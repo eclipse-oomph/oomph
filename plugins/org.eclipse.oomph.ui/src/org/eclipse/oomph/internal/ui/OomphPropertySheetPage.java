@@ -388,6 +388,7 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
                 if (Character.isISOControl(c))
                 {
                   doEscape = true;
+
                   str = StringUtil.escape(str);
                   break;
                 }
@@ -450,6 +451,13 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
                 final String className = "org.eclipse.emf.edit.ui.provider.PropertyDescriptor$MultiLineInputDialog";
                 Dialog dialog;
 
+                String stringValue = valueHandler.toString(getValue());
+                boolean containsNull = stringValue.indexOf('\u0000') != -1;
+                if (containsNull)
+                {
+                  stringValue = stringValue.replace('\u0000', '\n');
+                }
+
                 try
                 {
                   Class<?> c = CommonPlugin.loadClass("org.eclipse.emf.edit.ui", className);
@@ -469,7 +477,7 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
                   dialog = (Dialog)constructor.newInstance(composite.getShell(),
                       EMFEditUIPlugin.INSTANCE.getString("_UI_FeatureEditorDialog_title",
                           new Object[] { getDisplayName(), getEditLabelProvider().getText(object) }),
-                      EMFEditUIPlugin.INSTANCE.getString("_UI_MultiLineInputDialog_message"), valueHandler.toString(getValue()), valueHandler);
+                      EMFEditUIPlugin.INSTANCE.getString("_UI_MultiLineInputDialog_message"), stringValue, valueHandler);
 
                   if (dialog == null)
                   {
@@ -487,6 +495,11 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
                   String value = (String)ReflectUtil.invokeMethod("getValue", dialog);
 
                   value = value.replaceAll("\r\n", "\n");
+                  if (containsNull)
+                  {
+                    value = value.replace('\n', '\u0000');
+                  }
+
                   Object newValue = valueHandler.toValue(value);
                   if (newValue != null)
                   {

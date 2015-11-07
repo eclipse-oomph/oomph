@@ -316,7 +316,7 @@ public class SynchronizerDialog extends AbstractRecorderDialog
           }
         }
 
-        valueText.setText(StringUtil.safe(value));
+        valueText.setText(StringUtil.safe(value).replace('\u0000', '\n'));
       }
     });
 

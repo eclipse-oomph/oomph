@@ -26,9 +26,12 @@ import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.impl.PreferenceTaskImpl.PreferenceHandler.Factory;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.ReflectUtil;
+import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
 import org.eclipse.oomph.util.XMLUtil;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.BasicEMap;
@@ -57,6 +60,7 @@ import javax.xml.parsers.DocumentBuilder;
 import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -64,6 +68,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -612,7 +617,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
           if ("resourcetypes".equals(lastSegment))
           {
-            return new ListPreferenceHandler(key, "(?s)(<<info .*?</<info >)", "extension=\"([^\"]+)\"[^>]+name=\"([^\"]+)\"", "\n");
+            return new XMLPreferenceHandler(key, "info", new String[] { "extension", "name" }, null);
           }
 
           return new PreferenceHandler(key);
@@ -679,7 +684,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       {
         public PreferenceHandler create(URI key)
         {
-          return new ListPreferenceHandler(key, "(?s)(<profile .*?</profile>)", "name=\"([^\"]+)\"", "\n");
+          return new XMLPreferenceHandler(key, "profile", new String[] { "name" }, null);
         }
       });
 
@@ -695,7 +700,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       {
         public PreferenceHandler create(URI key)
         {
-          return new ListPreferenceHandler(key, "(?s)(<profile .*?</profile>)", "name=\"([^\"]+)\"", "\n");
+          return new XMLPreferenceHandler(key, "profile", new String[] { "name" }, null);
         }
       });
 
@@ -711,7 +716,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       {
         public PreferenceHandler create(URI key)
         {
-          return new ListPreferenceHandler(key, "(?s)([^\\n]+\\n[0-9]+)", "([^\n]+)", "\n");
+          return new TeamFileModePreferenceHandler(key);
         }
       });
 
@@ -719,7 +724,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       {
         public PreferenceHandler create(URI key)
         {
-          return new ListPreferenceHandler(key, "(?s)([^\\n]+\\n[0-9]+)", "([^\n]+)", "\n");
+          return new TeamFileModePreferenceHandler(key);
         }
       });
 
@@ -727,7 +732,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       {
         public PreferenceHandler create(URI key)
         {
-          return new ListPreferenceHandler(key, "(?s)(<template .*?</template>)", "id=\"([^\"]+)\"", "\n");
+          return new XMLPreferenceHandler(key, "template", new String[] { "id" }, null);
         }
       });
 
@@ -735,9 +740,31 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       {
         public PreferenceHandler create(URI key)
         {
-          String attributeValueAssignment = "=\"([^\"]+)\"";
-          return new ListPreferenceHandler(key, "(?s)(<template .*?</template>)", "autoinsert" + attributeValueAssignment + "[^>]+" + "context"
-              + attributeValueAssignment + "[^>]+" + "description" + attributeValueAssignment + "[^>]+" + "name" + attributeValueAssignment, "\n");
+          return new XMLPreferenceHandler(key, "template", new String[] { "context", "description", "name" }, null);
+        }
+      });
+
+      registry.put(URI.createURI("//instance/org.eclipse.ant.ui/org.eclipse.ant.ui.customtemplates"), new Factory()
+      {
+        public PreferenceHandler create(URI key)
+        {
+          return new XMLPreferenceHandler(key, "template", new String[] { "context", "description", "name" }, new String[] { "id" });
+        }
+      });
+
+      registry.put(URI.createURI("//instance/org.eclipse.core.variables/org.eclipse.core.variables.valueVariables"), new Factory()
+      {
+        public PreferenceHandler create(URI key)
+        {
+          return new XMLPreferenceHandler(key, "valueVariable", new String[] { "name" }, null);
+        }
+      });
+
+      registry.put(URI.createURI("//instance/org.eclipse.m2e.editor.xml/org.eclipse.m2e.editor.xml.templates"), new Factory()
+      {
+        public PreferenceHandler create(URI key)
+        {
+          return new XMLPreferenceHandler(key, "template", new String[] { "context", "description", "name" }, new String[] { "id" });
         }
       });
     }
@@ -1105,6 +1132,145 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     }
   }
 
+  public static class TeamFileModePreferenceHandler extends ListPreferenceHandler
+  {
+    protected static final Set<String> DEFAULT_NAME_MAPPINGS = new LinkedHashSet<String>();
+
+    protected static final Set<String> DEFAULT_EXTENSION_MAPPINGS = new LinkedHashSet<String>();
+
+    protected static final Object FILE_CONTENT_MANAGER;
+
+    protected boolean isExtension;
+
+    static
+    {
+      Object fileContentManager = null;
+      try
+      {
+        Class<?> teamClass = CommonPlugin.loadClass("org.eclipse.team.core", "org.eclipse.team.core.Team");
+        fileContentManager = ReflectUtil.invokeMethod("getFileContentManager", teamClass);
+        Object[] defaultNameMappings = (Object[])ReflectUtil.invokeMethod("getDefaultNameMappings", fileContentManager);
+        populateMappings(DEFAULT_NAME_MAPPINGS, defaultNameMappings);
+        Object[] defaultExtensionMappings = (Object[])ReflectUtil.invokeMethod("getDefaultExtensionMappings", fileContentManager);
+        populateMappings(DEFAULT_EXTENSION_MAPPINGS, defaultExtensionMappings);
+      }
+      catch (Throwable throwable)
+      {
+        //$FALL-THROUGH$
+      }
+
+      FILE_CONTENT_MANAGER = fileContentManager;
+    }
+
+    public TeamFileModePreferenceHandler(URI key)
+    {
+      super(key, "(?s)([^\\n]+\\n[0-9]+)", "([^\n]+)", "\n");
+      isExtension = "file_types".equals(key.lastSegment());
+    }
+
+    @Override
+    public String delta()
+    {
+      if (StringUtil.isEmpty(oldValue))
+      {
+        StringBuilder result = new StringBuilder(super.delta());
+        for (String mapping : isExtension ? DEFAULT_EXTENSION_MAPPINGS : DEFAULT_NAME_MAPPINGS)
+        {
+          int index = result.indexOf(mapping);
+          if (index == 0 || index > 0 && result.charAt(index - 1) == '\n')
+          {
+            result.delete(index, index + mapping.length());
+          }
+        }
+
+        return result.toString();
+      }
+
+      return super.delta();
+    }
+
+    @Override
+    public void apply(SetupTaskContext context)
+    {
+      if (FILE_CONTENT_MANAGER != null)
+      {
+        int size = changedItems.size();
+        String[] names = new String[size];
+        int[] types = new int[size];
+        int index = 0;
+        for (String changedItem : changedItems)
+        {
+          names[index] = changedItem;
+          String value = mergedItems.get(changedItem).getValue();
+          int offset = value.indexOf('\n');
+          types[index] = Integer.parseInt(value.substring(offset + 1));
+          ++index;
+        }
+
+        ReflectUtil.invokeMethod(
+            ReflectUtil.getMethod(FILE_CONTENT_MANAGER.getClass(), isExtension ? "addExtensionMappings" : "addNameMappings", String[].class, int[].class),
+            FILE_CONTENT_MANAGER, names, types);
+      }
+    }
+
+    private static void populateMappings(Set<String> target, Object[] mappings)
+    {
+      for (Object mapping : mappings)
+      {
+        Object string = ReflectUtil.invokeMethod("getString", mapping);
+        int type = (Integer)ReflectUtil.invokeMethod("getType", mapping);
+        target.add(string + "\n" + type + "\n");
+      }
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class XMLPreferenceHandler extends ListPreferenceHandler
+  {
+    public XMLPreferenceHandler(URI key, String tag, String[] requiredAttributes, String[] optionalAttributes)
+    {
+      super(key, getItemPattern(tag), getKeyPattern(requiredAttributes, optionalAttributes), "\n");
+    }
+
+    private static String getItemPattern(String tag)
+    {
+      return "(?s)(<" + tag + " (?:[^>]*/>|.*?</" + tag + ">))";
+    }
+
+    private static String getKeyPattern(String[] requiredAttributes, String[] optionalAttributes)
+    {
+      Set<String> attributes = new TreeSet<String>(Arrays.asList(requiredAttributes));
+      List<String> optional = optionalAttributes == null ? Collections.<String> emptyList() : Arrays.asList(optionalAttributes);
+      attributes.addAll(optional);
+
+      StringBuilder result = new StringBuilder();
+      for (String attribute : attributes)
+      {
+        if (result.length() != 0)
+        {
+          result.append("[^>]+");
+        }
+
+        boolean isOptional = optional.contains(attribute);
+        if (isOptional)
+        {
+          result.append("(?:");
+        }
+        result.append(attribute);
+        result.append("=\"([^\"]+)\"");
+
+        if (isOptional)
+        {
+          result.append(")?");
+        }
+      }
+
+      return result.toString();
+    }
+  }
+
   /**
    * @author Ed Merks
    */
@@ -1211,7 +1377,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
   /**
    * @author Ed Merks
    */
-  public static class PreferenceHandlerFactoryRegistry extends BasicEMap<URI, PreferenceHandler.Factory>implements PreferenceHandler.Factory.Registry
+  public static class PreferenceHandlerFactoryRegistry extends BasicEMap<URI, PreferenceHandler.Factory> implements PreferenceHandler.Factory.Registry
   {
     private static final URI ROOT_PREFIX = URI.createURI("//");
 

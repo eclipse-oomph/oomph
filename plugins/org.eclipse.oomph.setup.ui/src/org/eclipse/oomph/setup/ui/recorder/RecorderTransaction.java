@@ -743,12 +743,10 @@ public abstract class RecorderTransaction
           }
           else
           {
+            // Always merge the new value into the existing value, even if it's not needed.
             String value = preferenceTask.getValue();
-            if (handler.isNeeded(value, newValue))
-            {
-              newValue = handler.merge();
-            }
-
+            handler.isNeeded(value, newValue);
+            newValue = handler.merge();
             preferenceTask.setValue(newValue);
             recorderObjects.add(preferenceTask);
           }
