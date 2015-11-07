@@ -1157,66 +1157,69 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
               Item child = children.get(requiredID);
 
               Set<IInstallableUnit> set = ius.get(requiredID);
-              for (IInstallableUnit iu : set)
+              if (set != null)
               {
-                P2UIPlugin.checkCancelation(monitor);
-                Version version = iu.getVersion();
-
-                if (range.isIncluded(version))
+                for (IInstallableUnit iu : set)
                 {
-                  if (child == null)
-                  {
-                    String name = names.get(requiredID);
-                    if (isFiltered(name))
-                    {
-                      if (isFeature(iu))
-                      {
-                        if (requiredID.endsWith(SOURCE_FEATURE_SUFFIX))
-                        {
-                          String mainID = requiredID.substring(0, requiredID.length() - SOURCE_FEATURE_SUFFIX.length()) + Requirement.FEATURE_SUFFIX;
-                          String mainName = names.get(mainID);
+                  P2UIPlugin.checkCancelation(monitor);
+                  Version version = iu.getVersion();
 
-                          if (ObjectUtil.equals(name, mainName))
+                  if (range.isIncluded(version))
+                  {
+                    if (child == null)
+                    {
+                      String name = names.get(requiredID);
+                      if (isFiltered(name))
+                      {
+                        if (isFeature(iu))
+                        {
+                          if (requiredID.endsWith(SOURCE_FEATURE_SUFFIX))
                           {
-                            name += " (Source)";
+                            String mainID = requiredID.substring(0, requiredID.length() - SOURCE_FEATURE_SUFFIX.length()) + Requirement.FEATURE_SUFFIX;
+                            String mainName = names.get(mainID);
+
+                            if (ObjectUtil.equals(name, mainName))
+                            {
+                              name += " (Source)";
+                            }
                           }
+
+                          child = new FeatureItem(requiredID);
+                        }
+                        else
+                        {
+                          if (requiredID.endsWith(SOURCE_SUFFIX))
+                          {
+                            String mainID = requiredID.substring(0, requiredID.length() - SOURCE_SUFFIX.length());
+                            String mainName = names.get(mainID);
+
+                            if (ObjectUtil.equals(name, mainName))
+                            {
+                              name += " (Source)";
+                            }
+                          }
+
+                          child = new PluginItem(requiredID);
                         }
 
-                        child = new FeatureItem(requiredID);
+                        child.setLabel(name);
+                        children.put(requiredID, child);
                       }
-                      else
-                      {
-                        if (requiredID.endsWith(SOURCE_SUFFIX))
-                        {
-                          String mainID = requiredID.substring(0, requiredID.length() - SOURCE_SUFFIX.length());
-                          String mainName = names.get(mainID);
-
-                          if (ObjectUtil.equals(name, mainName))
-                          {
-                            name += " (Source)";
-                          }
-                        }
-
-                        child = new PluginItem(requiredID);
-                      }
-
-                      child.setLabel(name);
-                      children.put(requiredID, child);
                     }
-                  }
 
-                  if (child != null)
-                  {
-                    IMatchExpression<IInstallableUnit> matchExpression = iu.getFilter();
-
-                    Map<Version, IMatchExpression<IInstallableUnit>> map = versions.get(child);
-                    if (map == null)
+                    if (child != null)
                     {
-                      map = new HashMap<Version, IMatchExpression<IInstallableUnit>>();
-                      versions.put(child, map);
-                    }
+                      IMatchExpression<IInstallableUnit> matchExpression = iu.getFilter();
 
-                    map.put(version, matchExpression);
+                      Map<Version, IMatchExpression<IInstallableUnit>> map = versions.get(child);
+                      if (map == null)
+                      {
+                        map = new HashMap<Version, IMatchExpression<IInstallableUnit>>();
+                        versions.put(child, map);
+                      }
+
+                      map.put(version, matchExpression);
+                    }
                   }
                 }
               }
