@@ -60,9 +60,9 @@
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -110,9 +110,9 @@
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -253,9 +253,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -309,9 +309,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -458,9 +458,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -502,9 +502,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -627,9 +627,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -671,9 +671,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -747,9 +747,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -803,9 +803,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -875,9 +875,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -931,9 +931,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -1086,9 +1086,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -1142,9 +1142,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -1297,9 +1297,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -1353,9 +1353,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -1512,9 +1512,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -1568,9 +1568,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -1717,9 +1717,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -1761,9 +1761,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -1886,9 +1886,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -1930,9 +1930,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -2061,9 +2061,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -2117,9 +2117,9 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -2251,30 +2251,30 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Mars)"
-        requiredJavaVersion="1.7">
+        label="Latest (Neon)"
+        requiredJavaVersion="1.8">
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Scout Developers (Mars)">
+          label="Eclipse for Scout Developers (Neon)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,5.0.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,4.0.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/mars"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201510021000"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -2306,6 +2306,34 @@
       </setupTask>
     </version>
     <version
+        name="neon"
+        label="Neon"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Neon)">
+        <requirement
+            name="epp.package.scout"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.6.0,4.7.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.12.0,3.13.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.12.0,3.13.0)"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
+        <repository
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
+      </setupTask>
+    </version>
+    <version
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
@@ -2314,19 +2342,19 @@
           label="Eclipse for Scout Developers (Mars)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.5.0,4.6.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.5.0,4.6.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.7.0)"/>
+            versionRange="[4.5.0,4.6.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.11.0,3.12.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.13.0)"/>
+            versionRange="[3.11.0,3.12.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -2442,9 +2470,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
@@ -2485,9 +2513,9 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M3"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201510021100"/>
+            url="http://download.eclipse.org/releases/neon/201511131000"/>
       </setupTask>
     </version>
     <version
