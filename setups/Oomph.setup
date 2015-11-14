@@ -245,6 +245,8 @@
           </detail>
         </annotation>
         <requirement
+            name="org.eclipse.userstorage.sdk.feature.group"/>
+        <requirement
             name="*"/>
         <sourceLocator
             rootFolder="${git.clone.oomph.location}">
@@ -257,6 +259,8 @@
         </sourceLocator>
         <repositoryList
             name="Neon">
+          <repository
+              url="http://download.eclipse.org/oomph/uss/updates/latest"/>
           <repository
               url="http://download.eclipse.org/egit/updates"/>
           <repository
@@ -284,6 +288,8 @@
               url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+          <repository
+              url="http://download.eclipse.org/oomph/uss/updates/latest"/>
         </repositoryList>
         <repositoryList
             name="Luna">
@@ -293,6 +299,8 @@
               url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+          <repository
+              url="http://download.eclipse.org/oomph/uss/updates/latest"/>
         </repositoryList>
         <repositoryList
             name="Kepler">
@@ -302,6 +310,8 @@
               url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+          <repository
+              url="http://download.eclipse.org/oomph/uss/updates/latest"/>
         </repositoryList>
         <repositoryList
             name="Juno">
@@ -311,6 +321,8 @@
               url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+          <repository
+              url="http://download.eclipse.org/oomph/uss/updates/latest"/>
         </repositoryList>
       </targlet>
     </setupTask>

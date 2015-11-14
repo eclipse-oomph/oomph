@@ -59,6 +59,7 @@
         name="org.eclipse.pde">
       <setupTask
           xsi:type="setup:PreferenceTask"
+          disabled="true"
           key="/instance/org.eclipse.pde/compilers.f.unresolved-features"
           value="2"/>
       <setupTask

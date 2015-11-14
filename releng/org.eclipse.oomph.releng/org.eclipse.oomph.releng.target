@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="22">
+<target name="Generated from Oomph" sequenceNumber="23">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
@@ -55,6 +55,10 @@
       <unit id="org.eclipse.nebula.widgets.tablecombo" version="0.0.0"/>
       <unit id="org.eclipse.nebula.widgets.tablecombo.source" version="0.0.0"/>
       <repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
+      <unit id="org.eclipse.userstorage.sdk.feature.group" version="0.0.0"/>
+      <repository location="http://download.eclipse.org/oomph/uss/updates/latest"/>
     </location>
   </locations>
 </target>
