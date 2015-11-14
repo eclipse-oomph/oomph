@@ -213,7 +213,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
 
     if (checkedElements.length <= 1)
     {
-      RecorderManager.disposeInitializeItem();
+      RecorderManager.INSTANCE.disposeInitializeItem();
     }
     else
     {

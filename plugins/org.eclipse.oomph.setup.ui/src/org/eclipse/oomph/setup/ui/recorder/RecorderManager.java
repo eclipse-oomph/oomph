@@ -645,7 +645,7 @@ public final class RecorderManager
     if (syncInfo != null)
     {
       // Check if the recorder target is still the User scope (it could have been changed meanwhile).
-      Scope recorderTarget = INSTANCE.getRecorderTargetObject();
+      Scope recorderTarget = getRecorderTargetObject();
       if (recorderTarget instanceof User)
       {
         return syncInfo;
@@ -761,8 +761,8 @@ public final class RecorderManager
               @Override
               public void widgetSelected(SelectionEvent e)
               {
-                boolean enableRecorder = !INSTANCE.isRecorderEnabled();
-                INSTANCE.setRecorderEnabled(enableRecorder);
+                boolean enableRecorder = !isRecorderEnabled();
+                setRecorderEnabled(enableRecorder);
 
                 updateRecorderCheckboxState();
                 RecorderPreferencePage.updateEnablement();
@@ -772,6 +772,10 @@ public final class RecorderManager
                   SynchronizerManager.INSTANCE.offerFirstTimeConnect(shell);
                   createInitializeItem(shell, toolBar, dialog, preferenceManager);
                   buttonBar.layout();
+                }
+                else if (initializeItem != null)
+                {
+                  initializeItem.dispose();
                 }
               }
             });
@@ -784,7 +788,10 @@ public final class RecorderManager
               }
             });
 
-            createInitializeItem(shell, toolBar, dialog, preferenceManager);
+            if (isRecorderEnabled())
+            {
+              createInitializeItem(shell, toolBar, dialog, preferenceManager);
+            }
 
             buttonBar.layout();
           }
@@ -797,7 +804,7 @@ public final class RecorderManager
     }
   }
 
-  static void disposeInitializeItem()
+  void disposeInitializeItem()
   {
     if (initializeItem != null)
     {
@@ -858,8 +865,8 @@ public final class RecorderManager
 
   private boolean hasPreferencePagesToInitialize(PreferenceManager preferenceManager)
   {
-    Set<String> preferencePages = RecorderManager.INSTANCE.getInitializedPreferencePages();
-    preferencePages.addAll(RecorderManager.INSTANCE.getIgnoredPreferencePages());
+    Set<String> preferencePages = getInitializedPreferencePages();
+    preferencePages.addAll(getIgnoredPreferencePages());
     List<IPreferenceNode> preferenceNodes = preferenceManager.getElements(PreferenceManager.PRE_ORDER);
     for (IPreferenceNode element : preferenceNodes)
     {
