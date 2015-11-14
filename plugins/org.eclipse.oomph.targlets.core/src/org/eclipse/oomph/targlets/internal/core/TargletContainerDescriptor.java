@@ -53,6 +53,8 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
   @SuppressWarnings("restriction")
   private static final IPath INSTALL_FOLDERS = org.eclipse.pde.internal.core.PDECore.getDefault().getStateLocation().append(".install_folders");
 
+  private static final File DEFAULT_INSTALL_FOLDER = INSTALL_FOLDERS.append("default").toFile();
+
   private static long lastStamp;
 
   private String id;
@@ -169,6 +171,21 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
   public File getPoolLocation()
   {
     return poolLocation;
+  }
+
+  public File getInstallLocation()
+  {
+    Profile workingProfile = getWorkingProfile();
+    if (workingProfile != null)
+    {
+      String installFolder = workingProfile.getProperty(IProfile.PROP_INSTALL_FOLDER);
+      if (installFolder != null)
+      {
+        return new File(installFolder);
+      }
+    }
+
+    return DEFAULT_INSTALL_FOLDER;
   }
 
   public String getWorkingDigest()

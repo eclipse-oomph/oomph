@@ -488,7 +488,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
   {
     TargletContainerDescriptorManager manager = TargletContainerDescriptorManager.getInstance();
     TargletContainerDescriptor descriptor = manager.getDescriptor(id, new NullProgressMonitor());
-    return descriptor.getPoolLocation().getAbsolutePath();
+    return descriptor.getInstallLocation().getAbsolutePath();
   }
 
   public String getDigest()
