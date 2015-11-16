@@ -226,7 +226,7 @@ public abstract class SimpleInstallerPage extends Composite
   public static boolean isIncluded(ProductCatalog productCatalog)
   {
     String name = productCatalog.getName();
-    if (SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(name) || productCatalog.getProducts().isEmpty())
+    if (SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(name) || "redirectable".equals(name) || productCatalog.getProducts().isEmpty())
     {
       return false;
     }

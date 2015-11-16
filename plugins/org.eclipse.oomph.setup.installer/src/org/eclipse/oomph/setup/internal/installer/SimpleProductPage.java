@@ -301,7 +301,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
   public static String renderProduct(Product product, boolean large)
   {
-    String imageURI = SetupWizard.getImageURI(product);
+    String imageURI = SetupWizard.getLocalBrandingImageURI(product);
 
     String label = product.getLabel();
     if (StringUtil.isEmpty(label))
@@ -667,7 +667,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       this.product = product;
       if (product != null)
       {
-        Image image = SetupWizard.getImage(product);
+        Image image = SetupWizard.getBrandingImage(product);
         logo.setImage(image);
         title.setText(product.getLabel());
 

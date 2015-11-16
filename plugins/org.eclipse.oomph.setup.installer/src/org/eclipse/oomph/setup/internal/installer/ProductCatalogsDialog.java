@@ -26,6 +26,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -87,7 +88,16 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
           throw new IllegalArgumentException("input must be a CatalogManager");
         }
 
-        return catalogManager.getCatalogs(product).toArray();
+        List<Scope> scopes = new ArrayList<Scope>();
+        for (Scope scope : catalogManager.getCatalogs(product))
+        {
+          if (!"redirectable".equals(scope.getName()))
+          {
+            scopes.add(scope);
+          }
+        }
+
+        return scopes.toArray();
       }
     });
 

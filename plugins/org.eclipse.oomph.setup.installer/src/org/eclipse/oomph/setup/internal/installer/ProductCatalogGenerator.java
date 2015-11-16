@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
@@ -33,14 +34,19 @@ import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.StringUtil;
+import org.eclipse.oomph.util.WorkerPool;
 import org.eclipse.oomph.util.XMLUtil;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.resource.Resource;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
@@ -69,7 +75,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -80,9 +85,14 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -98,6 +108,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final String ICON_URL_PREFIX = "http://www.eclipse.org/downloads/images/";
 
+  private static final URI PACKAGES_URI = URI.createURI("https://www.eclipse.org/downloads/packages/");
+
   private static final String ICON_DEFAULT = ICON_URL_PREFIX + "committers.png";
 
   private static final Map<String, String> ICONS = new HashMap<String, String>();
@@ -107,6 +119,8 @@ public class ProductCatalogGenerator implements IApplication
       "epp.package.parallel", "epp.package.automotive", "epp.package.scout", "org.eclipse.platform.ide" });
 
   private static final Set<String> EXCLUDED_IDS = new HashSet<String>(Arrays.asList("epp.package.mobile"));
+
+  private final Map<String, Map<URI, Map<String, URI>>> sites = new LinkedHashMap<String, Map<URI, Map<String, URI>>>();
 
   public Object start(IApplicationContext context) throws Exception
   {
@@ -155,7 +169,7 @@ public class ProductCatalogGenerator implements IApplication
     // System.out.println();
     // System.out.println();
     //
-    // Resource resource = new BaseResourceFactoryImpl().createResource(org.eclipse.emf.common.util.URI.createURI("org.eclipse.complete.setup"));
+    // Resource resource = new BaseResourceFactoryImpl().createResource(URI.createURI("org.eclipse.complete.setup"));
     // resource.getContents().add(product);
     // resource.save(System.out, null);
     //
@@ -164,8 +178,9 @@ public class ProductCatalogGenerator implements IApplication
 
     // luna
     // -staging mars staging-epp staging-train
+
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
-    org.eclipse.emf.common.util.URI outputLocation = null;
+    URI outputLocation = null;
     String stagingTrain = null;
     URI stagingEPPLocation = null;
     URI stagingTrainLocation = null;
@@ -176,13 +191,13 @@ public class ProductCatalogGenerator implements IApplication
         String option = arguments[i];
         if ("-outputLocation".equals(option))
         {
-          outputLocation = org.eclipse.emf.common.util.URI.createURI(arguments[++i]);
+          outputLocation = URI.createURI(arguments[++i]);
         }
         else if ("-staging".equals(option))
         {
           stagingTrain = arguments[++i];
-          stagingEPPLocation = new URI(arguments[++i]);
-          stagingTrainLocation = new URI(arguments[++i]);
+          stagingEPPLocation = URI.createURI(arguments[++i]);
+          stagingTrainLocation = URI.createURI(arguments[++i]);
         }
       }
     }
@@ -233,8 +248,10 @@ public class ProductCatalogGenerator implements IApplication
     return false;
   }
 
-  public void generate(org.eclipse.emf.common.util.URI outputLocation, String stagingTrain, URI stagingEPPLocation, URI stagingTrainLocation)
+  public void generate(URI outputLocation, String stagingTrain, URI stagingEPPLocation, URI stagingTrainLocation)
   {
+    getPackageBrandingSites();
+
     final String[] TRAINS = getTrains();
     final String LATEST_TRAIN = TRAINS[TRAINS.length - 1];
     final boolean LATEST_RELEASED = !testNewUnreleasedProduct() && isLatestReleased();
@@ -244,6 +261,7 @@ public class ProductCatalogGenerator implements IApplication
       ProductCatalog productCatalog = SetupFactory.eINSTANCE.createProductCatalog();
       productCatalog.setName("org.eclipse.products");
       productCatalog.setLabel("Eclipse.org");
+      productCatalog.setDescription("The catalog of products available as <a href='https://www.eclipse.org/downloads/'>packaged downloads</a> at Eclipse.org.");
 
       Annotation brandingInfo = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
       brandingInfo.getDetails().put(AnnotationConstants.KEY_README_PATH, "readme/readme_eclipse.html");
@@ -262,8 +280,9 @@ public class ProductCatalogGenerator implements IApplication
       Requirement oomphRequirement = P2Factory.eINSTANCE.createRequirement("org.eclipse.oomph.setup.feature.group");
 
       Repository oomphRepository = P2Factory.eINSTANCE.createRepository("${" + SetupProperties.PROP_UPDATE_URL + "}");
-      String emfRepositoryLocation = trimEmptyTrailingSegment(
-          loadLatestRepository(manager, null, new URI("http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core")).getLocation()).toString();
+      String emfRepositoryLocation = trimEmptyTrailingSegment(URI.createURI(
+          loadLatestRepository(manager, null, URI.createURI("http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core")).getLocation().toString()))
+              .toString();
 
       P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
       p2Task.getRequirements().add(oomphRequirement);
@@ -276,7 +295,7 @@ public class ProductCatalogGenerator implements IApplication
 
       for (final String train : TRAINS)
       {
-        URI originalEPPURI = new URI(PACKAGES + "/" + train);
+        URI originalEPPURI = URI.createURI(PACKAGES + "/" + train);
         URI eppURI = originalEPPURI;
         System.out.print(eppURI);
         boolean isStaging = train.equals(stagingTrain);
@@ -288,21 +307,19 @@ public class ProductCatalogGenerator implements IApplication
         System.out.flush();
 
         URI effectiveEPPURI = isStaging ? stagingEPPLocation : eppURI;
-        IMetadataRepository eppMetaDataRepository = manager.loadRepository(effectiveEPPURI, null);
+        IMetadataRepository eppMetaDataRepository = manager.loadRepository(new java.net.URI(effectiveEPPURI.toString()), null);
         IMetadataRepository latestEPPMetaDataRepository = getLatestRepository(manager, eppMetaDataRepository);
         if (latestEPPMetaDataRepository != eppMetaDataRepository)
         {
-          URI latestLocation = latestEPPMetaDataRepository.getLocation();
+          URI latestLocation = URI.createURI(latestEPPMetaDataRepository.getLocation().toString());
           System.out.print(" -> " + latestLocation);
-          org.eclipse.emf.common.util.URI relativeLocation = org.eclipse.emf.common.util.URI.createURI(latestLocation.toString())
-              .deresolve(org.eclipse.emf.common.util.URI.createURI(effectiveEPPURI.toString()).appendSegment(""));
+          URI relativeLocation = URI.createURI(latestLocation.toString()).deresolve(URI.createURI(effectiveEPPURI.toString()).appendSegment(""));
           if (relativeLocation.isRelative())
           {
-            URI actualLatestEPPURI = new URI(
-                org.eclipse.emf.common.util.URI.createURI(eppURI.toString()).appendSegments(relativeLocation.segments()).toString());
+            URI actualLatestEPPURI = URI.createURI(URI.createURI(eppURI.toString()).appendSegments(relativeLocation.segments()).toString());
             try
             {
-              manager.loadRepository(actualLatestEPPURI, null);
+              manager.loadRepository(new java.net.URI(actualLatestEPPURI.toString()), null);
               System.out.print(" -> " + actualLatestEPPURI);
               eppURI = trimEmptyTrailingSegment(actualLatestEPPURI);
             }
@@ -320,11 +337,11 @@ public class ProductCatalogGenerator implements IApplication
 
         Map<String, IInstallableUnit> ius = new HashMap<String, IInstallableUnit>();
 
-        URI releaseURI = new URI(RELEASES + "/" + train);
+        URI releaseURI = URI.createURI(RELEASES + "/" + train);
         System.out.print(releaseURI);
 
         IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, originalEPPURI, isStaging ? stagingTrainLocation : releaseURI);
-        releaseURI = trimEmptyTrailingSegment(releaseMetaDataRepository.getLocation());
+        releaseURI = trimEmptyTrailingSegment(URI.createURI(releaseMetaDataRepository.getLocation().toString()));
         System.out.println(" -> " + releaseURI);
 
         Set<String> requirements = new HashSet<String>();
@@ -548,8 +565,7 @@ public class ProductCatalogGenerator implements IApplication
       checkVersionRanges(productCatalog);
       postProcess(productCatalog);
 
-      Resource resource = new BaseResourceFactoryImpl()
-          .createResource(outputLocation == null ? org.eclipse.emf.common.util.URI.createURI("org.eclipse.products.setup") : outputLocation);
+      Resource resource = new BaseResourceFactoryImpl().createResource(outputLocation == null ? URI.createURI("org.eclipse.products.setup") : outputLocation);
       resource.getContents().add(productCatalog);
       // resource.save(System.out, null);
 
@@ -566,12 +582,10 @@ public class ProductCatalogGenerator implements IApplication
 
   private URI trimEmptyTrailingSegment(URI uri) throws URISyntaxException
   {
-    String value = uri.toString();
-    if (value.endsWith("/"))
+    if (uri.hasTrailingPathSeparator())
     {
-      return new URI(value.substring(0, value.length() - 1));
+      return uri.trimSegments(1);
     }
-
     return uri;
   }
 
@@ -594,9 +608,9 @@ public class ProductCatalogGenerator implements IApplication
     {
       ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)repository;
       long latest = Integer.MIN_VALUE;
-      for (URI childURI : compositeRepository.getChildren())
+      for (java.net.URI childURI : compositeRepository.getChildren())
       {
-        childURI = trimEmptyTrailingSegment(childURI);
+        childURI = new java.net.URI(trimEmptyTrailingSegment(URI.createURI(childURI.toString())).toString());
         IMetadataRepository childRepository = manager.loadRepository(childURI, null);
         String value = childRepository.getProperties().get(IRepository.PROP_TIMESTAMP);
         long timestamp = Long.parseLong(value);
@@ -613,17 +627,18 @@ public class ProductCatalogGenerator implements IApplication
 
   private IMetadataRepository loadLatestRepository(IMetadataRepositoryManager manager, URI eppURI, URI releaseURI) throws URISyntaxException, ProvisionException
   {
-    IMetadataRepository releaseMetaDataRepository = manager.loadRepository(releaseURI, null);
+    IMetadataRepository releaseMetaDataRepository = manager.loadRepository(new java.net.URI(releaseURI.toString()), null);
     IMetadataRepository result = releaseMetaDataRepository;
     if (releaseMetaDataRepository instanceof ICompositeRepository<?>)
     {
       ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)releaseMetaDataRepository;
       long latest = Integer.MIN_VALUE;
-      for (URI childURI : compositeRepository.getChildren())
+      for (java.net.URI childURI : compositeRepository.getChildren())
       {
-        childURI = trimEmptyTrailingSegment(childURI);
-        if (!childURI.equals(eppURI))
+        URI trimmedURI = trimEmptyTrailingSegment(URI.createURI(childURI.toString()));
+        if (!trimmedURI.equals(eppURI))
         {
+          childURI = new java.net.URI(trimmedURI.toString());
           IMetadataRepository childRepository = manager.loadRepository(childURI, null);
           String value = childRepository.getProperties().get(IRepository.PROP_TIMESTAMP);
           long timestamp = Long.parseLong(value);
@@ -864,7 +879,101 @@ public class ProductCatalogGenerator implements IApplication
       System.out.print(" --> Java " + javaVersion);
     }
 
+    Map<URI, Map<String, URI>> releases = sites.get(train);
+    String productLabel = product.getLabel();
+    String key = getKey(productLabel);
+    URI siteURI = null;
+    for (Map.Entry<URI, Map<String, URI>> productEntry : releases.entrySet())
+    {
+      Map<String, URI> productLocations = productEntry.getValue();
+      siteURI = productLocations.get(key);
+      if (siteURI == null)
+      {
+        siteURI = productEntry.getKey();
+        System.out.print(" No version specific branding site -> " + siteURI);
+      }
+    }
+
+    if (siteURI != null)
+    {
+      BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_SITE_URI, siteURI.toString());
+    }
+
     System.out.println();
+  }
+
+  private String getKey(String productLabel)
+  {
+    if (productLabel.contains(" EE ") || productLabel.contains("Web"))
+    {
+      return "EE";
+    }
+    else if (productLabel.contains("Java Developer"))
+    {
+      return "Java";
+    }
+    else if (productLabel.contains("Mobile"))
+    {
+      return "Mobile";
+    }
+    else if (productLabel.contains("C/C++"))
+    {
+      return "C";
+    }
+    else if (productLabel.contains("Scout"))
+    {
+      return "Scout";
+    }
+    else if (productLabel.contains("Parallel"))
+    {
+      return "Parallel";
+    }
+    else if (productLabel.contains(" Report "))
+    {
+      return "Report";
+    }
+    else if (productLabel.contains("Automotive"))
+    {
+      return "Automotive";
+    }
+    else if (productLabel.contains("DSL"))
+    {
+      return "DSL";
+    }
+    else if (productLabel.contains("Modeling"))
+    {
+      return "Modeling";
+    }
+    else if (productLabel.contains("Testers"))
+    {
+      return "Testers";
+    }
+    else if (productLabel.contains("RCP"))
+    {
+      return "RCP";
+    }
+    else if (productLabel.contains("Standard") || productLabel.contains("Committers"))
+    {
+      return "Committers";
+    }
+    else if (productLabel.contains("PHP"))
+    {
+      return "PHP";
+    }
+    else if (productLabel.contains("Classic"))
+    {
+      return "Classic";
+    }
+    else if (productLabel.contains("SOA"))
+    {
+      return "SOA";
+    }
+    else if (productLabel.equals("Eclipse Platform"))
+    {
+      return "Platform";
+    }
+
+    throw new RuntimeException("No key for " + productLabel);
   }
 
   private VersionRange createVersionRange(Version version, VersionSegment versionSegment)
@@ -1035,6 +1144,156 @@ public class ProductCatalogGenerator implements IApplication
     return annotation.getDetails();
   }
 
+  private void getPackageBrandingSites()
+  {
+    InputStream packages = null;
+    try
+    {
+      URL packagesURL = new URL(PACKAGES_URI.toString());
+      packages = packagesURL.openStream();
+      List<String> lines = IOUtil.readLines(packages, "UTF-8");
+      Pattern pattern = Pattern.compile("<a href=\"([^\"]+)\"><span>([\\w]+)</span> Packages</a></span>");
+      PackageLocationLoader packageLocationLoader = new PackageLocationLoader(this);
+      Set<URI> locations = new LinkedHashSet<URI>();
+      for (String line : lines)
+      {
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find())
+        {
+          URI siteURI = URI.createURI(matcher.group(1));
+          String releaseName = matcher.group(2);
+          System.out.println(releaseName + " -> " + siteURI);
+          Map<URI, Map<String, URI>> foo = new LinkedHashMap<URI, Map<String, URI>>();
+          Map<String, URI> bar = new LinkedHashMap<String, URI>();
+          foo.put(siteURI, bar);
+          sites.put(releaseName.toLowerCase(), foo);
+          locations.add(siteURI);
+        }
+      }
+
+      URI releasePackages = URI.createURI("http://download.eclipse.org/eclipse/downloads/");
+      getPlatformPackageBrandingSites(releasePackages);
+      getPlatformPackageBrandingSites(URI.createURI("http://archive.eclipse.org/eclipse/downloads/"));
+
+      packageLocationLoader.perform(locations);
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace();
+    }
+    finally
+    {
+      IOUtil.closeSilent(packages);
+    }
+  }
+
+  private void getGeneralPackageBrandingSites(URI releasePackages)
+  {
+    InputStream inputStream = null;
+    try
+    {
+      URL releasePackagesURL = new URL(releasePackages.toString());
+      inputStream = releasePackagesURL.openStream();
+      List<String> lines = IOUtil.readLines(inputStream, "UTF-8");
+      Pattern pattern = Pattern.compile("<div class='package-teaser-title'><a href=\"([^\"]+)\">([^<]+)</a></div>");
+      for (String line : lines)
+      {
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find())
+        {
+          String packageName = matcher.group(2);
+          String key = getKey(packageName);
+          URI packageURI = URI.createURI(matcher.group(1));
+          if (packageURI.isRelative())
+          {
+            packageURI = packageURI.resolve(PACKAGES_URI);
+          }
+
+          synchronized (sites)
+          {
+            LOOP: for (Entry<String, Map<URI, Map<String, URI>>> releaseEntry : sites.entrySet())
+            {
+              for (Map.Entry<URI, Map<String, URI>> productEntry : releaseEntry.getValue().entrySet())
+              {
+                if (releasePackages.equals(productEntry.getKey()))
+                {
+                  System.out.println(releaseEntry.getKey() + " -> " + packageName + " -> " + packageURI);
+                  productEntry.getValue().put(key, packageURI);
+                  break LOOP;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace();
+    }
+    finally
+    {
+      IOUtil.closeSilent(inputStream);
+    }
+  }
+
+  private void getPlatformPackageBrandingSites(URI releasePackages)
+  {
+    InputStream inputStream = null;
+    try
+    {
+      URL releasePackagesURL = new URL(releasePackages.toString());
+      inputStream = releasePackagesURL.openStream();
+      List<String> lines = IOUtil.readLines(inputStream, "UTF-8");
+      Pattern pattern = Pattern.compile("<a href=\"([^\"]+)\"[^>]*>(4\\.[^<]+)</a>");
+      for (String line : lines)
+      {
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find())
+        {
+          String packageVersion = matcher.group(2);
+          URI packageURI = URI.createURI(matcher.group(1));
+          if (packageURI.isRelative())
+          {
+            packageURI = packageURI.resolve(releasePackages);
+          }
+
+          // Compute the train from the version number.
+          int version = Integer.parseInt(packageVersion.substring(2, 3));
+          List<String> trains = Arrays.asList(getTrains());
+          int index = trains.indexOf("neon") - (6 - version);
+          if (index >= 0 && index < trains.size())
+          {
+            String train = trains.get(index);
+
+            synchronized (sites)
+            {
+              Map<URI, Map<String, URI>> releaseLocations = sites.get(train);
+              for (Map<String, URI> packageLocations : releaseLocations.values())
+              {
+                if (!packageLocations.containsKey("Platform"))
+                {
+                  System.out.println(train + " -> " + packageVersion + " -> " + packageURI);
+                  packageLocations.put("Platform", packageURI);
+                }
+
+                break;
+              }
+            }
+          }
+        }
+      }
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace();
+    }
+    finally
+    {
+      IOUtil.closeSilent(inputStream);
+    }
+  }
+
   /**
    * @author Eike Stepper
    */
@@ -1083,6 +1342,43 @@ public class ProductCatalogGenerator implements IApplication
     public Map<String, Set<IInstallableUnit>> getIUs()
     {
       return ius;
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class PackageLocationLoader extends WorkerPool<PackageLocationLoader, URI, PackageLocationLoader.LoadJob>
+  {
+    private ProductCatalogGenerator generator;
+
+    public PackageLocationLoader(ProductCatalogGenerator generator)
+    {
+      this.generator = generator;
+    }
+
+    /**
+     * @author Ed Merks
+     */
+    public class LoadJob extends WorkerPool.Worker<URI, PackageLocationLoader>
+    {
+      private LoadJob(PackageLocationLoader loader, URI uri, int id, boolean secondary)
+      {
+        super("Load " + uri, loader, uri, id, secondary);
+      }
+
+      @Override
+      protected IStatus perform(IProgressMonitor monitor)
+      {
+        generator.getGeneralPackageBrandingSites(getKey());
+        return Status.OK_STATUS;
+      }
+    }
+
+    @Override
+    protected LoadJob createWorker(URI key, int workerID, boolean secondary)
+    {
+      return new LoadJob(this, key, workerID, secondary);
     }
   }
 }

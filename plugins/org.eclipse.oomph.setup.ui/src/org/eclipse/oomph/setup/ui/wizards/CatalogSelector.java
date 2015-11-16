@@ -97,7 +97,8 @@ public class CatalogSelector
 
         for (final Scope catalog : catalogManager.getCatalogs(product))
         {
-          if (!SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(catalog.getName()))
+          String name = catalog.getName();
+          if (!SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(name) && !"redirectable".equals(name))
           {
             final MenuItem item = new MenuItem(menu, SWT.CHECK);
             item.setText(SetupCoreUtil.getLabel(catalog));

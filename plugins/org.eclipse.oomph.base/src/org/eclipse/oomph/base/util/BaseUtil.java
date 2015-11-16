@@ -10,6 +10,9 @@
  */
 package org.eclipse.oomph.base.util;
 
+import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
@@ -288,5 +291,34 @@ public final class BaseUtil
     }
 
     return false;
+  }
+
+  public static String getAnnotation(ModelElement modelElement, String sourceURI, String key)
+  {
+    Annotation annotation = modelElement.getAnnotation(sourceURI);
+    return annotation == null ? null : (String)annotation.getDetails().get(key);
+  }
+
+  public static void setAnnotation(ModelElement modelElement, String sourceURI, String key, String value)
+  {
+    Annotation annotation = modelElement.getAnnotation(sourceURI);
+    if (value == null)
+    {
+      if (annotation != null)
+      {
+        annotation.getDetails().removeKey(key);
+      }
+    }
+    else
+    {
+      if (annotation == null)
+      {
+        annotation = BaseFactory.eINSTANCE.createAnnotation();
+        annotation.setSource(sourceURI);
+        modelElement.getAnnotations().add(annotation);
+      }
+
+      annotation.getDetails().put(key, value);
+    }
   }
 }

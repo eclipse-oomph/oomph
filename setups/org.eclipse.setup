@@ -45,8 +45,12 @@
       href="org.eclipse.products.setup#/"/>
   <productCatalog
       href="org.eclipse.applications.setup#/"/>
+  <productCatalog
+      href="redirectable.products.setup#/"/>
   <projectCatalog
       href="org.eclipse.projects.setup#/"/>
   <projectCatalog
       href="com.github.projects.setup#/"/>
+  <projectCatalog
+      href="redirectable.projects.setup#/"/>
 </setup:Index>

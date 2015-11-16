@@ -44,6 +44,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.parser.ParserDelegator;
 
@@ -736,6 +738,15 @@ public final class UIUtil
         public void handleText(char[] text, int pos)
         {
           builder.append(text);
+        }
+
+        @Override
+        public void handleSimpleTag(Tag t, MutableAttributeSet a, int pos)
+        {
+          if (t.breaksFlow())
+          {
+            builder.append("\n");
+          }
         }
       }, Boolean.TRUE);
 

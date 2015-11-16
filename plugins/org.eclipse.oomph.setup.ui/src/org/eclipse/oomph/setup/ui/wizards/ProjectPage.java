@@ -38,6 +38,8 @@ import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ButtonAnimator;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -74,6 +76,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 
 import org.eclipse.core.resources.IFile;
@@ -351,10 +354,46 @@ public class ProjectPage extends SetupWizardPage
       @Override
       public String getToolTipText(Object element)
       {
-        if (element instanceof Project)
+        if (element instanceof Scope)
         {
-          Project project = (Project)element;
-          return project.getDescription();
+          Scope scope = (Scope)element;
+          String localBrandingImageURI = SetupWizard.getLocalBrandingImageURI(scope);
+          URI brandingSiteURI = SetupWizard.getBrandingSiteURI(scope);
+          String label = SetupCoreUtil.getLabel(scope);
+
+          StringBuilder result = new StringBuilder();
+          result.append("<span style='white-space: nowrap; font-size: 150%;'><b>");
+          if (brandingSiteURI != null)
+          {
+            result.append("<a style='text-decoration: none; color: inherit;' href='");
+            result.append(brandingSiteURI);
+            result.append("'>");
+          }
+
+          result.append("<img style='padding-top: 4px;' src='");
+          result.append(localBrandingImageURI);
+          result.append("' width='42' height='42' align='absmiddle'/>&nbsp;");
+          result.append(DiagnosticDecorator.escapeContent(label).replace(" ", "&nbsp;"));
+          result.append("</b></span>");
+          if (brandingSiteURI != null)
+          {
+            result.append("</a>");
+          }
+
+          String description = scope.getDescription();
+          if (!StringUtil.isEmpty(description))
+          {
+            result.append("<br/>");
+            result.append("<span style='font-size: 50%;'><br/></span>");
+            result.append(description);
+            result.append("<br/>");
+          }
+
+          // Add extra invisible lines to convince the tool tip size calculation that the text is 3 lines longer.
+          // result.append("<div style='height=0px; display:none;'>&nbsp;&nbsp;&nbsp;&nbps;&nbps;&nbps;&nbps;&nbps;&nbps;&nbps;<br/><br/></br></div>");
+          result.append("<div style='height=0px; display:none;'>&nbps;&nbps;&nbps;&nbps;&nbps;<br/><br/></br></div>");
+
+          return result.toString();
         }
 
         return "";
@@ -450,6 +489,11 @@ public class ProjectPage extends SetupWizardPage
     {
       public void changing(LocationEvent event)
       {
+        if (!"about:blank".equals(event.location))
+        {
+          OS.INSTANCE.openSystemBrowser(event.location);
+          event.doit = false;
+        }
       }
 
       public void changed(LocationEvent event)
@@ -1582,7 +1626,21 @@ public class ProjectPage extends SetupWizardPage
         }
       });
 
-      List<? extends Scope> catalogs = catalogSelector.getCatalogs();
+      List<Scope> catalogs = new ArrayList<Scope>();
+      for (Scope scope : catalogSelector.getCatalogs())
+      {
+        for (EObject eObject : scope.eContents())
+        {
+          InternalEObject internalEObject = (InternalEObject)eObject;
+          Resource resource = internalEObject.eDirectResource();
+          if (resource != null && SetupContext.isUserScheme(resource.getURI().scheme()))
+          {
+            catalogs.add(scope);
+            break;
+          }
+        }
+      }
+
       catalogViewer.setInput(catalogs);
 
       if (catalogs.size() == 1)

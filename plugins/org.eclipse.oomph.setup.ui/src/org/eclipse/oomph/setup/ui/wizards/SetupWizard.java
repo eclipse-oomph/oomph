@@ -19,7 +19,7 @@ import org.eclipse.oomph.p2.internal.ui.CacheUsageConfirmerUI;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
-import org.eclipse.oomph.setup.Product;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
@@ -667,13 +667,38 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     }
   }
 
-  public static URI getProductImageURI(Product product)
+  public static URI getBrandingSiteURI(Scope scope)
+  {
+    if (scope != null)
+    {
+      Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+      if (annotation != null)
+      {
+        String detail = annotation.getDetails().get(AnnotationConstants.KEY_SITE_URI);
+        if (detail != null)
+        {
+          return URI.createURI(detail);
+        }
+      }
+
+      return getBrandingSiteURI(scope.getParentScope());
+    }
+
+    return null;
+  }
+
+  public static URI getBrandingImageURI(Scope scope)
   {
     URI imageURI = null;
 
-    Annotation annotation = product.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-    if (annotation != null)
+    if (scope != null)
     {
+      Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+      if (annotation == null)
+      {
+        return getBrandingImageURI(scope.getParentScope());
+      }
+
       String detail = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
       if (detail != null)
       {
@@ -683,10 +708,42 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
     if (imageURI == null)
     {
-      imageURI = getDefaultProductImageURI();
+      imageURI = getEclipseBrandingImage();
     }
 
     return imageURI;
+  }
+
+  public static String getLocalBrandingImageURI(Scope scope)
+  {
+    try
+    {
+      URI imageURI = getBrandingImageURI(scope);
+      return getImageURI(imageURI);
+    }
+    catch (Exception ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+    }
+
+    URI imageURI = getEclipseBrandingImage();
+    return getImageURI(imageURI);
+  }
+
+  public static Image getBrandingImage(Scope scope)
+  {
+    try
+    {
+      URI imageURI = getBrandingImageURI(scope);
+      return getImage(imageURI);
+    }
+    catch (Exception ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+    }
+
+    URI imageURI = getEclipseBrandingImage();
+    return getImage(imageURI);
   }
 
   private static String getImageURI(URI imageURI)
@@ -695,45 +752,13 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     return ImageURIRegistry.INSTANCE.getImageURI(remoteImage).toString();
   }
 
-  public static String getImageURI(Product product)
-  {
-    try
-    {
-      URI imageURI = getProductImageURI(product);
-      return getImageURI(imageURI);
-    }
-    catch (Exception ex)
-    {
-      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
-    }
-
-    URI imageURI = getDefaultProductImageURI();
-    return getImageURI(imageURI);
-  }
-
   private static Image getImage(URI imageURI)
   {
     Object image = BaseEditUtil.getImage(imageURI);
     return ExtendedImageRegistry.INSTANCE.getImage(image);
   }
 
-  public static Image getImage(Product product)
-  {
-    try
-    {
-      URI imageURI = getProductImageURI(product);
-      return getImage(imageURI);
-    }
-    catch (Exception ex)
-    {
-      SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
-    }
-
-    URI imageURI = getDefaultProductImageURI();
-    return getImage(imageURI);
-  }
-
-  public static URI getDefaultProductImageURI()
+  private static URI getEclipseBrandingImage()
   {
     return URI.createPlatformPluginURI(SetupUIPlugin.INSTANCE.getSymbolicName() + "/icons/committers.png", true);
   }
@@ -1050,10 +1075,10 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       @Override
       protected void visit(EObject eObject)
       {
-        if (eObject instanceof Product)
+        if (eObject instanceof Scope)
         {
-          Product product = (Product)eObject;
-          URI uri = getProductImageURI(product);
+          Scope scope = (Scope)eObject;
+          URI uri = getBrandingImageURI(scope);
           if (uri != null)
           {
             if (getResourceSet().getResourceFactoryRegistry().getExtensionToFactoryMap().containsKey(uri.fileExtension()))

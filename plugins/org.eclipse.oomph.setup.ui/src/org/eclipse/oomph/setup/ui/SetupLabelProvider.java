@@ -33,6 +33,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 
 import java.net.URL;
 import java.util.List;
@@ -71,6 +73,18 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
   {
     Font font = super.getFont(object);
     return font == null ? getDefaultFont() : font;
+  }
+
+  @Override
+  public Image getImage(Object object)
+  {
+    Image result = super.getImage(object);
+    if (isDisabled(object))
+    {
+      return getImageFromObject(new DisabledImageDescriptor(result));
+    }
+
+    return result;
   }
 
   public static boolean isDisabled(Object object)
@@ -163,5 +177,51 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
     }
 
     return prefix + " - " + suffix;
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static final class DisabledImageDescriptor extends ImageDescriptor
+  {
+    private final Image image;
+
+    public DisabledImageDescriptor(Image image)
+    {
+      this.image = image;
+    }
+
+    @Override
+    public Image createImage()
+    {
+      return new Image(image.getDevice(), image, SWT.IMAGE_GRAY);
+    }
+
+    @Override
+    public ImageData getImageData()
+    {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int hashCode()
+    {
+      return image.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+      if (obj != null && obj.getClass() == DisabledImageDescriptor.class)
+      {
+        DisabledImageDescriptor other = (DisabledImageDescriptor)obj;
+        if (other.image == image)
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
   }
 }

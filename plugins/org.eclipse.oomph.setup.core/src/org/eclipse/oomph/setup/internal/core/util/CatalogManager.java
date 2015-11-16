@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.ProductCatalog;
+import org.eclipse.oomph.setup.ProjectCatalog;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
@@ -161,8 +162,14 @@ public class CatalogManager
         EList<Stream> selectedStreams = this.selection.getSelectedStreams();
         selectedStreams.clear();
         selectedStreams.addAll(selection.getSelectedStreams());
-        populateSelectedProductCatalogs(this.selection, index);
-        populateSelectedProjectCatalogs(this.selection, index);
+
+        EList<ProductCatalog> productCatalogs = this.selection.getProductCatalogs();
+        productCatalogs.clear();
+        productCatalogs.addAll(selection.getProductCatalogs());
+
+        EList<ProjectCatalog> projectCatalogs = this.selection.getProjectCatalogs();
+        projectCatalogs.clear();
+        projectCatalogs.addAll(selection.getProjectCatalogs());
       }
 
       // Filter out any proxies that remain in the managed selection.
@@ -174,13 +181,13 @@ public class CatalogManager
       // If the managed selection's product catalog is empty, fill it with all available product catalogs from the index.
       if (this.selection.getProductCatalogs().isEmpty())
       {
-        this.selection.getProductCatalogs().addAll(index.getProductCatalogs());
+        populateSelectedProductCatalogs(this.selection, index);
       }
 
       // If the managed selection's project catalog is empty, fill it with all available project catalogs from the index.
       if (this.selection.getProjectCatalogs().isEmpty())
       {
-        this.selection.getProjectCatalogs().addAll(index.getProjectCatalogs());
+        populateSelectedProjectCatalogs(this.selection, index);
       }
     }
     else
@@ -204,7 +211,8 @@ public class CatalogManager
     for (ProductCatalog productCatalog : index.getProductCatalogs())
     {
       URI uri = EcoreUtil.getURI(productCatalog);
-      if (!"catalog".equals(uri.scheme()) && !SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(productCatalog.getName()))
+      if (!"catalog".equals(uri.scheme()) && !SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(productCatalog.getName())
+          && !productCatalog.getProducts().isEmpty())
       {
         productCatalogs.add(productCatalog);
       }
@@ -213,7 +221,14 @@ public class CatalogManager
 
   private void populateSelectedProjectCatalogs(CatalogSelection selection, Index index)
   {
-    selection.getProjectCatalogs().addAll(index.getProjectCatalogs());
+    EList<ProjectCatalog> projectCatalogs = selection.getProjectCatalogs();
+    for (ProjectCatalog projectCatalog : index.getProjectCatalogs())
+    {
+      if (!projectCatalog.getProjects().isEmpty())
+      {
+        projectCatalogs.add(projectCatalog);
+      }
+    }
   }
 
   private <K extends EObject, V extends EObject> void updateProxyKeyedMap(EMap<K, V> eMap)

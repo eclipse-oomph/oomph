@@ -82,6 +82,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -129,6 +130,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
@@ -266,6 +268,14 @@ public class ProductPage extends SetupWizardPage
       }
     });
 
+    versionComboViewer.addSelectionChangedListener(new ISelectionChangedListener()
+    {
+      public void selectionChanged(SelectionChangedEvent event)
+      {
+        updateProductVersionDetails(false);
+      }
+    });
+
     versionComboViewer.setInput(NO_PRODUCT);
     final Combo versionCombo = versionComboViewer.getCombo();
     versionCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -394,7 +404,7 @@ public class ProductPage extends SetupWizardPage
             setCurrentBundlePool(null);
           }
 
-          updateDetails(false);
+          updateProductDetails(false);
         }
       });
 
@@ -425,7 +435,7 @@ public class ProductPage extends SetupWizardPage
             if (pool != currentBundlePool)
             {
               setCurrentBundlePool(pool);
-              updateDetails(false);
+              updateProductDetails(false);
             }
           }
         }
@@ -467,7 +477,7 @@ public class ProductPage extends SetupWizardPage
       }
     });
 
-    updateDetails(true);
+    updateProductDetails(true);
 
     return mainComposite;
   }
@@ -578,7 +588,7 @@ public class ProductPage extends SetupWizardPage
             productViewer.expandToLevel(product, 1);
             productViewer.setSelection(new StructuredSelection(product));
             versionComboViewer.setSelection(new StructuredSelection(productVersion));
-            updateDetails(false);
+            updateProductDetails(false);
             gotoNextPage();
             return true;
           }
@@ -630,8 +640,12 @@ public class ProductPage extends SetupWizardPage
                   {
                     Product defaultProduct = defaultProductVersions.get(0).getKey();
                     productViewer.setSelection(new StructuredSelection(defaultProduct), true);
+                    return;
                   }
                 }
+
+                productViewer.setSelection(new StructuredSelection(elements[0]));
+                setErrorMessage(null);
               }
             }
           }
@@ -753,7 +767,7 @@ public class ProductPage extends SetupWizardPage
 
         addProductButton.setEnabled(hasUserProductCatalogs);
 
-        updateDetails(false);
+        updateProductDetails(false);
       }
     });
 
@@ -801,7 +815,7 @@ public class ProductPage extends SetupWizardPage
     SetupCoreUtil.sendStats(setupContext.getInstallation().getProductVersion(), success);
   }
 
-  private void updateDetails(boolean initial)
+  private void updateProductDetails(boolean initial)
   {
     Product product = getSelectedProduct();
     if (product == null)
@@ -809,10 +823,9 @@ public class ProductPage extends SetupWizardPage
       product = NO_PRODUCT;
     }
 
-    versionComboViewer.setInput(product);
-
     boolean productSelected = product != NO_PRODUCT;
-    String error = productSelected ? null : "Select a product from the catalogs and choose the product version.";
+
+    versionComboViewer.setInput(product);
 
     if (productSelected)
     {
@@ -820,24 +833,49 @@ public class ProductPage extends SetupWizardPage
       if (version != null)
       {
         versionComboViewer.setSelection(new StructuredSelection(version));
-      }
-      else
-      {
-        error = "The selected product has no versions that can be installed on this platform.";
+        return;
       }
     }
 
+    updateProductVersionDetails(initial);
+  }
+
+  private void updateProductVersionDetails(boolean initial)
+  {
+    ProductVersion productVersion = getSelectedProductVersion();
+    Product product = productVersion == null ? getSelectedProduct() : productVersion.getProduct();
+    if (product == null)
+    {
+      product = NO_PRODUCT;
+    }
+
+    boolean productSelected = product != NO_PRODUCT;
+    String error = productSelected ? productVersion == null ? "The selected product has no versions that can be installed on this platform." : null
+        : "Select a product from the catalogs and choose the product version.";
+
+    Scope scope = productSelected ? product : getSelectedProductCatalog();
     if (descriptionBrowser != null)
     {
-      String html = safe(productSelected ? getDescriptionHTML(product) : null);
-      descriptionBrowser.setEnabled(productSelected);
+      String html = safe(getDescriptionHTML(productVersion != null ? productVersion : scope));
+      descriptionBrowser.setEnabled(scope != null);
       descriptionBrowser.setText(html);
     }
     else
     {
-      String html = safe(productSelected ? product.getDescription() : null);
+      String html = safe(scope == null ? null : scope.getDescription());
+      URI brandingSiteURI = SetupWizard.getBrandingSiteURI(productVersion == null ? product : productVersion);
       String plain = StringUtil.isEmpty(html) ? "No description available." : UIUtil.stripHTML(html);
-      descriptionViewer.update(SetupWizard.getImage(product), SetupCoreUtil.getLabel(product), plain);
+      String label = SetupCoreUtil.getLabel(scope);
+      if (productVersion != null)
+      {
+        String productVersionLabel = getLabel(productVersion);
+        if (!StringUtil.isEmpty(productVersionLabel))
+        {
+          label += " \u2013 " + productVersionLabel;
+        }
+      }
+
+      descriptionViewer.update(SetupWizard.getBrandingImage(product), label, plain, brandingSiteURI == null ? null : brandingSiteURI.toString());
     }
 
     versionLabel.setEnabled(productSelected);
@@ -905,21 +943,95 @@ public class ProductPage extends SetupWizardPage
     return false;
   }
 
-  private String getDescriptionHTML(Product product)
+  private String getDescriptionHTML(Scope scope)
   {
-    String imageURI = SetupWizard.getImageURI(product);
-
-    String description = product.getDescription();
-    String label = product.getLabel();
-    if (StringUtil.isEmpty(label))
+    if (scope == null)
     {
-      label = product.getName();
+      return null;
     }
 
-    return "<html><body style=\"margin:5px;\"><img src=\"" + imageURI
-        + "\" width=\"42\" height=\"42\" align=\"absmiddle\"></img><b>&nbsp;&nbsp;&nbsp;<span style=\"font-family:'Arial',Verdana,sans-serif; font-size:100%\">"
-        + safe(label) + "</b><br/><hr/></span><span style=\"font-family:'Arial',Verdana,sans-serif; font-size:75%\">" + safe(description)
-        + "</span></body></html>";
+    String imageURI = SetupWizard.getLocalBrandingImageURI(scope);
+
+    Scope effectiveScope = scope instanceof ProductVersion ? scope.getParentScope() : scope;
+    String description = effectiveScope.getDescription();
+    String label = effectiveScope.getLabel();
+    if (StringUtil.isEmpty(label))
+    {
+      label = effectiveScope.getName();
+    }
+
+    String versionLabel = null;
+    if (!StringUtil.isEmpty(label) && scope instanceof ProductVersion)
+    {
+      versionLabel = getLabel((ProductVersion)scope);
+    }
+
+    URI brandingSiteURI = SetupWizard.getBrandingSiteURI(scope);
+
+    StringBuilder result = new StringBuilder();
+    result.append("<html><body style='margin:5px;'>");
+    if (brandingSiteURI != null)
+    {
+      result.append("<a style='text-decoration: none; color: inherit;' href='");
+      result.append(brandingSiteURI);
+      result.append("'>");
+    }
+
+    result.append("<img src='");
+    result.append(imageURI);
+    result.append("' width='42' height='42' align='absmiddle'></img>");
+    result.append("<span><b>&nbsp;&nbsp;&nbsp;<span style='font-family:Arial,Verdana,sans-serif; font-size:100%'>");
+    result.append(DiagnosticDecorator.escapeContent(safe(label)));
+    if (!StringUtil.isEmpty(versionLabel))
+    {
+      result.append(" &ndash; ");
+      result.append(DiagnosticDecorator.escapeContent(versionLabel));
+    }
+
+    if (brandingSiteURI != null)
+    {
+      result.append("</a>");
+    }
+
+    result.append("</b>");
+
+    if (brandingSiteURI != null && !StringUtil.isEmpty(versionLabel))
+    {
+      result.append("<a style='float: right; padding-top: 12px; padding-right: 15px; font-family:Arial,Verdana,sans-serif; font-size:75%' href='");
+      result.append(brandingSiteURI);
+      result.append("'>");
+      result.append("details");
+      result.append("</a>");
+    }
+
+    result.append("</span>");
+    result.append("<br/><hr/></span><span style='font-family:Arial,Verdana,sans-serif; font-size:75%'>");
+    result.append(safe(description));
+    result.append("</span></body></html>");
+    return result.toString();
+  }
+
+  private String getLabel(ProductVersion productVersion)
+  {
+    String label = productVersion.getLabel();
+    if (StringUtil.isEmpty(label))
+    {
+      label = productVersion.getName();
+    }
+    else
+    {
+      int start = label.indexOf('(');
+      if (start != -1)
+      {
+        int end = label.indexOf(')', start);
+        if (end != -1)
+        {
+          label = label.substring(start + 1, end);
+        }
+      }
+    }
+
+    return label;
   }
 
   private void setCurrentBundlePool(BundlePool pool)
@@ -986,6 +1098,18 @@ public class ProductPage extends SetupWizardPage
       pool = (BundlePool)dialog.getSelectedElement();
       poolComboViewer.setSelection(pool == null ? StructuredSelection.EMPTY : new StructuredSelection(pool));
     }
+  }
+
+  private ProductCatalog getSelectedProductCatalog()
+  {
+    IStructuredSelection selection = (IStructuredSelection)productViewer.getSelection();
+    Object element = selection.getFirstElement();
+    if (element instanceof ProductCatalog)
+    {
+      return (ProductCatalog)element;
+    }
+
+    return null;
   }
 
   private Product getSelectedProduct()
@@ -1195,6 +1319,10 @@ public class ProductPage extends SetupWizardPage
 
     private CLabel descriptionLabel;
 
+    private Link detailsLink;
+
+    private String detailsLocation;
+
     private Text descriptionText;
 
     private ControlAdapter resizeListener;
@@ -1225,11 +1353,36 @@ public class ProductPage extends SetupWizardPage
       descriptionComposite.setBackground(background);
       scrolledComposite.setContent(descriptionComposite);
 
-      descriptionLabel = new CLabel(descriptionComposite, SWT.NONE);
+      Composite labelComposite = new Composite(descriptionComposite, SWT.NONE);
+      GridLayout labelCompositeLayout = new GridLayout(2, false);
+      labelCompositeLayout.marginHeight = 0;
+      labelCompositeLayout.marginWidth = 0;
+      labelCompositeLayout.marginRight = 12;
+      labelComposite.setLayout(labelCompositeLayout);
+      labelComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+      labelComposite.setForeground(foreground);
+      labelComposite.setBackground(background);
+
+      descriptionLabel = new CLabel(labelComposite, SWT.NONE);
       descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
       descriptionLabel.setForeground(foreground);
       descriptionLabel.setBackground(background);
       descriptionLabel.setFont(SetupUIPlugin.getFont(font, URI.createURI("font:///+2/bold")));
+
+      detailsLink = new Link(labelComposite, SWT.NONE);
+      detailsLink.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
+      detailsLink.setText("<a>details</a>");
+      // detailsLink.setForeground(foreground);
+      detailsLink.setBackground(background);
+      detailsLink.setToolTipText("Opens a more detailed description, including package contents, in the system browser");
+      detailsLink.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          OS.INSTANCE.openSystemBrowser(detailsLocation);
+        }
+      });
 
       Label separator = new Label(descriptionComposite, SWT.HORIZONTAL | SWT.SEPARATOR);
       separator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -1240,11 +1393,22 @@ public class ProductPage extends SetupWizardPage
       descriptionText.setBackground(background);
     }
 
-    public void update(Image image, String title, String body)
+    public void update(Image image, String title, String body, String details)
     {
       descriptionLabel.setImage(image);
       descriptionLabel.setText(title);
       descriptionText.setText(body);
+      if (details == null)
+      {
+        detailsLink.setVisible(false);
+        detailsLocation = null;
+      }
+      else
+      {
+        detailsLink.setVisible(true);
+        detailsLocation = details;
+      }
+
       resizeListener.controlResized(null);
     }
   }

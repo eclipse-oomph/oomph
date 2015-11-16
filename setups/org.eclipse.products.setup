@@ -44,6 +44,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (Neon)">
@@ -69,6 +76,13 @@
         name="latest.released"
         label="Latest Release (Mars)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (Mars)">
@@ -94,6 +108,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (Neon)">
@@ -119,6 +140,13 @@
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (Mars)">
@@ -144,6 +172,13 @@
         name="luna"
         label="Luna"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (Luna)">
@@ -169,6 +204,13 @@
         name="kepler"
         label="Kepler"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/keplersr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (Kepler)">
@@ -196,6 +238,13 @@
         name="juno"
         label="Juno"
         requiredJavaVersion="1.5">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/junosr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (Juno)">
@@ -234,6 +283,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java EE Developers (Neon)">
@@ -262,6 +318,13 @@
         name="latest.released"
         label="Latest Release (Mars)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java EE Developers (Mars)">
@@ -290,6 +353,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java EE Developers (Neon)">
@@ -318,6 +388,13 @@
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java EE Developers (Mars)">
@@ -346,6 +423,13 @@
         name="luna"
         label="Luna"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java EE Developers (Luna)">
@@ -374,6 +458,13 @@
         name="kepler"
         label="Kepler"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/keplersr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java EE Developers (Kepler)">
@@ -404,6 +495,13 @@
         name="juno"
         label="Juno"
         requiredJavaVersion="1.5">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/junosr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java EE Developers (Juno)">
@@ -445,6 +543,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (Neon)">
@@ -467,6 +572,13 @@
         name="latest.released"
         label="Latest Release (Mars)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (Mars)">
@@ -489,6 +601,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (Neon)">
@@ -511,6 +630,13 @@
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (Mars)">
@@ -533,6 +659,13 @@
         name="luna"
         label="Luna"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (Luna)">
@@ -555,6 +688,13 @@
         name="kepler"
         label="Kepler"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/keplersr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (Kepler)">
@@ -579,6 +719,13 @@
         name="juno"
         label="Juno"
         requiredJavaVersion="1.5">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/junosr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (Juno)">
@@ -614,6 +761,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (Neon)">
@@ -636,6 +790,13 @@
         name="latest.released"
         label="Latest Release (Mars)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (Mars)">
@@ -658,6 +819,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (Neon)">
@@ -680,6 +848,13 @@
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (Mars)">
@@ -702,6 +877,13 @@
         name="luna"
         label="Luna"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (Luna)">
@@ -728,6 +910,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (Neon)">
@@ -756,6 +945,13 @@
         name="latest.released"
         label="Latest Release (Mars)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers-451/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (Mars)">
@@ -784,6 +980,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (Neon)">
@@ -812,6 +1015,13 @@
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers-451/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (Mars)">
@@ -856,6 +1066,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (Neon)">
@@ -884,6 +1101,13 @@
         name="latest.released"
         label="Latest Release (Mars)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (Mars)">
@@ -912,6 +1136,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (Neon)">
@@ -940,6 +1171,13 @@
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (Mars)">
@@ -968,6 +1206,13 @@
         name="luna"
         label="Luna"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (Luna)">
@@ -996,6 +1241,13 @@
         name="kepler"
         label="Kepler"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/keplersr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (Kepler)">
@@ -1026,6 +1278,13 @@
         name="juno"
         label="Juno"
         requiredJavaVersion="1.5">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/junosr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (Juno)">
@@ -1067,6 +1326,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (Neon)">
@@ -1095,6 +1361,13 @@
         name="latest.released"
         label="Latest Release (Mars)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (Mars)">
@@ -1123,6 +1396,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (Neon)">
@@ -1151,6 +1431,13 @@
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (Mars)">
@@ -1179,6 +1466,13 @@
         name="luna"
         label="Luna"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (Luna)">
@@ -1207,6 +1501,13 @@
         name="kepler"
         label="Kepler"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/keplersr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (Kepler)">
@@ -1237,6 +1538,13 @@
         name="juno"
         label="Juno"
         requiredJavaVersion="1.5">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/junosr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (Juno)">
@@ -1278,6 +1586,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (Neon)">
@@ -1306,6 +1621,13 @@
         name="latest.released"
         label="Latest Release (Mars)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (Mars)">
@@ -1334,6 +1656,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (Neon)">
@@ -1362,6 +1691,13 @@
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (Mars)">
@@ -1390,6 +1726,13 @@
         name="luna"
         label="Luna"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (Luna)">
@@ -1418,6 +1761,13 @@
         name="kepler"
         label="Kepler"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/keplersr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (Kepler)">
@@ -1448,6 +1798,13 @@
         name="juno"
         label="Juno"
         requiredJavaVersion="1.5">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/junosr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (Juno)">
@@ -1493,6 +1850,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (Neon)">
@@ -1521,6 +1885,13 @@
         name="latest.released"
         label="Latest Release (Mars)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (Mars)">
@@ -1549,6 +1920,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (Neon)">
@@ -1577,6 +1955,13 @@
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (Mars)">
@@ -1605,6 +1990,13 @@
         name="luna"
         label="Luna"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (Luna)">
@@ -1633,6 +2025,13 @@
         name="kepler"
         label="Kepler"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/keplersr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (Kepler)">
@@ -1663,6 +2062,13 @@
         name="juno"
         label="Juno"
         requiredJavaVersion="1.5">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/junosr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (Juno)">
@@ -1704,6 +2110,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Testers (Neon)">
@@ -1726,6 +2139,13 @@
         name="latest.released"
         label="Latest Release (Mars)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Testers (Mars)">
@@ -1748,6 +2168,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Testers (Neon)">
@@ -1770,6 +2197,13 @@
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Testers (Mars)">
@@ -1792,6 +2226,13 @@
         name="luna"
         label="Luna"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Testers (Luna)">
@@ -1814,6 +2255,13 @@
         name="kepler"
         label="Kepler"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/keplersr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Testers (Kepler)">
@@ -1838,6 +2286,13 @@
         name="juno"
         label="Juno"
         requiredJavaVersion="1.5">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/junosr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Testers (Juno)">
@@ -1873,6 +2328,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Parallel Application Developers (Neon)">
@@ -1895,6 +2357,13 @@
         name="latest.released"
         label="Latest Release (Mars)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Parallel Application Developers (Mars)">
@@ -1917,6 +2386,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Parallel Application Developers (Neon)">
@@ -1939,6 +2415,13 @@
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Parallel Application Developers (Mars)">
@@ -1961,6 +2444,13 @@
         name="luna"
         label="Luna"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Parallel Application Developers (Luna)">
@@ -1983,6 +2473,13 @@
         name="kepler"
         label="Kepler"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/keplersr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Parallel Application Developers (Kepler)">
@@ -2007,6 +2504,13 @@
         name="juno"
         label="Juno"
         requiredJavaVersion="1.5">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/junosr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Parallel Application Developers (Juno)">
@@ -2042,6 +2546,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-automotive-software-developers-includes-incubating-components/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Automotive Software Developers (Neon)">
@@ -2070,6 +2581,13 @@
         name="latest.released"
         label="Latest Release (Mars)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-automotive-software-developers-includes-incubating-components/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Automotive Software Developers (Mars)">
@@ -2098,6 +2616,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-automotive-software-developers-includes-incubating-components/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Automotive Software Developers (Neon)">
@@ -2126,6 +2651,13 @@
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-automotive-software-developers-includes-incubating-components/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Automotive Software Developers (Mars)">
@@ -2154,6 +2686,13 @@
         name="luna"
         label="Luna"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-automotive-software-developers-includes-incubating-components/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Automotive Software Developers (Luna)">
@@ -2182,6 +2721,13 @@
         name="kepler"
         label="Kepler"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-automotive-software-developers-includes-incubating-components/keplersr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Automotive Software Developers (Kepler)">
@@ -2212,6 +2758,13 @@
         name="juno"
         label="Juno"
         requiredJavaVersion="1.5">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-automotive-software-developers-includes-incubating-components/junosr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Automotive Software Developers (Juno)">
@@ -2253,6 +2806,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (Neon)">
@@ -2281,6 +2841,13 @@
         name="latest.released"
         label="Latest Release (Mars)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (Mars)">
@@ -2309,6 +2876,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonm3</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (Neon)">
@@ -2337,6 +2911,13 @@
         name="mars"
         label="Mars"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/mars1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (Mars)">
@@ -2365,6 +2946,13 @@
         name="luna"
         label="Luna"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (Luna)">
@@ -2393,6 +2981,13 @@
         name="kepler"
         label="Kepler"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/keplersr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (Kepler)">
@@ -2423,6 +3018,13 @@
         name="juno"
         label="Juno"
         requiredJavaVersion="1.5">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/junosr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (Juno)">
@@ -2457,6 +3059,13 @@
         name="latest"
         label="Latest (Neon)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.6M3-201510291100/</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Neon)">
@@ -2478,6 +3087,13 @@
     <version
         name="latest.released"
         label="Latest Release (Mars)">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.5.1-201509040015/</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Mars)">
@@ -2500,6 +3116,13 @@
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.6M3-201510291100/</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Neon)">
@@ -2521,6 +3144,13 @@
     <version
         name="mars"
         label="Mars">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.5.1-201509040015/</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Mars)">
@@ -2542,6 +3172,13 @@
     <version
         name="luna"
         label="Luna">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.4.2-201502041700/</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Luna)">
@@ -2563,6 +3200,13 @@
     <version
         name="kepler"
         label="Kepler">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.3.2-201402211700/</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Kepler)">
@@ -2586,6 +3230,13 @@
     <version
         name="juno"
         label="Juno">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.2.2-201302041200/</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Juno)">
@@ -2614,6 +3265,13 @@
         name="latest"
         label="Latest (Luna)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers-442/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Standard (Luna)">
@@ -2642,6 +3300,13 @@
         name="latest.released"
         label="Latest Release (Luna)"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers-442/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Standard (Luna)">
@@ -2670,6 +3335,13 @@
         name="luna"
         label="Luna"
         requiredJavaVersion="1.7">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers-442/lunasr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Standard (Luna)">
@@ -2698,6 +3370,13 @@
         name="kepler"
         label="Kepler"
         requiredJavaVersion="1.6">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-standard-432/keplersr2</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Standard (Kepler)">
@@ -2731,4 +3410,5 @@
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=EGit&quot;>here&lt;/a> to file a bug against Eclipse Git team provider.
     </description>
   </product>
+  <description>The catalog of products available as &lt;a href='https://www.eclipse.org/downloads/'>packaged downloads&lt;/a> at Eclipse.org.</description>
 </setup:ProductCatalog>
