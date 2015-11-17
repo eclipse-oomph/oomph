@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceNode;
+import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -45,6 +46,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Ed Merks
@@ -243,6 +245,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
           public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
             boolean cancel = false;
+            final AtomicBoolean abort = new AtomicBoolean(false);
             final Set<String> initializedPreferencePages = RecorderManager.INSTANCE.getInitializedPreferencePages();
             try
             {
@@ -295,13 +298,23 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
                       {
                         description.insert(0, " -> ");
                       }
+
                       description.insert(0, item.getText());
                     }
 
                     monitor.subTask(description.toString());
                     IPreferenceNode preferenceNode = (IPreferenceNode)treeItem.getData();
                     viewer.setSelection(new StructuredSelection(preferenceNode));
-                    initializedPreferencePages.add(preferenceNode.getId());
+                    IPreferencePage currentPage = (IPreferencePage)ReflectUtil.invokeMethod("getCurrentPage", preferenceDialog);
+                    if (currentPage != null && !currentPage.okToLeave())
+                    {
+                      monitor.setCanceled(true);
+                      abort.set(true);
+                    }
+                    else
+                    {
+                      initializedPreferencePages.add(preferenceNode.getId());
+                    }
                   }
                 });
 
@@ -314,33 +327,60 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
             {
               RecorderManager.INSTANCE.setInitializedPreferencePages(initializedPreferencePages);
 
-              final boolean finalCancel = cancel;
-              UIUtil.asyncExec(new Runnable()
+              if (!abort.get())
               {
-                public void run()
+                final boolean finalCancel = cancel;
+                UIUtil.asyncExec(new Runnable()
                 {
-                  RecorderManager.INSTANCE.cancelRecording();
-                  ReflectUtil.invokeMethod(finalCancel ? "cancelPressed" : "okPressed", preferenceDialog);
-                  RecorderTransaction transaction = RecorderTransaction.getInstance();
-                  if (transaction != null)
+                  public void run()
                   {
-                    transaction.close();
-                  }
+                    RecorderManager.INSTANCE.cancelRecording();
 
-                  UIUtil.asyncExec(new Runnable()
-                  {
-                    public void run()
+                    // Keep posting events to the display thread until this dialog shell itself is disposed.
+                    // Also dispose any new child shells that are created.
+                    final Shell shell = preferenceDialog.getShell();
+                    final List<Shell> children = Arrays.asList(shell.getShells());
+                    Runnable runnable = new Runnable()
                     {
-                      PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, id, null, null);
-                      dialog.open();
-                    }
-                  });
-                }
-              });
+                      public void run()
+                      {
+                        Shell[] shells = shell.getShells();
+                        for (Shell child : shells)
+                        {
+                          if (!children.contains(child) && shell.isVisible())
+                          {
+                            child.dispose();
+                          }
+                        }
 
-              if (cancel)
-              {
-                throw new InterruptedException();
+                        UIUtil.asyncExec(shell, this);
+                      }
+                    };
+
+                    UIUtil.asyncExec(shell, runnable);
+
+                    ReflectUtil.invokeMethod(finalCancel ? "cancelPressed" : "okPressed", preferenceDialog);
+                    RecorderTransaction transaction = RecorderTransaction.getInstance();
+                    if (transaction != null)
+                    {
+                      transaction.close();
+                    }
+
+                    UIUtil.asyncExec(new Runnable()
+                    {
+                      public void run()
+                      {
+                        PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, id, null, null);
+                        dialog.open();
+                      }
+                    });
+                  }
+                });
+
+                if (cancel)
+                {
+                  throw new InterruptedException();
+                }
               }
             }
           }
