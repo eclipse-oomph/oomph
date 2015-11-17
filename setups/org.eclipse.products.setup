@@ -914,7 +914,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -984,7 +984,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1070,7 +1070,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1140,7 +1140,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1590,7 +1590,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1660,7 +1660,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3086,7 +3086,8 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (Mars)">
+        label="Latest Release (Mars)"
+        requiredJavaVersion="1.7">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -3143,7 +3144,8 @@
     </version>
     <version
         name="mars"
-        label="Mars">
+        label="Mars"
+        requiredJavaVersion="1.7">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -3171,7 +3173,8 @@
     </version>
     <version
         name="luna"
-        label="Luna">
+        label="Luna"
+        requiredJavaVersion="1.6">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -3199,7 +3202,8 @@
     </version>
     <version
         name="kepler"
-        label="Kepler">
+        label="Kepler"
+        requiredJavaVersion="1.6">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -3229,7 +3233,8 @@
     </version>
     <version
         name="juno"
-        label="Juno">
+        label="Juno"
+        requiredJavaVersion="1.5">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
