@@ -29,6 +29,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.IProvidedCapability;
+import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.ArtifactKeyQuery;
@@ -50,6 +52,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -580,6 +583,7 @@ public final class AgentAnalyzer
       analyzer.bundlePoolChanged(this, false, false);
     }
 
+    @SuppressWarnings("restriction")
     private static boolean isDamaged(AnalyzedArtifact artifact)
     {
       File file = artifact.getFile();
@@ -588,8 +592,7 @@ public final class AgentAnalyzer
         return true;
       }
 
-      String name = file.getName();
-      if (name.endsWith(".jar") || name.endsWith(".zip"))
+      if (file.isFile())
       {
         ZipFile zipFile = null;
 
@@ -646,7 +649,53 @@ public final class AgentAnalyzer
         }
       }
 
-      return false;
+      try
+      {
+        String type = artifact.getType();
+        org.eclipse.equinox.p2.publisher.AbstractPublisherAction action;
+        String namespace;
+        if (AnalyzedArtifact.TYPE_FEATURE.equals(type))
+        {
+          action = new org.eclipse.equinox.p2.publisher.eclipse.FeaturesAction(new File[] { file });
+          namespace = "org.eclipse.update.feature";
+        }
+        else if (AnalyzedArtifact.TYPE_PLUGIN.equals(type))
+        {
+          action = new org.eclipse.equinox.p2.publisher.eclipse.BundlesAction(new File[] { file });
+          namespace = "osgi.bundle";
+        }
+        else
+        {
+          return false;
+        }
+
+        org.eclipse.equinox.p2.publisher.PublisherInfo info = new org.eclipse.equinox.p2.publisher.PublisherInfo();
+        org.eclipse.equinox.p2.publisher.PublisherResult result = new org.eclipse.equinox.p2.publisher.PublisherResult();
+        action.perform(info, result, new NullProgressMonitor());
+        IArtifactKey key = artifact.getKey();
+        String id = key.getId();
+        Version version = key.getVersion();
+        for (Iterator<IInstallableUnit> it = result.everything(); it.hasNext();)
+        {
+          IInstallableUnit iu = it.next();
+          for (IProvidedCapability capability : iu.getProvidedCapabilities())
+          {
+            String name = capability.getName();
+            String capabilityNamespace = capability.getNamespace();
+            Version capabilityVersion = capability.getVersion();
+            if (namespace.equals(capabilityNamespace) && id.equals(name) && version.equals(capabilityVersion))
+            {
+              return false;
+            }
+          }
+        }
+      }
+      catch (Exception exception)
+      {
+        return true;
+      }
+
+      return true;
     }
   }
 

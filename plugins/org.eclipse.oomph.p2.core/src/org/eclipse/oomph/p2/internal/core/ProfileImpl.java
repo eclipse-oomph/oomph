@@ -329,7 +329,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
       String workspace = getProperty("targlet.container.workspace");
       if (workspace != null)
       {
-        referencer = new File(workspace, ".metadata/.plugins/org.eclipse.oomph.targlets.core/targlet-profiles.txt");
+        referencer = new File(workspace, ".metadata/.plugins/org.eclipse.oomph.targlets.core/profiles.txt");
       }
     }
 
