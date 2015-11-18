@@ -571,24 +571,57 @@ public abstract class RecorderTransaction
     {
       public int compare(SetupTask o1, SetupTask o2)
       {
-        String n1 = StringUtil.safe(((CompoundTask)o1).getName()).toLowerCase();
-        String n2 = StringUtil.safe(((CompoundTask)o2).getName()).toLowerCase();
-        return n1.compareTo(n2);
+        if (o1 instanceof CompoundTask)
+        {
+          if (o2 instanceof CompoundTask)
+          {
+            String n1 = StringUtil.safe(((CompoundTask)o1).getName()).toLowerCase();
+            String n2 = StringUtil.safe(((CompoundTask)o2).getName()).toLowerCase();
+            return n1.compareTo(n2);
+          }
+
+          return -1;
+        }
+
+        if (o2 instanceof CompoundTask)
+        {
+          return 1;
+        }
+
+        return 0;
       }
     });
 
     for (SetupTask pluginCompound : pluginCompounds)
     {
-      EList<SetupTask> preferenceTasks = ((CompoundTask)pluginCompound).getSetupTasks();
-      ECollections.sort(preferenceTasks, new Comparator<SetupTask>()
+      if (pluginCompound instanceof CompoundTask)
       {
-        public int compare(SetupTask o1, SetupTask o2)
+        EList<SetupTask> preferenceTasks = ((CompoundTask)pluginCompound).getSetupTasks();
+        ECollections.sort(preferenceTasks, new Comparator<SetupTask>()
         {
-          String n1 = StringUtil.safe(((PreferenceTask)o1).getKey()).toLowerCase();
-          String n2 = StringUtil.safe(((PreferenceTask)o2).getKey()).toLowerCase();
-          return n1.compareTo(n2);
-        }
-      });
+          public int compare(SetupTask o1, SetupTask o2)
+          {
+            if (o1 instanceof PreferenceTask)
+            {
+              if (o2 instanceof PreferenceTask)
+              {
+                String n1 = StringUtil.safe(((PreferenceTask)o1).getKey()).toLowerCase();
+                String n2 = StringUtil.safe(((PreferenceTask)o2).getKey()).toLowerCase();
+                return n1.compareTo(n2);
+              }
+
+              return -1;
+            }
+
+            if (o2 instanceof PreferenceTask)
+            {
+              return 1;
+            }
+
+            return 0;
+          }
+        });
+      }
     }
   }
 
