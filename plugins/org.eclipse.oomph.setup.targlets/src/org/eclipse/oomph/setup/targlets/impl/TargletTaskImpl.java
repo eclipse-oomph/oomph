@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.targlets.impl;
 
 import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
@@ -747,6 +748,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     LOOP: for (Iterator<Targlet> it = targlets.iterator(); it.hasNext();)
     {
       Targlet targlet = it.next();
+      BaseUtil.setReduced(targlet, true);
       String name = targlet.getName();
       if (StringUtil.isEmpty(name) || !targletNames.add(name))
       {
@@ -769,21 +771,6 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         }
       }
     }
-
-    // for (Targlet targlet : targlets)
-    // {
-    // String activeRepositoryListName = targlet.getActiveRepositoryListName();
-    // RepositoryList activeRepositoryList = targlet.getActiveRepositoryList();
-    // EList<RepositoryList> repositoryLists = targlet.getRepositoryLists();
-    //
-    // for (RepositoryList repositoryList : repositoryLists)
-    // {
-    // if (repositoryList != activeRepositoryList)
-    // {
-    // SuppressHint.setSuppressed(repositoryList, true);
-    // }
-    // }
-    // }
 
     ECollections.sort(targlets, new Comparator<Targlet>()
     {

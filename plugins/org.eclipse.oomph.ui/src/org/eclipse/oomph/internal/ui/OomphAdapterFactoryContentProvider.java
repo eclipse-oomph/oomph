@@ -11,7 +11,6 @@
 package org.eclipse.oomph.internal.ui;
 
 import org.eclipse.oomph.internal.ui.OomphPropertySheetPage.OomphPropertyDescriptor;
-import org.eclipse.oomph.util.SuppressHint;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -94,77 +93,5 @@ public class OomphAdapterFactoryContentProvider extends AdapterFactoryContentPro
         return new OomphPropertyDescriptor(object, itemPropertyDescriptor);
       }
     };
-  }
-
-  @Override
-  public Object[] getElements(Object object)
-  {
-    Object[] elements = super.getElements(object);
-    int count = countSuppressed(elements);
-    if (count > 0)
-    {
-      elements = suppress(elements, count);
-    }
-
-    return elements;
-  }
-
-  @Override
-  public Object[] getChildren(Object object)
-  {
-    Object[] children = super.getChildren(object);
-    int count = countSuppressed(children);
-    if (count > 0)
-    {
-      children = suppress(children, count);
-    }
-
-    return children;
-  }
-
-  @Override
-  public boolean hasChildren(Object object)
-  {
-    boolean hasChildren = super.hasChildren(object);
-    if (hasChildren)
-    {
-      Object[] children = super.getChildren(object);
-      int count = countSuppressed(children);
-      return children.length - count > 0;
-    }
-
-    return hasChildren;
-  }
-
-  private int countSuppressed(Object[] objects)
-  {
-    int count = 0;
-    for (int i = 0; i < objects.length; i++)
-    {
-      Object object = objects[i];
-      if (SuppressHint.isSuppressed(object))
-      {
-        ++count;
-      }
-    }
-
-    return count;
-  }
-
-  private Object[] suppress(Object[] objects, int count)
-  {
-    Object[] result = new Object[objects.length - count];
-    int r = 0;
-
-    for (int i = 0; i < objects.length; i++)
-    {
-      Object object = objects[i];
-      if (!SuppressHint.isSuppressed(object))
-      {
-        result[r++] = object;
-      }
-    }
-
-    return result;
   }
 }

@@ -11,7 +11,9 @@
 package org.eclipse.oomph.targlets.provider;
 
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.p2.provider.RequirementItemProvider;
 import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.targlets.Targlet;
@@ -19,6 +21,7 @@ import org.eclipse.oomph.targlets.TargletPackage;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -28,6 +31,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -179,6 +183,36 @@ public class TargletItemProvider extends ModelElementItemProvider
     // adding (see {@link AddCommand}) it as a child.
 
     return super.getChildFeature(object, child);
+  }
+
+  @Override
+  public boolean hasChildren(Object object)
+  {
+    // The children may be reduced so really check that there are any.
+    return !getChildren(object).isEmpty();
+  }
+
+  @Override
+  public Collection<?> getChildren(Object object)
+  {
+    Collection<?> result = super.getChildren(object);
+    Targlet targlet = (Targlet)object;
+    if (BaseUtil.isReduced(targlet))
+    {
+      // Filter out all repository lists except the active repository list.
+      RepositoryList activeRepositoryList = targlet.getActiveRepositoryList();
+      EList<RepositoryList> repositoryLists = targlet.getRepositoryLists();
+      for (Iterator<?> it = result.iterator(); it.hasNext();)
+      {
+        Object child = it.next();
+        if (child != activeRepositoryList && repositoryLists.contains(child))
+        {
+          it.remove();
+        }
+      }
+    }
+
+    return result;
   }
 
   /**

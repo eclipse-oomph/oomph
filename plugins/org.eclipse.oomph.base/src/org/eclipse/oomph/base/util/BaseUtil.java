@@ -17,6 +17,10 @@ import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -46,6 +50,27 @@ import java.util.Map;
  */
 public final class BaseUtil
 {
+  private static final Adapter REDUCED = new Adapter()
+  {
+    public void setTarget(Notifier newTarget)
+    {
+    }
+
+    public void notifyChanged(Notification notification)
+    {
+    }
+
+    public boolean isAdapterForType(Object type)
+    {
+      return false;
+    }
+
+    public Notifier getTarget()
+    {
+      return null;
+    }
+  };
+
   private BaseUtil()
   {
   }
@@ -319,6 +344,27 @@ public final class BaseUtil
       }
 
       annotation.getDetails().put(key, value);
+    }
+  }
+
+  public static boolean isReduced(ModelElement modelElement)
+  {
+    return modelElement.eAdapters().contains(REDUCED);
+  }
+
+  public static void setReduced(ModelElement modelElement, boolean reduced)
+  {
+    EList<Adapter> eAdapters = modelElement.eAdapters();
+    if (reduced)
+    {
+      if (!eAdapters.contains(REDUCED))
+      {
+        eAdapters.add(REDUCED);
+      }
+    }
+    else
+    {
+      eAdapters.remove(REDUCED);
     }
   }
 }
