@@ -1352,7 +1352,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
   void checkLowerBoundVersions(IFile file, String releasePath, VersionConstraint versionConstraint, String versionAttribute)
   {
     VersionRange requiredVersionRange = versionConstraint.getVersionRange();
-    if (!requiredVersionRange.isEmpty())
+    if (!VersionRange.emptyRange.equals(requiredVersionRange))
     {
       BaseDescription supplier = versionConstraint.getSupplier();
       if (supplier != null)
