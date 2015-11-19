@@ -472,62 +472,9 @@ public final class SetupCoreUtil
       ResourceSet resourceSet = resource.getResourceSet();
       if (resourceSet != null)
       {
-        String prefix;
-        switch (scope.getType())
-        {
-          case PRODUCT_VERSION:
-          {
-            prefix = "product";
-            break;
-          }
-          case STREAM:
-          {
-            prefix = "project";
-            break;
-          }
-          default:
-          {
-            return;
-          }
-        }
-
-        URI statusURI = null;
-
-        List<String> names = new ArrayList<String>();
-        for (Scope x = scope; x != null; x = x.getParentScope())
-        {
-          if (SetupContext.isUserScheme(EcoreUtil.getURI(x).scheme()))
-          {
-            return;
-          }
-
-          if (statusURI == null)
-          {
-            Annotation annotation = x.getAnnotation(AnnotationConstants.ANNOTATION_STATS_SENDING);
-            if (annotation != null)
-            {
-              String uri = annotation.getDetails().get(AnnotationConstants.KEY_URI);
-              if (StringUtil.isEmpty(uri))
-              {
-                return;
-              }
-
-              statusURI = URI.createURI(uri);
-            }
-          }
-
-          names.add(0, URI.encodeSegment(x.getName(), false));
-        }
-
+        URI statusURI = getStatsURI(success, scope);
         if (statusURI != null)
         {
-          statusURI = statusURI.appendSegment(prefix).appendSegment(success ? "success" : "failure");
-
-          for (String name : names)
-          {
-            statusURI = statusURI.appendSegment(name);
-          }
-
           if (os != null)
           {
             statusURI = statusURI.appendSegment(os.getOsgiOS());
@@ -539,6 +486,73 @@ public final class SetupCoreUtil
         }
       }
     }
+  }
+
+  public static URI getStatsURI(boolean success, Scope scope)
+  {
+    String prefix = getStatsPrefix(scope);
+    if (prefix == null)
+    {
+      return null;
+    }
+
+    URI statusURI = null;
+
+    List<String> names = new ArrayList<String>();
+    for (Scope x = scope; x != null; x = x.getParentScope())
+    {
+      if (SetupContext.isUserScheme(EcoreUtil.getURI(x).scheme()))
+      {
+        return null;
+      }
+
+      if (statusURI == null)
+      {
+        Annotation annotation = x.getAnnotation(AnnotationConstants.ANNOTATION_STATS_SENDING);
+        if (annotation != null)
+        {
+          String uri = annotation.getDetails().get(AnnotationConstants.KEY_URI);
+          if (StringUtil.isEmpty(uri))
+          {
+            return null;
+          }
+
+          statusURI = URI.createURI(uri);
+        }
+      }
+
+      names.add(0, URI.encodeSegment(x.getName(), false));
+    }
+
+    if (statusURI != null)
+    {
+      statusURI = statusURI.appendSegment(prefix).appendSegment(success ? "success" : "failure");
+
+      for (String name : names)
+      {
+        statusURI = statusURI.appendSegment(name);
+      }
+    }
+
+    return statusURI;
+  }
+
+  private static String getStatsPrefix(Scope scope)
+  {
+    switch (scope.getType())
+    {
+      case PRODUCT_VERSION:
+      {
+        return "product";
+      }
+
+      case STREAM:
+      {
+        return "project";
+      }
+    }
+
+    return null;
   }
 
   /**
