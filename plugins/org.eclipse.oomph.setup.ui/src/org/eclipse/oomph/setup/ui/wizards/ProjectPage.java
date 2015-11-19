@@ -867,9 +867,12 @@ public class ProjectPage extends SetupWizardPage
     {
       List<Stream> streams = new ArrayList<Stream>(workspace.getStreams());
       streams.removeAll(existingStreams);
+
+      OS os = getPerformer().getOS();
+
       for (Stream stream : streams)
       {
-        SetupCoreUtil.sendStats(stream, success);
+        SetupCoreUtil.sendStats(success, stream, os);
       }
     }
   }

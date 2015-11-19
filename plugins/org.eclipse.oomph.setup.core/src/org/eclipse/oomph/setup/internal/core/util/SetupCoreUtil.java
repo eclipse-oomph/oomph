@@ -89,6 +89,12 @@ public final class SetupCoreUtil
 
   public static final AuthorizationHandler AUTHORIZATION_HANDLER;
 
+  private static final boolean SKIP_STATS = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_STATS_SKIP);
+
+  private static volatile Map<URI, URI> archiveRedirections;
+
+  private static volatile String archiveExpectedETag;
+
   static
   {
     IProvisioningAgent agent = (IProvisioningAgent)org.eclipse.equinox.internal.p2.core.helpers.ServiceHelper
@@ -100,10 +106,6 @@ public final class SetupCoreUtil
 
     AUTHORIZATION_HANDLER = new AuthorizationHandlerImpl(uiServices, securePreferences);
   }
-
-  private static volatile Map<URI, URI> archiveRedirections;
-
-  private static volatile String archiveExpectedETag;
 
   private SetupCoreUtil()
   {
@@ -457,74 +459,83 @@ public final class SetupCoreUtil
     new Migrator(resource).migrate(result);
   }
 
-  public static void sendStats(Scope scope, boolean success)
+  public static void sendStats(boolean success, Scope scope, OS os)
   {
-    if (scope != null)
+    if (SKIP_STATS || scope == null)
     {
-      Resource resource = scope.eResource();
-      if (resource != null)
+      return;
+    }
+
+    Resource resource = scope.eResource();
+    if (resource != null)
+    {
+      ResourceSet resourceSet = resource.getResourceSet();
+      if (resourceSet != null)
       {
-        ResourceSet resourceSet = resource.getResourceSet();
-        if (resourceSet != null)
+        String prefix;
+        switch (scope.getType())
         {
-          String prefix;
-          switch (scope.getType())
+          case PRODUCT_VERSION:
           {
-            case PRODUCT_VERSION:
-            {
-              prefix = "product";
-              break;
-            }
-            case STREAM:
-            {
-              prefix = "project";
-              break;
-            }
-            default:
-            {
-              return;
-            }
+            prefix = "product";
+            break;
+          }
+          case STREAM:
+          {
+            prefix = "project";
+            break;
+          }
+          default:
+          {
+            return;
+          }
+        }
+
+        URI statusURI = null;
+
+        List<String> names = new ArrayList<String>();
+        for (Scope x = scope; x != null; x = x.getParentScope())
+        {
+          if (SetupContext.isUserScheme(EcoreUtil.getURI(x).scheme()))
+          {
+            return;
           }
 
-          URI statusURI = null;
-
-          List<String> names = new ArrayList<String>();
-          for (Scope x = scope; x != null; x = x.getParentScope())
+          if (statusURI == null)
           {
-            if (SetupContext.isUserScheme(EcoreUtil.getURI(x).scheme()))
+            Annotation annotation = x.getAnnotation(AnnotationConstants.ANNOTATION_STATS_SENDING);
+            if (annotation != null)
             {
-              return;
-            }
-
-            if (statusURI == null)
-            {
-              Annotation annotation = x.getAnnotation(AnnotationConstants.ANNOTATION_STATS_SENDING);
-              if (annotation != null)
+              String uri = annotation.getDetails().get(AnnotationConstants.KEY_URI);
+              if (StringUtil.isEmpty(uri))
               {
-                String uri = annotation.getDetails().get(AnnotationConstants.KEY_URI);
-                if (StringUtil.isEmpty(uri))
-                {
-                  return;
-                }
-
-                statusURI = URI.createURI(uri);
+                return;
               }
-            }
 
-            names.add(0, URI.encodeSegment(x.getName(), false));
+              statusURI = URI.createURI(uri);
+            }
           }
 
-          if (statusURI != null)
+          names.add(0, URI.encodeSegment(x.getName(), false));
+        }
+
+        if (statusURI != null)
+        {
+          statusURI = statusURI.appendSegment(prefix).appendSegment(success ? "success" : "failure");
+
+          for (String name : names)
           {
-            statusURI = statusURI.appendSegment(prefix).appendSegment(success ? "success" : "failure");
-
-            for (String name : names)
-            {
-              statusURI = statusURI.appendSegment(name);
-            }
-
-            resourceSet.getURIConverter().exists(statusURI, null);
+            statusURI = statusURI.appendSegment(name);
           }
+
+          if (os != null)
+          {
+            statusURI = statusURI.appendSegment(os.getOsgiOS());
+            statusURI = statusURI.appendSegment(os.getOsgiWS());
+            statusURI = statusURI.appendSegment(os.getOsgiArch());
+          }
+
+          resourceSet.getURIConverter().exists(statusURI, null);
         }
       }
     }
@@ -813,6 +824,7 @@ public final class SetupCoreUtil
                 targetContainer = demandCreatedTargetContainer;
                 addToContainer = new Runnable()
                 {
+
                   public void run()
                   {
                     copyEObject.eSet(eReference, demandCreatedTargetContainer);
@@ -820,6 +832,7 @@ public final class SetupCoreUtil
                 };
               }
               else
+
               {
                 targetContainer = (EObject)targetValue;
               }
@@ -827,6 +840,7 @@ public final class SetupCoreUtil
               // If we can create a setting, add the container to really use it and return that setting.
               EStructuralFeature.Setting setting = demandCreateContainer(tried, targetContainer, name, eStructuralFeature);
               if (setting != null)
+
               {
                 if (addToContainer != null)
                 {
@@ -835,6 +849,7 @@ public final class SetupCoreUtil
 
                 return setting;
               }
+
             }
           }
         }

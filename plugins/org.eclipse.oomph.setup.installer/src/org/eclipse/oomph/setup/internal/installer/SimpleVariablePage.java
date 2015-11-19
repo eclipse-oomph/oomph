@@ -1225,6 +1225,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   private void installFinished()
   {
     readmePath = null;
+    boolean success = installError == null;
 
     if (performer != null)
     {
@@ -1234,12 +1235,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
         ProductVersion productVersion = installation.getProductVersion();
         if (productVersion != null)
         {
-          SetupCoreUtil.sendStats(productVersion, installError == null);
+          OS os = performer.getOS();
+          SetupCoreUtil.sendStats(success, productVersion, os);
         }
       }
     }
 
-    if (installError == null)
+    if (success)
     {
       installed = true;
 
@@ -1574,7 +1576,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   /**
    * @author Eike Stepper
    */
-  private final class SimplePrompter extends HashMap<String, String>implements SetupPrompter
+  private final class SimplePrompter extends HashMap<String, String> implements SetupPrompter
   {
     private static final long serialVersionUID = 1L;
 

@@ -812,7 +812,9 @@ public class ProductPage extends SetupWizardPage
       }
     }
 
-    SetupCoreUtil.sendStats(setupContext.getInstallation().getProductVersion(), success);
+    ProductVersion productVersion = setupContext.getInstallation().getProductVersion();
+    OS os = getPerformer().getOS();
+    SetupCoreUtil.sendStats(success, productVersion, os);
   }
 
   private void updateProductDetails(boolean initial)
