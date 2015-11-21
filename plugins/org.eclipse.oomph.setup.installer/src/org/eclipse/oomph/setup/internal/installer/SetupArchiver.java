@@ -16,6 +16,7 @@ import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
+import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 
@@ -32,6 +33,7 @@ import org.eclipse.equinox.app.IApplicationContext;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,7 +47,7 @@ import java.util.zip.ZipFile;
  */
 public class SetupArchiver implements IApplication
 {
-  public Object start(IApplicationContext context) throws Exception
+  public Object start(IApplicationContext context)
   {
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
 
@@ -70,18 +72,11 @@ public class SetupArchiver implements IApplication
     }
     else
     {
-      try
-      {
-        IOUtil.copyFile(file, temp);
-      }
-      catch (Throwable throwable)
-      {
-        throwable.printStackTrace();
-      }
+      IOUtil.copyFile(file, temp);
 
       if (!temp.setLastModified(lastModified))
       {
-        System.err.println("Count not set timestamp of " + temp);
+        throw new IORuntimeException("Could not set timestamp of " + temp);
       }
 
       outputLocation = URI.createURI("archive:" + URI.createFileURI(temp.toString()) + "!/");
@@ -108,6 +103,16 @@ public class SetupArchiver implements IApplication
 
           System.out.println("Previously mirrored " + uri + " -> " + archiveEntry);
         }
+      }
+      catch (IOException ex)
+      {
+        if (!file.delete())
+        {
+          throw new IORuntimeException("Could delete bad version of " + file);
+        }
+
+        lastModified = 0;
+        outputLocation = URI.createURI("archive:" + URI.createFileURI(file.toString()) + "!/");
       }
       finally
       {
@@ -166,6 +171,7 @@ public class SetupArchiver implements IApplication
     // Remove any folder redirection that might be in place for the location of the setups folder.
     uriMap.remove(SetupContext.INDEX_SETUP_LOCATION_URI.trimSegments(1).appendSegment(""));
 
+    boolean hasFailures = false;
     for (Resource resource : resourceSet.getResources())
     {
       URI uri = resource.getURI();
@@ -179,16 +185,17 @@ public class SetupArchiver implements IApplication
         path = path.appendSegments(normalizedURI.segments());
         System.out.println("Mirroring " + normalizedURI);
 
+        URI output = path.resolve(outputLocation);
+        entryNames.remove(path.toString());
+        uriMap.put(uri, output);
+
         if (resource.getContents().isEmpty())
         {
           System.err.println("Failed to load " + normalizedURI);
+          hasFailures = true;
         }
         else
         {
-          URI output = path.resolve(outputLocation);
-          entryNames.remove(path.toString());
-          uriMap.put(uri, output);
-
           try
           {
             long before = resource.getTimeStamp();
@@ -213,10 +220,24 @@ public class SetupArchiver implements IApplication
       }
     }
 
-    for (String entryName : entryNames)
+    if (hasFailures)
     {
-      URI archiveEntry = URI.createURI(outputLocation + entryName);
-      uriConverter.delete(archiveEntry, null);
+      System.err.println("There were failures so no entries will be deleted from the archive");
+    }
+    else
+    {
+      for (String entryName : entryNames)
+      {
+        URI archiveEntry = URI.createURI(outputLocation + entryName);
+        try
+        {
+          uriConverter.delete(archiveEntry, null);
+        }
+        catch (IOException ex)
+        {
+          ex.printStackTrace();
+        }
+      }
     }
 
     long finalLastModified = lastModified == 0 ? file.lastModified() : temp.lastModified();
@@ -232,15 +253,41 @@ public class SetupArchiver implements IApplication
 
       if (lastModified == 0)
       {
-        System.out.println("Successfully created " + file);
+        if (isDamaged(file))
+        {
+          System.err.println("The resulting archive is damaged. Deleting " + file);
+          file.delete();
+        }
+        else
+        {
+          System.out.println("Successfully created " + file);
+        }
       }
-      else if (temp.renameTo(file))
+      else if (isDamaged(temp))
       {
-        System.out.println("Successful updates for " + file);
+        System.err.println("The resulting archive is damaged so the old one will be retained. Deleting " + file);
+        temp.delete();
       }
       else
       {
-        System.err.println("Could not rename " + temp + " to " + file);
+        File backup = new File(file.getParentFile(), file.getName() + ".bak");
+        try
+        {
+          IOUtil.copyFile(temp, backup);
+        }
+        catch (Throwable throwable)
+        {
+          System.err.println("Could not create backup " + backup);
+        }
+
+        if (temp.renameTo(file))
+        {
+          System.out.println("Successful updates for " + file);
+        }
+        else
+        {
+          System.err.println("Could not rename " + temp + " to " + file);
+        }
       }
     }
     else
@@ -253,6 +300,73 @@ public class SetupArchiver implements IApplication
     }
 
     return null;
+  }
+
+  private boolean isDamaged(File file)
+  {
+    if (file == null || !file.exists())
+    {
+      return true;
+    }
+
+    if (file.isFile())
+    {
+      ZipFile zipFile = null;
+
+      try
+      {
+        zipFile = new ZipFile(file);
+        Enumeration<? extends ZipEntry> entries = zipFile.entries();
+        if (!entries.hasMoreElements())
+        {
+          return true;
+        }
+
+        do
+        {
+          ZipEntry entry = entries.nextElement();
+
+          entry.getName();
+          entry.getCompressedSize();
+          entry.getCrc();
+
+          InputStream inputStream = null;
+
+          try
+          {
+            inputStream = zipFile.getInputStream(entry);
+            if (inputStream == null)
+            {
+              return true;
+            }
+          }
+          finally
+          {
+            IOUtil.close(inputStream);
+          }
+        } while (entries.hasMoreElements());
+      }
+      catch (Exception ex)
+      {
+        return true;
+      }
+      finally
+      {
+        try
+        {
+          if (zipFile != null)
+          {
+            zipFile.close();
+          }
+        }
+        catch (IOException ex)
+        {
+          throw new IORuntimeException(ex);
+        }
+      }
+    }
+
+    return false;
   }
 
   public void stop()
