@@ -263,10 +263,18 @@ public final class PreferencesUtil
       String value = property.getSecureValue();
       if (propertyNames.remove(name))
       {
-        if (!ObjectUtil.equals(value, preferences.get(name, null)))
+        try
         {
-          isModified = true;
-          preferences.put(name, value);
+          String oldValue = preferences.get(name, null);
+          if (!ObjectUtil.equals(value, oldValue))
+          {
+            isModified = true;
+            preferences.put(name, value);
+          }
+        }
+        catch (RuntimeException ex)
+        {
+          // Do nothing if we can't get the old value.
         }
       }
       else
