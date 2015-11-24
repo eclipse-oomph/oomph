@@ -9,5 +9,5 @@
   <setupTask
       xsi:type="setup:InstallationTask"
       id="installation"/>
-  <description>And empty product catalog that can be redirected to a custom product catalog.</description>
+  <description>An empty product catalog that can be redirected to a custom product catalog.</description>
 </setup:ProductCatalog>

@@ -23,6 +23,7 @@ import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 
 import org.eclipse.emf.common.util.BasicEMap;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
@@ -35,6 +36,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -166,10 +168,12 @@ public class CatalogManager
         EList<ProductCatalog> productCatalogs = this.selection.getProductCatalogs();
         productCatalogs.clear();
         productCatalogs.addAll(selection.getProductCatalogs());
+        filter(productCatalogs, index.getProductCatalogs());
 
         EList<ProjectCatalog> projectCatalogs = this.selection.getProjectCatalogs();
         projectCatalogs.clear();
         projectCatalogs.addAll(selection.getProjectCatalogs());
+        filter(projectCatalogs, index.getProjectCatalogs());
       }
 
       // Filter out any proxies that remain in the managed selection.
@@ -203,6 +207,22 @@ public class CatalogManager
     }
 
     getPropertyChangeSupport().firePropertyChange(PROPERTY_INDEX, oldIndex, this.index);
+  }
+
+  private <T extends Scope> void filter(EList<T> selectionScopes, EList<T> indexScopes)
+  {
+    List<T> scopes = new ArrayList<T>(indexScopes);
+    scopes.retainAll(selectionScopes);
+    for (Iterator<T> it = scopes.iterator(); it.hasNext();)
+    {
+      T scope = it.next();
+      if ("redirectable".equals(scope.getName()))
+      {
+        it.remove();
+      }
+    }
+
+    ECollections.setEList(selectionScopes, scopes);
   }
 
   private void populateSelectedProductCatalogs(CatalogSelection selection, Index index)
