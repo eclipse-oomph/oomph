@@ -111,10 +111,9 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
   @Override
   public void dispose()
   {
-    if (transaction != null && !enableButton.getSelection())
+    if (transaction != null)
     {
-      transaction.close();
-      transaction = null;
+      closeRecorderTransaction();
     }
 
     instance = null;
@@ -191,8 +190,7 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
                 }
               }
 
-              transaction.close();
-              transaction = null;
+              closeRecorderTransaction();
             }
 
             openRecorderTransaction(null);
@@ -243,8 +241,7 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
         if (transaction != null)
         {
           policies = transaction.getPolicies(false);
-          transaction.close();
-          transaction = null;
+          closeRecorderTransaction();
         }
 
         openRecorderTransaction(policies);
@@ -319,10 +316,6 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
   @Override
   protected void contributeButtons(Composite parent)
   {
-    // Button uninitializedPageAltert = new Button(parent, SWT.CHECK);
-    // uninitializedPageAltert.setText("Show uninitialized page alert");
-    // uninitializedPageAltert.setSelection(true);
-
     initializePreferencesButton = new Button(parent, SWT.PUSH);
     initializePreferencesButton.setText("Initialize...");
 
@@ -383,6 +376,12 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
     job.schedule();
   }
 
+  private void closeRecorderTransaction()
+  {
+    transaction.close();
+    transaction = null;
+  }
+
   @Override
   protected void performDefaults()
   {
@@ -404,6 +403,7 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
     if (transaction != null)
     {
       transaction.commit();
+      closeRecorderTransaction();
     }
 
     return super.performOk();

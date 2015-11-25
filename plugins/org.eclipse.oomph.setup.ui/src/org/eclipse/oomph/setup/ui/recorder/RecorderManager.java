@@ -1054,13 +1054,6 @@ public final class RecorderManager
 
                   if (values.isEmpty())
                   {
-                    RecorderTransaction transaction = RecorderTransaction.getInstance();
-                    if (transaction != null)
-                    {
-                      // Close a transaction that has been opened by the RecorderPreferencePage.
-                      closeTransaction(transaction);
-                    }
-
                     earlySynchronization.stop();
                   }
                   else
