@@ -11,11 +11,14 @@
 package org.eclipse.oomph.setup.sync.tests;
 
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
+import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider;
 import org.eclipse.oomph.setup.internal.sync.Synchronization.ConflictException;
 import org.eclipse.oomph.setup.sync.tests.TestWorkstation.FailureHandler;
 import org.eclipse.oomph.setup.sync.tests.TestWorkstation.FailureHandler.Expect;
 import org.eclipse.oomph.setup.sync.tests.TestWorkstation.TestSynchronization;
 import org.eclipse.oomph.tests.AbstractTest;
+
+import org.eclipse.userstorage.tests.util.ServerFixture;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -32,12 +35,14 @@ public class SynchronizerTests extends AbstractTest
 {
   private final Map<Integer, TestWorkstation> workstations = new HashMap<Integer, TestWorkstation>();
 
+  private ServerFixture serverFixture;
+
   private TestWorkstation WS(int id) throws Exception
   {
     TestWorkstation workstation = workstations.get(id);
     if (workstation == null)
     {
-      workstation = new TestWorkstation(workstations, id);
+      workstation = new TestWorkstation(serverFixture, workstations, id);
       workstations.put(id, workstation);
     }
 
@@ -48,7 +53,15 @@ public class SynchronizerTests extends AbstractTest
   public void setUp() throws Exception
   {
     super.setUp();
-    TestServer.getRemoteDataProvider().delete();
+    workstations.clear();
+    serverFixture = new ServerFixture(RemoteDataProvider.APPLICATION_TOKEN);
+  }
+
+  @Override
+  public void tearDown() throws Exception
+  {
+    serverFixture.dispose();
+    super.tearDown();
   }
 
   @Test
@@ -203,8 +216,8 @@ public class SynchronizerTests extends AbstractTest
 
     WS(2).commit().assertCount(1);
     WS(2).set("refresh.resources", "true").save().synchronize().exclude("refresh.resources").commitAnd() //
-        .assertCount(2).assertSet("line.numbers", "true").assertSet("refresh.resources", "true") //
-        .assertExcluded("refresh.resources");
+        .assertCount(2).assertSet("line.numbers", "true").assertSet("refresh.resources", "true"); //
+    WS(2).assertExcluded("refresh.resources");
 
     WS(1).commit().assertCount(1).assertSet("line.numbers", "true").assertExcluded("refresh.resources");
     WS(1).set("refresh.resources", "true").save().commit() //

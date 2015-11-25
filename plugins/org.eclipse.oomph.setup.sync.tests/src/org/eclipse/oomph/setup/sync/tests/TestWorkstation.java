@@ -23,6 +23,8 @@ import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.sync.DataProvider;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.LocalDataProvider;
+import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider;
+import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider.SyncStorageCache;
 import org.eclipse.oomph.setup.internal.sync.SyncUtil;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.internal.sync.Synchronizer;
@@ -47,12 +49,20 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import org.eclipse.userstorage.IBlob;
+import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.StorageFactory;
+import org.eclipse.userstorage.spi.ISettings;
+import org.eclipse.userstorage.tests.util.ServerFixture;
+import org.eclipse.userstorage.util.Settings.MemorySettings;
+
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,17 +93,24 @@ public final class TestWorkstation
 
   private User user;
 
-  public TestWorkstation(Map<Integer, TestWorkstation> workstations, int id) throws Exception
+  public TestWorkstation(ServerFixture serverFixture, Map<Integer, TestWorkstation> workstations, int id) throws Exception
   {
-    this.id = id;
     this.workstations = workstations;
+    this.id = id;
 
     userHome = createUserHome();
     userSetup = new File(userHome, "user.setup");
 
+    ISettings settings = new MemorySettings();
+    settings.setValue(RemoteDataProvider.APPLICATION_TOKEN, serverFixture.getService().getServiceURI().toString());
+
+    StorageFactory factory = new StorageFactory(settings);
+    SyncStorageCache cache = new SyncStorageCache(userHome);
+    IStorage storage = factory.create(RemoteDataProvider.APPLICATION_TOKEN, cache);
+
     DataProvider localDataProvider = new LocalDataProvider(userSetup);
-    DataProvider remoteDataProvider = TestServer.getRemoteDataProvider();
-    synchronizer = new TestSynchronizer(localDataProvider, remoteDataProvider, userHome);
+    DataProvider remoteDataProvider = new RemoteDataProvider(storage);
+    synchronizer = new TestSynchronizer(localDataProvider, remoteDataProvider, cache.getFolder());
 
     log("Create workstation " + userHome);
   }
@@ -225,28 +242,28 @@ public final class TestWorkstation
     return this;
   }
 
-  public TestWorkstation assertIncluded(String key) throws IOException
+  public TestWorkstation assertIncluded(String key) throws Exception
   {
     Map<String, SyncPolicy> preferencePolicies = getPreferencePolicies();
     assertThat(preferencePolicies.get(key), CoreMatchers.is(SyncPolicy.INCLUDE));
     return this;
   }
 
-  public TestWorkstation assertExcluded(String key) throws IOException
+  public TestWorkstation assertExcluded(String key) throws Exception
   {
     Map<String, SyncPolicy> preferencePolicies = getPreferencePolicies();
     assertThat(preferencePolicies.get(key), CoreMatchers.is(SyncPolicy.EXCLUDE));
     return this;
   }
 
-  public TestWorkstation assertNoPolicy(String key) throws IOException
+  public TestWorkstation assertNoPolicy(String key) throws Exception
   {
     Map<String, SyncPolicy> preferencePolicies = getPreferencePolicies();
     assertThat(preferencePolicies.get(key), IsNull.nullValue());
     return this;
   }
 
-  public Map<String, SyncPolicy> getPreferencePolicies() throws IOException
+  public Map<String, SyncPolicy> getPreferencePolicies() throws Exception
   {
     RemoteData remoteData = getRemoteData();
     EMap<String, SyncPolicy> policies = remoteData.getPolicies();
@@ -267,33 +284,17 @@ public final class TestWorkstation
     return preferencePolicies;
   }
 
-  private void collectPreferencePolicies(Map<String, SyncPolicy> preferencePolicies, EMap<String, SyncPolicy> policies, List<? extends SetupTask> tasks)
-  {
-    for (SetupTask task : tasks)
-    {
-      if (task instanceof PreferenceTask)
-      {
-        PreferenceTask preferenceTask = (PreferenceTask)task;
-        String id = preferenceTask.getID();
-        SyncPolicy policy = policies.get(id);
-        if (policy != null)
-        {
-          String key = preferenceTask.getKey();
-          preferencePolicies.put(key, policy);
-        }
-      }
-    }
-  }
-
-  public RemoteData getRemoteData() throws IOException
+  public RemoteData getRemoteData() throws Exception
   {
     if (remoteFile == null)
     {
       remoteFile = File.createTempFile("remote-data-", ".tmp");
       remoteFile.deleteOnExit();
 
-      DataProvider dataProvider = synchronizer.getRemoteSnapshot().getDataProvider();
-      dataProvider.update(remoteFile);
+      IStorage tmpStorage = createTmpStorage();
+      IBlob tmpBlob = tmpStorage.getBlob(RemoteDataProvider.KEY);
+      InputStream tmpContents = tmpBlob.getContents();
+      RemoteDataProvider.saveContents(tmpContents, remoteFile);
     }
 
     return loadObject(URI.createFileURI(remoteFile.getAbsolutePath()), Synchronization.REMOTE_DATA_TYPE);
@@ -322,6 +323,18 @@ public final class TestWorkstation
   {
     Resource resource = resourceSet.getResource(uri, true);
     return BaseUtil.getObjectByType(resource.getContents(), classifier);
+  }
+
+  private IStorage createTmpStorage() throws Exception
+  {
+    RemoteDataProvider remoteDataProvider = (RemoteDataProvider)synchronizer.getRemoteSnapshot().getDataProvider();
+    IStorage storage = remoteDataProvider.getStorage();
+
+    ISettings settings = new MemorySettings();
+    settings.setValue(RemoteDataProvider.APPLICATION_TOKEN, storage.getService().getServiceURI().toString());
+
+    StorageFactory factory = new StorageFactory(settings);
+    return factory.create(RemoteDataProvider.APPLICATION_TOKEN);
   }
 
   private File createUserHome()
@@ -378,6 +391,24 @@ public final class TestWorkstation
       {
         CompoundTask compoundTask = (CompoundTask)task;
         collectPreferenceTasks(compoundTask.getSetupTasks(), result);
+      }
+    }
+  }
+
+  private void collectPreferencePolicies(Map<String, SyncPolicy> preferencePolicies, EMap<String, SyncPolicy> policies, List<? extends SetupTask> tasks)
+  {
+    for (SetupTask task : tasks)
+    {
+      if (task instanceof PreferenceTask)
+      {
+        PreferenceTask preferenceTask = (PreferenceTask)task;
+        String id = preferenceTask.getID();
+        SyncPolicy policy = policies.get(id);
+        if (policy != null)
+        {
+          String key = preferenceTask.getKey();
+          preferencePolicies.put(key, policy);
+        }
       }
     }
   }

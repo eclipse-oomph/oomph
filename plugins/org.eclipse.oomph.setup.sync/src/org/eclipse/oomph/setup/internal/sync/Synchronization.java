@@ -30,6 +30,7 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
@@ -416,12 +417,18 @@ public class Synchronization
   private Map<String, SetupTask> collectTasks(SetupTaskContainer taskContainer)
   {
     Map<String, SetupTask> tasks = new HashMap<String, SetupTask>();
-    collectTasks(taskContainer.getSetupTasks(), tasks);
+    if (collectTasks(taskContainer.getSetupTasks(), tasks))
+    {
+      new ChangedAdapter(taskContainer);
+    }
+
     return tasks;
   }
 
-  private void collectTasks(EList<SetupTask> tasks, Map<String, SetupTask> result)
+  private boolean collectTasks(EList<SetupTask> tasks, Map<String, SetupTask> result)
   {
+    boolean changed = false;
+
     for (SetupTask task : tasks)
     {
       String id = rememberID(task);
@@ -441,7 +448,13 @@ public class Synchronization
             ids.add(id);
           }
 
-          task.setID(id);
+          String oldID = task.getID();
+          if (!id.equals(oldID))
+          {
+            task.setID(id);
+            changed |= true;
+          }
+
           rememberPreferenceID(task);
         }
 
@@ -453,9 +466,11 @@ public class Synchronization
       else if (task instanceof CompoundTask)
       {
         CompoundTask compoundTask = (CompoundTask)task;
-        collectTasks(compoundTask.getSetupTasks(), result);
+        changed |= collectTasks(compoundTask.getSetupTasks(), result);
       }
     }
+
+    return changed;
   }
 
   private boolean isSychronizable(SetupTask task)
@@ -610,11 +625,11 @@ public class Synchronization
 
     try
     {
-      boolean changedRemote = applyActions(remoteWorkingCopy, REMOTE_DATA_TYPE);
-      remoteWorkingCopy.commit(changedRemote);
+      boolean updateRemoteDataProvider = applyActions(remoteWorkingCopy, REMOTE_DATA_TYPE);
+      remoteWorkingCopy.commit(updateRemoteDataProvider);
 
-      boolean changedLocal = applyActions(localWorkingCopy, USER_TYPE);
-      localWorkingCopy.commit(changedLocal);
+      boolean updateLocalDataProvider = applyActions(localWorkingCopy, USER_TYPE);
+      localWorkingCopy.commit(updateLocalDataProvider);
 
       synchronizer.commitFinished(null);
     }
@@ -646,7 +661,7 @@ public class Synchronization
     SetupTaskContainer taskContainer = loadObject(file, eClass);
     Map<String, SetupTask> tasks = collectTasks(taskContainer);
 
-    boolean changed = false;
+    boolean changed = ChangedAdapter.isChanged(taskContainer);
 
     for (Map.Entry<String, SyncAction> entry : actions.entrySet())
     {
@@ -809,6 +824,30 @@ public class Synchronization
     rememberIDs(resource);
 
     return BaseUtil.getObjectByType(resource.getContents(), eClass);
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class ChangedAdapter extends AdapterImpl
+  {
+    public ChangedAdapter(EObject object)
+    {
+      object.eAdapters().add(this);
+    }
+
+    public static boolean isChanged(EObject object)
+    {
+      for (Adapter adapter : object.eAdapters())
+      {
+        if (adapter.getClass() == ChangedAdapter.class)
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
   }
 
   /**

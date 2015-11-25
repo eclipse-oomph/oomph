@@ -66,23 +66,33 @@ public class Snapshot
     return newFile;
   }
 
-  public void copyFilesTo(File target) throws IOException
+  public void copyFilesTo(File target)
   {
-    IOUtil.copyFile(oldFile, new File(target, oldFile.getName()));
-    IOUtil.copyFile(newFile, new File(target, newFile.getName()));
+    copyFileTo(target, oldFile);
+    copyFileTo(target, newFile);
+
+    for (File file : dataProvider.getExtraFiles())
+    {
+      copyFileTo(target, file);
+    }
   }
 
-  public void copyFilesFrom(File source) throws IOException
+  public void copyFilesFrom(File source)
   {
-    IOUtil.copyFile(new File(source, oldFile.getName()), oldFile);
-    IOUtil.copyFile(new File(source, newFile.getName()), newFile);
+    copyFileFrom(source, oldFile);
+    copyFileFrom(source, newFile);
+
+    for (File file : dataProvider.getExtraFiles())
+    {
+      copyFileFrom(source, file);
+    }
   }
 
   public WorkingCopy createWorkingCopy() throws IOException
   {
     try
     {
-      dataProvider.update(newFile);
+      dataProvider.retrieve(newFile);
     }
     catch (NotFoundException ex)
     {
@@ -98,7 +108,7 @@ public class Snapshot
     return getClass().getSimpleName() + "[" + dataProvider + " --> " + info + "]";
   }
 
-  private void doCommit(boolean post) throws IOException, NotCurrentException
+  private void doCommit(boolean updateDataProvider) throws IOException, NotCurrentException
   {
     if (!tmpFile.isFile())
     {
@@ -107,14 +117,12 @@ public class Snapshot
 
     try
     {
-      if (post)
+      if (updateDataProvider)
       {
-        String baseVersion = SyncUtil.getDigest(newFile);
-        dataProvider.post(tmpFile, baseVersion);
+        dataProvider.update(tmpFile, newFile);
       }
 
       moveTmpFileTo(oldFile);
-
       IOUtil.copyFile(oldFile, newFile);
     }
     catch (NotCurrentException ex)
@@ -130,6 +138,23 @@ public class Snapshot
     if (!tmpFile.renameTo(target))
     {
       throw new IOException("Could not rename " + tmpFile + " to " + target);
+    }
+  }
+
+  private static void copyFileTo(File target, File file)
+  {
+    if (file.isFile())
+    {
+      IOUtil.copyFile(file, new File(target, file.getName()));
+    }
+  }
+
+  private static void copyFileFrom(File source, File file)
+  {
+    File sourceFile = new File(source, file.getName());
+    if (sourceFile.isFile())
+    {
+      IOUtil.copyFile(sourceFile, file);
     }
   }
 
@@ -164,12 +189,12 @@ public class Snapshot
       return snapshot.tmpFile;
     }
 
-    public void commit(boolean post) throws IOException, NotCurrentException
+    public void commit(boolean updateDataProvider) throws IOException, NotCurrentException
     {
       if (!committed && !disposed)
       {
         committed = true;
-        snapshot.doCommit(post);
+        snapshot.doCommit(updateDataProvider);
       }
     }
 

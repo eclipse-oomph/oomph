@@ -396,7 +396,7 @@ public class EnablementComposite extends Composite
   public static Map<EClass, EList<SetupTask>> getEnablementTasks(EList<SetupTask> tasks)
   {
     Map<EClass, EList<SetupTask>> result = new HashMap<EClass, EList<SetupTask>>();
-  
+
     for (SetupTask task : tasks)
     {
       if (task instanceof DynamicSetupTaskImpl)
@@ -412,7 +412,7 @@ public class EnablementComposite extends Composite
         }
       }
     }
-  
+
     return result;
   }
 

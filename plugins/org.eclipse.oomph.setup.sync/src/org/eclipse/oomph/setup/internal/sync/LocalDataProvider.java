@@ -22,6 +22,8 @@ import java.io.IOException;
  */
 public class LocalDataProvider implements DataProvider
 {
+  private static final File[] NO_FILES = {};
+
   private final File localFile;
 
   public LocalDataProvider(File locaFile)
@@ -29,17 +31,22 @@ public class LocalDataProvider implements DataProvider
     localFile = locaFile;
   }
 
-  public Location getLocation()
+  public final Location getLocation()
   {
     return Location.LOCAL;
   }
 
-  public File getLocalFile()
+  public final File getLocalFile()
   {
     return localFile;
   }
 
-  public boolean update(File file) throws IOException, NotFoundException
+  public File[] getExtraFiles()
+  {
+    return NO_FILES;
+  }
+
+  public boolean retrieve(File file) throws IOException, NotFoundException
   {
     String localVersion = SyncUtil.getDigest(localFile);
     if (StringUtil.isEmpty(localVersion))
@@ -57,9 +64,11 @@ public class LocalDataProvider implements DataProvider
     return false;
   }
 
-  public void post(File file, String baseVersion) throws IOException, NotCurrentException
+  public void update(File file, File baseFile) throws IOException, NotCurrentException
   {
     String localVersion = SyncUtil.getDigest(localFile);
+    String baseVersion = SyncUtil.getDigest(baseFile);
+
     if (StringUtil.isEmpty(localVersion) || ObjectUtil.equals(localVersion, baseVersion))
     {
       // OK.

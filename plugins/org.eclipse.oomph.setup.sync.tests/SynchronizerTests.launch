@@ -12,5 +12,5 @@
 <stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit4"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.oomph.setup.sync.tests.SynchronizerTests"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.oomph.setup.sync.tests"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Doomph.setup.sync.debug=true"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Doomph.setup.sync.debug=true&#13;&#10;-Dorg.eclipse.userstorage.credentialsProvider=org.eclipse.userstorage.tests.util.FixedCredentialsProvider&#13;&#10;-Dorg.eclipse.userstorage.session.debug=true&#13;&#10;-Dorg.eclipse.userstorage.tests.server.debug=false"/>
 </launchConfiguration>

@@ -85,7 +85,7 @@ public class Synchronizer
     return new Synchronization(this, deferLocal);
   }
 
-  public void copyFilesTo(File target) throws IOException
+  public void copyFilesTo(File target)
   {
     if (localSnapshot != null)
     {
@@ -98,7 +98,7 @@ public class Synchronizer
     }
   }
 
-  public void copyFilesFrom(File source) throws IOException
+  public void copyFilesFrom(File source)
   {
     if (localSnapshot != null)
     {

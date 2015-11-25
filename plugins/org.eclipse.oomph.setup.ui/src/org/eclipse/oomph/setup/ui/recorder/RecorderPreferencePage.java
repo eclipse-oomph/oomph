@@ -152,11 +152,12 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
         }
 
         updateEnablement();
-        RecorderManager.updateRecorderCheckboxState();
+        RecorderManager.updateRecorderToggleButton();
 
         if (enableRecorder)
         {
-          SynchronizerManager.INSTANCE.offerFirstTimeConnect(getShell());
+          boolean firstTime = SynchronizerManager.INSTANCE.offerFirstTimeConnect(getShell());
+          RecorderManager.INSTANCE.startEarlySynchronization(firstTime);
         }
       }
     });

@@ -125,6 +125,8 @@ public abstract class RecorderTransaction
 
   private CommitHandler commitHandler;
 
+  private Map<String, PreferenceTask> commitResult;
+
   RecorderTransaction(SetupTaskContainer rootObject)
   {
     this.rootObject = rootObject;
@@ -304,16 +306,29 @@ public abstract class RecorderTransaction
     this.commitHandler = commitHandler;
   }
 
+  public Map<String, PreferenceTask> getCommitResult()
+  {
+    return commitResult;
+  }
+
+  public boolean isCommitted()
+  {
+    return commitResult != null;
+  }
+
   public Map<String, PreferenceTask> commit()
   {
-    Map<String, PreferenceTask> preferenceTasks = new HashMap<String, PreferenceTask>();
-
-    if (isDirty())
+    if (commitResult == null)
     {
-      doCommit(preferenceTasks);
+      commitResult = new HashMap<String, PreferenceTask>();
+
+      if (isDirty())
+      {
+        doCommit(commitResult);
+      }
     }
 
-    return preferenceTasks;
+    return commitResult;
   }
 
   protected abstract void doCommit(Map<String, PreferenceTask> preferenceTasks);
@@ -456,6 +471,7 @@ public abstract class RecorderTransaction
     if (changed)
     {
       commit();
+      commitResult = null;
     }
   }
 

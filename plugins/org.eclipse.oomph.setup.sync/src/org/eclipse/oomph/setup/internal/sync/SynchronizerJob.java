@@ -14,26 +14,30 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.IStorageService;
+import org.eclipse.userstorage.spi.ICredentialsProvider;
 
 /**
  * @author Eike Stepper
  */
 public class SynchronizerJob extends Job
 {
-  private final CountDownLatch done = new CountDownLatch(1);
-
   private final Synchronizer synchronizer;
 
   private final boolean deferLocal;
 
-  private SynchronizerService service;
+  private IStorageService service;
+
+  private ICredentialsProvider credentialsProvider;
+
+  private Throwable exception;
 
   private Synchronization synchronization;
 
-  private Throwable exception;
+  private boolean finished;
+
+  private boolean awaitCanceled;
 
   public SynchronizerJob(Synchronizer synchronizer, boolean deferLocal)
   {
@@ -52,14 +56,24 @@ public class SynchronizerJob extends Job
     return deferLocal;
   }
 
-  public SynchronizerService getService()
+  public IStorageService getService()
   {
     return service;
   }
 
-  public void setService(SynchronizerService service)
+  public void setService(IStorageService service)
   {
     this.service = service;
+  }
+
+  public ICredentialsProvider getCredentialsProvider()
+  {
+    return credentialsProvider;
+  }
+
+  public void setCredentialsProvider(ICredentialsProvider credentialsProvider)
+  {
+    this.credentialsProvider = credentialsProvider;
   }
 
   public Throwable getException()
@@ -72,52 +86,70 @@ public class SynchronizerJob extends Job
     return synchronization;
   }
 
-  public Synchronization awaitSynchronization(long timeout, IProgressMonitor monitor)
+  public Synchronization awaitSynchronization(IProgressMonitor monitor)
   {
-    long now = System.currentTimeMillis();
-    long end = now + timeout;
-
-    while (!monitor.isCanceled())
+    while (!finished && exception == null)
     {
-      try
+      if (monitor.isCanceled())
       {
-        if (done.await(Math.min(timeout, 100), TimeUnit.MILLISECONDS))
-        {
-          return synchronization;
-        }
-
-        now = System.currentTimeMillis();
-        timeout = end - now;
-        if (timeout <= 0)
-        {
-          break;
-        }
-      }
-      catch (InterruptedException ex)
-      {
+        awaitCanceled = true;
         break;
+      }
+
+      synchronized (this)
+      {
+        try
+        {
+          wait(100); // Give the user a chance to cancel the monitor.
+        }
+        catch (InterruptedException ex)
+        {
+          return null;
+        }
       }
     }
 
-    return null;
+    return synchronization;
   }
 
   @Override
   protected IStatus run(IProgressMonitor monitor)
   {
+    RemoteDataProvider remoteDataProvider = (RemoteDataProvider)synchronizer.getRemoteSnapshot().getDataProvider();
+    IStorage storage = remoteDataProvider.getStorage();
+    ICredentialsProvider oldCredentialsProvider = storage.getCredentialsProvider();
+    storage.setCredentialsProvider(credentialsProvider);
+
     try
     {
       Synchronization result = synchronizer.synchronize(deferLocal);
 
-      // int xxx;
-      // Thread.sleep(15000);
+      if (Boolean.getBoolean("org.eclipse.oomph.setup.sync.SynchronizerJob.testDelay"))
+      {
+        for (int i = 0; i < 150 && !monitor.isCanceled() && !awaitCanceled; i++)
+        {
+          Thread.sleep(100);
+        }
+      }
 
-      synchronization = result;
-      done.countDown();
+      synchronized (this)
+      {
+        synchronization = result;
+        finished = true;
+        notifyAll();
+      }
     }
     catch (Throwable ex)
     {
-      exception = ex;
+      synchronized (this)
+      {
+        exception = ex;
+        notifyAll();
+      }
+    }
+    finally
+    {
+      storage.setCredentialsProvider(oldCredentialsProvider);
     }
 
     return Status.OK_STATUS;

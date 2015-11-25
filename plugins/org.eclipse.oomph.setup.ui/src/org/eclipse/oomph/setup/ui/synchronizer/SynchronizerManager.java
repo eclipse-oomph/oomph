@@ -18,26 +18,26 @@ import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider.AuthorizationReq
 import org.eclipse.oomph.setup.internal.sync.SetupSyncPlugin;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.internal.sync.Synchronizer;
-import org.eclipse.oomph.setup.internal.sync.SynchronizerCredentials;
 import org.eclipse.oomph.setup.internal.sync.SynchronizerJob;
-import org.eclipse.oomph.setup.internal.sync.SynchronizerService;
-import org.eclipse.oomph.setup.internal.sync.SynchronizerService.CredentialsProvider;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
-import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.PropertyFile;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.IStorageService;
+import org.eclipse.userstorage.StorageFactory;
+import org.eclipse.userstorage.spi.StorageCache;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -45,17 +45,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class SynchronizerManager
 {
+  public static final File SYNC_FOLDER = SetupSyncPlugin.INSTANCE.getUserLocation().toFile();
+
   public static final SynchronizerManager INSTANCE = new SynchronizerManager();
 
   public static final boolean ENABLED = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_SYNC);
 
-  public static final long TIMEOUT = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_SYNC_TIMEOUT, 10000);
-
   private static final File USER_SETUP = new File(SetupContext.USER_SETUP_LOCATION_URI.toFileString());
 
   private static final PropertyFile CONFIG = new PropertyFile(SetupSyncPlugin.INSTANCE.getUserLocation().append("sync.properties").toFile());
-
-  private static final String CONFIG_SERVICE_URI = "service.uri";
 
   private static final String CONFIG_SYNC_ENABLED = "sync.enabled";
 
@@ -69,103 +67,19 @@ public final class SynchronizerManager
    */
   private static final boolean DEBUG_CONNECTION_OFFERED = false;
 
-  private Boolean connectionOffered;
+  private final IStorage storage;
 
-  private SynchronizerService service;
+  private Boolean connectionOffered;
 
   private SynchronizerManager()
   {
+    StorageCache cache = new RemoteDataProvider.SyncStorageCache(SYNC_FOLDER);
+    storage = StorageFactory.DEFAULT.create(RemoteDataProvider.APPLICATION_TOKEN, cache);
   }
 
-  private void connect(Shell shell)
+  public IStorage getStorage()
   {
-    try
-    {
-      SynchronizerService service = getService();
-
-      SynchronizerLoginDialog dialog = new SynchronizerLoginDialog(shell, service);
-      if (dialog.open() == SynchronizerLoginDialog.OK)
-      {
-        SynchronizerCredentials credentials = dialog.getCredentials();
-        service.setCredentials(credentials);
-
-        setSyncEnabled(true);
-      }
-    }
-    catch (Throwable ex)
-    {
-      SetupUIPlugin.INSTANCE.log(ex);
-    }
-    finally
-    {
-      CONFIG.setProperty(CONFIG_CONNECTION_OFFERED, new Date().toString());
-      connectionOffered = true;
-    }
-  }
-
-  public void offerFirstTimeConnect(Shell shell)
-  {
-    if (!ENABLED)
-    {
-      return;
-    }
-
-    if (DEBUG_CONNECTION_OFFERED)
-    {
-      connectionOffered = null;
-      CONFIG.removeProperty(CONFIG_CONNECTION_OFFERED);
-    }
-
-    if (connectionOffered == null)
-    {
-      String property = CONFIG.getProperty(CONFIG_CONNECTION_OFFERED, null);
-      connectionOffered = property != null;
-    }
-
-    if (!connectionOffered)
-    {
-      connect(shell);
-    }
-  }
-
-  public SynchronizerService getService()
-  {
-    if (service == null)
-    {
-      try
-      {
-        String property = CONFIG.getProperty(CONFIG_SERVICE_URI, null);
-        if (property != null)
-        {
-          service = SynchronizerService.Registry.INSTANCE.getService(IOUtil.newURI(property));
-        }
-      }
-      catch (Throwable ex)
-      {
-        SetupUIPlugin.INSTANCE.log(ex);
-      }
-
-      if (service == null)
-      {
-        service = SynchronizerService.Registry.INSTANCE.getService(SynchronizerService.Registry.ECLIPSE_SERVICE_URI);
-      }
-    }
-
-    return service;
-  }
-
-  public void setService(SynchronizerService service)
-  {
-    if (service == null)
-    {
-      CONFIG.removeProperty(CONFIG_SERVICE_URI);
-    }
-    else
-    {
-      CONFIG.setProperty(CONFIG_SERVICE_URI, service.getServiceURI().toString());
-    }
-
-    this.service = service;
+    return storage;
   }
 
   public boolean isSyncEnabled()
@@ -191,35 +105,10 @@ public final class SynchronizerManager
    *
    * @throws AuthorizationRequiredException
    */
-  public Synchronizer createSynchronizer() throws AuthorizationRequiredException
-  {
-    return createSynchronizer(USER_SETUP);
-  }
-
-  /**
-   * Returns a {@link Synchronizer} for the current service, or for the Eclipse.org service if there is no current service.
-   *
-   * @throws AuthorizationRequiredException
-   */
-  public Synchronizer createSynchronizer(File userSetup) throws AuthorizationRequiredException
-  {
-    SynchronizerService service = getService();
-    File syncFolder = service.getSyncFolder();
-
-    return createSynchronizer(userSetup, syncFolder);
-  }
-
-  /**
-   * Returns a {@link Synchronizer} for the current service, or for the Eclipse.org service if there is no current service.
-   *
-   * @throws AuthorizationRequiredException
-   */
   public Synchronizer createSynchronizer(File userSetup, File syncFolder) throws AuthorizationRequiredException
   {
     LocalDataProvider localDataProvider = new LocalDataProvider(userSetup);
-
-    SynchronizerService service = getService();
-    RemoteDataProvider remoteDataProvider = service.createDataProvider(UICredentialsProvider.INSTANCE);
+    RemoteDataProvider remoteDataProvider = new RemoteDataProvider(storage);
 
     return new Synchronizer(localDataProvider, remoteDataProvider, syncFolder);
   }
@@ -254,38 +143,71 @@ public final class SynchronizerManager
     return null;
   }
 
-  /**
-   * @author Eike Stepper
-   */
-  public static final class UICredentialsProvider implements CredentialsProvider
+  public boolean offerFirstTimeConnect(Shell shell)
   {
-    public static final UICredentialsProvider INSTANCE = new UICredentialsProvider();
-
-    public SynchronizerCredentials provideCredentials(final SynchronizerService service)
+    if (!ENABLED)
     {
-      final SynchronizerCredentials[] credentials = { null };
+      return false;
+    }
 
-      try
+    IStorageService service = storage.getService();
+    if (service == null)
+    {
+      return false;
+    }
+
+    if (DEBUG_CONNECTION_OFFERED)
+    {
+      connectionOffered = null;
+      CONFIG.removeProperty(CONFIG_CONNECTION_OFFERED);
+    }
+
+    if (connectionOffered == null)
+    {
+      String property = CONFIG.getProperty(CONFIG_CONNECTION_OFFERED, null);
+      connectionOffered = property != null;
+    }
+
+    if (connectionOffered)
+    {
+      return false;
+    }
+
+    if (!connect(shell))
+    {
+      return false;
+    }
+
+    setSyncEnabled(true);
+    return true;
+  }
+
+  private boolean connect(final Shell shell)
+  {
+    try
+    {
+      final boolean[] result = { false };
+
+      shell.getDisplay().syncExec(new Runnable()
       {
-        final Shell shell = UIUtil.getShell();
-        shell.getDisplay().syncExec(new Runnable()
+        public void run()
         {
-          public void run()
-          {
-            SynchronizerLoginDialog dialog = new SynchronizerLoginDialog(shell, service);
-            if (dialog.open() == SynchronizerLoginDialog.OK)
-            {
-              credentials[0] = dialog.getCredentials();
-            }
-          }
-        });
-      }
-      catch (Throwable ex)
-      {
-        SetupUIPlugin.INSTANCE.log(ex);
-      }
+          SynchronizerWelcomeDialog dialog = new SynchronizerWelcomeDialog(shell);
+          result[0] = dialog.open() == SynchronizerWelcomeDialog.OK;
+        }
+      });
 
-      return credentials[0];
+      return result[0];
+    }
+    catch (Throwable ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex);
+      return false;
+    }
+    finally
+    {
+      CONFIG.setProperty(CONFIG_CONNECTION_OFFERED, new Date().toString());
+      connectionOffered = true;
     }
   }
 
@@ -296,25 +218,24 @@ public final class SynchronizerManager
   {
     private SynchronizerJob synchronizerJob;
 
-    private long startTime;
-
     public boolean start(boolean deferLocal)
     {
       if (ENABLED)
       {
         if (synchronizerJob == null && INSTANCE.isSyncEnabled())
         {
-          SynchronizerService service = INSTANCE.getService();
-          File syncFolder = service.getSyncFolder();
+          IStorageService service = INSTANCE.getStorage().getService();
+          if (service == null)
+          {
+            return false;
+          }
 
           try
           {
-            Synchronizer synchronizer = INSTANCE.createSynchronizer(USER_SETUP, syncFolder);
+            Synchronizer synchronizer = INSTANCE.createSynchronizer(USER_SETUP, SYNC_FOLDER);
             synchronizerJob = new SynchronizerJob(synchronizer, deferLocal);
             synchronizerJob.setService(service);
             synchronizerJob.schedule();
-
-            startTime = System.currentTimeMillis();
           }
           catch (AuthorizationRequiredException ex)
           {
@@ -353,8 +274,8 @@ public final class SynchronizerManager
 
         if (result[0] == null)
         {
-          SynchronizerService service = synchronizerJob.getService();
-          final String serviceLabel = service == null ? "remote service" : service.getLabel();
+          IStorageService service = synchronizerJob.getService();
+          final String serviceLabel = service == null ? "remote service" : service.getServiceLabel();
 
           try
           {
@@ -370,8 +291,7 @@ public final class SynchronizerManager
                   {
                     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
                     {
-                      long timeout = TIMEOUT - (System.currentTimeMillis() - startTime);
-                      result[0] = await(serviceLabel, timeout, monitor);
+                      result[0] = await(serviceLabel, monitor);
                     }
                   });
                 }
@@ -389,12 +309,12 @@ public final class SynchronizerManager
             if (result[0] == null && !canceled.get())
             {
               Throwable exception = synchronizerJob.getException();
-              if (exception != null)
+              if (exception == null || exception instanceof OperationCanceledException)
               {
-                throw exception;
+                return null;
               }
 
-              throw new TimeoutException("Request to " + serviceLabel + " timed out.");
+              throw exception;
             }
           }
           catch (Throwable ex)
@@ -409,13 +329,13 @@ public final class SynchronizerManager
       return null;
     }
 
-    private Synchronization await(String serviceLabel, long timeout, IProgressMonitor monitor)
+    private Synchronization await(String serviceLabel, IProgressMonitor monitor)
     {
       monitor.beginTask("Requesting data from " + serviceLabel + "...", IProgressMonitor.UNKNOWN);
 
       try
       {
-        return synchronizerJob.awaitSynchronization(timeout, monitor);
+        return synchronizerJob.awaitSynchronization(monitor);
       }
       finally
       {

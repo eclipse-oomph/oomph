@@ -21,9 +21,11 @@ public interface DataProvider
 {
   public Location getLocation();
 
-  public boolean update(File file) throws IOException, NotFoundException;
+  public File[] getExtraFiles();
 
-  public void post(File file, String baseVersion) throws IOException, NotCurrentException;
+  public boolean retrieve(File file) throws IOException, NotFoundException;
+
+  public void update(File file, File baseFile) throws IOException, NotCurrentException;
 
   public boolean delete() throws IOException;
 

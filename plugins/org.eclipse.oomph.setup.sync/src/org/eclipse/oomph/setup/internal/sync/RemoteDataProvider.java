@@ -11,187 +11,110 @@
 package org.eclipse.oomph.setup.internal.sync;
 
 import org.eclipse.oomph.util.IOUtil;
-import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.auth.Credentials;
-import org.apache.http.client.fluent.Executor;
-import org.apache.http.client.fluent.Request;
-import org.apache.http.client.fluent.Response;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.util.EntityUtils;
+import org.eclipse.userstorage.IBlob;
+import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.IStorageService;
+import org.eclipse.userstorage.util.ConflictException;
+import org.eclipse.userstorage.util.FileStorageCache;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.net.URI;
-import java.util.List;
 
 /**
  * @author Eike Stepper
  */
 public class RemoteDataProvider implements DataProvider
 {
-  private static final String USER_AGENT_ID = PropertiesUtil.getProperty("oomph.setup.sync.user_agent_id", "oomph/sync");
+  public static final String APPLICATION_TOKEN = "cNhDr0INs8T109P8h6E1r_GvU3I";
 
-  private static final boolean DEBUG = PropertiesUtil.isProperty("oomph.setup.sync.debug");
+  public static final String KEY = "user_setup";
 
-  private static final String BASE_VERSION_HEADER = "X-Base-Version";
+  private final IBlob blob;
 
-  private static final String VERSION_HEADER = "X-Version";
-
-  private static final int OK = 200;
-
-  private static final int NOT_MODIFIED = 304;
-
-  private static final int BAD_REQUEST = 400;
-
-  private static final int AUTHORIZATION_REQUIRED = 401;
-
-  private static final int FORBIDDEN = 403;
-
-  private static final int NOT_FOUND = 404;
-
-  private static final int CONFLICT = 409;
-
-  private final URI uri;
-
-  private final Executor executor;
-
-  public RemoteDataProvider(URI serviceURI, Executor executor)
+  public RemoteDataProvider(IStorage storage)
   {
-    uri = serviceURI;
-    this.executor = executor;
+    blob = storage.getBlob(KEY);
+    if (StringUtil.isEmpty(blob.getETag()))
+    {
+      // Avoid sending no/empty etag because then the service would unconditionally overwrite the blob.
+      blob.setETag("<unknown-etag>");
+    }
   }
 
-  public RemoteDataProvider(URI serviceURI, Credentials credentials)
-  {
-    this(serviceURI, Executor.newInstance().auth(credentials));
-  }
-
-  public Location getLocation()
+  public final Location getLocation()
   {
     return Location.REMOTE;
   }
 
-  public URI getURI()
+  public final URI getURI()
   {
-    return uri;
+    IStorageService service = getStorage().getService();
+    if (service != null)
+    {
+      return service.getServiceURI();
+    }
+
+    return null;
   }
 
-  public boolean update(File file) throws IOException, NotFoundException
+  public final IStorage getStorage()
   {
-    HttpEntity responseEntity = null;
-
-    try
-    {
-      String baseVersion = SyncUtil.getDigest(file);
-      Request request = configureRequest(Request.Get(uri), baseVersion);
-
-      HttpResponse response = sendRequest(request);
-      responseEntity = response.getEntity();
-
-      int status = getStatus(response);
-      if (status == NOT_FOUND)
-      {
-        throw new NotFoundException(uri);
-      }
-
-      if (status == NOT_MODIFIED)
-      {
-        return false;
-      }
-
-      if (status == OK)
-      {
-        saveContent(responseEntity, file);
-        return true;
-      }
-
-      throw BadResponseException.create(uri, response.getStatusLine());
-    }
-    catch (NotFoundException ex)
-    {
-      throw ex;
-    }
-    catch (IOException ex)
-    {
-      if (DEBUG && responseEntity != null)
-      {
-        responseEntity.writeTo(System.out);
-      }
-
-      throw ex;
-    }
-    finally
-    {
-      if (responseEntity != null)
-      {
-        EntityUtils.consume(responseEntity);
-      }
-    }
+    return blob.getStorage();
   }
 
-  public void post(File file, String baseVersion) throws IOException, NotCurrentException
+  public IBlob getBlob()
   {
-    HttpEntity responseEntity = null;
+    return blob;
+  }
 
+  public File[] getExtraFiles()
+  {
+    SyncStorageCache cache = (SyncStorageCache)getStorage().getCache();
+    return new File[] { cache.getPropertiesFile() };
+  }
+
+  public boolean retrieve(File file) throws IOException, NotFoundException
+  {
+    InputStream contents = blob.getContents();
+    if (contents == null)
+    {
+      throw new NotFoundException(getURI());
+    }
+
+    if (contents instanceof FileInputStream)
+    {
+      // NOT_MODIFIED
+      IOUtil.closeSilent(contents);
+      return false;
+    }
+
+    saveContents(contents, file);
+    return true;
+  }
+
+  public void update(File file, File baseFile) throws IOException, NotCurrentException
+  {
     try
     {
-      String version = SyncUtil.getDigest(file);
-
-      HttpEntity requestEntity = MultipartEntityBuilder.create().addPart("userfile", new FileBody(file)).build();
-      Request request = configureRequest(Request.Post(uri), baseVersion).addHeader(VERSION_HEADER, version).body(requestEntity);
-
-      HttpResponse response = sendRequest(request);
-      responseEntity = response.getEntity();
-      int status = getStatus(response);
-
-      if (status == CONFLICT)
-      {
-        saveContent(responseEntity, file);
-        throw new NotCurrentException(uri);
-      }
-
-      if (status == OK)
-      {
-        return;
-      }
-
-      throw BadResponseException.create(uri, response.getStatusLine());
+      blob.setContents(new FileInputStream(file));
     }
-    catch (IOException ex)
+    catch (ConflictException ex)
     {
-      if (DEBUG && responseEntity != null)
-      {
-        responseEntity.writeTo(System.out);
-      }
-
-      throw ex;
+      throw new NotCurrentException(getURI());
     }
   }
 
   public boolean delete() throws IOException
   {
-    Request request = configureRequest(Request.Delete(uri), null);
-    HttpResponse response = sendRequest(request);
-
-    int status = getStatus(response);
-    if (status == NOT_FOUND)
-    {
-      return false;
-    }
-
-    return true;
+    return false;
   }
 
   @Override
@@ -200,167 +123,42 @@ public class RemoteDataProvider implements DataProvider
     return getClass().getSimpleName() + "[" + getURI() + "]";
   }
 
-  private Request configureRequest(Request request, String baseVersion)
-  {
-    return request //
-        .viaProxy(SyncUtil.getProxyHost(uri)) //
-        .connectTimeout(3000) //
-        .staleConnectionCheck(true) //
-        .socketTimeout(10000) //
-        .addHeader(BASE_VERSION_HEADER, StringUtil.safe(baseVersion)) //
-        .addHeader("User-Agent", USER_AGENT_ID);
-  }
-
-  private HttpResponse sendRequest(Request request) throws IOException
-  {
-    long start = 0;
-    if (DEBUG)
-    {
-      try
-      {
-        start = System.currentTimeMillis();
-        StringBuilder builder = new StringBuilder();
-        builder.append(request);
-        builder.append('\n');
-
-        Field f1 = Request.class.getDeclaredField("request");
-        f1.setAccessible(true);
-        Object o1 = f1.get(request);
-
-        Field f2 = Class.forName("org.apache.http.message.AbstractHttpMessage").getDeclaredField("headergroup");
-        f2.setAccessible(true);
-        Object o2 = f2.get(o1);
-
-        Field f3 = o2.getClass().getDeclaredField("headers");
-        f3.setAccessible(true);
-        @SuppressWarnings("unchecked")
-        List<Header> o3 = (List<Header>)f3.get(o2);
-
-        for (Header header : o3)
-        {
-          builder.append("   ");
-          builder.append(header);
-          builder.append('\n');
-        }
-
-        System.out.print(builder);
-      }
-      catch (Throwable ex)
-      {
-        ex.printStackTrace();
-      }
-    }
-
-    Response result = SyncUtil.proxyAuthentication(executor, uri).execute(request);
-    HttpResponse response = result.returnResponse();
-
-    if (DEBUG)
-    {
-      try
-      {
-        StringBuilder builder = new StringBuilder();
-        builder.append(response.getStatusLine());
-        builder.append('\n');
-
-        for (Header header : response.getAllHeaders())
-        {
-          builder.append("   ");
-          builder.append(header);
-          builder.append('\n');
-        }
-
-        if (start != 0)
-        {
-          long millis = System.currentTimeMillis() - start;
-          builder.append("Took: ");
-          builder.append(millis);
-          builder.append(" millis");
-          builder.append('\n');
-        }
-
-        builder.append('\n');
-        System.out.print(builder);
-      }
-      catch (Throwable ex)
-      {
-        ex.printStackTrace();
-      }
-    }
-
-    return response;
-  }
-
-  private int getStatus(HttpResponse response) throws IOException
-  {
-    StatusLine statusLine = response.getStatusLine();
-    if (statusLine == null)
-    {
-      throw new BadResponseException(uri, "No status returned");
-    }
-
-    int status = statusLine.getStatusCode();
-    if (status == BAD_REQUEST)
-    {
-      throw new BadRequestException(uri);
-    }
-
-    if (status == FORBIDDEN)
-    {
-      throw new ForbiddenException(uri);
-    }
-
-    if (status == AUTHORIZATION_REQUIRED)
-    {
-      throw new AuthorizationRequiredException(uri);
-    }
-
-    return status;
-  }
-
-  private static void saveContent(HttpEntity entity, File file) throws IOException
+  public static void saveContents(InputStream contents, File file) throws IOException
   {
     file.getParentFile().mkdirs();
-
-    InputStream content = null;
     OutputStream out = null;
 
     try
     {
-      content = entity.getContent();
       out = new BufferedOutputStream(new FileOutputStream(file));
 
-      IOUtil.copy(content, out);
+      IOUtil.copy(contents, out);
     }
     finally
     {
       IOUtil.closeSilent(out);
-      IOUtil.closeSilent(content);
+      IOUtil.closeSilent(contents);
     }
   }
 
   /**
    * @author Eike Stepper
    */
-  public static class BadRequestException extends IOException
+  public static class SyncStorageCache extends FileStorageCache.SingleApplication.SingleKey
   {
-    private static final long serialVersionUID = 1L;
+    private static final String FILE_NAME_PREFIX = "remote-new.xml";
 
-    public BadRequestException(URI uri)
+    private static final String PROPERTIES_FILE_NAME = FILE_NAME_PREFIX + PROPERTIES;
+
+    public SyncStorageCache(File folder)
     {
-      super("Bad request: " + uri);
+      super(folder, APPLICATION_TOKEN, KEY);
+      setFileNamePrefix(FILE_NAME_PREFIX);
     }
-  }
 
-  /**
-   * @author Eike Stepper
-   */
-  public static class ForbiddenException extends IOException
-  {
-    private static final long serialVersionUID = 1L;
-
-    public ForbiddenException(URI uri)
+    public File getPropertiesFile()
     {
-      super("Forbidden: " + uri);
+      return new File(getFolder(), PROPERTIES_FILE_NAME);
     }
   }
 
@@ -374,24 +172,6 @@ public class RemoteDataProvider implements DataProvider
     public AuthorizationRequiredException(URI uri)
     {
       super("Forbidden: " + uri);
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static class BadResponseException extends IOException
-  {
-    private static final long serialVersionUID = 1L;
-
-    public BadResponseException(URI uri, String statusLine)
-    {
-      super("Bad response: " + uri + (StringUtil.isEmpty(statusLine) ? "" : " --> " + statusLine));
-    }
-
-    private static BadResponseException create(URI uri, StatusLine statusLine)
-    {
-      return new BadResponseException(uri, statusLine == null ? null : statusLine.toString());
     }
   }
 }

@@ -35,78 +35,87 @@ public enum ScopeType implements Enumerator
    * @generated
    * @ordered
    */
-  NONE(0, "None", "None"), /**
-                           * The '<em><b>Product Catalog</b></em>' literal object.
-                           * <!-- begin-user-doc -->
-                           * <!-- end-user-doc -->
-                           * @see #PRODUCT_CATALOG_VALUE
-                           * @generated
-                           * @ordered
-                           */
-  PRODUCT_CATALOG(1, "ProductCatalog", "ProductCatalog"), /**
-                                                          * The '<em><b>Product</b></em>' literal object.
-                                                          * <!-- begin-user-doc -->
-                                                          * <!-- end-user-doc -->
-                                                          * @see #PRODUCT_VALUE
-                                                          * @generated
-                                                          * @ordered
-                                                          */
-  PRODUCT(2, "Product", "Eclipse"), /**
-                                    * The '<em><b>Product Version</b></em>' literal object.
-                                    * <!-- begin-user-doc -->
-                                    * <!-- end-user-doc -->
-                                    * @see #PRODUCT_VERSION_VALUE
-                                    * @generated
-                                    * @ordered
-                                    */
-  PRODUCT_VERSION(3, "ProductVersion", "ProductVersion"), /**
-                                                          * The '<em><b>Project Catalog</b></em>' literal object.
-                                                          * <!-- begin-user-doc -->
-                                                          * <!-- end-user-doc -->
-                                                          * @see #PROJECT_CATALOG_VALUE
-                                                          * @generated
-                                                          * @ordered
-                                                          */
-  PROJECT_CATALOG(4, "ProjectCatalog", "ProjectCatalog"), /**
-                                                          * The '<em><b>Project</b></em>' literal object.
-                                                          * <!-- begin-user-doc -->
-                                                          * <!-- end-user-doc -->
-                                                          * @see #PROJECT_VALUE
-                                                          * @generated
-                                                          * @ordered
-                                                          */
-  PROJECT(5, "Project", "Project"), /**
-                                    * The '<em><b>Stream</b></em>' literal object.
-                                    * <!-- begin-user-doc -->
-                                    * <!-- end-user-doc -->
-                                    * @see #STREAM_VALUE
-                                    * @generated
-                                    * @ordered
-                                    */
-  STREAM(6, "Stream", "Stream"), /**
-                                 * The '<em><b>Installation</b></em>' literal object.
-                                 * <!-- begin-user-doc -->
-                                 * <!-- end-user-doc -->
-                                 * @see #INSTALLATION_VALUE
-                                 * @generated
-                                 * @ordered
-                                 */
-  INSTALLATION(7, "Installation", "Installation"), /**
-                                                   * The '<em><b>Workspace</b></em>' literal object.
-                                                   * <!-- begin-user-doc -->
-                                                   * <!-- end-user-doc -->
-                                                   * @see #WORKSPACE_VALUE
-                                                   * @generated
-                                                   * @ordered
-                                                   */
-  WORKSPACE(8, "Workspace", "Workspace"), /**
-                                          * The '<em><b>User</b></em>' literal object.
-                                          * <!-- begin-user-doc -->
-                                          * <!-- end-user-doc -->
-                                          * @see #USER_VALUE
-                                          * @generated
-                                          * @ordered
-                                          */
+  NONE(0, "None", "None"),
+  /**
+  * The '<em><b>Product Catalog</b></em>' literal object.
+  * <!-- begin-user-doc -->
+  * <!-- end-user-doc -->
+  * @see #PRODUCT_CATALOG_VALUE
+  * @generated
+  * @ordered
+  */
+  PRODUCT_CATALOG(1, "ProductCatalog", "ProductCatalog"),
+  /**
+  * The '<em><b>Product</b></em>' literal object.
+  * <!-- begin-user-doc -->
+  * <!-- end-user-doc -->
+  * @see #PRODUCT_VALUE
+  * @generated
+  * @ordered
+  */
+  PRODUCT(2, "Product", "Eclipse"),
+  /**
+  * The '<em><b>Product Version</b></em>' literal object.
+  * <!-- begin-user-doc -->
+  * <!-- end-user-doc -->
+  * @see #PRODUCT_VERSION_VALUE
+  * @generated
+  * @ordered
+  */
+  PRODUCT_VERSION(3, "ProductVersion", "ProductVersion"),
+  /**
+  * The '<em><b>Project Catalog</b></em>' literal object.
+  * <!-- begin-user-doc -->
+  * <!-- end-user-doc -->
+  * @see #PROJECT_CATALOG_VALUE
+  * @generated
+  * @ordered
+  */
+  PROJECT_CATALOG(4, "ProjectCatalog", "ProjectCatalog"),
+  /**
+  * The '<em><b>Project</b></em>' literal object.
+  * <!-- begin-user-doc -->
+  * <!-- end-user-doc -->
+  * @see #PROJECT_VALUE
+  * @generated
+  * @ordered
+  */
+  PROJECT(5, "Project", "Project"),
+  /**
+  * The '<em><b>Stream</b></em>' literal object.
+  * <!-- begin-user-doc -->
+  * <!-- end-user-doc -->
+  * @see #STREAM_VALUE
+  * @generated
+  * @ordered
+  */
+  STREAM(6, "Stream", "Stream"),
+  /**
+  * The '<em><b>Installation</b></em>' literal object.
+  * <!-- begin-user-doc -->
+  * <!-- end-user-doc -->
+  * @see #INSTALLATION_VALUE
+  * @generated
+  * @ordered
+  */
+  INSTALLATION(7, "Installation", "Installation"),
+  /**
+  * The '<em><b>Workspace</b></em>' literal object.
+  * <!-- begin-user-doc -->
+  * <!-- end-user-doc -->
+  * @see #WORKSPACE_VALUE
+  * @generated
+  * @ordered
+  */
+  WORKSPACE(8, "Workspace", "Workspace"),
+  /**
+  * The '<em><b>User</b></em>' literal object.
+  * <!-- begin-user-doc -->
+  * <!-- end-user-doc -->
+  * @see #USER_VALUE
+  * @generated
+  * @ordered
+  */
   USER(9, "User", "User");
 
   /**

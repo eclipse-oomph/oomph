@@ -10,25 +10,26 @@
  */
 package org.eclipse.oomph.setup.ui.synchronizer;
 
-import org.eclipse.oomph.setup.internal.sync.SynchronizerCredentials;
-import org.eclipse.oomph.setup.internal.sync.SynchronizerService;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
-import org.eclipse.oomph.util.ObjectUtil;
 
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.nebula.jface.tablecomboviewer.TableComboViewer;
 import org.eclipse.nebula.widgets.tablecombo.TableCombo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.userstorage.IStorage;
+import org.eclipse.userstorage.IStorageService;
+import org.eclipse.userstorage.ui.StorageConfigurationComposite;
 
 /**
  * @author Eike Stepper
@@ -39,23 +40,13 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
 
   private Button enableButton;
 
-  private TableCombo serviceCombo;
-
-  private SynchronizerLoginComposite loginComposite;
+  private StorageConfigurationComposite storageConfigurationComposite;
 
   private boolean initialEnabled;
-
-  private SynchronizerService initialService;
-
-  private SynchronizerCredentials initialCredentials;
-
-  private SynchronizerService currentService;
 
   public SynchronizerPreferencePage()
   {
     initialEnabled = SynchronizerManager.INSTANCE.isSyncEnabled();
-    initialService = SynchronizerManager.INSTANCE.getService();
-    initialCredentials = initialService.getCredentials();
   }
 
   public void init(IWorkbench workbench)
@@ -66,99 +57,108 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
   @Override
   protected Control createContents(Composite parent)
   {
-    loginComposite = new SynchronizerLoginComposite(parent, SWT.NONE, 0, 0)
+    IStorage storage = SynchronizerManager.INSTANCE.getStorage();
+    IStorageService service = storage.getService();
+    boolean showServices = StorageConfigurationComposite.isShowServices();
+
+    GridLayout layout = new GridLayout(showServices ? 2 : 1, false);
+    layout.marginWidth = 0;
+    layout.marginHeight = 0;
+
+    final Composite main = new Composite(parent, SWT.NONE);
+    main.setLayout(layout);
+
+    if (service == null && !showServices)
     {
-      @Override
-      protected void createUI(Composite parent, int columns)
+      Label label = new Label(main, SWT.NONE);
+      label.setText("No service available.");
+    }
+    else
+    {
+      enableButton = new Button(main, SWT.CHECK);
+      enableButton.setText("Synchronize with" + (showServices ? ":" : " " + service.getServiceLabel()));
+      enableButton.addSelectionListener(new SelectionAdapter()
       {
-        enableButton = new Button(parent, SWT.CHECK);
-        enableButton.setText("Synchronize with:");
-        enableButton.addSelectionListener(new SelectionAdapter()
+        @Override
+        public void widgetSelected(SelectionEvent e)
         {
-          @Override
-          public void widgetSelected(SelectionEvent e)
-          {
-            updateEnablement();
-          }
-        });
-
-        serviceCombo = new TableCombo(parent, SWT.BORDER | SWT.READ_ONLY);
-        serviceCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, columns - 1, 1));
-        serviceCombo.defineColumns(2);
-        serviceCombo.setToolTipText("Select the service to synchronize with");
-
-        Table table = serviceCombo.getTable();
-        table.addSelectionListener(new SelectionAdapter()
-        {
-          @Override
-          public void widgetSelected(SelectionEvent e)
-          {
-            if (e.item instanceof TableItem)
-            {
-              TableItem item = (TableItem)e.item;
-              SynchronizerService service = (SynchronizerService)item.getData();
-              selectService(service);
-            }
-          }
-        });
-
-        for (SynchronizerService service : SynchronizerService.Registry.INSTANCE.getServices())
-        {
-          TableItem item = new TableItem(table, SWT.NONE);
-          item.setData(service);
-          item.setImage(0, SetupUIPlugin.INSTANCE.getSWTImage("sync/Remote"));
-          item.setText(0, service.getLabel());
-          item.setText(1, service.getServiceURI().toString());
+          updateEnablement();
         }
+      });
 
-        super.createUI(parent, columns);
-      }
-
-      @Override
-      protected void validate()
+      if (showServices)
       {
-        updateEnablement();
+        storageConfigurationComposite = new StorageConfigurationComposite(main, SWT.NONE, storage)
+        {
+          @Override
+          protected StructuredViewer createViewer(Composite parent)
+          {
+            TableComboViewer viewer = new TableComboViewer(parent, SWT.BORDER | SWT.READ_ONLY);
+
+            TableCombo tableCombo = viewer.getTableCombo();
+            tableCombo.defineColumns(2);
+            tableCombo.setToolTipText("Select the service to synchronize with");
+
+            return viewer;
+          }
+        };
       }
-    };
 
-    enableButton.setSelection(initialEnabled);
-    selectService(initialService);
+      enableButton.setSelection(initialEnabled);
 
-    UIUtil.asyncExec(new Runnable()
-    {
-      public void run()
+      UIUtil.asyncExec(new Runnable()
       {
-        updateEnablement();
-      }
-    });
+        public void run()
+        {
+          updateEnablement();
+        }
+      });
+    }
 
-    return loginComposite;
+    return main;
   }
 
   @Override
   protected void performDefaults()
   {
-    enableButton.setSelection(initialEnabled);
-    selectService(initialService);
-    loginComposite.setCredentials(initialCredentials);
+    if (enableButton != null)
+    {
+      enableButton.setSelection(initialEnabled);
+      updateEnablement();
+    }
+
+    if (storageConfigurationComposite != null)
+    {
+      storageConfigurationComposite.performDefaults();
+    }
 
     super.performDefaults();
-    updateEnablement();
   }
 
   @Override
   protected void performApply()
   {
+    if (enableButton != null)
+    {
+      updateEnablement();
+    }
+
     super.performApply();
-    updateEnablement();
   }
 
   @Override
   public boolean performOk()
   {
-    currentService.setCredentials(initialCredentials = loginComposite.getCredentials());
-    SynchronizerManager.INSTANCE.setSyncEnabled(initialEnabled = enableButton.getSelection());
-    SynchronizerManager.INSTANCE.setService(initialService = currentService);
+    if (enableButton != null)
+    {
+      if (storageConfigurationComposite != null)
+      {
+        storageConfigurationComposite.performApply();
+      }
+
+      SynchronizerManager.INSTANCE.setSyncEnabled(initialEnabled = enableButton.getSelection());
+    }
+
     return super.performOk();
   }
 
@@ -171,15 +171,9 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
         return true;
       }
 
-      if (!ObjectUtil.equals(currentService, initialService))
+      if (storageConfigurationComposite != null)
       {
-        return true;
-      }
-
-      SynchronizerCredentials currentCredentials = loginComposite.getCredentials();
-      if (!ObjectUtil.equals(currentCredentials, initialCredentials))
-      {
-        return true;
+        return storageConfigurationComposite.isDirty();
       }
     }
     catch (Exception ex)
@@ -190,45 +184,14 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
     return false;
   }
 
-  private void selectService(SynchronizerService service)
-  {
-    if (service != null)
-    {
-      Table table = serviceCombo.getTable();
-      int i = 0;
-
-      for (TableItem item : table.getItems())
-      {
-        SynchronizerService itemService = (SynchronizerService)item.getData();
-        if (ObjectUtil.equals(itemService, service))
-        {
-          currentService = itemService;
-          serviceCombo.select(i);
-          loginComposite.setService(currentService);
-          return;
-        }
-
-        ++i;
-      }
-
-      if (serviceCombo.getItemCount() != 0)
-      {
-        currentService = (SynchronizerService)table.getItem(0).getData();
-        serviceCombo.select(0);
-        loginComposite.setService(currentService);
-        return;
-      }
-    }
-
-    currentService = null;
-    loginComposite.setService(null);
-  }
-
   private void updateEnablement()
   {
     boolean enabled = enableButton.getSelection();
-    serviceCombo.setEnabled(enabled);
-    loginComposite.setEnabled(enabled);
+
+    if (storageConfigurationComposite != null)
+    {
+      storageConfigurationComposite.setEnabled(enabled);
+    }
 
     boolean needsApply = needsApply();
 
