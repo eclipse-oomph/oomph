@@ -12,11 +12,12 @@ package org.eclipse.oomph.setup.internal.sync;
 
 import org.eclipse.oomph.setup.internal.sync.Snapshot.WorkingCopy;
 import org.eclipse.oomph.setup.sync.SyncAction;
-import org.eclipse.oomph.util.ConcurrentArray;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Eike Stepper
@@ -25,14 +26,7 @@ public class Synchronizer
 {
   private static final LocalLock LOCAL_LOCK = new LocalLock();
 
-  private final ConcurrentArray<SynchronizerListener> listeners = new ConcurrentArray<SynchronizerListener>()
-  {
-    @Override
-    protected SynchronizerListener[] newArray(int length)
-    {
-      return new SynchronizerListener[length];
-    }
-  };
+  private final List<SynchronizerListener> listeners = new CopyOnWriteArrayList<SynchronizerListener>();
 
   private final Snapshot localSnapshot;
 
@@ -129,7 +123,7 @@ public class Synchronizer
 
   protected void syncStarted()
   {
-    for (SynchronizerListener listener : listeners.get())
+    for (SynchronizerListener listener : listeners)
     {
       try
       {
@@ -144,7 +138,7 @@ public class Synchronizer
 
   protected void workingCopyCreated(WorkingCopy workingCopy)
   {
-    for (SynchronizerListener listener : listeners.get())
+    for (SynchronizerListener listener : listeners)
     {
       try
       {
@@ -159,7 +153,7 @@ public class Synchronizer
 
   protected void actionsComputed(Map<String, SyncAction> actions)
   {
-    for (SynchronizerListener listener : listeners.get())
+    for (SynchronizerListener listener : listeners)
     {
       try
       {
@@ -174,7 +168,7 @@ public class Synchronizer
 
   protected void actionResolved(SyncAction action, String id)
   {
-    for (SynchronizerListener listener : listeners.get())
+    for (SynchronizerListener listener : listeners)
     {
       try
       {
@@ -189,7 +183,7 @@ public class Synchronizer
 
   protected void commitStarted()
   {
-    for (SynchronizerListener listener : listeners.get())
+    for (SynchronizerListener listener : listeners)
     {
       try
       {
@@ -204,7 +198,7 @@ public class Synchronizer
 
   protected void commitFinished(Throwable exception)
   {
-    for (SynchronizerListener listener : listeners.get())
+    for (SynchronizerListener listener : listeners)
     {
       try
       {
@@ -226,7 +220,7 @@ public class Synchronizer
 
       LOCAL_LOCK.release();
 
-      for (SynchronizerListener listener : listeners.get())
+      for (SynchronizerListener listener : listeners)
       {
         try
         {

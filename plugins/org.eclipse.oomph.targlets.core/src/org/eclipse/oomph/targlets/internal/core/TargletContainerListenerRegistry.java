@@ -12,7 +12,6 @@ package org.eclipse.oomph.targlets.internal.core;
 
 import org.eclipse.oomph.targlets.core.ITargletContainerListener;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent;
-import org.eclipse.oomph.util.ConcurrentArray;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -23,7 +22,9 @@ import org.eclipse.core.runtime.IRegistryEventListener;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,14 +34,7 @@ public class TargletContainerListenerRegistry implements ITargletContainerListen
 {
   public static final TargletContainerListenerRegistry INSTANCE = new TargletContainerListenerRegistry();
 
-  private final ConcurrentArray<ITargletContainerListener> listeners = new ConcurrentArray<ITargletContainerListener>()
-  {
-    @Override
-    protected ITargletContainerListener[] newArray(int length)
-    {
-      return new ITargletContainerListener[length];
-    }
-  };
+  private final List<ITargletContainerListener> listeners = new ArrayList<ITargletContainerListener>();
 
   private final ExtensionPointHandler extensionPointHandler = new ExtensionPointHandler();
 
@@ -61,38 +55,47 @@ public class TargletContainerListenerRegistry implements ITargletContainerListen
 
   public void addListener(ITargletContainerListener listener)
   {
-    listeners.add(listener);
+    synchronized (listeners)
+    {
+      listeners.add(listener);
+    }
   }
 
   public void removeListener(ITargletContainerListener listener)
   {
-    listeners.remove(listener);
+    synchronized (listeners)
+    {
+      listeners.remove(listener);
+    }
   }
 
   public void notifyListeners(TargletContainerEvent event, IProgressMonitor monitor)
   {
-    ITargletContainerListener[] targletContainerListeners = listeners.get();
-    if (targletContainerListeners.length == 0)
+    ITargletContainerListener[] targletContainerListeners;
+    synchronized (listeners)
     {
-      return;
+      targletContainerListeners = listeners.toArray(new ITargletContainerListener[listeners.size()]);
     }
 
-    monitor.subTask("Notifying listeners of targlet container " + event.getSource().getID());
-    monitor.beginTask("", targletContainerListeners.length);
-
-    for (ITargletContainerListener listener : targletContainerListeners)
+    if (targletContainerListeners.length != 0)
     {
-      try
-      {
-        listener.handleTargletContainerEvent(event, new SubProgressMonitor(monitor, 1));
-      }
-      catch (Exception ex)
-      {
-        TargletsCorePlugin.INSTANCE.log(ex);
-      }
-    }
+      monitor.subTask("Notifying listeners of targlet container " + event.getSource().getID());
+      monitor.beginTask("", targletContainerListeners.length);
 
-    monitor.done();
+      for (ITargletContainerListener listener : targletContainerListeners)
+      {
+        try
+        {
+          listener.handleTargletContainerEvent(event, new SubProgressMonitor(monitor, 1));
+        }
+        catch (Exception ex)
+        {
+          TargletsCorePlugin.INSTANCE.log(ex);
+        }
+      }
+
+      monitor.done();
+    }
   }
 
   /**

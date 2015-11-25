@@ -22,7 +22,6 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.Authenticator;
-import org.eclipse.oomph.util.ConcurrentArray;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -69,6 +68,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -176,7 +176,7 @@ public abstract class PropertyField
 
   private final GridData helperGridData = new GridData(SWT.FILL, SWT.TOP, false, false);
 
-  private final ValueListenerArray valueListeners = new ValueListenerArray();
+  private final List<ValueListener> valueListeners = new CopyOnWriteArrayList<ValueListener>();
 
   private String value = EMPTY;
 
@@ -279,21 +279,13 @@ public abstract class PropertyField
 
   public final void addValueListener(ValueListener listener)
   {
-    if (listener == null)
-    {
-      throw new IllegalArgumentException("listener is null"); //$NON-NLS-1$
-    }
-
+    checkValueListener(listener);
     valueListeners.add(listener);
   }
 
   public final void removeValueListener(ValueListener listener)
   {
-    if (listener == null)
-    {
-      throw new IllegalArgumentException("listener is null"); //$NON-NLS-1$
-    }
-
+    checkValueListener(listener);
     valueListeners.remove(listener);
   }
 
@@ -438,36 +430,26 @@ public abstract class PropertyField
     throw new IllegalArgumentException("Parent must have a GridLayout with 3 columns");
   }
 
-  private void notifyValueListeners(String oldValue, String newValue)
+  private void checkValueListener(ValueListener listener)
   {
-    ValueListener[] listeners = valueListeners.get();
-    if (listeners != null)
+    if (listener == null)
     {
-      for (int i = 0; i < listeners.length; i++)
-      {
-        ValueListener listener = listeners[i];
-
-        try
-        {
-          listener.valueChanged(oldValue, newValue);
-        }
-        catch (Exception ex)
-        {
-          SetupUIPlugin.INSTANCE.log(ex);
-        }
-      }
+      throw new IllegalArgumentException("listener is null"); //$NON-NLS-1$
     }
   }
 
-  /**
-   * @author Eike Stepper
-   */
-  private static final class ValueListenerArray extends ConcurrentArray<ValueListener>
+  private void notifyValueListeners(String oldValue, String newValue)
   {
-    @Override
-    protected ValueListener[] newArray(int length)
+    for (ValueListener listener : valueListeners)
     {
-      return new ValueListener[length];
+      try
+      {
+        listener.valueChanged(oldValue, newValue);
+      }
+      catch (Exception ex)
+      {
+        SetupUIPlugin.INSTANCE.log(ex);
+      }
     }
   }
 

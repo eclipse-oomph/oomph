@@ -10,7 +10,6 @@
  */
 package org.eclipse.oomph.util.pde;
 
-import org.eclipse.oomph.util.ConcurrentArray;
 import org.eclipse.oomph.util.internal.pde.UtilPDEPlugin;
 
 import org.eclipse.core.runtime.CoreException;
@@ -28,20 +27,15 @@ import org.eclipse.pde.core.target.LoadTargetDefinitionJob;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Eike Stepper
  */
 public final class TargetPlatformUtil
 {
-  private static final ConcurrentArray<TargetPlatformListener> LISTENERS = new ConcurrentArray<TargetPlatformListener>()
-  {
-    @Override
-    protected TargetPlatformListener[] newArray(int length)
-    {
-      return new TargetPlatformListener[length];
-    }
-  };
+  private static final List<TargetPlatformListener> LISTENERS = new CopyOnWriteArrayList<TargetPlatformListener>();
 
   private static final Method GET_WORKSPACE_TARGET_DEFINITION_METHOD;
 
@@ -283,19 +277,15 @@ public final class TargetPlatformUtil
 
   private static void notifyListeners(ITargetDefinition oldTargetDefinition, ITargetDefinition newTargetDefinition)
   {
-    TargetPlatformListener[] listeners = LISTENERS.get();
-    if (listeners.length != 0)
+    for (TargetPlatformListener listener : LISTENERS)
     {
-      for (TargetPlatformListener listener : listeners)
+      try
       {
-        try
-        {
-          listener.targetDefinitionActivated(oldTargetDefinition, newTargetDefinition);
-        }
-        catch (Exception ex)
-        {
-          UtilPDEPlugin.INSTANCE.log(ex);
-        }
+        listener.targetDefinitionActivated(oldTargetDefinition, newTargetDefinition);
+      }
+      catch (Exception ex)
+      {
+        UtilPDEPlugin.INSTANCE.log(ex);
       }
     }
   }
