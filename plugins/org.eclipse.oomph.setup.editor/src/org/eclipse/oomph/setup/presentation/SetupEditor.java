@@ -1714,7 +1714,7 @@ public class SetupEditor extends MultiPageEditorPart
       {
         try
         {
-          getSite().getPage().showView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
+          getSite().getPage().showView("org.eclipse.ui.views.PropertySheet", null, IWorkbenchPage.VIEW_VISIBLE);
         }
         catch (PartInitException ex)
         {

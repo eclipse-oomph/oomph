@@ -700,10 +700,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       }
 
       String detail = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
-      if (detail != null)
+      if (detail == null)
       {
-        imageURI = URI.createURI(detail);
+        return getBrandingImageURI(scope.getParentScope());
       }
+
+      imageURI = URI.createURI(detail);
     }
 
     if (imageURI == null)

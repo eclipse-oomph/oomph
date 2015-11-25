@@ -42,7 +42,7 @@
     <requirement
         name="org.eclipse.net4j.db.h2.feature.group"/>
     <repository
-        url="http://download.eclipse.org/oomph/updates/latest"/>
+        url="${oomph.update.url}"/>
   </setupTask>
   <setupTask
       xsi:type="setup:ResourceCreationTask"

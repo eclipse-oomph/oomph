@@ -17,6 +17,7 @@
       xsi:type="setup:InstallationTask"
       id="installation"/>
   <product href="http://git.eclipse.org/c/cdo/cdo.git/plain/plugins/org.eclipse.emf.cdo.server.product/CDOServer.setup#/"/>
+  <product href="org.eclipse.all.product.setup#/"/>
   <product href="interim/products/PapyrusWithCDO.setup#/"/>
   <description>The catalog of applications provided by projects at Eclipse.org.</description>
 </setup:ProductCatalog>

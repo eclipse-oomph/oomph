@@ -16,6 +16,8 @@ import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceNode;
@@ -39,12 +41,18 @@ import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -185,9 +193,16 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
   }
 
   @Override
+  protected String getShellText()
+  {
+    return TITLE;
+  }
+
+  @Override
   protected void okPressed()
   {
     Set<String> initializedOrCheckedPreferencePages = RecorderManager.INSTANCE.getInitializedPreferencePages();
+    final Set<String> checkedPreferencePages = new LinkedHashSet<String>();
 
     Object[] checkedElements = checkboxTreeViewer.getCheckedElements();
     for (Object object : checkedElements)
@@ -195,7 +210,9 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
       if (object instanceof IPreferenceNode)
       {
         IPreferenceNode preferenceNode = (IPreferenceNode)object;
-        initializedOrCheckedPreferencePages.add(preferenceNode.getId());
+        String id = preferenceNode.getId();
+        initializedOrCheckedPreferencePages.add(id);
+        checkedPreferencePages.add(id);
       }
     }
 
@@ -213,21 +230,102 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
 
     super.okPressed();
 
-    if (checkedElements.length <= 1)
+    if (checkedElements.length == 0)
     {
       RecorderManager.INSTANCE.disposeInitializeItem();
     }
     else
     {
-      final TreeViewer viewer = filteredTree.getViewer();
-      final Tree tree = viewer.getTree();
+      new Initializer(preferenceDialog, checkedPreferencePages, ignoredPreferencePages).run();
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static class Initializer implements Runnable
+  {
+    private final String originalID;
+
+    private PreferenceDialog preferenceDialog;
+
+    private FilteredTree filteredTree;
+
+    private TreeViewer viewer;
+
+    final Set<String> initializedPreferencePages = RecorderManager.INSTANCE.getInitializedPreferencePages();
+
+    final Map<String, IPreferenceNode> nodes = new LinkedHashMap<String, IPreferenceNode>();
+
+    final Set<IPreferenceNode> visitedNodes = new HashSet<IPreferenceNode>();
+
+    public Initializer(PreferenceDialog preferenceDialog, Set<String> checkedPreferencePages, Set<String> ignoredPreferencePages)
+    {
+      setPreferenceDialog(preferenceDialog);
+
       filteredTree.getFilterControl().setText("");
-      viewer.getSorter();
 
       IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
       IPreferenceNode selectedNode = (IPreferenceNode)selection.getFirstElement();
-      final String id = selectedNode == null ? null : selectedNode.getId();
+      originalID = selectedNode == null ? null : selectedNode.getId();
 
+      // Build a map of all nodes we need to visit.
+      final Tree tree = viewer.getTree();
+      viewer.expandAll();
+      for (TreeItem object : tree.getItems())
+      {
+        visit(nodes, object);
+      }
+
+      for (Iterator<IPreferenceNode> it = nodes.values().iterator(); it.hasNext();)
+      {
+        IPreferenceNode preferenceNode = it.next();
+        String id = preferenceNode.getId();
+        checkedPreferencePages.remove(id);
+        if (ignoredPreferencePages.contains(id) || initializedPreferencePages.contains(id))
+        {
+          it.remove();
+        }
+      }
+
+      // Any checked page that doesn't really exist in the expanded tree we'll treat as if we've visited it already.
+      initializedPreferencePages.addAll(checkedPreferencePages);
+    }
+
+    private void setPreferenceDialog(PreferenceDialog preferenceDialog)
+    {
+      this.preferenceDialog = preferenceDialog;
+      filteredTree = ReflectUtil.getValue("filteredTree", preferenceDialog);
+      viewer = filteredTree.getViewer();
+    }
+
+    protected void visit(Map<String, IPreferenceNode> nodes, TreeItem treeItem)
+    {
+      Object data = treeItem.getData();
+      if (data instanceof IPreferenceNode)
+      {
+        IPreferenceNode preferenceNode = (IPreferenceNode)data;
+        StringBuilder description = new StringBuilder();
+        for (TreeItem item = treeItem; item != null; item = item.getParentItem())
+        {
+          if (description.length() != 0)
+          {
+            description.insert(0, " -> ");
+          }
+
+          description.insert(0, item.getText());
+        }
+        nodes.put(description.toString(), preferenceNode);
+      }
+
+      for (TreeItem child : treeItem.getItems())
+      {
+        visit(nodes, child);
+      }
+    }
+
+    public void run()
+    {
       try
       {
         ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(preferenceDialog.getShell())
@@ -246,40 +344,17 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
           {
             boolean cancel = false;
             final AtomicBoolean abort = new AtomicBoolean(false);
-            final Set<String> initializedPreferencePages = RecorderManager.INSTANCE.getInitializedPreferencePages();
+            final Set<IPreferenceNode> badPages = new HashSet<IPreferenceNode>();
             try
             {
-              final List<TreeItem> nodes = new ArrayList<TreeItem>();
-              UIUtil.syncExec(new Runnable()
-              {
-                public void run()
-                {
-                  viewer.expandAll();
-                  for (TreeItem object : tree.getItems())
-                  {
-                    visit(nodes, object);
-                  }
-
-                  for (Iterator<TreeItem> it = nodes.iterator(); it.hasNext();)
-                  {
-                    TreeItem treeItem = it.next();
-                    Object data = treeItem.getData();
-                    if (data instanceof IPreferenceNode)
-                    {
-                      IPreferenceNode preferenceNode = (IPreferenceNode)data;
-                      String id = preferenceNode.getId();
-                      if (ignoredPreferencePages.contains(id) || initializedPreferencePages.contains(id))
-                      {
-                        it.remove();
-                      }
-                    }
-                  }
-                }
-              });
-
               monitor.beginTask("Visiting preference pages", nodes.size());
 
-              for (final TreeItem treeItem : nodes)
+              Map<String, IPreferenceNode> remainingNodes = new LinkedHashMap<String, IPreferenceNode>(nodes);
+              remainingNodes.values().removeAll(visitedNodes);
+              monitor.worked(visitedNodes.size());
+
+              int count = 0;
+              for (final Map.Entry<String, IPreferenceNode> entry : remainingNodes.entrySet())
               {
                 if (monitor.isCanceled())
                 {
@@ -287,34 +362,48 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
                   break;
                 }
 
+                // Close the dialog and reopen it periodically to avoid running out of SWT handles.
+                if (++count > 100)
+                {
+                  monitor.setCanceled(true);
+                  abort.set(true);
+                  continue;
+                }
+
+                visitedNodes.add(entry.getValue());
                 UIUtil.syncExec(new Runnable()
                 {
                   public void run()
                   {
-                    StringBuilder description = new StringBuilder();
-                    for (TreeItem item = treeItem; item != null; item = item.getParentItem())
+                    monitor.subTask(entry.getKey());
+                    IPreferenceNode preferenceNode = entry.getValue();
+                    String id = preferenceNode.getId();
+                    try
                     {
-                      if (description.length() != 0)
-                      {
-                        description.insert(0, " -> ");
-                      }
-
-                      description.insert(0, item.getText());
+                      viewer.setSelection(new StructuredSelection(preferenceNode));
+                    }
+                    catch (Throwable throwable)
+                    {
+                      // Log any problem creating the page.
+                      SetupUIPlugin.INSTANCE.log(throwable, IStatus.WARNING);
                     }
 
-                    monitor.subTask(description.toString());
-                    IPreferenceNode preferenceNode = (IPreferenceNode)treeItem.getData();
-                    viewer.setSelection(new StructuredSelection(preferenceNode));
+                    // Check if the current page is valid.
                     IPreferencePage currentPage = (IPreferencePage)ReflectUtil.invokeMethod("getCurrentPage", preferenceDialog);
                     if (currentPage != null && !currentPage.okToLeave())
                     {
+                      // Log the fact that this page is ill behaved.
+                      Bundle bundle = FrameworkUtil.getBundle(currentPage.getClass());
+                      SetupUIPlugin.INSTANCE.log(new Status(IStatus.WARNING, bundle == null ? SetupUIPlugin.PLUGIN_ID : bundle.getSymbolicName(),
+                          "The preference page " + entry.getKey() + " comes up in an invalid state"));
+
+                      // Remember this bad page and reopen the dialog without this bad page as the current page.
+                      badPages.add(preferenceNode);
                       monitor.setCanceled(true);
                       abort.set(true);
                     }
-                    else
-                    {
-                      initializedPreferencePages.add(preferenceNode.getId());
-                    }
+
+                    initializedPreferencePages.add(id);
                   }
                 });
 
@@ -325,62 +414,81 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
             }
             finally
             {
+              // Record the preferences we've already initialized.
               RecorderManager.INSTANCE.setInitializedPreferencePages(initializedPreferencePages);
 
-              if (!abort.get())
+              UIUtil.asyncExec(new Runnable()
               {
-                final boolean finalCancel = cancel;
-                UIUtil.asyncExec(new Runnable()
+                public void run()
                 {
-                  public void run()
+                  // Don't record any preferences that are changing just because we've visited a page.
+                  RecorderManager.INSTANCE.cancelRecording();
+
+                  // Keep posting events to the display thread until this dialog shell itself is disposed.
+                  // Also dispose any new child shells that are created.
+                  final Shell shell = preferenceDialog.getShell();
+                  final List<Shell> children = Arrays.asList(shell.getShells());
+                  Runnable runnable = new Runnable()
                   {
-                    RecorderManager.INSTANCE.cancelRecording();
-
-                    // Keep posting events to the display thread until this dialog shell itself is disposed.
-                    // Also dispose any new child shells that are created.
-                    final Shell shell = preferenceDialog.getShell();
-                    final List<Shell> children = Arrays.asList(shell.getShells());
-                    Runnable runnable = new Runnable()
+                    public void run()
                     {
-                      public void run()
+                      Shell[] shells = shell.getShells();
+                      for (Shell child : shells)
                       {
-                        Shell[] shells = shell.getShells();
-                        for (Shell child : shells)
+                        if (!children.contains(child) && shell.isVisible())
                         {
-                          if (!children.contains(child) && shell.isVisible())
-                          {
-                            child.dispose();
-                          }
+                          child.dispose();
                         }
-
-                        UIUtil.asyncExec(shell, this);
                       }
-                    };
 
-                    UIUtil.asyncExec(shell, runnable);
-
-                    ReflectUtil.invokeMethod(finalCancel ? "cancelPressed" : "okPressed", preferenceDialog);
-                    RecorderTransaction transaction = RecorderTransaction.getInstance();
-                    if (transaction != null)
-                    {
-                      transaction.close();
+                      UIUtil.asyncExec(shell, this);
                     }
+                  };
 
-                    UIUtil.asyncExec(new Runnable()
-                    {
-                      public void run()
-                      {
-                        PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, id, null, null);
-                        dialog.open();
-                      }
-                    });
+                  UIUtil.asyncExec(shell, runnable);
+
+                  // Set the page for the bad nodes to null so we can exit the dialog with an OK.
+                  Set<IPreferencePage> pages = new HashSet<IPreferencePage>();
+                  for (IPreferenceNode node : badPages)
+                  {
+                    IPreferencePage page = node.getPage();
+                    pages.add(page);
+                    ReflectUtil.setValue("page", node, null);
                   }
-                });
 
-                if (cancel)
-                {
-                  throw new InterruptedException();
+                  ReflectUtil.invokeMethod("okPressed", preferenceDialog);
+
+                  // Close the current transaction.
+                  RecorderTransaction transaction = RecorderTransaction.getInstance();
+                  if (transaction != null)
+                  {
+                    transaction.close();
+                  }
+
+                  // Reopen the dialog.
+                  UIUtil.asyncExec(new Runnable()
+                  {
+                    public void run()
+                    {
+                      PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, originalID, null, null);
+
+                      // If we aborted, continue processing once the dialog comes up.
+                      if (abort.get())
+                      {
+                        // Reset the dialog to the newly created one.
+                        setPreferenceDialog(dialog);
+                        UIUtil.asyncExec(Initializer.this);
+                      }
+
+                      dialog.open();
+                    }
+                  });
                 }
+              });
+
+              if (cancel)
+              {
+                throw new InterruptedException();
               }
             }
           }
@@ -395,20 +503,5 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
         //$FALL-THROUGH$
       }
     }
-  }
-
-  protected void visit(List<TreeItem> nodes, TreeItem treeItem)
-  {
-    nodes.add(treeItem);
-    for (TreeItem child : treeItem.getItems())
-    {
-      visit(nodes, child);
-    }
-  }
-
-  @Override
-  protected String getShellText()
-  {
-    return TITLE;
   }
 }

@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Product
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
+    name="all"
+    label="Eclipse Eierlegende Wollmilchsau">
+  <setupTask
+      xsi:type="setup.p2:P2Task">
+    <requirement
+        name="org.eclipse.oomph.setup.feature.group"/>
+    <repository
+        url="${oomph.update.url}"/>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:EclipseIniTask"
+      option="-Xmx"
+      value="5g"
+      vm="true"/>
+  <version name="latest"
+      label="Latest (Neon)"
+      requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Eierlegende Wollmilchsau (Neon)">
+      <requirement
+          name="Application Development Frameworks"/>
+      <requirement
+          name="Business Intelligence, Reporting and Charting"/>
+      <requirement
+          name="Collaboration"/>
+      <requirement
+          name="Database Development"/>
+      <requirement
+          name="General Purpose Tools"/>
+      <requirement
+          name="Linux Tools"/>
+      <requirement
+          name="Mobile and Device Development"/>
+      <requirement
+          name="Modeling"/>
+      <requirement
+          name="Performance, Profiling and Tracing Tools"/>
+      <requirement
+          name="Programming Languages"/>
+      <requirement
+          name="SOA Development"/>
+      <requirement
+          name="Testing"/>
+      <requirement
+          name="Web, XML, Java EE and OSGi Enterprise Development"/>
+      <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.6.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/releases/neon/201511131000"/>
+    </setupTask>
+  </version>
+  <version name="latest.released"
+      label="Latest Release (Mars)"
+      requiredJavaVersion="1.7">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/Mars/1</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Eierlegende Wollmilchsau (Mars)">
+      <requirement
+          name="Application Development Frameworks"/>
+      <requirement
+          name="Business Intelligence, Reporting and Charting"/>
+      <requirement
+          name="Collaboration"/>
+      <requirement
+          name="Database Development"/>
+      <requirement
+          name="General Purpose Tools"/>
+      <requirement
+          name="Linux Tools"/>
+      <requirement
+          name="Mobile and Device Development"/>
+      <requirement
+          name="Modeling"/>
+      <requirement
+          name="Performance, Profiling and Tracing Tools"/>
+      <requirement
+          name="Programming Languages"/>
+      <requirement
+          name="SOA Development"/>
+      <requirement
+          name="Testing"/>
+      <requirement
+          name="Web, XML, Java EE and OSGi Enterprise Development"/>
+      <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.5.0,4.6.0)"/>
+      <repository
+          url="http://download.eclipse.org/releases/mars/201510021000"/>
+    </setupTask>
+  </version>
+  <version name="neon"
+      label="Neon"
+      requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Eierlegende Wollmilchsau (Neon)">
+      <requirement
+          name="Application Development Frameworks"/>
+      <requirement
+          name="Business Intelligence, Reporting and Charting"/>
+      <requirement
+          name="Collaboration"/>
+      <requirement
+          name="Database Development"/>
+      <requirement
+          name="General Purpose Tools"/>
+      <requirement
+          name="Linux Tools"/>
+      <requirement
+          name="Mobile and Device Development"/>
+      <requirement
+          name="Modeling"/>
+      <requirement
+          name="Performance, Profiling and Tracing Tools"/>
+      <requirement
+          name="Programming Languages"/>
+      <requirement
+          name="SOA Development"/>
+      <requirement
+          name="Testing"/>
+      <requirement
+          name="Web, XML, Java EE and OSGi Enterprise Development"/>
+      <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.6.0,4.7.0)"/>
+      <repository
+          url="http://download.eclipse.org/releases/neon/201511131000"/>
+    </setupTask>
+  </version>
+  <version name="mars"
+      label="Mars"
+      requiredJavaVersion="1.7">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/Mars/1</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Eierlegende Wollmilchsau (Mars)">
+      <requirement
+          name="Application Development Frameworks"/>
+      <requirement
+          name="Business Intelligence, Reporting and Charting"/>
+      <requirement
+          name="Collaboration"/>
+      <requirement
+          name="Database Development"/>
+      <requirement
+          name="General Purpose Tools"/>
+      <requirement
+          name="Linux Tools"/>
+      <requirement
+          name="Mobile and Device Development"/>
+      <requirement
+          name="Modeling"/>
+      <requirement
+          name="Performance, Profiling and Tracing Tools"/>
+      <requirement
+          name="Programming Languages"/>
+      <requirement
+          name="SOA Development"/>
+      <requirement
+          name="Testing"/>
+      <requirement
+          name="Web, XML, Java EE and OSGi Enterprise Development"/>
+      <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.5.0,4.6.0)"/>
+      <repository
+          url="http://download.eclipse.org/releases/mars/201510021000"/>
+    </setupTask>
+  </version>
+  <version name="luna"
+      label="Luna"
+      requiredJavaVersion="1.6">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/Luna/SR2</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Eierlegende Wollmilchsau (Luna)">
+      <requirement
+          name="Application Development Frameworks"/>
+      <requirement
+          name="Business Intelligence, Reporting and Charting"/>
+      <requirement
+          name="Collaboration"/>
+      <requirement
+          name="Database Development"/>
+      <requirement
+          name="General Purpose Tools"/>
+      <requirement
+          name="Linux Tools"/>
+      <requirement
+          name="Mobile and Device Development"/>
+      <requirement
+          name="Modeling"/>
+      <requirement
+          name="Programming Languages"/>
+      <requirement
+          name="SOA Development"/>
+      <requirement
+          name="Testing"/>
+      <requirement
+          name="Web, XML, Java EE and OSGi Enterprise Development"/>
+      <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.4.0,4.5.0)"/>
+      <repository
+          url="http://download.eclipse.org/releases/luna/201502271000"/>
+    </setupTask>
+  </version>
+  <version name="kepler"
+      label="Kepler"
+      requiredJavaVersion="1.6">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/Kepler/SR2</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Eierlegende Wollmilchsau (Kepler)">
+      <requirement
+          name="Application Development Frameworks"/>
+      <requirement
+          name="Business Intelligence, Reporting and Charting"/>
+      <requirement
+          name="Collaboration"/>
+      <requirement
+          name="Database Development"/>
+      <requirement
+          name="General Purpose Tools"/>
+      <requirement
+          name="Linux Tools"/>
+      <requirement
+          name="Mobile and Device Development"/>
+      <requirement
+          name="Modeling"/>
+      <requirement
+          name="Programming Languages"/>
+      <requirement
+          name="SOA Development"/>
+      <requirement
+          name="Testing"/>
+      <requirement
+          name="Web, XML, Java EE and OSGi Enterprise Development"/>
+      <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.3.0,4.4.0)"/>
+      <repository
+          url="http://download.eclipse.org/releases/kepler/201402280900"/>
+      <repository
+          url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
+    </setupTask>
+  </version>
+  <version name="juno"
+      label="Juno"
+      requiredJavaVersion="1.5">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/Juno/SR2</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Eierlegende Wollmilchsau (Juno)">
+      <requirement
+          name="Application Development Frameworks"/>
+      <requirement
+          name="Business Intelligence, Reporting and Charting"/>
+      <requirement
+          name="Collaboration"/>
+      <requirement
+          name="Database Development"/>
+      <requirement
+          name="General Purpose Tools"/>
+      <requirement
+          name="Linux Tools"/>
+      <requirement
+          name="Mobile and Device Development"/>
+      <requirement
+          name="Modeling"/>
+      <requirement
+          name="Programming Languages"/>
+      <requirement
+          name="SOA Development"/>
+      <requirement
+          name="Testing"/>
+      <requirement
+          name="Web, XML, Java EE and OSGi Enterprise Development"/>
+      <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.2.0,4.3.0)"/>
+      <repository
+          url="http://download.eclipse.org/releases/juno/201303010900"/>
+      <repository
+          url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
+    </setupTask>
+  </version>
+  <description>This package contains all categorized features of the release train. It can do &lt;a href='https://en.wiktionary.org/wiki/eierlegende_Wollmilchsau'>everything&lt;/a>, but it's not pretty.</description>
+</setup:Product>
