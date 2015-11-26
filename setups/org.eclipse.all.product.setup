@@ -43,7 +43,8 @@
       <requirement
           name="General Purpose Tools"/>
       <requirement
-          name="Linux Tools"/>
+          name="Linux Tools"
+          filter="(osgi.os=linux)"/>
       <requirement
           name="Mobile and Device Development"/>
       <requirement
@@ -89,7 +90,8 @@
       <requirement
           name="General Purpose Tools"/>
       <requirement
-          name="Linux Tools"/>
+          name="Linux Tools"
+          filter="(osgi.os=linux)"/>
       <requirement
           name="Mobile and Device Development"/>
       <requirement
@@ -135,7 +137,8 @@
       <requirement
           name="General Purpose Tools"/>
       <requirement
-          name="Linux Tools"/>
+          name="Linux Tools"
+          filter="(osgi.os=linux)"/>
       <requirement
           name="Mobile and Device Development"/>
       <requirement
@@ -181,7 +184,8 @@
       <requirement
           name="General Purpose Tools"/>
       <requirement
-          name="Linux Tools"/>
+          name="Linux Tools"
+          filter="(osgi.os=linux)"/>
       <requirement
           name="Mobile and Device Development"/>
       <requirement
@@ -227,7 +231,8 @@
       <requirement
           name="General Purpose Tools"/>
       <requirement
-          name="Linux Tools"/>
+          name="Linux Tools"
+          filter="(osgi.os=linux)"/>
       <requirement
           name="Mobile and Device Development"/>
       <requirement
@@ -271,7 +276,8 @@
       <requirement
           name="General Purpose Tools"/>
       <requirement
-          name="Linux Tools"/>
+          name="Linux Tools"
+          filter="(osgi.os=linux)"/>
       <requirement
           name="Mobile and Device Development"/>
       <requirement
@@ -317,7 +323,8 @@
       <requirement
           name="General Purpose Tools"/>
       <requirement
-          name="Linux Tools"/>
+          name="Linux Tools"
+          filter="(osgi.os=linux)"/>
       <requirement
           name="Mobile and Device Development"/>
       <requirement

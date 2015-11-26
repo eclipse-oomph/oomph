@@ -1136,11 +1136,17 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     final StructuredViewer viewer = getViewer();
 
     // We use this special class so we can detect if the label provider is already hooked up.
-    class DecoratingLabelProvider extends DelegatingStyledCellLabelProvider.FontAndColorProvider
+    class DecoratingLabelProvider extends DelegatingStyledCellLabelProvider.FontAndColorProvider implements IStyledLabelProvider
     {
       public DecoratingLabelProvider(IStyledLabelProvider styledLabelProvider)
       {
         super(styledLabelProvider);
+      }
+
+      @Override
+      public StyledString getStyledText(Object element)
+      {
+        return super.getStyledText(element);
       }
     }
 

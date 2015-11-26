@@ -77,6 +77,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
       addNamespacePropertyDescriptor(object);
       addVersionRangePropertyDescriptor(object);
       addOptionalPropertyDescriptor(object);
+      addGreedyPropertyDescriptor(object);
       addFilterPropertyDescriptor(object);
       addTypePropertyDescriptor(object);
     }
@@ -236,6 +237,19 @@ public class RequirementItemProvider extends ModelElementItemProvider
     });
   }
 
+  /**
+   * This adds a property descriptor for the Greedy feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addGreedyPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Requirement_greedy_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_greedy_feature", "_UI_Requirement_type"),
+        P2Package.Literals.REQUIREMENT__GREEDY, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
   @Override
   protected Collection<?> filterAlternatives(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> alternatives)
   {
@@ -337,16 +351,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
     }
 
     Object result = overlayImage(object, getResourceLocator().getImage(key));
-
-    if (requirement.isOptional())
-    {
-      List<Object> images = new ArrayList<Object>(2);
-      images.add(result);
-      images.add(getResourceLocator().getImage("full/ovr16/optional"));
-      result = new OptionalImage(images);
-    }
-
-    return result;
+    return getImage(result, requirement.isOptional(), requirement.isGreedy());
   }
 
   /**
@@ -397,7 +402,9 @@ public class RequirementItemProvider extends ModelElementItemProvider
     }
 
     VersionRange versionRange = requirement.getVersionRange();
-    return name + (versionRange == null || VersionRange.emptyRange.equals(versionRange) ? "" : " " + versionRange.toString());
+    String filter = requirement.getFilter();
+    return name + (versionRange == null || VersionRange.emptyRange.equals(versionRange) ? "" : " " + versionRange)
+        + (StringUtil.isEmpty(filter) ? "" : " " + filter);
   }
 
   /**
@@ -419,6 +426,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
       case P2Package.REQUIREMENT__NAMESPACE:
       case P2Package.REQUIREMENT__VERSION_RANGE:
       case P2Package.REQUIREMENT__OPTIONAL:
+      case P2Package.REQUIREMENT__GREEDY:
       case P2Package.REQUIREMENT__FILTER:
       case P2Package.REQUIREMENT__TYPE:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
@@ -440,12 +448,25 @@ public class RequirementItemProvider extends ModelElementItemProvider
     super.collectNewChildDescriptors(newChildDescriptors, object);
   }
 
+  public static Object getImage(Object baseImage, boolean optional, boolean greedy)
+  {
+    if (optional)
+    {
+      List<Object> images = new ArrayList<Object>(2);
+      images.add(baseImage);
+      images.add(P2EditPlugin.INSTANCE.getImage(greedy ? "full/ovr16/greedy" : "full/ovr16/optional"));
+      return new DecoratedImage(images);
+    }
+
+    return baseImage;
+  }
+
   /**
    * @author Ed Merks
    */
-  private final class OptionalImage extends ComposedImage
+  private static final class DecoratedImage extends ComposedImage
   {
-    private OptionalImage(Collection<?> images)
+    private DecoratedImage(Collection<?> images)
     {
       super(images);
     }

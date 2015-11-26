@@ -1201,6 +1201,11 @@ public class ProductCatalogGenerator implements IApplication
         Requirement requirement = P2Factory.eINSTANCE.createRequirement();
         requirement.setName(id);
         requirement.setVersionRange(VersionRange.emptyRange);
+        if (id.equals("Linux Tools"))
+        {
+          requirement.setFilter("(osgi.os=linux)");
+        }
+
         requirements.add(requirement);
         return;
       }

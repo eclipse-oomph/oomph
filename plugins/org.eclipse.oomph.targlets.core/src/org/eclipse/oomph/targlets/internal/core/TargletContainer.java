@@ -820,7 +820,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               continue;
             }
 
-            rootRequirements.add(P2Factory.eINSTANCE.createRequirement(iu.getId(), requirement.getVersionRange(), requirement.isOptional()));
+            rootRequirements
+                .add(P2Factory.eINSTANCE.createRequirement(iu.getId(), requirement.getVersionRange(), requirement.isOptional(), requirement.isGreedy()));
           }
 
           continue;

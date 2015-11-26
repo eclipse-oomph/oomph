@@ -33,6 +33,7 @@ import java.util.Comparator;
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getNamespace <em>Namespace</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getVersionRange <em>Version Range</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#isOptional <em>Optional</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.Requirement#isGreedy <em>Greedy</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getFilter <em>Filter</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getType <em>Type</em>}</li>
  * </ul>
@@ -228,6 +229,33 @@ public interface Requirement extends ModelElement
    * @generated
    */
   RequirementType getType();
+
+  /**
+   * Returns the value of the '<em><b>Greedy</b></em>' attribute.
+   * The default value is <code>"true"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Greedy</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Greedy</em>' attribute.
+   * @see #setGreedy(boolean)
+   * @see org.eclipse.oomph.p2.P2Package#getRequirement_Greedy()
+   * @model default="true"
+   * @generated
+   */
+  boolean isGreedy();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.p2.Requirement#isGreedy <em>Greedy</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Greedy</em>' attribute.
+   * @see #isGreedy()
+   * @generated
+   */
+  void setGreedy(boolean value);
 
   IMatchExpression<IInstallableUnit> getMatchExpression();
 

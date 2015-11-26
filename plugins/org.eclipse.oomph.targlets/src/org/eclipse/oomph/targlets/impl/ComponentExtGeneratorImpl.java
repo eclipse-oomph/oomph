@@ -154,7 +154,8 @@ public class ComponentExtGeneratorImpl extends ModelElementImpl implements Compo
           namespace = "osgi.bundle";
         }
 
-        requirements.add(MetadataFactory.createRequirement(namespace, id, versionRange, requirement.getFilter(), requirement.isOptional(), true, true));
+        requirements.add(MetadataFactory.createRequirement(namespace, id, versionRange, requirement.getFilter(), requirement.isOptional(), true,
+            !requirement.isOptional() || requirement.isGreedy()));
       }
 
       iu.setRequiredCapabilities(requirements.toArray(new IRequirement[requirements.size()]));

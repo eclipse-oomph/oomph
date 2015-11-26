@@ -348,7 +348,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    */
   public EAttribute getRequirement_Filter()
   {
-    return (EAttribute)requirementEClass.getEStructuralFeatures().get(5);
+    return (EAttribute)requirementEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -358,7 +358,17 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    */
   public EAttribute getRequirement_Type()
   {
-    return (EAttribute)requirementEClass.getEStructuralFeatures().get(6);
+    return (EAttribute)requirementEClass.getEStructuralFeatures().get(7);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getRequirement_Greedy()
+  {
+    return (EAttribute)requirementEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -532,6 +542,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
     createEAttribute(requirementEClass, REQUIREMENT__NAMESPACE);
     createEAttribute(requirementEClass, REQUIREMENT__VERSION_RANGE);
     createEAttribute(requirementEClass, REQUIREMENT__OPTIONAL);
+    createEAttribute(requirementEClass, REQUIREMENT__GREEDY);
     createEAttribute(requirementEClass, REQUIREMENT__FILTER);
     createEAttribute(requirementEClass, REQUIREMENT__TYPE);
     createEOperation(requirementEClass, REQUIREMENT___SET_VERSION_RANGE__VERSION_VERSIONSEGMENT);
@@ -628,6 +639,8 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
     initEAttribute(getRequirement_VersionRange(), getVersionRange(), "versionRange", "0.0.0", 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getRequirement_Optional(), ecorePackage.getEBoolean(), "optional", null, 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRequirement_Greedy(), ecorePackage.getEBoolean(), "greedy", "true", 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getRequirement_Filter(), ecorePackage.getEString(), "filter", null, 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

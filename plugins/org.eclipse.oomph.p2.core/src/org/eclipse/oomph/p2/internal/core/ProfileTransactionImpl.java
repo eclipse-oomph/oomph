@@ -896,8 +896,9 @@ public class ProfileTransactionImpl implements ProfileTransaction
       VersionRange versionRange = requirement.getVersionRange();
       IMatchExpression<IInstallableUnit> filter = requirement.getMatchExpression();
       boolean optional = requirement.isOptional();
+      boolean greedy = requirement.isGreedy();
 
-      IRequirement rootRequirement = MetadataFactory.createRequirement(namespace, name, versionRange, filter, optional, false);
+      IRequirement rootRequirement = MetadataFactory.createRequirement(namespace, name, versionRange, filter, optional ? 0 : 1, 1, !optional || greedy);
       rootRequirements.add(rootRequirement);
     }
 

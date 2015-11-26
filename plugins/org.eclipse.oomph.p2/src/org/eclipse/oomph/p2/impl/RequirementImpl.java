@@ -46,6 +46,7 @@ import java.lang.reflect.InvocationTargetException;
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getNamespace <em>Namespace</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getVersionRange <em>Version Range</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#isOptional <em>Optional</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#isGreedy <em>Greedy</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getFilter <em>Filter</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getType <em>Type</em>}</li>
  * </ul>
@@ -146,6 +147,26 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * @ordered
    */
   protected boolean optional = OPTIONAL_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isGreedy() <em>Greedy</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isGreedy()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean GREEDY_EDEFAULT = true;
+
+  /**
+   * The cached value of the '{@link #isGreedy() <em>Greedy</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isGreedy()
+   * @generated
+   * @ordered
+   */
+  protected boolean greedy = GREEDY_EDEFAULT;
 
   /**
    * The default value of the '{@link #getFilter() <em>Filter</em>}' attribute.
@@ -389,6 +410,31 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
     return RequirementType.NONE;
   }
 
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isGreedy()
+  {
+    return greedy;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setGreedy(boolean newGreedy)
+  {
+    boolean oldGreedy = greedy;
+    greedy = newGreedy;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, P2Package.REQUIREMENT__GREEDY, oldGreedy, greedy));
+    }
+  }
+
   public IMatchExpression<IInstallableUnit> getMatchExpression()
   {
     String filter = getFilter();
@@ -421,6 +467,8 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
         return getVersionRange();
       case P2Package.REQUIREMENT__OPTIONAL:
         return isOptional();
+      case P2Package.REQUIREMENT__GREEDY:
+        return isGreedy();
       case P2Package.REQUIREMENT__FILTER:
         return getFilter();
       case P2Package.REQUIREMENT__TYPE:
@@ -454,6 +502,9 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
       case P2Package.REQUIREMENT__OPTIONAL:
         setOptional((Boolean)newValue);
         return;
+      case P2Package.REQUIREMENT__GREEDY:
+        setGreedy((Boolean)newValue);
+        return;
       case P2Package.REQUIREMENT__FILTER:
         setFilter((String)newValue);
         return;
@@ -486,6 +537,9 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
       case P2Package.REQUIREMENT__OPTIONAL:
         setOptional(OPTIONAL_EDEFAULT);
         return;
+      case P2Package.REQUIREMENT__GREEDY:
+        setGreedy(GREEDY_EDEFAULT);
+        return;
       case P2Package.REQUIREMENT__FILTER:
         setFilter(FILTER_EDEFAULT);
         return;
@@ -513,6 +567,8 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
         return VERSION_RANGE_EDEFAULT == null ? versionRange != null : !VERSION_RANGE_EDEFAULT.equals(versionRange);
       case P2Package.REQUIREMENT__OPTIONAL:
         return optional != OPTIONAL_EDEFAULT;
+      case P2Package.REQUIREMENT__GREEDY:
+        return greedy != GREEDY_EDEFAULT;
       case P2Package.REQUIREMENT__FILTER:
         return FILTER_EDEFAULT == null ? filter != null : !FILTER_EDEFAULT.equals(filter);
       case P2Package.REQUIREMENT__TYPE:

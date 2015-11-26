@@ -300,13 +300,22 @@ public interface P2Package extends EPackage
   int REQUIREMENT__OPTIONAL = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
 
   /**
+   * The feature id for the '<em><b>Greedy</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REQUIREMENT__GREEDY = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
+
+  /**
    * The feature id for the '<em><b>Filter</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REQUIREMENT__FILTER = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
+  int REQUIREMENT__FILTER = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -315,7 +324,7 @@ public interface P2Package extends EPackage
    * @generated
    * @ordered
    */
-  int REQUIREMENT__TYPE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 6;
+  int REQUIREMENT__TYPE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 7;
 
   /**
    * The number of structural features of the '<em>Requirement</em>' class.
@@ -324,7 +333,7 @@ public interface P2Package extends EPackage
    * @generated
    * @ordered
    */
-  int REQUIREMENT_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 7;
+  int REQUIREMENT_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 8;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -725,6 +734,17 @@ public interface P2Package extends EPackage
   EAttribute getRequirement_Type();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement#isGreedy <em>Greedy</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Greedy</em>'.
+   * @see org.eclipse.oomph.p2.Requirement#isGreedy()
+   * @see #getRequirement()
+   * @generated
+   */
+  EAttribute getRequirement_Greedy();
+
+  /**
    * Returns the meta object for the '{@link org.eclipse.oomph.p2.Requirement#setVersionRange(org.eclipse.equinox.p2.metadata.Version, org.eclipse.oomph.p2.VersionSegment) <em>Set Version Range</em>}' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1023,6 +1043,14 @@ public interface P2Package extends EPackage
      * @generated
      */
     EAttribute REQUIREMENT__TYPE = eINSTANCE.getRequirement_Type();
+
+    /**
+     * The meta object literal for the '<em><b>Greedy</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute REQUIREMENT__GREEDY = eINSTANCE.getRequirement_Greedy();
 
     /**
      * The meta object literal for the '<em><b>Set Version Range</b></em>' operation.

@@ -203,6 +203,14 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
     return requirement;
   }
 
+  public Requirement createRequirement(String id, VersionRange versionRange, boolean optional, boolean greedy)
+  {
+    Requirement requirement = createRequirement(id, versionRange);
+    requirement.setOptional(optional);
+    requirement.setGreedy(greedy);
+    return requirement;
+  }
+
   public Requirement createRequirement(String id, Version version)
   {
     if (version == null)
@@ -218,6 +226,14 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
   {
     Requirement requirement = createRequirement(id, version);
     requirement.setOptional(optional);
+    return requirement;
+  }
+
+  public Requirement createRequirement(String id, Version version, boolean optional, boolean greedy)
+  {
+    Requirement requirement = createRequirement(id, version);
+    requirement.setOptional(optional);
+    requirement.setGreedy(greedy);
     return requirement;
   }
 

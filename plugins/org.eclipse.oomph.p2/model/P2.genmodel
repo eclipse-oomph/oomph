@@ -49,6 +49,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/namespace"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/versionRange"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/optional"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/greedy"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/filter"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/type"/>
       <genOperations ecoreOperation="P2.ecore#//Requirement/setVersionRange">
