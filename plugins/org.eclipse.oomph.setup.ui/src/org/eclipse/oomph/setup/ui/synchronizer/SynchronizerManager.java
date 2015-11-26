@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.ui.synchronizer;
 
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.LocalDataProvider;
 import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider;
 import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider.AuthorizationRequiredException;
@@ -19,10 +20,15 @@ import org.eclipse.oomph.setup.internal.sync.SetupSyncPlugin;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.internal.sync.Synchronizer;
 import org.eclipse.oomph.setup.internal.sync.SynchronizerJob;
+import org.eclipse.oomph.setup.sync.SyncAction;
+import org.eclipse.oomph.setup.sync.SyncActionType;
+import org.eclipse.oomph.setup.sync.SyncPolicy;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.PropertyFile;
+
+import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -33,11 +39,15 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.StorageFactory;
+import org.eclipse.userstorage.spi.ICredentialsProvider;
 import org.eclipse.userstorage.spi.StorageCache;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -117,10 +127,10 @@ public final class SynchronizerManager
    * Returns a {@link SynchronizationController} for the current service, or for the Eclipse.org service if there is no current service.
    * Returns <code>null</code> if the needed credentials are missing.
    */
-  public SynchronizationController startSynchronization()
+  public SynchronizationController startSynchronization(boolean withCredentialsPrompt)
   {
     SynchronizationController controller = new SynchronizationController();
-    if (controller.start(false))
+    if (controller.start(withCredentialsPrompt, false))
     {
       return controller;
     }
@@ -132,15 +142,70 @@ public final class SynchronizerManager
    * Returns a {@link Synchronization} for the current service, or for the Eclipse.org service if there is no current service.
    * Returns <code>null</code> if the needed credentials are missing.
    */
-  public Synchronization synchronize()
+  public Synchronization synchronize(boolean withCredentialsPrompt)
   {
-    SynchronizationController synchronizationController = startSynchronization();
+    SynchronizationController synchronizationController = startSynchronization(withCredentialsPrompt);
     if (synchronizationController != null)
     {
       return synchronizationController.await();
     }
 
     return null;
+  }
+
+  public void performSynchronization(Synchronization synchronization)
+  {
+    try
+    {
+      EMap<String, SyncPolicy> policies = synchronization.getRemotePolicies();
+      Map<String, SyncAction> actions = synchronization.getActions();
+
+      for (Iterator<Map.Entry<String, SyncAction>> it = actions.entrySet().iterator(); it.hasNext();)
+      {
+        Map.Entry<String, SyncAction> entry = it.next();
+        String syncID = entry.getKey();
+        SyncAction syncAction = entry.getValue();
+
+        SyncPolicy policy = policies.get(syncID);
+        if (policy == null || policy == SyncPolicy.EXCLUDE)
+        {
+          it.remove();
+          continue;
+        }
+
+        SyncActionType type = syncAction.getComputedType();
+        switch (type)
+        {
+          case SET_LOCAL: // Ignore LOCAL -> REMOTE actions.
+          case REMOVE_LOCAL: // Ignore LOCAL -> REMOTE actions.
+          case CONFLICT: // Ignore interactive actions.
+          case EXCLUDE: // Should not occur.
+          case NONE: // Should not occur.
+            it.remove();
+            continue;
+        }
+      }
+
+      if (!actions.isEmpty())
+      {
+        try
+        {
+          synchronization.commit();
+        }
+        catch (NotCurrentException ex)
+        {
+          SetupUIPlugin.INSTANCE.log(ex, IStatus.INFO);
+        }
+        catch (IOException ex)
+        {
+          SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+        }
+      }
+    }
+    finally
+    {
+      synchronization.dispose();
+    }
   }
 
   public boolean offerFirstTimeConnect(Shell shell)
@@ -218,7 +283,7 @@ public final class SynchronizerManager
   {
     private SynchronizerJob synchronizerJob;
 
-    public boolean start(boolean deferLocal)
+    public boolean start(boolean withCredentialsPrompt, boolean deferLocal)
     {
       if (ENABLED)
       {
@@ -235,6 +300,12 @@ public final class SynchronizerManager
             Synchronizer synchronizer = INSTANCE.createSynchronizer(USER_SETUP, SYNC_FOLDER);
             synchronizerJob = new SynchronizerJob(synchronizer, deferLocal);
             synchronizerJob.setService(service);
+
+            if (!withCredentialsPrompt)
+            {
+              synchronizerJob.setCredentialsProvider(ICredentialsProvider.CANCEL);
+            }
+
             synchronizerJob.schedule();
           }
           catch (AuthorizationRequiredException ex)

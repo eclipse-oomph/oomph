@@ -196,6 +196,11 @@ public class ConfirmationPage extends SetupWizardPage
       public void widgetSelected(SelectionEvent e)
       {
         viewer.refresh();
+
+        if (showAllButton.getSelection())
+        {
+          viewer.setExpandedState(ROOT_ELEMENT, true);
+        }
       }
     });
     AccessUtil.setKey(showAllButton, "showAllTasks");

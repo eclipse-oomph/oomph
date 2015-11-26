@@ -389,12 +389,21 @@ public final class SetupUIPlugin extends OomphUIPlugin
     SetupTaskPerformer performer = null;
     final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
 
+    SynchronizationController synchronizationController = null;
+
+    try
+    {
+      synchronizationController = SynchronizerManager.INSTANCE.startSynchronization(false);
+    }
+    catch (Exception ex)
+    {
+      INSTANCE.log(ex);
+    }
+
     monitor.setTaskName("Creating a setup task performer");
 
     try
     {
-      SynchronizationController synchronizationController = SynchronizerManager.INSTANCE.startSynchronization();
-
       // Ensure that the demand created resources for the installation, workspace, and user are loaded and created.
       // Load the resource set quickly without doing ETag checking.
       resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
@@ -427,13 +436,20 @@ public final class SetupUIPlugin extends OomphUIPlugin
         monitor.worked(75);
       }
 
-      if (synchronizationController != null)
+      try
       {
-        Synchronization synchronization = synchronizationController.await();
-        if (synchronization != null)
+        if (synchronizationController != null)
         {
-          // TODO Implement startup synchronization.
+          Synchronization synchronization = synchronizationController.await();
+          if (synchronization != null)
+          {
+            SynchronizerManager.INSTANCE.performSynchronization(synchronization);
+          }
         }
+      }
+      catch (Exception ex)
+      {
+        INSTANCE.log(ex);
       }
 
       // Create the performer with a fully populated resource set.
