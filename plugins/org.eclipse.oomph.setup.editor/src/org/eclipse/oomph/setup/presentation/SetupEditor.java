@@ -1214,56 +1214,6 @@ public class SetupEditor extends MultiPageEditorPart
         });
     editingDomain = new OomphEditingDomain(adapterFactory, editingDomain.getCommandStack(), readOnlyMap, delegates);
 
-    ResourceSet resourceSet = editingDomain.getResourceSet();
-    SetupCoreUtil.configureResourceSet(resourceSet);
-
-    // If the index's folder is redirected to the local file system...
-    URIConverter uriConverter = resourceSet.getURIConverter();
-    Map<URI, URI> uriMap = uriConverter.getURIMap();
-    Map<URI, URI> workspaceMappings = new HashMap<URI, URI>();
-    for (URI uri : uriMap.values())
-    {
-      if (uri.isFile() && !uri.isRelative())
-      {
-        try
-        {
-          java.net.URI locationURI = new java.net.URI(uri.toString());
-          if (uri.hasTrailingPathSeparator())
-          {
-            for (IContainer container : EcorePlugin.getWorkspaceRoot().findContainersForLocationURI(locationURI))
-            {
-              if (container.isAccessible())
-              {
-                // If there is, redirect the file system folder to the workspace folder.
-                URI redirectedWorkspaceURI = URI.createPlatformResourceURI(container.getFullPath().toString(), true).appendSegment("");
-                workspaceMappings.put(uri, redirectedWorkspaceURI);
-                break;
-              }
-            }
-          }
-          else
-          {
-            for (IFile file : EcorePlugin.getWorkspaceRoot().findFilesForLocationURI(locationURI))
-            {
-              if (file.isAccessible())
-              {
-                // If there is, redirect the file system folder to the workspace folder.
-                URI redirectedWorkspaceURI = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
-                workspaceMappings.put(uri, redirectedWorkspaceURI);
-                break;
-              }
-            }
-          }
-        }
-        catch (URISyntaxException ex)
-        {
-          // Ignore.
-        }
-      }
-    }
-
-    uriMap.putAll(workspaceMappings);
-
     // Add a listener to set the most recent command's affected objects to be the selection of the viewer with focus.
     //
     editingDomain.getCommandStack().addCommandStackListener(new CommandStackListener()
@@ -1514,6 +1464,55 @@ public class SetupEditor extends MultiPageEditorPart
   public void createModel()
   {
     final ResourceSet resourceSet = editingDomain.getResourceSet();
+    SetupCoreUtil.configureResourceSet(resourceSet);
+
+    // If the index's folder is redirected to the local file system...
+    URIConverter uriConverter = resourceSet.getURIConverter();
+    Map<URI, URI> uriMap = uriConverter.getURIMap();
+    Map<URI, URI> workspaceMappings = new HashMap<URI, URI>();
+    for (URI uri : uriMap.values())
+    {
+      if (uri.isFile() && !uri.isRelative())
+      {
+        try
+        {
+          java.net.URI locationURI = new java.net.URI(uri.toString());
+          if (uri.hasTrailingPathSeparator())
+          {
+            for (IContainer container : EcorePlugin.getWorkspaceRoot().findContainersForLocationURI(locationURI))
+            {
+              if (container.isAccessible())
+              {
+                // If there is, redirect the file system folder to the workspace folder.
+                URI redirectedWorkspaceURI = URI.createPlatformResourceURI(container.getFullPath().toString(), true).appendSegment("");
+                workspaceMappings.put(uri, redirectedWorkspaceURI);
+                break;
+              }
+            }
+          }
+          else
+          {
+            for (IFile file : EcorePlugin.getWorkspaceRoot().findFilesForLocationURI(locationURI))
+            {
+              if (file.isAccessible())
+              {
+                // If there is, redirect the file system folder to the workspace folder.
+                URI redirectedWorkspaceURI = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+                workspaceMappings.put(uri, redirectedWorkspaceURI);
+                break;
+              }
+            }
+          }
+        }
+        catch (URISyntaxException ex)
+        {
+          // Ignore.
+        }
+      }
+    }
+
+    uriMap.putAll(workspaceMappings);
+
     URI resourceURI = SetupEditorSupport.getURI(getEditorInput(), resourceSet.getURIConverter());
 
     resourceMirror.perform(resourceURI);
