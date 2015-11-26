@@ -50,6 +50,8 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TreeEvent;
+import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Rectangle;
@@ -139,6 +141,27 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
   private void addColumnResizer()
   {
     tree = (Tree)getControl();
+
+    tree.addTreeListener(new TreeListener()
+    {
+      Runnable runnable = new Runnable()
+      {
+        public void run()
+        {
+          resizeColumns();
+        }
+      };
+
+      public void treeExpanded(TreeEvent e)
+      {
+        UIUtil.asyncExec(tree, runnable);
+      }
+
+      public void treeCollapsed(TreeEvent e)
+      {
+        UIUtil.asyncExec(tree, runnable);
+      }
+    });
 
     final TreeColumn propertyColumn = tree.getColumn(0);
     propertyColumn.setResizable(false);
