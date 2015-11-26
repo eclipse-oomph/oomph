@@ -443,7 +443,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
           Synchronization synchronization = synchronizationController.await();
           if (synchronization != null)
           {
-            SynchronizerManager.INSTANCE.performSynchronization(synchronization);
+            SynchronizerManager.INSTANCE.performSynchronization(synchronization, true, true);
           }
         }
       }

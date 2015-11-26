@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.oomph.internal.ui.UIPropertyTester;
+import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
@@ -27,6 +28,16 @@ import org.osgi.service.prefs.Preferences;
  */
 public class SetupPropertyTester extends PropertyTester
 {
+  public static final String PREFIX = "org.eclipse.oomph.setup.ui.";
+
+  public static final String STARTING = "starting";
+
+  public static final String PERFORMING = "performing";
+
+  public static final String HANDLING = "handling";
+
+  public static final String SYNC_ENABLED = "syncEnabled";
+
   public static final String SHOW_TOOL_BAR_CONTRIBUTIONS = "showToolBarContributions";
 
   public static final String SHOW_PROGRESS_IN_WIZARD = "showProgressInWizard";
@@ -49,7 +60,7 @@ public class SetupPropertyTester extends PropertyTester
       {
         if (SHOW_TOOL_BAR_CONTRIBUTIONS.equals(event.getKey()))
         {
-          UIPropertyTester.requestEvaluation("org.eclipse.oomph.setup.ui." + SHOW_TOOL_BAR_CONTRIBUTIONS, "true".equals(event.getNewValue()));
+          UIPropertyTester.requestEvaluation(PREFIX + SHOW_TOOL_BAR_CONTRIBUTIONS, "true".equals(event.getNewValue()));
         }
       }
     });
@@ -59,7 +70,7 @@ public class SetupPropertyTester extends PropertyTester
     {
       public void run()
       {
-        UIPropertyTester.requestEvaluation("org.eclipse.oomph.setup.ui." + SHOW_TOOL_BAR_CONTRIBUTIONS, true);
+        UIPropertyTester.requestEvaluation(PREFIX + SHOW_TOOL_BAR_CONTRIBUTIONS, true);
       }
     });
   }
@@ -70,30 +81,29 @@ public class SetupPropertyTester extends PropertyTester
 
   public boolean test(Object receiver, String property, Object[] args, Object expectedValue)
   {
-    if ("starting".equals(property))
+    if (STARTING.equals(property))
     {
       return testStarting(receiver, args, expectedValue);
     }
 
-    if ("performing".equals(property))
+    if (PERFORMING.equals(property))
     {
       return testPerforming(receiver, args, expectedValue);
     }
 
-    if ("handling".equals(property))
+    if (HANDLING.equals(property))
     {
       return testHandling(receiver, args, expectedValue);
     }
 
+    if (SYNC_ENABLED.equals(property))
+    {
+      return testSyncEnabled(receiver, args, expectedValue);
+    }
+
     if (SHOW_TOOL_BAR_CONTRIBUTIONS.equals(property))
     {
-      if (expectedValue == null)
-      {
-        expectedValue = Boolean.TRUE;
-      }
-
-      boolean value = PREFERENCES.getBoolean(SHOW_TOOL_BAR_CONTRIBUTIONS, false);
-      return expectedValue.equals(value);
+      return testShowToolBarContributions(receiver, args, expectedValue);
     }
 
     return false;
@@ -129,10 +139,31 @@ public class SetupPropertyTester extends PropertyTester
     return expectedValue.equals(handlingShell != null);
   }
 
+  private boolean testSyncEnabled(Object receiver, Object[] args, Object expectedValue)
+  {
+    if (expectedValue == null)
+    {
+      expectedValue = Boolean.TRUE;
+    }
+
+    return expectedValue.equals(SynchronizerManager.INSTANCE.isSyncEnabled());
+  }
+
+  private boolean testShowToolBarContributions(Object receiver, Object[] args, Object expectedValue)
+  {
+    if (expectedValue == null)
+    {
+      expectedValue = Boolean.TRUE;
+    }
+
+    boolean value = PREFERENCES.getBoolean(SHOW_TOOL_BAR_CONTRIBUTIONS, false);
+    return expectedValue.equals(value);
+  }
+
   public static void setStarting(boolean starting)
   {
     SetupPropertyTester.starting = starting;
-    UIPropertyTester.requestEvaluation("org.eclipse.oomph.setup.ui.starting", false);
+    UIPropertyTester.requestEvaluation(PREFIX + STARTING, false);
   }
 
   public static IStatus getPerformingStatus()
@@ -165,7 +196,7 @@ public class SetupPropertyTester extends PropertyTester
       });
     }
 
-    UIPropertyTester.requestEvaluation("org.eclipse.oomph.setup.ui.performing", shell != null);
+    UIPropertyTester.requestEvaluation(PREFIX + PERFORMING, shell != null);
   }
 
   public static Shell getHandlingShell()
@@ -188,7 +219,7 @@ public class SetupPropertyTester extends PropertyTester
       });
     }
 
-    UIPropertyTester.requestEvaluation("org.eclipse.oomph.setup.ui.handling", false);
+    UIPropertyTester.requestEvaluation(PREFIX + HANDLING, false);
   }
 
   public static boolean isShowProgressInWizard()

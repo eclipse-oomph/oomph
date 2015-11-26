@@ -91,6 +91,11 @@
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
+            id="org.eclipse.oomph.setup.editor.synchronizePreferences"
+            name="Synchronize Preferences">
+      </command>
+      <command
+            categoryId="org.eclipse.oomph.setup.category"
             defaultHandler="org.eclipse.oomph.setup.presentation.handlers.OpenLogHandler"
             id="org.eclipse.oomph.setup.editor.openLog"
             name="Open Setup Log">
@@ -99,16 +104,8 @@
             categoryId="org.eclipse.oomph.setup.category"
             defaultHandler="org.eclipse.oomph.setup.presentation.handlers.RefreshCacheHandler"
             id="org.eclipse.oomph.setup.editor.refreshCache"
-            name="Referehs Remote Cache">
+            name="Refresh Remote Cache">
       </command>
-      <!--
-      <command
-            categoryId="org.eclipse.oomph.setup.category"
-            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.ChangeProductHandler"
-            id="org.eclipse.oomph.setup.editor.changeProduct"
-            name="Change Product">
-      </command>
-      -->
    </extension>
 
    <extension
@@ -185,6 +182,33 @@
             </and>
          </enabledWhen>
       </handler>
+      <handler
+            class="org.eclipse.oomph.setup.presentation.handlers.SynchronizePreferencesHandler"
+            commandId="org.eclipse.oomph.setup.editor.synchronizePreferences">
+         <enabledWhen>
+            <and>
+               <systemTest
+                     property="oomph.setup.sync"
+                     value="true">
+               </systemTest>
+               <test
+                     forcePluginActivation="true"
+                     property="org.eclipse.oomph.setup.ui.syncEnabled"
+                     value="true">
+               </test>
+               <test
+                     forcePluginActivation="true"
+                     property="org.eclipse.oomph.setup.ui.starting"
+                     value="false">
+               </test>
+               <test
+                     forcePluginActivation="true"
+                     property="org.eclipse.oomph.setup.ui.handling"
+                     value="false">
+               </test>
+            </and>
+         </enabledWhen>
+      </handler>
    </extension>
 
    <extension
@@ -224,6 +248,7 @@
             </command>
          </toolbar>
       </menuContribution>
+
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.trim.status">
          <toolbar
@@ -268,6 +293,7 @@
             </command>
          </toolbar>
       </menuContribution>
+
       <menuContribution
             locationURI="menu:org.eclipse.oomph.setup.editor.menu">
          <dynamic
@@ -275,6 +301,7 @@
                id="org.eclipse.oomph.setup.editor.menu.dynamic">
          </dynamic>
       </menuContribution>
+
       <menuContribution
             locationURI="menu:org.eclipse.oomph.setup.perform.menu">
          <command
@@ -307,6 +334,30 @@
                visible="true">
          </separator>
          <command
+               commandId="org.eclipse.oomph.setup.editor.synchronizePreferences"
+               icon="icons/Synchronize.gif"
+               label="Synchronize Preferences..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                 <systemTest
+                       property="oomph.setup.sync"
+                       value="true">
+                 </systemTest>
+                 <test
+                       forcePluginActivation="true"
+                       property="org.eclipse.oomph.setup.ui.syncEnabled"
+                       value="true">
+                 </test>
+               </and>
+            </visibleWhen>
+         </command>
+         <separator
+               name="org.eclipse.oomph.setup.perform.menu.separator2"
+               visible="true">
+         </separator>
+         <command
                commandId="org.eclipse.oomph.setup.editor.openLog"
                icon="icons/Log.gif"
                label="Open Setup Log"
@@ -318,14 +369,6 @@
                label="Refresh Remote Cache"
                style="push">
          </command>
-         <!--
-         <command
-               commandId="org.eclipse.oomph.setup.editor.changeProduct"
-               icon="icons/Product.gif"
-               label="Change Product..."
-               style="push">
-         </command>
-         -->
       </menuContribution>
 
       <menuContribution
@@ -341,6 +384,7 @@
                visible="true">
          </separator>
       </menuContribution>
+
       <menuContribution
             locationURI="menu:navigate?after=open.ext3">
          <separator

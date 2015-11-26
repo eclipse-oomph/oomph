@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui.synchronizer;
 
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.internal.ui.UIPropertyTester;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.LocalDataProvider;
@@ -23,6 +24,7 @@ import org.eclipse.oomph.setup.internal.sync.SynchronizerJob;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.SyncPolicy;
+import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -33,9 +35,9 @@ import org.eclipse.emf.common.util.EMap;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.StorageFactory;
@@ -48,6 +50,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -105,9 +108,32 @@ public final class SynchronizerManager
     }
   }
 
-  public void setSyncEnabled(boolean enabled)
+  public boolean setSyncEnabled(boolean enabled)
   {
-    CONFIG.setProperty(CONFIG_SYNC_ENABLED, Boolean.toString(enabled));
+    boolean changed;
+
+    if (enabled)
+    {
+      changed = CONFIG.compareAndSetProperty(CONFIG_SYNC_ENABLED, "true", "false", null);
+    }
+    else
+    {
+      changed = CONFIG.compareAndSetProperty(CONFIG_SYNC_ENABLED, "false", "true");
+    }
+
+    if (changed)
+    {
+      try
+      {
+        UIPropertyTester.requestEvaluation(SetupPropertyTester.PREFIX + SetupPropertyTester.SYNC_ENABLED, false);
+      }
+      catch (Exception ex)
+      {
+        SetupUIPlugin.INSTANCE.log(ex);
+      }
+    }
+
+    return changed;
   }
 
   /**
@@ -153,7 +179,7 @@ public final class SynchronizerManager
     return null;
   }
 
-  public void performSynchronization(Synchronization synchronization)
+  public void performSynchronization(Synchronization synchronization, boolean quiet, boolean local)
   {
     try
     {
@@ -167,7 +193,13 @@ public final class SynchronizerManager
         SyncAction syncAction = entry.getValue();
 
         SyncPolicy policy = policies.get(syncID);
-        if (policy == null || policy == SyncPolicy.EXCLUDE)
+        if (policy == SyncPolicy.EXCLUDE)
+        {
+          it.remove();
+          continue;
+        }
+
+        if (policy == null && quiet)
         {
           it.remove();
           continue;
@@ -178,7 +210,21 @@ public final class SynchronizerManager
         {
           case SET_LOCAL: // Ignore LOCAL -> REMOTE actions.
           case REMOVE_LOCAL: // Ignore LOCAL -> REMOTE actions.
+            if (local)
+            {
+              break;
+            }
+
+            //$FALL-THROUGH$
+
           case CONFLICT: // Ignore interactive actions.
+            if (quiet)
+            {
+              break;
+            }
+
+            //$FALL-THROUGH$
+
           case EXCLUDE: // Should not occur.
           case NONE: // Should not occur.
             it.remove();
@@ -205,6 +251,23 @@ public final class SynchronizerManager
     finally
     {
       synchronization.dispose();
+    }
+  }
+
+  public void performFullSynchronization()
+  {
+    // This is probably not needed because the handler is only enabled after opt-in.
+    // But it doesn't harm and it's safer for future changes.
+    SynchronizerManager.INSTANCE.offerFirstTimeConnect(UIUtil.getShell());
+
+    SynchronizationController synchronizationController = SynchronizerManager.INSTANCE.startSynchronization(true);
+    if (synchronizationController != null)
+    {
+      Synchronization synchronization = synchronizationController.await();
+      if (synchronization != null)
+      {
+        // SynchronizerManager.INSTANCE.performSynchronization(synchronization, false, false);
+      }
     }
   }
 
@@ -345,12 +408,10 @@ public final class SynchronizerManager
 
         if (result[0] == null)
         {
-          IStorageService service = synchronizerJob.getService();
-          final String serviceLabel = service == null ? "remote service" : service.getServiceLabel();
-
           try
           {
             final AtomicBoolean canceled = new AtomicBoolean();
+            final IStorageService service = synchronizerJob.getService();
 
             UIUtil.syncExec(new Runnable()
             {
@@ -358,10 +419,19 @@ public final class SynchronizerManager
               {
                 try
                 {
-                  PlatformUI.getWorkbench().getProgressService().busyCursorWhile(new IRunnableWithProgress()
+                  Shell shell = UIUtil.getShell();
+                  ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
+
+                  final Semaphore authenticationSemaphore = service.getAuthenticationSemaphore();
+                  authenticationSemaphore.acquire();
+
+                  dialog.run(true, true, new IRunnableWithProgress()
                   {
                     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
                     {
+                      authenticationSemaphore.release();
+
+                      String serviceLabel = service.getServiceLabel();
                       result[0] = await(serviceLabel, monitor);
                     }
                   });
@@ -391,6 +461,10 @@ public final class SynchronizerManager
           catch (Throwable ex)
           {
             SetupUIPlugin.INSTANCE.log(ex);
+          }
+          finally
+          {
+            synchronizerJob = null;
           }
         }
 

@@ -20,6 +20,7 @@ import org.eclipse.nebula.widgets.tablecombo.TableCombo;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -41,6 +42,8 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
   private Button enableButton;
 
   private StorageConfigurationComposite storageConfigurationComposite;
+
+  private Button syncButton;
 
   private boolean initialEnabled;
 
@@ -104,8 +107,19 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
         };
       }
 
-      enableButton.setSelection(initialEnabled);
+      syncButton = new Button(main, SWT.PUSH);
+      syncButton.setText("Synchronize Now...");
+      syncButton.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
+      syncButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          SynchronizerManager.INSTANCE.performFullSynchronization();
+        }
+      });
 
+      enableButton.setSelection(initialEnabled);
       UIUtil.asyncExec(new Runnable()
       {
         public void run()
@@ -186,11 +200,16 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
 
   private void updateEnablement()
   {
-    boolean enabled = enableButton.getSelection();
+    boolean enabled = enableButton != null ? enableButton.getSelection() : false;
 
     if (storageConfigurationComposite != null)
     {
       storageConfigurationComposite.setEnabled(enabled);
+    }
+
+    if (syncButton != null)
+    {
+      syncButton.setEnabled(enabled);
     }
 
     boolean needsApply = needsApply();
