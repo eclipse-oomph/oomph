@@ -33,13 +33,18 @@ public class PerformHandler extends AbstractDropdownItemHandler
 
   public void run()
   {
-    final Synchronization synchronization = SynchronizerManager.INSTANCE.synchronize(false);
+    Synchronization synchronization = SynchronizerManager.INSTANCE.synchronize(false, false);
     if (synchronization != null)
     {
-      SynchronizerManager.INSTANCE.performSynchronization(synchronization, true, true);
+      SynchronizerManager.INSTANCE.performSynchronization(synchronization, false, false);
     }
 
-    final SetupWizard updater = new SetupWizard.Updater(manual)
+    perform(manual);
+  }
+
+  public static void perform(boolean manual)
+  {
+    SetupWizard updater = new SetupWizard.Updater(manual)
     {
       @Override
       public void createPageControls(Composite pageContainer)

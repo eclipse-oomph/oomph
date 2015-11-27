@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.internal.sync;
 
+import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.internal.sync.DataProvider.Location;
 import org.eclipse.oomph.setup.internal.sync.Snapshot.WorkingCopy;
 import org.eclipse.oomph.setup.sync.SyncAction;
 
@@ -29,6 +31,10 @@ public class SynchronizerAdapter implements SynchronizerListener
   }
 
   public void workingCopyCreated(Synchronization synchronization, WorkingCopy workingCopy)
+  {
+  }
+
+  public void tasksCollected(Synchronization synchronization, Location location, Map<String, SetupTask> oldTasks, Map<String, SetupTask> newTasks)
   {
   }
 

@@ -21,7 +21,6 @@ import org.eclipse.oomph.setup.impl.PreferenceTaskImpl.PreferenceHandler;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
-import org.eclipse.oomph.setup.internal.sync.LocalDataProvider;
 import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider;
 import org.eclipse.oomph.setup.internal.sync.SyncUtil;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
@@ -1145,13 +1144,11 @@ public final class RecorderManager
           }
 
           File target = RecorderManager.copyRecorderTarget(recorderTarget, tmpFolder);
-          LocalDataProvider localDataProvider = new LocalDataProvider(target);
 
           StorageCache tmpCache = new RemoteDataProvider.SyncStorageCache(tmpFolder);
           IStorage tmpStorage = storage.getFactory().create(storage.getApplicationToken(), tmpCache);
-          RemoteDataProvider remoteDataProvider = new RemoteDataProvider(tmpStorage);
 
-          Synchronizer synchronizer = new Synchronizer(localDataProvider, remoteDataProvider, tmpFolder);
+          Synchronizer synchronizer = SynchronizerManager.INSTANCE.createSynchronizer(target, tmpFolder, tmpStorage);
           synchronizer.copyFilesFrom(SynchronizerManager.SYNC_FOLDER);
 
           synchronizerJob = new SynchronizerJob(synchronizer, true);

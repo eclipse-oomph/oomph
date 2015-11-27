@@ -21,6 +21,7 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.sync.DataProvider;
+import org.eclipse.oomph.setup.internal.sync.DataProvider.Location;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.LocalDataProvider;
 import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider;
@@ -297,7 +298,7 @@ public final class TestWorkstation
       RemoteDataProvider.saveContents(tmpContents, remoteFile);
     }
 
-    return loadObject(URI.createFileURI(remoteFile.getAbsolutePath()), Synchronization.REMOTE_DATA_TYPE);
+    return loadObject(URI.createFileURI(remoteFile.getAbsolutePath()), Location.REMOTE.getDataType());
   }
 
   public TestWorkstation log(Object msg)

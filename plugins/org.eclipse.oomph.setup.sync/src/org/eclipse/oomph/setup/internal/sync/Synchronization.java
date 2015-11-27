@@ -13,9 +13,10 @@ package org.eclipse.oomph.setup.internal.sync;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.PreferenceTask;
-import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContainer;
+import org.eclipse.oomph.setup.internal.sync.DataProvider.Location;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.Snapshot.WorkingCopy;
 import org.eclipse.oomph.setup.sync.RemoteData;
@@ -55,10 +56,6 @@ import java.util.Set;
  */
 public class Synchronization
 {
-  public static final EClass USER_TYPE = SetupPackage.Literals.USER;
-
-  public static final EClass REMOTE_DATA_TYPE = SyncPackage.Literals.REMOTE_DATA;
-
   private final ResourceSet resourceSet = SyncUtil.createResourceSet();
 
   private final Set<String> ids = new HashSet<String>();
@@ -92,13 +89,13 @@ public class Synchronization
     this.synchronizer = synchronizer;
     synchronizer.syncStarted();
 
-    remoteWorkingCopy = createRemoteWorkingCopy();
+    remoteWorkingCopy = createWorkingCopy(Location.REMOTE);
     synchronizer.workingCopyCreated(remoteWorkingCopy);
 
     remotePolicies = getPolicies(remoteWorkingCopy);
 
     // Compute remote deltas first to make sure that new local tasks don't pick remotely existing IDs.
-    remoteDeltas = computeRemoteDeltas(remoteWorkingCopy);
+    remoteDeltas = computeDeltas(Location.REMOTE);
 
     if (!deferLocal)
     {
@@ -137,10 +134,10 @@ public class Synchronization
     }
 
     // Compute local deltas.
-    localWorkingCopy = createLocalWorkingCopy();
+    localWorkingCopy = createWorkingCopy(Location.LOCAL);
     synchronizer.workingCopyCreated(localWorkingCopy);
 
-    localDeltas = computeLocalDeltas(localWorkingCopy);
+    localDeltas = computeDeltas(Location.LOCAL);
 
     // Compute sync actions.
     actions = computeSyncActions();
@@ -149,26 +146,15 @@ public class Synchronization
     return actions;
   }
 
-  private WorkingCopy createRemoteWorkingCopy() throws IOException
+  private WorkingCopy createWorkingCopy(Location location) throws IOException
   {
-    Snapshot snapshot = synchronizer.getRemoteSnapshot();
-    return createWorkingCopy(snapshot, REMOTE_DATA_TYPE);
-  }
-
-  private WorkingCopy createLocalWorkingCopy() throws IOException
-  {
-    Snapshot snapshot = synchronizer.getLocalSnapshot();
-    return createWorkingCopy(snapshot, USER_TYPE);
-  }
-
-  private WorkingCopy createWorkingCopy(Snapshot snapshot, EClass eClass) throws IOException
-  {
+    Snapshot snapshot = location.pick(synchronizer.getLocalSnapshot(), synchronizer.getRemoteSnapshot());
     WorkingCopy workingCopy = snapshot.createWorkingCopy();
 
     File oldFile = snapshot.getOldFile();
-    if (!oldFile.exists())
+    if (oldFile != null && !oldFile.exists())
     {
-      SyncUtil.inititalizeFile(oldFile, eClass, resourceSet);
+      SyncUtil.inititalizeFile(oldFile, location.getDataType(), resourceSet);
     }
 
     File tmpFile = workingCopy.getTmpFile();
@@ -177,7 +163,7 @@ public class Synchronization
       File newFile = snapshot.getNewFile();
       if (!newFile.exists())
       {
-        SyncUtil.inititalizeFile(tmpFile, eClass, resourceSet);
+        SyncUtil.inititalizeFile(tmpFile, location.getDataType(), resourceSet);
       }
       else
       {
@@ -191,7 +177,7 @@ public class Synchronization
   private EMap<String, SyncPolicy> getPolicies(WorkingCopy remoteWorkingCopy)
   {
     File file = remoteWorkingCopy.getTmpFile();
-    RemoteData remoteData = loadObject(file, REMOTE_DATA_TYPE);
+    RemoteData remoteData = loadObject(file, Location.REMOTE.getDataType());
     return remoteData.getPolicies();
   }
 
@@ -200,27 +186,20 @@ public class Synchronization
     return SyncPolicy.EXCLUDE != remotePolicies.get(id);
   }
 
-  private Map<String, SyncDelta> computeRemoteDeltas(WorkingCopy remoteWorkingCopy)
+  private Map<String, SyncDelta> computeDeltas(Location location)
   {
-    return computeDeltas(remoteWorkingCopy, REMOTE_DATA_TYPE);
-  }
+    EClass dataType = location.getDataType();
 
-  private Map<String, SyncDelta> computeLocalDeltas(WorkingCopy localWorkingCopy)
-  {
-    return computeDeltas(localWorkingCopy, USER_TYPE);
-  }
-
-  private Map<String, SyncDelta> computeDeltas(WorkingCopy workingCopy, EClass eClass)
-  {
+    WorkingCopy workingCopy = location.pick(localWorkingCopy, remoteWorkingCopy);
     Snapshot snapshot = workingCopy.getSnapshot();
 
     File oldFile = snapshot.getOldFile();
     File tmpFile = workingCopy.getTmpFile();
 
-    SetupTaskContainer oldData = loadObject(oldFile, eClass);
-    SetupTaskContainer newData = loadObject(tmpFile, eClass);
+    SetupTaskContainer oldData = oldFile != null ? (SetupTaskContainer)loadObject(oldFile, dataType) : SetupFactory.eINSTANCE.createCompoundTask();
+    SetupTaskContainer newData = loadObject(tmpFile, dataType);
 
-    return compareTasks(oldData, newData);
+    return compareTasks(location, oldData, newData);
   }
 
   private Map<String, SyncAction> computeSyncActions()
@@ -341,12 +320,13 @@ public class Synchronization
     throw new IllegalArgumentException();
   }
 
-  private Map<String, SyncDelta> compareTasks(SetupTaskContainer oldTaskContainer, SetupTaskContainer newTaskContainer)
+  private Map<String, SyncDelta> compareTasks(Location location, SetupTaskContainer oldTaskContainer, SetupTaskContainer newTaskContainer)
   {
     Map<String, SyncDelta> deltas = new HashMap<String, SyncDelta>();
 
     Map<String, SetupTask> oldTasks = collectTasks(oldTaskContainer);
     Map<String, SetupTask> newTasks = collectTasks(newTaskContainer);
+    synchronizer.tasksCollected(this, location, oldTasks, newTasks);
 
     for (Map.Entry<String, SetupTask> oldEntry : oldTasks.entrySet())
     {
@@ -625,10 +605,10 @@ public class Synchronization
 
     try
     {
-      boolean updateRemoteDataProvider = applyActions(remoteWorkingCopy, REMOTE_DATA_TYPE);
+      boolean updateRemoteDataProvider = applyActions(Location.REMOTE);
       remoteWorkingCopy.commit(updateRemoteDataProvider);
 
-      boolean updateLocalDataProvider = applyActions(localWorkingCopy, USER_TYPE);
+      boolean updateLocalDataProvider = applyActions(Location.LOCAL);
       localWorkingCopy.commit(updateLocalDataProvider);
 
       synchronizer.commitFinished(null);
@@ -654,11 +634,12 @@ public class Synchronization
     }
   }
 
-  private boolean applyActions(WorkingCopy workingCopy, EClass eClass)
+  private boolean applyActions(Location location)
   {
+    WorkingCopy workingCopy = location.pick(localWorkingCopy, remoteWorkingCopy);
     File file = workingCopy.getTmpFile();
 
-    SetupTaskContainer taskContainer = loadObject(file, eClass);
+    SetupTaskContainer taskContainer = loadObject(file, location.getDataType());
     Map<String, SetupTask> tasks = collectTasks(taskContainer);
 
     boolean changed = ChangedAdapter.isChanged(taskContainer);
@@ -680,7 +661,7 @@ public class Synchronization
           break;
 
         case SET_REMOTE:
-          if (eClass != REMOTE_DATA_TYPE) // Don't modify remote unnecessarily
+          if (location != Location.REMOTE) // Don't modify remote unnecessarily
           {
             changed |= include(id);
             changed |= applySetAction(taskContainer, tasks, id, action.getRemoteDelta());
@@ -693,7 +674,7 @@ public class Synchronization
           break;
 
         case REMOVE_REMOTE:
-          if (eClass != REMOTE_DATA_TYPE) // Don't modify remote unnecessarily
+          if (location != Location.REMOTE) // Don't modify remote unnecessarily
           {
             changed |= include(id);
             changed |= applyRemoveAction(taskContainer, tasks, action.getRemoteDelta());

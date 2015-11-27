@@ -329,10 +329,6 @@
                label="Import Projects..."
                style="push">
          </command>
-         <separator
-               name="org.eclipse.oomph.setup.perform.menu.separator1"
-               visible="true">
-         </separator>
          <command
                commandId="org.eclipse.oomph.setup.editor.synchronizePreferences"
                icon="icons/Synchronize.gif"
@@ -354,7 +350,7 @@
             </visibleWhen>
          </command>
          <separator
-               name="org.eclipse.oomph.setup.perform.menu.separator2"
+               name="org.eclipse.oomph.setup.perform.menu.separator1"
                visible="true">
          </separator>
          <command

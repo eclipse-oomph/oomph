@@ -93,6 +93,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -397,10 +398,13 @@ public class SynchronizerDialog extends AbstractRecorderDialog
   @Override
   protected void okPressed()
   {
-    Map<URI, Pair<String, String>> preferences = recorderTransaction.getPreferences();
-    if (preferences != null)
+    if (mode.isRecord())
     {
-      preferences.keySet().removeAll(recorderValuesToRemove);
+      Map<URI, Pair<String, String>> preferences = recorderTransaction.getPreferences();
+      if (preferences != null)
+      {
+        preferences.keySet().removeAll(recorderValuesToRemove);
+      }
     }
 
     super.okPressed();
@@ -653,30 +657,62 @@ public class SynchronizerDialog extends AbstractRecorderDialog
         // Only offer preferences with *new* policies for review.
         if (dirtyLocalPolicies.containsKey(key) || remotePolicyMissing || conflict)
         {
-          CollectionUtil.add(tasks, pluginID, task);
-
-          // Put the preference task into a compound task so that PreferenceTaskItemProvider shortens the label.
-          CompoundTask compound = compounds.get(pluginID);
-          if (compound == null)
-          {
-            compound = SetupFactory.eINSTANCE.createCompoundTask(pluginID);
-          }
-
-          compound.getSetupTasks().add(task);
-
-          // Remember task label.
-          ItemProviderAdapter itemProvider = (ItemProviderAdapter)adapterFactory.adapt(task, IItemLabelProvider.class);
-          labels.put(task, SetupLabelProvider.getText(itemProvider, task));
-          images.put(task, SetupUIPlugin.INSTANCE.getSWTImage(SetupLabelProvider.getImageDescriptor(itemProvider, task)));
+          addTask(task, pluginID, tasks, labels, images, compounds);
         }
       }
     }
     else // if (mode.isSync())
     {
-      // TODO
+      Map<String, CompoundTask> compounds = new HashMap<String, CompoundTask>();
+
+      Map<String, SyncAction> syncActions = synchronization.getActions();
+      for (Entry<String, SyncAction> entry : syncActions.entrySet())
+      {
+        String syncID = entry.getKey();
+        SyncAction syncAction = entry.getValue();
+
+        Map.Entry<String, String> preference = syncAction.getPreference();
+        String key = preference.getKey();
+        String value = preference.getValue();
+
+        PreferenceTask task = SetupFactory.eINSTANCE.createPreferenceTask();
+        task.setKey(key);
+        task.setValue(value);
+        task.setID(syncID);
+
+        if (syncAction.getComputedType() == SyncActionType.CONFLICT)
+        {
+          task.eAdapters().add(new ConflictAdapter());
+        }
+
+        URI uri = PreferencesFactory.eINSTANCE.createURI(key);
+        String pluginID = uri.segment(0);
+
+        addTask(task, pluginID, tasks, labels, images, compounds);
+      }
     }
 
     populateTree(tasks, labels, images);
+  }
+
+  private void addTask(PreferenceTask task, String pluginID, final Map<String, Set<SetupTask>> tasks, final Map<SetupTask, String> labels,
+      final Map<SetupTask, Image> images, Map<String, CompoundTask> compounds)
+  {
+    CollectionUtil.add(tasks, pluginID, task);
+
+    // Put the preference task into a compound task so that PreferenceTaskItemProvider shortens the label.
+    CompoundTask compound = compounds.get(pluginID);
+    if (compound == null)
+    {
+      compound = SetupFactory.eINSTANCE.createCompoundTask(pluginID);
+    }
+
+    compound.getSetupTasks().add(task);
+
+    // Remember task label.
+    ItemProviderAdapter itemProvider = (ItemProviderAdapter)adapterFactory.adapt(task, IItemLabelProvider.class);
+    labels.put(task, SetupLabelProvider.getText(itemProvider, task));
+    images.put(task, SetupUIPlugin.INSTANCE.getSWTImage(SetupLabelProvider.getImageDescriptor(itemProvider, task)));
   }
 
   private void populateTree(final Map<String, Set<SetupTask>> tasks, final Map<SetupTask, String> labels, final Map<SetupTask, Image> images)

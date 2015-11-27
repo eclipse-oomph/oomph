@@ -24,6 +24,8 @@ import java.io.IOException;
  */
 public class Snapshot
 {
+  public static final boolean DEFAULT_INCREMENTAL = true;
+
   private final DataProvider dataProvider;
 
   private final String info;
@@ -36,12 +38,25 @@ public class Snapshot
 
   public Snapshot(DataProvider dataProvider, File folder)
   {
+    this(dataProvider, folder, DEFAULT_INCREMENTAL);
+  }
+
+  public Snapshot(DataProvider dataProvider, File folder, boolean incremental)
+  {
     this.dataProvider = dataProvider;
 
     String prefix = dataProvider.getLocation().toString().toLowerCase();
     info = new File(folder, prefix + "-???.xml").toString();
 
-    oldFile = new File(folder, prefix + "-old.xml");
+    if (incremental)
+    {
+      oldFile = new File(folder, prefix + "-old.xml");
+    }
+    else
+    {
+      oldFile = null;
+    }
+
     newFile = new File(folder, prefix + "-new.xml");
     tmpFile = new File(folder, prefix + "-tmp.xml");
   }
@@ -122,12 +137,19 @@ public class Snapshot
         dataProvider.update(tmpFile, newFile);
       }
 
-      moveTmpFileTo(oldFile);
-      IOUtil.copyFile(oldFile, newFile);
+      if (oldFile != null)
+      {
+        moveTmpFileTo(oldFile);
+        IOUtil.copyFile(oldFile, newFile);
+      }
+      else
+      {
+        moveTmpFileTo(newFile);
+      }
     }
     catch (NotCurrentException ex)
     {
-      moveTmpFileTo(newFile);
+      moveTmpFileTo(newFile); // TODO Is this good??
       throw ex;
     }
   }
@@ -143,7 +165,7 @@ public class Snapshot
 
   private static void copyFileTo(File target, File file)
   {
-    if (file.isFile())
+    if (file != null && file.isFile())
     {
       IOUtil.copyFile(file, new File(target, file.getName()));
     }
@@ -151,10 +173,13 @@ public class Snapshot
 
   private static void copyFileFrom(File source, File file)
   {
-    File sourceFile = new File(source, file.getName());
-    if (sourceFile.isFile())
+    if (file != null)
     {
-      IOUtil.copyFile(sourceFile, file);
+      File sourceFile = new File(source, file.getName());
+      if (sourceFile.isFile())
+      {
+        IOUtil.copyFile(sourceFile, file);
+      }
     }
   }
 

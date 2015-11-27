@@ -12,20 +12,23 @@ package org.eclipse.oomph.setup.ui.synchronizer;
 
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.UIPropertyTester;
+import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.sync.DataProvider.Location;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.LocalDataProvider;
 import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider;
-import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider.AuthorizationRequiredException;
 import org.eclipse.oomph.setup.internal.sync.SetupSyncPlugin;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.internal.sync.Synchronizer;
+import org.eclipse.oomph.setup.internal.sync.SynchronizerAdapter;
 import org.eclipse.oomph.setup.internal.sync.SynchronizerJob;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.SyncPolicy;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.recorder.AbstractRecorderDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.PropertyFile;
@@ -47,9 +50,16 @@ import org.eclipse.userstorage.spi.StorageCache;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -136,27 +146,26 @@ public final class SynchronizerManager
     return changed;
   }
 
-  /**
-   * Returns a {@link Synchronizer} for the current service, or for the Eclipse.org service if there is no current service.
-   *
-   * @throws AuthorizationRequiredException
-   */
-  public Synchronizer createSynchronizer(File userSetup, File syncFolder) throws AuthorizationRequiredException
+  public Synchronizer createSynchronizer(File userSetup, File syncFolder)
+  {
+    return createSynchronizer(userSetup, syncFolder, storage);
+  }
+
+  public Synchronizer createSynchronizer(File userSetup, File syncFolder, IStorage storage)
   {
     LocalDataProvider localDataProvider = new LocalDataProvider(userSetup);
     RemoteDataProvider remoteDataProvider = new RemoteDataProvider(storage);
 
-    return new Synchronizer(localDataProvider, remoteDataProvider, syncFolder);
+    Synchronizer synchronizer = new Synchronizer(localDataProvider, remoteDataProvider, syncFolder);
+    synchronizer.addListener(new SkipHandler());
+
+    return synchronizer;
   }
 
-  /**
-   * Returns a {@link SynchronizationController} for the current service, or for the Eclipse.org service if there is no current service.
-   * Returns <code>null</code> if the needed credentials are missing.
-   */
-  public SynchronizationController startSynchronization(boolean withCredentialsPrompt)
+  public SynchronizationController startSynchronization(boolean withCredentialsPrompt, boolean deferLocal)
   {
     SynchronizationController controller = new SynchronizationController();
-    if (controller.start(withCredentialsPrompt, false))
+    if (controller.start(withCredentialsPrompt, deferLocal))
     {
       return controller;
     }
@@ -164,13 +173,9 @@ public final class SynchronizerManager
     return null;
   }
 
-  /**
-   * Returns a {@link Synchronization} for the current service, or for the Eclipse.org service if there is no current service.
-   * Returns <code>null</code> if the needed credentials are missing.
-   */
-  public Synchronization synchronize(boolean withCredentialsPrompt)
+  public Synchronization synchronize(boolean withCredentialsPrompt, boolean deferLocal)
   {
-    SynchronizationController synchronizationController = startSynchronization(withCredentialsPrompt);
+    SynchronizationController synchronizationController = startSynchronization(withCredentialsPrompt, deferLocal);
     if (synchronizationController != null)
     {
       return synchronizationController.await();
@@ -179,12 +184,13 @@ public final class SynchronizerManager
     return null;
   }
 
-  public void performSynchronization(Synchronization synchronization, boolean quiet, boolean local)
+  public void performSynchronization(Synchronization synchronization, boolean interactive, boolean remoteModifications)
   {
     try
     {
       EMap<String, SyncPolicy> policies = synchronization.getRemotePolicies();
       Map<String, SyncAction> actions = synchronization.getActions();
+      Map<String, SyncAction> includedActions = new HashMap<String, SyncAction>();
 
       for (Iterator<Map.Entry<String, SyncAction>> it = actions.entrySet().iterator(); it.hasNext();)
       {
@@ -199,7 +205,7 @@ public final class SynchronizerManager
           continue;
         }
 
-        if (policy == null && quiet)
+        if (policy == null && !interactive)
         {
           it.remove();
           continue;
@@ -208,32 +214,52 @@ public final class SynchronizerManager
         SyncActionType type = syncAction.getComputedType();
         switch (type)
         {
-          case SET_LOCAL: // Ignore LOCAL -> REMOTE actions.
-          case REMOVE_LOCAL: // Ignore LOCAL -> REMOTE actions.
-            if (local)
+          case SET_LOCAL:
+          case REMOVE_LOCAL:
+            if (!remoteModifications)
             {
-              break;
+              // Ignore LOCAL -> REMOTE actions.
+              it.remove();
+              continue;
             }
+            break;
 
-            //$FALL-THROUGH$
-
-          case CONFLICT: // Ignore interactive actions.
-            if (quiet)
+          case CONFLICT:
+            if (!interactive)
             {
-              break;
+              // Ignore interactive actions.
+              it.remove();
+              continue;
             }
+            break;
 
-            //$FALL-THROUGH$
-
-          case EXCLUDE: // Should not occur.
-          case NONE: // Should not occur.
+          case EXCLUDE:
+          case NONE:
+            // Should not occur.
             it.remove();
             continue;
         }
+
+        if (policy == SyncPolicy.INCLUDE && type != SyncActionType.CONFLICT)
+        {
+          it.remove();
+          includedActions.put(syncID, syncAction);
+        }
       }
 
-      if (!actions.isEmpty())
+      if (!actions.isEmpty() || !includedActions.isEmpty())
       {
+        if (!actions.isEmpty())
+        {
+          AbstractRecorderDialog dialog = new SynchronizerDialog(UIUtil.getShell(), null, synchronization);
+          if (dialog.open() != AbstractRecorderDialog.OK)
+          {
+            return;
+          }
+        }
+
+        actions.putAll(includedActions);
+
         try
         {
           synchronization.commit();
@@ -256,18 +282,12 @@ public final class SynchronizerManager
 
   public void performFullSynchronization()
   {
-    // This is probably not needed because the handler is only enabled after opt-in.
-    // But it doesn't harm and it's safer for future changes.
-    SynchronizerManager.INSTANCE.offerFirstTimeConnect(UIUtil.getShell());
+    offerFirstTimeConnect(UIUtil.getShell());
 
-    SynchronizationController synchronizationController = SynchronizerManager.INSTANCE.startSynchronization(true);
-    if (synchronizationController != null)
+    Synchronization synchronization = synchronize(true, false);
+    if (synchronization != null)
     {
-      Synchronization synchronization = synchronizationController.await();
-      if (synchronization != null)
-      {
-        // SynchronizerManager.INSTANCE.performSynchronization(synchronization, false, false);
-      }
+      performSynchronization(synchronization, true, true);
     }
   }
 
@@ -342,7 +362,147 @@ public final class SynchronizerManager
   /**
    * @author Eike Stepper
    */
-  public static class SynchronizationController
+  private static final class SkipHandler extends SynchronizerAdapter
+  {
+    private static final String CONFIG_SKIPPED_LOCAL = "skipped.local";
+
+    private static final String CONFIG_SKIPPED_REMOTE = "skipped.remote";
+
+    private static final String ID_SEPARATOR = " ";
+
+    private final Set<Location> skippedLocations = new HashSet<Location>();
+
+    private final Set<String> skippedLocal = new HashSet<String>();
+
+    private final Set<String> skippedRemote = new HashSet<String>();
+
+    private final Set<String> computedLocal = new HashSet<String>();
+
+    private final Set<String> computedRemote = new HashSet<String>();
+
+    public SkipHandler()
+    {
+    }
+
+    @Override
+    public void tasksCollected(Synchronization synchronization, Location location, Map<String, SetupTask> oldTasks, Map<String, SetupTask> newTasks)
+    {
+      Set<String> skippedIDs = getSkippedIDs(location);
+      oldTasks.keySet().removeAll(skippedIDs);
+    }
+
+    @Override
+    public void actionsComputed(Synchronization synchronization, Map<String, SyncAction> actions)
+    {
+      computedLocal.clear();
+      computedRemote.clear();
+
+      analyzeImpact(actions, computedLocal, computedRemote);
+    }
+
+    @Override
+    public void commitFinished(Synchronization synchronization, Throwable t)
+    {
+      if (t != null)
+      {
+        return;
+      }
+
+      Set<String> committedLocal = new HashSet<String>();
+      Set<String> committedRemote = new HashSet<String>();
+
+      Map<String, SyncAction> actions = synchronization.getActions();
+      analyzeImpact(actions, committedLocal, committedRemote);
+
+      computedLocal.removeAll(committedLocal);
+      computedRemote.removeAll(committedRemote);
+
+      setSkippedIDs(Location.LOCAL, computedLocal);
+      setSkippedIDs(Location.REMOTE, computedRemote);
+    }
+
+    private Set<String> getSkippedIDs(Location location)
+    {
+      Set<String> skippedIDs = location.pick(skippedLocal, skippedRemote);
+
+      if (skippedLocations.add(location))
+      {
+        String key = location.pick(CONFIG_SKIPPED_LOCAL, CONFIG_SKIPPED_REMOTE);
+        String property = CONFIG.getProperty(key, null);
+        if (property != null)
+        {
+          StringTokenizer tokenizer = new StringTokenizer(property, ID_SEPARATOR);
+          while (tokenizer.hasMoreTokens())
+          {
+            String id = tokenizer.nextToken();
+            skippedIDs.add(id);
+          }
+        }
+      }
+
+      return skippedIDs;
+    }
+
+    private void setSkippedIDs(Location location, Set<String> skippedIDs)
+    {
+      String key = location.pick(CONFIG_SKIPPED_LOCAL, CONFIG_SKIPPED_REMOTE);
+      if (skippedIDs.isEmpty())
+      {
+        CONFIG.removeProperty(key);
+      }
+      else
+      {
+        List<String> list = new ArrayList<String>(skippedIDs);
+        Collections.sort(list);
+
+        StringBuilder builder = new StringBuilder();
+        for (String id : list)
+        {
+          if (builder.length() != 0)
+          {
+            builder.append(ID_SEPARATOR);
+          }
+
+          builder.append(id);
+        }
+
+        CONFIG.setProperty(key, builder.toString());
+      }
+    }
+
+    private static void analyzeImpact(Map<String, SyncAction> actions, Set<String> local, Set<String> remote)
+    {
+      for (Map.Entry<String, SyncAction> entry : actions.entrySet())
+      {
+        String id = entry.getKey();
+        SyncAction action = entry.getValue();
+
+        SyncActionType effectiveType = action.getEffectiveType();
+        switch (effectiveType)
+        {
+          case SET_LOCAL:
+          case REMOVE_LOCAL:
+            local.add(id);
+            break;
+
+          case SET_REMOTE:
+          case REMOVE_REMOTE:
+            remote.add(id);
+            break;
+
+          case CONFLICT:
+            local.add(id);
+            remote.add(id);
+            break;
+        }
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static final class SynchronizationController
   {
     private SynchronizerJob synchronizerJob;
 
@@ -358,23 +518,16 @@ public final class SynchronizerManager
             return false;
           }
 
-          try
-          {
-            Synchronizer synchronizer = INSTANCE.createSynchronizer(USER_SETUP, SYNC_FOLDER);
-            synchronizerJob = new SynchronizerJob(synchronizer, deferLocal);
-            synchronizerJob.setService(service);
+          Synchronizer synchronizer = INSTANCE.createSynchronizer(USER_SETUP, SYNC_FOLDER);
+          synchronizerJob = new SynchronizerJob(synchronizer, deferLocal);
+          synchronizerJob.setService(service);
 
-            if (!withCredentialsPrompt)
-            {
-              synchronizerJob.setCredentialsProvider(ICredentialsProvider.CANCEL);
-            }
-
-            synchronizerJob.schedule();
-          }
-          catch (AuthorizationRequiredException ex)
+          if (!withCredentialsPrompt)
           {
-            SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+            synchronizerJob.setCredentialsProvider(ICredentialsProvider.CANCEL);
           }
+
+          synchronizerJob.schedule();
         }
       }
 

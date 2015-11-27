@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.internal.sync;
 
+import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.internal.sync.DataProvider.Location;
 import org.eclipse.oomph.setup.internal.sync.Snapshot.WorkingCopy;
 import org.eclipse.oomph.setup.sync.SyncAction;
 
@@ -24,6 +26,8 @@ public interface SynchronizerListener
 
   public void workingCopyCreated(Synchronization synchronization, WorkingCopy workingCopy);
 
+  public void tasksCollected(Synchronization synchronization, Location location, Map<String, SetupTask> oldTasks, Map<String, SetupTask> newTasks);
+
   public void actionsComputed(Synchronization synchronization, Map<String, SyncAction> actions);
 
   public void actionResolved(Synchronization synchronization, SyncAction action, String id);
@@ -33,5 +37,4 @@ public interface SynchronizerListener
   public void commitFinished(Synchronization synchronization, Throwable t);
 
   public void lockReleased(Synchronization synchronization);
-
 }

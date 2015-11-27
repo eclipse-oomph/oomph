@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.internal.sync;
 
+import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.internal.sync.DataProvider.Location;
 import org.eclipse.oomph.setup.internal.sync.Snapshot.WorkingCopy;
 import org.eclipse.oomph.setup.sync.SyncAction;
 
@@ -42,7 +44,12 @@ public class Synchronizer
 
   public Synchronizer(DataProvider localDataProvider, DataProvider remoteDataProvider, File syncFolder)
   {
-    this(new Snapshot(localDataProvider, syncFolder), new Snapshot(remoteDataProvider, syncFolder));
+    this(localDataProvider, remoteDataProvider, syncFolder, Snapshot.DEFAULT_INCREMENTAL);
+  }
+
+  public Synchronizer(DataProvider localDataProvider, DataProvider remoteDataProvider, File syncFolder, boolean incremental)
+  {
+    this(new Snapshot(localDataProvider, syncFolder, incremental), new Snapshot(remoteDataProvider, syncFolder, incremental));
   }
 
   public Snapshot getLocalSnapshot()
@@ -143,6 +150,21 @@ public class Synchronizer
       try
       {
         listener.workingCopyCreated(synchronization, workingCopy);
+      }
+      catch (Throwable ex)
+      {
+        SetupSyncPlugin.INSTANCE.log(ex);
+      }
+    }
+  }
+
+  protected void tasksCollected(Synchronization synchronization, Location location, Map<String, SetupTask> oldTasks, Map<String, SetupTask> newTasks)
+  {
+    for (SynchronizerListener listener : listeners)
+    {
+      try
+      {
+        listener.tasksCollected(synchronization, location, oldTasks, newTasks);
       }
       catch (Throwable ex)
       {

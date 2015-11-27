@@ -393,7 +393,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
     try
     {
-      synchronizationController = SynchronizerManager.INSTANCE.startSynchronization(false);
+      synchronizationController = SynchronizerManager.INSTANCE.startSynchronization(false, false);
     }
     catch (Exception ex)
     {
@@ -443,7 +443,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
           Synchronization synchronization = synchronizationController.await();
           if (synchronization != null)
           {
-            SynchronizerManager.INSTANCE.performSynchronization(synchronization, true, true);
+            SynchronizerManager.INSTANCE.performSynchronization(synchronization, false, false);
           }
         }
       }

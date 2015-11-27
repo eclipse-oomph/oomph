@@ -10,6 +10,11 @@
  */
 package org.eclipse.oomph.setup.internal.sync;
 
+import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.sync.SyncPackage;
+
+import org.eclipse.emf.ecore.EClass;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -34,7 +39,30 @@ public interface DataProvider
    */
   public enum Location
   {
-    LOCAL, REMOTE
+    LOCAL
+    {
+      @Override
+      public <T> T pick(T local, T remote)
+      {
+        return local;
+      }
+    },
+
+    REMOTE
+    {
+      @Override
+      public <T> T pick(T local, T remote)
+      {
+        return remote;
+      }
+    };
+
+    public EClass getDataType()
+    {
+      return pick(SetupPackage.Literals.USER, SyncPackage.Literals.REMOTE_DATA);
+    }
+
+    public abstract <T> T pick(T local, T remote);
   }
 
   /**
