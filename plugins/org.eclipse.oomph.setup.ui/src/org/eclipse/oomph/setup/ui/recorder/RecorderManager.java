@@ -681,7 +681,7 @@ public final class RecorderManager
       {
         Shell shell = UIUtil.getShell();
 
-        AbstractRecorderDialog dialog = new SynchronizerDialog(shell, transaction, synchronization);
+        SynchronizerDialog dialog = new SynchronizerDialog(shell, transaction, synchronization);
         int result = dialog.open();
 
         if (!dialog.isEnableRecorder())
@@ -689,7 +689,7 @@ public final class RecorderManager
           setRecorderEnabled(false);
           ok[0] = false;
         }
-        else if (result != AbstractRecorderDialog.OK)
+        else if (result != SynchronizerDialog.OK)
         {
           ok[0] = false;
         }

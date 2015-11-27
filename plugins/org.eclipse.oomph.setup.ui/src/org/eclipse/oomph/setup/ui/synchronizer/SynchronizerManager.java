@@ -28,7 +28,6 @@ import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.SyncPolicy;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
-import org.eclipse.oomph.setup.ui.recorder.AbstractRecorderDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.PropertyFile;
@@ -251,8 +250,8 @@ public final class SynchronizerManager
       {
         if (!actions.isEmpty())
         {
-          AbstractRecorderDialog dialog = new SynchronizerDialog(UIUtil.getShell(), null, synchronization);
-          if (dialog.open() != AbstractRecorderDialog.OK)
+          SynchronizerDialog dialog = new SynchronizerDialog(UIUtil.getShell(), null, synchronization);
+          if (dialog.open() != SynchronizerDialog.OK)
           {
             return;
           }

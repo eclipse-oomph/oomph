@@ -30,9 +30,9 @@ import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.SyncDelta;
 import org.eclipse.oomph.setup.sync.SyncPolicy;
+import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
-import org.eclipse.oomph.setup.ui.recorder.AbstractRecorderDialog;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
 import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
 import org.eclipse.oomph.util.CollectionUtil;
@@ -99,7 +99,7 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public class SynchronizerDialog extends AbstractRecorderDialog
+public class SynchronizerDialog extends AbstractSetupDialog
 {
   /**
    * If set to <code>true</code> the effective sync actions are dumped to the console.
@@ -164,6 +164,8 @@ public class SynchronizerDialog extends AbstractRecorderDialog
 
   private Button enableRecorderButton;
 
+  private boolean enableRecorder = RecorderManager.INSTANCE.isRecorderEnabled();
+
   public SynchronizerDialog(Shell parentShell)
   {
     this(parentShell, null, null);
@@ -171,7 +173,7 @@ public class SynchronizerDialog extends AbstractRecorderDialog
 
   public SynchronizerDialog(Shell parentShell, RecorderTransaction transaction, Synchronization sync)
   {
-    super(parentShell, getTitle(transaction), 800, 600);
+    super(parentShell, getTitle(transaction), 800, 600, SetupUIPlugin.INSTANCE, true);
     PreferenceTaskItemProvider.setShortenLabelText(adapterFactory);
 
     if (transaction != null)
@@ -204,6 +206,11 @@ public class SynchronizerDialog extends AbstractRecorderDialog
       recorderTargetText = null;
       synchronization = sync;
     }
+  }
+
+  public boolean isEnableRecorder()
+  {
+    return enableRecorder;
   }
 
   @Override
@@ -367,7 +374,7 @@ public class SynchronizerDialog extends AbstractRecorderDialog
   {
     enableRecorderButton = createCheckbox(parent, "Recorder enabled");
     enableRecorderButton.setToolTipText("The enablement can be changed later on the preference page Oomph | Setup | Preference Recorder");
-    enableRecorderButton.setSelection(isEnableRecorder());
+    enableRecorderButton.setSelection(enableRecorder);
     enableRecorderButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -383,8 +390,7 @@ public class SynchronizerDialog extends AbstractRecorderDialog
 
   protected void validatePage()
   {
-    boolean enableRecorder = enableRecorderButton != null && enableRecorderButton.getSelection();
-    setEnableRecorder(enableRecorder);
+    enableRecorder = enableRecorderButton != null && enableRecorderButton.getSelection();
 
     tree.setEnabled(enableRecorder);
     updateColumns();
