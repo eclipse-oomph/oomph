@@ -11,6 +11,8 @@
 package org.eclipse.oomph.setup.presentation.handlers;
 
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
+import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager.Impact;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 
 /**
  * @author Eike Stepper
@@ -24,6 +26,10 @@ public class SynchronizePreferencesHandler extends AbstractDropdownItemHandler
 
   public void run()
   {
-    SynchronizerManager.INSTANCE.performFullSynchronization();
+    Impact impact = SynchronizerManager.INSTANCE.performFullSynchronization();
+    if (impact != null && impact.hasLocalImpact())
+    {
+      SetupWizard.Updater.perform(true);
+    }
   }
 }

@@ -13,10 +13,6 @@ package org.eclipse.oomph.setup.presentation.handlers;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
-import org.eclipse.oomph.ui.UIUtil;
-
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Eike Stepper
@@ -39,23 +35,7 @@ public class PerformHandler extends AbstractDropdownItemHandler
       SynchronizerManager.INSTANCE.performSynchronization(synchronization, false, false);
     }
 
-    perform(manual);
-  }
-
-  public static void perform(boolean manual)
-  {
-    SetupWizard updater = new SetupWizard.Updater(manual)
-    {
-      @Override
-      public void createPageControls(Composite pageContainer)
-      {
-        loadIndex();
-        super.createPageControls(pageContainer);
-      }
-    };
-
-    Shell shell = UIUtil.getShell();
-    updater.openDialog(shell);
+    SetupWizard.Updater.perform(manual);
   }
 
   /**

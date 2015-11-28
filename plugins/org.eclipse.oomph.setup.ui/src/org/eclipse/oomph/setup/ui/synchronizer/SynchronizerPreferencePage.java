@@ -11,8 +11,12 @@
 package org.eclipse.oomph.setup.ui.synchronizer;
 
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager.Impact;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.nebula.jface.tablecomboviewer.TableComboViewer;
@@ -25,9 +29,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.ui.StorageConfigurationComposite;
@@ -115,7 +123,50 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
         @Override
         public void widgetSelected(SelectionEvent e)
         {
-          SynchronizerManager.INSTANCE.performFullSynchronization();
+          performApply();
+
+          final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+          final Display display = window.getShell().getDisplay();
+
+          UIUtil.asyncExec(display, new Runnable()
+          {
+            public void run()
+            {
+              try
+              {
+                Shell activeShell = display.getActiveShell();
+                Object data = activeShell.getData();
+                if (data instanceof PreferenceDialog)
+                {
+                  PreferenceDialog preferenceDialog = (PreferenceDialog)data;
+                  ReflectUtil.invokeMethod("okPressed", preferenceDialog);
+                }
+              }
+              catch (Throwable ex)
+              {
+                SetupUIPlugin.INSTANCE.log(ex);
+              }
+            }
+          });
+
+          UIUtil.asyncExec(display, new Runnable()
+          {
+            public void run()
+            {
+              try
+              {
+                Impact impact = SynchronizerManager.INSTANCE.performFullSynchronization();
+                if (impact != null && impact.hasLocalImpact())
+                {
+                  SetupWizard.Updater.perform(true);
+                }
+              }
+              catch (Throwable ex)
+              {
+                SetupUIPlugin.INSTANCE.log(ex);
+              }
+            }
+          });
         }
       });
 

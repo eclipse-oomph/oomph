@@ -35,6 +35,8 @@ public class SynchronizerJob extends Job
 
   private Synchronization synchronization;
 
+  private FinishHandler finishHandler;
+
   private boolean finished;
 
   private boolean awaitCanceled;
@@ -74,6 +76,16 @@ public class SynchronizerJob extends Job
   public void setCredentialsProvider(ICredentialsProvider credentialsProvider)
   {
     this.credentialsProvider = credentialsProvider;
+  }
+
+  public FinishHandler getFinishHandler()
+  {
+    return finishHandler;
+  }
+
+  public void setFinishHandler(FinishHandler finishHandler)
+  {
+    this.finishHandler = finishHandler;
   }
 
   public Throwable getException()
@@ -132,6 +144,8 @@ public class SynchronizerJob extends Job
         }
       }
 
+      handleFinish(null);
+
       synchronized (this)
       {
         synchronization = result;
@@ -141,6 +155,8 @@ public class SynchronizerJob extends Job
     }
     catch (Throwable ex)
     {
+      handleFinish(ex);
+
       synchronized (this)
       {
         exception = ex;
@@ -153,5 +169,28 @@ public class SynchronizerJob extends Job
     }
 
     return Status.OK_STATUS;
+  }
+
+  private void handleFinish(Throwable ex)
+  {
+    if (finishHandler != null)
+    {
+      try
+      {
+        finishHandler.handleFinish(ex);
+      }
+      catch (Throwable t)
+      {
+        SetupSyncPlugin.INSTANCE.log(t);
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public interface FinishHandler
+  {
+    public void handleFinish(Throwable ex) throws Exception;
   }
 }

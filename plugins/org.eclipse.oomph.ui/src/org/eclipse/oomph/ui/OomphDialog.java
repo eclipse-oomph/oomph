@@ -78,29 +78,26 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
     width = defaultWidth;
     height = defaultHeight;
 
-    if (true)
+    IDialogSettings settings = getDialogSettings();
+
+    try
     {
-      IDialogSettings settings = getDialogSettings();
+      int dialogWidth = settings.getInt(SETTING_DIALOG_WIDTH);
+      width = dialogWidth;
+    }
+    catch (NumberFormatException ex)
+    {
+      //$FALL-THROUGH$
+    }
 
-      try
-      {
-        int dialogWidth = settings.getInt(SETTING_DIALOG_WIDTH);
-        width = dialogWidth;
-      }
-      catch (NumberFormatException ex)
-      {
-        //$FALL-THROUGH$
-      }
-
-      try
-      {
-        int dialogHeight = settings.getInt(SETTING_DIALOG_HEIGHT);
-        height = dialogHeight;
-      }
-      catch (NumberFormatException ex)
-      {
-        //$FALL-THROUGH$
-      }
+    try
+    {
+      int dialogHeight = settings.getInt(SETTING_DIALOG_HEIGHT);
+      height = dialogHeight;
+    }
+    catch (NumberFormatException ex)
+    {
+      //$FALL-THROUGH$
     }
 
     if (helpAvailable)

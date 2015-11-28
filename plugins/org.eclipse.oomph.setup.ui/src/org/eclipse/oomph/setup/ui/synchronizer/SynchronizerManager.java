@@ -23,6 +23,7 @@ import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.internal.sync.Synchronizer;
 import org.eclipse.oomph.setup.internal.sync.SynchronizerAdapter;
 import org.eclipse.oomph.setup.internal.sync.SynchronizerJob;
+import org.eclipse.oomph.setup.internal.sync.SynchronizerListener;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.SyncPolicy;
@@ -183,7 +184,7 @@ public final class SynchronizerManager
     return null;
   }
 
-  public void performSynchronization(Synchronization synchronization, boolean interactive, boolean remoteModifications)
+  public Impact performSynchronization(Synchronization synchronization, boolean interactive, boolean remoteModifications)
   {
     try
     {
@@ -253,7 +254,7 @@ public final class SynchronizerManager
           SynchronizerDialog dialog = new SynchronizerDialog(UIUtil.getShell(), null, synchronization);
           if (dialog.open() != SynchronizerDialog.OK)
           {
-            return;
+            return null;
           }
         }
 
@@ -271,28 +272,42 @@ public final class SynchronizerManager
         {
           SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
         }
+
+        return getSkipHandler(synchronization);
       }
     }
     finally
     {
       synchronization.dispose();
     }
+
+    return null;
   }
 
-  public void performFullSynchronization()
+  public Impact performFullSynchronization()
   {
     offerFirstTimeConnect(UIUtil.getShell());
 
     Synchronization synchronization = synchronize(true, false);
     if (synchronization != null)
     {
-      performSynchronization(synchronization, true, true);
+      return performSynchronization(synchronization, true, true);
     }
+
+    return null;
   }
 
+  /**
+   * Returns <code>true</code> if offered the first time and offer was accepted, <code>false</code> otherwise.
+   */
   public boolean offerFirstTimeConnect(Shell shell)
   {
     if (!ENABLED)
+    {
+      return false;
+    }
+
+    if (isSyncEnabled())
     {
       return false;
     }
@@ -320,27 +335,29 @@ public final class SynchronizerManager
       return false;
     }
 
-    if (!connect(shell))
+    Boolean answer = connect(shell, service);
+    if (answer == null)
     {
       return false;
     }
 
-    setSyncEnabled(true);
-    return true;
+    setSyncEnabled(answer);
+    return answer;
   }
 
-  private boolean connect(final Shell shell)
+  private Boolean connect(final Shell shell, final IStorageService service)
   {
+    final Boolean[] result = { null };
+
     try
     {
-      final boolean[] result = { false };
-
       shell.getDisplay().syncExec(new Runnable()
       {
         public void run()
         {
-          SynchronizerWelcomeDialog dialog = new SynchronizerWelcomeDialog(shell);
-          result[0] = dialog.open() == SynchronizerWelcomeDialog.OK;
+          OptInDialog dialog = new OptInDialog(shell, service);
+          dialog.open();
+          result[0] = dialog.getAnswer();
         }
       });
 
@@ -353,15 +370,41 @@ public final class SynchronizerManager
     }
     finally
     {
-      CONFIG.setProperty(CONFIG_CONNECTION_OFFERED, new Date().toString());
-      connectionOffered = true;
+      if (result[0] != null)
+      {
+        CONFIG.setProperty(CONFIG_CONNECTION_OFFERED, new Date().toString());
+        connectionOffered = true;
+      }
     }
+  }
+
+  private static SkipHandler getSkipHandler(Synchronization synchronization)
+  {
+    for (SynchronizerListener listener : synchronization.getSynchronizer().getListeners())
+    {
+      if (listener instanceof SkipHandler)
+      {
+        return (SkipHandler)listener;
+      }
+    }
+
+    return null;
   }
 
   /**
    * @author Eike Stepper
    */
-  private static final class SkipHandler extends SynchronizerAdapter
+  public static interface Impact
+  {
+    public boolean hasLocalImpact();
+
+    public boolean hasRemoteImpact();
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class SkipHandler extends SynchronizerAdapter implements Impact
   {
     private static final String CONFIG_SKIPPED_LOCAL = "skipped.local";
 
@@ -379,8 +422,22 @@ public final class SynchronizerManager
 
     private final Set<String> computedRemote = new HashSet<String>();
 
+    private boolean localImpact;
+
+    private boolean remoteImpact;
+
     public SkipHandler()
     {
+    }
+
+    public boolean hasLocalImpact()
+    {
+      return localImpact;
+    }
+
+    public boolean hasRemoteImpact()
+    {
+      return remoteImpact;
     }
 
     @Override
@@ -412,6 +469,9 @@ public final class SynchronizerManager
 
       Map<String, SyncAction> actions = synchronization.getActions();
       analyzeImpact(actions, committedLocal, committedRemote);
+
+      localImpact = !committedRemote.isEmpty();
+      remoteImpact = !committedLocal.isEmpty();
 
       computedLocal.removeAll(committedLocal);
       computedRemote.removeAll(committedRemote);
@@ -565,6 +625,9 @@ public final class SynchronizerManager
             final AtomicBoolean canceled = new AtomicBoolean();
             final IStorageService service = synchronizerJob.getService();
 
+            final Semaphore authenticationSemaphore = service.getAuthenticationSemaphore();
+            authenticationSemaphore.acquire();
+
             UIUtil.syncExec(new Runnable()
             {
               public void run()
@@ -573,9 +636,6 @@ public final class SynchronizerManager
                 {
                   Shell shell = UIUtil.getShell();
                   ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
-
-                  final Semaphore authenticationSemaphore = service.getAuthenticationSemaphore();
-                  authenticationSemaphore.acquire();
 
                   dialog.run(true, true, new IRunnableWithProgress()
                   {

@@ -161,17 +161,4 @@ public class RemoteDataProvider implements DataProvider
       return new File(getFolder(), PROPERTIES_FILE_NAME);
     }
   }
-
-  /**
-   * @author Eike Stepper
-   */
-  public static class AuthorizationRequiredException extends IOException
-  {
-    private static final long serialVersionUID = 1L;
-
-    public AuthorizationRequiredException(URI uri)
-    {
-      super("Forbidden: " + uri);
-    }
-  }
 }

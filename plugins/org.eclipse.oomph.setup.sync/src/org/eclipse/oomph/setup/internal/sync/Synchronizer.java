@@ -112,6 +112,11 @@ public class Synchronizer
     }
   }
 
+  public SynchronizerListener[] getListeners()
+  {
+    return listeners.toArray(new SynchronizerListener[listeners.size()]);
+  }
+
   public void addListener(SynchronizerListener listener)
   {
     listeners.add(listener);

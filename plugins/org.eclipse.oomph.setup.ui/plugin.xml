@@ -86,24 +86,5 @@
             type="java.lang.Object">
       </propertyTester>
    </extension>
-   
-   <!--
-   <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="org.eclipse.oomph.setup.ui.actionSet1"
-            label="Synchronizer"
-            visible="true">
-         <action
-               class="org.eclipse.oomph.setup.ui.synchronizer.SynchronizerAction"
-               icon="icons/sync/Remote.gif"
-               id="org.eclipse.oomph.setup.ui.action1"
-               label="Synchronize"
-               style="push"
-               toolbarPath="oomphSynchronizer">
-         </action>
-      </actionSet>
-   </extension>
-   -->
 
 </plugin>

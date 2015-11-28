@@ -26,12 +26,14 @@ import org.eclipse.oomph.setup.internal.sync.SyncUtil;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.internal.sync.Synchronizer;
 import org.eclipse.oomph.setup.internal.sync.SynchronizerJob;
+import org.eclipse.oomph.setup.internal.sync.SynchronizerJob.FinishHandler;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.setup.sync.SyncActionType;
 import org.eclipse.oomph.setup.sync.SyncDelta;
 import org.eclipse.oomph.setup.sync.SyncPolicy;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction.CommitHandler;
+import org.eclipse.oomph.setup.ui.synchronizer.OptOutDialog;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerDialog;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerDialog.PolicyAndValue;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
@@ -82,6 +84,7 @@ import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
 import org.eclipse.userstorage.spi.StorageCache;
+import org.eclipse.userstorage.util.ProtocolException;
 
 import java.io.File;
 import java.io.IOException;
@@ -390,9 +393,9 @@ public final class RecorderManager
     return temporaryRecorderTarget != null;
   }
 
-  public boolean startEarlySynchronization(boolean withCredentialsPrompt)
+  public boolean startEarlySynchronization(boolean interactive)
   {
-    return earlySynchronization.start(withCredentialsPrompt);
+    return earlySynchronization.start(interactive);
   }
 
   private SyncInfo awaitEarlySynchronization()
@@ -753,7 +756,7 @@ public final class RecorderManager
   }
 
   @SuppressWarnings("restriction")
-  private void hookRecorderCheckbox(final Shell shell)
+  private void hookRecorderToggleButton(final Shell shell)
   {
     try
     {
@@ -1009,7 +1012,7 @@ public final class RecorderManager
           {
             public void run()
             {
-              hookRecorderCheckbox(shell);
+              hookRecorderToggleButton(shell);
             }
           });
 
@@ -1082,7 +1085,7 @@ public final class RecorderManager
   /**
    * @author Eike Stepper
    */
-  private static final class EarlySynchronization
+  private static final class EarlySynchronization implements FinishHandler
   {
     private Scope recorderTarget;
 
@@ -1094,7 +1097,7 @@ public final class RecorderManager
     {
     }
 
-    public boolean start(boolean withCredentialsPrompt)
+    public boolean start(boolean interactive)
     {
       if (!SynchronizerManager.ENABLED)
       {
@@ -1154,7 +1157,11 @@ public final class RecorderManager
           synchronizerJob = new SynchronizerJob(synchronizer, true);
           synchronizerJob.setService(service);
 
-          if (!withCredentialsPrompt)
+          if (interactive)
+          {
+            synchronizerJob.setFinishHandler(this);
+          }
+          else
           {
             synchronizerJob.setCredentialsProvider(ICredentialsProvider.CANCEL);
           }
@@ -1216,6 +1223,9 @@ public final class RecorderManager
             final AtomicBoolean canceled = new AtomicBoolean();
             final IStorageService service = synchronizerJob.getService();
 
+            final Semaphore authenticationSemaphore = service.getAuthenticationSemaphore();
+            authenticationSemaphore.acquire();
+
             UIUtil.syncExec(new Runnable()
             {
               public void run()
@@ -1224,9 +1234,6 @@ public final class RecorderManager
                 {
                   Shell shell = UIUtil.getShell();
                   ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
-
-                  final Semaphore authenticationSemaphore = service.getAuthenticationSemaphore();
-                  authenticationSemaphore.acquire();
 
                   dialog.run(true, true, new IRunnableWithProgress()
                   {
@@ -1288,6 +1295,29 @@ public final class RecorderManager
       finally
       {
         monitor.done();
+      }
+    }
+
+    public void handleFinish(Throwable ex) throws Exception
+    {
+      if (ex instanceof ProtocolException)
+      {
+        ProtocolException protocolException = (ProtocolException)ex;
+        if (protocolException.getStatusCode() == 401)
+        {
+          UIUtil.syncExec(new Runnable()
+          {
+            public void run()
+            {
+              OptOutDialog dialog = new OptOutDialog(UIUtil.getShell(), synchronizerJob.getService());
+              dialog.open();
+              if (!dialog.getAnswer())
+              {
+                SynchronizerManager.INSTANCE.setSyncEnabled(false);
+              }
+            }
+          });
+        }
       }
     }
   }
