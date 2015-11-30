@@ -29,7 +29,7 @@ public class SynchronizePreferencesHandler extends AbstractDropdownItemHandler
     Impact impact = SynchronizerManager.INSTANCE.performFullSynchronization();
     if (impact != null && impact.hasLocalImpact())
     {
-      SetupWizard.Updater.perform(true);
+      SetupWizard.Updater.perform(false);
     }
   }
 }

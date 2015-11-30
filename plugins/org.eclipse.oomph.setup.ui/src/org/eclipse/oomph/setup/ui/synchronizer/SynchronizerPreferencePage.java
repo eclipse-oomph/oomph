@@ -158,7 +158,7 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
                 Impact impact = SynchronizerManager.INSTANCE.performFullSynchronization();
                 if (impact != null && impact.hasLocalImpact())
                 {
-                  SetupWizard.Updater.perform(true);
+                  SetupWizard.Updater.perform(false);
                 }
               }
               catch (Throwable ex)
