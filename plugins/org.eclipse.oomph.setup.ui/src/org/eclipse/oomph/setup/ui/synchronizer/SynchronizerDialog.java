@@ -372,17 +372,20 @@ public class SynchronizerDialog extends AbstractSetupDialog
   @Override
   protected void createButtonsForButtonBar(Composite parent)
   {
-    enableRecorderButton = createCheckbox(parent, "Recorder enabled");
-    enableRecorderButton.setToolTipText("The enablement can be changed later on the preference page Oomph | Setup | Preference Recorder");
-    enableRecorderButton.setSelection(enableRecorder);
-    enableRecorderButton.addSelectionListener(new SelectionAdapter()
+    if (mode.isRecord())
     {
-      @Override
-      public void widgetSelected(SelectionEvent e)
+      enableRecorderButton = createCheckbox(parent, "Recorder enabled");
+      enableRecorderButton.setToolTipText("The enablement can be changed later on the preference page Oomph | Setup | Preference Recorder");
+      enableRecorderButton.setSelection(enableRecorder);
+      enableRecorderButton.addSelectionListener(new SelectionAdapter()
       {
-        validatePage();
-      }
-    });
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          validatePage();
+        }
+      });
+    }
 
     super.createButtonsForButtonBar(parent);
     validatePage();
@@ -390,15 +393,19 @@ public class SynchronizerDialog extends AbstractSetupDialog
 
   protected void validatePage()
   {
-    enableRecorder = enableRecorderButton != null && enableRecorderButton.getSelection();
-
-    tree.setEnabled(enableRecorder);
-    updateColumns();
-
-    if (valueText != null)
+    if (mode.isRecord())
     {
-      valueText.setVisible(enableRecorder);
+      enableRecorder = enableRecorderButton.getSelection();
+
+      tree.setEnabled(enableRecorder);
+
+      if (valueText != null)
+      {
+        valueText.setVisible(enableRecorder);
+      }
     }
+
+    updateColumns();
   }
 
   @Override
