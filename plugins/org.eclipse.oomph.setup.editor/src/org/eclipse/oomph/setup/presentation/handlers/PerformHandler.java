@@ -29,7 +29,7 @@ public class PerformHandler extends AbstractDropdownItemHandler
 
   public void run()
   {
-    Synchronization synchronization = SynchronizerManager.INSTANCE.synchronize(false, false);
+    Synchronization synchronization = SynchronizerManager.INSTANCE.synchronize(true, false, false);
     if (synchronization != null)
     {
       SynchronizerManager.INSTANCE.performSynchronization(synchronization, false, false);

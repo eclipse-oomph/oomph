@@ -393,7 +393,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
     try
     {
-      synchronizationController = SynchronizerManager.INSTANCE.startSynchronization(false, false);
+      synchronizationController = SynchronizerManager.INSTANCE.startSynchronization(false, false, false);
     }
     catch (Exception ex)
     {

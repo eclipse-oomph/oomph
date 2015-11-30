@@ -37,6 +37,7 @@ import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -162,10 +163,10 @@ public final class SynchronizerManager
     return synchronizer;
   }
 
-  public SynchronizationController startSynchronization(boolean withCredentialsPrompt, boolean deferLocal)
+  public SynchronizationController startSynchronization(boolean withProgressDialog, boolean withCredentialsPrompt, boolean deferLocal)
   {
     SynchronizationController controller = new SynchronizationController();
-    if (controller.start(withCredentialsPrompt, deferLocal))
+    if (controller.start(withProgressDialog, withCredentialsPrompt, deferLocal))
     {
       return controller;
     }
@@ -173,9 +174,9 @@ public final class SynchronizerManager
     return null;
   }
 
-  public Synchronization synchronize(boolean withCredentialsPrompt, boolean deferLocal)
+  public Synchronization synchronize(boolean withProgressDialog, boolean withCredentialsPrompt, boolean deferLocal)
   {
-    SynchronizationController synchronizationController = startSynchronization(withCredentialsPrompt, deferLocal);
+    SynchronizationController synchronizationController = startSynchronization(withProgressDialog, withCredentialsPrompt, deferLocal);
     if (synchronizationController != null)
     {
       return synchronizationController.await();
@@ -288,7 +289,7 @@ public final class SynchronizerManager
   {
     offerFirstTimeConnect(UIUtil.getShell());
 
-    Synchronization synchronization = synchronize(true, false);
+    Synchronization synchronization = synchronize(true, true, false);
     if (synchronization != null)
     {
       return performSynchronization(synchronization, true, true);
@@ -563,10 +564,13 @@ public final class SynchronizerManager
    */
   public static final class SynchronizationController
   {
+    private boolean withProgressDialog;
+
     private SynchronizerJob synchronizerJob;
 
-    public boolean start(boolean withCredentialsPrompt, boolean deferLocal)
+    public boolean start(boolean withProgressDialog, boolean withCredentialsPrompt, boolean deferLocal)
     {
+      this.withProgressDialog = withProgressDialog;
       if (ENABLED)
       {
         if (synchronizerJob == null && INSTANCE.isSyncEnabled())
@@ -624,40 +628,55 @@ public final class SynchronizerManager
           {
             final AtomicBoolean canceled = new AtomicBoolean();
             final IStorageService service = synchronizerJob.getService();
+            final String serviceLabel = service.getServiceLabel();
 
-            final Semaphore authenticationSemaphore = service.getAuthenticationSemaphore();
-            authenticationSemaphore.acquire();
-
-            UIUtil.syncExec(new Runnable()
+            if (withProgressDialog)
             {
-              public void run()
+              final Semaphore authenticationSemaphore = service.getAuthenticationSemaphore();
+              authenticationSemaphore.acquire();
+
+              UIUtil.syncExec(new Runnable()
               {
-                try
+                public void run()
                 {
-                  Shell shell = UIUtil.getShell();
-                  ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
-
-                  dialog.run(true, true, new IRunnableWithProgress()
+                  try
                   {
-                    public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
-                    {
-                      authenticationSemaphore.release();
+                    Shell shell = UIUtil.getShell();
+                    ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 
-                      String serviceLabel = service.getServiceLabel();
-                      result[0] = await(serviceLabel, monitor);
-                    }
-                  });
+                    dialog.run(true, true, new IRunnableWithProgress()
+                    {
+                      public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+                      {
+                        authenticationSemaphore.release();
+                        result[0] = await(serviceLabel, monitor);
+                      }
+                    });
+                  }
+                  catch (InvocationTargetException ex)
+                  {
+                    SetupUIPlugin.INSTANCE.log(ex);
+                  }
+                  catch (InterruptedException ex)
+                  {
+                    canceled.set(true);
+                  }
                 }
-                catch (InvocationTargetException ex)
+              });
+            }
+            else
+            {
+              final IProgressMonitor monitor = new NullProgressMonitor();
+              UIUtil.timerExec(10000, new Runnable()
+              {
+                public void run()
                 {
-                  SetupUIPlugin.INSTANCE.log(ex);
+                  monitor.setCanceled(true);
                 }
-                catch (InterruptedException ex)
-                {
-                  canceled.set(true);
-                }
-              }
-            });
+              });
+
+              result[0] = await(serviceLabel, monitor);
+            }
 
             if (result[0] == null && !canceled.get())
             {
