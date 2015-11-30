@@ -54,6 +54,7 @@ import org.eclipse.equinox.internal.p2.engine.Operand;
 import org.eclipse.equinox.internal.p2.engine.PropertyOperand;
 import org.eclipse.equinox.internal.p2.engine.ProvisioningPlan;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
+import org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.BackupStore;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.IBackupStore;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.NativeTouchpoint;
@@ -83,6 +84,7 @@ import org.eclipse.equinox.p2.query.IQuery;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.osgi.service.datalocation.Location;
@@ -777,8 +779,21 @@ public class ProfileTransactionImpl implements ProfileTransaction
       throws CoreException
   {
     Agent agent = profile.getAgent();
-    final IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
-    Set<String> knownRepositories = P2Util.getKnownRepositories(manager);
+    final IMetadataRepositoryManager metadataRepositoryManager = agent.getMetadataRepositoryManager();
+    Set<String> knownRepositories = P2Util.getKnownRepositories(metadataRepositoryManager);
+
+    if (metadataRepositoryManager instanceof AbstractRepositoryManager)
+    {
+      AbstractRepositoryManager<?> manager = (AbstractRepositoryManager<?>)metadataRepositoryManager;
+      manager.flushCache();
+    }
+
+    IArtifactRepositoryManager artifactRepositoryManager = agent.getArtifactRepositoryManager();
+    if (artifactRepositoryManager instanceof AbstractRepositoryManager)
+    {
+      AbstractRepositoryManager<?> manager = (AbstractRepositoryManager<?>)artifactRepositoryManager;
+      manager.flushCache();
+    }
 
     EList<Repository> repositories = profileDefinition.getRepositories();
     URI[] metadataURIs = new URI[repositories.size()];
@@ -798,7 +813,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
           {
             public void run()
             {
-              manager.removeRepository(uri);
+              metadataRepositoryManager.removeRepository(uri);
             }
           });
         }
@@ -816,7 +831,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       }
     }
 
-    RepositoryLoader repositoryLoader = new RepositoryLoader(manager, metadataURIs);
+    RepositoryLoader repositoryLoader = new RepositoryLoader(metadataRepositoryManager, metadataURIs);
     repositoryLoader.begin(monitor);
     ProvisionException exception = repositoryLoader.getException();
     if (exception != null)
@@ -831,7 +846,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
     for (int i = 0; i < metadataURIs.length; i++)
     {
-      IMetadataRepository metadataRepository = manager.loadRepository(metadataURIs[i], null);
+      IMetadataRepository metadataRepository = metadataRepositoryManager.loadRepository(metadataURIs[i], null);
       metadataRepositories.add(metadataRepository);
     }
 
