@@ -393,6 +393,21 @@ public class CachingRepositoryManager<T>
       return filter(super.getKnownRepositories(flags));
     }
 
+    /**
+     * Work-around for bug 483286.
+     */
+    @Override
+    public void flushCache()
+    {
+      synchronized (repositoryLock)
+      {
+        if (repositories != null)
+        {
+          super.flushCache();
+        }
+      }
+    }
+
     static URI[] filter(URI[] uris)
     {
       List<URI> result = new ArrayList<URI>(uris.length);
@@ -438,6 +453,21 @@ public class CachingRepositoryManager<T>
     public URI[] getKnownRepositories(int flags)
     {
       return Metadata.filter(super.getKnownRepositories(flags));
+    }
+
+    /**
+     * Work-around for bug 483286.
+     */
+    @Override
+    public void flushCache()
+    {
+      synchronized (repositoryLock)
+      {
+        if (repositories != null)
+        {
+          super.flushCache();
+        }
+      }
     }
   }
 }

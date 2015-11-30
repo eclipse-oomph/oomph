@@ -83,6 +83,7 @@ import org.eclipse.equinox.p2.query.IQuery;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.osgi.service.datalocation.Location;
@@ -780,18 +781,18 @@ public class ProfileTransactionImpl implements ProfileTransaction
     final IMetadataRepositoryManager metadataRepositoryManager = agent.getMetadataRepositoryManager();
     Set<String> knownRepositories = P2Util.getKnownRepositories(metadataRepositoryManager);
 
-    // if (metadataRepositoryManager instanceof AbstractRepositoryManager)
-    // {
-    // AbstractRepositoryManager<?> manager = (AbstractRepositoryManager<?>)metadataRepositoryManager;
-    // manager.flushCache();
-    // }
-    //
-    // IArtifactRepositoryManager artifactRepositoryManager = agent.getArtifactRepositoryManager();
-    // if (artifactRepositoryManager instanceof AbstractRepositoryManager)
-    // {
-    // AbstractRepositoryManager<?> manager = (AbstractRepositoryManager<?>)artifactRepositoryManager;
-    // manager.flushCache();
-    // }
+    if (metadataRepositoryManager instanceof CachingRepositoryManager.Metadata)
+    {
+      CachingRepositoryManager.Metadata manager = (CachingRepositoryManager.Metadata)metadataRepositoryManager;
+      manager.flushCache();
+    }
+
+    IArtifactRepositoryManager artifactRepositoryManager = agent.getArtifactRepositoryManager();
+    if (artifactRepositoryManager instanceof CachingRepositoryManager.Artifact)
+    {
+      CachingRepositoryManager.Artifact manager = (CachingRepositoryManager.Artifact)artifactRepositoryManager;
+      manager.flushCache();
+    }
 
     EList<Repository> repositories = profileDefinition.getRepositories();
     URI[] metadataURIs = new URI[repositories.size()];
