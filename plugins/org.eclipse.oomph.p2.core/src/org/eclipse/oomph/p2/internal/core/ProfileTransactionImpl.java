@@ -54,7 +54,6 @@ import org.eclipse.equinox.internal.p2.engine.Operand;
 import org.eclipse.equinox.internal.p2.engine.PropertyOperand;
 import org.eclipse.equinox.internal.p2.engine.ProvisioningPlan;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
-import org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.BackupStore;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.IBackupStore;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.NativeTouchpoint;
@@ -84,7 +83,6 @@ import org.eclipse.equinox.p2.query.IQuery;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
-import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.osgi.service.datalocation.Location;
@@ -782,18 +780,18 @@ public class ProfileTransactionImpl implements ProfileTransaction
     final IMetadataRepositoryManager metadataRepositoryManager = agent.getMetadataRepositoryManager();
     Set<String> knownRepositories = P2Util.getKnownRepositories(metadataRepositoryManager);
 
-    if (metadataRepositoryManager instanceof AbstractRepositoryManager)
-    {
-      AbstractRepositoryManager<?> manager = (AbstractRepositoryManager<?>)metadataRepositoryManager;
-      manager.flushCache();
-    }
-
-    IArtifactRepositoryManager artifactRepositoryManager = agent.getArtifactRepositoryManager();
-    if (artifactRepositoryManager instanceof AbstractRepositoryManager)
-    {
-      AbstractRepositoryManager<?> manager = (AbstractRepositoryManager<?>)artifactRepositoryManager;
-      manager.flushCache();
-    }
+    // if (metadataRepositoryManager instanceof AbstractRepositoryManager)
+    // {
+    // AbstractRepositoryManager<?> manager = (AbstractRepositoryManager<?>)metadataRepositoryManager;
+    // manager.flushCache();
+    // }
+    //
+    // IArtifactRepositoryManager artifactRepositoryManager = agent.getArtifactRepositoryManager();
+    // if (artifactRepositoryManager instanceof AbstractRepositoryManager)
+    // {
+    // AbstractRepositoryManager<?> manager = (AbstractRepositoryManager<?>)artifactRepositoryManager;
+    // manager.flushCache();
+    // }
 
     EList<Repository> repositories = profileDefinition.getRepositories();
     URI[] metadataURIs = new URI[repositories.size()];
