@@ -39,6 +39,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
@@ -667,13 +669,28 @@ public final class SynchronizerManager
             else
             {
               final IProgressMonitor monitor = new NullProgressMonitor();
-              UIUtil.timerExec(10000, new Runnable()
+
+              Job watchDog = new Job("Synchronizer Watch Dog")
               {
-                public void run()
+                @Override
+                protected IStatus run(IProgressMonitor monitor)
                 {
+                  try
+                  {
+                    Thread.sleep(10000);
+                  }
+                  catch (Throwable ex)
+                  {
+                    //$FALL-THROUGH$
+                  }
+
                   monitor.setCanceled(true);
+                  return Status.OK_STATUS;
                 }
-              });
+              };
+
+              watchDog.setSystem(true);
+              watchDog.schedule();
 
               result[0] = await(serviceLabel, monitor);
             }

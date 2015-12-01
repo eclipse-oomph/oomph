@@ -52,6 +52,7 @@ import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.JFacePreferences;
 import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.swt.SWT;
@@ -146,6 +147,8 @@ public class SynchronizerDialog extends AbstractSetupDialog
 
   private Tree tree;
 
+  private boolean treePopulated;
+
   private TreeColumn labelColumn;
 
   private TreeColumn localColumn;
@@ -165,6 +168,8 @@ public class SynchronizerDialog extends AbstractSetupDialog
   private Button enableRecorderButton;
 
   private boolean enableRecorder = RecorderManager.INSTANCE.isRecorderEnabled();
+
+  private Button okButton;
 
   public SynchronizerDialog(Shell parentShell)
   {
@@ -388,24 +393,42 @@ public class SynchronizerDialog extends AbstractSetupDialog
     }
 
     super.createButtonsForButtonBar(parent);
+    okButton = getButton(IDialogConstants.OK_ID);
     validatePage();
   }
 
   protected void validatePage()
   {
-    if (mode.isRecord())
+    if (treePopulated)
     {
-      enableRecorder = enableRecorderButton.getSelection();
-
-      tree.setEnabled(enableRecorder);
-
-      if (valueText != null)
+      if (mode.isRecord())
       {
-        valueText.setVisible(enableRecorder);
+        if (enableRecorderButton != null)
+        {
+          enableRecorder = enableRecorderButton.getSelection();
+
+          tree.setEnabled(enableRecorder);
+
+          if (valueText != null)
+          {
+            valueText.setVisible(enableRecorder);
+          }
+        }
+      }
+
+      updateColumns();
+
+      boolean noConflicts = true;
+      if (mode.isSync())
+      {
+        noConflicts = synchronization.getUnresolvedActions().isEmpty();
+      }
+
+      if (okButton != null)
+      {
+        okButton.setEnabled(noConflicts);
       }
     }
-
-    updateColumns();
   }
 
   @Override
@@ -607,6 +630,26 @@ public class SynchronizerDialog extends AbstractSetupDialog
     return result;
   }
 
+  private void addTask(PreferenceTask task, String pluginID, final Map<String, Set<SetupTask>> tasks, final Map<SetupTask, String> labels,
+      final Map<SetupTask, Image> images, Map<String, CompoundTask> compounds)
+  {
+    CollectionUtil.add(tasks, pluginID, task);
+  
+    // Put the preference task into a compound task so that PreferenceTaskItemProvider shortens the label.
+    CompoundTask compound = compounds.get(pluginID);
+    if (compound == null)
+    {
+      compound = SetupFactory.eINSTANCE.createCompoundTask(pluginID);
+    }
+  
+    compound.getSetupTasks().add(task);
+  
+    // Remember task label.
+    ItemProviderAdapter itemProvider = (ItemProviderAdapter)adapterFactory.adapt(task, IItemLabelProvider.class);
+    labels.put(task, SetupLabelProvider.getText(itemProvider, task));
+    images.put(task, SetupUIPlugin.INSTANCE.getSWTImage(SetupLabelProvider.getImageDescriptor(itemProvider, task)));
+  }
+
   private void populateTree()
   {
     final Map<String, Set<SetupTask>> tasks = new HashMap<String, Set<SetupTask>>();
@@ -708,26 +751,6 @@ public class SynchronizerDialog extends AbstractSetupDialog
     populateTree(tasks, labels, images);
   }
 
-  private void addTask(PreferenceTask task, String pluginID, final Map<String, Set<SetupTask>> tasks, final Map<SetupTask, String> labels,
-      final Map<SetupTask, Image> images, Map<String, CompoundTask> compounds)
-  {
-    CollectionUtil.add(tasks, pluginID, task);
-
-    // Put the preference task into a compound task so that PreferenceTaskItemProvider shortens the label.
-    CompoundTask compound = compounds.get(pluginID);
-    if (compound == null)
-    {
-      compound = SetupFactory.eINSTANCE.createCompoundTask(pluginID);
-    }
-
-    compound.getSetupTasks().add(task);
-
-    // Remember task label.
-    ItemProviderAdapter itemProvider = (ItemProviderAdapter)adapterFactory.adapt(task, IItemLabelProvider.class);
-    labels.put(task, SetupLabelProvider.getText(itemProvider, task));
-    images.put(task, SetupUIPlugin.INSTANCE.getSWTImage(SetupLabelProvider.getImageDescriptor(itemProvider, task)));
-  }
-
   private void populateTree(final Map<String, Set<SetupTask>> tasks, final Map<SetupTask, String> labels, final Map<SetupTask, Image> images)
   {
     List<String> nodes = new ArrayList<String>(tasks.keySet());
@@ -785,6 +808,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
     }
 
     synchronizeLocal(false);
+    treePopulated = true;
   }
 
   private void synchronizeLocal(boolean resynchronize)
@@ -883,6 +907,8 @@ public class SynchronizerDialog extends AbstractSetupDialog
         System.out.println("----------------------------");
       }
     }
+
+    validatePage();
   }
 
   private static String getServiceLabel()
