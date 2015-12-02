@@ -83,21 +83,23 @@ public class RemoteDataProvider implements DataProvider
 
   public boolean retrieve(File file) throws IOException, NotFoundException
   {
-    InputStream contents = blob.getContents();
-    if (contents == null)
+    try
+    {
+      InputStream contents = blob.getContents();
+      if (contents instanceof FileInputStream)
+      {
+        // NOT_MODIFIED
+        IOUtil.closeSilent(contents);
+        return false;
+      }
+
+      saveContents(contents, file);
+      return true;
+    }
+    catch (org.eclipse.userstorage.util.NotFoundException ex)
     {
       throw new NotFoundException(getURI());
     }
-
-    if (contents instanceof FileInputStream)
-    {
-      // NOT_MODIFIED
-      IOUtil.closeSilent(contents);
-      return false;
-    }
-
-    saveContents(contents, file);
-    return true;
   }
 
   public void update(File file, File baseFile) throws IOException, NotCurrentException

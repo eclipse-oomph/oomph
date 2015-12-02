@@ -155,8 +155,6 @@ public class SynchronizerDialog extends AbstractSetupDialog
 
   private TreeColumn remoteColumn;
 
-  private ControlAdapter columnResizer;
-
   private final ColumnManager[] columnManagers = { null, null, null };
 
   private LocalColumnManager localColumnManager;
@@ -304,6 +302,8 @@ public class SynchronizerDialog extends AbstractSetupDialog
     labelColumn.setWidth(200);
     labelColumn.setResizable(true);
 
+    int column = 1;
+
     if (mode.isRecord())
     {
       localColumn = new TreeColumn(tree, SWT.NONE);
@@ -312,11 +312,18 @@ public class SynchronizerDialog extends AbstractSetupDialog
       localColumn.setResizable(true);
 
       localColumnManager = new LocalColumnManager(this);
+      columnManagers[column++] = localColumnManager;
     }
 
     if (mode.isSync())
     {
+      remoteColumn = new TreeColumn(tree, SWT.NONE);
+      remoteColumn.setText("Remote Policy");
+      remoteColumn.setWidth(200);
+      remoteColumn.setResizable(true);
+
       remoteColumnManager = new RemoteColumnManager(this, getServiceLabel());
+      columnManagers[column++] = remoteColumnManager;
     }
 
     populateTree();
@@ -416,8 +423,6 @@ public class SynchronizerDialog extends AbstractSetupDialog
         }
       }
 
-      updateColumns();
-
       boolean noConflicts = true;
       if (mode.isSync())
       {
@@ -456,55 +461,9 @@ public class SynchronizerDialog extends AbstractSetupDialog
     return null;
   }
 
-  private void updateColumns()
-  {
-    int remoteColumnIndex;
-    if (localColumn != null)
-    {
-      columnManagers[1] = localColumnManager;
-      remoteColumnIndex = 2;
-    }
-    else
-    {
-      columnManagers[1] = null;
-      remoteColumnIndex = 1;
-    }
-
-    if (mode.isSync())
-    {
-      if (remoteColumn == null)
-      {
-        remoteColumn = new TreeColumn(tree, SWT.NONE, remoteColumnIndex);
-        remoteColumn.setText("Remote Policy");
-        remoteColumn.setWidth(200);
-        remoteColumn.setResizable(true);
-        remoteColumn.addControlListener(columnResizer);
-
-        columnManagers[remoteColumnIndex] = remoteColumnManager;
-        resizeColumns();
-      }
-    }
-    else
-    {
-      if (remoteColumn != null)
-      {
-        remoteColumn.dispose();
-        remoteColumn = null;
-
-        columnManagers[remoteColumnIndex] = null;
-        resizeColumns();
-      }
-    }
-  }
-
-  private void resizeColumns()
-  {
-    columnResizer.controlResized(null);
-  }
-
   private void initColumnResizer()
   {
-    columnResizer = new ControlAdapter()
+    ControlAdapter columnResizer = new ControlAdapter()
     {
       private int clientWidth = 0;
 
@@ -597,10 +556,18 @@ public class SynchronizerDialog extends AbstractSetupDialog
 
     tree.addControlListener(columnResizer);
     labelColumn.addControlListener(columnResizer);
+
     if (localColumn != null)
     {
       localColumn.addControlListener(columnResizer);
     }
+
+    if (remoteColumn != null)
+    {
+      remoteColumn.addControlListener(columnResizer);
+    }
+
+    columnResizer.controlResized(null);
   }
 
   private Map<URI, String> getRecorderPreferences()
@@ -634,16 +601,16 @@ public class SynchronizerDialog extends AbstractSetupDialog
       final Map<SetupTask, Image> images, Map<String, CompoundTask> compounds)
   {
     CollectionUtil.add(tasks, pluginID, task);
-  
+
     // Put the preference task into a compound task so that PreferenceTaskItemProvider shortens the label.
     CompoundTask compound = compounds.get(pluginID);
     if (compound == null)
     {
       compound = SetupFactory.eINSTANCE.createCompoundTask(pluginID);
     }
-  
+
     compound.getSetupTasks().add(task);
-  
+
     // Remember task label.
     ItemProviderAdapter itemProvider = (ItemProviderAdapter)adapterFactory.adapt(task, IItemLabelProvider.class);
     labels.put(task, SetupLabelProvider.getText(itemProvider, task));
