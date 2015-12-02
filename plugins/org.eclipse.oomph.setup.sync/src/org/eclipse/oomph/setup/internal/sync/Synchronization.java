@@ -628,10 +628,6 @@ public class Synchronization
       synchronizer.commitFinished(ex);
       throw ex;
     }
-    finally
-    {
-      doDispose();
-    }
   }
 
   private boolean applyActions(Location location)
@@ -772,7 +768,10 @@ public class Synchronization
 
     try
     {
-      localWorkingCopy.dispose();
+      if (localWorkingCopy != null)
+      {
+        localWorkingCopy.dispose();
+      }
     }
     catch (Throwable ex)
     {
@@ -781,7 +780,10 @@ public class Synchronization
 
     try
     {
-      remoteWorkingCopy.dispose();
+      if (remoteWorkingCopy != null)
+      {
+        remoteWorkingCopy.dispose();
+      }
     }
     catch (Throwable ex)
     {
@@ -790,7 +792,10 @@ public class Synchronization
 
     try
     {
-      synchronizer.releaseLock();
+      if (synchronizer != null)
+      {
+        synchronizer.releaseLock();
+      }
     }
     catch (Throwable ex)
     {

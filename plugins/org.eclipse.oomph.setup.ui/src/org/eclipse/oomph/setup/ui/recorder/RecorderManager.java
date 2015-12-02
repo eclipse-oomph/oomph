@@ -306,30 +306,6 @@ public final class RecorderManager
     }
   }
 
-  private Map<String, PreferenceTask> commitTransaction(RecorderTransaction transaction)
-  {
-    try
-    {
-      return transaction.commit();
-    }
-    finally
-    {
-      closeTransaction(transaction);
-    }
-  }
-
-  private void closeTransaction(final RecorderTransaction transaction)
-  {
-    try
-    {
-      transaction.close();
-    }
-    finally
-    {
-      earlySynchronization.stop();
-    }
-  }
-
   public Scope getRecorderTargetObject(ResourceSet resourceSet)
   {
     URI recorderTarget = getRecorderTarget();
@@ -516,7 +492,7 @@ public final class RecorderManager
       {
         if (!openSynchronizerDialog(transaction, synchronization))
         {
-          closeTransaction(transaction);
+          transaction.close();
           return;
         }
       }
@@ -541,7 +517,14 @@ public final class RecorderManager
         });
       }
 
-      commitTransaction(transaction);
+      try
+      {
+        transaction.commit();
+      }
+      finally
+      {
+        transaction.close();
+      }
 
       if (synchronization != null)
       {
@@ -657,21 +640,11 @@ public final class RecorderManager
           SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
           ErrorDialog.open(ex);
         }
-        finally
-        {
-          if (!SYNC_FOLDER_KEEP)
-          {
-            IOUtil.deleteBestEffort(tmpFolder, SYNC_FOLDER_RANDOM);
-          }
-        }
       }
     }
     finally
     {
-      if (synchronization != null)
-      {
-        synchronization.dispose();
-      }
+      earlySynchronization.stop();
     }
   }
 
@@ -1182,8 +1155,13 @@ public final class RecorderManager
 
       if (synchronizerJob != null)
       {
-        synchronizerJob.cancel();
+        synchronizerJob.stopSynchronization();
         synchronizerJob = null;
+
+        if (!SYNC_FOLDER_KEEP)
+        {
+          IOUtil.deleteBestEffort(tmpFolder, SYNC_FOLDER_RANDOM);
+        }
       }
     }
 
@@ -1214,7 +1192,7 @@ public final class RecorderManager
           }
           else if (earlyException != null)
           {
-            SetupUIPlugin.INSTANCE.log(earlyException);
+            SetupUIPlugin.INSTANCE.log(earlyException, IStatus.WARNING);
             return null;
           }
 

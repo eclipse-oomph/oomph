@@ -14,6 +14,7 @@ import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.Location;
 import org.eclipse.oomph.setup.internal.sync.Snapshot.WorkingCopy;
 import org.eclipse.oomph.setup.sync.SyncAction;
+import org.eclipse.oomph.util.LockFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,13 +27,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Synchronizer
 {
-  private static final LocalLock LOCAL_LOCK = new LocalLock();
-
   private final List<SynchronizerListener> listeners = new CopyOnWriteArrayList<SynchronizerListener>();
 
   private final Snapshot localSnapshot;
 
   private final Snapshot remoteSnapshot;
+
+  private LockFile lockFile;
 
   private Synchronization synchronization;
 
@@ -62,6 +63,16 @@ public class Synchronizer
     return remoteSnapshot;
   }
 
+  public LockFile getLockFile()
+  {
+    return lockFile;
+  }
+
+  public void setLockFile(LockFile lockFile)
+  {
+    this.lockFile = lockFile;
+  }
+
   public Synchronization synchronize() throws IOException, SynchronizerException
   {
     return synchronize(false);
@@ -74,10 +85,38 @@ public class Synchronizer
       return null;
     }
 
-    // TODO Implement the user lock.
-    LOCAL_LOCK.acquire();
+    if (lockFile != null)
+    {
+      try
+      {
+        lockFile.lock();
+      }
+      catch (Exception ex)
+      {
+        throw new LockException(lockFile.getFile());
+      }
+    }
 
-    synchronization = createSynchronization(deferLocal);
+    try
+    {
+      synchronization = createSynchronization(deferLocal);
+    }
+    catch (IOException ex)
+    {
+      doReleaseLock();
+      throw ex;
+    }
+    catch (RuntimeException ex)
+    {
+      doReleaseLock();
+      throw ex;
+    }
+    catch (Error ex)
+    {
+      doReleaseLock();
+      throw ex;
+    }
+
     return synchronization;
   }
 
@@ -245,7 +284,7 @@ public class Synchronizer
       Synchronization oldSynchronization = synchronization;
       synchronization = null;
 
-      LOCAL_LOCK.release();
+      doReleaseLock();
 
       for (SynchronizerListener listener : listeners)
       {
@@ -261,21 +300,24 @@ public class Synchronizer
     }
   }
 
+  private void doReleaseLock()
+  {
+    if (lockFile != null)
+    {
+      lockFile.unlock();
+    }
+  }
+
   /**
    * @author Eike Stepper
    */
-  private static final class LocalLock
+  public static class LockException extends SynchronizerException
   {
-    public LocalLock()
-    {
-    }
+    private static final long serialVersionUID = 1L;
 
-    public void acquire()
+    public LockException(File file)
     {
-    }
-
-    public void release()
-    {
+      super("Another synchronization process has locked " + file);
     }
   }
 }

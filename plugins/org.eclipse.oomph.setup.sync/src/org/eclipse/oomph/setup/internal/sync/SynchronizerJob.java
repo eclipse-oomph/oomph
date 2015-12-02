@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.internal.sync;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.userstorage.IStorage;
@@ -124,6 +125,12 @@ public class SynchronizerJob extends Job
     return synchronization;
   }
 
+  public void stopSynchronization()
+  {
+    cancel();
+    disposeSynchronization(synchronization);
+  }
+
   @Override
   protected IStatus run(IProgressMonitor monitor)
   {
@@ -144,6 +151,12 @@ public class SynchronizerJob extends Job
         }
       }
 
+      if (monitor.isCanceled())
+      {
+        disposeSynchronization(result);
+        throw new OperationCanceledException();
+      }
+
       handleFinish(null);
 
       synchronized (this)
@@ -153,13 +166,13 @@ public class SynchronizerJob extends Job
         notifyAll();
       }
     }
-    catch (Throwable ex)
+    catch (Throwable t)
     {
-      handleFinish(ex);
+      handleFinish(t);
 
       synchronized (this)
       {
-        exception = ex;
+        exception = t;
         notifyAll();
       }
     }
@@ -178,6 +191,21 @@ public class SynchronizerJob extends Job
       try
       {
         finishHandler.handleFinish(ex);
+      }
+      catch (Throwable t)
+      {
+        SetupSyncPlugin.INSTANCE.log(t);
+      }
+    }
+  }
+
+  private static void disposeSynchronization(Synchronization synchronization)
+  {
+    if (synchronization != null)
+    {
+      try
+      {
+        synchronization.dispose();
       }
       catch (Throwable t)
       {

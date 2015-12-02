@@ -30,6 +30,7 @@ import org.eclipse.oomph.setup.sync.SyncPolicy;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.LockFile;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.PropertyFile;
 
@@ -78,6 +79,8 @@ public final class SynchronizerManager
   public static final boolean ENABLED = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_SYNC);
 
   private static final File USER_SETUP = new File(SetupContext.USER_SETUP_LOCATION_URI.toFileString());
+
+  private static final LockFile USER_SETUP_LOCK = new LockFile(new File(USER_SETUP.getParentFile(), USER_SETUP.getName() + ".lock"));
 
   private static final PropertyFile CONFIG = new PropertyFile(SetupSyncPlugin.INSTANCE.getUserLocation().append("sync.properties").toFile());
 
@@ -160,6 +163,7 @@ public final class SynchronizerManager
     RemoteDataProvider remoteDataProvider = new RemoteDataProvider(storage);
 
     Synchronizer synchronizer = new Synchronizer(localDataProvider, remoteDataProvider, syncFolder);
+    synchronizer.setLockFile(USER_SETUP_LOCK);
     synchronizer.addListener(new SkipHandler());
 
     return synchronizer;
@@ -584,6 +588,7 @@ public final class SynchronizerManager
           }
 
           Synchronizer synchronizer = INSTANCE.createSynchronizer(USER_SETUP, SYNC_FOLDER);
+
           synchronizerJob = new SynchronizerJob(synchronizer, deferLocal);
           synchronizerJob.setService(service);
 
@@ -608,7 +613,7 @@ public final class SynchronizerManager
 
       if (synchronizerJob != null)
       {
-        synchronizerJob.cancel();
+        synchronizerJob.stopSynchronization();
         synchronizerJob = null;
       }
     }
@@ -708,7 +713,7 @@ public final class SynchronizerManager
           }
           catch (Throwable ex)
           {
-            SetupUIPlugin.INSTANCE.log(ex);
+            SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
           }
           finally
           {
