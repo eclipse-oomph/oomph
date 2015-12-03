@@ -152,12 +152,14 @@ public class Synchronization
     WorkingCopy workingCopy = snapshot.createWorkingCopy();
 
     File oldFile = snapshot.getOldFile();
+    unloadResource(oldFile);
     if (oldFile != null && !oldFile.exists())
     {
       SyncUtil.inititalizeFile(oldFile, location.getDataType(), resourceSet);
     }
 
     File tmpFile = workingCopy.getTmpFile();
+    unloadResource(tmpFile);
     if (!tmpFile.exists())
     {
       File newFile = snapshot.getNewFile();
@@ -803,13 +805,27 @@ public class Synchronization
     }
   }
 
-  private <T extends EObject> T loadObject(File file, EClass eClass)
+  private Resource getResource(File file, boolean loadOnDemand)
   {
     URI uri = URI.createFileURI(file.getAbsolutePath());
-    Resource resource = resourceSet.getResource(uri, true);
+    return resourceSet.getResource(uri, loadOnDemand);
+  }
+
+  private <T extends EObject> T loadObject(File file, EClass eClass)
+  {
+    Resource resource = getResource(file, true);
     rememberIDs(resource);
 
     return BaseUtil.getObjectByType(resource.getContents(), eClass);
+  }
+
+  private void unloadResource(File file)
+  {
+    Resource resource = getResource(file, false);
+    if (resource != null)
+    {
+      resource.unload();
+    }
   }
 
   /**

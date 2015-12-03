@@ -392,20 +392,20 @@ public final class RecorderManager
 
   private void handleRecording(IEditorPart editorPart, Map<URI, Pair<String, String>> values)
   {
-    SynchronizerManager.INSTANCE.offerFirstTimeConnect(UIUtil.getShell());
-
-    RecorderTransaction transaction = editorPart == null ? RecorderTransaction.open() : RecorderTransaction.open(editorPart);
-    transaction.setPreferences(values);
-
-    // In some cases (such as changing the recorder target in the current recorder transaction or missing credentials)
-    // early synchronization has not been started, yet. We want to be safe and try to start it now (has no effect if already started).
-    boolean started = startEarlySynchronization(true);
-
-    SyncInfo syncInfo = started ? awaitEarlySynchronization() : null;
-    Synchronization synchronization = syncInfo == null ? null : syncInfo.getSynchronization();
-
     try
     {
+      SynchronizerManager.INSTANCE.offerFirstTimeConnect(UIUtil.getShell());
+
+      RecorderTransaction transaction = editorPart == null ? RecorderTransaction.open() : RecorderTransaction.open(editorPart);
+      transaction.setPreferences(values);
+
+      // In some cases (such as changing the recorder target in the current recorder transaction or missing credentials)
+      // early synchronization has not been started, yet. We want to be safe and try to start it now (has no effect if already started).
+      boolean started = startEarlySynchronization(true);
+
+      SyncInfo syncInfo = started ? awaitEarlySynchronization() : null;
+      Synchronization synchronization = syncInfo == null ? null : syncInfo.getSynchronization();
+
       boolean dialogNeeded = false;
       Set<URI> preferenceURIs = transaction.getPreferences().keySet();
 
@@ -1187,7 +1187,6 @@ public final class RecorderManager
             // This means that the user couldn't be authenticated. Try again in UI thread below.
             stop();
             result.synchronization = null;
-            synchronizerJob = null;
             start(true);
           }
           else if (earlyException != null)
@@ -1249,10 +1248,6 @@ public final class RecorderManager
           catch (Throwable ex)
           {
             SetupUIPlugin.INSTANCE.log(ex);
-          }
-          finally
-          {
-            synchronizerJob = null;
           }
         }
 
