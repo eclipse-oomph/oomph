@@ -21,6 +21,9 @@ import org.eclipse.core.runtime.Platform;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -284,6 +287,75 @@ public class StringFilterRegistry
         return value.substring(pos + 1);
       }
     });
+
+    registerFilter("urlEncode", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        try
+        {
+          return URLEncoder.encode(value, "UTF-8");
+        }
+        catch (UnsupportedEncodingException ex)
+        {
+          // Should not happen.
+          return value;
+        }
+      }
+    });
+
+    registerFilter("urlDecode", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        try
+        {
+          return URLDecoder.decode(value, "UTF-8");
+        }
+        catch (UnsupportedEncodingException ex)
+        {
+          // Should not happen.
+          return value;
+        }
+      }
+    });
+
+    registerFilter("slashEncode", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        try
+        {
+          return org.eclipse.equinox.internal.p2.engine.SlashEncode.encode(value);
+        }
+        catch (Throwable ex)
+        {
+          // Should not happen.
+          return value;
+        }
+      }
+    });
+
+    registerFilter("slashDecode", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        try
+        {
+          return org.eclipse.equinox.internal.p2.engine.SlashEncode.decode(value);
+        }
+        catch (Throwable ex)
+        {
+          // Should not happen.
+          return value;
+        }
+      }
+    });
+  }
+
+  public static void main(String[] args) throws UnsupportedEncodingException
+  {
+    System.out.println(URLEncoder.encode("file:/C:/develop/", "UTF-8"));
   }
 
   public String filter(String value, String filterName)
