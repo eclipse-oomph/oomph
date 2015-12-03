@@ -521,7 +521,7 @@ public final class IOUtil
 
   public static void mkdirs(File folder) throws IORuntimeException
   {
-    if (!folder.exists())
+    if (folder != null && !folder.exists())
     {
       if (!folder.mkdirs())
       {
