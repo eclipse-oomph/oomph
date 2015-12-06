@@ -82,7 +82,8 @@ public class Synchronizer
   {
     if (synchronization != null)
     {
-      return null;
+      synchronization.dispose();
+      synchronization = null;
     }
 
     if (lockFile != null)

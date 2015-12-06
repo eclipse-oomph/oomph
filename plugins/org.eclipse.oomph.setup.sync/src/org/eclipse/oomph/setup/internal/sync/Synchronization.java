@@ -153,6 +153,7 @@ public class Synchronization
 
     File oldFile = snapshot.getOldFile();
     unloadResource(oldFile);
+
     if (oldFile != null && !oldFile.exists())
     {
       SyncUtil.inititalizeFile(oldFile, location.getDataType(), resourceSet);
@@ -160,17 +161,15 @@ public class Synchronization
 
     File tmpFile = workingCopy.getTmpFile();
     unloadResource(tmpFile);
-    if (!tmpFile.exists())
+
+    File newFile = snapshot.getNewFile();
+    if (!newFile.exists())
     {
-      File newFile = snapshot.getNewFile();
-      if (!newFile.exists())
-      {
-        SyncUtil.inititalizeFile(tmpFile, location.getDataType(), resourceSet);
-      }
-      else
-      {
-        IOUtil.copyFile(newFile, tmpFile);
-      }
+      SyncUtil.inititalizeFile(tmpFile, location.getDataType(), resourceSet);
+    }
+    else
+    {
+      IOUtil.copyFile(newFile, tmpFile);
     }
 
     return workingCopy;

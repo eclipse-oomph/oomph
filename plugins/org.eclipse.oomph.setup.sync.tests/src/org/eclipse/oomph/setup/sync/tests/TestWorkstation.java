@@ -295,7 +295,7 @@ public final class TestWorkstation
       IStorage tmpStorage = createTmpStorage();
       IBlob tmpBlob = tmpStorage.getBlob(RemoteDataProvider.KEY);
       InputStream tmpContents = tmpBlob.getContents();
-      RemoteDataProvider.saveContents(tmpContents, remoteFile);
+      RemoteDataProvider.inflateContents(tmpContents, remoteFile);
     }
 
     return loadObject(URI.createFileURI(remoteFile.getAbsolutePath()), Location.REMOTE.getDataType());

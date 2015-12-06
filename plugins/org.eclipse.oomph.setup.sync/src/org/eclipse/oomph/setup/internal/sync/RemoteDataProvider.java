@@ -101,34 +101,7 @@ public class RemoteDataProvider implements DataProvider
         return false;
       }
 
-      // BufferedInputStream bufferedInputStream = new BufferedInputStream(contents);
-
-      byte[] gzipMagic = new byte[GZIP_MAGIC.length];
-      int n = contents.read(gzipMagic);
-
-      if (n == -1)
-      {
-        contents = new ByteArrayInputStream(new byte[0]);
-      }
-      else if (n < GZIP_MAGIC.length)
-      {
-        contents = new ByteArrayInputStream(gzipMagic, 0, n);
-      }
-      else
-      {
-        Vector<InputStream> streams = new Vector<InputStream>(2);
-        streams.add(new ByteArrayInputStream(gzipMagic, 0, n));
-        streams.add(contents);
-
-        contents = new SequenceInputStream(streams.elements());
-
-        if (Arrays.equals(gzipMagic, GZIP_MAGIC))
-        {
-          contents = new GZIPInputStream(contents);
-        }
-      }
-
-      saveContents(contents, file);
+      inflateContents(contents, file);
       return true;
     }
     catch (org.eclipse.userstorage.util.NotFoundException ex)
@@ -188,6 +161,36 @@ public class RemoteDataProvider implements DataProvider
       IOUtil.closeSilent(out);
       IOUtil.closeSilent(contents);
     }
+  }
+
+  public static void inflateContents(InputStream contents, File file) throws IOException
+  {
+    byte[] gzipMagic = new byte[GZIP_MAGIC.length];
+    int n = contents.read(gzipMagic);
+
+    if (n == -1)
+    {
+      contents = new ByteArrayInputStream(new byte[0]);
+    }
+    else if (n < GZIP_MAGIC.length)
+    {
+      contents = new ByteArrayInputStream(gzipMagic, 0, n);
+    }
+    else
+    {
+      Vector<InputStream> streams = new Vector<InputStream>(2);
+      streams.add(new ByteArrayInputStream(gzipMagic, 0, n));
+      streams.add(contents);
+
+      contents = new SequenceInputStream(streams.elements());
+
+      if (Arrays.equals(gzipMagic, GZIP_MAGIC))
+      {
+        contents = new GZIPInputStream(contents);
+      }
+    }
+
+    saveContents(contents, file);
   }
 
   /**
