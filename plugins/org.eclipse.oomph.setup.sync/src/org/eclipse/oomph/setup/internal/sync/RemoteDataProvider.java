@@ -11,7 +11,6 @@
 package org.eclipse.oomph.setup.internal.sync;
 
 import org.eclipse.oomph.util.IOUtil;
-import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.userstorage.IBlob;
 import org.eclipse.userstorage.IStorage;
@@ -19,7 +18,7 @@ import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.util.ConflictException;
 import org.eclipse.userstorage.util.FileStorageCache;
 
-import java.io.ByteArrayInputStream;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,10 +26,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.SequenceInputStream;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.Vector;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -45,16 +42,13 @@ public class RemoteDataProvider implements DataProvider
 
   private static final byte[] GZIP_MAGIC = { (byte)0x1f, (byte)0x8b };
 
+  private static final int GZIP_MAGIC_LENGTH = GZIP_MAGIC.length;
+
   private final IBlob blob;
 
   public RemoteDataProvider(IStorage storage)
   {
     blob = storage.getBlob(KEY);
-    if (StringUtil.isEmpty(blob.getETag()))
-    {
-      // Avoid sending no/empty etag because then the service would unconditionally overwrite the blob.
-      blob.setETag("<unknown-etag>");
-    }
   }
 
   public final Location getLocation()
@@ -86,7 +80,7 @@ public class RemoteDataProvider implements DataProvider
   public File[] getExtraFiles()
   {
     SyncStorageCache cache = (SyncStorageCache)getStorage().getCache();
-    return new File[] { cache.getPropertiesFile() };
+    return new File[] { cache.getCacheFile(), cache.getPropertiesFile() };
   }
 
   public boolean retrieve(File file) throws IOException, NotFoundException
@@ -94,15 +88,10 @@ public class RemoteDataProvider implements DataProvider
     try
     {
       InputStream contents = blob.getContents();
-      if (contents instanceof FileInputStream)
-      {
-        // NOT_MODIFIED
-        IOUtil.closeSilent(contents);
-        return false;
-      }
+      boolean cached = contents instanceof FileInputStream;
 
-      inflateContents(contents, file);
-      return true;
+      uncompressContents(contents, file);
+      return !cached;
     }
     catch (org.eclipse.userstorage.util.NotFoundException ex)
     {
@@ -118,7 +107,7 @@ public class RemoteDataProvider implements DataProvider
 
       if (!Boolean.getBoolean("org.eclipse.oomph.setup.sync.gzip.skip"))
       {
-        contents = new DeflatingInputStream(contents);
+        contents = new CompressingInputStream(contents);
       }
 
       blob.setContents(contents);
@@ -131,7 +120,7 @@ public class RemoteDataProvider implements DataProvider
 
   public boolean delete() throws IOException
   {
-    return false;
+    return blob.delete();
   }
 
   @Override
@@ -163,28 +152,18 @@ public class RemoteDataProvider implements DataProvider
     }
   }
 
-  public static void inflateContents(InputStream contents, File file) throws IOException
+  public static void uncompressContents(InputStream contents, File file) throws IOException
   {
-    byte[] gzipMagic = new byte[GZIP_MAGIC.length];
-    int n = contents.read(gzipMagic);
-
-    if (n == -1)
+    if (!Boolean.getBoolean("org.eclipse.oomph.setup.sync.gunzip.skip"))
     {
-      contents = new ByteArrayInputStream(new byte[0]);
-    }
-    else if (n < GZIP_MAGIC.length)
-    {
-      contents = new ByteArrayInputStream(gzipMagic, 0, n);
-    }
-    else
-    {
-      Vector<InputStream> streams = new Vector<InputStream>(2);
-      streams.add(new ByteArrayInputStream(gzipMagic, 0, n));
-      streams.add(contents);
+      contents = new BufferedInputStream(contents);
+      contents.mark(GZIP_MAGIC_LENGTH);
 
-      contents = new SequenceInputStream(streams.elements());
+      byte[] gzipMagic = new byte[GZIP_MAGIC_LENGTH];
+      int n = contents.read(gzipMagic);
+      contents.reset();
 
-      if (Arrays.equals(gzipMagic, GZIP_MAGIC))
+      if (n == GZIP_MAGIC_LENGTH && Arrays.equals(gzipMagic, GZIP_MAGIC))
       {
         contents = new GZIPInputStream(contents);
       }
@@ -196,7 +175,7 @@ public class RemoteDataProvider implements DataProvider
   /**
    * @author Eike Stepper
    */
-  private static final class DeflatingInputStream extends InputStream
+  private static final class CompressingInputStream extends InputStream
   {
     private InputStream in;
 
@@ -204,7 +183,7 @@ public class RemoteDataProvider implements DataProvider
 
     private GZIPOutputStream gzip = new GZIPOutputStream(temp, true);
 
-    public DeflatingInputStream(InputStream in) throws IOException
+    public CompressingInputStream(InputStream in) throws IOException
     {
       this.in = in;
     }
@@ -275,7 +254,7 @@ public class RemoteDataProvider implements DataProvider
    */
   public static class SyncStorageCache extends FileStorageCache.SingleApplication.SingleKey
   {
-    private static final String FILE_NAME_PREFIX = "remote-new.xml";
+    private static final String FILE_NAME_PREFIX = "remote.cache";
 
     private static final String PROPERTIES_FILE_NAME = FILE_NAME_PREFIX + PROPERTIES;
 
@@ -283,6 +262,11 @@ public class RemoteDataProvider implements DataProvider
     {
       super(folder, APPLICATION_TOKEN, KEY);
       setFileNamePrefix(FILE_NAME_PREFIX);
+    }
+
+    public File getCacheFile()
+    {
+      return new File(getFolder(), FILE_NAME_PREFIX);
     }
 
     public File getPropertiesFile()
