@@ -379,6 +379,7 @@
   <project href="http://git.eclipse.org/c/cdt/org.eclipse.cdt.git/plain/releng/CDT.setup#/"/>
   <project href="http://git.eclipse.org/c/recommenders/org.eclipse.recommenders.git/plain/tools/oomph/recommenders.setup#/"/>
   <project href="interim/E4Tools.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse/packagedrone/master/setups/org.eclipse.packagedrone.oomph/PackageDrone.setup#/"/>
   <project href="https://git.eclipse.org/c/ecoretools/org.eclipse.ecoretools.git/plain/org.eclipse.emf.ecoretools.build/EcoreTools.setup#/"/>
   <project href="http://git.eclipse.org/c/egit/egit.git/plain/tools/oomph/EGit.setup#/"/>
   <project href="http://git.eclipse.org/c/emf/org.eclipse.emf.git/plain/releng/org.eclipse.emf.releng/EMF.setup#/"/>
