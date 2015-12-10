@@ -15,6 +15,7 @@ import org.eclipse.oomph.base.util.BaseResource;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.setup.CatalogSelection;
+import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.ProjectCatalog;
 import org.eclipse.oomph.setup.Scope;
@@ -32,9 +33,11 @@ import org.eclipse.oomph.setup.provider.ProjectCatalogItemProvider;
 import org.eclipse.oomph.setup.provider.ProjectItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.provider.WorkspaceItemProvider;
+import org.eclipse.oomph.setup.ui.SetupLabelProvider.DisabledImageDescriptor;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ButtonAnimator;
 import org.eclipse.oomph.ui.UIUtil;
@@ -78,6 +81,7 @@ import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
+import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -129,6 +133,7 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -203,15 +208,6 @@ public class ProjectPage extends SetupWizardPage
     adapterFactory = new ComposedAdapterFactory(getAdapterFactory());
     adapterFactory.insertAdapterFactory(new ItemProviderAdapterFactory(catalogSelector.getSelection()));
     BaseEditUtil.replaceReflectiveItemProvider(adapterFactory);
-
-    final Workspace workspace = getWorkspace();
-    if (workspace != null)
-    {
-      for (Stream stream : workspace.getStreams())
-      {
-        existingStreams.add(EcoreUtil.getURI(stream));
-      }
-    }
 
     ResourceSet resourceSet = getResourceSet();
     final AdapterFactoryEditingDomain editingDomain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack()
@@ -559,21 +555,22 @@ public class ProjectPage extends SetupWizardPage
     addHelpCallout(streamTable, 2);
 
     TableViewerColumn catalogViewerColumn = new TableViewerColumn(streamViewer, SWT.NONE);
-    catalogViewerColumn.setLabelProvider(new CatalogColumnLabelProvider());
+    catalogViewerColumn
+        .setLabelProvider(new CatalogColumnLabelProvider(labelProvider.getImage(SetupFactory.eINSTANCE.createProjectCatalog()), existingStreams));
 
     TableColumn catalogColumn = catalogViewerColumn.getColumn();
     catalogColumn.setText("Catalog");
     streamTableLayout.setColumnData(catalogColumn, new ColumnWeightData(30, true));
 
     TableViewerColumn projectViewerColumn = new TableViewerColumn(streamViewer, SWT.NONE);
-    projectViewerColumn.setLabelProvider(new ProjectColumnLabelProvider());
+    projectViewerColumn.setLabelProvider(new ProjectColumnLabelProvider(labelProvider.getImage(SetupFactory.eINSTANCE.createProject()), existingStreams));
 
     TableColumn projectColumn = projectViewerColumn.getColumn();
     projectColumn.setText("Project");
     streamTableLayout.setColumnData(projectColumn, new ColumnWeightData(40, true));
 
     TableViewerColumn streamViewerColumn = new TableViewerColumn(streamViewer, SWT.NONE);
-    streamViewerColumn.setLabelProvider(new StreamColumnLabelProvider());
+    streamViewerColumn.setLabelProvider(new StreamColumnLabelProvider(labelProvider.getImage(SetupFactory.eINSTANCE.createStream()), existingStreams));
     hookCellEditor(streamViewerColumn);
 
     TableColumn streamColumn = streamViewerColumn.getColumn();
@@ -582,20 +579,6 @@ public class ProjectPage extends SetupWizardPage
 
     CatalogSelection selection = catalogSelector.getSelection();
     projectViewer.setInput(selection);
-
-    if (workspace != null)
-    {
-      for (Iterator<Stream> it = workspace.getStreams().iterator(); it.hasNext();)
-      {
-        Stream stream = it.next();
-        if (stream.eIsProxy())
-        {
-          it.remove();
-        }
-      }
-    }
-
-    streamViewer.setInput(workspace);
 
     collapseAllButton.addSelectionListener(new SelectionAdapter()
     {
@@ -630,8 +613,6 @@ public class ProjectPage extends SetupWizardPage
             projectCatalogs.add(projectCatalog);
           }
         }
-
-        removeProjectButton.setEnabled(!userProjects.isEmpty());
 
         Workspace workspace = getWorkspace();
         List<Project> projectsToAdd = new ArrayList<Project>(projects);
@@ -756,7 +737,21 @@ public class ProjectPage extends SetupWizardPage
     {
       public void selectionChanged(SelectionChangedEvent event)
       {
-        removeButton.setEnabled(!event.getSelection().isEmpty());
+        boolean enabled = false;
+        IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+        for (Object object : selection.toArray())
+        {
+          if (object instanceof Stream)
+          {
+            Stream stream = (Stream)object;
+            if (!existingStreams.contains(EcoreUtil.getURI(stream)))
+            {
+              enabled = true;
+              break;
+            }
+          }
+        }
+        removeButton.setEnabled(enabled);
       }
     });
 
@@ -794,7 +789,7 @@ public class ProjectPage extends SetupWizardPage
   {
     // If we are in the Importer (i.e., no page before the ProjectPage) there must be at least one stream.
     Workspace workspace = getWorkspace();
-    setPageComplete(getPreviousPage() != null || workspace != null && workspace.getStreams().size() > existingStreams.size());
+    setPageComplete(getPreviousPage() instanceof ProjectPage || workspace != null && workspace.getStreams().size() > existingStreams.size());
   }
 
   @Override
@@ -819,14 +814,61 @@ public class ProjectPage extends SetupWizardPage
       }
       else if (projectViewer.getSelection().isEmpty())
       {
-        CatalogSelection selection = catalogSelector.getSelection();
-        List<Project> projects = new ArrayList<Project>();
-        for (Stream stream : selection.getSelectedStreams())
+        Runnable initializer = new Runnable()
         {
-          projects.add(stream.getProject());
-        }
+          public void run()
+          {
+            // If there is an index loader, await for the index to finish loading.
+            // This generally only happens if this page is the first page of the wizard, i.e., in the project importer wizard.
+            IndexLoader indexLoader = getWizard().getIndexLoader();
+            if (indexLoader != null)
+            {
+              indexLoader.awaitIndexLoad();
+            }
 
-        projectViewer.setSelection(new StructuredSelection(projects), true);
+            // We definite has a workspace with a fully mirrored resource set, so it's okay to access this on the UI thread now.
+            final Workspace workspace = getWorkspace();
+            if (workspace != null)
+            {
+              for (Iterator<Stream> it = workspace.getStreams().iterator(); it.hasNext();)
+              {
+                Stream stream = it.next();
+                if (stream.eIsProxy())
+                {
+                  it.remove();
+                }
+                else
+                {
+                  existingStreams.add(EcoreUtil.getURI(stream));
+                }
+              }
+
+              streamViewer.setInput(workspace);
+            }
+
+            CatalogSelection selection = catalogSelector.getSelection();
+            List<Project> projects = new ArrayList<Project>();
+            for (Stream stream : selection.getSelectedStreams())
+            {
+              projects.add(stream.getProject());
+            }
+
+            projectViewer.setSelection(new StructuredSelection(projects), true);
+          }
+        };
+
+        Index index = catalogSelector.getCatalogManager().getIndex();
+        if (index == null)
+        {
+          // If there is no index yet, defer the runnable until the index loader has started.
+          // This generally only happens if this page is the first page of the wizard, i.e., in the project importer wizard.
+          UIUtil.timerExec(500, initializer);
+        }
+        else
+        {
+          // Otherwise, just run it.
+          initializer.run();
+        }
       }
     }
   }
@@ -943,6 +985,11 @@ public class ProjectPage extends SetupWizardPage
       protected CellEditor getCellEditor(Object element)
       {
         Stream stream = (Stream)element;
+        if (existingStreams.contains(EcoreUtil.getURI(stream)))
+        {
+          return null;
+        }
+
         cellEditor.setInput(stream.getProject());
         return cellEditor;
       }
@@ -1487,12 +1534,55 @@ public class ProjectPage extends SetupWizardPage
     }
   }
 
+  private static class DisablingColumnLabelProvider extends ColumnLabelProvider
+  {
+    private static final Color DARK_GRAY = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY);
+
+    private final Image image;
+
+    private final Image disabledImage;
+
+    private final Set<URI> existingStreams;
+
+    public DisablingColumnLabelProvider(Image image, Set<URI> existingStreams)
+    {
+      this.image = image;
+      this.existingStreams = existingStreams;
+      disabledImage = ExtendedImageRegistry.INSTANCE.getImage(new DisabledImageDescriptor(image));
+    }
+
+    @Override
+    public Color getForeground(Object element)
+    {
+      if (isDisabled(element))
+      {
+        return DARK_GRAY;
+      }
+
+      return super.getForeground(element);
+    }
+
+    @Override
+    public Image getImage(Object element)
+    {
+      return isDisabled(element) ? disabledImage : image;
+    }
+
+    private boolean isDisabled(Object element)
+    {
+      return existingStreams.contains(EcoreUtil.getURI((EObject)element));
+    }
+  }
+
   /**
    * @author Eike Stepper
    */
-  private final class CatalogColumnLabelProvider extends ColumnLabelProvider
+  private static final class CatalogColumnLabelProvider extends DisablingColumnLabelProvider
   {
-    private final Image image = labelProvider.getImage(SetupFactory.eINSTANCE.createProjectCatalog());
+    public CatalogColumnLabelProvider(Image image, Set<URI> existingStreams)
+    {
+      super(image, existingStreams);
+    }
 
     @Override
     public String getText(Object element)
@@ -1501,20 +1591,17 @@ public class ProjectPage extends SetupWizardPage
       ProjectCatalog catalog = stream.getProject().getProjectCatalog();
       return SetupCoreUtil.getLabel(catalog);
     }
-
-    @Override
-    public Image getImage(Object element)
-    {
-      return image;
-    }
   }
 
   /**
    * @author Eike Stepper
    */
-  private final class ProjectColumnLabelProvider extends ColumnLabelProvider
+  private static final class ProjectColumnLabelProvider extends DisablingColumnLabelProvider
   {
-    private final Image image = labelProvider.getImage(SetupFactory.eINSTANCE.createProject());
+    public ProjectColumnLabelProvider(Image image, Set<URI> existingStreams)
+    {
+      super(image, existingStreams);
+    }
 
     @Override
     public String getText(Object element)
@@ -1524,32 +1611,23 @@ public class ProjectPage extends SetupWizardPage
       createProjectLabel(stream.getProject(), builder);
       return builder.toString();
     }
-
-    @Override
-    public Image getImage(Object element)
-    {
-      return image;
-    }
   }
 
   /**
    * @author Eike Stepper
    */
-  private final class StreamColumnLabelProvider extends ColumnLabelProvider
+  private static final class StreamColumnLabelProvider extends DisablingColumnLabelProvider
   {
-    private final Image image = labelProvider.getImage(SetupFactory.eINSTANCE.createStream());
+    public StreamColumnLabelProvider(Image image, Set<URI> existingStreams)
+    {
+      super(image, existingStreams);
+    }
 
     @Override
     public String getText(Object element)
     {
       Stream stream = (Stream)element;
       return SetupCoreUtil.getLabel(stream);
-    }
-
-    @Override
-    public Image getImage(Object element)
-    {
-      return image;
     }
   }
 

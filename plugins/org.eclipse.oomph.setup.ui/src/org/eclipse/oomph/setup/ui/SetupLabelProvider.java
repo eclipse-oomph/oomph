@@ -182,7 +182,7 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
   /**
    * @author Ed Merks
    */
-  private static final class DisabledImageDescriptor extends ImageDescriptor
+  public static final class DisabledImageDescriptor extends ImageDescriptor
   {
     private final Image image;
 
