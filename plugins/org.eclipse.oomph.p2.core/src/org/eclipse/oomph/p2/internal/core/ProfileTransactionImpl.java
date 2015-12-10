@@ -882,6 +882,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     List<IRequirement> rootRequirements = new ArrayList<IRequirement>();
 
     Map<String, IInstallableUnit> rootIUs = new HashMap<String, IInstallableUnit>();
+    Map<String, IRequirement> singletonRootRequirements = new HashMap<String, IRequirement>();
     for (IInstallableUnit rootIU : P2Util.asIterable(profile.query(new UserVisibleRootQuery(), null)))
     {
       if (!removeAll)
@@ -894,6 +895,10 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
         IRequirement rootRequirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, id, versionRange, filter, false, false);
         rootRequirements.add(rootRequirement);
+        if (rootIU.isSingleton() || "true".equals(rootIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP)))
+        {
+          singletonRootRequirements.put(id, rootRequirement);
+        }
       }
 
       request.remove(rootIU);
@@ -914,6 +919,20 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
       IRequirement rootRequirement = MetadataFactory.createRequirement(namespace, name, versionRange, filter, optional ? 0 : 1, 1, !optional || greedy);
       rootRequirements.add(rootRequirement);
+
+      // If this is a requirement for an IU...
+      if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
+      {
+        // If the clean profile has a requirement for this same singleton IU.
+        IRequirement singletonRootRequirement = singletonRootRequirements.get(name);
+        if (singletonRootRequirement != null)
+        {
+          // Remove that other requirement because the new requirement we're trying to satisfy might well be in conflict with the version range of that
+          // previously resolved requirement.
+          // Even if it's not in conflict, this new requirement's version range is what should be satisfied, regardless of what the old requirement might be.
+          rootRequirements.remove(singletonRootRequirement);
+        }
+      }
     }
 
     rootDescription.setRequirements(rootRequirements.toArray(new IRequirement[rootRequirements.size()]));

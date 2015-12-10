@@ -1120,7 +1120,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
                 // We can remove our synthetic IU to ensure that, whenever possible, a binary resolution for it is included in the TP.
                 // That's only necessary if the IU is a singleton.
-                if (workspaceIU.isSingleton())
+                if (workspaceIU.isSingleton() || "true".equals(workspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP)))
                 {
                   ius.remove(workspaceIU);
                 }
