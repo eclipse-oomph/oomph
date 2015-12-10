@@ -789,7 +789,7 @@ public class ProjectPage extends SetupWizardPage
   {
     // If we are in the Importer (i.e., no page before the ProjectPage) there must be at least one stream.
     Workspace workspace = getWorkspace();
-    setPageComplete(getPreviousPage() instanceof ProjectPage || workspace != null && workspace.getStreams().size() > existingStreams.size());
+    setPageComplete(getPreviousPage() instanceof SetupWizardPage || workspace != null && workspace.getStreams().size() > existingStreams.size());
   }
 
   @Override
@@ -854,6 +854,8 @@ public class ProjectPage extends SetupWizardPage
             }
 
             projectViewer.setSelection(new StructuredSelection(projects), true);
+
+            checkPageComplete();
           }
         };
 
