@@ -53,5 +53,9 @@ public interface SetupProperties
 
   public static final String PROP_SETUP_JRE_CHOICE = "oomph.setup.jre.choice";
 
+  public static final String PROJP_SETUP_ECF_CONNECT_TIMEOUT = "oomph.setup.ecf.connect.timeout";
+
+  public static final String PROJP_SETUP_ECF_READ_TIMEOUT = "oomph.setup.ecf.read.timeout";
+
   public static final String PROP_INSTALLER_UPDATE_URL = "oomph.installer.update.url";
 }

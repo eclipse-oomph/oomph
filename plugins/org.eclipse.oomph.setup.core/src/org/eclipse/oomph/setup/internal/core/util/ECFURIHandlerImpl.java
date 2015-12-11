@@ -11,12 +11,14 @@
 package org.eclipse.oomph.setup.internal.core.util;
 
 import org.eclipse.oomph.base.util.BaseUtil;
+import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
 import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.WorkerPool;
 
 import org.eclipse.emf.common.util.URI;
@@ -89,6 +91,10 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
   private static final String API_GITHUB_HOST = "api.github.com";
 
   private static final String CONTENT_TAG = "\"content\":\"";
+
+  private static int CONNECT_TIMEOUT = PropertiesUtil.getProperty(SetupProperties.PROJP_SETUP_ECF_CONNECT_TIMEOUT, 10000);
+
+  private static int READ_TIMEOUT = PropertiesUtil.getProperty(SetupProperties.PROJP_SETUP_ECF_READ_TIMEOUT, 10000);
 
   private AuthorizationHandler defaultAuthorizationHandler;
 
@@ -216,8 +222,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       {
         FileTransferID fileTransferID = new FileTransferID(new FileTransferNamespace(), IOUtil.newURI(uriString));
         Map<Object, Object> requestOptions = new HashMap<Object, Object>();
-        requestOptions.put(IRetrieveFileTransferOptions.CONNECT_TIMEOUT, 10000);
-        requestOptions.put(IRetrieveFileTransferOptions.READ_TIMEOUT, 10000);
+        requestOptions.put(IRetrieveFileTransferOptions.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
+        requestOptions.put(IRetrieveFileTransferOptions.READ_TIMEOUT, READ_TIMEOUT);
         if (authorization != null && authorization.isAuthorized())
         {
           requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, Collections.singletonMap("Authorization", authorization.getAuthorization()));
