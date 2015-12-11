@@ -577,9 +577,6 @@ public class ProjectPage extends SetupWizardPage
     streamColumn.setText("Stream");
     streamTableLayout.setColumnData(streamColumn, new ColumnWeightData(30, true));
 
-    CatalogSelection selection = catalogSelector.getSelection();
-    projectViewer.setInput(selection);
-
     collapseAllButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -779,7 +776,7 @@ public class ProjectPage extends SetupWizardPage
       }
     });
 
-    checkPageComplete();
+    setPageComplete(false);
 
     sashForm.setWeights(new int[] { 3, 1 });
     return sashForm;
@@ -812,7 +809,7 @@ public class ProjectPage extends SetupWizardPage
         setErrorMessage("Another setup wizard is already open.  Complete that interaction before importing projects.");
         projectViewer.getTree().setEnabled(false);
       }
-      else if (projectViewer.getSelection().isEmpty())
+      else if (!isPageComplete())
       {
         Runnable initializer = new Runnable()
         {
@@ -825,6 +822,9 @@ public class ProjectPage extends SetupWizardPage
             {
               indexLoader.awaitIndexLoad();
             }
+
+            CatalogSelection selection = catalogSelector.getSelection();
+            projectViewer.setInput(selection);
 
             // We definite has a workspace with a fully mirrored resource set, so it's okay to access this on the UI thread now.
             final Workspace workspace = getWorkspace();
@@ -846,7 +846,6 @@ public class ProjectPage extends SetupWizardPage
               streamViewer.setInput(workspace);
             }
 
-            CatalogSelection selection = catalogSelector.getSelection();
             List<Project> projects = new ArrayList<Project>();
             for (Stream stream : selection.getSelectedStreams())
             {
