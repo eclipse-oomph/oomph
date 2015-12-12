@@ -43,7 +43,7 @@ public abstract class AbstractServiceDialog extends AbstractDialog
   @Override
   protected Point getInitialSize()
   {
-    return new Point(480, 300);
+    return new Point(550, 300);
   }
 
   @Override
