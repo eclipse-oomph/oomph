@@ -22,8 +22,6 @@ import java.io.IOException;
  */
 public class LocalDataProvider implements DataProvider
 {
-  private static final File[] NO_FILES = {};
-
   private final File localFile;
 
   public LocalDataProvider(File locaFile)

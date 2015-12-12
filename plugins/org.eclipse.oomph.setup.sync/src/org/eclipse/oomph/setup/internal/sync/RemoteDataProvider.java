@@ -79,8 +79,7 @@ public class RemoteDataProvider implements DataProvider
 
   public File[] getExtraFiles()
   {
-    SyncStorageCache cache = (SyncStorageCache)getStorage().getCache();
-    return new File[] { cache.getCacheFile(), cache.getPropertiesFile() };
+    return NO_FILES;
   }
 
   public boolean retrieve(File file) throws IOException, NotFoundException

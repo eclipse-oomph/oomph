@@ -53,6 +53,8 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
 
   private Button syncButton;
 
+  private Button deleteButton;
+
   private boolean initialEnabled;
 
   public SynchronizerPreferencePage()
@@ -68,7 +70,7 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
   @Override
   protected Control createContents(Composite parent)
   {
-    IStorage storage = SynchronizerManager.INSTANCE.getStorage();
+    final IStorage storage = SynchronizerManager.INSTANCE.getStorage();
     IStorageService service = storage.getService();
     boolean showServices = StorageConfigurationComposite.isShowServices();
 
@@ -170,6 +172,49 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
         }
       });
 
+      // deleteButton = new Button(main, SWT.PUSH);
+      // deleteButton.setText("Delete Remote Data");
+      // deleteButton.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
+      // deleteButton.addSelectionListener(new SelectionAdapter()
+      // {
+      // @Override
+      // public void widgetSelected(SelectionEvent e)
+      // {
+      // Shell shell = UIUtil.getShell();
+      //
+      // try
+      // {
+      // ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
+      //
+      // dialog.run(true, true, new IRunnableWithProgress()
+      // {
+      // public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+      // {
+      // try
+      // {
+      // RemoteDataProvider remoteDataProvider = new RemoteDataProvider(storage);
+      // remoteDataProvider.delete();
+      // }
+      // catch (Throwable ex)
+      // {
+      // throw new InvocationTargetException(ex);
+      // }
+      // }
+      // });
+      // }
+      // catch (InvocationTargetException ex)
+      // {
+      // Throwable cause = ex.getCause();
+      // SetupUIPlugin.INSTANCE.log(cause);
+      // ErrorDialog.open(cause);
+      // }
+      // catch (InterruptedException ex)
+      // {
+      // //$FALL-THROUGH$
+      // }
+      // }
+      // });
+
       enableButton.setSelection(initialEnabled);
       UIUtil.asyncExec(new Runnable()
       {
@@ -261,6 +306,11 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
     if (syncButton != null)
     {
       syncButton.setEnabled(enabled);
+    }
+
+    if (deleteButton != null)
+    {
+      deleteButton.setEnabled(enabled);
     }
 
     boolean needsApply = needsApply();

@@ -24,6 +24,8 @@ import java.net.URI;
  */
 public interface DataProvider
 {
+  public static final File[] NO_FILES = {};
+
   public Location getLocation();
 
   public File[] getExtraFiles();

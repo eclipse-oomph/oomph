@@ -21,7 +21,6 @@ import org.eclipse.oomph.setup.impl.PreferenceTaskImpl.PreferenceHandler;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
-import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider;
 import org.eclipse.oomph.setup.internal.sync.SyncUtil;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.internal.sync.Synchronizer;
@@ -83,7 +82,6 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
-import org.eclipse.userstorage.spi.StorageCache;
 import org.eclipse.userstorage.util.ProtocolException;
 
 import java.io.File;
@@ -120,7 +118,7 @@ public final class RecorderManager
 
   private static final URI USER_FILE_URI = SetupContext.resolveUser(SetupCoreUtil.createResourceSet().getURIConverter().normalize(SetupContext.USER_SETUP_URI));
 
-  private static final boolean SYNC_FOLDER_RANDOM = PropertiesUtil.isProperty("oomph.setup.sync.folder.random");
+  private static final boolean SYNC_FOLDER_FIXED = PropertiesUtil.isProperty("oomph.setup.sync.folder.fixed");
 
   private static final boolean SYNC_FOLDER_KEEP = PropertiesUtil.isProperty("oomph.setup.sync.folder.keep");
 
@@ -1091,7 +1089,7 @@ public final class RecorderManager
         {
           tmpFolder = null;
 
-          if (!SYNC_FOLDER_RANDOM)
+          if (SYNC_FOLDER_FIXED)
           {
             try
             {
@@ -1121,10 +1119,7 @@ public final class RecorderManager
 
           File target = RecorderManager.copyRecorderTarget(recorderTarget, tmpFolder);
 
-          StorageCache tmpCache = new RemoteDataProvider.SyncStorageCache(tmpFolder);
-          IStorage tmpStorage = storage.getFactory().create(storage.getApplicationToken(), tmpCache);
-
-          Synchronizer synchronizer = SynchronizerManager.INSTANCE.createSynchronizer(target, tmpFolder, tmpStorage);
+          Synchronizer synchronizer = SynchronizerManager.INSTANCE.createSynchronizer(target, tmpFolder);
           synchronizer.copyFilesFrom(SynchronizerManager.SYNC_FOLDER);
 
           synchronizerJob = new SynchronizerJob(synchronizer, true);
@@ -1160,7 +1155,7 @@ public final class RecorderManager
 
         if (!SYNC_FOLDER_KEEP)
         {
-          IOUtil.deleteBestEffort(tmpFolder, SYNC_FOLDER_RANDOM);
+          IOUtil.deleteBestEffort(tmpFolder, !SYNC_FOLDER_FIXED);
         }
       }
     }

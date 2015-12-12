@@ -98,17 +98,26 @@ public final class SynchronizerManager
 
   private final IStorage storage;
 
+  private final RemoteDataProvider remoteDataProvider;
+
   private Boolean connectionOffered;
 
   private SynchronizerManager()
   {
     StorageCache cache = new RemoteDataProvider.SyncStorageCache(SYNC_FOLDER);
     storage = StorageFactory.DEFAULT.create(RemoteDataProvider.APPLICATION_TOKEN, cache);
+
+    remoteDataProvider = new RemoteDataProvider(storage);
   }
 
   public IStorage getStorage()
   {
     return storage;
+  }
+
+  public RemoteDataProvider getRemoteDataProvider()
+  {
+    return remoteDataProvider;
   }
 
   public boolean isSyncEnabled()
@@ -154,13 +163,7 @@ public final class SynchronizerManager
 
   public Synchronizer createSynchronizer(File userSetup, File syncFolder)
   {
-    return createSynchronizer(userSetup, syncFolder, storage);
-  }
-
-  public Synchronizer createSynchronizer(File userSetup, File syncFolder, IStorage storage)
-  {
     LocalDataProvider localDataProvider = new LocalDataProvider(userSetup);
-    RemoteDataProvider remoteDataProvider = new RemoteDataProvider(storage);
 
     Synchronizer synchronizer = new Synchronizer(localDataProvider, remoteDataProvider, syncFolder);
     synchronizer.setLockFile(USER_SETUP_LOCK);
@@ -481,6 +484,9 @@ public final class SynchronizerManager
       remoteImpact = !committedLocal.isEmpty();
 
       computedLocal.removeAll(committedLocal);
+      computedLocal.removeAll(committedRemote);
+
+      computedRemote.removeAll(committedLocal);
       computedRemote.removeAll(committedRemote);
 
       setSkippedIDs(Location.LOCAL, computedLocal);
