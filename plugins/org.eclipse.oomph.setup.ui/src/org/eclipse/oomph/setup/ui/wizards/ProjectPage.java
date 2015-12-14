@@ -611,6 +611,8 @@ public class ProjectPage extends SetupWizardPage
           }
         }
 
+        removeProjectButton.setEnabled(!userProjects.isEmpty());
+
         Workspace workspace = getWorkspace();
         List<Project> projectsToAdd = new ArrayList<Project>(projects);
         if (workspace != null)
