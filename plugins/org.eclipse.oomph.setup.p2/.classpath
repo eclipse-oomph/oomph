@@ -12,6 +12,7 @@
 			<accessrule kind="accessible" pattern="org/eclipse/ui/internal/progress/**"/>
 			<accessrule kind="accessible" pattern="org/eclipse/equinox/p2/internal/**"/>
 			<accessrule kind="accessible" pattern="org/eclipse/oomph/**"/>
+			<accessrule kind="accessible" pattern="org/eclipse/equinox/internal/provisional/p2/**"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>

@@ -25,6 +25,7 @@ import org.eclipse.equinox.internal.p2.repository.AuthenticationFailedException;
 import org.eclipse.equinox.internal.p2.repository.CacheManager;
 import org.eclipse.equinox.internal.p2.repository.DownloadStatus;
 import org.eclipse.equinox.internal.p2.repository.Transport;
+import org.eclipse.equinox.internal.provisional.p2.core.eventbus.IProvisioningEventBus;
 import org.eclipse.equinox.internal.provisional.p2.repository.IStateful;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 
@@ -66,6 +67,8 @@ public class CachingTransport extends Transport
 
   private final IProvisioningAgent agent;
 
+  private IProvisioningEventBus eventBus;
+
   private final File cacheFolder;
 
   private Transport delegate;
@@ -74,6 +77,7 @@ public class CachingTransport extends Transport
   {
     setDelegate(delegate);
     this.agent = agent;
+    eventBus = (IProvisioningEventBus)agent.getService(IProvisioningEventBus.SERVICE_NAME);
 
     File folder = P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.getUserHome()));
     cacheFolder = new File(folder, "cache");
@@ -110,7 +114,22 @@ public class CachingTransport extends Transport
 
     if (!isLoadingRepository(uri))
     {
-      return delegate.download(uri, target, startPos, monitor);
+      try
+      {
+        if (eventBus != null)
+        {
+          eventBus.publishEvent(new DownloadArtifactEvent(uri, false));
+        }
+
+        return delegate.download(uri, target, startPos, monitor);
+      }
+      finally
+      {
+        if (eventBus != null)
+        {
+          eventBus.publishEvent(new DownloadArtifactEvent(uri, true));
+        }
+      }
     }
 
     synchronized (getLock(uri))

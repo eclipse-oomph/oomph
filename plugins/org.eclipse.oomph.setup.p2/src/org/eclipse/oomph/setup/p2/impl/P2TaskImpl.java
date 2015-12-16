@@ -54,6 +54,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
+import org.eclipse.equinox.internal.provisional.p2.core.eventbus.IProvisioningEventBus;
+import org.eclipse.equinox.internal.provisional.p2.core.eventbus.ProvisioningListener;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.p2.engine.IProfile;
@@ -702,8 +704,19 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     transaction.setMirrors(mirrors);
 
     IProvisioningAgent provisioningAgent = profile.getAgent().getProvisioningAgent();
+
     CacheUsageConfirmer cacheUsageConfirmer = (CacheUsageConfirmer)context.get(CacheUsageConfirmer.class);
     CacheUsageConfirmer oldCacheUsageConfirmer = (CacheUsageConfirmer)provisioningAgent.getService(CacheUsageConfirmer.SERVICE_NAME);
+
+    ProvisioningListener provisioningListener = (ProvisioningListener)context.get(ProvisioningListener.class);
+    if (provisioningListener != null)
+    {
+      IProvisioningEventBus eventBus = (IProvisioningEventBus)provisioningAgent.getService(IProvisioningEventBus.SERVICE_NAME);
+      if (eventBus != null)
+      {
+        eventBus.addListener(provisioningListener);
+      }
+    }
 
     try
     {

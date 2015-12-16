@@ -23,6 +23,7 @@ import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.jreinfo.ui.JREController;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.internal.core.DownloadArtifactEvent;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.Installation;
@@ -113,10 +114,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EventObject;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Eike Stepper
@@ -1058,6 +1062,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     installThread.start();
   }
 
+  @SuppressWarnings("restriction")
   private void installPerform() throws Exception
   {
     if (dialog.getPool() != null)
@@ -1180,6 +1185,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       performer.setVMPath(vmPath);
       performer.setProgress(progress);
       performer.log("Executing " + performer.getTrigger().toString().toLowerCase() + " tasks");
+      performer.put(org.eclipse.equinox.internal.provisional.p2.core.eventbus.ProvisioningListener.class, new DownloadArtifactLister());
       performer.perform(progress);
       performer.recordVariables(installation, null, user);
       performer.savePasswords();
@@ -1509,6 +1515,30 @@ public class SimpleVariablePage extends SimpleInstallerPage
   }
 
   /**
+   * @author Ed Merks
+   */
+  @SuppressWarnings("restriction")
+  private class DownloadArtifactLister implements org.eclipse.equinox.internal.provisional.p2.core.eventbus.SynchronousProvisioningListener
+  {
+    public synchronized void notify(EventObject event)
+    {
+      if (event instanceof DownloadArtifactEvent)
+      {
+        DownloadArtifactEvent downloadArtifactEvent = (DownloadArtifactEvent)event;
+        URI artifactURI = URI.createURI(downloadArtifactEvent.getArtifactURI().toString());
+        if (downloadArtifactEvent.isCompleted())
+        {
+          progress.removeArtifactURI(artifactURI);
+        }
+        else
+        {
+          progress.addArtifactURI(artifactURI);
+        }
+      }
+    }
+  }
+
+  /**
    * @author Eike Stepper
    */
   private static final class UnloggedException extends RuntimeException
@@ -1642,6 +1672,20 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     private String lastName;
 
+    private final Set<URI> artifactURIs = new HashSet<URI>();
+
+    private Set<URI> lastArtifactURIs;
+
+    public synchronized void addArtifactURI(URI uri)
+    {
+      artifactURIs.add(uri);
+    }
+
+    public synchronized void removeArtifactURI(URI uri)
+    {
+      artifactURIs.remove(uri);
+    }
+
     public void setTerminating()
     {
     }
@@ -1743,6 +1787,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       double work;
       boolean canceled;
       boolean done;
+      Set<URI> artifactURIs;
 
       synchronized (this)
       {
@@ -1751,6 +1796,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         work = this.work;
         canceled = this.canceled;
         done = this.done;
+        artifactURIs = new HashSet<URI>(this.artifactURIs);
       }
 
       if (!canceled)
@@ -1760,13 +1806,44 @@ public class SimpleVariablePage extends SimpleInstallerPage
         if (PROGRESS_WATCHDOG_TIMEOUT != 0)
         {
           long now = System.currentTimeMillis();
-          if (lastWork == work)
+          boolean slowArtifactDownload = !artifactURIs.isEmpty() && artifactURIs.equals(lastArtifactURIs);
+          if (lastWork == work || slowArtifactDownload)
           {
             if (now >= reportWarningTimeout)
             {
               if (!isModalShellInForeground())
               {
-                dialog.showMessage(("The installation process is taking longer than usual: " + safeName).replace(' ', '\u00a0'), Type.WARNING, false);
+                if (slowArtifactDownload)
+                {
+                  StringBuilder message = new StringBuilder();
+                  Set<URI> hosts = new HashSet<URI>();
+                  for (URI artifactURI : artifactURIs)
+                  {
+                    URI hostURI = URI.createHierarchicalURI(artifactURI.scheme(), artifactURI.authority(), null, null, null);
+                    if (hosts.add(hostURI))
+                    {
+                      if (message.length() != 0)
+                      {
+                        message.append(", ");
+                      }
+
+                      message.append(hostURI);
+                    }
+                  }
+
+                  if (hosts.size() > 1)
+                  {
+                    message.insert(0, "the following hosts: ");
+                  }
+
+                  message.insert(0, "Artifact download is progressing very slowly from ");
+                  dialog.showMessage(message.toString().replace(' ', '\u00a0'), Type.WARNING, false);
+                }
+                else
+                {
+                  dialog.showMessage(("The installation process is taking longer than usual: " + safeName).replace(' ', '\u00a0'), Type.WARNING, false);
+                }
+
                 installButton.setProgressAnimationSpeed(0.4f);
               }
 
@@ -1779,8 +1856,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
             installButton.setProgressAnimationSpeed(1);
             dialog.clearMessage();
             resetWatchdogTimer(now);
-            lastWork = work;
           }
+
+          lastWork = work;
+          lastArtifactURIs = artifactURIs;
         }
 
         double progress = work / totalWork;
@@ -1805,7 +1884,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
         if (!done)
         {
-          schedule();
+          reschedule();
         }
       }
     }
@@ -1835,8 +1914,14 @@ public class SimpleVariablePage extends SimpleInstallerPage
       reportWarningTimeout = now + PROGRESS_WATCHDOG_TIMEOUT * 1000;
     }
 
+    private void reschedule()
+    {
+      UIUtil.timerExec(100, getDisplay(), this);
+    }
+
     private void schedule()
     {
+      resetWatchdogTimer(System.currentTimeMillis());
       UIUtil.asyncExec(getDisplay(), this);
     }
   }
