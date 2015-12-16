@@ -52,6 +52,8 @@ public class SetupPropertyTester extends PropertyTester
 
   private static Shell handlingShell;
 
+  private static boolean started;
+
   static
   {
     ((IEclipsePreferences)PREFERENCES).addPreferenceChangeListener(new IEclipsePreferences.IPreferenceChangeListener()
@@ -141,6 +143,11 @@ public class SetupPropertyTester extends PropertyTester
 
   private boolean testSyncEnabled(Object receiver, Object[] args, Object expectedValue)
   {
+    if (!started)
+    {
+      return false;
+    }
+
     if (expectedValue == null)
     {
       expectedValue = Boolean.TRUE;
@@ -162,6 +169,12 @@ public class SetupPropertyTester extends PropertyTester
 
   public static void setStarting(boolean starting)
   {
+    if (!starting)
+    {
+      started = true;
+      UIPropertyTester.requestEvaluation(PREFIX + SYNC_ENABLED, false);
+    }
+
     SetupPropertyTester.starting = starting;
     UIPropertyTester.requestEvaluation(PREFIX + STARTING, false);
   }

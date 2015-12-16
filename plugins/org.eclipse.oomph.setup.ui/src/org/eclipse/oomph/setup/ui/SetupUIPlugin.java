@@ -178,10 +178,15 @@ public final class SetupUIPlugin extends OomphUIPlugin
     return new File(INSTANCE.getStateLocation().toString(), RESTARTING_FILE_NAME);
   }
 
-  private static void performStartup()
+  static void performStartup()
   {
     if (!PropertiesUtil.isProperty(PREF_HEADLESS))
     {
+      // These are only to force class loading on a background thread.
+      SynchronizerManager.INSTANCE.toString();
+      SetupTaskPerformer.RULE_VARIABLE_ADAPTER.toString();
+      RecorderManager.INSTANCE.toString();
+
       final Display display = Display.getDefault();
       display.asyncExec(new Runnable()
       {
@@ -216,6 +221,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
               }
 
               RecorderManager.Lifecycle.start(display);
+              plugin.stopRecorder = true;
 
               if (!SETUP_SKIP && !isSkipStartupTasks())
               {
@@ -543,6 +549,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
    */
   public static class Implementation extends EclipseUIPlugin
   {
+    private boolean stopRecorder;
+
     public Implementation()
     {
       plugin = this;
@@ -552,13 +560,12 @@ public final class SetupUIPlugin extends OomphUIPlugin
     public void start(BundleContext context) throws Exception
     {
       super.start(context);
-      performStartup();
     }
 
     @Override
     public void stop(BundleContext context) throws Exception
     {
-      if (!isInstallerProduct())
+      if (stopRecorder)
       {
         RecorderManager.Lifecycle.stop();
       }

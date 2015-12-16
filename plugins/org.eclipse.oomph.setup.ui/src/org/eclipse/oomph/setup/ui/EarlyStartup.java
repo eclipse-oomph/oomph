@@ -19,5 +19,6 @@ public final class EarlyStartup implements IStartup
 {
   public void earlyStartup()
   {
+    SetupUIPlugin.performStartup();
   }
 }
