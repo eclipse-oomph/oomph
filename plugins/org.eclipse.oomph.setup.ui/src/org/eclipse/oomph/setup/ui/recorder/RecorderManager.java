@@ -122,6 +122,8 @@ public final class RecorderManager
 
   private static final boolean SYNC_FOLDER_KEEP = PropertiesUtil.isProperty("oomph.setup.sync.folder.keep");
 
+  private static final boolean SYNC_FOLDER_DEBUG = PropertiesUtil.isProperty("oomph.setup.sync.folder.debug");
+
   private final EarlySynchronization earlySynchronization = new EarlySynchronization();
 
   private static ToolItem recordItem;
@@ -527,7 +529,6 @@ public final class RecorderManager
       if (synchronization != null)
       {
         Scope recorderTarget = syncInfo.getRecorderTarget();
-        File syncFolder = SynchronizerManager.SYNC_FOLDER;
         File tmpFolder = syncInfo.getTmpFolder();
 
         if (!dialogNeeded)
@@ -560,7 +561,7 @@ public final class RecorderManager
           }
 
           // Copy the committed recorder target to the temporary sync folder.
-          RecorderManager.copyRecorderTarget(recorderTarget, tmpFolder);
+          copyRecorderTarget(recorderTarget, tmpFolder);
 
           if (remotePoliciesMissing)
           {
@@ -625,7 +626,7 @@ public final class RecorderManager
           synchronization.commit();
 
           Synchronizer synchronizer = synchronization.getSynchronizer();
-          synchronizer.copyFilesTo(syncFolder);
+          synchronizer.copyFilesTo(SynchronizerManager.SYNC_FOLDER);
 
           copyRecorderTargetBack(recorderTarget, tmpFolder);
         }
@@ -899,6 +900,13 @@ public final class RecorderManager
     File target = new File(targetFolder, uri.lastSegment());
 
     IOUtil.copyFile(source, target);
+
+    if (SYNC_FOLDER_DEBUG)
+    {
+
+      SetupUIPlugin.INSTANCE.log("Copy recorder target to " + target);
+    }
+
     return target;
   }
 
@@ -910,6 +918,12 @@ public final class RecorderManager
     File target = new File(targetFolder, uri.lastSegment());
 
     IOUtil.copyFile(target, source);
+
+    if (SYNC_FOLDER_DEBUG)
+    {
+      SetupUIPlugin.INSTANCE.log("Copy recorder target back to " + source);
+    }
+
     return target;
   }
 
@@ -1016,8 +1030,9 @@ public final class RecorderManager
                     if (SetupUIPlugin.PLUGIN_ID.equals(pluginID))
                     {
                       String lastSegment = uri.lastSegment();
-                      if (SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER.equals(lastSegment) || SetupUIPlugin.PREF_PREFERENCE_RECORDER_TARGET.equals(lastSegment)
-                          || SetupUIPlugin.PREF_IGNORED_PREFERENCE_PAGES.equals(lastSegment)
+                      if (SetupUIPlugin.PREF_ENABLE_PREFERENCE_RECORDER.equals(lastSegment) //
+                          || SetupUIPlugin.PREF_PREFERENCE_RECORDER_TARGET.equals(lastSegment) //
+                          || SetupUIPlugin.PREF_IGNORED_PREFERENCE_PAGES.equals(lastSegment) //
                           || SetupUIPlugin.PREF_INITIALIZED_PREFERENCE_PAGES.equals(lastSegment))
                       {
                         it.remove();
@@ -1117,6 +1132,11 @@ public final class RecorderManager
             tmpFolder = IOUtil.createTempFolder("sync-", true);
           }
 
+          if (SYNC_FOLDER_DEBUG)
+          {
+            SetupUIPlugin.INSTANCE.log("Early synchronization in " + tmpFolder);
+          }
+
           File target = RecorderManager.copyRecorderTarget(recorderTarget, tmpFolder);
 
           Synchronizer synchronizer = SynchronizerManager.INSTANCE.createSynchronizer(target, tmpFolder);
@@ -1155,7 +1175,19 @@ public final class RecorderManager
 
         if (!SYNC_FOLDER_KEEP)
         {
-          IOUtil.deleteBestEffort(tmpFolder, !SYNC_FOLDER_FIXED);
+          boolean deleted = IOUtil.deleteBestEffort(tmpFolder, !SYNC_FOLDER_FIXED);
+
+          if (SYNC_FOLDER_DEBUG)
+          {
+            if (deleted)
+            {
+              SetupUIPlugin.INSTANCE.log("Deleted " + tmpFolder);
+            }
+            else
+            {
+              SetupUIPlugin.INSTANCE.log("Failed to delete " + tmpFolder);
+            }
+          }
         }
       }
     }
@@ -1182,7 +1214,9 @@ public final class RecorderManager
             // This means that the user couldn't be authenticated. Try again in UI thread below.
             stop();
             result.synchronization = null;
+
             start(true);
+            result.tmpFolder = tmpFolder;
           }
           else if (earlyException != null)
           {
