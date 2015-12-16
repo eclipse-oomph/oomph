@@ -42,7 +42,7 @@ public class OptInDialog extends AbstractServiceDialog
     setMessage("Do you want to save your preferences on the " + serviceLabel + " server so you can share them on other workstations?");
 
     Button yesButton = new Button(parent, SWT.RADIO);
-    yesButton.setText("Yes  - You will be required to log-in to your " + shortLabel + " account.");
+    yesButton.setText("Yes  - You will be required to login to your " + shortLabel + " account.");
     yesButton.addSelectionListener(new SelectionAdapter()
     {
       @Override

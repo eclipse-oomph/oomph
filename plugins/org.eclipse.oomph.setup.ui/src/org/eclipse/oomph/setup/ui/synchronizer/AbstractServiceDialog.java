@@ -10,8 +10,10 @@
  */
 package org.eclipse.oomph.setup.ui.synchronizer;
 
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -41,9 +43,9 @@ public abstract class AbstractServiceDialog extends AbstractDialog
   }
 
   @Override
-  protected Point getInitialSize()
+  protected IDialogSettings getPluginSettings()
   {
-    return new Point(550, 300);
+    return SetupUIPlugin.INSTANCE.getDialogSettings();
   }
 
   @Override
@@ -70,9 +72,13 @@ public abstract class AbstractServiceDialog extends AbstractDialog
 
     Composite area = (Composite)super.createDialogArea(parent);
 
+    GridLayout layout = new GridLayout(1, false);
+    layout.marginWidth = 48;
+    layout.marginHeight = 32;
+
     Composite composite = new Composite(area, SWT.NONE);
     composite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
-    composite.setLayout(new GridLayout(1, false));
+    composite.setLayout(layout);
     createUI(composite, serviceLabel, shortLabel);
 
     return area;

@@ -40,7 +40,7 @@ public class OptOutDialog extends AbstractServiceDialog
   @Override
   protected void createUI(Composite parent, String serviceLabel, String shortLabel)
   {
-    setMessage("You did not log-in to your " + shortLabel + " account.\nDo you want to try again later?");
+    setMessage("You did not login to your " + shortLabel + " account. Do you want to try again later?");
 
     Button yesButton = new Button(parent, SWT.RADIO);
     yesButton.setText("Yes  - Skip now and try again later.");
