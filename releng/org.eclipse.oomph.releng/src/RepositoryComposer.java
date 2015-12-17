@@ -77,7 +77,7 @@ public final class RepositoryComposer
     File dropTypeFolder = new File(dropsFolder, buildType);
     File dropFolder = new File(dropTypeFolder, folder);
 
-    File updatesFolder = new File(downloadsFolder, "updates.tmp");
+    File updatesFolder = new File(downloadsFolder, "builds/tmp/updates.tmp");
     File updateTypeFolder = new File(updatesFolder, buildType);
 
     if ("release".equals(buildType))
