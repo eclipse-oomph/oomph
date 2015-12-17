@@ -115,43 +115,45 @@ $BASH $SCRIPTS/adjustArtifactRepository.sh \
 ######################
 
 cd $WORKSPACE
-rm -rf $PRODUCTS.tmp
-mkdir $PRODUCTS.tmp
-mkdir $PRODUCTS.tmp/latest
+
+PRODUCTS_TMP=$PRODUCTS.tmp
+rm -rf $PRODUCTS_TMP
+mkdir $PRODUCTS_TMP
+mkdir $PRODUCTS_TMP/latest
 
 cd $WORKSPACE/products
 for f in *.exe *.tar.gz; do
-  echo "Promoting $f to $PRODUCTS.tmp/latest"
-  cp -a $f $PRODUCTS.tmp/latest
+  echo "Promoting $f to $PRODUCTS_TMP/latest"
+  cp -a $f $PRODUCTS_TMP/latest
 
   if [[ "$BUILD_TYPE" != nightly ]]; then
-    echo "Promoting $f to $PRODUCTS.tmp"
-    cp -a $f $PRODUCTS.tmp
+    echo "Promoting $f to $PRODUCTS_TMP"
+    cp -a $f $PRODUCTS_TMP
   fi
 done
 
 cd $WORKSPACE
-cp -a $PROPERTIES $PRODUCTS.tmp/latest/product.properties
-cp -a $WORKSPACE/products/repository $PRODUCTS.tmp/latest
+cp -a $PROPERTIES $PRODUCTS_TMP/latest/product.properties
+cp -a $WORKSPACE/products/repository $PRODUCTS_TMP/latest
 $BASH $SCRIPTS/adjustArtifactRepository.sh \
-  $PRODUCTS.tmp/latest/repository \
+  $PRODUCTS_TMP/latest/repository \
   $PRODUCTS/latest/repository \
   "Oomph Product Updates Latest" \
   $BUILD_TYPE
 
 if [[ "$BUILD_TYPE" != nightly ]]; then
-  cp -a $PROPERTIES $PRODUCTS.tmp/product.properties
-  cp -a $WORKSPACE/products/repository $PRODUCTS.tmp
+  cp -a $PROPERTIES $PRODUCTS_TMP/product.properties
+  cp -a $WORKSPACE/products/repository $PRODUCTS_TMP
   $BASH $SCRIPTS/adjustArtifactRepository.sh \
-    $PRODUCTS.tmp/repository \
+    $PRODUCTS_TMP/repository \
     $PRODUCTS/repository \
     "Oomph Product Updates" \
     $BUILD_TYPE
 else
-  cp -a $PRODUCTS/product.properties $PRODUCTS.tmp
-  cp -a $PRODUCTS/*.exe $PRODUCTS.tmp
-  cp -a $PRODUCTS/*.tar.gz $PRODUCTS.tmp
-  cp -a $PRODUCTS/repository $PRODUCTS.tmp
+  cp -a $PRODUCTS/product.properties $PRODUCTS_TMP
+  cp -a $PRODUCTS/*.exe $PRODUCTS_TMP
+  cp -a $PRODUCTS/*.tar.gz $PRODUCTS_TMP
+  cp -a $PRODUCTS/repository $PRODUCTS_TMP
 fi
 
 ##################
@@ -160,22 +162,26 @@ fi
 
 echo "Promoting $WORKSPACE/help"
 cd $WORKSPACE
-rm -rf $HELP.tmp
-mkdir $HELP.tmp
-cp -a $WORKSPACE/help/* $HELP.tmp
+
+HELP_TMP=$HELP.tmp
+rm -rf $HELP_TMP
+mkdir $HELP_TMP
+cp -a $WORKSPACE/help/* $HELP_TMP
 
 #####################
 # DOWNLOADS/UPDATES #
 #####################
 
 cd $WORKSPACE
-rm -rf $UPDATES.tmp
-cp -a $UPDATES $UPDATES.tmp
+
+UPDATES_TMP=$UPDATES.tmp
+rm -rf $UPDATES_TMP
+cp -a $UPDATES $UPDATES_TMP
 
 if [[ "$BUILD_TYPE" == release ]]; then
   echo "Releasing $DROP/products"
   mkdir $DROP/products
-  cp -a $PRODUCTS.tmp/* $DROP/products
+  cp -a $PRODUCTS_TMP/* $DROP/products
   $BASH $SCRIPTS/adjustArtifactRepository.sh \
     $DROP/products/repository \
     $DROP/products/repository \
@@ -184,7 +190,7 @@ if [[ "$BUILD_TYPE" == release ]]; then
 
   echo "Releasing $DROP/help"
   mkdir $DROP/help
-  cp -a $HELP.tmp/* $DROP/help
+  cp -a $HELP_TMP/* $DROP/help
 fi
 
 $BASH $SCRIPTS/composeRepositories.sh \
@@ -193,15 +199,15 @@ $BASH $SCRIPTS/composeRepositories.sh \
   "$BUILD_KEY" \
   "$BUILD_LABEL"
 
-mkdir -p $UPDATES.tmp/$BUILD_TYPE/latest
-cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES.tmp/$BUILD_TYPE/latest
+mkdir -p $UPDATES_TMP/$BUILD_TYPE/latest
+cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES_TMP/$BUILD_TYPE/latest
 
-mkdir -p $UPDATES.tmp/latest
-cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES.tmp/latest
+mkdir -p $UPDATES_TMP/latest
+cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES_TMP/latest
 
-mv $UPDATES $UPDATES.bak; mv $UPDATES.tmp $UPDATES
-mv $PRODUCTS $PRODUCTS.bak; mv $PRODUCTS.tmp $PRODUCTS
-mv $HELP $HELP.bak; mv $HELP.tmp $HELP
+mv $UPDATES $UPDATES.bak; mv $UPDATES_TMP $UPDATES
+mv $PRODUCTS $PRODUCTS.bak; mv $PRODUCTS_TMP $PRODUCTS
+mv $HELP $HELP.bak; mv $HELP_TMP $HELP
 
 cd $WORKSPACE
 rm -rf $UPDATES.bak
