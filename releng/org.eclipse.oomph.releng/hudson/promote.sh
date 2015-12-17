@@ -96,6 +96,10 @@ mkdir -p $DROP_TYPE
 
 cp -a $PROPERTIES $BUILDS/$BUILD_NUMBER.properties
 
+PRODUCTS_TMP=$PRODUCTS.tmp
+HELP_TMP=$HELP.tmp
+UPDATES_TMP=$UPDATES.tmp
+
 ###################
 # DOWNLOADS/DROPS #
 ###################
@@ -115,8 +119,6 @@ $BASH $SCRIPTS/adjustArtifactRepository.sh \
 ######################
 
 cd $WORKSPACE
-
-PRODUCTS_TMP=$PRODUCTS.tmp
 rm -rf $PRODUCTS_TMP
 mkdir $PRODUCTS_TMP
 mkdir $PRODUCTS_TMP/latest
@@ -162,8 +164,6 @@ fi
 
 echo "Promoting $WORKSPACE/help"
 cd $WORKSPACE
-
-HELP_TMP=$HELP.tmp
 rm -rf $HELP_TMP
 mkdir $HELP_TMP
 cp -a $WORKSPACE/help/* $HELP_TMP
@@ -173,8 +173,6 @@ cp -a $WORKSPACE/help/* $HELP_TMP
 #####################
 
 cd $WORKSPACE
-
-UPDATES_TMP=$UPDATES.tmp
 rm -rf $UPDATES_TMP
 cp -a $UPDATES $UPDATES_TMP
 
