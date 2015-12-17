@@ -20,7 +20,7 @@
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Duser.home"
-      value="=${installation.location/home}"
+      value="=${installation.location/home|canonical}"
       vm="true"/>
   <setupTask
       xsi:type="setup:EclipseIniTask"
