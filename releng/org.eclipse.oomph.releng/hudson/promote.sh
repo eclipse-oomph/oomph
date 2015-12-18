@@ -96,17 +96,9 @@ mkdir -p $DROP_TYPE
 
 cp -a $PROPERTIES $BUILDS/$BUILD_NUMBER.properties
 
-#PRODUCTS_TMP=$PRODUCTS.tmp
-#HELP_TMP=$HELP.tmp
-#UPDATES_TMP=$UPDATES.tmp
-
-TMP_FOLDER=$BUILDS/tmp
-rm -rf $TMP_FOLDER
-mkdir $TMP_FOLDER
-
-PRODUCTS_TMP=$TMP_FOLDER/products.tmp
-HELP_TMP=$TMP_FOLDER/help.tmp
-UPDATES_TMP=$TMP_FOLDER/updates.tmp
+PRODUCTS_TMP=$PRODUCTS.tmp
+HELP_TMP=$HELP.tmp
+UPDATES_TMP=$UPDATES.tmp
 
 ###################
 # DOWNLOADS/DROPS #
@@ -211,14 +203,14 @@ cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES_TMP/$BUILD_TYPE/latest
 mkdir -p $UPDATES_TMP/latest
 cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES_TMP/latest
 
-#mv $UPDATES $UPDATES.bak; mv $UPDATES_TMP $UPDATES
-#mv $PRODUCTS $PRODUCTS.bak; mv $PRODUCTS_TMP $PRODUCTS
-#mv $HELP $HELP.bak; mv $HELP_TMP $HELP
+mv $UPDATES $UPDATES.bak; mv $UPDATES_TMP $UPDATES
+mv $PRODUCTS $PRODUCTS.bak; mv $PRODUCTS_TMP $PRODUCTS
+mv $HELP $HELP.bak; mv $HELP_TMP $HELP
 
-#cd $WORKSPACE
-#rm -rf $UPDATES.bak
-#rm -rf $PRODUCTS.bak
-#rm -rf $HELP.bak
+cd $WORKSPACE
+rm -rf $UPDATES.bak
+rm -rf $PRODUCTS.bak
+rm -rf $HELP.bak
 
 cd $WORKSPACE
 for t in nightly milestone; do
