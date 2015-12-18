@@ -25,7 +25,7 @@
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Dorg.eclipse.userstorage.staging"
-      value="=true"
+      value="=false"
       vm="true"/>
   <setupTask
       xsi:type="setup:EclipseIniTask"
