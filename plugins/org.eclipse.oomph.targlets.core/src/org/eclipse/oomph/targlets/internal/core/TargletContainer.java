@@ -62,6 +62,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.equinox.internal.p2.engine.DownloadManager;
 import org.eclipse.equinox.internal.p2.engine.InstallableUnitOperand;
 import org.eclipse.equinox.internal.p2.engine.InstallableUnitPhase;
@@ -726,6 +728,10 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     CacheUsageConfirmer cacheUsageConfirmer = TargletsCorePlugin.INSTANCE.getCacheUsageConfirmer();
     CacheUsageConfirmer oldCacheUsageConfirmer = (CacheUsageConfirmer)provisioningAgent.getService(CacheUsageConfirmer.SERVICE_NAME);
 
+    IEclipsePreferences garbageCollectorPreferences = ConfigurationScope.INSTANCE.getNode("org.eclipse.equinox.p2.garbagecollector");
+    String oldGCEnabled = garbageCollectorPreferences.get("gc_enabled", null);
+    garbageCollectorPreferences.putBoolean("gc_enabled", false);
+
     try
     {
       if (cacheUsageConfirmer != null)
@@ -777,6 +783,15 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     }
     finally
     {
+      if (oldGCEnabled == null)
+      {
+        garbageCollectorPreferences.remove("gc_enabled");
+      }
+      else
+      {
+        garbageCollectorPreferences.put("gc_enabled", oldGCEnabled);
+      }
+
       if (cacheUsageConfirmer != null && oldCacheUsageConfirmer != null)
       {
         provisioningAgent.registerService(CacheUsageConfirmer.SERVICE_NAME, oldCacheUsageConfirmer);

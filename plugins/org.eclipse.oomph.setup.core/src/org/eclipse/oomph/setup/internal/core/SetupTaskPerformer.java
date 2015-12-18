@@ -2901,6 +2901,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           }
         }
       }
+
+      File garbageCollectorPreferences = new File(productConfigurationLocation, ".settings/org.eclipse.equinox.p2.garbagecollector.prefs");
+      IOUtil.writeLines(garbageCollectorPreferences, "8859_1", Arrays.asList(new String[] { "eclipse.preferences.version=1", "gc_enabled=false" }));
     }
 
     monitor.worked(1);
