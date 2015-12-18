@@ -54,7 +54,7 @@ public class StringExpanderTests extends AbstractTest
   @Test
   public void testVariableSlashSlash() throws Exception
   {
-    assertThat(expander.expandString("START${windows.path//}END"), is("STARTC:\\develop\\java-latest\\\\END"));
+    assertThat(expander.expandString("START${windows.path//}END"), is("STARTC:\\develop\\java-latest\\END"));
   }
 
   @Test

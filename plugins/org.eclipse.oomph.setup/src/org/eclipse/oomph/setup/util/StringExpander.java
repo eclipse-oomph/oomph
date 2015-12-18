@@ -146,7 +146,12 @@ public abstract class StringExpander
               }
               else
               {
-                value += getFileSeparator() + extension.name;
+                if (!value.endsWith("/") && !value.endsWith("\\"))
+                {
+                  value += getFileSeparator();
+                }
+
+                value += extension.name;
               }
             }
           }
