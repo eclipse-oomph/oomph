@@ -118,14 +118,16 @@ public class ProductCatalogGenerator implements IApplication
   private static final Map<String, String> ICONS = new HashMap<String, String>();
 
   private static final List<String> PRODUCT_IDS = Arrays.asList(new String[] { "epp.package.java", "epp.package.jee", "epp.package.cpp", "epp.package.php",
-      "epp.package.committers", "epp.package.dsl", "epp.package.reporting", "epp.package.modeling", "epp.package.rcp", "epp.package.testing",
-      "epp.package.parallel", "epp.package.automotive", "epp.package.scout", "org.eclipse.platform.ide" });
+      "epp.package.committers", "epp.package.dsl", "epp.package.reporting", "epp.package.modeling", "epp.package.android", "epp.package.rcp",
+      "epp.package.testing", "epp.package.parallel", "epp.package.automotive", "epp.package.scout", "org.eclipse.platform.ide" });
 
   private static final Set<String> EXCLUDED_IDS = new HashSet<String>(Arrays.asList("epp.package.mobile"));
 
   private URI outputLocation;
 
   private String stagingTrain;
+
+  private boolean stagingEPPLocationIsActual;
 
   private URI stagingEPPLocation;
 
@@ -224,6 +226,10 @@ public class ProductCatalogGenerator implements IApplication
           stagingEPPLocation = URI.createURI(arguments[++i]);
           stagingTrainLocation = URI.createURI(arguments[++i]);
         }
+        else if ("-actual".equals(option))
+        {
+          stagingEPPLocationIsActual = true;
+        }
       }
     }
 
@@ -232,6 +238,7 @@ public class ProductCatalogGenerator implements IApplication
     ICONS.put("automotive", ICON_URL_PREFIX + "classic.jpg");
     ICONS.put("standard", ICON_URL_PREFIX + "committers.png");
     ICONS.put("committers", ICON_URL_PREFIX + "committers.png");
+    ICONS.put("android", ICON_URL_PREFIX + "committers.png");
     ICONS.put("dsl", ICON_URL_PREFIX + "dsl-package_42.png");
     ICONS.put("java", ICON_URL_PREFIX + "java.png");
     ICONS.put("jee", ICON_URL_PREFIX + "javaee.png");
@@ -543,6 +550,11 @@ public class ProductCatalogGenerator implements IApplication
             // Ignore;
           }
         }
+      }
+      else if (isStaging && stagingEPPLocationIsActual)
+      {
+        eppURI = stagingEPPLocation;
+        log.append(" -> ").append(stagingEPPLocation);
       }
 
       log.append('\n');
@@ -1153,6 +1165,10 @@ public class ProductCatalogGenerator implements IApplication
     {
       return "Platform";
     }
+    else if (productLabel.contains("Android"))
+    {
+      return "Android";
+    }
 
     throw new RuntimeException("No key for " + productLabel);
   }
@@ -1368,7 +1384,7 @@ public class ProductCatalogGenerator implements IApplication
       URL packagesURL = new URL(PACKAGES_URI.toString());
       packages = packagesURL.openStream();
       List<String> lines = IOUtil.readLines(packages, "UTF-8");
-      Pattern pattern = Pattern.compile("<a href=\"([^\"]+)\"><span>([\\w]+)</span> Packages</a></span>");
+      Pattern pattern = Pattern.compile("<a href=\"([^\"]+)\"[^>]*><span>([\\w]+)</span> Packages</a></span>");
       PackageLocationLoader packageLocationLoader = new PackageLocationLoader(this);
       Set<URI> locations = new LinkedHashSet<URI>();
       for (String line : lines)
@@ -1379,10 +1395,10 @@ public class ProductCatalogGenerator implements IApplication
           URI siteURI = URI.createURI(matcher.group(1));
           String releaseName = matcher.group(2);
           System.out.println(releaseName + " -> " + siteURI);
-          Map<URI, Map<String, URI>> foo = new LinkedHashMap<URI, Map<String, URI>>();
-          Map<String, URI> bar = new LinkedHashMap<String, URI>();
-          foo.put(siteURI, bar);
-          sites.put(releaseName.toLowerCase(), foo);
+          Map<URI, Map<String, URI>> releaseLocations = new LinkedHashMap<URI, Map<String, URI>>();
+          Map<String, URI> packageLocations = new LinkedHashMap<String, URI>();
+          releaseLocations.put(siteURI, packageLocations);
+          sites.put(releaseName.toLowerCase(), releaseLocations);
           locations.add(siteURI);
         }
       }
