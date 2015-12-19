@@ -623,7 +623,7 @@ public class SetupContext
         }
       }
 
-      if (productCatalog == null)
+      if (productCatalog == null || productCatalog.getProducts().isEmpty() || productCatalog.getProducts().get(0).getVersions().isEmpty())
       {
         Resource selfProductCatalogResource = BaseUtil.loadResourceSafely(resourceSet, URI.createURI("catalog:/self-product-catalog.setup"));
         productCatalog = (ProductCatalog)EcoreUtil.getObjectByType(selfProductCatalogResource.getContents(), SetupPackage.Literals.PRODUCT_CATALOG);
