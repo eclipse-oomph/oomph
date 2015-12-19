@@ -322,6 +322,11 @@ public class TextModifyTaskImpl extends SetupTaskImpl implements TextModifyTask
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
+    if (getURL() == null)
+    {
+      return false;
+    }
+
     try
     {
       String text = getText(context);
