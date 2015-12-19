@@ -139,7 +139,7 @@ public class DigestValidator extends VersionValidator
   public DigestValidatorState validateFull(IResource resource, DigestValidatorState parentState, IModel componentModel, IProgressMonitor monitor)
       throws Exception
   {
-    if (resource.getType() != IResource.PROJECT && !isConsidered(resource))
+    if (resource.getType() != IResource.PROJECT && (!isConsidered(resource) || !resource.exists()))
     {
       return null;
     }
