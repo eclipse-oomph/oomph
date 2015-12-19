@@ -17,7 +17,9 @@ import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.equinox.internal.p2.artifact.repository.Activator;
 import org.eclipse.equinox.internal.p2.artifact.repository.ArtifactRepositoryManager;
+import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager;
 import org.eclipse.equinox.internal.p2.repository.Transport;
 import org.eclipse.equinox.internal.p2.repository.helpers.AbstractRepositoryManager;
@@ -435,6 +437,8 @@ public class CachingRepositoryManager<T>
    */
   public static class Artifact extends ArtifactRepositoryManager
   {
+    private static final String GLOBAL_MAX_THREADS = Activator.getContext().getProperty(SimpleArtifactRepository.PROP_MAX_THREADS);
+
     private final CachingRepositoryManager<IArtifactKey> loader;
 
     public Artifact(IProvisioningAgent agent, CachingTransport transport)
@@ -446,7 +450,22 @@ public class CachingRepositoryManager<T>
     @Override
     protected IRepository<IArtifactKey> loadRepository(URI location, IProgressMonitor monitor, String type, int flags) throws ProvisionException
     {
-      return loader.loadRepository(location, monitor, type, flags);
+      IRepository<IArtifactKey> result = loader.loadRepository(location, monitor, type, flags);
+
+      // Because of the poor implementation in org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository.getMaximumThreads()
+      // which as reported in https://bugs.eclipse.org/bugs/show_bug.cgi?id=471861 but is not yet fixed,
+      // we work the around the problem by setting the global PROP_MAX_THREADS into the repository properties.
+      if (GLOBAL_MAX_THREADS != null && !result.isModifiable() && result instanceof SimpleArtifactRepository)
+      {
+        Map<String, String> properties = ReflectUtil.getValue("properties", result);
+        String respositoryMaxThreads = properties.get(SimpleArtifactRepository.PROP_MAX_THREADS);
+        if (respositoryMaxThreads == null)
+        {
+          properties.put(SimpleArtifactRepository.PROP_MAX_THREADS, GLOBAL_MAX_THREADS);
+        }
+      }
+
+      return result;
     }
 
     @Override
