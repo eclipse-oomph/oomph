@@ -1933,7 +1933,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     public void setLabel(String label)
     {
-      this.label = label;
+      this.label = StringUtil.safe(label);
     }
 
     public Item[] getChildren()
