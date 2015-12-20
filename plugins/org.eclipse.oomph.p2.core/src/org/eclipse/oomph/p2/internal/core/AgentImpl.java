@@ -112,6 +112,11 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       @Override
       protected Profile createElement(String profileID, String extraInfo)
       {
+        if (extraInfo == null)
+        {
+          return new ProfileImpl(AgentImpl.this, null, profileID, null, null, null);
+        }
+
         List<String> tokens = StringUtil.explode(extraInfo, "|");
         int size = tokens.size();
 
