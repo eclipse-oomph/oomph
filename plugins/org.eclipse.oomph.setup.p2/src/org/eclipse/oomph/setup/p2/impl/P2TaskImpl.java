@@ -708,10 +708,11 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     CacheUsageConfirmer cacheUsageConfirmer = (CacheUsageConfirmer)context.get(CacheUsageConfirmer.class);
     CacheUsageConfirmer oldCacheUsageConfirmer = (CacheUsageConfirmer)provisioningAgent.getService(CacheUsageConfirmer.SERVICE_NAME);
 
+    IProvisioningEventBus eventBus = null;
     ProvisioningListener provisioningListener = (ProvisioningListener)context.get(ProvisioningListener.class);
     if (provisioningListener != null)
     {
-      IProvisioningEventBus eventBus = (IProvisioningEventBus)provisioningAgent.getService(IProvisioningEventBus.SERVICE_NAME);
+      eventBus = (IProvisioningEventBus)provisioningAgent.getService(IProvisioningEventBus.SERVICE_NAME);
       if (eventBus != null)
       {
         eventBus.addListener(provisioningListener);
@@ -744,6 +745,11 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
     finally
     {
+      if (eventBus != null)
+      {
+        eventBus.removeListener(provisioningListener);
+      }
+
       if (cacheUsageConfirmer != null)
       {
         provisioningAgent.unregisterService(CacheUsageConfirmer.SERVICE_NAME, cacheUsageConfirmer);
