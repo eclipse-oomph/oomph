@@ -91,7 +91,7 @@ public final class ArtifactRepositoryAdjuster
           boolean mirrored = !"nightly".equals(buildType);
           if (mirrored)
           {
-            String mirrorsURL = "http://www.eclipse.org/downloads/download.php?file=/" + relativePath + "&amp;format=xml";
+            String mirrorsURL = "http://www.eclipse.org/downloads/download.php?file=/" + relativePath;
             System.out.println("  p2.mirrorsURL = " + mirrorsURL);
             properties.put("p2.mirrorsURL", mirrorsURL);
           }
