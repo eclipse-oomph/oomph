@@ -60,14 +60,14 @@ for f in *.zip; do
   fi
 
   if [[ $f == *macosx* ]]; then
-    #if [[ "$PACK_AND_SIGN" == true ]]; then
-    #  echo "  Signing Eclipse Installer.app"
-    #  zip -r -q unsigned.zip "Eclipse Installer.app"
-    #  rm -rf "Eclipse Installer.app"
-    #  curl -o signed.zip -F file=@unsigned.zip http://build.eclipse.org:31338/macsign.php
-    #  unzip -qq signed.zip
-    #  rm -f unsigned.zip signed.zip
-    #fi
+    if [[ "$PACK_AND_SIGN" == true ]]; then
+      echo "  Signing Eclipse Installer.app"
+      zip -r -q unsigned.zip "Eclipse Installer.app"
+      rm -rf "Eclipse Installer.app"
+      curl -o signed.zip -F file=@unsigned.zip http://build.eclipse.org:31338/macsign.php
+      unzip -qq signed.zip
+      rm -f unsigned.zip signed.zip
+    fi
 
     chmod a+x "Eclipse Installer.app/Contents/MacOS/eclipse-inst"
     tar -czf $PRODUCTS/eclipse-inst-mac$bitness.tar.gz "Eclipse Installer.app"
