@@ -48,7 +48,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -67,7 +67,7 @@
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -112,7 +112,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -131,7 +131,7 @@
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -287,7 +287,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/M4A</value>
         </detail>
       </annotation>
       <setupTask
@@ -309,7 +309,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -357,7 +357,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/M4A</value>
         </detail>
       </annotation>
       <setupTask
@@ -379,7 +379,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -547,7 +547,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -563,7 +563,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -605,7 +605,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -621,7 +621,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -765,7 +765,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -781,7 +781,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -823,7 +823,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -839,7 +839,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -914,7 +914,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -936,7 +936,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -984,7 +984,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -1006,7 +1006,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -1070,7 +1070,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -1092,7 +1092,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -1140,7 +1140,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -1162,7 +1162,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -1330,7 +1330,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -1352,7 +1352,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -1400,7 +1400,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -1422,7 +1422,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -1590,7 +1590,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -1612,7 +1612,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -1660,7 +1660,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -1682,7 +1682,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -1847,7 +1847,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/M4A</value>
         </detail>
       </annotation>
       <setupTask
@@ -1869,7 +1869,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -1882,7 +1882,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Neon/M3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/M4A</value>
         </detail>
       </annotation>
       <setupTask
@@ -1904,7 +1904,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -1928,7 +1928,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -1950,7 +1950,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -1998,7 +1998,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2020,7 +2020,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -2188,7 +2188,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2204,7 +2204,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -2246,7 +2246,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2262,7 +2262,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -2406,7 +2406,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2422,7 +2422,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -2464,7 +2464,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2480,7 +2480,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -2624,7 +2624,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-automotive-software-developers-includes-incubating-components/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-automotive-software-developers-includes-incubating-components/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2646,7 +2646,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -2694,7 +2694,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-automotive-software-developers-includes-incubating-components/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-automotive-software-developers-includes-incubating-components/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2716,7 +2716,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -2884,7 +2884,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2906,7 +2906,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -2954,7 +2954,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonm3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonm4a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2976,7 +2976,7 @@
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,3.13.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -3153,7 +3153,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
@@ -3211,7 +3211,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/neon/M4a"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201512181000"/>
       </setupTask>
