@@ -790,7 +790,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
           {
             // If we've just done a replace, we make sure that the next find will find something that can be replaced, i.e., a modifiable attribute.
             // Otherwise we make sure that the item is included by the search type.
-            if (findReplaceable ? !SearchType.MODIFIABLE_ATTRIBUTE.isIncluded(item) : !searchType.isIncluded(item))
+            if (findReplaceable ? !SearchType.MODIFIABLE_ATTRIBUTE.isIncluded(item) : searchType != null && !searchType.isIncluded(item))
             {
               continue;
             }
