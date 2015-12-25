@@ -341,6 +341,11 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
+    if (StringUtil.isEmpty(key))
+    {
+      return false;
+    }
+
     preferenceProperty = new PreferencesUtil.PreferenceProperty(key);
 
     String oldValue = preferenceProperty.getEffectiveProperty().get(null);
