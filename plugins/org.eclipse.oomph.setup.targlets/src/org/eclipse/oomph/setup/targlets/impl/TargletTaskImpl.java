@@ -997,14 +997,21 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     });
   }
 
-  private ITargetDefinition getTargetDefinition(ITargetPlatformService service, IProgressMonitor monitor) throws CoreException
+  private ITargetDefinition getTargetDefinition(ITargetPlatformService service, IProgressMonitor monitor)
   {
     for (ITargetHandle targetHandle : service.getTargets(monitor))
     {
-      ITargetDefinition targetDefinition = targetHandle.getTargetDefinition();
-      if (TARGET_DEFINITION_NAME.equals(targetDefinition.getName()))
+      try
       {
-        return targetDefinition;
+        ITargetDefinition targetDefinition = targetHandle.getTargetDefinition();
+        if (TARGET_DEFINITION_NAME.equals(targetDefinition.getName()))
+        {
+          return targetDefinition;
+        }
+      }
+      catch (CoreException ex)
+      {
+        // Ignore invalid handles.
       }
     }
 
