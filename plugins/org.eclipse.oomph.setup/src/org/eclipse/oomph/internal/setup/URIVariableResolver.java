@@ -23,6 +23,6 @@ public class URIVariableResolver implements IDynamicVariableResolver
 {
   public String resolveValue(IDynamicVariable variable, String file) throws CoreException
   {
-    return URI.createFileURI(file).toString();
+    return file == null ? null : URI.createFileURI(file).toString();
   }
 }
