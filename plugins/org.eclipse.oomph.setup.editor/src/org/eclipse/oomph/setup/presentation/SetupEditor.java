@@ -563,7 +563,7 @@ public class SetupEditor extends MultiPageEditorPart
    * This listens for workspace changes.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   protected IResourceChangeListener resourceChangeListener = new IResourceChangeListener()
   {
@@ -586,7 +586,26 @@ public class SetupEditor extends MultiPageEditorPart
             {
               if (delta.getKind() == IResourceDelta.REMOVED || delta.getKind() == IResourceDelta.CHANGED)
               {
-                final Resource resource = resourceSet.getResource(URI.createPlatformResourceURI(delta.getFullPath().toString(), true), false);
+                // If this is a *.ecore resource, it will be demand loaded regardless of demandLoad == false.
+                EList<Resource> resources = resourceSet.getResources();
+                List<Resource> originalResources = new ArrayList<Resource>(resources);
+                Resource resource = null;
+                try
+                {
+                  resource = resourceSet.getResource(URI.createPlatformResourceURI(delta.getFullPath().toString(), true), false);
+                }
+                catch (RuntimeException ex)
+                {
+                  // Ignore.
+                }
+
+                // If something was demand loaded, remove it, or if it's not in the resource set because it loaded with failures,
+                // and proceed as if it weren't demand loaded.
+                if (resources.retainAll(originalResources) || !resources.contains(resource))
+                {
+                  resource = null;
+                }
+
                 if (resource != null)
                 {
                   if (delta.getKind() == IResourceDelta.REMOVED)
