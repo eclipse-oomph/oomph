@@ -348,7 +348,7 @@ public final class SetupEditorSupport
   {
     normalizedURI = SetupContext.resolveUser(normalizedURI);
 
-    if (normalizedURI.isFile())
+    if (normalizedURI.isFile() && !normalizedURI.isRelative())
     {
       FileEditorInput editorInput = getFileEditorInput(normalizedURI);
       if (editorInput != null)
@@ -371,7 +371,7 @@ public final class SetupEditorSupport
 
   private static FileEditorInput getFileEditorInput(URI uri)
   {
-    if (uri.isFile())
+    if (uri.isFile() && !uri.isRelative())
     {
       try
       {
