@@ -125,16 +125,24 @@ public class AttributeRuleItemProvider extends ModelElementItemProvider
   public String getText(Object object)
   {
     AttributeRule attributeRule = (AttributeRule)object;
+    String name = null;
     URI attributeURI = attributeRule.getAttributeURI();
-    String name = attributeURI.fragment().substring(2).replace('/', '.');
-    String value = attributeRule.getValue();
+    if (attributeURI != null)
+    {
+      name = attributeURI.fragment();
+      if (name != null && name.startsWith("//"))
+      {
+        name = name.substring(2).replace('/', '.');
+      }
+    }
 
     if (StringUtil.isEmpty(name))
     {
       return getString("_UI_AttributeRule_type");
     }
 
-    String label = "" + name;
+    String label = name;
+    String value = attributeRule.getValue();
     if (value != null)
     {
       if (value.length() == 0)
