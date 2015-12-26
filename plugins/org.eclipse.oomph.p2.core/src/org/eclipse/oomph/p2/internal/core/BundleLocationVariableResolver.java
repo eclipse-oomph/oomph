@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.util.StringUtil;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
@@ -28,20 +30,23 @@ public class BundleLocationVariableResolver implements IDynamicVariableResolver
 {
   public String resolveValue(IDynamicVariable variable, String symbolicName) throws CoreException
   {
-    Bundle bundle = Platform.getBundle(symbolicName);
-    if (bundle != null)
+    if (!StringUtil.isEmpty(symbolicName))
     {
-      try
+      Bundle bundle = Platform.getBundle(symbolicName);
+      if (bundle != null)
       {
-        File bundleFile = FileLocator.getBundleFile(bundle);
-        if (bundleFile != null)
+        try
         {
-          return bundleFile.getAbsolutePath();
+          File bundleFile = FileLocator.getBundleFile(bundle);
+          if (bundleFile != null)
+          {
+            return bundleFile.getAbsolutePath();
+          }
         }
-      }
-      catch (IOException ex)
-      {
-        P2CorePlugin.INSTANCE.coreException(ex);
+        catch (IOException ex)
+        {
+          P2CorePlugin.INSTANCE.coreException(ex);
+        }
       }
     }
 
