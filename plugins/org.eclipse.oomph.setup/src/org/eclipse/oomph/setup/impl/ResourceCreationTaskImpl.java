@@ -334,7 +334,7 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     URI targetURI = createResolvedURI(getTargetURL());
-    return !context.getURIConverter().exists(targetURI, null);
+    return targetURI != null && !context.getURIConverter().exists(targetURI, null);
   }
 
   public void perform(SetupTaskContext context) throws Exception
