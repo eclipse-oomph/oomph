@@ -446,18 +446,21 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
       private void selectFirstLeaf(CategoryItem category)
       {
-        Item[] children = category.getChildren();
-        if (children != null && children.length != 0)
+        if (category != null)
         {
-          Item firstChild = children[0];
-          if (firstChild instanceof CategoryItem)
+          Item[] children = category.getChildren();
+          if (children != null && children.length != 0)
           {
-            CategoryItem firstCategory = (CategoryItem)firstChild;
-            selectFirstLeaf(firstCategory);
-          }
-          else
-          {
-            itemsViewer.setSelection(new StructuredSelection(firstChild));
+            Item firstChild = children[0];
+            if (firstChild instanceof CategoryItem)
+            {
+              CategoryItem firstCategory = (CategoryItem)firstChild;
+              selectFirstLeaf(firstCategory);
+            }
+            else
+            {
+              itemsViewer.setSelection(new StructuredSelection(firstChild));
+            }
           }
         }
       }
