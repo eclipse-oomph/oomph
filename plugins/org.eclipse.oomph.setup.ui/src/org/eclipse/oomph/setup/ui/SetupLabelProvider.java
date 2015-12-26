@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.ComposedImage;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.Viewer;
@@ -36,7 +37,6 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -121,7 +121,7 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
       key = images.get(0);
     }
 
-    return ImageDescriptor.createFromURL((URL)key);
+    return ExtendedImageRegistry.INSTANCE.getImageDescriptor(key);
   }
 
   public static String getText(ItemProviderAdapter itemProvider, EObject object)
