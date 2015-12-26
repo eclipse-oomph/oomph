@@ -125,6 +125,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -2720,9 +2721,11 @@ public class SetupEditor extends MultiPageEditorPart
     updateProblemIndication = false;
     try
     {
+      ISchedulingRule currentRule = Job.getJobManager().currentRule();
+
       // This runs the options, and shows progress.
       //
-      new ProgressMonitorDialog(getSite().getShell()).run(true, false, operation);
+      new ProgressMonitorDialog(getSite().getShell()).run(currentRule == null, false, operation);
 
       // Refresh the necessary state.
       //
