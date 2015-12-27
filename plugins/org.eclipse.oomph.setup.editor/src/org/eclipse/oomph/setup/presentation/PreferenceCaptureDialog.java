@@ -175,7 +175,10 @@ public class PreferenceCaptureDialog extends Dialog
           FileDialog dialog = new FileDialog(getShell(), SWT.OPEN | SWT.MULTI);
           dialog.setFilterExtensions(new String[] { "*.epf" });
           String result = dialog.open();
-          finalPreferenceFileText.setText(result);
+          if (result != null)
+          {
+            finalPreferenceFileText.setText(result);
+          }
         }
       });
     }
