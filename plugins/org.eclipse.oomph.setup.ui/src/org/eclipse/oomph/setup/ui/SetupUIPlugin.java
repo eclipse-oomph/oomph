@@ -287,7 +287,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
         URIConverter uriConverter = resourceSet.getURIConverter();
         for (URI uri : new URI[] { SetupContext.INSTALLATION_SETUP_URI, SetupContext.WORKSPACE_SETUP_URI, SetupContext.USER_SETUP_URI })
         {
-          if (uriConverter.exists(uri, null))
+          if (uri != null && uriConverter.exists(uri, null))
           {
             uris.add(uri);
           }
