@@ -1210,7 +1210,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     for (org.eclipse.pde.internal.core.ifeature.IFeatureModel featureModel : featureModels)
     {
       IResource resource = featureModel.getUnderlyingResource();
-      if (resource != null && featureModel.getFeature().getId().equals(name))
+      if (resource != null && name.equals(featureModel.getFeature().getId()))
       {
         return resource.getProject();
       }
