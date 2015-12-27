@@ -625,7 +625,11 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
       if (selection != null && !selection.isEmpty())
       {
         IPropertySheetEntry entry = (IPropertySheetEntry)selection.getFirstElement();
-        setClipboard(entry.getValueAsString());
+        String value = entry.getValueAsString();
+        if (value != null)
+        {
+          setClipboard(value);
+        }
       }
     }
 
