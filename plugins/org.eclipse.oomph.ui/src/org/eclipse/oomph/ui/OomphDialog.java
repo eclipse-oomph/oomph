@@ -320,7 +320,7 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
 
         if (HISTORY.compareAndSetProperty(key, value))
         {
-          UIUtil.asyncExec(new Runnable()
+          UIUtil.asyncExec(dialog.getShell(), new Runnable()
           {
             public void run()
             {
