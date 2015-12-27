@@ -125,7 +125,7 @@ public class PropertiesViewer extends TableViewer
     };
 
     table.addControlListener(columnResizer);
-    table.getDisplay().asyncExec(new Runnable()
+    UIUtil.asyncExec(table, new Runnable()
     {
       public void run()
       {
@@ -155,15 +155,11 @@ public class PropertiesViewer extends TableViewer
 
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
-      final Control control = viewer.getControl();
-      control.getDisplay().asyncExec(new Runnable()
+      UIUtil.asyncExec(viewer.getControl(), new Runnable()
       {
         public void run()
         {
-          if (!control.isDisposed())
-          {
-            columnResizer.controlResized(null);
-          }
+          columnResizer.controlResized(null);
         }
       });
     }
