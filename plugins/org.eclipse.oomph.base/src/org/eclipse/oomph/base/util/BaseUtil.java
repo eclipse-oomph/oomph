@@ -38,9 +38,11 @@ import org.eclipse.core.runtime.IStatus;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.channels.FileLock;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -240,16 +242,17 @@ public final class BaseUtil
   {
     // Create URIs for the locking the given URIs.
     // Each will be in the same folder
-    URI[] locks = new URI[uris.length];
+    URI[] lockLocations = new URI[uris.length];
     for (int i = 0; i < uris.length; ++i)
     {
       URI uri = uris[i];
       if (uri != null)
       {
-        locks[i] = uri.trimSegments(1).appendSegment(".lock-" + uri.lastSegment() + ".tmp");
+        lockLocations[i] = uri.trimSegments(1).appendSegment(uri.lastSegment() + ".lock");
       }
     }
 
+    FileLock[] fileLocks = new FileLock[uris.length];
     for (long start = System.currentTimeMillis(); System.currentTimeMillis() - start < timeout;)
     {
       OutputStream[] outputStreams = new OutputStream[uris.length];
@@ -258,10 +261,15 @@ public final class BaseUtil
         // Try to acquire the lock for each URI, i.e., create an output stream for each lock URI.
         for (int i = 0; i < uris.length; ++i)
         {
-          URI uri = locks[i];
+          URI uri = lockLocations[i];
           if (uri != null)
           {
             outputStreams[i] = uriConverter.createOutputStream(uri);
+            if (outputStreams[i] instanceof FileOutputStream)
+            {
+              FileOutputStream fileOutputStream = (FileOutputStream)outputStreams[i];
+              fileLocks[i] = fileOutputStream.getChannel().tryLock();
+            }
           }
         }
 
@@ -294,7 +302,7 @@ public final class BaseUtil
             {
               outputStream.close();
             }
-            catch (IOException ex)
+            catch (Throwable throwable)
             {
               // We don't expect this ever to happen, but if it does, we ignore it.
               // Ignore.
@@ -303,12 +311,26 @@ public final class BaseUtil
             // Try to delete the lock file.
             try
             {
-              uriConverter.delete(locks[i], null);
+              uriConverter.delete(lockLocations[i], null);
             }
-            catch (IOException ex)
+            catch (Throwable throwable)
             {
               // It's possible for this to fail because some other process has already acquired the lock, i.e., opened an output stream.
               // In this case, the other process will delete the file when its done, or perhaps has already deleted it.
+            }
+
+            FileLock fileLock = fileLocks[i];
+            if (fileLock != null)
+            {
+              try
+              {
+                fileLock.release();
+              }
+              catch (Throwable throwable)
+              {
+                // We don't expect this ever to happen, but if it does, we ignore it.
+                // Ignore.
+              }
             }
           }
         }

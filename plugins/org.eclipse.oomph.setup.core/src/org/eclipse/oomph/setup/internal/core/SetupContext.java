@@ -47,6 +47,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.service.datalocation.Location;
 
@@ -353,16 +354,23 @@ public class SetupContext
 
   public static void associate(final Installation installation, final Workspace workspace)
   {
-    final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
-    URIConverter uriConverter = resourceSet.getURIConverter();
-    BaseUtil.execute(5000, new Runnable()
+    try
     {
-      public void run()
+      final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
+      URIConverter uriConverter = resourceSet.getURIConverter();
+      BaseUtil.execute(5000, new Runnable()
       {
-        associate(resourceSet, installation, workspace);
-      }
-    }, uriConverter, LOCATION_CATALOG_SETUP_URI, installation == null ? null : installation.eResource().getURI(),
-        workspace == null ? null : workspace.eResource().getURI());
+        public void run()
+        {
+          associate(resourceSet, installation, workspace);
+        }
+      }, uriConverter, LOCATION_CATALOG_SETUP_URI, installation == null ? null : installation.eResource().getURI(),
+          workspace == null ? null : workspace.eResource().getURI());
+    }
+    catch (Throwable throwable)
+    {
+      SetupCorePlugin.INSTANCE.log(throwable, IStatus.WARNING);
+    }
   }
 
   private static void associate(ResourceSet resourceSet, Installation installation, Workspace workspace)
