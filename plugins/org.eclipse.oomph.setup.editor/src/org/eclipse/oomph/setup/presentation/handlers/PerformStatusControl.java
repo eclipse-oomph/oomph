@@ -138,10 +138,11 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
           {
             // If there is a status, reflect the feedback into the images.
             status = (IStatus)shell.getData(ProgressPage.PROGRESS_STATUS);
-            SetupPropertyTester.setPerformingStatus(status);
 
             if (status != null)
             {
+              SetupPropertyTester.setPerformingStatus(status);
+
               String statusImage;
               switch (status.getSeverity())
               {

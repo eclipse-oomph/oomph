@@ -204,6 +204,7 @@ public class SetupPropertyTester extends PropertyTester
       {
         public void widgetDisposed(DisposeEvent e)
         {
+          setPerformingStatus(null);
           setPerformingShell(null);
         }
       });
