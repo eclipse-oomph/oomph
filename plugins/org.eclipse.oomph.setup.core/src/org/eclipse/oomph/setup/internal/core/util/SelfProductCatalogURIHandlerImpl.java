@@ -24,6 +24,7 @@ import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.util.IOUtil;
@@ -36,6 +37,7 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
 
 import org.eclipse.core.runtime.IProduct;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IProfile;
@@ -180,47 +182,54 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
       P2Task selfP2Task = SetupP2Factory.eINSTANCE.createP2Task();
       selfProductVersion.getSetupTasks().add(selfP2Task);
 
-      IProvisioningAgent agent = P2Util.getCurrentProvisioningAgent();
-      IProfileRegistry profileRegistry = (IProfileRegistry)agent.getService(IProfileRegistry.class.getName());
-      IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
-      if (profile != null)
+      try
       {
-        EList<Requirement> requirements = selfP2Task.getRequirements();
-
-        IQueryResult<IInstallableUnit> query = profile.query(QueryUtil.createIUAnyQuery(), null);
-        for (IInstallableUnit iu : P2Util.asIterable(query))
+        IProvisioningAgent agent = P2Util.getCurrentProvisioningAgent();
+        IProfileRegistry profileRegistry = (IProfileRegistry)agent.getService(IProfileRegistry.class.getName());
+        IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
+        if (profile != null)
         {
-          if ("true".equals(profile.getInstallableUnitProperty(iu, IProfile.PROP_PROFILE_ROOT_IU)))
+          EList<Requirement> requirements = selfP2Task.getRequirements();
+
+          IQueryResult<IInstallableUnit> query = profile.query(QueryUtil.createIUAnyQuery(), null);
+          for (IInstallableUnit iu : P2Util.asIterable(query))
           {
-            Requirement requirement = P2Factory.eINSTANCE.createRequirement();
-
-            Version version = iu.getVersion();
-            if (version.isOSGiCompatible())
+            if ("true".equals(profile.getInstallableUnitProperty(iu, IProfile.PROP_PROFILE_ROOT_IU)))
             {
-              org.osgi.framework.Version osgiVersion = new org.osgi.framework.Version(version.toString());
-              int major = osgiVersion.getMajor();
-              int minor = osgiVersion.getMinor();
-              VersionRange versionRange = new VersionRange(Version.createOSGi(major, minor, 0), true, Version.createOSGi(major, minor + 1, 0), false);
-              requirement.setVersionRange(versionRange);
-            }
+              Requirement requirement = P2Factory.eINSTANCE.createRequirement();
 
-            requirement.setName(iu.getId());
-            requirement.setMatchExpression(iu.getFilter());
-            requirements.add(requirement);
+              Version version = iu.getVersion();
+              if (version.isOSGiCompatible())
+              {
+                org.osgi.framework.Version osgiVersion = new org.osgi.framework.Version(version.toString());
+                int major = osgiVersion.getMajor();
+                int minor = osgiVersion.getMinor();
+                VersionRange versionRange = new VersionRange(Version.createOSGi(major, minor, 0), true, Version.createOSGi(major, minor + 1, 0), false);
+                requirement.setVersionRange(versionRange);
+              }
+
+              requirement.setName(iu.getId());
+              requirement.setMatchExpression(iu.getFilter());
+              requirements.add(requirement);
+            }
+          }
+        }
+
+        IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager)agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
+        java.net.URI[] knownRepositories = metadataRepositoryManager.getKnownRepositories(IRepositoryManager.REPOSITORIES_NON_SYSTEM);
+        if (knownRepositories.length > 0)
+        {
+          EList<Repository> repositories = selfP2Task.getRepositories();
+          for (java.net.URI knownRepository : knownRepositories)
+          {
+            Repository repository = P2Factory.eINSTANCE.createRepository(knownRepository.toString());
+            repositories.add(repository);
           }
         }
       }
-
-      IMetadataRepositoryManager metadataRepositoryManager = (IMetadataRepositoryManager)agent.getService(IMetadataRepositoryManager.SERVICE_NAME);
-      java.net.URI[] knownRepositories = metadataRepositoryManager.getKnownRepositories(IRepositoryManager.REPOSITORIES_NON_SYSTEM);
-      if (knownRepositories.length > 0)
+      catch (Throwable throwable)
       {
-        EList<Repository> repositories = selfP2Task.getRepositories();
-        for (java.net.URI knownRepository : knownRepositories)
-        {
-          Repository repository = P2Factory.eINSTANCE.createRepository(knownRepository.toString());
-          repositories.add(repository);
-        }
+        SetupCorePlugin.INSTANCE.log(throwable, IStatus.WARNING);
       }
     }
 

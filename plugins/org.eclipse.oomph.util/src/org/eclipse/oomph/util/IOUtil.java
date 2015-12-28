@@ -96,7 +96,7 @@ public final class IOUtil
   {
     try
     {
-      return folder.isDirectory() && folder.getAbsoluteFile().equals(folder.getCanonicalFile());
+      return folder.isDirectory() && folder.getAbsoluteFile().equals(folder.getCanonicalFile()) && folder.listFiles() != null;
     }
     catch (IOException ex)
     {
