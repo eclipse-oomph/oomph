@@ -225,7 +225,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
   @Override
   protected String getShellText()
   {
-    return "Oomph " + getTitle(recorderTransaction);
+    return getTitle(recorderTransaction);
   }
 
   @Override

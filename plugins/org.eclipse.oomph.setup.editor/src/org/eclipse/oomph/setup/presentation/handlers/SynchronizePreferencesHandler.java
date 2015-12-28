@@ -10,9 +10,12 @@
  */
 package org.eclipse.oomph.setup.presentation.handlers;
 
+import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager.Impact;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
+
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Eike Stepper
@@ -26,10 +29,18 @@ public class SynchronizePreferencesHandler extends AbstractDropdownItemHandler
 
   public void run()
   {
-    Impact impact = SynchronizerManager.INSTANCE.performFullSynchronization();
-    if (impact != null && impact.hasLocalImpact())
+    Shell shell = SetupPropertyTester.getHandlingShell();
+    if (shell != null)
     {
-      SetupWizard.Updater.perform(false);
+      shell.setVisible(true);
+    }
+    else
+    {
+      Impact impact = SynchronizerManager.INSTANCE.performFullSynchronization();
+      if (impact != null && impact.hasLocalImpact())
+      {
+        SetupWizard.Updater.perform(false);
+      }
     }
   }
 }

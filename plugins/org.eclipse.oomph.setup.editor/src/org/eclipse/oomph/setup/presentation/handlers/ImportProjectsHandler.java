@@ -10,8 +10,11 @@
  */
 package org.eclipse.oomph.setup.presentation.handlers;
 
+import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.UIUtil;
+
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Eike Stepper
@@ -25,7 +28,15 @@ public class ImportProjectsHandler extends AbstractDropdownItemHandler
 
   public void run()
   {
-    SetupWizard wizard = new SetupWizard.Importer();
-    wizard.openDialog(UIUtil.getShell());
+    Shell shell = SetupPropertyTester.getHandlingShell();
+    if (shell != null)
+    {
+      shell.setVisible(true);
+    }
+    else
+    {
+      SetupWizard wizard = new SetupWizard.Importer();
+      wizard.openDialog(UIUtil.getShell());
+    }
   }
 }

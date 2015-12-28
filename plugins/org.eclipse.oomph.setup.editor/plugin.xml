@@ -114,72 +114,44 @@
             class="org.eclipse.oomph.setup.presentation.handlers.PerformDropdownHandler"
             commandId="org.eclipse.oomph.setup.editor.performDropdown">
          <enabledWhen>
-            <and>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.oomph.setup.ui.starting"
-                     value="false">
-               </test>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.oomph.setup.ui.handling"
-                     value="false">
-               </test>
-            </and>
+             <test
+                   forcePluginActivation="true"
+                   property="org.eclipse.oomph.setup.ui.starting"
+                   value="false">
+             </test>
          </enabledWhen>
       </handler>
       <handler
             class="org.eclipse.oomph.setup.presentation.handlers.PerformHandler"
             commandId="org.eclipse.oomph.setup.editor.perform">
          <enabledWhen>
-            <and>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.oomph.setup.ui.starting"
-                     value="false">
-               </test>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.oomph.setup.ui.handling"
-                     value="false">
-               </test>
-            </and>
+             <test
+                   forcePluginActivation="true"
+                   property="org.eclipse.oomph.setup.ui.starting"
+                   value="false">
+             </test>
          </enabledWhen>
       </handler>
       <handler
             class="org.eclipse.oomph.setup.presentation.handlers.PerformHandler$StartupPerformHandler"
             commandId="org.eclipse.oomph.setup.editor.perform.startup">
          <enabledWhen>
-            <and>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.oomph.setup.ui.starting"
-                     value="false">
-               </test>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.oomph.setup.ui.handling"
-                     value="false">
-               </test>
-            </and>
+             <test
+                   forcePluginActivation="true"
+                   property="org.eclipse.oomph.setup.ui.starting"
+                   value="false">
+             </test>
          </enabledWhen>
       </handler>
       <handler
             class="org.eclipse.oomph.setup.presentation.handlers.ImportProjectsHandler"
             commandId="org.eclipse.oomph.setup.editor.importProjects">
          <enabledWhen>
-            <and>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.oomph.setup.ui.starting"
-                     value="false">
-               </test>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.oomph.setup.ui.handling"
-                     value="false">
-               </test>
-            </and>
+             <test
+                   forcePluginActivation="true"
+                   property="org.eclipse.oomph.setup.ui.starting"
+                   value="false">
+             </test>
          </enabledWhen>
       </handler>
       <handler
@@ -199,11 +171,6 @@
                <test
                      forcePluginActivation="true"
                      property="org.eclipse.oomph.setup.ui.starting"
-                     value="false">
-               </test>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.oomph.setup.ui.handling"
                      value="false">
                </test>
             </and>

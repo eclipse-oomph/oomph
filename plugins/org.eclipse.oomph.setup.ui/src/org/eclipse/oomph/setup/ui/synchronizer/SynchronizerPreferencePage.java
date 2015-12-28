@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.ui.synchronizer;
 
+import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager.Impact;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
@@ -157,10 +158,18 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
             {
               try
               {
-                Impact impact = SynchronizerManager.INSTANCE.performFullSynchronization();
-                if (impact != null && impact.hasLocalImpact())
+                Shell shell = SetupPropertyTester.getHandlingShell();
+                if (shell != null)
                 {
-                  SetupWizard.Updater.perform(false);
+                  shell.setVisible(true);
+                }
+                else
+                {
+                  Impact impact = SynchronizerManager.INSTANCE.performFullSynchronization();
+                  if (impact != null && impact.hasLocalImpact())
+                  {
+                    SetupWizard.Updater.perform(false);
+                  }
                 }
               }
               catch (Throwable ex)

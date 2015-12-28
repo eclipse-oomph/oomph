@@ -11,8 +11,11 @@
 package org.eclipse.oomph.setup.presentation.handlers;
 
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
+import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
+
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Eike Stepper
@@ -29,13 +32,21 @@ public class PerformHandler extends AbstractDropdownItemHandler
 
   public void run()
   {
-    Synchronization synchronization = SynchronizerManager.INSTANCE.synchronize(true, false, false);
-    if (synchronization != null)
+    Shell shell = SetupPropertyTester.getHandlingShell();
+    if (shell != null)
     {
-      SynchronizerManager.INSTANCE.performSynchronization(synchronization, false, false);
+      shell.setVisible(true);
     }
+    else
+    {
+      Synchronization synchronization = SynchronizerManager.INSTANCE.synchronize(true, false, false);
+      if (synchronization != null)
+      {
+        SynchronizerManager.INSTANCE.performSynchronization(synchronization, false, false);
+      }
 
-    SetupWizard.Updater.perform(manual);
+      SetupWizard.Updater.perform(manual);
+    }
   }
 
   /**
