@@ -1807,46 +1807,42 @@ public class SimpleVariablePage extends SimpleInstallerPage
         {
           long now = System.currentTimeMillis();
           boolean slowArtifactDownload = !artifactURIs.isEmpty() && artifactURIs.equals(lastArtifactURIs);
-          if (lastWork == work || slowArtifactDownload)
+          if ((lastWork == work || slowArtifactDownload) && !isModalShellInForeground())
           {
             if (now >= reportWarningTimeout)
             {
-              if (!isModalShellInForeground())
+              if (slowArtifactDownload)
               {
-                if (slowArtifactDownload)
+                StringBuilder message = new StringBuilder();
+                Set<URI> hosts = new HashSet<URI>();
+                for (URI artifactURI : artifactURIs)
                 {
-                  StringBuilder message = new StringBuilder();
-                  Set<URI> hosts = new HashSet<URI>();
-                  for (URI artifactURI : artifactURIs)
+                  URI hostURI = URI.createHierarchicalURI(artifactURI.scheme(), artifactURI.authority(), null, null, null);
+                  if (hosts.add(hostURI))
                   {
-                    URI hostURI = URI.createHierarchicalURI(artifactURI.scheme(), artifactURI.authority(), null, null, null);
-                    if (hosts.add(hostURI))
+                    if (message.length() != 0)
                     {
-                      if (message.length() != 0)
-                      {
-                        message.append(", ");
-                      }
-
-                      message.append(hostURI);
+                      message.append(", ");
                     }
-                  }
 
-                  if (hosts.size() > 1)
-                  {
-                    message.insert(0, "the following hosts: ");
+                    message.append(hostURI);
                   }
-
-                  message.insert(0, "Artifact download is progressing very slowly from ");
-                  dialog.showMessage(message.toString().replace(' ', '\u00a0'), Type.WARNING, false);
                 }
-                else
+
+                if (hosts.size() > 1)
                 {
-                  dialog.showMessage(("The installation process is taking longer than usual: " + safeName).replace(' ', '\u00a0'), Type.WARNING, false);
+                  message.insert(0, "the following hosts: ");
                 }
 
-                installButton.setProgressAnimationSpeed(0.4f);
+                message.insert(0, "Artifact download is progressing very slowly from ");
+                dialog.showMessage(message.toString().replace(' ', '\u00a0'), Type.WARNING, false);
+              }
+              else
+              {
+                dialog.showMessage(("The installation process is taking longer than usual: " + safeName).replace(' ', '\u00a0'), Type.WARNING, false);
               }
 
+              installButton.setProgressAnimationSpeed(0.4f);
               resetWatchdogTimer(now);
             }
           }
