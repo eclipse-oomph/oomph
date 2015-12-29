@@ -1484,7 +1484,6 @@ public class SetupEditor extends MultiPageEditorPart
   public void createModel()
   {
     final ResourceSet resourceSet = editingDomain.getResourceSet();
-    SetupCoreUtil.configureResourceSet(resourceSet);
 
     // If the index's folder is redirected to the local file system...
     URIConverter uriConverter = resourceSet.getURIConverter();
@@ -1547,15 +1546,6 @@ public class SetupEditor extends MultiPageEditorPart
       {
         resourceMirror.perform(SetupContext.INDEX_SETUP_URI);
       }
-    }
-
-    try
-    {
-      EcoreUtil.resolveAll(resourceSet);
-    }
-    catch (RuntimeException ex)
-    {
-      // Ignore.
     }
 
     for (Resource resource : resourceSet.getResources())
@@ -1807,6 +1797,7 @@ public class SetupEditor extends MultiPageEditorPart
       protected IStatus run(final IProgressMonitor monitor)
       {
         final ResourceSet resourceSet = editingDomain.getResourceSet();
+        SetupCoreUtil.configureResourceSet(resourceSet);
 
         final ResourceMirror resourceMirror = new ResourceMirror(resourceSet)
         {
@@ -1815,6 +1806,7 @@ public class SetupEditor extends MultiPageEditorPart
           {
             SetupEditor.this.resourceMirror = this;
             createModel();
+            resolveProxies();
             dialogSettings.setLiveValidation(true);
             SetupEditor.this.resourceMirror = null;
           }

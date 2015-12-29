@@ -53,7 +53,6 @@ import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.IPageChangeProvider;
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -639,7 +638,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     loadIndex(SetupContext.INDEX_SETUP_URI, SetupContext.USER_SETUP_URI);
   }
 
-  protected void loadIndex(URI... uris)
+  protected void loadIndex(final URI... uris)
   {
     if (indexLoader == null)
     {
@@ -647,7 +646,14 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       indexLoader.setWizard(this);
     }
 
-    indexLoader.loadIndex(resourceSet, uris);
+    // Do this later so that the modal context of the progress dialog, if there is one, is within IndexLoader.awaitIndexLoad() event loop.
+    UIUtil.asyncExec(getShell(), new Runnable()
+    {
+      public void run()
+      {
+        indexLoader.loadIndex(resourceSet, uris);
+      }
+    });
   }
 
   protected void indexLoaded(Index index)
@@ -778,6 +784,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
     private volatile boolean reloaded;
 
+    protected boolean showETagProgress;
+
     final void setWizard(SetupWizard wizard)
     {
       this.wizard = wizard;
@@ -801,6 +809,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         protected void run(String taskName, IProgressMonitor monitor)
         {
           perform(uris);
+          resolveProxies();
         }
       };
 
@@ -830,8 +839,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       }
       else
       {
-        EcoreUtil.resolveAll(resourceSet);
-
         Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, false);
         final Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
         if (index == null)
@@ -874,106 +881,136 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
               reloading = true;
               loading = false;
 
-              new Thread()
+              UIUtil.asyncExec(new Runnable()
               {
-                @Override
                 public void run()
                 {
-                  // Collect a map of the remote URIs.
-                  Map<EClass, Set<URI>> uriMap = new LinkedHashMap<EClass, Set<URI>>();
-                  final Map<URI, Set<Resource>> resourceMap = new LinkedHashMap<URI, Set<Resource>>();
-                  URIConverter uriConverter = resourceSet.getURIConverter();
-                  for (Resource resource : resourceSet.getResources())
+                  final ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(shell);
+                  progressMonitorDialog.setOpenOnRun(false);
+                  try
                   {
-                    EList<EObject> contents = resource.getContents();
-                    if (!contents.isEmpty())
+                    progressMonitorDialog.run(true, true, new IRunnableWithProgress()
                     {
-                      // Allow subclasses to override which types of objects are of interest for reloading.
-                      // The simple installer is only interested in the index, products, and product catalogs.
-                      EClass eClass = contents.get(0).eClass();
-                      if (shouldReload(eClass))
+                      public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
                       {
-                        // If the scheme is remote...
-                        URI uri = uriConverter.normalize(resource.getURI());
-                        String scheme = uri.scheme();
-                        if (uri.isArchive())
+                        // Collect a map of the remote URIs.
+                        Map<EClass, Set<URI>> uriMap = new LinkedHashMap<EClass, Set<URI>>();
+                        final Map<URI, Set<Resource>> resourceMap = new LinkedHashMap<URI, Set<Resource>>();
+                        URIConverter uriConverter = resourceSet.getURIConverter();
+                        for (Resource resource : resourceSet.getResources())
                         {
-                          String authority = uri.authority();
-                          if (authority.startsWith("http:") || authority.startsWith("https:"))
+                          EList<EObject> contents = resource.getContents();
+                          if (!contents.isEmpty())
                           {
-                            URI archiveURI = URI.createURI(authority.substring(0, authority.length() - 1));
-                            CollectionUtil.add(uriMap, eClass, archiveURI);
-                            CollectionUtil.add(resourceMap, archiveURI, resource);
+                            // Allow subclasses to override which types of objects are of interest for reloading.
+                            // The simple installer is only interested in the index, products, and product catalogs.
+                            EClass eClass = contents.get(0).eClass();
+                            if (shouldReload(eClass))
+                            {
+                              // If the scheme is remote...
+                              URI uri = uriConverter.normalize(resource.getURI());
+                              String scheme = uri.scheme();
+                              if (uri.isArchive())
+                              {
+                                String authority = uri.authority();
+                                if (authority.startsWith("http:") || authority.startsWith("https:"))
+                                {
+                                  URI archiveURI = URI.createURI(authority.substring(0, authority.length() - 1));
+                                  CollectionUtil.add(uriMap, eClass, archiveURI);
+                                  CollectionUtil.add(resourceMap, archiveURI, resource);
+                                }
+                              }
+                              else if ("http".equals(scheme) || "https".equals(scheme))
+                              {
+                                // Group the URIs by object type so we can reload "the most import" types of objects first.
+                                CollectionUtil.add(uriMap, eClass, uri);
+                                CollectionUtil.add(resourceMap, uri, resource);
+                              }
+                            }
                           }
                         }
-                        else if ("http".equals(scheme) || "https".equals(scheme))
+
+                        // Collect the URIs is order of importance.
+                        Set<URI> resourceURIs = new LinkedHashSet<URI>();
+                        for (EClass eClass : new EClass[] { SetupPackage.Literals.INDEX, SetupPackage.Literals.PRODUCT_CATALOG, SetupPackage.Literals.PRODUCT,
+                            SetupPackage.Literals.PROJECT_CATALOG, SetupPackage.Literals.PROJECT })
                         {
-                          // Group the URIs by object type so we can reload "the most import" types of objects first.
-                          CollectionUtil.add(uriMap, eClass, uri);
-                          CollectionUtil.add(resourceMap, uri, resource);
+                          Set<URI> uris = uriMap.remove(eClass);
+                          if (uris != null)
+                          {
+                            resourceURIs.addAll(uris);
+                          }
+                        }
+
+                        for (Set<URI> uris : uriMap.values())
+                        {
+                          resourceURIs.addAll(uris);
+                        }
+
+                        // If there are resources to consider...
+                        int size = resourceURIs.size();
+                        if (size != 0)
+                        {
+                          if (showETagProgress)
+                          {
+                            UIUtil.asyncExec(new Runnable()
+                            {
+                              public void run()
+                              {
+                                progressMonitorDialog.getShell().setVisible(true);
+                              }
+                            });
+                          }
+
+                          // Remember which resource actually need updating based on detected remote changes by the ETag mirror.
+                          final Set<Resource> updatedResources = new HashSet<Resource>();
+                          new ECFURIHandlerImpl.ETagMirror()
+                          {
+                            @Override
+                            protected synchronized void cacheUpdated(URI uri)
+                            {
+                              updatedResources.addAll(resourceMap.get(uri));
+                            }
+                          }.begin(resourceURIs, monitor);
+
+                          // If our shell is still available and we have updated resources...
+                          if (!shell.isDisposed() && !updatedResources.isEmpty())
+                          {
+                            shell.getDisplay().asyncExec(new Runnable()
+                            {
+                              public void run()
+                              {
+                                // Reload only the affected resources.
+                                wizard.reloadIndex(updatedResources);
+                              }
+                            });
+                          }
+                          else
+                          {
+                            // Otherwise we're done reloading.
+                            reloading = false;
+                            reloaded = true;
+                          }
+                        }
+                        else
+                        {
+                          // Otherwise we're done reloading.
+                          reloading = false;
+                          reloaded = true;
                         }
                       }
-                    }
+                    });
                   }
-
-                  // Collect the URIs is order of importance.
-                  Set<URI> resourceURIs = new LinkedHashSet<URI>();
-                  for (EClass eClass : new EClass[] { SetupPackage.Literals.INDEX, SetupPackage.Literals.PRODUCT_CATALOG, SetupPackage.Literals.PRODUCT,
-                      SetupPackage.Literals.PROJECT_CATALOG, SetupPackage.Literals.PROJECT })
+                  catch (InvocationTargetException ex)
                   {
-                    Set<URI> uris = uriMap.remove(eClass);
-                    if (uris != null)
-                    {
-                      resourceURIs.addAll(uris);
-                    }
+                    SetupUIPlugin.INSTANCE.log(ex);
                   }
-
-                  for (Set<URI> uris : uriMap.values())
+                  catch (InterruptedException ex)
                   {
-                    resourceURIs.addAll(uris);
-                  }
-
-                  // If there are resources to consider...
-                  if (!resourceURIs.isEmpty())
-                  {
-                    // Remember which resource actually need updating based on detected remote changes by the ETag mirror.
-                    final Set<Resource> updatedResources = new HashSet<Resource>();
-                    new ECFURIHandlerImpl.ETagMirror()
-                    {
-                      @Override
-                      protected synchronized void cacheUpdated(URI uri)
-                      {
-                        updatedResources.addAll(resourceMap.get(uri));
-                      }
-                    }.begin(resourceURIs, new NullProgressMonitor());
-
-                    // If our shell is still available and we have updated resources...
-                    if (!shell.isDisposed() && !updatedResources.isEmpty())
-                    {
-                      shell.getDisplay().asyncExec(new Runnable()
-                      {
-                        public void run()
-                        {
-                          // Reload only the affected resources.
-                          wizard.reloadIndex(updatedResources);
-                        }
-                      });
-                    }
-                    else
-                    {
-                      // Otherwise we're done reloading.
-                      reloading = false;
-                      reloaded = true;
-                    }
-                  }
-                  else
-                  {
-                    // Otherwise we're done reloading.
-                    reloading = false;
-                    reloaded = true;
+                    // Ignore.
                   }
                 }
-              }.start();
+              });
             }
           }
         });
@@ -997,7 +1034,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         try
         {
           waiting();
-
           Shell shell = wizard.getShell();
           Display display = shell.getDisplay();
           while (!reloaded)
@@ -1100,14 +1136,34 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
    */
   public static class ProgressMonitorDialogIndexLoader extends IndexLoader
   {
+    public ProgressMonitorDialogIndexLoader()
+    {
+      showETagProgress = true;
+    }
+
     @Override
     public void loadIndex(final ResourceSet resourceSet, final URI... uris)
     {
       Shell shell = getWizard().getShell();
-      ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(shell);
+      final ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(shell);
+      progressMonitorDialog.setOpenOnRun(false);
 
       try
       {
+        // Delay showing the progress dialog for three seconds.
+        UIUtil.timerExec(3000, new Runnable()
+        {
+          public void run()
+          {
+            // If the dialog shell is already missing or disposed, the loading is already completed, so no need to show in that case.
+            Shell shell = progressMonitorDialog.getShell();
+            if (shell != null && !shell.isDisposed())
+            {
+              shell.setVisible(true);
+            }
+          }
+        });
+
         progressMonitorDialog.run(true, true, new IRunnableWithProgress()
         {
           public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
@@ -1339,7 +1395,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
           super.createPageControls(pageContainer);
         }
       };
-    
+
       Shell shell = UIUtil.getShell();
       updater.openDialog(shell);
     }

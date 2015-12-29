@@ -944,10 +944,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       {
         URI key = getKey();
         ETagMirror workPool = getWorkPool();
+        IProgressMonitor workpoolMonitor = workPool.getMonitor();
 
         try
         {
-          workPool.getMonitor().subTask("Mirroring " + key);
+          workpoolMonitor.subTask("Mirroring " + key);
         }
         catch (Exception ex)
         {
@@ -972,13 +973,13 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
         }
         catch (IOException ex)
         {
-          SetupCorePlugin.INSTANCE.log(ex);
+          SetupCorePlugin.INSTANCE.log(ex, IStatus.WARNING);
         }
         finally
         {
           try
           {
-            workPool.getMonitor().worked(1);
+            workpoolMonitor.worked(1);
           }
           catch (Exception ex)
           {

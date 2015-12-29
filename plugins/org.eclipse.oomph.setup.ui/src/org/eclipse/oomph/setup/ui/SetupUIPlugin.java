@@ -294,6 +294,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
         }
 
         perform(uris);
+        resolveProxies();
       }
     };
 

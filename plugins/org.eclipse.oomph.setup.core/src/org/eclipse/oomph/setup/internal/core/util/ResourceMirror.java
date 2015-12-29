@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.internal.core.util;
 
+import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.WorkerPool;
 
 import org.eclipse.emf.common.util.URI;
@@ -37,7 +38,7 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirror.LoadJob>
+public abstract class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirror.LoadJob>
 {
   private ResourceSet resourceSet;
 
@@ -71,8 +72,9 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
 
   public void begin(final IProgressMonitor monitor)
   {
-    final String taskName = resourceSet.getLoadOptions().get(ECFURIHandlerImpl.OPTION_CACHE_HANDLING) == ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? "Loading from local cache "
-        : "Loading from internet ";
+    final String taskName = resourceSet.getLoadOptions()
+        .get(ECFURIHandlerImpl.OPTION_CACHE_HANDLING) == ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? "Loading from local cache "
+            : "Loading from internet ";
     ResourceSet resourceSet = getResourceSet();
     XMLResource.ResourceHandler resourceHandler = new BasicResourceHandler()
     {
@@ -108,16 +110,27 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
 
     monitor.beginTask(taskName, 50);
 
-    super.begin(taskName, monitor);
+    begin(taskName, monitor);
 
     resourceSet.getLoadOptions().put(XMLResource.OPTION_RESOURCE_HANDLER, oldResourceHandler);
+  }
+
+  protected void resolveProxies()
+  {
+    IProgressMonitor monitor = getMonitor();
+    resourceLocator.dispose();
+    resourceLocator = null;
+    new ProxyResolver(resourceSet).begin(monitor);
   }
 
   @Override
   public void dispose()
   {
     resourceSet = null;
-    resourceLocator.dispose();
+    if (resourceLocator != null)
+    {
+      resourceLocator.dispose();
+    }
   }
 
   @Override
@@ -207,7 +220,7 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
         {
           resource.load(getWorkPool().resourceSet.getLoadOptions());
         }
-        catch (IOException ex)
+        catch (Throwable throwable)
         {
           new ResourceSetImpl()
           {
@@ -223,7 +236,7 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
                 // Ignore
               }
             }
-          }.handleDemandLoadException(resource, ex);
+          }.handleDemandLoadException(resource, throwable instanceof IOException ? (IOException)throwable : new IOExceptionWithCause(throwable));
         }
       }
 

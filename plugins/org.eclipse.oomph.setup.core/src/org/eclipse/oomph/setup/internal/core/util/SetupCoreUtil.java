@@ -274,6 +274,11 @@ public final class SetupCoreUtil
       @Override
       public Resource getResource(URI uri, boolean loadOnDemand)
       {
+        if (BaseUtil.isBogusURI(uri))
+        {
+          return null;
+        }
+
         if ("ecore".equals(uri.fileExtension()))
         {
           Resource resource = null;

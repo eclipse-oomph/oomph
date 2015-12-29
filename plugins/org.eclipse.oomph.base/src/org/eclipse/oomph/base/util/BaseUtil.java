@@ -52,6 +52,8 @@ import java.util.Map;
  */
 public final class BaseUtil
 {
+  private static final String BOGUS_SCHEME = URI.createURI("bogus:").scheme();
+
   private static final Adapter REDUCED = new Adapter()
   {
     public void setTarget(Notifier newTarget)
@@ -388,5 +390,20 @@ public final class BaseUtil
     {
       eAdapters.remove(REDUCED);
     }
+  }
+
+  public static URI createBogusURI(URI uri)
+  {
+    return URI.createURI("bogus:" + uri);
+  }
+
+  public static URI resolveBogusURI(URI uri)
+  {
+    return isBogusURI(uri) ? URI.createURI(uri.opaquePart()).appendQuery(uri.query()).appendFragment(uri.fragment()) : uri;
+  }
+
+  public static boolean isBogusURI(URI uri)
+  {
+    return uri != null && uri.scheme() == BOGUS_SCHEME && uri.hasOpaquePart();
   }
 }

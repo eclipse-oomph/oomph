@@ -356,6 +356,12 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
 
         return super.getHREF(otherResource, obj);
       }
+
+      @Override
+      public URI deresolve(URI uri)
+      {
+        return super.deresolve(BaseUtil.resolveBogusURI(uri));
+      }
     };
   }
 
