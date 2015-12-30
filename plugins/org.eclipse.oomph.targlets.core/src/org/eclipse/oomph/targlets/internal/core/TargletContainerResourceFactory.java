@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.resource.Resource.Factory;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import java.io.IOException;
@@ -61,7 +62,7 @@ public class TargletContainerResourceFactory implements Factory
           }
           catch (CoreException ex)
           {
-            TargletsCorePlugin.INSTANCE.log(ex);
+            TargletsCorePlugin.INSTANCE.log(ex, IStatus.WARNING);
           }
         }
       }
