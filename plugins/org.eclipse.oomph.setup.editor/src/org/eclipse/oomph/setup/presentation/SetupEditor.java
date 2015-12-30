@@ -1567,36 +1567,40 @@ public class SetupEditor extends MultiPageEditorPart
         public void run()
         {
           EPackage ePackage = mainResource.getContents().get(0).eClass().getEPackage();
-          URI ePackageResourceURI = ePackage.eResource().getURI();
-          if (ePackageResourceURI.isHierarchical() && ePackageResourceURI.trimSegments(1).equals(LEGACY_MODELS))
+          Resource packageResource = ePackage.eResource();
+          if (packageResource != null)
           {
-            List<EObject> migratedContents = new ArrayList<EObject>();
-
-            try
+            URI ePackageResourceURI = packageResource.getURI();
+            if (ePackageResourceURI.isHierarchical() && ePackageResourceURI.trimSegments(1).equals(LEGACY_MODELS))
             {
-              SetupCoreUtil.migrate(mainResource, migratedContents);
-              CompoundCommand command = new CompoundCommand(1, "Replace with Migrated Contents");
-              command.append(new RemoveCommand(editingDomain, mainResource.getContents(), new ArrayList<EObject>(mainResource.getContents())));
-              command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
-              editingDomain.getCommandStack().execute(command);
-            }
-            catch (RuntimeException ex)
-            {
-              CompoundCommand command = new CompoundCommand(1, "Add Partially Migrated Contents");
-              command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
-              editingDomain.getCommandStack().execute(command);
+              List<EObject> migratedContents = new ArrayList<EObject>();
 
-              SetupEditorPlugin.INSTANCE.log(ex);
-            }
-
-            EcoreUtil.resolveAll(mainResource);
-            for (Resource resource : resourceSet.getResources())
-            {
-              URI uri = resource.getURI();
-              if ("bogus".equals(uri.scheme()) || LEGACY_EXAMPLE_URI.equals(uri))
+              try
               {
-                resource.getErrors().clear();
-                resource.getWarnings().clear();
+                SetupCoreUtil.migrate(mainResource, migratedContents);
+                CompoundCommand command = new CompoundCommand(1, "Replace with Migrated Contents");
+                command.append(new RemoveCommand(editingDomain, mainResource.getContents(), new ArrayList<EObject>(mainResource.getContents())));
+                command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
+                editingDomain.getCommandStack().execute(command);
+              }
+              catch (RuntimeException ex)
+              {
+                CompoundCommand command = new CompoundCommand(1, "Add Partially Migrated Contents");
+                command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
+                editingDomain.getCommandStack().execute(command);
+
+                SetupEditorPlugin.INSTANCE.log(ex);
+              }
+
+              EcoreUtil.resolveAll(mainResource);
+              for (Resource resource : resourceSet.getResources())
+              {
+                URI uri = resource.getURI();
+                if ("bogus".equals(uri.scheme()) || LEGACY_EXAMPLE_URI.equals(uri))
+                {
+                  resource.getErrors().clear();
+                  resource.getWarnings().clear();
+                }
               }
             }
           }

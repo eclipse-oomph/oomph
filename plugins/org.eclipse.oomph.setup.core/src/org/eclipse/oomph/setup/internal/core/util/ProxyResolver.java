@@ -27,6 +27,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Ed Merks
  */
@@ -97,6 +100,7 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
     protected void visit(EObject eObject)
     {
       EClass eClass = eObject.eClass();
+      List<EObject> properContentObjects = new ArrayList<EObject>();
       for (EReference eReference : eClass.getEAllReferences())
       {
         if (!eReference.isDerived())
@@ -114,7 +118,7 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
                 ++i;
                 if (containment && referencedEObject.eDirectResource() == null)
                 {
-                  visit(referencedEObject);
+                  properContentObjects.add(referencedEObject);
                 }
               }
               catch (RuntimeException ex)
@@ -141,7 +145,7 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
               InternalEObject referencedEObject = (InternalEObject)eObject.eGet(eReference);
               if (referencedEObject != null && containment && referencedEObject.eDirectResource() == null)
               {
-                visit(referencedEObject);
+                properContentObjects.add(referencedEObject);
               }
             }
             catch (RuntimeException ex)
@@ -159,6 +163,16 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
               }
             }
           }
+
+          if (containment && !properContentObjects.isEmpty())
+          {
+            for (EObject properContent : properContentObjects)
+            {
+              visit(properContent);
+            }
+          }
+
+          properContentObjects.clear();
         }
       }
     }
