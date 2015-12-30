@@ -75,7 +75,7 @@
     <repository
         url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
     <repository
-        url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
+        url="http://download.eclipse.org/technology/swtbot/snapshots"/>
     <repository
         url="${oomph.update.url}"/>
   </setupTask>
@@ -285,7 +285,7 @@
           <repository
               url="http://download.eclipse.org/technology/nebula/snapshot"/>
           <repository
-              url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
+              url="http://download.eclipse.org/technology/swtbot/snapshots"/>
           <repository
               url="http://download.eclipse.org/webtools/downloads/drops/R3.7.0/R-3.7.0-20150609111814/repository"/>
         </repositoryList>
