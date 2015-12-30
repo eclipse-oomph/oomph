@@ -359,7 +359,7 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
         transaction = RecorderTransaction.open();
         transaction.setPolicies(policies);
 
-        UIUtil.asyncExec(new Runnable()
+        UIUtil.asyncExec(policiesComposite, new Runnable()
         {
           public void run()
           {
