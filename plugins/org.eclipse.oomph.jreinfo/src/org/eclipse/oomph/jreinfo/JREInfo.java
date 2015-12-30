@@ -72,7 +72,15 @@ public final class JREInfo
         File javaHomeFolder = new File(javaHome);
         if (javaHomeFolder.isDirectory())
         {
-          int jdk = isJDK(javaHomeFolder);
+          int jdk = 0;
+          try
+          {
+            jdk = isJDK(javaHomeFolder);
+          }
+          catch (FileNotFoundException ex)
+          {
+            //$FALL-THROUGH$
+          }
 
           JREInfo info = new JREInfo();
           info.javaHome = javaHomeFolder.getAbsolutePath();
