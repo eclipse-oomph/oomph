@@ -278,7 +278,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     Set<IInstallableUnit> resolvedIUs = new HashSet<IInstallableUnit>();
     for (IRequiredCapability requirement : rootRequirements)
     {
-      resolveRequirement(requirement, profile, resolvedIUs);
+      resolveRequirement(requirement, profile, resolvedIUs, new HashSet<IRequiredCapability>());
     }
 
     Map<String, IMetadataRepository> queriables = sortMetadataRepositories(targlet, metadataRepositories, preferredURLs, monitor);
@@ -319,34 +319,38 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     return queue;
   }
 
-  private static void resolveRequirement(IRequiredCapability requirement, IQueryable<IInstallableUnit> queryable, Set<IInstallableUnit> result)
+  private static void resolveRequirement(IRequiredCapability requirement, IQueryable<IInstallableUnit> queryable, Set<IInstallableUnit> result,
+      Set<IRequiredCapability> visited)
   {
-    for (IInstallableUnit iu : queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null))
+    if (visited.add(requirement))
     {
-      String id = iu.getId();
-      if (id.endsWith(".source") || id.endsWith(".source.feature.group"))
+      for (IInstallableUnit iu : queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null))
       {
-        continue;
-      }
-
-      if ("true".equals(iu.getProperty(TargletContainer.IU_PROPERTY_SOURCE)))
-      {
-        continue;
-      }
-
-      if (!"true".equals(iu.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)))
-      {
-        if (!result.add(iu))
+        String id = iu.getId();
+        if (id.endsWith(".source") || id.endsWith(".source.feature.group"))
         {
           continue;
         }
-      }
 
-      for (IRequirement iuRequirement : iu.getRequirements())
-      {
-        if (iuRequirement instanceof IRequiredCapability)
+        if ("true".equals(iu.getProperty(TargletContainer.IU_PROPERTY_SOURCE)))
         {
-          resolveRequirement((IRequiredCapability)iuRequirement, queryable, result);
+          continue;
+        }
+
+        if (!"true".equals(iu.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)))
+        {
+          if (!result.add(iu))
+          {
+            continue;
+          }
+        }
+
+        for (IRequirement iuRequirement : iu.getRequirements())
+        {
+          if (iuRequirement instanceof IRequiredCapability)
+          {
+            resolveRequirement((IRequiredCapability)iuRequirement, queryable, result, visited);
+          }
         }
       }
     }
