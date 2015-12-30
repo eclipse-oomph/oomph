@@ -98,6 +98,8 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
 
   private Button initializePreferencesButton;
 
+  private Job openTransactionJob;
+
   public RecorderPreferencePage()
   {
     instance = this;
@@ -351,29 +353,44 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
 
   private void openRecorderTransaction(final Map<String, Boolean> policies)
   {
-    Job job = new Job("Open recorder transaction")
+    if (openTransactionJob == null)
     {
-      @Override
-      protected IStatus run(IProgressMonitor monitor)
+      openTransactionJob = new Job("Open recorder transaction")
       {
-        transaction = RecorderTransaction.open();
-        transaction.setPolicies(policies);
-
-        UIUtil.asyncExec(policiesComposite, new Runnable()
+        @Override
+        protected IStatus run(final IProgressMonitor monitor)
         {
-          public void run()
+          if (!monitor.isCanceled())
           {
-            updateEnablement();
-            policiesComposite.setRecorderTransaction(transaction);
+            final RecorderTransaction transaction = RecorderTransaction.open();
+            transaction.setPolicies(policies);
+
+            if (!monitor.isCanceled())
+            {
+              UIUtil.syncExec(policiesComposite, new Runnable()
+              {
+                public void run()
+                {
+                  if (!monitor.isCanceled())
+                  {
+                    updateEnablement();
+                    policiesComposite.setRecorderTransaction(transaction);
+                    RecorderPreferencePage.this.transaction = transaction;
+                  }
+                }
+              });
+            }
           }
-        });
 
-        return Status.OK_STATUS;
-      }
-    };
+          return Status.OK_STATUS;
+        }
+      };
 
-    job.setSystem(true);
-    job.schedule();
+      openTransactionJob.setSystem(true);
+    }
+
+    openTransactionJob.cancel();
+    openTransactionJob.schedule();
   }
 
   private void closeRecorderTransaction()
