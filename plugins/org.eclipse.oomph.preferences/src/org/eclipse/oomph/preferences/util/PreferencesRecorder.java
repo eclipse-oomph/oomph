@@ -49,12 +49,15 @@ public class PreferencesRecorder extends EContentAdapter
 
   public Map<URI, Pair<String, String>> done()
   {
-    for (Iterator<EObject> it = rootPreferenceNode.eResource().getAllContents(); it.hasNext();)
+    if (rootPreferenceNode != null)
     {
-      it.next().eAdapters().clear();
-    }
+      for (Iterator<EObject> it = rootPreferenceNode.eResource().getAllContents(); it.hasNext();)
+      {
+        it.next().eAdapters().clear();
+      }
 
-    rootPreferenceNode = null;
+      rootPreferenceNode = null;
+    }
 
     paths.clear();
     for (Iterator<Pair<String, String>> it = values.values().iterator(); it.hasNext();)

@@ -1011,7 +1011,8 @@ public final class RecorderManager
           {
             public void widgetDisposed(DisposeEvent e)
             {
-              if (recorder == null)
+              final PreferencesRecorder finalRecorder = recorder;
+              if (finalRecorder == null)
               {
                 return;
               }
@@ -1020,7 +1021,7 @@ public final class RecorderManager
               {
                 public void run()
                 {
-                  final Map<URI, Pair<String, String>> values = recorder.done();
+                  final Map<URI, Pair<String, String>> values = finalRecorder.done();
                   recorder = null;
                   for (Iterator<URI> it = values.keySet().iterator(); it.hasNext();)
                   {
