@@ -16,7 +16,9 @@ import org.eclipse.oomph.internal.jreinfo.JREInfoPlugin;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OomphPlugin;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 
 import org.osgi.framework.Bundle;
 
@@ -104,16 +106,25 @@ final class InfoManager
   {
     infos.clear();
 
-    if (getCacheFile().isFile())
+    File cacheFile = getCacheFile();
+    if (cacheFile.isFile())
     {
       try
       {
-        for (String line : IOUtil.readLines(getCacheFile(), "UTF-8"))
+        for (String line : IOUtil.readLines(cacheFile, "UTF-8"))
         {
-          JRE jre = new JRE(line);
-          if (jre.isValid())
+          try
           {
-            infos.put(jre.getJavaHome(), jre);
+            JRE jre = new JRE(line);
+            if (jre.isValid())
+            {
+              infos.put(jre.getJavaHome(), jre);
+            }
+          }
+          catch (RuntimeException ex)
+          {
+            JREInfoPlugin.INSTANCE.log(new Status(IStatus.WARNING, JREInfoPlugin.INSTANCE.getSymbolicName(),
+                "The cache file '" + cacheFile + "' contains an invalid JRE entry: '" + line + "'", ex));
           }
         }
       }
