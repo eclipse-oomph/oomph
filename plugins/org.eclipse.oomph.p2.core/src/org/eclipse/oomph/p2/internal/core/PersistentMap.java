@@ -15,6 +15,8 @@ import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.core.runtime.IStatus;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -311,23 +313,30 @@ public abstract class PersistentMap<E>
     final Set<String> fileKeys = new HashSet<String>();
     fileKeys.add(addedKey);
 
-    load(new KeyHandler()
+    try
     {
-      public void handleKey(String key, String extraInfo) throws Exception
+      load(new KeyHandler()
       {
-        fileKeys.add(key);
-
-        if (!key.equals(removedKey) && !elements.containsKey(key))
+        public void handleKey(String key, String extraInfo) throws Exception
         {
-          E element = createElement(key, extraInfo);
-          if (element != null)
+          fileKeys.add(key);
+
+          if (!key.equals(removedKey) && !elements.containsKey(key))
           {
-            elements.put(key, element);
-            changed[0] = true;
+            E element = createElement(key, extraInfo);
+            if (element != null)
+            {
+              elements.put(key, element);
+              changed[0] = true;
+            }
           }
         }
-      }
-    });
+      });
+    }
+    catch (IORuntimeException ex)
+    {
+      P2CorePlugin.INSTANCE.log(ex, IStatus.WARNING);
+    }
 
     for (Iterator<String> it = elements.keySet().iterator(); it.hasNext();)
     {
