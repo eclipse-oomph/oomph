@@ -62,7 +62,7 @@ public final class IOUtil
 {
   private static final int MAX_FILE_NAME_LENGTH = 200;
 
-  private static final byte[] BUFFER = new byte[8192];
+  private static final int DEFAULT_BUFFER_SIZE = 8192;
 
   private static final ObjectOutputStream DEV_NULL = createDevNull();
 
@@ -291,12 +291,10 @@ public final class IOUtil
         }
       };
 
-      synchronized (BUFFER)
+      byte[] bytes = new byte[DEFAULT_BUFFER_SIZE];
+      while (stream.read(bytes) != -1)
       {
-        while (stream.read(BUFFER) != -1)
-        {
-          // Do nothing
-        }
+        // Do nothing
       }
 
       return digest.digest();
@@ -604,20 +602,12 @@ public final class IOUtil
 
   public static long copy(InputStream input, OutputStream output, int bufferSize) throws IORuntimeException
   {
-    if (bufferSize == BUFFER.length)
-    {
-      return copy(input, output);
-    }
-
     return copy(input, output, new byte[bufferSize]);
   }
 
   public static long copy(InputStream input, OutputStream output) throws IORuntimeException
   {
-    synchronized (BUFFER)
-    {
-      return copy(input, output, BUFFER);
-    }
+    return copy(input, output, DEFAULT_BUFFER_SIZE);
   }
 
   public static void copyTree(File source, File target, boolean bestEffort) throws IORuntimeException

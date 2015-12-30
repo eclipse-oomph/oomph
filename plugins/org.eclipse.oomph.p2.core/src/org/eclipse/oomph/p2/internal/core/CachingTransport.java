@@ -163,37 +163,49 @@ public class CachingTransport extends Transport
       try
       {
         cacheFile.getParentFile().mkdirs();
-        statefulTarget = new StatefulFileOutputStream(cacheFile);
-
-        IStatus status = delegate.download(uri, statefulTarget, startPos, monitor);
-        IOUtil.closeSilent(statefulTarget);
-        if (status.isOK())
+        try
         {
-          // Files can be many megabytes large, so download them directly to a file.
-          cacheInputStream = new FileInputStream(cacheFile);
-          IOUtil.copy(cacheInputStream, target);
-
-          DownloadStatus downloadStatus = (DownloadStatus)status;
-          long lastModified = downloadStatus.getLastModified();
-          if (lastModified >= 0)
-          {
-            cacheFile.setLastModified(lastModified);
-          }
-
-          // Remove the other form that might be cached.
-          String path = cacheFile.getPath();
-          if (path.endsWith(".xml"))
-          {
-            new File(path.substring(0, path.length() - 4) + ".jar").delete();
-          }
-          else if (path.endsWith(".jar"))
-          {
-            new File(path.substring(0, path.length() - 4) + ".xml").delete();
-          }
+          statefulTarget = new StatefulFileOutputStream(cacheFile);
         }
-        else
+        catch (IOException ex)
         {
-          IOUtil.deleteBestEffort(cacheFile);
+          // Can't open an output stream on the cache location.
+        }
+
+        IStatus status = delegate.download(uri, statefulTarget != null ? statefulTarget : target, startPos, monitor);
+
+        // If we have a cached stateful target, we need to transfer the bytes into the original target.
+        if (statefulTarget != null)
+        {
+          IOUtil.closeSilent(statefulTarget);
+          if (status.isOK())
+          {
+            // Files can be many megabytes large, so download them directly to a file.
+            cacheInputStream = new FileInputStream(cacheFile);
+            IOUtil.copy(cacheInputStream, target);
+
+            DownloadStatus downloadStatus = (DownloadStatus)status;
+            long lastModified = downloadStatus.getLastModified();
+            if (lastModified >= 0)
+            {
+              cacheFile.setLastModified(lastModified);
+            }
+
+            // Remove the other form that might be cached.
+            String path = cacheFile.getPath();
+            if (path.endsWith(".xml"))
+            {
+              new File(path.substring(0, path.length() - 4) + ".jar").delete();
+            }
+            else if (path.endsWith(".jar"))
+            {
+              new File(path.substring(0, path.length() - 4) + ".xml").delete();
+            }
+          }
+          else
+          {
+            IOUtil.deleteBestEffort(cacheFile);
+          }
         }
 
         return status;
