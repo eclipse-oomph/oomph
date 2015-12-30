@@ -18,6 +18,8 @@ import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.OomphPreferencePage;
 import org.eclipse.oomph.internal.ui.TaskItemDecorator;
 import org.eclipse.oomph.jreinfo.ui.JREInfoUIPlugin;
+import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
@@ -337,6 +339,20 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static void performStartup(final IWorkbench workbench, IProgressMonitor monitor)
   {
+    // TODO Remove the following try/catch block after bug 485018 has been fixed.
+    try
+    {
+      Profile currentProfile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
+      File bundlePoolLocation = currentProfile.getBundlePool().getLocation();
+
+      File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features");
+      eclipseExtensionFeaturesFolder.mkdirs();
+    }
+    catch (Throwable throwable)
+    {
+      SetupUIPlugin.INSTANCE.log(throwable, IStatus.WARNING);
+    }
+
     monitor.beginTask("", 105);
     Trigger trigger = Trigger.STARTUP;
     boolean restarting = false;

@@ -819,6 +819,10 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       if (bundlePoolLocation != null)
       {
         bundlePool = P2Util.getAgentManager().getBundlePool(new File(bundlePoolLocation));
+
+        // TODO Remove the following two lines after bug 485018 has been fixed.
+        File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features");
+        eclipseExtensionFeaturesFolder.mkdirs();
       }
       else
       {
