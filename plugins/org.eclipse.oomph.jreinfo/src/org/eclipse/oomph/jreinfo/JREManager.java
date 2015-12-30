@@ -18,6 +18,7 @@ import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubProgressMonitor;
@@ -366,7 +367,7 @@ public final class JREManager
       }
       catch (IOException ex)
       {
-        JREInfoPlugin.INSTANCE.log(ex);
+        JREInfoPlugin.INSTANCE.log(ex, IStatus.WARNING);
       }
     }
 
