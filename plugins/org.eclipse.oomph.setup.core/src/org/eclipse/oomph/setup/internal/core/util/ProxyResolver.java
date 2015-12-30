@@ -81,9 +81,12 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
    */
   public static class ResolveJob extends WorkerPool.Worker<Resource, ProxyResolver>
   {
+    private final ResourceSet resourceSet;
+
     private ResolveJob(ProxyResolver proxyResolver, Resource resource, int id, boolean secondary)
     {
       super("Resolver", proxyResolver, resource, id, secondary);
+      resourceSet = getWorkPool().getResourceSet();
     }
 
     @Override
@@ -114,7 +117,12 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
             {
               try
               {
-                InternalEObject referencedEObject = eObjects.get(i);
+                InternalEObject referencedEObject;
+                synchronized (resourceSet)
+                {
+                  referencedEObject = eObjects.get(i);
+                }
+
                 ++i;
                 if (containment && referencedEObject.eDirectResource() == null)
                 {
@@ -150,7 +158,11 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
             }
             catch (RuntimeException ex)
             {
-              InternalEObject referencedEObject = (InternalEObject)eObject.eGet(eReference, false);
+              InternalEObject referencedEObject;
+              synchronized (resourceSet)
+              {
+                referencedEObject = (InternalEObject)eObject.eGet(eReference, false);
+              }
 
               URI eProxyURI = referencedEObject.eProxyURI();
               if (eProxyURI != null)
