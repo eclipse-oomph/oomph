@@ -58,7 +58,7 @@ public class QuestionnaireImpl extends Questionnaire
         if (user.getQuestionnaireDate() == null || force)
         {
           final Map<URI, Pair<String, String>> preferences = new HashMap<URI, Pair<String, String>>();
-          UIUtil.syncExec(new Runnable()
+          UIUtil.syncExec(parentShell, new Runnable()
           {
             public void run()
             {
