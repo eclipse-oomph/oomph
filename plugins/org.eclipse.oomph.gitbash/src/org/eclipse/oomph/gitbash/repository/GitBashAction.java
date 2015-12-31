@@ -25,6 +25,9 @@ public class GitBashAction extends AbstractRepositoryAction
   protected void run(Shell shell, File workTree) throws Exception
   {
     String gitBash = GitBash.getExecutable(shell);
-    Runtime.getRuntime().exec("cmd /c cd \"" + workTree.getAbsolutePath() + "\" && start cmd.exe /c \"" + gitBash + "\" --login -i");
+    if (gitBash != null)
+    {
+      Runtime.getRuntime().exec("cmd /c cd \"" + workTree.getAbsolutePath() + "\" && start cmd.exe /c \"" + gitBash + "\" --login -i");
+    }
   }
 }

@@ -54,6 +54,10 @@ public class GitBash
       if (executable == null)
       {
         executable = openInputDialog(DEFAULT_EXECUTABLE, shell);
+        if (executable == null)
+        {
+          return null;
+        }
       }
 
       if (!new File(executable).isFile())
@@ -73,38 +77,41 @@ public class GitBash
     {
       String gitBash = getExecutable(shell);
 
-      ProcessBuilder builder = new ProcessBuilder(gitBash, "--login", "-c", command);
-      builder.directory(workTree);
-      builder.redirectErrorStream(true);
-
-      Process process = builder.start();
-      BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-      StringBuilder output = new StringBuilder();
-      String line;
-      while ((line = reader.readLine()) != null)
+      if (gitBash != null)
       {
-        output.append(line);
-        output.append("\n");
-      }
+        ProcessBuilder builder = new ProcessBuilder(gitBash, "--login", "-c", command);
+        builder.directory(workTree);
+        builder.redirectErrorStream(true);
 
-      int exitValue = process.waitFor();
-      if (exitValue == 0)
-      {
-        String message = "Command '" + command + "' executed successfully";
-        if (!quiet)
+        Process process = builder.start();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+        StringBuilder output = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null)
         {
-          Activator.log(message + "\n" + output, IStatus.INFO);
-          MessageDialog.openInformation(shell, "Git Bash", message);
+          output.append(line);
+          output.append("\n");
         }
-      }
-      else
-      {
-        String message = "Command '" + command + "' failed: " + exitValue;
-        if (!quiet)
+
+        int exitValue = process.waitFor();
+        if (exitValue == 0)
         {
-          Activator.log(message + "\n" + output, IStatus.ERROR);
-          MessageDialog.openError(shell, "Git Bash", message);
+          String message = "Command '" + command + "' executed successfully";
+          if (!quiet)
+          {
+            Activator.log(message + "\n" + output, IStatus.INFO);
+            MessageDialog.openInformation(shell, "Git Bash", message);
+          }
+        }
+        else
+        {
+          String message = "Command '" + command + "' failed: " + exitValue;
+          if (!quiet)
+          {
+            Activator.log(message + "\n" + output, IStatus.ERROR);
+            MessageDialog.openError(shell, "Git Bash", message);
+          }
         }
       }
     }
@@ -130,7 +137,7 @@ public class GitBash
 
     if (dialog.open() != InputDialog.OK)
     {
-      throw new IllegalStateException("Git bash not found at " + executable);
+      return null;
     }
 
     return dialog.getValue();
