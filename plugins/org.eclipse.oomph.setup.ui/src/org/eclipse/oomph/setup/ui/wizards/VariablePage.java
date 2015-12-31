@@ -15,7 +15,6 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.ui.AccessUtil;
-import org.eclipse.oomph.internal.ui.WorkUnit;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Installation;
@@ -70,6 +69,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -121,6 +121,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   private boolean save = true;
 
   private boolean defaultsSet;
+
+  private UserCallback userCallback;
 
   private FocusListener focusListener = new FocusAdapter()
   {
@@ -540,6 +542,12 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   {
     if (forward)
     {
+      if (userCallback == null)
+      {
+        Shell shell = getShell();
+        userCallback = new UICallback(shell, shell.getText());
+      }
+
       clearSpecialFieldHolders();
     }
 
@@ -733,14 +741,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   public UserCallback getUserCallback()
   {
-    return new UICallback(getShell(), new WorkUnit<String, RuntimeException>()
-    {
-      @Override
-      protected String doExecute()
-      {
-        return getShell().getText();
-      }
-    }.execute());
+    return userCallback;
   }
 
   /**
