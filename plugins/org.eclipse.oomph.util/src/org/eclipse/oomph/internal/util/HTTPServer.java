@@ -11,6 +11,7 @@
 package org.eclipse.oomph.internal.util;
 
 import org.eclipse.oomph.util.HexUtil;
+import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 import org.eclipse.oomph.util.StringUtil;
@@ -110,7 +111,7 @@ public final class HTTPServer
       }
       catch (InterruptedException ex)
       {
-        throw new IOException("Start interrupted");
+        throw new IOExceptionWithCause("Start interrupted", ex);
       }
     }
 

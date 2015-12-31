@@ -14,6 +14,7 @@ import org.eclipse.oomph.internal.ui.UIPlugin;
 import org.eclipse.oomph.internal.util.HTTPServer;
 import org.eclipse.oomph.util.OS;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.DialogTray;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
@@ -295,7 +296,7 @@ public class HelpSupport
       }
       catch (Exception ex)
       {
-        UIPlugin.INSTANCE.log(ex);
+        UIPlugin.INSTANCE.log(ex, IStatus.WARNING);
         return null;
       }
     }
