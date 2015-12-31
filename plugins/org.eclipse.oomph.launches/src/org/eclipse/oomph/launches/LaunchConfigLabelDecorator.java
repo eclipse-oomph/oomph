@@ -51,16 +51,19 @@ public class LaunchConfigLabelDecorator extends BaseLabelProvider implements ILa
 
   public Image decorateImage(Image image, Object element)
   {
-    if (isLocal(element))
+    if (image != null)
     {
-      DecorationOverlayIcon icon = new DecorationOverlayIcon(image, LOCAL_OVERLAY, IDecoration.TOP_LEFT);
-      return (Image)resourceManager.get(icon);
-    }
+      if (isLocal(element))
+      {
+        DecorationOverlayIcon icon = new DecorationOverlayIcon(image, LOCAL_OVERLAY, IDecoration.TOP_LEFT);
+        return (Image)resourceManager.get(icon);
+      }
 
-    if (isExampleCopy(element))
-    {
-      DecorationOverlayIcon icon = new DecorationOverlayIcon(image, EXAMPLE_OVERLAY, IDecoration.TOP_LEFT);
-      return (Image)resourceManager.get(icon);
+      if (isExampleCopy(element))
+      {
+        DecorationOverlayIcon icon = new DecorationOverlayIcon(image, EXAMPLE_OVERLAY, IDecoration.TOP_LEFT);
+        return (Image)resourceManager.get(icon);
+      }
     }
 
     return null;
