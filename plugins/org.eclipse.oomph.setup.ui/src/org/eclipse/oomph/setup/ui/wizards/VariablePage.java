@@ -189,7 +189,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       public void widgetSelected(SelectionEvent e)
       {
         fullPrompt = fullPromptButton.getSelection();
-        UIUtil.asyncExec(new Runnable()
+        UIUtil.asyncExec(getControl(), new Runnable()
         {
           public void run()
           {
@@ -489,7 +489,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
       setErrorMessage(errorMessage);
 
-      UIUtil.asyncExec(new Runnable()
+      UIUtil.asyncExec(getControl(), new Runnable()
       {
         public void run()
         {
@@ -576,7 +576,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       validate();
       if (forward && getPreviousPage() == null)
       {
-        UIUtil.asyncExec(new Runnable()
+        UIUtil.asyncExec(getControl(), new Runnable()
         {
           public void run()
           {
