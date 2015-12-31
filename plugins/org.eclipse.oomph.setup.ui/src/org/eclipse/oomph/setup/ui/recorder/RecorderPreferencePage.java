@@ -64,6 +64,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
@@ -237,17 +238,21 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        SetupEditorSupport.getEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), RecorderManager.INSTANCE.getRecorderTarget(), true);
-
-        Map<String, Boolean> policies = null;
-        if (transaction != null)
+        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        if (page != null)
         {
-          policies = transaction.getPolicies(false);
-          closeRecorderTransaction();
-        }
+          SetupEditorSupport.getEditor(page, RecorderManager.INSTANCE.getRecorderTarget(), true);
 
-        openRecorderTransaction(policies);
-        updateEnablement();
+          Map<String, Boolean> policies = null;
+          if (transaction != null)
+          {
+            policies = transaction.getPolicies(false);
+            closeRecorderTransaction();
+          }
+
+          openRecorderTransaction(policies);
+          updateEnablement();
+        }
       }
     });
 

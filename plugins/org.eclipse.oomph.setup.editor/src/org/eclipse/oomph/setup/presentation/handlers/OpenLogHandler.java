@@ -36,16 +36,19 @@ public class OpenLogHandler extends AbstractDropdownItemHandler
   {
     try
     {
-      URI uri = SetupContext.SETUP_LOG_URI;
-      if (!URIConverter.INSTANCE.exists(uri, null))
-      {
-        URIConverter.INSTANCE.createOutputStream(uri).close();
-      }
-
       IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-      File file = new File(uri.toFileString());
+      if (page != null)
+      {
+        URI uri = SetupContext.SETUP_LOG_URI;
+        if (!URIConverter.INSTANCE.exists(uri, null))
+        {
+          URIConverter.INSTANCE.createOutputStream(uri).close();
+        }
 
-      IDE.openEditor(page, file.toURI(), "org.eclipse.ui.DefaultTextEditor", true);
+        File file = new File(uri.toFileString());
+
+        IDE.openEditor(page, file.toURI(), "org.eclipse.ui.DefaultTextEditor", true);
+      }
     }
     catch (Exception ex)
     {
