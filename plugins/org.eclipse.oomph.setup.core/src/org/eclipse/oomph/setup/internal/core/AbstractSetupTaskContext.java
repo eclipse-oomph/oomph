@@ -379,7 +379,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       }
     }
 
-    SetupCorePlugin.INSTANCE.log("Could not determine the launcher name from " + profile.getProfileId(), IStatus.ERROR);
+    SetupCorePlugin.INSTANCE.log("Could not determine the launcher name from " + profile.getProfileId(), IStatus.WARNING);
 
     return "eclipse";
   }
