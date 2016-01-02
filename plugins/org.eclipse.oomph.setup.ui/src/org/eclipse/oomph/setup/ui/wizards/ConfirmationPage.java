@@ -407,7 +407,6 @@ public class ConfirmationPage extends SetupWizardPage
         try
         {
           SetupTaskPerformer performer = getPerformer();
-          performer.setVMPath(getWizard().getVMPath());
           performer.put(OS.class, getWizard().getOS());
           performer.setMirrors(isMirrors());
           performer.setOffline(isOffline());

@@ -483,6 +483,11 @@ public final class SetupUIPlugin extends OomphUIPlugin
       // Create a prompter that generally cancels except if all prompted variables are passwords.
       SetupPrompter prompter = new SetupPrompter()
       {
+        public String getVMPath()
+        {
+          return null;
+        }
+
         public boolean promptVariables(List<? extends SetupTaskContext> contexts)
         {
           @SuppressWarnings("unchecked")

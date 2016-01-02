@@ -237,8 +237,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private final ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
 
-  private String vmPath;
-
   private boolean hasSuccessfullyPerformed;
 
   public SetupTaskPerformer(URIConverter uriConverter, SetupPrompter prompter, Trigger trigger, SetupContext setupContext, Stream stream)
@@ -256,12 +254,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   public String getVMPath()
   {
-    return vmPath;
-  }
-
-  public void setVMPath(String vmPath)
-  {
-    this.vmPath = vmPath;
+    return getPrompter().getVMPath();
   }
 
   public boolean hasSuccessfullyPerformed()
@@ -1444,12 +1437,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   {
     addEclipseIniTask(result, false, "--launcher.appendVmargs", null);
 
+    String vmPath = getVMPath();
     if (vmPath != null)
     {
       addEclipseIniTask(result, false, "-vm", vmPath);
     }
 
-    // addEclipseIniTask(result, true, "-Declipse.p2.max.threads", "=10");
+    addEclipseIniTask(result, true, "-Declipse.p2.max.threads", "=10");
     addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_UPDATE_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_UPDATE_URL))));
 
     addIndexRedirection(result, SetupContext.INDEX_SETUP_URI, "");
@@ -3611,6 +3605,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           SetupPrompter fullPrompter = new SetupPrompter()
           {
             private boolean first = true;
+
+            public String getVMPath()
+            {
+              return prompter.getVMPath();
+            }
 
             public UserCallback getUserCallback()
             {

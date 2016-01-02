@@ -1108,7 +1108,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       IOUtil.writeLines(FILE_INSTALL_ROOT, "UTF-8", Collections.singletonList(installRoot));
 
-      SimplePrompter prompter = new SimplePrompter();
+      SimplePrompter prompter = new SimplePrompter(vmPath);
       performer = SetupTaskPerformer.create(uriConverter, prompter, Trigger.BOOTSTRAP, setupContext, false);
 
       EList<SetupTask> triggeredSetupTasks = performer.getTriggeredSetupTasks();
@@ -1182,7 +1182,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
       performer.put(OS.class, OS.INSTANCE.getForBitness(javaController.getBitness()));
       performer.setOffline(false);
       performer.setMirrors(true);
-      performer.setVMPath(vmPath);
       performer.setProgress(progress);
       performer.log("Executing " + performer.getTrigger().toString().toLowerCase() + " tasks");
       performer.put(org.eclipse.equinox.internal.provisional.p2.core.eventbus.ProvisioningListener.class, new DownloadArtifactLister());
@@ -1612,8 +1611,16 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     private final List<VariableTask> unresolvedVariables = new ArrayList<VariableTask>();
 
-    public SimplePrompter()
+    private final String vmPath;
+
+    public SimplePrompter(String vmPath)
     {
+      this.vmPath = vmPath;
+    }
+
+    public String getVMPath()
+    {
+      return vmPath;
     }
 
     public List<VariableTask> getUnresolvedVariables()

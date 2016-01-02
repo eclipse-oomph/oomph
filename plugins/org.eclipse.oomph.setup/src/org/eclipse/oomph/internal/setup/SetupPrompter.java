@@ -25,6 +25,8 @@ public interface SetupPrompter
 
   public static final SetupPrompter CANCEL = new Default(false);
 
+  public String getVMPath();
+
   public UserCallback getUserCallback();
 
   public String getValue(VariableTask variable);
@@ -41,6 +43,11 @@ public interface SetupPrompter
     public Default(boolean ok)
     {
       this.ok = ok;
+    }
+
+    public String getVMPath()
+    {
+      return null;
     }
 
     public UserCallback getUserCallback()

@@ -693,6 +693,11 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     return null;
   }
 
+  public String getVMPath()
+  {
+    return getWizard().getVMPath();
+  }
+
   public boolean promptVariables(List<? extends SetupTaskContext> contexts)
   {
     prompted = true;

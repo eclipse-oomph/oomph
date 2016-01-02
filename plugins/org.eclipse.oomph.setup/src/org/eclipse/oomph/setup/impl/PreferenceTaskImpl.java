@@ -447,6 +447,11 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       {
         return new SetupPrompter()
         {
+          public String getVMPath()
+          {
+            return null;
+          }
+
           public UserCallback getUserCallback()
           {
             return callback;
