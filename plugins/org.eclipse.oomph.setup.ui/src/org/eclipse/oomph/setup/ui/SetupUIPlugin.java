@@ -21,8 +21,12 @@ import org.eclipse.oomph.jreinfo.ui.JREInfoUIPlugin;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
+import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
@@ -43,6 +47,7 @@ import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.UserCallback;
 
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.EList;
@@ -475,8 +480,60 @@ public final class SetupUIPlugin extends OomphUIPlugin
         INSTANCE.log(ex);
       }
 
+      // Create a prompter that generally cancels except if all prompted variables are passwords.
+      SetupPrompter prompter = new SetupPrompter()
+      {
+        public boolean promptVariables(List<? extends SetupTaskContext> contexts)
+        {
+          @SuppressWarnings("unchecked")
+          List<SetupTaskPerformer> performers = (List<SetupTaskPerformer>)contexts;
+          for (SetupTaskPerformer performer : performers)
+          {
+            List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
+            for (VariableTask variable : unresolvedVariables)
+            {
+              if (variable.getType() == VariableType.PASSWORD)
+              {
+                variable.setValue(PreferencesUtil.encrypt(" "));
+              }
+              else
+              {
+                return false;
+              }
+            }
+          }
+
+          return true;
+        }
+
+        public String getValue(VariableTask variable)
+        {
+          return null;
+        }
+
+        public UserCallback getUserCallback()
+        {
+          return null;
+        }
+      };
+
       // Create the performer with a fully populated resource set.
-      performer = SetupTaskPerformer.createForIDE(resourceSet, SetupPrompter.CANCEL, trigger);
+      performer = SetupTaskPerformer.createForIDE(resourceSet, prompter, trigger);
+
+      // If we have a performer...
+      if (performer != null)
+      {
+        // And it has unresolved variables.
+        List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
+        if (!unresolvedVariables.isEmpty())
+        {
+          // They must be password variables that have been resolved to the encrypted value for " "
+          performer.getResolvedVariables().addAll(unresolvedVariables);
+
+          // If we don't clear them, the performer will throw an exception.
+          unresolvedVariables.clear();
+        }
+      }
     }
     catch (OperationCanceledException ex)
     {

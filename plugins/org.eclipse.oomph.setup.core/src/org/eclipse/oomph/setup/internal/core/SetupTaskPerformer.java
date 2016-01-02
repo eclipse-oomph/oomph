@@ -119,7 +119,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
@@ -168,6 +167,8 @@ import java.util.regex.Pattern;
 public class SetupTaskPerformer extends AbstractSetupTaskContext
 {
   public static final boolean REMOTE_DEBUG = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_REMOTE_DEBUG);
+
+  public static final boolean USER_HOME_REDIRECT = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_USER_HOME_REDIRECT);
 
   public static final Adapter RULE_VARIABLE_ADAPTER = new AdapterImpl();
 
@@ -1295,12 +1296,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   public EList<SetupTask> getSetupTasks(Stream stream)
   {
+    EList<SetupTask> result = new BasicEList<SetupTask>();
+    addBootstrapTasks(result);
+
     User user = getUser();
     Installation installation = getInstallation();
     Workspace workspace = getWorkspace();
     ProductVersion productVersion = installation.getProductVersion();
 
-    EList<SetupTask> result = new BasicEList<SetupTask>();
     if (productVersion != null && !productVersion.eIsProxy())
     {
       List<Scope> configurableItems = new ArrayList<Scope>();
@@ -1435,6 +1438,74 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
 
     return result;
+  }
+
+  private void addBootstrapTasks(EList<SetupTask> result)
+  {
+    addEclipseIniTask(result, false, "--launcher.appendVmargs", null);
+
+    if (vmPath != null)
+    {
+      addEclipseIniTask(result, false, "-vm", vmPath);
+    }
+
+    // addEclipseIniTask(result, true, "-Declipse.p2.max.threads", "=10");
+    addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_UPDATE_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_UPDATE_URL))));
+
+    addIndexRedirection(result, SetupContext.INDEX_SETUP_URI, "");
+    addIndexRedirection(result, SetupContext.INDEX_SETUP_LOCATION_URI, ".location");
+
+    if (REMOTE_DEBUG)
+    {
+      addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_SETUP_REMOTE_DEBUG, "=true");
+      addEclipseIniTask(result, true, "-Xdebug", "");
+      addEclipseIniTask(result, true, "-Xrunjdwp", ":transport=dt_socket,server=y,suspend=n,address=8123");
+    }
+
+    if (USER_HOME_REDIRECT)
+    {
+      addEclipseIniTask(result, true, "-Duser.home", "=" + PropertiesUtil.getUserHome());
+    }
+  }
+
+  private void addIndexRedirection(EList<SetupTask> result, URI indexURI, String name)
+  {
+    URI redirectedURI = redirect(indexURI);
+    if (!redirectedURI.equals(indexURI))
+    {
+      URI baseURI = indexURI.trimSegments(1).appendSegment("");
+      URI redirectedBaseURI = redirect(baseURI);
+      if (!redirectedBaseURI.equals(baseURI))
+      {
+        URI baseBaseURI = baseURI.trimSegments(1).appendSegment("");
+        URI redirectedBaseBaseURI = redirect(baseBaseURI);
+        if (!redirectedBaseBaseURI.equals(baseBaseURI))
+        {
+          addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection",
+              "=" + baseBaseURI + "->" + redirectedBaseBaseURI);
+        }
+        else
+        {
+          addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection",
+              "=" + baseURI + "->" + redirectedBaseURI);
+        }
+      }
+      // Don't add -D if we're redirecting into the default archive.
+      else if (!redirectedURI.isArchive() || !(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI + "!").equals(redirectedURI.authority()))
+      {
+        addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + indexURI + "->" + redirectedURI);
+      }
+    }
+  }
+
+  private void addEclipseIniTask(EList<SetupTask> result, boolean vm, String option, String value)
+  {
+    EclipseIniTask task = SetupFactory.eINSTANCE.createEclipseIniTask();
+    task.setVm(vm);
+    task.setOption(option);
+    task.setValue(value);
+    task.setExcludedTriggers(new HashSet<Trigger>(Arrays.asList(new Trigger[] { Trigger.STARTUP, Trigger.MANUAL })));
+    result.add(task);
   }
 
   private void generateScopeVariables(EList<SetupTask> setupTasks, String type, String qualifier, String name, String label, String description)
@@ -2743,48 +2814,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
   }
 
-  private void performEclipseIniTask(boolean vm, String option, String value, IProgressMonitor monitor) throws Exception
-  {
-    EclipseIniTask task = SetupFactory.eINSTANCE.createEclipseIniTask();
-    task.setVm(vm);
-    task.setOption(option);
-    task.setValue(value);
-    performTask(task, monitor);
-  }
-
-  private void performIndexRediction(URI indexURI, String name, IProgressMonitor monitor) throws Exception
-  {
-    {
-      URI redirectedURI = redirect(indexURI);
-      if (!redirectedURI.equals(indexURI))
-      {
-        URI baseURI = indexURI.trimSegments(1).appendSegment("");
-        URI redirectedBaseURI = redirect(baseURI);
-        if (!redirectedBaseURI.equals(baseURI))
-        {
-          URI baseBaseURI = baseURI.trimSegments(1).appendSegment("");
-          URI redirectedBaseBaseURI = redirect(baseBaseURI);
-          if (!redirectedBaseBaseURI.equals(baseBaseURI))
-          {
-            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection",
-                "=" + baseBaseURI + "->" + redirectedBaseBaseURI, monitor);
-          }
-          else
-          {
-            performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection",
-                "=" + baseURI + "->" + redirectedBaseURI, monitor);
-          }
-        }
-        // Don't add -D if we're redirecting into the default archive.
-        else if (!redirectedURI.isArchive() || !(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI + "!").equals(redirectedURI.authority()))
-        {
-          performEclipseIniTask(true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + indexURI + "->" + redirectedURI,
-              monitor);
-        }
-      }
-    }
-  }
-
   private void performTask(SetupTask task, IProgressMonitor monitor) throws Exception
   {
     monitor.beginTask("", 101);
@@ -2816,7 +2845,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public void perform(IProgressMonitor monitor) throws Exception
   {
     boolean bootstrap = getTrigger() == Trigger.BOOTSTRAP;
-    monitor.beginTask("", 100 + (bootstrap ? 6 + (vmPath != null ? 1 : 0) : 0));
+    monitor.beginTask("", 100 + (bootstrap ? 2 : 0));
 
     try
     {
@@ -2846,26 +2875,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   {
     log("Performing post bootstrap tasks", false, Severity.INFO);
     File productConfigurationLocation = getProductConfigurationLocation();
-
-    performEclipseIniTask(false, "--launcher.appendVmargs", null, new SubProgressMonitor(monitor, 1));
-
-    if (vmPath != null)
-    {
-      performEclipseIniTask(false, "-vm", vmPath, new SubProgressMonitor(monitor, 1));
-    }
-
-    performEclipseIniTask(true, "-D" + SetupProperties.PROP_UPDATE_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_UPDATE_URL))),
-        new SubProgressMonitor(monitor, 1));
-
-    performIndexRediction(SetupContext.INDEX_SETUP_URI, "", new SubProgressMonitor(monitor, 1));
-    performIndexRediction(SetupContext.INDEX_SETUP_LOCATION_URI, ".location", new SubProgressMonitor(monitor, 1));
-
-    if (REMOTE_DEBUG)
-    {
-      performEclipseIniTask(true, "-D" + SetupProperties.PROP_SETUP_REMOTE_DEBUG, "=true", new NullProgressMonitor());
-      performEclipseIniTask(true, "-Xdebug", "", new NullProgressMonitor());
-      performEclipseIniTask(true, "-Xrunjdwp", ":transport=dt_socket,server=y,suspend=n,address=8123", new NullProgressMonitor());
-    }
 
     if (OS.INSTANCE.isMac())
     {
