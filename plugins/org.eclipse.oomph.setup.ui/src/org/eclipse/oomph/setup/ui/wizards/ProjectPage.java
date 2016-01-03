@@ -89,11 +89,8 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.TableColumnLayout;
@@ -442,19 +439,6 @@ public class ProjectPage extends SetupWizardPage
           {
             public void run()
             {
-              try
-              {
-                Job.getJobManager().join(filteredTree.getRefreshJobFamily(), new NullProgressMonitor());
-              }
-              catch (OperationCanceledException ex)
-              {
-                // Ignore.
-              }
-              catch (InterruptedException ex)
-              {
-                // Ignore.
-              }
-
               if (!selectionMementoTried.getAndSet(true))
               {
                 if (applySelectionMemento())
@@ -828,7 +812,7 @@ public class ProjectPage extends SetupWizardPage
             CatalogSelection selection = catalogSelector.getSelection();
             projectViewer.setInput(selection);
 
-            // We definite has a workspace with a fully mirrored resource set, so it's okay to access this on the UI thread now.
+            // We definitely have a workspace with a fully mirrored resource set, so it's okay to access this on the UI thread now.
             final Workspace workspace = getWorkspace();
             if (workspace != null)
             {
@@ -854,7 +838,18 @@ public class ProjectPage extends SetupWizardPage
               projects.add(stream.getProject());
             }
 
-            projectViewer.setSelection(new StructuredSelection(projects), true);
+            if (projects.isEmpty())
+            {
+              EList<ProjectCatalog> projectCatalogs = selection.getProjectCatalogs();
+              if (!projectCatalogs.isEmpty())
+              {
+                projectViewer.expandToLevel(projectCatalogs.get(0), 1);
+              }
+            }
+            else
+            {
+              projectViewer.setSelection(new StructuredSelection(projects), true);
+            }
 
             checkPageComplete();
           }

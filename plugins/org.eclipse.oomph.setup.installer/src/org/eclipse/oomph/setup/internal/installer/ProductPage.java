@@ -85,10 +85,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -602,54 +599,44 @@ public class ProductPage extends SetupWizardPage
       {
         super.notifyChanged(notification);
 
-        getShell().getDisplay().asyncExec(new Runnable()
+        if (notification.getFeature() == SetupPackage.Literals.CATALOG_SELECTION__PRODUCT_CATALOGS)
         {
-          public void run()
+          getShell().getDisplay().asyncExec(new Runnable()
           {
-            try
+            public void run()
             {
-              Job.getJobManager().join(filteredTree.getRefreshJobFamily(), new NullProgressMonitor());
-            }
-            catch (OperationCanceledException ex)
-            {
-              // Ignore.
-            }
-            catch (InterruptedException ex)
-            {
-              // Ignore.
-            }
-
-            if (!selectionMementoTried.getAndSet(true))
-            {
-              if (applySelectionMemento())
+              if (!selectionMementoTried.getAndSet(true))
               {
-                return;
-              }
-            }
-
-            if (productViewer.getExpandedElements().length == 0)
-            {
-              Object[] elements = getElements(productViewer.getInput());
-              if (elements.length > 0)
-              {
-                productViewer.expandToLevel(elements[0], 1);
-                if (productViewer.getSelection().isEmpty())
+                if (applySelectionMemento())
                 {
-                  EMap<Product, ProductVersion> defaultProductVersions = catalogManager.getSelection().getDefaultProductVersions();
-                  if (!defaultProductVersions.isEmpty())
-                  {
-                    Product defaultProduct = defaultProductVersions.get(0).getKey();
-                    productViewer.setSelection(new StructuredSelection(defaultProduct), true);
-                    return;
-                  }
+                  return;
                 }
+              }
 
-                productViewer.setSelection(new StructuredSelection(elements[0]));
-                setErrorMessage(null);
+              if (productViewer.getExpandedElements().length == 0)
+              {
+                Object[] elements = getElements(productViewer.getInput());
+                if (elements.length > 0)
+                {
+                  productViewer.expandToLevel(elements[0], 1);
+                  if (productViewer.getSelection().isEmpty())
+                  {
+                    EMap<Product, ProductVersion> defaultProductVersions = catalogManager.getSelection().getDefaultProductVersions();
+                    if (!defaultProductVersions.isEmpty())
+                    {
+                      Product defaultProduct = defaultProductVersions.get(0).getKey();
+                      productViewer.setSelection(new StructuredSelection(defaultProduct), true);
+                      return;
+                    }
+                  }
+
+                  productViewer.setSelection(new StructuredSelection(elements[0]));
+                  setErrorMessage(null);
+                }
               }
             }
-          }
-        });
+          });
+        }
       }
     });
 
