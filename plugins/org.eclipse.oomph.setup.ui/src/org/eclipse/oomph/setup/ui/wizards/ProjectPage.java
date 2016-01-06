@@ -40,6 +40,7 @@ import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ButtonAnimator;
+import org.eclipse.oomph.ui.FilteredTreeWithoutWorkbench;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.StringUtil;

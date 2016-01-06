@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.emf.common.util.URI;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -54,15 +56,84 @@ public class P2IndexImpl implements P2Index
 
   private Repository[] repositoriesArray;
 
-  private File cacheFile;
+  private Map<String, Set<String>> capabilitiesMap;
+
+  private File repositoriesCacheFile;
+
+  private File capabilitiesCacheFile;
 
   private P2IndexImpl()
   {
   }
 
-  private synchronized void initRepositories()
+  private synchronized void initCapabilities()
   {
-    if (repositories == null)
+    if (capabilitiesMap == null)
+    {
+      capabilitiesMap = new LinkedHashMap<String, Set<String>>();
+
+      ZipFile zipFile = null;
+      InputStream inputStream = null;
+
+      try
+      {
+        boolean refreshed = initCapabilitiesCacheFile();
+
+        zipFile = new ZipFile(capabilitiesCacheFile);
+        ZipEntry zipEntry = zipFile.getEntry("capabilities");
+
+        inputStream = zipFile.getInputStream(zipEntry);
+
+        Map<Object, Object> options = new HashMap<Object, Object>();
+        options.put(BinaryResourceImpl.OPTION_VERSION, BinaryResourceImpl.BinaryIO.Version.VERSION_1_1);
+        options.put(BinaryResourceImpl.OPTION_STYLE_DATA_CONVERTER, Boolean.TRUE);
+        options.put(BinaryResourceImpl.OPTION_BUFFER_CAPACITY, 8192);
+
+        EObjectInputStream stream = new BinaryResourceImpl.EObjectInputStream(inputStream, options);
+        int refreshHours = stream.readInt();
+        int mapSize = stream.readCompressedInt();
+        for (int i = 0; i < mapSize; ++i)
+        {
+          String key = stream.readSegmentedString();
+          int valuesSize = stream.readCompressedInt();
+          for (int j = 0; j < valuesSize; ++j)
+          {
+            String value = stream.readSegmentedString();
+            CollectionUtil.add(capabilitiesMap, key, value);
+          }
+        }
+
+        if (refreshed)
+        {
+          File validityFile = getValidityFile();
+          IOUtil.writeLines(validityFile, "UTF-8", Collections.singletonList("" + (System.currentTimeMillis() + refreshHours * 60 * 60 * 1000)));
+        }
+      }
+      catch (Exception ex)
+      {
+        P2CorePlugin.INSTANCE.log(ex);
+      }
+      finally
+      {
+        IOUtil.closeSilent(inputStream);
+        if (zipFile != null)
+        {
+          try
+          {
+            zipFile.close();
+          }
+          catch (IOException ex)
+          {
+            P2CorePlugin.INSTANCE.log(ex);
+          }
+        }
+      }
+    }
+  }
+
+  private synchronized void initRepositories(boolean force)
+  {
+    if (repositories == null || force)
     {
       repositories = new HashMap<Integer, RepositoryImpl>();
 
@@ -71,9 +142,9 @@ public class P2IndexImpl implements P2Index
 
       try
       {
-        boolean refreshed = initCacheFile();
+        boolean refreshed = initRepositoriesCacheFile();
 
-        zipFile = new ZipFile(cacheFile);
+        zipFile = new ZipFile(repositoriesCacheFile);
         ZipEntry zipEntry = zipFile.getEntry("repositories");
 
         inputStream = zipFile.getInputStream(zipEntry);
@@ -140,15 +211,15 @@ public class P2IndexImpl implements P2Index
     }
   }
 
-  private boolean initCacheFile() throws Exception
+  private boolean initRepositoriesCacheFile() throws Exception
   {
-    if (cacheFile == null)
+    if (repositoriesCacheFile == null)
     {
       IPath stateLocation = P2CorePlugin.INSTANCE.isOSGiRunning() ? P2CorePlugin.INSTANCE.getStateLocation() : new Path(".");
-      cacheFile = new File(stateLocation.toOSString(), "repositories");
+      repositoriesCacheFile = new File(stateLocation.toOSString(), "repositories");
     }
 
-    if (cacheFile.exists())
+    if (repositoriesCacheFile.exists())
     {
       File validityFile = getValidityFile();
       List<String> lines = IOUtil.readLines(validityFile, "UTF-8");
@@ -165,7 +236,44 @@ public class P2IndexImpl implements P2Index
     try
     {
       inputStream = new URL(INDEX_BASE + "repositories").openStream();
-      outputStream = new FileOutputStream(cacheFile);
+      outputStream = new FileOutputStream(repositoriesCacheFile);
+      IOUtil.copy(inputStream, outputStream);
+    }
+    finally
+    {
+      IOUtil.close(outputStream);
+      IOUtil.close(inputStream);
+    }
+
+    return true;
+  }
+
+  private boolean initCapabilitiesCacheFile() throws Exception
+  {
+    if (capabilitiesCacheFile == null)
+    {
+      IPath stateLocation = P2CorePlugin.INSTANCE.isOSGiRunning() ? P2CorePlugin.INSTANCE.getStateLocation() : new Path(".");
+      capabilitiesCacheFile = new File(stateLocation.toOSString(), "capabilities");
+    }
+
+    if (capabilitiesCacheFile.exists())
+    {
+      File validityFile = getValidityFile();
+      List<String> lines = IOUtil.readLines(validityFile, "UTF-8");
+      long validUntil = Long.parseLong(lines.get(0));
+      if (System.currentTimeMillis() <= validUntil)
+      {
+        return false;
+      }
+    }
+
+    InputStream inputStream = null;
+    OutputStream outputStream = null;
+
+    try
+    {
+      inputStream = new URL(INDEX_BASE + "capabilities").openStream();
+      outputStream = new FileOutputStream(capabilitiesCacheFile);
       IOUtil.copy(inputStream, outputStream);
     }
     finally
@@ -179,13 +287,19 @@ public class P2IndexImpl implements P2Index
 
   private File getValidityFile()
   {
-    return new File(cacheFile.getParentFile(), "repositories.txt");
+    return new File((repositoriesCacheFile == null ? capabilitiesCacheFile : repositoriesCacheFile).getParentFile(), "repositories.txt");
   }
 
   public Repository[] getRepositories()
   {
-    initRepositories();
+    initRepositories(false);
     return repositoriesArray;
+  }
+
+  public Map<String, Set<String>> getCapabilities()
+  {
+    initCapabilities();
+    return Collections.unmodifiableMap(capabilitiesMap);
   }
 
   public Map<Repository, Set<Version>> lookupCapabilities(String namespace, String name)
@@ -208,12 +322,7 @@ public class P2IndexImpl implements P2Index
       }
 
       long timeStamp = Long.parseLong(line);
-      if (timeStamp != this.timeStamp)
-      {
-        repositories = null;
-      }
-
-      initRepositories();
+      initRepositories(timeStamp != this.timeStamp);
 
       while ((line = reader.readLine()) != null)
       {

@@ -60,6 +60,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -169,6 +170,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   private final VersionProvider versionProvider = new VersionProvider();
 
   private final CollapseAllAction collapseAllAction = new CollapseAllAction();
+
+  private final SearchAction searchAction = new SearchAction();
 
   private Composite container;
 
@@ -597,6 +600,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       }
     });
 
+    toolbarManager.add(new Separator("search"));
+    toolbarManager.add(searchAction);
+
     toolbarManager.add(new Separator("end"));
   }
 
@@ -718,6 +724,24 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     return array;
   }
 
+  static void minimizeNamespaces(Set<String> flavors, Set<String> namespaces)
+  {
+    String[] flavorIDs = getMinimalFlavors(flavors);
+    for (Iterator<String> it = namespaces.iterator(); it.hasNext();)
+    {
+      String namespace = it.next();
+      for (int i = 0; i < flavorIDs.length; i++)
+      {
+        String flavor = flavorIDs[i];
+        if (namespace.startsWith(flavor))
+        {
+          it.remove();
+          break;
+        }
+      }
+    }
+  }
+
   private static String[] getMinimalFlavors(final Set<String> flavors)
   {
     String[] flavorIDs = sortStrings(flavors);
@@ -814,6 +838,28 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       {
         TreeViewer treeViewer = (TreeViewer)itemsViewer;
         treeViewer.collapseAll();
+      }
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private final class SearchAction extends Action
+  {
+    public SearchAction()
+    {
+      super("Search", P2UIPlugin.INSTANCE.getImageDescriptor("tool16/search"));
+      setToolTipText("Search Eclipse repositories by provided capabilities");
+    }
+
+    @Override
+    public void run()
+    {
+      SearchEclipseRepositoryDialog searchEclipseRepositoryDialog = new SearchEclipseRepositoryDialog(UIUtil.getShell());
+      if (searchEclipseRepositoryDialog.open() == Dialog.OK)
+      {
+        activateAndLoadRepository(searchEclipseRepositoryDialog.getSelectedRepository());
       }
     }
   }
@@ -1428,20 +1474,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         }
       }
 
-      String[] flavorIDs = getMinimalFlavors(flavors);
-      for (Iterator<String> it = namespaces.iterator(); it.hasNext();)
-      {
-        String namespace = it.next();
-        for (int i = 0; i < flavorIDs.length; i++)
-        {
-          String flavor = flavorIDs[i];
-          if (namespace.startsWith(flavor))
-          {
-            it.remove();
-            break;
-          }
-        }
-      }
+      minimizeNamespaces(flavors, namespaces);
 
       if (!namespaces.contains(currentNamespace))
       {

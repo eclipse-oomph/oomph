@@ -8,9 +8,8 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.setup.ui.wizards;
+package org.eclipse.oomph.ui;
 
-import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -25,7 +24,9 @@ import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.progress.WorkbenchJob;
 
 /**
- * This subclass is needed because the refresh job won't schedule if there is no workbench, which is the case in the installer wizard.
+ * This subclass is useful because the refresh job won't schedule if there is no workbench, which is the case in the installer wizard.
+ * This supports an optional expansion filter that can be used to control how the tree is expanded after a match.
+ * This also supports controlling the number of items that will be expanded after a match.
  *
  * @author Ed Merks
  */
@@ -33,9 +34,25 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
 {
   private final Object refreshJobFamily = new Object();
 
+  private final ExpansionFilter expansionFilter;
+
+  private int expansionCount;
+
   public FilteredTreeWithoutWorkbench(Composite parent, int style)
   {
     super(parent, style, new PatternFilter(), true);
+    expansionFilter = null;
+  }
+
+  public FilteredTreeWithoutWorkbench(Composite parent, int style, PatternFilter patternFilter, ExpansionFilter expansionFilter)
+  {
+    super(parent, style, patternFilter, true);
+    this.expansionFilter = expansionFilter;
+  }
+
+  public void setExpansionCount(int expansionCount)
+  {
+    this.expansionCount = expansionCount;
   }
 
   public Object getRefreshJobFamily()
@@ -100,7 +117,7 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
             int numVisibleItems = treeHeight / getViewer().getTree().getItemHeight();
             long stopTime = 200 + System.currentTimeMillis();
             boolean cancel = false;
-            if (items.length > 0 && recursiveExpand(items, monitor, stopTime, new int[] { numVisibleItems }))
+            if (items.length > 0 && recursiveExpand(items, monitor, stopTime, new int[] { expansionCount == 0 ? numVisibleItems : expansionCount }))
             {
               cancel = true;
             }
@@ -145,7 +162,7 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
           else
           {
             Object itemData = item.getData();
-            if (itemData != null)
+            if (itemData != null && (expansionFilter == null || expansionFilter.shouldExpand(itemData)))
             {
               if (!item.getExpanded())
               {
@@ -188,5 +205,10 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
         return family == refreshJobFamily;
       }
     };
+  }
+
+  public static interface ExpansionFilter
+  {
+    public boolean shouldExpand(Object element);
   }
 }

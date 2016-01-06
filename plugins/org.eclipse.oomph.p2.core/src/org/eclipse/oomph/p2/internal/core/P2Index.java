@@ -30,6 +30,8 @@ public interface P2Index
 
   public Repository[] getRepositories();
 
+  public Map<String, Set<String>> getCapabilities();
+
   public Map<Repository, Set<Version>> lookupCapabilities(String namespace, String name);
 
   public Map<Repository, Set<Version>> generateCapabilitiesFromComposedRepositories(Map<Repository, Set<Version>> capabilitiesFromSimpleRepositories);
