@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,6 +32,8 @@ import java.util.List;
 public abstract class OS
 {
   public static final OS INSTANCE = create();
+
+  public static final List<OS> INSTANCES = createAll();
 
   private final String osgiOS;
 
@@ -88,6 +91,17 @@ public abstract class OS
   public boolean is32BitAvailable()
   {
     return true;
+  }
+
+  public int getBitness()
+  {
+    String osgiArch = getOsgiArch();
+    if (Platform.ARCH_IA64_32.equals(osgiArch) || Platform.ARCH_X86.equals(osgiArch))
+    {
+      return 32;
+    }
+
+    return 64;
   }
 
   public boolean isLineEndingConversionNeeded()
@@ -255,6 +269,25 @@ public abstract class OS
     }
 
     throw new IllegalStateException("Operating system not supported: " + os);
+  }
+
+  private static List<OS> createAll()
+  {
+    List<OS> result = new ArrayList<OS>();
+
+    result.add(Win64.INSTANCE);
+    result.add(Win32.INSTANCE);
+    result.add(new Mac(Platform.WS_COCOA, Platform.ARCH_X86_64));
+    result.add(new Linux(Platform.WS_GTK, Platform.ARCH_X86_64));
+    result.add(new Linux(Platform.WS_GTK, Platform.ARCH_X86));
+
+    return Collections.unmodifiableList(result);
+  }
+
+  @Override
+  public String toString()
+  {
+    return getOsgiOS() + " " + getOsgiWS() + " " + getOsgiArch();
   }
 
   /**

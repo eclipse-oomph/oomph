@@ -78,4 +78,6 @@ public interface SetupTaskContext extends ProgressLog
   public Set<Object> keySet();
 
   public String getLauncherName();
+
+  public boolean matchesFilterContext(String filter);
 }

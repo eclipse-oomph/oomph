@@ -12,6 +12,7 @@ package org.eclipse.oomph.internal.setup;
 
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.UserCallback;
 
 import java.util.List;
@@ -24,6 +25,8 @@ public interface SetupPrompter
   public static final SetupPrompter OK = new Default(true);
 
   public static final SetupPrompter CANCEL = new Default(false);
+
+  public OS getOS();
 
   public String getVMPath();
 
@@ -43,6 +46,11 @@ public interface SetupPrompter
     public Default(boolean ok)
     {
       this.ok = ok;
+    }
+
+    public OS getOS()
+    {
+      return OS.INSTANCE;
     }
 
     public String getVMPath()

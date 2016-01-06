@@ -447,6 +447,11 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       {
         return new SetupPrompter()
         {
+          public OS getOS()
+          {
+            return OS.INSTANCE;
+          }
+
           public String getVMPath()
           {
             return null;
@@ -587,6 +592,11 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       public String getLauncherName()
       {
         throw new UnsupportedOperationException();
+      }
+
+      public boolean matchesFilterContext(String filter)
+      {
+        return false;
       }
     };
 

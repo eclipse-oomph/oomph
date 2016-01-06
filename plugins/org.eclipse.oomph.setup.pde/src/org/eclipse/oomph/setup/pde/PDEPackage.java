@@ -160,6 +160,15 @@ public interface PDEPackage extends EPackage
   int TARGET_PLATFORM_TASK__RESTRICTIONS = SetupPackage.SETUP_TASK__RESTRICTIONS;
 
   /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGET_PLATFORM_TASK__FILTER = SetupPackage.SETUP_TASK__FILTER;
+
+  /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -267,6 +276,15 @@ public interface PDEPackage extends EPackage
    * @ordered
    */
   int API_BASELINE_TASK__RESTRICTIONS = SetupPackage.SETUP_TASK__RESTRICTIONS;
+
+  /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int API_BASELINE_TASK__FILTER = SetupPackage.SETUP_TASK__FILTER;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.

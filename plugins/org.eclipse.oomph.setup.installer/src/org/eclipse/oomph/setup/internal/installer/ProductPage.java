@@ -160,6 +160,8 @@ public class ProductPage extends SetupWizardPage
 
   private static final Pattern RELEASE_LABEL_PATTERN = Pattern.compile(".*\\(([^)]*)\\)[^)]*");
 
+  private static final boolean OS_CHOOSE = PropertiesUtil.isProperty("oomph.setup.os.choose");
+
   private final SelectionMemento selectionMemento;
 
   private ComposedAdapterFactory adapterFactory;
@@ -278,7 +280,44 @@ public class ProductPage extends SetupWizardPage
     versionCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     AccessUtil.setKey(versionCombo, "versionChoice");
 
-    if (JREManager.BITNESS_CHANGEABLE)
+    if (OS_CHOOSE)
+    {
+      ComboViewer osComboViewer = new ComboViewer(lowerComposite, SWT.READ_ONLY);
+      osComboViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+      osComboViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
+      {
+        @Override
+        public Object[] getElements(Object object)
+        {
+          return OS.INSTANCES.toArray();
+        }
+      });
+
+      osComboViewer.setInput(OS.INSTANCES);
+
+      for (OS os : OS.INSTANCES)
+      {
+        if (os.isCurrent())
+        {
+          osComboViewer.setSelection(new StructuredSelection(os));
+          break;
+        }
+      }
+
+      osComboViewer.addSelectionChangedListener(new ISelectionChangedListener()
+      {
+        public void selectionChanged(SelectionChangedEvent event)
+        {
+          IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+          OS os = (OS)selection.getFirstElement();
+          getWizard().setOS(os);
+          javaController.setBitness(os.getBitness());
+        }
+      });
+
+      new Label(lowerComposite, SWT.NONE);
+    }
+    else if (JREManager.BITNESS_CHANGEABLE)
     {
       bitness32Button = new ToolButton(lowerComposite, SWT.RADIO, SetupUIPlugin.INSTANCE.getSWTImage("32bit.png"), true);
       bitness32Button.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
@@ -359,7 +398,7 @@ public class ProductPage extends SetupWizardPage
       protected void jreChanged(JRE jre)
       {
         getWizard().setVMPath(getVMOption(jre));
-        getWizard().setOS(OS.INSTANCE.getForBitness(getBitness()));
+        getWizard().setOS(getWizard().getOS().getForBitness(getBitness()));
       }
 
       @Override
@@ -870,7 +909,7 @@ public class ProductPage extends SetupWizardPage
     versionLabel.setEnabled(productSelected);
     versionComboViewer.getControl().setEnabled(productSelected);
 
-    if (JREManager.BITNESS_CHANGEABLE)
+    if (JREManager.BITNESS_CHANGEABLE && !OS_CHOOSE)
     {
       bitness32Button.setEnabled(productSelected);
       bitness64Button.setEnabled(productSelected);

@@ -54,6 +54,7 @@
     </genEnums>
     <genDataTypes ecoreDataType="Setup.ecore#//TriggerSet"/>
     <genDataTypes ecoreDataType="Setup.ecore#//LicenseInfo"/>
+    <genDataTypes ecoreDataType="Setup.ecore#//Filter"/>
     <genClasses image="false" ecoreClass="Setup.ecore#//SetupTask">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/iD"/>
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/description"/>
@@ -73,6 +74,9 @@
         <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
       </genFeatures>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTask/restrictions">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/filter">
         <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
       </genFeatures>
       <genOperations ecoreOperation="Setup.ecore#//SetupTask/getScope"/>

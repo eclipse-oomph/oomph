@@ -299,7 +299,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   public String getVMPath()
   {
-    return vmPath;
+    return getOS().isCurrentOS() ? vmPath : null;
   }
 
   public void setVMPath(String vmPath)
@@ -309,7 +309,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   public OS getOS()
   {
-    return os;
+    return os == null ? OS.INSTANCE : os;
   }
 
   public void setOS(OS os)

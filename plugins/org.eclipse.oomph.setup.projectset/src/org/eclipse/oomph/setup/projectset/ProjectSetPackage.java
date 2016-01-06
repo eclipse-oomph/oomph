@@ -160,6 +160,15 @@ public interface ProjectSetPackage extends EPackage
   int PROJECT_SET_IMPORT_TASK__RESTRICTIONS = SetupPackage.SETUP_TASK__RESTRICTIONS;
 
   /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECT_SET_IMPORT_TASK__FILTER = SetupPackage.SETUP_TASK__FILTER;
+
+  /**
    * The feature id for the '<em><b>URL</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

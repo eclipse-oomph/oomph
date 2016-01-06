@@ -347,27 +347,30 @@ public class ProgressPage extends SetupWizardPage
     });
     AccessUtil.setKey(dismissButton, "dismiss");
 
-    if (getTrigger() == Trigger.BOOTSTRAP)
+    if (getWizard().getOS().isCurrentOS())
     {
-      launchButton = buttonBar.addCheckButton("Launch automatically", "Launch the installed product when all setup tasks have performed successfully", true,
-          "launchAutomatically");
-    }
-    else
-    {
-      launchButton = buttonBar.addCheckButton("Restart automatically if needed",
-          "Restart the current product if the installation has been changed by setup tasks", false, "restartIfNeeded");
-    }
-
-    launchAutomatically = launchButton.getSelection();
-    launchButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
+      if (getTrigger() == Trigger.BOOTSTRAP)
       {
-        launchAutomatically = launchButton.getSelection();
+        launchButton = buttonBar.addCheckButton("Launch automatically", "Launch the installed product when all setup tasks have performed successfully", true,
+            "launchAutomatically");
       }
-    });
-    AccessUtil.setKey(launchButton, "launch");
+      else
+      {
+        launchButton = buttonBar.addCheckButton("Restart automatically if needed",
+            "Restart the current product if the installation has been changed by setup tasks", false, "restartIfNeeded");
+      }
+
+      launchAutomatically = launchButton.getSelection();
+      launchButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          launchAutomatically = launchButton.getSelection();
+        }
+      });
+      AccessUtil.setKey(launchButton, "launch");
+    }
   }
 
   @Override

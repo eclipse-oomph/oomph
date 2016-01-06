@@ -62,6 +62,7 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.impl.SetupTaskImpl#getPredecessors <em>Predecessors</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.SetupTaskImpl#getSuccessors <em>Successors</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.SetupTaskImpl#getRestrictions <em>Restrictions</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.SetupTaskImpl#getFilter <em>Filter</em>}</li>
  * </ul>
  *
  * @generated
@@ -181,6 +182,26 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
   protected EList<Scope> restrictions;
 
   /**
+   * The default value of the '{@link #getFilter() <em>Filter</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFilter()
+   * @generated
+   * @ordered
+   */
+  protected static final String FILTER_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getFilter() <em>Filter</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFilter()
+   * @generated
+   * @ordered
+   */
+  protected String filter = FILTER_EDEFAULT;
+
+  /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated NOT
@@ -265,6 +286,31 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
       restrictions = new EObjectResolvingEList<Scope>(Scope.class, this, SetupPackage.SETUP_TASK__RESTRICTIONS);
     }
     return restrictions;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getFilter()
+  {
+    return filter;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setFilter(String newFilter)
+  {
+    String oldFilter = filter;
+    filter = newFilter;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.SETUP_TASK__FILTER, oldFilter, filter));
+    }
   }
 
   /**
@@ -608,6 +654,8 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
         return getSuccessors();
       case SetupPackage.SETUP_TASK__RESTRICTIONS:
         return getRestrictions();
+      case SetupPackage.SETUP_TASK__FILTER:
+        return getFilter();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -647,6 +695,9 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
         getRestrictions().clear();
         getRestrictions().addAll((Collection<? extends Scope>)newValue);
         return;
+      case SetupPackage.SETUP_TASK__FILTER:
+        setFilter((String)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -682,6 +733,9 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
       case SetupPackage.SETUP_TASK__RESTRICTIONS:
         getRestrictions().clear();
         return;
+      case SetupPackage.SETUP_TASK__FILTER:
+        setFilter(FILTER_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -712,6 +766,8 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
         return successors != null && !successors.isEmpty();
       case SetupPackage.SETUP_TASK__RESTRICTIONS:
         return restrictions != null && !restrictions.isEmpty();
+      case SetupPackage.SETUP_TASK__FILTER:
+        return FILTER_EDEFAULT == null ? filter != null : !FILTER_EDEFAULT.equals(filter);
     }
     return super.eIsSet(featureID);
   }
@@ -738,6 +794,8 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
     result.append(excludedTriggers);
     result.append(", disabled: ");
     result.append(disabled);
+    result.append(", filter: ");
+    result.append(filter);
     result.append(')');
     return result.toString();
   }

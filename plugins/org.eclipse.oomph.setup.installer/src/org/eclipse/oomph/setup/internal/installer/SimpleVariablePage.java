@@ -1108,7 +1108,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       IOUtil.writeLines(FILE_INSTALL_ROOT, "UTF-8", Collections.singletonList(installRoot));
 
-      SimplePrompter prompter = new SimplePrompter(vmPath);
+      SimplePrompter prompter = new SimplePrompter(OS.INSTANCE.getForBitness(javaController.getBitness()), vmPath);
       performer = SetupTaskPerformer.create(uriConverter, prompter, Trigger.BOOTSTRAP, setupContext, false);
 
       EList<SetupTask> triggeredSetupTasks = performer.getTriggeredSetupTasks();
@@ -1179,7 +1179,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
       performer.put(UIServices.class, Installer.SERVICE_UI);
       performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
       performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
-      performer.put(OS.class, OS.INSTANCE.getForBitness(javaController.getBitness()));
       performer.setOffline(false);
       performer.setMirrors(true);
       performer.setProgress(progress);
@@ -1611,10 +1610,18 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     private final List<VariableTask> unresolvedVariables = new ArrayList<VariableTask>();
 
+    private final OS os;
+
     private final String vmPath;
 
-    public SimplePrompter(String vmPath)
+    public OS getOS()
     {
+      return os;
+    }
+
+    public SimplePrompter(OS os, String vmPath)
+    {
+      this.os = os;
       this.vmPath = vmPath;
     }
 

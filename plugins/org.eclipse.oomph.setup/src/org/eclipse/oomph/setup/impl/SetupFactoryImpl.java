@@ -208,6 +208,8 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
         return createTriggerSetFromString(eDataType, initialValue);
       case SetupPackage.LICENSE_INFO:
         return createLicenseInfoFromString(eDataType, initialValue);
+      case SetupPackage.FILTER:
+        return createFilterFromString(eDataType, initialValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -235,6 +237,8 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
         return convertTriggerSetToString(eDataType, instanceValue);
       case SetupPackage.LICENSE_INFO:
         return convertLicenseInfoToString(eDataType, instanceValue);
+      case SetupPackage.FILTER:
+        return convertFilterToString(eDataType, instanceValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -706,6 +710,26 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
   public String convertLicenseInfoToString(EDataType eDataType, Object instanceValue)
   {
     return super.convertToString(eDataType, instanceValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public String createFilterFromString(EDataType eDataType, String initialValue)
+  {
+    return initialValue;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public String convertFilterToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
   }
 
   /**

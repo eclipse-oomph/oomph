@@ -47,6 +47,9 @@
         <details key="name" value="restriction"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filter" eType="#//Filter">
+      <eAnnotations source="http://www.eclipse.org/oomph/setup/NoExpand"/>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SetupTaskContainer" abstract="true"
       eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
@@ -493,5 +496,10 @@
     <eLiterals name="PROMPT"/>
     <eLiterals name="ACCEPT" value="1"/>
     <eLiterals name="DECLINE" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Filter" instanceClassName="java.lang.String">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="WellformedFilterExpression"/>
+    </eAnnotations>
   </eClassifiers>
 </ecore:EPackage>

@@ -113,6 +113,7 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
       addPredecessorsPropertyDescriptor(object);
       addSuccessorsPropertyDescriptor(object);
       addRestrictionsPropertyDescriptor(object);
+      addFilterPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -170,6 +171,20 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
         getString("_UI_SetupTask_restrictions_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_restrictions_feature", "_UI_SetupTask_type"),
         SetupPackage.Literals.SETUP_TASK__RESTRICTIONS, true, false, true, null, null, new String[] { "org.eclipse.ui.views.properties.expert" }));
+  }
+
+  /**
+   * This adds a property descriptor for the Filter feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addFilterPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_SetupTask_filter_feature"), getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_filter_feature", "_UI_SetupTask_type"),
+        SetupPackage.Literals.SETUP_TASK__FILTER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
+        new String[] { "org.eclipse.ui.views.properties.expert" }));
   }
 
   @Override
@@ -443,6 +458,7 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
       case SetupPackage.SETUP_TASK__EXCLUDED_TRIGGERS:
       case SetupPackage.SETUP_TASK__DISABLED:
       case SetupPackage.SETUP_TASK__RESTRICTIONS:
+      case SetupPackage.SETUP_TASK__FILTER:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }

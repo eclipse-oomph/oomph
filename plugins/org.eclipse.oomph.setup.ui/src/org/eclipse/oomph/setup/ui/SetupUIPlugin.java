@@ -46,6 +46,7 @@ import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.UserCallback;
 
@@ -483,6 +484,11 @@ public final class SetupUIPlugin extends OomphUIPlugin
       // Create a prompter that generally cancels except if all prompted variables are passwords.
       SetupPrompter prompter = new SetupPrompter()
       {
+        public OS getOS()
+        {
+          return OS.INSTANCE;
+        }
+
         public String getVMPath()
         {
           return null;

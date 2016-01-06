@@ -39,6 +39,7 @@ import org.eclipse.oomph.ui.ButtonBar;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
 
@@ -691,6 +692,11 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     }
 
     return null;
+  }
+
+  public OS getOS()
+  {
+    return getWizard().getOS();
   }
 
   public String getVMPath()

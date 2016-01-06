@@ -302,13 +302,22 @@ public interface SetupPackage extends EPackage
   int SETUP_TASK__RESTRICTIONS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 7;
 
   /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SETUP_TASK__FILTER = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 8;
+
+  /**
    * The number of structural features of the '<em>Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SETUP_TASK_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 8;
+  int SETUP_TASK_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 9;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -1538,6 +1547,15 @@ public interface SetupPackage extends EPackage
   int INSTALLATION_TASK__RESTRICTIONS = SETUP_TASK__RESTRICTIONS;
 
   /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INSTALLATION_TASK__FILTER = SETUP_TASK__FILTER;
+
+  /**
    * The feature id for the '<em><b>Location</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1718,6 +1736,15 @@ public interface SetupPackage extends EPackage
   int WORKSPACE_TASK__RESTRICTIONS = SETUP_TASK__RESTRICTIONS;
 
   /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORKSPACE_TASK__FILTER = SETUP_TASK__FILTER;
+
+  /**
    * The feature id for the '<em><b>Location</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1825,6 +1852,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int COMPOUND_TASK__RESTRICTIONS = SETUP_TASK__RESTRICTIONS;
+
+  /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COMPOUND_TASK__FILTER = SETUP_TASK__FILTER;
 
   /**
    * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
@@ -1943,6 +1979,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int VARIABLE_TASK__RESTRICTIONS = SETUP_TASK__RESTRICTIONS;
+
+  /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABLE_TASK__FILTER = SETUP_TASK__FILTER;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -2153,6 +2198,15 @@ public interface SetupPackage extends EPackage
   int STRING_SUBSTITUTION_TASK__RESTRICTIONS = SETUP_TASK__RESTRICTIONS;
 
   /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STRING_SUBSTITUTION_TASK__FILTER = SETUP_TASK__FILTER;
+
+  /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2261,6 +2315,15 @@ public interface SetupPackage extends EPackage
   int REDIRECTION_TASK__RESTRICTIONS = SETUP_TASK__RESTRICTIONS;
 
   /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REDIRECTION_TASK__FILTER = SETUP_TASK__FILTER;
+
+  /**
    * The feature id for the '<em><b>Source URL</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2367,6 +2430,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int ECLIPSE_INI_TASK__RESTRICTIONS = SETUP_TASK__RESTRICTIONS;
+
+  /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ECLIPSE_INI_TASK__FILTER = SETUP_TASK__FILTER;
 
   /**
    * The feature id for the '<em><b>Option</b></em>' attribute.
@@ -2484,6 +2556,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int LINK_LOCATION_TASK__RESTRICTIONS = SETUP_TASK__RESTRICTIONS;
+
+  /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LINK_LOCATION_TASK__FILTER = SETUP_TASK__FILTER;
 
   /**
    * The feature id for the '<em><b>Path</b></em>' attribute.
@@ -2604,6 +2685,15 @@ public interface SetupPackage extends EPackage
   int PREFERENCE_TASK__RESTRICTIONS = SETUP_TASK__RESTRICTIONS;
 
   /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PREFERENCE_TASK__FILTER = SETUP_TASK__FILTER;
+
+  /**
    * The feature id for the '<em><b>Key</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2712,6 +2802,15 @@ public interface SetupPackage extends EPackage
   int RESOURCE_COPY_TASK__RESTRICTIONS = SETUP_TASK__RESTRICTIONS;
 
   /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RESOURCE_COPY_TASK__FILTER = SETUP_TASK__FILTER;
+
+  /**
    * The feature id for the '<em><b>Source URL</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2818,6 +2917,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int RESOURCE_CREATION_TASK__RESTRICTIONS = SETUP_TASK__RESTRICTIONS;
+
+  /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RESOURCE_CREATION_TASK__FILTER = SETUP_TASK__FILTER;
 
   /**
    * The feature id for the '<em><b>Content</b></em>' attribute.
@@ -2935,6 +3043,15 @@ public interface SetupPackage extends EPackage
    * @ordered
    */
   int TEXT_MODIFY_TASK__RESTRICTIONS = SETUP_TASK__RESTRICTIONS;
+
+  /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TEXT_MODIFY_TASK__FILTER = SETUP_TASK__FILTER;
 
   /**
    * The feature id for the '<em><b>URL</b></em>' attribute.
@@ -3214,6 +3331,16 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   int LICENSE_INFO = 40;
+
+  /**
+   * The meta object id for the '<em>Filter</em>' data type.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see java.lang.String
+   * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getFilter()
+   * @generated
+   */
+  int FILTER = 41;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.Index <em>Index</em>}'.
@@ -3793,6 +3920,17 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   EReference getSetupTask_Restrictions();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.SetupTask#getFilter <em>Filter</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Filter</em>'.
+   * @see org.eclipse.oomph.setup.SetupTask#getFilter()
+   * @see #getSetupTask()
+   * @generated
+   */
+  EAttribute getSetupTask_Filter();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.SetupTask#getExcludedTriggers <em>Excluded Triggers</em>}'.
@@ -4631,6 +4769,18 @@ public interface SetupPackage extends EPackage
   EDataType getLicenseInfo();
 
   /**
+   * Returns the meta object for data type '{@link java.lang.String <em>Filter</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for data type '<em>Filter</em>'.
+   * @see java.lang.String
+   * @model instanceClass="java.lang.String"
+   *        annotation="http://www.eclipse.org/emf/2002/Ecore constraints='WellformedFilterExpression'"
+   * @generated
+   */
+  EDataType getFilter();
+
+  /**
    * Returns the meta object for data type '{@link java.util.Set <em>Trigger Set</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5116,6 +5266,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EReference SETUP_TASK__RESTRICTIONS = eINSTANCE.getSetupTask_Restrictions();
+
+    /**
+     * The meta object literal for the '<em><b>Filter</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute SETUP_TASK__FILTER = eINSTANCE.getSetupTask_Filter();
 
     /**
      * The meta object literal for the '<em><b>Excluded Triggers</b></em>' attribute feature.
@@ -5784,6 +5942,16 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EDataType LICENSE_INFO = eINSTANCE.getLicenseInfo();
+
+    /**
+     * The meta object literal for the '<em>Filter</em>' data type.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see java.lang.String
+     * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getFilter()
+     * @generated
+     */
+    EDataType FILTER = eINSTANCE.getFilter();
 
     /**
      * The meta object literal for the '<em>Trigger Set</em>' data type.

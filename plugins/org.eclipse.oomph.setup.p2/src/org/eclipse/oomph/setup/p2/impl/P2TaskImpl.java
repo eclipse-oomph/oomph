@@ -53,7 +53,6 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.internal.provisional.p2.core.eventbus.IProvisioningEventBus;
 import org.eclipse.equinox.internal.provisional.p2.core.eventbus.ProvisioningListener;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
@@ -65,7 +64,6 @@ import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.equinox.p2.metadata.VersionRange;
-import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
@@ -615,13 +613,10 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       return true;
     }
 
-    OS os = context.getOS();
-    IInstallableUnit contextIU = InstallableUnit.contextIU(os.getOsgiWS(), os.getOsgiOS(), os.getOsgiArch());
     Set<IInstallableUnit> installedUnits = getInstalledUnits(agent);
     for (Requirement requirement : getRequirements())
     {
-      IMatchExpression<IInstallableUnit> matchExpression = requirement.getMatchExpression();
-      if ((matchExpression == null || matchExpression.isMatch(contextIU)) && !requirement.isOptional())
+      if (context.matchesFilterContext(requirement.getFilter()) && !requirement.isOptional())
       {
         String id = requirement.getName();
         VersionRange versionRange = requirement.getVersionRange();

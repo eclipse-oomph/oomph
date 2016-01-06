@@ -38,10 +38,12 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.ITouchpointData;
 import org.eclipse.equinox.p2.metadata.ITouchpointInstruction;
+import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.query.QueryUtil;
 
 import java.io.File;
@@ -81,6 +83,8 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
 
   private String launcherName;
 
+  private IInstallableUnit filterContextIU;
+
   protected AbstractSetupTaskContext(URIConverter uriConverter, SetupPrompter prompter, Trigger trigger, SetupContext setupContext)
   {
     this.uriConverter = uriConverter;
@@ -99,6 +103,17 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       put(entry.getKey(), entry.getValue());
     }
 
+    Map<String, String> filterContext = new LinkedHashMap<String, String>();
+    Map<String, String> env = System.getenv();
+    synchronized (env)
+    {
+      for (Map.Entry<String, String> entry : env.entrySet())
+      {
+        String key = entry.getKey();
+        filterContext.put(key.replace('_', '.'), entry.getValue());
+      }
+    }
+
     Properties properties = System.getProperties();
     synchronized (properties)
     {
@@ -113,8 +128,20 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
           URI eclipseHomeRootLocation = URI.createURI(value.toString()).trimSegments(OS.INSTANCE.isMac() ? 3 : 1);
           put("eclipse.home.root.location", eclipseHomeRootLocation.toString());
         }
+
+        if (key instanceof String && value instanceof String)
+        {
+          filterContext.put((String)key, (String)value);
+        }
       }
     }
+
+    OS os = getOS();
+    filterContext.put("osgi.ws", os.getOsgiWS());
+    filterContext.put("osgi.os", os.getOsgiOS());
+    filterContext.put("osgi.arch", os.getOsgiArch());
+
+    filterContextIU = InstallableUnit.contextIU(filterContext);
 
     // Do this late because \ is replaced by / when looking at this property.
     put(PROP_UPDATE_URL, SetupCorePlugin.UPDATE_URL);
@@ -254,13 +281,26 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
 
   public OS getOS()
   {
-    OS os = (OS)get(OS.class);
-    if (os != null)
+    return getPrompter().getOS();
+  }
+
+  public boolean matchesFilterContext(String filter)
+  {
+    if (StringUtil.isEmpty(filter))
     {
-      return os;
+      return true;
     }
 
-    return OS.INSTANCE;
+    try
+    {
+      IMatchExpression<IInstallableUnit> matchExpression = InstallableUnit.parseFilter(filter);
+      return matchExpression.isMatch(filterContextIU);
+    }
+    catch (RuntimeException ex)
+    {
+      // If the filter can't be parsed, assume it matches nothing.
+      return false;
+    }
   }
 
   public File getProductLocation()

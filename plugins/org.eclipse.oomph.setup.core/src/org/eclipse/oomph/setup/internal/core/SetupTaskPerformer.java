@@ -1539,6 +1539,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         continue;
       }
 
+      if (!matchesFilterContext(setupTask.getFilter()))
+      {
+        continue;
+      }
+
       if (setupTask instanceof SetupTaskContainer)
       {
         SetupTaskContainer container = (SetupTaskContainer)setupTask;
@@ -3605,6 +3610,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           SetupPrompter fullPrompter = new SetupPrompter()
           {
             private boolean first = true;
+
+            public OS getOS()
+            {
+              return prompter.getOS();
+            }
 
             public String getVMPath()
             {

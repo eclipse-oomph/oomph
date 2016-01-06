@@ -33,6 +33,7 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.SetupTask#getPredecessors <em>Predecessors</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.SetupTask#getSuccessors <em>Successors</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.SetupTask#getRestrictions <em>Restrictions</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.SetupTask#getFilter <em>Filter</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getSetupTask()
@@ -127,6 +128,32 @@ public interface SetupTask extends ModelElement
    * @generated
    */
   EList<Scope> getRestrictions();
+
+  /**
+   * Returns the value of the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Filter</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Filter</em>' attribute.
+   * @see #setFilter(String)
+   * @see org.eclipse.oomph.setup.SetupPackage#getSetupTask_Filter()
+   * @model dataType="org.eclipse.oomph.setup.Filter"
+   * @generated
+   */
+  String getFilter();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.SetupTask#getFilter <em>Filter</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Filter</em>' attribute.
+   * @see #getFilter()
+   * @generated
+   */
+  void setFilter(String value);
 
   /**
    * Returns the value of the '<em><b>Scope Type</b></em>' attribute.

@@ -49,6 +49,7 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.WorkspaceTask;
+import org.eclipse.oomph.setup.util.SetupValidator;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -57,6 +58,7 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import java.util.Map;
@@ -355,6 +357,13 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EDataType filterEDataType = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EDataType triggerSetEDataType = null;
 
   /**
@@ -417,6 +426,15 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
 
     // Initialize created meta-data
     theSetupPackage.initializePackageContents();
+
+    // Register package validator
+    EValidator.Registry.INSTANCE.put(theSetupPackage, new EValidator.Descriptor()
+    {
+      public EValidator getEValidator()
+      {
+        return SetupValidator.INSTANCE;
+      }
+    });
 
     // Mark meta-data to indicate it can't be changed
     theSetupPackage.freeze();
@@ -954,6 +972,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
   public EReference getSetupTask_Restrictions()
   {
     return (EReference)setupTaskEClass.getEStructuralFeatures().get(7);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getSetupTask_Filter()
+  {
+    return (EAttribute)setupTaskEClass.getEStructuralFeatures().get(8);
   }
 
   /**
@@ -1731,6 +1759,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EDataType getFilter()
+  {
+    return filterEDataType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EDataType getTriggerSet()
   {
     return triggerSetEDataType;
@@ -1778,6 +1816,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEReference(setupTaskEClass, SETUP_TASK__PREDECESSORS);
     createEReference(setupTaskEClass, SETUP_TASK__SUCCESSORS);
     createEReference(setupTaskEClass, SETUP_TASK__RESTRICTIONS);
+    createEAttribute(setupTaskEClass, SETUP_TASK__FILTER);
 
     setupTaskContainerEClass = createEClass(SETUP_TASK_CONTAINER);
     createEReference(setupTaskContainerEClass, SETUP_TASK_CONTAINER__SETUP_TASKS);
@@ -1938,6 +1977,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     // Create data types
     triggerSetEDataType = createEDataType(TRIGGER_SET);
     licenseInfoEDataType = createEDataType(LICENSE_INFO);
+    filterEDataType = createEDataType(FILTER);
   }
 
   /**
@@ -2025,6 +2065,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSetupTask_Restrictions(), getScope(), null, "restrictions", null, 0, -1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getSetupTask_Filter(), getFilter(), "filter", null, 0, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+        !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     addEOperation(setupTaskEClass, getScope(), "getScope", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -2332,6 +2374,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     initEDataType(triggerSetEDataType, Set.class, "TriggerSet", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS,
         "java.util.Set<org.eclipse.oomph.setup.Trigger>");
     initEDataType(licenseInfoEDataType, LicenseInfo.class, "LicenseInfo", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(filterEDataType, String.class, "Filter", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
     // Create resource
     createResource(eNS_URI);
@@ -2349,6 +2392,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createRuleVariableAnnotations();
     // http://www.eclipse.org/oomph/setup/ValidTriggers
     createValidTriggersAnnotations();
+    // http://www.eclipse.org/emf/2002/Ecore
+    createEcoreAnnotations();
   }
 
   /**
@@ -2416,6 +2461,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
   {
     String source = "http://www.eclipse.org/oomph/setup/NoExpand";
     addAnnotation(getSetupTask_ID(), source, new String[] {});
+    addAnnotation(getSetupTask_Filter(), source, new String[] {});
     addAnnotation(getVariableTask_Name(), source, new String[] {});
     addAnnotation(getVariableChoice_Value(), source, new String[] {});
   }
@@ -2453,6 +2499,18 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
     addAnnotation(stringSubstitutionTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
     addAnnotation(preferenceTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/Ecore</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createEcoreAnnotations()
+  {
+    String source = "http://www.eclipse.org/emf/2002/Ecore";
+    addAnnotation(filterEDataType, source, new String[] { "constraints", "WellformedFilterExpression" });
   }
 
   /**
