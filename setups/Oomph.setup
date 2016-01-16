@@ -73,7 +73,7 @@
     <repository
         url="http://download.eclipse.org/egit/updates-stable-nightly"/>
     <repository
-        url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
+        url="http://download.eclipse.org/mylyn/snapshots/3.19"/>
     <repository
         url="http://download.eclipse.org/technology/swtbot/snapshots"/>
     <repository
@@ -279,7 +279,7 @@
           <repository
               url="http://download.eclipse.org/modeling/emf/emf/updates/2.11"/>
           <repository
-              url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
+              url="http://download.eclipse.org/mylyn/snapshots/3.19"/>
           <repository
               url="http://download.eclipse.org/technology/m2e/releases/1.6"/>
           <repository
