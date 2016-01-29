@@ -190,7 +190,6 @@
   <project href="https://raw.githubusercontent.com/LorenzoBettini/javamm/master/javamm.workspace/Javamm.setup#/"/>
   <project href="https://raw.githubusercontent.com/LorenzoBettini/jbase/master/jbase.workspace/Jbase.setup#/"/>
   <project href="https://raw.githubusercontent.com/openhab/openhab2/master/targetplatform/openHAB2.setup#/"/>
-  <project href="https://raw.githubusercontent.com/ctron/package-drone/master/setups/org.eclipse.packagedrone.oomph/PackageDrone.setup#/"/>
   <project href="https://github.com/meysholdt/Xpect/raw/master/org.xpect.releng/Xpect.setup#/"/>
   <project href="https://raw.githubusercontent.com/LorenzoBettini/xsemantics/master/devtools/it.xsemantics.workspace/Xsemantics.setup#/"/>
   <description>All the projects at Github.com that provide automated setup support along with additional user-added projects</description>
