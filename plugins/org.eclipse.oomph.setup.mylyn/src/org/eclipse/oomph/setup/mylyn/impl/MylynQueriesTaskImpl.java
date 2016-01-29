@@ -464,15 +464,16 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    EList<Query> queries = getQueries();
-    if (queries.isEmpty())
-    {
-      return false;
-    }
-
     String connectorKind = getConnectorKind();
     String repositoryURL = getRepositoryURL();
     repository = TasksUi.getRepositoryManager().getRepository(connectorKind, repositoryURL);
+
+    if (repository == null)
+    {
+      return true;
+    }
+
+    EList<Query> queries = getQueries();
 
     for (Query query : queries)
     {
@@ -485,17 +486,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
       }
     }
 
-    if (repository == null)
-    {
-      return true;
-    }
-
-    if (!repositoryQueries.isEmpty())
-    {
-      return true;
-    }
-
-    return false;
+    return !repositoryQueries.isEmpty();
   }
 
   public void perform(SetupTaskContext context) throws Exception
