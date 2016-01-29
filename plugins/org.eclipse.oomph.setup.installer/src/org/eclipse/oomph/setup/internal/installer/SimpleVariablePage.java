@@ -1813,7 +1813,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         artifactURIs = new HashSet<URI>(this.artifactURIs);
       }
 
-      if (!canceled)
+      if (!canceled && !done)
       {
         String safeName = StringUtil.safe(name);
 
@@ -1881,10 +1881,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
           if (!ObjectUtil.equals(name, lastName))
           {
             lastName = name;
-            if (!done)
-            {
-              installButton.setToolTipText(safeName);
-            }
+            installButton.setToolTipText(safeName);
           }
         }
         catch (SWTException ex)
@@ -1892,10 +1889,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
           return;
         }
 
-        if (!done)
-        {
-          reschedule();
-        }
+        reschedule();
       }
     }
 
