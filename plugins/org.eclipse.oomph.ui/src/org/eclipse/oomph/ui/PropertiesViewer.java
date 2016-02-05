@@ -86,40 +86,47 @@ public class PropertiesViewer extends TableViewer
 
     columnResizer = new ControlAdapter()
     {
+      private boolean resizing;
+
       @Override
       public void controlResized(ControlEvent e)
       {
-        try
+        if (!resizing)
         {
-          table.setRedraw(false);
-
-          Rectangle clientArea = table.getClientArea();
-          int clientWidth = clientArea.width - clientArea.x;
-
-          TableItem[] items = table.getItems();
-          if (items.length == 0)
+          try
           {
-            propertyColumn.setWidth(clientWidth / 2);
-            valueColumn.setWidth(clientWidth - clientWidth / 2);
-          }
-          else
-          {
-            propertyColumn.pack();
-            int propertyColumnWidth = propertyColumn.getWidth();
-            propertyColumn.setWidth(propertyColumnWidth += 20);
+            table.setRedraw(false);
+            resizing = true;
 
-            valueColumn.pack();
-            int valueColumnWidth = valueColumn.getWidth();
+            Rectangle clientArea = table.getClientArea();
+            int clientWidth = clientArea.width - clientArea.x;
 
-            if (propertyColumnWidth + valueColumnWidth < clientWidth)
+            TableItem[] items = table.getItems();
+            if (items.length == 0)
             {
-              valueColumn.setWidth(clientWidth - propertyColumnWidth);
+              propertyColumn.setWidth(clientWidth / 2);
+              valueColumn.setWidth(clientWidth - clientWidth / 2);
+            }
+            else
+            {
+              propertyColumn.pack();
+              int propertyColumnWidth = propertyColumn.getWidth();
+              propertyColumn.setWidth(propertyColumnWidth += 20);
+
+              valueColumn.pack();
+              int valueColumnWidth = valueColumn.getWidth();
+
+              if (propertyColumnWidth + valueColumnWidth < clientWidth)
+              {
+                valueColumn.setWidth(clientWidth - propertyColumnWidth);
+              }
             }
           }
-        }
-        finally
-        {
-          table.setRedraw(true);
+          finally
+          {
+            table.setRedraw(true);
+            resizing = false;
+          }
         }
       }
     };
