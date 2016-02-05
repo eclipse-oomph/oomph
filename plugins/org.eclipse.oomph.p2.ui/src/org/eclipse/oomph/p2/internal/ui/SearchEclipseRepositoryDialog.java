@@ -302,47 +302,54 @@ public class SearchEclipseRepositoryDialog extends OomphDialog
       @Override
       protected IStatus run(IProgressMonitor monitor)
       {
-        Map<String, Set<String>> capabilities = new LinkedHashMap<String, Set<String>>(P2Index.INSTANCE.getCapabilities());
-        Set<String> flavors = capabilities.get("org.eclipse.equinox.p2.flavor");
-        Set<String> capabilityKeys = capabilities.keySet();
-        RepositoryExplorer.minimizeNamespaces(flavors, capabilityKeys);
-        capabilityKeys.remove("org.eclipse.equinox.p2.flavor");
-        capabilityKeys.remove("A.PDE.Target.Platform");
         final Item root = Item.createItem();
         EList<Object> children = root.getChildren();
-        for (Entry<String, Set<String>> entry : capabilities.entrySet())
+        Map<String, Set<String>> capabilities = new LinkedHashMap<String, Set<String>>(P2Index.INSTANCE.getCapabilities());
+        if (capabilities.isEmpty())
         {
-          String namespace = entry.getKey();
-          Item namespaceItem = Item.createNamespaceItem(namespace);
-          children.add(namespaceItem);
-
-          Map<SegmentSequence, Item> hierarchicalChildren = new LinkedHashMap<SegmentSequence, Item>();
-          SegmentSequence baseName = SegmentSequence.create(".");
-          hierarchicalChildren.put(baseName, namespaceItem);
-          for (String value : entry.getValue())
+          children.add(Item.createNamespaceItem("Index unavailable"));
+        }
+        else
+        {
+          Set<String> flavors = capabilities.get("org.eclipse.equinox.p2.flavor");
+          Set<String> capabilityKeys = capabilities.keySet();
+          RepositoryExplorer.minimizeNamespaces(flavors, capabilityKeys);
+          capabilityKeys.remove("org.eclipse.equinox.p2.flavor");
+          capabilityKeys.remove("A.PDE.Target.Platform");
+          for (Entry<String, Set<String>> entry : capabilities.entrySet())
           {
-            SegmentSequence qualifiedName = SegmentSequence.create(".", value);
-            SegmentSequence partialName = baseName;
-            Item parent = namespaceItem;
-            for (String segment : qualifiedName.segments())
+            String namespace = entry.getKey();
+            Item namespaceItem = Item.createNamespaceItem(namespace);
+            children.add(namespaceItem);
+
+            Map<SegmentSequence, Item> hierarchicalChildren = new LinkedHashMap<SegmentSequence, Item>();
+            SegmentSequence baseName = SegmentSequence.create(".");
+            hierarchicalChildren.put(baseName, namespaceItem);
+            for (String value : entry.getValue())
             {
-              partialName = partialName.append(segment);
-              Item itemProvider = hierarchicalChildren.get(partialName);
-              if (itemProvider == null)
+              SegmentSequence qualifiedName = SegmentSequence.create(".", value);
+              SegmentSequence partialName = baseName;
+              Item parent = namespaceItem;
+              for (String segment : qualifiedName.segments())
               {
-                itemProvider = Item.create(namespace, partialName);
-                hierarchicalChildren.put(partialName, itemProvider);
-                parent.getChildren().add(itemProvider);
+                partialName = partialName.append(segment);
+                Item itemProvider = hierarchicalChildren.get(partialName);
+                if (itemProvider == null)
+                {
+                  itemProvider = Item.create(namespace, partialName);
+                  hierarchicalChildren.put(partialName, itemProvider);
+                  parent.getChildren().add(itemProvider);
+                }
+
+                parent = itemProvider;
               }
 
-              parent = itemProvider;
+              parent.setConcrete();
             }
-
-            parent.setConcrete();
           }
-        }
 
-        root.sort();
+          root.sort();
+        }
 
         UIUtil.asyncExec(capabilitiesViewer.getControl(), new Runnable()
         {
