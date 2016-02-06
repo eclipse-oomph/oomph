@@ -83,7 +83,7 @@ public class StringFilterRegistry
         }
 
         String result = URI.decode(uri.lastSegment());
-        if (result.endsWith(".git"))
+        if (result != null && result.endsWith(".git"))
         {
           result = result.substring(0, result.length() - 4);
         }
