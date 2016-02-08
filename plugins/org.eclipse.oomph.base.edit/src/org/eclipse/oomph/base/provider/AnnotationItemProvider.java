@@ -18,6 +18,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -201,11 +202,12 @@ public class AnnotationItemProvider extends ModelElementItemProvider
    * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
    * that can be created under this object.
    * <!-- begin-user-doc -->
+   * The Annotation.contents feature is marked for child creation, but for now we disable it via the code.
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
+  @SuppressWarnings("unused")
+  private void collectNewChildDescriptorsGen(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
@@ -217,18 +219,27 @@ public class AnnotationItemProvider extends ModelElementItemProvider
     newChildDescriptors
         .add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, BaseFactory.eINSTANCE.create(BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY)));
 
+    newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, XMLTypeFactory.eINSTANCE.createAnyType()));
+  }
+
+  @Override
+  public void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
+  {
+    super.collectNewChildDescriptors(newChildDescriptors, object);
+
     newChildDescriptors
-        .add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, org.eclipse.emf.ecore.xml.type.XMLTypeFactory.eINSTANCE.createAnyType()));
+        .add(createChildParameter(BasePackage.Literals.ANNOTATION__DETAILS, BaseFactory.eINSTANCE.create(BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY)));
   }
 
   /**
    * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
    * <!-- begin-user-doc -->
+   * The Annotation.contents feature is marked for child creation, but for now we disable it via the code.
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection)
+  @SuppressWarnings("unused")
+  private String getCreateChildTextGen(Object owner, Object feature, Object child, Collection<?> selection)
   {
     Object childFeature = feature;
     Object childObject = child;

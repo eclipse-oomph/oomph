@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.base.provider;
 
+import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.util.BaseAdapterFactory;
 
@@ -34,6 +35,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -223,10 +225,15 @@ public class BaseItemProviderAdapterFactory extends BaseAdapterFactory
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public Collection<?> getNewChildDescriptors(Object object, EditingDomain editingDomain)
   {
+    if (object instanceof Annotation)
+    {
+      return Collections.emptyList();
+    }
+
     return childCreationExtenderManager.getNewChildDescriptors(object, editingDomain);
   }
 
