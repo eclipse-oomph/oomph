@@ -442,7 +442,10 @@ public final class SetupUIPlugin extends OomphUIPlugin
       // This unloads the cross referenced resources and returns the container objects of the root object(s) of those resources.
       Set<EObject> eContainers = new HashSet<EObject>();
       eContainers.addAll(checkCrossReferences(resourceSet, SetupContext.INSTALLATION_SETUP_URI));
-      eContainers.addAll(checkCrossReferences(resourceSet, SetupContext.WORKSPACE_SETUP_URI));
+      if (SetupContext.WORKSPACE_SETUP_URI != null)
+      {
+        eContainers.addAll(checkCrossReferences(resourceSet, SetupContext.WORKSPACE_SETUP_URI));
+      }
 
       if (!eContainers.isEmpty())
       {
