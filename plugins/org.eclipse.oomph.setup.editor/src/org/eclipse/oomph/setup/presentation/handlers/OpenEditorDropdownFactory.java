@@ -216,7 +216,8 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
       ItemProviderAdapter itemProvider = (ItemProviderAdapter)adapterFactory.adapt(object, IItemLabelProvider.class);
 
       final ImageDescriptor imageDescriptor = SetupLabelProvider.getImageDescriptor(itemProvider, object);
-      final String text = OpenEditorDropdownHandler.getLabelText(itemProvider, object);
+      final String text = OpenEditorDropdownHandler.getLabelText(itemProvider, object,
+          !"org.eclipse.oomph.setup.editor.open.menu.dynamic".equals(OpenEditorDropdownFactory.this.getId()));
 
       MenuItem item = new MenuItem(menu, SWT.PUSH);
       item.setImage(ExtendedImageRegistry.INSTANCE.getImage(imageDescriptor));

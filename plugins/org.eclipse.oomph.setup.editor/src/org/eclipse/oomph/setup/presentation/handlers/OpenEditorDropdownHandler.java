@@ -52,7 +52,7 @@ public class OpenEditorDropdownHandler extends AbstractDropdownHandler
     ItemProviderAdapter itemProvider = (ItemProviderAdapter)adapterFactory.adapt(user, IItemLabelProvider.class);
 
     ImageDescriptor imageDescriptor = SetupLabelProvider.getImageDescriptor(itemProvider, user);
-    String text = getLabelText(itemProvider, user);
+    String text = getLabelText(itemProvider, user, true);
 
     Runnable runnable = new Runnable()
     {
@@ -65,9 +65,10 @@ public class OpenEditorDropdownHandler extends AbstractDropdownHandler
     return new ActionDescriptor(imageDescriptor, text, runnable);
   }
 
-  public static String getLabelText(ItemProviderAdapter itemProvider, EObject object)
+  public static String getLabelText(ItemProviderAdapter itemProvider, EObject object, boolean qualified)
   {
-    return "Open " + SetupLabelProvider.getText(itemProvider, object);
+    String itemLabel = SetupLabelProvider.getText(itemProvider, object);
+    return qualified ? "Open " + itemLabel : itemLabel;
   }
 
   public static void openEditor(EObject object)
