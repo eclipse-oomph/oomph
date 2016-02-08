@@ -113,13 +113,18 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
           {
             @SuppressWarnings("unchecked")
             InternalEList<InternalEObject> eObjects = (InternalEList<InternalEObject>)eObject.eGet(eReference);
-            for (int i = 0, size = eObjects.size(); i < size;)
+            for (int i = 0;;)
             {
               try
               {
                 InternalEObject referencedEObject;
                 synchronized (resourceSet)
                 {
+                  if (i >= eObjects.size())
+                  {
+                    break;
+                  }
+
                   referencedEObject = eObjects.get(i);
                 }
 
@@ -140,7 +145,6 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
                 }
                 else
                 {
-                  --size;
                   eObjects.remove(i);
                 }
               }
@@ -150,7 +154,12 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
           {
             try
             {
-              InternalEObject referencedEObject = (InternalEObject)eObject.eGet(eReference);
+              InternalEObject referencedEObject;
+              synchronized (resourceSet)
+              {
+                referencedEObject = (InternalEObject)eObject.eGet(eReference);
+              }
+
               if (referencedEObject != null && containment && referencedEObject.eDirectResource() == null)
               {
                 properContentObjects.add(referencedEObject);
@@ -158,12 +167,7 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
             }
             catch (RuntimeException ex)
             {
-              InternalEObject referencedEObject;
-              synchronized (resourceSet)
-              {
-                referencedEObject = (InternalEObject)eObject.eGet(eReference, false);
-              }
-
+              InternalEObject referencedEObject = (InternalEObject)eObject.eGet(eReference, false);
               URI eProxyURI = referencedEObject.eProxyURI();
               if (eProxyURI != null)
               {
