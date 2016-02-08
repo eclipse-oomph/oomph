@@ -640,6 +640,18 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
             return new XMLPreferenceHandler(key, "info", new String[] { "extension", "name" }, null);
           }
 
+          if ("org.eclipse.ui.commands".equals(lastSegment))
+          {
+            return new PreferenceHandler(key)
+            {
+              @Override
+              protected boolean isExcluded()
+              {
+                return false;
+              }
+            };
+          }
+
           return new PreferenceHandler(key);
         }
       });
@@ -1268,16 +1280,19 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       StringBuilder result = new StringBuilder();
       for (String attribute : attributes)
       {
-        if (result.length() != 0)
-        {
-          result.append("[^>]+");
-        }
+        int length = result.length();
 
         boolean isOptional = optional.contains(attribute);
         if (isOptional)
         {
           result.append("(?:");
         }
+
+        if (length != 0)
+        {
+          result.append("[^>]+");
+        }
+
         result.append(attribute);
         result.append("=\"([^\"]+)\"");
 
