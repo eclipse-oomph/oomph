@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.ui;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 /**
@@ -37,7 +38,27 @@ public abstract class Questionnaire
     return get() != null;
   }
 
-  public static void perform(Shell parentShell, boolean force)
+  public static void perform(final Shell parentShell, boolean force)
+  {
+    if (Display.getCurrent() == null)
+    {
+      performOutsideUI(parentShell, true);
+    }
+    else
+    {
+      // Don't perform the questionnaire on the UI thread or RecorderTransaction.open() will deadlock.
+      new Thread("Questionnaire")
+      {
+        @Override
+        public void run()
+        {
+          performOutsideUI(parentShell, true);
+        }
+      }.start();
+    }
+  }
+
+  private static void performOutsideUI(Shell parentShell, boolean force)
   {
     Questionnaire questionnaire = get();
     if (questionnaire != null)

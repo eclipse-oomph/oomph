@@ -117,15 +117,7 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
 
           final Shell parentShell = shell;
 
-          // Don't perform the questionnaire on the UI thread or RecorderTransaction.open() will deadlock.
-          new Thread("Questionnaire")
-          {
-            @Override
-            public void run()
-            {
-              Questionnaire.perform(parentShell, true);
-            }
-          }.start();
+          Questionnaire.perform(parentShell, true);
         }
       });
     }

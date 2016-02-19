@@ -87,4 +87,15 @@
       </propertyTester>
    </extension>
 
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.eclipse.oomph.setup.category"
+            defaultHandler="org.eclipse.oomph.setup.ui.actions.LaunchQuestionnaireHandler"
+            description="Review the IDE&apos;s most fiercely contested preferences "
+            id="org.eclipse.oomph.setup.ui.questionnaire"
+            name="Configuration Questionnaire">
+      </command>
+   </extension>
+
 </plugin>
