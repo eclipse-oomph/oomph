@@ -37,13 +37,13 @@ public enum SyncPolicy implements Enumerator
    */
   INCLUDE(0, "Include", "Include"),
   /**
-  * The '<em><b>Exclude</b></em>' literal object.
-  * <!-- begin-user-doc -->
+   * The '<em><b>Exclude</b></em>' literal object.
+   * <!-- begin-user-doc -->
   * <!-- end-user-doc -->
-  * @see #EXCLUDE_VALUE
-  * @generated
-  * @ordered
-  */
+   * @see #EXCLUDE_VALUE
+   * @generated
+   * @ordered
+   */
   EXCLUDE(1, "Exclude", "Exclude");
 
   /**

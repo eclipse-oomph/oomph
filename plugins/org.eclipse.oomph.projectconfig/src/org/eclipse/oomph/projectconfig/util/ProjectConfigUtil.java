@@ -109,8 +109,8 @@ public final class ProjectConfigUtil
       }
       else
       {
-        final PreferenceNode projectPreferenceNode = PreferencesUtil.getRootPreferenceNode(Collections.singleton(PreferencesUtil.PROJECT_NODE), true).getNode(
-            PreferencesUtil.PROJECT_NODE);
+        final PreferenceNode projectPreferenceNode = PreferencesUtil.getRootPreferenceNode(Collections.singleton(PreferencesUtil.PROJECT_NODE), true)
+            .getNode(PreferencesUtil.PROJECT_NODE);
         Adapter projectNodeListener = new AdapterImpl()
         {
           @Override

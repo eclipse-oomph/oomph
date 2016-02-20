@@ -18,7 +18,7 @@ import java.io.File;
  * @author Eike Stepper
  */
 @Deprecated
-public class ProfileReferencerImpl extends PersistentMap<Boolean>implements ProfileReferencer
+public class ProfileReferencerImpl extends PersistentMap<Boolean> implements ProfileReferencer
 {
   private final boolean directory;
 

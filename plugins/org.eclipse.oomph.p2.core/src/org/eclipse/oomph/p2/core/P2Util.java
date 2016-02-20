@@ -108,7 +108,7 @@ public final class P2Util
     {
       return iu.getId();
     }
-  
+
     return name;
   }
 

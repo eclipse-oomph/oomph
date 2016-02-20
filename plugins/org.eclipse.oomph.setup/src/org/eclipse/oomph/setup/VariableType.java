@@ -157,13 +157,13 @@ public enum VariableType implements Enumerator
    */
   FLOAT(12, "FLOAT", "FLOAT"),
   /**
-  * The '<em><b>JRE</b></em>' literal object.
-  * <!-- begin-user-doc -->
+   * The '<em><b>JRE</b></em>' literal object.
+   * <!-- begin-user-doc -->
   * <!-- end-user-doc -->
-  * @see #JRE_VALUE
-  * @generated
-  * @ordered
-  */
+   * @see #JRE_VALUE
+   * @generated
+   * @ordered
+   */
   JRE(13, "JRE", "JRE");
 
   /**

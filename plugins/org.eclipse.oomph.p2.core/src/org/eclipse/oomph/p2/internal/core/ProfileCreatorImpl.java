@@ -24,7 +24,7 @@ import java.util.StringTokenizer;
 /**
  * @author Eike Stepper
  */
-public abstract class ProfileCreatorImpl extends HashMap<String, String>implements ProfileCreator
+public abstract class ProfileCreatorImpl extends HashMap<String, String> implements ProfileCreator
 {
   private static final long serialVersionUID = 1L;
 

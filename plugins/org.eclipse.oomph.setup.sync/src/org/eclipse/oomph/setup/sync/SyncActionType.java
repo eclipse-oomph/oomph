@@ -67,22 +67,22 @@ public enum SyncActionType implements Enumerator
    */
   REMOVE_LOCAL(3, "RemoveLocal", "RemoveLocal"),
   /**
-  * The '<em><b>Remove Remote</b></em>' literal object.
-  * <!-- begin-user-doc -->
+   * The '<em><b>Remove Remote</b></em>' literal object.
+   * <!-- begin-user-doc -->
   * <!-- end-user-doc -->
-  * @see #REMOVE_REMOTE_VALUE
-  * @generated
-  * @ordered
-  */
+   * @see #REMOVE_REMOTE_VALUE
+   * @generated
+   * @ordered
+   */
   REMOVE_REMOTE(4, "RemoveRemote", "RemoveRemote"),
   /**
-  * The '<em><b>Conflict</b></em>' literal object.
-  * <!-- begin-user-doc -->
+   * The '<em><b>Conflict</b></em>' literal object.
+   * <!-- begin-user-doc -->
   * <!-- end-user-doc -->
-  * @see #CONFLICT_VALUE
-  * @generated
-  * @ordered
-  */
+   * @see #CONFLICT_VALUE
+   * @generated
+   * @ordered
+   */
   CONFLICT(5, "Conflict", "Conflict"),
 
   /**
