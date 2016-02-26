@@ -26,7 +26,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Neon/M4A</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Neon/M5</value>
       </detail>
     </annotation>
     <setupTask
@@ -63,7 +63,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.6.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/neon/201602051000/"/>
+          url="http://download.eclipse.org/releases/neon/201602051000"/>
     </setupTask>
   </version>
   <version name="latest.released"
@@ -73,7 +73,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Mars/1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Mars/2-RC3</value>
       </detail>
     </annotation>
     <setupTask
@@ -110,7 +110,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.5.0,4.6.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/mars/201510021000"/>
+          url="http://download.eclipse.org/releases/mars/201602261000"/>
     </setupTask>
   </version>
   <version name="neon"
@@ -120,7 +120,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Neon/M4A</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Neon/M5</value>
       </detail>
     </annotation>
     <setupTask
@@ -157,7 +157,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.6.0,4.7.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/neon/201602051000/"/>
+          url="http://download.eclipse.org/releases/neon/201602051000"/>
     </setupTask>
   </version>
   <version name="mars"
@@ -167,7 +167,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Mars/1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Mars/2-RC3</value>
       </detail>
     </annotation>
     <setupTask
@@ -204,7 +204,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.5.0,4.6.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/mars/201510021000"/>
+          url="http://download.eclipse.org/releases/mars/201602261000"/>
     </setupTask>
   </version>
   <version name="luna"
