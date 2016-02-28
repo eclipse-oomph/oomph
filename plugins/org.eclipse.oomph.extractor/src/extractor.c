@@ -21,6 +21,26 @@
 
 static _TCHAR* lib = NULL;
 
+// See https://de.wikipedia.org/wiki/DLL_Hijacking
+static void
+protectAgainstDLLHijacking ()
+{
+  // The following call is not supported by MinGW's libkernel32.a library:
+  // SetDefaultDllDirectories (LOAD_LIBRARY_SEARCH_SYSTEM32);
+
+  // So use GetProcAddress() to call that function dynamically.
+  // From libloaderapi.h: WINBASEAPI WINBOOL WINAPI SetDefaultDllDirectories (DWORD DirectoryFlags);
+  typedef WINBOOL
+  (CALLBACK*AddrSetDefaultDllDirectories) (DWORD);
+
+  AddrSetDefaultDllDirectories addrSetDefaultDllDirectories = (AddrSetDefaultDllDirectories) //
+      GetProcAddress (GetModuleHandle (_T("kernel32.dll")), _T("SetDefaultDllDirectories"));
+  if (addrSetDefaultDllDirectories)
+  {
+    addrSetDefaultDllDirectories (LOAD_LIBRARY_SEARCH_SYSTEM32);
+  }
+}
+
 static _TCHAR*
 getTempFile (_TCHAR* prefix)
 {
@@ -32,7 +52,7 @@ getTempFile (_TCHAR* prefix)
   }
 
   _TCHAR tempFile[MAX_PATH];
-  if ( GetTempFileName (tempFolder, prefix, 0, tempFile) == 0)
+  if (GetTempFileName (tempFolder, prefix, 0, tempFile) == 0)
   {
     return NULL;
   }
@@ -76,7 +96,7 @@ browseForFolder (HWND hwndOwner, LPCTSTR lpszTitle)
   LPITEMIDLIST itemIDList = NULL;
   if ((itemIDList = SHBrowseForFolder (&browseInfo)) != NULL)
   {
-    if ( SHGetPathFromIDList (itemIDList, buffer))
+    if (SHGetPathFromIDList (itemIDList, buffer))
     {
       result = _tcsdup (buffer);
     }
@@ -267,7 +287,7 @@ findDescriptor (_TCHAR* executable, REQ* req)
 }
 
 /****************************************************************************************
- * Java Library Mangement
+ * Java Library Management
  ***************************************************************************************/
 
 static BOOL
@@ -280,22 +300,28 @@ execLib (_TCHAR* javaHome, _TCHAR* className, _TCHAR* args)
   _TCHAR* lastDot = strrchr (javaHome, '.');
   if (lastDot != NULL && strcmp (lastDot, _T(".exe")) == 0)
   {
-    sprintf (cmdline, _T("\"%s\" -cp \"%s\" %s %s"), javaHome, lib, className, args);
+    if (snprintf (cmdline, sizeof(cmdline), _T("\"%s\" -cp \"%s\" %s %s"), javaHome, lib, className, args) >= sizeof(cmdline))
+    {
+      return FALSE;
+    }
   }
   else
   {
-    sprintf (cmdline, _T("\"%s\\bin\\javaw\" -cp \"%s\" %s %s"), javaHome, lib, className, args);
+    if (snprintf (cmdline, sizeof(cmdline), _T("\"%s\\bin\\javaw\" -cp \"%s\" %s %s"), javaHome, lib, className, args) >= sizeof(cmdline))
+    {
+      return FALSE;
+    }
   }
 
   STARTUPINFO si;
   PROCESS_INFORMATION pi;
 
-  ZeroMemory( &si, sizeof(si) );
+  ZeroMemory(&si, sizeof(si) );
   si.cb = sizeof(si);
-  ZeroMemory( &pi, sizeof(pi) );
+  ZeroMemory(&pi, sizeof(pi) );
 
   // Start the child process.
-  if (!CreateProcess ( NULL,   // No module name (use command line)
+  if (!CreateProcess (NULL,   // No module name (use command line)
       cmdline,        // Command line
       NULL,           // Process handle not inheritable
       NULL,           // Thread handle not inheritable
@@ -340,7 +366,10 @@ validateJRE (JRE* jre, REQ* req)
   }
 
   _TCHAR args[4 * 12];
-  sprintf (args, _T("%d %d %d %d"), req->major, req->minor, req->micro, req->bitness);
+  if (snprintf (args, sizeof(args), _T("%d %d %d %d"), req->major, req->minor, req->micro, req->bitness) >= sizeof(args))
+  {
+    return FALSE;
+  }
 
   return execLib (jre->javaHome, _T("org.eclipse.oomph.extractor.lib.JREValidator"), args);
 }
@@ -352,11 +381,17 @@ extractProduct (JRE* jre, JRE* argJRE, _TCHAR* executable, _TCHAR* targetFolder)
 
   if (argJRE == NULL)
   {
-    sprintf (args, _T("\"%s\" \"%s\""), executable, targetFolder);
+    if (snprintf (args, sizeof(args), _T("\"%s\" \"%s\""), executable, targetFolder) >= sizeof(args))
+    {
+      return FALSE;
+    }
   }
   else
   {
-    sprintf (args, _T("\"%s\" \"%s\" \"%s\""), executable, targetFolder, argJRE->javaHome);
+    if (snprintf (args, sizeof(args), _T("\"%s\" \"%s\" \"%s\""), executable, targetFolder, argJRE->javaHome) >= sizeof(args))
+    {
+      return FALSE;
+    }
   }
 
   return execLib (jre->javaHome, _T("org.eclipse.oomph.extractor.lib.BINExtractor"), args);
@@ -366,7 +401,10 @@ static _TCHAR*
 getVM (_TCHAR* path)
 {
   _TCHAR vm[MAX_PATH];
-  sprintf (vm, _T("%s\\javaw.exe"), path);
+  if (snprintf (vm, sizeof(vm), _T("%s\\javaw.exe"), path) >= sizeof(vm))
+  {
+    return NULL;
+  }
 
   if ((_access (vm, 0)) != -1)
   {
@@ -426,6 +464,8 @@ findAllJREsAndVMs (JRE** defaultJRE)
 int
 main (int argc, char *argv[])
 {
+  protectAgainstDLLHijacking ();
+
   BOOL validateJREs = TRUE;
   if (argc > 1)
   {
@@ -453,13 +493,20 @@ main (int argc, char *argv[])
     if (jre == NULL)
     {
       _TCHAR message[400];
-      sprintf (message, _T("The required %d-bit Java %d.%d.%d virtual machine could not be found.\nDo you want to browse your system for it?"), req.bitness,
-               req.major, req.minor, req.micro);
+      if (snprintf (message, sizeof(message),
+                    _T("The required %d-bit Java %d.%d.%d virtual machine could not be found.\nDo you want to browse your system for it?"), req.bitness,
+                    req.major, req.minor, req.micro) >= sizeof(message))
+      {
+        return EXIT_FAILURE_BUFFER_OVERFLOW;
+      }
 
-      if ( MessageBox ( NULL, message, _T("Eclipse Installer"), MB_YESNO | MB_ICONQUESTION) == IDYES)
+      if (MessageBox (NULL, message, _T("Eclipse Installer"), MB_YESNO | MB_ICONQUESTION) == IDYES)
       {
         _TCHAR label[100];
-        sprintf (label, _T("Select a %d-Bit Java %d.%d.%d Virtual Machine"), req.bitness, req.major, req.minor, req.micro);
+        if (snprintf (label, sizeof(label), _T("Select a %d-Bit Java %d.%d.%d Virtual Machine"), req.bitness, req.major, req.minor, req.micro) >= sizeof(label))
+        {
+          return EXIT_FAILURE_BUFFER_OVERFLOW;
+        }
 
         _TCHAR* vm = browseForFile (NULL, label, _T("javaw.exe\0javaw.exe\0\0"));
         if (vm != NULL)
@@ -480,7 +527,10 @@ main (int argc, char *argv[])
         if (targetFolder == NULL)
         {
           _TCHAR label[MAX_PATH];
-          sprintf (label, _T("Extract %s to:"), req.productName);
+          if (snprintf (label, sizeof(label), _T("Extract %s to:"), req.productName) >= sizeof(label))
+          {
+            return EXIT_FAILURE_BUFFER_OVERFLOW;
+          }
 
           targetFolder = browseForFolder (NULL, label);
         }
@@ -507,9 +557,19 @@ main (int argc, char *argv[])
     }
   }
 
+  _TCHAR sysdir[MAX_PATH];
+  if (!GetSystemDirectory (sysdir, sizeof(sysdir)))
+  {
+    return EXIT_FAILURE_SYSTEM_DIRECTORY;
+  }
+
   _TCHAR url[4 * MAX_PATH];
-  sprintf (url, _T("cmd /c start http://download.eclipse.org/oomph/jre/?vm=1_%d_%d_%d_%d_%d&pn=%s&pu=%s&pi=%s"), req.major, req.minor, req.micro, req.bitness,
-           req.jdk, req.productName, req.productURI, req.imageURI);
+  if (snprintf (url, sizeof(url),
+                _T("\"%s\\rundll32.exe\" %s\\url.dll,FileProtocolHandler \"http://download.eclipse.org/oomph/jre/?vm=1_%d_%d_%d_%d_%d&pn=%s&pu=%s&pi=%s\""), //
+                sysdir, sysdir, req.major, req.minor, req.micro, req.bitness, req.jdk, req.productName, req.productURI, req.imageURI) >= sizeof(url))
+  {
+    return EXIT_FAILURE_BUFFER_OVERFLOW;
+  }
 
   WinExec (url, SW_HIDE);
   return EXIT_FAILURE_JRE_DETECTION;
