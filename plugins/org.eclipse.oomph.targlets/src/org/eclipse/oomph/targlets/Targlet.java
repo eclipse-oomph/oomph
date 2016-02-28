@@ -38,6 +38,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeSources <em>Include Sources</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeAllPlatforms <em>Include All Platforms</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeAllRequirements <em>Include All Requirements</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.Targlet#getDropinLocations <em>Dropin Locations</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet()
@@ -122,6 +123,23 @@ public interface Targlet extends ModelElement
    * @generated
    */
   EList<IUGenerator> getInstallableUnitGenerators();
+
+  /**
+   * Returns the value of the '<em><b>Dropin Locations</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.oomph.targlets.DropinLocation}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Dropin Locations</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Dropin Locations</em>' containment reference list.
+   * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_DropinLocations()
+   * @model containment="true"
+   *        extendedMetaData="name='dropinLocation'"
+   * @generated
+   */
+  EList<DropinLocation> getDropinLocations();
 
   /**
    * Returns the value of the '<em><b>Repository Lists</b></em>' containment reference list.

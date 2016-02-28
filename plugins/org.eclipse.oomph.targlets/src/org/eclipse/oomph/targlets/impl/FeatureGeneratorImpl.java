@@ -57,7 +57,7 @@ import java.util.Map;
  */
 public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGenerator
 {
-  private static final IPath MANIFEST_PATH = new Path("feature.xml");
+  private static final IPath MANIFEST_PATH = new Path(FEATURE_XML);
 
   /**
    * <!-- begin-user-doc -->

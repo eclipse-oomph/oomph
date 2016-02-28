@@ -18,6 +18,7 @@ import org.eclipse.oomph.targlets.ComponentDefGenerator;
 import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.ComponentExtGenerator;
 import org.eclipse.oomph.targlets.ComponentExtension;
+import org.eclipse.oomph.targlets.DropinLocation;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.PluginGenerator;
@@ -353,6 +354,16 @@ public class TargletSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case TargletPackage.DROPIN_LOCATION:
+      {
+        DropinLocation dropinLocation = (DropinLocation)theEObject;
+        T result = caseDropinLocation(dropinLocation);
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       default:
         return defaultCase(theEObject);
     }
@@ -594,6 +605,22 @@ public class TargletSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseProjectNameGenerator(ProjectNameGenerator object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Dropin Location</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Dropin Location</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseDropinLocation(DropinLocation object)
   {
     return null;
   }

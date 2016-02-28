@@ -254,13 +254,22 @@ public interface TargletPackage extends EPackage
   int TARGLET__INCLUDE_ALL_REQUIREMENTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 10;
 
   /**
+   * The feature id for the '<em><b>Dropin Locations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET__DROPIN_LOCATIONS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 11;
+
+  /**
    * The number of structural features of the '<em>Targlet</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGLET_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 11;
+  int TARGLET_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 12;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -1014,6 +1023,52 @@ public interface TargletPackage extends EPackage
   int PROJECT_NAME_GENERATOR_OPERATION_COUNT = IU_GENERATOR_OPERATION_COUNT + 0;
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.targlets.impl.DropinLocationImpl <em>Dropin Location</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.targlets.impl.DropinLocationImpl
+   * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getDropinLocation()
+   * @generated
+   */
+  int DROPIN_LOCATION = 15;
+
+  /**
+   * The feature id for the '<em><b>Root Folder</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DROPIN_LOCATION__ROOT_FOLDER = 0;
+
+  /**
+   * The feature id for the '<em><b>Recursive</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DROPIN_LOCATION__RECURSIVE = 1;
+
+  /**
+   * The number of structural features of the '<em>Dropin Location</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DROPIN_LOCATION_FEATURE_COUNT = 2;
+
+  /**
+   * The number of operations of the '<em>Dropin Location</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DROPIN_LOCATION_OPERATION_COUNT = 0;
+
+  /**
    * The meta object id for the '<em>Installable Unit</em>' data type.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1021,7 +1076,7 @@ public interface TargletPackage extends EPackage
    * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getInstallableUnit()
    * @generated
    */
-  int INSTALLABLE_UNIT = 15;
+  int INSTALLABLE_UNIT = 16;
 
   /**
    * The meta object id for the '<em>String To Version Map</em>' data type.
@@ -1031,7 +1086,7 @@ public interface TargletPackage extends EPackage
    * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getStringToVersionMap()
    * @generated
    */
-  int STRING_TO_VERSION_MAP = 16;
+  int STRING_TO_VERSION_MAP = 17;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.targlets.TargletContainer <em>Container</em>}'.
@@ -1118,6 +1173,17 @@ public interface TargletPackage extends EPackage
    * @generated
    */
   EReference getTarglet_InstallableUnitGenerators();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.targlets.Targlet#getDropinLocations <em>Dropin Locations</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Dropin Locations</em>'.
+   * @see org.eclipse.oomph.targlets.Targlet#getDropinLocations()
+   * @see #getTarglet()
+   * @generated
+   */
+  EReference getTarglet_DropinLocations();
 
   /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.targlets.Targlet#getRepositoryLists <em>Repository Lists</em>}'.
@@ -1370,6 +1436,38 @@ public interface TargletPackage extends EPackage
   EClass getProjectNameGenerator();
 
   /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.targlets.DropinLocation <em>Dropin Location</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Dropin Location</em>'.
+   * @see org.eclipse.oomph.targlets.DropinLocation
+   * @generated
+   */
+  EClass getDropinLocation();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.targlets.DropinLocation#getRootFolder <em>Root Folder</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Root Folder</em>'.
+   * @see org.eclipse.oomph.targlets.DropinLocation#getRootFolder()
+   * @see #getDropinLocation()
+   * @generated
+   */
+  EAttribute getDropinLocation_RootFolder();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.targlets.DropinLocation#isRecursive <em>Recursive</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Recursive</em>'.
+   * @see org.eclipse.oomph.targlets.DropinLocation#isRecursive()
+   * @see #getDropinLocation()
+   * @generated
+   */
+  EAttribute getDropinLocation_Recursive();
+
+  /**
    * Returns the meta object for data type '{@link org.eclipse.equinox.p2.metadata.IInstallableUnit <em>Installable Unit</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1482,6 +1580,14 @@ public interface TargletPackage extends EPackage
      * @generated
      */
     EReference TARGLET__INSTALLABLE_UNIT_GENERATORS = eINSTANCE.getTarglet_InstallableUnitGenerators();
+
+    /**
+     * The meta object literal for the '<em><b>Dropin Locations</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TARGLET__DROPIN_LOCATIONS = eINSTANCE.getTarglet_DropinLocations();
 
     /**
      * The meta object literal for the '<em><b>Repository Lists</b></em>' containment reference list feature.
@@ -1700,6 +1806,32 @@ public interface TargletPackage extends EPackage
      * @generated
      */
     EClass PROJECT_NAME_GENERATOR = eINSTANCE.getProjectNameGenerator();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.DropinLocationImpl <em>Dropin Location</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.targlets.impl.DropinLocationImpl
+     * @see org.eclipse.oomph.targlets.impl.TargletPackageImpl#getDropinLocation()
+     * @generated
+     */
+    EClass DROPIN_LOCATION = eINSTANCE.getDropinLocation();
+
+    /**
+     * The meta object literal for the '<em><b>Root Folder</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DROPIN_LOCATION__ROOT_FOLDER = eINSTANCE.getDropinLocation_RootFolder();
+
+    /**
+     * The meta object literal for the '<em><b>Recursive</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DROPIN_LOCATION__RECURSIVE = eINSTANCE.getDropinLocation_Recursive();
 
     /**
      * The meta object literal for the '<em>Installable Unit</em>' data type.

@@ -21,6 +21,7 @@ import org.eclipse.oomph.targlets.ComponentDefGenerator;
 import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.ComponentExtGenerator;
 import org.eclipse.oomph.targlets.ComponentExtension;
+import org.eclipse.oomph.targlets.DropinLocation;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.PluginGenerator;
@@ -156,6 +157,13 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * @generated
    */
   private EClass projectNameGeneratorEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass dropinLocationEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -319,6 +327,16 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
   public EReference getTarglet_InstallableUnitGenerators()
   {
     return (EReference)targletEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getTarglet_DropinLocations()
+  {
+    return (EReference)targletEClass.getEStructuralFeatures().get(11);
   }
 
   /**
@@ -566,6 +584,36 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getDropinLocation()
+  {
+    return dropinLocationEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getDropinLocation_RootFolder()
+  {
+    return (EAttribute)dropinLocationEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getDropinLocation_Recursive()
+  {
+    return (EAttribute)dropinLocationEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EDataType getInstallableUnit()
   {
     return installableUnitEDataType;
@@ -630,6 +678,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     createEAttribute(targletEClass, TARGLET__INCLUDE_SOURCES);
     createEAttribute(targletEClass, TARGLET__INCLUDE_ALL_PLATFORMS);
     createEAttribute(targletEClass, TARGLET__INCLUDE_ALL_REQUIREMENTS);
+    createEReference(targletEClass, TARGLET__DROPIN_LOCATIONS);
 
     componentExtensionEClass = createEClass(COMPONENT_EXTENSION);
     createEReference(componentExtensionEClass, COMPONENT_EXTENSION__REQUIREMENTS);
@@ -660,6 +709,10 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     productGeneratorEClass = createEClass(PRODUCT_GENERATOR);
 
     projectNameGeneratorEClass = createEClass(PROJECT_NAME_GENERATOR);
+
+    dropinLocationEClass = createEClass(DROPIN_LOCATION);
+    createEAttribute(dropinLocationEClass, DROPIN_LOCATION__ROOT_FOLDER);
+    createEAttribute(dropinLocationEClass, DROPIN_LOCATION__RECURSIVE);
 
     // Create data types
     installableUnitEDataType = createEDataType(INSTALLABLE_UNIT);
@@ -750,6 +803,8 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTarglet_IncludeAllRequirements(), ecorePackage.getEBoolean(), "includeAllRequirements", "true", 0, 1, Targlet.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTarglet_DropinLocations(), getDropinLocation(), null, "dropinLocations", null, 0, -1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(componentExtensionEClass, ComponentExtension.class, "ComponentExtension", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getComponentExtension_Requirements(), theP2Package.getRequirement(), null, "requirements", null, 0, -1, ComponentExtension.class,
@@ -789,6 +844,12 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     initEClass(productGeneratorEClass, ProductGenerator.class, "ProductGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(projectNameGeneratorEClass, ProjectNameGenerator.class, "ProjectNameGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(dropinLocationEClass, DropinLocation.class, "DropinLocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getDropinLocation_RootFolder(), ecorePackage.getEString(), "rootFolder", null, 1, 1, DropinLocation.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getDropinLocation_Recursive(), ecorePackage.getEBoolean(), "recursive", "true", 0, 1, DropinLocation.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize data types
     initEDataType(installableUnitEDataType, IInstallableUnit.class, "InstallableUnit", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
@@ -852,6 +913,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     addAnnotation(getTarglet_ActiveRepositoryListName(), source, new String[] { "kind", "attribute", "name", "activeRepositoryList" });
     addAnnotation(getTarglet_ActiveRepositoryList(), source, new String[] { "name", "activeRepository" });
     addAnnotation(getTarglet_ActiveRepositories(), source, new String[] { "name", "activeRepository" });
+    addAnnotation(getTarglet_DropinLocations(), source, new String[] { "name", "dropinLocation" });
     addAnnotation(getComponentExtension_Requirements(), source, new String[] { "name", "requirement" });
     addAnnotation(getComponentDefinition_ID(), source, new String[] { "kind", "attribute", "name", "id" });
   }

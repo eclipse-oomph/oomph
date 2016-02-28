@@ -12,6 +12,7 @@ package org.eclipse.oomph.targlets.presentation;
 
 import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.targlets.ComponentDefinition;
+import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.TargletFactory;
 
 import org.eclipse.emf.common.util.URI;
@@ -363,7 +364,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
         return getErrorMessage(project, "The selected project appears to be a plugin component.");
       }
 
-      if (project.getFile("feature.xml").exists())
+      if (project.getFile(FeatureGenerator.FEATURE_XML).exists())
       {
         return getErrorMessage(project, "The selected project appears to be a feature component.");
       }

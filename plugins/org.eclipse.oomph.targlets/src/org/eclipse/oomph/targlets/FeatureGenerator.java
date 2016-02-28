@@ -22,6 +22,8 @@ package org.eclipse.oomph.targlets;
  */
 public interface FeatureGenerator extends IUGenerator
 {
+  public static final String FEATURE_XML = "feature.xml";
+
   public static final String PROP_REQUIRED_LICENCSE_FEATURE_ID = "org.eclipse.oomph.targlets.core.requiredLicenseFeatureID";
 
   public static final String PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE = "org.eclipse.oomph.targlets.core.requiredLicenseFeatureVersionRange";

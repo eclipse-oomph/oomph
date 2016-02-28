@@ -15,6 +15,7 @@ import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.resources.SourceLocator;
+import org.eclipse.oomph.targlets.DropinLocation;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletPackage;
@@ -50,6 +51,7 @@ import java.util.Collection;
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeSources <em>Include Sources</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeAllPlatforms <em>Include All Platforms</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeAllRequirements <em>Include All Requirements</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getDropinLocations <em>Dropin Locations</em>}</li>
  * </ul>
  *
  * @generated
@@ -197,6 +199,16 @@ public class TargletImpl extends ModelElementImpl implements Targlet
   protected boolean includeAllRequirements = INCLUDE_ALL_REQUIREMENTS_EDEFAULT;
 
   /**
+   * The cached value of the '{@link #getDropinLocations() <em>Dropin Locations</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDropinLocations()
+   * @generated
+   * @ordered
+   */
+  protected EList<DropinLocation> dropinLocations;
+
+  /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -282,6 +294,20 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       installableUnitGenerators = new EObjectContainmentEList<IUGenerator>(IUGenerator.class, this, TargletPackage.TARGLET__INSTALLABLE_UNIT_GENERATORS);
     }
     return installableUnitGenerators;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<DropinLocation> getDropinLocations()
+  {
+    if (dropinLocations == null)
+    {
+      dropinLocations = new EObjectContainmentEList<DropinLocation>(DropinLocation.class, this, TargletPackage.TARGLET__DROPIN_LOCATIONS);
+    }
+    return dropinLocations;
   }
 
   /**
@@ -464,6 +490,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return ((InternalEList<?>)getInstallableUnitGenerators()).basicRemove(otherEnd, msgs);
       case TargletPackage.TARGLET__REPOSITORY_LISTS:
         return ((InternalEList<?>)getRepositoryLists()).basicRemove(otherEnd, msgs);
+      case TargletPackage.TARGLET__DROPIN_LOCATIONS:
+        return ((InternalEList<?>)getDropinLocations()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -500,6 +528,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return isIncludeAllPlatforms();
       case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
         return isIncludeAllRequirements();
+      case TargletPackage.TARGLET__DROPIN_LOCATIONS:
+        return getDropinLocations();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -546,6 +576,10 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
         setIncludeAllRequirements((Boolean)newValue);
         return;
+      case TargletPackage.TARGLET__DROPIN_LOCATIONS:
+        getDropinLocations().clear();
+        getDropinLocations().addAll((Collection<? extends DropinLocation>)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -587,6 +621,9 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
         setIncludeAllRequirements(INCLUDE_ALL_REQUIREMENTS_EDEFAULT);
         return;
+      case TargletPackage.TARGLET__DROPIN_LOCATIONS:
+        getDropinLocations().clear();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -624,6 +661,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return includeAllPlatforms != INCLUDE_ALL_PLATFORMS_EDEFAULT;
       case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
         return includeAllRequirements != INCLUDE_ALL_REQUIREMENTS_EDEFAULT;
+      case TargletPackage.TARGLET__DROPIN_LOCATIONS:
+        return dropinLocations != null && !dropinLocations.isEmpty();
     }
     return super.eIsSet(featureID);
   }

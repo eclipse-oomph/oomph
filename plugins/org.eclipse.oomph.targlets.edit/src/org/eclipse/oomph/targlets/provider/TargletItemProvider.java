@@ -17,6 +17,7 @@ import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.p2.provider.RequirementItemProvider;
 import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.targlets.Targlet;
+import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.TargletPackage;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -167,6 +168,7 @@ public class TargletItemProvider extends ModelElementItemProvider
       childrenFeatures.add(TargletPackage.Literals.TARGLET__SOURCE_LOCATORS);
       childrenFeatures.add(TargletPackage.Literals.TARGLET__INSTALLABLE_UNIT_GENERATORS);
       childrenFeatures.add(TargletPackage.Literals.TARGLET__REPOSITORY_LISTS);
+      childrenFeatures.add(TargletPackage.Literals.TARGLET__DROPIN_LOCATIONS);
     }
     return childrenFeatures;
   }
@@ -291,6 +293,7 @@ public class TargletItemProvider extends ModelElementItemProvider
       case TargletPackage.TARGLET__SOURCE_LOCATORS:
       case TargletPackage.TARGLET__INSTALLABLE_UNIT_GENERATORS:
       case TargletPackage.TARGLET__REPOSITORY_LISTS:
+      case TargletPackage.TARGLET__DROPIN_LOCATIONS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;
     }
@@ -314,6 +317,8 @@ public class TargletItemProvider extends ModelElementItemProvider
     newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__SOURCE_LOCATORS, ResourcesFactory.eINSTANCE.createSourceLocator()));
 
     newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__REPOSITORY_LISTS, P2Factory.eINSTANCE.createRepositoryList()));
+
+    newChildDescriptors.add(createChildParameter(TargletPackage.Literals.TARGLET__DROPIN_LOCATIONS, TargletFactory.eINSTANCE.createDropinLocation()));
   }
 
 }

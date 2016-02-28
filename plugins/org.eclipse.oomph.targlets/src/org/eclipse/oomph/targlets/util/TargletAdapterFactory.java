@@ -18,6 +18,7 @@ import org.eclipse.oomph.targlets.ComponentDefGenerator;
 import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.ComponentExtGenerator;
 import org.eclipse.oomph.targlets.ComponentExtension;
+import org.eclipse.oomph.targlets.DropinLocation;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.PluginGenerator;
@@ -183,6 +184,12 @@ public class TargletAdapterFactory extends AdapterFactoryImpl
     public Adapter caseProjectNameGenerator(ProjectNameGenerator object)
     {
       return createProjectNameGeneratorAdapter();
+    }
+
+    @Override
+    public Adapter caseDropinLocation(DropinLocation object)
+    {
+      return createDropinLocationAdapter();
     }
 
     @Override
@@ -433,6 +440,21 @@ public class TargletAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createProjectNameGeneratorAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.targlets.DropinLocation <em>Dropin Location</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.targlets.DropinLocation
+   * @generated
+   */
+  public Adapter createDropinLocationAdapter()
   {
     return null;
   }

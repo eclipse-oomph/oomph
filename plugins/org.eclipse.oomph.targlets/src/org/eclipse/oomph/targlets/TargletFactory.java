@@ -166,6 +166,15 @@ public interface TargletFactory extends EFactory
   ProjectNameGenerator createProjectNameGenerator();
 
   /**
+   * Returns a new object of class '<em>Dropin Location</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Dropin Location</em>'.
+   * @generated
+   */
+  DropinLocation createDropinLocation();
+
+  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

@@ -78,6 +78,12 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeAllPlatforms" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeAllRequirements"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dropinLocations" upperBound="-1"
+        eType="#//DropinLocation" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="dropinLocation"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ComponentExtension" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="requirements" upperBound="-1"
@@ -117,6 +123,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="CategoryGenerator" eSuperTypes="#//SiteGenerator"/>
   <eClassifiers xsi:type="ecore:EClass" name="ProductGenerator" eSuperTypes="#//IUGenerator"/>
   <eClassifiers xsi:type="ecore:EClass" name="ProjectNameGenerator" eSuperTypes="#//IUGenerator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DropinLocation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rootFolder" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="recursive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="InstallableUnit" instanceClassName="org.eclipse.equinox.p2.metadata.IInstallableUnit"
       serializable="false"/>
   <eClassifiers xsi:type="ecore:EDataType" name="StringToVersionMap" instanceTypeName="java.util.Map&lt;java.lang.String, org.eclipse.equinox.p2.metadata.Version>"

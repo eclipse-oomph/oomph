@@ -21,6 +21,7 @@ import org.eclipse.oomph.targlets.ComponentDefGenerator;
 import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.ComponentExtGenerator;
 import org.eclipse.oomph.targlets.ComponentExtension;
+import org.eclipse.oomph.targlets.DropinLocation;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.PluginGenerator;
@@ -124,6 +125,8 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
         return createProductGenerator();
       case TargletPackage.PROJECT_NAME_GENERATOR:
         return createProjectNameGenerator();
+      case TargletPackage.DROPIN_LOCATION:
+        return createDropinLocation();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -226,6 +229,11 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
     for (IUGenerator iuGenerator : source.getInstallableUnitGenerators())
     {
       targlet.getInstallableUnitGenerators().add(EcoreUtil.copy(iuGenerator));
+    }
+
+    for (DropinLocation dropinLocation : source.getDropinLocations())
+    {
+      targlet.getDropinLocations().add(EcoreUtil.copy(dropinLocation));
     }
 
     return targlet;
@@ -372,6 +380,17 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
   {
     ProjectNameGeneratorImpl projectNameGenerator = new ProjectNameGeneratorImpl();
     return projectNameGenerator;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public DropinLocation createDropinLocation()
+  {
+    DropinLocationImpl dropinLocation = new DropinLocationImpl();
+    return dropinLocation;
   }
 
   /**

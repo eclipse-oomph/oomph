@@ -22,6 +22,7 @@ import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.resources.SourceLocator;
+import org.eclipse.oomph.targlets.DropinLocation;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.IUGenerator;
 import org.eclipse.oomph.targlets.Targlet;
@@ -139,6 +140,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -595,6 +597,14 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       generateUnits(descriptor, result.toUnmodifiableSet(), bundles, features, progress.newChild(98));
     }
 
+    for (Targlet targlet : targlets)
+    {
+      for (DropinLocation dropinLocation : targlet.getDropinLocations())
+      {
+        analyzeDropinLocation(dropinLocation, bundles, features);
+      }
+    }
+
     fBundles = bundles.toArray(new TargetBundle[bundles.size()]);
     fFeatures = features.toArray(new TargetFeature[features.size()]);
     progress.done();
@@ -631,8 +641,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       File file = repo.getArtifactFile(it.next());
       if (file != null)
       {
-        TargetBundle bundle = new TargetBundle(file);
-        bundles.add(bundle);
+        addTargetBundle(file, bundles);
       }
     }
   }
@@ -645,10 +654,88 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       File file = repo.getArtifactFile(it.next());
       if (file != null)
       {
-        TargetFeature feature = new TargetFeature(file);
-        features.add(feature);
+        addTargetFeature(file, features);
       }
     }
+  }
+
+  private void analyzeDropinLocation(DropinLocation dropinLocation, List<TargetBundle> bundles, List<TargetFeature> features)
+  {
+    String rootFolder = dropinLocation.getRootFolder();
+    if (!StringUtil.isEmpty(rootFolder))
+    {
+      File folder = new File(rootFolder);
+      if (folder.isDirectory())
+      {
+        analyzeDropinLocation(folder, dropinLocation.isRecursive(), bundles, features);
+      }
+    }
+  }
+
+  private void analyzeDropinLocation(File folder, boolean recursive, List<TargetBundle> bundles, List<TargetFeature> features)
+  {
+    File[] files = folder.listFiles();
+    if (files != null)
+    {
+      for (File file : files)
+      {
+        JarFile jarFile = null;
+
+        try
+        {
+          if (file.isFile())
+          {
+            if (file.getName().endsWith(".jar"))
+            {
+              jarFile = new JarFile(file);
+              if (jarFile.getJarEntry(FeatureGenerator.FEATURE_XML) != null)
+              {
+                addTargetFeature(file, features);
+              }
+              else if (jarFile.getJarEntry(JarFile.MANIFEST_NAME) != null)
+              {
+                addTargetBundle(file, bundles);
+              }
+            }
+          }
+          else if (file.isDirectory())
+          {
+            if (new File(file, FeatureGenerator.FEATURE_XML).isFile())
+            {
+              addTargetFeature(file, features);
+            }
+            else if (new File(file, JarFile.MANIFEST_NAME).isFile())
+            {
+              addTargetBundle(file, bundles);
+            }
+            else if (recursive)
+            {
+              analyzeDropinLocation(file, true, bundles, features);
+            }
+          }
+        }
+        catch (Exception ex)
+        {
+          TargletsCorePlugin.INSTANCE.log(ex, IStatus.WARNING);
+        }
+        finally
+        {
+          IOUtil.close(jarFile);
+        }
+      }
+    }
+  }
+
+  private void addTargetBundle(File file, List<TargetBundle> bundles) throws CoreException
+  {
+    TargetBundle bundle = new TargetBundle(file);
+    bundles.add(bundle);
+  }
+
+  private void addTargetFeature(File file, List<TargetFeature> features) throws CoreException
+  {
+    TargetFeature feature = new TargetFeature(file);
+    features.add(feature);
   }
 
   public void forceUpdate(boolean activateTargetDefinition, boolean mirrors, IProgressMonitor monitor) throws CoreException
