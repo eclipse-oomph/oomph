@@ -10,30 +10,24 @@
  */
 package org.eclipse.oomph.p2.internal.ui;
 
-import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.oomph.internal.ui.AbstractPreferencePage;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 
 /**
  * @author Eike Stepper
  */
-public class AgentManagerPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
+public class AgentManagerPreferencePage extends AbstractPreferencePage
 {
   public AgentManagerPreferencePage()
   {
     noDefaultAndApplyButton();
   }
 
-  public void init(IWorkbench workbench)
-  {
-    // Do nothing
-  }
-
   @Override
-  protected Control createContents(Composite parent)
+  protected Control doCreateContents(Composite parent)
   {
     return new AgentManagerComposite(parent, SWT.NONE, null);
   }

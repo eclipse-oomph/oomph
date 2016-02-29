@@ -198,6 +198,7 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
     Composite container = new Composite(area, SWT.NONE);
     container.setLayout(layout);
     container.setLayoutData(new GridData(GridData.FILL_BOTH));
+    container.setBackground(container.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 
     createUI(container);
 

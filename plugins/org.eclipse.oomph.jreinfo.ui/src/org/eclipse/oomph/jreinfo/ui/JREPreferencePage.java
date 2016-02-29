@@ -10,33 +10,26 @@
  */
 package org.eclipse.oomph.jreinfo.ui;
 
+import org.eclipse.oomph.internal.ui.AbstractPreferencePage;
 import org.eclipse.oomph.jreinfo.JREFilter;
 import org.eclipse.oomph.util.Request;
 
-import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 
 /**
  * @author Eike Stepper
  */
-public class JREPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
+public class JREPreferencePage extends AbstractPreferencePage
 {
   public JREPreferencePage()
   {
     noDefaultAndApplyButton();
   }
 
-  public void init(IWorkbench workbench)
-  {
-    // Do nothing
-  }
-
   @Override
-  protected Control createContents(Composite parent)
+  protected Control doCreateContents(Composite parent)
   {
     JREComposite jreComposite = new JREComposite(parent, SWT.NONE, Request.Handler.SYSTEM_BROWSER, null, null);
     jreComposite.setJREFilter(new JREFilter(null, null, (Integer)null));

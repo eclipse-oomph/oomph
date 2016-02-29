@@ -58,6 +58,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -70,13 +72,15 @@ public final class AgentAnalyzer
 
   private final Map<File, AnalyzedBundlePool> bundlePools = new HashMap<File, AnalyzedBundlePool>();
 
+  private final CountDownLatch analyzeLatch;
+
   private final List<Job> analyzeProfileJobs = new ArrayList<Job>();
 
   private Set<URI> repositoryURIs;
 
   private Handler handler;
 
-  public AgentAnalyzer(Agent agent, Handler handler, IProgressMonitor monitor)
+  public AgentAnalyzer(Agent agent, boolean analyzeDamage, Handler handler, IProgressMonitor monitor)
   {
     this.agent = agent;
     this.handler = handler;
@@ -120,12 +124,53 @@ public final class AgentAnalyzer
       monitor.done();
     }
 
-    handler.analyzerChanged(this);
+    if (handler != null)
+    {
+      handler.analyzerChanged(this);
+    }
+
+    analyzeLatch = new CountDownLatch(bundlePools.size());
 
     for (AnalyzedBundlePool bundlePool : bundlePools.values())
     {
-      Job job = bundlePool.analyze();
+      Job job = bundlePool.analyze(analyzeLatch, analyzeDamage);
       analyzeProfileJobs.add(job);
+    }
+  }
+
+  public void awaitAnalyzing(IProgressMonitor monitor)
+  {
+    int totalWork = bundlePools.size();
+    SubMonitor progress = SubMonitor.convert(monitor, "Analyzing...", totalWork).detectCancelation();
+    progress.subTask("Analyzing artifacts...");
+
+    int work = totalWork - (int)analyzeLatch.getCount();
+    if (work != 0)
+    {
+      progress.worked(work);
+    }
+
+    try
+    {
+      while (!analyzeLatch.await(100, TimeUnit.MILLISECONDS))
+      {
+        P2CorePlugin.checkCancelation(monitor);
+
+        int newWork = totalWork - (int)analyzeLatch.getCount();
+        if (newWork != work)
+        {
+          progress.worked(newWork - work);
+          work = newWork;
+        }
+      }
+    }
+    catch (InterruptedException ex)
+    {
+      //$FALL-THROUGH$
+    }
+    finally
+    {
+      progress.done();
     }
   }
 
@@ -254,10 +299,19 @@ public final class AgentAnalyzer
 
     private IFileArtifactRepository p2BundlePool;
 
+    private boolean analyzing = true;
+
+    private boolean analyzingDamage = true;
+
     public AnalyzedBundlePool(AgentAnalyzer analyzer, File location)
     {
       this.analyzer = analyzer;
       this.location = location;
+    }
+
+    public boolean isAnalyzing()
+    {
+      return analyzing;
     }
 
     public AgentAnalyzer getAnalyzer()
@@ -406,6 +460,11 @@ public final class AgentAnalyzer
       }
     }
 
+    public boolean isAnalyzingDamage()
+    {
+      return analyzingDamage;
+    }
+
     public int compareTo(AnalyzedBundlePool o)
     {
       return location.getAbsolutePath().compareTo(o.getLocation().getAbsolutePath());
@@ -449,14 +508,15 @@ public final class AgentAnalyzer
       return profile;
     }
 
-    Job analyze()
+    Job analyze(final CountDownLatch analyzeLatch, final boolean analyzeDamage)
     {
       Job job = new Job("Analyzing bundle pool " + location)
       {
         @Override
         protected IStatus run(IProgressMonitor monitor)
         {
-          analyze(monitor);
+          analyze(analyzeDamage, monitor);
+          analyzeLatch.countDown();
           return Status.OK_STATUS;
         }
       };
@@ -465,7 +525,7 @@ public final class AgentAnalyzer
       return job;
     }
 
-    private void analyze(IProgressMonitor monitor)
+    private void analyze(boolean analyzeDamage, IProgressMonitor monitor)
     {
       Random random = new Random(System.currentTimeMillis());
 
@@ -500,7 +560,12 @@ public final class AgentAnalyzer
       analyzer.analyzerChanged(analyzer);
 
       analyzeUnusedArtifacts(monitor);
-      analyzeDamagedArtifacts(monitor);
+      analyzing = false;
+
+      if (analyzeDamage)
+      {
+        analyzeDamagedArtifacts(monitor);
+      }
     }
 
     private void analyzeUnusedArtifacts(IProgressMonitor monitor)
@@ -581,6 +646,7 @@ public final class AgentAnalyzer
       }
 
       analyzer.bundlePoolChanged(this, false, false);
+      analyzingDamage = false;
     }
 
     @SuppressWarnings("restriction")

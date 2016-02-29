@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.preferences.presentation;
 
+import org.eclipse.oomph.internal.ui.AbstractPreferencePage;
 import org.eclipse.oomph.preferences.provider.PreferencesItemProviderAdapterFactory;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 
@@ -20,7 +21,6 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.IPreferencePageContainer;
-import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -36,7 +36,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbenchWindow;
 
 import java.lang.reflect.Method;
@@ -44,7 +43,7 @@ import java.lang.reflect.Method;
 /**
  * @author Eike Stepper
  */
-public class AllPreferencesPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
+public class AllPreferencesPreferencePage extends AbstractPreferencePage
 {
   private IWorkbench workbench;
 
@@ -53,13 +52,14 @@ public class AllPreferencesPreferencePage extends PreferencePage implements IWor
     noDefaultAndApplyButton();
   }
 
+  @Override
   public void init(IWorkbench workbench)
   {
     this.workbench = workbench;
   }
 
   @Override
-  protected Control createContents(Composite parent)
+  protected Control doCreateContents(Composite parent)
   {
     GridLayout layout = new GridLayout();
     layout.marginWidth = 0;

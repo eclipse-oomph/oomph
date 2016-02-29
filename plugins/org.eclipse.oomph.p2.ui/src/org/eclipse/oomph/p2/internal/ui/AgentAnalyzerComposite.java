@@ -96,6 +96,8 @@ public class AgentAnalyzerComposite extends Composite
 
   private final Agent agent;
 
+  private boolean initializingAnalyzer;
+
   private AgentAnalyzer analyzer;
 
   private AnalyzedBundlePool currentBundlePool;
@@ -103,6 +105,24 @@ public class AgentAnalyzerComposite extends Composite
   private TableViewer bundlePoolViewer;
 
   private BundlePoolContentProvider bundlePoolContentProvider;
+
+  private Button deleteUnusedProfilesButton;
+
+  private Button deleteUnusedArtifactsButton;
+
+  private Button repairAllArtifactsButton;
+
+  private TableViewer profileViewer;
+
+  private ProfileContentProvider profileContentProvider;
+
+  private String profileFilter = SHOW_ALL;
+
+  private Button selectAllProfilesButton;
+
+  private Button deleteProfilesButton;
+
+  private Button showDetailsButton;
 
   private TableViewer artifactViewer;
 
@@ -115,16 +135,6 @@ public class AgentAnalyzerComposite extends Composite
   private Button deleteArtifactsButton;
 
   private boolean deletingArtifacts;
-
-  private TableViewer profileViewer;
-
-  private ProfileContentProvider profileContentProvider;
-
-  private String profileFilter = SHOW_ALL;
-
-  private Button selectAllProfilesButton;
-
-  private Button deleteProfilesButton;
 
   public AgentAnalyzerComposite(final Composite parent, int margin, int style, Agent agent) throws InvocationTargetException, InterruptedException
   {
@@ -143,10 +153,10 @@ public class AgentAnalyzerComposite extends Composite
     SashForm verticalSashForm = new SashForm(this, SWT.SMOOTH | SWT.VERTICAL);
     verticalSashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-    createArtifactViewer(verticalSashForm);
     createProfileViewer(verticalSashForm);
+    createArtifactViewer(verticalSashForm);
 
-    verticalSashForm.setWeights(new int[] { 3, 2 });
+    verticalSashForm.setWeights(new int[] { 2, 3 });
 
     addDisposeListener(new DisposeListener()
     {
@@ -185,6 +195,16 @@ public class AgentAnalyzerComposite extends Composite
     bundlePoolColumn.setWidth(305);
     bundlePoolColumn.setResizable(false);
 
+    TableColumn profilesColumn = new TableViewerColumn(bundlePoolViewer, SWT.NONE).getColumn();
+    profilesColumn.setText("Profiles");
+    profilesColumn.setAlignment(SWT.RIGHT);
+    profilesColumn.setWidth(55);
+
+    TableColumn unusedProfilesColumn = new TableViewerColumn(bundlePoolViewer, SWT.NONE).getColumn();
+    unusedProfilesColumn.setText("Unused Profiles");
+    unusedProfilesColumn.setAlignment(SWT.RIGHT);
+    unusedProfilesColumn.setWidth(97);
+
     TableColumn artifactsColumn = new TableViewerColumn(bundlePoolViewer, SWT.NONE).getColumn();
     artifactsColumn.setText("Artifacts");
     artifactsColumn.setAlignment(SWT.RIGHT);
@@ -200,16 +220,6 @@ public class AgentAnalyzerComposite extends Composite
     damagedArtifactsColumn.setAlignment(SWT.RIGHT);
     damagedArtifactsColumn.setWidth(125);
 
-    TableColumn profilesColumn = new TableViewerColumn(bundlePoolViewer, SWT.NONE).getColumn();
-    profilesColumn.setText("Profiles");
-    profilesColumn.setAlignment(SWT.RIGHT);
-    profilesColumn.setWidth(55);
-
-    TableColumn unusedProfilesColumn = new TableViewerColumn(bundlePoolViewer, SWT.NONE).getColumn();
-    unusedProfilesColumn.setText("Unused Profiles");
-    unusedProfilesColumn.setAlignment(SWT.RIGHT);
-    unusedProfilesColumn.setWidth(97);
-
     bundlePoolContentProvider = new BundlePoolContentProvider();
     bundlePoolViewer.setContentProvider(bundlePoolContentProvider);
     bundlePoolViewer.setLabelProvider(new TableLabelProvider(getDisplay()));
@@ -220,16 +230,207 @@ public class AgentAnalyzerComposite extends Composite
       {
         currentBundlePool = (AnalyzedBundlePool)((IStructuredSelection)event.getSelection()).getFirstElement();
 
+        profileViewer.setSelection(StructuredSelection.EMPTY);
+        profileContentProvider.setInput(profileViewer, currentBundlePool);
+
         artifactViewer.setSelection(StructuredSelection.EMPTY);
         artifactContentProvider.setInput(artifactViewer, currentBundlePool);
 
-        profileViewer.setSelection(StructuredSelection.EMPTY);
-        profileContentProvider.setInput(profileViewer, currentBundlePool);
+        updateBundlePoolButtons();
+      }
+    });
+
+    Composite bundlePoolButtonBar = new Composite(bundlePoolComposite, SWT.NONE);
+    bundlePoolButtonBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+    GridLayout bundlePoolButtonBarLayout = new GridLayout(4, false);
+    bundlePoolButtonBarLayout.marginWidth = 0;
+    bundlePoolButtonBarLayout.marginHeight = 0;
+    bundlePoolButtonBar.setLayout(bundlePoolButtonBarLayout);
+
+    new Label(bundlePoolButtonBar, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+    deleteUnusedProfilesButton = new Button(bundlePoolButtonBar, SWT.NONE);
+    deleteUnusedProfilesButton.setText("Delete Unused Profiles");
+    deleteUnusedProfilesButton.setEnabled(false);
+    deleteUnusedProfilesButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        AnalyzedProfile[] profiles = currentBundlePool.getUnusedProfiles();
+        deleteProfiles(profiles);
+        updateBundlePoolButtons();
+      }
+    });
+
+    deleteUnusedArtifactsButton = new Button(bundlePoolButtonBar, SWT.NONE);
+    deleteUnusedArtifactsButton.setText("Delete Unused Artifacts");
+    deleteUnusedArtifactsButton.setEnabled(false);
+    deleteUnusedArtifactsButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        AnalyzedArtifact[] artifacts = currentBundlePool.getUnusedArtifacts();
+        deleteArtifacts(artifacts);
+        updateBundlePoolButtons();
+      }
+    });
+
+    repairAllArtifactsButton = new Button(bundlePoolButtonBar, SWT.NONE);
+    repairAllArtifactsButton.setText("Repair Damaged Artifacts");
+    repairAllArtifactsButton.setEnabled(false);
+    repairAllArtifactsButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        AnalyzedArtifact[] artifacts = currentBundlePool.getDamagedArtifacts();
+        repairArtifacts(artifacts);
+        updateBundlePoolButtons();
       }
     });
 
     new Label(bundlePoolComposite, SWT.NONE);
     bundlePoolContentProvider.setInput(bundlePoolViewer, null); // trigger resizeColumns
+  }
+
+  private void createProfileViewer(Composite parent)
+  {
+    Composite profileComposite = new Composite(parent, SWT.NONE);
+    GridLayout profileLayout = new GridLayout();
+    profileLayout.marginWidth = 0;
+    profileLayout.marginHeight = 0;
+    profileComposite.setLayout(profileLayout);
+
+    profileViewer = new TableViewer(profileComposite, TABLE_STYLE | SWT.MULTI);
+    Table profileTable = profileViewer.getTable();
+    profileTable.setHeaderVisible(true);
+    profileTable.setLayoutData(new GridData(GridData.FILL_BOTH));
+    new SelectAllAdapter(profileViewer);
+
+    TableColumn profileColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
+    profileColumn.setText("Profile");
+    profileColumn.setWidth(447);
+    profileColumn.setResizable(false);
+
+    TableColumn artifactsColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
+    artifactsColumn.setText("Artifacts");
+    artifactsColumn.setAlignment(SWT.RIGHT);
+    artifactsColumn.setWidth(62);
+
+    TableColumn damagedArtifactsColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
+    damagedArtifactsColumn.setText("Damaged Artifacts");
+    damagedArtifactsColumn.setAlignment(SWT.RIGHT);
+    damagedArtifactsColumn.setWidth(120);
+
+    TableColumn rootsColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
+    rootsColumn.setText("Roots");
+    rootsColumn.setAlignment(SWT.RIGHT);
+    rootsColumn.setWidth(50);
+
+    TableColumn repositoriesColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
+    repositoriesColumn.setText("Repositories");
+    repositoriesColumn.setAlignment(SWT.RIGHT);
+    repositoriesColumn.setWidth(82);
+
+    profileContentProvider = new ProfileContentProvider();
+    profileViewer.setContentProvider(profileContentProvider);
+    profileViewer.setLabelProvider(new TableLabelProvider(getDisplay()));
+    profileViewer.addSelectionChangedListener(new SelectionChangedListener()
+    {
+      @Override
+      protected void doSelectionChanged(SelectionChangedEvent event)
+      {
+        updateProfileButtons();
+      }
+
+      @Override
+      protected void triggerOtherSelections(SelectionChangedEvent event)
+      {
+        if (!changingSelection.contains(artifactViewer))
+        {
+          Set<AnalyzedArtifact> artifacts = new HashSet<AnalyzedArtifact>();
+          for (AnalyzedProfile profile : getSelectedProfiles())
+          {
+            artifacts.addAll(profile.getArtifacts());
+          }
+
+          artifactViewer.setSelection(new StructuredSelection(new ArrayList<AnalyzedArtifact>(artifacts)));
+        }
+      }
+    });
+
+    profileTable.addMouseListener(new MouseAdapter()
+    {
+      @Override
+      public void mouseDoubleClick(MouseEvent e)
+      {
+        showProfileDetails();
+      }
+    });
+
+    Composite profileButtonBar = new Composite(profileComposite, SWT.NONE);
+    profileButtonBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+    profileButtonBar.setLayout(UIUtil.createGridLayout(5));
+
+    final Combo filterCombo = new Combo(profileButtonBar, SWT.READ_ONLY);
+    filterCombo.add(SHOW_ALL);
+    filterCombo.add(SHOW_UNUSED);
+    filterCombo.add(SHOW_BY_ARTIFACT);
+    filterCombo.select(0);
+    filterCombo.pack();
+    filterCombo.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        profileFilter = filterCombo.getText();
+        profileContentProvider.setFilter(profileFilter);
+      }
+    });
+
+    selectAllProfilesButton = new Button(profileButtonBar, SWT.NONE);
+    selectAllProfilesButton.setText("Select All");
+    selectAllProfilesButton.setEnabled(false);
+    selectAllProfilesButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        profileViewer.setSelection(new StructuredSelection(currentBundlePool.getProfiles()));
+      }
+    });
+
+    new Label(profileButtonBar, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+
+    deleteProfilesButton = new Button(profileButtonBar, SWT.NONE);
+    deleteProfilesButton.setText("Delete Selected...");
+    deleteProfilesButton.setEnabled(false);
+    deleteProfilesButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        AnalyzedProfile[] profiles = getSelectedProfiles();
+        deleteProfiles(profiles);
+      }
+    });
+
+    showDetailsButton = new Button(profileButtonBar, SWT.NONE);
+    showDetailsButton.setText("Details...");
+    showDetailsButton.setEnabled(false);
+    showDetailsButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        showProfileDetails();
+      }
+    });
+
+    new Label(profileComposite, SWT.NONE);
+    profileContentProvider.setInput(profileViewer, null); // trigger resizeColumns
   }
 
   private void createArtifactViewer(Composite parent)
@@ -332,6 +533,19 @@ public class AgentAnalyzerComposite extends Composite
 
     new Label(artifactButtonBar, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
+    deleteArtifactsButton = new Button(artifactButtonBar, SWT.NONE);
+    deleteArtifactsButton.setText("Delete Selected...");
+    deleteArtifactsButton.setEnabled(false);
+    deleteArtifactsButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        AnalyzedArtifact[] artifacts = getSelectedArtifacts();
+        deleteArtifacts(artifacts);
+      }
+    });
+
     repairArtifactsButton = new Button(artifactButtonBar, SWT.NONE);
     repairArtifactsButton.setText("Repair Selected");
     repairArtifactsButton.setEnabled(false);
@@ -345,283 +559,137 @@ public class AgentAnalyzerComposite extends Composite
       }
     });
 
-    deleteArtifactsButton = new Button(artifactButtonBar, SWT.NONE);
-    deleteArtifactsButton.setText("Delete Selected...");
-    deleteArtifactsButton.setEnabled(false);
-    deleteArtifactsButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        AnalyzedArtifact[] artifacts = getSelectedArtifacts();
-        int len = artifacts.length;
-        String message = "Do you really want to delete " + len + " artifact" + (len == 1 ? "" : "s") + "?\n\n"
-            + "Note 1: Unused artifacts can always safely be deleted. "
-            + "They will be deleted physically from your disk and logically from your bundle pool.\n\n"
-            + "Note 2: Artifacts used in your profiles will be deleted only physically from your disk. "
-            + "Repairing them is possible if they are still available for download from a p2 repository.";
-
-        if (MessageDialog.openQuestion(getShell(), AgentAnalyzerDialog.TITLE, message))
-        {
-          deleteArtifacts(artifacts);
-        }
-      }
-    });
-
-    new Label(artifactComposite, SWT.NONE);
     artifactContentProvider.setInput(artifactViewer, null); // trigger resizeColumns
-  }
-
-  private void createProfileViewer(Composite parent)
-  {
-    Composite profileComposite = new Composite(parent, SWT.NONE);
-    GridLayout profileLayout = new GridLayout();
-    profileLayout.marginWidth = 0;
-    profileLayout.marginHeight = 0;
-    profileComposite.setLayout(profileLayout);
-
-    profileViewer = new TableViewer(profileComposite, TABLE_STYLE | SWT.MULTI);
-    Table profileTable = profileViewer.getTable();
-    profileTable.setHeaderVisible(true);
-    profileTable.setLayoutData(new GridData(GridData.FILL_BOTH));
-    new SelectAllAdapter(profileViewer);
-
-    TableColumn profileColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
-    profileColumn.setText("Profile");
-    profileColumn.setWidth(447);
-    profileColumn.setResizable(false);
-
-    TableColumn artifactsColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
-    artifactsColumn.setText("Artifacts");
-    artifactsColumn.setAlignment(SWT.RIGHT);
-    artifactsColumn.setWidth(62);
-
-    TableColumn damagedArtifactsColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
-    damagedArtifactsColumn.setText("Damaged Artifacts");
-    damagedArtifactsColumn.setAlignment(SWT.RIGHT);
-    damagedArtifactsColumn.setWidth(120);
-
-    TableColumn rootsColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
-    rootsColumn.setText("Roots");
-    rootsColumn.setAlignment(SWT.RIGHT);
-    rootsColumn.setWidth(50);
-
-    TableColumn repositoriesColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
-    repositoriesColumn.setText("Repositories");
-    repositoriesColumn.setAlignment(SWT.RIGHT);
-    repositoriesColumn.setWidth(82);
-
-    profileContentProvider = new ProfileContentProvider();
-    profileViewer.setContentProvider(profileContentProvider);
-    profileViewer.setLabelProvider(new TableLabelProvider(getDisplay()));
-    profileViewer.addSelectionChangedListener(new SelectionChangedListener()
-    {
-      @Override
-      protected void doSelectionChanged(SelectionChangedEvent event)
-      {
-        updateProfileButtons();
-      }
-
-      @Override
-      protected void triggerOtherSelections(SelectionChangedEvent event)
-      {
-        if (!changingSelection.contains(artifactViewer))
-        {
-          Set<AnalyzedArtifact> artifacts = new HashSet<AnalyzedArtifact>();
-          for (AnalyzedProfile profile : getSelectedProfiles())
-          {
-            artifacts.addAll(profile.getArtifacts());
-          }
-
-          artifactViewer.setSelection(new StructuredSelection(new ArrayList<AnalyzedArtifact>(artifacts)));
-        }
-      }
-    });
-
-    profileTable.addMouseListener(new MouseAdapter()
-    {
-      @Override
-      public void mouseDoubleClick(MouseEvent e)
-      {
-        AnalyzedProfile[] selectedProfiles = getSelectedProfiles();
-        if (selectedProfiles.length == 1)
-        {
-          Profile profile = selectedProfiles[0].getP2Profile();
-
-          ProfileDetailsDialog dialog = new ProfileDetailsDialog(getShell(), profile);
-          dialog.open();
-        }
-      }
-    });
-
-    Composite profileButtonBar = new Composite(profileComposite, SWT.NONE);
-    profileButtonBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-    profileButtonBar.setLayout(UIUtil.createGridLayout(4));
-
-    final Combo filterCombo = new Combo(profileButtonBar, SWT.READ_ONLY);
-    filterCombo.add(SHOW_ALL);
-    filterCombo.add(SHOW_UNUSED);
-    filterCombo.add(SHOW_BY_ARTIFACT);
-    filterCombo.select(0);
-    filterCombo.pack();
-    filterCombo.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        profileFilter = filterCombo.getText();
-        profileContentProvider.setFilter(profileFilter);
-      }
-    });
-
-    selectAllProfilesButton = new Button(profileButtonBar, SWT.NONE);
-    selectAllProfilesButton.setText("Select All");
-    selectAllProfilesButton.setEnabled(false);
-    selectAllProfilesButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        profileViewer.setSelection(new StructuredSelection(currentBundlePool.getProfiles()));
-      }
-    });
-
-    new Label(profileButtonBar, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-
-    deleteProfilesButton = new Button(profileButtonBar, SWT.NONE);
-    deleteProfilesButton.setText("Delete Selected...");
-    deleteProfilesButton.setEnabled(false);
-    deleteProfilesButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        AnalyzedProfile[] profiles = getSelectedProfiles();
-        int len = profiles.length;
-        String message = "Do you really want to delete " + len + " profile" + (len == 1 ? "" : "s") + "?";
-
-        if (MessageDialog.openQuestion(getShell(), AgentAnalyzerDialog.TITLE, message))
-        {
-          deleteProfiles(profiles);
-        }
-      }
-    });
-
-    profileContentProvider.setInput(profileViewer, null); // trigger resizeColumns
   }
 
   private void initAnalyzer() throws InvocationTargetException, InterruptedException
   {
-    ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
-    dialog.run(true, true, new IRunnableWithProgress()
+    initializingAnalyzer = true;
+
+    try
     {
-      public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+      ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+      dialog.run(true, true, new IRunnableWithProgress()
       {
-        analyzer = new AgentAnalyzer(agent, new Handler()
+        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
         {
-          public void analyzerChanged(final AgentAnalyzer analyzer)
+          analyzer = new AgentAnalyzer(agent, true, new Handler()
           {
-            if (analyzer == AgentAnalyzerComposite.this.analyzer)
+            public void analyzerChanged(final AgentAnalyzer analyzer)
+            {
+              if (analyzer == AgentAnalyzerComposite.this.analyzer)
+              {
+                asyncExec(new Runnable()
+                {
+                  public void run()
+                  {
+                    bundlePoolContentProvider.refresh();
+
+                    if (!deletingArtifacts)
+                    {
+                      artifactContentProvider.refresh();
+                      profileContentProvider.refresh();
+                    }
+
+                    getDisplay().asyncExec(new Runnable()
+                    {
+                      public void run()
+                      {
+                        Object[] elements = bundlePoolContentProvider.getElements(analyzer);
+                        if (elements.length != 0)
+                        {
+                          bundlePoolViewer.setSelection(new StructuredSelection(elements[0]));
+                        }
+                      }
+                    });
+                  }
+                });
+              }
+            }
+
+            public void bundlePoolChanged(final AnalyzedBundlePool bundlePool, final boolean artifacts, final boolean profiles)
             {
               asyncExec(new Runnable()
               {
                 public void run()
                 {
-                  bundlePoolContentProvider.refresh();
+                  bundlePoolViewer.update(bundlePool, null);
 
-                  if (!deletingArtifacts)
+                  if (bundlePool == currentBundlePool)
                   {
-                    artifactContentProvider.refresh();
-                    profileContentProvider.refresh();
-                  }
-
-                  getDisplay().asyncExec(new Runnable()
-                  {
-                    public void run()
+                    if (!artifacts && !profiles)
                     {
-                      Object[] elements = bundlePoolContentProvider.getElements(analyzer);
-                      if (elements.length != 0)
+                      updateBundlePoolButtons();
+                    }
+                    else
+                    {
+                      if (artifacts)
                       {
-                        bundlePoolViewer.setSelection(new StructuredSelection(elements[0]));
+                        artifactContentProvider.refresh();
+                      }
+
+                      if (profiles)
+                      {
+                        profileContentProvider.refresh();
                       }
                     }
-                  });
+                  }
                 }
               });
             }
-          }
 
-          public void bundlePoolChanged(final AnalyzedBundlePool bundlePool, final boolean artifacts, final boolean profiles)
-          {
-            asyncExec(new Runnable()
+            public void profileChanged(final AnalyzedProfile profile)
             {
-              public void run()
+              if (deletingArtifacts)
               {
-                bundlePoolViewer.update(bundlePool, null);
-
-                if (bundlePool == currentBundlePool)
-                {
-                  if (artifacts)
-                  {
-                    artifactContentProvider.refresh();
-                  }
-
-                  if (profiles)
-                  {
-                    profileContentProvider.refresh();
-                  }
-                }
+                return;
               }
-            });
-          }
 
-          public void profileChanged(final AnalyzedProfile profile)
-          {
-            if (deletingArtifacts)
-            {
-              return;
-            }
-
-            if (profile.getBundlePool() == currentBundlePool)
-            {
-              asyncExec(new Runnable()
+              if (profile.getBundlePool() == currentBundlePool)
               {
-                public void run()
+                asyncExec(new Runnable()
                 {
-                  profileViewer.update(profile, null);
-                }
-              });
-            }
-          }
-
-          public void artifactChanged(final AnalyzedArtifact artifact)
-          {
-            if (deletingArtifacts)
-            {
-              return;
+                  public void run()
+                  {
+                    profileViewer.update(profile, null);
+                  }
+                });
+              }
             }
 
-            if (artifact == null || artifact.getBundlePool() == currentBundlePool)
+            public void artifactChanged(final AnalyzedArtifact artifact)
             {
-              asyncExec(new Runnable()
+              if (deletingArtifacts)
               {
-                public void run()
+                return;
+              }
+
+              if (artifact == null || artifact.getBundlePool() == currentBundlePool)
+              {
+                asyncExec(new Runnable()
                 {
-                  if (artifact != null && ObjectUtil.equals(artifactContentProvider.getFilter(), SHOW_ALL))
+                  public void run()
                   {
-                    artifactViewer.update(artifact, null);
+                    if (artifact != null && ObjectUtil.equals(artifactContentProvider.getFilter(), SHOW_ALL))
+                    {
+                      artifactViewer.update(artifact, null);
+                    }
+                    else
+                    {
+                      artifactContentProvider.refresh();
+                    }
                   }
-                  else
-                  {
-                    artifactContentProvider.refresh();
-                  }
-                }
-              });
+                });
+              }
             }
-          }
-        }, monitor);
-      }
-    });
+          }, monitor);
+        }
+      });
+    }
+    finally
+    {
+      initializingAnalyzer = false;
+    }
   }
 
   private void asyncExec(Runnable runnable)
@@ -633,15 +701,6 @@ public class AgentAnalyzerComposite extends Composite
     }
   }
 
-  private AnalyzedArtifact[] getSelectedArtifacts()
-  {
-    IStructuredSelection selection = (IStructuredSelection)artifactViewer.getSelection();
-
-    @SuppressWarnings("unchecked")
-    List<AnalyzedArtifact> artifacts = (List<AnalyzedArtifact>)(List<?>)selection.toList();
-    return artifacts.toArray(new AnalyzedArtifact[artifacts.size()]);
-  }
-
   private AnalyzedProfile[] getSelectedProfiles()
   {
     IStructuredSelection selection = (IStructuredSelection)profileViewer.getSelection();
@@ -649,6 +708,15 @@ public class AgentAnalyzerComposite extends Composite
     @SuppressWarnings("unchecked")
     List<AnalyzedProfile> profiles = (List<AnalyzedProfile>)(List<?>)selection.toList();
     return profiles.toArray(new AnalyzedProfile[profiles.size()]);
+  }
+
+  private AnalyzedArtifact[] getSelectedArtifacts()
+  {
+    IStructuredSelection selection = (IStructuredSelection)artifactViewer.getSelection();
+
+    @SuppressWarnings("unchecked")
+    List<AnalyzedArtifact> artifacts = (List<AnalyzedArtifact>)(List<?>)selection.toList();
+    return artifacts.toArray(new AnalyzedArtifact[artifacts.size()]);
   }
 
   private boolean updateButton(Button button, String text, int count, String suffix)
@@ -670,6 +738,81 @@ public class AgentAnalyzerComposite extends Composite
     return false;
   }
 
+  private void updateBundlePoolButtons()
+  {
+    boolean changed = false;
+
+    if (currentBundlePool != null)
+    {
+      changed |= updateButton(deleteUnusedProfilesButton, "Delete", currentBundlePool.getUnusedProfilesCount(), " Unused Profiles...");
+      if (initializingAnalyzer && deleteUnusedProfilesButton.isEnabled())
+      {
+        deleteUnusedProfilesButton.setEnabled(false);
+      }
+
+      changed |= updateButton(deleteUnusedArtifactsButton, "Delete", currentBundlePool.getUnusedArtifactsCount(), " Unused Artifacts...");
+      if (initializingAnalyzer && deleteUnusedArtifactsButton.isEnabled())
+      {
+        deleteUnusedArtifactsButton.setEnabled(false);
+      }
+
+      changed |= updateButton(repairAllArtifactsButton, "Repair", currentBundlePool.getDamagedArtifactsCount(), " Damaged Artifacts");
+
+      if (currentBundlePool.isAnalyzingDamage() && repairAllArtifactsButton.isEnabled())
+      {
+        repairAllArtifactsButton.setEnabled(false);
+      }
+    }
+
+    if (changed)
+    {
+      Composite parent = deleteUnusedProfilesButton.getParent();
+      parent.pack();
+      parent.getParent().layout();
+    }
+  }
+
+  private void updateProfileButtons()
+  {
+    boolean changed = false;
+
+    if (currentBundlePool != null)
+    {
+      Object[] elements = profileContentProvider.getElements(currentBundlePool);
+      changed |= updateButton(selectAllProfilesButton, "Select All", elements.length, "");
+    }
+
+    AnalyzedProfile[] profiles = getSelectedProfiles();
+    int count = profiles.length;
+
+    changed |= updateButton(deleteProfilesButton, "Delete", count, " Selected...");
+
+    showDetailsButton.setEnabled(count == 1);
+
+    if (count != 0)
+    {
+      boolean enabled = true;
+      for (int i = 0; i < count; i++)
+      {
+        AnalyzedProfile profile = profiles[i];
+        if (!profile.isUnused())
+        {
+          enabled = false;
+          break;
+        }
+      }
+
+      deleteProfilesButton.setEnabled(enabled);
+    }
+
+    if (changed)
+    {
+      Composite parent = deleteProfilesButton.getParent();
+      parent.pack();
+      parent.getParent().layout();
+    }
+  }
+
   private void updateArtifactButtons()
   {
     boolean changed = false;
@@ -683,8 +826,8 @@ public class AgentAnalyzerComposite extends Composite
     AnalyzedArtifact[] artifacts = getSelectedArtifacts();
     int count = artifacts.length;
 
-    changed |= updateButton(deleteArtifactsButton, "Delete", count, " Selected...");
     changed |= updateButton(repairArtifactsButton, "Repair", count, " Selected");
+    changed |= updateButton(deleteArtifactsButton, "Delete", count, " Selected...");
 
     if (changed)
     {
@@ -694,41 +837,98 @@ public class AgentAnalyzerComposite extends Composite
     }
   }
 
+  private void deleteProfiles(final AnalyzedProfile[] profiles)
+  {
+    int len = profiles.length;
+    String message = "Do you really want to delete " + len + " profile" + (len == 1 ? "" : "s") + "?";
+
+    if (MessageDialog.openQuestion(getShell(), AgentAnalyzerDialog.TITLE, message))
+    {
+      try
+      {
+        UIUtil.runInProgressDialog(getShell(), new IRunnableWithProgress()
+        {
+          public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+          {
+            SubMonitor progress = SubMonitor.convert(monitor, "Deleting profiles", profiles.length).detectCancelation();
+
+            for (AnalyzedProfile profile : profiles)
+            {
+              profile.delete(progress.newChild());
+            }
+          }
+        });
+
+        profileContentProvider.refresh();
+        profileViewer.setSelection(StructuredSelection.EMPTY);
+      }
+      catch (InvocationTargetException ex)
+      {
+        ErrorDialog.open(ex);
+      }
+      catch (InterruptedException ex)
+      {
+        // Ignore.
+      }
+    }
+  }
+
+  private void showProfileDetails()
+  {
+    AnalyzedProfile[] selectedProfiles = getSelectedProfiles();
+    if (selectedProfiles.length == 1)
+    {
+      Profile profile = selectedProfiles[0].getP2Profile();
+
+      ProfileDetailsDialog dialog = new ProfileDetailsDialog(getShell(), profile);
+      dialog.open();
+    }
+  }
+
   private void deleteArtifacts(final AnalyzedArtifact[] artifacts)
   {
-    try
+    int len = artifacts.length;
+    String message = "Do you really want to delete " + len + " artifact" + (len == 1 ? "" : "s") + "?\n\n"
+        + "Note 1: Unused artifacts can always safely be deleted. " + "They will be deleted physically from your disk and logically from your bundle pool.\n\n"
+        + "Note 2: Artifacts used in your profiles will be deleted only physically from your disk. "
+        + "Repairing them is possible if they are still available for download from a p2 repository.";
+
+    if (MessageDialog.openQuestion(getShell(), AgentAnalyzerDialog.TITLE, message))
     {
-      deletingArtifacts = true;
-      UIUtil.runInProgressDialog(getShell(), new IRunnableWithProgress()
+      try
       {
-        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+        deletingArtifacts = true;
+        UIUtil.runInProgressDialog(getShell(), new IRunnableWithProgress()
         {
-          SubMonitor progress = SubMonitor.convert(monitor, "Deleting artifacts...", artifacts.length).detectCancelation();
-
-          for (AnalyzedArtifact artifact : artifacts)
+          public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
-            artifact.delete(progress.newChild());
+            SubMonitor progress = SubMonitor.convert(monitor, "Deleting artifacts...", artifacts.length).detectCancelation();
+
+            for (AnalyzedArtifact artifact : artifacts)
+            {
+              artifact.delete(progress.newChild());
+            }
           }
-        }
-      });
+        });
 
-      artifactContentProvider.refresh();
-      artifactViewer.setSelection(StructuredSelection.EMPTY);
+        profileViewer.refresh();
+        profileViewer.setSelection(StructuredSelection.EMPTY);
 
-      profileViewer.refresh();
-      profileViewer.setSelection(StructuredSelection.EMPTY);
-    }
-    catch (InvocationTargetException ex)
-    {
-      ErrorDialog.open(ex);
-    }
-    catch (InterruptedException ex)
-    {
-      // Ignore.
-    }
-    finally
-    {
-      deletingArtifacts = false;
+        artifactContentProvider.refresh();
+        artifactViewer.setSelection(StructuredSelection.EMPTY);
+      }
+      catch (InvocationTargetException ex)
+      {
+        ErrorDialog.open(ex);
+      }
+      catch (InterruptedException ex)
+      {
+        // Ignore.
+      }
+      finally
+      {
+        deletingArtifacts = false;
+      }
     }
   }
 
@@ -792,75 +992,6 @@ public class AgentAnalyzerComposite extends Composite
         repositories.removeAll(checkedRepositories);
         artifactContentProvider.refresh();
       }
-    }
-    catch (InvocationTargetException ex)
-    {
-      ErrorDialog.open(ex);
-    }
-    catch (InterruptedException ex)
-    {
-      // Ignore.
-    }
-  }
-
-  private void updateProfileButtons()
-  {
-    boolean changed = false;
-
-    if (currentBundlePool != null)
-    {
-      Object[] elements = profileContentProvider.getElements(currentBundlePool);
-      changed |= updateButton(selectAllProfilesButton, "Select All", elements.length, "");
-    }
-
-    AnalyzedProfile[] profiles = getSelectedProfiles();
-    int count = profiles.length;
-
-    changed |= updateButton(deleteProfilesButton, "Delete", count, " Selected...");
-
-    if (count != 0)
-    {
-      boolean enabled = true;
-      for (int i = 0; i < count; i++)
-      {
-        AnalyzedProfile profile = profiles[i];
-        if (!profile.isUnused())
-        {
-          enabled = false;
-          break;
-        }
-      }
-
-      deleteProfilesButton.setEnabled(enabled);
-    }
-
-    if (changed)
-    {
-      Composite parent = deleteProfilesButton.getParent();
-      parent.pack();
-      parent.getParent().layout();
-    }
-  }
-
-  private void deleteProfiles(final AnalyzedProfile[] profiles)
-  {
-    try
-    {
-      UIUtil.runInProgressDialog(getShell(), new IRunnableWithProgress()
-      {
-        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
-        {
-          SubMonitor progress = SubMonitor.convert(monitor, "Deleting profiles", profiles.length).detectCancelation();
-
-          for (AnalyzedProfile profile : profiles)
-          {
-            profile.delete(progress.newChild());
-          }
-        }
-      });
-
-      profileContentProvider.refresh();
-      profileViewer.setSelection(StructuredSelection.EMPTY);
     }
     catch (InvocationTargetException ex)
     {
@@ -956,16 +1087,33 @@ public class AgentAnalyzerComposite extends Composite
           case 0:
             return bundlePool.getLocation().getAbsolutePath();
           case 1:
-            return Integer.toString(bundlePool.getArtifactCount());
+            return Integer.toString(bundlePool.getProfilesCount());
           case 2:
-            return Integer.toString(bundlePool.getUnusedArtifactsCount());
+            return Integer.toString(bundlePool.getUnusedProfilesCount());
           case 3:
+            return Integer.toString(bundlePool.getArtifactCount());
+          case 4:
+            return Integer.toString(bundlePool.getUnusedArtifactsCount());
+          case 5:
             int percent = bundlePool.getDamagedArtifactsPercent();
             return Integer.toString(bundlePool.getDamagedArtifactsCount()) + (percent == 100 ? "" : " (" + percent + "%)");
+        }
+      }
+      else if (element instanceof AnalyzedProfile)
+      {
+        AnalyzedProfile profile = (AnalyzedProfile)element;
+        switch (columnIndex)
+        {
+          case 0:
+            return profile.getID();
+          case 1:
+            return Integer.toString(profile.getArtifacts().size());
+          case 2:
+            return Integer.toString(profile.getDamagedArtifactsCount());
+          case 3:
+            return Integer.toString(profile.getRoots());
           case 4:
-            return Integer.toString(bundlePool.getProfilesCount());
-          case 5:
-            return Integer.toString(bundlePool.getUnusedProfilesCount());
+            return Integer.toString(profile.getRepositoryURIs().size());
         }
       }
       else if (element instanceof AnalyzedArtifact)
@@ -984,24 +1132,6 @@ public class AgentAnalyzerComposite extends Composite
             return artifact.getVersion();
           case 2:
             return Integer.toString(artifact.getProfiles().size());
-        }
-      }
-      else if (element instanceof AnalyzedProfile)
-      {
-        AnalyzedProfile profile = (AnalyzedProfile)element;
-        switch (columnIndex)
-        {
-          case 0:
-            return profile.getID();
-          case 1:
-            return Integer.toString(profile.getArtifacts().size());
-          case 2:
-            return Integer.toString(profile.getDamagedArtifactsCount());
-          case 3:
-
-            return Integer.toString(profile.getRoots());
-          case 4:
-            return Integer.toString(profile.getRepositoryURIs().size());
         }
       }
 
@@ -1251,33 +1381,12 @@ public class AgentAnalyzerComposite extends Composite
       Arrays.sort(bundlePools);
       return bundlePools;
     }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  private final class ArtifactContentProvider extends TableContentProvider
-  {
-    public Object[] getElements(Object input)
-    {
-      String filter = getFilter();
-      if (ObjectUtil.equals(filter, SHOW_UNUSED))
-      {
-        return ((AnalyzedBundlePool)input).getUnusedArtifacts();
-      }
-      else if (ObjectUtil.equals(filter, SHOW_DAMAGED))
-      {
-        return ((AnalyzedBundlePool)input).getDamagedArtifacts();
-      }
-
-      return ((AnalyzedBundlePool)input).getArtifacts();
-    }
 
     @Override
     public void refresh()
     {
       super.refresh();
-      updateArtifactButtons();
+      updateBundlePoolButtons();
     }
   }
 
@@ -1293,7 +1402,8 @@ public class AgentAnalyzerComposite extends Composite
       {
         return ((AnalyzedBundlePool)input).getUnusedProfiles();
       }
-      else if (ObjectUtil.equals(filter, SHOW_BY_ARTIFACT))
+
+      if (ObjectUtil.equals(filter, SHOW_BY_ARTIFACT))
       {
         Set<AnalyzedProfile> profiles = new HashSet<AnalyzedProfile>();
         for (AnalyzedArtifact artifact : getSelectedArtifacts())
@@ -1314,6 +1424,35 @@ public class AgentAnalyzerComposite extends Composite
     {
       super.refresh();
       updateProfileButtons();
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class ArtifactContentProvider extends TableContentProvider
+  {
+    public Object[] getElements(Object input)
+    {
+      String filter = getFilter();
+      if (ObjectUtil.equals(filter, SHOW_UNUSED))
+      {
+        return ((AnalyzedBundlePool)input).getUnusedArtifacts();
+      }
+
+      if (ObjectUtil.equals(filter, SHOW_DAMAGED))
+      {
+        return ((AnalyzedBundlePool)input).getDamagedArtifacts();
+      }
+
+      return ((AnalyzedBundlePool)input).getArtifacts();
+    }
+
+    @Override
+    public void refresh()
+    {
+      super.refresh();
+      updateArtifactButtons();
     }
   }
 }

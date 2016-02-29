@@ -10,11 +10,11 @@
  */
 package org.eclipse.oomph.version.ui.preferences;
 
+import org.eclipse.oomph.internal.ui.AbstractPreferencePage;
 import org.eclipse.oomph.internal.version.Activator;
 import org.eclipse.oomph.internal.version.Activator.ReleaseCheckMode;
 import org.eclipse.oomph.version.VersionUtil;
 
-import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
@@ -36,8 +36,6 @@ import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,20 +43,15 @@ import java.util.Collections;
 /**
  * @author Eike Stepper
  */
-public class VersionBuilderPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
+public class VersionBuilderPreferencePage extends AbstractPreferencePage
 {
   public VersionBuilderPreferencePage()
   {
     noDefaultAndApplyButton();
   }
 
-  public void init(IWorkbench workbench)
-  {
-    // Do nothing
-  }
-
   @Override
-  protected Control createContents(Composite parent)
+  protected Control doCreateContents(Composite parent)
   {
     java.util.List<String> releasePaths = new ArrayList<String>(Activator.getReleasePaths());
     Collections.sort(releasePaths);

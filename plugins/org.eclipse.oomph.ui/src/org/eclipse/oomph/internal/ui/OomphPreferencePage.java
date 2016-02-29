@@ -10,17 +10,14 @@
  */
 package org.eclipse.oomph.internal.ui;
 
-import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 
 /**
  * @author Eike Stepper
  */
-public class OomphPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
+public class OomphPreferencePage extends AbstractPreferencePage
 {
   public static final String ID = "org.eclipse.oomph.ui.preferences.OomphPreferencePage";
 
@@ -30,13 +27,8 @@ public class OomphPreferencePage extends PreferencePage implements IWorkbenchPre
     noDefaultAndApplyButton();
   }
 
-  public void init(IWorkbench workbench)
-  {
-    // Do nothing
-  }
-
   @Override
-  protected Control createContents(Composite parent)
+  protected Control doCreateContents(Composite parent)
   {
     return new Composite(parent, SWT.NULL);
   }

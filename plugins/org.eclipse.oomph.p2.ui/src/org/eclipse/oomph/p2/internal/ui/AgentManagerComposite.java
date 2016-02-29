@@ -16,10 +16,16 @@ import org.eclipse.oomph.p2.core.AgentManagerElement;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
+import org.eclipse.oomph.p2.internal.core.AgentAnalyzer;
+import org.eclipse.oomph.p2.internal.core.AgentAnalyzer.AnalyzedArtifact;
+import org.eclipse.oomph.p2.internal.core.AgentAnalyzer.AnalyzedBundlePool;
+import org.eclipse.oomph.p2.internal.core.AgentAnalyzer.AnalyzedProfile;
 import org.eclipse.oomph.p2.internal.core.AgentManagerElementImpl;
+import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.SubMonitor;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -44,13 +50,16 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Eike Stepper
@@ -72,9 +81,13 @@ public class AgentManagerComposite extends Composite
 
   private Button deleteButton;
 
+  private Button cleanupButton;
+
   private Button analyzeButton;
 
   private Button showProfilesButton;
+
+  private Button profileDetailsButton;
 
   public AgentManagerComposite(Composite parent, int style, final Object selection)
   {
@@ -106,8 +119,7 @@ public class AgentManagerComposite extends Composite
       {
         if (selectedElement instanceof Profile)
         {
-          ProfileDetailsDialog dialog = new ProfileDetailsDialog(getShell(), (Profile)selectedElement);
-          dialog.open();
+          showProfileDetails();
         }
         else
         {
@@ -115,6 +127,7 @@ public class AgentManagerComposite extends Composite
         }
       }
     });
+
     tree.addKeyListener(new KeyAdapter()
     {
       @Override
@@ -136,38 +149,6 @@ public class AgentManagerComposite extends Composite
     buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
     buttonComposite.setBounds(0, 0, 64, 64);
 
-    refreshButton = new Button(buttonComposite, SWT.NONE);
-    refreshButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-    refreshButton.setText("Refresh");
-    refreshButton.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
-      {
-        try
-        {
-          ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
-          dialog.run(true, true, new IRunnableWithProgress()
-          {
-            public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
-            {
-              P2Util.getAgentManager().refreshAgents(monitor);
-            }
-          });
-        }
-        catch (InvocationTargetException ex)
-        {
-          P2UIPlugin.INSTANCE.log(ex);
-        }
-        catch (InterruptedException ex)
-        {
-          //$FALL-THROUGH$
-        }
-
-        treeViewer.refresh();
-      }
-    });
-
     newAgentButton = new Button(buttonComposite, SWT.NONE);
     newAgentButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
     newAgentButton.setText("New Agent...");
@@ -182,6 +163,42 @@ public class AgentManagerComposite extends Composite
           Agent agent = P2Util.getAgentManager().addAgent(new File(path));
           BundlePool bundlePool = agent.addBundlePool(new File(path, BundlePool.DEFAULT_NAME));
           refreshFor(bundlePool);
+        }
+      }
+    });
+
+    cleanupButton = new Button(buttonComposite, SWT.NONE);
+    cleanupButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+    cleanupButton.setText("Cleanup Agent...");
+    cleanupButton.setEnabled(false);
+    cleanupButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        Agent agent = getAgent(selectedElement);
+        if (agent != null)
+        {
+          cleanup(agent);
+          treeViewer.refresh();
+        }
+      }
+    });
+
+    analyzeButton = new Button(buttonComposite, SWT.NONE);
+    analyzeButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+    analyzeButton.setText("Analyze Agent...");
+    analyzeButton.setEnabled(false);
+    analyzeButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        Agent agent = getAgent(selectedElement);
+        if (agent != null)
+        {
+          analyze(agent);
+          treeViewer.refresh();
         }
       }
     });
@@ -218,21 +235,39 @@ public class AgentManagerComposite extends Composite
       }
     });
 
-    analyzeButton = new Button(buttonComposite, SWT.NONE);
-    analyzeButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-    analyzeButton.setText("Analyze...");
-    analyzeButton.setEnabled(false);
-    analyzeButton.addSelectionListener(new SelectionAdapter()
+    refreshButton = new Button(buttonComposite, SWT.NONE);
+    refreshButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+    refreshButton.setText("Refresh");
+    refreshButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        AgentAnalyzerDialog dialog = new AgentAnalyzerDialog(getShell(), (Agent)selectedElement);
-        dialog.open();
+        try
+        {
+          ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+          dialog.run(true, true, new IRunnableWithProgress()
+          {
+            public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+            {
+              P2Util.getAgentManager().refreshAgents(monitor);
+            }
+          });
+        }
+        catch (InvocationTargetException ex)
+        {
+          P2UIPlugin.INSTANCE.log(ex);
+        }
+        catch (InterruptedException ex)
+        {
+          //$FALL-THROUGH$
+        }
 
         treeViewer.refresh();
       }
     });
+
+    new Label(buttonComposite, SWT.NONE);
 
     showProfilesButton = new Button(buttonComposite, SWT.CHECK);
     showProfilesButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
@@ -244,6 +279,8 @@ public class AgentManagerComposite extends Composite
       {
         boolean showProfiles = showProfilesButton.getSelection();
         PREF_SHOW_PROFILES.set(showProfiles);
+
+        profileDetailsButton.setVisible(showProfiles);
 
         contentProvider.setShowProfiles(showProfiles);
         treeViewer.refresh();
@@ -257,9 +294,23 @@ public class AgentManagerComposite extends Composite
       }
     });
 
+    profileDetailsButton = new Button(buttonComposite, SWT.NONE);
+    profileDetailsButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+    profileDetailsButton.setText("Details...");
+    profileDetailsButton.setVisible(false);
+    profileDetailsButton.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        showProfileDetails();
+      }
+    });
+
     if (PREF_SHOW_PROFILES.get(false))
     {
       showProfilesButton.setSelection(true);
+      profileDetailsButton.setVisible(true);
       contentProvider.setShowProfiles(true);
       profilesShown(true);
     }
@@ -379,15 +430,162 @@ public class AgentManagerComposite extends Composite
     }
   }
 
+  private void cleanup(final Agent agent)
+  {
+    final String title = "Cleanup";
+    final AgentAnalyzer[] analyzer = { null };
+
+    try
+    {
+      ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+      dialog.run(true, true, new IRunnableWithProgress()
+      {
+        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+        {
+          SubMonitor progress = SubMonitor.convert(monitor, "Analyzing...", 100).detectCancelation();
+
+          analyzer[0] = new AgentAnalyzer(agent, false, null, progress.newChild(90));
+          analyzer[0].awaitAnalyzing(progress.newChild(10));
+        }
+      });
+    }
+    catch (Exception ex)
+    {
+      ErrorDialog.open(ex);
+      return;
+    }
+
+    final Map<AnalyzedProfile, AnalyzedProfile> unusedProfiles = new IdentityHashMap<AnalyzedProfile, AnalyzedProfile>();
+    final Map<AnalyzedArtifact, AnalyzedArtifact> unusedArtifacts = new IdentityHashMap<AnalyzedArtifact, AnalyzedArtifact>();
+
+    for (AnalyzedBundlePool bundlePool : analyzer[0].getBundlePools().values())
+    {
+      for (AnalyzedProfile profile : bundlePool.getUnusedProfiles())
+      {
+        unusedProfiles.put(profile, profile);
+      }
+
+      for (AnalyzedArtifact artifact : bundlePool.getArtifacts())
+      {
+        if (isUnused(artifact, unusedProfiles))
+        {
+          unusedArtifacts.put(artifact, artifact);
+        }
+      }
+    }
+
+    if (unusedProfiles.isEmpty() && unusedArtifacts.isEmpty())
+    {
+      MessageDialog.openInformation(getShell(), title, "Nothing to clean up.");
+      return;
+    }
+
+    final boolean showProfiles = showProfilesButton.getSelection();
+    final int profiles = unusedProfiles.size();
+    final int artifacts = unusedArtifacts.size();
+    String message = "Do you want to delete ";
+
+    if (profiles != 0)
+    {
+      message += profiles + " unused profile" + (profiles == 1 ? "" : "s");
+    }
+
+    if (artifacts != 0)
+    {
+      if (profiles != 0)
+      {
+        message += " and ";
+      }
+
+      message += artifacts + " unused artifact" + (artifacts == 1 ? "" : "s");
+    }
+
+    message += "?";
+
+    if (artifacts != 0)
+    {
+      message += "\n\n" + "Note: Unused artifacts can always safely be deleted. "
+          + "They will be deleted physically from your disk and logically from your bundle pool.";
+    }
+
+    if (MessageDialog.openQuestion(getShell(), title, message))
+    {
+      try
+      {
+        UIUtil.runInProgressDialog(getShell(), new IRunnableWithProgress()
+        {
+          public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+          {
+            SubMonitor progress = SubMonitor.convert(monitor, "Deleting...", profiles + artifacts).detectCancelation();
+
+            if (profiles != 0)
+            {
+              progress.setTaskName("Deleting unused profiles...");
+              for (AnalyzedProfile profile : unusedProfiles.keySet())
+              {
+                profile.delete(progress.newChild());
+
+                if (showProfiles)
+                {
+                  UIUtil.syncExec(new Runnable()
+                  {
+                    public void run()
+                    {
+                      treeViewer.refresh();
+                    }
+                  });
+                }
+              }
+            }
+
+            if (artifacts != 0)
+            {
+              progress.setTaskName("Deleting unused artifacts...");
+              for (AnalyzedArtifact artifact : unusedArtifacts.keySet())
+              {
+                artifact.delete(progress.newChild());
+              }
+            }
+          }
+        });
+      }
+      catch (InvocationTargetException ex)
+      {
+        ErrorDialog.open(ex);
+      }
+      catch (InterruptedException ex)
+      {
+        // Ignore.
+      }
+    }
+  }
+
+  private void analyze(Agent agent)
+  {
+    AgentAnalyzerDialog dialog = new AgentAnalyzerDialog(getShell(), agent);
+    dialog.open();
+  }
+
   protected void elementChanged(Object element)
   {
     newPoolButton.setEnabled(element instanceof Agent);
     deleteButton.setEnabled(element instanceof AgentManagerElement && !((AgentManagerElement)element).isUsed());
-    analyzeButton.setEnabled(element instanceof Agent);
+
+    Agent agent = getAgent(element);
+    cleanupButton.setEnabled(agent != null);
+    analyzeButton.setEnabled(agent != null);
+
+    profileDetailsButton.setEnabled(element instanceof Profile);
   }
 
   protected void profilesShown(boolean profilesShown)
   {
+  }
+
+  private void showProfileDetails()
+  {
+    ProfileDetailsDialog dialog = new ProfileDetailsDialog(getShell(), (Profile)selectedElement);
+    dialog.open();
   }
 
   private String openDirectoryDialog(String message, String path)
@@ -405,5 +603,40 @@ public class AgentManagerComposite extends Composite
     treeViewer.setExpandedState(bundlePool.getAgent(), true);
     treeViewer.setSelection(new StructuredSelection(bundlePool));
     treeViewer.getTree().setFocus();
+  }
+
+  private static Agent getAgent(Object element)
+  {
+    if (element instanceof Profile)
+    {
+      Profile profile = (Profile)element;
+      return profile.getAgent();
+    }
+
+    if (element instanceof BundlePool)
+    {
+      BundlePool bundlePool = (BundlePool)element;
+      return bundlePool.getAgent();
+    }
+
+    if (element instanceof Agent)
+    {
+      return (Agent)element;
+    }
+
+    return null;
+  }
+
+  private static boolean isUnused(AnalyzedArtifact artifact, Map<AnalyzedProfile, AnalyzedProfile> unusedProfiles)
+  {
+    for (AnalyzedProfile profile : artifact.getProfiles())
+    {
+      if (!unusedProfiles.containsKey(profile))
+      {
+        return false;
+      }
+    }
+
+    return true;
   }
 }

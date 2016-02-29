@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui.recorder;
 
 import org.eclipse.oomph.base.provider.BaseEditUtil;
+import org.eclipse.oomph.internal.ui.AbstractPreferencePage;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.Project;
@@ -46,7 +47,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceNode;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.Viewer;
@@ -63,9 +63,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
 import java.util.Collections;
@@ -77,7 +75,7 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public class RecorderPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
+public class RecorderPreferencePage extends AbstractPreferencePage
 {
   private static RecorderPreferencePage instance;
 
@@ -106,11 +104,6 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
     instance = this;
   }
 
-  public void init(IWorkbench workbench)
-  {
-    // Do nothing.
-  }
-
   @Override
   public void dispose()
   {
@@ -124,7 +117,7 @@ public class RecorderPreferencePage extends PreferencePage implements IWorkbench
   }
 
   @Override
-  protected Control createContents(Composite parent)
+  protected Control doCreateContents(Composite parent)
   {
     if (RecorderManager.INSTANCE.hasTemporaryRecorderTarget())
     {

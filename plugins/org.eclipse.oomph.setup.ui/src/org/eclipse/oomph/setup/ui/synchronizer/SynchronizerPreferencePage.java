@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.ui.synchronizer;
 
+import org.eclipse.oomph.internal.ui.AbstractPreferencePage;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager.Impact;
@@ -18,7 +19,6 @@ import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.nebula.jface.tablecomboviewer.TableComboViewer;
 import org.eclipse.nebula.widgets.tablecombo.TableCombo;
@@ -33,8 +33,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.userstorage.IStorage;
@@ -44,7 +42,7 @@ import org.eclipse.userstorage.ui.StorageConfigurationComposite;
 /**
  * @author Eike Stepper
  */
-public class SynchronizerPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
+public class SynchronizerPreferencePage extends AbstractPreferencePage
 {
   public static final String ID = "org.eclipse.oomph.setup.SynchronizerPreferencePage";
 
@@ -63,13 +61,8 @@ public class SynchronizerPreferencePage extends PreferencePage implements IWorkb
     initialEnabled = SynchronizerManager.INSTANCE.isSyncEnabled();
   }
 
-  public void init(IWorkbench workbench)
-  {
-    // Do nothing.
-  }
-
   @Override
-  protected Control createContents(Composite parent)
+  protected Control doCreateContents(Composite parent)
   {
     final IStorage storage = SynchronizerManager.INSTANCE.getStorage();
     IStorageService service = storage.getService();
