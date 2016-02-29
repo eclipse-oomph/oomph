@@ -98,11 +98,6 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
   {
     setSetupContext(setupContext);
 
-    for (Map.Entry<String, String> entry : System.getenv().entrySet())
-    {
-      put(entry.getKey(), entry.getValue());
-    }
-
     Map<String, String> filterContext = new LinkedHashMap<String, String>();
     Map<String, String> env = System.getenv();
     synchronized (env)
@@ -110,7 +105,9 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       for (Map.Entry<String, String> entry : env.entrySet())
       {
         String key = entry.getKey();
-        filterContext.put(key.replace('_', '.'), entry.getValue());
+        String value = entry.getValue();
+        put(key, value);
+        filterContext.put(key.replace('_', '.').toLowerCase(), value);
       }
     }
 
@@ -131,7 +128,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
 
         if (key instanceof String && value instanceof String)
         {
-          filterContext.put((String)key, (String)value);
+          filterContext.put(((String)key).toLowerCase(), (String)value);
         }
       }
     }
