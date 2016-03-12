@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
@@ -121,6 +122,11 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
     public void start(BundleContext context) throws Exception
     {
       super.start(context);
+
+      if (PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_USER_HOME_REDIRECT))
+      {
+        System.setProperty("user.home", new File(PropertiesUtil.getUserHome()).getCanonicalPath());
+      }
 
       if (!PropertiesUtil.isProperty(SetupUIPlugin.PREF_HEADLESS))
       {
