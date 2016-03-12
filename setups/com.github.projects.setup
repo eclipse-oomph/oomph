@@ -191,7 +191,8 @@
   <project href="https://raw.githubusercontent.com/LorenzoBettini/jbase/master/jbase.workspace/Jbase.setup#/"/>
   <project href="https://raw.githubusercontent.com/m2e-code-quality/m2e-code-quality/master/m2e-code-quality.setup#/"/>
   <project href="https://raw.githubusercontent.com/openhab/openhab-distro/master/launch/openHAB2.setup#/"/>
-  <project href="https://github.com/meysholdt/Xpect/raw/master/org.xpect.releng/Xpect.setup#/"/>
+  <project href="https://raw.githubusercontent.com/openhab/openhab-distro/master/launch/openHAB2.setup#/"/>
+  <project href="https://raw.githubusercontent.com/tlaplus/tlaplus/master/general/ide/TLA.setup#/"/>
   <project href="https://raw.githubusercontent.com/LorenzoBettini/xsemantics/master/devtools/it.xsemantics.workspace/Xsemantics.setup#/"/>
   <description>All the projects at Github.com that provide automated setup support along with additional user-added projects</description>
 </setup:ProjectCatalog>
