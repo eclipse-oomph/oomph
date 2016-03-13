@@ -908,22 +908,49 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       {
         String namespace = requirement.getNamespace();
         String name = requirement.getName();
+
+        // Ignore bogus requirements.
         if (StringUtil.isEmpty(namespace) || StringUtil.isEmpty(name) || requirement.getVersionRange() == null)
         {
           continue;
         }
 
+        // If this is a wildcard requirement, we want to expand it to all the IUs in the targlet's source locator.
         if ("*".equals(name) && IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
         {
+          // Preprocess all the IUs to build a map from workspace IU Info to filter.
+          // This ensures that a requirement on a plain.project will be filtered appropriately.
+          Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = workspaceIUAnalyzer.getWorkspaceIUInfos();
+          Map<WorkspaceIUInfo, IMatchExpression<IInstallableUnit>> filters = new HashMap<WorkspaceIUInfo, IMatchExpression<IInstallableUnit>>();
           for (IInstallableUnit iu : ius)
           {
+            IMatchExpression<IInstallableUnit> filter = iu.getFilter();
+            if (filter != null)
+            {
+              WorkspaceIUInfo workspaceIUInfo = workspaceIUInfos.get(iu);
+              filters.put(workspaceIUInfo, filter);
+            }
+          }
+
+          for (IInstallableUnit iu : ius)
+          {
+            // Ignore categories.
             if ("true".equalsIgnoreCase(iu.getProperty("org.eclipse.equinox.p2.type.category")))
             {
               continue;
             }
 
-            rootRequirements
-                .add(P2Factory.eINSTANCE.createRequirement(iu.getId(), requirement.getVersionRange(), requirement.isOptional(), requirement.isGreedy()));
+            Requirement expandedRequirement = P2Factory.eINSTANCE.createRequirement(iu.getId(), requirement.getVersionRange(), requirement.isOptional(),
+                requirement.isGreedy());
+
+            // If there is a filter associated with the IU, set it as the filter of the requirement.
+            IMatchExpression<IInstallableUnit> filter = filters.get(workspaceIUInfos.get(iu));
+            if (filter != null)
+            {
+              expandedRequirement.setMatchExpression(filter);
+            }
+
+            rootRequirements.add(expandedRequirement);
           }
 
           continue;

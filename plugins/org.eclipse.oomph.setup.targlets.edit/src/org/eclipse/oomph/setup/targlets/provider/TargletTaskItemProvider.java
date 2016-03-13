@@ -74,6 +74,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.Version;
+import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.query.CollectionResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
@@ -849,7 +850,14 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                 EList<Requirement> targletRequirements = targlet.getRequirements();
                 for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(ius))
                 {
-                  targletRequirements.add(P2Factory.eINSTANCE.createRequirement(iu.getId()));
+                  Requirement requirement = P2Factory.eINSTANCE.createRequirement(iu.getId());
+                  IMatchExpression<IInstallableUnit> filter = iu.getFilter();
+                  if (filter != null)
+                  {
+                    requirement.setMatchExpression(filter);
+                  }
+
+                  targletRequirements.add(requirement);
                 }
 
                 // Determine, if possible a variable to use to refer to the path needed by the source locator,
