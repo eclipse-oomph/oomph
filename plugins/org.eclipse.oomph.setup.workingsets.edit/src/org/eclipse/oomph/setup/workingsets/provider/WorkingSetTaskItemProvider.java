@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.workingsets.provider;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 import org.eclipse.oomph.setup.workingsets.SetupWorkingSetsPackage;
 import org.eclipse.oomph.setup.workingsets.WorkingSetTask;
+import org.eclipse.oomph.workingsets.WorkingSet;
 import org.eclipse.oomph.workingsets.WorkingSetsFactory;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -23,7 +24,9 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.oomph.setup.workingsets.WorkingSetTask} object.
@@ -126,7 +129,32 @@ public class WorkingSetTaskItemProvider extends SetupTaskItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_WorkingSetTask_type");
+    WorkingSetTask workingSetTask = (WorkingSetTask)object;
+
+    StringBuilder builder = new StringBuilder();
+    Set<String> added = new HashSet<String>();
+
+    for (WorkingSet workingSet : workingSetTask.getWorkingSets())
+    {
+      String name = workingSet.getName();
+      if (added.add(name))
+      {
+        if (builder.length() != 0)
+        {
+          builder.append(" + ");
+        }
+
+        builder.append(name);
+      }
+    }
+
+    String label = getString("_UI_WorkingSetTask_type");
+    if (builder.length() != 0)
+    {
+      label += " (" + builder + ")";
+    }
+
+    return label;
   }
 
   /**

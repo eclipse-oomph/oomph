@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.workingsets.impl;
 
 import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.workingsets.SetupWorkingSetsPackage;
@@ -190,6 +191,21 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
     }
 
     throw new IllegalStateException("The working set task must be indirectly contained by a scope");
+  }
+
+  @Override
+  public Object getOverrideToken()
+  {
+    return getWorkingSetPrefix();
+  }
+
+  @Override
+  public void overrideFor(SetupTask overriddenSetupTask)
+  {
+    super.overrideFor(overriddenSetupTask);
+
+    WorkingSetTask workingSetTask = (WorkingSetTask)overriddenSetupTask;
+    getWorkingSets().addAll(0, workingSetTask.getWorkingSets());
   }
 
   private Map<String, WorkingSet> getExistingWorkingSets(String prefix, EList<WorkingSet> workingSets)
