@@ -129,6 +129,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private boolean stagingEPPLocationIsActual;
 
+  private boolean stagingUseComposite;
+
   private URI stagingEPPLocation;
 
   private URI stagingTrainLocation;
@@ -230,6 +232,10 @@ public class ProductCatalogGenerator implements IApplication
         {
           stagingEPPLocationIsActual = true;
         }
+        else if ("-useComposite".equals(option))
+        {
+          stagingUseComposite = true;
+        }
       }
     }
 
@@ -306,9 +312,9 @@ public class ProductCatalogGenerator implements IApplication
       P2Task p2Task = createOomphP2Task();
       productCatalog.getSetupTasks().add(p2Task);
 
-      emfRepositoryLocation = trimEmptyTrailingSegment(URI.createURI(
-          loadLatestRepository(manager, null, URI.createURI("http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core")).getLocation().toString()))
-              .toString();
+      emfRepositoryLocation = trimEmptyTrailingSegment(
+          URI.createURI(loadLatestRepository(manager, null, URI.createURI("http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core"), true)
+              .getLocation().toString())).toString();
 
       new RepositoryLoader(this).perform(TRAINS);
 
@@ -530,7 +536,8 @@ public class ProductCatalogGenerator implements IApplication
 
       URI effectiveEPPURI = isStaging ? stagingEPPLocation : eppURI;
       IMetadataRepository eppMetaDataRepository = manager.loadRepository(new java.net.URI(effectiveEPPURI.toString()), null);
-      IMetadataRepository latestEPPMetaDataRepository = getLatestRepository(manager, eppMetaDataRepository);
+      IMetadataRepository latestEPPMetaDataRepository = isStaging && stagingUseComposite ? eppMetaDataRepository
+          : getLatestRepository(manager, eppMetaDataRepository);
       if (latestEPPMetaDataRepository != eppMetaDataRepository)
       {
         URI latestLocation = URI.createURI(latestEPPMetaDataRepository.getLocation().toString());
@@ -569,7 +576,8 @@ public class ProductCatalogGenerator implements IApplication
       URI releaseURI = URI.createURI(RELEASES + "/" + train);
       log.append(releaseURI);
 
-      IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, originalEPPURI, isStaging ? stagingTrainLocation : releaseURI);
+      IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, originalEPPURI, isStaging ? stagingTrainLocation : releaseURI,
+          !isStaging || !stagingUseComposite);
       releaseURI = trimEmptyTrailingSegment(URI.createURI(releaseMetaDataRepository.getLocation().toString()));
       log.append(" -> ").append(releaseURI).append('\n');
 
@@ -798,11 +806,12 @@ public class ProductCatalogGenerator implements IApplication
     return result;
   }
 
-  private IMetadataRepository loadLatestRepository(IMetadataRepositoryManager manager, URI eppURI, URI releaseURI) throws URISyntaxException, ProvisionException
+  private IMetadataRepository loadLatestRepository(IMetadataRepositoryManager manager, URI eppURI, URI releaseURI, boolean loadLatestChild)
+      throws URISyntaxException, ProvisionException
   {
     IMetadataRepository releaseMetaDataRepository = manager.loadRepository(new java.net.URI(releaseURI.toString()), null);
     IMetadataRepository result = releaseMetaDataRepository;
-    if (releaseMetaDataRepository instanceof ICompositeRepository<?>)
+    if (loadLatestChild && releaseMetaDataRepository instanceof ICompositeRepository<?>)
     {
       ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)releaseMetaDataRepository;
       long latest = Integer.MIN_VALUE;
