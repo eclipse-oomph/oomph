@@ -10,11 +10,15 @@
  */
 package org.eclipse.oomph.ui;
 
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -22,6 +26,8 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.progress.WorkbenchJob;
+
+import java.lang.reflect.Method;
 
 /**
  * This subclass is useful because the refresh job won't schedule if there is no workbench, which is the case in the installer wizard.
@@ -133,6 +139,8 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
           {
             updateToolbar(false);
           }
+
+          refreshed();
         }
         finally
         {
@@ -207,8 +215,189 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
     };
   }
 
+  protected void refreshed()
+  {
+  }
+
   public static interface ExpansionFilter
   {
     public boolean shouldExpand(Object element);
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static class WithCheckboxes extends FilteredTreeWithoutWorkbench
+  {
+    private static final Method CLEAR_CACHES_METHOD;
+
+    static
+    {
+      Method clearCachesMethod = null;
+
+      try
+      {
+        clearCachesMethod = ReflectUtil.getMethod(PatternFilter.class, "clearCaches");
+      }
+      catch (Throwable t)
+      {
+        //$FALL-THROUGH$
+      }
+
+      CLEAR_CACHES_METHOD = clearCachesMethod;
+    }
+
+    public WithCheckboxes(Composite parent, int style, PatternFilter patternFilter, ExpansionFilter expansionFilter)
+    {
+      super(parent, style, patternFilter, expansionFilter);
+    }
+
+    public WithCheckboxes(Composite parent, int style)
+    {
+      super(parent, style);
+    }
+
+    @Override
+    public CheckboxTreeViewer getViewer()
+    {
+      return (CheckboxTreeViewer)super.getViewer();
+    }
+
+    @Override
+    protected TreeViewer doCreateTreeViewer(Composite parent, int style)
+    {
+      return new NotifyingCheckboxTreeViewer(parent, style);
+    }
+
+    /**
+     * @author Eike Stepper
+     */
+    class NotifyingCheckboxTreeViewer extends CheckboxTreeViewer
+    {
+      public NotifyingCheckboxTreeViewer(Composite parent, int style)
+      {
+        super(parent, style);
+      }
+
+      @Override
+      public void add(Object parentElementOrTreePath, Object childElement)
+      {
+        clearPatternFilterCaches();
+        super.add(parentElementOrTreePath, childElement);
+      }
+
+      @Override
+      public void add(Object parentElementOrTreePath, Object[] childElements)
+      {
+        clearPatternFilterCaches();
+        super.add(parentElementOrTreePath, childElements);
+      }
+
+      @Override
+      public void insert(Object parentElementOrTreePath, Object element, int position)
+      {
+        clearPatternFilterCaches();
+        super.insert(parentElementOrTreePath, element, position);
+      }
+
+      @Override
+      public void refresh()
+      {
+        clearPatternFilterCaches();
+        super.refresh();
+      }
+
+      @Override
+      public void refresh(boolean updateLabels)
+      {
+        clearPatternFilterCaches();
+        super.refresh(updateLabels);
+      }
+
+      @Override
+      public void refresh(Object element)
+      {
+        clearPatternFilterCaches();
+        super.refresh(element);
+      }
+
+      @Override
+      public void refresh(Object element, boolean updateLabels)
+      {
+        clearPatternFilterCaches();
+        super.refresh(element, updateLabels);
+      }
+
+      @Override
+      public void remove(Object elementsOrTreePaths)
+      {
+        clearPatternFilterCaches();
+        super.remove(elementsOrTreePaths);
+      }
+
+      @Override
+      public void remove(Object parent, Object[] elements)
+      {
+        clearPatternFilterCaches();
+        super.remove(parent, elements);
+      }
+
+      @Override
+      public void remove(Object[] elementsOrTreePaths)
+      {
+        clearPatternFilterCaches();
+        super.remove(elementsOrTreePaths);
+      }
+
+      @Override
+      public void replace(Object parentElementOrTreePath, int index, Object element)
+      {
+        clearPatternFilterCaches();
+        super.replace(parentElementOrTreePath, index, element);
+      }
+
+      @Override
+      public void setChildCount(Object elementOrTreePath, int count)
+      {
+        clearPatternFilterCaches();
+        super.setChildCount(elementOrTreePath, count);
+      }
+
+      @Override
+      public void setContentProvider(IContentProvider provider)
+      {
+        clearPatternFilterCaches();
+        super.setContentProvider(provider);
+      }
+
+      @Override
+      public void setHasChildren(Object elementOrTreePath, boolean hasChildren)
+      {
+        clearPatternFilterCaches();
+        super.setHasChildren(elementOrTreePath, hasChildren);
+      }
+
+      @Override
+      protected void inputChanged(Object input, Object oldInput)
+      {
+        clearPatternFilterCaches();
+        super.inputChanged(input, oldInput);
+      }
+
+      private void clearPatternFilterCaches()
+      {
+        if (CLEAR_CACHES_METHOD != null)
+        {
+          try
+          {
+            CLEAR_CACHES_METHOD.invoke(getPatternFilter());
+          }
+          catch (Throwable ex)
+          {
+            //$FALL-THROUGH$
+          }
+        }
+      }
+    }
   }
 }

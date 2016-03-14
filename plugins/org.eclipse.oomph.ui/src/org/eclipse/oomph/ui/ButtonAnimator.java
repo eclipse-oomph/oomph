@@ -50,6 +50,11 @@ public abstract class ButtonAnimator implements Runnable
     this.rotate = rotate;
   }
 
+  public ToolItem getButton()
+  {
+    return button;
+  }
+
   public void run()
   {
     Shell shell = getShell();

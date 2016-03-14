@@ -98,6 +98,8 @@ import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -105,6 +107,8 @@ import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -114,7 +118,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.IWizardContainer;
@@ -179,7 +182,7 @@ public class ProjectPage extends SetupWizardPage
 
   private CatalogSelector catalogSelector;
 
-  private TreeViewer projectViewer;
+  private CheckboxTreeViewer projectViewer;
 
   private TableViewer streamViewer;
 
@@ -194,7 +197,7 @@ public class ProjectPage extends SetupWizardPage
     super("ProjectPage");
     this.selectionMemento = selectionMemento;
     setTitle("Projects");
-    setDescription("Double click the projects you want to provision, and for each choose its stream in the table column.");
+    setDescription("Check the projects you want to provision, and for each choose its stream in the table column.");
   }
 
   @Override
@@ -320,12 +323,37 @@ public class ProjectPage extends SetupWizardPage
     catalogSelector.configure(catalogsButton);
     AccessUtil.setKey(catalogsButton, "catalogs");
 
-    final FilteredTreeWithoutWorkbench filteredTree = new FilteredTreeWithoutWorkbench(upperComposite, SWT.BORDER | SWT.MULTI);
+    FilteredTreeWithoutWorkbench.WithCheckboxes filteredTree = new FilteredTreeWithoutWorkbench.WithCheckboxes(upperComposite, SWT.BORDER | SWT.MULTI);
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
     AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
 
     projectViewer = filteredTree.getViewer();
+    projectViewer.setCheckStateProvider(new ICheckStateProvider()
+    {
+      public boolean isGrayed(Object element)
+      {
+        if (element instanceof Project)
+        {
+          Project project = (Project)element;
+          return project.getStreams().isEmpty();
+        }
+
+        return true;
+      }
+
+      public boolean isChecked(Object element)
+      {
+        if (element instanceof Project)
+        {
+          Project project = (Project)element;
+          return isSelected(project);
+        }
+
+        return false;
+      }
+    });
+
     labelProvider = new ToolTipLabelProvider(adapterFactory)
     {
       private final Font baseFont = projectViewer.getControl().getFont();
@@ -647,31 +675,25 @@ public class ProjectPage extends SetupWizardPage
         if (element instanceof Project)
         {
           Project project = (Project)element;
+          handleCheckProject(project);
 
-          Workspace workspace = getWorkspace();
-          if (workspace != null)
-          {
-            for (Stream stream : workspace.getStreams())
-            {
-              if (stream.getProject() == project)
-              {
-                streamViewer.setSelection(new StructuredSelection(stream));
-                removeSelectedStreams();
-                return;
-              }
-            }
-          }
-
-          if (!project.getStreams().isEmpty())
-          {
-            addSelectedProjects();
-            addButton.setEnabled(false);
-            return;
-          }
+          boolean expanded = projectViewer.getExpandedState(element);
+          projectViewer.setExpandedState(element, !expanded);
         }
+      }
+    });
 
-        boolean expanded = projectViewer.getExpandedState(element);
-        projectViewer.setExpandedState(element, !expanded);
+    projectViewer.addCheckStateListener(new ICheckStateListener()
+    {
+      public void checkStateChanged(CheckStateChangedEvent event)
+      {
+        Object element = event.getElement();
+        if (element instanceof Project)
+        {
+          Project project = (Project)element;
+          projectViewer.setSelection(new StructuredSelection(project));
+          handleCheckProject(project);
+        }
       }
     });
 
@@ -783,6 +805,29 @@ public class ProjectPage extends SetupWizardPage
     if (addButtonAnimator.shouldAnimate())
     {
       display.asyncExec(addButtonAnimator);
+    }
+  }
+
+  protected void handleCheckProject(Project project)
+  {
+    Workspace workspace = getWorkspace();
+    if (workspace != null)
+    {
+      for (Stream stream : workspace.getStreams())
+      {
+        if (stream.getProject() == project)
+        {
+          streamViewer.setSelection(new StructuredSelection(stream));
+          removeSelectedStreams();
+          return;
+        }
+      }
+    }
+
+    if (!project.getStreams().isEmpty())
+    {
+      addSelectedProjects();
+      addButtonAnimator.getButton().setEnabled(false);
     }
   }
 
@@ -1799,19 +1844,19 @@ public class ProjectPage extends SetupWizardPage
 
           IFile[] files = WorkspaceResourceDialog.openFileSelection(getShell(), null, null, true, getContextSelection(),
               Collections.<ViewerFilter> singletonList(new ViewerFilter()
-          {
-            @Override
-            public boolean select(Viewer viewer, Object parentElement, Object element)
-            {
-              if (element instanceof IFile)
               {
-                IFile file = (IFile)element;
-                return "setup".equals(file.getFileExtension());
-              }
+                @Override
+                public boolean select(Viewer viewer, Object parentElement, Object element)
+                {
+                  if (element instanceof IFile)
+                  {
+                    IFile file = (IFile)element;
+                    return "setup".equals(file.getFileExtension());
+                  }
 
-              return true;
-            }
-          }));
+                  return true;
+                }
+              }));
 
           for (int i = 0, len = files.length; i < len; i++)
           {
