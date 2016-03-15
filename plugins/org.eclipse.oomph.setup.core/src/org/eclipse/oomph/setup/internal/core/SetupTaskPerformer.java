@@ -2989,6 +2989,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         autoBuilding = disableAutoBuilding();
       }
 
+      logJREInfos();
       logSetupInfos();
       logBundleInfos();
 
@@ -3115,6 +3116,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         buildJob.schedule();
       }
     }
+  }
+
+  private void logJREInfos()
+  {
+    log(System.getProperty("java.runtime.name") + " " + System.getProperty("java.runtime.version"));
   }
 
   private void logSetupInfos()
