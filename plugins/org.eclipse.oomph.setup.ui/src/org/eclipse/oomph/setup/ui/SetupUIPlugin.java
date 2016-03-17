@@ -18,6 +18,7 @@ import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.OomphPreferencePage;
 import org.eclipse.oomph.internal.ui.TaskItemDecorator;
 import org.eclipse.oomph.jreinfo.ui.JREInfoUIPlugin;
+import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
@@ -349,7 +350,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
     try
     {
       Profile currentProfile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
-      File bundlePoolLocation = currentProfile.getBundlePool().getLocation();
+      BundlePool bundlePool = currentProfile.getBundlePool();
+      File bundlePoolLocation = bundlePool.getLocation();
 
       File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features");
       eclipseExtensionFeaturesFolder.mkdirs();
