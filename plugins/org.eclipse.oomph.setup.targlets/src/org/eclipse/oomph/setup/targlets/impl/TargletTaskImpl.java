@@ -82,16 +82,14 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getProgramArguments <em>Program Arguments</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getVMArguments <em>VM Arguments</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getImplicitDependencies <em>Implicit Dependencies</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getTargetName <em>Target Name</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#isActivateTarget <em>Activate Target</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 {
-  private static final String TARGET_DEFINITION_NAME = "Modular Target";
-
-  private static final String TARGLET_CONTAINER_ID = "Oomph";
-
   /**
    * The cached value of the '{@link #getTarglets() <em>Targlets</em>}' containment reference list.
    * <!-- begin-user-doc -->
@@ -241,6 +239,46 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * @ordered
    */
   protected EList<ImplicitDependency> implicitDependencies;
+
+  /**
+   * The default value of the '{@link #getTargetName() <em>Target Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getTargetName()
+   * @generated
+   * @ordered
+   */
+  protected static final String TARGET_NAME_EDEFAULT = "Modular Target";
+
+  /**
+   * The cached value of the '{@link #getTargetName() <em>Target Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getTargetName()
+   * @generated
+   * @ordered
+   */
+  protected String targetName = TARGET_NAME_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isActivateTarget() <em>Activate Target</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isActivateTarget()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean ACTIVATE_TARGET_EDEFAULT = true;
+
+  /**
+   * The cached value of the '{@link #isActivateTarget() <em>Activate Target</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isActivateTarget()
+   * @generated
+   * @ordered
+   */
+  protected boolean activateTarget = ACTIVATE_TARGET_EDEFAULT;
 
   private ITargletContainer targletContainer;
 
@@ -467,6 +505,56 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getTargetName()
+  {
+    return targetName;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setTargetName(String newTargetName)
+  {
+    String oldTargetName = targetName;
+    targetName = newTargetName;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupTargletsPackage.TARGLET_TASK__TARGET_NAME, oldTargetName, targetName));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isActivateTarget()
+  {
+    return activateTarget;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setActivateTarget(boolean newActivateTarget)
+  {
+    boolean oldActivateTarget = activateTarget;
+    activateTarget = newActivateTarget;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupTargletsPackage.TARGLET_TASK__ACTIVATE_TARGET, oldActivateTarget, activateTarget));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -508,6 +596,10 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         return getVMArguments();
       case SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES:
         return getImplicitDependencies();
+      case SetupTargletsPackage.TARGLET_TASK__TARGET_NAME:
+        return getTargetName();
+      case SetupTargletsPackage.TARGLET_TASK__ACTIVATE_TARGET:
+        return isActivateTarget();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -553,6 +645,12 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         getImplicitDependencies().clear();
         getImplicitDependencies().addAll((Collection<? extends ImplicitDependency>)newValue);
         return;
+      case SetupTargletsPackage.TARGLET_TASK__TARGET_NAME:
+        setTargetName((String)newValue);
+        return;
+      case SetupTargletsPackage.TARGLET_TASK__ACTIVATE_TARGET:
+        setActivateTarget((Boolean)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -594,6 +692,12 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       case SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES:
         getImplicitDependencies().clear();
         return;
+      case SetupTargletsPackage.TARGLET_TASK__TARGET_NAME:
+        setTargetName(TARGET_NAME_EDEFAULT);
+        return;
+      case SetupTargletsPackage.TARGLET_TASK__ACTIVATE_TARGET:
+        setActivateTarget(ACTIVATE_TARGET_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -626,6 +730,10 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         return VM_ARGUMENTS_EDEFAULT == null ? vMArguments != null : !VM_ARGUMENTS_EDEFAULT.equals(vMArguments);
       case SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES:
         return implicitDependencies != null && !implicitDependencies.isEmpty();
+      case SetupTargletsPackage.TARGLET_TASK__TARGET_NAME:
+        return TARGET_NAME_EDEFAULT == null ? targetName != null : !TARGET_NAME_EDEFAULT.equals(targetName);
+      case SetupTargletsPackage.TARGLET_TASK__ACTIVATE_TARGET:
+        return activateTarget != ACTIVATE_TARGET_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -658,6 +766,10 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     result.append(programArguments);
     result.append(", vMArguments: ");
     result.append(vMArguments);
+    result.append(", targetName: ");
+    result.append(targetName);
+    result.append(", activateTarget: ");
+    result.append(activateTarget);
     result.append(')');
     return result.toString();
   }
@@ -665,7 +777,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   @Override
   public Object getOverrideToken()
   {
-    return createToken(TARGLET_CONTAINER_ID);
+    return createToken(getSafeTargetName());
   }
 
   @Override
@@ -922,10 +1034,13 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
             targetDefinition = getTargetDefinition(service, new SubProgressMonitor(monitor, 1));
           }
 
+          String targetName = getSafeTargetName();
+          boolean activateTarget = isActivateTarget();
+
           if (targetDefinition == null)
           {
             targetDefinition = service.newTarget();
-            targetDefinition.setName(TARGET_DEFINITION_NAME);
+            targetDefinition.setName(targetName);
           }
 
           targetDefinition.setOS(getOperatingSystem());
@@ -944,7 +1059,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
           EList<Targlet> targlets = copyTarglets;
           if (targletContainer == null)
           {
-            targletContainer = new TargletContainer(TARGLET_CONTAINER_ID);
+            targletContainer = new TargletContainer(targetName);
 
             ITargetLocation[] newLocations;
             ITargetLocation[] oldLocations = targetDefinition.getTargetLocations();
@@ -972,7 +1087,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
             TargletsCorePlugin.INSTANCE.setCacheUsageConfirmer(cacheUsageConfirmer);
 
             targletContainer.setTarglets(targlets);
-            targletContainer.forceUpdate(true, mirrors, new SubProgressMonitor(monitor, 90));
+            targletContainer.forceUpdate(activateTarget, mirrors, new SubProgressMonitor(monitor, 90));
 
             try
             {
@@ -998,6 +1113,17 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     });
   }
 
+  private String getSafeTargetName()
+  {
+    String targetName = getTargetName();
+    if (StringUtil.isEmpty(targetName))
+    {
+      targetName = TARGET_NAME_EDEFAULT;
+    }
+
+    return targetName;
+  }
+
   private ITargetDefinition getTargetDefinition(ITargetPlatformService service, IProgressMonitor monitor)
   {
     for (ITargetHandle targetHandle : service.getTargets(monitor))
@@ -1005,7 +1131,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       try
       {
         ITargetDefinition targetDefinition = targetHandle.getTargetDefinition();
-        if (TARGET_DEFINITION_NAME.equals(targetDefinition.getName()))
+        if (ObjectUtil.equals(getSafeTargetName(), targetDefinition.getName()))
         {
           return targetDefinition;
         }
@@ -1029,7 +1155,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         if (location instanceof ITargletContainer)
         {
           ITargletContainer targletContainer = (ITargletContainer)location;
-          if (TARGLET_CONTAINER_ID.equals(targletContainer.getID()))
+          if (ObjectUtil.equals(getSafeTargetName(), targletContainer.getID()))
           {
             return targletContainer;
           }

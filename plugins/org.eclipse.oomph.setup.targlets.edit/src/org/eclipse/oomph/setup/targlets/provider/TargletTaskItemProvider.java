@@ -140,8 +140,38 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
       addLocalePropertyDescriptor(object);
       addProgramArgumentsPropertyDescriptor(object);
       addVMArgumentsPropertyDescriptor(object);
+      addTargetNamePropertyDescriptor(object);
+      addActivateTargetPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Target Name feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addTargetNamePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_TargletTask_targetName_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_targetName_feature", "_UI_TargletTask_type"),
+        SetupTargletsPackage.Literals.TARGLET_TASK__TARGET_NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Activate Target feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addActivateTargetPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_TargletTask_activateTarget_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_activateTarget_feature", "_UI_TargletTask_type"),
+        SetupTargletsPackage.Literals.TARGLET_TASK__ACTIVATE_TARGET, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -391,6 +421,19 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
       }
     }
 
+    if (builder.length() != 0)
+    {
+      builder.append(" ");
+    }
+
+    builder.append("-> ");
+    builder.append(targletTask.getTargetName());
+
+    if (targletTask.isActivateTarget())
+    {
+      builder.append("!");
+    }
+
     String label = getString("_UI_TargletTask_type");
     if (builder.length() != 0)
     {
@@ -421,6 +464,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
       case SetupTargletsPackage.TARGLET_TASK__LOCALE:
       case SetupTargletsPackage.TARGLET_TASK__PROGRAM_ARGUMENTS:
       case SetupTargletsPackage.TARGLET_TASK__VM_ARGUMENTS:
+      case SetupTargletsPackage.TARGLET_TASK__TARGET_NAME:
+      case SetupTargletsPackage.TARGLET_TASK__ACTIVATE_TARGET:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
       case SetupTargletsPackage.TARGLET_TASK__TARGLETS:

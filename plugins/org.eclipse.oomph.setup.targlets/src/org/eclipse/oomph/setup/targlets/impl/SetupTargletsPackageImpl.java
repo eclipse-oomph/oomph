@@ -131,6 +131,26 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getTargletTask_TargetName()
+  {
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(9);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getTargletTask_ActivateTarget()
+  {
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(10);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getTargletTask_Targlets()
   {
     return (EReference)targletTaskEClass.getEStructuralFeatures().get(0);
@@ -289,6 +309,8 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
     createEAttribute(targletTaskEClass, TARGLET_TASK__PROGRAM_ARGUMENTS);
     createEAttribute(targletTaskEClass, TARGLET_TASK__VM_ARGUMENTS);
     createEReference(targletTaskEClass, TARGLET_TASK__IMPLICIT_DEPENDENCIES);
+    createEAttribute(targletTaskEClass, TARGLET_TASK__TARGET_NAME);
+    createEAttribute(targletTaskEClass, TARGLET_TASK__ACTIVATE_TARGET);
 
     implicitDependencyEClass = createEClass(IMPLICIT_DEPENDENCY);
     createEAttribute(implicitDependencyEClass, IMPLICIT_DEPENDENCY__ID);
@@ -354,6 +376,10 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTargletTask_ImplicitDependencies(), getImplicitDependency(), null, "implicitDependencies", null, 0, -1, TargletTask.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTargletTask_TargetName(), ecorePackage.getEString(), "targetName", "Modular Target", 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTargletTask_ActivateTarget(), ecorePackage.getEBoolean(), "activateTarget", "true", 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(implicitDependencyEClass, ImplicitDependency.class, "ImplicitDependency", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getImplicitDependency_ID(), ecorePackage.getEString(), "iD", null, 1, 1, ImplicitDependency.class, !IS_TRANSIENT, !IS_VOLATILE,

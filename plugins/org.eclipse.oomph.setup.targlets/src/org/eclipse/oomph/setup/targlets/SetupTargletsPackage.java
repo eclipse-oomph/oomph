@@ -251,13 +251,31 @@ public interface SetupTargletsPackage extends EPackage
   int TARGLET_TASK__IMPLICIT_DEPENDENCIES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 8;
 
   /**
+   * The feature id for the '<em><b>Target Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_TASK__TARGET_NAME = SetupPackage.SETUP_TASK_FEATURE_COUNT + 9;
+
+  /**
+   * The feature id for the '<em><b>Activate Target</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_TASK__ACTIVATE_TARGET = SetupPackage.SETUP_TASK_FEATURE_COUNT + 10;
+
+  /**
    * The number of structural features of the '<em>Targlet Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGLET_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 9;
+  int TARGLET_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 11;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.targlets.impl.ImplicitDependencyImpl <em>Implicit Dependency</em>}' class.
@@ -305,6 +323,28 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    */
   EClass getTargletTask();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.targlets.TargletTask#getTargetName <em>Target Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Target Name</em>'.
+   * @see org.eclipse.oomph.setup.targlets.TargletTask#getTargetName()
+   * @see #getTargletTask()
+   * @generated
+   */
+  EAttribute getTargletTask_TargetName();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.targlets.TargletTask#isActivateTarget <em>Activate Target</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Activate Target</em>'.
+   * @see org.eclipse.oomph.setup.targlets.TargletTask#isActivateTarget()
+   * @see #getTargletTask()
+   * @generated
+   */
+  EAttribute getTargletTask_ActivateTarget();
 
   /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.targlets.TargletTask#getTarglets <em>Targlets</em>}'.
@@ -469,6 +509,22 @@ public interface SetupTargletsPackage extends EPackage
      * @generated
      */
     EClass TARGLET_TASK = eINSTANCE.getTargletTask();
+
+    /**
+     * The meta object literal for the '<em><b>Target Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET_TASK__TARGET_NAME = eINSTANCE.getTargletTask_TargetName();
+
+    /**
+     * The meta object literal for the '<em><b>Activate Target</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET_TASK__ACTIVATE_TARGET = eINSTANCE.getTargletTask_ActivateTarget();
 
     /**
      * The meta object literal for the '<em><b>Targlets</b></em>' containment reference list feature.

@@ -33,6 +33,8 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getProgramArguments <em>Program Arguments</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getVMArguments <em>VM Arguments</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getImplicitDependencies <em>Implicit Dependencies</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getTargetName <em>Target Name</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#isActivateTarget <em>Activate Target</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask()
@@ -248,4 +250,58 @@ public interface TargletTask extends SetupTask
    * @generated
    */
   EList<ImplicitDependency> getImplicitDependencies();
+
+  /**
+   * Returns the value of the '<em><b>Target Name</b></em>' attribute.
+   * The default value is <code>"Modular Target"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Target Name</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Target Name</em>' attribute.
+   * @see #setTargetName(String)
+   * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask_TargetName()
+   * @model default="Modular Target"
+   * @generated
+   */
+  String getTargetName();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.targlets.TargletTask#getTargetName <em>Target Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Target Name</em>' attribute.
+   * @see #getTargetName()
+   * @generated
+   */
+  void setTargetName(String value);
+
+  /**
+   * Returns the value of the '<em><b>Activate Target</b></em>' attribute.
+   * The default value is <code>"true"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Activate Target</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Activate Target</em>' attribute.
+   * @see #setActivateTarget(boolean)
+   * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask_ActivateTarget()
+   * @model default="true"
+   * @generated
+   */
+  boolean isActivateTarget();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.targlets.TargletTask#isActivateTarget <em>Activate Target</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Activate Target</em>' attribute.
+   * @see #isActivateTarget()
+   * @generated
+   */
+  void setActivateTarget(boolean value);
 } // TargletTask
