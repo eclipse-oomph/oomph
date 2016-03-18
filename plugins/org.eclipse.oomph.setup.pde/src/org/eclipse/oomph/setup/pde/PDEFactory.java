@@ -49,6 +49,15 @@ public interface PDEFactory extends EFactory
   APIBaselineTask createAPIBaselineTask();
 
   /**
+   * Returns a new object of class '<em>API Baseline From Target Task</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>API Baseline From Target Task</em>'.
+   * @generated
+   */
+  APIBaselineFromTargetTask createAPIBaselineFromTargetTask();
+
+  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

@@ -431,7 +431,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
 
     if (targletTask.isActivateTarget())
     {
-      builder.append("!");
+      builder.append(", activate");
     }
 
     String label = getString("_UI_TargletTask_type");

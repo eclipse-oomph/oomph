@@ -12,7 +12,9 @@ package org.eclipse.oomph.setup.pde.util;
 
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.pde.APIBaselineFromTargetTask;
 import org.eclipse.oomph.setup.pde.APIBaselineTask;
+import org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask;
 import org.eclipse.oomph.setup.pde.PDEPackage;
 import org.eclipse.oomph.setup.pde.TargetPlatformTask;
 
@@ -90,9 +92,21 @@ public class PDEAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
+    public Adapter caseAbstractAPIBaselineTask(AbstractAPIBaselineTask object)
+    {
+      return createAbstractAPIBaselineTaskAdapter();
+    }
+
+    @Override
     public Adapter caseAPIBaselineTask(APIBaselineTask object)
     {
       return createAPIBaselineTaskAdapter();
+    }
+
+    @Override
+    public Adapter caseAPIBaselineFromTargetTask(APIBaselineFromTargetTask object)
+    {
+      return createAPIBaselineFromTargetTaskAdapter();
     }
 
     @Override
@@ -144,6 +158,21 @@ public class PDEAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask <em>Abstract API Baseline Task</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask
+   * @generated
+   */
+  public Adapter createAbstractAPIBaselineTaskAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.pde.APIBaselineTask <em>API Baseline Task</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -154,6 +183,21 @@ public class PDEAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createAPIBaselineTaskAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.pde.APIBaselineFromTargetTask <em>API Baseline From Target Task</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.pde.APIBaselineFromTargetTask
+   * @generated
+   */
+  public Adapter createAPIBaselineFromTargetTaskAdapter()
   {
     return null;
   }

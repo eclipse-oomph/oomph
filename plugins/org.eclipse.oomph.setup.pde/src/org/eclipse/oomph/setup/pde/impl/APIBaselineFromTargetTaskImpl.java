@@ -1,0 +1,285 @@
+/**
+ */
+package org.eclipse.oomph.setup.pde.impl;
+
+import org.eclipse.oomph.setup.SetupTaskContext;
+import org.eclipse.oomph.setup.log.ProgressLog.Severity;
+import org.eclipse.oomph.setup.log.ProgressLogMonitor;
+import org.eclipse.oomph.setup.pde.APIBaselineFromTargetTask;
+import org.eclipse.oomph.setup.pde.PDEPackage;
+import org.eclipse.oomph.util.StringUtil;
+import org.eclipse.oomph.util.pde.TargetPlatformUtil;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import org.eclipse.pde.api.tools.internal.ApiBaselineManager;
+import org.eclipse.pde.api.tools.internal.model.ApiModelFactory;
+import org.eclipse.pde.api.tools.internal.provisional.ApiPlugin;
+import org.eclipse.pde.api.tools.internal.provisional.IApiBaselineManager;
+import org.eclipse.pde.api.tools.internal.provisional.model.IApiBaseline;
+import org.eclipse.pde.core.target.ITargetDefinition;
+
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>API Baseline From Target Task</b></em>'.
+ * <!-- end-user-doc -->
+ * <p>
+ * The following features are implemented:
+ * </p>
+ * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineFromTargetTaskImpl#getTargetName <em>Target Name</em>}</li>
+ * </ul>
+ *
+ * @generated
+ */
+public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl implements APIBaselineFromTargetTask
+{
+  /**
+   * The default value of the '{@link #getTargetName() <em>Target Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getTargetName()
+   * @generated
+   * @ordered
+   */
+  protected static final String TARGET_NAME_EDEFAULT = "";
+
+  /**
+   * The cached value of the '{@link #getTargetName() <em>Target Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getTargetName()
+   * @generated
+   * @ordered
+   */
+  protected String targetName = TARGET_NAME_EDEFAULT;
+
+  private transient ITargetDefinition target;
+
+  private transient IApiBaselineManager baselineManager;
+
+  private transient String baselineName;
+
+  private transient IApiBaseline baseline;
+
+  private transient boolean wasActive;
+
+  private transient boolean backupRequired;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected APIBaselineFromTargetTaskImpl()
+  {
+    super();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  protected EClass eStaticClass()
+  {
+    return PDEPackage.Literals.API_BASELINE_FROM_TARGET_TASK;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getTargetName()
+  {
+    return targetName;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setTargetName(String newTargetName)
+  {
+    String oldTargetName = targetName;
+    targetName = newTargetName;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, PDEPackage.API_BASELINE_FROM_TARGET_TASK__TARGET_NAME, oldTargetName, targetName));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Object eGet(int featureID, boolean resolve, boolean coreType)
+  {
+    switch (featureID)
+    {
+      case PDEPackage.API_BASELINE_FROM_TARGET_TASK__TARGET_NAME:
+        return getTargetName();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void eSet(int featureID, Object newValue)
+  {
+    switch (featureID)
+    {
+      case PDEPackage.API_BASELINE_FROM_TARGET_TASK__TARGET_NAME:
+        setTargetName((String)newValue);
+        return;
+    }
+    super.eSet(featureID, newValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void eUnset(int featureID)
+  {
+    switch (featureID)
+    {
+      case PDEPackage.API_BASELINE_FROM_TARGET_TASK__TARGET_NAME:
+        setTargetName(TARGET_NAME_EDEFAULT);
+        return;
+    }
+    super.eUnset(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public boolean eIsSet(int featureID)
+  {
+    switch (featureID)
+    {
+      case PDEPackage.API_BASELINE_FROM_TARGET_TASK__TARGET_NAME:
+        return TARGET_NAME_EDEFAULT == null ? targetName != null : !TARGET_NAME_EDEFAULT.equals(targetName);
+    }
+    return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy())
+    {
+      return super.toString();
+    }
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (targetName: ");
+    result.append(targetName);
+    result.append(')');
+    return result.toString();
+  }
+
+  public boolean isNeeded(SetupTaskContext context) throws Exception
+  {
+    ApiPlugin apiPlugin = ApiPlugin.getDefault();
+    if (apiPlugin == null)
+    {
+      // Might be deactivated
+      return false;
+    }
+
+    baselineManager = apiPlugin.getApiBaselineManager();
+    baselineName = getName() + "-" + getVersion();
+
+    target = TargetPlatformUtil.getTargetDefinition(getTargetName());
+
+    baseline = baselineManager.getApiBaseline(baselineName);
+    if (baseline == null)
+    {
+      return true;
+    }
+
+    ((ApiBaselineManager)baselineManager).loadBaselineInfos(baseline);
+
+    // Work-around for PDE bug 489924:
+    // API baseline from target X is not considered as derived from target X
+    String location = baseline.getLocation();
+    if (!StringUtil.isEmpty(location) && location.startsWith("target:"))
+    {
+      if (location.indexOf('\\') >= 0)
+      {
+        location = location.replace('\\', '/');
+        baseline.setLocation(location);
+      }
+    }
+
+    wasActive = baselineManager.getDefaultApiBaseline() == baseline;
+    backupRequired = !ApiModelFactory.isDerivedFromTarget(baseline, target);
+
+    return backupRequired || target == null || !wasActive && isActivate();
+  }
+
+  public void perform(SetupTaskContext context) throws Exception
+  {
+    if (backupRequired)
+    {
+      String backupName = baselineName + " " + System.currentTimeMillis();
+      context.log("Backing up existing baseline to " + backupName);
+
+      baselineManager.removeApiBaseline(baselineName);
+      baseline.setName(backupName);
+      baselineManager.addApiBaseline(baseline);
+      baseline = null;
+    }
+
+    if (baseline != null)
+    {
+      context.log("Removing existing baseline.");
+      baselineManager.removeApiBaseline(baselineName);
+      baseline = null;
+    }
+
+    String targetName = getTargetName();
+    if (target == null)
+    {
+      context.log("Creating new empty baseline because target " + targetName + " was not found.", Severity.WARNING);
+      baseline = ApiModelFactory.newApiBaseline(baselineName);
+      baselineManager.addApiBaseline(baseline);
+    }
+
+    if (baseline == null)
+    {
+      context.log("Creating new baseline from target " + targetName);
+      baseline = ApiModelFactory.newApiBaselineFromTarget(baselineName, target, new ProgressLogMonitor(context));
+      baselineManager.addApiBaseline(baseline);
+    }
+
+    if ((wasActive || isActivate()) && baselineManager.getDefaultApiBaseline() != baseline)
+    {
+      context.log("Activating baseline: " + baselineName);
+      baselineManager.setDefaultApiBaseline(baselineName);
+    }
+  }
+
+} // APIBaselineFromTargetTaskImpl

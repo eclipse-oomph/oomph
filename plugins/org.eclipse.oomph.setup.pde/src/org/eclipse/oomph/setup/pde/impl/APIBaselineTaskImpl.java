@@ -11,7 +11,6 @@
 package org.eclipse.oomph.setup.pde.impl;
 
 import org.eclipse.oomph.setup.SetupTaskContext;
-import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.pde.APIBaselineTask;
 import org.eclipse.oomph.setup.pde.PDEPackage;
@@ -42,56 +41,14 @@ import java.io.InputStream;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getVersion <em>Version</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getLocation <em>Location</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getRemoteURI <em>Remote URI</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTask
+public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements APIBaselineTask
 {
-  /**
-   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getName()
-   * @generated
-   * @ordered
-   */
-  protected static final String NAME_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getName()
-   * @generated
-   * @ordered
-   */
-  protected String name = NAME_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getVersion()
-   * @generated
-   * @ordered
-   */
-  protected static final String VERSION_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getVersion()
-   * @generated
-   * @ordered
-   */
-  protected String version = VERSION_EDEFAULT;
-
   /**
    * The default value of the '{@link #getLocation() <em>Location</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -166,56 +123,6 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setName(String newName)
-  {
-    String oldName = name;
-    name = newName;
-    if (eNotificationRequired())
-    {
-      eNotify(new ENotificationImpl(this, Notification.SET, PDEPackage.API_BASELINE_TASK__NAME, oldName, name));
-    }
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String getVersion()
-  {
-    return version;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setVersion(String newVersion)
-  {
-    String oldVersion = version;
-    version = newVersion;
-    if (eNotificationRequired())
-    {
-      eNotify(new ENotificationImpl(this, Notification.SET, PDEPackage.API_BASELINE_TASK__VERSION, oldVersion, version));
-    }
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public String getLocation()
   {
     return location;
@@ -271,10 +178,6 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
   {
     switch (featureID)
     {
-      case PDEPackage.API_BASELINE_TASK__NAME:
-        return getName();
-      case PDEPackage.API_BASELINE_TASK__VERSION:
-        return getVersion();
       case PDEPackage.API_BASELINE_TASK__LOCATION:
         return getLocation();
       case PDEPackage.API_BASELINE_TASK__REMOTE_URI:
@@ -293,12 +196,6 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
   {
     switch (featureID)
     {
-      case PDEPackage.API_BASELINE_TASK__NAME:
-        setName((String)newValue);
-        return;
-      case PDEPackage.API_BASELINE_TASK__VERSION:
-        setVersion((String)newValue);
-        return;
       case PDEPackage.API_BASELINE_TASK__LOCATION:
         setLocation((String)newValue);
         return;
@@ -319,12 +216,6 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
   {
     switch (featureID)
     {
-      case PDEPackage.API_BASELINE_TASK__NAME:
-        setName(NAME_EDEFAULT);
-        return;
-      case PDEPackage.API_BASELINE_TASK__VERSION:
-        setVersion(VERSION_EDEFAULT);
-        return;
       case PDEPackage.API_BASELINE_TASK__LOCATION:
         setLocation(LOCATION_EDEFAULT);
         return;
@@ -345,10 +236,6 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
   {
     switch (featureID)
     {
-      case PDEPackage.API_BASELINE_TASK__NAME:
-        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case PDEPackage.API_BASELINE_TASK__VERSION:
-        return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
       case PDEPackage.API_BASELINE_TASK__LOCATION:
         return LOCATION_EDEFAULT == null ? location != null : !LOCATION_EDEFAULT.equals(location);
       case PDEPackage.API_BASELINE_TASK__REMOTE_URI:
@@ -371,11 +258,7 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
     }
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (name: ");
-    result.append(name);
-    result.append(", version: ");
-    result.append(version);
-    result.append(", location: ");
+    result.append(" (location: ");
     result.append(location);
     result.append(", remoteURI: ");
     result.append(remoteURI);
@@ -383,11 +266,9 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
     return result.toString();
   }
 
-  @Override
-  public int getProgressMonitorWork()
-  {
-    return 50;
-  }
+  protected transient boolean backupBaseline;
+
+  protected transient boolean createBaseline;
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
@@ -419,9 +300,10 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
       return true;
     }
 
-    if (baselineManager.getDefaultApiBaseline() != baseline)
+    this.baseline = baseline;
+
+    if (isActivate() && baselineManager.getDefaultApiBaseline() != baseline)
     {
-      this.baseline = baseline;
       return true;
     }
 
@@ -458,8 +340,11 @@ public class APIBaselineTaskImpl extends SetupTaskImpl implements APIBaselineTas
       baselineManager.addApiBaseline(baseline);
     }
 
-    context.log("Activating API baseline: " + baselineName);
-    baselineManager.setDefaultApiBaseline(baselineName);
+    if (isActivate())
+    {
+      context.log("Activating API baseline: " + baselineName);
+      baselineManager.setDefaultApiBaseline(baselineName);
+    }
   }
 
   private boolean isDifferentRemoteURI() throws Exception

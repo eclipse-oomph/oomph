@@ -1,20 +1,14 @@
-/*
- * Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *    Eike Stepper - initial API and implementation
+/**
  */
 package org.eclipse.oomph.setup.pde.provider;
 
-import org.eclipse.oomph.setup.pde.APIBaselineTask;
+import org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask;
 import org.eclipse.oomph.setup.pde.PDEPackage;
+import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -24,12 +18,12 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.oomph.setup.pde.APIBaselineTask} object.
+ * This is the item provider adapter for a {@link org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class APIBaselineTaskItemProvider extends AbstractAPIBaselineTaskItemProvider
+public class AbstractAPIBaselineTaskItemProvider extends SetupTaskItemProvider
 {
   /**
    * This constructs an instance from a factory and a notifier.
@@ -37,7 +31,7 @@ public class APIBaselineTaskItemProvider extends AbstractAPIBaselineTaskItemProv
    * <!-- end-user-doc -->
    * @generated
    */
-  public APIBaselineTaskItemProvider(AdapterFactory adapterFactory)
+  public AbstractAPIBaselineTaskItemProvider(AdapterFactory adapterFactory)
   {
     super(adapterFactory);
   }
@@ -55,50 +49,53 @@ public class APIBaselineTaskItemProvider extends AbstractAPIBaselineTaskItemProv
     {
       super.getPropertyDescriptors(object);
 
-      addLocationPropertyDescriptor(object);
-      addRemoteURIPropertyDescriptor(object);
+      addNamePropertyDescriptor(object);
+      addVersionPropertyDescriptor(object);
+      addActivatePropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
 
   /**
-   * This adds a property descriptor for the Location feature.
+   * This adds a property descriptor for the Name feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void addLocationPropertyDescriptor(Object object)
+  protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_APIBaselineTask_location_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_location_feature", "_UI_APIBaselineTask_type"),
-        PDEPackage.Literals.API_BASELINE_TASK__LOCATION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_AbstractAPIBaselineTask_name_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_AbstractAPIBaselineTask_name_feature", "_UI_AbstractAPIBaselineTask_type"),
+        PDEPackage.Literals.ABSTRACT_API_BASELINE_TASK__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
-   * This adds a property descriptor for the Remote URI feature.
+   * This adds a property descriptor for the Version feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void addRemoteURIPropertyDescriptor(Object object)
+  protected void addVersionPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_APIBaselineTask_remoteURI_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_remoteURI_feature", "_UI_APIBaselineTask_type"),
-        PDEPackage.Literals.API_BASELINE_TASK__REMOTE_URI, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_AbstractAPIBaselineTask_version_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_AbstractAPIBaselineTask_version_feature", "_UI_AbstractAPIBaselineTask_type"),
+        PDEPackage.Literals.ABSTRACT_API_BASELINE_TASK__VERSION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
-   * This returns APIBaselineTask.gif.
+   * This adds a property descriptor for the Activate feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public Object getImage(Object object)
+  protected void addActivatePropertyDescriptor(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/APIBaselineTask"));
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_AbstractAPIBaselineTask_activate_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_AbstractAPIBaselineTask_activate_feature", "_UI_AbstractAPIBaselineTask_type"),
+        PDEPackage.Literals.ABSTRACT_API_BASELINE_TASK__ACTIVATE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -116,42 +113,13 @@ public class APIBaselineTaskItemProvider extends AbstractAPIBaselineTaskItemProv
    * This returns the label text for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated NOT
+   * @generated
    */
   @Override
   public String getText(Object object)
   {
-    APIBaselineTask apiBaselineTask = (APIBaselineTask)object;
-    StringBuilder builder = new StringBuilder(getString("_UI_APIBaselineTask_type"));
-
-    String name = apiBaselineTask.getName();
-    if (name != null && name.length() != 0)
-    {
-      builder.append(' ');
-      builder.append(name);
-    }
-
-    String version = apiBaselineTask.getVersion();
-    if (version != null && version.length() != 0)
-    {
-      if (name != null && name.length() != 0)
-      {
-        builder.append('-');
-      }
-      else
-      {
-        builder.append(' ');
-      }
-
-      builder.append(version);
-    }
-
-    if (apiBaselineTask.isActivate())
-    {
-      builder.append(", activate");
-    }
-
-    return builder.toString();
+    String label = ((AbstractAPIBaselineTask)object).getName();
+    return label == null || label.length() == 0 ? getString("_UI_AbstractAPIBaselineTask_type") : getString("_UI_AbstractAPIBaselineTask_type") + " " + label;
   }
 
   /**
@@ -166,10 +134,11 @@ public class APIBaselineTaskItemProvider extends AbstractAPIBaselineTaskItemProv
   {
     updateChildren(notification);
 
-    switch (notification.getFeatureID(APIBaselineTask.class))
+    switch (notification.getFeatureID(AbstractAPIBaselineTask.class))
     {
-      case PDEPackage.API_BASELINE_TASK__LOCATION:
-      case PDEPackage.API_BASELINE_TASK__REMOTE_URI:
+      case PDEPackage.ABSTRACT_API_BASELINE_TASK__NAME:
+      case PDEPackage.ABSTRACT_API_BASELINE_TASK__VERSION:
+      case PDEPackage.ABSTRACT_API_BASELINE_TASK__ACTIVATE:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }
@@ -187,6 +156,18 @@ public class APIBaselineTaskItemProvider extends AbstractAPIBaselineTaskItemProv
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+  }
+
+  /**
+   * Return the resource locator for this item provider's resources.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public ResourceLocator getResourceLocator()
+  {
+    return PDEEditPlugin.INSTANCE;
   }
 
 }

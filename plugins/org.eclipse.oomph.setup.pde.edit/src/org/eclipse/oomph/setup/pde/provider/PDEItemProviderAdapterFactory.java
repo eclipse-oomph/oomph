@@ -144,6 +144,31 @@ public class PDEItemProviderAdapterFactory extends PDEAdapterFactory implements 
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.pde.APIBaselineFromTargetTask} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected APIBaselineFromTargetTaskItemProvider apiBaselineFromTargetTaskItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.pde.APIBaselineFromTargetTask}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createAPIBaselineFromTargetTaskAdapter()
+  {
+    if (apiBaselineFromTargetTaskItemProvider == null)
+    {
+      apiBaselineFromTargetTaskItemProvider = new APIBaselineFromTargetTaskItemProvider(this);
+    }
+
+    return apiBaselineFromTargetTaskItemProvider;
+  }
+
+  /**
    * This returns the root adapter factory that contains this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -262,6 +287,10 @@ public class PDEItemProviderAdapterFactory extends PDEAdapterFactory implements 
     {
       apiBaselineTaskItemProvider.dispose();
     }
+    if (apiBaselineFromTargetTaskItemProvider != null)
+    {
+      apiBaselineFromTargetTaskItemProvider.dispose();
+    }
   }
 
   /**
@@ -319,6 +348,8 @@ public class PDEItemProviderAdapterFactory extends PDEAdapterFactory implements 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, PDEFactory.eINSTANCE.createTargetPlatformTask()));
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, PDEFactory.eINSTANCE.createAPIBaselineTask()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, PDEFactory.eINSTANCE.createAPIBaselineFromTargetTask()));
 
         return null;
       }
@@ -413,6 +444,9 @@ public class PDEItemProviderAdapterFactory extends PDEAdapterFactory implements 
         newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, PDEFactory.eINSTANCE.createTargetPlatformTask()));
 
         newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, PDEFactory.eINSTANCE.createAPIBaselineTask()));
+
+        newChildDescriptors
+            .add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, PDEFactory.eINSTANCE.createAPIBaselineFromTargetTask()));
 
         return null;
       }

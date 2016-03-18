@@ -18,13 +18,18 @@
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="APIBaselineTask" eSuperTypes="../../org.eclipse.oomph.setup/model/Setup.ecore#//SetupTask">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractAPIBaselineTask" abstract="true"
+      eSuperTypes="../../org.eclipse.oomph.setup/model/Setup.ecore#//SetupTask">
     <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">
       <details key="triggers" value="STARTUP MANUAL"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="APIBaselineTask" eSuperTypes="#//AbstractAPIBaselineTask">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
       <eAnnotations source="http://www.eclipse.org/oomph/setup/Variable">
@@ -63,6 +68,42 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/oomph/setup/RemoteResource"/>
       <eAnnotations source="http://www.eclipse.org/oomph/setup/Redirect"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="APIBaselineFromTargetTask" eSuperTypes="#//AbstractAPIBaselineTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
+      <eAnnotations source="http://www.eclipse.org/oomph/setup/Variable">
+        <eAnnotations source="Choice">
+          <details key="value" value="${api.baselines.root/}${@id.name|lower}-${@id.version}"/>
+          <details key="label" value="Located in a folder named '&lt;name>-&lt;version>' within the root API baselines folder"/>
+        </eAnnotations>
+        <eAnnotations source="Choice">
+          <details key="value" value="${installation.location/baselines/}${@id.name|lower}-${@id.version}"/>
+          <details key="label" value="Located in a folder named 'baselines/&lt;name>-&lt;version>' within the installation folder"/>
+        </eAnnotations>
+        <eAnnotations source="Choice">
+          <details key="value" value="${workspace.location/.baselines/}${@id.name|lower}-${@id.version}"/>
+          <details key="label" value="Located in a folder named '.baselines/&lt;name>-&lt;version>' within the workspace folder"/>
+        </eAnnotations>
+        <eAnnotations source="Choice">
+          <details key="value" value="${@id.location}"/>
+          <details key="label" value="Located in the specified absolute folder location"/>
+        </eAnnotations>
+        <details key="type" value="STRING"/>
+        <details key="label" value="API baseline location rule"/>
+        <details key="description" value="The rule for the absolute folder location where the API baseline is located"/>
+        <details key="explicitType" value="FOLDER"/>
+        <details key="explicitLabel" value="${@id.name}-${@id.version} API baseline location"/>
+        <details key="explicitDescription" value="The absolute folder location where the ${@id.name}-${@id.version} API baseline is located"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/oomph/setup/RuleVariable">
+        <details key="name" value="api.baselines.root"/>
+        <details key="type" value="FOLDER"/>
+        <details key="label" value="Root API baselines folder"/>
+        <details key="description" value="The root API baselines folder where all the API baselines are located"/>
+        <details key="storageURI" value="scope://"/>
+      </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>

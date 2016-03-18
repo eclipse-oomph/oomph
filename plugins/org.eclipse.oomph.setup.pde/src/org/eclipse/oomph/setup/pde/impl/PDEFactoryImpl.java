@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.pde.impl;
 
+import org.eclipse.oomph.setup.pde.APIBaselineFromTargetTask;
 import org.eclipse.oomph.setup.pde.APIBaselineTask;
 import org.eclipse.oomph.setup.pde.PDEFactory;
 import org.eclipse.oomph.setup.pde.PDEPackage;
@@ -77,6 +78,8 @@ public class PDEFactoryImpl extends EFactoryImpl implements PDEFactory
         return createTargetPlatformTask();
       case PDEPackage.API_BASELINE_TASK:
         return createAPIBaselineTask();
+      case PDEPackage.API_BASELINE_FROM_TARGET_TASK:
+        return createAPIBaselineFromTargetTask();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -102,6 +105,17 @@ public class PDEFactoryImpl extends EFactoryImpl implements PDEFactory
   {
     APIBaselineTaskImpl apiBaselineTask = new APIBaselineTaskImpl();
     return apiBaselineTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public APIBaselineFromTargetTask createAPIBaselineFromTargetTask()
+  {
+    APIBaselineFromTargetTaskImpl apiBaselineFromTargetTask = new APIBaselineFromTargetTaskImpl();
+    return apiBaselineFromTargetTask;
   }
 
   /**
