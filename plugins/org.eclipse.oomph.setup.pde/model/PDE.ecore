@@ -20,9 +20,6 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AbstractAPIBaselineTask" abstract="true"
       eSuperTypes="../../org.eclipse.oomph.setup/model/Setup.ecore#//SetupTask">
-    <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">
-      <details key="triggers" value="STARTUP MANUAL"/>
-    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -30,6 +27,9 @@
         defaultValueLiteral="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="APIBaselineTask" eSuperTypes="#//AbstractAPIBaselineTask">
+    <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">
+      <details key="triggers" value="STARTUP MANUAL"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
       <eAnnotations source="http://www.eclipse.org/oomph/setup/Variable">
@@ -71,6 +71,9 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="APIBaselineFromTargetTask" eSuperTypes="#//AbstractAPIBaselineTask">
+    <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">
+      <details key="triggers" value="STARTUP MANUAL"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
       <eAnnotations source="http://www.eclipse.org/oomph/setup/Variable">

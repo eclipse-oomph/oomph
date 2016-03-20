@@ -24,7 +24,7 @@ package org.eclipse.oomph.setup.pde;
  * </ul>
  *
  * @see org.eclipse.oomph.setup.pde.PDEPackage#getAPIBaselineTask()
- * @model
+ * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
  * @generated
  */
 public interface APIBaselineTask extends AbstractAPIBaselineTask

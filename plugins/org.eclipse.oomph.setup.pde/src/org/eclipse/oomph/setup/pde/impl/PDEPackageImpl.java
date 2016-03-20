@@ -422,7 +422,8 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
   {
     String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
     addAnnotation(targetPlatformTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
-    addAnnotation(abstractAPIBaselineTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    addAnnotation(apiBaselineTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    addAnnotation(apiBaselineFromTargetTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
   }
 
   /**

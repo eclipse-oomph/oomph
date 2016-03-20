@@ -20,7 +20,6 @@ import org.eclipse.oomph.setup.SetupTask;
  *
  * @see org.eclipse.oomph.setup.pde.PDEPackage#getAbstractAPIBaselineTask()
  * @model abstract="true"
- *        annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
  * @generated
  */
 public interface AbstractAPIBaselineTask extends SetupTask
