@@ -233,7 +233,7 @@
           </detail>
         </annotation>
         <annotation
-            source="http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator_DISABLED">
+            source="http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator">
           <detail
               key="location">
             <value>${git.clone.oomph.location/releng/org.eclipse.oomph.releng/org.eclipse.oomph.releng.target}</value>

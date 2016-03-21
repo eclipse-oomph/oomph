@@ -79,13 +79,13 @@ public class TargletContainerListenerRegistry implements ITargletContainerListen
 
     if (targletContainerListeners.length != 0)
     {
-      monitor.subTask("Notifying listeners of targlet container " + event.getSource().getID());
       monitor.beginTask("", targletContainerListeners.length);
 
       for (ITargletContainerListener listener : targletContainerListeners)
       {
         try
         {
+          monitor.subTask("Sending " + event + " to " + listener);
           listener.handleTargletContainerEvent(event, new SubProgressMonitor(monitor, 1));
         }
         catch (Exception ex)

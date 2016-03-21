@@ -49,6 +49,12 @@ public class TargletContainerEvent extends EventObject
     return descriptor;
   }
 
+  @Override
+  public String toString()
+  {
+    return getClass().getSimpleName() + "[source=" + getSource().getID() + "]";
+  }
+
   /**
    * @author Eike Stepper
    */
@@ -151,8 +157,7 @@ public class TargletContainerEvent extends EventObject
     @Override
     public String toString()
     {
-      return "ProfileUpdateSucceededEvent[source=" + getSource().getID() + ", metadataRepositories=" + metadataRepositories + ", profile=" + profile
-          + ", provisioningPlan=" + provisioningPlan + ", workspaceIUInfos=" + workspaceIUInfos + "]";
+      return "ProfileUpdateSucceededEvent[source=" + getSource().getID() + ", profile=" + profile.getProfileId() + "]";
     }
   }
 
@@ -202,12 +207,6 @@ public class TargletContainerEvent extends EventObject
     public final Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> getImportResults()
     {
       return importResults;
-    }
-
-    @Override
-    public String toString()
-    {
-      return "WorkspaceUpdateFinishedEvent[source=" + getSource().getID() + ", importResults=" + importResults + "]";
     }
   }
 }

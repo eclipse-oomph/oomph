@@ -57,4 +57,10 @@ public abstract class WorkspaceUpdateListener implements ITargletContainerListen
 
   protected abstract void handleTargletContainerEvent(ProfileUpdateSucceededEvent profileUpdateSucceededEvent,
       WorkspaceUpdateFinishedEvent workspaceUpdateFinishedEvent, IProgressMonitor monitor) throws Exception;
+
+  @Override
+  public String toString()
+  {
+    return getClass().getSimpleName();
+  }
 }

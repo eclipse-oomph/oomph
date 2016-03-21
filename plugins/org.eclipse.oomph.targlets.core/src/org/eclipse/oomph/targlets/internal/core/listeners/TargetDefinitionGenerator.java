@@ -19,9 +19,9 @@ import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFinishedEvent;
+import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
-import org.eclipse.oomph.targlets.internal.core.WorkspaceIUAnalyzer;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -104,14 +104,15 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         Profile profile = profileUpdateSucceededEvent.getProfile();
         IInstallableUnit artificialRoot = profileUpdateSucceededEvent.getArtificialRoot();
         List<IMetadataRepository> metadataRepositories = profileUpdateSucceededEvent.getMetadataRepositories();
+        Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = profileUpdateSucceededEvent.getWorkspaceIUInfos();
 
-        generateTargetDefinition(targlet, annotation, profile, artificialRoot, metadataRepositories, monitor);
+        generateTargetDefinition(targlet, annotation, profile, artificialRoot, metadataRepositories, workspaceIUInfos, monitor);
       }
     }
   }
 
   private static void generateTargetDefinition(final Targlet targlet, Annotation annotation, Profile profile, IInstallableUnit artificialRoot,
-      List<IMetadataRepository> metadataRepositories, final IProgressMonitor monitor) throws Exception
+      List<IMetadataRepository> metadataRepositories, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, final IProgressMonitor monitor) throws Exception
   {
     monitor.setTaskName("Checking for generated target definition updates");
     EMap<String, String> details = annotation.getDetails();
@@ -138,7 +139,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     final boolean includeSource = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_SOURCE, targlet.isIncludeSources());
 
     final Map<IMetadataRepository, Set<IInstallableUnit>> repositoryIUs = analyzeRepositories(targlet, profile, artificialRoot, metadataRepositories,
-        extraUnits, preferredURLs, generateImplicitUnits, monitor);
+        workspaceIUInfos, extraUnits, preferredURLs, generateImplicitUnits, monitor);
 
     new FileUpdater()
     {
@@ -270,15 +271,21 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   }
 
   private static Map<IMetadataRepository, Set<IInstallableUnit>> analyzeRepositories(Targlet targlet, Profile profile, IInstallableUnit artificialRoot,
-      List<IMetadataRepository> metadataRepositories, Set<IVersionedId> extraUnits, List<String> preferredURLs, boolean generateImplicitUnits,
-      IProgressMonitor monitor)
+      List<IMetadataRepository> metadataRepositories, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, Set<IVersionedId> extraUnits,
+      List<String> preferredURLs, boolean generateImplicitUnits, IProgressMonitor monitor)
   {
-    Set<IRequiredCapability> rootRequirements = getRootRequirements(targlet, artificialRoot);
+    Set<IRequiredCapability> rootRequirements = getRootRequirements(targlet, artificialRoot, workspaceIUInfos);
+
+    Set<String> workspaceIDs = new HashSet<String>();
+    for (IInstallableUnit iu : workspaceIUInfos.keySet())
+    {
+      workspaceIDs.add(iu.getId());
+    }
 
     Set<IInstallableUnit> resolvedIUs = new HashSet<IInstallableUnit>();
     for (IRequiredCapability requirement : rootRequirements)
     {
-      resolveRequirement(requirement, profile, resolvedIUs, new HashSet<IRequiredCapability>());
+      resolveRequirement(requirement, profile, workspaceIDs, resolvedIUs, new HashSet<IRequiredCapability>());
     }
 
     Map<String, IMetadataRepository> queriables = sortMetadataRepositories(targlet, metadataRepositories, preferredURLs, monitor);
@@ -293,7 +300,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     return result;
   }
 
-  private static Set<IRequiredCapability> getRootRequirements(Targlet targlet, IInstallableUnit artificialRoot)
+  private static Set<IRequiredCapability> getRootRequirements(Targlet targlet, IInstallableUnit artificialRoot,
+      Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos)
   {
     Map<String, Set<IRequiredCapability>> profileRequirements = new HashMap<String, Set<IRequiredCapability>>();
     for (IRequirement profileRequirement : artificialRoot.getRequirements())
@@ -309,18 +317,40 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     Set<IRequiredCapability> queue = new HashSet<IRequiredCapability>();
     for (Requirement targletRequirement : targlet.getRequirements())
     {
-      String id = targletRequirement.getNamespace() + "/" + targletRequirement.getName();
-      Set<IRequiredCapability> set = profileRequirements.get(id);
-      if (set != null)
+      String namespace = targletRequirement.getNamespace();
+      String name = targletRequirement.getName();
+
+      // If this is a wildcard requirement, we want to expand it to all the IUs in the targlet's source locator.
+      if ("*".equals(name) && IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
       {
-        queue.addAll(set);
+        for (IInstallableUnit iu : workspaceIUInfos.keySet())
+        {
+          for (IRequirement workspaceRequirement : iu.getRequirements())
+          {
+            if (workspaceRequirement instanceof IRequiredCapability)
+            {
+              IRequiredCapability requiredCapability = (IRequiredCapability)workspaceRequirement;
+              queue.add(requiredCapability);
+            }
+          }
+        }
+      }
+      else
+      {
+        String id = namespace + "/" + name;
+        Set<IRequiredCapability> set = profileRequirements.get(id);
+        if (set != null)
+        {
+          queue.addAll(set);
+        }
       }
     }
+
     return queue;
   }
 
-  private static void resolveRequirement(IRequiredCapability requirement, IQueryable<IInstallableUnit> queryable, Set<IInstallableUnit> result,
-      Set<IRequiredCapability> visited)
+  private static void resolveRequirement(IRequiredCapability requirement, IQueryable<IInstallableUnit> queryable, Set<String> workspaceIDs,
+      Set<IInstallableUnit> result, Set<IRequiredCapability> visited)
   {
     if (visited.add(requirement))
     {
@@ -337,19 +367,22 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
           continue;
         }
 
-        if (!"true".equals(iu.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)))
+        // This check is not ideal because it does not consider versions.
+        // But the binary IUs induced by the workspace IUs may have any version, just depending on the involved repos.
+        // So for now, just exclude the IDs of all workspace IUs.
+        if (workspaceIDs.contains(id))
         {
-          if (!result.add(iu))
-          {
-            continue;
-          }
+          continue;
         }
 
-        for (IRequirement iuRequirement : iu.getRequirements())
+        if (result.add(iu))
         {
-          if (iuRequirement instanceof IRequiredCapability)
+          for (IRequirement iuRequirement : iu.getRequirements())
           {
-            resolveRequirement((IRequiredCapability)iuRequirement, queryable, result, visited);
+            if (iuRequirement instanceof IRequiredCapability)
+            {
+              resolveRequirement((IRequiredCapability)iuRequirement, queryable, workspaceIDs, result, visited);
+            }
           }
         }
       }

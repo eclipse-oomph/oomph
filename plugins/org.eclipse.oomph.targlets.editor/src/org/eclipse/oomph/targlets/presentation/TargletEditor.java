@@ -555,6 +555,12 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
         }
       }
     }
+
+    @Override
+    public String toString()
+    {
+      return TargletEditor.class.getSimpleName();
+    }
   };
 
   /**
