@@ -83,6 +83,9 @@ Eike Stepper - initial API and implementation
                 <configuration>
                   <excludes>
                     <plugin id="org.eclipse.oomph.releng.helpcenter"/>
+                    <plugin id="org.apache.commons.codec"/>
+                    <plugin id="org.apache.httpcomponents.httpclient"/>
+                    <plugin id="org.apache.httpcomponents.httpcore"/>
                   </excludes>
                 </configuration>
               </execution>

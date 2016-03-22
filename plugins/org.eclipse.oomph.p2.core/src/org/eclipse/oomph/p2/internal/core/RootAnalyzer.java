@@ -74,7 +74,7 @@ public final class RootAnalyzer
     }
   }
 
-  private static void removeImplicitUnits(Set<IInstallableUnit> ius, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor)
+  public static void removeImplicitUnits(Set<IInstallableUnit> ius, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor)
   {
     Set<IInstallableUnit> rootIUs = new HashSet<IInstallableUnit>(ius);
     Set<IInstallableUnit> visitedIUs = new HashSet<IInstallableUnit>();

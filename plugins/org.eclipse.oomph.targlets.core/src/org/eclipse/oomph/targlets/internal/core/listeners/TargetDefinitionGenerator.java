@@ -358,14 +358,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
     Map<String, IMetadataRepository> queryables = sortMetadataRepositories(targlet, metadataRepositories, preferredURLs, monitor);
 
-    Map<IMetadataRepository, Set<IInstallableUnit>> result = assignUnits(queryables, extraUnits, resolvedIUs, singleLocation);
-
-    if (!generateImplicitUnits)
-    {
-      RootAnalyzer.removeImplicitUnits(result, monitor);
-    }
-
-    return result;
+    return assignUnits(queryables, extraUnits, generateImplicitUnits, singleLocation, resolvedIUs, monitor);
   }
 
   private static Set<IRequiredCapability> getRootRequirements(Targlet targlet, IInstallableUnit artificialRoot,
@@ -517,7 +510,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   }
 
   private static Map<IMetadataRepository, Set<IInstallableUnit>> assignUnits(Map<String, IMetadataRepository> queryables, Set<IVersionedId> extraUnits,
-      Set<IInstallableUnit> resolvedIUs, boolean singleLocation)
+      boolean generateImplicitUnits, boolean singleLocation, Set<IInstallableUnit> resolvedIUs, IProgressMonitor monitor)
   {
     Map<IMetadataRepository, Set<IInstallableUnit>> result = new LinkedHashMap<IMetadataRepository, Set<IInstallableUnit>>();
 
@@ -545,6 +538,12 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
           }
 
           ius.addAll(resolvedIUs);
+
+          if (!generateImplicitUnits)
+          {
+            RootAnalyzer.removeImplicitUnits(ius, queryable, monitor);
+          }
+
           first = false;
         }
       }
@@ -579,6 +578,11 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
             break;
           }
         }
+      }
+
+      if (!generateImplicitUnits)
+      {
+        RootAnalyzer.removeImplicitUnits(result, monitor);
       }
     }
 
