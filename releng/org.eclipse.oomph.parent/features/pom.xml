@@ -82,10 +82,11 @@ Eike Stepper - initial API and implementation
                 </goals>
                 <configuration>
                   <excludes>
-                    <plugin id="org.eclipse.oomph.releng.helpcenter"/>
                     <plugin id="org.apache.commons.codec"/>
                     <plugin id="org.apache.httpcomponents.httpclient"/>
                     <plugin id="org.apache.httpcomponents.httpcore"/>
+                    <plugin id="org.eclipse.nebula.widgets.tablecombo"/>
+                    <plugin id="org.eclipse.oomph.releng.helpcenter"/>
                   </excludes>
                 </configuration>
               </execution>
