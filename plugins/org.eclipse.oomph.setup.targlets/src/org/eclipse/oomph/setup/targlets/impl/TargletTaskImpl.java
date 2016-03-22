@@ -58,11 +58,14 @@ import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.core.target.ITargetPlatformService;
 import org.eclipse.pde.core.target.NameVersionDescriptor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -1075,6 +1078,31 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
             }
 
             targetDefinition.setTargetLocations(newLocations);
+          }
+          else if (!targetName.equals("Oomph"))
+          {
+            // With bug 431316 the default TargletContainer ID was changed from "Oomph" to "Modular Target".
+            // Remove the old "Oomph" TargletContainer from the target definition to prevent duplicate/wrong resolution.
+
+            ITargetLocation[] oldLocations = targetDefinition.getTargetLocations();
+            if (oldLocations != null && oldLocations.length != 0)
+            {
+              List<ITargetLocation> list = new ArrayList<ITargetLocation>(Arrays.asList(oldLocations));
+              for (Iterator<ITargetLocation> it = list.iterator(); it.hasNext();)
+              {
+                ITargetLocation location = it.next();
+                if (location instanceof TargletContainer)
+                {
+                  TargletContainer container = (TargletContainer)location;
+                  if (container.getID().equals("Oomph"))
+                  {
+                    it.remove();
+                    targetDefinition.setTargetLocations(list.toArray(new ITargetLocation[list.size()]));
+                    break;
+                  }
+                }
+              }
+            }
           }
 
           boolean mirrors = context.isMirrors();
