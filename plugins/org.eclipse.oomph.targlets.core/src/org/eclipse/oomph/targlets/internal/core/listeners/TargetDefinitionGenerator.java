@@ -42,7 +42,6 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -82,6 +81,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   public static final String ANNOTATION_INCLUDE_SOURCE = "includeSource";
 
   public static final String ANNOTATION_EXTRA_UNITS = "extraUnits";
+
+  public static final String ANNOTATION_SINGLE_LOCATION = "singleLocation";
 
   private static final Pattern SEQUENCE_NUMBER_PATTERN = Pattern.compile("sequenceNumber=\"([0-9]+)\"");
 
@@ -129,9 +130,10 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
     File targetDefinition = new File(location);
 
-    Set<IVersionedId> extraUnits = getExtraUnits(annotation);
-    List<String> preferredURLs = Arrays.asList(getAnnotationDetail(annotation, ANNOTATION_PREFERRED_REPOSITORIES, "").split(","));
-    boolean generateImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_GENERATE_IMPLICIT_UNITS, false);
+    final Set<IVersionedId> extraUnits = getExtraUnits(annotation);
+    final List<String> preferredURLs = getPreferredRepositories(annotation);
+    final boolean singleLocation = isAnnotationDetail(annotation, ANNOTATION_SINGLE_LOCATION, false);
+    final boolean generateImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_GENERATE_IMPLICIT_UNITS, false);
     final boolean versions = isAnnotationDetail(annotation, ANNOTATION_GENERATE_VERSIONS, false);
     final boolean includeAllPlatforms = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_ALL_PLATFORMS, targlet.isIncludeAllPlatforms());
     final boolean includeConfigurePhase = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_CONFIGURE_PHASE, true);
@@ -139,7 +141,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     final boolean includeSource = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_SOURCE, targlet.isIncludeSources());
 
     final Map<IMetadataRepository, Set<IInstallableUnit>> repositoryIUs = analyzeRepositories(targlet, profile, artificialRoot, metadataRepositories,
-        workspaceIUInfos, extraUnits, preferredURLs, generateImplicitUnits, monitor);
+        workspaceIUInfos, extraUnits, preferredURLs, generateImplicitUnits, singleLocation, monitor);
 
     new FileUpdater()
     {
@@ -167,37 +169,84 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         builder.append("  <locations>");
         builder.append(nl);
 
-        for (Map.Entry<IMetadataRepository, Set<IInstallableUnit>> entry : repositoryIUs.entrySet())
+        if (singleLocation)
         {
-          IMetadataRepository repository = entry.getKey();
-          Set<IInstallableUnit> set = entry.getValue();
+          builder.append("    <location includeAllPlatforms=\"" + includeAllPlatforms + "\" includeConfigurePhase=\"" + includeConfigurePhase
+              + "\" includeMode=\"" + includeMode + "\" includeSource=\"" + includeSource + "\" type=\"InstallableUnit\">");
+          builder.append(nl);
 
-          List<IInstallableUnit> list = new ArrayList<IInstallableUnit>(set);
-          if (!list.isEmpty())
+          boolean first = true;
+
+          for (Map.Entry<IMetadataRepository, Set<IInstallableUnit>> entry : repositoryIUs.entrySet())
           {
-            builder.append("    <location includeAllPlatforms=\"" + includeAllPlatforms + "\" includeConfigurePhase=\"" + includeConfigurePhase
-                + "\" includeMode=\"" + includeMode + "\" includeSource=\"" + includeSource + "\" type=\"InstallableUnit\">");
-            builder.append(nl);
+            IMetadataRepository repository = entry.getKey();
+            Set<IInstallableUnit> set = entry.getValue();
 
-            Collection<String> elements = new LinkedHashSet<String>();
-            Collections.sort(list);
-
-            for (IInstallableUnit iu : list)
+            if (first)
             {
-              elements.add(formatElement(iu, versions));
-            }
+              List<IInstallableUnit> list = new ArrayList<IInstallableUnit>(set);
+              if (!list.isEmpty())
+              {
+                Collection<String> elements = new LinkedHashSet<String>();
+                Collections.sort(list);
 
-            for (String element : elements)
-            {
-              builder.append("      ");
-              builder.append(element);
-              builder.append(nl);
+                for (IInstallableUnit iu : list)
+                {
+                  elements.add(formatElement(iu, versions));
+                }
+
+                for (String element : elements)
+                {
+                  builder.append("      ");
+                  builder.append(element);
+                  builder.append(nl);
+                }
+
+                first = false;
+              }
             }
 
             builder.append("      <repository location=\"" + repository.getLocation() + "\"/>");
             builder.append(nl);
-            builder.append("    </location>");
-            builder.append(nl);
+          }
+
+          builder.append("    </location>");
+          builder.append(nl);
+        }
+        else
+        {
+          for (Map.Entry<IMetadataRepository, Set<IInstallableUnit>> entry : repositoryIUs.entrySet())
+          {
+            IMetadataRepository repository = entry.getKey();
+            Set<IInstallableUnit> set = entry.getValue();
+
+            List<IInstallableUnit> list = new ArrayList<IInstallableUnit>(set);
+            if (!list.isEmpty())
+            {
+              builder.append("    <location includeAllPlatforms=\"" + includeAllPlatforms + "\" includeConfigurePhase=\"" + includeConfigurePhase
+                  + "\" includeMode=\"" + includeMode + "\" includeSource=\"" + includeSource + "\" type=\"InstallableUnit\">");
+              builder.append(nl);
+
+              Collection<String> elements = new LinkedHashSet<String>();
+              Collections.sort(list);
+
+              for (IInstallableUnit iu : list)
+              {
+                elements.add(formatElement(iu, versions));
+              }
+
+              for (String element : elements)
+              {
+                builder.append("      ");
+                builder.append(element);
+                builder.append(nl);
+              }
+
+              builder.append("      <repository location=\"" + repository.getLocation() + "\"/>");
+              builder.append(nl);
+              builder.append("    </location>");
+              builder.append(nl);
+            }
           }
         }
 
@@ -244,7 +293,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     String values = annotation.getDetails().get(ANNOTATION_EXTRA_UNITS);
     if (!StringUtil.isEmpty(values))
     {
-      for (String value : values.split(" "))
+      for (String value : values.replace(',', ' ').split(" "))
       {
         if (!StringUtil.isEmpty(value))
         {
@@ -257,6 +306,25 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     }
 
     return extraUnits;
+  }
+
+  private static List<String> getPreferredRepositories(Annotation annotation)
+  {
+    List<String> preferredRepositories = new ArrayList<String>();
+
+    String values = annotation.getDetails().get(ANNOTATION_PREFERRED_REPOSITORIES);
+    if (!StringUtil.isEmpty(values))
+    {
+      for (String value : values.replace(',', ' ').split(" "))
+      {
+        if (!StringUtil.isEmpty(value))
+        {
+          preferredRepositories.add(value);
+        }
+      }
+    }
+
+    return preferredRepositories;
   }
 
   private static String formatElement(IInstallableUnit iu, boolean withVersion)
@@ -272,7 +340,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
   private static Map<IMetadataRepository, Set<IInstallableUnit>> analyzeRepositories(Targlet targlet, Profile profile, IInstallableUnit artificialRoot,
       List<IMetadataRepository> metadataRepositories, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, Set<IVersionedId> extraUnits,
-      List<String> preferredURLs, boolean generateImplicitUnits, IProgressMonitor monitor)
+      List<String> preferredURLs, boolean generateImplicitUnits, boolean singleLocation, IProgressMonitor monitor)
   {
     Set<IRequiredCapability> rootRequirements = getRootRequirements(targlet, artificialRoot, workspaceIUInfos);
 
@@ -288,9 +356,9 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       resolveRequirement(requirement, profile, workspaceIDs, resolvedIUs, new HashSet<IRequiredCapability>());
     }
 
-    Map<String, IMetadataRepository> queriables = sortMetadataRepositories(targlet, metadataRepositories, preferredURLs, monitor);
+    Map<String, IMetadataRepository> queryables = sortMetadataRepositories(targlet, metadataRepositories, preferredURLs, monitor);
 
-    Map<IMetadataRepository, Set<IInstallableUnit>> result = assignUnits(queriables, extraUnits, resolvedIUs);
+    Map<IMetadataRepository, Set<IInstallableUnit>> result = assignUnits(queryables, extraUnits, resolvedIUs, singleLocation);
 
     if (!generateImplicitUnits)
     {
@@ -368,7 +436,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         }
 
         // This check is not ideal because it does not consider versions.
-        // But the binary IUs induced by the workspace IUs may have any version, just depending on the involved repos.
+        // But the binary IUs induced by the workspace IUs may have any version, just depending on the involved repositories.
         // So for now, just exclude the IDs of all workspace IUs.
         if (workspaceIDs.contains(id))
         {
@@ -392,17 +460,17 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   private static Map<String, IMetadataRepository> sortMetadataRepositories(Targlet targlet, List<IMetadataRepository> metadataRepositories,
       List<String> preferredURLs, IProgressMonitor monitor)
   {
-    Map<String, IMetadataRepository> queriables = new LinkedHashMap<String, IMetadataRepository>();
+    Map<String, IMetadataRepository> queryables = new LinkedHashMap<String, IMetadataRepository>();
     for (String urlPrefix : preferredURLs)
     {
       for (IMetadataRepository metadataRepository : metadataRepositories)
       {
         String url = metadataRepository.getLocation().toString();
-        if (!queriables.containsKey(url))
+        if (!queryables.containsKey(url))
         {
           if (url.startsWith(urlPrefix))
           {
-            queriables.put(url, metadataRepository);
+            queryables.put(url, metadataRepository);
           }
         }
       }
@@ -413,12 +481,12 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       TargletsCorePlugin.checkCancelation(monitor);
       String url = repository.getURL();
 
-      if (!queriables.containsKey(url))
+      if (!queryables.containsKey(url))
       {
         IMetadataRepository metadataRepository = getMetadataRepository(url, metadataRepositories);
         if (metadataRepository != null)
         {
-          queriables.put(url, metadataRepository);
+          queryables.put(url, metadataRepository);
         }
       }
     }
@@ -426,12 +494,13 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     for (IMetadataRepository metadataRepository : metadataRepositories)
     {
       String url = metadataRepository.getLocation().toString();
-      if (!queriables.containsKey(url))
+      if (!queryables.containsKey(url))
       {
-        queriables.put(url, metadataRepository);
+        queryables.put(url, metadataRepository);
       }
     }
-    return queriables;
+
+    return queryables;
   }
 
   private static IMetadataRepository getMetadataRepository(String url, List<IMetadataRepository> metadataRepositories)
@@ -447,37 +516,68 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     return null;
   }
 
-  private static Map<IMetadataRepository, Set<IInstallableUnit>> assignUnits(Map<String, IMetadataRepository> queriables, Set<IVersionedId> extraUnits,
-      Set<IInstallableUnit> resolvedIUs)
+  private static Map<IMetadataRepository, Set<IInstallableUnit>> assignUnits(Map<String, IMetadataRepository> queryables, Set<IVersionedId> extraUnits,
+      Set<IInstallableUnit> resolvedIUs, boolean singleLocation)
   {
     Map<IMetadataRepository, Set<IInstallableUnit>> result = new LinkedHashMap<IMetadataRepository, Set<IInstallableUnit>>();
 
-    // Use keySet() to preserve iteration order!
-    for (String url : queriables.keySet())
+    if (singleLocation)
     {
-      IMetadataRepository metadataRepository = queriables.get(url);
-      Set<IInstallableUnit> ius = CollectionUtil.getSet(result, metadataRepository);
+      IQueryable<IInstallableUnit> queryable = QueryUtil.compoundQueryable(queryables.values());
+      boolean first = true;
 
-      for (Iterator<IVersionedId> it = extraUnits.iterator(); it.hasNext();)
+      // Use keySet() to preserve iteration order!
+      for (String url : queryables.keySet())
       {
-        IVersionedId extraUnit = it.next();
-        for (IInstallableUnit extraIU : metadataRepository.query(QueryUtil.createIUQuery(extraUnit), null))
+        IMetadataRepository metadataRepository = queryables.get(url);
+        Set<IInstallableUnit> ius = CollectionUtil.getSet(result, metadataRepository);
+
+        if (first)
         {
-          ius.add(extraIU);
-          it.remove();
-          break;
+          for (Iterator<IVersionedId> it = extraUnits.iterator(); it.hasNext();)
+          {
+            IVersionedId extraUnit = it.next();
+            for (IInstallableUnit extraIU : queryable.query(QueryUtil.createIUQuery(extraUnit), null))
+            {
+              ius.add(extraIU);
+              break;
+            }
+          }
+
+          ius.addAll(resolvedIUs);
+          first = false;
         }
       }
     }
-
-    for (IInstallableUnit iu : resolvedIUs)
+    else
     {
-      for (IMetadataRepository metadataRepository : queriables.values())
+      // Use keySet() to preserve iteration order!
+      for (String url : queryables.keySet())
       {
-        if (!metadataRepository.query(QueryUtil.createIUQuery(iu), null).isEmpty())
+        IMetadataRepository metadataRepository = queryables.get(url);
+        Set<IInstallableUnit> ius = CollectionUtil.getSet(result, metadataRepository);
+
+        for (Iterator<IVersionedId> it = extraUnits.iterator(); it.hasNext();)
         {
-          CollectionUtil.add(result, metadataRepository, iu);
-          break;
+          IVersionedId extraUnit = it.next();
+          for (IInstallableUnit extraIU : metadataRepository.query(QueryUtil.createIUQuery(extraUnit), null))
+          {
+            ius.add(extraIU);
+            it.remove(); // TODO Why is it removed? Should we log left-overs?
+            break;
+          }
+        }
+      }
+
+      for (IInstallableUnit iu : resolvedIUs)
+      {
+        for (IMetadataRepository metadataRepository : queryables.values())
+        {
+          if (!metadataRepository.query(QueryUtil.createIUQuery(iu), null).isEmpty())
+          {
+            CollectionUtil.add(result, metadataRepository, iu);
+            break;
+          }
         }
       }
     }

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="25">
+<target name="Generated from Oomph" sequenceNumber="26">
   <locations>
-    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
-      <unit id="org.apache.commons.codec.source" version="0.0.0"/>
-      <unit id="org.apache.httpcomponents.httpclient.source" version="0.0.0"/>
-      <unit id="org.apache.httpcomponents.httpcore.source" version="0.0.0"/>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="javax.xml.bind" version="0.0.0"/>
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.emf.ecoretools.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
@@ -13,24 +11,17 @@
       <unit id="org.eclipse.m2e.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.builds.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.sdk_feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.nebula.widgets.tablecombo" version="0.0.0"/>
       <unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
-      <unit id="org.eclipse.userstorage.ui" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/releases/mars"/>
-    </location>
-    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
-      <unit id="org.eclipse.nebula.widgets.tablecombo" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
-    </location>
-    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
-      <unit id="javax.xml.bind" version="0.0.0"/>
-      <unit id="org.hamcrest.library" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
-    </location>
-    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="false" type="InstallableUnit">
       <unit id="org.eclipse.userstorage.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
+      <unit id="org.hamcrest.library" version="0.0.0"/>
+      <repository location="http://download.eclipse.org/releases/mars"/>
+      <repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
+      <repository location="http://download.eclipse.org/technology/swtbot/releases/latest"/>
+      <repository location="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
       <repository location="http://download.eclipse.org/oomph/uss/updates/latest"/>
     </location>
   </locations>

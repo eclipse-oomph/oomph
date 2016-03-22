@@ -240,11 +240,11 @@
           </detail>
           <detail
               key="extraUnits">
-            <value>org.eclipse.equinox.executable.feature.group org.apache.commons.codec.source org.apache.httpcomponents.httpclient.source org.apache.httpcomponents.httpcore.source</value>
+            <value>org.eclipse.equinox.executable.feature.group</value>
           </detail>
           <detail
-              key="preferredRepositories">
-            <value>http://download.eclipse.org/eclipse/updates/</value>
+              key="singleLocation">
+            <value>true</value>
           </detail>
           <detail
               key="includeAllPlatforms">
@@ -252,7 +252,7 @@
           </detail>
           <detail
               key="includeSource">
-            <value>false</value>
+            <value>true</value>
           </detail>
         </annotation>
         <requirement
