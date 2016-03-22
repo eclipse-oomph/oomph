@@ -20,6 +20,16 @@
             name="target_platform_classpath_file"
             resolver="org.eclipse.oomph.util.internal.pde.TargetPlatformClasspathFile"
             supportsArgument="false"/>
+      <variable
+            description="Target Platform Feature Location"
+            name="target_platform_feature_location"
+            resolver="org.eclipse.oomph.util.internal.pde.TargetPlatformFeatureLocation"
+            supportsArgument="true"/>
+      <variable
+            description="Target Platform Plugin Location"
+            name="target_platform_plugin_location"
+            resolver="org.eclipse.oomph.util.internal.pde.TargetPlatformPluginLocation"
+            supportsArgument="true"/>
    </extension>
 
 </plugin>

@@ -24,7 +24,6 @@ import org.eclipse.pde.core.target.TargetBundle;
 import org.osgi.framework.Constants;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.Map;
@@ -35,7 +34,7 @@ import java.util.StringTokenizer;
  */
 public class TargetPlatformClasspathFile implements IDynamicVariableResolver
 {
-  public String resolveValue(IDynamicVariable variable, String containerID) throws CoreException
+  public String resolveValue(IDynamicVariable variable, String argument) throws CoreException
   {
     try
     {
@@ -71,7 +70,7 @@ public class TargetPlatformClasspathFile implements IDynamicVariableResolver
       IOUtil.writeLines(tempFile, "UTF-8", Collections.singletonList(builder.toString()));
       return tempFile.getAbsolutePath();
     }
-    catch (IOException ex)
+    catch (Exception ex)
     {
       UtilPDEPlugin.INSTANCE.coreException(ex);
     }
