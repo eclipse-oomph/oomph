@@ -40,6 +40,15 @@
    </extension>
 
    <extension
+         point="org.eclipse.jdt.core.classpathVariableInitializer">
+      <classpathVariableInitializer
+            class="org.eclipse.oomph.targlets.internal.core.variables.TargetPlatformBundlePoolInitializer"
+            readOnly="true"
+            variable="TARGET_PLATFORM_BUNDLE_POOL">
+      </classpathVariableInitializer>
+   </extension>
+
+   <extension
          point="org.eclipse.core.variables.dynamicVariables">
       <variable
             description="Targlet Container Profile ID"
