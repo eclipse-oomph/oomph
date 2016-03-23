@@ -9,7 +9,7 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .
 Require-Bundle: org.eclipse.help;bundle-version="[3.3.0,4.0.0)";resolution:=optional,
  org.eclipse.oomph.util.doc;bundle-version="[1.4.0,2.0.0)";resolution:=optional;visibility:=reexport,
- org.eclipse.oomph.p2;bundle-version="[1.3.0,2.0.0)";resolution:=optional;visibility:=reexport,
+ org.eclipse.oomph.p2;bundle-version="[1.4.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.p2.core;bundle-version="[1.4.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.p2.edit;bundle-version="[1.4.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.p2.ui;bundle-version="[1.4.0,2.0.0)";resolution:=optional;visibility:=reexport
