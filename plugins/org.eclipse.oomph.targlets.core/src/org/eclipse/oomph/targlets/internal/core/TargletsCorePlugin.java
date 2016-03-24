@@ -11,6 +11,7 @@
 package org.eclipse.oomph.targlets.internal.core;
 
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
+import org.eclipse.oomph.targlets.internal.core.variables.TargetPlatformBundlePoolInitializer;
 import org.eclipse.oomph.util.OomphPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -63,6 +64,7 @@ public final class TargletsCorePlugin extends OomphPlugin
     public void start(BundleContext context) throws Exception
     {
       super.start(context);
+      TargetPlatformBundlePoolInitializer.start();
       TargletContainerListenerRegistry.INSTANCE.start();
       WorkspaceIUImporter.INSTANCE.start();
     }
@@ -72,6 +74,7 @@ public final class TargletsCorePlugin extends OomphPlugin
     {
       WorkspaceIUImporter.INSTANCE.stop();
       TargletContainerListenerRegistry.INSTANCE.stop();
+      TargetPlatformBundlePoolInitializer.stop();
       super.stop(context);
     }
   }

@@ -12,6 +12,7 @@ package org.eclipse.oomph.targlets.internal.core.variables;
 
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
+import org.eclipse.oomph.util.pde.TargetPlatformListener;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
 import org.eclipse.core.runtime.CoreException;
@@ -29,6 +30,14 @@ public class TargetPlatformBundlePoolInitializer extends ClasspathVariableInitia
 {
   public static final String VARIABLE = "TARGET_PLATFORM_BUNDLE_POOL"; //$NON-NLS-1$
 
+  private static final TargetPlatformListener TARGET_PLATFORM_LISTENER = new TargetPlatformListener()
+  {
+    public void targetDefinitionActivated(ITargetDefinition oldTargetDefinition, ITargetDefinition newTargetDefinition) throws Exception
+    {
+      resetVariable();
+    }
+  };
+
   public TargetPlatformBundlePoolInitializer()
   {
   }
@@ -39,7 +48,7 @@ public class TargetPlatformBundlePoolInitializer extends ClasspathVariableInitia
     resetVariable();
   }
 
-  public static void resetVariable()
+  private static void resetVariable()
   {
     try
     {
@@ -67,5 +76,15 @@ public class TargetPlatformBundlePoolInitializer extends ClasspathVariableInitia
     {
       //$FALL-THROUGH$
     }
+  }
+
+  public static void start()
+  {
+    TargetPlatformUtil.addListener(TARGET_PLATFORM_LISTENER);
+  }
+
+  public static void stop()
+  {
+    TargetPlatformUtil.removeListener(TARGET_PLATFORM_LISTENER);
   }
 }
