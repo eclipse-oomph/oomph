@@ -610,10 +610,179 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
   }
 
   /**
+   * Pathological list preferences:
+   * <ul>
+   * <li> //instance/org.eclipse.ui.browser/browsers (order matters for //instance/org.eclipse.ui.browser/browser-choice)
+   * <li> //instance/org.eclipse.jdt.core/org.eclipse.jdt.core.compiler.taskTags (order matters for //instance/org.eclipse.jdt.core/org.eclipse.jdt.core.compiler.taskPriorities)
+   * <li> //instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.typefilter.disabled (enabling an item does not remove the item)
+   * <li> //instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.typefilter.enabled (disabling an item does not remove the item)
+   * </ul>
+   *
    * @author Ed Merks
    */
   public static class PreferenceHandler
   {
+    protected URI key;
+
+    protected String oldValue;
+
+    protected String newValue;
+
+    public PreferenceHandler(URI key)
+    {
+      this.key = key;
+    }
+
+    public boolean isIgnored()
+    {
+      return false;
+    }
+
+    public final boolean isNeeded(String oldValue, String newValue)
+    {
+      this.oldValue = oldValue;
+      this.newValue = newValue;
+      return isNeeded();
+    }
+
+    protected boolean isNeeded()
+    {
+      if (isExcluded())
+      {
+        return false;
+      }
+
+      String mergedValue = merge();
+      return !ObjectUtil.equals(mergedValue, oldValue);
+    }
+
+    protected boolean isExcluded()
+    {
+      // If the old value is an XML blob...
+      if (oldValue != null && oldValue.startsWith("<?xml "))
+      {
+        try
+        {
+          DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
+          Document document = documentBuilder.parse(new InputSource(new StringReader(oldValue)));
+          NodeList childNodes = document.getDocumentElement().getChildNodes();
+          for (int i = 0, length = childNodes.getLength(); i < length; ++i)
+          {
+            Node item = childNodes.item(i);
+            String nodeValue = item.getNodeValue();
+
+            // If there are any children that aren't simply whitespace content, then it's non-empty XML.
+            if (nodeValue == null || nodeValue.trim().length() != 0)
+            {
+              return true;
+            }
+          }
+        }
+        catch (Throwable throwable)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+
+      return false;
+    }
+
+    public String merge()
+    {
+      return newValue;
+    }
+
+    public String delta()
+    {
+      return newValue;
+    }
+
+    public void apply(SetupTaskContext context)
+    {
+    }
+
+    public static void main(String[] args)
+    {
+      PreferenceHandlerFactoryRegistry uriMappingRegistryImpl = (PreferenceHandlerFactoryRegistry)Factory.Registry.INSTANCE;
+      uriMappingRegistryImpl.put(URI.createURI("//"), null);
+      uriMappingRegistryImpl.put(URI.createURI("///"), null);
+      uriMappingRegistryImpl.put(URI.createURI("//instance/foo/bar/"), null);
+      uriMappingRegistryImpl.put(URI.createURI("//instance"), new Factory()
+      {
+        public PreferenceHandler create(URI key)
+        {
+          return null;
+        }
+      });
+
+      uriMappingRegistryImpl.getFactory(URI.createURI("//instance/foo/bar/myproperty"));
+      uriMappingRegistryImpl.getFactory(URI.createURI("//instance/fudge/bar/myproperty"));
+
+      {
+        PreferenceHandler handler = new ListPreferenceHandler(URI.createURI(""), "(?s)([^\\n]+\\n[0-9]+)", "([^\n]+)", "\n");
+        if (handler.isNeeded("a\n2\n", "b\n2\na\n1\n"))
+        {
+          String result = handler.merge();
+          System.out.println(result);
+        }
+        else
+        {
+          System.out.println("has conflict");
+        }
+      }
+
+      {
+        PreferenceHandler handler = new ListPreferenceHandler(URI.createURI(""), "(?s)([^\\n]+\\n[0-9]+)", "([^ \n]+) ([^\n]+)", "\n");
+        if (handler.isNeeded("a b\n2\n", "a b\n3\nb a\n2\na a\n1\n"))
+        {
+          String result = handler.merge();
+          System.out.println(result);
+        }
+        else
+        {
+          System.out.println("has conflict");
+        }
+      }
+    }
+
+    public static PreferenceHandler getHandler(String key)
+    {
+      URI keyURI = PreferencesFactory.eINSTANCE.createURI(key);
+      return getHandler(keyURI);
+    }
+
+    public static PreferenceHandler getHandler(URI key)
+    {
+      Factory factory = Factory.Registry.INSTANCE.getFactory(key);
+      if (factory == null)
+      {
+        return new PreferenceHandler(key);
+      }
+
+      return factory.create(key);
+    }
+
+    protected static void registerListHandlerFactory(String key, char itemSeparator, char keySeparator)
+    {
+      final String itemSeparatorStr = new String(new char[] { itemSeparator });
+      final String itemPattern = "([^" + itemSeparatorStr + "]+)";
+      final String keyPattern = keySeparator == (char)0 ? ".*" : "([^" + new String(new char[] { keySeparator }) + "]+)";
+
+      PreferenceHandlerFactoryRegistry registry = (PreferenceHandlerFactoryRegistry)Factory.Registry.INSTANCE;
+      registry.put(URI.createURI(key), new Factory()
+      {
+        public PreferenceHandler create(URI key)
+        {
+          return new ListPreferenceHandler(key, itemPattern, keyPattern, itemSeparatorStr);
+        }
+      });
+    }
+
+    protected static void registerListHandlerFactory(String key, char itemSeparator)
+    {
+      registerListHandlerFactory(key, itemSeparator, (char)0);
+    }
+
     static
     {
       PreferenceHandlerFactoryRegistry registry = (PreferenceHandlerFactoryRegistry)Factory.Registry.INSTANCE;
@@ -624,6 +793,12 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
           return new PreferenceHandler(key);
         }
       });
+
+      registerListHandlerFactory("//instance/org.eclipse.ui.workbench/ENABLED_DECORATORS", ',', ':');
+
+      // See Javadoc on PreferenceHandler:
+      // registerListHandlerFactory("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.typefilter.disabled", ';');
+      // registerListHandlerFactory("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.typefilter.enabled", ';');
 
       registry.put(URI.createURI("//instance/org.eclipse.ui.workbench/"), new Factory()
       {
@@ -667,7 +842,8 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
             {
               return new ContentTypeFileExtensionPreferenceHandler(key);
             }
-            else if (property.equals("charset"))
+
+            if (property.equals("charset"))
             {
               return new ContentTypeCharsetPreferenceHandler(key);
             }
@@ -801,146 +977,6 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       });
     }
 
-    protected URI key;
-
-    protected String oldValue;
-
-    protected String newValue;
-
-    public static PreferenceHandler getHandler(String key)
-    {
-      URI keyURI = PreferencesFactory.eINSTANCE.createURI(key);
-      return getHandler(keyURI);
-    }
-
-    public static PreferenceHandler getHandler(URI key)
-    {
-      Factory factory = Factory.Registry.INSTANCE.getFactory(key);
-      if (factory == null)
-      {
-        return new PreferenceHandler(key);
-      }
-
-      return factory.create(key);
-    }
-
-    public PreferenceHandler(URI key)
-    {
-      this.key = key;
-    }
-
-    public boolean isIgnored()
-    {
-      return false;
-    }
-
-    public final boolean isNeeded(String oldValue, String newValue)
-    {
-      this.oldValue = oldValue;
-      this.newValue = newValue;
-      return isNeeded();
-    }
-
-    protected boolean isNeeded()
-    {
-      if (isExcluded())
-      {
-        return false;
-      }
-
-      String mergedValue = merge();
-      return !ObjectUtil.equals(mergedValue, oldValue);
-    }
-
-    protected boolean isExcluded()
-    {
-      // If the old value is an XML blob...
-      if (oldValue != null && oldValue.startsWith("<?xml "))
-      {
-        try
-        {
-          DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
-          Document document = documentBuilder.parse(new InputSource(new StringReader(oldValue)));
-          NodeList childNodes = document.getDocumentElement().getChildNodes();
-          for (int i = 0, length = childNodes.getLength(); i < length; ++i)
-          {
-            Node item = childNodes.item(i);
-            String nodeValue = item.getNodeValue();
-
-            // If there are any children that aren't simply whitespace content, then it's non-empty XML.
-            if (nodeValue == null || nodeValue.trim().length() != 0)
-            {
-              return true;
-            }
-          }
-        }
-        catch (Throwable throwable)
-        {
-          //$FALL-THROUGH$
-        }
-      }
-
-      return false;
-    }
-
-    public String merge()
-    {
-      return newValue;
-    }
-
-    public String delta()
-    {
-      return newValue;
-    }
-
-    public void apply(SetupTaskContext context)
-    {
-    }
-
-    public static void main(String[] args)
-    {
-      PreferenceHandlerFactoryRegistry uriMappingRegistryImpl = (PreferenceHandlerFactoryRegistry)Factory.Registry.INSTANCE;
-      uriMappingRegistryImpl.put(URI.createURI("//"), null);
-      uriMappingRegistryImpl.put(URI.createURI("///"), null);
-      uriMappingRegistryImpl.put(URI.createURI("//instance/foo/bar/"), null);
-      uriMappingRegistryImpl.put(URI.createURI("//instance"), new Factory()
-      {
-        public PreferenceHandler create(URI key)
-        {
-          return null;
-        }
-      });
-
-      uriMappingRegistryImpl.getFactory(URI.createURI("//instance/foo/bar/myproperty"));
-      uriMappingRegistryImpl.getFactory(URI.createURI("//instance/fudge/bar/myproperty"));
-
-      {
-        PreferenceHandler handler = new ListPreferenceHandler(URI.createURI(""), "(?s)([^\\n]+\\n[0-9]+)", "([^\n]+)", "\n");
-        if (handler.isNeeded("a\n2\n", "b\n2\na\n1\n"))
-        {
-          String result = handler.merge();
-          System.out.println(result);
-        }
-        else
-        {
-          System.out.println("has conflict");
-        }
-      }
-
-      {
-        PreferenceHandler handler = new ListPreferenceHandler(URI.createURI(""), "(?s)([^\\n]+\\n[0-9]+)", "([^ \n]+) ([^\n]+)", "\n");
-        if (handler.isNeeded("a b\n2\n", "a b\n3\nb a\n2\na a\n1\n"))
-        {
-          String result = handler.merge();
-          System.out.println(result);
-        }
-        else
-        {
-          System.out.println("has conflict");
-        }
-      }
-    }
-
     /**
      * @author Ed Merks
      */
@@ -960,6 +996,9 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     }
   }
 
+  /**
+   * @author Ed Merks
+   */
   public static class IgnoredPreferenceHandler extends PreferenceHandler
   {
     public IgnoredPreferenceHandler(URI key)
@@ -1164,6 +1203,59 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     }
   }
 
+  /**
+   * @author Ed Merks
+   */
+  public static class XMLPreferenceHandler extends ListPreferenceHandler
+  {
+    public XMLPreferenceHandler(URI key, String tag, String[] requiredAttributes, String[] optionalAttributes)
+    {
+      super(key, getItemPattern(tag), getKeyPattern(requiredAttributes, optionalAttributes), "\n");
+    }
+
+    private static String getItemPattern(String tag)
+    {
+      return "(?s)(<" + tag + " (?:[^>]*/>|.*?</" + tag + ">))";
+    }
+
+    private static String getKeyPattern(String[] requiredAttributes, String[] optionalAttributes)
+    {
+      Set<String> attributes = new TreeSet<String>(Arrays.asList(requiredAttributes));
+      List<String> optional = optionalAttributes == null ? Collections.<String> emptyList() : Arrays.asList(optionalAttributes);
+      attributes.addAll(optional);
+
+      StringBuilder result = new StringBuilder();
+      for (String attribute : attributes)
+      {
+        int length = result.length();
+
+        boolean isOptional = optional.contains(attribute);
+        if (isOptional)
+        {
+          result.append("(?:");
+        }
+
+        if (length != 0)
+        {
+          result.append("[^>]+");
+        }
+
+        result.append(attribute);
+        result.append("=\"([^\"]+)\"");
+
+        if (isOptional)
+        {
+          result.append(")?");
+        }
+      }
+
+      return result.toString();
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
   public static class TeamFileModePreferenceHandler extends ListPreferenceHandler
   {
     protected static final Set<String> DEFAULT_NAME_MAPPINGS = new LinkedHashSet<String>();
@@ -1253,56 +1345,6 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         int type = (Integer)ReflectUtil.invokeMethod("getType", mapping);
         target.add(string + "\n" + type + "\n");
       }
-    }
-  }
-
-  /**
-   * @author Ed Merks
-   */
-  public static class XMLPreferenceHandler extends ListPreferenceHandler
-  {
-    public XMLPreferenceHandler(URI key, String tag, String[] requiredAttributes, String[] optionalAttributes)
-    {
-      super(key, getItemPattern(tag), getKeyPattern(requiredAttributes, optionalAttributes), "\n");
-    }
-
-    private static String getItemPattern(String tag)
-    {
-      return "(?s)(<" + tag + " (?:[^>]*/>|.*?</" + tag + ">))";
-    }
-
-    private static String getKeyPattern(String[] requiredAttributes, String[] optionalAttributes)
-    {
-      Set<String> attributes = new TreeSet<String>(Arrays.asList(requiredAttributes));
-      List<String> optional = optionalAttributes == null ? Collections.<String> emptyList() : Arrays.asList(optionalAttributes);
-      attributes.addAll(optional);
-
-      StringBuilder result = new StringBuilder();
-      for (String attribute : attributes)
-      {
-        int length = result.length();
-
-        boolean isOptional = optional.contains(attribute);
-        if (isOptional)
-        {
-          result.append("(?:");
-        }
-
-        if (length != 0)
-        {
-          result.append("[^>]+");
-        }
-
-        result.append(attribute);
-        result.append("=\"([^\"]+)\"");
-
-        if (isOptional)
-        {
-          result.append(")?");
-        }
-      }
-
-      return result.toString();
     }
   }
 
