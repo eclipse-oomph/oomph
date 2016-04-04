@@ -267,29 +267,31 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
       for (IProcess process : processes)
       {
         IStreamsProxy streamsProxy = process.getStreamsProxy();
-
-        IStreamMonitor outputStreamMonitor = streamsProxy.getOutputStreamMonitor();
-        if (outputStreamMonitor != null)
+        if (streamsProxy != null)
         {
-          outputStreamMonitor.addListener(new IStreamListener()
+          IStreamMonitor outputStreamMonitor = streamsProxy.getOutputStreamMonitor();
+          if (outputStreamMonitor != null)
           {
-            public void streamAppended(String text, IStreamMonitor monitor)
+            outputStreamMonitor.addListener(new IStreamListener()
             {
-              context.log(text.replace('\r', ' '));
-            }
-          });
-        }
+              public void streamAppended(String text, IStreamMonitor monitor)
+              {
+                context.log(text.replace('\r', ' '));
+              }
+            });
+          }
 
-        IStreamMonitor errorStreamMonitor = streamsProxy.getErrorStreamMonitor();
-        if (errorStreamMonitor != null)
-        {
-          errorStreamMonitor.addListener(new IStreamListener()
+          IStreamMonitor errorStreamMonitor = streamsProxy.getErrorStreamMonitor();
+          if (errorStreamMonitor != null)
           {
-            public void streamAppended(String text, IStreamMonitor monitor)
+            errorStreamMonitor.addListener(new IStreamListener()
             {
-              context.log(text.replace('\r', ' '), Severity.ERROR);
-            }
-          });
+              public void streamAppended(String text, IStreamMonitor monitor)
+              {
+                context.log(text.replace('\r', ' '), Severity.ERROR);
+              }
+            });
+          }
         }
       }
 
