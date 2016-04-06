@@ -814,6 +814,8 @@ public final class RecorderManager
     {
       initializeItem = new ToolItem(toolBar, SWT.PUSH);
 
+      initializeItem.setToolTipText("Initialize preference pages");
+
       final class Animator extends ButtonAnimator
       {
         public Animator(ToolItem toolItem)
