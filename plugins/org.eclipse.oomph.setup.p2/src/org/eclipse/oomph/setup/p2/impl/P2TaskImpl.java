@@ -826,6 +826,9 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         bundlePool = agent.addBundlePool(agentLocation.getParentFile());
       }
 
+      IProvisioningAgent currentAgent = P2Util.getCurrentProvisioningAgent();
+      bundlePool.getAgent().getProvisioningAgent().registerService(IProvisioningAgent.INSTALLER_AGENT, currentAgent);
+
       profile = bundlePool.getProfile(profileID);
       if (profile != null && context.put(FIRST_CALL_DETECTION_KEY, Boolean.TRUE) == null)
       {

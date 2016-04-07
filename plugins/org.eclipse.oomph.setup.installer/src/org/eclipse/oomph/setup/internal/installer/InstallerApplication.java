@@ -62,11 +62,7 @@ public class InstallerApplication implements IApplication
   protected Integer run(final IApplicationContext context) throws Exception
   {
     // This must come very early, before the first model is accessed, so that HTTPS can be authorized.
-    P2Util.getCurrentProvisioningAgent().registerService(UIServices.SERVICE_NAME, Installer.SERVICE_UI);
-
-    @SuppressWarnings("restriction")
-    IProvisioningAgent agent = (IProvisioningAgent)org.eclipse.equinox.internal.p2.core.helpers.ServiceHelper
-        .getService(org.eclipse.equinox.internal.p2.repository.Activator.getContext(), IProvisioningAgent.SERVICE_NAME);
+    IProvisioningAgent agent = P2Util.getCurrentProvisioningAgent();
     agent.registerService(UIServices.SERVICE_NAME, Installer.SERVICE_UI);
 
     final InstallerUI[] installerDialog = { null };
