@@ -87,9 +87,11 @@ import org.eclipse.equinox.p2.engine.spi.ProvisioningAction;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IInstallableUnitFragment;
+import org.eclipse.equinox.p2.metadata.IInstallableUnitPatch;
 import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.equinox.p2.metadata.IProvidedCapability;
 import org.eclipse.equinox.p2.metadata.IRequirement;
+import org.eclipse.equinox.p2.metadata.IRequirementChange;
 import org.eclipse.equinox.p2.metadata.ITouchpointData;
 import org.eclipse.equinox.p2.metadata.MetadataFactory;
 import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescription;
@@ -1447,6 +1449,16 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             Collection<IRequirement> host = installableUnitFragment.getHost();
             fragmentDescription.setHost(host.toArray(new IRequirement[host.size()]));
             description = fragmentDescription;
+          }
+          else if (iu instanceof IInstallableUnitPatch)
+          {
+            IInstallableUnitPatch installableUnitPatch = (IInstallableUnitPatch)iu;
+            MetadataFactory.InstallableUnitPatchDescription patchDescription = new MetadataFactory.InstallableUnitPatchDescription();
+            patchDescription.setApplicabilityScope(installableUnitPatch.getApplicabilityScope());
+            patchDescription.setLifeCycle(installableUnitPatch.getLifeCycle());
+            List<IRequirementChange> requirementsChange = installableUnitPatch.getRequirementsChange();
+            patchDescription.setRequirementChanges(requirementsChange.toArray(new IRequirementChange[requirementsChange.size()]));
+            description = patchDescription;
           }
           else
           {
