@@ -813,7 +813,7 @@ public final class RecorderManager
     if (hasPreferencePagesToInitialize(preferenceManager))
     {
       initializeItem = new ToolItem(toolBar, SWT.PUSH);
-
+      initializeItem.setImage(SetupUIPlugin.INSTANCE.getSWTImage("bulb0.png"));
       initializeItem.setToolTipText("Initialize preference pages");
 
       final class Animator extends ButtonAnimator
@@ -835,8 +835,6 @@ public final class RecorderManager
           return true;
         }
       }
-
-      initializeItem.setImage(SetupUIPlugin.INSTANCE.getSWTImage("bulb0.png"));
 
       new Animator(initializeItem).run();
 
