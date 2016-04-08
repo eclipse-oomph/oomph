@@ -101,8 +101,11 @@ public final class RootAnalyzer
         {
           P2CorePlugin.checkCancelation(monitor);
 
-          rootIUs.remove(requiredIU);
-          removeImplicitUnits(requiredIU, rootIUs, visitedIUs, queryable, monitor);
+          if (!iu.equals(requiredIU))
+          {
+            rootIUs.remove(requiredIU);
+            removeImplicitUnits(requiredIU, rootIUs, visitedIUs, queryable, monitor);
+          }
         }
       }
     }
