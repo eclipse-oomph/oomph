@@ -172,8 +172,7 @@
         xsi:type="setup.targlets:TargletTask">
       <targlet
           name="Platform Base, Update, and Ant"
-          activeRepositoryList="${eclipse.target.platform}"
-          includeAllPlatforms="true">
+          activeRepositoryList="${eclipse.target.platform}">
         <requirement
             name="*"/>
         <sourceLocator
@@ -271,8 +270,7 @@
         xsi:type="setup.targlets:TargletTask">
       <targlet
           name="Platform Documentation"
-          activeRepositoryList="${eclipse.target.platform}"
-          includeAllPlatforms="true">
+          activeRepositoryList="${eclipse.target.platform}">
         <requirement
             name="*"/>
         <sourceLocator
@@ -326,8 +324,7 @@
         xsi:type="setup.targlets:TargletTask">
       <targlet
           name="Platform Debug"
-          activeRepositoryList="${eclipse.target.platform}"
-          includeAllPlatforms="true">
+          activeRepositoryList="${eclipse.target.platform}">
         <requirement
             name="*"/>
         <sourceLocator
@@ -590,8 +587,7 @@
         xsi:type="setup.targlets:TargletTask">
       <targlet
           name="Platform UI Tools"
-          activeRepositoryList="${eclipse.target.platform}"
-          includeAllPlatforms="true">
+          activeRepositoryList="${eclipse.target.platform}">
         <requirement
             name="*"/>
         <sourceLocator
