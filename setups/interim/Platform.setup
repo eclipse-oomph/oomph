@@ -440,17 +440,6 @@
                   </detail>
                 </annotation>
               </operand>
-              <operand
-                  xsi:type="predicates:NamePredicate"
-                  pattern="org\.eclipse\.swt\.snippets">
-                <annotation
-                    source="http://www.eclipse.org/oomph/base/Warning">
-                  <detail
-                      key="diagnostic">
-                    <value>This bundle has dependencies that I don't know how to satisfy</value>
-                  </detail>
-                </annotation>
-              </operand>
             </operand>
           </predicate>
         </sourceLocator>
@@ -529,6 +518,11 @@
       </annotation>
       <description>Platform SWT</description>
     </setupTask>
+    <setupTask
+        xsi:type="setup:ResourceCopyTask"
+        excludedTriggers="BOOTSTRAP"
+        sourceURL="${git.clone.platform.swt.location|uri}/examples/org.eclipse.swt.snippets/.classpath_${osgi.ws}"
+        targetURL="${git.clone.platform.swt.location|uri}/examples/org.eclipse.swt.snippets/.classpath"/>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
       <targlet
