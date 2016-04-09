@@ -93,7 +93,7 @@
         <repository
             url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.6-N-builds"/>
+            url="http://download.eclipse.org/eclipse/updates/4.6-I-builds"/>
       </repositoryList>
       <repositoryList
           name="Mars">
