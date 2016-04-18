@@ -215,38 +215,6 @@
         </predicate>
       </workingSet>
     </setupTask>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.jdt.core/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.jdt.annotation/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.jdt.annotation_v1/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.jdt.apt.core/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.jdt.apt.pluggable.core/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.jdt.apt.ui/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.jdt.compiler.apt/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.jdt.compiler.tool/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
     <project
         name="tests"
         label="Tests">
@@ -280,38 +248,6 @@
           </predicate>
         </workingSet>
       </setupTask>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.apt.pluggable.tests/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.apt.tests/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.compiler.apt.tests/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.compiler.tool.tests/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.core.tests.builder/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.core.tests.compiler/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.core.tests.model/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.core.tests.performance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
       <stream
           name="master"
           label="Master">
@@ -422,26 +358,6 @@
         </workingSet>
       </setupTask>
       <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.text.tests/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.ui.tests/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.ui.tests.refactoring/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.ltk.core.refactoring.tests/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.ltk.ui.refactoring.tests/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
           xsi:type="projects:ProjectsImportTask">
         <sourceLocator
             rootFolder="${git.clone.jdt.debug.location/}org.eclipse.jdt.debug.jdi.tests"/>
@@ -532,34 +448,6 @@
         </predicate>
       </workingSet>
     </setupTask>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.jdt.junit/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.jdt.junit.core/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.jdt.junit.runtime/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.jdt.junit4.runtime/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.jdt.ui/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.ltk.core.refactoring/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.ltk.ui.refactoring/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
     <project
         name="tests"
         label="Tests">
@@ -592,26 +480,6 @@
           </predicate>
         </workingSet>
       </setupTask>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.text.tests/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.ui.tests/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.ui.tests.refactoring/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.ltk.core.refactoring.tests/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.ltk.ui.refactoring.tests/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
       <stream
           name="master"
           label="Master">
@@ -650,14 +518,6 @@
           </predicate>
         </workingSet>
       </setupTask>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.ui.examples.javafamily/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
-      <setupTask
-          xsi:type="setup:PreferenceTask"
-          key="/project/org.eclipse.jdt.ui.examples.projects/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-          value="warning"/>
       <stream
           name="master"
           label="Master">
