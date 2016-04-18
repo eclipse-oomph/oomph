@@ -15,6 +15,7 @@ import org.eclipse.oomph.setup.log.ProgressLog.Severity;
 import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.pde.APIBaselineFromTargetTask;
 import org.eclipse.oomph.setup.pde.PDEPackage;
+import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
@@ -217,11 +218,23 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
       return false;
     }
 
+    String name = getName();
+    String targetName = getTargetName();
+    if (name == null || targetName == null)
+    {
+      return false;
+    }
+
+    target = TargetPlatformUtil.getTargetDefinition(targetName);
+
+    boolean hasTargetDefinitionUpdates = SetupUtil.getResolvingTargetDefinitions(context).contains(targetName);
+    if (target == null && !hasTargetDefinitionUpdates)
+    {
+      return false;
+    }
+
     baselineManager = apiPlugin.getApiBaselineManager();
-    baselineName = getName() + "-" + getVersion();
-
-    target = TargetPlatformUtil.getTargetDefinition(getTargetName());
-
+    baselineName = name;
     baseline = baselineManager.getApiBaseline(baselineName);
     if (baseline == null)
     {
@@ -245,7 +258,7 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
     wasActive = baselineManager.getDefaultApiBaseline() == baseline;
     backupRequired = !ApiModelFactory.isDerivedFromTarget(baseline, target);
 
-    return backupRequired || target == null || !wasActive && isActivate();
+    return backupRequired || target == null || !wasActive && isActivate() || hasTargetDefinitionUpdates;
   }
 
   public void perform(SetupTaskContext context) throws Exception
@@ -269,6 +282,11 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
     }
 
     String targetName = getTargetName();
+    if (target == null)
+    {
+      target = TargetPlatformUtil.getTargetDefinition(targetName);
+    }
+
     if (target == null)
     {
       context.log("Creating new empty baseline because target " + targetName + " was not found.", Severity.WARNING);

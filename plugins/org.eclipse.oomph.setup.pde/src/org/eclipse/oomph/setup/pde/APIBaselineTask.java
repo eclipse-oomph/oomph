@@ -19,6 +19,7 @@ package org.eclipse.oomph.setup.pde;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getVersion <em>Version</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getLocation <em>Location</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getRemoteURI <em>Remote URI</em>}</li>
  * </ul>
@@ -29,6 +30,32 @@ package org.eclipse.oomph.setup.pde;
  */
 public interface APIBaselineTask extends AbstractAPIBaselineTask
 {
+  /**
+   * Returns the value of the '<em><b>Version</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Version</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Version</em>' attribute.
+   * @see #setVersion(String)
+   * @see org.eclipse.oomph.setup.pde.PDEPackage#getAPIBaselineTask_Version()
+   * @model required="true"
+   * @generated
+   */
+  String getVersion();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getVersion <em>Version</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Version</em>' attribute.
+   * @see #getVersion()
+   * @generated
+   */
+  void setVersion(String value);
+
   /**
    * Returns the value of the '<em><b>Location</b></em>' attribute.
    * The default value is <code>""</code>.

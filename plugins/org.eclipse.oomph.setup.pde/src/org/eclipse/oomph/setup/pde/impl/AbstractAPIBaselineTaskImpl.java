@@ -27,7 +27,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.pde.impl.AbstractAPIBaselineTaskImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.pde.impl.AbstractAPIBaselineTaskImpl#getVersion <em>Version</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.impl.AbstractAPIBaselineTaskImpl#isActivate <em>Activate</em>}</li>
  * </ul>
  *
@@ -54,26 +53,6 @@ public abstract class AbstractAPIBaselineTaskImpl extends SetupTaskImpl implemen
    * @ordered
    */
   protected String name = NAME_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getVersion()
-   * @generated
-   * @ordered
-   */
-  protected static final String VERSION_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getVersion()
-   * @generated
-   * @ordered
-   */
-  protected String version = VERSION_EDEFAULT;
 
   /**
    * The default value of the '{@link #isActivate() <em>Activate</em>}' attribute.
@@ -146,31 +125,6 @@ public abstract class AbstractAPIBaselineTaskImpl extends SetupTaskImpl implemen
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getVersion()
-  {
-    return version;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setVersion(String newVersion)
-  {
-    String oldVersion = version;
-    version = newVersion;
-    if (eNotificationRequired())
-    {
-      eNotify(new ENotificationImpl(this, Notification.SET, PDEPackage.ABSTRACT_API_BASELINE_TASK__VERSION, oldVersion, version));
-    }
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public boolean isActivate()
   {
     return activate;
@@ -203,8 +157,6 @@ public abstract class AbstractAPIBaselineTaskImpl extends SetupTaskImpl implemen
     {
       case PDEPackage.ABSTRACT_API_BASELINE_TASK__NAME:
         return getName();
-      case PDEPackage.ABSTRACT_API_BASELINE_TASK__VERSION:
-        return getVersion();
       case PDEPackage.ABSTRACT_API_BASELINE_TASK__ACTIVATE:
         return isActivate();
     }
@@ -223,9 +175,6 @@ public abstract class AbstractAPIBaselineTaskImpl extends SetupTaskImpl implemen
     {
       case PDEPackage.ABSTRACT_API_BASELINE_TASK__NAME:
         setName((String)newValue);
-        return;
-      case PDEPackage.ABSTRACT_API_BASELINE_TASK__VERSION:
-        setVersion((String)newValue);
         return;
       case PDEPackage.ABSTRACT_API_BASELINE_TASK__ACTIVATE:
         setActivate((Boolean)newValue);
@@ -247,9 +196,6 @@ public abstract class AbstractAPIBaselineTaskImpl extends SetupTaskImpl implemen
       case PDEPackage.ABSTRACT_API_BASELINE_TASK__NAME:
         setName(NAME_EDEFAULT);
         return;
-      case PDEPackage.ABSTRACT_API_BASELINE_TASK__VERSION:
-        setVersion(VERSION_EDEFAULT);
-        return;
       case PDEPackage.ABSTRACT_API_BASELINE_TASK__ACTIVATE:
         setActivate(ACTIVATE_EDEFAULT);
         return;
@@ -269,8 +215,6 @@ public abstract class AbstractAPIBaselineTaskImpl extends SetupTaskImpl implemen
     {
       case PDEPackage.ABSTRACT_API_BASELINE_TASK__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case PDEPackage.ABSTRACT_API_BASELINE_TASK__VERSION:
-        return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
       case PDEPackage.ABSTRACT_API_BASELINE_TASK__ACTIVATE:
         return activate != ACTIVATE_EDEFAULT;
     }
@@ -293,8 +237,6 @@ public abstract class AbstractAPIBaselineTaskImpl extends SetupTaskImpl implemen
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (name: ");
     result.append(name);
-    result.append(", version: ");
-    result.append(version);
     result.append(", activate: ");
     result.append(activate);
     result.append(')');

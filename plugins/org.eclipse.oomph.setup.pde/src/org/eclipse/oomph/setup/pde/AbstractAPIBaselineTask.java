@@ -22,7 +22,6 @@ import org.eclipse.oomph.setup.SetupTask;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask#getName <em>Name</em>}</li>
- *   <li>{@link org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask#getVersion <em>Version</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask#isActivate <em>Activate</em>}</li>
  * </ul>
  *
@@ -57,32 +56,6 @@ public interface AbstractAPIBaselineTask extends SetupTask
    * @generated
    */
   void setName(String value);
-
-  /**
-   * Returns the value of the '<em><b>Version</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Version</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Version</em>' attribute.
-   * @see #setVersion(String)
-   * @see org.eclipse.oomph.setup.pde.PDEPackage#getAbstractAPIBaselineTask_Version()
-   * @model required="true"
-   * @generated
-   */
-  String getVersion();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask#getVersion <em>Version</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Version</em>' attribute.
-   * @see #getVersion()
-   * @generated
-   */
-  void setVersion(String value);
 
   /**
    * Returns the value of the '<em><b>Activate</b></em>' attribute.

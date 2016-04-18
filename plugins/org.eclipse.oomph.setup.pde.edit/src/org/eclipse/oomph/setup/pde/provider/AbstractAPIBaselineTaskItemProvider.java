@@ -24,6 +24,8 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask} object.
@@ -58,7 +60,6 @@ public class AbstractAPIBaselineTaskItemProvider extends SetupTaskItemProvider
       super.getPropertyDescriptors(object);
 
       addNamePropertyDescriptor(object);
-      addVersionPropertyDescriptor(object);
       addActivatePropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
@@ -76,20 +77,6 @@ public class AbstractAPIBaselineTaskItemProvider extends SetupTaskItemProvider
         getString("_UI_AbstractAPIBaselineTask_name_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_AbstractAPIBaselineTask_name_feature", "_UI_AbstractAPIBaselineTask_type"),
         PDEPackage.Literals.ABSTRACT_API_BASELINE_TASK__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
-  }
-
-  /**
-   * This adds a property descriptor for the Version feature.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  protected void addVersionPropertyDescriptor(Object object)
-  {
-    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_AbstractAPIBaselineTask_version_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_AbstractAPIBaselineTask_version_feature", "_UI_AbstractAPIBaselineTask_type"),
-        PDEPackage.Literals.ABSTRACT_API_BASELINE_TASK__VERSION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -126,8 +113,41 @@ public class AbstractAPIBaselineTaskItemProvider extends SetupTaskItemProvider
   @Override
   public String getText(Object object)
   {
-    String label = ((AbstractAPIBaselineTask)object).getName();
-    return label == null || label.length() == 0 ? getString("_UI_AbstractAPIBaselineTask_type") : getString("_UI_AbstractAPIBaselineTask_type") + " " + label;
+    AbstractAPIBaselineTask apiBaselineTask = (AbstractAPIBaselineTask)object;
+    StringBuilder builder = new StringBuilder();
+
+    String name = getName(object);
+    Pattern NAME_LABEL_PATTERN = Pattern.compile("(.*?)[\\s-_]*(API)?[\\s-_]*(Baseline)?[\\s]*", Pattern.CASE_INSENSITIVE);
+    Matcher matcher = NAME_LABEL_PATTERN.matcher(name);
+    if (matcher.matches())
+    {
+      builder.append(matcher.group(1));
+    }
+    else
+    {
+      builder.append(name);
+    }
+
+    if (builder.length() != 0)
+    {
+      builder.append(' ');
+    }
+
+    builder.append(getString("_UI_APIBaselineTask_type"));
+
+    if (apiBaselineTask.isActivate())
+    {
+      builder.append(", activate");
+    }
+
+    return builder.toString();
+  }
+
+  protected String getName(Object object)
+  {
+    AbstractAPIBaselineTask apiBaselineTask = (AbstractAPIBaselineTask)object;
+    String name = apiBaselineTask.getName();
+    return name == null ? "" : name;
   }
 
   /**
@@ -145,7 +165,6 @@ public class AbstractAPIBaselineTaskItemProvider extends SetupTaskItemProvider
     switch (notification.getFeatureID(AbstractAPIBaselineTask.class))
     {
       case PDEPackage.ABSTRACT_API_BASELINE_TASK__NAME:
-      case PDEPackage.ABSTRACT_API_BASELINE_TASK__VERSION:
       case PDEPackage.ABSTRACT_API_BASELINE_TASK__ACTIVATE:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;

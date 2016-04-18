@@ -11,8 +11,11 @@
 package org.eclipse.oomph.setup.util;
 
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.util.PropertiesUtil;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 /**
@@ -21,6 +24,8 @@ import java.util.regex.Matcher;
 public final class SetupUtil
 {
   private static final String DEFAULT_INSTALLER_UPDATE_URL = "http://download.eclipse.org/oomph/products/repository";
+
+  private static final String RESOLVING_TARGET_PLATFORM_DEFINITIONS = "oomph.setup.resolving.target.platform.definitions";
 
   public static final String INSTALLER_UPDATE_URL = PropertiesUtil.getProperty(SetupProperties.PROP_INSTALLER_UPDATE_URL, DEFAULT_INSTALLER_UPDATE_URL)
       .replace('\\', '/');
@@ -72,5 +77,18 @@ public final class SetupUtil
     }
 
     return result.toString();
+  }
+
+  public static Set<String> getResolvingTargetDefinitions(SetupTaskContext context)
+  {
+    @SuppressWarnings("unchecked")
+    Set<String> targetDefinitions = (Set<String>)context.get(RESOLVING_TARGET_PLATFORM_DEFINITIONS);
+    if (targetDefinitions == null)
+    {
+      targetDefinitions = new LinkedHashSet<String>();
+      context.put(RESOLVING_TARGET_PLATFORM_DEFINITIONS, targetDefinitions);
+    }
+
+    return targetDefinitions;
   }
 }

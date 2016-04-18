@@ -23,6 +23,7 @@ import org.eclipse.oomph.setup.targlets.ImplicitDependency;
 import org.eclipse.oomph.setup.targlets.SetupTargletsFactory;
 import org.eclipse.oomph.setup.targlets.SetupTargletsPackage;
 import org.eclipse.oomph.setup.targlets.TargletTask;
+import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.core.ITargletContainer;
@@ -950,7 +951,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   {
     copyTarglets = TargletFactory.eINSTANCE.copyTarglets(getTarglets());
 
-    return TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Boolean>()
+    boolean isNeeded = TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Boolean>()
     {
       public Boolean run(ITargetPlatformService service) throws CoreException
       {
@@ -1005,6 +1006,15 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         return false;
       }
     });
+
+    if (isNeeded)
+    {
+      SetupUtil.getResolvingTargetDefinitions(context).add(getSafeTargetName());
+
+      return true;
+    }
+
+    return false;
   }
 
   public void perform(final SetupTaskContext context) throws Exception

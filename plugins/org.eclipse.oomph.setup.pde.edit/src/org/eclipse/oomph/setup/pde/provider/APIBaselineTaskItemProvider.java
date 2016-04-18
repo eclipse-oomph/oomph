@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.pde.provider;
 
 import org.eclipse.oomph.setup.pde.APIBaselineTask;
 import org.eclipse.oomph.setup.pde.PDEPackage;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -55,10 +56,25 @@ public class APIBaselineTaskItemProvider extends AbstractAPIBaselineTaskItemProv
     {
       super.getPropertyDescriptors(object);
 
+      addVersionPropertyDescriptor(object);
       addLocationPropertyDescriptor(object);
       addRemoteURIPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Version feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addVersionPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_APIBaselineTask_version_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_version_feature", "_UI_APIBaselineTask_type"),
+        PDEPackage.Literals.API_BASELINE_TASK__VERSION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -121,34 +137,29 @@ public class APIBaselineTaskItemProvider extends AbstractAPIBaselineTaskItemProv
   @Override
   public String getText(Object object)
   {
-    APIBaselineTask apiBaselineTask = (APIBaselineTask)object;
-    StringBuilder builder = new StringBuilder(getString("_UI_APIBaselineTask_type"));
+    return super.getText(object);
+  }
 
+  @Override
+  protected String getName(Object object)
+  {
+    APIBaselineTask apiBaselineTask = (APIBaselineTask)object;
+    StringBuilder builder = new StringBuilder();
     String name = apiBaselineTask.getName();
-    if (name != null && name.length() != 0)
+    if (!StringUtil.isEmpty(name))
     {
-      builder.append(' ');
       builder.append(name);
     }
 
     String version = apiBaselineTask.getVersion();
-    if (version != null && version.length() != 0)
+    if (!StringUtil.isEmpty(version))
     {
-      if (name != null && name.length() != 0)
+      if (builder.length() != 0)
       {
         builder.append('-');
       }
-      else
-      {
-        builder.append(' ');
-      }
 
       builder.append(version);
-    }
-
-    if (apiBaselineTask.isActivate())
-    {
-      builder.append(", activate");
     }
 
     return builder.toString();
@@ -168,6 +179,7 @@ public class APIBaselineTaskItemProvider extends AbstractAPIBaselineTaskItemProv
 
     switch (notification.getFeatureID(APIBaselineTask.class))
     {
+      case PDEPackage.API_BASELINE_TASK__VERSION:
       case PDEPackage.API_BASELINE_TASK__LOCATION:
       case PDEPackage.API_BASELINE_TASK__REMOTE_URI:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

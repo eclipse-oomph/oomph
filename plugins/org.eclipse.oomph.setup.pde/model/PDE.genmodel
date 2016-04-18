@@ -12,12 +12,19 @@
       childCreationExtenders="true" ecorePackage="PDE.ecore#/" publicationLocation="/setups/models/PDE.ecore">
     <genClasses ecoreClass="PDE.ecore#//TargetPlatformTask">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute PDE.ecore#//TargetPlatformTask/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute PDE.ecore#//TargetPlatformTask/activate"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="PDE.ecore#//AbstractAPIBaselineTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute PDE.ecore#//AbstractAPIBaselineTask/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute PDE.ecore#//AbstractAPIBaselineTask/activate"/>
     </genClasses>
     <genClasses ecoreClass="PDE.ecore#//APIBaselineTask">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute PDE.ecore#//APIBaselineTask/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute PDE.ecore#//APIBaselineTask/version"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute PDE.ecore#//APIBaselineTask/location"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute PDE.ecore#//APIBaselineTask/remoteURI"/>
+    </genClasses>
+    <genClasses ecoreClass="PDE.ecore#//APIBaselineFromTargetTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute PDE.ecore#//APIBaselineFromTargetTask/targetName"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -153,6 +153,16 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getTargetPlatformTask_Activate()
+  {
+    return (EAttribute)targetPlatformTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getAbstractAPIBaselineTask()
   {
     return abstractAPIBaselineTaskEClass;
@@ -173,19 +183,9 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getAbstractAPIBaselineTask_Version()
-  {
-    return (EAttribute)abstractAPIBaselineTaskEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EAttribute getAbstractAPIBaselineTask_Activate()
   {
-    return (EAttribute)abstractAPIBaselineTaskEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)abstractAPIBaselineTaskEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -203,7 +203,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getAPIBaselineTask_Location()
+  public EAttribute getAPIBaselineTask_Version()
   {
     return (EAttribute)apiBaselineTaskEClass.getEStructuralFeatures().get(0);
   }
@@ -213,9 +213,19 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getAPIBaselineTask_RemoteURI()
+  public EAttribute getAPIBaselineTask_Location()
   {
     return (EAttribute)apiBaselineTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getAPIBaselineTask_RemoteURI()
+  {
+    return (EAttribute)apiBaselineTaskEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -273,13 +283,14 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
     // Create classes and their features
     targetPlatformTaskEClass = createEClass(TARGET_PLATFORM_TASK);
     createEAttribute(targetPlatformTaskEClass, TARGET_PLATFORM_TASK__NAME);
+    createEAttribute(targetPlatformTaskEClass, TARGET_PLATFORM_TASK__ACTIVATE);
 
     abstractAPIBaselineTaskEClass = createEClass(ABSTRACT_API_BASELINE_TASK);
     createEAttribute(abstractAPIBaselineTaskEClass, ABSTRACT_API_BASELINE_TASK__NAME);
-    createEAttribute(abstractAPIBaselineTaskEClass, ABSTRACT_API_BASELINE_TASK__VERSION);
     createEAttribute(abstractAPIBaselineTaskEClass, ABSTRACT_API_BASELINE_TASK__ACTIVATE);
 
     apiBaselineTaskEClass = createEClass(API_BASELINE_TASK);
+    createEAttribute(apiBaselineTaskEClass, API_BASELINE_TASK__VERSION);
     createEAttribute(apiBaselineTaskEClass, API_BASELINE_TASK__LOCATION);
     createEAttribute(apiBaselineTaskEClass, API_BASELINE_TASK__REMOTE_URI);
 
@@ -331,17 +342,19 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
     initEClass(targetPlatformTaskEClass, TargetPlatformTask.class, "TargetPlatformTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getTargetPlatformTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, TargetPlatformTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTargetPlatformTask_Activate(), ecorePackage.getEBoolean(), "activate", "true", 0, 1, TargetPlatformTask.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(abstractAPIBaselineTaskEClass, AbstractAPIBaselineTask.class, "AbstractAPIBaselineTask", IS_ABSTRACT, !IS_INTERFACE,
         IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getAbstractAPIBaselineTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, AbstractAPIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAbstractAPIBaselineTask_Version(), ecorePackage.getEString(), "version", null, 1, 1, AbstractAPIBaselineTask.class, !IS_TRANSIENT,
-        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getAbstractAPIBaselineTask_Activate(), ecorePackage.getEBoolean(), "activate", "true", 0, 1, AbstractAPIBaselineTask.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(apiBaselineTaskEClass, APIBaselineTask.class, "APIBaselineTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getAPIBaselineTask_Version(), ecorePackage.getEString(), "version", null, 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getAPIBaselineTask_Location(), ecorePackage.getEString(), "location", "", 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getAPIBaselineTask_RemoteURI(), ecorePackage.getEString(), "remoteURI", null, 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE,

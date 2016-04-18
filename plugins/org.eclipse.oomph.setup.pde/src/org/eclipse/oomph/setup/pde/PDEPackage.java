@@ -178,13 +178,22 @@ public interface PDEPackage extends EPackage
   int TARGET_PLATFORM_TASK__NAME = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Activate</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGET_PLATFORM_TASK__ACTIVATE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+
+  /**
    * The number of structural features of the '<em>Target Platform Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGET_PLATFORM_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+  int TARGET_PLATFORM_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.pde.impl.AbstractAPIBaselineTaskImpl <em>Abstract API Baseline Task</em>}' class.
@@ -296,22 +305,13 @@ public interface PDEPackage extends EPackage
   int ABSTRACT_API_BASELINE_TASK__NAME = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Version</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ABSTRACT_API_BASELINE_TASK__VERSION = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
-
-  /**
    * The feature id for the '<em><b>Activate</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ABSTRACT_API_BASELINE_TASK__ACTIVATE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+  int ABSTRACT_API_BASELINE_TASK__ACTIVATE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>Abstract API Baseline Task</em>' class.
@@ -320,7 +320,7 @@ public interface PDEPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ABSTRACT_API_BASELINE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
+  int ABSTRACT_API_BASELINE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl <em>API Baseline Task</em>}' class.
@@ -432,15 +432,6 @@ public interface PDEPackage extends EPackage
   int API_BASELINE_TASK__NAME = ABSTRACT_API_BASELINE_TASK__NAME;
 
   /**
-   * The feature id for the '<em><b>Version</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int API_BASELINE_TASK__VERSION = ABSTRACT_API_BASELINE_TASK__VERSION;
-
-  /**
    * The feature id for the '<em><b>Activate</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -450,13 +441,22 @@ public interface PDEPackage extends EPackage
   int API_BASELINE_TASK__ACTIVATE = ABSTRACT_API_BASELINE_TASK__ACTIVATE;
 
   /**
+   * The feature id for the '<em><b>Version</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int API_BASELINE_TASK__VERSION = ABSTRACT_API_BASELINE_TASK_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Location</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int API_BASELINE_TASK__LOCATION = ABSTRACT_API_BASELINE_TASK_FEATURE_COUNT + 0;
+  int API_BASELINE_TASK__LOCATION = ABSTRACT_API_BASELINE_TASK_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Remote URI</b></em>' attribute.
@@ -465,7 +465,7 @@ public interface PDEPackage extends EPackage
    * @generated
    * @ordered
    */
-  int API_BASELINE_TASK__REMOTE_URI = ABSTRACT_API_BASELINE_TASK_FEATURE_COUNT + 1;
+  int API_BASELINE_TASK__REMOTE_URI = ABSTRACT_API_BASELINE_TASK_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>API Baseline Task</em>' class.
@@ -474,7 +474,7 @@ public interface PDEPackage extends EPackage
    * @generated
    * @ordered
    */
-  int API_BASELINE_TASK_FEATURE_COUNT = ABSTRACT_API_BASELINE_TASK_FEATURE_COUNT + 2;
+  int API_BASELINE_TASK_FEATURE_COUNT = ABSTRACT_API_BASELINE_TASK_FEATURE_COUNT + 3;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.pde.impl.APIBaselineFromTargetTaskImpl <em>API Baseline From Target Task</em>}' class.
@@ -586,15 +586,6 @@ public interface PDEPackage extends EPackage
   int API_BASELINE_FROM_TARGET_TASK__NAME = ABSTRACT_API_BASELINE_TASK__NAME;
 
   /**
-   * The feature id for the '<em><b>Version</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int API_BASELINE_FROM_TARGET_TASK__VERSION = ABSTRACT_API_BASELINE_TASK__VERSION;
-
-  /**
    * The feature id for the '<em><b>Activate</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -643,6 +634,17 @@ public interface PDEPackage extends EPackage
   EAttribute getTargetPlatformTask_Name();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.pde.TargetPlatformTask#isActivate <em>Activate</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Activate</em>'.
+   * @see org.eclipse.oomph.setup.pde.TargetPlatformTask#isActivate()
+   * @see #getTargetPlatformTask()
+   * @generated
+   */
+  EAttribute getTargetPlatformTask_Activate();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask <em>Abstract API Baseline Task</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -664,17 +666,6 @@ public interface PDEPackage extends EPackage
   EAttribute getAbstractAPIBaselineTask_Name();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask#getVersion <em>Version</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Version</em>'.
-   * @see org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask#getVersion()
-   * @see #getAbstractAPIBaselineTask()
-   * @generated
-   */
-  EAttribute getAbstractAPIBaselineTask_Version();
-
-  /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.pde.AbstractAPIBaselineTask#isActivate <em>Activate</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -694,6 +685,17 @@ public interface PDEPackage extends EPackage
    * @generated
    */
   EClass getAPIBaselineTask();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getVersion <em>Version</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Version</em>'.
+   * @see org.eclipse.oomph.setup.pde.APIBaselineTask#getVersion()
+   * @see #getAPIBaselineTask()
+   * @generated
+   */
+  EAttribute getAPIBaselineTask_Version();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.pde.APIBaselineTask#getLocation <em>Location</em>}'.
@@ -780,6 +782,14 @@ public interface PDEPackage extends EPackage
     EAttribute TARGET_PLATFORM_TASK__NAME = eINSTANCE.getTargetPlatformTask_Name();
 
     /**
+     * The meta object literal for the '<em><b>Activate</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGET_PLATFORM_TASK__ACTIVATE = eINSTANCE.getTargetPlatformTask_Activate();
+
+    /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.pde.impl.AbstractAPIBaselineTaskImpl <em>Abstract API Baseline Task</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -798,14 +808,6 @@ public interface PDEPackage extends EPackage
     EAttribute ABSTRACT_API_BASELINE_TASK__NAME = eINSTANCE.getAbstractAPIBaselineTask_Name();
 
     /**
-     * The meta object literal for the '<em><b>Version</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ABSTRACT_API_BASELINE_TASK__VERSION = eINSTANCE.getAbstractAPIBaselineTask_Version();
-
-    /**
      * The meta object literal for the '<em><b>Activate</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -822,6 +824,14 @@ public interface PDEPackage extends EPackage
      * @generated
      */
     EClass API_BASELINE_TASK = eINSTANCE.getAPIBaselineTask();
+
+    /**
+     * The meta object literal for the '<em><b>Version</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute API_BASELINE_TASK__VERSION = eINSTANCE.getAPIBaselineTask_Version();
 
     /**
      * The meta object literal for the '<em><b>Location</b></em>' attribute feature.

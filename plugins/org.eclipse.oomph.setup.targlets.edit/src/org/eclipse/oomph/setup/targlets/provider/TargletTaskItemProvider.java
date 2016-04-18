@@ -407,6 +407,22 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     StringBuilder builder = new StringBuilder();
     Set<String> added = new HashSet<String>();
 
+    String targetNameLabel = "";
+    String targetName = targletTask.getTargetName();
+    if (targetName != null)
+    {
+      Pattern TARGET_NAME_LABEL_PATTERN = Pattern.compile("(.*)[\\s-_](Modular)?[\\s-_]*(Target)?");
+      Matcher matcher = TARGET_NAME_LABEL_PATTERN.matcher(targetName);
+      if (matcher.matches())
+      {
+        targetNameLabel = matcher.group(1);
+      }
+      else
+      {
+        targetNameLabel = targetName;
+      }
+    }
+
     for (Targlet targlet : targletTask.getTarglets())
     {
       String name = targlet.getName();
@@ -423,24 +439,26 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
 
     if (builder.length() != 0)
     {
-      builder.append(" ");
+      builder.insert(0, " (");
+      builder.append(')');
     }
 
-    builder.append("-> ");
-    builder.append(targletTask.getTargetName());
+    if (StringUtil.isEmpty(targetNameLabel))
+    {
+      builder.insert(0, "Target");
+    }
+    else
+    {
+      builder.insert(0, " Target");
+      builder.insert(0, targetNameLabel);
+    }
 
     if (targletTask.isActivateTarget())
     {
       builder.append(", activate");
     }
 
-    String label = getString("_UI_TargletTask_type");
-    if (builder.length() != 0)
-    {
-      label += " (" + builder + ")";
-    }
-
-    return label;
+    return builder.toString();
   }
 
   /**

@@ -22,6 +22,7 @@ import org.eclipse.oomph.setup.SetupTask;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.pde.TargetPlatformTask#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.pde.TargetPlatformTask#isActivate <em>Activate</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.pde.PDEPackage#getTargetPlatformTask()
@@ -55,5 +56,32 @@ public interface TargetPlatformTask extends SetupTask
    * @generated
    */
   void setName(String value);
+
+  /**
+   * Returns the value of the '<em><b>Activate</b></em>' attribute.
+   * The default value is <code>"true"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Activate</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Activate</em>' attribute.
+   * @see #setActivate(boolean)
+   * @see org.eclipse.oomph.setup.pde.PDEPackage#getTargetPlatformTask_Activate()
+   * @model default="true"
+   * @generated
+   */
+  boolean isActivate();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.pde.TargetPlatformTask#isActivate <em>Activate</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Activate</em>' attribute.
+   * @see #isActivate()
+   * @generated
+   */
+  void setActivate(boolean value);
 
 } // TargetPlatformTask

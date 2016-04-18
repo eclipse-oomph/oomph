@@ -41,6 +41,7 @@ import java.io.InputStream;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getVersion <em>Version</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getLocation <em>Location</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.pde.impl.APIBaselineTaskImpl#getRemoteURI <em>Remote URI</em>}</li>
  * </ul>
@@ -49,6 +50,26 @@ import java.io.InputStream;
  */
 public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements APIBaselineTask
 {
+  /**
+   * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getVersion()
+   * @generated
+   * @ordered
+   */
+  protected static final String VERSION_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getVersion()
+   * @generated
+   * @ordered
+   */
+  protected String version = VERSION_EDEFAULT;
+
   /**
    * The default value of the '{@link #getLocation() <em>Location</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -123,6 +144,31 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getVersion()
+  {
+    return version;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setVersion(String newVersion)
+  {
+    String oldVersion = version;
+    version = newVersion;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, PDEPackage.API_BASELINE_TASK__VERSION, oldVersion, version));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getLocation()
   {
     return location;
@@ -178,6 +224,8 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
   {
     switch (featureID)
     {
+      case PDEPackage.API_BASELINE_TASK__VERSION:
+        return getVersion();
       case PDEPackage.API_BASELINE_TASK__LOCATION:
         return getLocation();
       case PDEPackage.API_BASELINE_TASK__REMOTE_URI:
@@ -196,6 +244,9 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
   {
     switch (featureID)
     {
+      case PDEPackage.API_BASELINE_TASK__VERSION:
+        setVersion((String)newValue);
+        return;
       case PDEPackage.API_BASELINE_TASK__LOCATION:
         setLocation((String)newValue);
         return;
@@ -216,6 +267,9 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
   {
     switch (featureID)
     {
+      case PDEPackage.API_BASELINE_TASK__VERSION:
+        setVersion(VERSION_EDEFAULT);
+        return;
       case PDEPackage.API_BASELINE_TASK__LOCATION:
         setLocation(LOCATION_EDEFAULT);
         return;
@@ -236,6 +290,8 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
   {
     switch (featureID)
     {
+      case PDEPackage.API_BASELINE_TASK__VERSION:
+        return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
       case PDEPackage.API_BASELINE_TASK__LOCATION:
         return LOCATION_EDEFAULT == null ? location != null : !LOCATION_EDEFAULT.equals(location);
       case PDEPackage.API_BASELINE_TASK__REMOTE_URI:
@@ -258,7 +314,9 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
     }
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (location: ");
+    result.append(" (version: ");
+    result.append(version);
+    result.append(", location: ");
     result.append(location);
     result.append(", remoteURI: ");
     result.append(remoteURI);

@@ -124,6 +124,24 @@ public final class TargetPlatformUtil
     }
   }
 
+  public static void resolveTargetDefinition(ITargetDefinition targetDefinition, IProgressMonitor monitor) throws CoreException
+  {
+    monitor.beginTask("Resolving target platform", 100);
+
+    try
+    {
+      IStatus status = targetDefinition.resolve(new SubProgressMonitor(monitor, 100));
+      if (status.getSeverity() == IStatus.ERROR)
+      {
+        throw new CoreException(status);
+      }
+    }
+    finally
+    {
+      monitor.done();
+    }
+  }
+
   public static void activateTargetDefinition(ITargetDefinition targetDefinition, IProgressMonitor monitor) throws CoreException
   {
     ITargetDefinition oldTargetDefinition = getActiveTargetDefinition();

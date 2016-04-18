@@ -58,6 +58,7 @@ public class TargetPlatformTaskItemProvider extends SetupTaskItemProvider
       super.getPropertyDescriptors(object);
 
       addNamePropertyDescriptor(object);
+      addActivatePropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -74,6 +75,20 @@ public class TargetPlatformTaskItemProvider extends SetupTaskItemProvider
         getString("_UI_TargetPlatformTask_name_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_TargetPlatformTask_name_feature", "_UI_TargetPlatformTask_type"),
         PDEPackage.Literals.TARGET_PLATFORM_TASK__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Activate feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addActivatePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_TargetPlatformTask_activate_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_TargetPlatformTask_activate_feature", "_UI_TargetPlatformTask_type"),
+        PDEPackage.Literals.TARGET_PLATFORM_TASK__ACTIVATE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -132,6 +147,7 @@ public class TargetPlatformTaskItemProvider extends SetupTaskItemProvider
     switch (notification.getFeatureID(TargetPlatformTask.class))
     {
       case PDEPackage.TARGET_PLATFORM_TASK__NAME:
+      case PDEPackage.TARGET_PLATFORM_TASK__ACTIVATE:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }

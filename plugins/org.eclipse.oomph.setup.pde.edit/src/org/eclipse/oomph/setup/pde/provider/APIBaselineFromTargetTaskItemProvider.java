@@ -12,7 +12,6 @@ package org.eclipse.oomph.setup.pde.provider;
 
 import org.eclipse.oomph.setup.pde.APIBaselineFromTargetTask;
 import org.eclipse.oomph.setup.pde.PDEPackage;
-import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -107,47 +106,7 @@ public class APIBaselineFromTargetTaskItemProvider extends AbstractAPIBaselineTa
   @Override
   public String getText(Object object)
   {
-    APIBaselineFromTargetTask apiBaselineTask = (APIBaselineFromTargetTask)object;
-    StringBuilder builder = new StringBuilder(getString("_UI_APIBaselineTask_type"));
-
-    String name = apiBaselineTask.getName();
-    if (name != null && name.length() != 0)
-    {
-      builder.append(' ');
-      builder.append(name);
-    }
-
-    String version = apiBaselineTask.getVersion();
-    if (version != null && version.length() != 0)
-    {
-      if (name != null && name.length() != 0)
-      {
-        builder.append('-');
-      }
-      else
-      {
-        builder.append(' ');
-      }
-
-      builder.append(version);
-    }
-
-    builder.append(' ');
-    builder.append(getString("_UI_APIBaselineFromTargetTask_from_target"));
-
-    String targetName = apiBaselineTask.getTargetName();
-    if (!StringUtil.isEmpty(targetName))
-    {
-      builder.append(' ');
-      builder.append(targetName);
-    }
-
-    if (apiBaselineTask.isActivate())
-    {
-      builder.append(", activate");
-    }
-
-    return builder.toString();
+    return super.getText(object);
   }
 
   /**
