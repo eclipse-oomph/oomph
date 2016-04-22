@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.base.util.EAnnotations;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
+import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.CacheHandling;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
@@ -61,6 +62,15 @@ public class SetupArchiver implements IApplication
       }
     }
 
+    String url = file.getAbsolutePath();
+    if (url.startsWith("/home/data/httpd/"))
+    {
+      url = "http://" + url.substring("/home/data/httpd/".length());
+      System.out.println();
+      System.out.println("--> " + url);
+      System.out.println();
+    }
+
     Set<String> entryNames = new HashSet<String>();
     long lastModified = file.lastModified();
     File temp = new File(file.toString() + ".tmp");
@@ -102,6 +112,19 @@ public class SetupArchiver implements IApplication
           URI archiveEntry = URI.createURI("archive:" + URI.createFileURI(file.toString()) + "!/" + path);
 
           System.out.println("Previously mirrored " + uri + " -> " + archiveEntry);
+
+          // if (path.toString().contains("SmartHome"))
+          // {
+          // ByteArrayOutputStream out = new ByteArrayOutputStream();
+          //
+          // ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
+          // Resource resource = resourceSet.getResource(archiveEntry, true);
+          // resource.save(out, null);
+          //
+          // System.out.println();
+          // System.out.println(new String(out.toByteArray()));
+          // System.out.println();
+          // }
         }
       }
       catch (IOException ex)
@@ -131,6 +154,8 @@ public class SetupArchiver implements IApplication
     }
 
     final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
+    resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_IGNORE);
+
     ResourceMirror resourceMirror = new SetupWizard.IndexLoader.ResourceMirrorWithProductImages(resourceSet)
     {
       @Override
@@ -191,7 +216,7 @@ public class SetupArchiver implements IApplication
 
         if (resource.getContents().isEmpty())
         {
-          System.err.println("Failed to load " + normalizedURI);
+          System.err.println("FAILED to load " + normalizedURI);
           hasFailures = true;
         }
         else
@@ -204,12 +229,12 @@ public class SetupArchiver implements IApplication
 
             if (after - before > 0)
             {
-              System.err.println("changed! " + normalizedURI);
+              System.err.println("CHANGED! " + normalizedURI);
             }
           }
           catch (IOException ex)
           {
-            System.err.println("Failed to save " + normalizedURI);
+            System.err.println("FAILED to save " + normalizedURI);
             ex.printStackTrace();
           }
         }
