@@ -232,7 +232,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
               RecorderManager.Lifecycle.start(display);
               plugin.stopRecorder = true;
 
-              if (!SETUP_SKIP && !isSkipStartupTasks())
+              if (!SETUP_SKIP && (!isSkipStartupTasks() || getRestartingFile().exists()))
               {
                 new Job("Setup check")
                 {
