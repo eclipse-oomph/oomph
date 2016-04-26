@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.internal.core.util;
 
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
@@ -88,6 +89,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
   private static final boolean TEST_SLOW_NETWORK = false;
 
+  private static final boolean TRACE = PropertiesUtil.isProperty(SetupProperties.PROJP_SETUP_ECF_TRACE);
+
   private static final String API_GITHUB_HOST = "api.github.com";
 
   private static final String CONTENT_TAG = "\"content\":\"";
@@ -160,6 +163,17 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     URI cacheURI = getCacheFile(uri);
     String eTag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getETag(uriConverter, cacheURI);
     String expectedETag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getExpectedETag(uri);
+
+    String tracePrefix = null;
+    if (TRACE)
+    {
+      tracePrefix = "> ECF: " + uri;
+      System.out.println(tracePrefix + " uri=" + uri);
+      System.out.println(tracePrefix + " cacheURI=" + cacheURI);
+      System.out.println(tracePrefix + " eTag=" + eTag);
+      System.out.println(tracePrefix + " expectedETag=" + expectedETag);
+    }
+
     if (expectedETag != null || cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING)
     {
       if (cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? eTag != null : expectedETag.equals(eTag))
@@ -167,12 +181,23 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
         try
         {
           setExpectedETag(uri, expectedETag);
-          return uriConverter.createInputStream(cacheURI, options);
+          InputStream result = uriConverter.createInputStream(cacheURI, options);
+          if (TRACE)
+          {
+            System.out.println(tracePrefix + " returning cached content");
+          }
+
+          return result;
         }
         catch (IOException ex)
         {
           // Perhaps another JVM is busy writing this file.
           // Proceed as if it doesn't exit.
+
+          if (TRACE)
+          {
+            System.out.println(tracePrefix + " unable to load cached content");
+          }
         }
       }
     }
@@ -193,27 +218,44 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       password = null;
     }
 
+    if (TRACE)
+    {
+      System.out.println(tracePrefix + " proxy=" + proxy);
+      System.out.println(tracePrefix + " username=" + username);
+      System.out.println(tracePrefix + " password=" + PreferencesUtil.encrypt(password));
+    }
+
     IContainer container = createContainer();
 
     AuthorizationHandler authorizatonHandler = getAuthorizatonHandler(options);
     Authorization authorization = getAuthorizaton(options);
+
+    if (TRACE)
+    {
+      System.out.println(tracePrefix + " authorizationHandler=" + authorizatonHandler);
+    }
+
     int triedReauthorization = 0;
     for (int i = 0;; ++i)
     {
+      if (TRACE)
+      {
+        System.out.println(tracePrefix + " trying=" + i);
+        System.out.println(tracePrefix + " triedReauthorization=" + triedReauthorization);
+        System.out.println(tracePrefix + " authorization=" + authorization);
+      }
+
       IRetrieveFileTransferContainerAdapter fileTransfer = container.getAdapter(IRetrieveFileTransferContainerAdapter.class);
 
-      if (proxy != null)
-      {
-        fileTransfer.setProxy(proxy);
+      fileTransfer.setProxy(proxy);
 
-        if (username != null)
-        {
-          fileTransfer.setConnectContextForAuthentication(ConnectContextFactory.createUsernamePasswordConnectContext(username, password));
-        }
-        else if (password != null)
-        {
-          fileTransfer.setConnectContextForAuthentication(ConnectContextFactory.createPasswordConnectContext(password));
-        }
+      if (username != null)
+      {
+        fileTransfer.setConnectContextForAuthentication(ConnectContextFactory.createUsernamePasswordConnectContext(username, password));
+      }
+      else if (password != null)
+      {
+        fileTransfer.setConnectContextForAuthentication(ConnectContextFactory.createPasswordConnectContext(password));
       }
 
       FileTransferListener transferListener = new FileTransferListener(eTag);
@@ -233,6 +275,12 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       }
       catch (IncomingFileTransferException ex)
       {
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " IncomingFileTransferException");
+          ex.printStackTrace(System.out);
+        }
+
         throw new IOExceptionWithCause(ex);
       }
       try
@@ -241,11 +289,23 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       }
       catch (InterruptedException ex)
       {
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " InterruptedException");
+          ex.printStackTrace(System.out);
+        }
+
         throw new IOExceptionWithCause(ex);
       }
 
       if (transferListener.exception != null)
       {
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " transferLister.exception");
+          transferListener.exception.printStackTrace(System.out);
+        }
+
         if (!(transferListener.exception instanceof UserCancelledException))
         {
           if (transferListener.exception.getCause() instanceof SocketTimeoutException && i <= 2)
@@ -259,6 +319,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
             // That API, for security reasons, does not return HTTP_UNAUTHORIZED, so we need this special case for that host.
             IncomingFileTransferException incomingFileTransferException = (IncomingFileTransferException)transferListener.exception;
             int errorCode = incomingFileTransferException.getErrorCode();
+            if (TRACE)
+            {
+              System.out.println(tracePrefix + " errorCode=" + errorCode);
+            }
+
             if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED || API_GITHUB_HOST.equals(getHost(uri)) && errorCode == HttpURLConnection.HTTP_NOT_FOUND)
             {
               if (authorization == null)
@@ -289,7 +354,17 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
                 || ((IncomingFileTransferException)transferListener.exception).getErrorCode() != HttpURLConnection.HTTP_NOT_FOUND))
         {
           setExpectedETag(uri, transferListener.eTag == null ? eTag : transferListener.eTag);
+          if (TRACE)
+          {
+            System.out.println(tracePrefix + " returning cache content");
+          }
+
           return uriConverter.createInputStream(cacheURI, options);
+        }
+
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " failing");
         }
 
         throw new IOExceptionWithCause(transferListener.exception);
@@ -330,6 +405,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
       try
       {
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " writing cache");
+        }
+
         BaseUtil.writeFile(uriConverter, options, cacheURI, bytes);
       }
       catch (IORuntimeException ex)
@@ -337,6 +417,12 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
         // Ignore attempts to write out to the cache file.
         // This may collide with another JVM doing exactly the same thing.
         transferListener.eTag = null;
+
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " failed writing cache");
+          ex.printStackTrace(System.out);
+        }
       }
       finally
       {
@@ -354,6 +440,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       if (etagMirror != null)
       {
         etagMirror.cacheUpdated(uri);
+      }
+
+      if (TRACE)
+      {
+        System.out.println(tracePrefix + " returning successful results");
       }
 
       return new ByteArrayInputStream(bytes);
