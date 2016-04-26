@@ -146,6 +146,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
   @Override
   public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
   {
+    if (uri.isPlatform())
+    {
+      return super.createInputStream(uri, options);
+    }
+
     if (TEST_IO_EXCEPTION)
     {
       File folder = new File(CACHE_FOLDER.toFileString());
