@@ -80,6 +80,7 @@ Eike Stepper - initial API and implementation
     <module>../../../plugins/org.eclipse.oomph.setup.projects.edit</module>
     <module>../../../plugins/org.eclipse.oomph.setup.projectset</module>
     <module>../../../plugins/org.eclipse.oomph.setup.projectset.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.setup.sdk</module>
     <module>../../../plugins/org.eclipse.oomph.setup.sync</module>
     <module>../../../plugins/org.eclipse.oomph.setup.sync.tests</module>
     <module>../../../plugins/org.eclipse.oomph.setup.targlets</module>
