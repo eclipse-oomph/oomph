@@ -73,10 +73,12 @@ public class SetupArchiver implements IApplication
     System.out.println();
     System.out.println("http.proxyHost = " + System.getProperty("http.proxyHost", ""));
     System.out.println("http.proxyPort = " + System.getProperty("http.proxyPort", ""));
+    System.out.println("http.nonProxyHosts = " + System.getProperty("http.nonProxyHosts", ""));
+    System.out.println();
     System.out.println("https.proxyHost = " + System.getProperty("https.proxyHost", ""));
     System.out.println("https.proxyPort = " + System.getProperty("https.proxyPort", ""));
-    System.out.println("http.nonProxyHosts = " + System.getProperty("http.nonProxyHosts", ""));
     System.out.println("https.nonProxyHosts = " + System.getProperty("https.nonProxyHosts", ""));
+    System.out.println();
     System.out.println("ftp.proxyHost = " + System.getProperty("ftp.proxyHost", ""));
     System.out.println("ftp.proxyPort = " + System.getProperty("ftp.proxyPort", ""));
     System.out.println("ftp.nonProxyHosts = " + System.getProperty("ftp.nonProxyHosts", ""));
