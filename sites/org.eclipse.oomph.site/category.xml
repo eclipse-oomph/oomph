@@ -3,10 +3,10 @@
 
    <!-- Setup -->
    <category-def name="org.eclipse.oomph.setup.category" label="Oomph Setup"/>
-   <feature id="org.eclipse.oomph.setup.sdk" version="0.0.0">
+   <feature id="org.eclipse.oomph.setup" version="0.0.0">
       <category name="org.eclipse.oomph.setup.category"/>
    </feature>
-   <feature id="org.eclipse.oomph.setup" version="0.0.0">
+   <feature id="org.eclipse.oomph.setup.sdk" version="0.0.0">
       <category name="org.eclipse.oomph.setup.category"/>
    </feature>
    <feature id="org.eclipse.oomph.setup.ui.ide" version="0.0.0">

@@ -163,19 +163,19 @@ public final class RepositoryComposer
     String name = dropTypeFolder.getName();
     if ("release".equals(name))
     {
-      name = "Releases";
+      name = "Release";
     }
     else if ("milestone".equals(name))
     {
-      name = "Milestones";
+      name = "Milestone";
     }
     else if ("nightly".equals(name))
     {
-      name = "Nightly Builds";
+      name = "Nightly Build";
     }
 
-    composeRepository(updateTypeFolder, "Oomph " + name, drops);
-    composeRepository(new File(updateTypeFolder, "latest"), "Oomph Latest " + name.substring(0, name.length() - 1), Collections.singletonList(drops.get(0)));
+    composeRepository(updateTypeFolder, "Oomph " + name + "s", drops);
+    composeRepository(new File(updateTypeFolder, "latest"), "Oomph Latest " + name, Collections.singletonList(drops.get(0)));
     return true;
   }
 

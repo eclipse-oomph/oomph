@@ -57,7 +57,6 @@ public final class ArtifactRepositoryAdjuster
     Version greatestVersion = getGreatestFeatureVersion(input);
 
     System.out.println("Adjusting " + input);
-    System.out.println("  repository.name = " + repositoryName);
 
     BufferedReader reader = new BufferedReader(new FileReader(input));
     BufferedWriter writer = new BufferedWriter(new FileWriter(output));
@@ -83,7 +82,13 @@ public final class ArtifactRepositoryAdjuster
         Matcher matcher = REPOSITORY_PATTERN.matcher(line);
         if (matcher.matches())
         {
-          line = line.replaceFirst("name=['\"].*?['\"]", "name='" + repositoryName + "'");
+          String newLine = line.replaceFirst("name=['\"].*?['\"]", "name='" + repositoryName + "'");
+          if (!newLine.equals(line))
+          {
+            System.out.println("  repository.name = " + repositoryName);
+            line = newLine;
+          }
+
           writeLine(writer, line);
 
           Properties properties = new Properties(reader);

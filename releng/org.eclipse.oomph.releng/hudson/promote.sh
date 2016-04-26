@@ -111,8 +111,11 @@ cp -a $WORKSPACE/updates/* $DROP
 $BASH $SCRIPTS/adjustArtifactRepository.sh \
   $DROP \
   $DROP \
-  "Oomph Updates $FOLDER" \
+  "Oomph $FOLDER" \
   $BUILD_TYPE
+$BASH $SCRIPTS/adjustContentRepository.sh \
+  $DROP \
+  "Oomph $FOLDER"
 
 ######################
 # DOWNLOADS/PRODUCTS #
@@ -140,8 +143,11 @@ cp -a $WORKSPACE/products/repository $PRODUCTS_TMP/latest
 $BASH $SCRIPTS/adjustArtifactRepository.sh \
   $PRODUCTS_TMP/latest/repository \
   $PRODUCTS/latest/repository \
-  "Oomph Product Updates Latest" \
+  "Eclipse Installer $FOLDER" \
   $BUILD_TYPE
+$BASH $SCRIPTS/adjustContentRepository.sh \
+  $PRODUCTS_TMP/latest/repository \
+  "Eclipse Installer $FOLDER"
 
 if [[ "$BUILD_TYPE" != nightly ]]; then
   cp -a $PROPERTIES $PRODUCTS_TMP/product.properties
@@ -149,8 +155,11 @@ if [[ "$BUILD_TYPE" != nightly ]]; then
   $BASH $SCRIPTS/adjustArtifactRepository.sh \
     $PRODUCTS_TMP/repository \
     $PRODUCTS/repository \
-    "Oomph Product Updates" \
+    "Eclipse Installer $FOLDER" \
     $BUILD_TYPE
+  $BASH $SCRIPTS/adjustContentRepository.sh \
+    $PRODUCTS_TMP/repository \
+    "Eclipse Installer $FOLDER"
 else
   cp -a $PRODUCTS/product.properties $PRODUCTS_TMP
   cp -a $PRODUCTS/*.exe $PRODUCTS_TMP
@@ -183,8 +192,11 @@ if [[ "$BUILD_TYPE" == release ]]; then
   $BASH $SCRIPTS/adjustArtifactRepository.sh \
     $DROP/products/repository \
     $DROP/products/repository \
-    "Oomph $FOLDER Product Updates" \
+    "Eclipse Installer $FOLDER" \
     $BUILD_TYPE
+  $BASH $SCRIPTS/adjustContentRepository.sh \
+    $DROP/products/repository \
+    "Eclipse Installer $FOLDER"
 
   echo "Releasing $DROP/help"
   mkdir $DROP/help

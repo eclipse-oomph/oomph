@@ -28,8 +28,8 @@
    </license>
 
    <url>
-      <update label="%updateSiteName" url="http://www.eclipse.org/modeling/updates/"/>
-      <discovery label="%updateSiteName" url="http://www.eclipse.org/modeling/updates/"/>
+      <update label="%updateSiteName" url="http://download.eclipse.org/oomph/updates"/>
+      <discovery label="%updateSiteName" url="http://download.eclipse.org/oomph/updates"/>
    </url>
 
    <includes

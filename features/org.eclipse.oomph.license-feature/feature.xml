@@ -12,7 +12,7 @@
 <feature
       id="org.eclipse.oomph.license"
       label="Oomph License"
-      version="1.1.0.qualifier"
+      version="1.2.0.qualifier"
       provider-name="Eclipse Oomph Project">
 
    <description>
