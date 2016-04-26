@@ -14,7 +14,7 @@ CURDIR=`pwd -P`
 cd "$REPO"
 unzip -qq content.jar
 
-sed -e "s/<repository name=['\"].*?['\"]/<repository name='$REPO_NAME'/" content.xml > content.out
+sed -e "s/<repository name='[^']*'/<repository name='$REPO_NAME'/" content.xml > content.out
 mv content.out content.xml
 
 zip -r -9 -qq content.jar content.xml
