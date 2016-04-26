@@ -171,7 +171,7 @@
          <version>${tycho-version}</version>
          <configuration>
             <includeAllDependencies>true</includeAllDependencies>
-            <repositoryName>Oomph Build ${build.id}</repositoryName>
+            <repositoryName>Eclipse Installer Build ${build.id}</repositoryName>
          </configuration>
       </plugin>
       <plugin>
