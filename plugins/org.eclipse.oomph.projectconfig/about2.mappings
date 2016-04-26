@@ -1,3 +1,0 @@
-0=${build.id}
-1=${git.branch}
-2=${git.commit}
