@@ -52,5 +52,7 @@
   <projectCatalog
       href="com.github.projects.setup#/"/>
   <projectCatalog
+      href="https://raw.githubusercontent.com/vorburger/opendaylight-eclipse-setup/master/org.opendaylight.projects.setup#/"/>
+  <projectCatalog
       href="redirectable.projects.setup#/"/>
 </setup:Index>
