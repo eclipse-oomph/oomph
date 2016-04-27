@@ -35,6 +35,7 @@ import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.WorkerPool;
 import org.eclipse.oomph.util.XMLUtil;
@@ -46,6 +47,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.resource.Resource;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -985,6 +987,7 @@ public class ProductCatalogGenerator implements IApplication
       requirement.setVersionRange(versionRange);
       p2Task.getRequirements().add(requirement);
       addRootIURequirements(p2Task.getRequirements(), versionSegment, ius);
+      addAdditionalInstallRootIURequirements(p2Task.getRequirements(), productName, train, eppMetaDataRepositories, ius);
     }
     else
     {
@@ -1105,6 +1108,10 @@ public class ProductCatalogGenerator implements IApplication
     if (productLabel.contains("Eierlegende"))
     {
       return "All";
+    }
+    else if (productLabel.contains("JavaScript"))
+    {
+      return "JavaScript";
     }
     else if (productLabel.contains(" EE ") || productLabel.contains("Web"))
     {
@@ -1249,6 +1256,37 @@ public class ProductCatalogGenerator implements IApplication
       requirement.setName(id);
       requirement.setVersionRange(range);
       requirements.add(requirement);
+    }
+  }
+
+  private void addAdditionalInstallRootIURequirements(EList<Requirement> requirements, String productName, String train,
+      Map<String, IMetadataRepository> eppMetaDataRepositories, Map<String, Set<IInstallableUnit>> ius)
+  {
+    IMetadataRepository eppMetadataRepository = eppMetaDataRepositories.get(train);
+    IInstallableUnit maxProductIU = null;
+    if (eppMetadataRepository != null)
+    {
+      for (IInstallableUnit productIU : eppMetadataRepository.query(QueryUtil.createIUQuery(productName), null))
+      {
+        if (maxProductIU == null || productIU.getVersion().compareTo(maxProductIU.getVersion()) > 0)
+        {
+          maxProductIU = productIU;
+        }
+      }
+    }
+
+    if (maxProductIU != null)
+    {
+      Set<String> rootInstallIUs = getRootInstallIUs(train, maxProductIU);
+      if (rootInstallIUs != null)
+      {
+        for (String id : rootInstallIUs)
+        {
+          Requirement requirement = P2Factory.eINSTANCE.createRequirement();
+          requirement.setName(id);
+          requirements.add(requirement);
+        }
+      }
     }
   }
 
@@ -1717,5 +1755,53 @@ public class ProductCatalogGenerator implements IApplication
     {
       return new GenerateJob(this, key, workerID, secondary);
     }
+  }
+
+  //
+  // Temporary logic until this information is available in the product IU properties
+  //
+
+  private static final Map<String, Map<String, Set<String>>> ROOT_INSTALL_IUS = new LinkedHashMap<String, Map<String, Set<String>>>();
+
+  private static final File ROOT_LOCATION;
+
+  static
+  {
+    try
+    {
+      URL baseURL = SetupInstallerPlugin.INSTANCE.getBaseURL();
+      URL resolvedURL = FileLocator.resolve(baseURL);
+      String path = URI.createURI(resolvedURL.toString()).toFileString();
+      ROOT_LOCATION = new File(path);
+    }
+    catch (Exception ex)
+    {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  private Set<String> getRootInstallIUs(String release, IInstallableUnit productID)
+  {
+    Map<String, Set<String>> rootInstallIUs = ROOT_INSTALL_IUS.get(release);
+    if (rootInstallIUs == null)
+    {
+      rootInstallIUs = new LinkedHashMap<String, Set<String>>();
+      if (ROOT_LOCATION != null)
+      {
+        File propertiesLocation = new File(ROOT_LOCATION, release + ".properties");
+        if (propertiesLocation.isFile())
+        {
+          Map<String, String> loadProperties = PropertiesUtil.loadProperties(propertiesLocation);
+          for (Map.Entry<String, String> entry : loadProperties.entrySet())
+          {
+            Set<String> roots = new LinkedHashSet<String>(StringUtil.explode(entry.getValue(), " "));
+            rootInstallIUs.put(entry.getKey(), roots);
+          }
+        }
+      }
+      ROOT_INSTALL_IUS.put(release, rootInstallIUs);
+    }
+
+    return rootInstallIUs.get(productID.getId());
   }
 }
