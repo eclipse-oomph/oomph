@@ -74,6 +74,24 @@
       version="JavaSE-1.8"
       location="${jre.location-1.8}"/>
   <setupTask
+      xsi:type="setup.targlets:TargletTask"
+      targetName="Modular API Baseline Target"
+      activateTarget="false">
+    <targlet
+        name="Platform"
+        activeRepositoryList="${eclipse.api.baseline.target.platform}"
+        includeSources="false">
+      <requirement
+          name="org.eclipse.platform.feature.group"/>
+      <requirement
+          name="org.eclipse.jdt.feature.group"/>
+      <requirement
+          name="org.eclipse.pde.feature.group"/>
+      <requirement
+          name="org.eclipse.equinox.executable.feature.group"/>
+    </targlet>
+  </setupTask>
+  <setupTask
       xsi:type="setup.targlets:TargletTask">
     <targlet
         name="Platform"
@@ -92,8 +110,6 @@
             url="http://download.eclipse.org/cbi/updates/license"/>
         <repository
             url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
-        <repository
-            url="http://download.eclipse.org/eclipse/updates/4.6-I-builds"/>
       </repositoryList>
       <repositoryList
           name="Mars">
@@ -552,6 +568,11 @@
           name="eclipse.target.platform"
           value="Neon"
           storageURI="scope://Workspace"/>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="eclipse.api.baseline.target.platform"
+          value="Mars"
+          storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform SWT support</description>
   </project>
@@ -664,6 +685,6 @@
   </project>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
-      href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
+      href="../org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
   <description>The Eclipse platform</description>
 </setup:Project>
