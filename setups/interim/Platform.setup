@@ -165,26 +165,6 @@
       <description>Platform Base, Update, and Ant</description>
     </setupTask>
     <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.ant.core/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.ant.launching/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.ant.ui/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.ant.tests.core/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/project/org.eclipse.ant.tests.ui/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="warning"/>
-    <setupTask
         xsi:type="setup.targlets:TargletTask">
       <targlet
           name="Platform Base, Update, and Ant"
@@ -221,7 +201,7 @@
               pattern=".*/eclipse\.platform/ant/.*"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@projects[name='platform']/@setupTasks.7/@workingSets.2"/>
+              excludedWorkingSet="//@projects[name='platform']/@setupTasks.2/@workingSets.2"/>
         </predicate>
       </workingSet>
       <workingSet
