@@ -31,6 +31,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -108,8 +110,21 @@ public class HelpSupport
             @Override
             protected Control createContents(Composite parent)
             {
-              helpBrowser = new Browser(parent, SWT.NONE);
+              Composite container = new Composite(parent, SWT.NONE);
+
+              GridLayout layout = new GridLayout();
+              layout.marginWidth = layout.marginHeight = 0;
+              layout.verticalSpacing = 0;
+              container.setLayout(layout);
+
+              helpBrowser = new Browser(container, SWT.NONE);
+
+              GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+              gridData.widthHint = 500;
+              gridData.heightHint = 800;
+
               helpBrowser.setSize(500, 800);
+              helpBrowser.setLayoutData(gridData);
               helpBrowser.addDisposeListener(new DisposeListener()
               {
                 public void widgetDisposed(DisposeEvent e)
@@ -120,7 +135,7 @@ public class HelpSupport
               });
 
               updateHelp();
-              return helpBrowser;
+              return container;
             }
           };
 
