@@ -98,11 +98,6 @@ public final class WorkspaceIUInfo
           return ResourcesUtil.ImportResult.EXISTED_DIFFERENT_LOCATION;
         }
 
-        if (!project.isOpen())
-        {
-          project.open(monitor);
-        }
-
         return ResourcesUtil.ImportResult.EXISTED;
       }
 

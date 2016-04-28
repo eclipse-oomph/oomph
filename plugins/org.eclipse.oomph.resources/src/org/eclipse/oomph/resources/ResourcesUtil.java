@@ -265,11 +265,6 @@ public final class ResourcesUtil
         return ImportResult.EXISTED_DIFFERENT_LOCATION;
       }
 
-      if (!project.isOpen())
-      {
-        project.open(monitor);
-      }
-
       return ImportResult.EXISTED;
     }
 
