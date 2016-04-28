@@ -41,7 +41,7 @@ public interface SetupProperties
 
   public static final String PROP_SETUP_USER_HOME_REDIRECT = "oomph.setup.user.home.redirect";
 
-  public static final String PROP_SETUP_SYNC = "oomph.setup.sync";
+  public static final String PROP_SETUP_SYNC_SKIP = "oomph.setup.sync.skip";
 
   public static final String PROP_SETUP_SYNC_TIMEOUT = "oomph.setup.sync.timeout";
 

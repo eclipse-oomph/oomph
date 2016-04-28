@@ -76,7 +76,7 @@ public final class SynchronizerManager
 
   public static final SynchronizerManager INSTANCE = new SynchronizerManager();
 
-  public static final boolean ENABLED = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_SYNC);
+  public static final boolean ENABLED = !PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_SYNC_SKIP);
 
   private static final File USER_SETUP = new File(SetupContext.USER_SETUP_LOCATION_URI.toFileString());
 
