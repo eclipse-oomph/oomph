@@ -167,8 +167,7 @@
         xsi:type="setup.targlets:TargletTask">
       <targlet
           name="Equinox P2"
-          activeRepositoryList="${eclipse.target.platform}"
-          includeAllPlatforms="true">
+          activeRepositoryList="${eclipse.target.platform}">
         <sourceLocator
             rootFolder="${git.clone.equinox.p2.location}"/>
       </targlet>
@@ -238,8 +237,7 @@
         xsi:type="setup.targlets:TargletTask">
       <targlet
           name="Equinox Framework"
-          activeRepositoryList="${eclipse.target.platform}"
-          includeAllPlatforms="true">
+          activeRepositoryList="${eclipse.target.platform}">
         <requirement
             name="org.eclipse.equinox.executable.feature.group"/>
         <requirement
@@ -295,8 +293,7 @@
         xsi:type="setup.targlets:TargletTask">
       <targlet
           name="Equinox Bundles"
-          activeRepositoryList="${eclipse.target.platform}"
-          includeAllPlatforms="true">
+          activeRepositoryList="${eclipse.target.platform}">
         <requirement
             name="org.eclipse.equinox.compendium.sdk.feature.group"/>
         <requirement
@@ -372,6 +369,6 @@
   </project>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
-      href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
+      href="../org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
   <description>The setups for the Equinox projects</description>
 </setup:Project>
