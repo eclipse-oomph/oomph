@@ -304,8 +304,8 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
   @Override
   public int getPriority()
   {
-    String key = getKey();
-    return key != null && key.startsWith("/project") ? PRIORITY_LATE : PRIORITY_EARLY;
+    PreferenceHandler preferenceHandler = PreferenceHandler.getHandler(getKey());
+    return preferenceHandler.getPriority();
   }
 
   @Override
@@ -631,6 +631,11 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     public PreferenceHandler(URI key)
     {
       this.key = key;
+    }
+
+    public int getPriority()
+    {
+      return key != null && "project".equals(key.authority()) ? PRIORITY_LATE : PRIORITY_EARLY;
     }
 
     public boolean isIgnored()
@@ -1425,6 +1430,12 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     {
       super(key);
       this.profileType = profileType;
+    }
+
+    @Override
+    public int getPriority()
+    {
+      return PRIORITY_EARLY + 1;
     }
 
     @Override
