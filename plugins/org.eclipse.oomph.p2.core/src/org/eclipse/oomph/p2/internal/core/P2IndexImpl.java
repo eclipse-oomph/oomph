@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectInputStream;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.equinox.p2.metadata.Version;
 
@@ -105,13 +106,13 @@ public class P2IndexImpl implements P2Index
 
         if (refreshed)
         {
-          File validityFile = getValidityFile();
+          File validityFile = getCapabilitiesValidityFile();
           IOUtil.writeLines(validityFile, "UTF-8", Collections.singletonList("" + (System.currentTimeMillis() + refreshHours * 60 * 60 * 1000)));
         }
       }
       catch (Exception ex)
       {
-        P2CorePlugin.INSTANCE.log(ex);
+        P2CorePlugin.INSTANCE.log(ex, IStatus.WARNING);
       }
       finally
       {
@@ -124,7 +125,7 @@ public class P2IndexImpl implements P2Index
           }
           catch (IOException ex)
           {
-            P2CorePlugin.INSTANCE.log(ex);
+            P2CorePlugin.INSTANCE.log(ex, IStatus.WARNING);
           }
         }
       }
@@ -162,7 +163,7 @@ public class P2IndexImpl implements P2Index
 
         if (refreshed)
         {
-          File validityFile = getValidityFile();
+          File validityFile = getRepositoriesValidityFile();
           IOUtil.writeLines(validityFile, "UTF-8", Collections.singletonList("" + (System.currentTimeMillis() + refreshHours * 60 * 60 * 1000)));
         }
 
@@ -191,7 +192,7 @@ public class P2IndexImpl implements P2Index
       }
       catch (Exception ex)
       {
-        P2CorePlugin.INSTANCE.log(ex);
+        P2CorePlugin.INSTANCE.log(ex, IStatus.WARNING);
       }
       finally
       {
@@ -204,7 +205,7 @@ public class P2IndexImpl implements P2Index
           }
           catch (IOException ex)
           {
-            P2CorePlugin.INSTANCE.log(ex);
+            P2CorePlugin.INSTANCE.log(ex, IStatus.WARNING);
           }
         }
       }
@@ -221,7 +222,7 @@ public class P2IndexImpl implements P2Index
 
     if (repositoriesCacheFile.exists())
     {
-      File validityFile = getValidityFile();
+      File validityFile = getRepositoriesValidityFile();
       List<String> lines = IOUtil.readLines(validityFile, "UTF-8");
       long validUntil = Long.parseLong(lines.get(0));
       if (System.currentTimeMillis() <= validUntil)
@@ -258,7 +259,7 @@ public class P2IndexImpl implements P2Index
 
     if (capabilitiesCacheFile.exists())
     {
-      File validityFile = getValidityFile();
+      File validityFile = getCapabilitiesValidityFile();
       List<String> lines = IOUtil.readLines(validityFile, "UTF-8");
       long validUntil = Long.parseLong(lines.get(0));
       if (System.currentTimeMillis() <= validUntil)
@@ -285,9 +286,14 @@ public class P2IndexImpl implements P2Index
     return true;
   }
 
-  private File getValidityFile()
+  private File getRepositoriesValidityFile()
   {
-    return new File((repositoriesCacheFile == null ? capabilitiesCacheFile : repositoriesCacheFile).getParentFile(), "repositories.txt");
+    return new File(repositoriesCacheFile.getParentFile(), "repositories.txt");
+  }
+
+  private File getCapabilitiesValidityFile()
+  {
+    return new File(capabilitiesCacheFile.getParentFile(), "capabilities.txt");
   }
 
   public Repository[] getRepositories()
@@ -347,7 +353,7 @@ public class P2IndexImpl implements P2Index
     }
     catch (Exception ex)
     {
-      P2CorePlugin.INSTANCE.log(ex);
+      P2CorePlugin.INSTANCE.log(ex, IStatus.WARNING);
     }
     finally
     {
