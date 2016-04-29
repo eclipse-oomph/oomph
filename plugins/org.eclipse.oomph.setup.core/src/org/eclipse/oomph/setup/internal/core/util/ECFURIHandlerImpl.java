@@ -37,14 +37,22 @@ import org.eclipse.ecf.core.ContainerFactory;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.security.ConnectContextFactory;
 import org.eclipse.ecf.core.util.Proxy;
+import org.eclipse.ecf.filetransfer.BrowseFileTransferException;
 import org.eclipse.ecf.filetransfer.IFileTransferListener;
+import org.eclipse.ecf.filetransfer.IRemoteFile;
+import org.eclipse.ecf.filetransfer.IRemoteFileInfo;
+import org.eclipse.ecf.filetransfer.IRemoteFileSystemBrowserContainerAdapter;
+import org.eclipse.ecf.filetransfer.IRemoteFileSystemListener;
 import org.eclipse.ecf.filetransfer.IRetrieveFileTransferContainerAdapter;
 import org.eclipse.ecf.filetransfer.IRetrieveFileTransferOptions;
 import org.eclipse.ecf.filetransfer.IncomingFileTransferException;
+import org.eclipse.ecf.filetransfer.RemoteFileSystemException;
 import org.eclipse.ecf.filetransfer.UserCancelledException;
 import org.eclipse.ecf.filetransfer.events.IFileTransferEvent;
 import org.eclipse.ecf.filetransfer.events.IIncomingFileTransferReceiveDoneEvent;
 import org.eclipse.ecf.filetransfer.events.IIncomingFileTransferReceiveStartEvent;
+import org.eclipse.ecf.filetransfer.events.IRemoteFileSystemBrowseEvent;
+import org.eclipse.ecf.filetransfer.events.IRemoteFileSystemEvent;
 import org.eclipse.ecf.provider.filetransfer.identity.FileTransferID;
 import org.eclipse.ecf.provider.filetransfer.identity.FileTransferNamespace;
 import org.eclipse.ecf.provider.filetransfer.util.ProxySetupHelper;
@@ -114,33 +122,285 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       Set<String> requestedAttributes = getRequestedAttributes(options);
       if (requestedAttributes != null && requestedAttributes.contains(URIConverter.ATTRIBUTE_READ_ONLY) && requestedAttributes.size() == 1)
       {
+        // For performance reasons, this assumes that all http/https accessible files are read only.
         Map<String, Object> result = new HashMap<String, Object>();
         result.put(URIConverter.ATTRIBUTE_READ_ONLY, true);
         return result;
       }
     }
 
-    return super.getAttributes(uri, options);
+    return getRemoteAttributes(uri, options);
+  }
+
+  private Map<String, ?> getRemoteAttributes(URI uri, Map<?, ?> options)
+  {
+    if (uri.isPlatform())
+    {
+      return super.getAttributes(uri, options);
+    }
+
+    Set<String> requestedAttributes = getRequestedAttributes(options);
+
+    CacheHandling cacheHandling = getCacheHandling(options);
+    URIConverter uriConverter = getURIConverter(options);
+    URI cacheURI = getCacheFile(uri);
+    String eTag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getETag(uriConverter, cacheURI);
+    String expectedETag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getExpectedETag(uri);
+
+    String tracePrefix = null;
+    if (TRACE)
+    {
+      tracePrefix = ">? ECF: " + uri;
+      System.out.println(tracePrefix + " uri=" + uri);
+      System.out.println(tracePrefix + " cacheURI=" + cacheURI);
+      System.out.println(tracePrefix + " eTag=" + eTag);
+      System.out.println(tracePrefix + " expectedETag=" + expectedETag);
+    }
+
+    if (expectedETag != null || cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING)
+    {
+      if (cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? eTag != null : expectedETag.equals(eTag))
+      {
+        Map<String, ?> result = handleAttributes(requestedAttributes, uriConverter.getAttributes(cacheURI, options));
+        if (!result.isEmpty())
+        {
+          return result;
+        }
+      }
+    }
+
+    String username;
+    String password;
+
+    String uriString = uri.toString();
+    Proxy proxy = ProxySetupHelper.getProxy(uriString);
+    if (proxy != null)
+    {
+      username = proxy.getUsername();
+      password = proxy.getPassword();
+    }
+    else
+    {
+      username = null;
+      password = null;
+    }
+
+    if (TRACE)
+    {
+      System.out.println(tracePrefix + " proxy=" + proxy);
+      System.out.println(tracePrefix + " username=" + username);
+      System.out.println(tracePrefix + " password=" + PreferencesUtil.encrypt(password));
+    }
+
+    IContainer container;
+    try
+    {
+      container = createContainer();
+    }
+    catch (IOException ex)
+    {
+      return Collections.emptyMap();
+    }
+
+    AuthorizationHandler authorizatonHandler = getAuthorizatonHandler(options);
+    Authorization authorization = getAuthorizaton(options);
+
+    if (TRACE)
+    {
+      System.out.println(tracePrefix + " authorizationHandler=" + authorizatonHandler);
+    }
+
+    int triedReauthorization = 0;
+    for (int i = 0;; ++i)
+    {
+      if (TRACE)
+      {
+        System.out.println(tracePrefix + " trying=" + i);
+        System.out.println(tracePrefix + " triedReauthorization=" + triedReauthorization);
+        System.out.println(tracePrefix + " authorization=" + authorization);
+      }
+
+      IRemoteFileSystemBrowserContainerAdapter fileBrowser = container.getAdapter(IRemoteFileSystemBrowserContainerAdapter.class);
+
+      fileBrowser.setProxy(proxy);
+
+      if (username != null)
+      {
+        fileBrowser.setConnectContextForAuthentication(ConnectContextFactory.createUsernamePasswordConnectContext(username, password));
+      }
+      else if (password != null)
+      {
+        fileBrowser.setConnectContextForAuthentication(ConnectContextFactory.createPasswordConnectContext(password));
+      }
+
+      RemoteFileSystemListener fileSystemListener = new RemoteFileSystemListener();
+
+      try
+      {
+        FileTransferID fileTransferID = new FileTransferID(new FileTransferNamespace(), IOUtil.newURI(uriString));
+
+        // ECF doesn't support such options.
+        // I'm not sure how it can browser a file that's authorization protected and it also behind an authorization protected firewall.
+        // Map<Object, Object> requestOptions = new HashMap<Object, Object>();
+        // requestOptions.put(IRetrieveFileTransferOptions.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
+        // requestOptions.put(IRetrieveFileTransferOptions.READ_TIMEOUT, READ_TIMEOUT);
+        // if (authorization != null && authorization.isAuthorized())
+        // {
+        // requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, Collections.singletonMap("Authorization", authorization.getAuthorization()));
+        // }
+
+        fileBrowser.sendBrowseRequest(fileTransferID, fileSystemListener);
+      }
+      catch (RemoteFileSystemException ex)
+      {
+        return Collections.emptyMap();
+      }
+
+      try
+      {
+        fileSystemListener.receiveLatch.await();
+      }
+      catch (InterruptedException ex)
+      {
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " InterruptedException");
+          ex.printStackTrace(System.out);
+        }
+
+        return Collections.emptyMap();
+      }
+
+      if (fileSystemListener.exception != null)
+      {
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " transferLister.exception");
+          fileSystemListener.exception.printStackTrace(System.out);
+        }
+
+        if (!(fileSystemListener.exception instanceof UserCancelledException))
+        {
+          if (fileSystemListener.exception.getCause() instanceof SocketTimeoutException && i <= 2)
+          {
+            continue;
+          }
+
+          if (authorizatonHandler != null && fileSystemListener.exception instanceof BrowseFileTransferException)
+          {
+            // We assume contents can be accessed via the github API https://developer.github.com/v3/repos/contents/#get-contents
+            // That API, for security reasons, does not return HTTP_UNAUTHORIZED, so we need this special case for that host.
+            BrowseFileTransferException browseFileTransferException = (BrowseFileTransferException)fileSystemListener.exception;
+            int errorCode = browseFileTransferException.getErrorCode();
+            if (TRACE)
+            {
+              System.out.println(tracePrefix + " errorCode=" + errorCode);
+            }
+
+            if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED || API_GITHUB_HOST.equals(getHost(uri)) && errorCode == HttpURLConnection.HTTP_NOT_FOUND)
+            {
+              if (authorization == null)
+              {
+                authorization = authorizatonHandler.authorize(uri);
+                if (authorization.isAuthorized())
+                {
+                  --i;
+                  continue;
+                }
+              }
+
+              if (!authorization.isUnauthorizeable() && triedReauthorization++ < 3)
+              {
+                authorization = authorizatonHandler.reauthorize(uri, authorization);
+                if (authorization.isAuthorized())
+                {
+                  --i;
+                  continue;
+                }
+              }
+            }
+          }
+        }
+
+        if (!CacheHandling.CACHE_IGNORE.equals(cacheHandling) && uriConverter.exists(cacheURI, options)
+            && (!(fileSystemListener.exception instanceof RemoteFileSystemException)
+                || ((BrowseFileTransferException)fileSystemListener.exception).getErrorCode() != HttpURLConnection.HTTP_NOT_FOUND))
+        {
+          return handleAttributes(requestedAttributes, uriConverter.getAttributes(cacheURI, options));
+        }
+
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " failing");
+        }
+
+        return Collections.emptyMap();
+      }
+
+      // In the case of the Github API, the bytes will be JSON that contains a "content" pair containing the Base64 encoding of the actual contents.
+      if (API_GITHUB_HOST.equals(getHost(uri)))
+      {
+        // We should have a special case for that too.
+      }
+
+      return handleAttributes(requestedAttributes, fileSystemListener.info);
+    }
+  }
+
+  private final Map<String, ?> handleAttributes(Set<String> requestedAttributes, IRemoteFileInfo info)
+  {
+    Map<String, Object> result = new HashMap<String, Object>();
+    if (requestedAttributes == null || requestedAttributes.contains(URIConverter.ATTRIBUTE_READ_ONLY))
+    {
+      result.put(URIConverter.ATTRIBUTE_READ_ONLY, true);
+    }
+
+    if (requestedAttributes == null || requestedAttributes.contains(URIConverter.ATTRIBUTE_TIME_STAMP))
+    {
+      result.put(URIConverter.ATTRIBUTE_TIME_STAMP, info.getLastModified());
+    }
+
+    if (requestedAttributes == null || requestedAttributes.contains(URIConverter.ATTRIBUTE_LENGTH))
+    {
+      result.put(URIConverter.ATTRIBUTE_LENGTH, info.getLength());
+    }
+
+    return result;
+  }
+
+  private final Map<String, ?> handleAttributes(Set<String> requestedAttributes, Map<String, ?> attributes)
+  {
+    Map<String, Object> result = new HashMap<String, Object>();
+    if (requestedAttributes == null || requestedAttributes.contains(URIConverter.ATTRIBUTE_READ_ONLY))
+    {
+      result.put(URIConverter.ATTRIBUTE_READ_ONLY, true);
+    }
+
+    if (requestedAttributes == null || requestedAttributes.contains(URIConverter.ATTRIBUTE_TIME_STAMP))
+    {
+      Object timeStamp = attributes.get(URIConverter.ATTRIBUTE_TIME_STAMP);
+      if (timeStamp != null)
+      {
+        result.put(URIConverter.ATTRIBUTE_TIME_STAMP, timeStamp);
+      }
+    }
+
+    if (requestedAttributes == null || requestedAttributes.contains(URIConverter.ATTRIBUTE_LENGTH))
+    {
+      Object length = attributes.get(URIConverter.ATTRIBUTE_HIDDEN);
+      if (length != null)
+      {
+        result.put(URIConverter.ATTRIBUTE_LENGTH, length);
+      }
+    }
+
+    return result;
   }
 
   @Override
   public boolean exists(URI uri, Map<?, ?> options)
   {
-    InputStream inputStream = null;
-    try
-    {
-      // Use this approach to ensure that proxies and authorization are handled.
-      inputStream = createInputStream(uri, options);
-      return true;
-    }
-    catch (IOException ex)
-    {
-      return false;
-    }
-    finally
-    {
-      IOUtil.closeSilent(inputStream);
-    }
+    return !getAttributes(uri, options).isEmpty();
   }
 
   @Override
@@ -288,6 +548,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
         throw new IOExceptionWithCause(ex);
       }
+
       try
       {
         transferListener.receiveLatch.await();
@@ -966,6 +1227,41 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
         if (ex != null && exception == null)
         {
           exception = ex;
+        }
+
+        receiveLatch.countDown();
+      }
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static final class RemoteFileSystemListener implements IRemoteFileSystemListener
+  {
+    public final CountDownLatch receiveLatch = new CountDownLatch(1);
+
+    public Exception exception;
+
+    public IRemoteFileInfo info;
+
+    public RemoteFileSystemListener()
+    {
+    }
+
+    public void handleRemoteFileEvent(IRemoteFileSystemEvent event)
+    {
+      if (event instanceof IRemoteFileSystemBrowseEvent)
+      {
+        IRemoteFileSystemBrowseEvent browseEvent = (IRemoteFileSystemBrowseEvent)event;
+        exception = browseEvent.getException();
+        if (exception == null)
+        {
+          for (IRemoteFile remoteFile : browseEvent.getRemoteFiles())
+          {
+            info = remoteFile.getInfo();
+            break;
+          }
         }
 
         receiveLatch.countDown();
