@@ -168,8 +168,13 @@
       <targlet
           name="Equinox P2"
           activeRepositoryList="${eclipse.target.platform}">
+        <requirement
+            name="*"/>
         <sourceLocator
-            rootFolder="${git.clone.equinox.p2.location}"/>
+            rootFolder="${git.clone.equinox.p2.location}">
+          <excludedPath>org.eclipse.equinox.p2.releng.buckminster</excludedPath>
+          <excludedPath>bundles/org.eclipse.equinox.p2.testserver</excludedPath>
+        </sourceLocator>
       </targlet>
     </setupTask>
     <setupTask
@@ -239,9 +244,7 @@
           name="Equinox Framework"
           activeRepositoryList="${eclipse.target.platform}">
         <requirement
-            name="org.eclipse.equinox.executable.feature.group"/>
-        <requirement
-            name="org.eclipse.osgi.compatibility.plugins.feature.feature.group"/>
+            name="*"/>
         <sourceLocator
             rootFolder="${git.clone.equinox.framework.location}"/>
       </targlet>
@@ -295,29 +298,7 @@
           name="Equinox Bundles"
           activeRepositoryList="${eclipse.target.platform}">
         <requirement
-            name="org.eclipse.equinox.compendium.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.equinox.core.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.equinox.core.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.equinox.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.equinox.server.core.feature.group"/>
-        <requirement
-            name="org.eclipse.equinox.server.jetty.feature.group"/>
-        <requirement
-            name="org.eclipse.equinox.server.p2.feature.group"/>
-        <requirement
-            name="org.eclipse.equinox.server.servletbridge.feature.group"/>
-        <requirement
-            name="org.eclipse.equinox.server.simple.feature.group"/>
-        <requirement
-            name="org.eclipse.equinox.serverside.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.equinox.weaving.sdk.feature.group"/>
-        <requirement
-            name="org.aspectj.weaver"/>
+            name="*"/>
         <sourceLocator
             rootFolder="${git.clone.equinox.bundles.location}"/>
         <repositoryList
