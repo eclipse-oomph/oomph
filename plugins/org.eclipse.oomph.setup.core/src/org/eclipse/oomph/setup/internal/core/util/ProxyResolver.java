@@ -13,6 +13,9 @@ package org.eclipse.oomph.setup.internal.core.util;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.util.WorkerPool;
 
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -62,12 +65,35 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
   }
 
   @Override
-  protected void run(String taskName, IProgressMonitor monitor)
+  protected void run(String taskName, final IProgressMonitor monitor)
   {
-    EList<Resource> resources = resourceSet.getResources();
+    final EList<Resource> resources = resourceSet.getResources();
     monitor.setTaskName("Resolving");
     monitor.subTask("Resolving proxies of " + resources.size() + " resources");
-    perform(resources);
+
+    Adapter adapter = new AdapterImpl()
+    {
+      @Override
+      public void notifyChanged(Notification notification)
+      {
+        if (notification.getEventType() == Notification.ADD)
+        {
+          Resource resource = (Resource)notification.getNewValue();
+          schedule(resource);
+          monitor.subTask("Resolving proxies of " + resources.size() + " resources");
+        }
+      }
+    };
+
+    try
+    {
+      resourceSet.eAdapters().add(adapter);
+      perform(new ArrayList<Resource>(resources));
+    }
+    finally
+    {
+      resourceSet.eAdapters().remove(adapter);
+    }
   }
 
   @Override
@@ -92,7 +118,13 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
     @Override
     protected IStatus perform(IProgressMonitor monitor)
     {
-      for (EObject eObject : getKey().getContents())
+      EList<EObject> contents;
+      synchronized (resourceSet)
+      {
+        contents = getKey().getContents();
+      }
+
+      for (EObject eObject : contents)
       {
         visit(eObject);
       }
