@@ -133,6 +133,12 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
             toolItem.setSelection(visible);
           }
 
+          String text = shell.getText();
+          if (!text.equals(toolItem.getToolTipText()))
+          {
+            toolItem.setToolTipText(text);
+          }
+
           IStatus status = SetupPropertyTester.getPerformingStatus();
           if (status == null)
           {
