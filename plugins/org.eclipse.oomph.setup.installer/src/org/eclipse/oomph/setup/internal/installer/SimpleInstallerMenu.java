@@ -159,6 +159,7 @@ public class SimpleInstallerMenu extends Shell implements Listener
   {
     Composite parent = getParent();
     Rectangle bounds = parent.getBounds();
+    Rectangle displayRect = getDisplay().getBounds();
 
     Point menuStartLocation = new Point(bounds.x + bounds.width, bounds.y + 75);
     parent.toDisplay(menuStartLocation);
@@ -166,7 +167,17 @@ public class SimpleInstallerMenu extends Shell implements Listener
     Point prefSize = computeSize(SWT.DEFAULT, SWT.DEFAULT);
     Point size = new Point(Math.max(prefSize.x, getDefaultSize(parent).x), Math.max(prefSize.y, bounds.height - 80) - 5);
 
-    setBounds(menuStartLocation.x, menuStartLocation.y, size.x, size.y);
+    /*
+     * If there is no space available to the right of the installer, display the menu to the left of the Dialog
+     */
+    if (menuStartLocation.x + size.x > displayRect.width)
+    {
+      setBounds(menuStartLocation.x - bounds.width - size.x, menuStartLocation.y, size.x, size.y);
+    }
+    else
+    {
+      setBounds(menuStartLocation.x, menuStartLocation.y, size.x, size.y);
+    }
   }
 
   public void handleEvent(Event event)
