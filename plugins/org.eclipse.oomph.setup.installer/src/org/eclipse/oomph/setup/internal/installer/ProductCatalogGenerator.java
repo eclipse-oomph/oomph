@@ -21,6 +21,7 @@ import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.impl.RequirementImpl;
 import org.eclipse.oomph.p2.internal.core.AgentImpl;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.EclipseIniTask;
@@ -35,7 +36,6 @@ import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
-import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.WorkerPool;
 import org.eclipse.oomph.util.XMLUtil;
@@ -47,7 +47,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.resource.Resource;
 
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -62,6 +61,7 @@ import org.eclipse.equinox.p2.metadata.ITouchpointData;
 import org.eclipse.equinox.p2.metadata.ITouchpointInstruction;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.query.CompoundQueryable;
 import org.eclipse.equinox.p2.query.IQuery;
 import org.eclipse.equinox.p2.query.IQueryable;
@@ -96,6 +96,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -119,11 +120,14 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final Map<String, String> ICONS = new HashMap<String, String>();
 
-  private static final List<String> PRODUCT_IDS = Arrays.asList(new String[] { "epp.package.java", "epp.package.jee", "epp.package.cpp", "epp.package.php",
-      "epp.package.committers", "epp.package.dsl", "epp.package.reporting", "epp.package.modeling", "epp.package.android", "epp.package.rcp",
-      "epp.package.testing", "epp.package.parallel", "epp.package.automotive", "epp.package.scout", "org.eclipse.platform.ide" });
+  private static final List<String> PRODUCT_IDS = Arrays
+      .asList(new String[] { "epp.package.java", "epp.package.jee", "epp.package.cpp", "epp.package.javascript", "epp.package.php", "epp.package.committers",
+          "epp.package.dsl", "epp.package.reporting", "epp.package.modeling", "epp.package.android", "epp.package.rcp", "epp.package.testing",
+          "epp.package.parallel", "epp.package.automotive", "epp.package.scout", "org.eclipse.platform.ide" });
 
   private static final Set<String> EXCLUDED_IDS = new HashSet<String>(Arrays.asList("epp.package.mobile"));
+
+  private static final String EPP_INSTALL_ROOTS_FILTER = "(org.eclipse.epp.install.roots=true)";
 
   private URI outputLocation;
 
@@ -626,6 +630,16 @@ public class ProductCatalogGenerator implements IApplication
           if (requirement instanceof IRequiredCapability)
           {
             IRequiredCapability capability = (IRequiredCapability)requirement;
+            IMatchExpression<IInstallableUnit> filter = capability.getFilter();
+            if (filter != null)
+            {
+              String value = RequirementImpl.formatMatchExpression(filter);
+              if (EPP_INSTALL_ROOTS_FILTER.equals(value))
+              {
+                continue;
+              }
+            }
+
             if ("org.eclipse.equinox.p2.iu".equals(capability.getNamespace()))
             {
               requirements.add(capability.getName());
@@ -925,6 +939,16 @@ public class ProductCatalogGenerator implements IApplication
         String capabilityName = capability.getName();
         if (capabilityName.endsWith(Requirement.FEATURE_SUFFIX))
         {
+          IMatchExpression<IInstallableUnit> filter = capability.getFilter();
+          if (filter != null)
+          {
+            String value = RequirementImpl.formatMatchExpression(filter);
+            if (EPP_INSTALL_ROOTS_FILTER.equals(value))
+            {
+              continue;
+            }
+          }
+
           @SuppressWarnings("unchecked")
           IQueryable<IInstallableUnit> queriable = new CompoundQueryable<IInstallableUnit>(
               new IQueryable[] { releaseMetaDataRepository, eppMetaDataRepository });
@@ -971,6 +995,27 @@ public class ProductCatalogGenerator implements IApplication
     if (eppURI != null)
     {
       packageRepository = P2Factory.eINSTANCE.createRepository();
+
+      // Check if the product IU is really in the EPP repository we will reference.
+      // It might be the case that it's only present in an older child of the composite, in which case, we'll must point at the composites.
+      if (!"all".equals(productName) && !"org.eclipse.platform.ide".equals(productName) && train.equals(stagingTrain))
+      {
+        try
+        {
+          IMetadataRepository eppMetadataRepository = manager.loadRepository(new java.net.URI(eppURI.toString()), null);
+          if (!eppMetadataRepository.query(QueryUtil.createIUQuery(productName), null).iterator().hasNext())
+          {
+            eppURI = eppURI.trimSegments(1);
+            trainURI = trainURI.trimSegments(1);
+            log.append(" {missing}");
+          }
+        }
+        catch (Exception ex)
+        {
+          throw new RuntimeException(ex);
+        }
+      }
+
       packageRepository.setURL(eppURI.toString());
     }
 
@@ -994,7 +1039,7 @@ public class ProductCatalogGenerator implements IApplication
       addAllRootIURequirements(p2Task.getRequirements(), versionSegment, ius);
     }
 
-    if (!"org.eclipse.platform.ide".equals(name) && packageRepository != null)
+    if (!"org.eclipse.platform.ide".equals(productName) && packageRepository != null)
     {
       p2Task.getRepositories().add(packageRepository);
     }
@@ -1573,6 +1618,29 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
+  private Set<String> getRootInstallIUs(String release, IInstallableUnit productIU)
+  {
+    Set<String> rootInstallIUs = new TreeSet<String>();
+    for (IRequirement requirement : productIU.getRequirements())
+    {
+      if (requirement instanceof IRequiredCapability)
+      {
+        IRequiredCapability capability = (IRequiredCapability)requirement;
+        IMatchExpression<IInstallableUnit> filter = capability.getFilter();
+        if (filter != null)
+        {
+          String value = RequirementImpl.formatMatchExpression(filter);
+          if (EPP_INSTALL_ROOTS_FILTER.equals(value))
+          {
+            rootInstallIUs.add(capability.getName());
+          }
+        }
+      }
+    }
+
+    return rootInstallIUs;
+  }
+
   /**
    * @author Eike Stepper
    */
@@ -1755,53 +1823,5 @@ public class ProductCatalogGenerator implements IApplication
     {
       return new GenerateJob(this, key, workerID, secondary);
     }
-  }
-
-  //
-  // Temporary logic until this information is available in the product IU properties
-  //
-
-  private static final Map<String, Map<String, Set<String>>> ROOT_INSTALL_IUS = new LinkedHashMap<String, Map<String, Set<String>>>();
-
-  private static final File ROOT_LOCATION;
-
-  static
-  {
-    try
-    {
-      URL baseURL = SetupInstallerPlugin.INSTANCE.getBaseURL();
-      URL resolvedURL = FileLocator.resolve(baseURL);
-      String path = URI.createURI(resolvedURL.toString()).toFileString();
-      ROOT_LOCATION = new File(path);
-    }
-    catch (Exception ex)
-    {
-      throw new RuntimeException(ex);
-    }
-  }
-
-  private Set<String> getRootInstallIUs(String release, IInstallableUnit productID)
-  {
-    Map<String, Set<String>> rootInstallIUs = ROOT_INSTALL_IUS.get(release);
-    if (rootInstallIUs == null)
-    {
-      rootInstallIUs = new LinkedHashMap<String, Set<String>>();
-      if (ROOT_LOCATION != null)
-      {
-        File propertiesLocation = new File(ROOT_LOCATION, release + ".properties");
-        if (propertiesLocation.isFile())
-        {
-          Map<String, String> loadProperties = PropertiesUtil.loadProperties(propertiesLocation);
-          for (Map.Entry<String, String> entry : loadProperties.entrySet())
-          {
-            Set<String> roots = new LinkedHashSet<String>(StringUtil.explode(entry.getValue(), " "));
-            rootInstallIUs.put(entry.getKey(), roots);
-          }
-        }
-      }
-      ROOT_INSTALL_IUS.put(release, rootInstallIUs);
-    }
-
-    return rootInstallIUs.get(productID.getId());
   }
 }
