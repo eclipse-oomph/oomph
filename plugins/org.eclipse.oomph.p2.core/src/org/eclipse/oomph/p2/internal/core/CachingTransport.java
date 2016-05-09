@@ -232,7 +232,7 @@ public class CachingTransport extends Transport
   @Override
   public IStatus download(URI uri, OutputStream target, IProgressMonitor monitor)
   {
-    return download(uri, target, 0, monitor);
+    return download(uri, target, -1, monitor);
   }
 
   @Override
