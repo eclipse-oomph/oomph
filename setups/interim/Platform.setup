@@ -59,6 +59,11 @@
       defaultValue="Luna"
       storageURI="scope://Workspace"/>
   <setupTask
+      xsi:type="setup:VariableTask"
+      name="eclipse.api.baseline.target.platform"
+      value="Mars"
+      storageURI="scope://Workspace"/>
+  <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Xmx"
       value="2048m"
