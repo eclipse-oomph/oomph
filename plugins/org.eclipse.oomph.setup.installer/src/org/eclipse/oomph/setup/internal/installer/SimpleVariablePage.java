@@ -1111,28 +1111,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
       SimplePrompter prompter = new SimplePrompter(OS.INSTANCE.getForBitness(javaController.getBitness()), vmPath);
       performer = SetupTaskPerformer.create(uriConverter, prompter, Trigger.BOOTSTRAP, setupContext, false);
 
-      EList<SetupTask> triggeredSetupTasks = performer.getTriggeredSetupTasks();
-      final Map<EClass, EList<SetupTask>> enablementTasks = EnablementComposite.getEnablementTasks(triggeredSetupTasks);
-      if (!enablementTasks.isEmpty())
-      {
-        UIUtil.syncExec(getDisplay(), new Runnable()
-        {
-          public void run()
-          {
-            EnablementDialog enablementDialog = new EnablementDialog(getShell(), "the installer", enablementTasks);
-            if (enablementDialog.open() == EnablementDialog.OK)
-            {
-              selectionMemento.setProductVersion(EcoreUtil.getURI(selectedProductVersion));
-              dialog.restart();
-            }
-
-            installCancel();
-          }
-        });
-
-        throw new OperationCanceledException();
-      }
-
       final List<VariableTask> unresolvedVariables = prompter.getUnresolvedVariables();
       if (!unresolvedVariables.isEmpty())
       {
@@ -1173,6 +1151,28 @@ public class SimpleVariablePage extends SimpleInstallerPage
         }
 
         throw new UnloggedException("Undefined variable" + (multi ? "s" : "") + ": " + variables);
+      }
+
+      EList<SetupTask> triggeredSetupTasks = performer.getTriggeredSetupTasks();
+      final Map<EClass, EList<SetupTask>> enablementTasks = EnablementComposite.getEnablementTasks(triggeredSetupTasks);
+      if (!enablementTasks.isEmpty())
+      {
+        UIUtil.syncExec(getDisplay(), new Runnable()
+        {
+          public void run()
+          {
+            EnablementDialog enablementDialog = new EnablementDialog(getShell(), "the installer", enablementTasks);
+            if (enablementDialog.open() == EnablementDialog.OK)
+            {
+              selectionMemento.setProductVersion(EcoreUtil.getURI(selectedProductVersion));
+              dialog.restart();
+            }
+
+            installCancel();
+          }
+        });
+
+        throw new OperationCanceledException();
       }
 
       performer.getUnresolvedVariables().clear();
