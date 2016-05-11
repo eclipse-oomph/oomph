@@ -13,7 +13,7 @@ package org.eclipse.oomph.internal.setup;
 /**
  * @author Eike Stepper
  */
-public interface SetupProperties
+public class SetupProperties
 {
   public static final String PROP_DO_NOT_LOAD_RESOURCES_PLUGIN = "org.eclipse.emf.ecore.plugin.EcorePlugin.doNotLoadResourcesPlugin";
 
@@ -78,4 +78,8 @@ public interface SetupProperties
    * If set, the 'launch automatically' and the 'restart if needed' check boxes are not displayed; instead the property value (true or false) is used directly.
    */
   public static final String PROP_SETUP_LAUNCH_AUTOMATICALLY = "oomph.setup.launch.automatically";
+
+  private SetupProperties()
+  {
+  }
 }

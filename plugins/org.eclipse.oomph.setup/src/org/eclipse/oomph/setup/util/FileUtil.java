@@ -28,6 +28,10 @@ import java.util.List;
  */
 public final class FileUtil
 {
+  private FileUtil()
+  {
+  }
+
   public static File rename(File from) throws IOException, InterruptedException
   {
     File to = new File(from.getParentFile(), from.getName() + "." + System.currentTimeMillis());
@@ -39,8 +43,6 @@ public final class FileUtil
   {
     if (from.exists())
     {
-      // Files.move(Paths.get(from.toString()), Paths.get(to.toString()));
-
       for (int i = 0; i < 200; i++)
       {
         if (from.renameTo(to))
@@ -114,7 +116,7 @@ public final class FileUtil
           monitor.setTaskName("Deleting file " + childPath);
         }
 
-        doDelete(child, monitor);
+        doDelete(child);
         monitor.worked(1);
       }
     }
@@ -127,11 +129,10 @@ public final class FileUtil
     }
   }
 
-  private static void doDelete(File file, IProgressMonitor monitor) throws IOException, InterruptedException
+  private static void doDelete(File file) throws IOException, InterruptedException
   {
     for (int i = 0; i < 1000; i++)
     {
-      // SetupPlugin.checkCancelation(monitor);
       if (file.delete())
       {
         return;
