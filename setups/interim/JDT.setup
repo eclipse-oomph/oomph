@@ -110,6 +110,12 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>JDT Features</description>
     </setupTask>
     <setupTask
@@ -173,6 +179,12 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>JDT Core</description>
     </setupTask>
     <setupTask
@@ -290,6 +302,12 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>JDT Core</description>
     </setupTask>
     <setupTask
@@ -404,6 +422,12 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>JDT UI</description>
     </setupTask>
     <setupTask
@@ -560,6 +584,12 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>JDT Tests</description>
     </setupTask>
     <setupTask
