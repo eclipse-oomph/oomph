@@ -18,6 +18,7 @@ import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.OomphPreferencePage;
 import org.eclipse.oomph.internal.ui.TaskItemDecorator;
 import org.eclipse.oomph.jreinfo.ui.JREInfoUIPlugin;
+import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
@@ -349,12 +350,24 @@ public final class SetupUIPlugin extends OomphUIPlugin
     // TODO Remove the following try/catch block after bug 485018 has been fixed.
     try
     {
-      Profile currentProfile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
-      BundlePool bundlePool = currentProfile.getBundlePool();
-      File bundlePoolLocation = bundlePool.getLocation();
-
-      File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features");
-      eclipseExtensionFeaturesFolder.mkdirs();
+      Agent currentAgent = P2Util.getAgentManager().getCurrentAgent();
+      if (currentAgent != null)
+      {
+        Profile currentProfile = currentAgent.getCurrentProfile();
+        if (currentProfile != null)
+        {
+          BundlePool bundlePool = currentProfile.getBundlePool();
+          if (bundlePool != null)
+          {
+            File bundlePoolLocation = bundlePool.getLocation();
+            if (bundlePoolLocation != null)
+            {
+              File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features");
+              eclipseExtensionFeaturesFolder.mkdirs();
+            }
+          }
+        }
+      }
     }
     catch (Throwable throwable)
     {
