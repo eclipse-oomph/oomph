@@ -27,6 +27,8 @@ public interface Profile extends IProfile, AgentElement
 
   public static final String PROP_PROFILE_REFERENCER = "org.eclipse.oomph.p2.profile.referencer"; //$NON-NLS-1$
 
+  public static final String PROP_PROFILE_SHARED_POOL = "org.eclipse.oomph.p2.profile.shared.pool"; //$NON-NLS-1$
+
   public static final String PROP_IU_COMPATIBILITY = "org.eclipse.oomph.p2.iu.compatibility"; //$NON-NLS-1$
 
   public static final String TYPE_INSTALLATION = "Installation";

@@ -159,6 +159,18 @@ public abstract class PersistentMap<E>
     return element;
   }
 
+  public final synchronized E remap(String oldKey, String newKey)
+  {
+    E element = elements.remove(oldKey);
+    if (element != null)
+    {
+      elements.put(newKey, element);
+      save(newKey, oldKey);
+    }
+
+    return element;
+  }
+
   public final synchronized void removeElement(String key)
   {
     E element = elements.remove(key);
@@ -248,7 +260,7 @@ public abstract class PersistentMap<E>
     }
   }
 
-  private void save(String addedKey, final String removedKey)
+  public void save(String addedKey, final String removedKey)
   {
     if (file != null)
     {

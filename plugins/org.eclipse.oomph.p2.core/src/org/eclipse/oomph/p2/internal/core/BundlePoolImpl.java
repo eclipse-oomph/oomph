@@ -34,17 +34,16 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
 {
   private final Agent agent;
 
-  private final File location;
+  private File location;
 
-  private final String path;
+  private String path;
 
   private IFileArtifactRepository fileArtifactRepository;
 
   public BundlePoolImpl(AgentImpl agent, File location)
   {
     this.agent = agent;
-    this.location = location;
-    path = location.getAbsolutePath();
+    setLocation(location);
   }
 
   @Override
@@ -66,6 +65,12 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
   public File getLocation()
   {
     return location;
+  }
+
+  public void setLocation(File location)
+  {
+    this.location = location;
+    path = location.getAbsolutePath();
   }
 
   public Set<String> getClients()

@@ -123,8 +123,6 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.equinox.internal.p2.update.Configuration;
-import org.eclipse.equinox.internal.p2.update.Site;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 
 import org.osgi.framework.Bundle;
@@ -2890,26 +2888,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     File bundlePool = profile.getBundlePool().getLocation();
     if (!installFolder.equals(bundlePool))
     {
-      File platformXML = new File(productConfigurationLocation, "org.eclipse.update/platform.xml");
-      if (platformXML.isFile())
-      {
-        Configuration configuration = Configuration.load(platformXML, null);
-        for (Site site : configuration.getSites())
-        {
-          if (!Site.POLICY_MANAGED_ONLY.equals(site.getPolicy()))
-          {
-            File siteLocation = new File(URI.createURI(site.getUrl()).toFileString());
-            if (siteLocation.equals(bundlePool))
-            {
-              log("Changing " + platformXML + " (policy=" + Site.POLICY_MANAGED_ONLY + ")", false, Severity.OK);
-              site.setPolicy(Site.POLICY_MANAGED_ONLY);
-              configuration.save(platformXML, null);
-              break;
-            }
-          }
-        }
-      }
-
       File garbageCollectorPreferences = new File(productConfigurationLocation, ".settings/org.eclipse.equinox.p2.garbagecollector.prefs");
       IOUtil.writeLines(garbageCollectorPreferences, "8859_1", Arrays.asList(new String[] { "eclipse.preferences.version=1", "gc_enabled=false" }));
     }

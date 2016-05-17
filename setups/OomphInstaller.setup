@@ -22,6 +22,18 @@
       <value>Eclipse Installer</value>
     </detail>
   </annotation>
+  <version name="local"
+      label="Local"
+      requiredJavaVersion="1.7">
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Installer">
+      <requirement
+          name="org.eclipse.oomph.setup.installer.product"/>
+      <repository
+          url="${oomph.product.update.url}"/>
+    </setupTask>
+  </version>
   <version name="mars"
       label="Mars"
       requiredJavaVersion="1.7">

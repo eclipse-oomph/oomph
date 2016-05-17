@@ -70,6 +70,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.dynamichelpers.IExtensionTracker;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.swt.widgets.Display;
@@ -362,10 +363,28 @@ public final class SetupUIPlugin extends OomphUIPlugin
             File bundlePoolLocation = bundlePool.getLocation();
             if (bundlePoolLocation != null)
             {
-              File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features");
-              eclipseExtensionFeaturesFolder.mkdirs();
+              String installFolderLocation = currentProfile.getProperty(IProfile.PROP_INSTALL_FOLDER);
+              if (installFolderLocation != null && !bundlePoolLocation.equals(new File(installFolderLocation)))
+              {
+                File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features");
+                eclipseExtensionFeaturesFolder.mkdirs();
+              }
             }
           }
+        }
+      }
+
+      Profile currentProfile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
+      String installFolderLocation = currentProfile.getProperty(IProfile.PROP_INSTALL_FOLDER);
+      if (installFolderLocation != null)
+      {
+        BundlePool bundlePool = currentProfile.getBundlePool();
+        File bundlePoolLocation = bundlePool.getLocation();
+
+        if (!bundlePoolLocation.equals(new File(installFolderLocation)))
+        {
+          File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features");
+          eclipseExtensionFeaturesFolder.mkdirs();
         }
       }
     }

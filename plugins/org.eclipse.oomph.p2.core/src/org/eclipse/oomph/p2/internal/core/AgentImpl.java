@@ -14,14 +14,26 @@ import org.eclipse.oomph.p2.P2Exception;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.URIConverter;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.equinox.internal.p2.engine.CommitOperationEvent;
 import org.eclipse.equinox.internal.p2.repository.Transport;
+import org.eclipse.equinox.internal.p2.touchpoint.eclipse.EclipseTouchpoint;
+import org.eclipse.equinox.internal.p2.touchpoint.eclipse.Util;
+import org.eclipse.equinox.internal.p2.update.Configuration;
+import org.eclipse.equinox.internal.p2.update.Site;
+import org.eclipse.equinox.internal.provisional.p2.core.eventbus.IProvisioningEventBus;
+import org.eclipse.equinox.internal.provisional.p2.core.eventbus.SynchronousProvisioningListener;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 import org.eclipse.equinox.p2.core.ProvisionException;
@@ -29,7 +41,10 @@ import org.eclipse.equinox.p2.core.spi.IAgentService;
 import org.eclipse.equinox.p2.engine.IEngine;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
+import org.eclipse.equinox.p2.metadata.IArtifactKey;
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.planner.IPlanner;
+import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
@@ -40,10 +55,15 @@ import org.osgi.framework.ServiceReference;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EventObject;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -52,6 +72,9 @@ import java.util.Set;
 public class AgentImpl extends AgentManagerElementImpl implements Agent
 {
   public static final String ENGINE_PATH = "org.eclipse.equinox.p2.engine";
+
+  private static final Pattern ECLIPSE_INI_SECTION_PATTERN = Pattern.compile("^(-vmargs)([\n\r]+.*)\\z|^(-[^\\n\\r]*[\\n\\r]*)((?:^[^-][^\\n\\r]*)*[\\n\\r]*)",
+      Pattern.MULTILINE | Pattern.DOTALL);
 
   private final AgentManagerImpl agentManager;
 
@@ -93,6 +116,13 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       }
 
       @Override
+      protected BundlePool loadElement(String key, String extraInfo)
+      {
+        // TODO
+        return super.loadElement(key, extraInfo);
+      }
+
+      @Override
       protected void initializeFirstTime()
       {
         IProfileRegistry profileRegistry = getProfileRegistry();
@@ -126,6 +156,13 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
         File referencer = size > 3 ? AgentImpl.getFile(tokens.get(3)) : null;
 
         return new ProfileImpl(AgentImpl.this, bundlePool, profileID, type, installFolder, referencer);
+      }
+
+      @Override
+      protected Profile loadElement(String key, String extraInfo)
+      {
+        // TODO
+        return super.loadElement(key, extraInfo);
       }
 
       @Override
@@ -467,7 +504,60 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
         provisioningAgent.registerService(IArtifactRepositoryManager.SERVICE_NAME, artifactRepositoryManager);
       }
 
+      IProvisioningEventBus eventBus = (IProvisioningEventBus)provisioningAgent.getService(IProvisioningEventBus.SERVICE_NAME);
+      if (eventBus != null)
+      {
+        eventBus.addListener(new SynchronousProvisioningListener()
+        {
+          public void notify(EventObject event)
+          {
+            if (event instanceof CommitOperationEvent)
+            {
+              CommitOperationEvent commitOperationEvent = (CommitOperationEvent)event;
+              IProfile profile = commitOperationEvent.getProfile();
+              if (Profile.TYPE_INSTALLATION.equals(profile.getProperty(Profile.PROP_PROFILE_TYPE)))
+              {
+                // If this is a commit of an Oomph-created installation profile, then adjust the installation details.
+                adjustInstallation(profile);
+              }
+            }
+          }
+        });
+      }
+
       this.provisioningAgent = provisioningAgent;
+
+      Profile currentProfile = getCurrentProfile();
+      if (currentProfile instanceof ProfileImpl)
+      {
+        File cachedInstallFolder = currentProfile.getInstallFolder();
+        if (cachedInstallFolder != null)
+        {
+          String actualInstallFolderLocation = currentProfile.getProperty(IProfile.PROP_INSTALL_FOLDER);
+          if (actualInstallFolderLocation != null)
+          {
+            File actualInstallFolder = new File(actualInstallFolderLocation);
+            if (!actualInstallFolder.equals(cachedInstallFolder))
+            {
+              ((ProfileImpl)currentProfile).setInstallFolder(actualInstallFolder);
+
+              BundlePool bundlePool = currentProfile.getBundlePool();
+              if (bundlePool instanceof BundlePoolImpl)
+              {
+                File bundlePoolLocation = bundlePool.getLocation();
+                if (bundlePoolLocation.equals(cachedInstallFolder))
+                {
+                  ((BundlePoolImpl)bundlePool).setLocation(actualInstallFolder);
+                  bundlePoolMap.remap(cachedInstallFolder.toString(), actualInstallFolderLocation);
+                }
+              }
+
+              String profileID = currentProfile.getProfileId();
+              profileMap.save(profileID, profileID);
+            }
+          }
+        }
+      }
     }
   }
 
@@ -660,5 +750,385 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     }
 
     return provisioningAgent;
+  }
+
+  private void adjustInstallation(IProfile profile)
+  {
+    // This property should always be in a well-formed profile.
+    String bundlePoolLocation = profile.getProperty(IProfile.PROP_CACHE);
+    if (bundlePoolLocation != null)
+    {
+      // There should always be a bundle pool for this location.
+      BundlePool bundlePool = getBundlePool(new File(bundlePoolLocation));
+      if (bundlePool != null)
+      {
+        // And there should always be an install folder in a well-formed profile.
+        // On the Mac, this should point at the Contents/Eclipse subfolder.
+        String installFolderLocation = profile.getProperty(IProfile.PROP_INSTALL_FOLDER);
+        if (installFolderLocation != null)
+        {
+          // The configuration folder should be nested in this install folder.
+          File installFolder = new File(installFolderLocation);
+          File configurationFolder = new File(installFolder, "configuration");
+
+          // If this is an installation based on a shared pool...
+          if ("true".equals(profile.getProperty(Profile.PROP_PROFILE_SHARED_POOL)))
+          {
+            try
+            {
+              adjustConfigIni(profile, bundlePool, configurationFolder);
+            }
+            catch (Exception ex)
+            {
+              // Ignore.
+            }
+
+            try
+            {
+              adjustLauncherIni(profile, installFolder, true);
+            }
+            catch (Exception ex)
+            {
+              // Ignore.
+            }
+
+            try
+            {
+              adjustBundlesInfo(configurationFolder);
+            }
+            catch (Exception ex)
+            {
+              // Ignore.
+            }
+
+            try
+            {
+              adjustPlatformXML(bundlePoolLocation, configurationFolder);
+            }
+            catch (Exception ex)
+            {
+              // Ignore.
+            }
+          }
+          else
+          {
+            try
+            {
+              adjustLauncherIni(profile, installFolder, false);
+            }
+            catch (Exception ex)
+            {
+              // Ignore.
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private void adjustConfigIni(IProfile profile, BundlePool bundlePool, File configurationFolder)
+  {
+    // It should have a config.ini file to set various system properties.
+    // If it doesn't exist, it's not a well-formed installation so an exception will be thrown loading it and we'll exit this method as a result.
+    File configIniFile = new File(configurationFolder, "config.ini");
+    Map<String, String> configProperties = PropertiesUtil.loadProperties(configIniFile);
+
+    // The OSGi slash path might be specified using platform:/base/<bundle-id>
+    // but that doesn't work for a shared installation because the referenced bundle doesn't physically exist in the installation.
+    boolean changed = false;
+    String splashPath = configProperties.get("osgi.splashPath");
+    if (splashPath != null)
+    {
+      // If there is a splash path with a URI of this form...
+      org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createURI(splashPath);
+      if ("platform".equals(uri.scheme()) && uri.segmentCount() >= 2 && "base".equals(uri.segment(0)))
+      {
+        // Determine which IU resolves for bundle-id...
+        LOOP: for (IInstallableUnit installableUnit : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(uri.lastSegment()), null)))
+        {
+          // Look at all that IU's artifacts.
+          for (IArtifactKey artifactKey : installableUnit.getArtifacts())
+          {
+            // If the file slash.bmp exists in that artifact jar or folder...
+            File artifactFile = bundlePool.getFileArtifactRepository().getArtifactFile(artifactKey);
+            if (artifactFile.isDirectory() ? new File(artifactFile, "splash.bmp").exists()
+                : URIConverter.INSTANCE.exists(URI.createURI("archive:" + URI.createFileURI(artifactFile.getAbsolutePath() + "!/splash.bmp")), null))
+            {
+              // Replace the value with the absolute URI of the artifact in the shared bundle pool.
+              // The launcher and p2 have a bad habit of using URL.getPath which does not decode encoded character, e.g., %20 is not decode to the space
+              // character.
+              // So better we not produce an encoded URI.
+              configProperties.put("osgi.splashPath", createFileURI(artifactFile));
+              changed = true;
+              break LOOP;
+            }
+          }
+        }
+      }
+    }
+
+    // The OSGi framework property might be a relative path, e.g., file:../<path-to-shared-pool>.
+    String osgiFramework = configProperties.get("osgi.framework");
+    if (osgiFramework != null)
+    {
+      // If file: is not followed by a '/', the URI won't be considered hierarchical even though it has file scheme.
+      URI uri = URI.createURI(osgiFramework);
+      if (uri.hasOpaquePart() && "file".equals(uri.scheme()))
+      {
+        // Resolve the relative path in the URI against the configuration folder's URI.
+        // If that file exists, as expected will be the case.
+        URI configurationFolderURI = URI.createFileURI(configurationFolder.toString());
+        URI absoluteOSGiFrameworkLocation = URI.createURI(uri.opaquePart()).resolve(configurationFolderURI);
+        if (new File(absoluteOSGiFrameworkLocation.toFileString()).exists())
+        {
+          // Replace the value with the absolute URI of the OSGi framework bundle.
+          // The launcher and p2 have a bad habit of using URL.getPath which does not decode encoded character, e.g., %20 is not decode to the space character.
+          // So better we not produce an encoded URI.
+          configProperties.put("osgi.framework", createFileURI(absoluteOSGiFrameworkLocation.toFileString()));
+          changed = true;
+        }
+      }
+    }
+
+    // If there were changes made, save the configuration.
+    if (changed)
+    {
+      PropertiesUtil.saveProperties(configIniFile, configProperties, false, true, "This configuration file was written by: " + AgentImpl.class.getName());
+    }
+  }
+
+  private void adjustLauncherIni(IProfile profile, File installFolder, boolean sharedPool)
+  {
+    // We need to modify the eclipse.ini.
+    // For generality we'll check the launcher name property to compute the name of the launcher ini.
+    String launcherName = profile.getProperty(EclipseTouchpoint.PROFILE_PROP_LAUNCHER_NAME);
+    File iniFile = new File(installFolder, launcherName == null ? "eclipse.ini" : launcherName + ".ini");
+    String contents = new String(IOUtil.readFile(iniFile));
+
+    // We will process all the sections, keeping them in a map from which we'll compute the modified contents.
+    Map<String, String> map = new LinkedHashMap<String, String>();
+    for (Matcher matcher = ECLIPSE_INI_SECTION_PATTERN.matcher(contents); matcher.find();)
+    {
+      // Depending on which part of the pattern matched, we'll need to select the argument and extension from the constituent parts.
+      String argument = matcher.group(3);
+      String extension;
+      if (argument == null)
+      {
+        // If there is no third group, then the first part of the pattern matched, i.e., the -vmargs and the associated args.
+        argument = matcher.group(1);
+        extension = matcher.group(2);
+      }
+      else
+      {
+        // Otherwise the fourth group is the value part of the argument; it could be an empty string.
+        extension = matcher.group(4);
+      }
+
+      // This will remove duplicates as well.
+      if (!argument.startsWith("--launcher.XXMaxPermSize") && !argument.startsWith("-startup") || !map.containsKey(argument))
+      {
+        map.put(argument, extension);
+      }
+    }
+
+    // If there are relative paths, that needs to be made absolute, this is used as the base URI against which to resolve them.
+    // We will build the new contents from the entries in the map.
+    // And will preserve the existing line feed convention if we need to add new lines.
+    URI baseURI = URI.createFileURI(installFolder.toString()).appendSegment("");
+    StringBuilder newContents = new StringBuilder();
+    String nl = null;
+    for (Map.Entry<String, String> entry : map.entrySet())
+    {
+      // The keys will generally include the line feed character, so we trim that off when inspecting the key.
+      String key = entry.getKey();
+      String trimmedKey = key.trim();
+      String value = entry.getValue();
+      if (sharedPool)
+      {
+        if ("-startup".equals(trimmedKey))
+        {
+          // For the -startup value, check if it's a relative path.
+          if (value.startsWith("../"))
+          {
+            // Resolve it against the base URI and check that this file actually exists.
+            URI absoluteBundleLocation = URI.createURI(value.trim()).resolve(baseURI);
+            if (new File(absoluteBundleLocation.toFileString()).exists())
+            {
+              // We'll copy this to the installation folder.
+              // We do this because the Equinox launcher org.eclipse.equinox.launcher.Main.getInstallLocation()
+              // computes the installation location from the location of this bundle.
+              // If we leave it as a relative path that references something outside the installation,
+              // the installation can't roam.
+              File localStartBundle = new File(new File(installFolder, "plugins"), absoluteBundleLocation.lastSegment());
+              IOUtil.copyFile(new File(absoluteBundleLocation.toFileString()), localStartBundle);
+
+              // Remember the line feed convention used for this section.
+              nl = key.substring(trimmedKey.length());
+
+              // The value is therefore the relative path to this copied target.
+              value = (Platform.OS_MACOSX.equals(Util.getOSFromProfile(profile)) ? "../Eclipse/plugins/" : "plugins/") + absoluteBundleLocation.lastSegment()
+                  + nl;
+            }
+          }
+        }
+        else if ("--launcher.library".equals(trimmedKey))
+        {
+          // If the launcher library, where the companion shared library is located, is a relative path.
+          if (value.startsWith("../"))
+          {
+            // Resolve it against against the base to determine the absolute location, checking that actually exists.
+            URI absoluteBundleLocation = URI.createURI(value.trim()).resolve(baseURI);
+            if (new File(absoluteBundleLocation.toFileString()).exists())
+            {
+              // Replace the value with this absolute path, preserving the existing line feed convention.
+              nl = key.substring(trimmedKey.length());
+              value = absoluteBundleLocation.toFileString() + nl;
+            }
+          }
+        }
+        else if ("-install".equals(trimmedKey))
+        {
+          // Omit the install argument.
+          // This is generally an absolute path that effectively points at the folder in which the launcher ini is located.
+          // This breaks the ability for this installation to roam.
+          // Instead of this argument, we've copied the startup bundle into the installation, eliminating the need for this value.
+          continue;
+        }
+      }
+
+      newContents.append(key);
+      newContents.append(value);
+    }
+
+    if (!contents.contentEquals(newContents))
+    {
+      IOUtil.writeFile(iniFile, newContents.toString().getBytes());
+    }
+  }
+
+  private void adjustBundlesInfo(File configurationFolder)
+  {
+    // For an installation with a shared bundle pool, this will be a relative path that navigates outside of the installation.
+    // In that case, we want to make those references be absolute.
+    File bundlesInfoFile = new File(configurationFolder, "org.eclipse.equinox.simpleconfigurator/bundles.info");
+
+    // Read all the lines as UTF-8 as documented in a comment in that file.
+    List<String> lines = IOUtil.readLines(bundlesInfoFile, "UTF-8");
+    List<String> result = new ArrayList<String>();
+    boolean changed = false;
+    URI configurationFolderURI = URI.createFileURI(configurationFolder.toString());
+
+    for (String line : lines)
+    {
+      // Ignore the comment lines.
+      if (!line.startsWith("#"))
+      {
+        // Lines of of this form:
+        // <bundle-id>,<version>,<location-URI>,<start-level>,<true|false>
+        // As such, we can split the lines on ',' and generally expect 5 elements in the list.
+        List<String> elements = StringUtil.explode(line, ",");
+        if (elements.size() > 2)
+        {
+          // If the third element that needs to be modified it it's a relative path.
+          String bundleReference = elements.get(2);
+          if (bundleReference.startsWith("../"))
+          {
+            // Resolve it against the location of the configuration folder, and if that bundle exists, as expected...
+            URI absoluteBundleLocation = URI.createURI(bundleReference).resolve(configurationFolderURI);
+            if (new File(absoluteBundleLocation.toFileString()).exists())
+            {
+              // Replace the element, with that absolute URI,
+              // add that replacement to the result,
+              // and continue with the next line.
+              elements.set(2, createFileURI(absoluteBundleLocation.toFileString()));
+              result.add(StringUtil.implode(elements, ',', (char)0));
+              changed = true;
+              continue;
+            }
+          }
+        }
+      }
+
+      // Otherwise add the line as-is to the result.
+      result.add(line);
+    }
+
+    // If there are any changes...
+    if (changed)
+    {
+      // Write the modified result back out to the bundles.info file.
+      IOUtil.writeLines(bundlesInfoFile, "UTF-8", result);
+    }
+  }
+
+  private void adjustPlatformXML(String bundlePoolLocation, File configurationFolder) throws ProvisionException
+  {
+    // The platform.xml, initially will have the wrong site policy.
+    // Also, regular p2 updates will mangle the site URL to be an poorly-formed relative file URI,
+    // which again breaks the ability for the installation to roam.
+    File platformXML = new File(configurationFolder, "org.eclipse.update/platform.xml");
+    if (platformXML.isFile())
+    {
+      URI configurationFolderURI = URI.createFileURI(configurationFolder.toString());
+      Configuration configuration = Configuration.load(platformXML, null);
+      boolean changed = true;
+      for (Site site : configuration.getSites())
+      {
+        // If the site URI is of the form file:../<path> then we need to make it absolute.
+        URI siteURI = URI.createURI(site.getUrl());
+        if (siteURI.hasOpaquePart() && "file".equals(siteURI.scheme()))
+        {
+          // Resolve it against the location of the configuration folder, checking if the folder really exists.
+          URI absoluteSiteURI = URI.createURI(siteURI.opaquePart()).resolve(configurationFolderURI);
+          if (new File(absoluteSiteURI.toFileString()).exists())
+          {
+            // If so, we use this absolute URI instead and change the configuration to specify it.
+            siteURI = absoluteSiteURI;
+            site.setUrl(absoluteSiteURI.toFileString());
+            changed = true;
+          }
+        }
+
+        // If the policy isn't managed all the bundles in the pool will be visible, which is very bad.
+        if (!Site.POLICY_MANAGED_ONLY.equals(site.getPolicy()))
+        {
+          // If this site refers to the shared bundle pool, change the policy to be managed.
+          File siteLocation = new File(siteURI.toFileString());
+          if (siteLocation.equals(new File(bundlePoolLocation)))
+          {
+            site.setPolicy(Site.POLICY_MANAGED_ONLY);
+            changed = true;
+            break;
+          }
+        }
+      }
+
+      // If something has changed, save the configuration.
+      if (changed)
+      {
+        configuration.save(platformXML, null);
+      }
+    }
+  }
+
+  private static String createFileURI(String path)
+  {
+    return createFileURI(new File(path));
+  }
+
+  private static String createFileURI(File file)
+  {
+    String path = file.getPath();
+    if (File.separatorChar != '/')
+    {
+      path = path.replace(File.separatorChar, '/');
+    }
+
+    if (file.isAbsolute() && !path.startsWith(File.separator))
+    {
+      return "file:/" + path;
+    }
+
+    return "file:" + path;
   }
 }

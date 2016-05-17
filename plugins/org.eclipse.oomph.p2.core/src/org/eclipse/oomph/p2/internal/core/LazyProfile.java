@@ -14,6 +14,7 @@ import org.eclipse.oomph.p2.P2Exception;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.internal.p2.engine.ISurrogateProfileHandler;
+import org.eclipse.equinox.internal.p2.engine.Profile;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
@@ -152,7 +153,20 @@ public final class LazyProfile extends org.eclipse.equinox.internal.p2.engine.Pr
   @Override
   public void setProperty(String key, String value)
   {
-    getDelegate().setProperty(key, value);
+    Profile delegate = getDelegate();
+    if (IProfile.PROP_CACHE.equals(key))
+    {
+      // If we're setting the cache property,
+      // and this is a profile for an Oomph installation with a shared bundle pool for which the cache property has already been set,
+      // we don't want org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry.updateRoamingProfile(Profile)
+      // to change the cache location to point to the installation.
+      if ("true".equals(delegate.getProperty(org.eclipse.oomph.p2.core.Profile.PROP_PROFILE_SHARED_POOL)) && delegate.getProperty(IProfile.PROP_CACHE) != null)
+      {
+        return;
+      }
+    }
+
+    delegate.setProperty(key, value);
   }
 
   @Override

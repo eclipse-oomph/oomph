@@ -30,10 +30,8 @@ import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.internal.p2.SetupP2Plugin;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Package;
-import org.eclipse.oomph.setup.util.DownloadUtil;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
-import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.Pair;
@@ -60,7 +58,6 @@ import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
-import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.equinox.p2.metadata.VersionRange;
@@ -72,7 +69,6 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.security.cert.Certificate;
@@ -81,12 +77,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * <!-- begin-user-doc -->
@@ -638,8 +631,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   public void perform(final SetupTaskContext context) throws Exception
   {
     File eclipseDir = context.getProductLocation();
-    File eclipseIni = new File(eclipseDir, "eclipse.ini");
-    boolean eclipseIniExisted = eclipseIni.exists();
 
     boolean offline = context.isOffline();
     context.log("Offline = " + offline);
@@ -754,53 +745,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         }
       }
     }
-
-    if (eclipseIniExisted)
-    {
-      checkEclipseIniForDuplicates(context, eclipseIni);
-    }
-
-    updateSplash(context, profile);
-  }
-
-  private void updateSplash(final SetupTaskContext context, Profile profile)
-  {
-    BundlePool bundlePool = profile.getBundlePool();
-    if (bundlePool != null)
-    {
-      File productConfigurationLocation = context.getProductConfigurationLocation();
-      try
-      {
-        File configIniFile = new File(productConfigurationLocation, "config.ini");
-        Map<String, String> properties = PropertiesUtil.loadProperties(configIniFile);
-        String splashPath = properties.get("osgi.splashPath");
-        if (splashPath != null)
-        {
-          org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createURI(splashPath);
-          if ("platform".equals(uri.scheme()) && uri.segmentCount() >= 2 && "base".equals(uri.segment(0)))
-          {
-            for (IInstallableUnit installableUnit : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(uri.lastSegment()), null)))
-            {
-              for (IArtifactKey artifactKey : installableUnit.getArtifacts())
-              {
-                File artifactFile = bundlePool.getFileArtifactRepository().getArtifactFile(artifactKey);
-                if (new File(artifactFile, "splash.bmp").exists())
-                {
-                  properties.put("osgi.splashPath", org.eclipse.emf.common.util.URI.createFileURI(artifactFile.toString()).toString());
-                  saveConfigIni(configIniFile, properties, P2TaskImpl.class);
-
-                  return;
-                }
-              }
-            }
-          }
-        }
-      }
-      catch (IORuntimeException ex)
-      {
-        // Ignore.
-      }
-    }
   }
 
   private Profile getProfile(final SetupTaskContext context, String profileID) throws Exception
@@ -811,8 +755,10 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       BundlePool bundlePool;
 
       String bundlePoolLocation = (String)context.get(AgentManager.PROP_BUNDLE_POOL_LOCATION);
+      boolean sharedPool;
       if (bundlePoolLocation != null)
       {
+        sharedPool = true;
         bundlePool = P2Util.getAgentManager().getBundlePool(new File(bundlePoolLocation));
 
         // TODO Remove the following two lines after bug 485018 has been fixed.
@@ -821,6 +767,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       }
       else
       {
+        sharedPool = false;
         File agentLocation = new File(context.getProductLocation(), "p2");
         Agent agent = P2Util.createAgent(agentLocation);
         bundlePool = agent.addBundlePool(agentLocation.getParentFile());
@@ -846,6 +793,13 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         profileCreator.addOS(os.getOsgiOS());
         profileCreator.addWS(os.getOsgiWS());
         profileCreator.addArch(os.getOsgiArch());
+        profileCreator.setRoaming(true);
+
+        // This property is used in org.eclipse.oomph.p2.internal.core.LazyProfile.setProperty(String, String)
+        // to ensure that when org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry.updateRoamingProfile(Profile)
+        // updates the profile's install location, it doesn't also replace the shared pool location with a local pool.
+        // Of course if this is an installation with a local pool, it should be replace during a roaming update.
+        profileCreator.set(Profile.PROP_PROFILE_SHARED_POOL, sharedPool);
 
         profile = profileCreator.create();
       }
@@ -971,56 +925,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
           }
         }
       }
-    }
-  }
-
-  private static void checkEclipseIniForDuplicates(final SetupTaskContext context, File iniFile)
-  {
-    FileOutputStream out = null;
-
-    try
-    {
-      org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createFileURI(iniFile.toString());
-      String contents = DownloadUtil.load(context.getURIConverter(), uri, null);
-      Pattern section = Pattern.compile("^(-vmargs)([\n\r]+.*)\\z|^(-[^\\n\\r]*[\\n\\r]*)((?:^[^-][^\\n\\r]*)*[\\n\\r]*)", Pattern.MULTILINE | Pattern.DOTALL);
-      Map<String, String> map = new LinkedHashMap<String, String>();
-      for (Matcher matcher = section.matcher(contents); matcher.find();)
-      {
-        String argument = matcher.group(3);
-        String extension;
-        if (argument == null)
-        {
-          argument = matcher.group(1);
-          extension = matcher.group(2);
-        }
-        else
-        {
-          extension = matcher.group(4);
-        }
-
-        if (!argument.startsWith("--launcher.XXMaxPermSize") || !map.containsKey(argument))
-        {
-          map.put(argument, extension);
-        }
-      }
-
-      StringBuilder newContents = new StringBuilder();
-      for (Map.Entry<String, String> entry : map.entrySet())
-      {
-        newContents.append(entry.getKey());
-        newContents.append(entry.getValue());
-      }
-
-      out = new FileOutputStream(iniFile);
-      out.write(newContents.toString().getBytes());
-    }
-    catch (IOException ex)
-    {
-      // Ignore.
-    }
-    finally
-    {
-      IOUtil.close(out);
     }
   }
 

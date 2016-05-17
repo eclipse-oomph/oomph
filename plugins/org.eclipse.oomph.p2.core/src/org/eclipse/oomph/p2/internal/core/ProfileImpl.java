@@ -132,9 +132,9 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
 
   private final String type;
 
-  private final File installFolder;
+  private File installFolder;
 
-  private final File referencer;
+  private File referencer;
 
   private IProfile delegate;
 
@@ -198,9 +198,19 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
     return installFolder;
   }
 
+  public void setInstallFolder(File installFolder)
+  {
+    this.installFolder = installFolder;
+  }
+
   public File getReferencer()
   {
     return referencer;
+  }
+
+  public void setReferencer(File referencer)
+  {
+    this.referencer = referencer;
   }
 
   public String getExtraInfo()
