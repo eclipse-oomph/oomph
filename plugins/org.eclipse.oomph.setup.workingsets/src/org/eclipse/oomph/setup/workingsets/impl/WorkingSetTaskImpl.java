@@ -205,7 +205,19 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
     super.overrideFor(overriddenSetupTask);
 
     WorkingSetTask workingSetTask = (WorkingSetTask)overriddenSetupTask;
-    getWorkingSets().addAll(0, workingSetTask.getWorkingSets());
+    EList<WorkingSet> workingSets = getWorkingSets();
+    LOOP: for (WorkingSet overriddenWorkingSet : new ArrayList<WorkingSet>(workingSetTask.getWorkingSets()))
+    {
+      for (WorkingSet workingSet : workingSets)
+      {
+        if (EcoreUtil.equals(workingSet, overriddenWorkingSet))
+        {
+          continue LOOP;
+        }
+      }
+
+      workingSets.add(0, overriddenWorkingSet);
+    }
   }
 
   private Map<String, WorkingSet> getExistingWorkingSets(String prefix, EList<WorkingSet> workingSets)
