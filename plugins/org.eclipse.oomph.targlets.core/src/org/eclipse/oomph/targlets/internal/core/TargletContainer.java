@@ -21,6 +21,7 @@ import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
+import org.eclipse.oomph.p2.internal.core.CachingRepositoryManager;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.targlets.DropinLocation;
 import org.eclipse.oomph.targlets.FeatureGenerator;
@@ -821,6 +822,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     String oldGCEnabled = garbageCollectorPreferences.get("gc_enabled", null);
     garbageCollectorPreferences.putBoolean("gc_enabled", false);
 
+    boolean originalBetterMirrorSelection = CachingRepositoryManager.enableBetterMirrorSelection();
+
     try
     {
       if (cacheUsageConfirmer != null)
@@ -872,6 +875,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     }
     finally
     {
+      CachingRepositoryManager.setBetterMirrorSelection(originalBetterMirrorSelection);
+
       if (oldGCEnabled == null)
       {
         garbageCollectorPreferences.remove("gc_enabled");

@@ -21,6 +21,7 @@ import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext.DeltaType;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext.ResolutionInfo;
+import org.eclipse.oomph.p2.internal.core.CachingRepositoryManager.Artifact.BetterMirrorSelector;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
 import org.eclipse.oomph.util.ObjectUtil;
@@ -45,9 +46,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.ProgressMonitorWrapper;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.equinox.internal.p2.artifact.repository.CompositeArtifactRepository;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.director.ProfileChangeRequest;
 import org.eclipse.equinox.internal.p2.director.SimplePlanner;
+import org.eclipse.equinox.internal.p2.engine.CollectEvent;
 import org.eclipse.equinox.internal.p2.engine.InstallableUnitOperand;
 import org.eclipse.equinox.internal.p2.engine.InstallableUnitPropertyOperand;
 import org.eclipse.equinox.internal.p2.engine.Operand;
@@ -57,6 +60,8 @@ import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.BackupStore;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.IBackupStore;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.NativeTouchpoint;
+import org.eclipse.equinox.internal.provisional.p2.core.eventbus.IProvisioningEventBus;
+import org.eclipse.equinox.internal.provisional.p2.core.eventbus.SynchronousProvisioningListener;
 import org.eclipse.equinox.internal.provisional.p2.director.PlanExecutionHelper;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.ProvisionException;
@@ -83,7 +88,10 @@ import org.eclipse.equinox.p2.query.IQuery;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRequest;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.osgi.service.datalocation.Location;
@@ -93,15 +101,19 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.security.cert.Certificate;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -480,6 +492,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
       return new Resolution()
       {
+        private final ProvisioningListener provisioningListener = new ProvisioningListener();
+
         public ProfileTransaction getProfileTransaction()
         {
           return ProfileTransactionImpl.this;
@@ -508,8 +522,18 @@ public class ProfileTransactionImpl implements ProfileTransaction
             }
           });
 
+          // We won't register our listener if better mirror selection is not enabled.
+          IProvisioningEventBus eventBus = CachingRepositoryManager.isBetterMirrorSelection()
+              ? (IProvisioningEventBus)agent.getProvisioningAgent().getService(IProvisioningEventBus.SERVICE_NAME) : null;
+
           try
           {
+            if (eventBus != null)
+            {
+              provisioningListener.setMonitor(new SubProgressMonitor(monitor, 1));
+              eventBus.addListener(provisioningListener);
+            }
+
             IPhaseSet phaseSet = context.getPhaseSet(ProfileTransactionImpl.this);
 
             initUnsignedContentConfirmer(context, agent, cleanup);
@@ -528,6 +552,11 @@ public class ProfileTransactionImpl implements ProfileTransaction
           }
           finally
           {
+            if (eventBus != null)
+            {
+              eventBus.removeListener(provisioningListener);
+            }
+
             cleanup(cleanup);
           }
         }
@@ -1240,6 +1269,132 @@ public class ProfileTransactionImpl implements ProfileTransaction
       if (!dirty.containsKey(key))
       {
         handler.handleRemoval(key);
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class ProvisioningListener implements SynchronousProvisioningListener
+  {
+    private long startTime;
+
+    private IProgressMonitor monitor;
+
+    public void setMonitor(IProgressMonitor monitor)
+    {
+      this.monitor = monitor;
+    }
+
+    public void notify(EventObject event)
+    {
+      if (event instanceof CollectEvent)
+      {
+        CollectEvent collectEvent = (CollectEvent)event;
+        if (collectEvent.getType() == CollectEvent.TYPE_REPOSITORY_START)
+        {
+          startTime = System.currentTimeMillis();
+          final IArtifactRepository repository = collectEvent.getRepository();
+          if (repository != null)
+          {
+            monitor.subTask("Collecting " + collectEvent.getDownloadRequests().length + " artifacts from " + repository.getLocation());
+            if (!repository.isModifiable())
+            {
+              IArtifactRequest[] requests = collectEvent.getDownloadRequests();
+
+              // We want to have the smallest artifacts at the top of the requests array,
+              // so that phase 1 probing on bad mirrors can't block for too long.
+              Arrays.sort(requests, new Comparator<IArtifactRequest>()
+              {
+                public int compare(IArtifactRequest o1, IArtifactRequest o2)
+                {
+                  int size1 = getDownloadSize(o1);
+                  int size2 = getDownloadSize(o2);
+                  return size1 - size2;
+                }
+
+                private int getDownloadSize(IArtifactRequest request)
+                {
+                  IArtifactKey artifactKey = request.getArtifactKey();
+                  IArtifactDescriptor[] artifactDescriptors = repository.getArtifactDescriptors(artifactKey);
+                  if (artifactDescriptors != null && artifactDescriptors.length != 0)
+                  {
+                    IArtifactDescriptor artifactDescriptor = artifactDescriptors[0];
+                    String property = artifactDescriptor.getProperty(IArtifactDescriptor.DOWNLOAD_SIZE);
+                    if (property != null)
+                    {
+                      try
+                      {
+                        long size = Long.parseLong(property);
+                        if (size > Integer.MAX_VALUE)
+                        {
+                          return Integer.MAX_VALUE;
+                        }
+
+                        return (int)size;
+                      }
+                      catch (NumberFormatException ex)
+                      {
+                        //$FALL-THROUGH$
+                      }
+                    }
+                  }
+
+                  return Integer.MAX_VALUE;
+                }
+              });
+
+              int length = requests.length;
+              if (length >= 4)
+              {
+                // We don't want to leave the biggest artifacts at the end because then fewer threads than the maximum could be busy
+                // for a longer time. While, when downloading the big artifacts earlier, the full thread pool could be utilized.
+                // So we reverse the order of the second half of the request array. That still leaves the smallest ones at the top,
+                // so that phase 1 probing on bad mirrors can't block for too long.
+                List<IArtifactRequest> list = Arrays.asList(requests);
+                List<IArtifactRequest> subList = list.subList(length / 2, length);
+                Collections.reverse(subList);
+              }
+            }
+          }
+        }
+        else if (collectEvent.getType() == CollectEvent.TYPE_REPOSITORY_END)
+        {
+          IArtifactRepository repository = collectEvent.getRepository();
+          if (repository != null)
+          {
+            processStats(repository);
+
+            NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
+            monitor.subTask("Collected " + collectEvent.getDownloadRequests().length + " artifacts from " + repository.getLocation() + " in "
+                + numberFormat.format((System.currentTimeMillis() - startTime) / 1000.0) + "s");
+          }
+        }
+      }
+    }
+
+    private void processStats(IArtifactRepository repository)
+    {
+      if (repository instanceof SimpleArtifactRepository)
+      {
+        Object value = ReflectUtil.getValue("mirrors", repository);
+        if (value instanceof BetterMirrorSelector)
+        {
+          BetterMirrorSelector mirrorSelector = (BetterMirrorSelector)value;
+          for (String stats : mirrorSelector.getStats())
+          {
+            monitor.subTask(stats);
+          }
+        }
+      }
+      else if (repository instanceof CompositeArtifactRepository)
+      {
+        CompositeArtifactRepository compositeArtifactRepository = (CompositeArtifactRepository)repository;
+        for (IArtifactRepository childRepository : compositeArtifactRepository.getLoadedChildren())
+        {
+          processStats(childRepository);
+        }
       }
     }
   }

@@ -123,6 +123,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 
 import org.osgi.framework.Bundle;
@@ -1441,7 +1442,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       addEclipseIniTask(result, false, "-vm", vmPath);
     }
 
-    addEclipseIniTask(result, true, "-Declipse.p2.max.threads", "=10");
+    String maxThreads = PropertiesUtil.getProperty(SimpleArtifactRepository.PROP_MAX_THREADS);
+    if (maxThreads != null)
+    {
+      addEclipseIniTask(result, true, "-D" + SimpleArtifactRepository.PROP_MAX_THREADS, "=" + maxThreads);
+    }
+
     addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_UPDATE_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_UPDATE_URL))));
 
     addIndexRedirection(result, SetupContext.INDEX_SETUP_URI, "");

@@ -10,6 +10,9 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 import java.net.URI;
 import java.util.EventObject;
 
@@ -24,11 +27,22 @@ public final class DownloadArtifactEvent extends EventObject
 
   private final boolean completed;
 
-  public DownloadArtifactEvent(URI artifactURI, boolean completed)
+  private final IStatus status;
+
+  public DownloadArtifactEvent(URI artifactURI)
   {
     super(artifactURI);
     this.artifactURI = artifactURI;
-    this.completed = completed;
+    completed = false;
+    status = Status.OK_STATUS;
+  }
+
+  public DownloadArtifactEvent(URI artifactURI, IStatus status)
+  {
+    super(artifactURI);
+    this.artifactURI = artifactURI;
+    completed = true;
+    this.status = status;
   }
 
   public URI getArtifactURI()
@@ -39,5 +53,10 @@ public final class DownloadArtifactEvent extends EventObject
   public boolean isCompleted()
   {
     return completed;
+  }
+
+  public IStatus getStatus()
+  {
+    return status;
   }
 }

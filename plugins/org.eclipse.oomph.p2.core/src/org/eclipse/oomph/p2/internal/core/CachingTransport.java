@@ -114,20 +114,23 @@ public class CachingTransport extends Transport
 
     if (!isLoadingRepository(uri))
     {
+      IStatus status = Status.CANCEL_STATUS;
+
       try
       {
         if (eventBus != null)
         {
-          eventBus.publishEvent(new DownloadArtifactEvent(uri, false));
+          eventBus.publishEvent(new DownloadArtifactEvent(uri));
         }
 
-        return delegate.download(uri, target, startPos, monitor);
+        status = delegate.download(uri, target, startPos, monitor);
+        return status;
       }
       finally
       {
         if (eventBus != null)
         {
-          eventBus.publishEvent(new DownloadArtifactEvent(uri, true));
+          eventBus.publishEvent(new DownloadArtifactEvent(uri, status));
         }
       }
     }

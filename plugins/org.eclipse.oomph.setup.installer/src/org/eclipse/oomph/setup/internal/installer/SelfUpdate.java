@@ -15,6 +15,7 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
+import org.eclipse.oomph.p2.internal.core.CachingRepositoryManager;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SelfCommitContext;
@@ -142,6 +143,8 @@ public class SelfUpdate
     {
       public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
       {
+        boolean originalBetterMirrorSelection = CachingRepositoryManager.enableBetterMirrorSelection();
+
         try
         {
           resolution.commit(monitor);
@@ -176,6 +179,8 @@ public class SelfUpdate
         }
         finally
         {
+          CachingRepositoryManager.setBetterMirrorSelection(originalBetterMirrorSelection);
+
           if (finalRunnable != null)
           {
             finalRunnable.run();

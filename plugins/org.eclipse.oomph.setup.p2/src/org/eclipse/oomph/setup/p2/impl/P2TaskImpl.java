@@ -21,6 +21,7 @@ import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
+import org.eclipse.oomph.p2.internal.core.CachingRepositoryManager;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
@@ -705,6 +706,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       }
     }
 
+    boolean originalBetterMirrorSelection = CachingRepositoryManager.enableBetterMirrorSelection();
+
     try
     {
       if (cacheUsageConfirmer != null)
@@ -731,6 +734,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
     finally
     {
+      CachingRepositoryManager.setBetterMirrorSelection(originalBetterMirrorSelection);
+
       if (eventBus != null)
       {
         eventBus.removeListener(provisioningListener);
