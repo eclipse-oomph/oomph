@@ -126,24 +126,6 @@ public final class JRE implements Comparable<JRE>
 
   public boolean isMatch(JREFilter filter)
   {
-    Integer filterMajor = filter.getMajor();
-    if (filterMajor != null && major < filterMajor)
-    {
-      return false;
-    }
-
-    Integer filterMinor = filter.getMinor();
-    if (filterMinor != null && minor < filterMinor)
-    {
-      return false;
-    }
-
-    Integer filterMicro = filter.getMicro();
-    if (filterMicro != null && micro < filterMicro)
-    {
-      return false;
-    }
-
     Integer filterBitness = filter.getBitness();
     if (filterBitness != null && bitness != filterBitness.intValue())
     {
@@ -152,6 +134,49 @@ public final class JRE implements Comparable<JRE>
 
     Boolean filterJDK = filter.isJDK();
     if (filterJDK != null && jdk != filterJDK.booleanValue())
+    {
+      return false;
+    }
+
+    Integer filterMajor = filter.getMajor();
+    if (filterMajor == null)
+    {
+      return true;
+    }
+
+    if (major < filterMajor)
+    {
+      return false;
+    }
+
+    if (major > filterMajor)
+    {
+      return true;
+    }
+
+    Integer filterMinor = filter.getMinor();
+    if (filterMinor == null)
+    {
+      return true;
+    }
+
+    if (minor < filterMinor)
+    {
+      return false;
+    }
+
+    if (minor > filterMinor)
+    {
+      return true;
+    }
+
+    Integer filterMicro = filter.getMicro();
+    if (filterMicro == null)
+    {
+      return true;
+    }
+
+    if (micro < filterMicro)
     {
       return false;
     }

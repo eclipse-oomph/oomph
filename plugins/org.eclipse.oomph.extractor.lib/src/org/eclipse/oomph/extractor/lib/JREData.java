@@ -121,9 +121,19 @@ public final class JREData
 
   public boolean satisfies(JREData requirement)
   {
+    if (bitness != requirement.bitness)
+    {
+      return false;
+    }
+
     if (major < requirement.major)
     {
       return false;
+    }
+
+    if (major > requirement.major)
+    {
+      return true;
     }
 
     if (minor < requirement.minor)
@@ -131,12 +141,12 @@ public final class JREData
       return false;
     }
 
-    if (micro < requirement.micro)
+    if (minor > requirement.minor)
     {
-      return false;
+      return true;
     }
 
-    if (bitness != requirement.bitness)
+    if (micro < requirement.micro)
     {
       return false;
     }

@@ -44,6 +44,16 @@ public final class JREFilter
 
   public JREFilter(Integer major, Integer minor, Integer micro, Integer bitness, Boolean jdk)
   {
+    if (major == null && minor != null)
+    {
+      throw new IllegalArgumentException("Minor can't be non-null if major is null");
+    }
+
+    if (minor == null && micro != null)
+    {
+      throw new IllegalArgumentException("Micro can't be non-null if minor is null");
+    }
+
     this.major = major;
     this.minor = minor;
     this.micro = micro;
