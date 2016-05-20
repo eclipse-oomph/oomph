@@ -11,6 +11,7 @@
 package org.eclipse.oomph.base.provider;
 
 import org.eclipse.oomph.base.util.EAnnotations;
+import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -103,7 +104,7 @@ public final class BaseEditUtil
     static
     {
       URIConverter uriConverter = null;
-      Map<?, ?> options = null;
+      Map<Object, Object> options = null;
       Constructor<?> imageDataConstructor = null;
       Method imageDescriptorCreateFromImageDataMethod = null;
 
@@ -121,6 +122,15 @@ public final class BaseEditUtil
         ResourceSet resourceSet = (ResourceSet)createResourceSetMethod.invoke(null);
         uriConverter = resourceSet.getURIConverter();
         options = resourceSet.getLoadOptions();
+
+        Class<?> ecfURIHandlerImplClass = CommonPlugin.loadClass("org.eclipse.oomph.setup.core",
+            "org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl");
+        Object ecfCacheHandlingOption = ReflectUtil.getValue(ReflectUtil.getField(ecfURIHandlerImplClass, "OPTION_CACHE_HANDLING"), null);
+        Class<?> ecfURIHandlerImplCacheHandlingClass = CommonPlugin.loadClass("org.eclipse.oomph.setup.core",
+            "org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl$CacheHandling");
+        Object ecfOptionCacheHandlingValue = ReflectUtil.getValue(ReflectUtil.getField(ecfURIHandlerImplCacheHandlingClass, "CACHE_WITHOUT_ETAG_CHECKING"),
+            null);
+        options.put(ecfCacheHandlingOption, ecfOptionCacheHandlingValue);
       }
       catch (Throwable ex)
       {

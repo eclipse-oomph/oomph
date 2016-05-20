@@ -771,6 +771,45 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     return URI.createPlatformPluginURI(SetupUIPlugin.INSTANCE.getSymbolicName() + "/icons/committers.png", true);
   }
 
+  private static boolean hasModalChild(Shell parentShell, Shell excludedShell)
+  {
+    if (!parentShell.isDisposed())
+    {
+      for (Shell otherChildShell : parentShell.getShells())
+      {
+        if (otherChildShell.isVisible() && excludedShell != otherChildShell && (otherChildShell.getStyle() & SWT.APPLICATION_MODAL) != 0)
+        {
+          return true;
+        }
+      }
+
+      Composite grandParent = parentShell.getParent();
+      if (grandParent instanceof Shell)
+      {
+        return hasModalChild((Shell)grandParent, parentShell);
+      }
+    }
+
+    return false;
+  }
+
+  private static void setProgressMonitorVisible(final Shell shell, final ProgressMonitorDialog progressMonitorDialog, Runnable runnable)
+  {
+    // If the dialog shell is already missing or disposed, the loading is already completed, so no need to show in that case.
+    Shell dialogShell = progressMonitorDialog.getShell();
+    if (dialogShell != null && !dialogShell.isDisposed())
+    {
+      if (hasModalChild(shell, dialogShell))
+      {
+        UIUtil.timerExec(200, runnable);
+      }
+      else
+      {
+        dialogShell.setVisible(true);
+      }
+    }
+  }
+
   /**
    * @author Eike Stepper
    */
@@ -885,6 +924,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
               {
                 public void run()
                 {
+                  if (hasModalChild(shell, null))
+                  {
+                    UIUtil.timerExec(200, this);
+                    return;
+                  }
+
                   final ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(shell);
                   progressMonitorDialog.setOpenOnRun(false);
                   try
@@ -957,7 +1002,13 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                             {
                               public void run()
                               {
-                                progressMonitorDialog.getShell().setVisible(true);
+                                UIUtil.timerExec(1000, new Runnable()
+                                {
+                                  public void run()
+                                  {
+                                    setProgressMonitorVisible(shell, progressMonitorDialog, this);
+                                  }
+                                });
                               }
                             });
                           }
@@ -1144,7 +1195,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     @Override
     public void loadIndex(final ResourceSet resourceSet, final URI... uris)
     {
-      Shell shell = getWizard().getShell();
+      final Shell shell = getWizard().getShell();
       final ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(shell);
       progressMonitorDialog.setOpenOnRun(false);
 
@@ -1155,12 +1206,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         {
           public void run()
           {
-            // If the dialog shell is already missing or disposed, the loading is already completed, so no need to show in that case.
-            Shell shell = progressMonitorDialog.getShell();
-            if (shell != null && !shell.isDisposed())
-            {
-              shell.setVisible(true);
-            }
+            setProgressMonitorVisible(shell, progressMonitorDialog, this);
           }
         });
 

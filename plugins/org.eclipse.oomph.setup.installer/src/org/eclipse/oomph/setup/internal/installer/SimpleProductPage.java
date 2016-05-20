@@ -818,7 +818,11 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         gc.setBackground(COLOR_PAGE_BORDER);
 
         gc.fillOval(0, 0, rect.width, rect.height);
-        gc.drawImage(image, imageX, imageY);
+
+        if (image != null)
+        {
+          gc.drawImage(image, imageX, imageY);
+        }
 
         gc.setBackground(oldBackground);
         gc.setAntialias(oldAntialias);
