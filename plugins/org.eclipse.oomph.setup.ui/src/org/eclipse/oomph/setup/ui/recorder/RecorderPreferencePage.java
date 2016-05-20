@@ -453,7 +453,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
       if (uri != null)
       {
         Map<?, ?> options = Collections.singletonMap(URIConverter.OPTION_REQUESTED_ATTRIBUTES, Collections.singleton(URIConverter.ATTRIBUTE_READ_ONLY));
-        Map<String, ?> attributes = uriConverter.getAttributes(uri, options);
+        Map<String, ?> attributes = uriConverter.getAttributes(uri.trimFragment(), options);
         boolean writable = !Boolean.TRUE.equals(attributes.get(URIConverter.ATTRIBUTE_READ_ONLY));
 
         if (writable)
