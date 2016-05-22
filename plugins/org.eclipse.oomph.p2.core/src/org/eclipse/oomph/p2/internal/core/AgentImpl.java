@@ -951,23 +951,29 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
           if (value.startsWith("../"))
           {
             // Resolve it against the base URI and check that this file actually exists.
-            URI absoluteBundleLocation = URI.createURI(value.trim()).resolve(baseURI);
-            if (new File(absoluteBundleLocation.toFileString()).exists())
+            URI absoluteLauncherLibraryLocation = URI.createURI(value.trim()).resolve(baseURI);
+            File absoluteLauncherLibraryFile = new File(absoluteLauncherLibraryLocation.toFileString());
+            if (absoluteLauncherLibraryFile.exists())
             {
               // We'll copy this to the installation folder.
               // We do this because the Equinox launcher org.eclipse.equinox.launcher.Main.getInstallLocation()
               // computes the installation location from the location of this bundle.
               // If we leave it as a relative path that references something outside the installation,
               // the installation can't roam.
-              File localStartBundle = new File(new File(installFolder, "plugins"), absoluteBundleLocation.lastSegment());
-              IOUtil.copyFile(new File(absoluteBundleLocation.toFileString()), localStartBundle);
+              // Note that on the Mac we're replacing it with a relative path that starts with ..
+              // so we'd better be sure we don't try to copy the file to itself.
+              File localLauncherLibraryFile = new File(new File(installFolder, "plugins"), absoluteLauncherLibraryLocation.lastSegment());
+              if (!localLauncherLibraryFile.equals(absoluteLauncherLibraryFile))
+              {
+                IOUtil.copyFile(absoluteLauncherLibraryFile, localLauncherLibraryFile);
 
-              // Remember the line feed convention used for this section.
-              nl = key.substring(trimmedKey.length());
+                // Remember the line feed convention used for this section.
+                nl = key.substring(trimmedKey.length());
 
-              // The value is therefore the relative path to this copied target.
-              value = (Platform.OS_MACOSX.equals(Util.getOSFromProfile(profile)) ? "../Eclipse/plugins/" : "plugins/") + absoluteBundleLocation.lastSegment()
-                  + nl;
+                // The value is therefore the relative path to this copied target within the installation.
+                value = (Platform.OS_MACOSX.equals(Util.getOSFromProfile(profile)) ? "../Eclipse/plugins/" : "plugins/")
+                    + absoluteLauncherLibraryLocation.lastSegment() + nl;
+              }
             }
           }
         }
