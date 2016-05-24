@@ -141,7 +141,22 @@ public final class LazyProfile extends org.eclipse.equinox.internal.p2.engine.Pr
   @Override
   public String getProperty(String key)
   {
-    return getDelegate().getProperty(key);
+    Profile delegate = getDelegate();
+
+    // If we're getting the cache property and this is for an installation with a shared bundle pool...
+    if (IProfile.PROP_CACHE.equals(key) && "true".equals(delegate.getProperty(org.eclipse.oomph.p2.core.Profile.PROP_PROFILE_SHARED_POOL)))
+    {
+      // If we're being called from org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry.updateRoamingProfile(Profile)
+      StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+      if (stackTrace.length > 3 && "updateRoamingProfile".equals(stackTrace[2].getMethodName()))
+      {
+        // Return the value of the install folder instead.
+        // This will prevent that method from trying to change the value of the cache property.
+        return delegate.getProperty(IProfile.PROP_INSTALL_FOLDER);
+      }
+    }
+
+    return delegate.getProperty(key);
   }
 
   @Override

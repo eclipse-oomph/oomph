@@ -57,7 +57,7 @@ public abstract class PersistentMap<E>
 
       String name = file.getName();
       tempFile = new File(folder, name + ".temp");
-      lockFile = new File(folder, name + ".lock");
+      lockFile = LazyProfileRegistryComponent.OsgiHelper.canWrite(folder) ? new File(folder, name + ".lock") : null;
     }
     else
     {
@@ -365,6 +365,11 @@ public abstract class PersistentMap<E>
 
   private FileWriter lock()
   {
+    if (lockFile == null)
+    {
+      return null;
+    }
+
     long start = System.currentTimeMillis();
 
     for (;;)
@@ -394,22 +399,25 @@ public abstract class PersistentMap<E>
 
   private void unlock(FileWriter lock)
   {
-    try
+    if (lock != null)
     {
-      IOUtil.close(lock);
-    }
-    catch (Exception ex)
-    {
-      P2CorePlugin.INSTANCE.log(ex);
-    }
+      try
+      {
+        IOUtil.close(lock);
+      }
+      catch (Exception ex)
+      {
+        P2CorePlugin.INSTANCE.log(ex);
+      }
 
-    try
-    {
-      lockFile.delete();
-    }
-    catch (Exception ex)
-    {
-      // Ignore
+      try
+      {
+        lockFile.delete();
+      }
+      catch (Exception ex)
+      {
+        // Ignore
+      }
     }
   }
 

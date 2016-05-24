@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.oomph.p2.core.registry_bug390470">
-   <implementation class="org.eclipse.oomph.p2.internal.core.LazyProfileRegistryComponent"/>
-   <service>
-      <provide interface="org.eclipse.equinox.p2.core.spi.IAgentServiceFactory"/>
-   </service>
-   <property name="p2.agent.servicename" type="String" value="org.eclipse.equinox.p2.engine.IProfileRegistry"/>
-   <property name="service.ranking" type="Integer" value="-10000"/>
-</scr:component>

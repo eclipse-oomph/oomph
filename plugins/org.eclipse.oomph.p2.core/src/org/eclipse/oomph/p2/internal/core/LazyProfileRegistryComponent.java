@@ -40,12 +40,12 @@ public class LazyProfileRegistryComponent implements IAgentServiceFactory
 
     SimpleProfileRegistry registry = null;
 
-    boolean isLazySupported = !"false".equals(PropertiesUtil.getProperty(PROP_LAZY_PROFILE_REGISTRY)) && OsgiHelper.canWrite(directory);
+    boolean isLazySupported = !"false".equals(PropertiesUtil.getProperty(PROP_LAZY_PROFILE_REGISTRY));
     if (isLazySupported)
     {
       try
       {
-        registry = new LazyProfileRegistry(agent, directory);
+        registry = new LazyProfileRegistry(agent, directory, OsgiHelper.canWrite(directory));
       }
       catch (Throwable ex)
       {
@@ -65,7 +65,7 @@ public class LazyProfileRegistryComponent implements IAgentServiceFactory
   /**
    * @author Ed Merks
    */
-  private static class OsgiHelper
+  static class OsgiHelper
   {
     public static boolean canWrite(File installDir)
     {

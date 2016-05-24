@@ -1122,7 +1122,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return createFileURI(new File(path));
   }
 
-  private static String createFileURI(File file)
+  static String createFileURI(File file)
   {
     String path = file.getPath();
     if (File.separatorChar != '/')

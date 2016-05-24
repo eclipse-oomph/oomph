@@ -20,11 +20,14 @@ import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.internal.p2.engine.EngineActivator;
+import org.eclipse.equinox.internal.p2.engine.Profile;
 import org.eclipse.equinox.internal.p2.engine.ProfileLock;
 import org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry;
+import org.eclipse.equinox.internal.p2.engine.SurrogateProfileHandler;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.osgi.util.NLS;
 
 import org.osgi.framework.BundleContext;
@@ -32,6 +35,7 @@ import org.osgi.framework.BundleContext;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.lang.ref.SoftReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -73,17 +77,16 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
   private Map<String, org.eclipse.equinox.internal.p2.engine.Profile> profileMap;
 
   @SuppressWarnings("unchecked")
-  public LazyProfileRegistry(IProvisioningAgent provisioningAgent, File store) throws Exception
+  public LazyProfileRegistry(IProvisioningAgent provisioningAgent, File store, boolean updateSelfProfile) throws Exception
   {
-    super(provisioningAgent, store);
+    super(provisioningAgent, store, updateSelfProfile ? new AdjustingSurrogateProfileHandler(provisioningAgent) : null, updateSelfProfile);
     this.provisioningAgent = provisioningAgent;
     this.store = store;
 
     Field selfField = ReflectUtil.getField(SimpleProfileRegistry.class, "self");
     self = (String)ReflectUtil.getValue(selfField, this);
 
-    Field updateSelfProfileField = ReflectUtil.getField(SimpleProfileRegistry.class, "updateSelfProfile");
-    updateSelfProfile = (Boolean)ReflectUtil.getValue(updateSelfProfileField, this);
+    this.updateSelfProfile = updateSelfProfile;
 
     Field profileLocksField = ReflectUtil.getField(SimpleProfileRegistry.class, "profileLocks");
     profileLocks = (Map<String, ProfileLock>)ReflectUtil.getValue(profileLocksField, this);
@@ -303,7 +306,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
       @SuppressWarnings("unchecked")
       Map<String, org.eclipse.equinox.internal.p2.engine.Profile> profileMap = //
-      (Map<String, org.eclipse.equinox.internal.p2.engine.Profile>)ReflectUtil.invokeMethod(getProfileMapMethod, parser);
+          (Map<String, org.eclipse.equinox.internal.p2.engine.Profile>)ReflectUtil.invokeMethod(getProfileMapMethod, parser);
 
       return profileMap.get(profileId);
     }
@@ -354,5 +357,63 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
       }
     }
     return latest;
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static class AdjustingSurrogateProfileHandler extends SurrogateProfileHandler
+  {
+    public AdjustingSurrogateProfileHandler(IProvisioningAgent provisioningAgent)
+    {
+      super(provisioningAgent);
+
+      // If there is a shared base agent.
+      IProvisioningAgent baseAgent = (IProvisioningAgent)provisioningAgent.getService(IProvisioningAgent.SHARED_BASE_AGENT);
+      if (baseAgent != null)
+      {
+        // And it has a profile registry.
+        IProfileRegistry profileRegistry = (IProfileRegistry)baseAgent.getService(IProfileRegistry.SERVICE_NAME);
+        if (profileRegistry != null)
+        {
+          // Use that registry directly.
+          // Otherwise org.eclipse.equinox.internal.p2.engine.SurrogateProfileHandler.getProfileRegistry()
+          // assumes that the registry is in the installation folder.
+          ReflectUtil.setValue("profileRegistry", this, profileRegistry);
+        }
+      }
+    }
+
+    @Override
+    public IProfile createProfile(String id)
+    {
+      IProfile profile = super.createProfile(id);
+
+      // The method org.eclipse.equinox.internal.p2.engine.SurrogateProfileHandler.updateProperties(IProfile, Profile)
+      // makes a mess of the it messes up this IProfile.PROP_SHARED_CACHE, assuming it's colocated with the installation.
+      // For our shared pool installation, we'll need to correct that problem.
+      if (profile != null && "true".equals(profile.getProperty(org.eclipse.oomph.p2.core.Profile.PROP_PROFILE_SHARED_POOL)))
+      {
+        // Fetch the soft reference to the shared profile...
+        SoftReference<IProfile> sharedProfileReference = ReflectUtil.getValue("cachedProfile", this);
+        if (sharedProfileReference != null)
+        {
+          // If it has a referent.
+          IProfile sharedProfile = sharedProfileReference.get();
+          if (sharedProfile != null)
+          {
+            // Get the original value of the cache.
+            String cache = sharedProfile.getProperty(IProfile.PROP_CACHE);
+            if (cache != null)
+            {
+              // Set that value back to be the shared cache of the surrogate profile.
+              ((Profile)profile).setProperty(IProfile.PROP_SHARED_CACHE, cache);
+            }
+          }
+        }
+      }
+
+      return profile;
+    }
   }
 }
