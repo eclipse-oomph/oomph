@@ -992,6 +992,12 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
             }
           }
         }
+        else if ("-configuration".equals(trimmedKey))
+        {
+          // On the Mac, a -configuration ../Eclipse/configuration is produced, but this breaks the ability to run a read-only installation.
+          // Moreover, it isn't needed so best to omit it.
+          continue;
+        }
         else if ("-install".equals(trimmedKey))
         {
           // Omit the install argument.

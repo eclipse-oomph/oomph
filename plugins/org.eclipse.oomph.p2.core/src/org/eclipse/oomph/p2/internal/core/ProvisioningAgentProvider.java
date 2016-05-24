@@ -101,7 +101,7 @@ public class ProvisioningAgentProvider extends DefaultAgentProvider
               if (dataArea.startsWith("file:/"))
               {
                 // The path should generally correspond to an existing folder.
-                File dataAreaFolder = new File(dataArea.substring("file:/".length()));
+                File dataAreaFolder = new File(dataArea.substring("file:/".length() - 1));
                 if (dataAreaFolder.isDirectory())
                 {
                   try
