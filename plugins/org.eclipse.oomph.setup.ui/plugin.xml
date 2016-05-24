@@ -89,9 +89,9 @@
       <wizard
             category="org.eclipse.oomph.importWizards"
             class="org.eclipse.oomph.setup.ui.wizards.SetupWizard$Importer"
-            icon="icons/oomph16.png"
+            icon="icons/oomph_import.png"
             id="org.eclipse.oomph.setup.ui.ImportWizard"
-            name="Projects into Workspace">
+            name="Projects from Catalog">
          <description>
             Import projects from the Oomph catalogs into the workspace.
          </description>

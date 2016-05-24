@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Shell;
  * </p>
  * <p>
  * The project wizard is available in any running Eclipse product with Oomph installed
- * via {@select File|Import...|Oomph|Projects into Workspace}
+ * via {@select File|Import...|Oomph|Projects from Catalog}
  * and the <em>execution</em> tool bar button.
  * Its purpose is to augment the {@link DocWorkspaceResource workspace}'s set of streams.
  * </p>
