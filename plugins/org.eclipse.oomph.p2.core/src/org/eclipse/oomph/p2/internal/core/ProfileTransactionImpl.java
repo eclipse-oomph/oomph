@@ -1292,83 +1292,85 @@ public class ProfileTransactionImpl implements ProfileTransaction
       if (event instanceof CollectEvent)
       {
         CollectEvent collectEvent = (CollectEvent)event;
-        if (collectEvent.getType() == CollectEvent.TYPE_REPOSITORY_START)
+        IArtifactRequest[] requests = collectEvent.getDownloadRequests();
+        if (requests != null && requests.length > 0)
         {
-          startTime = System.currentTimeMillis();
-          final IArtifactRepository repository = collectEvent.getRepository();
-          if (repository != null)
+          if (collectEvent.getType() == CollectEvent.TYPE_REPOSITORY_START)
           {
-            monitor.subTask("Collecting " + collectEvent.getDownloadRequests().length + " artifacts from " + repository.getLocation());
-            if (!repository.isModifiable())
+            startTime = System.currentTimeMillis();
+            final IArtifactRepository repository = collectEvent.getRepository();
+            if (repository != null)
             {
-              IArtifactRequest[] requests = collectEvent.getDownloadRequests();
-
-              // We want to have the smallest artifacts at the top of the requests array,
-              // so that phase 1 probing on bad mirrors can't block for too long.
-              Arrays.sort(requests, new Comparator<IArtifactRequest>()
+              monitor.subTask("Collecting " + requests.length + " artifacts from " + repository.getLocation());
+              if (!repository.isModifiable())
               {
-                public int compare(IArtifactRequest o1, IArtifactRequest o2)
+                // We want to have the smallest artifacts at the top of the requests array,
+                // so that phase 1 probing on bad mirrors can't block for too long.
+                Arrays.sort(requests, new Comparator<IArtifactRequest>()
                 {
-                  int size1 = getDownloadSize(o1);
-                  int size2 = getDownloadSize(o2);
-                  return size1 - size2;
-                }
-
-                private int getDownloadSize(IArtifactRequest request)
-                {
-                  IArtifactKey artifactKey = request.getArtifactKey();
-                  IArtifactDescriptor[] artifactDescriptors = repository.getArtifactDescriptors(artifactKey);
-                  if (artifactDescriptors != null && artifactDescriptors.length != 0)
+                  public int compare(IArtifactRequest o1, IArtifactRequest o2)
                   {
-                    IArtifactDescriptor artifactDescriptor = artifactDescriptors[0];
-                    String property = artifactDescriptor.getProperty(IArtifactDescriptor.DOWNLOAD_SIZE);
-                    if (property != null)
-                    {
-                      try
-                      {
-                        long size = Long.parseLong(property);
-                        if (size > Integer.MAX_VALUE)
-                        {
-                          return Integer.MAX_VALUE;
-                        }
-
-                        return (int)size;
-                      }
-                      catch (NumberFormatException ex)
-                      {
-                        //$FALL-THROUGH$
-                      }
-                    }
+                    int size1 = getDownloadSize(o1);
+                    int size2 = getDownloadSize(o2);
+                    return size1 - size2;
                   }
 
-                  return Integer.MAX_VALUE;
-                }
-              });
+                  private int getDownloadSize(IArtifactRequest request)
+                  {
+                    IArtifactKey artifactKey = request.getArtifactKey();
+                    IArtifactDescriptor[] artifactDescriptors = repository.getArtifactDescriptors(artifactKey);
+                    if (artifactDescriptors != null && artifactDescriptors.length != 0)
+                    {
+                      IArtifactDescriptor artifactDescriptor = artifactDescriptors[0];
+                      String property = artifactDescriptor.getProperty(IArtifactDescriptor.DOWNLOAD_SIZE);
+                      if (property != null)
+                      {
+                        try
+                        {
+                          long size = Long.parseLong(property);
+                          if (size > Integer.MAX_VALUE)
+                          {
+                            return Integer.MAX_VALUE;
+                          }
 
-              int length = requests.length;
-              if (length >= 4)
-              {
-                // We don't want to leave the biggest artifacts at the end because then fewer threads than the maximum could be busy
-                // for a longer time. While, when downloading the big artifacts earlier, the full thread pool could be utilized.
-                // So we reverse the order of the second half of the request array. That still leaves the smallest ones at the top,
-                // so that phase 1 probing on bad mirrors can't block for too long.
-                List<IArtifactRequest> list = Arrays.asList(requests);
-                List<IArtifactRequest> subList = list.subList(length / 2, length);
-                Collections.reverse(subList);
+                          return (int)size;
+                        }
+                        catch (NumberFormatException ex)
+                        {
+                          //$FALL-THROUGH$
+                        }
+                      }
+                    }
+
+                    return Integer.MAX_VALUE;
+                  }
+                });
+
+                int length = requests.length;
+                if (length >= 4)
+                {
+                  // We don't want to leave the biggest artifacts at the end because then fewer threads than the maximum could be busy
+                  // for a longer time. While, when downloading the big artifacts earlier, the full thread pool could be utilized.
+                  // So we reverse the order of the second half of the request array. That still leaves the smallest ones at the top,
+                  // so that phase 1 probing on bad mirrors can't block for too long.
+                  List<IArtifactRequest> list = Arrays.asList(requests);
+                  List<IArtifactRequest> subList = list.subList(length / 2, length);
+                  Collections.reverse(subList);
+                }
               }
             }
           }
-        }
-        else if (collectEvent.getType() == CollectEvent.TYPE_REPOSITORY_END)
-        {
-          IArtifactRepository repository = collectEvent.getRepository();
-          if (repository != null)
+          else if (collectEvent.getType() == CollectEvent.TYPE_REPOSITORY_END)
           {
-            processStats(repository);
+            IArtifactRepository repository = collectEvent.getRepository();
+            if (repository != null)
+            {
+              processStats(repository);
 
-            NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
-            monitor.subTask("Collected " + collectEvent.getDownloadRequests().length + " artifacts from " + repository.getLocation() + " in "
-                + numberFormat.format((System.currentTimeMillis() - startTime) / 1000.0) + "s");
+              NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
+              monitor.subTask("Collected " + requests.length + " artifacts for " + repository.getLocation() + " in "
+                  + numberFormat.format((System.currentTimeMillis() - startTime) / 1000.0) + "s");
+            }
           }
         }
       }
