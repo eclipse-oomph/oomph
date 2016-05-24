@@ -286,7 +286,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
             continue;
           }
 
-          if (authorizatonHandler != null && fileSystemListener.exception instanceof BrowseFileTransferException)
+          if (fileSystemListener.exception instanceof BrowseFileTransferException)
           {
             // We assume contents can be accessed via the github API https://developer.github.com/v3/repos/contents/#get-contents
             // That API, for security reasons, does not return HTTP_UNAUTHORIZED, so we need this special case for that host.
@@ -297,26 +297,48 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
               System.out.println(tracePrefix + " errorCode=" + errorCode);
             }
 
-            if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED || API_GITHUB_HOST.equals(getHost(uri)) && errorCode == HttpURLConnection.HTTP_NOT_FOUND)
+            if (authorizatonHandler != null)
             {
-              if (authorization == null)
+              if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED || API_GITHUB_HOST.equals(getHost(uri)) && errorCode == HttpURLConnection.HTTP_NOT_FOUND)
               {
-                authorization = authorizatonHandler.authorize(uri);
-                if (authorization.isAuthorized())
+                if (authorization == null)
                 {
-                  --i;
-                  continue;
+                  authorization = authorizatonHandler.authorize(uri);
+                  if (authorization.isAuthorized())
+                  {
+                    --i;
+                    continue;
+                  }
+                }
+
+                if (!authorization.isUnauthorizeable() && triedReauthorization++ < 3)
+                {
+                  authorization = authorizatonHandler.reauthorize(uri, authorization);
+                  if (authorization.isAuthorized())
+                  {
+                    --i;
+                    continue;
+                  }
                 }
               }
+            }
 
-              if (!authorization.isUnauthorizeable() && triedReauthorization++ < 3)
+            // We can't do a HEAD request.
+            if (errorCode == HttpURLConnection.HTTP_BAD_METHOD)
+            {
+              // Try instead to create an input stream and use the response to get at least the timestamp property.
+              Map<Object, Object> specializedOptions = new HashMap<Object, Object>(options);
+              Map<Object, Object> response = new HashMap<Object, Object>();
+              specializedOptions.put(URIConverter.OPTION_RESPONSE, response);
+              try
               {
-                authorization = authorizatonHandler.reauthorize(uri, authorization);
-                if (authorization.isAuthorized())
-                {
-                  --i;
-                  continue;
-                }
+                InputStream inputStream = createInputStream(uri, specializedOptions);
+                inputStream.close();
+                return handleResponseAttributes(requestedAttributes, response);
+              }
+              catch (IOException ex)
+              {
+                // This implies a GET request also fails, so continue the processing below.
               }
             }
           }
@@ -345,6 +367,26 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
       return handleAttributes(requestedAttributes, fileSystemListener.info);
     }
+  }
+
+  private final Map<String, ?> handleResponseAttributes(Set<String> requestedAttributes, Map<Object, Object> response)
+  {
+    Map<String, Object> result = new HashMap<String, Object>();
+    if (requestedAttributes == null || requestedAttributes.contains(URIConverter.ATTRIBUTE_READ_ONLY))
+    {
+      result.put(URIConverter.ATTRIBUTE_READ_ONLY, true);
+    }
+
+    if (requestedAttributes == null || requestedAttributes.contains(URIConverter.ATTRIBUTE_TIME_STAMP))
+    {
+      Object timeStamp = response.get(URIConverter.RESPONSE_TIME_STAMP_PROPERTY);
+      if (timeStamp != null)
+      {
+        result.put(URIConverter.ATTRIBUTE_TIME_STAMP, timeStamp);
+      }
+    }
+
+    return result;
   }
 
   private final Map<String, ?> handleAttributes(Set<String> requestedAttributes, IRemoteFileInfo info)
@@ -387,7 +429,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
     if (requestedAttributes == null || requestedAttributes.contains(URIConverter.ATTRIBUTE_LENGTH))
     {
-      Object length = attributes.get(URIConverter.ATTRIBUTE_HIDDEN);
+      Object length = attributes.get(URIConverter.ATTRIBUTE_LENGTH);
       if (length != null)
       {
         result.put(URIConverter.ATTRIBUTE_LENGTH, length);
