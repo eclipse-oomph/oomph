@@ -184,7 +184,7 @@ public final class DownloadUtil
     }
     catch (IOException ex)
     {
-      throw new RuntimeException(ex);
+      throw new RuntimeException("Problem downloading '" + url + "'", ex);
     }
     finally
     {
