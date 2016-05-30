@@ -54,6 +54,7 @@ import org.eclipse.osgi.service.datalocation.Location;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -456,7 +457,7 @@ public class SetupContext
 
     try
     {
-      resource.save(null);
+      resource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
     }
     catch (IOException ex)
     {
@@ -725,7 +726,7 @@ public class SetupContext
 
       try
       {
-        userResource.save(null);
+        userResource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
       }
       catch (IOException ex)
       {

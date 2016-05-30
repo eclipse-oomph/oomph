@@ -1049,7 +1049,7 @@ public abstract class RecorderTransaction
       {
         try
         {
-          getResource().save(null);
+          getResource().save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
         }
         catch (IOException ex)
         {

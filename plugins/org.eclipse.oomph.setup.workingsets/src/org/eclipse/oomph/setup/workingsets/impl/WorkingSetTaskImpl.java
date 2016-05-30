@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -291,7 +292,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
     workingSets.removeAll(existingWorkingSets.values());
 
     Resource resource = defaultWorkingSetGroup.eResource();
-    resource.save(null);
+    resource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
   }
 
   @Override

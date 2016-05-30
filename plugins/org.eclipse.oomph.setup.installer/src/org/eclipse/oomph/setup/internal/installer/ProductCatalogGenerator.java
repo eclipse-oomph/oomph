@@ -425,14 +425,14 @@ public class ProductCatalogGenerator implements IApplication
 
               allProductResource.getContents().add(product);
 
-              allProductResource.save(null);
+              allProductResource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
             }
 
             break;
           }
         }
 
-        resource.save(null);
+        resource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
       }
     }
     catch (Exception ex)

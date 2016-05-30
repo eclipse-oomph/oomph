@@ -82,6 +82,7 @@ import org.osgi.framework.BundleContext;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -171,7 +172,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     {
       Resource resource = SetupCoreUtil.createResourceSet().createResource(URI.createFileURI(file.toString()));
       resource.getContents().add(annotation);
-      resource.save(null);
+      resource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
     }
     catch (Exception ex)
     {
