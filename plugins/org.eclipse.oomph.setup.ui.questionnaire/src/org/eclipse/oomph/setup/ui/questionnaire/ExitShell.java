@@ -36,8 +36,7 @@ public class ExitShell extends AnimatedShell<Boolean>
 
   private static final int BIG_FONT_PX = GearAnimator.BIG_FONT_PX;
 
-  private static final String[] LINES = { "This one-time questionnaire will not automatically pop up again.",
-      "You can take the questionnaire later via the Oomph Setup preferences:" };
+  private static final String[] LINES = { "You can take the questionnaire later via the Oomph Setup preferences:" };
 
   private final GearAnimator gearAnimator;
 
@@ -184,7 +183,6 @@ public class ExitShell extends AnimatedShell<Boolean>
 
       gc.setFont(font);
       drawText(gc, cX, 2 * BORDER + BIG_FONT_PX, LINES[0]);
-      drawText(gc, cX, 2 * BORDER + BIG_FONT_PX + fontPx + 8, LINES[1]);
 
       int x = cX - image.getBounds().width / 2;
       int y = 2 * BORDER + BIG_FONT_PX + 2 * (fontPx + 8);
