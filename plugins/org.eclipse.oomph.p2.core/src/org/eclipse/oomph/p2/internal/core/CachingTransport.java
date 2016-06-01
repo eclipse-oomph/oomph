@@ -373,7 +373,7 @@ public class CachingTransport extends Transport
       return lastModified - 1;
     }
 
-    if (cacheFile.lastModified() != lastModified)
+    if (cacheFile.lastModified() != lastModified || lastModified == 0)
     {
       synchronized (getLock(uri))
       {
