@@ -48,7 +48,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -104,7 +104,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -115,7 +115,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -171,7 +171,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -182,7 +182,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -238,7 +238,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -373,7 +373,7 @@
             url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
-    <description>The essential tools for any Java developer, including a Java IDE, a Git client, XML Editor, Mylyn, Maven integration and WindowBuilder</description>
+    <description>The essential tools for any Java developer, including a Java IDE, a Git client, XML Editor, Mylyn, Maven and Gradle integration</description>
   </product>
   <product name="epp.package.jee"
       label="Eclipse IDE for Java EE Developers">
@@ -392,7 +392,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -528,7 +528,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -539,7 +539,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -675,7 +675,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -686,7 +686,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -822,7 +822,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -988,7 +988,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -1058,7 +1058,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -1069,7 +1069,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -1139,7 +1139,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -1150,7 +1150,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -1220,7 +1220,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -1362,7 +1362,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -1424,7 +1424,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -1435,7 +1435,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -1497,7 +1497,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -1508,7 +1508,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -1570,7 +1570,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <description>The essential tools for any JavaScript developer, including JavaScript language support, Git client, Mylyn and editors for JavaScript, HTML, CSS and XML.</description>
@@ -1592,7 +1592,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -1638,7 +1638,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -1649,7 +1649,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -1695,7 +1695,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -1706,7 +1706,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -1752,7 +1752,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -1825,7 +1825,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -1921,7 +1921,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -1932,7 +1932,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2028,7 +2028,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -2039,7 +2039,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2135,7 +2135,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -2197,7 +2197,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2229,7 +2229,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -2240,7 +2240,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2272,7 +2272,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -2283,7 +2283,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2315,7 +2315,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -2481,7 +2481,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2593,7 +2593,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -2604,7 +2604,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2716,7 +2716,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -2727,7 +2727,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2839,7 +2839,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -3005,7 +3005,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3089,7 +3089,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -3100,7 +3100,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3184,7 +3184,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -3195,7 +3195,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3279,7 +3279,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -3442,7 +3442,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3506,7 +3506,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -3517,7 +3517,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3581,7 +3581,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -3592,7 +3592,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3656,7 +3656,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <description>An IDE for developers creating Android applications.</description>
@@ -3678,7 +3678,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3748,7 +3748,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -3759,7 +3759,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3829,7 +3829,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -3840,7 +3840,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3910,7 +3910,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -4057,7 +4057,7 @@
             url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
-    <description>A complete set of tools for developers who want to create Eclipse plug-ins, Rich Client Applications or Remote Application Platform (RCP+RAP), plus Mylyn, the m2e Maven integration, and an XML editor. It contains the EGit tooling for accessing Git version control systems.</description>
+    <description>A complete set of tools for developers who want to create Eclipse plug-ins, Rich Client Applications or Remote Application Platform (RCP+RAP), plus Maven and Gradle tooling, and an XML editor. It contains the EGit tooling for accessing Git version control systems.</description>
   </product>
   <product name="epp.package.testing"
       label="Eclipse for Testers">
@@ -4076,7 +4076,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -4106,7 +4106,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -4117,7 +4117,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -4147,7 +4147,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -4158,7 +4158,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -4188,7 +4188,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -4330,7 +4330,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -4400,7 +4400,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -4411,7 +4411,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -4481,7 +4481,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -4492,7 +4492,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -4562,7 +4562,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -4929,7 +4929,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -4981,7 +4981,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -4992,7 +4992,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -5044,7 +5044,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -5055,7 +5055,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -5107,7 +5107,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -5266,7 +5266,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.6RC4a-201606061100/</value>
+          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.6-201606061100/</value>
         </detail>
       </annotation>
       <setupTask
@@ -5282,7 +5282,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -5293,7 +5293,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.6RC4a-201606061100/</value>
+          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.6-201606061100/</value>
         </detail>
       </annotation>
       <setupTask
@@ -5309,7 +5309,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
@@ -5320,7 +5320,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.6RC4a-201606061100/</value>
+          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.6-201606061100/</value>
         </detail>
       </annotation>
       <setupTask
@@ -5336,7 +5336,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/neon"/>
+            url="http://download.eclipse.org/releases/neon/201606221000"/>
       </setupTask>
     </version>
     <version
