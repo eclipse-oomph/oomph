@@ -96,7 +96,7 @@ public class StringFilterRegistry
     {
       public String filter(String value)
       {
-        return URI.encodeSegment(value, false).replace("@", "%40");
+        return URI.encodeSegment(value, false).replace(":", "%3A").replace("@", "%40");
       }
     });
 
