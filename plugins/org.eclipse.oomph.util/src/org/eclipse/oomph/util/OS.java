@@ -25,6 +25,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Eike Stepper
@@ -179,6 +180,16 @@ public abstract class OS
   public Process execute(List<String> command, boolean terminal) throws Exception
   {
     ProcessBuilder processBuilder = new ProcessBuilder(command);
+    try
+    {
+      Map<String, String> environment = processBuilder.environment();
+      environment.remove("SWT_GTK3");
+    }
+    catch (UnsupportedOperationException ex)
+    {
+      // Ignore.
+    }
+
     Process process = processBuilder.start();
     process.getInputStream().close();
     process.getOutputStream().close();
