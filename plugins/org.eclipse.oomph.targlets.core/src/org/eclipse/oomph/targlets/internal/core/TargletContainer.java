@@ -1230,14 +1230,9 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             ius.add(createPDETargetPlatformIU());
 
             IQueryResult<IInstallableUnit> metadataResult = super.getMetadata(monitor).query(QueryUtil.createIUAnyQuery(), monitor);
-            Set<IRequirement> licenseRequirements = new HashSet<IRequirement>();
-            Set<IRequirement> workspaceRequirements = new HashSet<IRequirement>();
-            Set<IRequirement> binaryRequirements = new HashSet<IRequirement>();
             for (IInstallableUnit iu : P2Util.asIterable(metadataResult))
             {
               TargletsCorePlugin.checkCancelation(monitor);
-
-              binaryRequirements.addAll(iu.getRequirements());
 
               ius.add(createGeneralizedIU(iu));
 
@@ -1262,6 +1257,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                 }
 
                 // If the workspaceIU has any requirements not in the binary IU, then include those.
+                List<IRequirement> extraRequirements = new ArrayList<IRequirement>();
                 LOOP: for (IRequirement workspaceRequirement : workspaceIU.getRequirements())
                 {
                   if (workspaceRequirement instanceof IRequiredCapability)
@@ -1291,7 +1287,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                       if (requiredWorkspaceIU != null
                           && (requiredWorkspaceIU.isSingleton() || "true".equals(requiredWorkspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP))))
                       {
-                        workspaceRequirements
+                        extraRequirements
                             .add(MetadataFactory.createRequirement(namespace, name, VersionRange.emptyRange, workspaceRequiredCapability.getFilter(),
                                 workspaceRequiredCapability.getMin(), workspaceRequiredCapability.getMax(), workspaceRequiredCapability.isGreedy()));
                         continue LOOP;
@@ -1300,7 +1296,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                   }
 
                   // Otherwise add the requirement as is.
-                  workspaceRequirements.add(workspaceRequirement);
+                  extraRequirements.add(workspaceRequirement);
                 }
 
                 // If there this workspace IU has a license...
@@ -1311,49 +1307,16 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                   VersionRange versionRange = new VersionRange(workspaceIU.getProperty(FeatureGenerator.PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE));
                   IRequirement requirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, licenseFeatureID, versionRange, null, false,
                       false);
-                  licenseRequirements.add(requirement);
+                  extraRequirements.add(requirement);
+                }
+
+                if (!extraRequirements.isEmpty() && iu instanceof InstallableUnit)
+                {
+                  InstallableUnit binaryIU = (InstallableUnit)iu;
+                  extraRequirements.addAll(0, binaryIU.getRequirements());
+                  binaryIU.setRequiredCapabilities(extraRequirements.toArray(new IRequirement[extraRequirements.size()]));
                 }
               }
-            }
-
-            // If we need license requirements.
-            if (!licenseRequirements.isEmpty())
-            {
-              // Build an artificial unit that requires all the license features.
-              InstallableUnitDescription requiredLicensesDescription = new InstallableUnitDescription();
-              requiredLicensesDescription.setId("required_licenses");
-              requiredLicensesDescription.setVersion(Version.createOSGi(1, 0, 0));
-              requiredLicensesDescription.setArtifacts(new IArtifactKey[0]);
-              requiredLicensesDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
-              requiredLicensesDescription.setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
-                  requiredLicensesDescription.getId(), requiredLicensesDescription.getVersion()) });
-              requiredLicensesDescription.addRequirements(licenseRequirements);
-
-              IInstallableUnit requiredLicensesIU = MetadataFactory.createInstallableUnit(requiredLicensesDescription);
-              ius.add(requiredLicensesIU);
-
-              profileChangeRequest.add(requiredLicensesIU);
-            }
-
-            // If we need source requirements.
-            workspaceRequirements.removeAll(binaryRequirements);
-            if (!workspaceRequirements.isEmpty())
-            {
-              // Build an artificial unit that requires all the license features.
-              InstallableUnitDescription workspaceRequirementsDescription = new InstallableUnitDescription();
-              workspaceRequirementsDescription.setId("workspace_requirements");
-              workspaceRequirementsDescription.setVersion(Version.createOSGi(1, 0, 0));
-              workspaceRequirementsDescription.setArtifacts(new IArtifactKey[0]);
-              workspaceRequirementsDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
-              workspaceRequirementsDescription
-                  .setCapabilities(new IProvidedCapability[] { MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID,
-                      workspaceRequirementsDescription.getId(), workspaceRequirementsDescription.getVersion()) });
-              workspaceRequirementsDescription.addRequirements(workspaceRequirements);
-
-              IInstallableUnit workspaceRequirementsIU = MetadataFactory.createInstallableUnit(workspaceRequirementsDescription);
-              ius.add(workspaceRequirementsIU);
-
-              profileChangeRequest.add(workspaceRequirementsIU);
             }
 
             Set<IInstallableUnit> remainingWorkspaceIUs = new HashSet<IInstallableUnit>(ius);
