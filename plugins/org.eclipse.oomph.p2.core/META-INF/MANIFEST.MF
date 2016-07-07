@@ -25,6 +25,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.equinox.p2.operations;bundle-version="[2.0.0,3.0.0)",
  org.eclipse.equinox.p2.touchpoint.natives;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.equinox.p2.touchpoint.eclipse;bundle-version="[2.0.0,3.0.0)",
- org.eclipse.oomph.p2;bundle-version="[1.4.0,2.0.0)";visibility:=reexport
+ org.eclipse.oomph.p2;bundle-version="[1.5.0,2.0.0)";visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Service-Component: META-INF/lazyProfileRegistry.xml, META-INF/provisioningAgentProvider.xml

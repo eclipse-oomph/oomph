@@ -14,11 +14,11 @@ Export-Package: org.eclipse.oomph.setup.internal.targlets;version="1.5.0";x-inte
  org.eclipse.oomph.setup.targlets.util;version="1.5.0";x-internal:=true
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.emf.ecore;bundle-version="[2.10.0,3.0.0)";visibility:=reexport,
- org.eclipse.oomph.p2;bundle-version="[1.4.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.resources;bundle-version="[1.4.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.setup;bundle-version="[1.4.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.p2;bundle-version="[1.5.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.resources;bundle-version="[1.5.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.setup;bundle-version="[1.5.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.targlets;bundle-version="[1.5.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.targlets.core;bundle-version="[1.5.0,2.0.0)",
- org.eclipse.oomph.util.pde;bundle-version="[1.4.0,2.0.0)",
+ org.eclipse.oomph.util.pde;bundle-version="[1.5.0,2.0.0)",
  org.eclipse.pde.core;bundle-version="[3.5.0,4.0.0)"
 Bundle-ActivationPolicy: lazy
