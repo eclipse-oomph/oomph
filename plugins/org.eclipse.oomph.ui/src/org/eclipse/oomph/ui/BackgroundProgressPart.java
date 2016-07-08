@@ -14,11 +14,16 @@ import org.eclipse.jface.wizard.ProgressMonitorPart;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Eike Stepper
  */
 public class BackgroundProgressPart extends ProgressMonitorPart
 {
+  private final Updater updater = new Updater();
+
   public BackgroundProgressPart(Composite parent, Layout layout)
   {
     super(parent, layout);
@@ -37,7 +42,7 @@ public class BackgroundProgressPart extends ProgressMonitorPart
   @Override
   public void beginTask(final String name, final int totalWork)
   {
-    UIUtil.syncExec(new Runnable()
+    updater.update(new Runnable()
     {
       public void run()
       {
@@ -49,7 +54,7 @@ public class BackgroundProgressPart extends ProgressMonitorPart
   @Override
   public void setTaskName(final String name)
   {
-    UIUtil.syncExec(new Runnable()
+    updater.update(new Runnable()
     {
       public void run()
       {
@@ -61,7 +66,7 @@ public class BackgroundProgressPart extends ProgressMonitorPart
   @Override
   public void subTask(final String name)
   {
-    UIUtil.syncExec(new Runnable()
+    updater.update(new Runnable()
     {
       public void run()
       {
@@ -73,7 +78,7 @@ public class BackgroundProgressPart extends ProgressMonitorPart
   @Override
   public void done()
   {
-    UIUtil.syncExec(new Runnable()
+    updater.update(new Runnable()
     {
       public void run()
       {
@@ -85,7 +90,7 @@ public class BackgroundProgressPart extends ProgressMonitorPart
   @Override
   public void internalWorked(final double work)
   {
-    UIUtil.syncExec(new Runnable()
+    updater.update(new Runnable()
     {
       public void run()
       {
@@ -97,12 +102,59 @@ public class BackgroundProgressPart extends ProgressMonitorPart
   @Override
   public void worked(final int work)
   {
-    UIUtil.syncExec(new Runnable()
+    updater.update(new Runnable()
     {
       public void run()
       {
         BackgroundProgressPart.super.worked(work);
       }
     });
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static class Updater implements Runnable
+  {
+    private List<Runnable> runnables;
+
+    public void run()
+    {
+      List<Runnable> currentRunnables;
+      synchronized (this)
+      {
+        currentRunnables = runnables;
+        runnables = null;
+      }
+
+      for (Runnable runnable : currentRunnables)
+      {
+        runnable.run();
+      }
+    }
+
+    public void update(Runnable runnable)
+    {
+      boolean dispatch;
+      synchronized (this)
+      {
+        if (runnables == null)
+        {
+          runnables = new ArrayList<Runnable>();
+          dispatch = true;
+        }
+        else
+        {
+          dispatch = false;
+        }
+      }
+
+      runnables.add(runnable);
+
+      if (dispatch)
+      {
+        UIUtil.asyncExec(this);
+      }
+    }
   }
 }
