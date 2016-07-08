@@ -980,6 +980,36 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
           return new XMLPreferenceHandler(key, "template", new String[] { "context", "description", "name" }, new String[] { "id" });
         }
       });
+
+      registry.put(URI.createURI("//instance/org.eclipse.cdt.ui/org.eclipse.cdt.ui.formatterprofiles"), new Factory()
+      {
+        public PreferenceHandler create(URI key)
+        {
+          return new XMLPreferenceHandler(key, "profile", new String[] { "name" }, null);
+        }
+      });
+
+      registry.put(URI.createURI("//instance/org.eclipse.cdt.ui/formatter_profile"), new Factory()
+      {
+        public PreferenceHandler create(URI key)
+        {
+          return new CDTProfileChoicePreferenceHandler(key);
+        }
+      });
+
+      registry.put(URI.createURI("//instance/org.eclipse.cdt.core/"), new Factory()
+      {
+        public PreferenceHandler create(URI key)
+        {
+          String lastSegment = key.lastSegment();
+          if (lastSegment.startsWith("org.eclipse.cdt.core.formatter."))
+          {
+            return new IgnoredPreferenceHandler(key);
+          }
+
+          return new PreferenceHandler(key);
+        }
+      });
     }
 
     /**
@@ -1420,16 +1450,13 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
   /**
    * @author Ed Merks
    */
-  public static class JDTProfileChoicePreferenceHandler extends PreferenceHandler
+  public static abstract class ProfileChoicePreferenceHandler extends PreferenceHandler
   {
     private static final Pattern SETTING_PATTERN = Pattern.compile("<setting id=\"([^\"]+)\" value=\"([^\"]+)\"");
 
-    private String profileType;
-
-    public JDTProfileChoicePreferenceHandler(URI key, String profileType)
+    public ProfileChoicePreferenceHandler(URI key)
     {
       super(key);
-      this.profileType = profileType;
     }
 
     @Override
@@ -1438,10 +1465,14 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       return PRIORITY_EARLY + 1;
     }
 
+    protected abstract PreferenceProperty getProfilesPreferenceProperty();
+
+    protected abstract PreferenceProperty getKeyPreferenceProperty(String propertyKey);
+
     @Override
     public void apply(SetupTaskContext context)
     {
-      PreferenceProperty profiles = new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui." + profileType + "profiles");
+      PreferenceProperty profiles = getProfilesPreferenceProperty();
       Pattern pattern = Pattern.compile("(?s)(<profile[^\n]*name=\"" + newValue.substring(1) + "\".*?</profile>)");
       String value = profiles.get(null);
       if (value != null)
@@ -1454,11 +1485,54 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
           {
             String propertyKey = settingMatcher.group(1);
             String propertyValue = settingMatcher.group(2);
-            PreferenceProperty property = new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.jdt.core/" + propertyKey);
+            PreferenceProperty property = getKeyPreferenceProperty(propertyKey);
             property.set(propertyValue);
           }
         }
       }
+    }
+  }
+
+  public static class JDTProfileChoicePreferenceHandler extends ProfileChoicePreferenceHandler
+  {
+    private String profileType;
+
+    public JDTProfileChoicePreferenceHandler(URI key, String profileType)
+    {
+      super(key);
+      this.profileType = profileType;
+    }
+
+    @Override
+    protected PreferenceProperty getProfilesPreferenceProperty()
+    {
+      return new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui." + profileType + "profiles");
+    }
+
+    @Override
+    protected PreferenceProperty getKeyPreferenceProperty(String propertyKey)
+    {
+      return new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.jdt.core/" + propertyKey);
+    }
+  }
+
+  public static class CDTProfileChoicePreferenceHandler extends ProfileChoicePreferenceHandler
+  {
+    public CDTProfileChoicePreferenceHandler(URI key)
+    {
+      super(key);
+    }
+
+    @Override
+    protected PreferenceProperty getProfilesPreferenceProperty()
+    {
+      return new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.cdt.ui/org.eclipse.cdt.ui.formatterprofiles");
+    }
+
+    @Override
+    protected PreferenceProperty getKeyPreferenceProperty(String propertyKey)
+    {
+      return new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.cdt.core/" + propertyKey);
     }
   }
 
