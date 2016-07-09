@@ -37,6 +37,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.window.Window;
+import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
@@ -44,6 +45,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -64,6 +66,18 @@ public class InstallerApplication implements IApplication
     // This must come very early, before the first model is accessed, so that HTTPS can be authorized.
     IProvisioningAgent agent = P2Util.getCurrentProvisioningAgent();
     agent.registerService(UIServices.SERVICE_NAME, Installer.SERVICE_UI);
+
+    Location location = Platform.getInstanceLocation();
+    if (location != null)
+    {
+      SetupInstallerPlugin.INSTANCE.log("Just testing");
+      Location configurationLocation = Platform.getConfigurationLocation();
+      if (configurationLocation != null)
+      {
+        URL configurationLocationURL = configurationLocation.getURL();
+        location.set(configurationLocationURL, false);
+      }
+    }
 
     final InstallerUI[] installerDialog = { null };
 
@@ -236,6 +250,8 @@ public class InstallerApplication implements IApplication
 
         return EXIT_RESTART;
       }
+
+      SetupInstallerPlugin.INSTANCE.log("Just testing the end");
 
       return EXIT_OK;
     }

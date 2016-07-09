@@ -2848,7 +2848,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public void perform(IProgressMonitor monitor) throws Exception
   {
     boolean bootstrap = getTrigger() == Trigger.BOOTSTRAP;
-    monitor.beginTask("", 100 + (bootstrap ? 2 : 0));
+    monitor.beginTask("", 100 + (bootstrap ? 3 : 0));
 
     try
     {
@@ -2900,16 +2900,47 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     monitor.worked(1);
 
+    URIConverter uriConverter = getURIConverter();
     String[] networkPreferences = new String[] { ".settings", "org.eclipse.core.net.prefs" };
-    URI sourceLocation = SetupContext.CONFIGURATION_LOCATION_URI.appendSegments(networkPreferences);
-    if (getURIConverter().exists(sourceLocation, null))
+    URI networkPreferencesSourceLocation = SetupContext.CONFIGURATION_LOCATION_URI.appendSegments(networkPreferences);
+    if (uriConverter.exists(networkPreferencesSourceLocation, null))
     {
       URI targetURI = URI.createFileURI(productConfigurationLocation.toString()).appendSegments(networkPreferences);
 
       ResourceCopyTask resourceCopyTask = SetupFactory.eINSTANCE.createResourceCopyTask();
-      resourceCopyTask.setSourceURL(sourceLocation.toString());
+      resourceCopyTask.setSourceURL(networkPreferencesSourceLocation.toString());
       resourceCopyTask.setTargetURL(targetURI.toString());
       performTask(resourceCopyTask, new SubProgressMonitor(monitor, 1));
+    }
+    else
+    {
+      monitor.worked(1);
+    }
+
+    File workspaceLocation = getWorkspaceLocation();
+    if (workspaceLocation != null)
+    {
+      String[] jschPreferences = new String[] { ".metadata", ".plugins", "org.eclipse.core.runtime", ".settings", "org.eclipse.jsch.core.prefs" };
+      URI jschPreferencesSourceLocation = SetupContext.CONFIGURATION_LOCATION_URI.appendSegments(jschPreferences);
+      if (uriConverter.exists(jschPreferencesSourceLocation, null))
+      {
+        URI targetURI = URI.createFileURI(workspaceLocation.toString()).appendSegments(jschPreferences);
+        if (!uriConverter.exists(targetURI, null))
+        {
+          ResourceCopyTask resourceCopyTask = SetupFactory.eINSTANCE.createResourceCopyTask();
+          resourceCopyTask.setSourceURL(jschPreferencesSourceLocation.toString());
+          resourceCopyTask.setTargetURL(targetURI.toString());
+          performTask(resourceCopyTask, new SubProgressMonitor(monitor, 1));
+        }
+        else
+        {
+          monitor.worked(1);
+        }
+      }
+      else
+      {
+        monitor.worked(1);
+      }
     }
     else
     {

@@ -13,7 +13,7 @@
 -name
 Eclipse Installer
 -data
-@none
+@noDefault
       </programArgs>
       <programArgsLin>--launcher.GTK_version
 2
