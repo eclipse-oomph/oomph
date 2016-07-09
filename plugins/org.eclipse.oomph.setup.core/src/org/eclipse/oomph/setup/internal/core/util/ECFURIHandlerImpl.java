@@ -1241,15 +1241,26 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
           if (isHTTPS && responseHeaders.get("Set-Cookie") != null)
           {
-            IncomingFileTransferException incomingFileTransferException = new IncomingFileTransferException(HttpURLConnection.HTTP_UNAUTHORIZED);
-            incomingFileTransferException.fillInStackTrace();
-            exception = incomingFileTransferException;
-            receiveStartEvent.cancel();
+            try
+            {
+              java.net.URI uri = ((IIncomingFileTransferReceiveStartEvent)event).getFileID().getURI();
+              if ("bitbucket.org".equals(uri.getHost()))
+              {
+                IncomingFileTransferException incomingFileTransferException = new IncomingFileTransferException(HttpURLConnection.HTTP_UNAUTHORIZED);
+                incomingFileTransferException.fillInStackTrace();
+                exception = incomingFileTransferException;
+                receiveStartEvent.cancel();
 
-            // Older versions of ECF don't produce a IIncomingFileTransferReceiveDoneEvent.
-            // exception = new UserCancelledException();
-            receiveLatch.countDown();
-            return;
+                // Older versions of ECF don't produce a IIncomingFileTransferReceiveDoneEvent.
+                // exception = new UserCancelledException();
+                receiveLatch.countDown();
+                return;
+              }
+            }
+            catch (URISyntaxException ex)
+            {
+              // Ignore.
+            }
           }
         }
 
