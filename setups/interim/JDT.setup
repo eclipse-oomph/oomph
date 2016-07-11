@@ -40,14 +40,39 @@
       encoding="UTF-8"
       documentation="Initialize the Package Explorer to display workings sets."/>
   <setupTask
-      xsi:type="setup:VariableTask"
-      name="eclipse.target.platform"
-      defaultValue="Neon"
-      storageURI="scope://Workspace"/>
-  <setupTask
       xsi:type="jdt:JRETask"
       version="JavaSE-1.8"
       location="${jre.location-1.8}"/>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      name="eclipse.target.platform"
+      defaultValue="Oxygen"
+      storageURI="scope://Workspace"/>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      disabled="true"
+      name="eclipse.api.baseline.target.platform"
+      value="Neon"
+      storageURI="scope://Workspace"/>
+  <setupTask
+      xsi:type="setup.targlets:TargletTask"
+      disabled="true"
+      targetName="Modular API Baseline Target"
+      activateTarget="false">
+    <targlet
+        name="Platform"
+        activeRepositoryList="${eclipse.api.baseline.target.platform}"
+        includeSources="false">
+      <requirement
+          name="org.eclipse.platform.feature.group"/>
+      <requirement
+          name="org.eclipse.jdt.feature.group"/>
+      <requirement
+          name="org.eclipse.pde.feature.group"/>
+      <requirement
+          name="org.eclipse.equinox.executable.feature.group"/>
+    </targlet>
+  </setupTask>
   <setupTask
       xsi:type="setup.targlets:TargletTask">
     <targlet
@@ -61,6 +86,11 @@
           name="org.eclipse.pde.feature.group"/>
       <requirement
           name="org.eclipse.equinox.executable.feature.group"/>
+      <repositoryList
+          name="Oxygen">
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
+      </repositoryList>
       <repositoryList
           name="Neon">
         <repository
@@ -127,6 +157,8 @@
         <sourceLocator
             rootFolder="${git.clone.jdt.location}"/>
         <repositoryList
+            name="Oxygen"/>
+        <repositoryList
             name="Neon"/>
         <repositoryList
             name="Mars"/>
@@ -153,7 +185,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Neon"
+          value="Oxygen"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The features of the JDT project</description>
@@ -197,6 +229,8 @@
             name="org.eclipse.jdt.apt.ui"/>
         <sourceLocator
             rootFolder="${git.clone.jdt.core.location}"/>
+        <repositoryList
+            name="Oxygen"/>
         <repositoryList
             name="Neon"/>
         <repositoryList
@@ -266,7 +300,7 @@
         <setupTask
             xsi:type="setup:VariableTask"
             name="eclipse.target.platform"
-            value="Neon"
+            value="Oxygen"
             storageURI="scope://Workspace"/>
       </stream>
     </project>
@@ -276,7 +310,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Neon"
+          value="Oxygen"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The core parts of the JDT project</description>
@@ -318,6 +352,8 @@
           includeAllPlatforms="true">
         <sourceLocator
             rootFolder="${git.clone.jdt.debug.location}"/>
+        <repositoryList
+            name="Oxygen"/>
         <repositoryList
             name="Neon"/>
         <repositoryList
@@ -386,7 +422,7 @@
         <setupTask
             xsi:type="setup:VariableTask"
             name="eclipse.target.platform"
-            value="Neon"
+            value="Oxygen"
             storageURI="scope://Workspace"/>
       </stream>
     </project>
@@ -396,7 +432,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Neon"
+          value="Oxygen"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The debug parts of the JDT project</description>
@@ -442,6 +478,8 @@
             name="org.eclipse.jdt.jeview.feature.feature.group"/>
         <sourceLocator
             rootFolder="${git.clone.jdt.ui.location}"/>
+        <repositoryList
+            name="Oxygen"/>
         <repositoryList
             name="Neon"/>
         <repositoryList
@@ -510,7 +548,7 @@
         <setupTask
             xsi:type="setup:VariableTask"
             name="eclipse.target.platform"
-            value="Neon"
+            value="Oxygen"
             storageURI="scope://Workspace"/>
       </stream>
     </project>
@@ -548,7 +586,7 @@
         <setupTask
             xsi:type="setup:VariableTask"
             name="eclipse.target.platform"
-            value="Neon"
+            value="Oxygen"
             storageURI="scope://Workspace"/>
       </stream>
     </project>
@@ -558,7 +596,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Neon"
+          value="Oxygen"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The UI parts of the JDT project</description>
@@ -603,6 +641,8 @@
         <sourceLocator
             rootFolder="${git.clone.jdt.binaries.location}"/>
         <repositoryList
+            name="Oxygen"/>
+        <repositoryList
             name="Neon"/>
         <repositoryList
             name="Mars"/>
@@ -629,13 +669,13 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Neon"
+          value="Oxygen"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The binaries for tests of the JDT project</description>
   </project>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
-      href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
+      href="../org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
   <description>The setups for the Java Development Tools projects</description>
 </setup:Project>
