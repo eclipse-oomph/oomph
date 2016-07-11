@@ -56,12 +56,12 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Luna"
+      defaultValue="Oxygen"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.api.baseline.target.platform"
-      value="Mars"
+      value="Neon"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup:EclipseIniTask"
@@ -109,6 +109,13 @@
           name="org.eclipse.pde.feature.group"/>
       <requirement
           name="org.eclipse.equinox.executable.feature.group"/>
+      <repositoryList
+          name="Oxygen">
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
+        <repository
+            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+      </repositoryList>
       <repositoryList
           name="Neon">
         <repository
@@ -240,7 +247,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Neon"
+          value="Oxygen"
           storageURI="scope://Workspace"/>
     </stream>
   </project>
@@ -293,7 +300,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Neon"
+          value="Oxygen"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform documentation</description>
@@ -377,7 +384,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Neon"
+          value="Oxygen"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform Debug support</description>
@@ -551,12 +558,12 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Neon"
+          value="Oxygen"
           storageURI="scope://Workspace"/>
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.api.baseline.target.platform"
-          value="Mars"
+          value="Neon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform SWT support</description>
@@ -598,6 +605,15 @@
             name="*"/>
         <sourceLocator
             rootFolder="${git.clone.platform.ui.tools.location}"/>
+        <repositoryList
+            name="Oxygen">
+          <repository
+              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+          <repository
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11.x"/>
+          <repository
+              url="http://download.eclipse.org/tools/gef/updates/releases"/>
+        </repositoryList>
         <repositoryList
             name="Neon">
           <repository
@@ -663,7 +679,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Neon"
+          value="Oxygen"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform UI Tools support</description>
