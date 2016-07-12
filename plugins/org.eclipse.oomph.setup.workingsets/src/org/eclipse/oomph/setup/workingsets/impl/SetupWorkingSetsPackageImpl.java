@@ -16,6 +16,7 @@ import org.eclipse.oomph.setup.workingsets.SetupWorkingSetsPackage;
 import org.eclipse.oomph.setup.workingsets.WorkingSetTask;
 import org.eclipse.oomph.workingsets.WorkingSetsPackage;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -121,9 +122,19 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getWorkingSetTask_Prefix()
+  {
+    return (EAttribute)workingSetTaskEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getWorkingSetTask_WorkingSets()
   {
-    return (EReference)workingSetTaskEClass.getEStructuralFeatures().get(0);
+    return (EReference)workingSetTaskEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -160,6 +171,7 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
 
     // Create classes and their features
     workingSetTaskEClass = createEClass(WORKING_SET_TASK);
+    createEAttribute(workingSetTaskEClass, WORKING_SET_TASK__PREFIX);
     createEReference(workingSetTaskEClass, WORKING_SET_TASK__WORKING_SETS);
   }
 
@@ -203,6 +215,8 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
 
     // Initialize classes and features; add operations and parameters
     initEClass(workingSetTaskEClass, WorkingSetTask.class, "WorkingSetTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getWorkingSetTask_Prefix(), ecorePackage.getEString(), "prefix", null, 0, 1, WorkingSetTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getWorkingSetTask_WorkingSets(), theWorkingSetsPackage.getWorkingSet(), null, "workingSets", null, 0, -1, WorkingSetTask.class,
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

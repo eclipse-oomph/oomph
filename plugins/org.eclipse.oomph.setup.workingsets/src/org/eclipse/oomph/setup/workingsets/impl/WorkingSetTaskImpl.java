@@ -20,11 +20,13 @@ import org.eclipse.oomph.workingsets.WorkingSet;
 import org.eclipse.oomph.workingsets.WorkingSetGroup;
 import org.eclipse.oomph.workingsets.util.WorkingSetsUtil;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -44,6 +46,7 @@ import java.util.Map;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.workingsets.impl.WorkingSetTaskImpl#getPrefix <em>Prefix</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.workingsets.impl.WorkingSetTaskImpl#getWorkingSets <em>Working Sets</em>}</li>
  * </ul>
  *
@@ -51,6 +54,26 @@ import java.util.Map;
  */
 public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
 {
+  /**
+   * The default value of the '{@link #getPrefix() <em>Prefix</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getPrefix()
+   * @generated
+   * @ordered
+   */
+  protected static final String PREFIX_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getPrefix() <em>Prefix</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getPrefix()
+   * @generated
+   * @ordered
+   */
+  protected String prefix = PREFIX_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getWorkingSets() <em>Working Sets</em>}' containment reference list.
    * <!-- begin-user-doc -->
@@ -80,6 +103,31 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
   protected EClass eStaticClass()
   {
     return SetupWorkingSetsPackage.Literals.WORKING_SET_TASK;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public String getPrefix()
+  {
+    return prefix == null ? getWorkingSetPrefix() : prefix;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setPrefix(String newPrefix)
+  {
+    String oldPrefix = prefix;
+    prefix = newPrefix;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupWorkingSetsPackage.WORKING_SET_TASK__PREFIX, oldPrefix, prefix));
+    }
   }
 
   /**
@@ -122,6 +170,8 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
   {
     switch (featureID)
     {
+      case SetupWorkingSetsPackage.WORKING_SET_TASK__PREFIX:
+        return getPrefix();
       case SetupWorkingSetsPackage.WORKING_SET_TASK__WORKING_SETS:
         return getWorkingSets();
     }
@@ -139,6 +189,9 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
   {
     switch (featureID)
     {
+      case SetupWorkingSetsPackage.WORKING_SET_TASK__PREFIX:
+        setPrefix((String)newValue);
+        return;
       case SetupWorkingSetsPackage.WORKING_SET_TASK__WORKING_SETS:
         getWorkingSets().clear();
         getWorkingSets().addAll((Collection<? extends WorkingSet>)newValue);
@@ -157,6 +210,9 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
   {
     switch (featureID)
     {
+      case SetupWorkingSetsPackage.WORKING_SET_TASK__PREFIX:
+        setPrefix(PREFIX_EDEFAULT);
+        return;
       case SetupWorkingSetsPackage.WORKING_SET_TASK__WORKING_SETS:
         getWorkingSets().clear();
         return;
@@ -174,10 +230,32 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
   {
     switch (featureID)
     {
+      case SetupWorkingSetsPackage.WORKING_SET_TASK__PREFIX:
+        return PREFIX_EDEFAULT == null ? prefix != null : !PREFIX_EDEFAULT.equals(prefix);
       case SetupWorkingSetsPackage.WORKING_SET_TASK__WORKING_SETS:
         return workingSets != null && !workingSets.isEmpty();
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy())
+    {
+      return super.toString();
+    }
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (prefix: ");
+    result.append(prefix);
+    result.append(')');
+    return result.toString();
   }
 
   private String getWorkingSetPrefix()
@@ -197,7 +275,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
   @Override
   public Object getOverrideToken()
   {
-    return getWorkingSetPrefix();
+    return getPrefix();
   }
 
   @Override
@@ -238,7 +316,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    String prefix = getWorkingSetPrefix();
+    String prefix = getPrefix();
     WorkingSetGroup defaultWorkingSetGroup = WorkingSetsUtil.getWorkingSetGroup();
     Map<String, WorkingSet> existingWorkingSets = getExistingWorkingSets(prefix, defaultWorkingSetGroup.getWorkingSets());
 
@@ -264,7 +342,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    String prefix = getWorkingSetPrefix();
+    String prefix = getPrefix();
     WorkingSetGroup defaultWorkingSetGroup = WorkingSetsUtil.getWorkingSetGroup();
     EList<WorkingSet> workingSets = defaultWorkingSetGroup.getWorkingSets();
     Map<String, WorkingSet> existingWorkingSets = getExistingWorkingSets(prefix, workingSets);

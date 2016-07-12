@@ -10,6 +10,10 @@
   <genPackages prefix="SetupWorkingSets" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
       childCreationExtenders="true" ecorePackage="SetupWorkingSets.ecore#/" publicationLocation="/setups/models/SetupWorkingSets.ecore">
     <genClasses ecoreClass="SetupWorkingSets.ecore#//WorkingSetTask">
+      <genFeatures createChild="false" propertyDescription="A globally unique identifier that will be used to merge this task with other working set tasks with the same prefix"
+          ecoreFeature="ecore:EAttribute SetupWorkingSets.ecore#//WorkingSetTask/prefix">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference SetupWorkingSets.ecore#//WorkingSetTask/workingSets"/>
     </genClasses>
   </genPackages>

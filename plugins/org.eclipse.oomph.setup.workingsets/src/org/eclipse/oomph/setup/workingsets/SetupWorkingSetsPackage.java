@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.workingsets;
 
 import org.eclipse.oomph.setup.SetupPackage;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -169,13 +170,22 @@ public interface SetupWorkingSetsPackage extends EPackage
   int WORKING_SET_TASK__FILTER = SetupPackage.SETUP_TASK__FILTER;
 
   /**
+   * The feature id for the '<em><b>Prefix</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORKING_SET_TASK__PREFIX = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Working Sets</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int WORKING_SET_TASK__WORKING_SETS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+  int WORKING_SET_TASK__WORKING_SETS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>Working Set Task</em>' class.
@@ -184,7 +194,7 @@ public interface SetupWorkingSetsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int WORKING_SET_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+  int WORKING_SET_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.workingsets.WorkingSetTask <em>Working Set Task</em>}'.
@@ -195,6 +205,17 @@ public interface SetupWorkingSetsPackage extends EPackage
    * @generated
    */
   EClass getWorkingSetTask();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.workingsets.WorkingSetTask#getPrefix <em>Prefix</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Prefix</em>'.
+   * @see org.eclipse.oomph.setup.workingsets.WorkingSetTask#getPrefix()
+   * @see #getWorkingSetTask()
+   * @generated
+   */
+  EAttribute getWorkingSetTask_Prefix();
 
   /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.workingsets.WorkingSetTask#getWorkingSets <em>Working Sets</em>}'.
@@ -239,6 +260,14 @@ public interface SetupWorkingSetsPackage extends EPackage
      * @generated
      */
     EClass WORKING_SET_TASK = eINSTANCE.getWorkingSetTask();
+
+    /**
+     * The meta object literal for the '<em><b>Prefix</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute WORKING_SET_TASK__PREFIX = eINSTANCE.getWorkingSetTask_Prefix();
 
     /**
      * The meta object literal for the '<em><b>Working Sets</b></em>' containment reference list feature.

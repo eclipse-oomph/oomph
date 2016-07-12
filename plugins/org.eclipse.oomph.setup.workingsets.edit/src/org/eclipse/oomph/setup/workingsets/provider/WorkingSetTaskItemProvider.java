@@ -20,7 +20,9 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import java.util.Collection;
@@ -60,8 +62,23 @@ public class WorkingSetTaskItemProvider extends SetupTaskItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addPrefixPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Prefix feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addPrefixPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_WorkingSetTask_prefix_feature"), getString("_UI_WorkingSetTask_prefix_description"),
+        SetupWorkingSetsPackage.Literals.WORKING_SET_TASK__PREFIX, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
+        new String[] { "org.eclipse.ui.views.properties.expert" }));
   }
 
   /**
@@ -171,6 +188,9 @@ public class WorkingSetTaskItemProvider extends SetupTaskItemProvider
 
     switch (notification.getFeatureID(WorkingSetTask.class))
     {
+      case SetupWorkingSetsPackage.WORKING_SET_TASK__PREFIX:
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+        return;
       case SetupWorkingSetsPackage.WORKING_SET_TASK__WORKING_SETS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;
