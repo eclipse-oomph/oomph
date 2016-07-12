@@ -70,7 +70,6 @@ public class InstallerApplication implements IApplication
     Location location = Platform.getInstanceLocation();
     if (location != null)
     {
-      SetupInstallerPlugin.INSTANCE.log("Just testing");
       Location configurationLocation = Platform.getConfigurationLocation();
       if (configurationLocation != null)
       {
@@ -250,8 +249,6 @@ public class InstallerApplication implements IApplication
 
         return EXIT_RESTART;
       }
-
-      SetupInstallerPlugin.INSTANCE.log("Just testing the end");
 
       return EXIT_OK;
     }
