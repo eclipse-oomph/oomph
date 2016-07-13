@@ -212,8 +212,23 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       fieldHolder.clear();
     }
 
-    for (SetupTaskPerformer setupTaskPerformer : incompletePerformers.isEmpty()
-        ? performer == null ? Collections.<SetupTaskPerformer> emptySet() : Collections.singleton(performer) : incompletePerformers)
+    Set<SetupTaskPerformer> performers = new LinkedHashSet<SetupTaskPerformer>();
+    if (incompletePerformers.isEmpty())
+    {
+      if (performer != null)
+      {
+        performers.add(performer);
+      }
+
+      performers.addAll(allPromptedPerfomers);
+    }
+    else
+    {
+      performers.addAll(incompletePerformers);
+      performers.addAll(allPromptedPerfomers);
+    }
+
+    for (SetupTaskPerformer setupTaskPerformer : performers)
     {
       List<VariableTask> variables = setupTaskPerformer.getUnresolvedVariables();
       for (VariableTask variable : variables)
@@ -387,6 +402,10 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     // Determine an appropriate field order.
     manager.reorder(allPerformers);
 
+    parent.pack();
+    parent.getParent().layout();
+    parent.setRedraw(true);
+
     FieldHolder firstField = null;
     FieldHolder firstEmptyField = null;
     for (FieldHolder fieldHolder : manager)
@@ -422,10 +441,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         field.setFocus();
       }
     }
-
-    parent.pack();
-    parent.getParent().layout();
-    parent.setRedraw(true);
 
     for (FieldHolder fieldHolder : manager)
     {

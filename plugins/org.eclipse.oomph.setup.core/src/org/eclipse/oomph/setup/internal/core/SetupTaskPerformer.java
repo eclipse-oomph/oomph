@@ -2416,6 +2416,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           {
             SetupPrompter prompter = getPrompter();
             String value = prompter.getValue(variable);
+            if (value == null)
+            {
+              value = variable.getValue();
+            }
+
             if (value != null)
             {
               variable.setValue(value);

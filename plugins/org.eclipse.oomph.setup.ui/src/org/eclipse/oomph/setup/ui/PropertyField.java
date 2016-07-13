@@ -695,6 +695,7 @@ public abstract class PropertyField
         else
         {
           text.setText(actualValue);
+          text.setSelection(actualValue.length());
         }
       }
       else
