@@ -11,12 +11,17 @@
 package org.eclipse.oomph.ui;
 
 import org.eclipse.oomph.base.provider.BaseEditUtil;
+import org.eclipse.oomph.internal.ui.UIPlugin;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.AdapterFactoryItemDelegator;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -25,7 +30,13 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.ui.provider.DecoratingColumLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
+import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.dialogs.PopupDialog;
+import org.eclipse.jface.util.Util;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -33,17 +44,22 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,11 +155,92 @@ public class PropertiesViewer extends TableViewer
         columnResizer.controlResized(null);
       }
     });
+
+    addDoubleClickListener(new IDoubleClickListener()
+    {
+      public void doubleClick(DoubleClickEvent event)
+      {
+        IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+        final Object[] element = (Object[])selection.getFirstElement();
+        if (element != null && element[5] != null)
+        {
+          final String value = (String)element[5];
+          UIUtil.asyncExec(table, new Runnable()
+          {
+            public void run()
+            {
+              PopupDialog popupDialog = new InformationPopupDialog(table.getShell(), (String)element[0], value);
+              popupDialog.open();
+            }
+          });
+        }
+      }
+    });
   }
 
   public DelegatingLabelDecorator getDelegatingLabelDecorator()
   {
     return labelDecorator;
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private final class InformationPopupDialog extends PopupDialog
+  {
+    private final String content;
+
+    public InformationPopupDialog(Shell parent, String titleText, String content)
+    {
+      super(parent, PopupDialog.INFOPOPUPRESIZE_SHELLSTYLE, true, true, true, true, false, titleText, null);
+      this.content = content;
+    }
+
+    @Override
+    protected void showDialogMenu()
+    {
+      super.showDialogMenu();
+
+      // On Linux this listenToDeactivate is set to false when showing the menu, apparently as a workaround for bad behavior in event handling.
+      if (Util.isGtk())
+      {
+        // Set it back to true after the menu is already showing.
+        // Otherwise the pop up won't disappear upon losing focus.
+        UIUtil.asyncExec(getShell(), new Runnable()
+        {
+          public void run()
+          {
+            ReflectUtil.setValue("listenToDeactivate", InformationPopupDialog.this, true);
+          }
+        });
+      }
+    }
+
+    @Override
+    protected Control createDialogArea(Composite parent)
+    {
+      Composite composite = (Composite)super.createDialogArea(parent);
+      ScrolledComposite scrolledComposite = new ScrolledComposite(composite, SWT.H_SCROLL | SWT.V_SCROLL);
+      scrolledComposite.setExpandHorizontal(true);
+      scrolledComposite.setExpandVertical(true);
+
+      Text text = new Text(scrolledComposite, SWT.MULTI | SWT.READ_ONLY);
+      text.setText(content);
+
+      Point size = text.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+      scrolledComposite.setMinSize(size);
+      scrolledComposite.setContent(text);
+
+      GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
+      scrolledComposite.setLayoutData(data);
+      return composite;
+    }
+
+    @Override
+    protected IDialogSettings getDialogSettings()
+    {
+      return UIPlugin.INSTANCE.getDialogSettings("InformationPopup");
+    }
   }
 
   /**
@@ -195,23 +292,35 @@ public class PropertiesViewer extends TableViewer
           }
 
           EStructuralFeature.Setting setting = null;
+          String fullValueText = null;
           Object feature = propertyDescriptor.getFeature(element);
           if (feature instanceof EStructuralFeature)
           {
+            EStructuralFeature eStructuralFeature = (EStructuralFeature)feature;
             Object object = AdapterFactoryEditingDomain.unwrap(element);
             if (object instanceof EObject)
             {
-              setting = ((InternalEObject)object).eSetting((EStructuralFeature)feature);
+              setting = ((InternalEObject)object).eSetting(eStructuralFeature);
+            }
+
+            if (eStructuralFeature instanceof EAttribute)
+            {
+              EAttribute eAttribute = (EAttribute)eStructuralFeature;
+              EDataType eDataType = eAttribute.getEAttributeType();
+              if (eDataType.isSerializable())
+              {
+                fullValueText = EcoreUtil.convertToString(eDataType, propertyValue);
+              }
             }
           }
 
           if (isExpertProperty(propertyDescriptor, element))
           {
-            expertProperties.add(new Object[] { displayName, valueText, image, true, setting });
+            expertProperties.add(new Object[] { displayName, valueText, image, true, setting, fullValueText });
           }
           else
           {
-            properties.add(new Object[] { displayName, valueText, image, false, setting });
+            properties.add(new Object[] { displayName, valueText, image, false, setting, fullValueText });
           }
         }
       }
