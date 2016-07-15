@@ -1602,12 +1602,15 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                 .singleton(MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID, description.getId(), description.getVersion())));
 
             IInstallableUnit workspaceSourceIU = MetadataFactory.createInstallableUnit(description);
-            ius.add(workspaceSourceIU);
-            ids.put(workspaceSourceID, version);
+            if (!workspaceIUInfos.containsKey(workspaceSourceIU))
+            {
+              ius.add(workspaceSourceIU);
+              ids.put(workspaceSourceID, version);
 
-            idToIUMap.put(new IU(workspaceSourceIU), workspaceSourceIU);
-            WorkspaceIUInfo info = workspaceIUInfos.get(iu);
-            workspaceSourceIUInfos.put(workspaceSourceIU, info);
+              idToIUMap.put(new IU(workspaceSourceIU), workspaceSourceIU);
+              WorkspaceIUInfo info = workspaceIUInfos.get(iu);
+              workspaceSourceIUInfos.put(workspaceSourceIU, info);
+            }
           }
 
           // Include all source IUs in the map.
