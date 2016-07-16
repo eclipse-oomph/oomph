@@ -18,6 +18,7 @@ import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.ProjectCatalog;
+import org.eclipse.oomph.setup.ProjectContainer;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
@@ -151,6 +152,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.dialogs.PatternFilter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -323,7 +325,32 @@ public class ProjectPage extends SetupWizardPage
     catalogSelector.configure(catalogsButton);
     AccessUtil.setKey(catalogsButton, "catalogs");
 
-    FilteredTreeWithoutWorkbench.WithCheckboxes filteredTree = new FilteredTreeWithoutWorkbench.WithCheckboxes(upperComposite, SWT.BORDER | SWT.MULTI);
+    PatternFilter patternFilter = new PatternFilter()
+    {
+      @Override
+      protected boolean isLeafMatch(Viewer viewer, Object element)
+      {
+        boolean result = super.isLeafMatch(viewer, element);
+        if (!result)
+        {
+          if (element instanceof Project)
+          {
+            Project project = (Project)element;
+            ProjectContainer projectContainer = project.getProjectContainer();
+            if (projectContainer instanceof Project)
+            {
+              Project parentProject = (Project)projectContainer;
+              return isLeafMatch(viewer, parentProject);
+            }
+          }
+        }
+
+        return result;
+      }
+    };
+
+    FilteredTreeWithoutWorkbench.WithCheckboxes filteredTree = new FilteredTreeWithoutWorkbench.WithCheckboxes(upperComposite, SWT.BORDER | SWT.MULTI,
+        patternFilter, null);
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
     AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
