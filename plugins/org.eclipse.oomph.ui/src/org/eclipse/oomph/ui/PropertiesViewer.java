@@ -16,6 +16,7 @@ import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -24,12 +25,13 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.AdapterFactoryItemDelegator;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.ui.provider.DecoratingColumLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.util.Util;
@@ -44,7 +46,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Color;
@@ -59,7 +61,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,13 +80,18 @@ public class PropertiesViewer extends TableViewer
 
   public PropertiesViewer(Composite parent, int style)
   {
+    this(parent, style, BaseEditUtil.createAdapterFactory());
+  }
+
+  public PropertiesViewer(Composite parent, int style, AdapterFactory adapterFactory)
+  {
     super(parent, style | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 
     final Table table = getTable();
     UIUtil.applyGridData(table).heightHint = 64;
 
     setLabelProvider(new DecoratingPropertiesLabelProvider(new PropertiesLabelProvider(), labelDecorator, table));
-    setContentProvider(new PropertiesContentProvider());
+    setContentProvider(new PropertiesContentProvider(adapterFactory));
 
     propertyColumn = new TableColumn(table, SWT.NONE);
     propertyColumn.setText("Property");
@@ -162,9 +168,9 @@ public class PropertiesViewer extends TableViewer
       {
         IStructuredSelection selection = (IStructuredSelection)event.getSelection();
         final Object[] element = (Object[])selection.getFirstElement();
-        if (element != null && element[5] != null)
+        if (element != null && (element[5] != null || element[1] != null))
         {
-          final String value = (String)element[5];
+          final String value = (String)(element[5] == null ? element[1] : element[5]);
           UIUtil.asyncExec(table, new Runnable()
           {
             public void run()
@@ -220,19 +226,30 @@ public class PropertiesViewer extends TableViewer
     protected Control createDialogArea(Composite parent)
     {
       Composite composite = (Composite)super.createDialogArea(parent);
-      ScrolledComposite scrolledComposite = new ScrolledComposite(composite, SWT.H_SCROLL | SWT.V_SCROLL);
-      scrolledComposite.setExpandHorizontal(true);
-      scrolledComposite.setExpandVertical(true);
 
-      Text text = new Text(scrolledComposite, SWT.MULTI | SWT.READ_ONLY);
+      StyledText text = new StyledText(composite, SWT.MULTI | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL);
+      text.setAlwaysShowScrollBars(false);
+      Dialog.applyDialogFont(text);
+
+      StringBuilder minimalText = new StringBuilder();
+      for (int i = 0; i < 6; ++i)
+      {
+        for (int j = 0; j < 30; ++j)
+        {
+          minimalText.append('M');
+        }
+        minimalText.append('\n');
+      }
+
+      text.setText(minimalText.toString());
+      Point size = text.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+      GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
+      data.widthHint = size.x;
+      data.heightHint = size.y;
+      text.setLayoutData(data);
+
       text.setText(content);
 
-      Point size = text.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-      scrolledComposite.setMinSize(size);
-      scrolledComposite.setContent(text);
-
-      GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
-      scrolledComposite.setLayoutData(data);
       return composite;
     }
 
@@ -248,13 +265,22 @@ public class PropertiesViewer extends TableViewer
    */
   private final class PropertiesContentProvider implements IStructuredContentProvider
   {
-    private final ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
+    private final AdapterFactory adapterFactory;
 
-    private final AdapterFactoryItemDelegator itemDelegator = new AdapterFactoryItemDelegator(adapterFactory);
+    private final AdapterFactoryItemDelegator itemDelegator;
+
+    public PropertiesContentProvider(AdapterFactory adapterFactory)
+    {
+      this.adapterFactory = adapterFactory;
+      itemDelegator = new AdapterFactoryItemDelegator(adapterFactory);
+    }
 
     public void dispose()
     {
-      adapterFactory.dispose();
+      if (adapterFactory instanceof IDisposable)
+      {
+        ((IDisposable)adapterFactory).dispose();
+      }
     }
 
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
