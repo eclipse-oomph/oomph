@@ -120,6 +120,18 @@ public final class IOUtil
     return null;
   }
 
+  public static File getCanonicalFile(File file)
+  {
+    try
+    {
+      return file.getCanonicalFile();
+    }
+    catch (IOException ex)
+    {
+      return file.getAbsoluteFile();
+    }
+  }
+
   public static File getFromPath(String command)
   {
     String path = System.getenv().get("PATH");

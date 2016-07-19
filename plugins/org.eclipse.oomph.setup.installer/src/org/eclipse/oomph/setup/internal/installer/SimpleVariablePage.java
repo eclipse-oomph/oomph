@@ -483,7 +483,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
         final FocusSelectionAdapter focusSelectionAdapter = (FocusSelectionAdapter)folderText.getData(FocusSelectionAdapter.ADAPTER_KEY);
         focusSelectionAdapter.setNextSelectionRange(folderText.getSelection());
 
-        installFolder = folderText.getText();
+        String folder = folderText.getText().trim();
+        installFolder = StringUtil.isEmpty(folder) ? "" : IOUtil.getCanonicalFile(new File(folder)).getAbsolutePath();
         folderText.setToolTipText(installFolder);
 
         validator.schedule();
@@ -1491,7 +1492,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         return "Installation folder must be specified.";
       }
 
-      File folder = new File(installFolder);
+      File folder = IOUtil.getCanonicalFile(new File(installFolder));
       File parentFolder = folder.getParentFile();
 
       String name = folder.getName();
@@ -1520,7 +1521,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         }
       }
 
-      installRoot = parentFolder.getAbsolutePath();
+      installRoot = parentFolder == null ? folder.getAbsolutePath() : parentFolder.getAbsolutePath();
     }
     catch (Exception ex)
     {
