@@ -428,21 +428,65 @@ public class SimpleVariablePage extends SimpleInstallerPage
     folderText = createTextField(variablesComposite);
     folderText.addModifyListener(new ModifyListener()
     {
+      /**
+       * A class for delayed validation of the install folder.
+       * @author Ed Merks
+       */
+      class Validator implements Runnable
+      {
+        private boolean dispatched;
+
+        private boolean redispatch;
+
+        public void run()
+        {
+          if (!getShell().isDisposed())
+          {
+            dispatched = false;
+            if (redispatch)
+            {
+              schedule();
+            }
+            else
+            {
+              validatePage();
+            }
+          }
+        }
+
+        public void schedule()
+        {
+          if (dispatched)
+          {
+            redispatch = true;
+          }
+          else
+          {
+            // Immediately disable the install button if the install folder is currently invalid.
+            if (validateInstallFolder() != null)
+            {
+              installButton.setEnabled(false);
+            }
+
+            dispatched = true;
+            redispatch = false;
+
+            UIUtil.timerExec(350, this);
+          }
+        }
+      }
+
+      private final Validator validator = new Validator();
+
       public void modifyText(ModifyEvent e)
       {
         final FocusSelectionAdapter focusSelectionAdapter = (FocusSelectionAdapter)folderText.getData(FocusSelectionAdapter.ADAPTER_KEY);
         focusSelectionAdapter.setNextSelectionRange(folderText.getSelection());
 
-        UIUtil.getDisplay().asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            validatePage();
-          }
-        });
-
         installFolder = folderText.getText();
         folderText.setToolTipText(installFolder);
+
+        validator.schedule();
 
         String productInstallFolder = getProductInstallFolder().toString();
         installFolderLabel.setToolTipText("Install into the folder '" + productInstallFolder + "'");
@@ -1448,17 +1492,32 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
 
       File folder = new File(installFolder);
-
       File parentFolder = folder.getParentFile();
-      if (!isValidParentFolder(parentFolder) || folder.isFile() || folder.isDirectory() && !folder.canWrite())
+
+      String name = folder.getName();
+      if (folder.exists())
       {
-        String name = folder.getName();
-        if (StringUtil.isEmpty(name))
+        if (folder.isFile())
         {
-          name = installFolder.toString();
+          return "Folder " + name + " cannot be created because a file exists at that location.";
         }
 
-        return "Folder " + name + " cannot be created.";
+        if (!folder.canWrite())
+        {
+          return "Folder " + name + " is not writable.";
+        }
+      }
+      else
+      {
+        if (!isValidParentFolder(parentFolder))
+        {
+          if (StringUtil.isEmpty(name))
+          {
+            name = installFolder.toString();
+          }
+
+          return "Folder " + name + " cannot be created.";
+        }
       }
 
       installRoot = parentFolder.getAbsolutePath();

@@ -97,7 +97,7 @@ public class SimpleMessageOverlay extends Shell implements ControlListener
     layout.marginBottom = 3;
     setLayout(layout);
 
-    text = new StyledText(this, SWT.WRAP);
+    text = new StyledText(this, SWT.WRAP | SWT.READ_ONLY);
     text.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).create());
     text.setFont(SimpleInstallerDialog.getDefaultFont());
     text.setForeground(type.foregroundColor);

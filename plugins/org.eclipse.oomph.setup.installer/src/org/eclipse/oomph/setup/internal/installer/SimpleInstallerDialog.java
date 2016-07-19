@@ -624,6 +624,22 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       clearMessage();
 
+      final Control originalFocusControl = getShell().getDisplay().getFocusControl();
+      if (originalFocusControl != null)
+      {
+        UIUtil.asyncExec(originalFocusControl, new Runnable()
+        {
+          public void run()
+          {
+            Control focusControl = getShell().getDisplay().getFocusControl();
+            if (focusControl != originalFocusControl)
+            {
+              originalFocusControl.setFocus();
+            }
+          }
+        });
+      }
+
       currentMessage = new SimpleMessageOverlay(this, type, new ControlRelocator()
       {
         public void relocate(Control control)
