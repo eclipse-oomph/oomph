@@ -11,7 +11,7 @@
     </eOperations>
     <eOperations name="getValidTriggers" lowerBound="1" eType="#//TriggerSet"/>
     <eOperations name="getTriggers" lowerBound="1" eType="#//TriggerSet"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType ../../org.eclipse.oomph.base/model/Base.ecore#//ID"
         iD="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>

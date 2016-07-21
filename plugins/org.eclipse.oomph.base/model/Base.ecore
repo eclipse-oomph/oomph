@@ -53,4 +53,9 @@
   <eClassifiers xsi:type="ecore:EDataType" name="URI" instanceClassName="org.eclipse.emf.common.util.URI"/>
   <eClassifiers xsi:type="ecore:EDataType" name="Exception" instanceClassName="java.lang.Exception"/>
   <eClassifiers xsi:type="ecore:EDataType" name="Text" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ID" instanceClassName="java.lang.String">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="pattern" value="[\i-[:]][\c-[:]]*"/>
+    </eAnnotations>
+  </eClassifiers>
 </ecore:EPackage>

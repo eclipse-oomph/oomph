@@ -13,6 +13,7 @@
     <genDataTypes ecoreDataType="Base.ecore#//URI"/>
     <genDataTypes ecoreDataType="Base.ecore#//Exception"/>
     <genDataTypes ecoreDataType="Base.ecore#//Text"/>
+    <genDataTypes ecoreDataType="Base.ecore#//ID"/>
     <genClasses image="false" ecoreClass="Base.ecore#//ModelElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Base.ecore#//ModelElement/annotations"/>
       <genOperations ecoreOperation="Base.ecore#//ModelElement/getAnnotation">

@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+ * Copyright (c) 2016 Ed Merks (Berlin, Germany) and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Eike Stepper - initial API and implementation
+ *    Ed Merks - initial API and implementation
  */
 package org.eclipse.oomph.base.util;
 
@@ -19,9 +19,11 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EObjectValidator;
+import org.eclipse.emf.ecore.xml.type.util.XMLTypeUtil;
 
 import java.util.Map;
 
@@ -119,6 +121,8 @@ public class BaseValidator extends EObjectValidator
         return validateException((Exception)value, diagnostics, context);
       case BasePackage.TEXT:
         return validateText((String)value, diagnostics, context);
+      case BasePackage.ID:
+        return validateID((String)value, diagnostics, context);
       default:
         return true;
     }
@@ -259,6 +263,45 @@ public class BaseValidator extends EObjectValidator
   public boolean validateText(String text, DiagnosticChain diagnostics, Map<Object, Object> context)
   {
     return true;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean validateID(String id, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
+    boolean result = validateID_Pattern(id, diagnostics, context);
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @see #validateID_Pattern
+   */
+  public static final PatternMatcher[][] ID__PATTERN__VALUES = new PatternMatcher[][] {
+      new PatternMatcher[] { XMLTypeUtil.createPatternMatcher("[\\i-[:]][\\c-[:]]*") } };
+
+  /**
+   * Validates the Pattern constraint of '<em>ID</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean validateID_Pattern(String id, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
+    return validatePattern(BasePackage.Literals.ID, id, ID__PATTERN__VALUES, diagnostics, context);
+  }
+
+  @Override
+  protected void reportDataValuePatternViolation(EDataType eDataType, Object value, PatternMatcher[] patterns, DiagnosticChain diagnostics,
+      Map<Object, Object> context)
+  {
+    diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, DATA_VALUE__MATCHES_PATTERN, "_UI_IDConstraint_diagnostic",
+        new Object[] { getValueLabel(eDataType, value, context) }, new Object[] { value, eDataType, patterns }, context));
   }
 
   /**

@@ -282,6 +282,16 @@ public interface BasePackage extends EPackage
   int TEXT = 5;
 
   /**
+   * The meta object id for the '<em>ID</em>' data type.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see java.lang.String
+   * @see org.eclipse.oomph.base.impl.BasePackageImpl#getID()
+   * @generated
+   */
+  int ID = 6;
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.base.ModelElement <em>Model Element</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -446,6 +456,18 @@ public interface BasePackage extends EPackage
   EDataType getText();
 
   /**
+   * Returns the meta object for data type '{@link java.lang.String <em>ID</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for data type '<em>ID</em>'.
+   * @see java.lang.String
+   * @model instanceClass="java.lang.String"
+   *        extendedMetaData="pattern='[\\i-[:]][\\c-[:]]*'"
+   * @generated
+   */
+  EDataType getID();
+
+  /**
    * Returns the factory that creates the instances of the model.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -600,6 +622,16 @@ public interface BasePackage extends EPackage
      * @generated
      */
     EDataType TEXT = eINSTANCE.getText();
+
+    /**
+     * The meta object literal for the '<em>ID</em>' data type.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see java.lang.String
+     * @see org.eclipse.oomph.base.impl.BasePackageImpl#getID()
+     * @generated
+     */
+    EDataType ID = eINSTANCE.getID();
 
   }
 

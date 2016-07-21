@@ -78,6 +78,13 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
   private EDataType textEDataType = null;
 
   /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EDataType idEDataType = null;
+
+  /**
    * Creates an instance of the model <b>Package</b>, registered with
    * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
    * package URI value.
@@ -307,6 +314,16 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EDataType getID()
+  {
+    return idEDataType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public BaseFactory getBaseFactory()
   {
     return (BaseFactory)getEFactoryInstance();
@@ -354,6 +371,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
     uriEDataType = createEDataType(URI);
     exceptionEDataType = createEDataType(EXCEPTION);
     textEDataType = createEDataType(TEXT);
+    idEDataType = createEDataType(ID);
   }
 
   /**
@@ -420,6 +438,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
     initEDataType(uriEDataType, org.eclipse.emf.common.util.URI.class, "URI", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
     initEDataType(exceptionEDataType, Exception.class, "Exception", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
     initEDataType(textEDataType, String.class, "Text", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(idEDataType, String.class, "ID", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
     // Create resource
     createResource(eNS_URI);
@@ -460,6 +479,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
     addAnnotation(getAnnotation_Contents(), source, new String[] { "name", "content" });
     addAnnotation(getAnnotation_References(), source, new String[] { "name", "reference" });
     addAnnotation(getStringToStringMapEntry_Value(), source, new String[] { "kind", "element" });
+    addAnnotation(idEDataType, source, new String[] { "pattern", "[\\i-[:]][\\c-[:]]*" });
   }
 
   /**

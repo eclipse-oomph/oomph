@@ -65,7 +65,7 @@ public interface SetupTask extends ModelElement
    * @return the value of the '<em>ID</em>' attribute.
    * @see #setID(String)
    * @see org.eclipse.oomph.setup.SetupPackage#getSetupTask_ID()
-   * @model id="true"
+   * @model id="true" dataType="org.eclipse.oomph.base.ID"
    *        extendedMetaData="kind='attribute' name='id'"
    * @generated
    */

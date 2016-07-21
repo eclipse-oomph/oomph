@@ -116,6 +116,8 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
         return createExceptionFromString(eDataType, initialValue);
       case BasePackage.TEXT:
         return createTextFromString(eDataType, initialValue);
+      case BasePackage.ID:
+        return createIDFromString(eDataType, initialValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -137,6 +139,8 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
         return convertExceptionToString(eDataType, instanceValue);
       case BasePackage.TEXT:
         return convertTextToString(eDataType, instanceValue);
+      case BasePackage.ID:
+        return convertIDToString(eDataType, instanceValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -316,6 +320,46 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
   public String convertTextToString(EDataType eDataType, Object instanceValue)
   {
     return convertText((String)instanceValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public String createID(String literal)
+  {
+    return StringUtil.isEmpty(literal) ? null : literal;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String createIDFromString(EDataType eDataType, String initialValue)
+  {
+    return createID(initialValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public String convertID(String instanceValue)
+  {
+    return instanceValue;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertIDToString(EDataType eDataType, Object instanceValue)
+  {
+    return convertID((String)instanceValue);
   }
 
   /**
