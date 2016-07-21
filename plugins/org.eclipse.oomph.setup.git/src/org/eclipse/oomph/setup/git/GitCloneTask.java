@@ -30,6 +30,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getCheckoutBranch <em>Checkout Branch</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#isRecursive <em>Recursive</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getConfigSections <em>Config Sections</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#isRestrictToCheckoutBranch <em>Restrict To Checkout Branch</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask()
@@ -216,5 +217,32 @@ public interface GitCloneTask extends SetupTask
    * @generated
    */
   EList<ConfigSection> getConfigSections();
+
+  /**
+   * Returns the value of the '<em><b>Restrict To Checkout Branch</b></em>' attribute.
+   * The default value is <code>"false"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Restrict To Checkout Branch</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Restrict To Checkout Branch</em>' attribute.
+   * @see #setRestrictToCheckoutBranch(boolean)
+   * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask_RestrictToCheckoutBranch()
+   * @model default="false"
+   * @generated
+   */
+  boolean isRestrictToCheckoutBranch();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.git.GitCloneTask#isRestrictToCheckoutBranch <em>Restrict To Checkout Branch</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Restrict To Checkout Branch</em>' attribute.
+   * @see #isRestrictToCheckoutBranch()
+   * @generated
+   */
+  void setRestrictToCheckoutBranch(boolean value);
 
 } // GitCloneTask

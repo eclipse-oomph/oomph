@@ -214,6 +214,16 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getGitCloneTask_RestrictToCheckoutBranch()
+  {
+    return (EAttribute)gitCloneTaskEClass.getEStructuralFeatures().get(7);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getConfigSection()
   {
     return configSectionEClass;
@@ -330,6 +340,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
     createEAttribute(gitCloneTaskEClass, GIT_CLONE_TASK__CHECKOUT_BRANCH);
     createEAttribute(gitCloneTaskEClass, GIT_CLONE_TASK__RECURSIVE);
     createEReference(gitCloneTaskEClass, GIT_CLONE_TASK__CONFIG_SECTIONS);
+    createEAttribute(gitCloneTaskEClass, GIT_CLONE_TASK__RESTRICT_TO_CHECKOUT_BRANCH);
 
     configSectionEClass = createEClass(CONFIG_SECTION);
     createEReference(configSectionEClass, CONFIG_SECTION__SUBSECTIONS);
@@ -397,6 +408,8 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getGitCloneTask_ConfigSections(), getConfigSection(), null, "configSections", null, 0, -1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getGitCloneTask_RestrictToCheckoutBranch(), ecorePackage.getEBoolean(), "restrictToCheckoutBranch", "false", 0, 1, GitCloneTask.class,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(configSectionEClass, ConfigSection.class, "ConfigSection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getConfigSection_Subsections(), getConfigSubsection(), null, "subsections", null, 0, -1, ConfigSection.class, !IS_TRANSIENT, !IS_VOLATILE,

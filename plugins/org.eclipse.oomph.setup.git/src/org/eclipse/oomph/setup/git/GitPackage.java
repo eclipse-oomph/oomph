@@ -235,13 +235,22 @@ public interface GitPackage extends EPackage
   int GIT_CLONE_TASK__CONFIG_SECTIONS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
 
   /**
+   * The feature id for the '<em><b>Restrict To Checkout Branch</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CLONE_TASK__RESTRICT_TO_CHECKOUT_BRANCH = SetupPackage.SETUP_TASK_FEATURE_COUNT + 7;
+
+  /**
    * The number of structural features of the '<em>Clone Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int GIT_CLONE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 7;
+  int GIT_CLONE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 8;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.git.impl.ConfigSubsectionImpl <em>Config Subsection</em>}' class.
@@ -451,6 +460,17 @@ public interface GitPackage extends EPackage
   EReference getGitCloneTask_ConfigSections();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.git.GitCloneTask#isRestrictToCheckoutBranch <em>Restrict To Checkout Branch</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Restrict To Checkout Branch</em>'.
+   * @see org.eclipse.oomph.setup.git.GitCloneTask#isRestrictToCheckoutBranch()
+   * @see #getGitCloneTask()
+   * @generated
+   */
+  EAttribute getGitCloneTask_RestrictToCheckoutBranch();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.git.ConfigSection <em>Config Section</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -624,6 +644,14 @@ public interface GitPackage extends EPackage
      * @generated
      */
     EReference GIT_CLONE_TASK__CONFIG_SECTIONS = eINSTANCE.getGitCloneTask_ConfigSections();
+
+    /**
+     * The meta object literal for the '<em><b>Restrict To Checkout Branch</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute GIT_CLONE_TASK__RESTRICT_TO_CHECKOUT_BRANCH = eINSTANCE.getGitCloneTask_RestrictToCheckoutBranch();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.git.impl.ConfigSectionImpl <em>Config Section</em>}' class.

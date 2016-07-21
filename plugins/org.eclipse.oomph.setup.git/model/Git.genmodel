@@ -17,6 +17,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/checkoutBranch"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/recursive"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Git.ecore#//GitCloneTask/configSections"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/restrictToCheckoutBranch"/>
     </genClasses>
     <genClasses ecoreClass="Git.ecore#//ConfigSection">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Git.ecore#//ConfigSection/subsections"/>
