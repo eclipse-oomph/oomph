@@ -31,7 +31,7 @@ public class PromptHandler extends AbstractLocationHandler
   {
     if (OS.INSTANCE.isWin())
     {
-      Runtime.getRuntime().exec("cmd /c cd \"" + location + "\" && start cmd.exe");
+      Runtime.getRuntime().exec("cmd /c cd /d \"" + location + "\" && start cmd.exe");
     }
     else if (OS.INSTANCE.isMac())
     {
