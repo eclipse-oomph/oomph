@@ -9,12 +9,19 @@
   <foreignModel>Projects.ecore</foreignModel>
   <genPackages prefix="Projects" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
       childCreationExtenders="true" ecorePackage="Projects.ecore#/" publicationLocation="/setups/models/Projects.ecore">
-    <genClasses ecoreClass="Projects.ecore#//ProjectsImportTask">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Projects.ecore#//ProjectsImportTask/sourceLocators"/>
-    </genClasses>
     <genClasses ecoreClass="Projects.ecore#//PathVariableTask">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//PathVariableTask/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//PathVariableTask/uRI"/>
+    </genClasses>
+    <genClasses ecoreClass="Projects.ecore#//ProjectsImportTask" labelFeature="../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup/SetupTask/description">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Projects.ecore#//ProjectsImportTask/sourceLocators"/>
+    </genClasses>
+    <genClasses ecoreClass="Projects.ecore#//ProjectsBuildTask" labelFeature="../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup/SetupTask/description">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Projects.ecore#//ProjectsBuildTask/predicates"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//ProjectsBuildTask/onlyNewProjects"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//ProjectsBuildTask/refresh"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//ProjectsBuildTask/clean"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//ProjectsBuildTask/build"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

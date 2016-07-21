@@ -14,6 +14,7 @@ import org.eclipse.oomph.predicates.PredicatesFactory;
 import org.eclipse.oomph.setup.projects.ProjectsBuildTask;
 import org.eclipse.oomph.setup.projects.ProjectsPackage;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -24,6 +25,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -183,13 +185,40 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
    * This returns the label text for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public String getText(Object object)
   {
-    String label = ((ProjectsBuildTask)object).getID();
-    return label == null || label.length() == 0 ? getString("_UI_ProjectsBuildTask_type") : getString("_UI_ProjectsBuildTask_type") + " " + label;
+    ProjectsBuildTask projectsBuildTask = (ProjectsBuildTask)object;
+    String label = getString("_UI_ProjectsBuildTask_type");
+    List<String> tags = new ArrayList<String>();
+    if (projectsBuildTask.isOnlyNewProjects())
+    {
+      tags.add(getFeatureText(ProjectsPackage.Literals.PROJECTS_BUILD_TASK__ONLY_NEW_PROJECTS));
+    }
+
+    if (projectsBuildTask.isRefresh())
+    {
+      tags.add(getFeatureText(ProjectsPackage.Literals.PROJECTS_BUILD_TASK__REFRESH));
+    }
+
+    if (projectsBuildTask.isClean())
+    {
+      tags.add(getFeatureText(ProjectsPackage.Literals.PROJECTS_BUILD_TASK__CLEAN));
+    }
+
+    if (projectsBuildTask.isBuild())
+    {
+      tags.add(getFeatureText(ProjectsPackage.Literals.PROJECTS_BUILD_TASK__BUILD));
+    }
+
+    if (!tags.isEmpty())
+    {
+      return label + " (" + StringUtil.implode(tags, ',').replace(",", ", ") + ")";
+    }
+
+    return label;
   }
 
   /**
