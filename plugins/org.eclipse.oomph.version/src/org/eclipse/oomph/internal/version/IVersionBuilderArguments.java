@@ -46,6 +46,8 @@ public interface IVersionBuilderArguments extends Map<String, String>
 
   public static final String CHECK_CLOSURE_COMPLETENESS_ARGUMENT = "check.feature.closure.completeness";
 
+  public static final String CHECK_CLOSURE_CONTENT_ARGUMENT = "check.feature.closure.content";
+
   public static final String CHECK_MAVEN_POM_ARGUMENT = "check.maven.pom";
 
   public String getReleasePath();
@@ -71,6 +73,8 @@ public interface IVersionBuilderArguments extends Map<String, String>
   public boolean isIgnoreFeatureContentRedundancy();
 
   public boolean isCheckFeatureClosureCompleteness();
+
+  public boolean isCheckFeatureClosureContent();
 
   public boolean isCheckMavenPom();
 

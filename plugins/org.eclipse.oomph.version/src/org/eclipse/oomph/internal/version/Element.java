@@ -29,34 +29,48 @@ import java.util.Set;
  */
 public class Element implements IElement
 {
-  private Element.Type type;
+  private final Element.Type type;
 
-  private String name;
+  private final String name;
 
   private Version version;
 
+  private final boolean fragment;
+
   private boolean licenseFeature;
 
-  private List<IElement> children = new ArrayList<IElement>();
+  private final List<IElement> children = new ArrayList<IElement>();
 
   private Set<IElement> allChildren;
 
   public Element(Element.Type type, String name, Version version)
   {
+    this(type, name, version, false);
+  }
+
+  public Element(Element.Type type, String name, Version version, boolean fragment)
+  {
     this.type = type;
     this.name = name;
+    this.fragment = fragment;
     this.version = VersionUtil.normalize(version);
   }
 
   public Element(Element.Type type, String name, String version)
   {
-    this(type, name, new Version(version));
+    this(type, name, version, false);
   }
 
-  public Element(Type type, String name)
+  public Element(Element.Type type, String name, String version, boolean fragment)
+  {
+    this(type, name, new Version(version), fragment);
+  }
+
+  public Element(Type type, String name, boolean fragment)
   {
     this.type = type;
     this.name = name;
+    this.fragment = fragment;
     version = Version.emptyVersion;
   }
 
@@ -78,6 +92,11 @@ public class Element implements IElement
   public Version getVersion()
   {
     return version;
+  }
+
+  public boolean isFragment()
+  {
+    return fragment;
   }
 
   public boolean isLicenseFeature()
@@ -169,7 +188,8 @@ public class Element implements IElement
   @Override
   public String toString()
   {
-    return "Element[type=" + type + ", name=" + name + ", version=" + version + "]";
+    return "Element[type=" + type + ", name=" + name + (licenseFeature ? ", licenseFeature=true" : "") + (fragment ? ", fragment=true" : "") + ", version="
+        + version + "]";
   }
 
   @Override
@@ -231,7 +251,13 @@ public class Element implements IElement
 
   public IElement trimVersion()
   {
-    return new Element(type, name);
+    Element element = new Element(type, name, fragment);
+    if (isLicenseFeature())
+    {
+      element.setLicenseFeature(true);
+    }
+
+    return element;
   }
 
   public boolean isVersionUnresolved()

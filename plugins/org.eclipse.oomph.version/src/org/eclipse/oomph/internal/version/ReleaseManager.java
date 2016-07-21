@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.pde.core.IModel;
+import org.eclipse.pde.core.plugin.IFragmentModel;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.PluginRegistry;
 
@@ -184,7 +185,7 @@ public class ReleaseManager implements IReleaseManager
 
       String name = description.getSymbolicName();
       Version version = description.getVersion();
-      return new Element(Type.PLUGIN, name, version);
+      return new Element(Type.PLUGIN, name, version, pluginModel instanceof IFragmentModel);
     }
 
     return createFeatureElement(componentModel, withFeatureContent, resolve);
@@ -229,7 +230,7 @@ public class ReleaseManager implements IReleaseManager
 
       for (org.eclipse.pde.internal.core.ifeature.IFeaturePlugin versionable : feature.getPlugins())
       {
-        Element child = new Element(IElement.Type.PLUGIN, versionable.getId(), versionable.getVersion());
+        Element child = new Element(IElement.Type.PLUGIN, versionable.getId(), versionable.getVersion(), versionable.isFragment());
         if (resolve)
         {
           child.resolveVersion();

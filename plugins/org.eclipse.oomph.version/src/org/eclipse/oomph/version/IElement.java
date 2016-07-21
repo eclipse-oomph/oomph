@@ -34,6 +34,8 @@ public interface IElement
 
   public Version getResolvedVersion();
 
+  public boolean isFragment();
+
   public boolean isLicenseFeature();
 
   public List<IElement> getChildren();

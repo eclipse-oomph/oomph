@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
-public class VersionBuilderArguments extends HashMap<String, String>implements IVersionBuilderArguments
+public class VersionBuilderArguments extends HashMap<String, String> implements IVersionBuilderArguments
 {
   private static final long serialVersionUID = 1L;
 
@@ -174,6 +174,16 @@ public class VersionBuilderArguments extends HashMap<String, String>implements I
   public void setCheckFeatureClosureCompleteness(boolean value)
   {
     setBoolean(IVersionBuilderArguments.CHECK_CLOSURE_COMPLETENESS_ARGUMENT, value);
+  }
+
+  public boolean isCheckFeatureClosureContent()
+  {
+    return "true".equals(get(IVersionBuilderArguments.CHECK_CLOSURE_CONTENT_ARGUMENT));
+  }
+
+  public void setCheckFeatureClosureContent(boolean value)
+  {
+    setBoolean(IVersionBuilderArguments.CHECK_CLOSURE_CONTENT_ARGUMENT, value);
   }
 
   public boolean isCheckMavenPom()

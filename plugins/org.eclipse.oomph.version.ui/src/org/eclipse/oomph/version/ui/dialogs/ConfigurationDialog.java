@@ -68,6 +68,8 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
 
   private Button checkFeatureClosureCompletenessButton;
 
+  private Button checkFeatureClosureContentButton;
+
   private Button checkMavenPomButton;
 
   public ConfigurationDialog(Shell parentShell, VersionBuilderArguments defaults)
@@ -173,6 +175,11 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     checkFeatureClosureCompletenessButton.setSelection(values.isCheckFeatureClosureCompleteness());
     checkFeatureClosureCompletenessButton.addSelectionListener(buttonListener);
 
+    checkFeatureClosureContentButton = new Button(composite, SWT.CHECK);
+    checkFeatureClosureContentButton.setText("Check feature closure content");
+    checkFeatureClosureContentButton.setSelection(values.isCheckFeatureClosureContent());
+    checkFeatureClosureContentButton.addSelectionListener(buttonListener);
+
     checkMavenPomButton = new Button(composite, SWT.CHECK);
     checkMavenPomButton.setText("Check Maven POM");
     checkMavenPomButton.setSelection(values.isCheckMavenPom());
@@ -215,6 +222,7 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     values.setIgnoreFeatureContentChanges(ignoreFeatureContentChangesButton.getSelection());
     values.setIgnoreFeatureContentRedundancy(ignoreFeatureContentRedundancyButton.getSelection());
     values.setCheckFeatureClosureCompleteness(checkFeatureClosureCompletenessButton.getSelection());
+    values.setCheckFeatureClosureContent(checkFeatureClosureContentButton.getSelection());
     values.setCheckMavenPom(checkMavenPomButton.getSelection());
     super.okPressed();
   }
@@ -277,6 +285,11 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
   public boolean isCheckFeatureClosureCompleteness()
   {
     return values.isCheckFeatureClosureCompleteness();
+  }
+
+  public boolean isCheckFeatureClosureContent()
+  {
+    return values.isCheckFeatureClosureContent();
   }
 
   public boolean isCheckMavenPom()

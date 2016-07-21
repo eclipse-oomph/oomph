@@ -70,6 +70,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -795,6 +796,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       case MAJOR_CHANGED:
         return new Version(releaseVersion.getMajor() + 1, 0, 0);
       case ADDED:
+      case FRAGMENT_REMOVED:
       case MINOR_CHANGED:
         return new Version(releaseVersion.getMajor(), releaseVersion.getMinor() + 1, 0);
       case MICRO_CHANGED:
@@ -926,24 +928,28 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
   private ComponentReferenceType checkFeatureContentChanges(IElement element, IElement releasedElement, List<Problem> problems)
   {
     ComponentReferenceType biggestChange = ComponentReferenceType.UNCHANGED;
-    Set<IElement> allChildren = element.getAllChildren(this, release);
-    for (IElement child : allChildren)
+    Collection<IElement> children = arguments.isCheckFeatureClosureContent() ? element.getAllChildren(this, release) : element.getChildren();
+    for (IElement child : children)
     {
       ComponentReferenceType change = checkFeatureContentChanges(element, releasedElement, child, problems);
       biggestChange = ComponentReferenceType.values()[Math.max(biggestChange.ordinal(), change.ordinal())];
     }
 
-    for (IElement releasedElementsChild : releasedElement.getAllChildren(release, this))
+    Collection<IElement> releasedElementChildren = arguments.isCheckFeatureClosureContent() ? releasedElement.getAllChildren(release, this)
+        : releasedElement.getChildren();
+    for (IElement releasedElementsChild : releasedElementChildren)
     {
       IElement trimmedVersion = releasedElementsChild.trimVersion();
-      if (!allChildren.contains(trimmedVersion))
+      if (!children.contains(trimmedVersion))
       {
         // IElement resolvedElement = resolveElement(trimmedVersion);
         // if (resolvedElement != null && !resolvedElement.isVersionUnresolved())
         {
-          if (addProblem(releasedElementsChild, IMarker.SEVERITY_WARNING, ComponentReferenceType.REMOVED, null, problems))
+          ComponentReferenceType componentReferenceType = releasedElementsChild.isFragment() ? ComponentReferenceType.FRAGMENT_REMOVED
+              : ComponentReferenceType.REMOVED;
+          if (addProblem(releasedElementsChild, IMarker.SEVERITY_WARNING, componentReferenceType, null, problems))
           {
-            biggestChange = ComponentReferenceType.REMOVED;
+            biggestChange = ComponentReferenceType.values()[Math.max(biggestChange.ordinal(), componentReferenceType.ordinal())];
           }
         }
       }
@@ -1365,7 +1371,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
           BundleDescription supplierBundle = supplier.getSupplier();
           if (supplierBundle != null)
           {
-            IElement element = resolveElement(new Element(Type.PLUGIN, supplierBundle.getName()));
+            IElement element = resolveElement(new Element(Type.PLUGIN, supplierBundle.getName(), supplierBundle.getHost() != null));
             if (element != null)
             {
               IModel componentModel = ReleaseManager.INSTANCE.getComponentModel(element);
@@ -1857,7 +1863,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
       String name = element.getName();
 
-      if (componentReferenceType == ComponentReferenceType.REMOVED)
+      if (componentReferenceType == ComponentReferenceType.REMOVED || componentReferenceType == ComponentReferenceType.FRAGMENT_REMOVED)
       {
         String msg = label + " reference '" + name + "' has been removed";
         IMarker marker = Markers.addMarker(file, msg, severity);
@@ -1949,7 +1955,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
    */
   private static enum ComponentReferenceType
   {
-    UNRESOLVED, UNCHANGED, MICRO_CHANGED, MINOR_CHANGED, ADDED, MAJOR_CHANGED, REMOVED
+    UNRESOLVED, UNCHANGED, MICRO_CHANGED, MINOR_CHANGED, ADDED, FRAGMENT_REMOVED, MAJOR_CHANGED, REMOVED
   }
 
   private static class Problem
