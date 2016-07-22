@@ -472,7 +472,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       defaultsSet = true;
     }
 
-    if (!isPageComplete() && (firstEmptyField == null || setDefault))
+    if (isPageComplete() ? setDefault : firstEmptyField == null || setDefault)
     {
       // If the page isn't complete but there are no empty fields, then the last change introduced a new field.
       // So we should validate again to be sure there really needs to be more information prompted from the user.

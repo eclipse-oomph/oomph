@@ -687,7 +687,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             String name = variable.getName();
             keys.add(name);
 
-            String value = variable.getValue();
+            String value = fullPromptUser ? variable.getValue() : getPrompter().getValue(variable);
+            if (value == null)
+            {
+              value = variable.getValue();
+            }
 
             if (variable.getType() == VariableType.PASSWORD)
             {
