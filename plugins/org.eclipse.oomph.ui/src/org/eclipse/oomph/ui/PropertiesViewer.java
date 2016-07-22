@@ -329,13 +329,39 @@ public class PropertiesViewer extends TableViewer
               setting = ((InternalEObject)object).eSetting(eStructuralFeature);
             }
 
-            if (eStructuralFeature instanceof EAttribute)
+            if (propertyValue != null)
             {
-              EAttribute eAttribute = (EAttribute)eStructuralFeature;
-              EDataType eDataType = eAttribute.getEAttributeType();
-              if (eDataType.isSerializable())
+              if (eStructuralFeature instanceof EAttribute)
               {
-                fullValueText = EcoreUtil.convertToString(eDataType, propertyValue);
+                EAttribute eAttribute = (EAttribute)eStructuralFeature;
+                EDataType eDataType = eAttribute.getEAttributeType();
+                if (eDataType.isSerializable())
+                {
+                  if (eAttribute.isMany())
+                  {
+                    List<?> values = (List<?>)propertyValue;
+                    StringBuilder result = new StringBuilder();
+                    for (Object item : values)
+                    {
+                      String stringValue = EcoreUtil.convertToString(eDataType, item);
+                      if (stringValue != null)
+                      {
+                        if (result.length() != 0)
+                        {
+                          result.append(StringUtil.NL);
+                        }
+
+                        result.append(stringValue);
+                      }
+                    }
+
+                    fullValueText = result.toString();
+                  }
+                  else
+                  {
+                    fullValueText = EcoreUtil.convertToString(eDataType, propertyValue);
+                  }
+                }
               }
             }
           }
