@@ -18,6 +18,9 @@ import org.eclipse.core.resources.IBuildConfiguration;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceProxy;
+import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -186,16 +189,36 @@ public final class VersionUtil
     return IOUtil.getSHA1(contents);
   }
 
+  public static List<IModel> getComponentModels(IProject project)
+  {
+    List<IModel> result = new ArrayList<IModel>();
+    IModel componentModel = PluginRegistry.findModel(project);
+    if (componentModel == null)
+    {
+      componentModel = getFeatureModel(project);
+    }
+
+    if (componentModel != null)
+    {
+      result.add(componentModel);
+    }
+
+    result.addAll(getProductModels(project));
+
+    if (result.isEmpty())
+    {
+      throw new IllegalStateException("The project " + project.getName() + " is neither a plugin nor a feature and contains no products");
+    }
+
+    return result;
+  }
+
   public static IModel getComponentModel(IProject project)
   {
     IModel componentModel = PluginRegistry.findModel(project);
     if (componentModel == null)
     {
       componentModel = getFeatureModel(project);
-      if (componentModel == null)
-      {
-        throw new IllegalStateException("The project " + project.getName() + " is neither a plugin nor a feature");
-      }
     }
 
     return componentModel;
@@ -219,6 +242,46 @@ public final class VersionUtil
   }
 
   @SuppressWarnings("restriction")
+  public static List<org.eclipse.pde.internal.core.iproduct.IProductModel> getProductModels(IProject project)
+  {
+    final List<org.eclipse.pde.internal.core.iproduct.IProductModel> productModels = new ArrayList<org.eclipse.pde.internal.core.iproduct.IProductModel>();
+    try
+    {
+      project.accept(new IResourceProxyVisitor()
+      {
+        public boolean visit(IResourceProxy proxy) throws CoreException
+        {
+          if (proxy.getType() == IResource.FILE)
+          {
+            String name = proxy.getName();
+            if (name.endsWith(".product"))
+            {
+              org.eclipse.pde.internal.core.product.WorkspaceProductModel workspaceProductModel = new org.eclipse.pde.internal.core.product.WorkspaceProductModel(
+                  (IFile)proxy.requestResource(), false);
+              try
+              {
+                workspaceProductModel.load();
+                productModels.add(workspaceProductModel);
+              }
+              catch (CoreException ex)
+              {
+              }
+            }
+          }
+
+          return true;
+        }
+      }, IResource.NONE);
+    }
+    catch (CoreException ex)
+    {
+      // Ignore
+    }
+
+    return productModels;
+  }
+
+  @SuppressWarnings("restriction")
   public static Version getComponentVersion(IModel componentModel)
   {
     if (componentModel instanceof IPluginModelBase)
@@ -227,8 +290,19 @@ public final class VersionUtil
       return normalize(pluginModel.getBundleDescription().getVersion());
     }
 
-    Version version = new Version(((org.eclipse.pde.internal.core.ifeature.IFeatureModel)componentModel).getFeature().getVersion());
-    return normalize(version);
+    if (componentModel instanceof org.eclipse.pde.internal.core.ifeature.IFeatureModel)
+    {
+      Version version = new Version(((org.eclipse.pde.internal.core.ifeature.IFeatureModel)componentModel).getFeature().getVersion());
+      return normalize(version);
+    }
+
+    if (componentModel instanceof org.eclipse.pde.internal.core.iproduct.IProductModel)
+    {
+      Version version = new Version(((org.eclipse.pde.internal.core.iproduct.IProductModel)componentModel).getProduct().getVersion());
+      return normalize(version);
+    }
+
+    throw new IllegalStateException("Unexpected model type " + componentModel);
   }
 
   public static void cleanReleaseProjects(final String releasePath)
@@ -291,6 +365,10 @@ public final class VersionUtil
   public static IBuild getBuild(IModel componentModel) throws CoreException
   {
     IBuildModel buildModel = getBuildModel(componentModel);
+    if (buildModel == null)
+    {
+      return null;
+    }
 
     IBuild build = buildModel.getBuild();
     if (build == null)
@@ -316,6 +394,11 @@ public final class VersionUtil
       }
     }
 
+    if (componentModel instanceof org.eclipse.pde.internal.core.iproduct.IProductModel)
+    {
+      return null;
+    }
+
     throw new IllegalStateException("Could not determine build model for " + getName(componentModel));
   }
 
@@ -328,6 +411,37 @@ public final class VersionUtil
       return pluginModel.getBundleDescription().getSymbolicName();
     }
 
-    return ((org.eclipse.pde.internal.core.ifeature.IFeatureModel)componentModel).getFeature().getId();
+    if (componentModel instanceof org.eclipse.pde.internal.core.ifeature.IFeatureModel)
+    {
+      return ((org.eclipse.pde.internal.core.ifeature.IFeatureModel)componentModel).getFeature().getId();
+    }
+
+    if (componentModel instanceof org.eclipse.pde.internal.core.iproduct.IProductModel)
+    {
+      return ((org.eclipse.pde.internal.core.ifeature.IFeatureModel)componentModel).getFeature().getId();
+    }
+
+    throw new IllegalStateException("Unexpected model type " + componentModel);
+  }
+
+  @SuppressWarnings("restriction")
+  public static IElement.Type getType(IModel componentModel)
+  {
+    if (componentModel instanceof IPluginModelBase)
+    {
+      return IElement.Type.PLUGIN;
+    }
+
+    if (componentModel instanceof org.eclipse.pde.internal.core.ifeature.IFeatureModel)
+    {
+      return IElement.Type.FEATURE;
+    }
+
+    if (componentModel instanceof org.eclipse.pde.internal.core.iproduct.IProductModel)
+    {
+      return IElement.Type.PRODUCT;
+    }
+
+    throw new IllegalStateException("Unexpected model type " + componentModel);
   }
 }

@@ -76,12 +76,13 @@ public class AddNatureAction extends AbstractAction<IVersionBuilderArguments>
     for (int i = 0; i < projects.size(); ++i)
     {
       IProject project = projects.get(i);
-      IModel componentModel = VersionUtil.getComponentModel(project);
-      if (componentModel != null)
+      List<IModel> componentModels = VersionUtil.getComponentModels(project);
+      for (IModel componentModel : componentModels)
       {
         boolean dependenciesIncluded = false;
         IElement element = IReleaseManager.INSTANCE.createElement(componentModel, true, false);
-        if (element.getType() == IElement.Type.FEATURE)
+        IElement.Type elementType = element.getType();
+        if (elementType == IElement.Type.FEATURE || elementType == IElement.Type.PRODUCT)
         {
           for (IElement child : element.getChildren())
           {

@@ -22,6 +22,8 @@ import org.eclipse.oomph.version.Markers;
 import org.eclipse.oomph.version.VersionUtil;
 import org.eclipse.oomph.version.VersionValidator;
 
+import org.eclipse.emf.common.util.UniqueEList;
+
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -97,6 +99,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
   public static final String INTEGRATION_PROPERTY_KEY = "baseline.for.integration";
 
+  public static final String SERVICE_PROPERTY_KEY = "provide.service";
+
   public static final String DEVIATIONS_PROPERTY_KEY = "show.deviations";
 
   public static final String ROOT_PROJECTS_KEY = "root.projects";
@@ -118,6 +122,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
   private IRelease release;
 
   private Boolean integration;
+
+  private Boolean service;
 
   private Boolean deviations;
 
@@ -168,7 +174,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       elementCache.putAll(elements);
       for (IElement element : elements.keySet())
       {
-        if (element.getType() == IElement.Type.FEATURE)
+        IElement.Type type = element.getType();
+        if (type == IElement.Type.FEATURE || type == IElement.Type.PRODUCT)
         {
           for (IElement child : element.getChildren())
           {
@@ -208,7 +215,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
   @Override
   protected final IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor) throws CoreException
   {
-    List<IProject> buildDependencies = new ArrayList<IProject>();
+    List<IProject> buildDependencies = new UniqueEList<IProject>();
     build(kind, args, monitor, buildDependencies);
     return buildDependencies.toArray(new IProject[buildDependencies.size()]);
   }
@@ -252,9 +259,6 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
     try
     {
-      IModel componentModel = VersionUtil.getComponentModel(project);
-      IFile componentModelFile = (IFile)componentModel.getUnderlyingResource();
-
       /*
        * Determine release data to validate against
        */
@@ -316,6 +320,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       IFile propertiesFile = VersionUtil.getFile(releasePath, "properties");
       long propertiesTimeStamp = propertiesFile.getLocalTimeStamp();
       boolean formerDeviations = buildState.isDeviations();
+      boolean deleteDeviationMarkers = false;
       if (buildState.getPropertiesTimeStamp() != propertiesTimeStamp)
       {
         if (initReleaseProperties(propertiesFile))
@@ -325,345 +330,367 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
         buildState.setDeviations(deviations);
         buildState.setIntegration(integration);
+        buildState.setService(service);
         buildState.setRootProjects(rootProjects);
         buildState.setIgnoredReferences(ignoredReferences);
         buildState.setPropertiesTimeStamp(propertiesTimeStamp);
 
         if (formerDeviations && !deviations)
         {
-          Markers.deleteAllMarkers(componentModelFile, Markers.DEVIATION_INFO);
+          deleteDeviationMarkers = true;
         }
       }
       else
       {
         deviations = formerDeviations;
         integration = buildState.isIntegration();
+        service = buildState.isService();
         rootProjects = buildState.getRootProjects();
         ignoredReferences = buildState.getIgnoredReferences();
       }
 
-      IPath componentModelPath = componentModelFile.getProjectRelativePath();
-      boolean checkComponentModel = delta == null || delta.findMember(componentModelPath) != null;
-
-      IElement element = IReleaseManager.INSTANCE.createElement(componentModel, true, false);
-      for (IElement child : element.getAllChildren(this, release))
+      for (IModel componentModel : VersionUtil.getComponentModels(project))
       {
-        IProject childProject = getProject(child);
-        if (childProject != null)
+        IFile componentModelFile = (IFile)componentModel.getUnderlyingResource();
+
+        if (deleteDeviationMarkers)
         {
-          buildDependencies.add(childProject);
-          if (checkComponentModel)
+          Markers.deleteAllMarkers(componentModelFile, Markers.DEVIATION_INFO);
+        }
+
+        IPath componentModelPath = componentModelFile.getProjectRelativePath();
+        boolean checkComponentModel = delta == null || delta.findMember(componentModelPath) != null;
+
+        if (!arguments.isIgnoreLaxLowerBoundDependencyVersions() && componentModel instanceof IPluginModelBase)
+        {
+          addDependencies(buildDependencies, project);
+        }
+
+        IElement element = IReleaseManager.INSTANCE.createElement(componentModel, true, false);
+        IElement.Type elementType = element.getType();
+        for (IElement child : element.getAllChildren(this, release))
+        {
+          IProject childProject = getProject(child);
+          if (childProject != null)
           {
-            IModel childProjectComponentModel = VersionUtil.getComponentModel(childProject);
-            if (childProjectComponentModel != null)
+            buildDependencies.add(childProject);
+            if (checkComponentModel)
             {
-              IResource underlyingResource = childProjectComponentModel.getUnderlyingResource();
-              Markers.deleteAllMarkers(underlyingResource, Markers.UNREFERENCED_ELEMENT_PROBLEM);
-            }
-          }
-        }
-      }
-
-      Markers.deleteAllMarkers(componentModelFile, Markers.UNREFERENCED_ELEMENT_PROBLEM);
-      if (Activator.getReleaseCheckMode(releasePathArg) == ReleaseCheckMode.FULL && !rootProjects.contains(project.getName()))
-      {
-        Set<IElement> elementReference = resolveReferences(element);
-        if (elementReference == null || elementReference.isEmpty())
-        {
-          addUnreferencedElementMarker(componentModelFile, element);
-        }
-      }
-
-      if (componentModel instanceof IPluginModelBase)
-      {
-        if (!arguments.isIgnoreSchemaBuilder())
-        {
-          if (delta == null || delta.findMember(DESCRIPTION_PATH) != null)
-          {
-            checkSchemaBuilder((IPluginModelBase)componentModel, projectDescription);
-          }
-        }
-        else if (!oldVersionBuilderArguments.isIgnoreSchemaBuilder())
-        {
-          Markers.deleteAllMarkers(projectDescription, Markers.SCHEMA_BUILDER_PROBLEM);
-        }
-
-        if (!arguments.isIgnoreDebugOptions())
-        {
-          if (delta == null || delta.findMember(OPTIONS_PATH) != null)
-          {
-            checkDebugOptions((IPluginModelBase)componentModel);
-          }
-        }
-        else if (!oldVersionBuilderArguments.isIgnoreDebugOptions())
-        {
-          Markers.deleteAllMarkers(project.getFile(OPTIONS_PATH), Markers.DEBUG_OPTION_PROBLEM);
-        }
-
-        if (!arguments.isIgnoreMissingDependencyRanges())
-        {
-          if (checkComponentModel)
-          {
-            checkDependencyRanges((IPluginModelBase)componentModel);
-          }
-        }
-        else if (!oldVersionBuilderArguments.isIgnoreMissingDependencyRanges())
-        {
-          Markers.deleteAllMarkers(getProject().getFile(MANIFEST_PATH), Markers.LOWER_BOUND_VERSION_PROBLEM);
-        }
-
-        if (!arguments.isIgnoreLaxLowerBoundDependencyVersions())
-        {
-          if (checkComponentModel)
-          {
-            checkLowerBoundVersions((IPluginModelBase)componentModel);
-          }
-        }
-        else if (!oldVersionBuilderArguments.isIgnoreLaxLowerBoundDependencyVersions())
-        {
-          Markers.deleteAllMarkers(getProject().getFile(MANIFEST_PATH), Markers.LOWER_BOUND_VERSION_PROBLEM);
-        }
-
-        if (!arguments.isIgnoreMissingExportVersions())
-        {
-          if (checkComponentModel)
-          {
-            checkPackageExports((IPluginModelBase)componentModel);
-          }
-        }
-        else if (!oldVersionBuilderArguments.isIgnoreMissingExportVersions())
-        {
-          Markers.deleteAllMarkers(getProject().getFile(MANIFEST_PATH), Markers.EXPORT_VERSION_PROBLEM);
-        }
-
-        if (hasAPIToolsMarker((IPluginModelBase)componentModel))
-        {
-          return;
-        }
-      }
-      else
-      {
-        if (!arguments.isIgnoreFeatureNature())
-        {
-          if (delta == null || delta.findMember(DESCRIPTION_PATH) != null)
-          {
-            checkFeatureNature(projectDescription);
-          }
-        }
-        else if (!oldVersionBuilderArguments.isIgnoreFeatureNature())
-        {
-          Markers.deleteAllMarkers(projectDescription, Markers.FEATURE_NATURE_PROBLEM);
-        }
-      }
-
-      if (!arguments.isIgnoreMalformedVersions())
-      {
-        if (checkComponentModel)
-        {
-          if (checkMalformedVersions(componentModel))
-          {
-            return;
-          }
-        }
-      }
-      else if (!oldVersionBuilderArguments.isIgnoreMalformedVersions())
-      {
-        Markers.deleteAllMarkers(componentModelFile, Markers.MALFORMED_VERSION_PROBLEM);
-      }
-
-      if (arguments.isCheckMavenPom())
-      {
-        if (delta == null || delta.findMember(MAVEN_POM_PATH) != null || delta.findMember(componentModelPath) != null)
-        {
-          checkMavenPom(element);
-        }
-      }
-      else if (oldVersionBuilderArguments.isCheckMavenPom())
-      {
-        Markers.deleteAllMarkers(project.getFile(MAVEN_POM_PATH), Markers.MAVEN_POM_PROBLEM);
-      }
-
-      IElement releaseElement = release.getElements().get(element.trimVersion());
-      if (releaseElement == null)
-      {
-        if (VersionUtil.DEBUG)
-        {
-          System.out.println("Project has not been released: " + project.getName());
-        }
-
-        return;
-      }
-
-      Markers.deleteAllMarkers(componentModelFile, Markers.VERSION_NATURE_PROBLEM);
-      for (IElement child : element.getChildren())
-      {
-        IModel childComponentModel = ReleaseManager.INSTANCE.getComponentModel(child);
-        if (childComponentModel != null)
-        {
-          IResource childComponentModelFile = childComponentModel.getUnderlyingResource();
-          if (childComponentModelFile != null)
-          {
-            IProject childProject = childComponentModelFile.getProject();
-            if (!childProject.hasNature(VersionNature.NATURE_ID))
-            {
-              Type childType = child.getType();
-              String name = child.getName();
-              String label = childType.toString();
-              String tag = childType.getTag();
-              String msg = label + " '" + name + "' is missing the version management builder";
-              IMarker marker = addFeatureChildMarker(componentModelFile, Markers.VERSION_NATURE_PROBLEM, tag, name, msg, child.isLicenseFeature(), false, null,
-                  IMarker.SEVERITY_ERROR);
-              marker.setAttribute(Markers.QUICK_FIX_NATURE, VersionNature.NATURE_ID);
-              marker.setAttribute(Markers.QUICK_FIX_PROJECT, childProject.getName());
-            }
-          }
-        }
-      }
-
-      Version elementVersion = element.getVersion();
-      Version releaseVersion = releaseElement.getVersion();
-      Version nextMicroVersion = getNextMicroVersion(releaseVersion);
-
-      int comparison = releaseVersion.compareTo(elementVersion);
-      if (comparison != 0 && deviations && checkComponentModel)
-      {
-        addDeviationMarker(componentModelFile, element, releaseVersion);
-      }
-
-      Markers.deleteAllMarkers(componentModelFile, Markers.COMPONENT_VERSION_PROBLEM, Markers.FEATURE_CLOSURE_PROBLEM);
-      boolean microVersionProperlyIncreased = false;
-
-      if (comparison < 0)
-      {
-        microVersionProperlyIncreased = nextMicroVersion.equals(elementVersion);
-        if (!microVersionProperlyIncreased)
-        {
-          boolean noOtherIncrements = elementVersion.getMajor() == nextMicroVersion.getMajor() && elementVersion.getMinor() == nextMicroVersion.getMinor();
-          if (noOtherIncrements)
-          {
-            addVersionMarker(componentModelFile, "Version should be " + nextMicroVersion, nextMicroVersion);
-          }
-        }
-
-        if (element.getType() == IElement.Type.PLUGIN)
-        {
-          return;
-        }
-      }
-
-      if (comparison > 0)
-      {
-        addVersionMarker(componentModelFile, "Version has been decreased after release " + releaseVersion, releaseVersion);
-        return;
-      }
-
-      if (element.getType() == IElement.Type.FEATURE)
-      {
-        if (!arguments.isIgnoreFeatureContentRedundancy())
-        {
-          checkFeatureRedundancy(componentModelFile, element);
-        }
-
-        if (arguments.isCheckFeatureClosureCompleteness())
-        {
-          checkFeatureClosureCompleteness(componentModelFile, element);
-        }
-
-        if (!arguments.isIgnoreFeatureContentChanges())
-        {
-          List<Problem> problems = new ArrayList<Problem>();
-          checkFeatureReferences(componentModelFile, element, problems);
-          if (!problems.isEmpty())
-          {
-            createMarkers(componentModelFile, problems, ComponentReferenceType.UNRESOLVED);
-            return;
-          }
-
-          ComponentReferenceType change = checkFeatureContentChanges(element, releaseElement, problems);
-          if (change != ComponentReferenceType.UNCHANGED)
-          {
-            Version nextFeatureVersion = getNextFeatureVersion(releaseVersion, nextMicroVersion, change);
-            if (elementVersion.compareTo(nextFeatureVersion) < 0)
-            {
-              IMarker marker = addVersionMarker(componentModelFile,
-                  "Version must be increased to " + nextFeatureVersion + " because the feature's references have changed", nextFeatureVersion);
-              if (marker != null)
+              IModel childProjectComponentModel = VersionUtil.getComponentModel(childProject);
+              if (childProjectComponentModel != null)
               {
-                marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT);
+                IResource underlyingResource = childProjectComponentModel.getUnderlyingResource();
+                Markers.deleteAllMarkers(underlyingResource, Markers.UNREFERENCED_ELEMENT_PROBLEM);
+              }
+            }
+          }
+        }
+
+        if (elementType != IElement.Type.PRODUCT)
+        {
+          Markers.deleteAllMarkers(componentModelFile, Markers.UNREFERENCED_ELEMENT_PROBLEM);
+          if (Activator.getReleaseCheckMode(releasePathArg) == ReleaseCheckMode.FULL && !rootProjects.contains(project.getName()))
+          {
+            Set<IElement> elementReference = resolveReferences(element);
+            if (elementReference == null || elementReference.isEmpty())
+            {
+              addUnreferencedElementMarker(componentModelFile, element);
+            }
+          }
+        }
+
+        boolean contentMustChange = false;
+        if (elementType == IElement.Type.PLUGIN)
+        {
+          if (!arguments.isIgnoreSchemaBuilder())
+          {
+            if (delta == null || delta.findMember(DESCRIPTION_PATH) != null)
+            {
+              checkSchemaBuilder((IPluginModelBase)componentModel, projectDescription);
+            }
+          }
+          else if (!oldVersionBuilderArguments.isIgnoreSchemaBuilder())
+          {
+            Markers.deleteAllMarkers(projectDescription, Markers.SCHEMA_BUILDER_PROBLEM);
+          }
+
+          if (!arguments.isIgnoreDebugOptions())
+          {
+            if (delta == null || delta.findMember(OPTIONS_PATH) != null)
+            {
+              checkDebugOptions((IPluginModelBase)componentModel);
+            }
+          }
+          else if (!oldVersionBuilderArguments.isIgnoreDebugOptions())
+          {
+            Markers.deleteAllMarkers(project.getFile(OPTIONS_PATH), Markers.DEBUG_OPTION_PROBLEM);
+          }
+
+          if (!arguments.isIgnoreMissingDependencyRanges())
+          {
+            if (checkComponentModel)
+            {
+              checkDependencyRanges((IPluginModelBase)componentModel);
+            }
+          }
+          else if (!oldVersionBuilderArguments.isIgnoreMissingDependencyRanges())
+          {
+            Markers.deleteAllMarkers(getProject().getFile(MANIFEST_PATH), Markers.LOWER_BOUND_VERSION_PROBLEM);
+          }
+
+          if (!arguments.isIgnoreLaxLowerBoundDependencyVersions())
+          {
+            contentMustChange = !checkLowerBoundVersions((IPluginModelBase)componentModel);
+          }
+          else if (!oldVersionBuilderArguments.isIgnoreLaxLowerBoundDependencyVersions())
+          {
+            Markers.deleteAllMarkers(getProject().getFile(MANIFEST_PATH), Markers.LOWER_BOUND_VERSION_PROBLEM);
+          }
+
+          if (!arguments.isIgnoreMissingExportVersions())
+          {
+            if (checkComponentModel)
+            {
+              checkPackageExports((IPluginModelBase)componentModel);
+            }
+          }
+          else if (!oldVersionBuilderArguments.isIgnoreMissingExportVersions())
+          {
+            Markers.deleteAllMarkers(getProject().getFile(MANIFEST_PATH), Markers.EXPORT_VERSION_PROBLEM);
+          }
+
+          if (hasAPIToolsMarker((IPluginModelBase)componentModel))
+          {
+            continue;
+          }
+        }
+        else if (elementType == IElement.Type.FEATURE)
+        {
+          if (!arguments.isIgnoreFeatureNature())
+          {
+            if (delta == null || delta.findMember(DESCRIPTION_PATH) != null)
+            {
+              checkFeatureNature(projectDescription);
+            }
+          }
+          else if (!oldVersionBuilderArguments.isIgnoreFeatureNature())
+          {
+            Markers.deleteAllMarkers(projectDescription, Markers.FEATURE_NATURE_PROBLEM);
+          }
+        }
+
+        if (!arguments.isIgnoreMalformedVersions())
+        {
+          if (checkComponentModel)
+          {
+            if (checkMalformedVersions(componentModel))
+            {
+              continue;
+            }
+          }
+        }
+        else if (!oldVersionBuilderArguments.isIgnoreMalformedVersions())
+        {
+          Markers.deleteAllMarkers(componentModelFile, Markers.MALFORMED_VERSION_PROBLEM);
+        }
+
+        if (arguments.isCheckMavenPom())
+        {
+          if (delta == null || delta.findMember(MAVEN_POM_PATH) != null || delta.findMember(componentModelPath) != null)
+          {
+            checkMavenPom(element);
+          }
+        }
+        else if (oldVersionBuilderArguments.isCheckMavenPom())
+        {
+          Markers.deleteAllMarkers(project.getFile(MAVEN_POM_PATH), Markers.MAVEN_POM_PROBLEM);
+        }
+
+        IElement releaseElement = release.getElements().get(element.trimVersion());
+        if (releaseElement == null)
+        {
+          if (VersionUtil.DEBUG)
+          {
+            System.out.println("Project has not been released: " + project.getName());
+          }
+
+          continue;
+        }
+
+        Markers.deleteAllMarkers(componentModelFile, Markers.VERSION_NATURE_PROBLEM);
+        for (IElement child : element.getChildren())
+        {
+          IModel childComponentModel = ReleaseManager.INSTANCE.getComponentModel(child);
+          if (childComponentModel != null)
+          {
+            IResource childComponentModelFile = childComponentModel.getUnderlyingResource();
+            if (childComponentModelFile != null)
+            {
+              IProject childProject = childComponentModelFile.getProject();
+              if (!childProject.hasNature(VersionNature.NATURE_ID))
+              {
+                Type childType = child.getType();
+                String name = child.getName();
+                String label = childType.toString();
+                String tag = childType.getTag();
+                String msg = label + " '" + name + "' is missing the version management builder";
+                IMarker marker = addFeatureChildMarker(componentModelFile, Markers.VERSION_NATURE_PROBLEM, tag, name, msg, child.isLicenseFeature(), false,
+                    null, IMarker.SEVERITY_ERROR);
+                marker.setAttribute(Markers.QUICK_FIX_NATURE, VersionNature.NATURE_ID);
+                marker.setAttribute(Markers.QUICK_FIX_PROJECT, childProject.getName());
+              }
+            }
+          }
+        }
+
+        Version elementVersion = element.getVersion();
+        Version releaseVersion = releaseElement.getVersion();
+        Version nextVersion = getNextVersion(releaseVersion);
+
+        int comparison = releaseVersion.compareTo(elementVersion);
+        if (comparison != 0 && deviations && checkComponentModel)
+        {
+          addDeviationMarker(componentModelFile, element, releaseVersion);
+        }
+
+        Markers.deleteAllMarkers(componentModelFile, Markers.COMPONENT_VERSION_PROBLEM, Markers.FEATURE_CLOSURE_PROBLEM);
+        boolean versionProperlyIncreased = false;
+
+        if (comparison < 0)
+        {
+          versionProperlyIncreased = nextVersion.equals(elementVersion);
+          if (!versionProperlyIncreased)
+          {
+            boolean noOtherIncrements = elementVersion.getMajor() == nextVersion.getMajor() && elementVersion.getMinor() == nextVersion.getMinor();
+            if (noOtherIncrements)
+            {
+              addVersionMarker(componentModelFile, "Version should be " + nextVersion, nextVersion);
+            }
+          }
+
+          if (elementType == IElement.Type.PLUGIN)
+          {
+            continue;
+          }
+        }
+
+        if (comparison > 0)
+        {
+          addVersionMarker(componentModelFile, "Version has been decreased after release " + releaseVersion, releaseVersion);
+          continue;
+        }
+
+        if (elementType == IElement.Type.FEATURE || elementType == IElement.Type.PRODUCT)
+        {
+          if (!arguments.isIgnoreFeatureContentRedundancy())
+          {
+            checkFeatureRedundancy(componentModelFile, element);
+          }
+
+          if (arguments.isCheckFeatureClosureCompleteness())
+          {
+            checkFeatureClosureCompleteness(componentModelFile, element);
+          }
+
+          if (!arguments.isIgnoreFeatureContentChanges())
+          {
+            List<Problem> problems = new ArrayList<Problem>();
+            checkFeatureReferences(componentModelFile, element, problems);
+            if (!problems.isEmpty())
+            {
+              createMarkers(componentModelFile, problems, ComponentReferenceType.UNRESOLVED);
+              continue;
+            }
+
+            ComponentReferenceType change = checkFeatureContentChanges(element, releaseElement, problems);
+            if (change != ComponentReferenceType.UNCHANGED)
+            {
+              Version nextFeatureVersion = getNextFeatureVersion(releaseVersion, nextVersion, change);
+              if (elementVersion.compareTo(nextFeatureVersion) < 0)
+              {
+                IMarker marker = addVersionMarker(componentModelFile, "Version must be increased to " + nextFeatureVersion + " because the "
+                    + elementType.toString().toLowerCase() + "'s references have changed", nextFeatureVersion);
+                if (marker != null)
+                {
+                  marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT);
+                }
+
+                createMarkers(componentModelFile, problems, change);
               }
 
-              createMarkers(componentModelFile, problems, change);
+              continue;
+            }
+
+            if (!elementVersion.equals(releaseVersion))
+            {
+              continue;
+            }
+          }
+        }
+
+        if (versionProperlyIncreased || elementVersion.getMajor() > nextVersion.getMajor() || elementVersion.getMinor() > nextVersion.getMinor())
+        {
+          continue;
+        }
+
+        if (contentMustChange)
+        {
+          addVersionMarker(componentModelFile, "Version must be increased to " + nextVersion + " because the project's manifest must be changed", nextVersion);
+          continue;
+        }
+
+        // Initialize the validator on demand.
+        if (validator == null)
+        {
+          String validatorClassName = arguments.getValidatorClassName();
+          if (validatorClassName == null)
+          {
+            validatorClassName = IVersionBuilderArguments.DEFAULT_VALIDATOR_CLASS_NAME;
+          }
+
+          try
+          {
+            Markers.deleteAllMarkers(projectDescription, Markers.VALIDATOR_CLASS_PROBLEM);
+
+            Class<?> c = Class.forName(validatorClassName, true, VersionBuilder.class.getClassLoader());
+            validator = (VersionValidator)c.newInstance();
+
+            if (VersionUtil.DEBUG)
+            {
+              System.out.println(validator.getClass().getName() + ": " + project.getName());
+            }
+          }
+          catch (Exception ex)
+          {
+            String msg = ex.getLocalizedMessage() + ": " + validatorClassName;
+            IMarker marker = Markers.addMarker(projectDescription, msg, IMarker.SEVERITY_ERROR, ".*(" + validatorClassName + ").*");
+            if (marker != null)
+            {
+              marker.setAttribute(Markers.PROBLEM_TYPE, Markers.VALIDATOR_CLASS_PROBLEM);
             }
 
             return;
           }
 
-          if (!elementVersion.equals(releaseVersion))
+          String validatorVersion = validator.getVersion();
+          if (!VersionUtil.equals(validatorClassName, buildState.getValidatorClass())
+              || !VersionUtil.equals(validatorVersion, buildState.getValidatorVersion()))
           {
-            return;
+            buildState.clearValidatorStates();
+            delta = null;
           }
+
+          buildState.setValidatorClass(validatorClassName);
+          buildState.setValidatorVersion(validatorVersion);
         }
-      }
 
-      if (microVersionProperlyIncreased || elementVersion.getMajor() > nextMicroVersion.getMajor() || elementVersion.getMinor() > nextMicroVersion.getMinor())
-      {
-        return;
-      }
+        // Apply the validator.
+        validator.updateBuildState(buildState, release, project, delta, componentModel, monitor);
 
-      /*
-       * Determine validator to use
-       */
-
-      String validatorClassName = arguments.getValidatorClassName();
-      if (validatorClassName == null)
-      {
-        validatorClassName = IVersionBuilderArguments.DEFAULT_VALIDATOR_CLASS_NAME;
-      }
-
-      try
-      {
-        Markers.deleteAllMarkers(projectDescription, Markers.VALIDATOR_CLASS_PROBLEM);
-
-        Class<?> c = Class.forName(validatorClassName, true, VersionBuilder.class.getClassLoader());
-        validator = (VersionValidator)c.newInstance();
-
-        if (VersionUtil.DEBUG)
+        if (buildState.isChangedSinceRelease())
         {
-          System.out.println(validator.getClass().getName() + ": " + project.getName());
+          addVersionMarker(componentModelFile, "Version must be increased to " + nextVersion + " because the project's contents have changed", nextVersion);
         }
-      }
-      catch (Exception ex)
-      {
-        String msg = ex.getLocalizedMessage() + ": " + validatorClassName;
-        IMarker marker = Markers.addMarker(projectDescription, msg, IMarker.SEVERITY_ERROR, ".*(" + validatorClassName + ").*");
-        if (marker != null)
-        {
-          marker.setAttribute(Markers.PROBLEM_TYPE, Markers.VALIDATOR_CLASS_PROBLEM);
-        }
-
-        return;
-      }
-
-      String validatorVersion = validator.getVersion();
-      if (!VersionUtil.equals(validatorClassName, buildState.getValidatorClass()) || !VersionUtil.equals(validatorVersion, buildState.getValidatorVersion()))
-      {
-        buildState.setValidatorState(null);
-        delta = null;
-      }
-
-      buildState.setValidatorClass(validatorClassName);
-      buildState.setValidatorVersion(validatorVersion);
-
-      /*
-       * Do the validation
-       */
-
-      validator.updateBuildState(buildState, release, project, delta, componentModel, monitor);
-
-      if (buildState.isChangedSinceRelease())
-      {
-        addVersionMarker(componentModelFile, "Version must be increased to " + nextMicroVersion + " because the project's contents have changed",
-            nextMicroVersion);
       }
     }
     catch (Exception ex)
@@ -686,8 +713,34 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     {
       deviations = null;
       integration = null;
+      service = null;
       release = null;
       monitor.done();
+    }
+  }
+
+  private void addDependencies(List<IProject> buildDependencies, IProject project)
+  {
+    IModel childProjectComponentModel = VersionUtil.getComponentModel(project);
+    if (childProjectComponentModel instanceof IPluginModelBase)
+    {
+      BundleDescription bundleDescription = ((IPluginModelBase)childProjectComponentModel).getBundleDescription();
+      if (bundleDescription != null)
+      {
+        BundleDescription[] requiredBundles = bundleDescription.getResolvedRequires();
+        if (requiredBundles != null)
+        {
+          for (BundleDescription requiredBundleDescription : requiredBundles)
+          {
+            IElement element = new Element(Type.PLUGIN, requiredBundleDescription.getSymbolicName(), false);
+            IProject childProject = getProject(element);
+            if (childProject != null)
+            {
+              buildDependencies.add(childProject);
+            }
+          }
+        }
+      }
     }
   }
 
@@ -732,6 +785,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
       try
       {
+        boolean result = false;
+
         contents = propertiesFile.getContents();
 
         Properties properties = new Properties();
@@ -751,14 +806,21 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
           ignoredReferences.add(ignoredReference.replace("\\ ", " ").replace("\\\\", "\\"));
         }
 
-        Boolean newValue = Boolean.valueOf(properties.getProperty(INTEGRATION_PROPERTY_KEY, "true"));
-        if (!newValue.equals(integration))
+        Boolean newIntegrationValue = Boolean.valueOf(properties.getProperty(INTEGRATION_PROPERTY_KEY, "true"));
+        if (!newIntegrationValue.equals(integration))
         {
-          integration = newValue;
-          return true;
+          integration = newIntegrationValue;
+          result = true;
         }
 
-        return false;
+        Boolean newServiceValue = Boolean.valueOf(properties.getProperty(SERVICE_PROPERTY_KEY, "true"));
+        if (!newServiceValue.equals(service))
+        {
+          service = newServiceValue;
+          result = true;
+        }
+
+        return result;
       }
       finally
       {
@@ -768,12 +830,13 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
     deviations = false;
     integration = true;
+    service = true;
     rootProjects = new HashSet<String>();
     ignoredReferences = new HashSet<String>();
 
     String lineDelimiter = VersionUtil.getLineDelimiter(propertiesFile);
-    String contents = INTEGRATION_PROPERTY_KEY + " = " + integration + lineDelimiter + DEVIATIONS_PROPERTY_KEY + " = " + deviations + lineDelimiter
-        + ROOT_PROJECTS_KEY + " = ";
+    String contents = INTEGRATION_PROPERTY_KEY + " = " + integration + lineDelimiter + SERVICE_PROPERTY_KEY + " = " + service + lineDelimiter
+        + DEVIATIONS_PROPERTY_KEY + " = " + deviations + lineDelimiter + ROOT_PROJECTS_KEY + " = ";
 
     String charsetName = propertiesFile.getCharset();
     byte[] bytes = contents.getBytes(charsetName);
@@ -783,9 +846,14 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     return true;
   }
 
-  private Version getNextMicroVersion(Version releaseVersion)
+  private Version getNextVersion(Version releaseVersion)
   {
-    return new Version(releaseVersion.getMajor(), releaseVersion.getMinor(), releaseVersion.getMicro() + (integration ? 100 : 1));
+    if (service)
+    {
+      return new Version(releaseVersion.getMajor(), releaseVersion.getMinor(), releaseVersion.getMicro() + (integration ? 100 : 1));
+    }
+
+    return new Version(releaseVersion.getMajor(), releaseVersion.getMinor() + 1, 0);
   }
 
   private Version getNextFeatureVersion(Version releaseVersion, Version nextImplementationVersion, ComponentReferenceType change)
@@ -828,39 +896,43 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
   private void checkFeatureRedundancy(IFile file, IElement element)
   {
-    int i = 0;
+    Map<IElement, IElement> allFeatureChildren = new HashMap<IElement, IElement>();
     List<IElement> children = element.getChildren();
-    for (IElement pluginChild : children)
+    for (IElement child : children)
     {
-      if (pluginChild.getType() == IElement.Type.PLUGIN)
+      if (child.getType() == IElement.Type.FEATURE)
       {
-        for (IElement featureChild : children)
+        child = resolveElement(child);
+        if (child != null)
         {
-          if (featureChild.getType() == IElement.Type.FEATURE)
+          Set<IElement> allChildren = child.getAllChildren(this, release);
+          for (IElement featureChild : allChildren)
           {
-            featureChild = resolveElement(featureChild);
-            if (featureChild != null)
-            {
-              Set<IElement> allChildren = featureChild.getAllChildren(this, release);
-              if (allChildren.contains(pluginChild))
-              {
-                try
-                {
-                  addRedundancyMarker(file, pluginChild, featureChild);
-                }
-                catch (Exception ex)
-                {
-                  Activator.log(ex);
-                }
-              }
-            }
+            allFeatureChildren.put(featureChild, child);
           }
         }
+      }
+    }
 
-        if (children.indexOf(pluginChild) != i)
+    int i = 0;
+    for (IElement child : children)
+    {
+      IElement featureElement = allFeatureChildren.get(child);
+      if (featureElement != null && !child.isLicenseFeature())
+      {
+        try
         {
-          addRedundancyMarker(file, pluginChild, null);
+          addRedundancyMarker(file, child, featureElement);
         }
+        catch (Exception ex)
+        {
+          Activator.log(ex);
+        }
+      }
+
+      if (children.indexOf(child) != i)
+      {
+        addRedundancyMarker(file, child, null);
       }
 
       ++i;
@@ -935,6 +1007,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       biggestChange = ComponentReferenceType.values()[Math.max(biggestChange.ordinal(), change.ordinal())];
     }
 
+    Collection<IElement> allChildren = element.getAllChildren(this, release);
     Collection<IElement> releasedElementChildren = arguments.isCheckFeatureClosureContent() ? releasedElement.getAllChildren(release, this)
         : releasedElement.getChildren();
     for (IElement releasedElementsChild : releasedElementChildren)
@@ -949,7 +1022,9 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
               : ComponentReferenceType.REMOVED;
           if (addProblem(releasedElementsChild, IMarker.SEVERITY_WARNING, componentReferenceType, null, problems))
           {
-            biggestChange = ComponentReferenceType.values()[Math.max(biggestChange.ordinal(), componentReferenceType.ordinal())];
+            // If we've removed a redundant plugin or feature, we don't want it to be considered a remove that requires a major version increment.
+            biggestChange = ComponentReferenceType.values()[Math.max(biggestChange.ordinal(),
+                allChildren.contains(trimmedVersion) ? ComponentReferenceType.MINOR_CHANGED.ordinal() : componentReferenceType.ordinal())];
           }
         }
       }
@@ -1039,6 +1114,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
       final String componentName = element.getName();
       final String componentVersion = StringUtil.removeSuffix(element.getVersion().toString(), ".qualifier");
+      final String componentType = element.getType().toString().toLowerCase();
 
       InputStream contents = null;
 
@@ -1100,7 +1176,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
               {
                 if (!textContent.equals(componentName))
                 {
-                  addMarker(file, "Maven artifactId '" + textContent + "' is different from plug-in name '" + componentName + "'", textContent, componentName);
+                  addMarker(file, "Maven artifactId '" + textContent + "' is different from " + componentType + " name '" + componentName + "'", textContent,
+                      componentName);
                 }
               }
               else
@@ -1108,7 +1185,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
                 String version = StringUtil.removeSuffix(textContent, "-SNAPSHOT");
                 if (!version.equals(componentVersion))
                 {
-                  addMarker(file, "Maven version '" + version + "' is different from plug-in version '" + componentVersion + "'", version, componentVersion);
+                  addMarker(file, "Maven version '" + version + "' is different from " + componentType + " version '" + componentVersion + "'", version,
+                      componentVersion);
                 }
               }
 
@@ -1237,15 +1315,21 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       {
         IFile file = null;
         String regex = null;
-        if (componentModel instanceof IPluginModelBase)
+        IElement.Type type = VersionUtil.getType(componentModel);
+        if (type == IElement.Type.PLUGIN)
         {
           file = project.getFile(MANIFEST_PATH);
           regex = "Bundle-Version: *(\\d+(\\.\\d+(\\.\\d+(\\.[-_a-zA-Z0-9]+)?)?)?)";
         }
-        else
+        else if (type == IElement.Type.FEATURE)
         {
           file = project.getFile(FEATURE_PATH);
           regex = "feature.*?version\\s*=\\s*[\"'](\\d+(\\.\\d+(\\.\\d+(\\.[-_a-zA-Z0-9]+)?)?)?)";
+        }
+        else if (type == IElement.Type.PRODUCT)
+        {
+          file = (IFile)underlyingResource;
+          regex = "product.*?version\\s*=\\s*[\"'](\\d+(\\.\\d+(\\.\\d+(\\.[-_a-zA-Z0-9]+)?)?)?)";
         }
 
         if (file.exists())
@@ -1332,30 +1416,38 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     }
   }
 
-  private void checkLowerBoundVersions(IPluginModelBase pluginModel) throws CoreException, IOException
+  private boolean checkLowerBoundVersions(IPluginModelBase pluginModel) throws CoreException, IOException
   {
+    boolean result = true;
+
     BundleDescription description = pluginModel.getBundleDescription();
-    if (description == null)
+    if (description != null)
     {
-      return;
+      IFile file = getProject().getFile(MANIFEST_PATH);
+      Markers.deleteAllMarkers(file, Markers.LOWER_BOUND_VERSION_PROBLEM);
+
+      String releasePath = arguments.getReleasePath();
+      for (BundleSpecification requiredBundle : description.getRequiredBundles())
+      {
+        if (!checkLowerBoundVersions(file, releasePath, requiredBundle, "bundle-version"))
+        {
+          result = false;
+        }
+      }
+
+      for (ImportPackageSpecification importPackage : description.getImportPackages())
+      {
+        if (!checkLowerBoundVersions(file, releasePath, importPackage, "version"))
+        {
+          result = false;
+        }
+      }
     }
 
-    IFile file = getProject().getFile(MANIFEST_PATH);
-    Markers.deleteAllMarkers(file, Markers.LOWER_BOUND_VERSION_PROBLEM);
-
-    String releasePath = arguments.getReleasePath();
-    for (BundleSpecification requiredBundle : description.getRequiredBundles())
-    {
-      checkLowerBoundVersions(file, releasePath, requiredBundle, "bundle-version");
-    }
-
-    for (ImportPackageSpecification importPackage : description.getImportPackages())
-    {
-      checkLowerBoundVersions(file, releasePath, importPackage, "version");
-    }
+    return result;
   }
 
-  void checkLowerBoundVersions(IFile file, String releasePath, VersionConstraint versionConstraint, String versionAttribute)
+  private boolean checkLowerBoundVersions(IFile file, String releasePath, VersionConstraint versionConstraint, String versionAttribute)
   {
     VersionRange requiredVersionRange = versionConstraint.getVersionRange();
     if (!VersionRange.emptyRange.equals(requiredVersionRange))
@@ -1374,7 +1466,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
             IElement element = resolveElement(new Element(Type.PLUGIN, supplierBundle.getName(), supplierBundle.getHost() != null));
             if (element != null)
             {
-              IModel componentModel = ReleaseManager.INSTANCE.getComponentModel(element);
+              IModel componentModel = ReleaseManager.INSTANCE.getComponentModel(element.trimVersion());
               if (componentModel != null)
               {
                 IResource underlyingResource = componentModel.getUnderlyingResource();
@@ -1389,6 +1481,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
                     VersionRange expectedVersionRange = new VersionRange(element.getVersion(), true, requiredVersionRange.getRight(),
                         requiredVersionRange.getIncludeMaximum());
                     addLaxLowerBoundMarker(file, name, "dependency range minimum must be " + version, expectedVersionRange, versionAttribute);
+                    return false;
                   }
                 }
               }
@@ -1397,6 +1490,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
         }
       }
     }
+
+    return true;
   }
 
   @SuppressWarnings("deprecation")
@@ -1687,15 +1782,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
   {
     try
     {
-      String type;
-      if (element.getType() == IElement.Type.PLUGIN)
-      {
-        type = "Plug-in";
-      }
-      else
-      {
-        type = "Feature";
-      }
+      String type = element.getType().toString();
 
       String message = type + " '" + element.getName() + "' is not referenced by any other feature";
       String regex;
@@ -1727,16 +1814,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
   {
     try
     {
-      String type;
-      if (element.getType() == IElement.Type.PLUGIN)
-      {
-        type = "Plug-in";
-      }
-      else
-      {
-        type = "Feature";
-      }
-
+      String type = element.getType().toString();
       Version version = element.getVersion();
       String message = type + " '" + element.getName() + "' has been changed from " + releasedVersion + " to " + version;
       IMarker marker = addVersionMarker(file, message, version, IMarker.SEVERITY_INFO);
@@ -1782,9 +1860,13 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       {
         regex = "Bundle-Version: *(\\d+(\\.\\d+(\\.\\d+)?)?)";
       }
-      else
+      else if (!file.getName().endsWith(".product"))
       {
         regex = "feature.*?version\\s*=\\s*[\"'](\\d+(\\.\\d+(\\.\\d+)?)?)";
+      }
+      else
+      {
+        regex = "product.*?version\\s*=\\s*[\"'](\\d+(\\.\\d+(\\.\\d+)?)?)";
       }
 
       IMarker marker = Markers.addMarker(file, message, severity, regex);
@@ -1803,16 +1885,17 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     }
   }
 
-  private void addRedundancyMarker(IFile file, IElement pluginChild, IElement featureChild)
+  private void addRedundancyMarker(IFile file, IElement child, IElement feature)
   {
     try
     {
-      String name = pluginChild.getName();
-      String cause = featureChild != null ? "feature '" + featureChild.getName() + "' already includes it"
-          : " because it occurs more than once in this feature";
-      String msg = "Plug-in reference '" + name + "' is redundant because " + cause;
+      String name = child.getName();
+      Type type = child.getType();
 
-      IMarker marker = addFeatureChildMarker(file, Markers.COMPONENT_VERSION_PROBLEM, "plugin", name, msg, false, true, null, IMarker.SEVERITY_WARNING);
+      String cause = feature != null ? "feature '" + feature.getName() + "' already includes it" : " because it occurs more than once in this feature";
+      String msg = type + " reference '" + name + "' is redundant because " + cause;
+
+      IMarker marker = addFeatureChildMarker(file, Markers.COMPONENT_VERSION_PROBLEM, type.getTag(), name, msg, false, true, null, IMarker.SEVERITY_WARNING);
       marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.IGNORE_CONTENT_REDUNDANCY_ARGUMENT);
     }
     catch (Exception ex)
@@ -1854,6 +1937,11 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       {
         label = "Plug-in";
         tag = "plugin";
+      }
+      else if (file.getName().endsWith(".product"))
+      {
+        label = "Feature";
+        tag = "feature";
       }
       else
       {

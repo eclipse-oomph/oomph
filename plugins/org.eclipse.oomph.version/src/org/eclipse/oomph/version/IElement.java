@@ -55,6 +55,21 @@ public interface IElement
    */
   public static enum Type
   {
+    PRODUCT
+    {
+      @Override
+      public String getTag()
+      {
+        return "products";
+      }
+
+      @Override
+      public String toString()
+      {
+        return "Product";
+      }
+    },
+
     FEATURE
     {
       @Override

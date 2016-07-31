@@ -20,6 +20,7 @@ import org.eclipse.oomph.version.VersionUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -42,8 +43,9 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -52,7 +54,10 @@ import java.util.WeakHashMap;
  */
 public class ReleaseManager implements IReleaseManager
 {
-  private Map<IRelease, Long> releases = new WeakHashMap<IRelease, Long>();
+  private final Map<IRelease, Long> releases = new WeakHashMap<IRelease, Long>();
+
+  @SuppressWarnings("restriction")
+  private final Map<org.eclipse.pde.internal.core.iproduct.IProductModel, Long> productModels = new WeakHashMap<org.eclipse.pde.internal.core.iproduct.IProductModel, Long>();
 
   private SAXParserFactory parserFactory;
 
@@ -74,7 +79,7 @@ public class ReleaseManager implements IReleaseManager
   {
     try
     {
-      for (Entry<IRelease, Long> entry : releases.entrySet())
+      for (Map.Entry<IRelease, Long> entry : releases.entrySet())
       {
         IRelease release = entry.getKey();
         if (release.getFile().equals(file))
@@ -127,9 +132,11 @@ public class ReleaseManager implements IReleaseManager
         String releasePath = args.getReleasePath();
         if (path.equals(releasePath))
         {
-          IModel componentModel = VersionUtil.getComponentModel(project);
-          IElement element = createElement(componentModel, true, resolve);
-          elements.put(element, element);
+          for (IModel componentModel : VersionUtil.getComponentModels(project))
+          {
+            IElement element = createElement(componentModel, true, resolve);
+            elements.put(element, element);
+          }
         }
       }
     }
@@ -157,6 +164,7 @@ public class ReleaseManager implements IReleaseManager
         }
       }
     }
+
     return elements;
   }
 
@@ -172,6 +180,7 @@ public class ReleaseManager implements IReleaseManager
     return release;
   }
 
+  @SuppressWarnings("restriction")
   public IElement createElement(IModel componentModel, boolean withFeatureContent, boolean resolve)
   {
     if (componentModel instanceof IPluginModelBase)
@@ -188,7 +197,12 @@ public class ReleaseManager implements IReleaseManager
       return new Element(Type.PLUGIN, name, version, pluginModel instanceof IFragmentModel);
     }
 
-    return createFeatureElement(componentModel, withFeatureContent, resolve);
+    if (componentModel instanceof org.eclipse.pde.internal.core.ifeature.IFeatureModel)
+    {
+      return createFeatureElement(componentModel, withFeatureContent, resolve);
+    }
+
+    return createProductElement(componentModel, resolve);
   }
 
   @SuppressWarnings("restriction")
@@ -204,8 +218,10 @@ public class ReleaseManager implements IReleaseManager
 
     if (withContent)
     {
+      List<IElement> children = element.getChildren();
+
       String licenseFeatureID = feature.getLicenseFeatureID();
-      if (licenseFeatureID.length() != 0)
+      if (!StringUtil.isEmpty(licenseFeatureID))
       {
         Element child = new Element(IElement.Type.FEATURE, licenseFeatureID, feature.getLicenseFeatureVersion());
         if (resolve)
@@ -214,7 +230,7 @@ public class ReleaseManager implements IReleaseManager
         }
 
         child.setLicenseFeature(true);
-        element.getChildren().add(child);
+        children.add(child);
       }
 
       for (org.eclipse.pde.internal.core.ifeature.IFeatureChild versionable : feature.getIncludedFeatures())
@@ -225,7 +241,7 @@ public class ReleaseManager implements IReleaseManager
           child.resolveVersion();
         }
 
-        element.getChildren().add(child);
+        children.add(child);
       }
 
       for (org.eclipse.pde.internal.core.ifeature.IFeaturePlugin versionable : feature.getPlugins())
@@ -236,8 +252,62 @@ public class ReleaseManager implements IReleaseManager
           child.resolveVersion();
         }
 
-        element.getChildren().add(child);
+        children.add(child);
       }
+    }
+
+    return element;
+  }
+
+  @SuppressWarnings("restriction")
+  private IElement createProductElement(IModel componentModel, boolean resolve)
+  {
+    org.eclipse.pde.internal.core.iproduct.IProductModel productModel = (org.eclipse.pde.internal.core.iproduct.IProductModel)componentModel;
+    org.eclipse.pde.internal.core.iproduct.IProduct product = productModel.getProduct();
+
+    synchronized (this)
+    {
+      productModels.put(productModel, productModel.getUnderlyingResource().getModificationStamp());
+    }
+
+    String name = product.getId();
+    String versionValue = product.getVersion();
+    Version version = new Version(StringUtil.isEmpty(versionValue) ? "1.0.0.qualifier" : versionValue);
+    IElement element = new Element(Type.PRODUCT, name, version);
+    List<IElement> children = element.getChildren();
+
+    for (org.eclipse.pde.internal.core.iproduct.IProductFeature versionable : product.getFeatures())
+    {
+      String featureVersion = versionable.getVersion();
+      if (StringUtil.isEmpty(featureVersion))
+      {
+        featureVersion = "0.0.0";
+      }
+
+      Element child = new Element(IElement.Type.FEATURE, versionable.getId(), featureVersion);
+      if (resolve)
+      {
+        child.resolveVersion();
+      }
+
+      children.add(child);
+    }
+
+    for (org.eclipse.pde.internal.core.iproduct.IProductPlugin versionable : product.getPlugins())
+    {
+      String pluginVersion = versionable.getVersion();
+      if (StringUtil.isEmpty(pluginVersion))
+      {
+        pluginVersion = "0.0.0";
+      }
+
+      Element child = new Element(IElement.Type.PLUGIN, versionable.getId(), pluginVersion, versionable.isFragment());
+      if (resolve)
+      {
+        child.resolveVersion();
+      }
+
+      children.add(child);
     }
 
     return element;
@@ -247,57 +317,71 @@ public class ReleaseManager implements IReleaseManager
   public IModel getComponentModel(IElement element)
   {
     String name = element.getName();
-    if (element.getType() == IElement.Type.PLUGIN)
+    switch (element.getType())
     {
-      IPluginModelBase model = PluginRegistry.findModel(name);
-      if (name.endsWith(".source") && model != null && model.getUnderlyingResource() == null)
+      case PLUGIN:
       {
-        return null;
-      }
-
-      if (!element.isVersionUnresolved())
-      {
-        Version pluginVersion = VersionUtil.normalize(model.getBundleDescription().getVersion());
-        if (!element.getVersion().equals(pluginVersion))
+        IPluginModelBase model = PluginRegistry.findModel(name);
+        if (name.endsWith(".source") && model != null && model.getUnderlyingResource() == null)
         {
           return null;
         }
+
+        if (model != null && !element.isVersionUnresolved())
+        {
+          Version pluginVersion = VersionUtil.normalize(model.getBundleDescription().getVersion());
+          if (!element.getVersion().equals(pluginVersion))
+          {
+            return null;
+          }
+        }
+
+        return model;
       }
 
-      return model;
-    }
-
-    org.eclipse.pde.internal.core.FeatureModelManager manager = org.eclipse.pde.internal.core.PDECore.getDefault().getFeatureModelManager();
-    org.eclipse.pde.internal.core.ifeature.IFeatureModel[] featureModels = manager.getWorkspaceModels();
-
-    org.eclipse.pde.internal.core.ifeature.IFeatureModel featureModel = getFeatureModel(name, featureModels);
-    if (featureModel == null)
-    {
-      featureModels = manager.getExternalModels();
-      featureModel = getFeatureModel(name, featureModels);
-
-      if (featureModel == null)
+      case FEATURE:
       {
-        return null;
+        org.eclipse.pde.internal.core.FeatureModelManager manager = org.eclipse.pde.internal.core.PDECore.getDefault().getFeatureModelManager();
+        org.eclipse.pde.internal.core.ifeature.IFeatureModel[] featureModels = manager.getWorkspaceModels();
+
+        org.eclipse.pde.internal.core.ifeature.IFeatureModel featureModel = getFeatureModel(name, featureModels);
+        if (featureModel == null)
+        {
+          featureModels = manager.getExternalModels();
+          featureModel = getFeatureModel(name, featureModels);
+
+          if (featureModel == null)
+          {
+            return null;
+          }
+        }
+
+        if (name.endsWith(".source") && featureModel.getUnderlyingResource() == null)
+        {
+          return null;
+        }
+
+        if (!element.isVersionUnresolved())
+        {
+          org.eclipse.pde.internal.core.ifeature.IFeature feature = featureModel.getFeature();
+          Version featureVersion = VersionUtil.normalize(new Version(feature.getVersion()));
+          if (!element.getVersion().equals(featureVersion))
+          {
+            return null;
+          }
+        }
+
+        return featureModel;
       }
-    }
-
-    if (name.endsWith(".source") && featureModel.getUnderlyingResource() == null)
-    {
-      return null;
-    }
-
-    if (!element.isVersionUnresolved())
-    {
-      org.eclipse.pde.internal.core.ifeature.IFeature feature = featureModel.getFeature();
-      Version featureVersion = VersionUtil.normalize(new Version(feature.getVersion()));
-      if (!element.getVersion().equals(featureVersion))
+      case PRODUCT:
       {
-        return null;
+        return getProductModel(element);
+      }
+      default:
+      {
+        throw new IllegalStateException("Unknown element type " + element);
       }
     }
-
-    return featureModel;
   }
 
   @SuppressWarnings("restriction")
@@ -322,11 +406,79 @@ public class ReleaseManager implements IReleaseManager
       }
     }
 
-    if (highestModel == null)
+    return highestModel;
+  }
+
+  @SuppressWarnings("restriction")
+  private synchronized org.eclipse.pde.internal.core.iproduct.IProductModel getProductModel(IElement element)
+  {
+    clearStaleCachedProductModels();
+
+    org.eclipse.pde.internal.core.iproduct.IProductModel productModel = getCachedProduct(element);
+    if (productModel == null)
     {
-      return null;
+      populateCachedProducts();
+      productModel = getCachedProduct(element);
     }
 
-    return highestModel;
+    return productModel;
+  }
+
+  @SuppressWarnings("restriction")
+  private void clearStaleCachedProductModels()
+  {
+    for (Iterator<Map.Entry<org.eclipse.pde.internal.core.iproduct.IProductModel, Long>> it = productModels.entrySet().iterator(); it.hasNext();)
+    {
+      Map.Entry<org.eclipse.pde.internal.core.iproduct.IProductModel, Long> entry = it.next();
+      org.eclipse.pde.internal.core.iproduct.IProductModel productModel = entry.getKey();
+      IResource underlyingResource = productModel.getUnderlyingResource();
+      long timeStamp = entry.getValue();
+      if (underlyingResource.getModificationStamp() != timeStamp)
+      {
+        it.remove();
+      }
+    }
+  }
+
+  @SuppressWarnings("restriction")
+  private void populateCachedProducts()
+  {
+    for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects())
+    {
+      if (project.isOpen())
+      {
+        for (org.eclipse.pde.internal.core.iproduct.IProductModel productModel : VersionUtil.getProductModels(project))
+        {
+          IResource underlyingResource = productModel.getUnderlyingResource();
+          long timeStamp = underlyingResource.getModificationStamp();
+          productModels.put(productModel, timeStamp);
+        }
+      }
+    }
+  }
+
+  @SuppressWarnings("restriction")
+  private org.eclipse.pde.internal.core.iproduct.IProductModel getCachedProduct(IElement element)
+  {
+    String name = element.getName();
+    for (org.eclipse.pde.internal.core.iproduct.IProductModel productModel : productModels.keySet())
+    {
+      org.eclipse.pde.internal.core.iproduct.IProduct product = productModel.getProduct();
+      if (name.equals(product.getId()))
+      {
+        if (!element.isVersionUnresolved())
+        {
+          Version productVersion = VersionUtil.normalize(new Version(product.getVersion()));
+          if (!element.getVersion().equals(productVersion))
+          {
+            continue;
+          }
+        }
+
+        return productModel;
+      }
+    }
+
+    return null;
   }
 }

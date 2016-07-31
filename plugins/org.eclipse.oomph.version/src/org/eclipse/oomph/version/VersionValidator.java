@@ -29,6 +29,6 @@ public abstract class VersionValidator
 
   public void abort(IBuildState buildState, IProject project, Exception exception, IProgressMonitor monitor) throws Exception
   {
-    buildState.setValidatorState(null);
+    buildState.clearValidatorStates();
   }
 }

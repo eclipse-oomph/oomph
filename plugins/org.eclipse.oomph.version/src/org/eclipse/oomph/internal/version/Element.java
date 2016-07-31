@@ -81,7 +81,7 @@ public class Element implements IElement
 
   public String getTag()
   {
-    return type == Type.PLUGIN ? Release.PLUGIN_TAG : Release.FEATURE_TAG;
+    return type == Type.PLUGIN ? Release.PLUGIN_TAG : type == Type.FEATURE ? Release.FEATURE_TAG : Release.PRODUCT_TAG;
   }
 
   public String getName()

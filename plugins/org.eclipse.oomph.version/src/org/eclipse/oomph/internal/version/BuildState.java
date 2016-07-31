@@ -13,8 +13,11 @@ package org.eclipse.oomph.internal.version;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.version.IBuildState;
 
+import org.eclipse.pde.core.IModel;
+
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,7 +26,7 @@ import java.util.Set;
  */
 public class BuildState implements IBuildState, Serializable
 {
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 2L;
 
   private Map<String, String> arguments;
 
@@ -35,13 +38,13 @@ public class BuildState implements IBuildState, Serializable
 
   private boolean integration;
 
+  private boolean service;
+
   private Set<String> rootProjects;
 
   private Set<String> ignoredReferences;
 
-  private boolean changedSinceRelease;
-
-  private long validatorTimeStamp;
+  private Map<String, Long> validatorTimeStamps = new LinkedHashMap<String, Long>();
 
   private String validatorClass;
 
@@ -49,7 +52,9 @@ public class BuildState implements IBuildState, Serializable
 
   private byte[] validatorBytes;
 
-  private transient Serializable validatorState;
+  private transient Map<String, Serializable> validatorStates;
+
+  private transient boolean changedSinceRelease;
 
   BuildState()
   {
@@ -105,6 +110,16 @@ public class BuildState implements IBuildState, Serializable
     this.integration = integration;
   }
 
+  public boolean isService()
+  {
+    return service;
+  }
+
+  public void setService(boolean service)
+  {
+    this.service = service;
+  }
+
   public Set<String> getRootProjects()
   {
     return rootProjects;
@@ -125,14 +140,15 @@ public class BuildState implements IBuildState, Serializable
     this.ignoredReferences = ignoredReferences;
   }
 
-  public long getValidatorTimeStamp()
+  public long getValidatorTimeStamp(IModel model)
   {
-    return validatorTimeStamp;
+    Long result = validatorTimeStamps.get(model.getUnderlyingResource().getProjectRelativePath().toString());
+    return result == null ? 0 : result;
   }
 
-  public void setValidatorTimeStamp(long validatorTimeStamp)
+  public void setValidatorTimeStamp(IModel model, long validatorTimeStamp)
   {
-    this.validatorTimeStamp = validatorTimeStamp;
+    validatorTimeStamps.put(getKey(model), validatorTimeStamp);
   }
 
   public String getValidatorClass()
@@ -165,30 +181,51 @@ public class BuildState implements IBuildState, Serializable
     this.changedSinceRelease = changedSinceRelease;
   }
 
-  public Serializable getValidatorState()
+  @SuppressWarnings("unchecked")
+  public Serializable getValidatorState(IModel model)
   {
-    if (validatorState == null)
+    if (validatorStates == null)
     {
       if (validatorBytes != null)
       {
-        validatorState = IOUtil.deserialize(validatorBytes);
+        validatorStates = (Map<String, Serializable>)IOUtil.deserialize(validatorBytes);
+      }
+      else
+      {
+        validatorStates = new LinkedHashMap<String, Serializable>();
       }
     }
 
-    return validatorState;
+    return validatorStates.get(getKey(model));
   }
 
-  public void setValidatorState(Serializable validatorState)
+  public void setValidatorState(IModel model, Serializable validatorState)
   {
-    this.validatorState = validatorState;
+    if (validatorStates == null)
+    {
+      validatorStates = new LinkedHashMap<String, Serializable>();
+    }
+
+    validatorStates.put(getKey(model), validatorState);
+    validatorBytes = null;
+  }
+
+  public void clearValidatorStates()
+  {
+    validatorStates = null;
     validatorBytes = null;
   }
 
   void serializeValidatorState()
   {
-    if (validatorBytes == null && validatorState != null)
+    if (validatorBytes == null && validatorStates != null)
     {
-      validatorBytes = IOUtil.serialize(validatorState);
+      validatorBytes = IOUtil.serialize((Serializable)validatorStates);
     }
+  }
+
+  private String getKey(IModel model)
+  {
+    return model.getUnderlyingResource().getProjectRelativePath().toString();
   }
 }

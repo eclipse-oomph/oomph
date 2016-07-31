@@ -11,6 +11,7 @@
 package org.eclipse.oomph.version;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.pde.core.IModel;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -24,13 +25,15 @@ import java.util.Map;
  */
 public interface IBuildState
 {
-  public long getValidatorTimeStamp();
+  public long getValidatorTimeStamp(IModel model);
 
-  public void setValidatorTimeStamp(long validatorTimeStamp);
+  public void setValidatorTimeStamp(IModel model, long validatorTimeStamp);
 
-  public Serializable getValidatorState();
+  public Serializable getValidatorState(IModel model);
 
-  public void setValidatorState(Serializable validatorState);
+  public void setValidatorState(IModel model, Serializable validatorState);
+
+  public void clearValidatorStates();
 
   public void setChangedSinceRelease(boolean changedSinceRelease);
 

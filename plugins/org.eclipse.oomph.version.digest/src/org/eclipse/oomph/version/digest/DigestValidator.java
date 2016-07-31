@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.version.digest;
 
+import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.version.IBuildState;
 import org.eclipse.oomph.version.IElement;
 import org.eclipse.oomph.version.IRelease;
@@ -26,6 +27,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.pde.core.IModel;
 import org.eclipse.pde.core.build.IBuild;
@@ -71,19 +73,19 @@ public class DigestValidator extends VersionValidator
   public void updateBuildState(IBuildState buildState, IRelease release, IProject project, IResourceDelta delta, IModel componentModel,
       IProgressMonitor monitor) throws Exception
   {
-    DigestValidatorState validatorState = (DigestValidatorState)buildState.getValidatorState();
+    DigestValidatorState validatorState = (DigestValidatorState)buildState.getValidatorState(componentModel);
     IPath releasePath = release.getFile().getFullPath();
     ReleaseDigest releaseDigest = getReleaseDigest(releasePath, release, monitor);
 
     // Check whether the release digest to use is still the one that has been used the for the last build.
     long timeStamp = releaseDigest.getTimeStamp();
-    if (timeStamp != buildState.getValidatorTimeStamp())
+    if (timeStamp != buildState.getValidatorTimeStamp(componentModel))
     {
       // Trigger full validation if the release digest to use is different from the one used for the last build
       delta = null;
 
       // Avoid triggering full builds after this (full) build
-      buildState.setValidatorTimeStamp(timeStamp);
+      buildState.setValidatorTimeStamp(componentModel, timeStamp);
     }
 
     beforeValidation(validatorState, componentModel);
@@ -94,7 +96,7 @@ public class DigestValidator extends VersionValidator
         System.out.println("Digest: Full validation...");
       }
 
-      buildState.setValidatorState(null);
+      buildState.setValidatorState(componentModel, null);
       validatorState = validateFull(project, null, componentModel, monitor);
     }
     else
@@ -119,7 +121,7 @@ public class DigestValidator extends VersionValidator
       System.out.println("DIGEST  = " + formatDigest(validatorDigest));
     }
 
-    byte[] releasedProjectDigest = releaseDigest.get(project.getName());
+    byte[] releasedProjectDigest = releaseDigest.get(getName(project, componentModel));
 
     boolean changedSinceRelease = false;
     if (releasedProjectDigest != null)
@@ -133,7 +135,7 @@ public class DigestValidator extends VersionValidator
     }
 
     buildState.setChangedSinceRelease(changedSinceRelease);
-    buildState.setValidatorState(validatorState);
+    buildState.setValidatorState(componentModel, validatorState);
   }
 
   public DigestValidatorState validateFull(IResource resource, DigestValidatorState parentState, IModel componentModel, IProgressMonitor monitor)
@@ -150,7 +152,7 @@ public class DigestValidator extends VersionValidator
     }
 
     DigestValidatorState result = new DigestValidatorState();
-    result.setName(resource.getName());
+    result.setName(getName(resource, componentModel));
     result.setParent(parentState);
 
     if (resource instanceof IContainer)
@@ -204,7 +206,7 @@ public class DigestValidator extends VersionValidator
     {
       case IResourceDelta.ADDED:
         result = new DigestValidatorState();
-        result.setName(resource.getName());
+        result.setName(getName(resource, componentModel));
 
         //$FALL-THROUGH$
       case IResourceDelta.CHANGED:
@@ -426,6 +428,17 @@ public class DigestValidator extends VersionValidator
     }
   }
 
+  private String getName(IResource resource, IModel model)
+  {
+    String name = resource.getName();
+    if (resource.getType() == IResource.PROJECT && VersionUtil.getType(model) == IElement.Type.PRODUCT)
+    {
+      name += "/" + model.getUnderlyingResource().getProjectRelativePath();
+    }
+
+    return name;
+  }
+
   public ReleaseDigest createReleaseDigest(IRelease release, IFile target, List<String> warnings, IProgressMonitor monitor) throws CoreException
   {
     monitor.beginTask(null, release.getSize() + 1);
@@ -517,35 +530,69 @@ public class DigestValidator extends VersionValidator
    */
   public static class BuildModel extends DigestValidator
   {
+    @SuppressWarnings("restriction")
+    private static final String[] ICON_IDS = { org.eclipse.pde.internal.core.iproduct.ILauncherInfo.LINUX_ICON,
+        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.MACOSX_ICON, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.SOLARIS_LARGE,
+        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.SOLARIS_MEDIUM, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.SOLARIS_SMALL,
+        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.SOLARIS_TINY, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.SOLARIS_TINY,
+        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_16_HIGH, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_32_LOW,
+        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_32_HIGH, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_48_LOW,
+        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_48_HIGH, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_256_HIGH };
+
     private Set<String> considered = new HashSet<String>();
 
     public BuildModel()
     {
     }
 
+    @SuppressWarnings("restriction")
     @Override
     protected void beforeValidation(DigestValidatorState validatorState, IModel componentModel) throws Exception
     {
       considered.clear();
       considered.add("");
 
-      IBuild build = VersionUtil.getBuild(componentModel);
-      IBuildEntry binIncludes = build.getEntry(IBuildEntry.BIN_INCLUDES);
-      if (binIncludes != null)
+      if (VersionUtil.getType(componentModel) == IElement.Type.PRODUCT)
       {
-        for (String binInclude : binIncludes.getTokens())
+        IPath projectRelativePath = componentModel.getUnderlyingResource().getProjectRelativePath();
+        consider(projectRelativePath);
+        consider(projectRelativePath.removeFileExtension().addFileExtension("p2.inf"));
+
+        org.eclipse.pde.internal.core.iproduct.IProductModel productModel = (org.eclipse.pde.internal.core.iproduct.IProductModel)componentModel;
+        org.eclipse.pde.internal.core.iproduct.IProduct product = productModel.getProduct();
+        org.eclipse.pde.internal.core.iproduct.ILauncherInfo launcherInfo = product.getLauncherInfo();
+        for (String iconID : ICON_IDS)
         {
-          IBuildEntry sources = build.getEntry("source." + binInclude);
-          if (sources != null)
+          String iconPath = launcherInfo.getIconPath(iconID);
+          if (!StringUtil.isEmpty(iconPath))
           {
-            for (String source : sources.getTokens())
-            {
-              consider(source);
-            }
+            consider(new Path(iconPath));
           }
-          else
+        }
+      }
+      else
+      {
+        IBuild build = VersionUtil.getBuild(componentModel);
+        if (build != null)
+        {
+          IBuildEntry binIncludes = build.getEntry(IBuildEntry.BIN_INCLUDES);
+          if (binIncludes != null)
           {
-            consider(binInclude);
+            for (String binInclude : binIncludes.getTokens())
+            {
+              IBuildEntry sources = build.getEntry("source." + binInclude);
+              if (sources != null)
+              {
+                for (String source : sources.getTokens())
+                {
+                  consider(new Path(source));
+                }
+              }
+              else
+              {
+                consider(new Path(binInclude));
+              }
+            }
           }
         }
       }
@@ -574,14 +621,15 @@ public class DigestValidator extends VersionValidator
       return false;
     }
 
-    private void consider(String path)
+    private void consider(IPath path)
     {
-      if (path.endsWith("/"))
+      for (IPath basePath = path.removeTrailingSeparator(); basePath.segmentCount() > 0; basePath = basePath.removeLastSegments(1))
       {
-        path = path.substring(0, path.length() - 1);
+        if (!considered.add(basePath.toString()))
+        {
+          break;
+        }
       }
-
-      considered.add(path);
     }
   }
 }

@@ -52,6 +52,8 @@ public class Release implements IRelease
 
   public static final String PLUGIN_TAG = "plugin";
 
+  public static final String PRODUCT_TAG = "product";
+
   public static final String NAME_ATTRIBUTE = "name";
 
   public static final String VERSION_ATTRIBUTE = "version";
@@ -258,6 +260,24 @@ public class Release implements IRelease
           parent.getChildren().add(element);
         }
       }
+      else if (PRODUCT_TAG.equalsIgnoreCase(qName))
+      {
+        if (level == 0)
+        {
+          return;
+        }
+
+        IElement element = createElement(IElement.Type.PRODUCT, attributes);
+        if (++level == 2)
+        {
+          elements.put(element, element);
+          parent = element;
+        }
+        else
+        {
+          parent.getChildren().add(element);
+        }
+      }
       else if (PLUGIN_TAG.equalsIgnoreCase(qName))
       {
         if (level == 0)
@@ -297,7 +317,7 @@ public class Release implements IRelease
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException
     {
-      if (FEATURE_TAG.equalsIgnoreCase(qName) || PLUGIN_TAG.equalsIgnoreCase(qName))
+      if (FEATURE_TAG.equalsIgnoreCase(qName) || PLUGIN_TAG.equalsIgnoreCase(qName) || PRODUCT_TAG.equalsIgnoreCase(qName))
       {
         --level;
       }
