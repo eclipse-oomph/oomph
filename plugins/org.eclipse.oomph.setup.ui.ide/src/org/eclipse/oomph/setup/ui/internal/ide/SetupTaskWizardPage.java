@@ -35,6 +35,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -141,6 +142,17 @@ public class SetupTaskWizardPage extends WizardPage
       @Override
       public void widgetSelected(SelectionEvent e)
       {
+        String filter = containerLocationText.getText();
+        DirectoryDialog dialog = new DirectoryDialog(getShell());
+        dialog.setText("Root Folder");
+        dialog.setMessage("Pick a root folder in which to locate the new plug-in projects...");
+        dialog.setFilterPath(filter);
+
+        String directory = dialog.open();
+        if (directory != null)
+        {
+          containerLocationText.setText(directory);
+        }
       }
     });
 
