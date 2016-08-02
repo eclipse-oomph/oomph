@@ -15,6 +15,7 @@ import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.OomphAdapterFactoryContentProvider;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.LicenseInfo;
+import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.UnsignedPolicy;
@@ -685,6 +686,7 @@ public class ProgressPage extends SetupWizardPage
 
                 if (launchAutomatically && trigger == Trigger.BOOTSTRAP)
                 {
+                  progressLog.setTerminating();
                   hasLaunched = launchProduct(performer);
                 }
 
@@ -776,6 +778,36 @@ public class ProgressPage extends SetupWizardPage
                 final AtomicBoolean disableCancelButton = new AtomicBoolean(true);
 
                 final boolean restart = restartReasons != null && !restartReasons.isEmpty() && trigger != Trigger.BOOTSTRAP;
+
+                if (trigger == Trigger.STARTUP)
+                {
+                  StringBuilder startupLogMessage = new StringBuilder("Setup tasks were performed during startup");
+                  int preferenceTaskCount = 0;
+                  if (!restart)
+                  {
+                    for (SetupTask setupTask : getPerformer().getTriggeredSetupTasks())
+                    {
+                      if (setupTask instanceof PreferenceTask)
+                      {
+                        ++preferenceTaskCount;
+                      }
+                    }
+                  }
+
+                  if (preferenceTaskCount == 1)
+                  {
+                    startupLogMessage.append(" updating 1 preference");
+                  }
+                  else if (preferenceTaskCount > 1)
+                  {
+                    startupLogMessage.append(" updating ").append(preferenceTaskCount).append(" preferences");
+                  }
+
+                  startupLogMessage.append(". See '").append(SetupContext.SETUP_LOG_URI.toFileString()).append("' for details");
+
+                  SetupUIPlugin.INSTANCE.log(startupLogMessage.toString(), IStatus.INFO);
+                }
+
                 if (restart)
                 {
                   progressLog.message("A restart is needed for the following reasons:", false, Severity.INFO);
@@ -948,16 +980,12 @@ public class ProgressPage extends SetupWizardPage
           };
 
           job.schedule();
-
         }
       };
 
       UIUtil.asyncExec(jobRunnable);
     }
-    catch (
-
-    Throwable ex)
-
+    catch (Throwable ex)
     {
       SetupUIPlugin.INSTANCE.log(ex);
       ErrorDialog.open(ex);
@@ -1008,7 +1036,8 @@ public class ProgressPage extends SetupWizardPage
       ExecutableInfo info = performer.getExecutableInfo();
 
       List<String> command = new ArrayList<String>();
-      command.add(info.getExecutable().toString());
+      File executable = info.getExecutable();
+      command.add(executable.toString());
 
       File ws = performer.getWorkspaceLocation();
       if (ws != null)
@@ -1022,7 +1051,17 @@ public class ProgressPage extends SetupWizardPage
       command.add("-vmargs");
       command.add("-Duser.dir=" + info.getEclipseLocation());
 
-      os.execute(command, info.needsConsole());
+      try
+      {
+        os.execute(command, info.needsConsole());
+      }
+      catch (Exception ex)
+      {
+        performer.log("Launching the installed product failed.");
+        performer.log(ex);
+        return false;
+      }
+
       return true;
     }
 
@@ -1216,7 +1255,7 @@ public class ProgressPage extends SetupWizardPage
 
     public void log(String line, boolean filter, Severity severity)
     {
-      if (done)
+      if (done && !terminating)
       {
         return;
       }
