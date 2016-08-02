@@ -37,6 +37,14 @@
    </extension>
 
    <extension
+         point="org.eclipse.ui.exportWizards">
+      <category
+            id="org.eclipse.oomph.exportWizards"
+            name="Oomph">
+      </category>
+   </extension>
+
+   <extension
          point="org.eclipse.ui.views">
       <category
             id="org.eclipse.oomph.views"

@@ -27,6 +27,7 @@ import org.eclipse.pde.core.target.LoadTargetDefinitionJob;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -272,6 +273,44 @@ public final class TargetPlatformUtil
           }
 
           return null;
+        }
+      });
+    }
+    catch (CoreException ex)
+    {
+      UtilPDEPlugin.INSTANCE.log(ex);
+    }
+
+    return null;
+  }
+
+  public static ITargetDefinition[] getTargetDefinitions(final IProgressMonitor monitor)
+  {
+    try
+    {
+      return runWithTargetPlatformService(new TargetPlatformRunnable<ITargetDefinition[]>()
+      {
+        public ITargetDefinition[] run(ITargetPlatformService service) throws CoreException
+        {
+          List<ITargetDefinition> targetDefinitions = new ArrayList<ITargetDefinition>();
+
+          for (ITargetHandle targetHandle : service.getTargets(monitor))
+          {
+            try
+            {
+              if (targetHandle.exists())
+              {
+                ITargetDefinition targetDefinition = targetHandle.getTargetDefinition();
+                targetDefinitions.add(targetDefinition);
+              }
+            }
+            catch (CoreException ex)
+            {
+              // Ignore
+            }
+          }
+
+          return targetDefinitions.toArray(new ITargetDefinition[targetDefinitions.size()]);
         }
       });
     }

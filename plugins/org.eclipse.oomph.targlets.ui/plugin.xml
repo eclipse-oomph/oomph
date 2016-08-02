@@ -54,5 +54,19 @@
             name="Targlet">
       </profileType>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <wizard
+            category="org.eclipse.oomph.exportWizards"
+            class="org.eclipse.oomph.targlets.internal.ui.wizards.TargetDefinitionExportWizard"
+            icon="icons/target_export.gif"
+            id="org.eclipse.oomph.targlets.ui.TargetDefinitionExportWizard"
+            name="Target Definition">
+         <description>
+            Export a target definition to a file system folder.
+         </description>
+      </wizard>
+   </extension>
 
 </plugin>

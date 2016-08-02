@@ -41,14 +41,18 @@ public class TargetPlatformFeatureLocation implements IDynamicVariableResolver
           targetDefinition.resolve(new NullProgressMonitor());
         }
 
-        for (TargetFeature feature : targetDefinition.getAllFeatures())
+        TargetFeature[] features = targetDefinition.getAllFeatures();
+        if (features != null)
         {
-          if (feature.getId().equals(id) && (version == null || version.equals(feature.getVersion())))
+          for (TargetFeature feature : features)
           {
-            String location = feature.getLocation();
-            if (location != null)
+            if (feature.getId().equals(id) && (version == null || version.equals(feature.getVersion())))
             {
-              return location;
+              String location = feature.getLocation();
+              if (location != null)
+              {
+                return location;
+              }
             }
           }
         }

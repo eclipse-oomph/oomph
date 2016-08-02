@@ -47,20 +47,25 @@ public class TargetPlatformClasspathFile implements IDynamicVariableResolver
       }
 
       StringBuilder builder = new StringBuilder();
-      for (TargetBundle bundle : targetDefinition.getAllBundles())
+
+      TargetBundle[] bundles = targetDefinition.getAllBundles();
+      if (bundles != null)
       {
-        BundleInfo info = bundle.getBundleInfo();
-        if (info != null)
+        for (TargetBundle bundle : bundles)
         {
-          if (!info.getSymbolicName().endsWith(".source"))
+          BundleInfo info = bundle.getBundleInfo();
+          if (info != null)
           {
-            URI location = info.getLocation();
-            if (location != null)
+            if (!info.getSymbolicName().endsWith(".source"))
             {
-              String scheme = location.getScheme();
-              if ("file".equals(scheme))
+              URI location = info.getLocation();
+              if (location != null)
               {
-                appendBundleClasspath(builder, new File(location.getPath()));
+                String scheme = location.getScheme();
+                if ("file".equals(scheme))
+                {
+                  appendBundleClasspath(builder, new File(location.getPath()));
+                }
               }
             }
           }

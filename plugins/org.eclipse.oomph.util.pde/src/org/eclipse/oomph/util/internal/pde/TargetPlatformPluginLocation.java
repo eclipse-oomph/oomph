@@ -45,21 +45,25 @@ public class TargetPlatformPluginLocation implements IDynamicVariableResolver
           targetDefinition.resolve(new NullProgressMonitor());
         }
 
-        for (TargetBundle bundle : targetDefinition.getAllBundles())
+        TargetBundle[] bundles = targetDefinition.getAllBundles();
+        if (bundles != null)
         {
-          BundleInfo info = bundle.getBundleInfo();
-          if (info != null)
+          for (TargetBundle bundle : bundles)
           {
-            if (info.getSymbolicName().equals(id) && (version == null || version.equals(info.getVersion())))
+            BundleInfo info = bundle.getBundleInfo();
+            if (info != null)
             {
-              URI location = info.getLocation();
-              if (location != null)
+              if (info.getSymbolicName().equals(id) && (version == null || version.equals(info.getVersion())))
               {
-                String scheme = location.getScheme();
-                if ("file".equals(scheme))
+                URI location = info.getLocation();
+                if (location != null)
                 {
-                  File file = new File(location.getPath());
-                  return file.getAbsolutePath();
+                  String scheme = location.getScheme();
+                  if ("file".equals(scheme))
+                  {
+                    File file = new File(location.getPath());
+                    return file.getAbsolutePath();
+                  }
                 }
               }
             }
