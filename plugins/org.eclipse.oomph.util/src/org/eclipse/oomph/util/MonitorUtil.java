@@ -24,7 +24,7 @@ public final class MonitorUtil
   {
   }
 
-  @SuppressWarnings("deprecation")
+  @SuppressWarnings("all")
   public static IProgressMonitorWithBlocking create(IProgressMonitor monitor, int ticks)
   {
     return new org.eclipse.core.runtime.SubProgressMonitor(monitor, ticks);
