@@ -80,6 +80,8 @@
         defaultValueLiteral="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="configSections" upperBound="-1"
         eType="#//ConfigSection" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictToCheckoutBranch"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConfigSection" eSuperTypes="#//ConfigSubsection">
     <eStructuralFeatures xsi:type="ecore:EReference" name="subsections" upperBound="-1"
