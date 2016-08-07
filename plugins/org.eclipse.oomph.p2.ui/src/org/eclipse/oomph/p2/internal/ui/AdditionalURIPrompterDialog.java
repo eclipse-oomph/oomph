@@ -19,7 +19,7 @@ import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ModifyEvent;
@@ -114,7 +114,7 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
 
     TableViewer artifactViewer = new TableViewer(artifactComposite, SWT.BORDER | SWT.FULL_SELECTION);
     artifactViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-    artifactViewer.setSorter(new ViewerSorter());
+    artifactViewer.setComparator(new ViewerComparator());
     artifactViewer.setLabelProvider(new AgentAnalyzerComposite.TableLabelProvider(parent.getDisplay(), true));
     artifactViewer.setContentProvider(new ArrayContentProvider());
     artifactViewer.setInput(artifacts);
@@ -150,7 +150,7 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
 
     repositoryViewer = CheckboxTableViewer.newCheckList(repositoryComposite, SWT.BORDER | SWT.FULL_SELECTION);
     repositoryViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-    repositoryViewer.setSorter(new ViewerSorter());
+    repositoryViewer.setComparator(new ViewerComparator());
     repositoryViewer.setLabelProvider(new AgentAnalyzerComposite.TableLabelProvider(parent.getDisplay()));
     repositoryViewer.setContentProvider(new ArrayContentProvider());
     repositoryViewer.setInput(repositories);

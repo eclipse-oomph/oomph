@@ -76,7 +76,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
@@ -1397,12 +1397,12 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       disposeChildren(parent);
 
       CCombo namespaceCombo =
-      // new CCombo(parent, SWT.BORDER | SWT.READ_ONLY | SWT.FLAT);
-      createCombo(parent, SWT.BORDER | SWT.READ_ONLY | SWT.FLAT, false);
+          // new CCombo(parent, SWT.BORDER | SWT.READ_ONLY | SWT.FLAT);
+          createCombo(parent, SWT.BORDER | SWT.READ_ONLY | SWT.FLAT, false);
       namespaceCombo.setToolTipText("Select the namespace of the capabilities to show");
 
       namespaceViewer = new ComboViewer(namespaceCombo);
-      namespaceViewer.setSorter(new ViewerSorter());
+      namespaceViewer.setComparator(new ViewerComparator());
       namespaceViewer.setContentProvider(new ArrayContentProvider());
       namespaceViewer.setLabelProvider(new LabelProvider());
       namespaceViewer.setInput(new String[] { currentNamespace });

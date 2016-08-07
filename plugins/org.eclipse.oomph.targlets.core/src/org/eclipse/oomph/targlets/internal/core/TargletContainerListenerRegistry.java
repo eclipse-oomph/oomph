@@ -12,6 +12,7 @@ package org.eclipse.oomph.targlets.internal.core;
 
 import org.eclipse.oomph.targlets.core.ITargletContainerListener;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent;
+import org.eclipse.oomph.util.MonitorUtil;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -20,7 +21,6 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IRegistryEventListener;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.SubProgressMonitor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,7 +86,7 @@ public class TargletContainerListenerRegistry implements ITargletContainerListen
         try
         {
           monitor.subTask("Sending " + event + " to " + listener);
-          listener.handleTargletContainerEvent(event, new SubProgressMonitor(monitor, 1));
+          listener.handleTargletContainerEvent(event, MonitorUtil.create(monitor, 1));
         }
         catch (Exception ex)
         {

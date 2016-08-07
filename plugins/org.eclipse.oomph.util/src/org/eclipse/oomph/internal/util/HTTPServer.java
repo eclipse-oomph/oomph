@@ -638,7 +638,7 @@ public final class HTTPServer
       return URLDecoder.decode(path, URL_ENCODING);
     }
 
-    @SuppressWarnings({ "deprecation", "restriction" })
+    @SuppressWarnings("all")
     protected static String formatDate(long lastModified)
     {
       return org.apache.http.impl.cookie.DateUtils.formatDate(new Date(lastModified));

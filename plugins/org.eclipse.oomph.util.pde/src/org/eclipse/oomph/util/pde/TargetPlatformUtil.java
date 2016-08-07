@@ -10,13 +10,13 @@
  */
 package org.eclipse.oomph.util.pde;
 
+import org.eclipse.oomph.util.MonitorUtil;
 import org.eclipse.oomph.util.internal.pde.UtilPDEPlugin;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
@@ -131,7 +131,7 @@ public final class TargetPlatformUtil
 
     try
     {
-      IStatus status = targetDefinition.resolve(new SubProgressMonitor(monitor, 100));
+      IStatus status = targetDefinition.resolve(MonitorUtil.create(monitor, 100));
       if (status.getSeverity() == IStatus.ERROR)
       {
         throw new CoreException(status);
@@ -150,12 +150,12 @@ public final class TargetPlatformUtil
 
     try
     {
-      targetDefinition.resolve(new SubProgressMonitor(monitor, 50));
+      targetDefinition.resolve(MonitorUtil.create(monitor, 50));
 
       LoadTargetDefinitionJob job = new LoadTargetDefinitionJob(targetDefinition);
 
       @SuppressWarnings("restriction")
-      IStatus status = job.run(new SubProgressMonitor(monitor, 50));
+      IStatus status = job.run(MonitorUtil.create(monitor, 50));
       if (status.getSeverity() == IStatus.ERROR)
       {
         throw new CoreException(status);

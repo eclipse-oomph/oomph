@@ -23,6 +23,7 @@ import org.eclipse.oomph.setup.git.GitCloneTask;
 import org.eclipse.oomph.setup.git.GitPackage;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.util.FileUtil;
+import org.eclipse.oomph.util.MonitorUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.ReflectUtil;
@@ -42,7 +43,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.egit.core.EclipseGitProgressTransformer;
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.CloneCommand;
@@ -804,7 +804,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
           if (cachedGit == null)
           {
             cachedGit = cloneRepository(context, workDir, checkoutBranch, isRestrictToCheckoutBranch(), remoteName, remoteURI, isRecursive(),
-                new SubProgressMonitor(monitor, 50));
+                MonitorUtil.create(monitor, 50));
             cachedRepository = cachedGit.getRepository();
 
             if (!URI.createURI(remoteURI).isFile())
@@ -830,7 +830,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
           if (isRecursive())
           {
-            addSubmodules(context, cachedGit, new SubProgressMonitor(monitor, 20));
+            addSubmodules(context, cachedGit, MonitorUtil.create(monitor, 20));
           }
         }
 
@@ -1235,7 +1235,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     command.call();
   }
 
-  private static void addSubmodules(SetupTaskContext context, Git git, SubProgressMonitor monitor) throws Exception
+  private static void addSubmodules(SetupTaskContext context, Git git, IProgressMonitor monitor) throws Exception
   {
     context.log("Adding submodules");
 

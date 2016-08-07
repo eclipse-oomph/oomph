@@ -48,6 +48,7 @@ import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.MonitorUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.UserCallback;
@@ -67,7 +68,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.dynamichelpers.IExtensionTracker;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.p2.engine.IProfile;
@@ -310,7 +310,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       }
     };
 
-    resourceMirror.begin(new SubProgressMonitor(monitor, work));
+    resourceMirror.begin(MonitorUtil.create(monitor, work));
   }
 
   private static Set<? extends EObject> checkCrossReferences(ResourceSet resourceSet, URI uri)
@@ -607,7 +607,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       try
       {
         // At this point we know that no prompt was needed.
-        EList<SetupTask> neededTasks = performer.initNeededSetupTasks(new SubProgressMonitor(monitor, 2));
+        EList<SetupTask> neededTasks = performer.initNeededSetupTasks(MonitorUtil.create(monitor, 2));
         if (restarting)
         {
           for (Iterator<SetupTask> it = neededTasks.iterator(); it.hasNext();)

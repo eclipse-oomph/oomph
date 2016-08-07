@@ -21,11 +21,10 @@ import org.eclipse.core.runtime.IProgressMonitorWithBlocking;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.SubProgressMonitor;
 
 /**
  * A {@link IProgressMonitorWithBlocking progress monitor} that uses a given amount of work ticks from a parent monitor.
- * This is intended as a safer, easier-to-use alternative to {@link SubProgressMonitor}.
+ * This is intended as a safer, easier-to-use alternative to {@link org.eclipse.core.runtime.SubProgressMonitor}.
  * <p>
  * Progress monitoring is generally quite invasive to the code that is monitored.
  * At the same time progress monitoring itself is typically very hard to implement correctly.

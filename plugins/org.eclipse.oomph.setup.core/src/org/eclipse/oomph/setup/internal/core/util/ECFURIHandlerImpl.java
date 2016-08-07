@@ -875,7 +875,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     return null;
   }
 
-  @SuppressWarnings({ "deprecation", "restriction" })
+  @SuppressWarnings("all")
   private static Date parseHTTPDate(String string)
   {
     try

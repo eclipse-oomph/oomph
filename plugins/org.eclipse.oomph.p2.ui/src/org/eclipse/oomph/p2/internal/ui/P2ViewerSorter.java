@@ -15,12 +15,12 @@ import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.Profile;
 
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 
 /**
  * @author Eike Stepper
  */
-public class P2ViewerSorter extends ViewerSorter
+public class P2ViewerSorter extends ViewerComparator
 {
   @Override
   public int category(Object element)

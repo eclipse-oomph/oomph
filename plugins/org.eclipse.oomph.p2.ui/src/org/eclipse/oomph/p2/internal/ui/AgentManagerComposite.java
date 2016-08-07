@@ -100,7 +100,7 @@ public class AgentManagerComposite extends Composite
     treeViewer = new TreeViewer(this, SWT.BORDER);
     treeViewer.setContentProvider(contentProvider);
     treeViewer.setLabelProvider(new P2LabelProvider());
-    treeViewer.setSorter(new P2ViewerSorter());
+    treeViewer.setComparator(new P2ViewerSorter());
     treeViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
       public void selectionChanged(SelectionChangedEvent event)

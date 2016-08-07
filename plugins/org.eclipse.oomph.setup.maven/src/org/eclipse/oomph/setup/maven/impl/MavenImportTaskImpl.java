@@ -19,6 +19,7 @@ import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.maven.MavenImportTask;
 import org.eclipse.oomph.setup.maven.MavenPackage;
+import org.eclipse.oomph.util.MonitorUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -36,7 +37,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.MavenModelManager;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
@@ -323,7 +323,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
       for (SourceLocator sourceLocator : sourceLocators)
       {
         LocalProjectScanner projectScanner = new LocalProjectScanner(null, Collections.singletonList(sourceLocator.getRootFolder()), false, modelManager);
-        processMavenProject(sourceLocator, projectInfos, projectScanner, new SubProgressMonitor(monitor, 1));
+        processMavenProject(sourceLocator, projectInfos, projectScanner, MonitorUtil.create(monitor, 1));
       }
 
       if (projectInfos.isEmpty())
@@ -341,7 +341,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
           projectImportConfiguration.setProjectNameTemplate(projectNameTemplate);
         }
 
-        projectConfigurationManager.importProjects(projectInfos, projectImportConfiguration, new SubProgressMonitor(monitor, size));
+        projectConfigurationManager.importProjects(projectInfos, projectImportConfiguration, MonitorUtil.create(monitor, size));
       }
     }
     finally
@@ -357,10 +357,10 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
 
     try
     {
-      projectScanner.run(new SubProgressMonitor(monitor, 1));
+      projectScanner.run(MonitorUtil.create(monitor, 1));
 
       List<MavenProjectInfo> projects = projectScanner.getProjects();
-      processMavenProject(sourceLocator, projectInfos, projects, new SubProgressMonitor(monitor, 1));
+      processMavenProject(sourceLocator, projectInfos, projects, MonitorUtil.create(monitor, 1));
     }
     finally
     {
@@ -376,7 +376,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     {
       for (MavenProjectInfo projectInfo : projects)
       {
-        processMavenProject(sourceLocator, projectInfos, projectInfo, new SubProgressMonitor(monitor, 1));
+        processMavenProject(sourceLocator, projectInfos, projectInfo, MonitorUtil.create(monitor, 1));
       }
     }
     finally
@@ -395,7 +395,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
       String projectFolder = projectInfo.getPomFile().getParent();
       BackendContainer backendContainer = (BackendContainer)BackendResource.get(projectFolder);
 
-      IProject project = sourceLocator.loadProject(MavenProjectFactory.LIST, backendContainer, new SubProgressMonitor(monitor, 1));
+      IProject project = sourceLocator.loadProject(MavenProjectFactory.LIST, backendContainer, MonitorUtil.create(monitor, 1));
       if (project != null)
       {
         if (sourceLocator.matches(project))
@@ -409,7 +409,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
       }
 
       Collection<MavenProjectInfo> projects = projectInfo.getProjects();
-      processMavenProject(sourceLocator, projectInfos, projects, new SubProgressMonitor(monitor, 5));
+      processMavenProject(sourceLocator, projectInfos, projects, MonitorUtil.create(monitor, 5));
     }
     finally
     {
@@ -426,7 +426,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     {
       for (MavenProjectInfo childProjectInfo : projects)
       {
-        processMavenProject(sourceLocator, projectInfos, childProjectInfo, new SubProgressMonitor(monitor, 1));
+        processMavenProject(sourceLocator, projectInfos, childProjectInfo, MonitorUtil.create(monitor, 1));
       }
     }
     finally

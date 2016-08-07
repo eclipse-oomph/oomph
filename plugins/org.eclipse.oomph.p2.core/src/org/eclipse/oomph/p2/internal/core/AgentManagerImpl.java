@@ -16,10 +16,10 @@ import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.MonitorUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 
 import org.osgi.framework.BundleContext;
@@ -238,7 +238,7 @@ public class AgentManagerImpl implements AgentManager
       monitor.worked(1);
 
       Collection<Agent> agents = getAgents();
-      refreshAgents(agents, new SubProgressMonitor(monitor, 20));
+      refreshAgents(agents, MonitorUtil.create(monitor, 20));
     }
     finally
     {
@@ -257,8 +257,8 @@ public class AgentManagerImpl implements AgentManager
         P2CorePlugin.checkCancelation(monitor);
         monitor.subTask("Refreshing " + agent.getLocation());
 
-        agent.refreshBundlePools(new SubProgressMonitor(monitor, 1));
-        agent.refreshProfiles(new SubProgressMonitor(monitor, 20));
+        agent.refreshBundlePools(MonitorUtil.create(monitor, 1));
+        agent.refreshProfiles(MonitorUtil.create(monitor, 20));
       }
     }
     finally
