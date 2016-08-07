@@ -794,11 +794,14 @@ public class ProjectPage extends SetupWizardPage
         {
           for (Stream stream : workspace.getStreams())
           {
-            for (ProjectContainer projectContainer = stream.getProject(); projectContainer != null; projectContainer = projectContainer.getProjectContainer())
+            if (!existingStreams.contains(EcoreUtil.getURI(stream)))
             {
-              if (projectContainer == element)
+              for (ProjectContainer projectContainer = stream.getProject(); projectContainer != null; projectContainer = projectContainer.getProjectContainer())
               {
-                streams.add(stream);
+                if (projectContainer == element)
+                {
+                  streams.add(stream);
+                }
               }
             }
           }
