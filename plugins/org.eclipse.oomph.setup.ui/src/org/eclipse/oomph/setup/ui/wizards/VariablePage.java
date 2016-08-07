@@ -535,7 +535,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
           return createDialog(getShell(), SETUP_TASK_ANALYSIS_TITLE, null,
               "Analyzing the needed setup tasks has taken more than " + (System.currentTimeMillis() - getStart()) / 1000
                   + " seconds.  The Next button will be disabled, though animated, until it completes.  You may continue to modify the values of the variables.",
-              MessageDialog.INFORMATION, 0, new String[] { IDialogConstants.OK_LABEL });
+              MessageDialog.INFORMATION, new String[] { IDialogConstants.OK_LABEL }, 0);
         }
 
         @Override

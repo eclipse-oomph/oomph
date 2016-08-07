@@ -480,10 +480,10 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
       return " " + text.substring(0, text.length() - 1) + " " + text.charAt(text.length() - 1);
     }
 
-    protected Dialog createDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, int dialogImageType, int defaultIndex,
-        String... dialogButtonLabels)
+    protected Dialog createDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, int dialogImageType,
+        String[] dialogButtonLabels, int defaultIndex)
     {
-      Dialog dialog = new MessageDialog(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, defaultIndex, dialogButtonLabels)
+      Dialog dialog = new MessageDialog(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels, defaultIndex)
       {
         @Override
         protected int getShellStyle()

@@ -132,7 +132,7 @@ public class ExtensionPage extends SetupWizardPage
             return createDialog(getShell(), SETUP_EXTENSION_ANALYSIS_TITLE, null,
                 "Analyzing the needed setup extensions has taken more than " + (System.currentTimeMillis() - getStart()) / 1000
                     + " seconds.  Would you like to continue this step?",
-                MessageDialog.QUESTION, 0, new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL });
+                MessageDialog.QUESTION, new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL }, 0);
           }
 
           @Override
