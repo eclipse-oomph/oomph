@@ -35,6 +35,7 @@ import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.BasicEMap;
+import org.eclipse.emf.common.util.CommonUtil;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -45,7 +46,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 
@@ -53,7 +53,10 @@ import org.osgi.service.prefs.Preferences;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import javax.xml.parsers.DocumentBuilder;
 
@@ -168,7 +171,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setKey(String newKey)
+  public void setKeyGen(String newKey)
   {
     String oldKey = key;
     key = newKey;
@@ -176,6 +179,12 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     {
       eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.PREFERENCE_TASK__KEY, oldKey, key));
     }
+  }
+
+  public void setKey(String newKey)
+  {
+    setKeyGen(CommonUtil.intern(newKey));
+    preferenceHandler = null;
   }
 
   /**
@@ -304,20 +313,23 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
   @Override
   public int getPriority()
   {
-    PreferenceHandler preferenceHandler = PreferenceHandler.getHandler(getKey());
-    return preferenceHandler.getPriority();
+    return getPreferenceHandler().getPriority();
+  }
+
+  private PreferenceHandler getPreferenceHandler()
+  {
+    if (preferenceHandler == null)
+    {
+      preferenceHandler = PreferenceHandler.getHandler(getKey());
+    }
+
+    return preferenceHandler;
   }
 
   @Override
   public Object getOverrideToken()
   {
-    String key = getKey();
-    if (key == null)
-    {
-      return super.getOverrideToken();
-    }
-
-    return createToken(new Path(key).makeAbsolute().toString());
+    return createToken(getKey());
   }
 
   @Override
@@ -326,7 +338,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     super.overrideFor(overriddenSetupTask);
 
     PreferenceTask overriddenPeferenceTask = (PreferenceTask)overriddenSetupTask;
-    PreferenceHandler preferenceHandler = PreferenceHandler.getHandler(getKey());
+    PreferenceHandler preferenceHandler = getPreferenceHandler();
     if (preferenceHandler.isNeeded(overriddenPeferenceTask.getValue(), getValue()))
     {
       setValue(preferenceHandler.merge());
@@ -350,8 +362,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
     String oldValue = preferenceProperty.getEffectiveProperty().get(null);
     String newValue = getValue();
-    preferenceHandler = PreferenceHandler.getHandler(key);
-    return preferenceHandler.isNeeded(oldValue, newValue);
+    return getPreferenceHandler().isNeeded(oldValue, newValue);
   }
 
   public void perform(SetupTaskContext context) throws Exception
@@ -669,6 +680,21 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         try
         {
           DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
+          documentBuilder.setErrorHandler(new ErrorHandler()
+          {
+            public void warning(SAXParseException exception) throws SAXException
+            {
+            }
+
+            public void fatalError(SAXParseException exception) throws SAXException
+            {
+              throw exception;
+            }
+
+            public void error(SAXParseException exception) throws SAXException
+            {
+            }
+          });
           Document document = documentBuilder.parse(new InputSource(new StringReader(oldValue)));
           NodeList childNodes = document.getDocumentElement().getChildNodes();
           for (int i = 0, length = childNodes.getLength(); i < length; ++i)

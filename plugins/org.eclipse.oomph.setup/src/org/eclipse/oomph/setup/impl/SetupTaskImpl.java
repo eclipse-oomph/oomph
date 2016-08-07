@@ -30,6 +30,7 @@ import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.util.UserCallback;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -249,13 +250,13 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public EList<SetupTask> getPredecessors()
   {
     if (predecessors == null)
     {
-      predecessors = new EObjectResolvingEList<SetupTask>(SetupTask.class, this, SetupPackage.SETUP_TASK__PREDECESSORS);
+      predecessors = new EObjectResolvingEList<SetupTask>(SetupTaskImpl.class, this, SetupPackage.SETUP_TASK__PREDECESSORS);
     }
     return predecessors;
   }
@@ -263,13 +264,13 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public EList<SetupTask> getSuccessors()
   {
     if (successors == null)
     {
-      successors = new EObjectResolvingEList<SetupTask>(SetupTask.class, this, SetupPackage.SETUP_TASK__SUCCESSORS);
+      successors = new EObjectResolvingEList<SetupTask>(SetupTaskImpl.class, this, SetupPackage.SETUP_TASK__SUCCESSORS);
     }
     return successors;
   }
@@ -487,6 +488,11 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
     return visitPredecessors(setupTask, new HashSet<SetupTask>()) || ((SetupTaskImpl)setupTask).visitSuccessors(this, new HashSet<SetupTask>());
   }
 
+  public boolean requiresFast(SetupTask setupTask)
+  {
+    return visitPredecessorsFast(setupTask, new HashSet<SetupTask>()) || ((SetupTaskImpl)setupTask).visitSuccessorsFast(this, new HashSet<SetupTask>());
+  }
+
   private static Set<Trigger> getTriggers(EClass eClass)
   {
     Set<Trigger> result = TRIGGERS.get(eClass);
@@ -547,6 +553,74 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
     return Trigger.intern(result);
   }
 
+  private boolean visitPredecessorsFast(SetupTask setupTask, Set<SetupTask> visited)
+  {
+    if (visited.add(this))
+    {
+      if (setupTask == this)
+      {
+        return true;
+      }
+
+      if (predecessors != null)
+      {
+        SetupTaskImpl[] data = (SetupTaskImpl[])((BasicEList<SetupTask>)predecessors).data();
+        if (data != null)
+        {
+          for (int i = 0, length = data.length; i < length; ++i)
+          {
+            SetupTaskImpl requirement = data[i];
+            if (requirement == null)
+            {
+              break;
+            }
+
+            if (requirement.visitPredecessorsFast(setupTask, visited))
+            {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
+  private boolean visitSuccessorsFast(SetupTask setupTask, Set<SetupTask> visited)
+  {
+    if (visited.add(this))
+    {
+      if (setupTask == this)
+      {
+        return true;
+      }
+
+      if (successors != null)
+      {
+        SetupTaskImpl[] data = (SetupTaskImpl[])((BasicEList<SetupTask>)successors).data();
+        if (data != null)
+        {
+          for (int i = 0, length = data.length; i < length; ++i)
+          {
+            SetupTaskImpl requirement = data[i];
+            if (requirement == null)
+            {
+              break;
+            }
+
+            if (requirement.visitSuccessorsFast(setupTask, visited))
+            {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
   private boolean visitPredecessors(SetupTask setupTask, Set<SetupTask> visited)
   {
     if (visited.add(this))
@@ -556,11 +630,14 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
         return true;
       }
 
-      for (SetupTask requirement : getPredecessors())
+      if (predecessors != null && !predecessors.isEmpty())
       {
-        if (((SetupTaskImpl)requirement).visitPredecessors(setupTask, visited))
+        for (SetupTask requirement : getPredecessors())
         {
-          return true;
+          if (((SetupTaskImpl)requirement).visitPredecessors(setupTask, visited))
+          {
+            return true;
+          }
         }
       }
     }
@@ -577,11 +654,14 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
         return true;
       }
 
-      for (SetupTask requirement : getSuccessors())
+      if (successors != null && !successors.isEmpty())
       {
-        if (((SetupTaskImpl)requirement).visitSuccessors(setupTask, visited))
+        for (SetupTask requirement : successors)
         {
-          return true;
+          if (((SetupTaskImpl)requirement).visitSuccessors(setupTask, visited))
+          {
+            return true;
+          }
         }
       }
     }
@@ -606,9 +686,23 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
 
   public void overrideFor(SetupTask overriddenSetupTask)
   {
-    getPredecessors().addAll(overriddenSetupTask.getPredecessors());
-    getSuccessors().addAll(overriddenSetupTask.getSuccessors());
-    getRestrictions().addAll(overriddenSetupTask.getRestrictions());
+    EList<SetupTask> overriddenPredecessors = overriddenSetupTask.getPredecessors();
+    if (overriddenPredecessors.isEmpty())
+    {
+      getPredecessors().addAll(overriddenPredecessors);
+    }
+
+    EList<SetupTask> overriddenSuccessors = overriddenSetupTask.getSuccessors();
+    if (!overriddenPredecessors.isEmpty())
+    {
+      getSuccessors().addAll(overriddenSuccessors);
+    }
+
+    EList<Scope> overriddenRestrictions = overriddenSetupTask.getRestrictions();
+    if (!overriddenRestrictions.isEmpty())
+    {
+      getRestrictions().addAll(overriddenRestrictions);
+    }
   }
 
   public void consolidate()

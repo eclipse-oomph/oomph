@@ -58,7 +58,7 @@ public class CatalogManager
   public CatalogManager()
   {
     selection = SetupFactory.eINSTANCE.createCatalogSelection();
-    Resource selectionResource = Resource.Factory.Registry.INSTANCE.getFactory(SetupContext.CATALOG_SELECTION_SETUP_URI)
+    Resource selectionResource = SetupCoreUtil.RESOURCE_FACTORY_REGISTRY.getFactory(SetupContext.CATALOG_SELECTION_SETUP_URI)
         .createResource(SetupContext.CATALOG_SELECTION_SETUP_URI);
     selectionResource.getContents().add(selection);
   }

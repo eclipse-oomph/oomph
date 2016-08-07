@@ -18,40 +18,74 @@ import org.eclipse.oomph.setup.ui.EnablementComposite;
 import org.eclipse.oomph.setup.ui.EnablementComposite.InstallHandler;
 import org.eclipse.oomph.setup.ui.EnablementComposite.InstallOperation;
 import org.eclipse.oomph.setup.ui.EnablementDialog;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardPage;
 import org.eclipse.oomph.ui.ErrorDialog;
+import org.eclipse.oomph.ui.StackComposite;
+import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Eike Stepper
  */
 public class ExtensionPage extends SetupWizardPage
 {
+  private static final String SETUP_EXTENSION_ANALYSIS_TITLE = "Setup Extension Analysis";
+
   private EnablementComposite enablementComposite;
 
   private InstallOperation installOperation;
+
+  private PerformerCreationJob performerCreationJob;
+
+  private StackComposite stackComposite;
+
+  private Composite messageComposite;
 
   protected ExtensionPage()
   {
     super("ExtensionPage");
     setTitle("Extensions");
-    setDescription(EnablementDialog.getDescription("the installer", "Finish"));
   }
 
   @Override
   protected Control createUI(Composite parent)
   {
-    enablementComposite = new EnablementComposite(parent, SWT.BORDER);
-    enablementComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-    return enablementComposite;
+    stackComposite = new StackComposite(parent, SWT.NONE);
+    stackComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+    enablementComposite = new EnablementComposite(stackComposite, SWT.BORDER);
+
+    messageComposite = new Composite(stackComposite, SWT.NONE);
+    messageComposite.setLayout(UIUtil.createGridLayout(1));
+    stackComposite.setTopControl(messageComposite);
+
+    Label initialLabel = new Label(messageComposite, SWT.NONE);
+    initialLabel.setText("Analyzing the needed setup extensions...");
+
+    GridData data = new GridData();
+    data.grabExcessHorizontalSpace = true;
+    data.horizontalAlignment = GridData.CENTER;
+    data.grabExcessVerticalSpace = true;
+    data.verticalAlignment = GridData.CENTER;
+    initialLabel.setLayoutData(data);
+
+    return stackComposite;
   }
 
   @Override
@@ -76,11 +110,86 @@ public class ExtensionPage extends SetupWizardPage
     {
       try
       {
-        SetupTaskPerformer performer = createPerformer(SetupPrompter.OK, false);
-        EList<SetupTask> triggeredSetupTasks = performer.getTriggeredSetupTasks();
+        messageComposite.setVisible(false);
+        stackComposite.setTopControl(messageComposite);
 
+        setDescription(StringUtil.cap(SETUP_EXTENSION_ANALYSIS_TITLE.toLowerCase()) + '.');
+        setButtonState(IDialogConstants.FINISH_ID, false);
+        setButtonState(IDialogConstants.NEXT_ID, false);
+
+        final AtomicBoolean canceled = new AtomicBoolean();
+        performerCreationJob = new PerformerCreationJob(SETUP_EXTENSION_ANALYSIS_TITLE)
+        {
+          @Override
+          protected SetupTaskPerformer createPerformer() throws Exception
+          {
+            return ExtensionPage.this.createPerformer(SetupPrompter.OK, false);
+          }
+
+          @Override
+          protected Dialog createDialog()
+          {
+            return createDialog(getShell(), SETUP_EXTENSION_ANALYSIS_TITLE, null,
+                "Analyzing the needed setup extensions has taken more than " + (System.currentTimeMillis() - getStart()) / 1000
+                    + " seconds.  Would you like to continue this step?",
+                MessageDialog.QUESTION, 0, new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL });
+          }
+
+          @Override
+          protected void handleDialogResult(int result)
+          {
+            if (result == 0)
+            {
+              setDelay(Integer.MAX_VALUE);
+            }
+            else if (result == 1)
+            {
+              canceled.set(true);
+              cancel();
+            }
+            else
+            {
+              setDelay(2 * getDelay());
+            }
+          }
+
+          @Override
+          protected void heartBeat()
+          {
+            messageComposite.setVisible(true);
+          }
+        };
+
+        performerCreationJob.create();
+        if (getControl().isDisposed())
+        {
+          return;
+        }
+
+        Throwable throwable = performerCreationJob.getThrowable();
+        if (throwable != null)
+        {
+          if (throwable instanceof OperationCanceledException)
+          {
+            // The operation could also be canceled because the user pressed the back button.
+            // So only proceed if the operation wasn't explicitly canceled by the user.
+            if (canceled.get())
+            {
+              setPageComplete(true);
+              gotoNextPage();
+            }
+
+            return;
+          }
+
+          throw throwable;
+        }
+
+        EList<SetupTask> triggeredSetupTasks = performerCreationJob.getPerformer().getTriggeredSetupTasks();
         if (enablementComposite.setInput(triggeredSetupTasks) != null)
         {
+          stackComposite.setTopControl(enablementComposite);
+          setDescription(EnablementDialog.getDescription("the installer", "Finish"));
           setPageComplete(false);
         }
         else
@@ -91,7 +200,12 @@ public class ExtensionPage extends SetupWizardPage
       }
       catch (Throwable t)
       {
+        SetupUIPlugin.INSTANCE.log(t);
         ErrorDialog.open(t);
+      }
+      finally
+      {
+        performerCreationJob = null;
       }
     }
     else
@@ -108,6 +222,11 @@ public class ExtensionPage extends SetupWizardPage
       if (installOperation != null)
       {
         installOperation.cancel();
+      }
+
+      if (performerCreationJob != null)
+      {
+        performerCreationJob.cancel();
       }
     }
   }

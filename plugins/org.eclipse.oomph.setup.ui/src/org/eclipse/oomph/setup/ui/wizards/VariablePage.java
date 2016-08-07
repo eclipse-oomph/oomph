@@ -36,6 +36,7 @@ import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
 import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.ui.ButtonBar;
+import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UICallback;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
@@ -53,6 +54,9 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
@@ -91,6 +95,8 @@ import java.util.regex.Pattern;
  */
 public class VariablePage extends SetupWizardPage implements SetupPrompter
 {
+  private static final String SETUP_TASK_ANALYSIS_TITLE = "Setup Task Analysis";
+
   private static final URI INSTALLATION_ID_URI = URI.createURI("#~installation.id");
 
   private static final URI WORKSPACE_ID_URI = URI.createURI("#~workspace.id");
@@ -125,6 +131,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   private UserCallback userCallback;
 
+  private final Validator validator = new Validator();
+
   private FocusListener focusListener = new FocusAdapter()
   {
     @Override
@@ -133,6 +141,10 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       focusControl = (Control)e.widget;
     }
   };
+
+  private PerformerCreationJob performerCreationJob;
+
+  private long delay;
 
   public VariablePage()
   {
@@ -148,14 +160,20 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     mainComposite.setLayout(UIUtil.createGridLayout(1));
     mainComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
+    GridLayout outerLayout = (GridLayout)parent.getParent().getLayout();
+    outerLayout.marginLeft = outerLayout.marginWidth;
+    outerLayout.marginWidth = 0;
+
     scrolledComposite = new ScrolledComposite(mainComposite, SWT.VERTICAL);
     scrolledComposite.setExpandHorizontal(true);
     scrolledComposite.setExpandVertical(true);
+    scrolledComposite.setShowFocusedControl(true);
     scrolledComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
     GridLayout layout = UIUtil.createGridLayout(3);
     layout.horizontalSpacing = 10;
     layout.verticalSpacing = 10;
+    layout.marginRight = outerLayout.marginLeft;
 
     composite = new Composite(scrolledComposite, SWT.NONE);
     composite.setLayout(layout);
@@ -190,20 +208,14 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       public void widgetSelected(SelectionEvent e)
       {
         fullPrompt = fullPromptButton.getSelection();
-        UIUtil.asyncExec(getControl(), new Runnable()
-        {
-          public void run()
-          {
-            validate();
-          }
-        });
+        validator.schedule(false);
       }
     });
 
     AccessUtil.setKey(fullPromptButton, "showAll");
   }
 
-  private void updateFields()
+  private synchronized boolean updateFields()
   {
     unusedVariables.clear();
 
@@ -228,6 +240,16 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       performers.addAll(allPromptedPerfomers);
     }
 
+    Set<String> usedVariables = new HashSet<String>();
+    for (FieldHolder fieldHolder : manager)
+    {
+      String value = fieldHolder.getValue();
+      if (!StringUtil.isEmpty(value))
+      {
+        usedVariables.addAll(SetupTaskPerformer.getVariables(value));
+      }
+    }
+
     for (SetupTaskPerformer setupTaskPerformer : performers)
     {
       List<VariableTask> variables = setupTaskPerformer.getUnresolvedVariables();
@@ -239,21 +261,24 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
           if (variable.getAnnotation(AnnotationConstants.ANNOTATION_UNDECLARED_VARIABLE) != null)
           {
             String name = variable.getName();
-            Trigger trigger = getTrigger();
-            boolean isUsedInActualTriggeredTask = false;
-            for (SetupTask setupTask : setupTaskPerformer.getTriggeredSetupTasks())
+            if (!usedVariables.contains(name))
             {
-              if (setupTask.getTriggers().contains(trigger) && setupTaskPerformer.isVariableUsed(name, setupTask, true))
+              Trigger trigger = getTrigger();
+              boolean isUsedInActualTriggeredTask = false;
+              for (SetupTask setupTask : setupTaskPerformer.getTriggeredSetupTasks())
               {
-                isUsedInActualTriggeredTask = true;
-                break;
+                if (setupTask.getTriggers().contains(trigger) && setupTaskPerformer.isVariableUsed(name, setupTask, true))
+                {
+                  isUsedInActualTriggeredTask = true;
+                  break;
+                }
               }
-            }
 
-            if (!isUsedInActualTriggeredTask)
-            {
-              unusedVariables.add(name);
-              continue;
+              if (!isUsedInActualTriggeredTask)
+              {
+                unusedVariables.add(name);
+                continue;
+              }
             }
           }
 
@@ -390,7 +415,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     manager.cleanup(uris);
 
-    Composite parent = composite.getParent();
+    ScrolledComposite parent = (ScrolledComposite)composite.getParent();
+    Point origin = parent.getOrigin();
     parent.setRedraw(false);
 
     List<SetupTaskPerformer> allPerformers = new ArrayList<SetupTaskPerformer>(allPromptedPerfomers);
@@ -404,6 +430,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     parent.pack();
     parent.getParent().layout();
+    parent.setOrigin(origin);
     parent.setRedraw(true);
 
     FieldHolder firstField = null;
@@ -427,6 +454,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     if (focusControl != null && !focusControl.isDisposed())
     {
       focusControl.setFocus();
+      parent.showControl(focusControl);
     }
     else
     {
@@ -439,6 +467,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       if (field != null)
       {
         field.setFocus();
+        parent.showControl(field.getControl());
       }
     }
 
@@ -476,8 +505,10 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     {
       // If the page isn't complete but there are no empty fields, then the last change introduced a new field.
       // So we should validate again to be sure there really needs to be more information prompted from the user.
-      validate();
+      return true;
     }
+
+    return false;
   }
 
   private void validate()
@@ -485,31 +516,73 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     try
     {
       performer = null;
-      String errorMessage = null;
+      incompletePerformers.clear();
+      allPromptedPerfomers.clear();
 
-      try
-      {
-        incompletePerformers.clear();
-        allPromptedPerfomers.clear();
+      setButtonState(IDialogConstants.NEXT_ID, false);
 
-        performer = createPerformer(this, fullPrompt);
-      }
-      catch (OperationCanceledException ex)
+      performerCreationJob = new PerformerCreationJob(SETUP_TASK_ANALYSIS_TITLE)
       {
-        //$FALL-THROUGH$
-      }
-      catch (IllegalArgumentException ex)
+        @Override
+        protected SetupTaskPerformer createPerformer() throws Exception
+        {
+          return VariablePage.this.createPerformer(VariablePage.this, fullPrompt);
+        }
+
+        @Override
+        protected Dialog createDialog()
+        {
+          return createDialog(getShell(), SETUP_TASK_ANALYSIS_TITLE, null,
+              "Analyzing the needed setup tasks has taken more than " + (System.currentTimeMillis() - getStart()) / 1000
+                  + " seconds.  The Next button will be disabled, though animated, until it completes.  You may continue to modify the values of the variables.",
+              MessageDialog.INFORMATION, 0, new String[] { IDialogConstants.OK_LABEL });
+        }
+
+        @Override
+        protected void handleDialogResult(int result)
+        {
+          if (result == 0)
+          {
+            setDelay(Integer.MAX_VALUE);
+          }
+          else
+          {
+            setDelay(2 * getDelay());
+          }
+        }
+      };
+
+      if (delay != 0)
       {
-        errorMessage = ex.getMessage();
+        performerCreationJob.setDelay(delay);
       }
 
-      setErrorMessage(errorMessage);
+      performerCreationJob.create();
+      delay = performerCreationJob.getDelay();
+
+      Throwable throwable = performerCreationJob.getThrowable();
+      if (throwable != null)
+      {
+        if (throwable instanceof OperationCanceledException)
+        {
+          performerCreationJob = null;
+          return;
+        }
+
+        throw throwable;
+      }
+
+      performer = performerCreationJob.getPerformer();
 
       UIUtil.asyncExec(getControl(), new Runnable()
       {
         public void run()
         {
-          updateFields();
+          performerCreationJob = null;
+          if (updateFields())
+          {
+            validate();
+          }
         }
       });
 
@@ -528,9 +601,11 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         }
       }
     }
-    catch (Exception ex)
+    catch (Throwable t)
     {
-      SetupUIPlugin.INSTANCE.log(ex);
+      performerCreationJob = null;
+      SetupUIPlugin.INSTANCE.log(t);
+      ErrorDialog.open(t);
     }
   }
 
@@ -682,10 +757,12 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       originalContext = null;
 
       setPerformer(null);
+
+      validator.cancel();
     }
   }
 
-  public String getValue(VariableTask variable)
+  public synchronized String getValue(VariableTask variable)
   {
     FieldHolder fieldHolder = manager.getFieldHolder(variable, false, true);
     if (fieldHolder != null && (updating || fieldHolder.isDirty()))
@@ -719,7 +796,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     return getWizard().getVMPath();
   }
 
-  public boolean promptVariables(List<? extends SetupTaskContext> contexts)
+  public synchronized boolean promptVariables(List<? extends SetupTaskContext> contexts)
   {
     prompted = true;
 
@@ -926,13 +1003,15 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     public void valueChanged(String oldValue, String newValue) throws Exception
     {
-      for (VariableTask variable : variables)
+      synchronized (VariablePage.this)
       {
-        variable.setValue(newValue);
+        for (VariableTask variable : variables)
+        {
+          variable.setValue(newValue);
+        }
       }
 
-      clearSpecialFieldHolders();
-      validate();
+      validator.schedule(true);
     }
 
     public void recordInitialValue()
@@ -1297,4 +1376,80 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     }
   }
 
+  /**
+   * A class for delayed validation.
+   * @author Ed Merks
+   */
+  private class Validator implements Runnable
+  {
+    private boolean canceled;
+
+    private boolean dispatched;
+
+    private boolean redispatch;
+
+    private boolean clearSpecialFieldHolders;
+
+    public void run()
+    {
+      if (!canceled && !getShell().isDisposed())
+      {
+        dispatched = false;
+        if (redispatch || performerCreationJob != null)
+        {
+          if (performerCreationJob != null)
+          {
+            performerCreationJob.cancel();
+          }
+
+          schedule(clearSpecialFieldHolders);
+        }
+        else
+        {
+          if (clearSpecialFieldHolders)
+          {
+            clearSpecialFieldHolders();
+            clearSpecialFieldHolders = false;
+          }
+
+          validate();
+        }
+      }
+    }
+
+    public void schedule(boolean clearSpecialFieldHolders)
+    {
+      canceled = false;
+
+      if (clearSpecialFieldHolders)
+      {
+        this.clearSpecialFieldHolders = true;
+      }
+
+      if (dispatched)
+      {
+        redispatch = true;
+      }
+      else
+      {
+        dispatched = true;
+        redispatch = false;
+
+        UIUtil.timerExec(350, this);
+      }
+    }
+
+    public void cancel()
+    {
+      canceled = true;
+      dispatched = false;
+      redispatch = false;
+      clearSpecialFieldHolders = false;
+
+      if (performerCreationJob != null)
+      {
+        performerCreationJob.cancel();
+      }
+    }
+  }
 }

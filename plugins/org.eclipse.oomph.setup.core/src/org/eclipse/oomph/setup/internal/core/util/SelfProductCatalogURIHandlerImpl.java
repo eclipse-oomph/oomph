@@ -101,7 +101,7 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
           if (in == null)
           {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            Resource resource = Resource.Factory.Registry.INSTANCE.getFactory(SELF_PRODUCT_CATALOG_URI).createResource(SELF_PRODUCT_CATALOG_URI);
+            Resource resource = SetupCoreUtil.RESOURCE_FACTORY_REGISTRY.getFactory(SELF_PRODUCT_CATALOG_URI).createResource(SELF_PRODUCT_CATALOG_URI);
             resource.getContents().add(create());
             resource.save(out, null);
             in = new ByteArrayInputStream(out.toByteArray());

@@ -331,6 +331,12 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
     return 2;
   }
 
+  @Override
+  public Object getOverrideToken()
+  {
+    return createToken(getTargetURL());
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     URI targetURI = createResolvedURI(getTargetURL());

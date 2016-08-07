@@ -55,6 +55,7 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.WorkspaceTask;
+import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.internal.core.util.Authenticator;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.log.ProgressLog;
@@ -184,6 +185,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   private static final Pattern INSTALLABLE_UNIT_WITH_RANGE_PATTERN = Pattern.compile("([^\\[\\(]*)(.*)");
 
   private static final Pattern ATTRIBUTE_REFERENCE_PATTERN = Pattern.compile("@[\\p{Alpha}_][\\p{Alnum}_]*");
+
+  private static final ThreadLocal<IProgressMonitor> CREATION_MONITOR = new ThreadLocal<IProgressMonitor>();
 
   private ProgressLog progress;
 
@@ -463,7 +466,30 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           overridingSetupTask.overrideFor(overriddenSetupTask);
         }
 
-        for (int i = triggeredSetupTasks.size(); --i >= 0;)
+        // Compute a hash code for each triggered task to avoid equality checking for tasks that definitely aren't equal.
+        int size = triggeredSetupTasks.size();
+        int[] hashCodes = new int[size];
+        for (int i = 0; i < size; ++i)
+        {
+          SetupTask setupTask = triggeredSetupTasks.get(i);
+          EClass eClass = setupTask.eClass();
+          int hashCode = eClass.hashCode();
+          for (EAttribute eAttribute : eClass.getEAllAttributes())
+          {
+            if (!eAttribute.isMany() && !eAttribute.isDerived())
+            {
+              Object value = setupTask.eGet(eAttribute);
+              if (value != null)
+              {
+                hashCode ^= value.hashCode();
+              }
+            }
+          }
+
+          hashCodes[i] = hashCode;
+        }
+
+        for (int i = size; --i >= 0;)
         {
           SetupTask setupTask = triggeredSetupTasks.get(i);
           if (!directSubstitutions.containsKey(setupTask))
@@ -472,28 +498,33 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             {
               SetupTask otherSetupTask = triggeredSetupTasks.get(j);
 
-              // We must ignore specific references that are bound to be different, but don't affect what the task actually does.
-              EcoreUtil.EqualityHelper equalityHelper = new EcoreUtil.EqualityHelper()
+              // Only check equality if the rough hash codes are the same.
+              if (hashCodes[i] == hashCodes[j] && directSubstitutions.get(otherSetupTask) != setupTask)
               {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected boolean haveEqualReference(EObject eObject1, EObject eObject2, EReference reference)
+                // We must ignore specific references that are bound to be different, but don't affect what the task actually does.
+                EcoreUtil.EqualityHelper equalityHelper = new EcoreUtil.EqualityHelper()
                 {
-                  if (reference == SetupPackage.Literals.SETUP_TASK__PREDECESSORS || reference == SetupPackage.Literals.SETUP_TASK__SUCCESSORS
-                      || reference == SetupPackage.Literals.SETUP_TASK__RESTRICTIONS)
-                  {
-                    return true;
-                  }
+                  private static final long serialVersionUID = 1L;
 
-                  return super.haveEqualReference(eObject1, eObject2, reference);
+                  @Override
+                  protected boolean haveEqualReference(EObject eObject1, EObject eObject2, EReference reference)
+                  {
+                    if (reference == SetupPackage.Literals.SETUP_TASK__PREDECESSORS || reference == SetupPackage.Literals.SETUP_TASK__SUCCESSORS
+                        || reference == SetupPackage.Literals.SETUP_TASK__RESTRICTIONS)
+                    {
+                      return true;
+                    }
+
+                    return super.haveEqualReference(eObject1, eObject2, reference);
+                  }
+                };
+
+                if (equalityHelper.equals(setupTask, otherSetupTask))
+                {
+                  directSubstitutions.put(otherSetupTask, setupTask);
+                  overrides.put(setupTask, otherSetupTask);
+                  setupTask.overrideFor(otherSetupTask);
                 }
-              };
-              if (equalityHelper.equals(setupTask, otherSetupTask))
-              {
-                directSubstitutions.put(otherSetupTask, setupTask);
-                overrides.put(setupTask, otherSetupTask);
-                setupTask.overrideFor(otherSetupTask);
               }
             }
           }
@@ -513,9 +544,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           }
         }
 
-        // Replace predecessor references to refer to the direct substitution.
+        // Modify all predecessors to refer to the direct substitution.
         for (SetupTask setupTask : remainingSetupTasks)
         {
+          checkCancel();
+
           EList<SetupTask> predecessors = setupTask.getPredecessors();
           for (ListIterator<SetupTask> it = predecessors.listIterator(); it.hasNext();)
           {
@@ -523,7 +556,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             SetupTask overridingSetupTask = directSubstitutions.get(predecessor);
             if (overridingSetupTask != null)
             {
-              if (predecessors.contains(overridingSetupTask) || overridingSetupTask.requires(predecessor))
+              if (predecessors.contains(overridingSetupTask))
               {
                 it.remove();
               }
@@ -535,7 +568,23 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           }
         }
 
-        ECollections.setEList(triggeredSetupTasks, remainingSetupTasks);
+        // Modify all the predecessors to remove any that result in circularity.
+        for (SetupTask setupTask : remainingSetupTasks)
+        {
+          checkCancel();
+
+          EList<SetupTask> predecessors = setupTask.getPredecessors();
+          for (ListIterator<SetupTask> it = predecessors.listIterator(); it.hasNext();)
+          {
+            SetupTask predecessor = it.next();
+            if (((SetupTaskImpl)predecessor).requiresFast(setupTask))
+            {
+              it.remove();
+            }
+          }
+        }
+
+        triggeredSetupTasks = remainingSetupTasks;
       }
       else
       {
@@ -696,6 +745,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               if (promptedValue != null)
               {
                 variable.setValue(promptedValue);
+                value = null;
               }
             }
 
@@ -1467,7 +1517,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_SETUP_REMOTE_DEBUG, "=true");
       addEclipseIniTask(result, true, "-Xdebug", "");
-      addEclipseIniTask(result, true, "-Xrunjdwp", ":transport=dt_socket,server=y,suspend=n,address=8123");
+      addEclipseIniTask(result, true, "-Xrunjdwp:transport", "=dt_socket,server=y,suspend=n,address=8123");
     }
 
     if (USER_HOME_REDIRECT)
@@ -2128,7 +2178,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return false;
   }
 
-  public Set<String> getVariables(String string)
+  public static Set<String> getVariables(String string)
   {
     if (string == null)
     {
@@ -3365,7 +3415,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         {
           URI uri = resource.getURI();
           ResourceSet resourceSet = resource.getResourceSet();
-          Registry resourceFactoryRegistry = resourceSet == null ? Resource.Factory.Registry.INSTANCE : resourceSet.getResourceFactoryRegistry();
+          Registry resourceFactoryRegistry = resourceSet == null ? SetupCoreUtil.RESOURCE_FACTORY_REGISTRY : resourceSet.getResourceFactoryRegistry();
           newResource = resourceFactoryRegistry.getFactory(uri).createResource(uri);
           resourceCopies.put(resource, newResource);
         }
@@ -3404,11 +3454,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     for (EObject copiedObject : new ArrayList<EObject>(copier.values()))
     {
-      URI uri = EcoreUtil.getURI(copiedObject);
-      EObject originalObject = originalCrossReferences.get(uri);
-      if (originalObject != null)
+      if (copiedObject instanceof Stream)
       {
-        copier.put(originalObject, copiedObject);
+        URI uri = EcoreUtil.getURI(copiedObject);
+        EObject originalObject = originalCrossReferences.get(uri);
+        if (originalObject != null)
+        {
+          copier.put(originalObject, copiedObject);
+        }
       }
     }
 
@@ -3573,6 +3626,23 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return label.startsWith(type) ? label : type + " " + label;
   }
 
+  public static void setCreationMonitor(IProgressMonitor monitor)
+  {
+    if (monitor == null)
+    {
+      CREATION_MONITOR.remove();
+    }
+    else
+    {
+      CREATION_MONITOR.set(monitor);
+    }
+  }
+
+  private static void checkCancel()
+  {
+    SetupCorePlugin.checkCancelation(CREATION_MONITOR.get());
+  }
+
   /**
    * Used in IDE.
    */
@@ -3605,6 +3675,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     for (Stream stream : streams)
     {
+      checkCancel();
+
       if (stream == null || !stream.eIsProxy())
       {
         SetupTaskPerformer performer = new SetupTaskPerformer(uriConverter, prompter, null, setupContext, stream);

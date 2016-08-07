@@ -56,6 +56,7 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
@@ -88,6 +89,21 @@ public final class SetupCoreUtil
   public static final String STATS_URI = "http://download.eclipse.org/stats/oomph";
 
   public static final AuthorizationHandler AUTHORIZATION_HANDLER;
+
+  public static Resource.Factory.Registry RESOURCE_FACTORY_REGISTRY = new ResourceSetImpl().getResourceFactoryRegistry();
+
+  static
+  {
+    Resource.Factory factory = new BaseResourceFactoryImpl();
+
+    Map<String, Object> extensionToFactoryMap = RESOURCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
+    extensionToFactoryMap.put("setup", factory);
+    extensionToFactoryMap.put("targlet", factory);
+    extensionToFactoryMap.put("def", factory);
+    extensionToFactoryMap.put("ext", factory);
+
+    extensionToFactoryMap.put("ecore", new EcoreResourceFactoryImpl());
+  }
 
   private static final boolean SKIP_STATS = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_STATS_SKIP);
 
@@ -136,13 +152,7 @@ public final class SetupCoreUtil
 
   public static void configureResourceSet(final ResourceSet resourceSet)
   {
-    Resource.Factory factory = new BaseResourceFactoryImpl();
-
-    Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
-    extensionToFactoryMap.put("setup", factory);
-    extensionToFactoryMap.put("targlet", factory);
-    extensionToFactoryMap.put("def", factory);
-    extensionToFactoryMap.put("ext", factory);
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().putAll(RESOURCE_FACTORY_REGISTRY.getExtensionToFactoryMap());
 
     URIConverter uriConverter = resourceSet.getURIConverter();
     Map<URI, URI> uriMap = uriConverter.getURIMap();

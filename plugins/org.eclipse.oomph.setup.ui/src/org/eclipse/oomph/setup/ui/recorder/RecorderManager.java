@@ -427,7 +427,7 @@ public final class RecorderManager
         Boolean localPolicy = transaction.getPolicy(key);
         if (localPolicy == null)
         {
-          PreferenceHandler handler = PreferenceTaskImpl.PreferenceHandler.getHandler(key);
+          PreferenceHandler handler = PreferenceTaskImpl.PreferenceHandler.getHandler(uri);
           if (handler.isIgnored())
           {
             // Handler policy is "ignore".

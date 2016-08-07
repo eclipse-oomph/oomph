@@ -24,6 +24,10 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.WeakHashMap;
+
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model <b>Factory</b>.
@@ -32,6 +36,8 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  */
 public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesFactory
 {
+  private Map<String, URI> PREFERENCE_URIS = Collections.synchronizedMap(new WeakHashMap<String, URI>());
+
   /**
    * Creates the default factory implementation.
    * <!-- begin-user-doc -->
@@ -232,62 +238,70 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
       return null;
     }
 
-    String[] segments = literal.split("/");
-    int length = segments.length;
-    if (length == 0)
+    URI result = PREFERENCE_URIS.get(literal);
+    if (result == null)
     {
-      return URI.createHierarchicalURI(null, "", null, null, null);
-    }
-
-    URI result = URI.createURI("");
-    StringBuilder property = null;
-    boolean startProperty = false;
-    int start = -1;
-    for (int i = 0; i < length; ++i)
-    {
-      String segment = segments[i];
-      if (property != null)
+      String[] segments = literal.split("/");
+      int length = segments.length;
+      if (length == 0)
       {
-        if (startProperty)
-        {
-          property.append('/');
-        }
-        else
-        {
-          startProperty = true;
-        }
-
-        property.append(segment);
-      }
-      else if (segment.length() == 0)
-      {
-        if (i == 0)
-        {
-          if (i != length - 1)
-          {
-            result = URI.createHierarchicalURI(null, "", null, null, null);
-          }
-
-          start = 1;
-        }
-        else
-        {
-          property = new StringBuilder();
-        }
-      }
-      else if (i == start)
-      {
-        result = URI.createHierarchicalURI(null, URI.encodeAuthority(segment, false), null, null, null);
+        result = URI.createHierarchicalURI(null, "", null, null, null);
       }
       else
       {
-        result = result.appendSegment(URI.encodeSegment(segment, false));
-      }
-    }
+        result = URI.createURI("");
+        StringBuilder property = null;
+        boolean startProperty = false;
+        int start = -1;
+        for (int i = 0; i < length; ++i)
+        {
+          String segment = segments[i];
+          if (property != null)
+          {
+            if (startProperty)
+            {
+              property.append('/');
+            }
+            else
+            {
+              startProperty = true;
+            }
 
-    if (property != null)
-    {
-      result = result.appendSegment(URI.encodeSegment(property.toString(), false));
+            property.append(segment);
+          }
+          else if (segment.length() == 0)
+          {
+            if (i == 0)
+            {
+              if (i != length - 1)
+              {
+                result = URI.createHierarchicalURI(null, "", null, null, null);
+              }
+
+              start = 1;
+            }
+            else
+            {
+              property = new StringBuilder();
+            }
+          }
+          else if (i == start)
+          {
+            result = URI.createHierarchicalURI(null, URI.encodeAuthority(segment, false), null, null, null);
+          }
+          else
+          {
+            result = result.appendSegment(URI.encodeSegment(segment, false));
+          }
+        }
+
+        if (property != null)
+        {
+          result = result.appendSegment(URI.encodeSegment(property.toString(), false));
+        }
+      }
+
+      PREFERENCE_URIS.put(literal, result);
     }
 
     return result;

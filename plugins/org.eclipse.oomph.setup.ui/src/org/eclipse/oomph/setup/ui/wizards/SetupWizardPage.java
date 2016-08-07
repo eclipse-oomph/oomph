@@ -18,6 +18,7 @@ import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.ui.ButtonBar;
 import org.eclipse.oomph.ui.HelpSupport.HelpProvider;
 import org.eclipse.oomph.ui.OomphWizardDialog;
@@ -31,12 +32,20 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -44,8 +53,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Eike Stepper
@@ -134,7 +145,7 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     URI uri = originalUser.eResource().getURI();
 
     final User user = EcoreUtil.copy(originalUser);
-    Resource userResource = Resource.Factory.Registry.INSTANCE.getFactory(uri).createResource(uri);
+    Resource userResource = SetupCoreUtil.RESOURCE_FACTORY_REGISTRY.getFactory(uri).createResource(uri);
     userResource.getContents().add(user);
 
     Trigger trigger = getTrigger();
@@ -276,17 +287,26 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
 
   protected void setButtonState(int buttonID, boolean enabled)
   {
+    Button button = getButton(buttonID);
+    if (button != null)
+    {
+      button.setEnabled(enabled);
+    }
+  }
+
+  protected Button getButton(int buttonID)
+  {
     try
     {
       IWizardContainer container = getContainer();
       Method method = ReflectUtil.getMethod(container.getClass(), "getButton", int.class);
       method.setAccessible(true);
       Button button = (Button)method.invoke(container, buttonID);
-      button.setEnabled(enabled);
+      return button;
     }
     catch (Throwable ex)
     {
-      // Ignore
+      return null;
     }
   }
 
@@ -296,5 +316,183 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
   public interface WizardFinisher
   {
     public boolean performFinish();
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  protected abstract class PerformerCreationJob extends Job
+  {
+    private SetupTaskPerformer performer;
+
+    private Throwable throwable;
+
+    private long start;
+
+    private long interval;
+
+    private long delay = 5000;
+
+    public PerformerCreationJob(String name)
+    {
+      super(name);
+    }
+
+    @Override
+    protected IStatus run(IProgressMonitor monitor)
+    {
+      try
+      {
+        SetupTaskPerformer.setCreationMonitor(monitor);
+        performer = createPerformer();
+      }
+      catch (Throwable throwable)
+      {
+        this.throwable = throwable;
+      }
+      finally
+      {
+        SetupTaskPerformer.setCreationMonitor(null);
+      }
+
+      return Status.OK_STATUS;
+    }
+
+    protected abstract SetupTaskPerformer createPerformer() throws Exception;
+
+    protected abstract Dialog createDialog();
+
+    protected abstract void handleDialogResult(int result);
+
+    protected void heartBeat()
+    {
+
+    }
+
+    public long getStart()
+    {
+      return start;
+    }
+
+    public long getDelay()
+    {
+      return delay;
+    }
+
+    public void setDelay(long delay)
+    {
+      interval = System.currentTimeMillis();
+      this.delay = delay;
+    }
+
+    public SetupTaskPerformer getPerformer()
+    {
+      return performer;
+    }
+
+    public Throwable getThrowable()
+    {
+      return throwable;
+    }
+
+    public void create()
+    {
+      final Button button = getButton(IDialogConstants.NEXT_ID);
+      final String originalText = button.getText();
+      final String[] animationText = new String[] { originalText };
+
+      schedule();
+
+      start = System.currentTimeMillis();
+      interval = start;
+      long nextAnimation = start + 500;
+
+      Shell shell = getShell();
+      final Display display = shell.getDisplay();
+      while (getState() != Job.NONE)
+      {
+        if (!display.readAndDispatch())
+        {
+          display.sleep();
+        }
+
+        if (button.isDisposed())
+        {
+          return;
+        }
+
+        long now = System.currentTimeMillis();
+        if (now > nextAnimation)
+        {
+          nextAnimation = now + 500;
+          button.setText(animationText[0] = getNextAnimationText(originalText, animationText[0]));
+          heartBeat();
+        }
+
+        if (now - interval > delay)
+        {
+          final Dialog dialog = createDialog();
+
+          final AtomicBoolean closedAfterJobCompletion = new AtomicBoolean();
+          Runnable livenessChecker = new Runnable()
+          {
+            public void run()
+            {
+              if (getState() == Job.NONE)
+              {
+                closedAfterJobCompletion.set(true);
+                dialog.close();
+              }
+              else
+              {
+                button.setText(animationText[0] = getNextAnimationText(originalText, animationText[0]));
+                heartBeat();
+                display.timerExec(1000, this);
+              }
+            }
+          };
+
+          display.asyncExec(livenessChecker);
+
+          int result = dialog.open();
+          if (!closedAfterJobCompletion.get())
+          {
+            handleDialogResult(result);
+          }
+        }
+
+        if (shell.isDisposed())
+        {
+          return;
+        }
+      }
+
+      button.setText(originalText);
+    }
+
+    private String getNextAnimationText(String originalText, String text)
+    {
+      if (text.length() > originalText.length() + 10)
+      {
+        return originalText;
+      }
+
+      return " " + text.substring(0, text.length() - 1) + " " + text.charAt(text.length() - 1);
+    }
+
+    protected Dialog createDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, int dialogImageType, int defaultIndex,
+        String... dialogButtonLabels)
+    {
+      Dialog dialog = new MessageDialog(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, defaultIndex, dialogButtonLabels)
+      {
+        @Override
+        protected int getShellStyle()
+        {
+          return super.getShellStyle() | SWT.SHEET;
+        }
+      };
+
+      return dialog;
+    }
   }
 }
