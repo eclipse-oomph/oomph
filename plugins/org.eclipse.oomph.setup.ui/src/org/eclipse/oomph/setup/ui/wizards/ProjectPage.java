@@ -975,7 +975,7 @@ public class ProjectPage extends SetupWizardPage
 
             // Hide the view while we're updating it with input and then a selection to avoid flickering.
             Tree tree = projectViewer.getTree();
-            tree.setVisible(false);
+            tree.setRedraw(false);
 
             CatalogSelection selection = catalogSelector.getSelection();
             projectViewer.setInput(selection);
@@ -1019,7 +1019,7 @@ public class ProjectPage extends SetupWizardPage
               projectViewer.setSelection(new StructuredSelection(projects), true);
             }
 
-            tree.setVisible(true);
+            tree.setRedraw(true);
 
             checkPageComplete();
           }
