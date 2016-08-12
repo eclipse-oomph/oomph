@@ -847,6 +847,7 @@ public class ProgressPage extends SetupWizardPage
                   if (success && launchAutomatically)
                   {
                     wizard.performFinish();
+                    progressLog.setTerminated();
                     return Status.OK_STATUS;
                   }
 
@@ -866,6 +867,7 @@ public class ProgressPage extends SetupWizardPage
                         {
                           WizardDialog dialog = (WizardDialog)container;
                           progressLog.done();
+                          progressLog.setTerminated();
                           dialog.close();
                         }
                       }
@@ -969,6 +971,7 @@ public class ProgressPage extends SetupWizardPage
                 });
               }
 
+              progressLog.setTerminated();
               return Status.OK_STATUS;
             }
 
@@ -1106,6 +1109,12 @@ public class ProgressPage extends SetupWizardPage
     public void setTerminating()
     {
       terminating = true;
+    }
+
+    public void setTerminated()
+    {
+      terminating = false;
+      done = true;
     }
 
     public boolean isCanceled()
