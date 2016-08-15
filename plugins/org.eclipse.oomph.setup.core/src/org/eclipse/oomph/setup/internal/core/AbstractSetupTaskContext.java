@@ -134,6 +134,9 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     }
 
     OS os = getOS();
+    put("osgi.ws", os.getOsgiWS());
+    put("osgi.os", os.getOsgiOS());
+    put("osgi.arch", os.getOsgiArch());
     filterContext.put("osgi.ws", os.getOsgiWS());
     filterContext.put("osgi.os", os.getOsgiOS());
     filterContext.put("osgi.arch", os.getOsgiArch());
