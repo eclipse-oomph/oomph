@@ -134,6 +134,12 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="simrel.train.name"
+        value="oxygen"/>
+  </stream>
+  <stream name="Neon_maintenance">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="simrel.train.name"
         value="neon"/>
   </stream>
   <stream name="Mars_maintenance">
