@@ -9,11 +9,16 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -56,6 +61,16 @@ public final class RepositoryComposer
     }
   };
 
+  private static final String NIGHTLY_TYPE = "nightly";
+
+  private static final String MILESTONE_TYPE = "milestone";
+
+  private static final String RELEASE_TYPE = "release";
+
+  private static final String CLEANUP_TYPE = "cleanup";
+
+  private static final byte[] BUFFER = new byte[8192];
+
   private RepositoryComposer()
   {
   }
@@ -63,35 +78,27 @@ public final class RepositoryComposer
   public static void main(String[] args) throws Exception
   {
     File downloadsFolder = new File(args[0]).getCanonicalFile();
-    String buildType = args[1];
-    String buildKey = args[2];
-    String buildLabel = args[3];
-
-    String folder = buildKey;
-    if (buildLabel.length() != 0)
-    {
-      folder += "-" + buildLabel;
-    }
-
     File dropsFolder = new File(downloadsFolder, "drops");
-    File dropTypeFolder = new File(dropsFolder, buildType);
-    File dropFolder = new File(dropTypeFolder, folder);
-
     File updatesFolder = new File(downloadsFolder, "updates.tmp");
-    File updateTypeFolder = new File(updatesFolder, buildType);
 
-    if ("release".equals(buildType))
+    String buildType = args[1];
+    boolean cleanup = CLEANUP_TYPE.equals(buildType);
+
+    String buildKey = cleanup ? null : args[2];
+    String buildLabel = cleanup ? null : args[3];
+
+    if (cleanup || RELEASE_TYPE.equals(buildType))
     {
-      composeRepositories(dropTypeFolder, updateTypeFolder, VERSION_COMPARATOR, Integer.MAX_VALUE);
+      composeRepositories(new File(dropsFolder, RELEASE_TYPE), new File(updatesFolder, RELEASE_TYPE), VERSION_COMPARATOR, Integer.MAX_VALUE);
 
       boolean milestonesChanged = false;
-      File milestonesFolder = new File(dropsFolder, "milestone");
+      File milestonesFolder = new File(dropsFolder, MILESTONE_TYPE);
       File[] children = milestonesFolder.listFiles();
       if (children != null)
       {
         for (File child : children)
         {
-          if (child.isDirectory() && child.getName().contains("-" + buildLabel + "-"))
+          if (child.isDirectory() && child.getName().contains("-" + buildKey + "-"))
           {
             scheduleRemoval(child);
             milestonesChanged = true;
@@ -101,30 +108,53 @@ public final class RepositoryComposer
 
       if (milestonesChanged)
       {
-        composeMilestoneRepositories(dropsFolder, new File(updatesFolder, "milestone"));
+        composeMilestoneRepositories(dropsFolder, new File(updatesFolder, MILESTONE_TYPE));
       }
     }
-    else if ("milestone".equals(buildType))
+
+    if (cleanup || MILESTONE_TYPE.equals(buildType))
     {
-      composeMilestoneRepositories(dropsFolder, updateTypeFolder);
+      composeMilestoneRepositories(dropsFolder, new File(updatesFolder, MILESTONE_TYPE));
     }
-    else if ("nightly".equals(buildType))
+
+    if (cleanup || NIGHTLY_TYPE.equals(buildType))
     {
-      composeRepositories(dropTypeFolder, updateTypeFolder, ALPHA_COMPARATOR, 5);
+      composeRepositories(new File(dropsFolder, NIGHTLY_TYPE), new File(updatesFolder, NIGHTLY_TYPE), ALPHA_COMPARATOR, 5);
     }
 
     composeRepository(updatesFolder, "Oomph All", getComposites(updatesFolder));
-    composeRepository(new File(updatesFolder, "latest"), "Oomph Latest", Collections.singletonList(dropFolder));
+
+    String latestDropFolderSuffix;
+    if (cleanup)
+    {
+      latestDropFolderSuffix = IO.readUTF8(new File(downloadsFolder, "updates/latest/drop.properties"));
+    }
+    else
+    {
+      String folder = buildKey;
+      if (buildLabel.length() != 0)
+      {
+        folder += "-" + buildLabel;
+      }
+
+      latestDropFolderSuffix = buildType + "/" + folder;
+    }
+
+    File latestDropFolder = new File(dropsFolder, latestDropFolderSuffix);
+    File latestUpdatesFolder = new File(updatesFolder, "latest");
+
+    composeRepository(latestUpdatesFolder, "Oomph Latest", Collections.singletonList(latestDropFolder));
+    IO.writeUTF8(new File(latestUpdatesFolder, "drop.properties"), latestDropFolderSuffix);
   }
 
   private static void composeMilestoneRepositories(File dropsFolder, File updateTypeFolder) throws IOException
   {
-    File milestonesFolder = new File(dropsFolder, "milestone");
+    File milestonesFolder = new File(dropsFolder, MILESTONE_TYPE);
     if (!composeRepositories(milestonesFolder, updateTypeFolder, ALPHA_COMPARATOR, Integer.MAX_VALUE))
     {
       List<File> drops = new ArrayList<File>();
 
-      File releasesFolder = new File(dropsFolder, "release");
+      File releasesFolder = new File(dropsFolder, RELEASE_TYPE);
       List<String> names = getSortedChildren(releasesFolder, VERSION_COMPARATOR);
       if (!names.isEmpty())
       {
@@ -161,15 +191,15 @@ public final class RepositoryComposer
     }
 
     String name = dropTypeFolder.getName();
-    if ("release".equals(name))
+    if (RELEASE_TYPE.equals(name))
     {
       name = "Release";
     }
-    else if ("milestone".equals(name))
+    else if (MILESTONE_TYPE.equals(name))
     {
       name = "Milestone";
     }
-    else if ("nightly".equals(name))
+    else if (NIGHTLY_TYPE.equals(name))
     {
       name = "Nightly Build";
     }
@@ -181,9 +211,17 @@ public final class RepositoryComposer
 
   private static void composeRepository(File compositeFolder, String name, List<File> drops) throws IOException
   {
+    System.out.println("Composing " + suffix(compositeFolder) + ":");
+    for (File drop : drops)
+    {
+      System.out.println("  of " + suffix(drop));
+    }
+
     long timestamp = System.currentTimeMillis();
     writeRepository(compositeFolder, true, name, timestamp, drops);
     writeRepository(compositeFolder, false, name, timestamp, drops);
+
+    System.out.println();
   }
 
   private static void writeRepository(File compositeFolder, boolean metadata, String name, long timestamp, List<File> drops) throws IOException
@@ -277,9 +315,9 @@ public final class RepositoryComposer
   private static List<File> getComposites(File updatesFolder)
   {
     List<File> composites = new ArrayList<File>();
-    addComposite(updatesFolder, composites, "release");
-    addComposite(updatesFolder, composites, "milestone");
-    addComposite(updatesFolder, composites, "nightly");
+    addComposite(updatesFolder, composites, RELEASE_TYPE);
+    addComposite(updatesFolder, composites, MILESTONE_TYPE);
+    addComposite(updatesFolder, composites, NIGHTLY_TYPE);
     return composites;
   }
 
@@ -316,5 +354,70 @@ public final class RepositoryComposer
   {
     File marker = new File(folder, REMOVE_MARKER);
     marker.createNewFile();
+  }
+
+  private static String suffix(File file)
+  {
+    return file.getParentFile().getName() + "/" + file.getName();
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class IO
+  {
+    public static String readUTF8(File file) throws IOException
+    {
+      InputStream inputStream = new FileInputStream(file);
+      ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+      try
+      {
+        copy(inputStream, outputStream);
+      }
+      finally
+      {
+        close(inputStream);
+      }
+
+      return new String(outputStream.toByteArray(), "UTF-8");
+    }
+
+    public static void writeUTF8(File file, String contents) throws IOException
+    {
+      InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"));
+      OutputStream outputStream = new FileOutputStream(file);
+
+      try
+      {
+        copy(inputStream, outputStream);
+      }
+      finally
+      {
+        close(outputStream);
+      }
+    }
+
+    private static long copy(InputStream input, OutputStream output) throws IOException
+    {
+      long length = 0;
+      int n;
+
+      while ((n = input.read(BUFFER)) != -1)
+      {
+        output.write(BUFFER, 0, n);
+        length += n;
+      }
+
+      return length;
+    }
+
+    private static void close(Closeable closeable) throws IOException
+    {
+      if (closeable != null)
+      {
+        closeable.close();
+      }
+    }
   }
 }
