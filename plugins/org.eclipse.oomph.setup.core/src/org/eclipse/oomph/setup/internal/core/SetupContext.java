@@ -374,7 +374,12 @@ public class SetupContext
     }
   }
 
-  private static void associate(ResourceSet resourceSet, Installation installation, Workspace workspace)
+  public static LocationCatalog getLocationCatalog(ResourceSet resourceSet)
+  {
+    return associate(resourceSet, null, null);
+  }
+
+  private static LocationCatalog associate(ResourceSet resourceSet, Installation installation, Workspace workspace)
   {
     URIConverter uriConverter = resourceSet.getURIConverter();
 
@@ -463,6 +468,8 @@ public class SetupContext
     {
       SetupCorePlugin.INSTANCE.log(ex);
     }
+
+    return locationCatalog;
   }
 
   private static <K extends EObject, V extends EObject> void removeProxies(EMap<K, EList<V>> map)

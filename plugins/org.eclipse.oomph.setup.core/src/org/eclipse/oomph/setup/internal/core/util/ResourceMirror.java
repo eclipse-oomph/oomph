@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.internal.core.util;
 
+import org.eclipse.oomph.base.util.BytesResourceFactoryImpl;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.WorkerPool;
 
@@ -297,6 +299,43 @@ public abstract class ResourceMirror extends WorkerPool<ResourceMirror, URI, Res
           }
         }
       }
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class WithProductImages extends ResourceMirror
+  {
+    public WithProductImages(ResourceSet resourceSet)
+    {
+      super(resourceSet);
+
+      BytesResourceFactoryImpl bytesResourceFactory = new BytesResourceFactoryImpl();
+      Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
+      extensionToFactoryMap.put("gif", bytesResourceFactory);
+      extensionToFactoryMap.put("png", bytesResourceFactory);
+      extensionToFactoryMap.put("jpeg", bytesResourceFactory);
+      extensionToFactoryMap.put("jpg", bytesResourceFactory);
+    }
+
+    @Override
+    protected void visit(EObject eObject)
+    {
+      if (eObject instanceof Scope)
+      {
+        Scope scope = (Scope)eObject;
+        URI uri = SetupCoreUtil.getBrandingImageURI(scope);
+        if (uri != null)
+        {
+          if (getResourceSet().getResourceFactoryRegistry().getExtensionToFactoryMap().containsKey(uri.fileExtension()))
+          {
+            schedule(uri, true);
+          }
+        }
+      }
+
+      super.visit(eObject);
     }
   }
 }

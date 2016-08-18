@@ -15,8 +15,8 @@ import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.preferences.util.PreferencesUtil.PreferenceProperty;
 import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.User;
-import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
+import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.Pair;
@@ -89,13 +89,12 @@ public final class QuestionnairePlugin extends OomphUIPlugin
 
           if (!preferences.isEmpty())
           {
-            boolean inIDE = !SetupUIPlugin.isInstallerProduct();
             for (Entry<URI, Pair<String, String>> entry : preferences.entrySet())
             {
               String path = PreferencesFactory.eINSTANCE.convertURI(entry.getKey());
               transaction.setPolicy(path, true);
 
-              if (inIDE)
+              if (!SetupUtil.INSTALLER_PRODUCT)
               {
                 PreferenceProperty property = new PreferencesUtil.PreferenceProperty(path);
                 property.set(entry.getValue().getElement2());

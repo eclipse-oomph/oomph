@@ -39,6 +39,7 @@ import org.eclipse.equinox.internal.p2.repository.helpers.LocationProperties;
 import org.eclipse.equinox.internal.provisional.p2.core.eventbus.IProvisioningEventBus;
 import org.eclipse.equinox.internal.provisional.p2.core.eventbus.SynchronousProvisioningListener;
 import org.eclipse.equinox.internal.provisional.p2.repository.RepositoryEvent;
+import org.eclipse.equinox.p2.core.IAgentLocation;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
@@ -116,6 +117,20 @@ public class CachingRepositoryManager<T>
   public CachingRepositoryManager(AbstractRepositoryManager<T> delegate, int repositoryType, CachingTransport transport)
   {
     this.delegate = delegate;
+
+    IAgentLocation agentLocation = ReflectUtil.getValue("agentLocation", delegate);
+    if (agentLocation != null)
+    {
+      URI rootLocation = agentLocation.getRootLocation();
+      if (rootLocation != null)
+      {
+        if (!LazyProfileRegistryComponent.OsgiHelper.canWrite(new File(rootLocation.getPath())))
+        {
+          ReflectUtil.setValue("agentLocation", delegate, null);
+        }
+      }
+    }
+
     this.repositoryType = repositoryType;
 
     if (transport == null)

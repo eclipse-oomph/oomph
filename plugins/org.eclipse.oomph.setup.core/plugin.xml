@@ -15,4 +15,17 @@
 
    <extension-point id="stringFilters" name="String Filters" schema="schema/stringFilters.exsd"/>
 
+   <extension
+         id="SetupArchiver"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="org.eclipse.oomph.setup.internal.core.SetupArchiver">
+         </run>
+      </application>
+   </extension>
+
 </plugin>

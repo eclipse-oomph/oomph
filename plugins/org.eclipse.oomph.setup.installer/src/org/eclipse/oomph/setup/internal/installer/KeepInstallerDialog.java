@@ -12,6 +12,7 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -194,7 +195,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
   @Override
   protected void okPressed()
   {
-    final String launcher = InstallerApplication.getLauncher();
+    final String launcher = OS.getCurrentLauncher(false);
     if (launcher != null)
     {
       final boolean startMenu = startMenuButton == null ? false : startMenuButton.getSelection();

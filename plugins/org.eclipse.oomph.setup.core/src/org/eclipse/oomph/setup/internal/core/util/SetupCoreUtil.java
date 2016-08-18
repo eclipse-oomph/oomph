@@ -26,6 +26,7 @@ import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandlerImpl;
+import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -369,8 +370,7 @@ public final class SetupCoreUtil
       }
     }
 
-    if (SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI != null && !PropertiesUtil.isProperty(SetupProperties.PROP_REDIRECTION_BASE + "mirror.nothing")
-        && SetupContext.INDEX_SETUP_LOCATION_URI.equals(uriConverter.normalize(SetupContext.INDEX_SETUP_LOCATION_URI)))
+    if (!SetupUtil.SETUP_ARCHIVER_APPLICATION)
     {
       handleArchiveRedirection(uriConverter);
     }
@@ -378,7 +378,8 @@ public final class SetupCoreUtil
 
   private static void handleArchiveRedirection(URIConverter uriConverter)
   {
-    if (archiveExpectedETag == null || !archiveExpectedETag.equals(ECFURIHandlerImpl.getExpectedETag(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI)))
+    if (archiveExpectedETag == null
+        || !archiveExpectedETag.equals(ECFURIHandlerImpl.getExpectedETag(uriConverter.normalize(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI))))
     {
       // long start = System.currentTimeMillis();
 
@@ -1075,5 +1076,39 @@ public final class SetupCoreUtil
 
       return result;
     }
+  }
+
+  public static URI getEclipseBrandingImage()
+  {
+    return URI.createPlatformPluginURI("org.eclipse.oomph.setup.ui/icons/committers.png", true);
+  }
+
+  public static URI getBrandingImageURI(Scope scope)
+  {
+    URI imageURI = null;
+
+    if (scope != null)
+    {
+      Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+      if (annotation == null)
+      {
+        return getBrandingImageURI(scope.getParentScope());
+      }
+
+      String detail = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
+      if (detail == null)
+      {
+        return getBrandingImageURI(scope.getParentScope());
+      }
+
+      imageURI = URI.createURI(detail);
+    }
+
+    if (imageURI == null)
+    {
+      imageURI = getEclipseBrandingImage();
+    }
+
+    return imageURI;
   }
 }

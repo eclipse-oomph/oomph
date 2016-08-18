@@ -12,7 +12,6 @@ package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
-import org.eclipse.oomph.base.util.BytesResourceFactoryImpl;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.p2.internal.ui.CacheUsageConfirmerUI;
@@ -693,40 +692,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     return null;
   }
 
-  public static URI getBrandingImageURI(Scope scope)
-  {
-    URI imageURI = null;
-
-    if (scope != null)
-    {
-      Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-      if (annotation == null)
-      {
-        return getBrandingImageURI(scope.getParentScope());
-      }
-
-      String detail = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
-      if (detail == null)
-      {
-        return getBrandingImageURI(scope.getParentScope());
-      }
-
-      imageURI = URI.createURI(detail);
-    }
-
-    if (imageURI == null)
-    {
-      imageURI = getEclipseBrandingImage();
-    }
-
-    return imageURI;
-  }
-
   public static String getLocalBrandingImageURI(Scope scope)
   {
     try
     {
-      URI imageURI = getBrandingImageURI(scope);
+      URI imageURI = SetupCoreUtil.getBrandingImageURI(scope);
       return getImageURI(imageURI);
     }
     catch (Exception ex)
@@ -734,7 +704,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
     }
 
-    URI imageURI = getEclipseBrandingImage();
+    URI imageURI = SetupCoreUtil.getEclipseBrandingImage();
     return getImageURI(imageURI);
   }
 
@@ -742,7 +712,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   {
     try
     {
-      URI imageURI = getBrandingImageURI(scope);
+      URI imageURI = SetupCoreUtil.getBrandingImageURI(scope);
       return getImage(imageURI);
     }
     catch (Exception ex)
@@ -750,7 +720,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
     }
 
-    URI imageURI = getEclipseBrandingImage();
+    URI imageURI = SetupCoreUtil.getEclipseBrandingImage();
     return getImage(imageURI);
   }
 
@@ -764,11 +734,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   {
     Object image = BaseEditUtil.getImage(imageURI);
     return ExtendedImageRegistry.INSTANCE.getImage(image);
-  }
-
-  private static URI getEclipseBrandingImage()
-  {
-    return URI.createPlatformPluginURI(SetupUIPlugin.INSTANCE.getSymbolicName() + "/icons/committers.png", true);
   }
 
   private static boolean hasModalChild(Shell parentShell, Shell excludedShell)
@@ -842,7 +807,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       loading = true;
 
-      ResourceMirror resourceMirror = new ResourceMirrorWithProductImages(resourceSet)
+      ResourceMirror resourceMirror = new ResourceMirror.WithProductImages(resourceSet)
       {
         @Override
         protected void run(String taskName, IProgressMonitor monitor)
@@ -1141,43 +1106,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       catch (Exception ex)
       {
         //$FALL-THROUGH$
-      }
-    }
-
-    /**
-     * @author Ed Merks
-     */
-    public static class ResourceMirrorWithProductImages extends ResourceMirror
-    {
-      public ResourceMirrorWithProductImages(ResourceSet resourceSet)
-      {
-        super(resourceSet);
-
-        BytesResourceFactoryImpl bytesResourceFactory = new BytesResourceFactoryImpl();
-        Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
-        extensionToFactoryMap.put("gif", bytesResourceFactory);
-        extensionToFactoryMap.put("png", bytesResourceFactory);
-        extensionToFactoryMap.put("jpeg", bytesResourceFactory);
-        extensionToFactoryMap.put("jpg", bytesResourceFactory);
-      }
-
-      @Override
-      protected void visit(EObject eObject)
-      {
-        if (eObject instanceof Scope)
-        {
-          Scope scope = (Scope)eObject;
-          URI uri = getBrandingImageURI(scope);
-          if (uri != null)
-          {
-            if (getResourceSet().getResourceFactoryRegistry().getExtensionToFactoryMap().containsKey(uri.fileExtension()))
-            {
-              schedule(uri, true);
-            }
-          }
-        }
-
-        super.visit(eObject);
       }
     }
   }

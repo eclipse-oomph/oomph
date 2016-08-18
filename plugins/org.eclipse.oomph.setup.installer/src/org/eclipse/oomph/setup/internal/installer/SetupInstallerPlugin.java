@@ -15,6 +15,7 @@ import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.ui.OomphUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IORuntimeException;
@@ -131,7 +132,7 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
         System.setProperty("user.home", new File(PropertiesUtil.getUserHome()).getCanonicalPath());
       }
 
-      if (!PropertiesUtil.isProperty(SetupUIPlugin.PREF_HEADLESS))
+      if (!PropertiesUtil.isProperty(SetupUIPlugin.PREF_HEADLESS) && !SetupUtil.SETUP_ARCHIVER_APPLICATION)
       {
         UIUtil.syncExec(new Runnable()
         {

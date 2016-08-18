@@ -70,6 +70,8 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
   private final String self;
 
+  private final boolean canWrite;
+
   private boolean updateSelfProfile;
 
   private final Map<String, ProfileLock> profileLocks;
@@ -82,6 +84,8 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
     super(provisioningAgent, store, updateSelfProfile ? new AdjustingSurrogateProfileHandler(provisioningAgent) : null, updateSelfProfile);
     this.provisioningAgent = provisioningAgent;
     this.store = store;
+
+    canWrite = LazyProfileRegistryComponent.OsgiHelper.canWrite(store);
 
     Field selfField = ReflectUtil.getField(SimpleProfileRegistry.class, "self");
     self = (String)ReflectUtil.getValue(selfField, this);
@@ -259,14 +263,14 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
       Object parser = ReflectUtil.newInstance(parserConstructor, this, EngineActivator.getContext(), EngineActivator.ID);
 
       ProfileLock lock = profileLocks.get(profileId);
-      if (lock == null)
+      if (lock == null && canWrite)
       {
         lock = new ProfileLock(this, profileDirectory);
         profileLocks.put(profileId, lock);
       }
 
       boolean locked = false;
-      if (lock.processHoldsLock() || (locked = lock.lock()))
+      if (lock == null || lock.processHoldsLock() || (locked = lock.lock()))
       {
         try
         {

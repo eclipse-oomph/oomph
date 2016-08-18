@@ -232,6 +232,46 @@ public abstract class OS
     return launcherName;
   }
 
+  public static String getCurrentLauncher(boolean console)
+  {
+    try
+    {
+      String launcher = PropertiesUtil.getProperty("eclipse.launcher");
+      if (launcher != null)
+      {
+        File launcherFile = new File(launcher);
+        if (launcherFile.isFile())
+        {
+          File result = IOUtil.getCanonicalFile(launcherFile);
+          if (INSTANCE.isWin())
+          {
+            // If we don't need a console, but actually ended up here with eclipsec.exe, we don't try to find the product-specifically named executable.
+            if (console)
+            {
+              File parentFolder = result.getParentFile();
+              if (parentFolder != null)
+              {
+                File consoleLauncher = new File(parentFolder, "eclipsec.exe");
+                if (consoleLauncher.isFile())
+                {
+                  return consoleLauncher.getPath();
+                }
+              }
+            }
+          }
+
+          return result.getPath();
+        }
+      }
+    }
+    catch (Throwable ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    return null;
+  }
+
   public abstract String getGitPrefix();
 
   public abstract String getJREsRoot();

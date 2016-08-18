@@ -8,15 +8,13 @@
  * Contributors:
  *    Ed Merks - initial API and implementation
  */
-package org.eclipse.oomph.setup.internal.installer;
+package org.eclipse.oomph.setup.internal.core;
 
 import org.eclipse.oomph.base.util.EAnnotations;
-import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.CacheHandling;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
-import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
@@ -38,6 +36,7 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
@@ -52,13 +51,35 @@ public class SetupArchiver implements IApplication
   {
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
 
-    File file = new File(System.getProperty("java.io.tmpdir"), "setups.zip");
+    // The default target file is the cache location of the local setup archive.
+    final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
+    final URIConverter uriConverter = resourceSet.getURIConverter();
+    URI archiveLocation = uriConverter.normalize(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI);
+    File file = new File(ECFURIHandlerImpl.getCacheFile(archiveLocation).toFileString());
 
+    Set<URI> uris = new LinkedHashSet<URI>();
+    uris.add(SetupContext.INDEX_SETUP_URI);
+
+    boolean expectURIs = false;
     for (int i = 0; i < arguments.length; ++i)
     {
-      if ("-target".equals(arguments[i]))
+      String argument = arguments[i];
+      if (argument.startsWith("-"))
+      {
+        expectURIs = false;
+      }
+
+      if (expectURIs)
+      {
+        uris.add(URI.createURI(argument));
+      }
+      else if ("-target".equals(argument))
       {
         file = new File(arguments[++i]);
+      }
+      else if ("-uris".equals(argument))
+      {
+        expectURIs = true;
       }
     }
 
@@ -112,19 +133,6 @@ public class SetupArchiver implements IApplication
           URI archiveEntry = URI.createURI("archive:" + URI.createFileURI(file.toString()) + "!/" + path);
 
           System.out.println("Previously mirrored " + uri + " -> " + archiveEntry);
-
-          // if (path.toString().contains("SmartHome"))
-          // {
-          // ByteArrayOutputStream out = new ByteArrayOutputStream();
-          //
-          // ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
-          // Resource resource = resourceSet.getResource(archiveEntry, true);
-          // resource.save(out, null);
-          //
-          // System.out.println();
-          // System.out.println(new String(out.toByteArray()));
-          // System.out.println();
-          // }
         }
       }
       catch (IOException ex)
@@ -153,10 +161,9 @@ public class SetupArchiver implements IApplication
       }
     }
 
-    final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
     resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_IGNORE);
 
-    ResourceMirror resourceMirror = new SetupWizard.IndexLoader.ResourceMirrorWithProductImages(resourceSet)
+    ResourceMirror resourceMirror = new ResourceMirror.WithProductImages(resourceSet)
     {
       @Override
       protected void visit(EObject eObject)
@@ -178,13 +185,12 @@ public class SetupArchiver implements IApplication
       }
     };
 
-    resourceMirror.perform(SetupContext.INDEX_SETUP_URI);
+    resourceMirror.perform(uris);
     resourceMirror.dispose();
     EcoreUtil.resolveAll(resourceSet);
 
     ECFURIHandlerImpl.clearExpectedETags();
 
-    final URIConverter uriConverter = resourceSet.getURIConverter();
     Map<URI, URI> uriMap = uriConverter.getURIMap();
     Map<Object, Object> options = new HashMap<Object, Object>();
     if (lastModified != 0)

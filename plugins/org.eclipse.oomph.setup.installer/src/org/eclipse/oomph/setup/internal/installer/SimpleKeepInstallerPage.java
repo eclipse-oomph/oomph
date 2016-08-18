@@ -15,6 +15,7 @@ import org.eclipse.oomph.internal.ui.FlatButton;
 import org.eclipse.oomph.internal.ui.ImageHoverButton;
 import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.Type;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -194,7 +195,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        final String launcher = InstallerApplication.getLauncher();
+        final String launcher = OS.getCurrentLauncher(false);
         if (launcher != null)
         {
           final boolean startMenu = startMenuButton == null ? false : startMenuButton.isChecked();

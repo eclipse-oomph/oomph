@@ -135,12 +135,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
     return plugin;
   }
 
-  public static boolean isInstallerProduct()
-  {
-    String productID = PropertiesUtil.getProperty("eclipse.product");
-    return SetupUtil.INSTALLER_PRODUCT_ID.equals(productID);
-  }
-
   public static void initialStart(File ws, boolean offline, boolean mirrors)
   {
     Annotation annotation = BaseFactory.eINSTANCE.createAnnotation();
@@ -192,7 +186,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   static void performStartup()
   {
-    if (!PropertiesUtil.isProperty(PREF_HEADLESS))
+    if (!PropertiesUtil.isProperty(PREF_HEADLESS) && !SetupUtil.SETUP_ARCHIVER_APPLICATION)
     {
       // These are only to force class loading on a background thread.
       SynchronizerManager.INSTANCE.toString();
@@ -204,7 +198,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       {
         public void run()
         {
-          if (!isInstallerProduct())
+          if (!SetupUtil.INSTALLER_PRODUCT)
           {
             SetupPropertyTester.setStarting(true);
 

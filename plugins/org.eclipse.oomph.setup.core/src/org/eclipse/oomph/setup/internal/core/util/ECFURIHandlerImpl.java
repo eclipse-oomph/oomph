@@ -16,10 +16,13 @@ import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
+import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.WorkerPool;
 
 import org.eclipse.emf.common.util.URI;
@@ -61,6 +64,8 @@ import org.eclipse.equinox.p2.core.UIServices.AuthenticationInfo;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.StorageException;
 
+import org.osgi.framework.Version;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -97,15 +102,43 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
   private static final boolean TEST_SLOW_NETWORK = false;
 
-  private static final boolean TRACE = PropertiesUtil.isProperty(SetupProperties.PROJP_SETUP_ECF_TRACE);
+  private static final boolean TRACE = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_ECF_TRACE);
 
   private static final String API_GITHUB_HOST = "api.github.com";
 
   private static final String CONTENT_TAG = "\"content\":\"";
 
-  private static int CONNECT_TIMEOUT = PropertiesUtil.getProperty(SetupProperties.PROJP_SETUP_ECF_CONNECT_TIMEOUT, 10000);
+  private static final int CONNECT_TIMEOUT = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_ECF_CONNECT_TIMEOUT, 10000);
 
-  private static int READ_TIMEOUT = PropertiesUtil.getProperty(SetupProperties.PROJP_SETUP_ECF_READ_TIMEOUT, 10000);
+  private static final int READ_TIMEOUT = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_ECF_READ_TIMEOUT, 10000);
+
+  private static boolean loggedBlockedURI;
+
+  private static final String USER_AGENT;
+  static
+  {
+    String userAgentProperty = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_USER_AGENT);
+    if (userAgentProperty == null)
+    {
+      StringBuilder userAgent = new StringBuilder("eclipse/oomph/");
+      if (SetupUtil.INSTALLER_PRODUCT)
+      {
+        userAgent.append("installer/");
+      }
+      else if (SetupUtil.SETUP_ARCHIVER_APPLICATION)
+      {
+        userAgent.append("installer/");
+      }
+
+      Version oomphVersion = SetupCorePlugin.INSTANCE.getBundle().getVersion();
+      userAgent.append(oomphVersion);
+      USER_AGENT = userAgent.toString();
+    }
+    else
+    {
+      USER_AGENT = userAgentProperty;
+    }
+  }
 
   private AuthorizationHandler defaultAuthorizationHandler;
 
@@ -167,6 +200,12 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
           return result;
         }
       }
+    }
+
+    String host = getHost(uri);
+    if ("git.eclipse.org".equals(host))
+    {
+      return Collections.emptyMap();
     }
 
     String username;
@@ -481,6 +520,15 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       System.out.println(tracePrefix + " expectedETag=" + expectedETag);
     }
 
+    // To prevent Eclipse's Git server from being overload, because it can't scale to thousands of users, we block all access.
+    String host = getHost(uri);
+    boolean isBlockedEclipseGitURI = !SetupUtil.SETUP_ARCHIVER_APPLICATION && "git.eclipse.org".equals(host);
+    if (isBlockedEclipseGitURI && uriConverter.exists(cacheURI, options))
+    {
+      // If the file is in the cache, it's okay to use that cached version, so try that first.
+      cacheHandling = CacheHandling.CACHE_ONLY;
+    }
+
     if (expectedETag != null || cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING)
     {
       if (cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? eTag != null : expectedETag.equals(eTag))
@@ -499,14 +547,42 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
         catch (IOException ex)
         {
           // Perhaps another JVM is busy writing this file.
-          // Proceed as if it doesn't exit.
-
+          // Proceed as if it doesn't exist.
           if (TRACE)
           {
             System.out.println(tracePrefix + " unable to load cached content");
           }
         }
       }
+    }
+
+    // In general all Eclipse-hosted setups should be in the Eclipse project or product catalog and therefore should be in
+    // SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI or should already be in the cache from running the setup archiver application.
+    if (isBlockedEclipseGitURI)
+    {
+      synchronized (this)
+      {
+        if (!loggedBlockedURI)
+        {
+          String launcher = OS.getCurrentLauncher(true);
+          if (launcher == null)
+          {
+            launcher = "eclipse";
+          }
+
+          // We'll log a single warning for this case.
+          SetupCorePlugin.INSTANCE.log(
+              "The Eclipse Git-hosted URI '" + uri + "' is blocked for direct access." + StringUtil.NL + //
+                  "Please open a Bugzilla to add it to an official Oomph catalog." + StringUtil.NL + //
+                  "For initial testing, use the file system local version of the resource." + StringUtil.NL + //
+                  "Alternatively, run the setup archiver application as follows:" + StringUtil.NL + //
+                  "  " + launcher + " -application org.eclipse.oomph.setup.core.SetupArchiver -consoleLog -noSplash -uris " + uri, //
+              IStatus.WARNING);
+          loggedBlockedURI = true;
+        }
+      }
+
+      throw new IOException("Eclipse Git access blocked: " + uri);
     }
 
     String username;
@@ -576,6 +652,13 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
         if (authorization != null && authorization.isAuthorized())
         {
           requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, Collections.singletonMap("Authorization", authorization.getAuthorization()));
+        }
+
+        if (!StringUtil.isEmpty(USER_AGENT) && host != null && host.endsWith(".eclipse.org"))
+        {
+          Map<String, String> requestHeaders = new HashMap<String, String>();
+          requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, requestHeaders);
+          requestHeaders.put("User-Agent", USER_AGENT);
         }
 
         fileTransfer.sendRetrieveRequest(fileTransferID, transferListener, requestOptions);
@@ -659,7 +742,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
         if (!CacheHandling.CACHE_IGNORE.equals(cacheHandling) && uriConverter.exists(cacheURI, options)
             && (!(transferListener.exception instanceof IncomingFileTransferException)
-                || ((IncomingFileTransferException)transferListener.exception).getErrorCode() != HttpURLConnection.HTTP_NOT_FOUND))
+                || ((IncomingFileTransferException)transferListener.exception).getErrorCode() != HttpURLConnection.HTTP_NOT_FOUND)
+            || uri.equals(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI))
         {
           setExpectedETag(uri, transferListener.eTag == null ? eTag : transferListener.eTag);
           if (TRACE)
