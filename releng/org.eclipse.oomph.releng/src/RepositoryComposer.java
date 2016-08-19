@@ -211,17 +211,15 @@ public final class RepositoryComposer
 
   private static void composeRepository(File compositeFolder, String name, List<File> drops) throws IOException
   {
-    System.out.println("Composing " + suffix(compositeFolder) + ":");
+    System.out.println("Composing " + compositeFolder + ":");
     for (File drop : drops)
     {
-      System.out.println("  of " + suffix(drop));
+      System.out.println("       of " + drop);
     }
 
     long timestamp = System.currentTimeMillis();
     writeRepository(compositeFolder, true, name, timestamp, drops);
     writeRepository(compositeFolder, false, name, timestamp, drops);
-
-    System.out.println();
   }
 
   private static void writeRepository(File compositeFolder, boolean metadata, String name, long timestamp, List<File> drops) throws IOException
@@ -354,11 +352,6 @@ public final class RepositoryComposer
   {
     File marker = new File(folder, REMOVE_MARKER);
     marker.createNewFile();
-  }
-
-  private static String suffix(File file)
-  {
-    return file.getParentFile().getName() + "/" + file.getName();
   }
 
   /**
