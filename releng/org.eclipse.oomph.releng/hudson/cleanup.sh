@@ -34,7 +34,7 @@ $BASH $SCRIPTS/composeRepositories.sh \
   "" \
   ""
 
-#mv $UPDATES $UPDATES.bak; mv $UPDATES_TMP $UPDATES
+mv $UPDATES $UPDATES.bak; mv $UPDATES_TMP $UPDATES
 
 for t in nightly milestone; do
   for f in $DROPS/$t/*; do
