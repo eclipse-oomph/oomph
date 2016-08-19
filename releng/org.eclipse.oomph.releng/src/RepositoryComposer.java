@@ -71,6 +71,10 @@ public final class RepositoryComposer
 
   private static final byte[] BUFFER = new byte[8192];
 
+  private static final String LATEST = "latest";
+
+  private static final String DROP_PROPERTIES = "drop.properties";
+
   private RepositoryComposer()
   {
   }
@@ -127,7 +131,7 @@ public final class RepositoryComposer
     String latestDropFolderSuffix;
     if (cleanup)
     {
-      latestDropFolderSuffix = IO.readUTF8(new File(downloadsFolder, "updates/latest/drop.properties"));
+      latestDropFolderSuffix = IO.readUTF8(new File(downloadsFolder, "updates/" + LATEST + "/" + DROP_PROPERTIES));
     }
     else
     {
@@ -141,10 +145,10 @@ public final class RepositoryComposer
     }
 
     File latestDropFolder = new File(dropsFolder, latestDropFolderSuffix);
-    File latestUpdatesFolder = new File(updatesFolder, "latest");
+    File latestUpdatesFolder = new File(updatesFolder, LATEST);
 
     composeRepository(latestUpdatesFolder, "Oomph Latest", Collections.singletonList(latestDropFolder));
-    IO.writeUTF8(new File(latestUpdatesFolder, "drop.properties"), latestDropFolderSuffix);
+    IO.writeUTF8(new File(latestUpdatesFolder, DROP_PROPERTIES), latestDropFolderSuffix);
   }
 
   private static void composeMilestoneRepositories(File dropsFolder, File updateTypeFolder) throws IOException
@@ -152,24 +156,31 @@ public final class RepositoryComposer
     File milestonesFolder = new File(dropsFolder, MILESTONE_TYPE);
     if (!composeRepositories(milestonesFolder, updateTypeFolder, ALPHA_COMPARATOR, Integer.MAX_VALUE))
     {
-      List<File> drops = new ArrayList<File>();
+      List<File> releaseDrop = new ArrayList<File>();
 
       File releasesFolder = new File(dropsFolder, RELEASE_TYPE);
       List<String> names = getSortedChildren(releasesFolder, VERSION_COMPARATOR);
       if (!names.isEmpty())
       {
-        drops.add(new File(releasesFolder, names.get(0)));
+        releaseDrop.add(new File(releasesFolder, names.get(0)));
       }
 
-      composeRepository(updateTypeFolder, "Oomph Milestones", drops);
-      composeRepository(new File(updateTypeFolder, "latest"), "Oomph Latest Milestone", drops);
+      composeRepository(updateTypeFolder, "Oomph Milestones", releaseDrop);
+
+      File latestUpdatesFolder = new File(updateTypeFolder, LATEST);
+      composeRepository(latestUpdatesFolder, "Oomph Latest Milestone", releaseDrop);
+
+      if (!names.isEmpty())
+      {
+        IO.writeUTF8(new File(latestUpdatesFolder, DROP_PROPERTIES), RELEASE_TYPE + "/" + names.get(0));
+      }
     }
   }
 
   private static boolean composeRepositories(File dropTypeFolder, File updateTypeFolder, Comparator<String> comparator, int max) throws IOException
   {
-    List<String> names = getSortedChildren(dropTypeFolder, comparator);
-    if (names.isEmpty())
+    List<String> dropNames = getSortedChildren(dropTypeFolder, comparator);
+    if (dropNames.isEmpty())
     {
       return false;
     }
@@ -177,9 +188,9 @@ public final class RepositoryComposer
     List<File> drops = new ArrayList<File>();
     int count = 0;
 
-    for (String name : names)
+    for (String dropName : dropNames)
     {
-      File drop = new File(dropTypeFolder, name);
+      File drop = new File(dropTypeFolder, dropName);
       if (++count > max)
       {
         scheduleRemoval(drop);
@@ -190,22 +201,38 @@ public final class RepositoryComposer
       }
     }
 
-    String name = dropTypeFolder.getName();
-    if (RELEASE_TYPE.equals(name))
+    String dropTypeLabel = "Build";
+    String dropType = dropTypeFolder.getName();
+
+    if (RELEASE_TYPE.equals(dropType))
     {
-      name = "Release";
+      dropTypeLabel = "Release";
     }
-    else if (MILESTONE_TYPE.equals(name))
+    else if (MILESTONE_TYPE.equals(dropType))
     {
-      name = "Milestone";
+      dropTypeLabel = "Milestone";
     }
-    else if (NIGHTLY_TYPE.equals(name))
+    else if (NIGHTLY_TYPE.equals(dropType))
     {
-      name = "Nightly Build";
+      dropTypeLabel = "Nightly Build";
     }
 
-    composeRepository(updateTypeFolder, "Oomph " + name + "s", drops);
-    composeRepository(new File(updateTypeFolder, "latest"), "Oomph Latest " + name, Collections.singletonList(drops.get(0)));
+    composeRepository(updateTypeFolder, "Oomph " + dropTypeLabel + "s", drops);
+
+    List<File> latestDrop = Collections.emptyList();
+    if (!drops.isEmpty())
+    {
+      latestDrop = Collections.singletonList(drops.get(0));
+    }
+
+    File latestUpdatesFolder = new File(updateTypeFolder, LATEST);
+    composeRepository(latestUpdatesFolder, "Oomph Latest " + dropTypeLabel, latestDrop);
+
+    if (!drops.isEmpty())
+    {
+      IO.writeUTF8(new File(latestUpdatesFolder, DROP_PROPERTIES), dropType + "/" + dropNames.get(0));
+    }
+
     return true;
   }
 
