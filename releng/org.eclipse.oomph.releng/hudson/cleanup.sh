@@ -30,7 +30,9 @@ cp -a $UPDATES $UPDATES_TMP
 
 $BASH $SCRIPTS/composeRepositories.sh \
   "$DOWNLOADS" \
-  "cleanup"
+  "cleanup" \
+  "" \
+  ""
 
 #mv $UPDATES $UPDATES.bak; mv $UPDATES_TMP $UPDATES
 
