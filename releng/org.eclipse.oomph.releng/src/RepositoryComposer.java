@@ -95,24 +95,27 @@ public final class RepositoryComposer
     {
       composeRepositories(new File(dropsFolder, RELEASE_TYPE), new File(updatesFolder, RELEASE_TYPE), VERSION_COMPARATOR, Integer.MAX_VALUE);
 
-      boolean milestonesChanged = false;
-      File milestonesFolder = new File(dropsFolder, MILESTONE_TYPE);
-      File[] children = milestonesFolder.listFiles();
-      if (children != null)
+      if (!cleanup)
       {
-        for (File child : children)
+        boolean milestonesChanged = false;
+        File milestonesFolder = new File(dropsFolder, MILESTONE_TYPE);
+        File[] children = milestonesFolder.listFiles();
+        if (children != null)
         {
-          if (child.isDirectory() && child.getName().contains("-" + buildKey + "-"))
+          for (File child : children)
           {
-            scheduleRemoval(child);
-            milestonesChanged = true;
+            if (child.isDirectory() && child.getName().contains("-" + buildKey + "-"))
+            {
+              scheduleRemoval(child);
+              milestonesChanged = true;
+            }
           }
         }
-      }
 
-      if (milestonesChanged)
-      {
-        composeMilestoneRepositories(dropsFolder, new File(updatesFolder, MILESTONE_TYPE));
+        if (milestonesChanged)
+        {
+          composeMilestoneRepositories(dropsFolder, new File(updatesFolder, MILESTONE_TYPE));
+        }
       }
     }
 
