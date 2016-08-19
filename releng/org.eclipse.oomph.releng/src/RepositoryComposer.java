@@ -33,6 +33,8 @@ import java.util.zip.ZipEntry;
  */
 public final class RepositoryComposer
 {
+  private static final String EXCLUDE_MARKER = "EXCLUDE";
+
   private static final String REMOVE_MARKER = "REMOVE";
 
   private static final Comparator<String> ALPHA_COMPARATOR = new Comparator<String>()
@@ -366,7 +368,7 @@ public final class RepositoryComposer
     {
       for (File child : children)
       {
-        if (child.isDirectory() && !new File(child, REMOVE_MARKER).exists())
+        if (child.isDirectory() && !new File(child, EXCLUDE_MARKER).exists() && !new File(child, REMOVE_MARKER).exists())
         {
           names.add(child.getName());
         }
