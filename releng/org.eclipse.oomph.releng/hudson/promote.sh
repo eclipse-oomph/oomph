@@ -215,13 +215,16 @@ cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES_TMP/$BUILD_TYPE/latest
 mkdir -p $UPDATES_TMP/latest
 cp -a $DROP/org.eclipse.oomph.site.zip $UPDATES_TMP/latest
 
-mv $UPDATES $UPDATES.bak; mv $UPDATES_TMP $UPDATES
-mv $PRODUCTS $PRODUCTS.bak; mv $PRODUCTS_TMP $PRODUCTS
-mv $HELP $HELP.bak; mv $HELP_TMP $HELP
-
-cd $WORKSPACE
 rm -rf $UPDATES.bak
+mv $UPDATES $UPDATES.bak; mv $UPDATES_TMP $UPDATES
+rm -rf $UPDATES.bak
+
 rm -rf $PRODUCTS.bak
+mv $PRODUCTS $PRODUCTS.bak; mv $PRODUCTS_TMP $PRODUCTS
+rm -rf $PRODUCTS.bak
+
+rm -rf $HELP.bak
+mv $HELP $HELP.bak; mv $HELP_TMP $HELP
 rm -rf $HELP.bak
 
 cd $WORKSPACE
