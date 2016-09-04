@@ -27,6 +27,8 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.xmi.XMLHelper;
+import org.eclipse.emf.ecore.xmi.impl.XMLSaveImpl;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
@@ -159,12 +161,14 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
           }
         }
 
+        XML.Escaper escaper = new XML.Escaper(encoding);
+
         StringBuilder builder = new StringBuilder();
         builder.append("<?xml version=\"1.0\" encoding=\"" + encoding + "\" standalone=\"no\"?>");
         builder.append(nl);
         builder.append("<?pde version=\"3.8\"?>");
         builder.append(nl);
-        builder.append("<target name=\"" + name + "\" sequenceNumber=\"" + sequenceNumber + "\">");
+        builder.append("<target name=\"" + escaper.escape(name) + "\" sequenceNumber=\"" + sequenceNumber + "\">");
         builder.append(nl);
         builder.append("  <locations>");
         builder.append(nl);
@@ -192,7 +196,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
                 for (IInstallableUnit iu : list)
                 {
-                  elements.add(formatElement(iu, versions));
+                  elements.add(formatElement(iu, versions, escaper));
                 }
 
                 for (String element : elements)
@@ -206,7 +210,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
               }
             }
 
-            builder.append("      <repository location=\"" + repository.getLocation() + "\"/>");
+            builder.append("      <repository location=\"" + escaper.escape(repository.getLocation()) + "\"/>");
             builder.append(nl);
           }
 
@@ -232,7 +236,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
               for (IInstallableUnit iu : list)
               {
-                elements.add(formatElement(iu, versions));
+                elements.add(formatElement(iu, versions, escaper));
               }
 
               for (String element : elements)
@@ -242,7 +246,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
                 builder.append(nl);
               }
 
-              builder.append("      <repository location=\"" + repository.getLocation() + "\"/>");
+              builder.append("      <repository location=\"" + escaper.escape(repository.getLocation()) + "\"/>");
               builder.append(nl);
               builder.append("    </location>");
               builder.append(nl);
@@ -264,6 +268,17 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         monitor.subTask("Updating " + (uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
         contents = contents.replace("sequenceNumber=\"" + sequenceNumber + "\"", "sequenceNumber=\"" + (sequenceNumber + 1) + "\"");
         super.setContents(uri, encoding, contents);
+      }
+
+      private String formatElement(IInstallableUnit iu, boolean withVersion, XML.Escaper escaper)
+      {
+        Version version = iu.getVersion();
+        if (!withVersion || version == null)
+        {
+          version = Version.emptyVersion;
+        }
+
+        return "<unit id=\"" + escaper.escape(iu.getId()) + "\" version=\"" + escaper.escape(version) + "\"/>";
       }
 
     }.update(targetDefinition);
@@ -325,17 +340,6 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     }
 
     return preferredRepositories;
-  }
-
-  private static String formatElement(IInstallableUnit iu, boolean withVersion)
-  {
-    Version version = iu.getVersion();
-    if (!withVersion || version == null)
-    {
-      version = Version.emptyVersion;
-    }
-
-    return "<unit id=\"" + iu.getId() + "\" version=\"" + version + "\"/>";
   }
 
   private static Map<IMetadataRepository, Set<IInstallableUnit>> analyzeRepositories(Targlet targlet, Profile profile, IInstallableUnit artificialRoot,
@@ -587,5 +591,51 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     }
 
     return result;
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class XML extends XMLSaveImpl
+  {
+    private XML(XMLHelper helper)
+    {
+      super(helper);
+    }
+
+    /**
+     * @author Eike Stepper
+     */
+    public static final class Escaper extends Escape
+    {
+      private static final int MAX_UTF_MAPPABLE_CODEPOINT = 0x10FFFF;
+
+      private static final int MAX_LATIN1_MAPPABLE_CODEPOINT = 0xFF;
+
+      private static final int MAX_ASCII_MAPPABLE_CODEPOINT = 0x7F;
+
+      public Escaper(String encoding)
+      {
+        int maxSafeChar = MAX_UTF_MAPPABLE_CODEPOINT;
+        if (encoding != null)
+        {
+          if (encoding.equalsIgnoreCase("ASCII") || encoding.equalsIgnoreCase("US-ASCII"))
+          {
+            maxSafeChar = MAX_ASCII_MAPPABLE_CODEPOINT;
+          }
+          else if (encoding.equalsIgnoreCase("ISO-8859-1"))
+          {
+            maxSafeChar = MAX_LATIN1_MAPPABLE_CODEPOINT;
+          }
+        }
+
+        setMappingLimit(maxSafeChar);
+      }
+
+      public String escape(Object value)
+      {
+        return convert(String.valueOf(value));
+      }
+    }
   }
 }
