@@ -612,144 +612,27 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return planner;
   }
 
+  public void flushRepositoryCaches()
+  {
+    IMetadataRepositoryManager metadataRepositoryManager = getMetadataRepositoryManager();
+    if (metadataRepositoryManager instanceof CachingRepositoryManager.Metadata)
+    {
+      CachingRepositoryManager.Metadata manager = (CachingRepositoryManager.Metadata)metadataRepositoryManager;
+      manager.flushCache();
+    }
+
+    IArtifactRepositoryManager artifactRepositoryManager = getArtifactRepositoryManager();
+    if (artifactRepositoryManager instanceof CachingRepositoryManager.Artifact)
+    {
+      CachingRepositoryManager.Artifact manager = (CachingRepositoryManager.Artifact)artifactRepositoryManager;
+      manager.flushCache();
+    }
+  }
+
   @Override
   public String toString()
   {
     return getLocation().getAbsolutePath();
-  }
-
-  private static boolean cacheTransport(Transport transport)
-  {
-    if (PropertiesUtil.isProperty("oomph.p2.disable.offline"))
-    {
-      return false;
-    }
-
-    // If a location is listed twice or the location to be installed in is also listed in the agents.info we may already have a CachingTransport.
-    if (transport instanceof CachingTransport)
-    {
-      return false;
-    }
-
-    // We can only cache if we can delegate to an existing transport.
-    return transport != null;
-  }
-
-  private static File getFile(String path)
-  {
-    if (StringUtil.isEmpty(path))
-    {
-      return null;
-    }
-
-    return new File(path);
-  }
-
-  public static boolean isValid(File location)
-  {
-    return new File(location, ENGINE_PATH).isDirectory();
-  }
-
-  public static String getProfileType(IProfile delegate)
-  {
-    String type = delegate.getProperty(Profile.PROP_PROFILE_TYPE);
-    if (type == null)
-    {
-      // This check is done for legacy reasons. The current targlet.ui plugin contributes a profileType extension.
-      if (delegate.getProperty("targlet.container.id") != null)
-      {
-        return "Targlet";
-      }
-
-      if (delegate.getProperty(Profile.PROP_INSTALL_FOLDER) != null)
-      {
-        return "Installation";
-      }
-    }
-
-    return type;
-  }
-
-  public static String getProfileExtraInfo(IProfile delegate)
-  {
-    List<String> tokens = new ArrayList<String>();
-    tokens.add(getProfileType(delegate));
-    tokens.add(delegate.getProperty(Profile.PROP_CACHE));
-    tokens.add(delegate.getProperty(Profile.PROP_INSTALL_FOLDER));
-    tokens.add(delegate.getProperty(Profile.PROP_PROFILE_REFERENCER));
-    return StringUtil.implode(tokens, '|');
-  }
-
-  public static IProvisioningAgent getOrCreateProvisioningAgent(File location)
-  {
-    BundleContext context = P2CorePlugin.INSTANCE.getBundleContext();
-    ServiceReference<IProvisioningAgent> agentRef = null;
-    IProvisioningAgent provisioningAgent = null;
-
-    try
-    {
-      Collection<ServiceReference<IProvisioningAgent>> agentRefs = null;
-
-      try
-      {
-        agentRefs = context.getServiceReferences(IProvisioningAgent.class, "(locationURI=" + location.toURI() + ")");
-      }
-      catch (InvalidSyntaxException ex)
-      {
-        // Can't happen because we write the filter ourselves
-      }
-
-      if (agentRefs != null && !agentRefs.isEmpty())
-      {
-        agentRef = agentRefs.iterator().next();
-        provisioningAgent = context.getService(agentRef);
-      }
-    }
-    catch (Exception ex)
-    {
-      provisioningAgent = null;
-    }
-    finally
-    {
-      if (agentRef != null)
-      {
-        context.ungetService(agentRef);
-      }
-    }
-
-    if (provisioningAgent == null)
-    {
-      location.mkdirs();
-      ServiceReference<IProvisioningAgentProvider> providerRef = null;
-
-      try
-      {
-        providerRef = context.getServiceReference(IProvisioningAgentProvider.class);
-        if (providerRef != null)
-        {
-          IProvisioningAgentProvider provider = context.getService(providerRef);
-          provisioningAgent = provider.createAgent(location.toURI());
-        }
-      }
-      catch (ProvisionException ex)
-      {
-        throw new P2Exception(ex);
-      }
-      finally
-      {
-        if (providerRef != null)
-        {
-          context.ungetService(providerRef);
-        }
-      }
-    }
-
-    if (provisioningAgent == null)
-    {
-      throw new P2Exception("Provisioning agent could not be loaded from " + location);
-    }
-
-    return provisioningAgent;
   }
 
   private void adjustInstallation(IProfile profile)
@@ -1117,6 +1000,140 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
         configuration.save(platformXML, null);
       }
     }
+  }
+
+  public static boolean isValid(File location)
+  {
+    return new File(location, ENGINE_PATH).isDirectory();
+  }
+
+  public static String getProfileType(IProfile delegate)
+  {
+    String type = delegate.getProperty(Profile.PROP_PROFILE_TYPE);
+    if (type == null)
+    {
+      // This check is done for legacy reasons. The current targlet.ui plugin contributes a profileType extension.
+      if (delegate.getProperty("targlet.container.id") != null)
+      {
+        return "Targlet";
+      }
+
+      if (delegate.getProperty(Profile.PROP_INSTALL_FOLDER) != null)
+      {
+        return "Installation";
+      }
+    }
+
+    return type;
+  }
+
+  public static String getProfileExtraInfo(IProfile delegate)
+  {
+    List<String> tokens = new ArrayList<String>();
+    tokens.add(getProfileType(delegate));
+    tokens.add(delegate.getProperty(Profile.PROP_CACHE));
+    tokens.add(delegate.getProperty(Profile.PROP_INSTALL_FOLDER));
+    tokens.add(delegate.getProperty(Profile.PROP_PROFILE_REFERENCER));
+    return StringUtil.implode(tokens, '|');
+  }
+
+  public static IProvisioningAgent getOrCreateProvisioningAgent(File location)
+  {
+    BundleContext context = P2CorePlugin.INSTANCE.getBundleContext();
+    ServiceReference<IProvisioningAgent> agentRef = null;
+    IProvisioningAgent provisioningAgent = null;
+
+    try
+    {
+      Collection<ServiceReference<IProvisioningAgent>> agentRefs = null;
+
+      try
+      {
+        agentRefs = context.getServiceReferences(IProvisioningAgent.class, "(locationURI=" + location.toURI() + ")");
+      }
+      catch (InvalidSyntaxException ex)
+      {
+        // Can't happen because we write the filter ourselves
+      }
+
+      if (agentRefs != null && !agentRefs.isEmpty())
+      {
+        agentRef = agentRefs.iterator().next();
+        provisioningAgent = context.getService(agentRef);
+      }
+    }
+    catch (Exception ex)
+    {
+      provisioningAgent = null;
+    }
+    finally
+    {
+      if (agentRef != null)
+      {
+        context.ungetService(agentRef);
+      }
+    }
+
+    if (provisioningAgent == null)
+    {
+      location.mkdirs();
+      ServiceReference<IProvisioningAgentProvider> providerRef = null;
+
+      try
+      {
+        providerRef = context.getServiceReference(IProvisioningAgentProvider.class);
+        if (providerRef != null)
+        {
+          IProvisioningAgentProvider provider = context.getService(providerRef);
+          provisioningAgent = provider.createAgent(location.toURI());
+        }
+      }
+      catch (ProvisionException ex)
+      {
+        throw new P2Exception(ex);
+      }
+      finally
+      {
+        if (providerRef != null)
+        {
+          context.ungetService(providerRef);
+        }
+      }
+    }
+
+    if (provisioningAgent == null)
+    {
+      throw new P2Exception("Provisioning agent could not be loaded from " + location);
+    }
+
+    return provisioningAgent;
+  }
+
+  private static boolean cacheTransport(Transport transport)
+  {
+    if (PropertiesUtil.isProperty("oomph.p2.disable.offline"))
+    {
+      return false;
+    }
+
+    // If a location is listed twice or the location to be installed in is also listed in the agents.info we may already have a CachingTransport.
+    if (transport instanceof CachingTransport)
+    {
+      return false;
+    }
+
+    // We can only cache if we can delegate to an existing transport.
+    return transport != null;
+  }
+
+  private static File getFile(String path)
+  {
+    if (StringUtil.isEmpty(path))
+    {
+      return null;
+    }
+
+    return new File(path);
   }
 
   private static String createFileURI(String path)

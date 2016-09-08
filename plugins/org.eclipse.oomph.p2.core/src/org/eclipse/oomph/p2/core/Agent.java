@@ -56,4 +56,6 @@ public interface Agent extends AgentManagerElement, ProfileContainer
   public IEngine getEngine();
 
   public IPlanner getPlanner();
+
+  public void flushRepositoryCaches();
 }

@@ -20,6 +20,7 @@ import org.eclipse.oomph.p2.P2Package;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.VersionSegment;
+import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.RepositoryProvider;
 import org.eclipse.oomph.p2.impl.RequirementImpl;
@@ -945,7 +946,10 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       analyzeJob.cancel();
       installableUnits = null;
 
-      IMetadataRepositoryManager repositoryManager = P2Util.getAgentManager().getCurrentAgent().getMetadataRepositoryManager();
+      Agent agent = P2Util.getAgentManager().getCurrentAgent();
+      agent.flushRepositoryCaches();
+
+      IMetadataRepositoryManager repositoryManager = agent.getMetadataRepositoryManager();
       if (repositoryProvider == null || !repositoryProvider.getLocation().equals(location))
       {
         disposeRepositoryProvider();
@@ -955,7 +959,6 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       SubMonitor progress = SubMonitor.convert(monitor, 101);
 
       IMetadataRepository repository = repositoryProvider.getRepository(progress.newChild(100));
-
       if (repository instanceof org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository)
       {
         org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository compositeRepository = (org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository)repository;
@@ -970,6 +973,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           try
           {
             URI absolute = URIUtil.makeAbsolute(child, location);
+
             if (repositoryManager.loadRepository(absolute, null) == null)
             {
               throw new ProvisionException("No repository found at " + absolute + ".");

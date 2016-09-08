@@ -90,7 +90,6 @@ import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
-import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRequest;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
@@ -807,21 +806,10 @@ public class ProfileTransactionImpl implements ProfileTransaction
       throws CoreException
   {
     Agent agent = profile.getAgent();
+    agent.flushRepositoryCaches();
+
     final IMetadataRepositoryManager metadataRepositoryManager = agent.getMetadataRepositoryManager();
     Set<String> knownRepositories = P2Util.getKnownRepositories(metadataRepositoryManager);
-
-    if (metadataRepositoryManager instanceof CachingRepositoryManager.Metadata)
-    {
-      CachingRepositoryManager.Metadata manager = (CachingRepositoryManager.Metadata)metadataRepositoryManager;
-      manager.flushCache();
-    }
-
-    IArtifactRepositoryManager artifactRepositoryManager = agent.getArtifactRepositoryManager();
-    if (artifactRepositoryManager instanceof CachingRepositoryManager.Artifact)
-    {
-      CachingRepositoryManager.Artifact manager = (CachingRepositoryManager.Artifact)artifactRepositoryManager;
-      manager.flushCache();
-    }
 
     EList<Repository> repositories = profileDefinition.getRepositories();
     URI[] metadataURIs = new URI[repositories.size()];
