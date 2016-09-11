@@ -246,7 +246,13 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       String value = fieldHolder.getValue();
       if (!StringUtil.isEmpty(value))
       {
-        usedVariables.addAll(SetupTaskPerformer.getVariables(value));
+        for (String variable : SetupTaskPerformer.getVariables(value))
+        {
+          if (!variable.startsWith("@"))
+          {
+            usedVariables.add(variable);
+          }
+        }
       }
     }
 
