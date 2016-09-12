@@ -741,11 +741,15 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             // If it's not a full prompt user, we want to be sure we get the value from the variable page.
             if (!fullPromptUser)
             {
-              String promptedValue = getPrompter().getValue(variable);
-              if (promptedValue != null)
+              // But don't do that for implied variables.
+              if (variable.getAnnotation("ImpliedVariable") == null)
               {
-                variable.setValue(promptedValue);
-                value = null;
+                String promptedValue = getPrompter().getValue(variable);
+                if (promptedValue != null)
+                {
+                  variable.setValue(promptedValue);
+                  value = null;
+                }
               }
             }
 
