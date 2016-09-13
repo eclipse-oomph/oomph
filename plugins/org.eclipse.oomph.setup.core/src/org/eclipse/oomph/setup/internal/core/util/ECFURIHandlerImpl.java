@@ -671,7 +671,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
           ex.printStackTrace(System.out);
         }
 
-        throw new IOExceptionWithCause(ex);
+        throw createIOException(uriString, ex);
       }
 
       try
@@ -686,7 +686,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
           ex.printStackTrace(System.out);
         }
 
-        throw new IOExceptionWithCause(ex);
+        throw createIOException(uriString, ex);
       }
 
       if (transferListener.exception != null)
@@ -759,7 +759,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
           System.out.println(tracePrefix + " failing");
         }
 
-        throw new IOExceptionWithCause(transferListener.exception);
+        throw createIOException(uriString, transferListener.exception);
       }
 
       byte[] bytes = transferListener.out.toByteArray();
@@ -1008,6 +1008,22 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
   private static Authorization getAuthorizaton(Map<?, ?> options)
   {
     return (Authorization)options.get(OPTION_AUTHORIZATION);
+  }
+
+  private static IOException createIOException(String url, Throwable cause)
+  {
+    String message = cause.getMessage();
+    if (message != null && message.contains(url))
+    {
+      if (cause instanceof IOException)
+      {
+        return (IOException)cause;
+      }
+
+      return new IOExceptionWithCause(cause);
+    }
+
+    return new IOExceptionWithCause((StringUtil.isEmpty(message) ? "Error: " : message + ": ") + url, cause);
   }
 
   /**
