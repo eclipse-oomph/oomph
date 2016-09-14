@@ -744,7 +744,14 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       {
         if (otherChildShell.isVisible() && excludedShell != otherChildShell && (otherChildShell.getStyle() & SWT.APPLICATION_MODAL) != 0)
         {
-          return true;
+          if (otherChildShell.getData("IndexLoaderDialogShell") != null)
+          {
+            otherChildShell.setVisible(false);
+          }
+          else
+          {
+            return true;
+          }
         }
       }
 
@@ -770,6 +777,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       }
       else
       {
+        dialogShell.setData("IndexLoaderDialogShell", progressMonitorDialog);
         dialogShell.setVisible(true);
       }
     }
