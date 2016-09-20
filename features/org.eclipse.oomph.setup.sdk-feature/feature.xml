@@ -12,7 +12,7 @@
 <feature
       id="org.eclipse.oomph.setup.sdk"
       label="%featureName"
-      version="1.5.0.qualifier"
+      version="1.6.0.qualifier"
       provider-name="%providerName"
       license-feature="org.eclipse.oomph.license"
       license-feature-version="0.0.0">
@@ -33,10 +33,6 @@
       <update label="%updateSiteName" url="http://download.eclipse.org/oomph/updates"/>
       <discovery label="%updateSiteName" url="http://download.eclipse.org/oomph/updates"/>
    </url>
-
-   <includes
-         id="org.eclipse.oomph.setup"
-         version="0.0.0"/>
 
    <includes
          id="org.eclipse.oomph.setup.git"
