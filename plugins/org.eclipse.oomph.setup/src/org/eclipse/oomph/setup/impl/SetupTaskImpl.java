@@ -687,13 +687,13 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
   public void overrideFor(SetupTask overriddenSetupTask)
   {
     EList<SetupTask> overriddenPredecessors = overriddenSetupTask.getPredecessors();
-    if (overriddenPredecessors.isEmpty())
+    if (!overriddenPredecessors.isEmpty())
     {
       getPredecessors().addAll(overriddenPredecessors);
     }
 
     EList<SetupTask> overriddenSuccessors = overriddenSetupTask.getSuccessors();
-    if (!overriddenPredecessors.isEmpty())
+    if (!overriddenSuccessors.isEmpty())
     {
       getSuccessors().addAll(overriddenSuccessors);
     }
