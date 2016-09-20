@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.oomph.projectconfig;singleton:=true
-Bundle-Version: 1.5.0.qualifier
+Bundle-Version: 1.6.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.oomph.projectconfig.impl.ProjectConfigPlugin$Implementation
 Bundle-Name: %pluginName
@@ -9,13 +9,13 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.emf.ecore;bundle-version="[2.10.0,3.0.0)";visibility:=reexport,
- org.eclipse.oomph.predicates;bundle-version="[1.5.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.preferences;bundle-version="[1.5.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.predicates;bundle-version="[1.6.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.preferences;bundle-version="[1.6.0,2.0.0)";visibility:=reexport,
  org.eclipse.core.resources;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.team.core;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.emf.ecore.xmi;bundle-version="[2.10.0,3.0.0)"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: org.eclipse.oomph.projectconfig;version="1.5.0";x-internal:=true,
- org.eclipse.oomph.projectconfig.impl;version="1.5.0";x-internal:=true,
- org.eclipse.oomph.projectconfig.util;version="1.5.0";x-internal:=true
+Export-Package: org.eclipse.oomph.projectconfig;version="1.6.0";x-internal:=true,
+ org.eclipse.oomph.projectconfig.impl;version="1.6.0";x-internal:=true,
+ org.eclipse.oomph.projectconfig.util;version="1.6.0";x-internal:=true

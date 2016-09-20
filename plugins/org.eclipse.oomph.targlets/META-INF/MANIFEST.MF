@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.oomph.targlets;singleton:=true
-Bundle-Version: 1.5.0.qualifier
+Bundle-Version: 1.6.0.qualifier
 Bundle-ClassPath: .
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
@@ -14,13 +14,13 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.equinox.p2.publisher;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.equinox.p2.updatesite;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.equinox.p2.repository;bundle-version="[2.0.0,3.0.0)",
- org.eclipse.oomph.p2.core;bundle-version="[1.5.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.resources;bundle-version="[1.5.0,2.0.0)";visibility:=reexport
+ org.eclipse.oomph.p2.core;bundle-version="[1.6.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.resources;bundle-version="[1.6.0,2.0.0)";visibility:=reexport
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.oomph.internal.targlets;version="1.5.0";x-internal:=true,
- org.eclipse.oomph.targlets;version="1.5.0";x-internal:=true,
- org.eclipse.oomph.targlets.impl;version="1.5.0";x-internal:=true,
- org.eclipse.oomph.targlets.util;version="1.5.0";x-internal:=true
+Export-Package: org.eclipse.oomph.internal.targlets;version="1.6.0";x-internal:=true,
+ org.eclipse.oomph.targlets;version="1.6.0";x-internal:=true,
+ org.eclipse.oomph.targlets.impl;version="1.6.0";x-internal:=true,
+ org.eclipse.oomph.targlets.util;version="1.6.0";x-internal:=true
 Bundle-Activator: org.eclipse.oomph.internal.targlets.TargletsPlugin$Implementation
 Service-Component: META-INF/noopPluginConverter.xml

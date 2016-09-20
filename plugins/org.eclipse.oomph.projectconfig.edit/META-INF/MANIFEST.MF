@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.oomph.projectconfig.edit;singleton:=true
-Bundle-Version: 1.5.0.qualifier
+Bundle-Version: 1.6.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.oomph.projectconfig.provider.ProjectConfigEditPlugin$Implementation
 Bundle-Vendor: %providerName
@@ -10,10 +10,10 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: org.eclipse.oomph.projectconfig.provider;version="1.5.0";x-internal:=true
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
- org.eclipse.oomph.projectconfig;bundle-version="[1.5.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.projectconfig;bundle-version="[1.6.0,2.0.0)";visibility:=reexport,
  org.eclipse.emf.edit;bundle-version="[2.10.0,3.0.0)";visibility:=reexport,
- org.eclipse.oomph.predicates.edit;bundle-version="[1.5.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.preferences.edit;bundle-version="[1.5.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.base.edit;bundle-version="[1.5.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.predicates.edit;bundle-version="[1.6.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.preferences.edit;bundle-version="[1.6.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.base.edit;bundle-version="[1.6.0,2.0.0)";visibility:=reexport,
  org.eclipse.core.resources;bundle-version="[3.5.0,4.0.0)"
 Bundle-ActivationPolicy: lazy
