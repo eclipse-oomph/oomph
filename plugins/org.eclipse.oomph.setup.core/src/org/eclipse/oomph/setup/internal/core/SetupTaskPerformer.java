@@ -790,7 +790,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           }
         }
 
-        expandVariableKeys(keys);
+        expandVariableKeys(keys, true);
 
         // 2.8. Expand task attributes in situ
         expandStrings(triggeredSetupTasks);
@@ -2398,7 +2398,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    expandVariableKeys(keys);
+    expandVariableKeys(keys, false);
 
     for (EStructuralFeature.Setting setting : unresolvedSettings)
     {
@@ -2463,7 +2463,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
   }
 
-  private void expandVariableKeys(Set<String> keys)
+  private void expandVariableKeys(Set<String> keys, boolean addUnresolvedSettings)
   {
     Map<String, Set<String>> variables = new LinkedHashMap<String, Set<String>>();
     for (Map.Entry<Object, Object> entry : getMap().entrySet())
@@ -2502,7 +2502,17 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         else if (entryKey instanceof String)
         {
           String value = entryValue.toString();
-          variables.put(key, getVariables(value));
+          Set<String> valueVariables = getVariables(value);
+          variables.put(key, valueVariables);
+
+          if (addUnresolvedSettings && !valueVariables.isEmpty())
+          {
+            VariableTask variable = allVariables.get(key);
+            if (variable != null)
+            {
+              unresolvedSettings.add(((InternalEObject)variable).eSetting(SetupPackage.Literals.VARIABLE_TASK__VALUE));
+            }
+          }
         }
       }
     }
@@ -3809,8 +3819,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       {
         return null;
       }
+    }
 
-      for (SetupTaskPerformer setupTaskPerformer : performers)
+    for (SetupTaskPerformer setupTaskPerformer : performers)
+    {
+      if (!setupTaskPerformer.unresolvedSettings.isEmpty())
       {
         setupTaskPerformer.resolveSettings();
       }
