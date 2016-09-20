@@ -223,7 +223,7 @@ public class AnnotationItemProvider extends ModelElementItemProvider
   }
 
   @Override
-  public void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
+  protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 

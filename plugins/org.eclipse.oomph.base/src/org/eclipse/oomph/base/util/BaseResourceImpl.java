@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLHelper;
 import org.eclipse.emf.ecore.xmi.XMLLoad;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.XMLSave;
 import org.eclipse.emf.ecore.xmi.impl.SAXXMIHandler;
 import org.eclipse.emf.ecore.xmi.impl.XMIHelperImpl;
@@ -299,70 +300,80 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
   @Override
   protected XMLHelper createXMLHelper()
   {
-    return new XMIHelperImpl(this)
+    return new BaseHelperImpl(this);
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class BaseHelperImpl extends XMIHelperImpl
+  {
+    public BaseHelperImpl(XMLResource resource)
     {
-      @Override
-      protected URI getHREF(Resource otherResource, EObject obj)
+      super(resource);
+    }
+
+    @Override
+    public URI getHREF(Resource otherResource, EObject obj)
+    {
+      // Walk up the containers.
+      InternalEObject internalEObject = (InternalEObject)obj;
+
+      EObject basisObject = null;
+      boolean checkedID = false;
+      String id = null;
+      for (InternalEObject container = (InternalEObject)internalEObject.eContainer(); container != null; container = (InternalEObject)container.eContainer())
       {
-        // Walk up the containers.
-        InternalEObject internalEObject = (InternalEObject)obj;
-
-        EObject basisObject = null;
-        boolean checkedID = false;
-        String id = null;
-        for (InternalEObject container = (InternalEObject)internalEObject.eContainer(); container != null; container = (InternalEObject)container.eContainer())
+        // If the object is contained by this helper's resource, we want a normal "downward" pointing href.
+        Internal eDirectResource = container.eDirectResource();
+        if (eDirectResource == resource)
         {
-          // If the object is contained by this helper's resource, we want a normal "downward" pointing href.
-          Internal eDirectResource = container.eDirectResource();
-          if (eDirectResource == resource)
-          {
-            return super.getHREF(otherResource, obj);
-          }
-
-          if (eDirectResource != null && basisObject == null)
-          {
-            if (!checkedID)
-            {
-              checkedID = true;
-              id = EcoreUtil.getID(obj);
-            }
-
-            if (id != null && container instanceof ModelElement)
-            {
-              basisObject = container;
-            }
-          }
-
-          internalEObject = container;
+          return super.getHREF(otherResource, obj);
         }
 
-        Resource rootContainerResource = internalEObject.eResource();
-        if (rootContainerResource != otherResource && rootContainerResource != null)
+        if (eDirectResource != null && basisObject == null)
         {
-          String fragmentPath = EcoreUtil.getRelativeURIFragmentPath(internalEObject, basisObject == null ? obj : basisObject);
-          URI proxyURI = super.getHREF(rootContainerResource, internalEObject);
-          StringBuilder fragment = new StringBuilder(proxyURI.fragment());
-          fragment.append('/');
-          fragment.append(fragmentPath);
-          if (basisObject != null)
+          if (!checkedID)
           {
-            fragment.append("/'");
-            encode(fragment, id);
-            fragment.append('\'');
+            checkedID = true;
+            id = EcoreUtil.getID(obj);
           }
 
-          return proxyURI.appendFragment(fragment.toString());
+          if (id != null && container instanceof ModelElement)
+          {
+            basisObject = container;
+          }
         }
 
-        return super.getHREF(otherResource, obj);
+        internalEObject = container;
       }
 
-      @Override
-      public URI deresolve(URI uri)
+      Resource rootContainerResource = internalEObject.eResource();
+      if (rootContainerResource != otherResource && rootContainerResource != null)
       {
-        return super.deresolve(BaseUtil.resolveBogusURI(uri));
+        String fragmentPath = EcoreUtil.getRelativeURIFragmentPath(internalEObject, basisObject == null ? obj : basisObject);
+        URI proxyURI = super.getHREF(rootContainerResource, internalEObject);
+        StringBuilder fragment = new StringBuilder(proxyURI.fragment());
+        fragment.append('/');
+        fragment.append(fragmentPath);
+        if (basisObject != null)
+        {
+          fragment.append("/'");
+          encode(fragment, id);
+          fragment.append('\'');
+        }
+
+        return proxyURI.appendFragment(fragment.toString());
       }
-    };
+
+      return super.getHREF(otherResource, obj);
+    }
+
+    @Override
+    public URI deresolve(URI uri)
+    {
+      return super.deresolve(BaseUtil.resolveBogusURI(uri));
+    }
   }
 
   private static final String[] ESCAPE = { "%00", "%01", "%02", "%03", "%04", "%05", "%06", "%07", "%08", "%09", "%0A", "%0B", "%0C", "%0D", "%0E", "%0F",
