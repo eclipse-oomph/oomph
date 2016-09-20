@@ -1334,6 +1334,7 @@ public final class AgentAnalyzer
             IStatus status = repository.getArtifact(remoteDescriptor, destination, progress.newChild());
             if (status.getSeverity() == IStatus.OK)
             {
+              localDescriptors = null;
               return true;
             }
           }
@@ -1345,18 +1346,19 @@ public final class AgentAnalyzer
       }
       catch (OperationCanceledException ex)
       {
-        restoreDescriptors(p2BundlePool, localDescriptors);
         throw ex;
       }
       catch (Error err)
       {
-        restoreDescriptors(p2BundlePool, localDescriptors);
         throw err;
       }
       catch (Exception ex)
       {
-        restoreDescriptors(p2BundlePool, localDescriptors);
         P2CorePlugin.INSTANCE.log(ex);
+      }
+      finally
+      {
+        restoreDescriptors(p2BundlePool, localDescriptors);
       }
 
       return false;
