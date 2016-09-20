@@ -524,6 +524,9 @@
           summary="Oomph Resolved in 1.5.0"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;resolution=FIXED&amp;resolution=DUPLICATE&amp;version=1.5.0"/>
       <query
+          summary="Oomph Resolved in 1.6.0"
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;resolution=FIXED&amp;resolution=DUPLICATE&amp;version=1.6.0"/>
+      <query
           summary="Oomph Unspecified Version"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;version=unspecified"/>
     </setupTask>
