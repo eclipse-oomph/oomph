@@ -42,27 +42,20 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java Developers (Neon)">
+          label="Eclipse IDE for Java Developers (Oxygen)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -102,9 +95,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -115,7 +108,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -175,6 +168,66 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java Developers (Oxygen)">
+        <requirement
+            name="epp.package.java"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.buildship.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jgit.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.logback.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -182,7 +235,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -386,27 +439,20 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (Neon)">
+          label="Eclipse IDE for Java EE Developers (Oxygen)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cft.server.core.feature.feature.group"/>
         <requirement
@@ -526,9 +572,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -539,7 +585,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -679,6 +725,146 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java EE Developers (Oxygen)">
+        <requirement
+            name="epp.package.jee"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.cft.server.core.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.cft.server.ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.common.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.intro.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.modelbase.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqltools.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.common.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.common.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.dbws.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jaxb.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jaxb.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jpa.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jpa.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jsf.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.common.fproj.enablement.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.enterprise_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.jsf.apache.trinidad.tagsupport.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.server_adapters.ext.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.server_adapters.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.server_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.web_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.webpageeditor.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.ws.axis2tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.ws.cxf.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.ws.jaxws.dom.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.ws.jaxws.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.logback.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.wtp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.wtp.jaxrs.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.wtp.jpa.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.wtp.jsf.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.rse.feature.group"/>
+        <requirement
+            name="org.eclipse.rse.useractions.feature.group"/>
+        <requirement
+            name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.common.fproj.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.jsdt.chromium.debug.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.jsdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.server_adapters.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.web_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xsl.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -686,7 +872,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -982,27 +1168,20 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for C/C++ Developers (Neon)">
+          label="Eclipse IDE for C/C++ Developers (Oxygen)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -1056,9 +1235,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -1069,7 +1248,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/1.RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1143,6 +1322,80 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (Oxygen)">
+        <requirement
+            name="epp.package.cpp"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.cdt.autotools.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.build.crossgcc.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.debug.standalone.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.debug.ui.memory.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.launch.remote.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.cdt.libhover.devhelp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.cdt.libhover.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.changelog.c.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.gcov.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.gprof.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.rpm.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.valgrind.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.rse.feature.group"/>
+        <requirement
+            name="org.eclipse.tracecompass.gdbtrace.feature.group"/>
+        <requirement
+            name="org.eclipse.tracecompass.lttng2.control.feature.group"/>
+        <requirement
+            name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
+        <requirement
+            name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -1150,7 +1403,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/1.RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1356,27 +1609,20 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (Neon)">
+          label="Eclipse IDE for JavaScript and Web Developers (Oxygen)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -1422,9 +1668,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -1435,7 +1681,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1501,6 +1747,72 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for JavaScript and Web Developers (Oxygen)">
+        <requirement
+            name="epp.package.javascript"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.gitflow.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.package.common.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.equinox.p2.user.ui.feature.group"/>
+        <requirement
+            name="org.eclipse.help.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.github.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.rse.feature.group"/>
+        <requirement
+            name="org.eclipse.thym.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.jsdt.chromium.debug.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.jsdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.json_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.server_adapters.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.server_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.web_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -1508,7 +1820,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1586,27 +1898,20 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for PHP Developers (Neon)">
+          label="Eclipse IDE for PHP Developers (Oxygen)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -1636,9 +1941,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -1649,7 +1954,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1699,6 +2004,56 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for PHP Developers (Oxygen)">
+        <requirement
+            name="epp.package.php"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.gitflow.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.github.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.php.feature.group"/>
+        <requirement
+            name="org.eclipse.php.importer.feature.group"/>
+        <requirement
+            name="org.eclipse.php.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.jsdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -1706,7 +2061,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1819,53 +2174,40 @@
       label="Eclipse IDE for Eclipse Committers">
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Eclipse Committers (Neon)">
+          label="Eclipse IDE for Eclipse Committers (Oxygen)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
             name="org.eclipse.cvs.feature.group"/>
         <requirement
-            name="org.eclipse.cvs.source.feature.group"/>
-        <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
+            name="org.eclipse.egit.gitflow.feature.feature.group"/>
+        <requirement
             name="org.eclipse.egit.mylyn.feature.group"/>
-        <requirement
-            name="org.eclipse.epp.package.common.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.equinox.p2.user.ui.feature.group"/>
-        <requirement
-            name="org.eclipse.help.feature.group"/>
         <requirement
             name="org.eclipse.jdt.feature.group"/>
         <requirement
             name="org.eclipse.jdt.source.feature.group"/>
         <requirement
-            name="org.eclipse.jgit.feature.group"/>
-        <requirement
             name="org.eclipse.jgit.http.apache.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
         <requirement
@@ -1918,10 +2260,14 @@
             name="org.eclipse.recommenders.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.json_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -1932,7 +2278,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2032,6 +2378,104 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Eclipse Committers (Oxygen)">
+        <requirement
+            name="epp.package.committers"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.buildship.feature.group"/>
+        <requirement
+            name="org.eclipse.cvs.feature.group"/>
+        <requirement
+            name="org.eclipse.e4.core.tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.gitflow.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.source.feature.group"/>
+        <requirement
+            name="org.eclipse.jgit.http.apache.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.builds.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.notifications.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.discovery.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.gerrit.dashboard.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.gerrit.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.reviews.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"/>
+        <requirement
+            name="org.eclipse.pde.source.feature.group"/>
+        <requirement
+            name="org.eclipse.platform.source.feature.group"/>
+        <requirement
+            name="org.eclipse.rcp.source.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.news.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.json_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -2039,7 +2483,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2191,30 +2635,23 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse DSL Tools (Neon)">
+          label="Eclipse DSL Tools (Oxygen)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.12.0,4.0.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
@@ -2227,9 +2664,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -2240,7 +2677,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2276,6 +2713,42 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (Oxygen)">
+        <requirement
+            name="epp.package.dsl"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.13.0,3.14.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.12.0,3.14.0)"/>
+        <requirement
+            name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.mwe2.language.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.xtext.sdk.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -2283,7 +2756,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2475,27 +2948,20 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java and Report Developers (Neon)">
+          label="Eclipse IDE for Java and Report Developers (Oxygen)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
         <requirement
@@ -2591,9 +3057,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -2604,7 +3070,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/1.RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2720,6 +3186,122 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java and Report Developers (Oxygen)">
+        <requirement
+            name="epp.package.reporting"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.birt.chart.cshelp.feature.group"/>
+        <requirement
+            name="org.eclipse.birt.cshelp.feature.group"/>
+        <requirement
+            name="org.eclipse.birt.doc.feature.group"/>
+        <requirement
+            name="org.eclipse.birt.example.feature.group"/>
+        <requirement
+            name="org.eclipse.birt.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.common.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.intro.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.modelbase.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqltools.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.common.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.common.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.dbws.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jaxb.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jaxb.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jpa.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jpa.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jsf.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.common.fproj.enablement.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.enterprise_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.jsf.apache.trinidad.tagsupport.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.server_adapters.ext.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.server_adapters.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.server_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.web_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.webpageeditor.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.ws.axis2tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.rse.feature.group"/>
+        <requirement
+            name="org.eclipse.rse.useractions.feature.group"/>
+        <requirement
+            name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.common.fproj.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.jsdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.server_adapters.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.web_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xsl.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -2727,7 +3309,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/1.RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2999,27 +3581,20 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse Modeling Tools (Neon)">
+          label="Eclipse Modeling Tools (Oxygen)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.amalgam.discovery.feature.group"/>
         <requirement
@@ -3087,9 +3662,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -3100,7 +3675,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3188,6 +3763,94 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Modeling Tools (Oxygen)">
+        <requirement
+            name="epp.package.modeling"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.amalgam.discovery.feature.group"/>
+        <requirement
+            name="org.eclipse.e4.core.tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.cdo.epp.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.ide.ui.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.ecoretools.design.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.ecoretools.explorer.contextual.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.ecp.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.emfstore.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.parsley.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.parsley.sdk.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.query.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.transaction.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.validation.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.gef.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.gmf.runtime.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.ocl.all.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"/>
+        <requirement
+            name="org.eclipse.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.uml2.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.xsd.sdk.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -3195,7 +3858,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3436,27 +4099,20 @@
       label="Eclipse for Android Developers">
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Android Developers (Neon)">
+          label="Eclipse for Android Developers (Oxygen)">
         <requirement
             name="epp.package.android"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.andmore.android.basic.feature.feature.group"/>
         <requirement
@@ -3504,9 +4160,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -3517,7 +4173,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3585,6 +4241,74 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Android Developers (Oxygen)">
+        <requirement
+            name="epp.package.android"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.andmore.android.basic.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.andmore.gldebugger.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.andmore.hierarchyviewer.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.andmore.ndk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.andmore.traceview.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.buildship.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.logback.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -3592,7 +4316,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3672,30 +4396,23 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for RCP and RAP Developers (Neon)">
+          label="Eclipse for RCP and RAP Developers (Oxygen)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.12.0,4.0.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
             versionRange="[3.12.0,4.0.0)"/>
@@ -3746,9 +4463,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -3759,7 +4476,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3833,6 +4550,80 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for RCP and RAP Developers (Oxygen)">
+        <requirement
+            name="epp.package.rcp"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.13.0,3.14.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.12.0,3.14.0)"/>
+        <requirement
+            name="org.eclipse.buildship.feature.group"/>
+        <requirement
+            name="org.eclipse.e4.core.tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.logback.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.gerrit.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.rap.tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.swtbot.eclipse.feature.group"/>
+        <requirement
+            name="org.eclipse.swtbot.eclipse.gef.feature.group"/>
+        <requirement
+            name="org.eclipse.swtbot.ide.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -3840,7 +4631,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4070,27 +4861,20 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Testers (Neon)">
+          label="Eclipse for Testers (Oxygen)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jubula.feature.feature.group"/>
         <requirement
@@ -4104,9 +4888,9 @@
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -4117,7 +4901,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4151,6 +4935,40 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Testers (Oxygen)">
+        <requirement
+            name="epp.package.testing"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.jubula.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -4158,7 +4976,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4324,27 +5142,20 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Neon)">
+          label="Eclipse for Parallel Application Developers (Oxygen)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -4398,9 +5209,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -4411,7 +5222,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4485,6 +5296,80 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (Oxygen)">
+        <requirement
+            name="epp.package.parallel"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.cdt.autotools.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.bupc.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.core.parser.upc.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.debug.ui.memory.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.platform.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.xlc.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.jgit.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.debug.sdm.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.fortran.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.pldt.upc.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.rdt.sync.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.remote.terminal.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.rm.jaxb.contrib.feature.group"/>
+        <requirement
+            name="org.eclipse.remote.console.feature.group"/>
+        <requirement
+            name="org.eclipse.remote.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -4492,7 +5377,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4923,27 +5808,20 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonr</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Scout Developers (Neon)">
+          label="Eclipse for Scout Developers (Oxygen)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -4979,9 +5857,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/neon"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -4992,7 +5870,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5048,6 +5926,62 @@
       </setupTask>
     </version>
     <version
+        name="oxygen"
+        label="Oxygen"
+        requiredJavaVersion="1.8">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (Oxygen)">
+        <requirement
+            name="epp.package.scout"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.help.source.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.source.feature.group"/>
+        <requirement
+            name="org.eclipse.jgit.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.web_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.scout.sdk-feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/oxygen/M2"/>
+        <repository
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+      </setupTask>
+    </version>
+    <version
         name="neon"
         label="Neon"
         requiredJavaVersion="1.8">
@@ -5055,7 +5989,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neonr</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neon1rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5260,29 +6194,22 @@
       label="Eclipse Platform">
     <version
         name="latest"
-        label="Latest (Neon)"
+        label="Latest (Oxygen)"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.6-201606061100/</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse Platform (Neon)">
+          label="Eclipse Platform (Oxygen)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,5.0.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version
@@ -5316,13 +6243,6 @@
         name="oxygen"
         label="Oxygen"
         requiredJavaVersion="1.8">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.6-201606061100/</value>
-        </detail>
-      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (Oxygen)">
@@ -5336,11 +6256,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.7.0,4.8.0)"/>
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.7-I-builds"/>
-        <repository
-            url="http://download.eclipse.org/releases/neon/201606221000"/>
-        <repository
-            url="http://download.eclipse.org/modeling/emf/emf/updates/2.12"/>
+            url="http://download.eclipse.org/releases/oxygen/201609231000"/>
       </setupTask>
     </version>
     <version

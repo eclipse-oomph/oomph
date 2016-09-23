@@ -20,18 +20,11 @@
       value="5g"
       vm="true"/>
   <version name="latest"
-      label="Latest (Neon)"
+      label="Latest (Oxygen)"
       requiredJavaVersion="1.8">
-    <annotation
-        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Neon/R</value>
-      </detail>
-    </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse Eierlegende Wollmilchsau (Neon)">
+        label="Eclipse Eierlegende Wollmilchsau (Oxygen)">
       <requirement
           name="Application Development Frameworks"/>
       <requirement
@@ -63,9 +56,9 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.6.0,5.0.0)"/>
+          versionRange="[4.7.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/neon/201606221000"/>
+          url="http://download.eclipse.org/releases/oxygen/201609231000"/>
     </setupTask>
   </version>
   <version name="latest.released"
@@ -75,7 +68,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Neon/R</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Neon/1.RC3</value>
       </detail>
     </annotation>
     <setupTask
@@ -117,6 +110,48 @@
           url="http://download.eclipse.org/releases/neon/201606221000"/>
     </setupTask>
   </version>
+  <version name="oxygen"
+      label="Oxygen"
+      requiredJavaVersion="1.8">
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Eierlegende Wollmilchsau (Oxygen)">
+      <requirement
+          name="Application Development Frameworks"/>
+      <requirement
+          name="Business Intelligence, Reporting and Charting"/>
+      <requirement
+          name="Cloud Tools"/>
+      <requirement
+          name="Collaboration"/>
+      <requirement
+          name="Database Development"/>
+      <requirement
+          name="General Purpose Tools"/>
+      <requirement
+          name="Linux Tools"
+          filter="(osgi.os=linux)"/>
+      <requirement
+          name="Mobile and Device Development"/>
+      <requirement
+          name="Modeling"/>
+      <requirement
+          name="Performance, Profiling and Tracing Tools"/>
+      <requirement
+          name="Programming Languages"/>
+      <requirement
+          name="SOA Development"/>
+      <requirement
+          name="Testing"/>
+      <requirement
+          name="Web, XML, Java EE and OSGi Enterprise Development"/>
+      <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.7.0,4.8.0)"/>
+      <repository
+          url="http://download.eclipse.org/releases/oxygen/201609231000"/>
+    </setupTask>
+  </version>
   <version name="neon"
       label="Neon"
       requiredJavaVersion="1.8">
@@ -124,7 +159,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Neon/R</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Neon/1.RC3</value>
       </detail>
     </annotation>
     <setupTask
