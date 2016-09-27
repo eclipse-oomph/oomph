@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
@@ -148,6 +149,13 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * @generated
    */
   private EClass workspaceTaskEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass configurationEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -459,9 +467,19 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getIndex_Name()
+  {
+    return (EAttribute)indexEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getIndex_DiscoverablePackages()
   {
-    return (EReference)indexEClass.getEStructuralFeatures().get(0);
+    return (EReference)indexEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -471,7 +489,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    */
   public EReference getIndex_ProjectCatalogs()
   {
-    return (EReference)indexEClass.getEStructuralFeatures().get(2);
+    return (EReference)indexEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -541,7 +559,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    */
   public EReference getIndex_ProductCatalogs()
   {
-    return (EReference)indexEClass.getEStructuralFeatures().get(1);
+    return (EReference)indexEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -802,6 +820,36 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
   public EAttribute getWorkspaceTask_Location()
   {
     return (EAttribute)workspaceTaskEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getConfiguration()
+  {
+    return configurationEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getConfiguration_Installation()
+  {
+    return (EReference)configurationEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getConfiguration_Workspace()
+  {
+    return (EReference)configurationEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1828,6 +1876,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEAttribute(scopeEClass, SCOPE__QUALIFIED_NAME);
 
     indexEClass = createEClass(INDEX);
+    createEAttribute(indexEClass, INDEX__NAME);
     createEReference(indexEClass, INDEX__DISCOVERABLE_PACKAGES);
     createEReference(indexEClass, INDEX__PRODUCT_CATALOGS);
     createEReference(indexEClass, INDEX__PROJECT_CATALOGS);
@@ -1894,6 +1943,10 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
 
     workspaceTaskEClass = createEClass(WORKSPACE_TASK);
     createEAttribute(workspaceTaskEClass, WORKSPACE_TASK__LOCATION);
+
+    configurationEClass = createEClass(CONFIGURATION);
+    createEReference(configurationEClass, CONFIGURATION__INSTALLATION);
+    createEReference(configurationEClass, CONFIGURATION__WORKSPACE);
 
     compoundTaskEClass = createEClass(COMPOUND_TASK);
     createEAttribute(compoundTaskEClass, COMPOUND_TASK__NAME);
@@ -2033,6 +2086,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     installationTaskEClass.getESuperTypes().add(getSetupTask());
     workspaceEClass.getESuperTypes().add(getScope());
     workspaceTaskEClass.getESuperTypes().add(getSetupTask());
+    configurationEClass.getESuperTypes().add(theBasePackage.getModelElement());
     compoundTaskEClass.getESuperTypes().add(getSetupTask());
     compoundTaskEClass.getESuperTypes().add(getSetupTaskContainer());
     variableTaskEClass.getESuperTypes().add(getSetupTask());
@@ -2096,6 +2150,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addEOperation(scopeEClass, getScopeType(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED);
 
     initEClass(indexEClass, Index.class, "Index", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getIndex_Name(), ecorePackage.getEString(), "name", null, 1, 1, Index.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+        !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getIndex_DiscoverablePackages(), ecorePackage.getEPackage(), null, "discoverablePackages", null, 0, -1, Index.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getIndex_ProductCatalogs(), getProductCatalog(), getProductCatalog_Index(), "productCatalogs", null, 0, -1, Index.class, !IS_TRANSIENT,
@@ -2213,6 +2269,12 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     initEClass(workspaceTaskEClass, WorkspaceTask.class, "WorkspaceTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getWorkspaceTask_Location(), ecorePackage.getEString(), "location", "", 1, 1, WorkspaceTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(configurationEClass, Configuration.class, "Configuration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getConfiguration_Installation(), getInstallation(), null, "installation", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConfiguration_Workspace(), getWorkspace(), null, "workspace", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(compoundTaskEClass, CompoundTask.class, "CompoundTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getCompoundTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, CompoundTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,

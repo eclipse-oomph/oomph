@@ -11,6 +11,7 @@
 package org.eclipse.oomph.internal.ui;
 
 import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
+import org.eclipse.oomph.base.util.BaseResourceImpl;
 
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.EMFPlugin;
@@ -37,7 +38,6 @@ import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectOutputStrea
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.BasicInternalEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xml.namespace.XMLNamespacePackage;
@@ -72,6 +72,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -612,11 +613,11 @@ public abstract class OomphTransferDelegate
         ePackages.remove(XMLNamespacePackage.eINSTANCE);
 
         // Create a specialized copier for copying the packages and the EObjects.
-        class Copier extends EcoreUtil.Copier
+        class Copier extends ProxifyingCopier
         {
           private static final long serialVersionUID = 1L;
 
-          Map<EObject, EObject> packageCopies;
+          private Map<EObject, EObject> packageCopies;
 
           public Copier()
           {
@@ -629,7 +630,11 @@ public abstract class OomphTransferDelegate
             // Map to the copied package metadata.
             if (packageCopies != null)
             {
-              return (EClass)packageCopies.get(eClass);
+              EClass result = (EClass)packageCopies.get(eClass);
+              if (result != null)
+              {
+                return result;
+              }
             }
 
             return eClass;
@@ -641,7 +646,11 @@ public abstract class OomphTransferDelegate
             // Map to the copied package metadata.
             if (packageCopies != null)
             {
-              return (EStructuralFeature)packageCopies.get(eStructuralFeature);
+              EStructuralFeature result = (EStructuralFeature)packageCopies.get(eStructuralFeature);
+              if (result != null)
+              {
+                return result;
+              }
             }
 
             return eStructuralFeature;
@@ -992,11 +1001,35 @@ public abstract class OomphTransferDelegate
     {
       if (data instanceof String)
       {
-        Collection<? extends EObject> result = fromString(domain, data.toString());
+        String value = data.toString().trim();
+        Collection<? extends EObject> result = fromString(domain, value);
         if (result != null)
         {
           return result;
         }
+
+        String[] uriStrings = value.split("\r?\n");
+        Set<URI> uris = new LinkedHashSet<URI>();
+        for (String uriString : uriStrings)
+        {
+          try
+          {
+            String trimmedURIString = uriString.trim().replace(" ", "%20");
+            URI uri = URI.createURI(trimmedURIString);
+            if (uri.scheme() != null && uri.scheme().length() > 1)
+            {
+              // Make sure it's a valid according to Java's URI implementation as well.
+              new java.net.URI(trimmedURIString);
+              uris.add(uri);
+            }
+          }
+          catch (Throwable throwable)
+          {
+            // Ignore.
+          }
+        }
+
+        return uris;
       }
 
       return Collections.emptyList();
@@ -1089,8 +1122,9 @@ public abstract class OomphTransferDelegate
       {
         XMLResource resource = (XMLResource)RESOURCE_FACTORY.createResource(URI.createURI("dummy:/*.xmi"));
 
-        Copier copier = new EcoreUtil.Copier(true, false);
+        ProxifyingCopier copier = new ProxifyingCopier(true, false);
         Collection<EObject> eObjectCopies = copier.copyAll(eObjects);
+        copier.copyReferences();
         resource.getContents().addAll(eObjectCopies);
 
         StringWriter writer = new StringWriter();
@@ -1148,6 +1182,61 @@ public abstract class OomphTransferDelegate
       }
 
       return null;
+    }
+  }
+
+  private static class ProxifyingCopier extends EcoreUtil.Copier
+  {
+    private static final long serialVersionUID = 1L;
+
+    private final BaseResourceImpl.BaseHelperImpl helper = new BaseResourceImpl.BaseHelperImpl(null);
+
+    private final Collection<Resource> excludedResources = new HashSet<Resource>();
+
+    public ProxifyingCopier(boolean resolveProxies, boolean useOriginalReferences)
+    {
+      super(resolveProxies, useOriginalReferences);
+    }
+
+    @Override
+    public EObject get(Object key)
+    {
+      EObject eObject = super.get(key);
+      if (eObject == null && !useOriginalReferences)
+      {
+        InternalEObject originalEObject = (InternalEObject)key;
+        if (originalEObject.eIsProxy())
+        {
+          InternalEObject proxy = (InternalEObject)EcoreUtil.create(getTarget(originalEObject.eClass()));
+          proxy.eSetProxyURI(originalEObject.eProxyURI());
+          return proxy;
+        }
+
+        Resource resource = originalEObject.eResource();
+        if (resource != null && !excludedResources.contains(resource))
+        {
+          URI uri = helper.getHREF(resource, originalEObject);
+          if (!uri.isCurrentDocumentReference())
+          {
+            InternalEObject proxy = (InternalEObject)EcoreUtil.create(getTarget(originalEObject.eClass()));
+            proxy.eSetProxyURI(uri);
+            return proxy;
+          }
+        }
+      }
+
+      return eObject;
+    }
+
+    @Override
+    public <T> Collection<T> copyAll(Collection<? extends T> eObjects)
+    {
+      for (Object object : eObjects)
+      {
+        excludedResources.add(((EObject)object).eResource());
+      }
+
+      return super.copyAll(eObjects);
     }
   }
 }

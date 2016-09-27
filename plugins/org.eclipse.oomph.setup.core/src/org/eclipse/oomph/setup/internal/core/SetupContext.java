@@ -24,6 +24,7 @@ import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
+import org.eclipse.oomph.setup.internal.core.util.IndexManager;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
@@ -119,9 +120,15 @@ public class SetupContext
 
   public static final URI SETUP_LOG_URI = CONFIGURATION_STATE_LOCATION_URI.appendSegment(LOG_FILE_NAME);
 
-  public static final URI INDEX_SETUP_URI = URI.createURI("index:/org.eclipse.setup");
+  public static final String INDEX_SETUP_NAME = "org.eclipse.setup";
 
-  public static final URI INDEX_SETUP_LOCATION_URI = URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.setup");
+  public static final URI INDEX_ROOT_URI = URI.createURI("index:/");
+
+  public static final URI INDEX_SETUP_URI = INDEX_ROOT_URI.appendSegment(INDEX_SETUP_NAME);
+
+  public static final URI INDEX_ROOT_LOCATION_URI = URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/");
+
+  public static final URI INDEX_SETUP_LOCATION_URI = INDEX_ROOT_LOCATION_URI.trimSegments(1).appendSegment(INDEX_SETUP_NAME);
 
   public static final URI INDEX_SETUP_ARCHIVE_LOCATION_URI = URI.createURI("http://www.eclipse.org/setups/setups.zip");
 
@@ -218,6 +225,16 @@ public class SetupContext
 
   public static SetupContext createSelf(ResourceSet resourceSet)
   {
+    Resource indexResource = resourceSet.getResource(INDEX_SETUP_URI, false);
+    if (indexResource != null)
+    {
+      Index index = (Index)EcoreUtil.getObjectByType(indexResource.getContents(), SetupPackage.Literals.INDEX);
+      if (index != null)
+      {
+        new IndexManager().addIndex(index);
+      }
+    }
+
     Installation installation = getInstallation(resourceSet, true, Mode.CREATE_AND_SAVE);
     Workspace workspace = getWorkspace(resourceSet, true, Mode.CREATE_AND_SAVE);
 
@@ -284,11 +301,8 @@ public class SetupContext
 
   public static SetupContext create(Installation installation, Collection<? extends Stream> streams, User user)
   {
-    Workspace workspace = createWorkspace();
+    Workspace workspace = getWorkspace(installation.eResource().getResourceSet(), false, Mode.CREATE);
     workspace.getStreams().addAll(streams);
-    Resource workspaceResource = installation.eResource().getResourceSet().createResource(WORKSPACE_SETUP_FILE_NAME_URI);
-    workspaceResource.getContents().add(workspace);
-
     return new SetupContext(installation, workspace, user);
   }
 
@@ -602,7 +616,20 @@ public class SetupContext
 
       if (installationResource != null)
       {
-        installation = (Installation)installationResource.getContents().get(0);
+        EList<EObject> contents = installationResource.getContents();
+        if (contents.isEmpty())
+        {
+          // If it's not in the resource, and we're not going to create it and save it, then make sure it exists.
+          if (mode == Mode.NONE)
+          {
+            installation = createInstallation();
+            contents.add(installation);
+          }
+        }
+        else
+        {
+          installation = (Installation)contents.get(0);
+        }
       }
     }
 
@@ -680,7 +707,21 @@ public class SetupContext
 
       if (workspaceResource != null)
       {
-        workspace = (Workspace)workspaceResource.getContents().get(0);
+        EList<EObject> contents = workspaceResource.getContents();
+        if (contents.isEmpty())
+        {
+          // If it's not in the resource, and we're not going to create it and save it, then make sure it exists.
+          if (mode == Mode.NONE)
+          {
+            workspace = createWorkspace();
+            contents.add(workspace);
+          }
+
+        }
+        else
+        {
+          workspace = (Workspace)workspaceResource.getContents().get(0);
+        }
       }
     }
 

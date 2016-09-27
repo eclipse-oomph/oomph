@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.impl;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
@@ -138,6 +139,8 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
         return createWorkspace();
       case SetupPackage.WORKSPACE_TASK:
         return createWorkspaceTask();
+      case SetupPackage.CONFIGURATION:
+        return createConfiguration();
       case SetupPackage.COMPOUND_TASK:
         return createCompoundTask();
       case SetupPackage.VARIABLE_TASK:
@@ -374,6 +377,17 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
   {
     WorkspaceTaskImpl workspaceTask = new WorkspaceTaskImpl();
     return workspaceTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Configuration createConfiguration()
+  {
+    ConfigurationImpl configuration = new ConfigurationImpl();
+    return configuration;
   }
 
   /**

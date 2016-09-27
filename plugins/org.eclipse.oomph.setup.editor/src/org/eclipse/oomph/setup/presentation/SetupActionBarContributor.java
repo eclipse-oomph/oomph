@@ -81,6 +81,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
@@ -258,6 +259,42 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     validateAction = new ValidateAction();
     liveValidationAction = new DiagnosticDecorator.LiveValidator.LiveValidationAction(SetupEditorPlugin.getPlugin().getDialogSettings());
     controlAction = new ControlAction();
+  }
+
+  @Override
+  public void init(IActionBars actionBars)
+  {
+    super.init(actionBars);
+
+    loadResourceAction = new LoadResourceAction()
+    {
+      @Override
+      public void run()
+      {
+        ResourceSet resourceSet = domain.getResourceSet();
+        EList<Resource> resources = resourceSet.getResources();
+        List<Resource> originalResources = new ArrayList<Resource>(resources);
+        super.run();
+        synchronized (resourceSet)
+        {
+          List<Resource> finalResources = new ArrayList<Resource>(resources);
+          finalResources.removeAll(originalResources);
+          if (!finalResources.isEmpty())
+          {
+            int index = 0;
+            for (Resource resource : finalResources)
+            {
+              resources.move(++index, resource);
+            }
+
+            if (!toggleViewerInputAction.isChecked())
+            {
+              toggleViewerInputAction.run();
+            }
+          }
+        }
+      }
+    };
   }
 
   public final ToggleViewerInputAction getToggleViewerInputAction()

@@ -917,6 +917,58 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
   }
 
   /**
+   * @author Ed Merks
+   */
+  public static class NewConfigurationWizard extends SetupModelWizard
+  {
+    @Override
+    protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
+    {
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label3"));
+      templateUsagePage.addTemplate("Simple Configuration", "@ConfigurationTemplate@.setup");
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class NewIndexWizard extends SetupModelWizard
+  {
+    @Override
+    protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
+    {
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label4"));
+      templateUsagePage.addTemplate("Simple Index", "@IndexTemplate@.setup");
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class NewProductCatalogWizard extends SetupModelWizard
+  {
+    @Override
+    protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
+    {
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label5"));
+      templateUsagePage.addTemplate("Simple Product Catalog", "@ProductCatalogTemplate@.setup");
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class NewProjectCatalogWizard extends SetupModelWizard
+  {
+    @Override
+    protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
+    {
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label6"));
+      templateUsagePage.addTemplate("Simple Project Catalog", "@ProjectCatalogTemplate@.setup");
+    }
+  }
+
+  /**
    * @author Eike Stepper
    */
   public static class NewProductWizard extends SetupModelWizard

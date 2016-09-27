@@ -27,6 +27,7 @@ import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
+import org.eclipse.oomph.setup.internal.core.util.IndexManager;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.provider.CatalogSelectionItemProvider;
 import org.eclipse.oomph.setup.provider.IndexItemProvider;
@@ -36,6 +37,7 @@ import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.provider.WorkspaceItemProvider;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider.DisabledImageDescriptor;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
+import org.eclipse.oomph.setup.ui.SetupTransferSupport;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
@@ -135,6 +137,8 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
@@ -178,6 +182,8 @@ public class ProjectPage extends SetupWizardPage
 
   private final SelectionMemento selectionMemento;
 
+  private final AtomicBoolean selectionMementoTried = new AtomicBoolean();
+
   private ComposedAdapterFactory adapterFactory;
 
   private ToolTipLabelProvider labelProvider;
@@ -193,6 +199,12 @@ public class ProjectPage extends SetupWizardPage
   private boolean projectsChanged;
 
   private boolean inactive;
+
+  private ConfigurationListener configurationListener;
+
+  private SetupTransferSupport.DropListener dropListener;
+
+  private FilteredTreeWithoutWorkbench.WithCheckboxes filteredTree;
 
   public ProjectPage(SelectionMemento selectionMemento)
   {
@@ -319,10 +331,30 @@ public class ProjectPage extends SetupWizardPage
     collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all"));
     AccessUtil.setKey(collapseAllButton, "collapse");
 
+    final boolean supportsIndexSwitching = getPreviousPage() instanceof SetupWizardPage;
+    configurationListener = new ConfigurationListener(getWizard().getTransferSupport(), catalogManager, filterToolBar)
+    {
+      @Override
+      protected void filter(Collection<? extends Resource> resources)
+      {
+        if (!supportsIndexSwitching)
+        {
+          for (Iterator<? extends Resource> it = resources.iterator(); it.hasNext();)
+          {
+            Resource resource = it.next();
+            if (ConfigurationListener.isIndexURI(resource.getURI()))
+            {
+              it.remove();
+            }
+          }
+        }
+      }
+    };
+
     final ToolItem catalogsButton = new ToolItem(filterToolBar, SWT.DROP_DOWN);
     catalogsButton.setToolTipText("Select Catalogs");
     catalogsButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("catalogs"));
-    catalogSelector.configure(catalogsButton);
+    catalogSelector.configure(getWizard(), catalogsButton, supportsIndexSwitching);
     AccessUtil.setKey(catalogsButton, "catalogs");
 
     PatternFilter patternFilter = new PatternFilter()
@@ -349,8 +381,7 @@ public class ProjectPage extends SetupWizardPage
       }
     };
 
-    FilteredTreeWithoutWorkbench.WithCheckboxes filteredTree = new FilteredTreeWithoutWorkbench.WithCheckboxes(upperComposite, SWT.BORDER | SWT.MULTI,
-        patternFilter, null);
+    filteredTree = new FilteredTreeWithoutWorkbench.WithCheckboxes(upperComposite, SWT.BORDER | SWT.MULTI, patternFilter, null);
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
     AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
@@ -502,8 +533,6 @@ public class ProjectPage extends SetupWizardPage
     projectViewer.setLabelProvider(labelProvider);
     projectViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
     {
-      private final AtomicBoolean selectionMementoTried = new AtomicBoolean();
-
       private boolean applySelectionMemento()
       {
         List<URI> uris = selectionMemento.getStreams();
@@ -539,6 +568,12 @@ public class ProjectPage extends SetupWizardPage
       public void notifyChanged(Notification notification)
       {
         super.notifyChanged(notification);
+
+        Workspace workspace = getWorkspace();
+        if (streamViewer.getInput() != workspace)
+        {
+          streamViewer.setInput(workspace);
+        }
 
         if (notification.getFeature() == SetupPackage.Literals.CATALOG_SELECTION__PROJECT_CATALOGS)
         {
@@ -731,8 +766,7 @@ public class ProjectPage extends SetupWizardPage
         Project parentProject = project.getParentProject();
         if (parentProject != null)
         {
-          Resource resource = parentProject.eResource();
-          if (resource != null && SetupContext.isUserScheme(resource.getURI().scheme()))
+          if (ConfigurationProcessor.isUserProject(parentProject))
           {
             userProjects.add(project);
           }
@@ -929,6 +963,90 @@ public class ProjectPage extends SetupWizardPage
     setPageComplete(false);
 
     sashForm.setWeights(new int[] { 3, 1 });
+
+    dropListener = new SetupTransferSupport.DropListener()
+    {
+      public void resourcesDropped(Collection<? extends Resource> resources)
+      {
+        SetupWizard setupWizard = getWizard();
+        setupWizard.setConfigurationResources(resources);
+
+        ConfigurationProcessor configurationProcessor = new ConfigurationProcessor(getWizard())
+        {
+          @Override
+          protected boolean applyStreams(List<Stream> streams)
+          {
+            filteredTree.clearText();
+            List<Project> projects = new ArrayList<Project>();
+            for (Stream stream : streams)
+            {
+              Project project = stream.getProject();
+              projects.add(project);
+            }
+
+            addProjects(projects);
+            projectViewer.setSelection(new StructuredSelection(projects), true);
+
+            Workspace viewerWorkspace = getWorkspace();
+            EList<Stream> viewerWorkspaceStreams = viewerWorkspace.getStreams();
+            for (Stream stream : streams)
+            {
+              Project project = stream.getProject();
+              LOOP: for (Stream viewerWorkspaceStream : viewerWorkspaceStreams)
+              {
+                if (viewerWorkspaceStream.getProject() == project)
+                {
+                  if (viewerWorkspaceStream != stream)
+                  {
+                    viewerWorkspaceStreams.remove(viewerWorkspaceStream);
+                    break;
+                  }
+
+                  continue LOOP;
+                }
+              }
+
+              viewerWorkspaceStreams.add(stream);
+              saveProjectStreamSelection(stream);
+            }
+
+            streamViewer.refresh();
+            projectViewer.refresh();
+            if (isCurrentPage())
+            {
+              gotoNextPage();
+            }
+
+            return true;
+          }
+
+          @Override
+          protected boolean applyNoStreams()
+          {
+            Workspace workspace = getWorkspace();
+            if (workspace == null)
+            {
+              SetupWizard wizard = getWizard();
+              wizard.setSetupContext(SetupContext.create(getInstallation(), Collections.<Stream> emptyList(), getUser()));
+              workspace = getWorkspace();
+              streamViewer.setInput(workspace);
+            }
+
+            return true;
+          }
+        };
+
+        configurationProcessor.processWorkspace();
+        IStatus status = configurationProcessor.getStatus();
+        if (!status.isOK())
+        {
+          ErrorDialog.openError(getShell(), "Workspace Problems", null, status);
+        }
+      }
+    };
+
+    getWizard().getTransferSupport().addDropListener(dropListener);
+
     return sashForm;
   }
 
@@ -952,6 +1070,8 @@ public class ProjectPage extends SetupWizardPage
   @Override
   public void enterPage(boolean forward)
   {
+    hookTransferControl(getShell(), getControl(), getWizard().getTransferSupport(), configurationListener);
+
     if (forward)
     {
       if (SetupPropertyTester.getHandlingShell() != getShell())
@@ -959,7 +1079,7 @@ public class ProjectPage extends SetupWizardPage
         setErrorMessage("Another setup wizard is already open.  Complete that interaction before importing projects.");
         projectViewer.getTree().setEnabled(false);
       }
-      else if (!isPageComplete())
+      else if (!isPageComplete() || projectViewer.getInput() == null)
       {
         Runnable initializer = new Runnable()
         {
@@ -981,6 +1101,7 @@ public class ProjectPage extends SetupWizardPage
             projectViewer.setInput(selection);
 
             // We definitely have a workspace with a fully mirrored resource set, so it's okay to access this on the UI thread now.
+            final boolean isPageComplete = isPageComplete();
             final Workspace workspace = getWorkspace();
             if (workspace != null)
             {
@@ -991,7 +1112,7 @@ public class ProjectPage extends SetupWizardPage
                 {
                   it.remove();
                 }
-                else
+                else if (!isPageComplete)
                 {
                   existingStreams.add(EcoreUtil.getURI(stream));
                 }
@@ -1041,9 +1162,31 @@ public class ProjectPage extends SetupWizardPage
     }
   }
 
+  public static void hookTransferControl(Shell shell, Control execludedControl, SetupTransferSupport transferSupport,
+      ConfigurationListener configurationListener)
+  {
+    shell.addShellListener(configurationListener);
+
+    // Listen for drops on the overall composite.
+    for (Control control : shell.getChildren())
+    {
+      if (control instanceof Composite)
+      {
+        transferSupport.addControl(control);
+        break;
+      }
+    }
+
+    // But exclude the page itself.
+    transferSupport.excludeControl(execludedControl);
+    configurationListener.checkConfigurationAvailability();
+  }
+
   @Override
   public void leavePage(boolean forward)
   {
+    unhookTransferControl(getShell(), getControl(), getWizard().getTransferSupport(), configurationListener);
+
     if (forward)
     {
       Workspace workspace = getWorkspace();
@@ -1057,8 +1200,16 @@ public class ProjectPage extends SetupWizardPage
         }
 
         selectionMemento.setStreams(uris);
+        selectionMementoTried.set(true);
       }
     }
+  }
+
+  public static void unhookTransferControl(Shell shell, Control execludedControl, SetupTransferSupport transferSupport,
+      ConfigurationListener configurationListener)
+  {
+    shell.removeShellListener(configurationListener);
+    transferSupport.removeControls();
   }
 
   @Override
@@ -2276,6 +2427,123 @@ public class ProjectPage extends SetupWizardPage
 
         return uri;
       }
+    }
+  }
+
+  public static class ConfigurationListener extends ShellAdapter
+  {
+    private final SetupTransferSupport transferSupport;
+
+    private final CatalogManager catalogManager;
+
+    private final ToolBar toolBar;
+
+    private ToolItem applyConfigurationButton;
+
+    public ConfigurationListener(SetupTransferSupport transferSupport, CatalogManager catalogManager, ToolBar toolBar)
+    {
+      this.transferSupport = transferSupport;
+      this.catalogManager = catalogManager;
+      this.toolBar = toolBar;
+    }
+
+    @Override
+    public void shellActivated(ShellEvent e)
+    {
+      checkConfigurationAvailability();
+    }
+
+    public void checkConfigurationAvailability()
+    {
+      Collection<? extends Resource> resources = transferSupport.getResources();
+      filter(resources);
+
+      URI indexLocation = getIndexURI(resources);
+      if (!resources.isEmpty() && (indexLocation == null || !catalogManager.isCurrentIndex(indexLocation)))
+      {
+        class ConfigurationSelectionAdapter extends SelectionAdapter
+        {
+          final Collection<Resource> resources = new ArrayList<Resource>();
+
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            transferSupport.resourcesDropped(resources);
+            disposeApplyConfigurationButton();
+          }
+
+          public void updateResources(Collection<? extends Resource> resources)
+          {
+            this.resources.clear();
+            this.resources.addAll(resources);
+          }
+        }
+
+        if (applyConfigurationButton == null)
+        {
+          applyConfigurationButton = new ToolItem(toolBar, SWT.NONE, 0);
+          applyConfigurationButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("full/obj16/Configuration"));
+
+          ConfigurationSelectionAdapter selectionListener = new ConfigurationSelectionAdapter();
+          selectionListener.updateResources(resources);
+          applyConfigurationButton.addSelectionListener(selectionListener);
+          applyConfigurationButton.setData("ConfigurationSelectionAdapter", selectionListener);
+          AccessUtil.setKey(applyConfigurationButton, "applyConfiguration");
+
+          toolBar.getParent().layout(true);
+          toolBar.layout(true);
+        }
+        else
+        {
+          ConfigurationSelectionAdapter selectionListener = (ConfigurationSelectionAdapter)applyConfigurationButton.getData("ConfigurationSelectionAdapter");
+          selectionListener.updateResources(resources);
+        }
+
+        if (indexLocation != null)
+        {
+          applyConfigurationButton.setToolTipText("Switch to the catalog index from the clipboard: " + IndexManager.getUnderlyingLocation(indexLocation));
+        }
+        else
+        {
+          applyConfigurationButton.setToolTipText("Apply the configuration from the clipboard");
+        }
+      }
+      else if (applyConfigurationButton != null)
+      {
+        disposeApplyConfigurationButton();
+      }
+    }
+
+    protected void filter(Collection<? extends Resource> resources)
+    {
+    }
+
+    private void disposeApplyConfigurationButton()
+    {
+      applyConfigurationButton.dispose();
+      applyConfigurationButton = null;
+
+      toolBar.getParent().layout(true);
+      toolBar.layout(true);
+    }
+
+    public static boolean isIndexURI(URI uri)
+    {
+      return uri != null && (uri.isArchive() || SetupContext.INDEX_SETUP_NAME.equals(uri.lastSegment()) || "zip".equals(uri.fileExtension()));
+    }
+
+    public static URI getIndexURI(Collection<? extends Resource> resources)
+    {
+      for (Resource resource : resources)
+      {
+        URI uri = resource.getURI();
+        if (isIndexURI(uri))
+        {
+          return uri;
+        }
+      }
+
+      return null;
     }
   }
 }

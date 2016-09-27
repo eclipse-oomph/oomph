@@ -22,7 +22,7 @@
             id="org.eclipse.oomph"
             name="%_UI_OomphWizard_category"/>
       <wizard
-            id="org.eclipse.oomph.setup.presentation.SetupModelWizardID"
+            id="org.eclipse.oomph.setup.presentation.SetupModelProjectWizardID"
             name="%_UI_SetupModelWizard_label"
             class="org.eclipse.oomph.setup.presentation.SetupModelWizard$NewProjectWizard"
             category="org.eclipse.oomph"
@@ -31,12 +31,48 @@
          <selection class="org.eclipse.core.resources.IResource"/>
       </wizard>
       <wizard
-            id="org.eclipse.oomph.setup.presentation.SetupModelWizardID"
+            id="org.eclipse.oomph.setup.presentation.SetupModelProductWizardID"
             name="%_UI_SetupModelWizard_label2"
             class="org.eclipse.oomph.setup.presentation.SetupModelWizard$NewProductWizard"
             category="org.eclipse.oomph"
             icon="icons/full/obj16/SetupModelFile.gif">
          <description>%_UI_SetupModelWizard_description2</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+      <wizard
+            id="org.eclipse.oomph.setup.presentation.SetupModelConfigurationWizardID"
+            name="%_UI_SetupModelWizard_label3"
+            class="org.eclipse.oomph.setup.presentation.SetupModelWizard$NewConfigurationWizard"
+            category="org.eclipse.oomph"
+            icon="icons/full/obj16/SetupModelFile.gif">
+         <description>%_UI_SetupModelWizard_description3</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+      <wizard
+            id="org.eclipse.oomph.setup.presentation.SetupModelIndexWizardID"
+            name="%_UI_SetupModelWizard_label4"
+            class="org.eclipse.oomph.setup.presentation.SetupModelWizard$NewIndexWizard"
+            category="org.eclipse.oomph"
+            icon="icons/full/obj16/SetupModelFile.gif">
+         <description>%_UI_SetupModelWizard_description4</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+      <wizard
+            id="org.eclipse.oomph.setup.presentation.SetupModelProductCatalogWizardID"
+            name="%_UI_SetupModelWizard_label5"
+            class="org.eclipse.oomph.setup.presentation.SetupModelWizard$NewProductCatalogWizard"
+            category="org.eclipse.oomph"
+            icon="icons/full/obj16/SetupModelFile.gif">
+         <description>%_UI_SetupModelWizard_description5</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+      <wizard
+            id="org.eclipse.oomph.setup.presentation.SetupModelProjectCatalogWizardID"
+            name="%_UI_SetupModelWizard_label6"
+            class="org.eclipse.oomph.setup.presentation.SetupModelWizard$NewProjectCatalogWizard"
+            category="org.eclipse.oomph"
+            icon="icons/full/obj16/SetupModelFile.gif">
+         <description>%_UI_SetupModelWizard_description6</description>
          <selection class="org.eclipse.core.resources.IResource"/>
       </wizard>
    </extension>

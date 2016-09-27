@@ -1,39 +1,36 @@
 /*
- * Copyright (c) 2014 Eike Stepper (Berlin, Germany) and others.
+ * Copyright (c) 2016 Ed Merks (Berlin, Germany) and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Eike Stepper - initial API and implementation
+ *    Ed Merks - initial API and implementation
  */
 package org.eclipse.oomph.setup.provider;
 
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
-import org.eclipse.oomph.setup.Index;
+import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
-import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import java.util.Collection;
 import java.util.List;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.oomph.setup.Index} object.
+ * This is the item provider adapter for a {@link org.eclipse.oomph.setup.Configuration} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class IndexItemProvider extends ModelElementItemProvider
+public class ConfigurationItemProvider extends ModelElementItemProvider
 {
   /**
    * This constructs an instance from a factory and a notifier.
@@ -41,7 +38,7 @@ public class IndexItemProvider extends ModelElementItemProvider
    * <!-- end-user-doc -->
    * @generated
    */
-  public IndexItemProvider(AdapterFactory adapterFactory)
+  public ConfigurationItemProvider(AdapterFactory adapterFactory)
   {
     super(adapterFactory);
   }
@@ -59,37 +56,8 @@ public class IndexItemProvider extends ModelElementItemProvider
     {
       super.getPropertyDescriptors(object);
 
-      addNamePropertyDescriptor(object);
-      addDiscoverablePackagesPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
-  }
-
-  /**
-   * This adds a property descriptor for the Name feature.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  protected void addNamePropertyDescriptor(Object object)
-  {
-    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Index_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Index_name_feature", "_UI_Index_type"),
-        SetupPackage.Literals.INDEX__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
-  }
-
-  /**
-   * This adds a property descriptor for the Discoverable Packages feature.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  protected void addDiscoverablePackagesPropertyDescriptor(Object object)
-  {
-    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Index_discoverablePackages_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Index_discoverablePackages_feature", "_UI_Index_type"),
-        SetupPackage.Literals.INDEX__DISCOVERABLE_PACKAGES, true, false, true, null, null, null));
   }
 
   /**
@@ -106,8 +74,8 @@ public class IndexItemProvider extends ModelElementItemProvider
     if (childrenFeatures == null)
     {
       super.getChildrenFeatures(object);
-      childrenFeatures.add(SetupPackage.Literals.INDEX__PRODUCT_CATALOGS);
-      childrenFeatures.add(SetupPackage.Literals.INDEX__PROJECT_CATALOGS);
+      childrenFeatures.add(SetupPackage.Literals.CONFIGURATION__INSTALLATION);
+      childrenFeatures.add(SetupPackage.Literals.CONFIGURATION__WORKSPACE);
     }
     return childrenFeatures;
   }
@@ -127,7 +95,7 @@ public class IndexItemProvider extends ModelElementItemProvider
   }
 
   /**
-   * This returns Index.gif.
+   * This returns Configuration.gif.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -135,7 +103,7 @@ public class IndexItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Index"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Configuration"));
   }
 
   /**
@@ -153,19 +121,12 @@ public class IndexItemProvider extends ModelElementItemProvider
    * This returns the label text for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated NOT
+   * @generated
    */
   @Override
   public String getText(Object object)
   {
-    Index index = (Index)object;
-    String label = index.getName();
-    if (StringUtil.isEmpty(label))
-    {
-      label = getTypeText(object);
-    }
-
-    return label;
+    return getString("_UI_Configuration_type");
   }
 
   /**
@@ -180,13 +141,10 @@ public class IndexItemProvider extends ModelElementItemProvider
   {
     updateChildren(notification);
 
-    switch (notification.getFeatureID(Index.class))
+    switch (notification.getFeatureID(Configuration.class))
     {
-      case SetupPackage.INDEX__NAME:
-        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-        return;
-      case SetupPackage.INDEX__PRODUCT_CATALOGS:
-      case SetupPackage.INDEX__PROJECT_CATALOGS:
+      case SetupPackage.CONFIGURATION__INSTALLATION:
+      case SetupPackage.CONFIGURATION__WORKSPACE:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;
     }
@@ -205,9 +163,9 @@ public class IndexItemProvider extends ModelElementItemProvider
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
-    newChildDescriptors.add(createChildParameter(SetupPackage.Literals.INDEX__PRODUCT_CATALOGS, SetupFactory.eINSTANCE.createProductCatalog()));
+    newChildDescriptors.add(createChildParameter(SetupPackage.Literals.CONFIGURATION__INSTALLATION, SetupFactory.eINSTANCE.createInstallation()));
 
-    newChildDescriptors.add(createChildParameter(SetupPackage.Literals.INDEX__PROJECT_CATALOGS, SetupFactory.eINSTANCE.createProjectCatalog()));
+    newChildDescriptors.add(createChildParameter(SetupPackage.Literals.CONFIGURATION__WORKSPACE, SetupFactory.eINSTANCE.createWorkspace()));
   }
 
 }

@@ -21,6 +21,8 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
+import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.ECollections;
@@ -31,6 +33,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -49,9 +52,11 @@ public class CatalogManager
 {
   public static final String PROPERTY_INDEX = "PROPERTY_INDEX";
 
-  private Index index;
+  private final IndexManager indexManager = new IndexManager();
 
-  private CatalogSelection selection;
+  private final CatalogSelection selection;
+
+  private Index index;
 
   private PropertyChangeSupport propertyChangeSupport;
 
@@ -88,9 +93,48 @@ public class CatalogManager
     return index;
   }
 
+  public boolean isCurrentIndex(URI indexURI)
+  {
+    if (index == null)
+    {
+      return false;
+    }
+
+    Resource resource = index.eResource();
+    URI currentIndexURI = resource.getResourceSet().getURIConverter().normalize(resource.getURI());
+    if (currentIndexURI.equals(indexURI))
+    {
+      return true;
+    }
+
+    if (currentIndexURI.isArchive())
+    {
+      String authority = currentIndexURI.authority();
+      if (authority.equals(indexURI + "!"))
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public CatalogSelection getSelection()
   {
     return selection;
+  }
+
+  public Scope getCatalog(boolean product, String name)
+  {
+    for (Scope scope : getCatalogs(product))
+    {
+      if (name.equals(scope.getName()))
+      {
+        return scope;
+      }
+    }
+
+    return null;
   }
 
   public List<? extends Scope> getCatalogs(boolean product)
@@ -137,9 +181,40 @@ public class CatalogManager
     Index oldIndex = this.index;
     this.index = index;
 
-    // Load the local selection into the same resource set as the index, but only if the local selection exists.
+    // If the name of the index changes, we clear out the current state of the selection.
+    String indexName = index.getName();
+    if (oldIndex != null && !ObjectUtil.equals(indexName, oldIndex.getName()))
+    {
+      selection.getDefaultProductVersions().clear();
+      selection.getDefaultStreams().clear();
+      selection.getProductCatalogs().clear();
+      selection.getProjectCatalogs().clear();
+      selection.getSelectedStreams().clear();
+      selection.getAnnotations().clear();
+    }
+
+    indexManager.addIndex(index);
+
     ResourceSet resourceSet = index.eResource().getResourceSet();
-    if (resourceSet.getURIConverter().exists(SetupContext.CATALOG_SELECTION_SETUP_URI, null))
+    URIConverter uriConverter = resourceSet.getURIConverter();
+
+    // Determine the URI of the selection from the name of the index.
+    URI catalogURI = StringUtil.isEmpty(indexName) || "Eclipse".equals(indexName) ? SetupContext.CATALOG_SELECTION_SETUP_URI
+        : SetupContext.CATALOG_SELECTION_SETUP_URI.trimSegments(1)
+            .appendSegment(URI.encodeSegment(indexName.replace(' ', '.').toLowerCase(), false) + '.' + SetupContext.CATALOG_SELECTION_SETUP_URI.lastSegment());
+    if (catalogURI != null && !catalogURI.equals(SetupContext.CATALOG_SELECTION_SETUP_URI))
+    {
+      // If it's not the default, redirect the default to the location.
+      uriConverter.getURIMap().put(SetupContext.CATALOG_SELECTION_SETUP_URI, catalogURI);
+    }
+    else
+    {
+      // Otherwise remove the mapping we might have added previously.
+      uriConverter.getURIMap().remove(SetupContext.CATALOG_SELECTION_SETUP_URI);
+    }
+
+    // Load the local selection into the same resource set as the index, but only if the local selection exists.
+    if (uriConverter.exists(SetupContext.CATALOG_SELECTION_SETUP_URI, null))
     {
       // Load local selection file
       Resource selectionResource = BaseUtil.loadResourceSafely(resourceSet, SetupContext.CATALOG_SELECTION_SETUP_URI);
@@ -149,7 +224,7 @@ public class CatalogManager
       EcoreUtil.resolveAll(selectionResource);
       selectionResource.getContents().clear();
 
-      // Add the managed selection to that same resource so it's proxies can resolve.
+      // Add the managed selection to that same resource so its proxies can resolve.
       selectionResource.getContents().add(this.selection);
 
       // Update the maps so they're hashed by the resolved proxies.

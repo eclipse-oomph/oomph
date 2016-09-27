@@ -1516,6 +1516,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     addIndexRedirection(result, SetupContext.INDEX_SETUP_URI, "");
     addIndexRedirection(result, SetupContext.INDEX_SETUP_LOCATION_URI, ".location");
+    addIndexRedirection(result, SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI, ".archive.location");
 
     if (REMOTE_DEBUG)
     {

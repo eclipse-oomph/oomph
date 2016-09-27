@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.provider;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -146,9 +147,14 @@ public class ScopeItemProvider extends SetupTaskContainerItemProvider
   {
     Scope scope = (Scope)object;
     String label = scope.getLabel();
-    if (label == null || label.length() == 0)
+    if (StringUtil.isEmpty(label))
     {
       label = scope.getName();
+    }
+
+    if (StringUtil.isEmpty(label))
+    {
+      label = getTypeText(object);
     }
 
     return label;

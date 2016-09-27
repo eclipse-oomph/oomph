@@ -32,7 +32,7 @@ public final class SetupUtil
 
   public static final String INSTALLER_PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
 
-  public static final boolean INSTALLER_PRODUCT = PropertiesUtil.getProperty("eclipse.product").equals(INSTALLER_PRODUCT_ID);
+  public static final boolean INSTALLER_PRODUCT = INSTALLER_PRODUCT_ID.equals(PropertiesUtil.getProperty("eclipse.product"));
 
   public static final boolean SETUP_ARCHIVER_APPLICATION = "org.eclipse.oomph.setup.core.SetupArchiver"
       .equals(PropertiesUtil.getProperty("eclipse.application"));

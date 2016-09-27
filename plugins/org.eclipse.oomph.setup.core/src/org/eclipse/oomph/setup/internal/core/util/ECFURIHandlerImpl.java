@@ -913,7 +913,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     return null;
   }
 
-  public static void setETag(URIConverter uriConverter, URI file, String eTag)
+  private static void setETag(URIConverter uriConverter, URI file, String eTag)
   {
     try
     {
@@ -982,7 +982,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
     }
   }
 
-  private static void setExpectedETag(URI uri, String eTag)
+  static void setExpectedETag(URI uri, String eTag)
   {
     synchronized (EXPECTED_ETAGS)
     {

@@ -11,12 +11,19 @@
 package org.eclipse.oomph.setup.provider;
 
 import org.eclipse.oomph.setup.Installation;
+import org.eclipse.oomph.setup.Product;
+import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.SetupPackage;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
@@ -109,8 +116,13 @@ public class InstallationItemProvider extends ScopeItemProvider
   @Override
   public String getText(Object object)
   {
-    String label = getString("_UI_Installation_type");
     Installation installation = (Installation)object;
+    if (installation.eContainer() != null)
+    {
+      return super.getText(object);
+    }
+
+    String label = getString("_UI_Installation_type");
     Resource resource = installation.eResource();
     if (resource != null)
     {
@@ -147,6 +159,33 @@ public class InstallationItemProvider extends ScopeItemProvider
         return;
     }
     super.notifyChanged(notification);
+  }
+
+  @Override
+  protected Command factorAddCommand(EditingDomain domain, CommandParameter commandParameter)
+  {
+    Collection<?> collection = commandParameter.getCollection();
+    if (collection != null)
+    {
+      for (Object object : collection)
+      {
+        if (object instanceof ProductVersion)
+        {
+          return SetCommand.create(domain, commandParameter.getOwner(), SetupPackage.Literals.INSTALLATION__PRODUCT_VERSION, object);
+        }
+        else if (object instanceof Product)
+        {
+          Product product = (Product)object;
+          EList<ProductVersion> versions = product.getVersions();
+          if (!versions.isEmpty())
+          {
+            return SetCommand.create(domain, commandParameter.getOwner(), SetupPackage.Literals.INSTALLATION__PRODUCT_VERSION, versions.get(0));
+          }
+        }
+      }
+    }
+
+    return super.factorAddCommand(domain, commandParameter);
   }
 
   /**

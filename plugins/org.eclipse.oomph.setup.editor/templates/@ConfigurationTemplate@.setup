@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Configuration
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0">
+  <annotation>
+    <content
+        xsi:type="setup:CompoundTask"
+        id="template.variables"
+        name="@TemplateVariables@">
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="configuration.label"
+          value="My"
+          label="Base Label">
+        <description>The title case name of the configuration, including spaces.</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="installation.label"
+          value="${configuration.label} Installation"
+          label="Installation Label">
+        <description>The title case name of the installation including spaces.</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="installation.name"
+          value="${configuration.label|qualifiedName}.installation"
+          label="Installation Name">
+        <description>The lower case name of the configuration.</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          type="TEXT"
+          name="installation.description"
+          value="${configuration.label} installation provides cool stuff."
+          label="Installation Description">
+        <description>An informative multi-line description of what the installation does.</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="workspace.label"
+          value="${configuration.label} Workspace"
+          label="Workspace Label">
+        <description>The title case name of the workspace including spaces.</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="workspace.name"
+          value="${configuration.label|qualifiedName}.workspace"
+          label="Workspace Name">
+        <description>The lower case name of the workspace</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          type="TEXT"
+          name="workspace.description"
+          value="${configuration.label} workspace provides cool stuff."
+          label="Workspace Description">
+        <description>An informative multi-line description of what the workspace does.</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          type="CONTAINER"
+          name="setup.location"
+          label="Folder">
+        <description>The workspace folder of the new configuration setup model.</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="setup.filename"
+          value="${configuration.label|camel}Configuration.setup"
+          label="Filename">
+        <description>The camel case filename of the new configuration setup model.</description>
+      </setupTask>
+    </content>
+  </annotation>
+  <installation
+      name="${installation.name}"
+      label="${installation.label}">
+    <productVersion
+        href="index:/org.eclipse.setup#//@productCatalogs[name='self']/@products[name='empty.product']/@versions[name='version']"/>
+    <description>${installation.description}</description>
+  </installation>
+  <workspace
+      name="${workspace.name}"
+      label="${workspace.label}">
+    <description>${workspace.description}</description>
+  </workspace>
+</setup:Configuration>

@@ -16,11 +16,13 @@ import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProjectCatalog;
 import org.eclipse.oomph.setup.SetupPackage;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -35,6 +37,7 @@ import java.util.Collection;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.impl.IndexImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.IndexImpl#getDiscoverablePackages <em>Discoverable Packages</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.IndexImpl#getProductCatalogs <em>Product Catalogs</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.IndexImpl#getProjectCatalogs <em>Project Catalogs</em>}</li>
@@ -44,6 +47,26 @@ import java.util.Collection;
  */
 public class IndexImpl extends ModelElementImpl implements Index
 {
+  /**
+   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getName()
+   * @generated
+   * @ordered
+   */
+  protected static final String NAME_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getName()
+   * @generated
+   * @ordered
+   */
+  protected String name = NAME_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getDiscoverablePackages() <em>Discoverable Packages</em>}' reference list.
    * <!-- begin-user-doc -->
@@ -93,6 +116,31 @@ public class IndexImpl extends ModelElementImpl implements Index
   protected EClass eStaticClass()
   {
     return SetupPackage.Literals.INDEX;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setName(String newName)
+  {
+    String oldName = name;
+    name = newName;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.INDEX__NAME, oldName, name));
+    }
   }
 
   /**
@@ -186,6 +234,8 @@ public class IndexImpl extends ModelElementImpl implements Index
   {
     switch (featureID)
     {
+      case SetupPackage.INDEX__NAME:
+        return getName();
       case SetupPackage.INDEX__DISCOVERABLE_PACKAGES:
         return getDiscoverablePackages();
       case SetupPackage.INDEX__PRODUCT_CATALOGS:
@@ -207,6 +257,9 @@ public class IndexImpl extends ModelElementImpl implements Index
   {
     switch (featureID)
     {
+      case SetupPackage.INDEX__NAME:
+        setName((String)newValue);
+        return;
       case SetupPackage.INDEX__DISCOVERABLE_PACKAGES:
         getDiscoverablePackages().clear();
         getDiscoverablePackages().addAll((Collection<? extends EPackage>)newValue);
@@ -233,6 +286,9 @@ public class IndexImpl extends ModelElementImpl implements Index
   {
     switch (featureID)
     {
+      case SetupPackage.INDEX__NAME:
+        setName(NAME_EDEFAULT);
+        return;
       case SetupPackage.INDEX__DISCOVERABLE_PACKAGES:
         getDiscoverablePackages().clear();
         return;
@@ -256,6 +312,8 @@ public class IndexImpl extends ModelElementImpl implements Index
   {
     switch (featureID)
     {
+      case SetupPackage.INDEX__NAME:
+        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case SetupPackage.INDEX__DISCOVERABLE_PACKAGES:
         return discoverablePackages != null && !discoverablePackages.isEmpty();
       case SetupPackage.INDEX__PRODUCT_CATALOGS:
@@ -264,6 +322,26 @@ public class IndexImpl extends ModelElementImpl implements Index
         return projectCatalogs != null && !projectCatalogs.isEmpty();
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy())
+    {
+      return super.toString();
+    }
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (name: ");
+    result.append(name);
+    result.append(')');
+    return result.toString();
   }
 
 } // IndexImpl

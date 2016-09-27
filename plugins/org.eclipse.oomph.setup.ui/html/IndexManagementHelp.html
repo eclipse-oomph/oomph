@@ -1,0 +1,86 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<title>Catalog Index Manager Dialog</title>
+
+<link rel="stylesheet" href="book.css">
+
+<noscript></noscript>
+<script type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Catalog Index Manager";
+    }
+}
+</script>
+</head>
+<body bgcolor="white" onload="windowTitle();">
+
+<h1>Catalong Index Manager Dialog</h1>
+
+<p>
+  Oomph manages the catalog indices that are available for use in the Eclipse installer and in Eclipse applications.
+  A catalog index is a container for product and project catalogs.
+  You are likely familiar with the default index 
+  which is the so-called set archive located at <a href="http://www.eclipse.org/setups/setups.zip">http://www.eclipse.org/setups/setups.zip</a>.
+  If you use an index <a href="https://wiki.eclipse.org/Eclipse_Oomph_Authoring#Hosting_your_own_index_.2F_catalogs">authored by a third party</a> 
+  and hosted at a different location,
+  this index location will also be managed by Oomph.
+  The Catalog Index Manager dialog provides access to every index you've ever used on this machine.
+  You can use it to assign your own label to an index in order to tailor what is displayed in menus and drop-downs displaying that index.
+</p>
+
+<p>
+  Indices are managed as XMI resources, namely as <code>indices.xmi</code>.
+  There is a global <code>indices.xmi</code> stored in the home folder, i.e., in <code>~/.eclipse/org.eclipse.oomph.setup/indices.xmi</code>.
+  Each Eclipse application, including the Eclipse Installer, 
+  also maintains a local <code>indices.xmi</code> in the configuration folder of that application's installation folder,
+  i.e., in <code>configuration/org.eclipse.oomph.setup/indices.xmi</code>.
+  This flexible design allows each application to control which indices are locally available as well as the labels used for them.
+</p>
+
+<p>
+  The Catalog Index Manager dialog provides a scope selection drop-down to manage the indices available in both the local and the global scope.
+  By default, only the indices in the local scope of the application are displayed,
+  but via the drop-down, 
+  you can choose to see both those and the ones in global scope, 
+  or only the ones in the global scope.
+  Any index displayed that is not currently in the local index will be shown with gray text.
+  The currently active index is displayed with bold font.
+  In the background, every index is checked for availability, i.e., whether the resource is currently accessible;
+  any index that is not currently available is displayed with italic font.
+<p>
+
+<p>
+  The Catalog Index Manager dialog displays a list of indices available for the selected scope.
+  The label can be modified via cell editing:
+  you can either double click the index item or select it and enter F2 to activate the cell editor.
+  In addition, you can remove an index by selecting it and clicking the Remove button.
+  To make the changes permanent,  click OK.
+  Depending on which scope you have selected,
+  the changes will be applied either to just the local <code>indices.xmi</code>,
+  both the local and the global <code>indices.xmi</code>,
+  or to just the global <code>indices.xmi</code>
+</p>
+
+<p>
+  The Catalog Index Manager dialog does not provide the ability to add a new index.
+  This can be easily accomplished by dragging and dropping to the title area of the setup wizard a setup archive file, 
+  a link to a set archive, 
+  a link to an index, i.e., to an <code>org.eclipse.setup</code>
+  or an index file.
+  Alternatively, you can copy any of these to the system clipboard, and apply it to the setup wizard.
+  In the simple mode, when the system clipboard contains a setup index, the Eclipse installer's menu will display an SWITCH CATALOG INDEX item.
+  In the advanced mode, the Product or Project page tool bar will display an addition control to apply the catalog index.
+  That being said,
+  if your global <code>indices.xmi</code> contains an index not yet available in your local <code>indices.xmi</code>,
+  you can select the Local and Global scope to see those additional indices&mdash;it will be displayed with gray text&mdash;
+  and if you hit OK at this point, it will be added to your local <code>indices.xmi</code>
+  to make it available in your application.
+  This is a simple way to gain access to an index added by some other application.
+</p>
+
+</body>
+</html>

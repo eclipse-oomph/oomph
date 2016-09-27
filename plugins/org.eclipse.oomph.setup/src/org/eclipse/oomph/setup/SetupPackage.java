@@ -127,7 +127,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getLinkLocationTask()
    * @generated
    */
-  int LINK_LOCATION_TASK = 25;
+  int LINK_LOCATION_TASK = 26;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.EclipseIniTaskImpl <em>Eclipse Ini Task</em>}' class.
@@ -137,7 +137,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getEclipseIniTask()
    * @generated
    */
-  int ECLIPSE_INI_TASK = 24;
+  int ECLIPSE_INI_TASK = 25;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.ResourceCopyTaskImpl <em>Resource Copy Task</em>}' class.
@@ -147,7 +147,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getResourceCopyTask()
    * @generated
    */
-  int RESOURCE_COPY_TASK = 27;
+  int RESOURCE_COPY_TASK = 28;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.TextModifyTaskImpl <em>Text Modify Task</em>}' class.
@@ -157,7 +157,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getTextModifyTask()
    * @generated
    */
-  int TEXT_MODIFY_TASK = 29;
+  int TEXT_MODIFY_TASK = 30;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.TextModificationImpl <em>Text Modification</em>}' class.
@@ -167,7 +167,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getTextModification()
    * @generated
    */
-  int TEXT_MODIFICATION = 30;
+  int TEXT_MODIFICATION = 31;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.ResourceCreationTaskImpl <em>Resource Creation Task</em>}' class.
@@ -177,7 +177,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getResourceCreationTask()
    * @generated
    */
-  int RESOURCE_CREATION_TASK = 28;
+  int RESOURCE_CREATION_TASK = 29;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.RedirectionTaskImpl <em>Redirection Task</em>}' class.
@@ -187,7 +187,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getRedirectionTask()
    * @generated
    */
-  int REDIRECTION_TASK = 23;
+  int REDIRECTION_TASK = 24;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.VariableChoiceImpl <em>Variable Choice</em>}' class.
@@ -197,7 +197,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getVariableChoice()
    * @generated
    */
-  int VARIABLE_CHOICE = 21;
+  int VARIABLE_CHOICE = 22;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.AttributeRuleImpl <em>Attribute Rule</em>}' class.
@@ -429,13 +429,22 @@ public interface SetupPackage extends EPackage
   int INDEX__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
 
   /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INDEX__NAME = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Discoverable Packages</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int INDEX__DISCOVERABLE_PACKAGES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+  int INDEX__DISCOVERABLE_PACKAGES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.UserImpl <em>User</em>}' class.
@@ -534,7 +543,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int INDEX__PRODUCT_CATALOGS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+  int INDEX__PRODUCT_CATALOGS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Project Catalogs</b></em>' containment reference list.
@@ -543,7 +552,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int INDEX__PROJECT_CATALOGS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+  int INDEX__PROJECT_CATALOGS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The number of structural features of the '<em>Index</em>' class.
@@ -552,7 +561,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int INDEX_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
+  int INDEX_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -1763,6 +1772,52 @@ public interface SetupPackage extends EPackage
   int WORKSPACE_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.impl.ConfigurationImpl <em>Configuration</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.impl.ConfigurationImpl
+   * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getConfiguration()
+   * @generated
+   */
+  int CONFIGURATION = 19;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIGURATION__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
+   * The feature id for the '<em><b>Installation</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIGURATION__INSTALLATION = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Workspace</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIGURATION__WORKSPACE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Configuration</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIGURATION_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+  /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.CompoundTaskImpl <em>Compound Task</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1770,7 +1825,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getCompoundTask()
    * @generated
    */
-  int COMPOUND_TASK = 19;
+  int COMPOUND_TASK = 20;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -1897,7 +1952,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getVariableTask()
    * @generated
    */
-  int VARIABLE_TASK = 20;
+  int VARIABLE_TASK = 21;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -2114,7 +2169,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getStringSubstitutionTask()
    * @generated
    */
-  int STRING_SUBSTITUTION_TASK = 22;
+  int STRING_SUBSTITUTION_TASK = 23;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -2601,7 +2656,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getPreferenceTask()
    * @generated
    */
-  int PREFERENCE_TASK = 26;
+  int PREFERENCE_TASK = 27;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -3133,7 +3188,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getProductToProductVersionMapEntry()
    * @generated
    */
-  int PRODUCT_TO_PRODUCT_VERSION_MAP_ENTRY = 31;
+  int PRODUCT_TO_PRODUCT_VERSION_MAP_ENTRY = 32;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -3170,7 +3225,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getProjectToStreamMapEntry()
    * @generated
    */
-  int PROJECT_TO_STREAM_MAP_ENTRY = 32;
+  int PROJECT_TO_STREAM_MAP_ENTRY = 33;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -3216,7 +3271,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getInstallationToWorkspacesMapEntry()
    * @generated
    */
-  int INSTALLATION_TO_WORKSPACES_MAP_ENTRY = 33;
+  int INSTALLATION_TO_WORKSPACES_MAP_ENTRY = 34;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -3253,7 +3308,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getWorkspaceToInstallationsMapEntry()
    * @generated
    */
-  int WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY = 34;
+  int WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY = 35;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -3290,7 +3345,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getScopeType()
    * @generated
    */
-  int SCOPE_TYPE = 35;
+  int SCOPE_TYPE = 36;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.Trigger <em>Trigger</em>}' enum.
@@ -3300,7 +3355,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getTrigger()
    * @generated
    */
-  int TRIGGER = 36;
+  int TRIGGER = 37;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.VariableType <em>Variable Type</em>}' enum.
@@ -3310,7 +3365,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getVariableType()
    * @generated
    */
-  int VARIABLE_TYPE = 37;
+  int VARIABLE_TYPE = 38;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.UnsignedPolicy <em>Unsigned Policy</em>}' enum.
@@ -3320,7 +3375,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getUnsignedPolicy()
    * @generated
    */
-  int UNSIGNED_POLICY = 38;
+  int UNSIGNED_POLICY = 39;
 
   /**
    * The meta object id for the '<em>License Info</em>' data type.
@@ -3330,7 +3385,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getLicenseInfo()
    * @generated
    */
-  int LICENSE_INFO = 40;
+  int LICENSE_INFO = 41;
 
   /**
    * The meta object id for the '<em>Filter</em>' data type.
@@ -3340,7 +3395,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getFilter()
    * @generated
    */
-  int FILTER = 41;
+  int FILTER = 42;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.Index <em>Index</em>}'.
@@ -3351,6 +3406,17 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   EClass getIndex();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.Index#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.eclipse.oomph.setup.Index#getName()
+   * @see #getIndex()
+   * @generated
+   */
+  EAttribute getIndex_Name();
 
   /**
    * Returns the meta object for the reference list '{@link org.eclipse.oomph.setup.Index#getDiscoverablePackages <em>Discoverable Packages</em>}'.
@@ -3458,7 +3524,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getTriggerSet()
    * @generated
    */
-  int TRIGGER_SET = 39;
+  int TRIGGER_SET = 40;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.Project <em>Project</em>}'.
@@ -3736,6 +3802,38 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   EAttribute getWorkspaceTask_Location();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.Configuration <em>Configuration</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Configuration</em>'.
+   * @see org.eclipse.oomph.setup.Configuration
+   * @generated
+   */
+  EClass getConfiguration();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.oomph.setup.Configuration#getInstallation <em>Installation</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Installation</em>'.
+   * @see org.eclipse.oomph.setup.Configuration#getInstallation()
+   * @see #getConfiguration()
+   * @generated
+   */
+  EReference getConfiguration_Installation();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.oomph.setup.Configuration#getWorkspace <em>Workspace</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Workspace</em>'.
+   * @see org.eclipse.oomph.setup.Configuration#getWorkspace()
+   * @see #getConfiguration()
+   * @generated
+   */
+  EReference getConfiguration_Workspace();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.CompoundTask <em>Compound Task</em>}'.
@@ -4826,6 +4924,14 @@ public interface SetupPackage extends EPackage
     EClass INDEX = eINSTANCE.getIndex();
 
     /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INDEX__NAME = eINSTANCE.getIndex_Name();
+
+    /**
      * The meta object literal for the '<em><b>Discoverable Packages</b></em>' reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5124,6 +5230,32 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EAttribute WORKSPACE_TASK__LOCATION = eINSTANCE.getWorkspaceTask_Location();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.ConfigurationImpl <em>Configuration</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.impl.ConfigurationImpl
+     * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getConfiguration()
+     * @generated
+     */
+    EClass CONFIGURATION = eINSTANCE.getConfiguration();
+
+    /**
+     * The meta object literal for the '<em><b>Installation</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONFIGURATION__INSTALLATION = eINSTANCE.getConfiguration_Installation();
+
+    /**
+     * The meta object literal for the '<em><b>Workspace</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference CONFIGURATION__WORKSPACE = eINSTANCE.getConfiguration_Workspace();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.CompoundTaskImpl <em>Compound Task</em>}' class.

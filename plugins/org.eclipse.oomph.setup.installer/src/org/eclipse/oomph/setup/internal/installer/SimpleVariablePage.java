@@ -816,7 +816,25 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   public void setProduct(Product product)
   {
-    this.product = product;
+    ProductVersion defaultProductVersion = ProductPage.getDefaultProductVersion(installer.getCatalogManager(), product);
+    List<ProductVersion> validProductVersions = ProductPage.getValidProductVersions(product, PRODUCT_VERSION_FILTER);
+    for (ProductVersion productVersion : validProductVersions)
+    {
+      if (defaultProductVersion == null || !validProductVersions.contains(defaultProductVersion))
+      {
+        defaultProductVersion = productVersion;
+      }
+    }
+
+    if (defaultProductVersion != null)
+    {
+      setProductVersion(defaultProductVersion);
+    }
+  }
+
+  public void setProductVersion(ProductVersion productVersion)
+  {
+    product = productVersion.getProduct();
 
     if (detailBrowser != null)
     {
@@ -833,23 +851,16 @@ public class SimpleVariablePage extends SimpleInstallerPage
     productVersions.clear();
     versionCombo.removeAll();
 
-    ProductVersion defaultProductVersion = ProductPage.getDefaultProductVersion(installer.getCatalogManager(), product);
     int i = 0;
-    int selection = 0;
-
+    int selection = -1;
     List<ProductVersion> validProductVersions = ProductPage.getValidProductVersions(product, PRODUCT_VERSION_FILTER);
-    for (ProductVersion productVersion : validProductVersions)
+    for (ProductVersion version : validProductVersions)
     {
-      if (defaultProductVersion == null || !validProductVersions.contains(defaultProductVersion))
-      {
-        defaultProductVersion = productVersion;
-      }
-
-      String label = SetupCoreUtil.getLabel(productVersion);
-      productVersions.put(label, productVersion);
+      String label = SetupCoreUtil.getLabel(version);
+      productVersions.put(label, version);
       versionCombo.add(label);
 
-      if (productVersion == defaultProductVersion)
+      if (version == productVersion)
       {
         selection = i;
       }
@@ -857,8 +868,17 @@ public class SimpleVariablePage extends SimpleInstallerPage
       ++i;
     }
 
+    // If the product version is filtered out of the valid available versions, add a choice for it anyway.
+    if (selection == -1)
+    {
+      String label = SetupCoreUtil.getLabel(productVersion);
+      productVersions.put(label, productVersion);
+      versionCombo.add(label);
+      selection = i;
+    }
+
     versionCombo.select(selection);
-    productVersionSelected(defaultProductVersion);
+    productVersionSelected(productVersion);
     UIUtil.setSelectionToEnd(versionCombo);
 
     installButton.setCurrentState(State.INSTALL);

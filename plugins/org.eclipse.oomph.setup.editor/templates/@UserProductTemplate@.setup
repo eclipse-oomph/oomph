@@ -111,9 +111,6 @@
       <description>The camel case filename of the new product setup model.</description>
     </setupTask>
   </setupTask>
-  <setupTask
-      xsi:type="setup:InstallationTask"
-      id="installation"/>
   <version name="${product.release.train|lower}"
       label="${product.release.train}"
       requiredJavaVersion="1.7">

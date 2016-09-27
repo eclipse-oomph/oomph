@@ -10,13 +10,20 @@
  */
 package org.eclipse.oomph.setup.provider;
 
+import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.Workspace;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
@@ -108,8 +115,13 @@ public class WorkspaceItemProvider extends ScopeItemProvider
   @Override
   public String getText(Object object)
   {
-    String label = getString("_UI_Workspace_type");
     Workspace workspace = (Workspace)object;
+    if (workspace.eContainer() != null)
+    {
+      return super.getText(object);
+    }
+
+    String label = getString("_UI_Workspace_type");
     Resource resource = workspace.eResource();
     if (resource != null)
     {
@@ -146,6 +158,33 @@ public class WorkspaceItemProvider extends ScopeItemProvider
         return;
     }
     super.notifyChanged(notification);
+  }
+
+  @Override
+  protected Command factorAddCommand(EditingDomain domain, CommandParameter commandParameter)
+  {
+    Collection<?> collection = commandParameter.getCollection();
+    if (collection != null)
+    {
+      for (Object object : collection)
+      {
+        if (object instanceof Stream)
+        {
+          return AddCommand.create(domain, commandParameter.getOwner(), SetupPackage.Literals.WORKSPACE__STREAMS, object);
+        }
+        else if (object instanceof Project)
+        {
+          Project project = (Project)object;
+          EList<Stream> streams = project.getStreams();
+          if (!streams.isEmpty())
+          {
+            return AddCommand.create(domain, commandParameter.getOwner(), SetupPackage.Literals.WORKSPACE__STREAMS, streams.get(0));
+          }
+        }
+      }
+    }
+
+    return super.factorAddCommand(domain, commandParameter);
   }
 
   /**

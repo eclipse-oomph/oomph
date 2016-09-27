@@ -140,13 +140,13 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
               switch (answer)
               {
                 case 0:
-                  installer.reloadIndex();
+                  installer.reloadIndex(null);
                   shell.getDisplay().asyncExec(checkIndex);
                   return;
 
                 case 1:
                   new NetworkConnectionsDialog(getShell()).open();
-                  installer.reloadIndex();
+                  installer.reloadIndex(null);
                   shell.getDisplay().asyncExec(checkIndex);
                   return;
 

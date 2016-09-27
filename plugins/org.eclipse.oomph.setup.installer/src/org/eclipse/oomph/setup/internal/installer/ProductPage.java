@@ -43,10 +43,13 @@ import org.eclipse.oomph.setup.provider.ProductCatalogItemProvider;
 import org.eclipse.oomph.setup.provider.ProductItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.JREDownloadHandler;
+import org.eclipse.oomph.setup.ui.SetupTransferSupport;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.CatalogSelector;
+import org.eclipse.oomph.setup.ui.wizards.ConfigurationProcessor;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
+import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardPage;
 import org.eclipse.oomph.ui.FilteredTreeWithoutWorkbench;
@@ -199,6 +202,10 @@ public class ProductPage extends SetupWizardPage
   private BundlePool currentBundlePool;
 
   private boolean currentBundlePoolChanging;
+
+  private ProjectPage.ConfigurationListener configurationListener;
+
+  private SetupTransferSupport.DropListener dropListener;
 
   public ProductPage(SelectionMemento selectionMemento)
   {
@@ -590,10 +597,12 @@ public class ProductPage extends SetupWizardPage
     collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all"));
     AccessUtil.setKey(collapseAllButton, "collapse");
 
+    configurationListener = new ProjectPage.ConfigurationListener(getWizard().getTransferSupport(), catalogManager, filterToolBar);
+
     final ToolItem catalogsButton = new ToolItem(filterToolBar, SWT.DROP_DOWN);
     catalogsButton.setToolTipText("Select Catalogs");
     catalogsButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("catalogs"));
-    catalogSelector.configure(catalogsButton);
+    catalogSelector.configure(getWizard(), catalogsButton, true);
     AccessUtil.setKey(catalogsButton, "catalogs");
 
     final FilteredTreeWithoutWorkbench filteredTree = new FilteredTreeWithoutWorkbench(treeComposite, SWT.BORDER);
@@ -763,7 +772,7 @@ public class ProductPage extends SetupWizardPage
           {
             Product product = (Product)value;
             ProductCatalog productCatalog = product.getProductCatalog();
-            if (isUserProductCatalog(productCatalog))
+            if (ConfigurationProcessor.isUserProductCatalog(productCatalog))
             {
               userProductCatalogs.add(productCatalog);
               userProducts.add(product);
@@ -772,7 +781,7 @@ public class ProductPage extends SetupWizardPage
           else if (value instanceof ProductCatalog)
           {
             ProductCatalog productCatalog = (ProductCatalog)value;
-            if (isUserProductCatalog(productCatalog))
+            if (ConfigurationProcessor.isUserProductCatalog(productCatalog))
             {
               userProductCatalogs.add(productCatalog);
             }
@@ -784,7 +793,7 @@ public class ProductPage extends SetupWizardPage
         boolean hasUserProductCatalogs = false;
         for (Scope scope : catalogSelector.getCatalogs())
         {
-          if (isUserProductCatalog(scope))
+          if (ConfigurationProcessor.isUserProductCatalog(scope))
           {
             hasUserProductCatalogs = true;
             break;
@@ -797,18 +806,116 @@ public class ProductPage extends SetupWizardPage
       }
     });
 
+    dropListener = new SetupTransferSupport.DropListener()
+    {
+      public void resourcesDropped(Collection<? extends Resource> resources)
+      {
+        SetupWizard setupWizard = getWizard();
+        setupWizard.setConfigurationResources(resources);
+
+        ConfigurationProcessor configurationProcessor = new ConfigurationProcessor(getWizard())
+        {
+          @Override
+          protected boolean applyEmptyProductVersion()
+          {
+            applyInstallation();
+            return true;
+          }
+
+          @Override
+          protected boolean applyProductVersion(ProductVersion productVersion)
+          {
+            applyInstallation();
+
+            // Ensure that the view is updated to show what might be a newly added product catalog.
+            while (getShell().getDisplay().readAndDispatch())
+            {
+              // Do nothing.
+            }
+
+            filteredTree.clearText();
+            productViewer.setSelection(new StructuredSelection(productVersion.getProduct()), true);
+            versionComboViewer.setSelection(new StructuredSelection(productVersion), true);
+
+            // Ensure that asynchronous update of the JRE controller's enablement has completed.
+            while (getShell().getDisplay().readAndDispatch())
+            {
+              // Do nothing.
+            }
+
+            if (isCurrentPage() && isPageComplete())
+            {
+              gotoNextPage();
+            }
+
+            return true;
+          }
+        };
+
+        configurationProcessor.processInstallation();
+        IStatus status = configurationProcessor.getStatus();
+        if (!status.isOK())
+        {
+          ErrorDialog.openError(getShell(), "Installation Problems", null, status);
+        }
+      }
+    };
+
+    getWizard().getTransferSupport().addDropListener(dropListener);
+
     return sashForm;
+  }
+
+  @Override
+  public void enterPage(boolean forward)
+  {
+    getWizard().setSetupContext(SetupContext.create(getResourceSet(), null));
+
+    final Collection<? extends Resource> configurationResources = getWizard().getConfigurationResources();
+    final SetupTransferSupport transferSupport = getWizard().getTransferSupport();
+    ProjectPage.hookTransferControl(getShell(), getControl(), transferSupport, configurationListener);
+    if (forward && !configurationResources.isEmpty())
+    {
+      UIUtil.asyncExec(getShell(), new Runnable()
+      {
+        private int count;
+
+        public void run()
+        {
+          IndexLoader indexLoader = getWizard().getIndexLoader();
+          if (indexLoader != null)
+          {
+            indexLoader.awaitIndexLoad();
+          }
+          if (++count < 10)
+          {
+            UIUtil.asyncExec(getShell(), this);
+          }
+          else
+          {
+            transferSupport.resourcesDropped(configurationResources);
+          }
+        }
+      });
+    }
   }
 
   @Override
   public void leavePage(boolean forward)
   {
+    ProjectPage.unhookTransferControl(getShell(), getControl(), getWizard().getTransferSupport(), configurationListener);
+
     if (forward)
     {
-      ProductVersion productVersion = getSelectedProductVersion();
-      selectionMemento.setProductVersion(EcoreUtil.getURI(productVersion));
-      getWizard().setSetupContext(SetupContext.create(getResourceSet(), productVersion));
+      updateSetupContext();
     }
+  }
+
+  private void updateSetupContext()
+  {
+    ProductVersion productVersion = getSelectedProductVersion();
+    selectionMemento.setProductVersion(EcoreUtil.getURI(productVersion));
+    getWizard().setSetupContext(SetupContext.create(getResourceSet(), productVersion));
   }
 
   public boolean refreshJREs()
@@ -957,18 +1064,6 @@ public class ProductPage extends SetupWizardPage
       setErrorMessage(error);
       setPageComplete(error == null);
     }
-  }
-
-  private static boolean isUserProductCatalog(Scope scope)
-  {
-    if (scope instanceof ProductCatalog)
-    {
-      ProductCatalog productCatalog = (ProductCatalog)scope;
-      Resource resource = productCatalog.eResource();
-      return resource != null && SetupContext.isUserScheme(resource.getURI().scheme());
-    }
-
-    return false;
   }
 
   private String getDescriptionHTML(Scope scope)
@@ -1765,7 +1860,7 @@ public class ProductPage extends SetupWizardPage
       List<? extends Scope> catalogs = new ArrayList<Scope>(catalogSelector.getCatalogs());
       for (Iterator<? extends Scope> it = catalogs.iterator(); it.hasNext();)
       {
-        if (!isUserProductCatalog(it.next()))
+        if (!ConfigurationProcessor.isUserProductCatalog(it.next()))
         {
           it.remove();
         }

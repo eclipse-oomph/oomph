@@ -30,6 +30,8 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -64,7 +66,14 @@ public class UserURIHandlerImpl extends URIHandlerImpl
     URIConverter uriConverter = getURIConverter(options);
     if (!uriConverter.exists(normalizedURI, options))
     {
-      create(uri, normalizedURI);
+      Resource resource = create(uri, normalizedURI);
+      if (resource != null && normalizedURI.lastSegment().equals("${setup.filename}"))
+      {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        resource.save(out, options);
+        out.close();
+        return new ByteArrayInputStream(out.toByteArray());
+      }
     }
 
     return uriConverter.createInputStream(normalizedURI, options);
@@ -104,7 +113,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   {
     URI normalizedURI = SetupContext.resolveUser(uri);
     URIConverter uriConverter = getURIConverter(options);
-    return uriConverter.exists(normalizedURI, options) || create(uri, normalizedURI);
+    return uriConverter.exists(normalizedURI, options) || create(uri, normalizedURI) != null;
   }
 
   @Override
@@ -133,7 +142,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
     uriConverter.setAttributes(normalizedURI, attributes, options);
   }
 
-  private boolean create(URI uri, URI normalizedURI)
+  private Resource create(URI uri, URI normalizedURI)
   {
     String query = uri.query();
     if (query != null)
@@ -198,20 +207,25 @@ public class UserURIHandlerImpl extends URIHandlerImpl
       return saveResource(resource);
     }
 
-    return false;
+    return null;
   }
 
-  private static boolean saveResource(Resource resource)
+  private static Resource saveResource(Resource resource)
   {
+    if (resource.getURI().lastSegment().equals("${setup.filename}"))
+    {
+      return resource;
+    }
+
     try
     {
       resource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
-      return true;
+      return resource;
     }
     catch (IOException ex)
     {
       SetupCorePlugin.INSTANCE.log(ex);
-      return false;
+      return null;
     }
   }
 }

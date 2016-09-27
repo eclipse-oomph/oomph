@@ -22,11 +22,16 @@ import org.eclipse.oomph.p2.internal.ui.AgentManagerDialog;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
+import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
+import org.eclipse.oomph.setup.internal.core.util.IndexManager;
+import org.eclipse.oomph.setup.internal.installer.SimpleInstallerMenu.InstallerMenuItem;
 import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.ControlRelocator;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.setup.ui.wizards.ConfigurationProcessor;
+import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
@@ -36,6 +41,9 @@ import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.StringUtil;
+
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -63,7 +71,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -73,6 +82,10 @@ import java.util.Stack;
 public final class SimpleInstallerDialog extends AbstractSimpleDialog implements InstallerUI
 {
   private static final String CATALOGS_MENU_ITEM_TEXT = ProductCatalogsDialog.TITLE.toUpperCase() + StringUtil.HORIZONTAL_ELLIPSIS;
+
+  private static final String APPLY_CONFIGURATION_MENU_ITEM_TEXT = "APPLY CONFIGURATION";
+
+  private static final String SWITCH_CATALOG_INDEX_MENU_ITEM_TEXT = "SWITCH CATALOG INDEX";
 
   private static final String BUNDLE_POOLS_MENU_ITEM_TEXT = "BUNDLE POOLS" + StringUtil.HORIZONTAL_ELLIPSIS;
 
@@ -134,13 +147,50 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private ToggleSwitchButton bundlePoolSwitch;
 
-  public SimpleInstallerDialog(Display display, final Installer installer, boolean restarted)
+  private boolean showProductCatalogsItem;
+
+  public SimpleInstallerDialog(Display display, Installer installer, boolean restarted)
   {
     super(display, OS.INSTANCE.isMac() ? SWT.TOOL : SWT.NO_TRIM, getDefaultSize(display).x, getDefaultSize(display).y);
     setMinimumSize(385, 75);
     this.installer = installer;
     this.restarted = restarted;
     catalogManager = installer.getCatalogManager();
+  }
+
+  protected void applyConfiguration()
+  {
+    ConfigurationProcessor configurationProcessor = new ConfigurationProcessor(installer)
+    {
+      @Override
+      protected void handleSwitchToAdvancedMode()
+      {
+        switchToAdvancedMode();
+      }
+
+      @Override
+      protected boolean applyEmptyProductVersion()
+      {
+        applyInstallation();
+        return true;
+      }
+
+      @Override
+      protected boolean applyProductVersion(ProductVersion productVersion)
+      {
+        applyInstallation();
+
+        productPage.handleFilter("");
+        productPage.productSelected(productVersion.getProduct());
+        variablePage.setProductVersion(productVersion);
+        return true;
+      }
+    };
+
+    if (configurationProcessor.processWorkspace())
+    {
+      configurationProcessor.processInstallation();
+    }
   }
 
   @Override
@@ -258,15 +308,56 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     }
 
-    boolean showProductCatalogsItem = count > 1;
-
-    installerMenu.findMenuItemByName(CATALOGS_MENU_ITEM_TEXT).setVisible(showProductCatalogsItem);
-    installerMenu.layout();
+    // Show it if there is more than one catalog,
+    // or if there are no filters in place and there indices available to switch to.
+    // This will not show it for the crippled installer because it has filters in place.
+    showProductCatalogsItem = count > 1
+        || StringUtil.isEmpty(SimpleInstallerPage.PRODUCT_CATALOG_FILTER.pattern()) && StringUtil.isEmpty(SimpleInstallerPage.PRODUCT_FILTER.pattern())
+            && StringUtil.isEmpty(SimpleInstallerPage.PRODUCT_VERSION_FILTER.pattern()) && new IndexManager().getIndexNames(false).size() > 1;
   }
 
   private void toggleMenu()
   {
-    getInstallerMenu().setVisible(!getInstallerMenu().isVisible());
+    SimpleInstallerMenu installerMenu = getInstallerMenu();
+    boolean show = !installerMenu.isVisible();
+
+    Installer installer = getInstaller();
+    if (show)
+    {
+      installer.setConfigurationResources(Collections.<Resource> emptySet());
+      SimpleInstallerPage topPage = getTopPage();
+      if (topPage != null)
+      {
+        topPage.menuAboutToShow(installerMenu);
+      }
+
+      InstallerMenuItem switchCatalogIndexItem = installerMenu.findMenuItemByName(SWITCH_CATALOG_INDEX_MENU_ITEM_TEXT);
+      InstallerMenuItem catalogsMenuItem = installerMenu.findMenuItemByName(CATALOGS_MENU_ITEM_TEXT);
+      InstallerMenuItem applyConfigurationMenuItem = installerMenu.findMenuItemByName(APPLY_CONFIGURATION_MENU_ITEM_TEXT);
+
+      if (topPage == productPage)
+      {
+        Collection<? extends Resource> configurationResources = installer.getConfigurationResources();
+        URI indexLocation = ProjectPage.ConfigurationListener.getIndexURI(configurationResources);
+        applyConfigurationMenuItem.setVisible(!configurationResources.isEmpty() && indexLocation == null);
+        boolean switchCatalogVisible = indexLocation != null && !catalogManager.isCurrentIndex(indexLocation);
+        switchCatalogIndexItem.setVisible(switchCatalogVisible);
+        if (switchCatalogVisible)
+        {
+          switchCatalogIndexItem.setToolTipText("Switch to the catalog index from the clipboard: " + IndexManager.getUnderlyingLocation(indexLocation));
+        }
+
+        catalogsMenuItem.setVisible(showProductCatalogsItem);
+      }
+      else
+      {
+        catalogsMenuItem.setVisible(false);
+        applyConfigurationMenuItem.setVisible(false);
+        switchCatalogIndexItem.setVisible(false);
+      }
+    }
+
+    installerMenu.setVisible(show);
   }
 
   public Installer getInstaller()
@@ -354,6 +445,31 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     });
 
+    SimpleInstallerMenu.InstallerMenuItem applyConfigurationItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    applyConfigurationItem.setText(APPLY_CONFIGURATION_MENU_ITEM_TEXT);
+    applyConfigurationItem.setToolTipText("Apply the configuration from the clipboard");
+    applyConfigurationItem.setVisible(false);
+    applyConfigurationItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        applyConfiguration();
+      }
+    });
+
+    SimpleInstallerMenu.InstallerMenuItem switchCatalogIndexItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    switchCatalogIndexItem.setText(SWITCH_CATALOG_INDEX_MENU_ITEM_TEXT);
+    switchCatalogIndexItem.setVisible(false);
+    switchCatalogIndexItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        applyConfiguration();
+      }
+    });
+
     SimpleInstallerMenu.InstallerMenuItem catalogsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
     catalogsItem.setText(CATALOGS_MENU_ITEM_TEXT);
     catalogsItem.setToolTipText(ProductCatalogsDialog.DESCRIPTION);
@@ -363,11 +479,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        ProductCatalogsDialog productCatalogsDialog = new ProductCatalogsDialog(SimpleInstallerDialog.this, catalogManager, true);
-        if (productCatalogsDialog.open() == ProductCatalogsDialog.OK)
-        {
-          productPage.handleFilter("");
-        }
+        ProductCatalogsDialog productCatalogsDialog = new ProductCatalogsDialog(SimpleInstallerDialog.this, getInstaller(), catalogManager);
+        productCatalogsDialog.open();
       }
     });
     AccessUtil.setKey(catalogsItem, "catalogs");
@@ -563,6 +676,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   public void switchToAdvancedMode()
   {
+    installer.setConfigurationResources(Collections.<Resource> emptySet());
     setReturnCode(RETURN_ADVANCED);
     exitSelected();
   }
@@ -674,7 +788,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     }
   }
 
-  public void showReadme(URI readmeURI)
+  public void showReadme(java.net.URI readmeURI)
   {
     if (readmePage != null)
     {

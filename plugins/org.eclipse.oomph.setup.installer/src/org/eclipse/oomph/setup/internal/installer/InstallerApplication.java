@@ -25,6 +25,8 @@ import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 
+import org.eclipse.emf.ecore.resource.Resource;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
@@ -47,6 +49,8 @@ import org.eclipse.swt.widgets.Shell;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -174,6 +178,7 @@ public class InstallerApplication implements IApplication
 
     mode = Mode.valueOf(modeName.toUpperCase());
 
+    Collection<? extends Resource> configurationResources = Collections.emptySet();
     for (;;)
     {
       if (selectionMemento == null)
@@ -198,6 +203,7 @@ public class InstallerApplication implements IApplication
           }
         }
 
+        installer.setConfigurationResources(configurationResources);
         installerDialog[0] = new InstallerDialog(null, installer, restarted);
       }
       else
@@ -219,6 +225,7 @@ public class InstallerApplication implements IApplication
       {
         setMode(Mode.ADVANCED);
         selectionMemento = null;
+        configurationResources = installer.getConfigurationResources();
         continue;
       }
 

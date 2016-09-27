@@ -20,6 +20,7 @@ import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 
 import org.eclipse.equinox.p2.core.UIServices;
+import org.eclipse.jface.wizard.IWizardPage;
 
 /**
  * @author Eike Stepper
@@ -72,6 +73,12 @@ public class Installer extends SetupWizard
   {
     super.indexLoaded(index);
     getCatalogManager().indexLoaded(index);
+
+    IWizardPage currentPage = getCurrentPage();
+    if (currentPage instanceof ProjectPage)
+    {
+      ((ProjectPage)currentPage).gotoPreviousPage();
+    }
   }
 
   @Override

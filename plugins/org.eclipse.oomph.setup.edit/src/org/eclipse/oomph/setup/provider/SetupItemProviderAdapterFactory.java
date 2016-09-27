@@ -402,6 +402,31 @@ public class SetupItemProviderAdapterFactory extends SetupAdapterFactory
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.Configuration} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected ConfigurationItemProvider configurationItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.Configuration}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createConfigurationAdapter()
+  {
+    if (configurationItemProvider == null)
+    {
+      configurationItemProvider = new ConfigurationItemProvider(this);
+    }
+
+    return configurationItemProvider;
+  }
+
+  /**
    * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.CompoundTask} instances.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1077,6 +1102,10 @@ public class SetupItemProviderAdapterFactory extends SetupAdapterFactory
     {
       workspaceTaskItemProvider.dispose();
     }
+    if (configurationItemProvider != null)
+    {
+      configurationItemProvider.dispose();
+    }
     if (compoundTaskItemProvider != null)
     {
       compoundTaskItemProvider.dispose();
@@ -1224,6 +1253,8 @@ public class SetupItemProviderAdapterFactory extends SetupAdapterFactory
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupFactory.eINSTANCE.createWorkspace()));
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupFactory.eINSTANCE.createWorkspaceTask()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupFactory.eINSTANCE.createConfiguration()));
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupFactory.eINSTANCE.createCompoundTask()));
 

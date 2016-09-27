@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -20,6 +21,7 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.installer.SimpleProductPage.ProductList.BrowserProductList;
 import org.eclipse.oomph.setup.internal.installer.SimpleProductPage.ProductList.CompositeProductList;
+import org.eclipse.oomph.setup.ui.SetupTransferSupport;
 import org.eclipse.oomph.setup.ui.wizards.CatalogSelector;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
@@ -32,15 +34,20 @@ import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
@@ -48,6 +55,8 @@ import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseTrackListener;
@@ -73,6 +82,7 @@ import org.eclipse.swt.widgets.ToolBar;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -108,6 +118,17 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
   @Override
   protected void createContent(final Composite container)
   {
+    SetupTransferSupport.DropListener dropListener = new SetupTransferSupport.DropListener()
+    {
+      public void resourcesDropped(Collection<? extends Resource> resources)
+      {
+        dialog.getInstaller().setConfigurationResources(resources);
+        dialog.applyConfiguration();
+      }
+    };
+
+    installer.getTransferSupport().addDropListener(dropListener);
+
     GridLayout searchLayout = UIUtil.createGridLayout(2);
     searchLayout.horizontalSpacing = 0;
 
@@ -176,14 +197,52 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         });
       }
     });
+
+    final CatalogSelection selection = catalogManager.getSelection();
+    final Adapter selectionAdapter = new AdapterImpl()
+    {
+      @Override
+      public void notifyChanged(Notification notification)
+      {
+        if (notification.getFeature() == SetupPackage.Literals.CATALOG_SELECTION__PRODUCT_CATALOGS)
+        {
+          handleFilter("");
+        }
+      }
+    };
+
+    selection.eAdapters().add(selectionAdapter);
+    container.addDisposeListener(new DisposeListener()
+    {
+      public void widgetDisposed(DisposeEvent e)
+      {
+        selection.eAdapters().remove(selectionAdapter);
+      }
+    });
+  }
+
+  @Override
+  public void aboutToShow()
+  {
+    super.aboutToShow();
+    installer.getTransferSupport().addControl(dialog.getChildren()[0]);
   }
 
   @Override
   public void aboutToHide()
   {
     super.aboutToHide();
-    productList.reset(); // TODO Use JavaScript, so that the browser doesn't scroll to top!
+    productList.reset(false); // TODO Use JavaScript, so that the browser doesn't scroll to top!
     setFocus();
+
+    installer.getTransferSupport().removeControls();
+  }
+
+  @Override
+  protected void menuAboutToShow(SimpleInstallerMenu menu)
+  {
+    Collection<? extends Resource> resources = installer.getTransferSupport().getResources();
+    dialog.getInstaller().setConfigurationResources(resources);
   }
 
   @Override
@@ -361,7 +420,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
     public abstract void setInput(List<Product> products);
 
-    public abstract void reset();
+    public abstract void reset(boolean clear);
 
     protected final void productSelected(Product product)
     {
@@ -425,9 +484,9 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       }
 
       @Override
-      public void reset()
+      public void reset(boolean clear)
       {
-        browser.setText(browser.getText());
+        browser.setText(clear ? "" : browser.getText());
       }
 
       private void productSelected(String url, CatalogSelector catalogSelector)
@@ -555,9 +614,9 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       }
 
       @Override
-      public void reset()
+      public void reset(boolean clear)
       {
-        setInput(products);
+        setInput(clear ? null : products);
       }
     }
   }
@@ -848,11 +907,11 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     }
 
     @Override
-    public void loadIndex(final ResourceSet resourceSet, final org.eclipse.emf.common.util.URI... uris)
+    public void loadIndex(final IRunnableWithProgress runnable, int delay)
     {
       searchField.setEnabled(false);
 
-      productList.reset();
+      productList.reset(true);
       stackComposite.setTopControl(animator);
       animator.start(1, animator.getImages().length - 1);
 
@@ -865,7 +924,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         {
           try
           {
-            loadIndex(resourceSet, uris, monitor);
+            runnable.run(monitor);
           }
           catch (InvocationTargetException ex)
           {
@@ -884,25 +943,25 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
             {
               public void run()
               {
-                stackComposite.setTopControl(productList.getControl());
-                setFocus();
-
                 CatalogManager catalogManager = catalogSelector.getCatalogManager();
                 Index index = catalogManager.getIndex();
                 if (index == null)
                 {
+                  stackComposite.setTopControl(productList.getControl());
+                  setFocus();
+
                   int answer = new MessageDialog(getShell(), "Network Problem", null,
                       "The catalog could not be loaded. Please ensure that you have network access and, if needed, have configured your network proxy.",
                       MessageDialog.ERROR, new String[] { "Retry", "Configure Network Proxy" + StringUtil.HORIZONTAL_ELLIPSIS, "Exit" }, 0).open();
                   switch (answer)
                   {
                     case 0:
-                      installer.reloadIndex();
+                      installer.reloadIndex(null);
                       return;
 
                     case 1:
                       new NetworkConnectionsDialog(getShell()).open();
-                      installer.reloadIndex();
+                      installer.reloadIndex(null);
                       return;
 
                     default:
@@ -922,6 +981,15 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
       thread.setDaemon(true);
       thread.start();
+    }
+
+    @Override
+    protected void indexLoaded(Index index)
+    {
+      super.indexLoaded(index);
+
+      stackComposite.setTopControl(productList.getControl());
+      setFocus();
     }
 
     @Override

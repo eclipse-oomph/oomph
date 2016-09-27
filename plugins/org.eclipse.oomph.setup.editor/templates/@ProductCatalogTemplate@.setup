@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:ProductCatalog
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
+    name="${catalog.name}"
+    label="${catalog.label}">
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      id="template.variables"
+      name="@TemplateVariables@">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="catalog.label"
+        value="My Products"
+        label="Label">
+      <description>
+        The title case name of the product catalog, including spaces.
+        This will be displayed in any tree view of this product catalog.
+      </description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="catalog.name"
+        value="${catalog.label|qualifiedName}"
+        label="Name">
+      <description>The lower case name of the product catalog.&#xD;</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        type="TEXT"
+        name="catalog.description"
+        value="${catalog.label} provides cool products."
+        label="Description">
+      <description>An informative multi-line description of what the product catalog contains.</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        type="CONTAINER"
+        name="setup.location"
+        label="Folder">
+      <description>The workspace folder of the new product catalog setup model.</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="setup.filename"
+        value="${catalog.label|camel}.setup"
+        label="Filename">
+      <description>The camel case filename of the new product catalog setup model.</description>
+    </setupTask>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:InstallationTask"
+      id="installation"/>
+  <setupTask
+      xsi:type="setup.p2:P2Task">
+    <requirement
+        name="org.eclipse.oomph.setup.feature.group"/>
+    <repository
+        url="${oomph.update.url}"/>
+  </setupTask>
+  <description>${catalog.description}</description>
+</setup:ProductCatalog>

@@ -14,6 +14,7 @@ import org.eclipse.oomph.internal.setup.SetupPlugin;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
@@ -184,6 +185,8 @@ public class SetupValidator extends EObjectValidator
         return validateWorkspace((Workspace)value, diagnostics, context);
       case SetupPackage.WORKSPACE_TASK:
         return validateWorkspaceTask((WorkspaceTask)value, diagnostics, context);
+      case SetupPackage.CONFIGURATION:
+        return validateConfiguration((Configuration)value, diagnostics, context);
       case SetupPackage.COMPOUND_TASK:
         return validateCompoundTask((CompoundTask)value, diagnostics, context);
       case SetupPackage.VARIABLE_TASK:
@@ -423,6 +426,16 @@ public class SetupValidator extends EObjectValidator
   public boolean validateWorkspaceTask(WorkspaceTask workspaceTask, DiagnosticChain diagnostics, Map<Object, Object> context)
   {
     return validate_EveryDefaultConstraint(workspaceTask, diagnostics, context);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean validateConfiguration(Configuration configuration, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
+    return validate_EveryDefaultConstraint(configuration, diagnostics, context);
   }
 
   /**

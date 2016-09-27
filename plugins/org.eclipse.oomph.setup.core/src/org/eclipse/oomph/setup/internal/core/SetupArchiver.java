@@ -36,6 +36,7 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -199,8 +200,18 @@ public class SetupArchiver implements IApplication
       // options.put(Resource.OPTION_LINE_DELIMITER, "\n");
     }
 
-    // Remove any folder redirection that might be in place for the location of the setups folder.
-    uriMap.remove(SetupContext.INDEX_SETUP_LOCATION_URI.trimSegments(1).appendSegment(""));
+    // Remove any folder redirections that might be in place for the location of the setups folder and folders under that.
+    for (Iterator<URI> it = uriMap.keySet().iterator(); it.hasNext();)
+    {
+      URI uri = it.next();
+      URI deresolvedURI = uri.deresolve(SetupContext.INDEX_ROOT_LOCATION_URI);
+      if (deresolvedURI.isRelative())
+      {
+        it.remove();
+      }
+    }
+
+    uriMap.remove(SetupContext.INDEX_ROOT_LOCATION_URI);
 
     boolean hasFailures = false;
     for (Resource resource : resourceSet.getResources())

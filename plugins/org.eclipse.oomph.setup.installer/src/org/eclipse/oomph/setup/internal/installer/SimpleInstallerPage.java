@@ -56,9 +56,9 @@ public abstract class SimpleInstallerPage extends Composite
 
   protected static final Font FONT_LABEL = SimpleInstallerDialog.getDefaultFont();
 
-  private static final Pattern PRODUCT_CATALOG_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_CATALOG_FILTER, ""));
+  protected static final Pattern PRODUCT_CATALOG_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_CATALOG_FILTER, ""));
 
-  private static final Pattern PRODUCT_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_FILTER, ""));
+  protected static final Pattern PRODUCT_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_FILTER, ""));
 
   protected static final Pattern PRODUCT_VERSION_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_VERSION_FILTER, ""));
 
@@ -71,6 +71,7 @@ public abstract class SimpleInstallerPage extends Composite
   public SimpleInstallerPage(final Composite parent, final SimpleInstallerDialog dialog, boolean withBackButton)
   {
     super(parent, SWT.NONE);
+
     installer = dialog.getInstaller();
     this.dialog = dialog;
 
@@ -195,6 +196,12 @@ public abstract class SimpleInstallerPage extends Composite
     // Subclasses may override.
   }
 
+  protected void menuAboutToShow(SimpleInstallerMenu menu)
+  {
+    // This is called for the top page just before the menu is shown.
+    // Subclasses may override.
+  }
+
   protected void applyComboOrTextStyle(Control control)
   {
     control.setFont(SimpleInstallerDialog.getFont(1, "normal"));
@@ -225,6 +232,11 @@ public abstract class SimpleInstallerPage extends Composite
 
   public static boolean isIncluded(ProductCatalog productCatalog)
   {
+    if (productCatalog.eIsProxy())
+    {
+      return false;
+    }
+
     String name = productCatalog.getName();
     if (SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(name) || "redirectable".equals(name) || productCatalog.getProducts().isEmpty())
     {

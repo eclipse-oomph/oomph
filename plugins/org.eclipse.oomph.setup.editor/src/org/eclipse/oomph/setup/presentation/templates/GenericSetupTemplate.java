@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.presentation.templates;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.base.util.BaseResourceImpl;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Scope;
@@ -25,26 +26,31 @@ import org.eclipse.oomph.setup.ui.PropertyField;
 import org.eclipse.oomph.ui.LabelDecorator;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.Resource.Internal;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -60,7 +66,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,6 +77,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -80,11 +91,13 @@ public class GenericSetupTemplate extends SetupTemplate
 {
   private static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(\\|([^{}/]+))?([^{}]*)}|\\$)");
 
+  private static final Pattern GIT_REPOSITORY_URL_PATTERN = Pattern.compile("\\s*url\\s*=\\s*([^ ]+)");
+
   private final URI templateLocation;
 
   private Composite composite;
 
-  private Scope setupScope;
+  private ModelElement setupModelElement;
 
   private final Map<VariableTask, PropertyField> fields = new LinkedHashMap<VariableTask, PropertyField>();
 
@@ -172,6 +185,7 @@ public class GenericSetupTemplate extends SetupTemplate
     }
 
     String filename = expandString("${setup.filename}", null);
+    filename = expandString(filename, null);
     if (!path.isValidSegment(filename))
     {
       return "The filename '" + filename + "' is not a valid filename";
@@ -298,14 +312,15 @@ public class GenericSetupTemplate extends SetupTemplate
 
     Resource resource = getResource();
     ResourceSet resourceSet = resource.getResourceSet();
-    setupScope = (Scope)resourceSet.getEObject(templateLocation, true);
+    setupModelElement = (ModelElement)resourceSet.getEObject(templateLocation, true);
 
     final Font normalFont = composite.getFont();
     final Font boldFont = ExtendedFontRegistry.INSTANCE.getFont(normalFont, IItemFontProvider.BOLD_FONT);
 
-    CompoundTask compoundTask = (CompoundTask)setupScope.eResource().getEObject("template.variables");
+    CompoundTask compoundTask = (CompoundTask)setupModelElement.eResource().getEObject("template.variables");
     Control firstControl = null;
     VariableTask firstVariable = null;
+    String defaultLocation = getContainer().getDefaultLocation();
     for (SetupTask setupTask : compoundTask.getSetupTasks())
     {
       final VariableTask variable = (VariableTask)setupTask;
@@ -357,9 +372,11 @@ public class GenericSetupTemplate extends SetupTemplate
 
       if ("setup.location".equals(variable.getName()))
       {
-        field.setValue(getContainer().getDefaultLocation());
+        field.setValue(defaultLocation);
       }
     }
+
+    computeProjectTemplateDefaults();
 
     Composite parent = composite.getParent();
     int currentHeight = composite.getSize().y;
@@ -398,7 +415,27 @@ public class GenericSetupTemplate extends SetupTemplate
 
   private void modelChanged(final VariableTask triggerVariable)
   {
-    Scope copy = EcoreUtil.copy(setupScope);
+    computeProjectTemplateDefaults();
+
+    Copier copier = new EcoreUtil.Copier();
+    ModelElement copy = (ModelElement)copier.copy(setupModelElement);
+    copier.copyReferences();
+
+    Set<Resource> resources = new HashSet<Resource>();
+    for (Map.Entry<EObject, EObject> entry : copier.entrySet())
+    {
+      EObject key = entry.getKey();
+      if (key != setupModelElement)
+      {
+        Internal eDirectResource = ((InternalEObject)key).eDirectResource();
+        if (eDirectResource != null)
+        {
+          Resource resource = new BaseResourceImpl(eDirectResource.getURI());
+          resources.add(resource);
+          resource.getContents().add(entry.getValue());
+        }
+      }
+    }
 
     Set<PropertyField> originalDirtyPropertyFields = new HashSet<PropertyField>(dirtyFields);
     for (VariableTask variable : variables.values())
@@ -425,17 +462,19 @@ public class GenericSetupTemplate extends SetupTemplate
       InternalEObject eObject = (InternalEObject)it.next();
       for (EAttribute eAttribute : eObject.eClass().getEAllAttributes())
       {
-        if (eAttribute.getEType().getInstanceClass() == String.class && !eAttribute.isDerived())
+        EDataType eAttributeType = eAttribute.getEAttributeType();
+        Class<?> instanceClass = eAttributeType.getInstanceClass();
+        if ((instanceClass == String.class || instanceClass == URI.class) && !eAttribute.isDerived())
         {
           if (!eAttribute.isMany())
           {
-            String value = (String)eObject.eGet(eAttribute);
+            String value = EcoreUtil.convertToString(eAttributeType, eObject.eGet(eAttribute));
             if (value != null)
             {
               Set<VariableTask> usedVariables = new HashSet<VariableTask>();
               String replacement = expandString(value, usedVariables);
               CollectionUtil.addAll(usages, usedVariables, eObject.eSetting(eAttribute));
-              eObject.eSet(eAttribute, replacement);
+              eObject.eSet(eAttribute, EcoreUtil.createFromString(eAttributeType, replacement));
             }
           }
         }
@@ -455,7 +494,8 @@ public class GenericSetupTemplate extends SetupTemplate
         CompoundTask compoundTask = (CompoundTask)eObject;
         if ("template.variables".equals(compoundTask.getID()))
         {
-          eObjectsToDelete.add(compoundTask);
+          EObject eContainer = compoundTask.eContainer();
+          eObjectsToDelete.add(eContainer instanceof Scope ? compoundTask : eContainer);
         }
       }
     }
@@ -496,6 +536,13 @@ public class GenericSetupTemplate extends SetupTemplate
     for (EObject eObject : eObjectsToDelete)
     {
       EcoreUtil.delete(eObject);
+    }
+
+    for (Resource resource : resources)
+    {
+      URI uri = resource.getURI();
+      String expandedURI = expandString(uri.toString(), null);
+      resource.setURI(URI.createURI(expandedURI));
     }
 
     final Resource resource = getResource();
@@ -550,7 +597,7 @@ public class GenericSetupTemplate extends SetupTemplate
     getContainer().validate();
   }
 
-  private void updateResource(Scope setup)
+  private void updateResource(ModelElement setup)
   {
     final Resource resource = getResource();
 
@@ -645,6 +692,242 @@ public class GenericSetupTemplate extends SetupTemplate
       }
     }
 
+    if (filterName.equals("firstSegment"))
+    {
+      URI uri = URI.createURI(value);
+      return uri.segmentCount() > 0 ? uri.segment(0) : "";
+    }
+
+    if (filterName.equals("not"))
+    {
+      return "false".equals(value) ? "true" : "false";
+    }
+
+    if (filterName.equals("description"))
+    {
+      return value.startsWith("...") ? StringUtil.NL + "Before enabling this task, replace '...' with the repository path of this setup's containing project."
+          : "";
+    }
+
+    if (filterName.equals("isClonePath"))
+    {
+      return filter(variable, value, "clonePath").startsWith("...") ? "false" : "true";
+    }
+
+    if (filterName.equals("clonePath"))
+    {
+      try
+      {
+        IProject project = EcorePlugin.getWorkspaceRoot().getProject(new Path(value).segment(0));
+        IPath location = project.getLocation();
+        StringBuilder path = new StringBuilder();
+        if (location != null)
+        {
+          for (File file = location.toFile(); file != null; file = file.getParentFile())
+          {
+            File[] gitFile = file.listFiles(new FileFilter()
+            {
+              public boolean accept(File pathname)
+              {
+                return ".git".equals(pathname.getName());
+              }
+            });
+
+            if (gitFile.length == 1)
+            {
+              return path.toString();
+            }
+
+            if (path.length() != 0)
+            {
+              path.insert(0, '/');
+            }
+
+            path.insert(0, file.getName());
+          }
+
+          return ".../" + location.segment(0);
+        }
+      }
+      catch (Exception ex)
+      {
+        // Ignore.
+      }
+
+      return "...";
+    }
+
     return StringFilterRegistry.INSTANCE.filter(value, filterName);
+  }
+
+  private void computeProjectTemplateDefaults()
+  {
+    if (variables.containsKey("project.name"))
+    {
+      String fileLocation = expandString("${setup.location}", null);
+      if (fileLocation != null)
+      {
+        Path path = new Path(fileLocation);
+        if (path.segmentCount() > 0)
+        {
+          try
+          {
+            IProject project = EcorePlugin.getWorkspaceRoot().getProject(path.segment(0));
+            IPath location = project.getLocation();
+            if (location != null)
+            {
+              for (File file = location.toFile(); file != null; file = file.getParentFile())
+              {
+                File[] gitFile = file.listFiles(new FileFilter()
+                {
+                  public boolean accept(File pathname)
+                  {
+                    return ".git".equals(pathname.getName());
+                  }
+                });
+
+                if (gitFile.length == 1)
+                {
+                  List<String> lines = IOUtil.readLines(new File(gitFile[0], "config"), "UTF-8");
+                  for (String line : lines)
+                  {
+                    Matcher matcher = GIT_REPOSITORY_URL_PATTERN.matcher(line);
+                    if (matcher.matches())
+                    {
+                      URI repositoryURI = URI.createURI(matcher.group(1));
+                      String host = repositoryURI.host();
+                      List<String> segments = repositoryURI.isHierarchical() ? repositoryURI.segmentsList()
+                          : URI.createURI(repositoryURI.opaquePart()).segmentsList();
+                      String firstSegment = segments.get(0);
+                      String lastSegment = segments.get(segments.size() - 1);
+                      List<String> qualifiedName = StringUtil.explode(lastSegment, ".-");
+                      String projectRemoteURIs = null;
+                      if ("git.eclipse.org".equals(host))
+                      {
+                        if ("r".equals(firstSegment) || "gitroot".equals(firstSegment))
+                        {
+                          segments.remove(0);
+                        }
+
+                        if ("r".equals(firstSegment) || repositoryURI.port() != null)
+                        {
+                          projectRemoteURIs = "eclipse.git.gerrit.remoteURIs";
+                        }
+
+                        if ("org".equals(qualifiedName.get(0)))
+                        {
+                          qualifiedName.remove(0);
+                        }
+
+                        if ("eclipse".equals(qualifiedName.get(0)))
+                        {
+                          qualifiedName.remove(0);
+                        }
+                      }
+                      else if ("github.com".equals(host))
+                      {
+                        if ("eclipse".equals(firstSegment))
+                        {
+                          projectRemoteURIs = "github.remote.uris";
+                        }
+                      }
+
+                      String projectName = StringUtil.implode(qualifiedName, '.');
+
+                      for (ListIterator<String> it = qualifiedName.listIterator(); it.hasNext();)
+                      {
+                        String nameSegment = it.next();
+                        it.set(nameSegment.length() <= 4 ? nameSegment.toUpperCase() : StringUtil.cap(nameSegment));
+                      }
+
+                      String projectLabel = StringUtil.implode(qualifiedName, ' ');
+
+                      applyVariableValue("project.label", projectLabel);
+                      applyVariableValue("project.name", projectName);
+                      applyVariableValue("project.git.path", StringUtil.implode(segments, '/'));
+                      if (projectRemoteURIs != null)
+                      {
+                        applyVariableValue("project.remote.uris", projectRemoteURIs);
+                      }
+
+                      return;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          catch (Exception ex)
+          {
+            // Ignore.
+          }
+
+          String firstSegment = path.segment(0);
+          List<String> qualifiedName = StringUtil.explode(firstSegment, ".-_ ");
+          if (!qualifiedName.isEmpty())
+          {
+            ArrayList<String> domainPrefixes = new ArrayList<String>(Arrays.asList(Locale.getISOCountries()));
+            domainPrefixes.add("COM");
+            domainPrefixes.add("ORG");
+            if (domainPrefixes.contains(qualifiedName.get(0).toUpperCase()))
+            {
+              qualifiedName.remove(0);
+              if (qualifiedName.size() > 1)
+              {
+                qualifiedName.remove(0);
+              }
+            }
+
+            String nameSegment = qualifiedName.get(0);
+            String projectName = nameSegment.toLowerCase();
+            String projectLabel = nameSegment.length() <= 4 ? nameSegment.toUpperCase() : StringUtil.cap(nameSegment);
+            applyVariableValue("project.label", projectLabel);
+            applyVariableValue("project.name", projectName);
+            return;
+          }
+        }
+      }
+
+      restoreDefaultValue("project.label");
+      restoreDefaultValue("project.name");
+      restoreDefaultValue("project.git.path");
+      restoreDefaultValue("project.remote.uris");
+    }
+  }
+
+  private void applyVariableValue(String name, String value)
+  {
+    VariableTask variable = variables.get(name);
+    if (variable != null)
+    {
+      PropertyField field = fields.get(variable);
+      if (!dirtyFields.contains(field))
+      {
+        if (variable.getDefaultValue() == null)
+        {
+          variable.setDefaultValue(variable.getValue());
+        }
+        variable.setValue(value);
+        field.setValue(value, false);
+      }
+    }
+  }
+
+  private void restoreDefaultValue(String name)
+  {
+    VariableTask variable = variables.get(name);
+    if (variable != null)
+    {
+      PropertyField field = fields.get(variable);
+      if (!dirtyFields.contains(field))
+      {
+        String defaultValue = variable.getDefaultValue();
+        if (defaultValue != null)
+        {
+          variable.setValue(defaultValue);
+          field.setValue(defaultValue, false);
+        }
+      }
+    }
   }
 }

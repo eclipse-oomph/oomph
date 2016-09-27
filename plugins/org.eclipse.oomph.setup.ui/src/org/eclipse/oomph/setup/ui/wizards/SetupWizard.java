@@ -13,12 +13,15 @@ package org.eclipse.oomph.setup.ui.wizards;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.p2.internal.ui.CacheUsageConfirmerUI;
 import org.eclipse.oomph.setup.AnnotationConstants;
+import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
@@ -27,9 +30,11 @@ import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
+import org.eclipse.oomph.setup.internal.core.util.IndexManager;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
+import org.eclipse.oomph.setup.ui.SetupTransferSupport;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardPage.WizardFinisher;
 import org.eclipse.oomph.ui.UIUtil;
@@ -52,6 +57,7 @@ import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.IPageChangeProvider;
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -88,6 +94,8 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -114,6 +122,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   private ResourceSet resourceSet;
 
   private CatalogManager catalogManager;
+
+  private SetupTransferSupport setupTransferSupport;
+
+  private Configuration configuration;
+
+  private final List<Resource> configurationResources = new ArrayList<Resource>();
 
   private SetupContext setupContext;
 
@@ -246,6 +260,127 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     return resourceSet;
   }
 
+  public SetupTransferSupport getTransferSupport()
+  {
+    if (setupTransferSupport == null)
+    {
+      setupTransferSupport = new SetupTransferSupport();
+    }
+
+    return setupTransferSupport;
+  }
+
+  public Collection<? extends Resource> getConfigurationResources()
+  {
+    return new ArrayList<Resource>(configurationResources);
+  }
+
+  public void setConfigurationResources(Collection<? extends Resource> configurationResources)
+  {
+    if (!this.configurationResources.equals(new ArrayList<Resource>(configurationResources)))
+    {
+      configuration = null;
+      this.configurationResources.clear();
+      this.configurationResources.addAll(configurationResources);
+    }
+  }
+
+  public Configuration getConfiguration()
+  {
+    if (configuration == null)
+    {
+      ResourceSet resourceSet = getResourceSet();
+      for (Resource resource : configurationResources)
+      {
+        if (!resource.isLoaded())
+        {
+          URI uri = resource.getURI();
+          if ("zip".equals(uri.fileExtension()))
+          {
+            configuration = SetupFactory.eINSTANCE.createConfiguration();
+            reloadIndex(URI.createURI("archive:" + uri + "!/"));
+            return configuration;
+          }
+          else if (SetupContext.INDEX_SETUP_NAME.equals(uri.lastSegment()))
+          {
+            configuration = SetupFactory.eINSTANCE.createConfiguration();
+            reloadIndex(uri);
+            return configuration;
+          }
+
+          Resource localResource = resourceSet.getResource(uri, false);
+          if (localResource != null)
+          {
+            resourceSet.getResources().remove(localResource);
+          }
+
+          resourceSet.getResources().add(resource);
+          try
+          {
+            resourceSet.getResource(uri, true);
+          }
+          catch (RuntimeException ex)
+          {
+            // Ignore.
+          }
+
+          Configuration configuration = (Configuration)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.CONFIGURATION);
+          this.configuration = configuration;
+          break;
+        }
+
+        final Configuration configuration = (Configuration)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.CONFIGURATION);
+        if (configuration != null)
+        {
+          OomphTransferDelegate.TextTransferDelegate delegate = new OomphTransferDelegate.TextTransferDelegate()
+          {
+            {
+              eObjects = Collections.<EObject> singleton(configuration);
+            }
+          };
+
+          String xml = (String)delegate.getData();
+          if (xml != null)
+          {
+            final URI syntheticConfigurationResourceURI = URI.createURI("dummy:/Configuration.setup");
+            Resource localResource = resourceSet.getResource(syntheticConfigurationResourceURI, false);
+            if (localResource != null)
+            {
+              resourceSet.getResources().remove(localResource);
+            }
+
+            localResource = resourceSet.createResource(syntheticConfigurationResourceURI);
+            try
+            {
+              localResource.load(new URIConverter.ReadableInputStream(xml), resourceSet.getLoadOptions());
+              Configuration localConfiguration = (Configuration)EcoreUtil.getObjectByType(localResource.getContents(), SetupPackage.Literals.CONFIGURATION);
+              ResourceMirror resourceMirror = new ResourceMirror.WithProductImages(resourceSet)
+              {
+                @Override
+                protected void run(String taskName, IProgressMonitor monitor)
+                {
+                  perform(syntheticConfigurationResourceURI);
+                  resolveProxies();
+                }
+              };
+
+              resourceMirror.begin(new NullProgressMonitor());
+
+              this.configuration = localConfiguration;
+              break;
+            }
+            catch (IOException ex)
+            {
+              // Ignore.
+            }
+          }
+        }
+      }
+    }
+
+    return configuration;
+  }
+
   public CatalogManager getCatalogManager()
   {
     if (catalogManager == null)
@@ -347,6 +482,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   public void setSimpleShell(Shell simpleShell)
   {
     this.simpleShell = simpleShell;
+  }
+
+  public boolean isSimple()
+  {
+    return simpleShell != null;
   }
 
   @Override
@@ -530,12 +670,25 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     return dialog.open();
   }
 
-  public void reloadIndex()
+  public void reloadIndex(final URI indexLocationURI)
   {
-    reloadIndex(null);
+    if (indexLoader == null)
+    {
+      indexLoader = new ProgressMonitorDialogIndexLoader();
+      indexLoader.setWizard(this);
+    }
+
+    // Do this later so that the modal context of the progress dialog, if there is one, is within IndexLoader.awaitIndexLoad() event loop.
+    UIUtil.asyncExec(getShell(), new Runnable()
+    {
+      public void run()
+      {
+        indexLoader.reloadIndex(indexLocationURI);
+      }
+    });
   }
 
-  public void reloadIndex(Set<Resource> updatedResources)
+  protected void reloadIndexResources(Set<Resource> updatedResources)
   {
     Set<Resource> excludedResources = new LinkedHashSet<Resource>();
 
@@ -607,7 +760,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
       resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
       resourceSet.getPackageRegistry().clear();
-      loadIndex();
+      loadIndex(false, SetupContext.INDEX_SETUP_URI, SetupContext.USER_SETUP_URI);
     }
     else
     {
@@ -617,7 +770,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         uris.add(resource.getURI());
       }
 
-      loadIndex(uris.toArray(new URI[uris.size()]));
+      loadIndex(false, uris.toArray(new URI[uris.size()]));
     }
 
     for (Resource resource : excludedResources)
@@ -629,15 +782,14 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       EcoreUtil.resolveAll(resource);
     }
-
   }
 
   public void loadIndex()
   {
-    loadIndex(SetupContext.INDEX_SETUP_URI, SetupContext.USER_SETUP_URI);
+    loadIndex(true, SetupContext.INDEX_SETUP_URI, SetupContext.USER_SETUP_URI);
   }
 
-  protected void loadIndex(final URI... uris)
+  protected void loadIndex(final boolean configure, final URI... uris)
   {
     if (indexLoader == null)
     {
@@ -650,7 +802,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       public void run()
       {
-        indexLoader.loadIndex(resourceSet, uris);
+        indexLoader.loadIndex(configure, resourceSet, uris);
       }
     });
   }
@@ -808,7 +960,23 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       return wizard;
     }
 
-    public abstract void loadIndex(ResourceSet resourceSet, URI... uris);
+    public abstract void loadIndex(IRunnableWithProgress runnable, int delay);
+
+    public void loadIndex(final boolean configure, final ResourceSet resourceSet, final URI... uris)
+    {
+      loadIndex(new IRunnableWithProgress()
+      {
+        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+        {
+          if (configure)
+          {
+            new IndexManager().configure(resourceSet);
+          }
+
+          loadIndex(resourceSet, uris, monitor);
+        }
+      }, 3000);
+    }
 
     protected final void loadIndex(final ResourceSet resourceSet, final URI[] uris, IProgressMonitor monitor)
         throws InvocationTargetException, InterruptedException
@@ -845,7 +1013,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
               }
             }
 
-            loadIndex(resourceSet, uris.toArray(new URI[uris.size()]));
+            loadIndex(false, resourceSet, uris.toArray(new URI[uris.size()]));
           }
         });
       }
@@ -1005,7 +1173,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                               public void run()
                               {
                                 // Reload only the affected resources.
-                                wizard.reloadIndex(updatedResources);
+                                wizard.reloadIndexResources(updatedResources);
                               }
                             });
                           }
@@ -1039,6 +1207,22 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
           }
         });
       }
+    }
+
+    public void reloadIndex(final URI indexLocationURI)
+    {
+      loadIndex(new IRunnableWithProgress()
+      {
+        public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+        {
+          if (indexLocationURI != null)
+          {
+            new IndexManager().configureForProxy(getWizard().getResourceSet(), indexLocationURI);
+          }
+
+          getWizard().reloadIndexResources(null);
+        }
+      }, 1000);
     }
 
     protected void indexLoaded(final Index index)
@@ -1129,7 +1313,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     }
 
     @Override
-    public void loadIndex(final ResourceSet resourceSet, final URI... uris)
+    public void loadIndex(IRunnableWithProgress runnable, int delay)
     {
       final Shell shell = getWizard().getShell();
       final ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(shell);
@@ -1138,7 +1322,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       try
       {
         // Delay showing the progress dialog for three seconds.
-        UIUtil.timerExec(3000, new Runnable()
+        UIUtil.timerExec(delay, new Runnable()
         {
           public void run()
           {
@@ -1146,13 +1330,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
           }
         });
 
-        progressMonitorDialog.run(true, true, new IRunnableWithProgress()
-        {
-          public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
-          {
-            loadIndex(resourceSet, uris, monitor);
-          }
-        });
+        progressMonitorDialog.run(true, true, runnable);
       }
       catch (InvocationTargetException ex)
       {

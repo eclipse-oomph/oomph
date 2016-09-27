@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
@@ -469,6 +470,20 @@ public class SetupSwitch<T> extends Switch<T>
         if (result == null)
         {
           result = caseModelElement(workspaceTask);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case SetupPackage.CONFIGURATION:
+      {
+        Configuration configuration = (Configuration)theEObject;
+        T result = caseConfiguration(configuration);
+        if (result == null)
+        {
+          result = caseModelElement(configuration);
         }
         if (result == null)
         {
@@ -989,6 +1004,22 @@ public class SetupSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseWorkspaceTask(WorkspaceTask object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Configuration</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Configuration</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseConfiguration(Configuration object)
   {
     return null;
   }

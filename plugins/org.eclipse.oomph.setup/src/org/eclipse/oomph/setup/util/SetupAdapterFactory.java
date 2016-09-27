@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
@@ -226,6 +227,12 @@ public class SetupAdapterFactory extends AdapterFactoryImpl
     public Adapter caseWorkspaceTask(WorkspaceTask object)
     {
       return createWorkspaceTaskAdapter();
+    }
+
+    @Override
+    public Adapter caseConfiguration(Configuration object)
+    {
+      return createConfigurationAdapter();
     }
 
     @Override
@@ -512,6 +519,21 @@ public class SetupAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createWorkspaceTaskAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.Configuration <em>Configuration</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.Configuration
+   * @generated
+   */
+  public Adapter createConfigurationAdapter()
   {
     return null;
   }

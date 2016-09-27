@@ -16,11 +16,15 @@ import org.eclipse.oomph.util.PropertyFile;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.jface.dialogs.DialogTray;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -30,6 +34,7 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -209,6 +214,129 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
 
     shell.setActive();
     return area;
+  }
+
+  protected Control createButtonBarWithControls(Composite parent)
+  {
+    GridLayout layout = new GridLayout();
+    layout.marginRight = 0;
+    layout.marginLeft = 0;
+    layout.marginHeight = 0;
+    layout.horizontalSpacing = 5;
+
+    Composite controlArea = new Composite(parent, SWT.NONE);
+    controlArea.setLayout(layout);
+    controlArea.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+    controlArea.setFont(parent.getFont());
+
+    boolean helpAvailable = isHelpAvailable();
+    if (helpAvailable)
+    {
+      Control helpControl = createHelpControl(controlArea);
+      ((GridData)helpControl.getLayoutData()).horizontalIndent = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_MARGIN);
+    }
+
+    createControlsForButtonBar(controlArea);
+
+    HelpSupport oldHelpSupport = helpSupport;
+    helpSupport = null;
+    super.createButtonBar(controlArea);
+    helpSupport = oldHelpSupport;
+
+    return controlArea;
+  }
+
+  protected void createControlsForButtonBar(Composite parent)
+  {
+    throw new UnsupportedOperationException("At least one control must be added when createButtonBarWithControls is called.");
+  }
+
+  public CCombo createCCombo(Composite parent)
+  {
+    GridLayout layout = (GridLayout)parent.getLayout();
+    if (layout.numColumns == 1)
+    {
+      layout.marginLeft = 10;
+    }
+
+    layout.numColumns++;
+
+    final CCombo combo = new CCombo(parent, SWT.BORDER | SWT.READ_ONLY | SWT.FLAT);
+    combo.addControlListener(new ControlAdapter()
+    {
+      boolean firstTime = true;
+
+      @Override
+      public void controlResized(ControlEvent e)
+      {
+        Button button = getButton(IDialogConstants.CANCEL_ID);
+        if (firstTime)
+        {
+          button.addControlListener(this);
+          firstTime = false;
+        }
+
+        Rectangle buttonBounds = button.getBounds();
+        if (buttonBounds.height != 0)
+        {
+          int borderCompensation = button.getBorderWidth() - combo.getBorderWidth();
+
+          Rectangle bounds = combo.getBounds();
+          bounds.y = buttonBounds.y - borderCompensation / 2;
+          bounds.height = buttonBounds.height + borderCompensation;
+
+          combo.setBounds(bounds);
+        }
+      }
+    });
+
+    GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+    int widthHint = convertHorizontalDLUsToPixels(IDialogConstants.BUTTON_WIDTH);
+    data.grabExcessHorizontalSpace = true;
+    data.widthHint = widthHint;
+    combo.setLayoutData(data);
+
+    return combo;
+  }
+
+  public Combo createCombo(Composite parent)
+  {
+    GridLayout layout = (GridLayout)parent.getLayout();
+    if (layout.numColumns == 1)
+    {
+      layout.marginLeft = 10;
+    }
+
+    layout.numColumns++;
+
+    Combo combo = new Combo(parent, SWT.READ_ONLY);
+
+    GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+    int widthHint = convertHorizontalDLUsToPixels(IDialogConstants.BUTTON_WIDTH);
+    data.grabExcessHorizontalSpace = true;
+    data.widthHint = widthHint;
+    combo.setLayoutData(data);
+
+    return combo;
+  }
+
+  public Label createLabel(Composite parent, String text)
+  {
+    GridLayout layout = (GridLayout)parent.getLayout();
+    if (layout.numColumns == 1 && parent.getChildren().length == 0)
+    {
+      layout.marginLeft = 10;
+    }
+
+    layout.numColumns++;
+
+    Label label = new Label(parent, SWT.NONE);
+    label.setText(text);
+
+    GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+    label.setLayoutData(data);
+
+    return label;
   }
 
   protected Button createCheckbox(Composite parent, String label)

@@ -19,7 +19,6 @@ import org.eclipse.oomph.internal.ui.FindAndReplaceTarget;
 import org.eclipse.oomph.internal.ui.IRevertablePart;
 import org.eclipse.oomph.internal.ui.OomphEditingDomain;
 import org.eclipse.oomph.internal.ui.OomphPropertySheetPage;
-import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
@@ -43,6 +42,7 @@ import org.eclipse.oomph.setup.provider.PreferenceTaskItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
+import org.eclipse.oomph.setup.ui.SetupTransferSupport;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.StringUtil;
@@ -78,6 +78,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CopyCommand.Helper;
 import org.eclipse.emf.edit.command.RemoveCommand;
@@ -697,6 +698,8 @@ public class SetupEditor extends MultiPageEditorPart
 
   private IconReflectiveItemProvider reflectiveItemProvider;
 
+  private Runnable reproxifier;
+
   /**
    * This creates a model editor.
    * <!-- begin-user-doc -->
@@ -1221,23 +1224,7 @@ public class SetupEditor extends MultiPageEditorPart
       }
     };
 
-    List<? extends OomphTransferDelegate> delegates = OomphTransferDelegate.merge(OomphTransferDelegate.DELEGATES,
-        new OomphTransferDelegate.FileTransferDelegate()
-        {
-          @Override
-          protected void gather(EditingDomain domain, URI uri)
-          {
-            super.gather(domain, SetupContext.resolveUser(uri));
-          }
-        }, new OomphTransferDelegate.URLTransferDelegate()
-        {
-          @Override
-          protected void gather(EditingDomain domain, URI uri)
-          {
-            super.gather(domain, SetupContext.resolveUser(uri));
-          }
-        });
-    editingDomain = new OomphEditingDomain(adapterFactory, editingDomain.getCommandStack(), readOnlyMap, delegates);
+    editingDomain = new OomphEditingDomain(adapterFactory, editingDomain.getCommandStack(), readOnlyMap, SetupTransferSupport.USER_RESOLVING_DELEGATES);
 
     // Add a listener to set the most recent command's affected objects to be the selection of the viewer with focus.
     //
@@ -1547,7 +1534,46 @@ public class SetupEditor extends MultiPageEditorPart
     if (!contents.isEmpty())
     {
       rootObject = contents.get(0);
-      if (!(rootObject instanceof Index))
+      if (rootObject instanceof Index)
+      {
+        final Index index = (Index)rootObject;
+
+        // Record the proxies in the discoverable packages list so they can be restored before saving.
+        // Our special model handling has the effect that resolving a proxy reference to a model resource
+        // will resolve to the generated package when its implementation is available in the installation.
+        // But we don't want to serialize a reference to that, we want to preserve the original form in which the model was referenced.
+        reproxifier = new Runnable()
+        {
+          final InternalEList<EPackage> discoverablePackages = (InternalEList<EPackage>)index.getDiscoverablePackages();
+
+          final Map<EPackage, EPackage> packageProxies = new LinkedHashMap<EPackage, EPackage>();
+
+          {
+            // Record a map from resolved EPackage to the original EPackage proxy.
+            for (int i = 0, size = discoverablePackages.size(); i < size; ++i)
+            {
+              EPackage ePackageProxy = discoverablePackages.basicGet(i);
+              EPackage ePackage = discoverablePackages.get(i);
+              packageProxies.put(ePackage, ePackageProxy);
+            }
+          }
+
+          public void run()
+          {
+            // Before saving, we can run this to restore the original proxies.
+            for (int i = 0, size = discoverablePackages.size(); i < size; ++i)
+            {
+              EPackage ePackage = discoverablePackages.basicGet(i);
+              EPackage ePackageProxy = packageProxies.get(ePackage);
+              if (ePackageProxy != null)
+              {
+                discoverablePackages.set(i, ePackageProxy);
+              }
+            }
+          }
+        };
+      }
+      else
       {
         resourceMirror.perform(SetupContext.INDEX_SETUP_URI);
       }
@@ -2760,6 +2786,14 @@ public class SetupEditor extends MultiPageEditorPart
       {
         ++i;
       }
+    }
+
+    // Restore the indexes original proxies before saving.
+    // Because of our special model handling, references to the packages resolve to the actual generated package resources,
+    // but we'd like to preserve the original proxy URI when saving and index.
+    if (reproxifier != null)
+    {
+      reproxifier.run();
     }
 
     doSaveGen(progressMonitor);

@@ -61,6 +61,12 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
     this.expansionCount = expansionCount;
   }
 
+  @Override
+  public void clearText()
+  {
+    super.clearText();
+  }
+
   public Object getRefreshJobFamily()
   {
     return refreshJobFamily;
@@ -104,13 +110,16 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
         try
         {
           redrawFalseControl.setRedraw(false);
-          TreeItem[] is = treeViewer.getTree().getItems();
-          for (int i = 0; i < is.length; i++)
+          if (Boolean.FALSE.equals(ReflectUtil.getValue("narrowingDown", FilteredTreeWithoutWorkbench.this)))
           {
-            TreeItem item = is[i];
-            if (item.getExpanded())
+            TreeItem[] is = treeViewer.getTree().getItems();
+            for (int i = 0; i < is.length; i++)
             {
-              treeViewer.setExpandedState(item.getData(), false);
+              TreeItem item = is[i];
+              if (item.getExpanded())
+              {
+                treeViewer.setExpandedState(item.getData(), false);
+              }
             }
           }
 

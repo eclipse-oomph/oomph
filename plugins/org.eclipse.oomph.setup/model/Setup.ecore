@@ -75,6 +75,7 @@
         volatile="true" transient="true" derived="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Index" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="discoverablePackages" upperBound="-1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EPackage">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -318,6 +319,12 @@
         <details key="description" value="The name of the workspace folder within the root workspace-container folder where the workspaces are located"/>
       </eAnnotations>
     </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Configuration" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="installation" eType="#//Installation"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workspace" eType="#//Workspace"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompoundTask" eSuperTypes="#//SetupTask #//SetupTaskContainer">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
