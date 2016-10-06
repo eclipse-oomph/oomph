@@ -30,6 +30,7 @@
             </objectClass>
          </enablement>
       </decorator>
+      <!--
       <decorator
             adaptable="true"
             class="org.eclipse.oomph.launches.TestElementLabelDecorator"
@@ -43,6 +44,14 @@
             </objectClass>
          </enablement>
       </decorator>
+      -->
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.eclipse.oomph.launches.EarlyStartup">
+      </startup>
    </extension>
 
 </plugin>
