@@ -67,7 +67,6 @@ import org.eclipse.equinox.p2.core.UIServices.AuthenticationInfo;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.StorageException;
 
-import org.apache.http.impl.client.BasicCookieStore;
 import org.osgi.framework.Version;
 
 import java.io.ByteArrayInputStream;
@@ -718,7 +717,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
             requestHeaders.put("User-Agent", USER_AGENT);
           }
 
-          System.err.println("####" + i + ">" + uri);
           fileTransfer.sendRetrieveRequest(fileTransferID, transferListener, requestOptions);
         }
         catch (IncomingFileTransferException ex)
@@ -1379,7 +1377,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
    */
   private static final class FileTransferListener implements IFileTransferListener
   {
-    private static final BasicCookieStore COOKIE_STORE = new BasicCookieStore();
+    @SuppressWarnings("restriction")
+    private static final org.apache.http.impl.client.BasicCookieStore COOKIE_STORE = new org.apache.http.impl.client.BasicCookieStore();
 
     public final CountDownLatch receiveLatch = new CountDownLatch(1);
 

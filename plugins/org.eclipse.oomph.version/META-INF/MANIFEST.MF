@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.oomph.version;singleton:=true
-Bundle-Version: 1.5.0.qualifier
+Bundle-Version: 1.6.0.qualifier
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -12,8 +12,8 @@ Bundle-ClassPath: .
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.core.resources;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.pde.core;bundle-version="[3.5.0,4.0.0)",
- org.eclipse.oomph.util;bundle-version="[1.5.0,2.0.0)";visibility:=reexport
-Export-Package: org.eclipse.oomph.internal.version;version="1.5.0";x-friends:="org.eclipse.oomph.version.ui",
- org.eclipse.oomph.version;version="1.5.0"
+ org.eclipse.oomph.util;bundle-version="[1.6.0,2.0.0)";visibility:=reexport
+Export-Package: org.eclipse.oomph.internal.version;version="1.6.0";x-friends:="org.eclipse.oomph.version.ui",
+ org.eclipse.oomph.version;version="1.6.0"
 Eclipse-RegisterBuddy: org.eclipse.oomph.util
 Eclipse-BuddyPolicy: dependent
