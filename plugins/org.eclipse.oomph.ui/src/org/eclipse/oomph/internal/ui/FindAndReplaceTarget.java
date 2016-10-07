@@ -38,6 +38,7 @@ import org.eclipse.jface.text.IFindReplaceTargetExtension;
 import org.eclipse.jface.text.IFindReplaceTargetExtension3;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ILabelDecorator;
@@ -1270,7 +1271,15 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
           // Otherwise just pass through the string.
           return styledString;
         }
-      });
+      })
+      {
+        {
+          if (labelProvider instanceof CellLabelProvider)
+          {
+            cellLabelProvider = (CellLabelProvider)labelProvider;
+          }
+        }
+      };
 
       // Hook up the label provider to be the one used by the view.
       ILabelProvider delegatingLabelProvider = new DecoratingLabelProvider(styledProvider);

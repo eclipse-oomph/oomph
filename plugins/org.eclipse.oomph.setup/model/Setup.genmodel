@@ -92,7 +92,7 @@
     <genClasses image="false" ecoreClass="Setup.ecore#//Scope">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Scope/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Scope/label"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Scope/description"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Setup.ecore#//Scope/description"/>
       <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Scope/qualifiedName"/>
       <genOperations ecoreOperation="Setup.ecore#//Scope/getParentScope"/>
       <genOperations ecoreOperation="Setup.ecore#//Scope/getType"/>

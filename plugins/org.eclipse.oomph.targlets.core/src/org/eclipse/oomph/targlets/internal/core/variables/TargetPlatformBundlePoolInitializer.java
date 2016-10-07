@@ -55,16 +55,20 @@ public class TargetPlatformBundlePoolInitializer extends ClasspathVariableInitia
       ITargetDefinition target = TargetPlatformUtil.getActiveTargetDefinition();
       if (target != null)
       {
-        for (ITargetLocation location : target.getTargetLocations())
+        ITargetLocation[] targetLocations = target.getTargetLocations();
+        if (targetLocations != null)
         {
-          if (location instanceof TargletContainer)
+          for (ITargetLocation location : targetLocations)
           {
-            TargletContainer container = (TargletContainer)location;
-            BundlePool bundlePool = container.getDescriptor().getBundlePool();
-            if (bundlePool != null)
+            if (location instanceof TargletContainer)
             {
-              JavaCore.setClasspathVariable(VARIABLE, new Path(bundlePool.getLocation().getAbsolutePath()), null);
-              return;
+              TargletContainer container = (TargletContainer)location;
+              BundlePool bundlePool = container.getDescriptor().getBundlePool();
+              if (bundlePool != null)
+              {
+                JavaCore.setClasspathVariable(VARIABLE, new Path(bundlePool.getLocation().getAbsolutePath()), null);
+                return;
+              }
             }
           }
         }

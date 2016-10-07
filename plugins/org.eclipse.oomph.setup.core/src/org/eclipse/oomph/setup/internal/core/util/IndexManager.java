@@ -206,7 +206,7 @@ public class IndexManager
   public void configure(ResourceSet resourceSet, URI setupArchiveURI)
   {
     // Load the entry information in the archive.
-    Resource archiveResource = new ArchiveResourceImpl(setupArchiveURI);
+    Resource archiveResource = new ArchiveResourceImpl(setupArchiveURI, resourceSet.getURIConverter());
     try
     {
       archiveResource.load(null);

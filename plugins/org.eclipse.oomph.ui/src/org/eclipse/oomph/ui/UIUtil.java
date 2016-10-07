@@ -12,12 +12,18 @@ package org.eclipse.oomph.ui;
 
 import org.eclipse.oomph.internal.ui.UIPlugin;
 import org.eclipse.oomph.util.ReflectUtil;
+import org.eclipse.oomph.util.StringUtil;
+
+import org.eclipse.emf.edit.provider.IItemFontProvider;
+import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.resource.FontRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
@@ -25,6 +31,8 @@ import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
@@ -52,6 +60,8 @@ import javax.swing.text.html.parser.ParserDelegator;
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -787,5 +797,220 @@ public final class UIUtil
     {
       return html;
     }
+  }
+
+  public static String stripHTMLFull(String html)
+  {
+    return stripHTMLFull(html, false);
+  }
+
+  private static String stripHTMLFull(String html, boolean images)
+  {
+    try
+    {
+      final StringBuilder result = new StringBuilder();
+      new ParserDelegator().parse(new StringReader(html), new HTMLEditorKit.ParserCallback()
+      {
+        private StringBuilder builder = result;
+
+        private List<List<StringBuilder>> table;
+
+        private List<StringBuilder> row;
+
+        @Override
+        public void handleText(char[] text, int pos)
+        {
+          builder.append(text);
+        }
+
+        @Override
+        public void handleSimpleTag(Tag t, MutableAttributeSet a, int pos)
+        {
+          if ("img".equals(t.toString()))
+          {
+            builder.append("      ");
+          }
+          else if (t.breaksFlow())
+          {
+            builder.append("\n");
+          }
+        }
+
+        @Override
+        public void handleStartTag(Tag t, MutableAttributeSet a, int pos)
+        {
+          String tagName = t.toString();
+          if ("table".equals(tagName))
+          {
+            table = new ArrayList<List<StringBuilder>>();
+          }
+          else if ("tr".equals(tagName))
+          {
+            row = new ArrayList<StringBuilder>();
+            table.add(row);
+          }
+          else if ("td".equals(tagName))
+          {
+            builder = new StringBuilder();
+            row.add(builder);
+          }
+          else if (tagName.startsWith("h") && tagName.length() > 1 && Character.isDigit(tagName.charAt(1)))
+          {
+            appendLineFeed(true);
+            appendLineFeed(false);
+          }
+          else
+          {
+            if (t.breaksFlow())
+            {
+              appendLineFeed(true);
+            }
+          }
+        }
+
+        @Override
+        public void handleEndTag(Tag t, int pos)
+        {
+          String tagName = t.toString();
+          if ("table".equals(tagName))
+          {
+            int[] widths = null;
+            String[][][] tableEntries = new String[table.size()][][];
+
+            builder = result;
+
+            int rowIndex = 0;
+            for (List<StringBuilder> row : table)
+            {
+              if (widths == null)
+              {
+                widths = new int[row.size()];
+              }
+
+              String[][] tableRow = new String[row.size()][];
+              tableEntries[rowIndex] = tableRow;
+
+              int columnIndex = 0;
+              for (StringBuilder entry : row)
+              {
+                String value = StringUtil.trimRight(entry.toString());
+                String[] lines = value.split("\n");
+                tableRow[columnIndex] = lines;
+
+                for (String line : lines)
+                {
+                  widths[columnIndex] = Math.max(widths[columnIndex], line.length());
+                }
+
+                ++columnIndex;
+              }
+
+              ++rowIndex;
+            }
+
+            // for (int i = 0; i < widths.length; ++i)
+            // {
+            // widths[i] += 4;
+            // }
+
+            for (String[][] row : tableEntries)
+            {
+              int maxLines = 0;
+              for (String[] column : row)
+              {
+                maxLines = Math.max(maxLines, column.length);
+              }
+
+              for (int i = 0; i < maxLines; ++i)
+              {
+                builder.append("|  ");
+                int columnIndex = 0;
+                for (String[] column : row)
+                {
+                  append(i < column.length ? column[i] : "", widths[columnIndex++]);
+                  builder.append(i == maxLines - 1 ? "  |" : "  |  ");
+                }
+
+                appendLineFeed(false);
+              }
+            }
+
+            table = null;
+          }
+          else if ("tr".equals(tagName))
+          {
+          }
+          else if ("td".equals(tagName))
+          {
+          }
+          else
+          {
+            if (t.breaksFlow())
+            {
+              appendLineFeed(true);
+            }
+          }
+        }
+
+        private void append(String value, int width)
+        {
+          builder.append(value);
+
+          for (int i = value.length(); i < width; ++i)
+          {
+            builder.append(' ');
+          }
+        }
+
+        private void appendLineFeed(boolean conditional)
+        {
+          if (conditional)
+          {
+            int length = builder.length();
+            if (length == 0 || builder.charAt(length - 1) == '\n')
+            {
+              return;
+            }
+          }
+
+          builder.append('\n');
+        }
+
+      }, Boolean.TRUE);
+
+      return result.toString();
+    }
+    catch (IOException ex)
+    {
+      return html;
+    }
+  }
+
+  public static Point caclcuateSize(String html)
+  {
+    Shell shell = new Shell();
+    GC gc = new GC(shell);
+    FontRegistry fontRegistry = JFaceResources.getFontRegistry();
+    Font font = fontRegistry.get(fontRegistry.hasValueFor("org.eclipse.jdt.ui.javadocfont") ? "org.eclipse.jdt.ui.javadocfont" : JFaceResources.DIALOG_FONT);
+
+    Font boldFont = ExtendedFontRegistry.INSTANCE.getFont(font, IItemFontProvider.BOLD_FONT);
+    gc.setFont(boldFont);
+
+    String text = stripHTMLFull(html, true).trim();
+    String[] lines = text.split("\n");
+    int pixelWidth = 0;
+    for (String line : lines)
+    {
+      pixelWidth = Math.max(pixelWidth, gc.textExtent(line).x);
+      gc.setFont(font);
+    }
+
+    int averageCharWidth = gc.getFontMetrics().getAverageCharWidth();
+    int numberOfAverageCharacters = pixelWidth / averageCharWidth + 5;
+
+    gc.dispose();
+    shell.dispose();
+
+    return new Point(numberOfAverageCharacters, lines.length);
   }
 }

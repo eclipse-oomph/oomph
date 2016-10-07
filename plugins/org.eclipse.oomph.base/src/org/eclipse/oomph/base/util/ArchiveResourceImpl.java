@@ -15,6 +15,7 @@ import org.eclipse.oomph.base.BaseFactory;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 
 import java.io.IOException;
@@ -28,9 +29,18 @@ import java.util.zip.ZipInputStream;
  */
 public class ArchiveResourceImpl extends ResourceImpl implements BytesResource
 {
-  public ArchiveResourceImpl(URI uri)
+  private final URIConverter uriConverter;
+
+  public ArchiveResourceImpl(URI uri, URIConverter uriConverter)
   {
     super(uri);
+    this.uriConverter = uriConverter;
+  }
+
+  @Override
+  protected URIConverter getURIConverter()
+  {
+    return uriConverter != null ? uriConverter : super.getURIConverter();
   }
 
   @Override

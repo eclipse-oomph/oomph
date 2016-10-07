@@ -103,7 +103,7 @@ public class ScopeItemProvider extends SetupTaskContainerItemProvider
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_Scope_description_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Scope_description_feature", "_UI_Scope_type"),
-        SetupPackage.Literals.SCOPE__DESCRIPTION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        SetupPackage.Literals.SCOPE__DESCRIPTION, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**

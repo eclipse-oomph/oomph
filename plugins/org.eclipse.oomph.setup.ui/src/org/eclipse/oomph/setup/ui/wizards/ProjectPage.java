@@ -462,7 +462,23 @@ public class ProjectPage extends SetupWizardPage
       }
     });
 
-    labelProvider = new ToolTipLabelProvider(adapterFactory)
+    ColumnViewerInformationControlToolTipSupport toolTipSupport = new ColumnViewerInformationControlToolTipSupport(projectViewer, new LocationListener()
+    {
+      public void changing(LocationEvent event)
+      {
+        if (!"about:blank".equals(event.location))
+        {
+          OS.INSTANCE.openSystemBrowser(event.location);
+          event.doit = false;
+        }
+      }
+
+      public void changed(LocationEvent event)
+      {
+      }
+    });
+
+    labelProvider = new ToolTipLabelProvider(adapterFactory, toolTipSupport)
     {
       private final Font baseFont = projectViewer.getControl().getFont();
 
@@ -607,21 +623,6 @@ public class ProjectPage extends SetupWizardPage
     Transfer[] transfers = new Transfer[] { LocalTransfer.getInstance(), LocalSelectionTransfer.getTransfer(), FileTransfer.getInstance(),
         URLTransfer.getInstance() };
     projectViewer.addDropSupport(dndOperations, transfers, new URIDropAdapter(editingDomain, projectViewer));
-    new ColumnViewerInformationControlToolTipSupport(projectViewer, new LocationListener()
-    {
-      public void changing(LocationEvent event)
-      {
-        if (!"about:blank".equals(event.location))
-        {
-          OS.INSTANCE.openSystemBrowser(event.location);
-          event.doit = false;
-        }
-      }
-
-      public void changed(LocationEvent event)
-      {
-      }
-    });
 
     final Tree projectTree = projectViewer.getTree();
     projectTree.setLayoutData(new GridData(GridData.FILL_BOTH));

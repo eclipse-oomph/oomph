@@ -319,7 +319,7 @@ public final class IOUtil
 
   public static String encodeFileName(String path)
   {
-    String result = path.replace(':', '_').replace('/', '_').replace('\\', '_').replace('?', '_');
+    String result = path.replace(':', '_').replace('/', '_').replace('\\', '_').replace('?', '_').replace('#', '_').replace(';', '_');
 
     int length = result.length();
     if (length > MAX_FILE_NAME_LENGTH)

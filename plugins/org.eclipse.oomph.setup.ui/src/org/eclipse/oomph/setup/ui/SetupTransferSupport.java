@@ -70,7 +70,7 @@ public class SetupTransferSupport
           @Override
           protected void gather(EditingDomain domain, URI uri)
           {
-            super.gather(domain, SetupContext.resolveUser(uri));
+            super.gather(domain, SetupContext.isUserScheme(uri.scheme()) ? SetupContext.resolve(uri) : uri);
           }
         }, //
         new OomphTransferDelegate.URLTransferDelegate()
@@ -78,7 +78,7 @@ public class SetupTransferSupport
           @Override
           protected void gather(EditingDomain domain, URI uri)
           {
-            super.gather(domain, SetupContext.resolveUser(uri));
+            super.gather(domain, SetupContext.isUserScheme(uri.scheme()) ? SetupContext.resolve(uri) : uri);
           }
         });
 

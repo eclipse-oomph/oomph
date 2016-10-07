@@ -26,6 +26,7 @@ import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
 import org.eclipse.oomph.setup.internal.core.util.IndexManager;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.internal.core.util.URIResolver;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
@@ -43,6 +44,7 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -81,13 +83,23 @@ public class SetupContext
   }
 
   /**
-   * Resolves a '{@link #USER_SCHEME user}' scheme URI to a 'file' scheme URI.
+   * Resolves using the appropriate URI handler's implementation.
+   * E.g., it resolves a '{@link #USER_SCHEME user}' scheme URI to a 'file' scheme URI.
    */
-  public static URI resolveUser(URI uri)
+  public static URI resolve(URI uri)
   {
-    if (isUserScheme(uri.scheme()))
+    for (URIHandler uriHandler : SetupCoreUtil.URI_CONVERTER.getURIHandlers())
     {
-      return SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegments(uri.segments()).appendFragment(uri.fragment());
+      if (uriHandler.canHandle(uri))
+      {
+        if (uriHandler instanceof URIResolver)
+        {
+          URIResolver uriResolver = (URIResolver)uriHandler;
+          return uriResolver.resolve(uri);
+        }
+
+        break;
+      }
     }
 
     return uri;

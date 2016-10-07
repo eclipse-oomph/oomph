@@ -22,6 +22,7 @@ import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.WorkerPool;
 
@@ -42,6 +43,7 @@ import org.eclipse.ecf.core.security.ConnectContextFactory;
 import org.eclipse.ecf.core.util.Proxy;
 import org.eclipse.ecf.filetransfer.BrowseFileTransferException;
 import org.eclipse.ecf.filetransfer.IFileTransferListener;
+import org.eclipse.ecf.filetransfer.IIncomingFileTransfer;
 import org.eclipse.ecf.filetransfer.IRemoteFile;
 import org.eclipse.ecf.filetransfer.IRemoteFileInfo;
 import org.eclipse.ecf.filetransfer.IRemoteFileSystemBrowserContainerAdapter;
@@ -51,6 +53,7 @@ import org.eclipse.ecf.filetransfer.IRetrieveFileTransferOptions;
 import org.eclipse.ecf.filetransfer.IncomingFileTransferException;
 import org.eclipse.ecf.filetransfer.RemoteFileSystemException;
 import org.eclipse.ecf.filetransfer.UserCancelledException;
+import org.eclipse.ecf.filetransfer.events.IFileTransferConnectStartEvent;
 import org.eclipse.ecf.filetransfer.events.IFileTransferEvent;
 import org.eclipse.ecf.filetransfer.events.IIncomingFileTransferReceiveDoneEvent;
 import org.eclipse.ecf.filetransfer.events.IIncomingFileTransferReceiveStartEvent;
@@ -64,6 +67,7 @@ import org.eclipse.equinox.p2.core.UIServices.AuthenticationInfo;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.StorageException;
 
+import org.apache.http.impl.client.BasicCookieStore;
 import org.osgi.framework.Version;
 
 import java.io.ByteArrayInputStream;
@@ -79,6 +83,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
@@ -86,17 +92,27 @@ import java.util.concurrent.CountDownLatch;
 /**
  * @author Eike Stepper
  */
-public class ECFURIHandlerImpl extends URIHandlerImpl
+public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 {
+  private static final String FAILED_EXPECTED_ETAG = "-1";
+
   public static final String OPTION_CACHE_HANDLING = "OPTION_CACHE_HANDLING";
 
   public static final String OPTION_AUTHORIZATION_HANDLER = "OPTION_AUTHORIZATION_HANDLER";
 
   public static final String OPTION_AUTHORIZATION = "OPTION_AUTHORIZATION";
 
+  public static final String OPTION_MONITOR = "OPTION_MONITOR";
+
+  private static final String OPTION_LOGIN_URI = "OPTION_LOGIN_URI";
+
   private static final URI CACHE_FOLDER = SetupContext.GLOBAL_STATE_LOCATION_URI.appendSegment("cache");
 
   private static final Map<URI, String> EXPECTED_ETAGS = new HashMap<URI, String>();
+
+  private static final Map<URI, IOException> EXPECTED_EXCEPTIONS = Collections.synchronizedMap(new HashMap<URI, IOException>());
+
+  private static final Map<URI, CountDownLatch> LOCKS = new HashMap<URI, CountDownLatch>();
 
   private static final boolean TEST_IO_EXCEPTION = false;
 
@@ -145,6 +161,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
   public ECFURIHandlerImpl(AuthorizationHandler defaultAuthorizationHandler)
   {
     this.defaultAuthorizationHandler = defaultAuthorizationHandler;
+  }
+
+  public URI resolve(URI uri)
+  {
+    return transform(uri, null);
   }
 
   @Override
@@ -492,355 +513,437 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       return super.createInputStream(uri, options);
     }
 
-    if (TEST_IO_EXCEPTION)
+    Map<Object, Object> transformedOptions = new HashMap<Object, Object>(options);
+    uri = transform(uri, transformedOptions);
+    URI loginURI = (URI)transformedOptions.get(OPTION_LOGIN_URI);
+    if (loginURI != null)
     {
-      File folder = new File(CACHE_FOLDER.toFileString());
-      if (folder.isDirectory())
+      try
       {
-        System.out.println("Deleting cache folder: " + folder);
-        IOUtil.deleteBestEffort(folder);
+        InputStream inputStream = createInputStream(loginURI, options);
+        inputStream.close();
       }
-
-      throw new IOException("Simulated network problem");
-    }
-
-    CacheHandling cacheHandling = getCacheHandling(options);
-    URIConverter uriConverter = getURIConverter(options);
-    URI cacheURI = getCacheFile(uri);
-    String eTag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getETag(uriConverter, cacheURI);
-    String expectedETag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getExpectedETag(uri);
-
-    String tracePrefix = null;
-    if (TRACE)
-    {
-      tracePrefix = "> ECF: " + uri;
-      System.out.println(tracePrefix + " uri=" + uri);
-      System.out.println(tracePrefix + " cacheURI=" + cacheURI);
-      System.out.println(tracePrefix + " eTag=" + eTag);
-      System.out.println(tracePrefix + " expectedETag=" + expectedETag);
-    }
-
-    // To prevent Eclipse's Git server from being overload, because it can't scale to thousands of users, we block all access.
-    String host = getHost(uri);
-    boolean isBlockedEclipseGitURI = !SetupUtil.SETUP_ARCHIVER_APPLICATION && "git.eclipse.org".equals(host);
-    if (isBlockedEclipseGitURI && uriConverter.exists(cacheURI, options))
-    {
-      // If the file is in the cache, it's okay to use that cached version, so try that first.
-      cacheHandling = CacheHandling.CACHE_ONLY;
-    }
-
-    if (expectedETag != null || cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING)
-    {
-      if (cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? eTag != null : expectedETag.equals(eTag))
+      catch (IOException ex)
       {
-        try
-        {
-          setExpectedETag(uri, expectedETag);
-          InputStream result = uriConverter.createInputStream(cacheURI, options);
-          if (TRACE)
-          {
-            System.out.println(tracePrefix + " returning cached content");
-          }
-
-          return result;
-        }
-        catch (IOException ex)
-        {
-          // Perhaps another JVM is busy writing this file.
-          // Proceed as if it doesn't exist.
-          if (TRACE)
-          {
-            System.out.println(tracePrefix + " unable to load cached content");
-          }
-        }
+        // Ignore this.
+        // The main URI should still be attempted, and if it can't get authorization and isn't in the cache,
+        // there will be an appropriate stack trace.
       }
     }
 
-    // In general all Eclipse-hosted setups should be in the Eclipse project or product catalog and therefore should be in
-    // SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI or should already be in the cache from running the setup archiver application.
-    if (isBlockedEclipseGitURI)
-    {
-      synchronized (this)
-      {
-        if (!loggedBlockedURI)
-        {
-          String launcher = OS.getCurrentLauncher(true);
-          if (launcher == null)
-          {
-            launcher = "eclipse";
-          }
+    IProgressMonitor monitor = (IProgressMonitor)options.get(OPTION_MONITOR);
 
-          // We'll log a single warning for this case.
-          SetupCorePlugin.INSTANCE.log(
-              "The Eclipse Git-hosted URI '" + uri + "' is blocked for direct access." + StringUtil.NL + //
-                  "Please open a Bugzilla to add it to an official Oomph catalog." + StringUtil.NL + //
-                  "For initial testing, use the file system local version of the resource." + StringUtil.NL + //
-                  "Alternatively, run the setup archiver application as follows:" + StringUtil.NL + //
-                  "  " + launcher + " -application org.eclipse.oomph.setup.core.SetupArchiver -consoleLog -noSplash -uris " + uri, //
-              IStatus.WARNING);
-          loggedBlockedURI = true;
+    CountDownLatch countDownLatch = acquireLock(uri);
+    try
+    {
+      if (TEST_IO_EXCEPTION)
+      {
+        File folder = new File(CACHE_FOLDER.toFileString());
+        if (folder.isDirectory())
+        {
+          System.out.println("Deleting cache folder: " + folder);
+          IOUtil.deleteBestEffort(folder);
         }
+
+        throw new IOException("Simulated network problem");
       }
 
-      throw new IOException("Eclipse Git access blocked: " + uri);
-    }
+      CacheHandling cacheHandling = getCacheHandling(options);
+      URIConverter uriConverter = getURIConverter(options);
+      URI cacheURI = getCacheFile(uri);
+      String eTag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getETag(uriConverter, cacheURI);
+      String expectedETag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getExpectedETag(uri);
 
-    String username;
-    String password;
-
-    String uriString = uri.toString();
-    Proxy proxy = ProxySetupHelper.getProxy(uriString);
-    if (proxy != null)
-    {
-      username = proxy.getUsername();
-      password = proxy.getPassword();
-    }
-    else
-    {
-      username = null;
-      password = null;
-    }
-
-    if (TRACE)
-    {
-      System.out.println(tracePrefix + " proxy=" + proxy);
-      System.out.println(tracePrefix + " username=" + username);
-      System.out.println(tracePrefix + " password=" + PreferencesUtil.encrypt(password));
-    }
-
-    IContainer container = createContainer();
-
-    AuthorizationHandler authorizatonHandler = getAuthorizatonHandler(options);
-    Authorization authorization = getAuthorizaton(options);
-
-    if (TRACE)
-    {
-      System.out.println(tracePrefix + " authorizationHandler=" + authorizatonHandler);
-    }
-
-    int triedReauthorization = 0;
-    for (int i = 0;; ++i)
-    {
+      String tracePrefix = null;
       if (TRACE)
       {
-        System.out.println(tracePrefix + " trying=" + i);
-        System.out.println(tracePrefix + " triedReauthorization=" + triedReauthorization);
-        System.out.println(tracePrefix + " authorization=" + authorization);
+        tracePrefix = "> ECF: " + uri;
+        System.out.println(tracePrefix + " uri=" + uri);
+        System.out.println(tracePrefix + " cacheURI=" + cacheURI);
+        System.out.println(tracePrefix + " eTag=" + eTag);
+        System.out.println(tracePrefix + " expectedETag=" + expectedETag);
       }
 
-      IRetrieveFileTransferContainerAdapter fileTransfer = container.getAdapter(IRetrieveFileTransferContainerAdapter.class);
-
-      fileTransfer.setProxy(proxy);
-
-      if (username != null)
+      // To prevent Eclipse's Git server from being overload, because it can't scale to thousands of users, we block all access.
+      String host = getHost(uri);
+      boolean isBlockedEclipseGitURI = !SetupUtil.SETUP_ARCHIVER_APPLICATION && "git.eclipse.org".equals(host);
+      if (isBlockedEclipseGitURI && uriConverter.exists(cacheURI, options))
       {
-        fileTransfer.setConnectContextForAuthentication(ConnectContextFactory.createUsernamePasswordConnectContext(username, password));
-      }
-      else if (password != null)
-      {
-        fileTransfer.setConnectContextForAuthentication(ConnectContextFactory.createPasswordConnectContext(password));
+        // If the file is in the cache, it's okay to use that cached version, so try that first.
+        cacheHandling = CacheHandling.CACHE_ONLY;
       }
 
-      FileTransferListener transferListener = new FileTransferListener(eTag);
-
-      try
+      // This is a URI that fails to load at all.
+      if (FAILED_EXPECTED_ETAG.equals(expectedETag))
       {
-        FileTransferID fileTransferID = new FileTransferID(new FileTransferNamespace(), IOUtil.newURI(uriString));
-        Map<Object, Object> requestOptions = new HashMap<Object, Object>();
-        requestOptions.put(IRetrieveFileTransferOptions.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
-        requestOptions.put(IRetrieveFileTransferOptions.READ_TIMEOUT, READ_TIMEOUT);
-        if (authorization != null && authorization.isAuthorized())
+        throw EXPECTED_EXCEPTIONS.get(uri);
+      }
+
+      if (expectedETag != null || cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING)
+      {
+        if (cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? eTag != null : expectedETag.equals(eTag))
         {
-          requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, Collections.singletonMap("Authorization", authorization.getAuthorization()));
-        }
-
-        if (!StringUtil.isEmpty(USER_AGENT) && host != null && host.endsWith(".eclipse.org"))
-        {
-          Map<String, String> requestHeaders = new HashMap<String, String>();
-          requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, requestHeaders);
-          requestHeaders.put("User-Agent", USER_AGENT);
-        }
-
-        fileTransfer.sendRetrieveRequest(fileTransferID, transferListener, requestOptions);
-      }
-      catch (IncomingFileTransferException ex)
-      {
-        if (TRACE)
-        {
-          System.out.println(tracePrefix + " IncomingFileTransferException");
-          ex.printStackTrace(System.out);
-        }
-
-        throw createIOException(uriString, ex);
-      }
-
-      try
-      {
-        transferListener.receiveLatch.await();
-      }
-      catch (InterruptedException ex)
-      {
-        if (TRACE)
-        {
-          System.out.println(tracePrefix + " InterruptedException");
-          ex.printStackTrace(System.out);
-        }
-
-        throw createIOException(uriString, ex);
-      }
-
-      if (transferListener.exception != null)
-      {
-        if (TRACE)
-        {
-          System.out.println(tracePrefix + " transferLister.exception");
-          transferListener.exception.printStackTrace(System.out);
-        }
-
-        if (!(transferListener.exception instanceof UserCancelledException))
-        {
-          if (transferListener.exception.getCause() instanceof SocketTimeoutException && i <= 2)
+          try
           {
-            continue;
-          }
-
-          if (authorizatonHandler != null && transferListener.exception instanceof IncomingFileTransferException)
-          {
-            // We assume contents can be accessed via the github API https://developer.github.com/v3/repos/contents/#get-contents
-            // That API, for security reasons, does not return HTTP_UNAUTHORIZED, so we need this special case for that host.
-            IncomingFileTransferException incomingFileTransferException = (IncomingFileTransferException)transferListener.exception;
-            int errorCode = incomingFileTransferException.getErrorCode();
+            setExpectedETag(uri, expectedETag);
+            InputStream result = uriConverter.createInputStream(cacheURI, options);
             if (TRACE)
             {
-              System.out.println(tracePrefix + " errorCode=" + errorCode);
+              System.out.println(tracePrefix + " returning cached content");
             }
 
-            if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED || API_GITHUB_HOST.equals(getHost(uri)) && errorCode == HttpURLConnection.HTTP_NOT_FOUND)
-            {
-              if (authorization == null)
-              {
-                authorization = authorizatonHandler.authorize(uri);
-                if (authorization.isAuthorized())
-                {
-                  --i;
-                  continue;
-                }
-              }
-
-              if (!authorization.isUnauthorizeable() && triedReauthorization++ < 3)
-              {
-                authorization = authorizatonHandler.reauthorize(uri, authorization);
-                if (authorization.isAuthorized())
-                {
-                  --i;
-                  continue;
-                }
-              }
-            }
+            return result;
           }
-        }
-
-        if (!CacheHandling.CACHE_IGNORE.equals(cacheHandling) && uriConverter.exists(cacheURI, options)
-            && (!(transferListener.exception instanceof IncomingFileTransferException)
-                || ((IncomingFileTransferException)transferListener.exception).getErrorCode() != HttpURLConnection.HTTP_NOT_FOUND)
-            || uri.equals(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI))
-        {
-          setExpectedETag(uri, transferListener.eTag == null ? eTag : transferListener.eTag);
-          if (TRACE)
+          catch (IOException ex)
           {
-            System.out.println(tracePrefix + " returning cache content");
+            // Perhaps another JVM is busy writing this file.
+            // Proceed as if it doesn't exist.
+            if (TRACE)
+            {
+              System.out.println(tracePrefix + " unable to load cached content");
+            }
           }
-
-          return uriConverter.createInputStream(cacheURI, options);
         }
-
-        if (TRACE)
-        {
-          System.out.println(tracePrefix + " failing");
-        }
-
-        throw createIOException(uriString, transferListener.exception);
       }
 
-      byte[] bytes = transferListener.out.toByteArray();
-
-      // In the case of the Github API, the bytes will be JSON that contains a "content" pair containing the Base64 encoding of the actual contents.
-      if (API_GITHUB_HOST.equals(getHost(uri)))
+      // In general all Eclipse-hosted setups should be in the Eclipse project or product catalog and therefore should be in
+      // SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI or should already be in the cache from running the setup archiver application.
+      if (isBlockedEclipseGitURI)
       {
-        // Find the start tag in the JSON value.
-        String value = new String(bytes, "UTF-8");
-        int start = value.indexOf(CONTENT_TAG);
-        if (start != -1)
+        synchronized (this)
         {
-          // Find the ending quote of the encoded contents.
-          start += CONTENT_TAG.length();
-          int end = value.indexOf('"', start);
-          if (end != -1)
+          if (!loggedBlockedURI)
           {
-            // The content is delimited by \n so split on that during the conversion.
-            String content = value.substring(start, end);
-            String[] split = content.split("\\\\n");
-
-            // Write the converted bytes to a new stream and process those bytes instead.
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            for (String line : split)
+            String launcher = OS.getCurrentLauncher(true);
+            if (launcher == null)
             {
-              byte[] binary = XMLTypeFactory.eINSTANCE.createBase64Binary(line);
-              out.write(binary);
+              launcher = "eclipse";
             }
 
-            out.close();
-            bytes = out.toByteArray();
+            // We'll log a single warning for this case.
+            SetupCorePlugin.INSTANCE.log(
+                "The Eclipse Git-hosted URI '" + uri + "' is blocked for direct access." + StringUtil.NL + //
+                    "Please open a Bugzilla to add it to an official Oomph catalog." + StringUtil.NL + //
+                    "For initial testing, use the file system local version of the resource." + StringUtil.NL + //
+                    "Alternatively, run the setup archiver application as follows:" + StringUtil.NL + //
+                    "  " + launcher + " -application org.eclipse.oomph.setup.core.SetupArchiver -consoleLog -noSplash -uris " + uri, //
+                IStatus.WARNING);
+            loggedBlockedURI = true;
           }
         }
+
+        throw new IOException("Eclipse Git access blocked: " + uri);
       }
 
-      try
-      {
-        if (TRACE)
-        {
-          System.out.println(tracePrefix + " writing cache");
-        }
+      String username;
+      String password;
 
-        BaseUtil.writeFile(uriConverter, options, cacheURI, bytes);
-      }
-      catch (IORuntimeException ex)
+      String uriString = uri.toString();
+      Proxy proxy = ProxySetupHelper.getProxy(uriString);
+      if (proxy != null)
       {
-        // Ignore attempts to write out to the cache file.
-        // This may collide with another JVM doing exactly the same thing.
-        transferListener.eTag = null;
-
-        if (TRACE)
-        {
-          System.out.println(tracePrefix + " failed writing cache");
-          ex.printStackTrace(System.out);
-        }
+        username = proxy.getUsername();
+        password = proxy.getPassword();
       }
-      finally
+      else
       {
-        setETag(uriConverter, cacheURI, transferListener.eTag);
-      }
-
-      setExpectedETag(uri, transferListener.eTag);
-      Map<Object, Object> response = getResponse(options);
-      if (response != null)
-      {
-        response.put(URIConverter.RESPONSE_TIME_STAMP_PROPERTY, transferListener.lastModified);
-      }
-
-      ETagMirror etagMirror = (ETagMirror)options.get(ETagMirror.OPTION_ETAG_MIRROR);
-      if (etagMirror != null)
-      {
-        etagMirror.cacheUpdated(uri);
+        username = null;
+        password = null;
       }
 
       if (TRACE)
       {
-        System.out.println(tracePrefix + " returning successful results");
+        System.out.println(tracePrefix + " proxy=" + proxy);
+        System.out.println(tracePrefix + " username=" + username);
+        System.out.println(tracePrefix + " password=" + PreferencesUtil.encrypt(password));
       }
 
-      return new ByteArrayInputStream(bytes);
+      IContainer container = createContainer();
+
+      AuthorizationHandler authorizationHandler = getAuthorizatonHandler(options);
+      Authorization authorization = getAuthorizaton(options);
+
+      // If we don't an authorization in the options, but we have a handler,
+      // we might as well get the authorization that might exist in the secure storage so our first access uses the right credentials up front.
+      if (authorization == null && authorizationHandler != null)
+      {
+        authorization = authorizationHandler.authorize(uri);
+      }
+
+      if (TRACE)
+      {
+        System.out.println(tracePrefix + " authorizationHandler=" + authorizationHandler);
+      }
+
+      int triedReauthorization = 0;
+      for (int i = 0;; ++i)
+      {
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " trying=" + i);
+          System.out.println(tracePrefix + " triedReauthorization=" + triedReauthorization);
+          System.out.println(tracePrefix + " authorization=" + authorization);
+        }
+
+        IRetrieveFileTransferContainerAdapter fileTransfer = container.getAdapter(IRetrieveFileTransferContainerAdapter.class);
+
+        fileTransfer.setProxy(proxy);
+
+        if (username != null)
+        {
+          fileTransfer.setConnectContextForAuthentication(ConnectContextFactory.createUsernamePasswordConnectContext(username, password));
+        }
+        else if (password != null)
+        {
+          fileTransfer.setConnectContextForAuthentication(ConnectContextFactory.createPasswordConnectContext(password));
+        }
+
+        FileTransferListener transferListener = new FileTransferListener(eTag, monitor);
+
+        try
+        {
+          FileTransferID fileTransferID = new FileTransferID(new FileTransferNamespace(), IOUtil.newURI(uriString));
+          Map<Object, Object> requestOptions = new HashMap<Object, Object>();
+          requestOptions.put(IRetrieveFileTransferOptions.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
+          requestOptions.put(IRetrieveFileTransferOptions.READ_TIMEOUT, READ_TIMEOUT);
+          if (authorization != null && authorization.isAuthorized())
+          {
+            requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, Collections.singletonMap("Authorization", authorization.getAuthorization()));
+          }
+
+          if (!StringUtil.isEmpty(USER_AGENT) && host != null && host.endsWith(".eclipse.org"))
+          {
+            Map<String, String> requestHeaders = new HashMap<String, String>();
+            requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, requestHeaders);
+            requestHeaders.put("User-Agent", USER_AGENT);
+          }
+
+          System.err.println("####" + i + ">" + uri);
+          fileTransfer.sendRetrieveRequest(fileTransferID, transferListener, requestOptions);
+        }
+        catch (IncomingFileTransferException ex)
+        {
+          if (TRACE)
+          {
+            System.out.println(tracePrefix + " IncomingFileTransferException");
+            ex.printStackTrace(System.out);
+          }
+
+          throw createIOException(uriString, ex);
+        }
+
+        try
+        {
+          transferListener.receiveLatch.await();
+        }
+        catch (InterruptedException ex)
+        {
+          if (TRACE)
+          {
+            System.out.println(tracePrefix + " InterruptedException");
+            ex.printStackTrace(System.out);
+          }
+
+          throw createIOException(uriString, ex);
+        }
+
+        if (transferListener.exception != null)
+        {
+          if (TRACE)
+          {
+            System.out.println(tracePrefix + " transferLister.exception");
+            transferListener.exception.printStackTrace(System.out);
+          }
+
+          if (!(transferListener.exception instanceof UserCancelledException))
+          {
+            if ((transferListener.exception instanceof SocketTimeoutException || transferListener.exception.getCause() instanceof SocketTimeoutException)
+                && i < 2)
+            {
+              continue;
+            }
+
+            if (authorizationHandler != null && transferListener.exception instanceof IncomingFileTransferException)
+            {
+              // We assume contents can be accessed via the github API https://developer.github.com/v3/repos/contents/#get-contents
+              // That API, for security reasons, does not return HTTP_UNAUTHORIZED, so we need this special case for that host.
+              IncomingFileTransferException incomingFileTransferException = (IncomingFileTransferException)transferListener.exception;
+              int errorCode = incomingFileTransferException.getErrorCode();
+              if (TRACE)
+              {
+                System.out.println(tracePrefix + " errorCode=" + errorCode);
+              }
+
+              if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED || API_GITHUB_HOST.equals(getHost(uri)) && errorCode == HttpURLConnection.HTTP_NOT_FOUND)
+              {
+                if (authorization == null)
+                {
+                  authorization = authorizationHandler.authorize(uri);
+                  if (authorization.isAuthorized())
+                  {
+                    --i;
+                    continue;
+                  }
+                }
+
+                if (!authorization.isUnauthorizeable() && triedReauthorization++ < 3)
+                {
+                  authorization = authorizationHandler.reauthorize(uri, authorization);
+                  if (authorization.isAuthorized())
+                  {
+                    --i;
+                    continue;
+                  }
+                }
+              }
+            }
+          }
+
+          if (!CacheHandling.CACHE_IGNORE.equals(cacheHandling) && uriConverter.exists(cacheURI, options)
+              && (!(transferListener.exception instanceof IncomingFileTransferException)
+                  || ((IncomingFileTransferException)transferListener.exception).getErrorCode() != HttpURLConnection.HTTP_NOT_FOUND)
+              || uri.equals(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI) || loginURI != null)
+          {
+            setExpectedETag(uri, transferListener.eTag == null ? eTag == null ? Long.toString(System.currentTimeMillis()) : eTag : transferListener.eTag);
+            if (TRACE)
+            {
+              System.out.println(tracePrefix + " returning cache content");
+            }
+
+            return uriConverter.createInputStream(cacheURI, options);
+          }
+
+          if (TRACE)
+          {
+            System.out.println(tracePrefix + " failing");
+          }
+
+          IOException ioException = createIOException(uriString, transferListener.exception);
+          EXPECTED_EXCEPTIONS.put(uri, ioException);
+          setExpectedETag(uri, FAILED_EXPECTED_ETAG);
+
+          throw ioException;
+        }
+
+        byte[] bytes = transferListener.out.toByteArray();
+
+        // In the case of the Github API, the bytes will be JSON that contains a "content" pair containing the Base64 encoding of the actual contents.
+        if (API_GITHUB_HOST.equals(getHost(uri)))
+        {
+          // Find the start tag in the JSON value.
+          String value = new String(bytes, "UTF-8");
+          int start = value.indexOf(CONTENT_TAG);
+          if (start != -1)
+          {
+            // Find the ending quote of the encoded contents.
+            start += CONTENT_TAG.length();
+            int end = value.indexOf('"', start);
+            if (end != -1)
+            {
+              // The content is delimited by \n so split on that during the conversion.
+              String content = value.substring(start, end);
+              String[] split = content.split("\\\\n");
+
+              // Write the converted bytes to a new stream and process those bytes instead.
+              ByteArrayOutputStream out = new ByteArrayOutputStream();
+              for (String line : split)
+              {
+                byte[] binary = XMLTypeFactory.eINSTANCE.createBase64Binary(line);
+                out.write(binary);
+              }
+
+              out.close();
+              bytes = out.toByteArray();
+            }
+          }
+        }
+
+        try
+        {
+          if (TRACE)
+          {
+            System.out.println(tracePrefix + " writing cache");
+          }
+
+          BaseUtil.writeFile(uriConverter, options, cacheURI, bytes);
+        }
+        catch (IORuntimeException ex)
+        {
+          // Ignore attempts to write out to the cache file.
+          // This may collide with another JVM doing exactly the same thing.
+          transferListener.eTag = null;
+
+          if (TRACE)
+          {
+            System.out.println(tracePrefix + " failed writing cache");
+            ex.printStackTrace(System.out);
+          }
+        }
+        finally
+        {
+          setETag(uriConverter, cacheURI, transferListener.eTag);
+        }
+
+        setExpectedETag(uri, transferListener.eTag);
+        Map<Object, Object> response = getResponse(options);
+        if (response != null)
+        {
+          response.put(URIConverter.RESPONSE_TIME_STAMP_PROPERTY, transferListener.lastModified);
+        }
+
+        ETagMirror etagMirror = (ETagMirror)options.get(ETagMirror.OPTION_ETAG_MIRROR);
+        if (etagMirror != null)
+        {
+          etagMirror.cacheUpdated(uri);
+        }
+
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " returning successful results");
+        }
+
+        return new ByteArrayInputStream(bytes);
+      }
     }
+    finally
+    {
+      releaseLock(uri, countDownLatch);
+    }
+  }
+
+  private CountDownLatch acquireLock(URI uri) throws IOException
+  {
+    CountDownLatch countDownLatch = null;
+    synchronized (LOCKS)
+    {
+      countDownLatch = LOCKS.get(uri);
+      if (countDownLatch == null)
+      {
+        countDownLatch = new CountDownLatch(1);
+        LOCKS.put(uri, countDownLatch);
+        return countDownLatch;
+      }
+    }
+
+    try
+    {
+      countDownLatch.await();
+      return acquireLock(uri);
+    }
+    catch (InterruptedException ex)
+    {
+      throw new IOExceptionWithCause(ex);
+    }
+  }
+
+  private void releaseLock(URI uri, CountDownLatch countDownLatch)
+  {
+    synchronized (LOCKS)
+    {
+      LOCKS.remove(uri);
+    }
+
+    countDownLatch.countDown();
   }
 
   private IContainer createContainer() throws IOException
@@ -863,6 +966,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
       result = new HashSet<URI>(EXPECTED_ETAGS.keySet());
       EXPECTED_ETAGS.clear();
     }
+
+    EXPECTED_EXCEPTIONS.clear();
 
     return result;
   }
@@ -1274,6 +1379,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
    */
   private static final class FileTransferListener implements IFileTransferListener
   {
+    private static final BasicCookieStore COOKIE_STORE = new BasicCookieStore();
+
     public final CountDownLatch receiveLatch = new CountDownLatch(1);
 
     public final String expectedETag;
@@ -1286,16 +1393,43 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
     public Exception exception;
 
-    public FileTransferListener(String expectedETag)
+    private IProgressMonitor monitor;
+
+    public FileTransferListener(String expectedETag, IProgressMonitor monitor)
     {
       this.expectedETag = expectedETag;
+      this.monitor = monitor;
     }
 
     public void handleTransferEvent(IFileTransferEvent event)
     {
-      if (event instanceof IIncomingFileTransferReceiveStartEvent)
+      if (event instanceof IFileTransferConnectStartEvent)
+      {
+        IFileTransferConnectStartEvent connectStartEvent = (IFileTransferConnectStartEvent)event;
+        if (monitor != null && monitor.isCanceled())
+        {
+          connectStartEvent.cancel();
+
+          // Older versions of ECF don't produce a IIncomingFileTransferReceiveDoneEvent.
+          exception = new UserCancelledException();
+          receiveLatch.countDown();
+          return;
+        }
+
+        applyCookieStore(connectStartEvent.getAdapter(IIncomingFileTransfer.class));
+      }
+      else if (event instanceof IIncomingFileTransferReceiveStartEvent)
       {
         IIncomingFileTransferReceiveStartEvent receiveStartEvent = (IIncomingFileTransferReceiveStartEvent)event;
+        if (monitor != null && monitor.isCanceled())
+        {
+          receiveStartEvent.cancel();
+
+          // Older versions of ECF don't produce a IIncomingFileTransferReceiveDoneEvent.
+          exception = new UserCancelledException();
+          receiveLatch.countDown();
+          return;
+        }
 
         out = new ByteArrayOutputStream();
 
@@ -1316,6 +1450,15 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
               {
                 eTag = Long.toString(lastModified);
               }
+            }
+          }
+
+          if (lastModified == 0)
+          {
+            lastModified = System.currentTimeMillis();
+            if (eTag == null)
+            {
+              eTag = Long.toString(lastModified);
             }
           }
 
@@ -1383,6 +1526,22 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
         }
 
         receiveLatch.countDown();
+      }
+    }
+
+    private static void applyCookieStore(IIncomingFileTransfer fileTransfer)
+    {
+      try
+      {
+        if (fileTransfer != null)
+        {
+          Object httpClient = ReflectUtil.getValue("httpClient", fileTransfer);
+          ReflectUtil.setValue("cookieStore", httpClient, COOKIE_STORE);
+        }
+      }
+      catch (Throwable throwable)
+      {
+        // Ignore.
       }
     }
   }
@@ -1458,6 +1617,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
 
     public void begin(Set<? extends URI> uris, final IProgressMonitor monitor)
     {
+      options.put(OPTION_MONITOR, monitor);
+
       this.uris = uris;
       int size = uris.size();
       monitor.beginTask("Mirroring " + size + " resource" + (size == 1 ? "" : "s"), uris.size());
@@ -1535,5 +1696,480 @@ public class ECFURIHandlerImpl extends URIHandlerImpl
         return Status.OK_STATUS;
       }
     }
+  }
+
+  // https://example.com/gerrit/gitweb?p=EXAMPLE.git;a=blob_plain;f=Src/com.example.releng/example.setup;hb=HEAD
+  //
+
+  public static class Main
+  {
+    public static void main(String[] args) throws Exception
+    {
+      // TODO
+      // We might need to produce a result that is separated with & rather than ; for some servers?
+      // Note that a more standard representation separates arguments with an &
+
+      URI expectedURI = URI.createURI("https://example.com/gerrit/gitweb?p=EXAMPLE.git;a=blob_plain;f=Src/com.example.releng/example.setup;hb=HEAD");
+      URI inputURI = URI.createURI(
+          "https://user:password@example.com:1234/gerrit/gitweb/EXAMPLE.git/Src/com.example.releng/example.setup?oomph=b[0..1];oomph_login=s://a/[0..1]/'login';oomph-p=[2];oomph-f=[3..];a=blob_plain;hb=HEAD;"
+              + "oomph-s=s;" + //
+              "oomph-S=S;" + //
+              "oomph-u=u;" + //
+              "oomph-U=U;" + //
+              "oomph-h=h;" + //
+              "oomph--p=p;" + //
+              "oomph-P=P;" + //
+              "oomph-a=a;" + //
+              "oomph-b=b;" + //
+              "oomph-text='text';" + //
+              "oomph-quote='';" + //
+              "oomph-slash=/;" + //
+              "oomph-colon=:;" + //
+              "oomph-r1=[1];" + //
+              "oomph-r2=[2];" + //
+              "oomph-r3=[-1];" + //
+              "oomph-r4=[-3..-1];" + //
+              "oomph-r5=[-2..]" + //
+              "" //
+      );
+
+      inputURI = URI.createURI(
+          "https://example.com/gerrit/gitweb/EXAMPLE.git/Src/com.example.releng/example.setup?oomph=b[0..1];oomph_login=b[0]/'login';oomph-p=[2];oomph-f=[3..];a=blob_plain;hb=HEAD");
+      new java.net.URI(inputURI.toString());
+      HashMap<Object, Object> options = new HashMap<Object, Object>();
+      URI uri = transform(inputURI, options);
+      System.err.println(">   " + expectedURI);
+      System.err.println(">>  " + inputURI);
+      System.err.println(">>> " + uri);
+      System.err.println(">>>>" + options.get(OPTION_LOGIN_URI));
+    }
+
+    private static URI transform(URI uri, Map<Object, Object> options)
+    {
+      String query = uri.query();
+      if (query != null)
+      {
+        List<String> parameters = StringUtil.explode(query, ";");
+        if (parameters.isEmpty())
+        {
+          return uri;
+        }
+
+        Map<String, String> arguments = new LinkedHashMap<String, String>();
+        for (String parameter : parameters)
+        {
+          List<String> assignment = StringUtil.explode(parameter, "=");
+          if (assignment.size() != 2)
+          {
+            return uri;
+          }
+
+          arguments.put(assignment.get(0), assignment.get(1));
+        }
+
+        URI outputURI = uri;
+        URI loginURI = null;
+        Map<String, String> outputQuery = new LinkedHashMap<String, String>();
+        for (Map.Entry<String, String> entry : arguments.entrySet())
+        {
+          String key = entry.getKey();
+          String value = entry.getValue();
+          if ("oomph".equals(key))
+          {
+            String result = evaluate(value, uri);
+            if (result == null)
+            {
+              result = evaluate(value, uri);
+              return null;
+            }
+
+            outputURI = URI.createURI(result);
+            continue;
+          }
+          else if ("oomph_login".equals(key))
+          {
+            String result = evaluate(value, uri);
+            if (result == null)
+            {
+              result = evaluate(value, uri);
+              return null;
+            }
+
+            loginURI = URI.createURI(result);
+            continue;
+          }
+          else if (key.startsWith("oomph-"))
+          {
+            String result = evaluate(value, uri);
+            if (result == null)
+            {
+              result = evaluate(value, uri);
+              return null;
+            }
+
+            key = key.substring("oomph-".length());
+            value = result;
+          }
+
+          outputQuery.put(key, value);
+        }
+
+        if (outputURI == null)
+        {
+          return null;
+        }
+
+        if (!outputQuery.isEmpty())
+        {
+          StringBuilder queryResult = new StringBuilder();
+          for (Map.Entry<String, String> entry : outputQuery.entrySet())
+          {
+            if (queryResult.length() != 0)
+            {
+              queryResult.append(';');
+            }
+
+            queryResult.append(entry.getKey()).append('=').append(entry.getValue());
+          }
+
+          outputURI = outputURI.appendQuery(queryResult.toString());
+        }
+
+        if (loginURI != null && options != null)
+        {
+          options.put(OPTION_LOGIN_URI, loginURI);
+        }
+
+        return outputURI;
+      }
+
+      return uri;
+    }
+
+    //
+    // s -> URI.scheme
+    // S -> URIscheme == null ? "" : URI.scheme ":"
+    // u -> URI.userInfo
+    // U -> URI.userInfo == null ? "" : URI.userInfo "@"
+    // h -> URI.host
+    // p -> URI.port
+    // P -> URI.port == null ? "" : ":" URI.port
+    // a -> URI.authority
+    // b -> URI.scheme ( URI.isHierarchicial ? "//:" URI.authority "/" : ":")
+    // o -> URI.opaqePart
+    // [n{..{m}}] -> URI.segment(n) { m is present ? "/" URI.segment(m) : URI.segments.lastSegment} ** negative n or m -> URI.segmentCount + n
+    // 'text' -> "text"
+    // '' -> "'"
+    // / -> "/"
+    // : -> ":"
+    // * fail
+    //
+    // ^((:?[^\r\n]*(?!property=value)(\r?\n))+)$
+    //
+    private static String evaluate(String expression, URI uri)
+    {
+      StringBuilder result = new StringBuilder();
+      boolean quote = false;
+      int segmentCount = uri.segmentCount();
+      for (int i = 0, length = expression.length(); i < length; ++i)
+      {
+        char character = expression.charAt(i);
+        if (quote && character != '\'')
+        {
+          result.append(character);
+        }
+        else
+        {
+          switch (character)
+          {
+            case '\'':
+            {
+              if (i + 1 < length && expression.charAt(i + 1) == '\'')
+              {
+                ++i;
+                result.append('\'');
+              }
+              else
+              {
+                quote = !quote;
+              }
+              break;
+            }
+            case 's':
+            {
+              String scheme = uri.scheme();
+              if (scheme == null)
+              {
+                return null;
+              }
+              result.append(scheme);
+              break;
+            }
+            case 'S':
+            {
+              String scheme = uri.scheme();
+              if (scheme != null)
+              {
+                result.append(scheme).append(':');
+              }
+              break;
+            }
+            case 'u':
+            {
+              String userInfo = uri.userInfo();
+              if (userInfo == null)
+              {
+                return null;
+              }
+              result.append(userInfo);
+              break;
+            }
+            case 'U':
+            {
+              String userInfo = uri.userInfo();
+              if (userInfo != null)
+              {
+                result.append(userInfo).append('@');
+              }
+              break;
+            }
+            case 'h':
+            {
+              String host = uri.host();
+              if (host == null)
+              {
+                return null;
+              }
+
+              result.append(host);
+              break;
+            }
+            case 'p':
+            {
+              String port = uri.port();
+              if (port == null)
+              {
+                return null;
+              }
+              result.append(port);
+              break;
+            }
+            case 'P':
+            {
+              String port = uri.port();
+              if (port != null)
+              {
+                result.append(':').append(port);
+              }
+              break;
+            }
+            case 'a':
+            {
+              String authority = uri.authority();
+              if (authority == null)
+              {
+                return null;
+              }
+              result.append(authority);
+              break;
+            }
+            case 'b':
+            {
+              String base = uri.isHierarchical() ? uri.trimSegments(segmentCount).trimQuery().trimFragment().toString() : uri.scheme() + ":";
+              result.append(base);
+              break;
+            }
+            case 'o':
+            {
+              String opaquePart = uri.opaquePart();
+              if (opaquePart == null)
+              {
+                return null;
+              }
+              result.append(opaquePart);
+              break;
+            }
+            case '/':
+            case ':':
+            {
+              result.append(character);
+              break;
+            }
+            case '[':
+            {
+              if (++i >= length)
+              {
+                return null;
+              }
+
+              character = expression.charAt(i);
+              boolean negativeN = false;
+              if (character == '-')
+              {
+                negativeN = true;
+                if (++i >= length)
+                {
+                  return null;
+                }
+                character = expression.charAt(i);
+              }
+
+              if (character < '0' && character > '9')
+              {
+                return null;
+              }
+
+              int n = 0;
+              for (;;)
+              {
+                if (character >= '0' && character <= '9')
+                {
+                  n = 10 * n + character - '0';
+                  if (++i >= length)
+                  {
+                    return null;
+                  }
+                  character = expression.charAt(i);
+                }
+                else
+                {
+                  break;
+                }
+              }
+
+              int m;
+              boolean negativeM = false;
+              if (character == '.')
+              {
+                if (++i >= length)
+                {
+                  return null;
+                }
+
+                character = expression.charAt(i);
+                if (character != '.')
+                {
+                  return null;
+                }
+
+                if (++i >= length)
+                {
+                  return null;
+                }
+
+                character = expression.charAt(i);
+                if (character == '-')
+                {
+                  m = 0;
+                  negativeM = true;
+                  if (++i >= length)
+                  {
+                    return null;
+                  }
+
+                  character = expression.charAt(i);
+                  if (character < '0' && character > '9')
+                  {
+                    return null;
+                  }
+                }
+                else if (character >= '0' && character <= '9')
+                {
+                  m = 0;
+                }
+                else
+                {
+                  m = 1;
+                  negativeM = true;
+                }
+
+                for (;;)
+                {
+                  if (character >= '0' && character <= '9')
+                  {
+                    if (m == Integer.MIN_VALUE)
+                    {
+                      m = character - '0';
+                    }
+                    else
+                    {
+                      m = 10 * m + character - '0';
+                    }
+
+                    if (++i >= length)
+                    {
+                      return null;
+                    }
+
+                    character = expression.charAt(i);
+                  }
+                  else
+                  {
+                    break;
+                  }
+                }
+              }
+              else
+              {
+                m = n;
+                negativeM = negativeN;
+              }
+
+              if (character != ']')
+              {
+                return null;
+              }
+
+              if (negativeN)
+              {
+                n = segmentCount - n;
+              }
+
+              if (negativeM)
+              {
+                m = segmentCount - m;
+              }
+
+              if (m == Integer.MIN_VALUE)
+              {
+                m = n;
+              }
+              else if (n >= segmentCount || m >= segmentCount || n > m)
+              {
+                return null;
+              }
+
+              for (int j = n; j <= m; ++j)
+              {
+                if (j != n)
+                {
+                  result.append('/');
+                }
+
+                result.append(uri.segment(j));
+              }
+
+              break;
+            }
+            default:
+            {
+              return null;
+            }
+          }
+        }
+      }
+
+      if (quote)
+      {
+        return null;
+      }
+
+      return result.toString();
+    }
+  }
+
+  private static URI transform(URI uri, Map<Object, Object> options)
+  {
+    return Main.transform(uri, options);
   }
 }

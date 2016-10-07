@@ -501,6 +501,11 @@ public final class PreferencesUtil
     return CIPHER.decrypt(value);
   }
 
+  private static boolean isEncryptedValue(String value)
+  {
+    return CIPHER.isEncryptedValue(value);
+  }
+
   /**
    * A specialized secure preferences wrapper that auto refreshes, i.e., the reloads the secure store what it has changed in the file system, presumably because another process has changed it.
    * @author Ed Merks
@@ -726,7 +731,8 @@ public final class PreferencesUtil
 
     public PreferenceProperty(String preferencePropertyPath)
     {
-      node = Platform.getPreferencesService().getRootNode();
+      IEclipsePreferences rootNode = Platform.getPreferencesService().getRootNode();
+      node = rootNode;
 
       String[] segments = preferencePropertyPath.split("/");
       StringBuilder property = null;
@@ -753,7 +759,15 @@ public final class PreferencesUtil
         }
         else
         {
-          node = node.node(segment);
+          if (node == rootNode && "secure".equals(segment))
+          {
+            rootNode = SecurePreferenceWapper.create(getSecurePreferences());
+            node = rootNode;
+          }
+          else
+          {
+            node = node.node(segment);
+          }
         }
       }
 
@@ -863,13 +877,60 @@ public final class PreferencesUtil
       }
       else
       {
+        if (node instanceof SecurePreferenceWapper)
+        {
+          SecurePreferenceWapper securePreferenceWapper = (SecurePreferenceWapper)node;
+          try
+          {
+            // Check if the property is already marked as encrypted.
+            boolean encrypted = securePreferenceWapper.preferences.isEncrypted(property);
+
+            // If not, but the value itself is marked as encrypted, then we want to be sure to store it as encrypted.
+            if (!encrypted && PreferencesUtil.isEncryptedValue(value))
+            {
+              encrypted = true;
+            }
+
+            // If we are going to store it as encrypted, then we'd better remove our own in-memory encryption first.
+            if (encrypted)
+            {
+              value = decrypt(value);
+            }
+
+            securePreferenceWapper.preferences.put(property, value, encrypted);
+            return;
+          }
+          catch (StorageException ex)
+          {
+            return;
+          }
+        }
+
         node.put(property, value);
       }
     }
 
     public String get(String defaultValue)
     {
-      return node.get(property, defaultValue);
+      String value = node.get(property, defaultValue);
+      if (node instanceof SecurePreferenceWapper)
+      {
+        SecurePreferenceWapper securePreferenceWapper = (SecurePreferenceWapper)node;
+        try
+        {
+          boolean encrypted = securePreferenceWapper.preferences.isEncrypted(property);
+          if (encrypted)
+          {
+            return PreferencesUtil.encrypt(value);
+          }
+        }
+        catch (StorageException ex)
+        {
+          return defaultValue;
+        }
+      }
+
+      return value;
     }
 
     public void remove()
@@ -1331,9 +1392,16 @@ public final class PreferencesUtil
    */
   private static class Cipher extends DESCipherImpl
   {
+    private static final String ENCRYPTION_PREFIX = "#!";
+
     public Cipher()
     {
       super(EcoreUtil.generateUUID());
+    }
+
+    public boolean isEncryptedValue(String value)
+    {
+      return value != null && value.startsWith(ENCRYPTION_PREFIX);
     }
 
     public String encrypt(String value)
@@ -1353,7 +1421,7 @@ public final class PreferencesUtil
         OutputStream out = encrypt(bytes);
         out.write(value.getBytes());
         out.close();
-        return XMLTypeFactory.eINSTANCE.convertBase64Binary(bytes.toByteArray());
+        return ENCRYPTION_PREFIX + XMLTypeFactory.eINSTANCE.convertBase64Binary(bytes.toByteArray());
       }
       catch (Exception ex)
       {
@@ -1370,6 +1438,11 @@ public final class PreferencesUtil
       else if ("".equals(value))
       {
         return "";
+      }
+
+      if (value.startsWith(ENCRYPTION_PREFIX))
+      {
+        value = value.substring(2);
       }
 
       ByteArrayInputStream byteValue = new ByteArrayInputStream(XMLTypeFactory.eINSTANCE.createBase64Binary(value));

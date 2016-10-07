@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.internal.core;
 
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
+import org.eclipse.oomph.preferences.util.PreferencesUtil.PreferenceProperty;
 import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -349,6 +351,16 @@ public class StringFilterRegistry
           // Should not happen.
           return value;
         }
+      }
+    });
+
+    registerFilter("propertyValue", new StringFilter()
+    {
+      public String filter(String value)
+      {
+        PreferenceProperty preferenceProperty = new PreferencesUtil.PreferenceProperty(value);
+        String result = preferenceProperty.get(null);
+        return result == null ? "" : result;
       }
     });
   }

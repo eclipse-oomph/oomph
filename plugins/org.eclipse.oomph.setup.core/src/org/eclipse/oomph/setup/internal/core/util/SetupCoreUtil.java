@@ -28,6 +28,8 @@ import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandlerImpl;
 import org.eclipse.oomph.setup.util.SetupUtil;
+import org.eclipse.oomph.util.IORuntimeException;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
@@ -56,6 +58,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIHandler;
+import org.eclipse.emf.ecore.resource.impl.ArchiveURIHandlerImpl;
+import org.eclipse.emf.ecore.resource.impl.FileURIHandlerImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
@@ -65,10 +69,16 @@ import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -77,6 +87,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * @author Eike Stepper
@@ -102,6 +114,13 @@ public final class SetupCoreUtil
     extensionToFactoryMap.put("ext", factory);
 
     extensionToFactoryMap.put("ecore", new EcoreResourceFactoryImpl());
+  }
+
+  public static URIConverter URI_CONVERTER = new ResourceSetImpl().getURIConverter();
+
+  static
+  {
+    configureURIHandlers(URI_CONVERTER);
   }
 
   private static final boolean SKIP_STATS = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_STATS_SKIP);
@@ -151,16 +170,17 @@ public final class SetupCoreUtil
 
   public static void configureResourceSet(final ResourceSet resourceSet)
   {
+    configureResourceSet(resourceSet, true);
+  }
+
+  private static void configureResourceSet(final ResourceSet resourceSet, boolean configureURIMappings)
+  {
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().putAll(RESOURCE_FACTORY_REGISTRY.getExtensionToFactoryMap());
 
     URIConverter uriConverter = resourceSet.getURIConverter();
     Map<URI, URI> uriMap = uriConverter.getURIMap();
 
-    EList<URIHandler> uriHandlers = uriConverter.getURIHandlers();
-    uriHandlers.add(4, new UserURIHandlerImpl());
-    uriHandlers.add(5, new SelfProductCatalogURIHandlerImpl());
-    uriHandlers.add(6, new PreferencesURIHandlerImpl());
-    uriHandlers.add(7, new ECFURIHandlerImpl(AUTHORIZATION_HANDLER));
+    configureURIHandlers(uriConverter);
 
     class ModelResourceSet extends ResourceSetImpl
     {
@@ -316,62 +336,183 @@ public final class SetupCoreUtil
       }
     };
 
-    uriMap.put(SetupContext.INDEX_ROOT_URI, SetupContext.INDEX_ROOT_LOCATION_URI);
-
-    Properties properties = System.getProperties();
-    Map<Object, Object> safeProperties;
-    synchronized (properties)
+    if (configureURIMappings)
     {
-      safeProperties = new HashMap<Object, Object>(properties);
-    }
+      uriMap.put(SetupContext.INDEX_ROOT_URI, SetupContext.INDEX_ROOT_LOCATION_URI);
 
-    for (Map.Entry<Object, Object> entry : safeProperties.entrySet())
-    {
-      Object key = entry.getKey();
-      if (key instanceof String)
+      Properties properties = System.getProperties();
+      Map<Object, Object> safeProperties;
+      synchronized (properties)
       {
-        if (((String)key).startsWith(SetupProperties.PROP_REDIRECTION_BASE))
+        safeProperties = new HashMap<Object, Object>(properties);
+      }
+
+      for (Map.Entry<Object, Object> entry : safeProperties.entrySet())
+      {
+        Object key = entry.getKey();
+        if (key instanceof String)
         {
-          String[] mapping = ((String)entry.getValue()).split("->");
-          if (mapping.length == 1)
+          if (((String)key).startsWith(SetupProperties.PROP_REDIRECTION_BASE))
           {
-            URI sourceURI = URI.createURI(mapping[0]);
-            uriMap.remove(sourceURI);
-          }
-          else if (mapping.length == 2)
-          {
-            URI sourceURI = URI.createURI(mapping[0]);
-            URI targetURI = URI.createURI(mapping[1].replace("\\", "/"));
-
-            // Only include the mapping if the target exists.
-            // For example, we often include a redirection of the remote setup to the local git clone in an installed IDE,
-            // but if that clone hasn't been cloned yet, we want to continue to use the remote version.
-            //
-            if (targetURI.isFile())
+            String[] mapping = ((String)entry.getValue()).split("->");
+            if (mapping.length == 1)
             {
-              // If the file is a relative path, interpret it as relative to the root folder of the installation.
-              if (targetURI.isRelative())
-              {
-                targetURI = targetURI.resolve(SetupContext.PRODUCT_LOCATION.trimSegments(OS.INSTANCE.isMac() ? 2 : 0).appendSegment(""));
-              }
-
-              File file = new File(targetURI.toFileString());
-              if (!file.exists())
-              {
-                continue;
-              }
+              URI sourceURI = URI.createURI(mapping[0]);
+              uriMap.remove(sourceURI);
             }
+            else if (mapping.length == 2)
+            {
+              URI sourceURI = URI.createURI(mapping[0]);
+              URI targetURI = URI.createURI(mapping[1].replace("\\", "/"));
 
-            uriMap.put(sourceURI, targetURI);
+              // Only include the mapping if the target exists.
+              // For example, we often include a redirection of the remote setup to the local git clone in an installed IDE,
+              // but if that clone hasn't been cloned yet, we want to continue to use the remote version.
+              //
+              if (targetURI.isFile())
+              {
+                // If the file is a relative path, interpret it as relative to the root folder of the installation.
+                if (targetURI.isRelative())
+                {
+                  targetURI = targetURI.resolve(SetupContext.PRODUCT_LOCATION.trimSegments(OS.INSTANCE.isMac() ? 2 : 0).appendSegment(""));
+                }
+
+                File file = new File(targetURI.toFileString());
+                if (!file.exists())
+                {
+                  continue;
+                }
+              }
+
+              uriMap.put(sourceURI, targetURI);
+            }
           }
         }
       }
+
+      if (!SetupUtil.SETUP_ARCHIVER_APPLICATION)
+      {
+        handleArchiveRedirection(uriConverter);
+      }
+    }
+  }
+
+  private static final Map<URI, WeakReference<byte[]>> ZIPS = Collections.synchronizedMap(new HashMap<URI, WeakReference<byte[]>>());
+
+  private static void configureURIHandlers(URIConverter uriConverter)
+  {
+    EList<URIHandler> uriHandlers = uriConverter.getURIHandlers();
+
+    for (int i = 0, size = uriHandlers.size(); i < size; ++i)
+    {
+      URIHandler uriHandler = uriHandlers.get(i);
+      if (uriHandler instanceof FileURIHandlerImpl)
+      {
+        uriHandlers.set(i, new FileURIHandlerImpl()
+        {
+          @Override
+          public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
+          {
+            if (!"zip".equals(uri.fileExtension()))
+            {
+              return super.createInputStream(uri, options);
+            }
+
+            // Look for a cached version first.
+            WeakReference<byte[]> bytesReference = ZIPS.get(uri);
+            if (bytesReference != null)
+            {
+              byte[] bytes = bytesReference.get();
+              if (bytes != null)
+              {
+                return new ByteArrayInputStream(bytes);
+              }
+            }
+
+            // Otherwise read the entire input stream into memory and cache it.
+            InputStream in = super.createInputStream(uri, options);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            try
+            {
+              IOUtil.copy(in, out);
+              byte[] bytes = out.toByteArray();
+              ZIPS.put(uri, new WeakReference<byte[]>(bytes));
+              return new ByteArrayInputStream(bytes);
+            }
+            catch (IORuntimeException ex)
+            {
+              throw (IOException)ex.getCause();
+            }
+            finally
+            {
+              IOUtil.close(in);
+            }
+          }
+        });
+      }
+      else if (uriHandler instanceof ArchiveURIHandlerImpl)
+      {
+        uriHandlers.set(i, new ArchiveURIHandlerImpl()
+        {
+          @Override
+          public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
+          {
+            // Look for a cached version first.
+            WeakReference<byte[]> bytesReference = ZIPS.get(uri);
+            if (bytesReference != null)
+            {
+              byte[] bytes = bytesReference.get();
+              if (bytes != null)
+              {
+                return new ByteArrayInputStream(bytes);
+              }
+            }
+
+            String authority = uri.authority();
+            URI archiveURI = URI.createURI(authority.substring(0, authority.length() - 1));
+
+            URI baseURI = uri.trimSegments(uri.segmentCount());
+
+            byte[] result = null;
+
+            InputStream inputStream = getURIConverter(options).createInputStream(archiveURI, options);
+            ZipInputStream zipInputStream = new ZipInputStream(inputStream);
+            for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry())
+            {
+              String name = zipEntry.getName();
+              URI entryURI = URI.createURI(name).resolve(baseURI);
+              ByteArrayOutputStream output = new ByteArrayOutputStream();
+              try
+              {
+                IOUtil.copy(zipInputStream, output);
+                byte[] bytes = output.toByteArray();
+                ZIPS.put(entryURI, new WeakReference<byte[]>(bytes));
+                if (entryURI.equals(uri))
+                {
+                  result = bytes;
+                }
+              }
+              catch (IORuntimeException ex)
+              {
+                throw (IOException)ex.getCause();
+              }
+            }
+
+            if (result == null)
+            {
+              throw new FileNotFoundException(uri.toString());
+            }
+
+            return new ByteArrayInputStream(result);
+          }
+        });
+      }
     }
 
-    if (!SetupUtil.SETUP_ARCHIVER_APPLICATION)
-    {
-      handleArchiveRedirection(uriConverter);
-    }
+    uriHandlers.add(4, new UserURIHandlerImpl());
+    uriHandlers.add(5, new SelfProductCatalogURIHandlerImpl());
+    uriHandlers.add(6, new PreferencesURIHandlerImpl());
+    uriHandlers.add(7, new ECFURIHandlerImpl(AUTHORIZATION_HANDLER));
   }
 
   private static void handleArchiveRedirection(final URIConverter uriConverter)
@@ -383,14 +524,8 @@ public final class SetupCoreUtil
       options.put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
 
       final Map<URI, URI> redirections = new HashMap<URI, URI>();
-      Resource archiveResource = new ArchiveResourceImpl(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI)
+      Resource archiveResource = new ArchiveResourceImpl(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI, uriConverter)
       {
-        @Override
-        protected URIConverter getURIConverter()
-        {
-          return uriConverter;
-        }
-
         @Override
         protected void handle(EMap<String, String> details, URI uri, URI archiveEntry)
         {

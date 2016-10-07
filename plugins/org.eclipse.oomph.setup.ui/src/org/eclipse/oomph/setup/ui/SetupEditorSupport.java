@@ -76,14 +76,27 @@ public final class SetupEditorSupport
 
   public static IEditorPart getEditor(final IWorkbenchPage page, final URI uri, boolean force, LoadHandler... loadHandlers)
   {
+    URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
+    URI trimmedURI = uri.trimFragment();
+    final URI normalizedURI = uriConverter.normalize(trimmedURI);
+
+    final IEditorInput editorInput = getEditorInput(normalizedURI, trimmedURI);
+    return getEditor(page, editorInput, uri, uriConverter, force, loadHandlers);
+  }
+
+  public static IEditorPart getEditor(final IWorkbenchPage page, IEditorInput editorInput, URI uri, boolean force, LoadHandler... loadHandlers)
+  {
+    URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
+    return getEditor(page, editorInput, uri, uriConverter, force, loadHandlers);
+  }
+
+  private static IEditorPart getEditor(final IWorkbenchPage page, final IEditorInput editorInput, URI uri, URIConverter uriConverter, boolean force,
+      LoadHandler... loadHandlers)
+  {
     try
     {
-      URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
       final String fragment = uri.fragment();
-      URI trimmedURI = uri.trimFragment();
-      final URI normalizedURI = uriConverter.normalize(trimmedURI);
 
-      final IEditorInput editorInput = getEditorInput(normalizedURI, trimmedURI);
       IEditorPart editor = findEditor(EDITOR_ID, page, uriConverter, editorInput);
       if (editor != null)
       {
@@ -194,13 +207,23 @@ public final class SetupEditorSupport
 
   public static IEditorPart getTextEditor(final IWorkbenchPage page, final URI uri)
   {
+    URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
+    URI trimmedURI = uri.trimFragment();
+    URI normalizedURI = uriConverter.normalize(trimmedURI);
+    IEditorInput editorInput = getTextEditorInput(normalizedURI, trimmedURI);
+    return getTextEditor(page, uriConverter, editorInput);
+  }
+
+  public static IEditorPart getTextEditor(final IWorkbenchPage page, IEditorInput editorInput)
+  {
+    URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
+    return getTextEditor(page, uriConverter, editorInput);
+  }
+
+  public static IEditorPart getTextEditor(final IWorkbenchPage page, URIConverter uriConverter, IEditorInput editorInput)
+  {
     try
     {
-      URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
-      URI trimmedURI = uri.trimFragment();
-      URI normalizedURI = uriConverter.normalize(trimmedURI);
-      IEditorInput editorInput = getTextEditorInput(normalizedURI, trimmedURI);
-
       String editorID = getTextEditorID();
 
       IEditorPart editor = findEditor(editorID, page, uriConverter, editorInput);
@@ -260,7 +283,7 @@ public final class SetupEditorSupport
     if (editorInput instanceof URIEditorInput)
     {
       URIEditorInput uriEditorInput = (URIEditorInput)editorInput;
-      final URI uri = uriEditorInput.getURI();
+      final URI uri = SetupContext.resolve(uriEditorInput.getURI());
       if (uri.isFile())
       {
         IFileStore store = EFS.getLocalFileSystem().getStore(new Path(uri.toFileString()));
@@ -346,7 +369,7 @@ public final class SetupEditorSupport
 
   private static IEditorInput getEditorInput(URI normalizedURI, URI originalURI)
   {
-    normalizedURI = SetupContext.resolveUser(normalizedURI);
+    normalizedURI = SetupContext.resolve(normalizedURI);
 
     if (normalizedURI.isFile() && !normalizedURI.isRelative())
     {

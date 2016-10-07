@@ -25,7 +25,9 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.WorkspaceTask;
 import org.eclipse.oomph.setup.impl.DynamicSetupTaskImpl;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.presentation.SetupEditor.BrowserDialog;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
 import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
 import org.eclipse.oomph.ui.UIUtil;
@@ -57,8 +59,12 @@ import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.core.resources.IStorage;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
@@ -74,23 +80,41 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.SubContributionItem;
 import org.eclipse.jface.bindings.Binding;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPersistableElement;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IStorageEditorInput;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.keys.IBindingService;
+import org.eclipse.ui.part.IPage;
+import org.eclipse.ui.views.properties.PropertySheet;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -144,23 +168,9 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
    * This action opens the Properties view.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
-  protected IAction showPropertiesViewAction = new Action(SetupEditorPlugin.INSTANCE.getString("_UI_ShowPropertiesView_menu_item"))
-  {
-    @Override
-    public void run()
-    {
-      try
-      {
-        getPage().showView("org.eclipse.ui.views.PropertySheet");
-      }
-      catch (PartInitException exception)
-      {
-        SetupEditorPlugin.INSTANCE.log(exception);
-      }
-    }
-  };
+  protected ShowPropertiesViewAction showPropertiesViewAction = new ShowPropertiesViewAction();
 
   /**
    * This action refreshes the viewer of the current editor if the editor
@@ -244,6 +254,10 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
   private final OpenInTextEditorAction openInTextEditorAction = new OpenInTextEditorAction();
 
+  private final ShowTooltipsAction showTooltipsAction = new ShowTooltipsAction();
+
+  private final ShowInformationBrowserAction showInformationBrowserAction = new ShowInformationBrowserAction();
+
   private int lastSubMenuID;
 
   /**
@@ -265,6 +279,10 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   public void init(IActionBars actionBars)
   {
     super.init(actionBars);
+
+    showPropertiesViewAction.setPage(getPage());
+    liveValidationAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("live_validation"));
+    refreshViewerAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("refresh_view"));
 
     loadResourceAction = new LoadResourceAction()
     {
@@ -323,6 +341,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     toolBarManager.add(commandTableAction);
     toolBarManager.add(editorTableAction);
     // toolBarManager.add(testInstallAction);
+    toolBarManager.add(showInformationBrowserAction);
     toolBarManager.add(toggleViewerInputAction);
     super.contributeToToolBar(toolBarManager);
     toolBarManager.add(new Separator("setup-additions"));
@@ -390,6 +409,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     openInTextEditorAction.setActiveWorkbenchPart(part);
     capturePreferencesAction.setActiveWorkbenchPart(part);
     importPreferencesAction.setActiveWorkbenchPart(part);
+    showInformationBrowserAction.setActiveWorkbenchPart(part);
 
     // Switch to the new selection provider.
     //
@@ -1028,8 +1048,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  protected void addGlobalActions(IMenuManager menuManager)
+  protected void addGlobalActionsGen(IMenuManager menuManager)
   {
     menuManager.insertAfter("additions-end", new Separator("ui-actions"));
     menuManager.insertAfter("ui-actions", showPropertiesViewAction);
@@ -1038,6 +1057,16 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     menuManager.insertAfter("ui-actions", refreshViewerAction);
 
     super.addGlobalActions(menuManager);
+  }
+
+  @Override
+  protected void addGlobalActions(IMenuManager menuManager)
+  {
+    liveValidationAction.setId("live");
+    addGlobalActionsGen(menuManager);
+    showTooltipsAction.setChecked(isShowTooltips());
+    menuManager.insertAfter("live", new ActionContributionItem(showTooltipsAction));
+    menuManager.insertBefore("properties", new ActionContributionItem(showInformationBrowserAction));
   }
 
   /**
@@ -1050,6 +1079,42 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   protected boolean removeAllReferencesOnDelete()
   {
     return true;
+  }
+
+  public boolean isLiveValidation()
+  {
+    return liveValidationAction.isChecked();
+  }
+
+  public void setLiveValidation(boolean liveValidation)
+  {
+    liveValidationAction.setChecked(liveValidation);
+    liveValidationAction.run();
+  }
+
+  public void showInformationBrowser(Object object)
+  {
+    showInformationBrowserAction.open(new StructuredSelection(object));
+  }
+
+  public boolean isInformationBrowserShowing()
+  {
+    return showInformationBrowserAction.isChecked();
+  }
+
+  public void openInTextEditor(Object object)
+  {
+    openInTextEditorAction.open(object);
+  }
+
+  public void openInSetupEditor(Object object)
+  {
+    openInSetupEditorAction.open(object);
+  }
+
+  public void openInPropertiesView(SetupEditor setupEditor, Object object, String property)
+  {
+    showPropertiesViewAction.open(setupEditor, object, property);
   }
 
   /**
@@ -1450,6 +1515,31 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     }
   }
 
+  static URI getEditURI(Object object, boolean text)
+  {
+    object = AdapterFactoryEditingDomain.unwrap(object);
+    if (object instanceof EObject)
+    {
+      EObject eObject = (EObject)object;
+      Resource resource = eObject.eResource();
+      if (resource != null)
+      {
+        ResourceSet resourceSet = resource.getResourceSet();
+        if (text || resourceSet == null || resourceSet.getResources().indexOf(resource) != 0)
+        {
+          return EcoreUtil.getURI(eObject);
+        }
+      }
+    }
+    else if (object instanceof Resource)
+    {
+      Resource resource = (Resource)object;
+      return resource.getURI();
+    }
+
+    return null;
+  }
+
   /**
    * @author Ed Merks
    */
@@ -1462,10 +1552,30 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     public OpenInSetupEditorAction()
     {
       setText("Open in Setup Editor");
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("edit_setup"));
     }
 
     @Override
     public void run()
+    {
+      open(uri);
+    }
+
+    public void open(Object object)
+    {
+      final URI uri = getEditURI(object, true);
+      if ("performer".equals(uri.scheme()))
+      {
+        SetupEditorSupport.getEditor(setupEditor.getSite().getWorkbenchWindow().getActivePage(),
+            OpenInTextEditorAction.createEditorInput(uri.trimFragment(), object), uri, true);
+      }
+      else
+      {
+        open(uri);
+      }
+    }
+
+    public void open(URI uri)
     {
       SetupEditorSupport.getEditor(setupEditor.getSite().getWorkbenchWindow().getActivePage(), uri, true);
     }
@@ -1492,25 +1602,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       if (selection.size() == 1)
       {
         Object object = selection.getFirstElement();
-        object = AdapterFactoryEditingDomain.unwrap(object);
-        if (object instanceof EObject)
-        {
-          EObject eObject = (EObject)object;
-          Resource resource = eObject.eResource();
-          if (resource != null)
-          {
-            ResourceSet resourceSet = resource.getResourceSet();
-            if (resourceSet == null || resourceSet.getResources().indexOf(resource) != 0)
-            {
-              uri = EcoreUtil.getURI(eObject);
-            }
-          }
-        }
-        else if (object instanceof Resource)
-        {
-          Resource resource = (Resource)object;
-          uri = resource.getURI();
-        }
+        uri = getEditURI(object, false);
       }
 
       setEnabled(uri != null);
@@ -1522,6 +1614,8 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
    */
   private static final class OpenInTextEditorAction extends Action
   {
+    private Object object;
+
     private URI uri;
 
     private SetupEditor setupEditor;
@@ -1529,10 +1623,129 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     public OpenInTextEditorAction()
     {
       setText("Open in Text Editor");
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("edit_text"));
     }
 
     @Override
     public void run()
+    {
+      if ("performer".equals(uri.scheme()))
+      {
+        SetupEditorSupport.getTextEditor(setupEditor.getSite().getWorkbenchWindow().getActivePage(), createEditorInput(uri.trimFragment(), object));
+      }
+      else
+      {
+        open(uri);
+      }
+    }
+
+    public static IEditorInput createEditorInput(final URI uri, Object object)
+    {
+      final Resource resource = object instanceof Resource ? (Resource)object : ((EObject)object).eResource();
+      IStorageEditorInput editorInput = new IStorageEditorInput()
+      {
+        public <T> T getAdapter(Class<T> adapter)
+        {
+          if (adapter == IStorage.class)
+          {
+            try
+            {
+              @SuppressWarnings("unchecked")
+              T storage = (T)getStorage();
+              return storage;
+            }
+            catch (CoreException ex)
+            {
+            }
+          }
+
+          return null;
+        }
+
+        public String getToolTipText()
+        {
+          return uri.toString();
+        }
+
+        public IPersistableElement getPersistable()
+        {
+          return null;
+        }
+
+        public String getName()
+        {
+          return uri.lastSegment();
+        }
+
+        public ImageDescriptor getImageDescriptor()
+        {
+          return null;
+        }
+
+        public boolean exists()
+        {
+          return true;
+        }
+
+        public IStorage getStorage() throws CoreException
+        {
+          return new IStorage()
+          {
+            public <T> T getAdapter(Class<T> adapter)
+            {
+              return null;
+            }
+
+            public boolean isReadOnly()
+            {
+              return true;
+            }
+
+            public String getName()
+            {
+              return uri.lastSegment();
+            }
+
+            public IPath getFullPath()
+            {
+              return new Path(uri.toString());
+            }
+
+            public InputStream getContents() throws CoreException
+            {
+              try
+              {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                resource.save(out, null);
+                return new ByteArrayInputStream(out.toByteArray());
+              }
+              catch (IOException ex)
+              {
+                SetupEditorPlugin.INSTANCE.coreException(ex);
+                return new ByteArrayInputStream(new byte[0]);
+              }
+            }
+          };
+        }
+      };
+
+      return editorInput;
+    }
+
+    public void open(Object object)
+    {
+      final URI uri = getEditURI(object, true);
+      if ("performer".equals(uri.scheme()))
+      {
+        SetupEditorSupport.getTextEditor(setupEditor.getSite().getWorkbenchWindow().getActivePage(), createEditorInput(uri.trimFragment(), object));
+      }
+      else
+      {
+        open(uri);
+      }
+    }
+
+    public void open(URI uri)
     {
       SetupEditorSupport.getTextEditor(setupEditor.getSite().getWorkbenchWindow().getActivePage(), uri);
     }
@@ -1558,25 +1771,186 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       IStructuredSelection selection = (IStructuredSelection)event.getSelection();
       if (selection.size() == 1)
       {
-        Object object = selection.getFirstElement();
-        object = AdapterFactoryEditingDomain.unwrap(object);
-        if (object instanceof EObject)
-        {
-          EObject eObject = (EObject)object;
-          Resource resource = eObject.eResource();
-          if (resource != null)
-          {
-            uri = resource.getURI();
-          }
-        }
-        else if (object instanceof Resource)
-        {
-          Resource resource = (Resource)object;
-          uri = resource.getURI();
-        }
+        object = selection.getFirstElement();
+        uri = getEditURI(object, true);
       }
 
       setEnabled(uri != null);
+    }
+  }
+
+  public static boolean isShowTooltips()
+  {
+    return SetupUIPlugin.INSTANCE.getInstancePreference("showTooltips").get(true);
+  }
+
+  public static void setShowTooltips(boolean showTooltips)
+  {
+    SetupUIPlugin.INSTANCE.getInstancePreference("showTooltips").set(showTooltips);
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static final class ShowTooltipsAction extends Action
+  {
+    public ShowTooltipsAction()
+    {
+      setText("Show Tooltips");
+      setChecked(isShowTooltips());
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("show_tooltips"));
+    }
+
+    @Override
+    public void run()
+    {
+      boolean show = isChecked();
+      setShowTooltips(show);
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static final class ShowInformationBrowserAction extends Action
+  {
+    private SetupEditor setupEditor;
+
+    public ShowInformationBrowserAction()
+    {
+      super("Show Information Browser", Action.AS_CHECK_BOX);
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("open_browser"));
+    }
+
+    @Override
+    public void run()
+    {
+      if (isChecked())
+      {
+        IStructuredSelection selection = (IStructuredSelection)setupEditor.getSelection();
+        open(selection);
+      }
+      else
+      {
+        BrowserDialog.closeFor(setupEditor.getSite().getWorkbenchWindow());
+      }
+    }
+
+    public void open(IStructuredSelection selection)
+    {
+      BrowserDialog browserDialog = BrowserDialog.openFor(setupEditor.getSite().getWorkbenchWindow());
+      Object object = selection.getFirstElement();
+      if (object == null)
+      {
+        EList<Resource> resources = setupEditor.getEditingDomain().getResourceSet().getResources();
+        if (!resources.isEmpty())
+        {
+          object = resources.get(0);
+        }
+      }
+
+      browserDialog.setInput(setupEditor, object);
+
+      browserDialog.getShell().addShellListener(new ShellAdapter()
+      {
+        @Override
+        public void shellClosed(ShellEvent e)
+        {
+          setChecked(false);
+        }
+
+        @Override
+        public void shellDeiconified(ShellEvent e)
+        {
+          setChecked(true);
+        }
+
+        @Override
+        public void shellIconified(ShellEvent e)
+        {
+          setChecked(false);
+        }
+      });
+    }
+
+    public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
+    {
+      if (workbenchPart instanceof SetupEditor)
+      {
+        setupEditor = (SetupEditor)workbenchPart;
+        setEnabled(true);
+      }
+      else
+      {
+        setEnabled(false);
+        setupEditor = null;
+      }
+    }
+  }
+
+  /**
+   * @author Ed merks
+   */
+  private static class ShowPropertiesViewAction extends Action
+  {
+    private IWorkbenchPage page;
+
+    private ShowPropertiesViewAction()
+    {
+      super(SetupEditorPlugin.INSTANCE.getString("_UI_ShowPropertiesView_menu_item"), SetupEditorPlugin.INSTANCE.getImageDescriptor("show_properties_view"));
+      setId("properties");
+    }
+
+    public void setPage(IWorkbenchPage page)
+    {
+      this.page = page;
+    }
+
+    @Override
+    public void run()
+    {
+      try
+      {
+        page.showView("org.eclipse.ui.views.PropertySheet");
+      }
+      catch (PartInitException exception)
+      {
+        SetupEditorPlugin.INSTANCE.log(exception);
+      }
+    }
+
+    public void open(SetupEditor setupEditor, Object object, String property)
+    {
+      try
+      {
+        IViewPart propertiesView = page.showView("org.eclipse.ui.views.PropertySheet");
+        if (propertiesView instanceof PropertySheet)
+        {
+          PropertySheet propertySheet = (PropertySheet)propertiesView;
+          IPage page = propertySheet.getCurrentPage();
+          if (page instanceof ISelectionListener)
+          {
+            ((ISelectionListener)page).selectionChanged(setupEditor, new StructuredSelection(object));
+            Control control = page.getControl();
+            if (control instanceof Tree)
+            {
+              Tree tree = (Tree)control;
+              for (TreeItem treeItem : tree.getItems())
+              {
+                if (property.equals(treeItem.getText()))
+                {
+                  tree.select(treeItem);
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+      catch (PartInitException exception)
+      {
+        SetupEditorPlugin.INSTANCE.log(exception);
+      }
     }
   }
 }

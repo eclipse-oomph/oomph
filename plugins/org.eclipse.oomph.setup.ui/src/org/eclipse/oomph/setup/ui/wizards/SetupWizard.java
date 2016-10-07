@@ -362,6 +362,27 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                   perform(syntheticConfigurationResourceURI);
                   resolveProxies();
                 }
+
+                @Override
+                protected boolean await(long timeout) throws InterruptedException
+                {
+                  // We must do this so that if there is a password prompt for the configuration being loaded, the UI thread can display it.
+                  Display display = getShell().getDisplay();
+                  while (!super.await(500))
+                  {
+                    if (display.isDisposed())
+                    {
+                      break;
+                    }
+
+                    while (display.readAndDispatch())
+                    {
+                      // Keep processing events until there are none, in which case the display can sleep, but we can check the await status again.
+                    }
+                  }
+
+                  return true;
+                }
               };
 
               resourceMirror.begin(new NullProgressMonitor());
@@ -1161,7 +1182,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                             @Override
                             protected synchronized void cacheUpdated(URI uri)
                             {
-                              updatedResources.addAll(resourceMap.get(uri));
+                              Set<Resource> resources = resourceMap.get(uri);
+                              if (resources != null)
+                              {
+                                updatedResources.addAll(resources);
+                              }
                             }
                           }.begin(resourceURIs, monitor);
 

@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
 /**
  * @author Eike Stepper
  */
-public class UserURIHandlerImpl extends URIHandlerImpl
+public class UserURIHandlerImpl extends URIHandlerImpl implements URIResolver
 {
   private static final String FEATURE_PATTERN_SUFFIX = "='([^']*)'";
 
@@ -59,10 +59,15 @@ public class UserURIHandlerImpl extends URIHandlerImpl
     return SetupContext.isUserScheme(uri.scheme());
   }
 
+  public URI resolve(URI uri)
+  {
+    return SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegments(uri.segments()).appendFragment(uri.fragment());
+  }
+
   @Override
   public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
   {
-    URI normalizedURI = SetupContext.resolveUser(uri);
+    URI normalizedURI = resolve(uri);
     URIConverter uriConverter = getURIConverter(options);
     if (!uriConverter.exists(normalizedURI, options))
     {
@@ -82,7 +87,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public OutputStream createOutputStream(URI uri, Map<?, ?> options) throws IOException
   {
-    URI normalizedURI = SetupContext.resolveUser(uri);
+    URI normalizedURI = resolve(uri);
     URIConverter uriConverter = getURIConverter(options);
     return uriConverter.createOutputStream(normalizedURI, options);
   }
@@ -90,7 +95,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public void delete(URI uri, Map<?, ?> options) throws IOException
   {
-    URI normalizedURI = SetupContext.resolveUser(uri);
+    URI normalizedURI = resolve(uri);
     URIConverter uriConverter = getURIConverter(options);
     uriConverter.delete(normalizedURI, options);
   }
@@ -98,7 +103,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public Map<String, ?> contentDescription(URI uri, Map<?, ?> options) throws IOException
   {
-    URI normalizedURI = SetupContext.resolveUser(uri);
+    URI normalizedURI = resolve(uri);
     URIConverter uriConverter = getURIConverter(options);
     if (!uriConverter.exists(normalizedURI, options))
     {
@@ -111,7 +116,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public boolean exists(URI uri, Map<?, ?> options)
   {
-    URI normalizedURI = SetupContext.resolveUser(uri);
+    URI normalizedURI = resolve(uri);
     URIConverter uriConverter = getURIConverter(options);
     return uriConverter.exists(normalizedURI, options) || create(uri, normalizedURI) != null;
   }
@@ -119,7 +124,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public Map<String, ?> getAttributes(URI uri, Map<?, ?> options)
   {
-    URI normalizedURI = SetupContext.resolveUser(uri);
+    URI normalizedURI = resolve(uri);
     URIConverter uriConverter = getURIConverter(options);
     if (!uriConverter.exists(normalizedURI, options))
     {
@@ -132,7 +137,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl
   @Override
   public void setAttributes(URI uri, Map<String, ?> attributes, Map<?, ?> options) throws IOException
   {
-    URI normalizedURI = SetupContext.resolveUser(uri);
+    URI normalizedURI = resolve(uri);
     URIConverter uriConverter = getURIConverter(options);
     if (!uriConverter.exists(normalizedURI, options))
     {

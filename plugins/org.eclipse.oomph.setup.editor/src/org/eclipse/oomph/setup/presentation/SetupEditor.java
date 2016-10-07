@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.presentation;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.base.provider.BaseEditUtil.IconReflectiveItemProvider;
 import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
+import org.eclipse.oomph.base.util.BaseResourceImpl;
 import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.ui.FindAndReplaceTarget;
@@ -20,7 +21,9 @@ import org.eclipse.oomph.internal.ui.IRevertablePart;
 import org.eclipse.oomph.internal.ui.OomphEditingDomain;
 import org.eclipse.oomph.internal.ui.OomphPropertySheetPage;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.Index;
+import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -33,6 +36,7 @@ import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
@@ -43,11 +47,16 @@ import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
 import org.eclipse.oomph.setup.ui.SetupTransferSupport;
+import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.Pair;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
+import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -58,6 +67,8 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.ui.MarkerHelper;
 import org.eclipse.emf.common.ui.editor.ProblemEditorPart;
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
@@ -68,6 +79,7 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.SegmentSequence;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -76,11 +88,14 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.edit.EMFEditPlugin;
+import org.eclipse.emf.edit.command.AbstractOverrideableCommand;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.CopyCommand.Helper;
+import org.eclipse.emf.edit.command.CopyCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -92,11 +107,15 @@ import org.eclipse.emf.edit.provider.DelegatingWrapperItemProvider;
 import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.IWrapperItemProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptorDecorator;
 import org.eclipse.emf.edit.provider.ItemProvider;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProvider;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.emf.edit.provider.resource.ResourceSetItemProvider;
 import org.eclipse.emf.edit.ui.EMFEditUIPlugin;
 import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -119,6 +138,7 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -137,9 +157,13 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.text.AbstractHoverInformationControlManager;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -147,39 +171,70 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.IToolTipProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWindowListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.progress.IProgressService;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
@@ -194,6 +249,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -206,8 +262,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This is an example of a Setup model editor.
@@ -223,6 +282,10 @@ public class SetupEditor extends MultiPageEditorPart
   private static final URI LEGACY_EXAMPLE_URI = URI.createURI("file:/example.setup");
 
   private static final Object VARIABLE_GROUP_IMAGE = SetupEditorPlugin.INSTANCE.getImage("full/obj16/VariableGroup");
+
+  private static final Pattern HEADER_PATTERN = Pattern.compile("(<h1)(>)");
+
+  private static final Pattern IMAGE_PATTERN = Pattern.compile("(<img )(src=)");
 
   private static final Object UNDECLARED_VARIABLE_GROUP_IMAGE;
 
@@ -354,6 +417,7 @@ public class SetupEditor extends MultiPageEditorPart
    */
   protected IPartListener partListener = new IPartListener()
   {
+    @SuppressWarnings("restriction")
     public void partActivated(IWorkbenchPart p)
     {
       if (p instanceof ContentOutline)
@@ -361,6 +425,7 @@ public class SetupEditor extends MultiPageEditorPart
         if (((ContentOutline)p).getCurrentPage() == contentOutlinePage)
         {
           getActionBarContributor().setActiveEditor(SetupEditor.this);
+          ((org.eclipse.ui.internal.EditorSite)getEditorSite()).activateActionBars(true);
 
           setCurrentViewer(contentOutlineViewer);
         }
@@ -370,6 +435,7 @@ public class SetupEditor extends MultiPageEditorPart
         if (propertySheetPages.contains(((PropertySheet)p).getCurrentPage()))
         {
           getActionBarContributor().setActiveEditor(SetupEditor.this);
+          ((org.eclipse.ui.internal.EditorSite)getEditorSite()).activateActionBars(true);
           handleActivate();
         }
       }
@@ -377,6 +443,10 @@ public class SetupEditor extends MultiPageEditorPart
       {
         handleActivate();
         setCurrentViewer(selectionViewer);
+      }
+      else if (!(p instanceof SetupEditor))
+      {
+        ((org.eclipse.ui.internal.EditorSite)getEditorSite()).deactivateActionBars(false);
       }
     }
 
@@ -681,7 +751,9 @@ public class SetupEditor extends MultiPageEditorPart
           });
         }
       }
-      catch (CoreException exception)
+      catch (
+
+      CoreException exception)
       {
         SetupEditorPlugin.INSTANCE.log(exception);
       }
@@ -771,7 +843,7 @@ public class SetupEditor extends MultiPageEditorPart
           {
             URI uri = resource.getURI();
             URI normalizedURI = uriConverter.normalize(uri);
-            normalizedURI = SetupContext.resolveUser(normalizedURI);
+            normalizedURI = SetupContext.resolve(normalizedURI);
 
             if (normalizedURI.isPlatformResource())
             {
@@ -1115,7 +1187,7 @@ public class SetupEditor extends MultiPageEditorPart
           }
 
           @Override
-          protected Command createCopyCommand(EditingDomain domain, EObject owner, Helper helper)
+          protected Command createCopyCommand(EditingDomain domain, EObject owner, CopyCommand.Helper helper)
           {
             return UnexecutableCommand.INSTANCE;
           }
@@ -1171,13 +1243,25 @@ public class SetupEditor extends MultiPageEditorPart
                     uri = resourceSet.getURIConverter().normalize(uri);
                   }
 
-                  uri = SetupContext.resolveUser(uri);
+                  uri = SetupContext.resolve(uri);
+
+                  if (uri.isPlatform())
+                  {
+                    try
+                    {
+                      URL resolveURL = FileLocator.resolve(new URL(uri.toString()));
+                      uri = URI.createURI(resolveURL.toString());
+                    }
+                    catch (IOException ex)
+                    {
+                    }
+                  }
 
                   return uri;
                 }
               });
-
             }
+
             return itemPropertyDescriptors;
           }
 
@@ -1193,6 +1277,109 @@ public class SetupEditor extends MultiPageEditorPart
                 disposable.dispose();
               }
             }
+          }
+        };
+      }
+
+      @Override
+      public Adapter createResourceSetAdapter()
+      {
+        return new ResourceSetItemProvider(this)
+        {
+          @Override
+          protected Command createDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation,
+              final Collection<?> collection)
+          {
+            final ResourceSet resourceSet = (ResourceSet)owner;
+            class LoadResourceCommand extends AbstractOverrideableCommand implements AbstractCommand.NonDirtying
+            {
+              protected LoadResourceCommand(EditingDomain domain)
+              {
+                super(domain);
+              }
+
+              protected List<Resource> resources;
+
+              @Override
+              protected boolean prepare()
+              {
+                for (Object object : collection)
+                {
+                  if (!(object instanceof URI))
+                  {
+                    return false;
+                  }
+                }
+                return true;
+              }
+
+              @Override
+              public void doExecute()
+              {
+                resources = new ArrayList<Resource>();
+                for (Object object : collection)
+                {
+                  URI uri = (URI)object;
+                  Resource resource = resourceSet.getResource(uri, false);
+                  if (resource == null)
+                  {
+                    try
+                    {
+                      resource = resourceSet.getResource(uri, true);
+                    }
+                    catch (RuntimeException exception)
+                    {
+                      resource = resourceSet.getResource(uri, false);
+                      EMFEditPlugin.INSTANCE.log(exception);
+                    }
+                  }
+
+                  if (resource != null)
+                  {
+                    EList<Resource> resourceSetResources = resourceSet.getResources();
+                    if (resourceSetResources.indexOf(resource) != 0)
+                    {
+                      resourceSetResources.move(1, resource);
+                    }
+
+                    resources.add(resource);
+                  }
+                }
+              }
+
+              @Override
+              public void doUndo()
+              {
+                resourceSet.getResources().removeAll(resources);
+                resources = null;
+              }
+
+              @Override
+              public void doRedo()
+              {
+                doExecute();
+              }
+
+              @Override
+              public Collection<?> doGetAffectedObjects()
+              {
+                return resources == null ? Collections.singleton(resourceSet) : resources;
+              }
+
+              @Override
+              public String doGetDescription()
+              {
+                return EMFEditPlugin.INSTANCE.getString("_UI_LoadResources_description");
+              }
+
+              @Override
+              public String doGetLabel()
+              {
+                return EMFEditPlugin.INSTANCE.getString("_UI_LoadResources_label");
+              }
+            }
+
+            return new LoadResourceCommand(domain);
           }
         };
       }
@@ -1456,7 +1643,19 @@ public class SetupEditor extends MultiPageEditorPart
    */
   protected void createContextMenuFor(StructuredViewer viewer)
   {
-    MenuManager contextMenu = new MenuManager("#PopUp");
+    // Refuse to add the popup extender because we don't want all those things polluting the menu.
+    MenuManager contextMenu = new MenuManager("#PopUp")
+    {
+      @Override
+      public void addMenuListener(IMenuListener listener)
+      {
+        if (!"org.eclipse.ui.internal.PopupMenuExtender".equals(listener.getClass().getName()))
+        {
+          super.addMenuListener(listener);
+        }
+      }
+    };
+
     contextMenu.add(new Separator("additions"));
     contextMenu.setRemoveAllWhenShown(true);
     contextMenu.addMenuListener(this);
@@ -1525,7 +1724,6 @@ public class SetupEditor extends MultiPageEditorPart
     uriMap.putAll(workspaceMappings);
 
     URI resourceURI = SetupEditorSupport.getURI(getEditorInput(), resourceSet.getURIConverter());
-
     resourceMirror.perform(resourceURI);
 
     final Resource mainResource = resourceSet.getResource(resourceURI, false);
@@ -1575,6 +1773,82 @@ public class SetupEditor extends MultiPageEditorPart
       }
       else
       {
+        if (rootObject instanceof Configuration)
+        {
+          final Configuration configuration = (Configuration)rootObject;
+          final Installation installation = configuration.getInstallation();
+          final Workspace workspace = configuration.getWorkspace();
+
+          // Record the proxies in configuration's workspace and installation.
+          // Often these are added to the index, e.g., to the user product index or the user project catalog extension projects,
+          // and then the reference will be changed to be via the index:/
+          // But we don't want to serialize a reference to that, we want to preserve the original form in which the model was referenced,
+          // so that this configuration.
+          reproxifier = new Runnable()
+          {
+            final Map<Object, Object> proxies = new LinkedHashMap<Object, Object>();
+
+            private final Adapter proxyListener = new AdapterImpl()
+            {
+              @Override
+              public void notifyChanged(Notification notification)
+              {
+                if (notification.getEventType() == Notification.RESOLVE)
+                {
+                  Object feature = notification.getFeature();
+                  if (feature == SetupPackage.Literals.INSTALLATION__PRODUCT_VERSION || feature == SetupPackage.Literals.WORKSPACE__STREAMS)
+                  {
+                    proxies.put(notification.getNewValue(), notification.getOldValue());
+                  }
+                }
+              }
+            };
+
+            {
+              if (installation != null)
+              {
+                installation.eAdapters().add(proxyListener);
+              }
+
+              if (workspace != null)
+              {
+                workspace.eAdapters().add(proxyListener);
+
+              }
+            }
+
+            public void run()
+            {
+              if (installation != null)
+              {
+                EObject productVersion = (EObject)installation.eGet(SetupPackage.Literals.INSTALLATION__PRODUCT_VERSION, false);
+                if (productVersion != null)
+                {
+                  ProductVersion productVersionProxy = (ProductVersion)proxies.get(productVersion);
+                  if (productVersionProxy != null)
+                  {
+                    installation.setProductVersion(productVersionProxy);
+                  }
+                }
+              }
+
+              if (workspace != null)
+              {
+                InternalEList<Stream> streams = (InternalEList<Stream>)workspace.getStreams();
+                for (int i = 0, size = streams.size(); i < size; ++i)
+                {
+                  Stream stream = streams.basicGet(i);
+                  Stream streamProxy = (Stream)proxies.get(stream);
+                  if (streamProxy != null)
+                  {
+                    streams.set(i, streamProxy);
+                  }
+                }
+              }
+            }
+          };
+        }
+
         resourceMirror.perform(SetupContext.INDEX_SETUP_URI);
       }
     }
@@ -1668,41 +1942,325 @@ public class SetupEditor extends MultiPageEditorPart
     }
   }
 
-  /**
-   * This is the method used by the framework to install your own controls.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated NOT
-   */
-  @Override
-  public void createPages()
+  private void configure(ColumnViewer viewer, final boolean foreignResourceDecoration)
   {
-    // Create a page for the selection tree view.
-    //
-    Tree tree = new Tree(getContainer(), SWT.MULTI);
-    selectionViewer = new TreeViewer(tree);
-    setCurrentViewer(selectionViewer);
+    final SetupLocationListener locationListener = new SetupLocationListener(true);
+    locationListener.setEditor(this);
 
-    selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
+    final ColumnViewerInformationControlToolTipSupport toolTipSupport = new ColumnViewerInformationControlToolTipSupport(viewer, locationListener);
+
+    locationListener.setToolTipSupport(toolTipSupport);
+
+    final SetupLabelProvider setupLabelProvider = new SetupLabelProvider(adapterFactory, viewer);
+
+    DiagnosticDecorator diagnosticDecorator = new DiagnosticDecorator(editingDomain, viewer, dialogSettings)
     {
-      @Override
-      public Object getParent(Object object)
+      final AdapterFactoryItemDelegator itemDelegator = new AdapterFactoryItemDelegator(adapterFactory)
       {
-        // Return the direct resource as the parent so that selection find the object directly in its own resource.
-        if (object instanceof InternalEObject)
+        @Override
+        public String getText(Object object)
         {
-          Resource resource = ((InternalEObject)object).eDirectResource();
-          if (resource != null)
+          if (object instanceof EClass)
           {
-            return resource;
+            return ((EClass)object).getName();
+          }
+
+          return super.getText(object);
+        }
+      };
+
+      @Override
+      protected BasicDiagnostic decorate(Map<Object, BasicDiagnostic> decorations, Object object, Diagnostic diagnostic, List<Integer> path)
+      {
+        if (diagnostic != null)
+        {
+          BasicDiagnostic oldDiagnostic = decorations.get(object);
+          if (oldDiagnostic != null)
+          {
+            for (Diagnostic oldChildDiagnostic : oldDiagnostic.getChildren())
+            {
+              if (equals(diagnostic, oldChildDiagnostic))
+              {
+                // Avoid adding structural equal duplicates.
+                // Because objects are reachable multiple times via cross resource containment,
+                // we generally end up with duplicates.
+                return oldDiagnostic;
+              }
+            }
           }
         }
-        return super.getParent(object);
-      }
-    });
 
-    selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new SetupLabelProvider(adapterFactory, selectionViewer),
-        new DiagnosticDecorator(editingDomain, selectionViewer, dialogSettings))
+        return super.decorate(decorations, object, diagnostic, path);
+      }
+
+      protected boolean equals(Diagnostic diagnostic1, Diagnostic diagnostic2)
+      {
+        if (diagnostic1.getCode() != diagnostic2.getCode())
+        {
+          return false;
+        }
+
+        if (diagnostic1.getSource() != diagnostic2.getSource())
+        {
+          return false;
+        }
+
+        if (diagnostic1.getSeverity() != diagnostic2.getSeverity())
+        {
+          return false;
+        }
+
+        if (!ObjectUtil.equals(diagnostic1.getMessage(), diagnostic2.getMessage()))
+        {
+          return false;
+        }
+
+        if (!diagnostic1.getData().equals(diagnostic2.getData()))
+        {
+          return false;
+        }
+
+        List<Diagnostic> children1 = diagnostic1.getChildren();
+        List<Diagnostic> children2 = diagnostic1.getChildren();
+        if (children1.size() != children2.size())
+        {
+          return false;
+        }
+
+        for (int i = 0, size = children1.size(); i < size; ++i)
+        {
+          Diagnostic child1 = children1.get(i);
+          Diagnostic child2 = children2.get(i);
+          if (!equals(child1, child2))
+          {
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      @Override
+      protected void buildToolTipText(StringBuilder result, ILabelProvider labelProvider, Diagnostic diagnostic, Object object)
+      {
+        int index = result.length();
+        super.buildToolTipText(result, labelProvider, diagnostic, object);
+
+        // We want to insert a header if the first header is the one for problems on children.
+        if (result.indexOf("<h1>Problems on Children</h1>\n") != index)
+        {
+          result.insert(index, "<h1>Problems</h1>\n");
+        }
+      }
+
+      @Override
+      public String getToolTipText(Object object)
+      {
+        boolean extend = false;
+        SetupLocationListener effectiveLocationListener;
+        if (object instanceof ToolTipObject)
+        {
+          ToolTipObject wrapper = (ToolTipObject)object;
+          object = wrapper.getWrappedObject();
+          effectiveLocationListener = wrapper.getLocationListener();
+          wrapper.getLocationListener().setToolTipObject(object, wrapper.getSetupEditor(), toolTipSupport);
+          extend = wrapper.isExtended();
+        }
+        else
+        {
+          // If the option is disabled, don't show the tool tip.
+          if (!SetupActionBarContributor.isShowTooltips() || getActionBarContributor().isInformationBrowserShowing())
+          {
+            return null;
+          }
+
+          effectiveLocationListener = locationListener;
+        }
+
+        Image image = setupLabelProvider.getImage(object);
+        if (image == null)
+        {
+          return null;
+        }
+
+        effectiveLocationListener.setToolTipObject(object, SetupEditor.this, toolTipSupport);
+
+        StringBuilder result = new StringBuilder();
+
+        result.append("<div style='word-break: break-all;'>");
+
+        URI imageURI = ImageURIRegistry.INSTANCE.getImageURI(image);
+        String labelText = setupLabelProvider.getText(object);
+        if (!extend)
+        {
+          result.append("<a href='?extend' style='text-decoration: none; color: inherit;'>");
+          result.append("<img style='padding-right: 2pt; margin-top: 2px; margin-bottom: -2pt;' src='");
+          result.append(imageURI);
+          result.append("'/><b>");
+          result.append(DiagnosticDecorator.escapeContent(labelText));
+          result.append("</b></a>");
+        }
+        else
+        {
+          EList<Object> path = new BasicEList<Object>();
+          for (Object parent = itemDelegator.getParent(object); parent != null; parent = itemDelegator.getParent(parent))
+          {
+            if (parent instanceof ResourceSet)
+            {
+              break;
+            }
+
+            path.add(0, parent);
+          }
+
+          int indent = 0;
+
+          for (Object element : path)
+          {
+            result.append("<div style='margin-left: ").append(indent).append("px;'>");
+            ToolTipLabelProvider.renderHTMLPropertyValue(result, itemDelegator, element, true);
+            result.append("</div>");
+
+            indent += 10;
+          }
+
+          result.append("<div style='margin-left: ").append(indent).append("px;'>");
+          result.append("<a href='?no-extend' style='text-decoration: none; color: inherit;'>");
+          result.append("<img style='padding-right: 2pt; margin-top: 2px; margin-bottom: -2pt;' src='");
+          result.append(imageURI);
+          result.append("'/><b>");
+          result.append(DiagnosticDecorator.escapeContent(labelText));
+          result.append("</b></a>");
+          result.append("</div>");
+
+          indent += 10;
+
+          for (Object child : itemDelegator.getChildren(object))
+          {
+            result.append("<div style='margin-left: ").append(indent).append("px;'>");
+            ToolTipLabelProvider.renderHTMLPropertyValue(result, itemDelegator, child, true);
+            result.append("</div>");
+          }
+        }
+
+        result.append("</div>\n");
+
+        List<IItemPropertyDescriptor> propertyDescriptors = new ArrayList<IItemPropertyDescriptor>();
+        List<IItemPropertyDescriptor> underlyingPropertyDescriptors = itemDelegator.getPropertyDescriptors(object);
+        if (underlyingPropertyDescriptors != null)
+        {
+          propertyDescriptors.addAll(underlyingPropertyDescriptors);
+        }
+
+        for (Iterator<IItemPropertyDescriptor> it = propertyDescriptors.iterator(); it.hasNext();)
+        {
+          IItemPropertyDescriptor itemPropertyDescriptor = it.next();
+          Object feature = itemPropertyDescriptor.getFeature(object);
+          Object propertyValue = itemPropertyDescriptor.getPropertyValue(object);
+          if (feature instanceof EStructuralFeature)
+          {
+            // Filter out the description property.
+            EStructuralFeature eStructuralFeature = (EStructuralFeature)feature;
+            if ("description".equals(eStructuralFeature.getName()) && propertyValue instanceof IItemPropertySource)
+            {
+              Object editableValue = ((IItemPropertySource)propertyValue).getEditableValue(object);
+              if (editableValue instanceof String)
+              {
+                String description = editableValue.toString();
+                if (description != null)
+                {
+                  result.append("<h1>Description</h1>");
+                  result.append(description);
+                  it.remove();
+                  continue;
+                }
+              }
+            }
+            else if (feature == SetupPackage.Literals.SETUP_TASK__DISABLED)
+            {
+              it.remove();
+              continue;
+            }
+          }
+
+          // Filter out any properties that have no value.
+          String valueLabel = itemPropertyDescriptor.getLabelProvider(object).getText(propertyValue);
+          if (StringUtil.isEmpty(valueLabel))
+          {
+            it.remove();
+          }
+        }
+
+        String diagnosticText = super.getToolTipText(object);
+        if (diagnosticText != null)
+        {
+          // Improve the layout for the images so the text lines up better.
+          Matcher matcher = IMAGE_PATTERN.matcher(diagnosticText);
+          StringBuffer improvedDiagnosticText = new StringBuffer();
+          while (matcher.find())
+          {
+            matcher.appendReplacement(improvedDiagnosticText, "$1" + "style='margin-bottom: -2pt;' " + "$2");
+          }
+
+          matcher.appendTail(improvedDiagnosticText);
+
+          result.append("\n").append(improvedDiagnosticText);
+        }
+
+        String propertyTable = ToolTipLabelProvider.renderHTML(propertyDescriptors, object, true);
+        if (propertyTable != null)
+        {
+          result.append("\n<h1>Properties</h1>\n");
+          result.append('\n').append(propertyTable);
+        }
+
+        // Improve all the headers to add some nice spacing.
+        StringBuffer improvedResult = new StringBuffer();
+        Matcher matcher = HEADER_PATTERN.matcher(result);
+        while (matcher.find())
+        {
+          matcher.appendReplacement(improvedResult, "$1" + " style='padding-bottom: 2pt; padding-top: 4pt;'" + "$2");
+        }
+
+        matcher.appendTail(improvedResult);
+
+        String finalText = improvedResult.toString();
+
+        try
+        {
+          AbstractHoverInformationControlManager hoverInformationControlManager = ReflectUtil.getValue("hoverInformationControlManager", toolTipSupport);
+          Point size = UIUtil.caclcuateSize(finalText);
+          hoverInformationControlManager.setSizeConstraints(size.x, size.y + (propertyDescriptors.size() + 1) / 3 + 1, true, false);
+        }
+        catch (Throwable throwable)
+        {
+          // Ignore.
+        }
+
+        return finalText;
+      }
+
+      @Override
+      protected void buildToolTipMessage(StringBuilder result, ILabelProvider labelProvider, Object object, Diagnostic diagnostic, int indentation)
+      {
+        StringBuilder builder = new StringBuilder();
+        super.buildToolTipMessage(builder, labelProvider, object, diagnostic, indentation);
+
+        // Fix the image for the small diagnostic severity icons that they don't have so much padding applied like the larger images.
+        StringBuffer improvedResult = new StringBuffer();
+        Matcher matcher = IMAGE_PATTERN.matcher(builder);
+        if (matcher.find())
+        {
+          matcher.appendReplacement(improvedResult, "$1" + "style='padding-bottom: 1px;' " + "$2");
+        }
+
+        matcher.appendTail(improvedResult);
+        result.append(improvedResult);
+      }
+    };
+
+    final Font font = viewer.getControl().getFont();
+    viewer.setLabelProvider(new DecoratingColumLabelProvider(setupLabelProvider, diagnosticDecorator)
     {
       @Override
       public String getText(Object element)
@@ -1748,11 +2306,27 @@ public class SetupEditor extends MultiPageEditorPart
 
         return text;
       }
+
+      @Override
+      public Font getFont(Object object)
+      {
+        Font result = super.getFont(object);
+        if (foreignResourceDecoration && object instanceof SetupTask)
+        {
+          SetupTask setupTask = (SetupTask)object;
+          Resource resource = setupTask.eResource();
+          if (resource == null || !editingDomain.getResourceSet().getResources().get(0).getURI().equals(resource.getURI()))
+          {
+            result = ExtendedFontRegistry.INSTANCE.getFont(result != null ? result : font, IItemFontProvider.ITALIC_FONT);
+          }
+        }
+
+        return result;
+      }
     });
 
-    selectionViewer.setInput(loadingResourceInput);
-
-    getViewer().getControl().addMouseListener(new MouseListener()
+    final Control control = viewer.getControl();
+    control.addMouseListener(new MouseListener()
     {
       public void mouseDoubleClick(MouseEvent e)
       {
@@ -1771,17 +2345,76 @@ public class SetupEditor extends MultiPageEditorPart
         // Do nothing
       }
 
-      public void mouseUp(MouseEvent e)
+      public void mouseUp(final MouseEvent e)
       {
-        // Do nothing
+        if ((e.stateMask & SWT.MOD3) != 0)
+        {
+          final boolean showTooltips = SetupActionBarContributor.isShowTooltips();
+          SetupActionBarContributor.setShowTooltips(true);
+          Event exitEvent = new Event();
+          exitEvent.display = e.display;
+          exitEvent.x = -1;
+          exitEvent.y = -1;
+          control.notifyListeners(SWT.MouseExit, exitEvent);
+
+          ReflectUtil.setValue("currentCell", toolTipSupport, null);
+
+          Event event = new Event();
+          event.display = e.display;
+          event.x = e.x;
+          event.y = e.y;
+          control.notifyListeners(SWT.MouseHover, event);
+
+          SetupActionBarContributor.setShowTooltips(showTooltips);
+        }
       }
     });
 
-    new AdapterFactoryTreeEditor(selectionViewer.getTree(), adapterFactory);
-    new ColumnViewerInformationControlToolTipSupport(selectionViewer, new DiagnosticDecorator.EditingDomainLocationListener(editingDomain, selectionViewer));
+    createContextMenuFor(viewer);
+  }
 
-    createContextMenuFor(selectionViewer);
+  /**
+   * This is the method used by the framework to install your own controls.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  @Override
+  public void createPages()
+  {
+    // Create a page for the selection tree view.
+    //
+    final Tree tree = new Tree(getContainer(), SWT.MULTI);
+    selectionViewer = new TreeViewer(tree);
+    setCurrentViewer(selectionViewer);
+
+    configure(selectionViewer, false);
+
+    selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
+    {
+      @Override
+      public Object getParent(Object object)
+      {
+        // Return the direct resource as the parent so that selection finds the object directly in its own resource.
+        if (object instanceof InternalEObject)
+        {
+          Resource resource = ((InternalEObject)object).eDirectResource();
+          if (resource != null)
+          {
+            return resource;
+          }
+        }
+
+        return super.getParent(object);
+      }
+    });
+
+    selectionViewer.setInput(loadingResourceInput);
+
+    new AdapterFactoryTreeEditor(selectionViewer.getTree(), adapterFactory);
+
     int pageIndex = addPage(tree);
+
     setPageText(pageIndex, getString("_UI_SelectionPage_label"));
 
     getSite().getShell().getDisplay().asyncExec(new Runnable()
@@ -2039,6 +2672,10 @@ public class SetupEditor extends MultiPageEditorPart
 
     private AdapterFactoryEditingDomain.EditingDomainProvider editingDomainProvider = new AdapterFactoryEditingDomain.EditingDomainProvider(editingDomain);
 
+    private ResourceLocator resourceLocator;
+
+    private AdapterFactoryItemDelegator itemDelegator;
+
     private class VariableContainer extends ItemProvider
     {
       private SetupTaskPerformer setupTaskPerformer;
@@ -2083,9 +2720,9 @@ public class SetupEditor extends MultiPageEditorPart
         }
       });
 
-      // Set up the tree viewer.
-      //
-      contentOutlineViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
+      itemDelegator = new AdapterFactoryItemDelegator(adapterFactory);
+
+      AdapterFactoryContentProvider contentProvider = new AdapterFactoryContentProvider(adapterFactory)
       {
         @Override
         public boolean hasChildren(Object object)
@@ -2133,33 +2770,13 @@ public class SetupEditor extends MultiPageEditorPart
           Object parent = parents.get(object);
           return parent != null ? parent : super.getParent(object);
         }
-      });
-
-      final Font font = contentOutlineViewer.getControl().getFont();
-      labelProvider = new SetupLabelProvider(adapterFactory, contentOutlineViewer)
-      {
-        @Override
-        public Font getFont(Object object)
-        {
-          Font result = super.getFont(object);
-          if (object instanceof SetupTask)
-          {
-            SetupTask setupTask = (SetupTask)object;
-            Resource resource = setupTask.eResource();
-            if (resource == null || !editingDomain.getResourceSet().getResources().get(0).getURI().equals(resource.getURI()))
-            {
-              result = ExtendedFontRegistry.INSTANCE.getFont(result != null ? result : font, IItemFontProvider.ITALIC_FONT);
-            }
-          }
-
-          return result;
-        }
       };
-      contentOutlineViewer.setLabelProvider(labelProvider);
 
-      // Make sure our popups work.
-      //
-      createContextMenuFor(contentOutlineViewer);
+      contentOutlineViewer.setContentProvider(contentProvider);
+
+      configure(contentOutlineViewer, true);
+
+      labelProvider = (ILabelProvider)contentOutlineViewer.getLabelProvider();
 
       selectionViewer.addSelectionChangedListener(new ISelectionChangedListener()
       {
@@ -2224,6 +2841,14 @@ public class SetupEditor extends MultiPageEditorPart
         copyMap.clear();
         inverseCopyMap.clear();
 
+        ResourceSet resourceSet = editingDomain.getResourceSet();
+        if (resourceLocator != null)
+        {
+          resourceLocator.dispose();
+        }
+
+        resourceLocator = new ResourceLocator(resourceSet);
+
         for (Notifier notifier : notifiers)
         {
           notifier.eAdapters().clear();
@@ -2233,7 +2858,6 @@ public class SetupEditor extends MultiPageEditorPart
 
         try
         {
-          ResourceSet resourceSet = editingDomain.getResourceSet();
           EList<Resource> resources = resourceSet.getResources();
           if (!resources.isEmpty())
           {
@@ -2351,15 +2975,84 @@ public class SetupEditor extends MultiPageEditorPart
       return result;
     }
 
-    private ItemProvider getTriggeredTasks(Project project)
+    private ItemProvider getTriggeredTasks(final Project project)
     {
-      final ItemProvider projectItem = new ItemProvider(labelProvider.getText(project), labelProvider.getImage(project));
+      class ProjectItemProvider extends ItemProvider implements IWrapperItemProvider
+      {
+        public ProjectItemProvider()
+        {
+          super(labelProvider.getText(project), labelProvider.getImage(project));
+        }
+
+        public Object getValue()
+        {
+          return project;
+        }
+
+        public Object getOwner()
+        {
+          return project;
+        }
+
+        public EStructuralFeature getFeature()
+        {
+          return null;
+        }
+
+        public int getIndex()
+        {
+          return 0;
+        }
+
+        public void setIndex(int index)
+        {
+        }
+      }
+
+      final ItemProvider projectItem = new ProjectItemProvider();
 
       EList<Object> projectItemChildren = projectItem.getChildren();
       EList<Stream> streams = project.getStreams();
-      for (Stream stream : streams)
+      for (final Stream stream : streams)
       {
-        final ItemProvider branchItem = new ItemProvider(labelProvider.getText(stream), labelProvider.getImage(stream));
+        class BranchItemProvider extends ItemProvider implements IItemPropertySource
+        {
+          public BranchItemProvider()
+          {
+            super(labelProvider.getText(stream), labelProvider.getImage(stream));
+          }
+
+          public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
+          {
+            List<IItemPropertyDescriptor> descriptors = itemDelegator.getPropertyDescriptors(stream);
+
+            List<IItemPropertyDescriptor> result = new ArrayList<IItemPropertyDescriptor>();
+            for (IItemPropertyDescriptor descriptor : descriptors)
+            {
+              result.add(new ItemPropertyDescriptorDecorator(stream, descriptor));
+            }
+
+            return result;
+          }
+
+          public IItemPropertyDescriptor getPropertyDescriptor(Object object, Object propertyID)
+          {
+            IItemPropertyDescriptor descriptor = itemDelegator.getPropertyDescriptor(stream, propertyID);
+            if (descriptor != null)
+            {
+              return new ItemPropertyDescriptorDecorator(stream, descriptor);
+            }
+
+            return null;
+          }
+
+          public Object getEditableValue(Object object)
+          {
+            return itemDelegator.getEditableValue(stream);
+          }
+        }
+
+        final ItemProvider branchItem = new BranchItemProvider();
         projectItemChildren.add(branchItem);
 
         ProductVersion version = null;
@@ -2367,6 +3060,18 @@ public class SetupEditor extends MultiPageEditorPart
         if (projectCatalog != null)
         {
           EObject rootContainer = EcoreUtil.getRootContainer(projectCatalog);
+          if (!(rootContainer instanceof Index))
+          {
+            for (Resource resource : editingDomain.getResourceSet().getResources())
+            {
+              Object index = EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
+              if (index != null)
+              {
+                rootContainer = (EObject)index;
+              }
+            }
+          }
+
           if (rootContainer instanceof Index)
           {
             Index index = (Index)rootContainer;
@@ -2403,7 +3108,8 @@ public class SetupEditor extends MultiPageEditorPart
           version.getSetupTasks().clear();
 
           SetupContext setupContext = SetupContext.create(version, stream);
-          URIConverter uriConverter = getEditingDomain().getResourceSet().getURIConverter();
+          ResourceSet resourceSet = getEditingDomain().getResourceSet();
+          URIConverter uriConverter = resourceSet.getURIConverter();
 
           SetupTaskPerformer setupTaskPerformer = new SetupTaskPerformer(uriConverter, SetupPrompter.CANCEL, trigger, setupContext, stream);
           List<SetupTask> triggeredSetupTasks = new ArrayList<SetupTask>(setupTaskPerformer.getTriggeredSetupTasks());
@@ -2411,6 +3117,14 @@ public class SetupEditor extends MultiPageEditorPart
 
           if (!triggeredSetupTasks.isEmpty())
           {
+            URI baseURI = URI.createURI("performer:/" + stream.getQualifiedName());
+            URI uri = baseURI.appendSegment("tasks.setup");
+
+            Resource fakeResource = new BaseResourceImpl(uri);
+            fakeResource.eAdapters().add(editingDomainProvider);
+            EList<EObject> fakeResourceContents = fakeResource.getContents();
+            resourceLocator.map(uri, fakeResource);
+
             for (EObject eObject : setupTaskPerformer.getCopyMap().values())
             {
               notifiers.add(eObject);
@@ -2420,6 +3134,29 @@ public class SetupEditor extends MultiPageEditorPart
               {
                 resource.eAdapters().add(editingDomainProvider);
                 notifiers.add(resource);
+
+                URI originalURI = resource.getURI();
+                URI newURI = baseURI.appendSegment(originalURI.scheme() + ":").appendSegments(originalURI.segments());
+                resource.setURI(newURI);
+                resourceLocator.map(newURI, resource);
+              }
+
+              resource = eObject.eResource();
+              if (resource == null || resource == fakeResource)
+              {
+                try
+                {
+                  EcoreUtil.setID(eObject, null);
+                }
+                catch (IllegalArgumentException ex)
+                {
+                  // Ignore.
+                }
+
+                if (eObject.eContainer() == null)
+                {
+                  fakeResourceContents.add(eObject);
+                }
               }
             }
 
@@ -2429,6 +3166,7 @@ public class SetupEditor extends MultiPageEditorPart
             for (String key : sortStrings(undeclaredVariables))
             {
               VariableTask contextVariableTask = SetupFactory.eINSTANCE.createVariableTask();
+              fakeResourceContents.add(contextVariableTask);
               contextVariableTask.setName(key);
               undeclaredVariablesItemChildren.add(contextVariableTask);
               parents.put(contextVariableTask, undeclaredVariablesItem);
@@ -2444,6 +3182,11 @@ public class SetupEditor extends MultiPageEditorPart
             List<VariableTask> unresolvedVariables = setupTaskPerformer.getUnresolvedVariables();
             for (VariableTask contextVariableTask : sortVariables(unresolvedVariables))
             {
+              if (contextVariableTask.eContainer() == null && contextVariableTask.eResource() == null)
+              {
+                fakeResourceContents.add(contextVariableTask);
+              }
+
               unresolvedVariablesItemChildren.add(contextVariableTask);
               parents.put(contextVariableTask, unresolvedVariablesItem);
             }
@@ -2458,6 +3201,11 @@ public class SetupEditor extends MultiPageEditorPart
             List<VariableTask> resolvedVariables = setupTaskPerformer.getResolvedVariables();
             for (VariableTask contextVariableTask : sortVariables(resolvedVariables))
             {
+              if (contextVariableTask.eContainer() == null && contextVariableTask.eResource() == null)
+              {
+                fakeResourceContents.add(contextVariableTask);
+              }
+
               resolvedVariablesItemChildren.add(contextVariableTask);
               parents.put(contextVariableTask, resolvedVariablesItem);
             }
@@ -2557,6 +3305,31 @@ public class SetupEditor extends MultiPageEditorPart
     public <T> T getAdapter(Class<T> adapter)
     {
       return (T)FindAndReplaceTarget.getAdapter(adapter, SetupEditor.this);
+    }
+
+    public SetupEditor getSetupEditor()
+    {
+      return SetupEditor.this;
+    }
+
+    public class ResourceLocator extends ResourceSetImpl.MappedResourceLocator
+    {
+      public ResourceLocator(ResourceSet resourceSet)
+      {
+        super((ResourceSetImpl)resourceSet);
+      }
+
+      @Override
+      public void map(URI normalizedURI, Resource resource)
+      {
+        super.map(normalizedURI, resource);
+      }
+
+      @Override
+      public void dispose()
+      {
+        super.dispose();
+      }
     }
   }
 
@@ -3101,7 +3874,7 @@ public class SetupEditor extends MultiPageEditorPart
    * This implements {@link org.eclipse.jface.action.IMenuListener} to help fill the context menus with contributions from the Edit menu.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public void menuAboutToShow(IMenuManager menuManager)
   {
@@ -3318,6 +4091,1277 @@ public class SetupEditor extends MultiPageEditorPart
     public void save(String fileName) throws IOException
     {
       dialogSettings.save(fileName);
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static class SetupLocationListener extends ColumnViewerInformationControlToolTipSupport.PathLocationListener
+  {
+    private static boolean styleSheetInitialized;
+
+    private Browser browser;
+
+    private ToolBar toolBar;
+
+    private ToolItem editTextItem;
+
+    private ToolItem editSetupItem;
+
+    private ToolItem showToolTipsItem;
+
+    private ToolItem liveValidationItem;
+
+    private ToolTipObject toolTipObject;
+
+    private List<ToolTipObject> toolTipObjects = new ArrayList<ToolTipObject>();
+
+    private int toolTipIndex = -1;
+
+    private ToolItem backwardItem;
+
+    private ToolItem forwardItem;
+
+    private SetupEditor setupEditor;
+
+    private boolean editorSpecific;
+
+    private final Map<SetupEditor, DisposeListener> editorDisposeListeners = new HashMap<SetupEditor, DisposeListener>();
+
+    private ColumnViewerInformationControlToolTipSupport toolTipSupport;
+
+    private SetupLocationListener(boolean editorSpecific)
+    {
+      super(null);
+      this.editorSpecific = editorSpecific;
+    }
+
+    public void setToolTipSupport(ColumnViewerInformationControlToolTipSupport toolTipSupport)
+    {
+      this.toolTipSupport = toolTipSupport;
+      initializeStyleSheet();
+    }
+
+    private void initializeStyleSheet()
+    {
+      if (!styleSheetInitialized)
+      {
+        // String styleSheet = toolTipSupport.getStyleSheet();
+        // ReflectUtil.setValue("defaultStyleSheet", toolTipSupport,
+        // styleSheet + "\n" + //
+        // ".hover-link: \t{ text-decoration: none; color: inherit; }\n" + //
+        // "hover-link:hover \t{ text-decoration: underline; }\n" + //
+        // "\n");
+        styleSheetInitialized = true;
+      }
+    }
+
+    protected void setEditor(SetupEditor setupEditor)
+    {
+      this.setupEditor = setupEditor;
+
+      if (!editorSpecific && setupEditor != null)
+      {
+        DisposeListener disposeListener = editorDisposeListeners.get(setupEditor);
+        if (disposeListener == null)
+        {
+          disposeListener = new DisposeListener()
+          {
+            private SetupEditor setupEditor = SetupLocationListener.this.setupEditor;
+
+            public void widgetDisposed(DisposeEvent e)
+            {
+              editorDisposeListeners.remove(setupEditor);
+
+              for (Iterator<ToolTipObject> it = toolTipObjects.iterator(); it.hasNext();)
+              {
+                ToolTipObject wrapper = it.next();
+                if (wrapper.getSetupEditor() == setupEditor)
+                {
+                  it.remove();
+                  --toolTipIndex;
+                }
+              }
+
+              navigate(toolTipIndex);
+            }
+          };
+
+          setupEditor.getContainer().addDisposeListener(disposeListener);
+          editorDisposeListeners.put(setupEditor, disposeListener);
+        }
+      }
+    }
+
+    public void setToolTipObject(Object toolTipObject, SetupEditor setupEditor, ColumnViewerInformationControlToolTipSupport toolTipSupport)
+    {
+      this.toolTipObject = new ToolTipObject(toolTipObject, this, setupEditor, false);
+
+      setEditor(setupEditor);
+      setToolTipSupport(toolTipSupport);
+      toolTipObjects = new ArrayList<ToolTipObject>(toolTipObjects.subList(0, toolTipIndex + 1));
+      toolTipObjects.add(this.toolTipObject);
+    }
+
+    @Override
+    public void changed(LocationEvent event)
+    {
+      String url = browser.getUrl();
+      if (!"about:blank".equals(url))
+      {
+        if (toolTipIndex >= 0 && toolTipIndex < toolTipObjects.size() && !toolTipObjects.get(toolTipIndex).getWrappedObject().toString().equals(url))
+        {
+          setToolTipObject(URI.createURI(url), setupEditor, toolTipSupport);
+          toolTipIndex = toolTipObjects.size() - 1;
+        }
+      }
+    }
+
+    @Override
+    public void changing(LocationEvent event)
+    {
+      Object source = event.getSource();
+      if (source instanceof Browser)
+      {
+        browser = (Browser)source;
+        Composite parent = browser.getParent();
+
+        // If we've not created a tool bar yet, do it when the shell is becoming active the first time.
+        boolean toolBarCreated = false;
+        if (toolBar == null)
+        {
+          toolBarCreated = true;
+
+          // Change the parent to use a grid layout.
+          GridLayout gridLayout = new GridLayout();
+          gridLayout.marginHeight = 0;
+          gridLayout.marginWidth = 0;
+          gridLayout.horizontalSpacing = 0;
+          gridLayout.verticalSpacing = 0;
+          parent.setLayout(gridLayout);
+
+          // The main control should fill everything as much as possible.
+          GridData controlGridData = new GridData();
+          controlGridData.verticalAlignment = GridData.FILL;
+          controlGridData.grabExcessVerticalSpace = true;
+          controlGridData.horizontalAlignment = GridData.FILL;
+          controlGridData.grabExcessHorizontalSpace = true;
+          browser.setLayoutData(controlGridData);
+
+          // The tool bar should just be as tall as it needs to be and fill the horizontal space.
+          toolBar = new ToolBar(parent, SWT.FLAT | SWT.HORIZONTAL | SWT.SHADOW_OUT);
+          GridData toolBarGridData = new GridData();
+          toolBarGridData.verticalAlignment = GridData.FILL;
+          toolBarGridData.horizontalAlignment = GridData.FILL;
+          toolBarGridData.grabExcessHorizontalSpace = true;
+          toolBar.setLayoutData(toolBarGridData);
+
+          class NavigationListener extends SelectionAdapter
+          {
+            private final boolean forward;
+
+            public NavigationListener(boolean forward)
+            {
+              this.forward = forward;
+            }
+
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+              if (e.detail == SWT.ARROW)
+              {
+                Rectangle bounds = (forward ? forwardItem : backwardItem).getBounds();
+                Point location = new Point(bounds.x, bounds.y + bounds.height);
+                location = toolBar.toDisplay(location);
+                Menu menu = new Menu(browser.getShell());
+
+                for (int i = toolTipObjects.size() - 1; i >= 0; --i)
+                {
+                  ToolTipObject wrapper = toolTipObjects.get(i);
+                  Object wrappedObject = wrapper.getWrappedObject();
+                  String text;
+                  if (wrappedObject instanceof URI)
+                  {
+                    text = wrappedObject.toString();
+                  }
+                  else
+                  {
+                    URI uri = SetupActionBarContributor.getEditURI(wrappedObject, true);
+                    if (uri == null)
+                    {
+                      continue;
+                    }
+
+                    text = uri.toString();
+                  }
+
+                  MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
+                  menuItem.setText(text);
+                  if (i == toolTipIndex)
+                  {
+                    menuItem.setSelection(true);
+                  }
+
+                  ILabelProvider labelProvider = (ILabelProvider)wrapper.getSetupEditor().selectionViewer.getLabelProvider();
+                  Image image = labelProvider.getImage(wrappedObject);
+                  if (image != null)
+                  {
+                    menuItem.setImage(image);
+                  }
+
+                  final int index = i;
+                  menuItem.addSelectionListener(new SelectionAdapter()
+                  {
+                    @Override
+                    public void widgetSelected(SelectionEvent e)
+                    {
+                      navigate(index);
+                    }
+                  });
+                }
+
+                menu.setLocation(location.x, location.y);
+                menu.setVisible(true);
+              }
+              else if (forward)
+              {
+                navigate(toolTipIndex + 1);
+              }
+              else
+              {
+                navigate(toolTipIndex - 1);
+              }
+            }
+          }
+
+          backwardItem = createItem(SWT.DROP_DOWN, "backward", "Back", new NavigationListener(false));
+
+          forwardItem = createItem(SWT.DROP_DOWN, "forward", "Forward", new NavigationListener(true));
+
+          new ToolItem(toolBar, SWT.SEPARATOR);
+
+          editSetupItem = createItem(SWT.PUSH, "edit_setup", "Open in Setup Editor", new SelectionAdapter()
+          {
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+              Object unwrappedObject = ToolTipObject.unwrap(toolTipObject);
+              setupEditor.getActionBarContributor().openInSetupEditor(unwrappedObject);
+            }
+          });
+
+          editTextItem = createItem(SWT.PUSH, "edit_text", "Open in Text Editor", new SelectionAdapter()
+          {
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+              Object unwrappedObject = ToolTipObject.unwrap(toolTipObject);
+              setupEditor.getActionBarContributor().openInTextEditor(unwrappedObject);
+            }
+          });
+
+          if (editorSpecific)
+          {
+            createItem(SWT.PUSH, "show_properties_view", "Show Properties View", new SelectionAdapter()
+            {
+              @Override
+              public void widgetSelected(SelectionEvent e)
+              {
+                try
+                {
+                  setupEditor.getSite().getWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.PropertySheet");
+                }
+                catch (PartInitException ex)
+                {
+                  SetupEditorPlugin.INSTANCE.log(ex);
+                }
+              }
+            });
+
+            createItem(SWT.PUSH, "open_browser", "Open Information Browser", new SelectionAdapter()
+            {
+              @Override
+              public void widgetSelected(SelectionEvent e)
+              {
+                setupEditor.getActionBarContributor().showInformationBrowser(ToolTipObject.unwrap(toolTipObject));
+              }
+            });
+
+            new ToolItem(toolBar, SWT.SEPARATOR);
+
+            showToolTipsItem = createItem(SWT.CHECK, "show_tooltips", "Show Tooltips (Alt-Mouse-Click)", new SelectionAdapter()
+            {
+              @Override
+              public void widgetSelected(SelectionEvent e)
+              {
+                boolean show = showToolTipsItem.getSelection();
+                SetupActionBarContributor.setShowTooltips(show);
+              }
+            });
+
+            liveValidationItem = createItem(SWT.CHECK, "live_validation", "Live Validation", new SelectionAdapter()
+            {
+              @Override
+              public void widgetSelected(SelectionEvent e)
+              {
+                boolean liveValidation = liveValidationItem.getSelection();
+                setupEditor.getActionBarContributor().setLiveValidation(liveValidation);
+              }
+            });
+          }
+        }
+
+        final Shell shell = browser.getShell();
+        if (!shell.isVisible() && editorSpecific || toolBarCreated)
+        {
+          toolTipObjects = new ArrayList<ToolTipObject>();
+          if (toolTipObject == null)
+          {
+            toolTipIndex = -1;
+          }
+          else
+          {
+            toolTipIndex = 0;
+            toolTipObjects.add(toolTipObject);
+          }
+
+          // Delay this until the shell has sized properly.
+          UIUtil.asyncExec(shell, new Runnable()
+          {
+            public void run()
+            {
+              // Increase the height by the height of the tool bar.
+              Point computeSize = toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+              Point size = shell.getSize();
+              size.y += computeSize.y;
+              shell.setSize(size);
+            }
+          });
+
+          parent.layout(true);
+        }
+
+        if (setupEditor != null)
+        {
+          URI uri = URI.createURI(event.location);
+          Resource resource = setupEditor.editingDomain.getResourceSet().getResource(uri.trimFragment(), false);
+          Object selection = resource;
+          if (resource != null)
+          {
+            String fragment = uri.fragment();
+            if (fragment != null)
+            {
+              EObject eObject = resource.getEObject(fragment);
+              if (eObject != null)
+              {
+                selection = eObject;
+              }
+            }
+
+            setSelection(selection);
+            event.doit = false;
+          }
+
+          if (event.doit)
+          {
+            if ("path".equals(uri.scheme()))
+            {
+              viewer = setupEditor.selectionViewer;
+              super.changing(event);
+            }
+          }
+
+          if ("about:blank#".equals(event.location))
+          {
+            event.doit = false;
+          }
+          else if ("about:blank?extend".equals(event.location))
+          {
+            ToolTipObject wrapper = toolTipObjects.get(toolTipIndex);
+            ToolTipObject extendedWrapper = new ToolTipObject(wrapper.getWrappedObject(), this, wrapper.getSetupEditor(), true);
+            toolTipObjects.set(toolTipIndex, extendedWrapper);
+            navigate(toolTipIndex);
+
+            event.doit = false;
+          }
+          else if ("about:blank?no-extend".equals(event.location))
+          {
+            ToolTipObject wrapper = toolTipObjects.get(toolTipIndex);
+            ToolTipObject extendedWrapper = new ToolTipObject(wrapper.getWrappedObject(), this, wrapper.getSetupEditor(), false);
+            toolTipObjects.set(toolTipIndex, extendedWrapper);
+            navigate(toolTipIndex);
+
+            event.doit = false;
+          }
+          else if ("property".equals(uri.scheme()))
+          {
+            ToolTipObject wrapper = toolTipObjects.get(toolTipIndex);
+            setupEditor.getActionBarContributor().openInPropertiesView(wrapper.getSetupEditor(), wrapper.getWrappedObject(), URI.decode(uri.segment(0)));
+
+            event.doit = false;
+          }
+        }
+
+        backwardItem.setEnabled(toolTipIndex > 0);
+        forwardItem.setEnabled(toolTipIndex + 1 < toolTipObjects.size());
+        editSetupItem.setEnabled(SetupActionBarContributor.getEditURI(ToolTipObject.unwrap(toolTipObject), !editorSpecific) != null);
+        editTextItem.setEnabled(SetupActionBarContributor.getEditURI(ToolTipObject.unwrap(toolTipObject), true) != null);
+
+        if (editorSpecific)
+        {
+          showToolTipsItem.setSelection(SetupActionBarContributor.isShowTooltips());
+          liveValidationItem.setSelection(setupEditor.getActionBarContributor().isLiveValidation());
+        }
+      }
+    }
+
+    private ToolItem createItem(int style, String imageKey, String toolTipText, SelectionListener selectionListener)
+    {
+      ToolItem toolItem = new ToolItem(toolBar, style);
+      toolItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage(imageKey));
+      toolItem.setToolTipText(toolTipText);
+      toolItem.addSelectionListener(selectionListener);
+      return toolItem;
+    }
+
+    @SuppressWarnings("restriction")
+    private String getFullHTML(String text)
+    {
+      if (setupEditor == null)
+      {
+        return text;
+      }
+
+      StringBuffer result = new StringBuffer(text);
+      String styleSheet = toolTipSupport.getStyleSheet();
+      String symbolicFont = (String)ReflectUtil.invokeMethod("getSymbolicFont", toolTipSupport);
+
+      FontData fontData = JFaceResources.getFontRegistry().getFontData(symbolicFont)[0];
+      styleSheet = org.eclipse.jface.internal.text.html.HTMLPrinter.convertTopLevelFont(styleSheet, fontData);
+      Color foregroundColor = browser.getForeground();
+      Color backgroundColor = browser.getBackground();
+
+      org.eclipse.jface.internal.text.html.HTMLPrinter.insertPageProlog(result, 0, foregroundColor == null ? null : foregroundColor.getRGB(),
+          backgroundColor == null ? null : backgroundColor.getRGB(), styleSheet);
+      org.eclipse.jface.internal.text.html.HTMLPrinter.addPageEpilog(result);
+      return result.toString();
+    }
+
+    protected void navigate(int index)
+    {
+      if (toolTipIndex == -1)
+      {
+        setEditor(null);
+        toolTipObject = null;
+        browser.setText(getFullHTML("No history"), false);
+      }
+      else
+      {
+        List<ToolTipObject> toolTipObjects = this.toolTipObjects;
+
+        toolTipObject = toolTipObjects.get(index);
+
+        setEditor(toolTipObject.getSetupEditor());
+
+        Object wrappedObject = toolTipObject.getWrappedObject();
+        if (wrappedObject instanceof URI)
+        {
+          browser.setUrl(wrappedObject.toString());
+        }
+        else
+        {
+          IToolTipProvider toolTipProvider = (IToolTipProvider)setupEditor.selectionViewer.getLabelProvider();
+          String toolTipText = toolTipProvider.getToolTipText(toolTipObject);
+          browser.setText(getFullHTML(toolTipText), false);
+        }
+
+        this.toolTipObjects = toolTipObjects;
+        toolTipIndex = index;
+      }
+
+      backwardItem.setEnabled(toolTipIndex > 0);
+      forwardItem.setEnabled(toolTipIndex + 1 < toolTipObjects.size());
+    }
+
+    @Override
+    protected void setSelection(Object object)
+    {
+      IToolTipProvider toolTipProvider = (IToolTipProvider)setupEditor.selectionViewer.getLabelProvider();
+      String toolTipText = toolTipProvider.getToolTipText(new ToolTipObject(object, this, setupEditor, false));
+      if (!StringUtil.isEmpty(toolTipText))
+      {
+        ++toolTipIndex;
+        browser.setText(getFullHTML(toolTipText), false);
+      }
+    }
+
+    public void dispose()
+    {
+      for (Entry<SetupEditor, DisposeListener> entry : editorDisposeListeners.entrySet())
+      {
+        entry.getKey().getContainer().removeDisposeListener(entry.getValue());
+      }
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static final class ToolTipObject
+  {
+    private final Object wrappedObject;
+
+    private final SetupLocationListener locationListener;
+
+    private final SetupEditor setupEditor;
+
+    private boolean extended;
+
+    public ToolTipObject(Object wrappedObject, SetupLocationListener locationListener, SetupEditor setupEditor, boolean extended)
+    {
+      this.wrappedObject = wrappedObject;
+      this.locationListener = locationListener;
+      this.setupEditor = setupEditor;
+      this.extended = extended;
+    }
+
+    public Object getWrappedObject()
+    {
+      return wrappedObject;
+    }
+
+    public SetupLocationListener getLocationListener()
+    {
+      return locationListener;
+    }
+
+    public SetupEditor getSetupEditor()
+    {
+      return setupEditor;
+    }
+
+    public boolean isExtended()
+    {
+      return extended;
+    }
+
+    @Override
+    public String toString()
+    {
+      return super.toString() + " -> " + wrappedObject;
+    }
+
+    public static Object unwrap(Object object)
+    {
+      if (object instanceof ToolTipObject)
+      {
+        return ((ToolTipObject)object).getWrappedObject();
+      }
+
+      return object;
+    }
+  }
+
+  /**
+   * A Dialog for browsing tool tip information in a non-modal shell associated with a workbench window.
+   * Generally the constructor is not used to create an instance but rather the {@link #openFor(IWorkbenchWindow) open} method which maintains one instance per workbench window..
+   *
+   * @author Ed Merks
+   */
+  public static class BrowserDialog extends Dialog
+  {
+    /**
+     * There can be at most one per workbench window.
+     */
+    private static final Map<IWorkbenchWindow, BrowserDialog> BROWSERS = new HashMap<IWorkbenchWindow, BrowserDialog>();
+
+    private final IWorkbenchWindow workbenchWindow;
+
+    private final SetupLocationListener locationListener = new SetupLocationListener(false);
+
+    /**
+     * Listens to any interesting selection changes in the workbench.
+     */
+    private final ISelectionListener selectionListener = new ISelectionListener()
+    {
+      public void selectionChanged(IWorkbenchPart part, ISelection selection)
+      {
+        setWorkbenchPart(part);
+        if (locationListener.setupEditor != null)
+        {
+          if (selection instanceof IStructuredSelection)
+          {
+            Object object = ((IStructuredSelection)selection).getFirstElement();
+            if (object != null)
+            {
+              locationListener.setSelection(object);
+            }
+          }
+        }
+      }
+    };
+
+    private Browser browser;
+
+    protected BrowserDialog(IWorkbenchWindow workbenchWindow)
+    {
+      super(workbenchWindow.getShell());
+
+      setShellStyle(getShellStyle() ^ SWT.APPLICATION_MODAL | SWT.MODELESS | SWT.RESIZE | SWT.MAX | SWT.MIN);
+      setBlockOnOpen(false);
+
+      this.workbenchWindow = workbenchWindow;
+    }
+
+    protected void setWorkbenchPart(IWorkbenchPart part)
+    {
+      // Determines if the part corresponds to one that can show a setup editor's information via its selection.
+      SetupEditor setupEditor = null;
+      if (part instanceof SetupEditor)
+      {
+        setupEditor = (SetupEditor)part;
+      }
+      else if (part instanceof ContentOutline)
+      {
+        ContentOutline contentOutline = (ContentOutline)part;
+        IPage page = contentOutline.getCurrentPage();
+        if (page instanceof SetupEditor.OutlinePreviewPage)
+        {
+          SetupEditor.OutlinePreviewPage outlinePreviewPage = (OutlinePreviewPage)page;
+          setupEditor = outlinePreviewPage.getSetupEditor();
+        }
+      }
+
+      locationListener.setEditor(setupEditor);
+
+      // If there is no setup editor, hide the shell, otherwise show the shell.
+      Shell shell = getShell();
+      if (setupEditor == null)
+      {
+        shell.setVisible(false);
+        shell.setData("forced", true);
+        shell.setMinimized(true);
+        shell.notifyListeners(SWT.Iconify, new Event());
+      }
+      else if (Boolean.TRUE.equals(shell.getData("forced")))
+      {
+        shell.setMinimized(false);
+        shell.notifyListeners(SWT.Deiconify, new Event());
+        shell.setData("forced", false);
+        shell.setVisible(true);
+      }
+    }
+
+    /**
+     * Updates the contents based on the setup editor's input object.
+     */
+    protected void setInput(SetupEditor setupEditor, Object input)
+    {
+      setWorkbenchPart(setupEditor);
+
+      // If the input is a URI...
+      LocationEvent event = new LocationEvent(browser);
+      if (input instanceof URI)
+      {
+        // Handle it just like we are following it as a link and set it into the browser as a URL.
+        event.location = ((URI)input).toString();
+        locationListener.changing(event);
+        browser.setUrl(event.location);
+      }
+      else
+      {
+        // Otherwise it must be an appropriate object with an associated URI.
+        URI uri = SetupActionBarContributor.getEditURI(ToolTipObject.unwrap(input), true);
+        event.location = uri == null ? "about:blank" : uri.toString();
+        locationListener.changing(event);
+
+        // If there is no URI, treat it as if we were selected by navigating from a page.
+        if (uri == null)
+        {
+          locationListener.setSelection(input);
+        }
+      }
+    }
+
+    @Override
+    protected IDialogSettings getDialogBoundsSettings()
+    {
+      return SetupEditorPlugin.INSTANCE.getDialogSettings("Browser");
+    }
+
+    @Override
+    protected Control createContents(Composite parent)
+    {
+      getShell().setText("Setup Information Browser");
+
+      // Create this just like the column viewer tooltip information control so that the we can reuse the logic in the setup location listener.
+      Composite composite = new Composite(parent, SWT.NONE);
+      FillLayout layout = new FillLayout();
+      composite.setLayout(layout);
+      GridData layoutData = new GridData(GridData.FILL_BOTH);
+      layoutData.widthHint = 800;
+      layoutData.heightHint = 600;
+      composite.setLayoutData(layoutData);
+      applyDialogFont(composite);
+
+      initializeDialogUnits(composite);
+
+      browser = new Browser(composite, SWT.NONE);
+      Display display = parent.getDisplay();
+      browser.setForeground(display.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
+      browser.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+      browser.addLocationListener(locationListener);
+
+      // Hook up the selection listener and be sure we clean it up when the browser is disposed.
+      final ISelectionService selectionService = workbenchWindow.getSelectionService();
+      selectionService.addPostSelectionListener(selectionListener);
+      browser.addDisposeListener(new DisposeListener()
+      {
+        public void widgetDisposed(DisposeEvent e)
+        {
+          locationListener.dispose();
+          selectionService.removePostSelectionListener(selectionListener);
+        }
+      });
+
+      return composite;
+    }
+
+    /**
+     * Close the instance for this workbench window, if there is one.
+     */
+    public static void closeFor(final IWorkbenchWindow workbenchWindow)
+    {
+      BrowserDialog browserDialog = BROWSERS.get(workbenchWindow);
+      if (browserDialog != null)
+      {
+        browserDialog.close();
+      }
+    }
+
+    /**
+     * Reopen or create the instance for this workbench window.
+     */
+    public static BrowserDialog openFor(final IWorkbenchWindow workbenchWindow)
+    {
+      // Create a new one if there isn't an existing one.
+      BrowserDialog browserDialog = BROWSERS.get(workbenchWindow);
+      if (browserDialog == null)
+      {
+        browserDialog = new BrowserDialog(workbenchWindow);
+        BROWSERS.put(workbenchWindow, browserDialog);
+        browserDialog.open();
+
+        // Be sure to clean it from the map when either the workbench window or the browser itself is disposed.
+        DisposeListener disposeListener = new DisposeListener()
+        {
+          public void widgetDisposed(DisposeEvent e)
+          {
+            BROWSERS.remove(workbenchWindow);
+          }
+        };
+
+        // Also clean up if the workbench window is disposed.
+        final Shell windowShell = workbenchWindow.getShell();
+        windowShell.addDisposeListener(disposeListener);
+
+        // Also clean up if the browser is disposed.
+        final Shell shell = browserDialog.getShell();
+        shell.addDisposeListener(disposeListener);
+
+        /**
+         * This monitors the shell events, such as dragging to a new position.
+         * It's primary purpose to to support docking of the browser shell into a part stack on a workbench window.
+         *
+         * @author Ed Merks
+         */
+        class ShellHandler extends ShellAdapter implements ControlListener, Runnable
+        {
+          private final Shell shell;
+
+          private final Display display;
+
+          /**
+           * A map from a tab folder (corresponding to a part stack) to the absolute display bounds where it is located.
+           */
+          private final Map<CTabFolder, Rectangle> tabFolders = new HashMap<CTabFolder, Rectangle>();
+
+          /**
+           * A map from a tab folder to the part references in that part stack.
+           */
+          private final Map<CTabFolder, Set<IWorkbenchPartReference>> tabFolderParts = new HashMap<CTabFolder, Set<IWorkbenchPartReference>>();
+
+          /**
+           * The cursor we show when in a docking location.
+           */
+          private final Cursor sizeAllCursor;
+
+          /**
+           * A listener that listens to the tab folder and to the overall workbench window to track resizing and movement so that the docking position can be maintained.
+           */
+          private final ControlListener dockingListener = new ControlListener()
+          {
+            public void controlResized(ControlEvent e)
+            {
+              update();
+            }
+
+            public void controlMoved(ControlEvent e)
+            {
+              update();
+            }
+          };
+
+          /**
+           * The point at which we most recently hovered in a location where we could dock the shell.
+           */
+          private Point snapPoint;
+
+          /**
+           * This is true only while we are doing the positioning of the shell.
+           */
+          private boolean ignoreControlMoved;
+
+          /**
+           * Because we don't receive events such as mouse moves or mouse clicks from the shell, we keep track of how and whether the cursor is moving.
+           * @see #run()
+           */
+          private Point cursorLocation;
+
+          /**
+           * This records the most recent time the cursor has been moved to a different location.
+           * @see #run()
+           */
+          private long timeOfLastCursorChange;
+
+          /**
+           * This is the most recent bounds where we can dock the shell.
+           */
+          private Rectangle hotZone;
+
+          /**
+           * Because we want to be able to drag the docked shell slightly away from the docking site to undock it,
+           * we keep track of the hot zone changes and ignore it initially for a short period of time.
+           */
+          private long timeOfLastHotZoneChange;
+
+          /**
+           * It's very hard to clear the hotZone and the snapPoint because we could just get no events when the interaction ends.
+           * So we keep track of when the last time a moved happened and if a short period of time passes, we assume we're starting a new interaction.
+           */
+          private long timeOfLastMove;
+
+          /**
+           * This is set after docking.
+           * When we hover in a docking position for a short period of time, we set the shell to be at that bounds of that hot zone.
+           * But when the mouse is released the shell automatically will move to it's original position, for which we get an event,
+           * and then we can use these bounds to set the shell back yet again to the right bounds.
+           *
+           * @see #dock(Rectangle)
+           */
+          private Rectangle snapBounds;
+
+          /**
+           * This the part stack where we are docked and that we will track when it resizes or moves.
+           */
+          private CTabFolder dockedTabFolder;
+
+          /**
+           * These are the part references at the part stack.
+           * We record these so that if we turn to a new perspective, we can try to dock at a different part stack that contains one of the part references.
+           */
+          private Set<IWorkbenchPartReference> dockedParts;
+
+          public ShellHandler(Shell shell)
+          {
+            this.shell = shell;
+            display = shell.getDisplay();
+            sizeAllCursor = display.getSystemCursor(SWT.CURSOR_SIZEALL);
+          }
+
+          @Override
+          public void shellClosed(ShellEvent e)
+          {
+            BROWSERS.remove(workbenchWindow);
+          }
+
+          @Override
+          public void shellIconified(ShellEvent e)
+          {
+            shell.setVisible(false);
+          }
+
+          public void controlResized(ControlEvent e)
+          {
+            // Ignore.
+          }
+
+          public void controlMoved(ControlEvent e)
+          {
+            // When the shell is maximized, we get a moved event, and we can use that to clear the snap bounds
+            // so that the restore goes back to the right position rather than the snap position.
+            //
+            boolean maximized = shell.getMaximized();
+            if (maximized)
+            {
+              snapBounds = null;
+            }
+
+            // We do nothing we are the ones moving the shell or the shell is maximized.
+            if (!ignoreControlMoved && !maximized)
+            {
+              // We have snap bounds to apply, because releasing the mouse after docking moved the shell yet again, we can apply it now, and we never have to do
+              // it again.
+              if (snapBounds != null)
+              {
+                setBounds(snapBounds);
+                dock(snapBounds);
+                snapBounds = null;
+              }
+              else
+              {
+                // If we have a docking site...
+                if (dockedTabFolder != null)
+                {
+                  // And we moved outside of it...
+                  if (!getBounds(dockedTabFolder).equals(shell.getBounds()))
+                  {
+                    // Undock the shell.
+                    dock(null);
+                  }
+                  else
+                  {
+                    // Otherwise we have moved to exactly the docking site, in which case we don't want to do anything!
+                    return;
+                  }
+                }
+              }
+
+              // If we haven't moved the shell for a short white, assume we're staring a new interaction.
+              long newTimeOfLastMove = System.currentTimeMillis();
+              if (newTimeOfLastMove - timeOfLastMove > 1000)
+              {
+                hotZone = null;
+                snapPoint = null;
+              }
+
+              timeOfLastMove = newTimeOfLastMove;
+
+              // Determine the hot zone at the cursor location.
+              Point cursorLocation = display.getCursorLocation();
+              Rectangle newHotZone = getHotZone(cursorLocation);
+              if (newHotZone != null)
+              {
+                // If it's a new one...
+                if (!newHotZone.equals(hotZone))
+                {
+                  // Keep track of when we first entered this new hot zone.
+                  timeOfLastHotZoneChange = System.currentTimeMillis();
+                  hotZone = newHotZone;
+                }
+
+                // If we've been in this hot zone for a short period of time...
+                if (System.currentTimeMillis() - timeOfLastHotZoneChange > 400)
+                {
+                  // If we have no snap point for this yet...
+                  if (snapPoint == null)
+                  {
+                    // Show a different cursor and start the heartbeat runnable.
+                    shell.setCursor(sizeAllCursor);
+                    display.timerExec(100, this);
+                  }
+
+                  // keep track of where we started.
+                  snapPoint = cursorLocation;
+                }
+              }
+              else
+              {
+                // If we're outside of a hot zone, reset all the state.
+                shell.setCursor(null);
+                snapPoint = null;
+                hotZone = null;
+                dock(null);
+              }
+            }
+          }
+
+          /**
+           * This is the heartbeat runnable that's started once we've hovered over a hot zone for a short period of time.
+           */
+          public void run()
+          {
+            // Keep track of cursor movements, so that only if you hover for a while in the same location will the shell be snapped to the hot zone.
+            Point newCursorLocation = display.getCursorLocation();
+            if (cursorLocation == null || !cursorLocation.equals(newCursorLocation))
+            {
+              timeOfLastCursorChange = System.currentTimeMillis();
+              cursorLocation = newCursorLocation;
+            }
+
+            if (snapPoint == null)
+            {
+              // Not in hot zone.
+              shell.setCursor(null);
+            }
+            else if (System.currentTimeMillis() - timeOfLastCursorChange > 500)
+            {
+              // Get the bounds for the hot zone, and dock to that location.
+              snapBounds = getHotZone(snapPoint);
+              setBounds(snapBounds);
+              snapPoint = null;
+              timeOfLastCursorChange = System.currentTimeMillis();
+              dock(snapBounds);
+              shell.setCursor(null);
+            }
+            else
+            {
+              // Still moving the cursor, so check again in a while.
+              display.timerExec(100, this);
+            }
+          }
+
+          /**
+           * Returns the hot zone rectangle if the cursor is within the tab area of that zone.
+           */
+          private Rectangle getHotZone(Point cursorLocation)
+          {
+            for (Rectangle rectangle : getHotZones())
+            {
+              final Rectangle hotZone = new Rectangle(rectangle.x, rectangle.y, rectangle.width, 30);
+              if (hotZone.contains(cursorLocation))
+              {
+                return rectangle;
+              }
+            }
+
+            return null;
+          }
+
+          /**
+           * We call this when we set to bounds of the shell so that we can ignore the events we're causing ourselves.
+           */
+          private void setBounds(Rectangle bounds)
+          {
+            ignoreControlMoved = true;
+            shell.setBounds(bounds);
+            ignoreControlMoved = false;
+          }
+
+          /**
+           * Docks the shell at this rectangle.
+           * We listen to the tab folder and the workbench window shell, so we need to maintain those listeners properly.
+           */
+          private void dock(Rectangle rectangle)
+          {
+            gatherTabFolders();
+
+            // Remove any existing listeners.
+            windowShell.removeControlListener(dockingListener);
+            if (dockedTabFolder != null)
+            {
+              dockedTabFolder.removeControlListener(dockingListener);
+            }
+
+            for (Map.Entry<CTabFolder, Rectangle> entry : tabFolders.entrySet())
+            {
+              if (entry.getValue().equals(rectangle))
+              {
+                // If we find an appropriate part stack, add the listeners and record the information about the docking site and the part references associated
+                // with it.
+                windowShell.addControlListener(dockingListener);
+                dockedTabFolder = entry.getKey();
+                dockedTabFolder.addControlListener(dockingListener);
+                dockedParts = tabFolderParts.get(dockedTabFolder);
+                return;
+              }
+            }
+
+            // Clear the recorded information to undock the shell.
+            dockedTabFolder = null;
+            dockedParts = null;
+          }
+
+          private void dispose()
+          {
+            // Clear up any docking listeners that might currently be in place.
+            windowShell.removeControlListener(dockingListener);
+            if (dockedTabFolder != null)
+            {
+              dockedTabFolder.removeControlListener(dockingListener);
+            }
+          }
+
+          /**
+           * This is called when the docking site or workbench window shell moves or changes because of perspective switching.
+           */
+          private void update()
+          {
+            if (dockedTabFolder != null)
+            {
+              gatherTabFolders();
+
+              // If our docking site isn't visible.
+              if (!dockedTabFolder.isVisible())
+              {
+                // Find a new corresponding docking site, i.e., one that contains one of the part references in the part stack to which we're currently docked.
+                for (IWorkbenchPartReference partReference : dockedParts)
+                {
+                  for (Map.Entry<CTabFolder, Set<IWorkbenchPartReference>> entry : tabFolderParts.entrySet())
+                  {
+                    if (entry.getValue().contains(partReference))
+                    {
+                      // Dock to this new replacement.
+                      CTabFolder tabFolder = entry.getKey();
+                      Rectangle bounds = getBounds(tabFolder);
+                      setBounds(bounds);
+                      dock(bounds);
+
+                      // If we've been forced to minimize the shell because there is no docking site in the perspective, but now we do have a docking site,
+                      // make the shell visible again.
+                      if (shell.getMinimized() && Boolean.TRUE.equals(shell.getData("forced")))
+                      {
+                        shell.setData("forced", null);
+                        shell.setMinimized(false);
+                        shell.setVisible(true);
+                      }
+
+                      return;
+                    }
+                  }
+                }
+
+                // There is no docking site, for minimize the shell and mark that as forced (as opposed to the user having mimimized the shell.
+                shell.setMinimized(true);
+                shell.setVisible(false);
+                shell.setData("forced", true);
+              }
+              else
+              {
+                // Get the new bounds for the docking site and apply them.
+                // Restore the shell if it's been forced into minimized state.
+                Rectangle bounds = getBounds(dockedTabFolder);
+                setBounds(bounds);
+                if (shell.getMinimized() && Boolean.TRUE.equals(shell.getData("forced")))
+                {
+                  shell.setData("forced", null);
+                  shell.setMinimized(false);
+                  shell.setVisible(true);
+                }
+              }
+            }
+          }
+
+          private Collection<Rectangle> getHotZones()
+          {
+            gatherTabFolders();
+            return tabFolders.values();
+          }
+
+          /**
+           * Gets the bounds for the tab folder in display absolute coordinates.
+           */
+          private Rectangle getBounds(CTabFolder tabFolder)
+          {
+            Rectangle bounds = tabFolder.getBounds();
+            Point displayPoint = tabFolder.getParent().toDisplay(bounds.x, bounds.y);
+            bounds.x = displayPoint.x;
+            bounds.y = displayPoint.y;
+            return bounds;
+          }
+
+          public void gatherTabFolders()
+          {
+            tabFolders.clear();
+            tabFolderParts.clear();
+
+            // Visit all the part references of the page.
+            IWorkbenchPage page = workbenchWindow.getActivePage();
+            if (page != null)
+            {
+              IViewReference[] viewReferences = page.getViewReferences();
+              for (IViewReference viewReference : viewReferences)
+              {
+                gatherTabFolders(viewReference);
+              }
+
+              IEditorReference[] editorReferences = page.getEditorReferences();
+              for (IEditorReference editorReference : editorReferences)
+              {
+                gatherTabFolders(editorReference);
+              }
+            }
+          }
+
+          private void gatherTabFolders(IWorkbenchPartReference partReference)
+          {
+            // Get the widget associated the the part...
+            Object part = ReflectUtil.getValue("part", partReference);
+            if (part != null)
+            {
+              Object widget = ReflectUtil.invokeMethod("getWidget", part);
+              if (widget instanceof Control)
+              {
+                // Walk up until we hit a visible tab folder.
+                for (Control control = (Control)widget; control != null; control = control.getParent())
+                {
+                  if (control.isVisible() && control instanceof CTabFolder)
+                  {
+                    // Add it to the map, keeping track of the part references in each part stack.
+                    CTabFolder tabFolder = (CTabFolder)control;
+                    tabFolders.put(tabFolder, getBounds(tabFolder));
+                    CollectionUtil.add(tabFolderParts, tabFolder, partReference);
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        // Listen for shell and control events.
+        final ShellHandler shellHandler = new ShellHandler(shell);
+        shell.addShellListener(shellHandler);
+        shell.addControlListener(shellHandler);
+
+        // Clean up all these listeners when the shell is disposed.
+        shell.addDisposeListener(new DisposeListener()
+        {
+          public void widgetDisposed(DisposeEvent e)
+          {
+            shell.removeShellListener(shellHandler);
+            shell.removeControlListener(shellHandler);
+            shellHandler.dispose();
+          }
+        });
+
+        // Listen to perspective changes so we can update the docking site as needed.
+        workbenchWindow.addPerspectiveListener(new PerspectiveAdapter()
+        {
+          @Override
+          public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective)
+          {
+            UIUtil.asyncExec(shell, new Runnable()
+            {
+              public void run()
+              {
+                shellHandler.update();
+              }
+            });
+          }
+        });
+      }
+      else
+      {
+        // Show the shell if it already exists.
+        final Shell shell = browserDialog.getShell();
+        shell.setMinimized(false);
+        shell.setVisible(true);
+        shell.setData("forced", null);
+        shell.setFocus();
+      }
+
+      return browserDialog;
     }
   }
 }

@@ -272,14 +272,7 @@ public class ProgressPage extends SetupWizardPage
     Tree tree = treeViewer.getTree();
     addHelpCallout(tree, 1);
 
-    ILabelProvider labelProvider = createLabelProvider();
-    treeViewer.setLabelProvider(labelProvider);
-
-    final AdapterFactoryContentProvider contentProvider = new OomphAdapterFactoryContentProvider(getAdapterFactory());
-    treeViewer.setContentProvider(contentProvider);
-    treeViewer.addSelectionChangedListener(treeViewerSelectionChangedListener);
-
-    new ColumnViewerInformationControlToolTipSupport(treeViewer, new LocationListener()
+    ColumnViewerInformationControlToolTipSupport toolTipSupport = new ColumnViewerInformationControlToolTipSupport(treeViewer, new LocationListener()
     {
       public void changing(LocationEvent event)
       {
@@ -289,6 +282,13 @@ public class ProgressPage extends SetupWizardPage
       {
       }
     });
+
+    ILabelProvider labelProvider = createLabelProvider(toolTipSupport);
+    treeViewer.setLabelProvider(labelProvider);
+
+    final AdapterFactoryContentProvider contentProvider = new OomphAdapterFactoryContentProvider(getAdapterFactory());
+    treeViewer.setContentProvider(contentProvider);
+    treeViewer.addSelectionChangedListener(treeViewerSelectionChangedListener);
 
     tree.setLayoutData(new GridData(GridData.FILL_BOTH));
     tree.setBackground(getShell().getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -614,9 +614,9 @@ public class ProgressPage extends SetupWizardPage
     }
   }
 
-  private ILabelProvider createLabelProvider()
+  private ILabelProvider createLabelProvider(ColumnViewerInformationControlToolTipSupport toolTipSupport)
   {
-    return new ToolTipLabelProvider(getAdapterFactory())
+    return new ToolTipLabelProvider(getAdapterFactory(), toolTipSupport)
     {
       @Override
       public Font getFont(Object element)

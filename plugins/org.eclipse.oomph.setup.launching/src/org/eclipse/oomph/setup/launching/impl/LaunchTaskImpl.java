@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.launching.impl;
 
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
+import org.eclipse.oomph.preferences.util.PreferencesUtil.PreferenceProperty;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
@@ -260,56 +262,68 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
       throw new Exception("No launcher found for " + launcher);
     }
 
-    ILaunch launch = targetLaunchConfiguration.launch(ILaunchManager.RUN_MODE, null);
-    IProcess[] processes = launch.getProcesses();
-    if (processes.length > 0)
+    PreferenceProperty launchPromptForErrorPreference = new PreferencesUtil.PreferenceProperty(
+        "/instance/org.eclipse.debug.ui/org.eclipse.debug.ui.cancel_launch_with_compile_errors");
+    String oldValue = launchPromptForErrorPreference.get(null);
+    try
     {
-      for (IProcess process : processes)
+      launchPromptForErrorPreference.set("always");
+
+      ILaunch launch = targetLaunchConfiguration.launch(ILaunchManager.RUN_MODE, null);
+      IProcess[] processes = launch.getProcesses();
+      if (processes.length > 0)
       {
-        IStreamsProxy streamsProxy = process.getStreamsProxy();
-        if (streamsProxy != null)
+        for (IProcess process : processes)
         {
-          IStreamMonitor outputStreamMonitor = streamsProxy.getOutputStreamMonitor();
-          if (outputStreamMonitor != null)
+          IStreamsProxy streamsProxy = process.getStreamsProxy();
+          if (streamsProxy != null)
           {
-            outputStreamMonitor.addListener(new IStreamListener()
+            IStreamMonitor outputStreamMonitor = streamsProxy.getOutputStreamMonitor();
+            if (outputStreamMonitor != null)
             {
-              public void streamAppended(String text, IStreamMonitor monitor)
+              outputStreamMonitor.addListener(new IStreamListener()
               {
-                context.log(text.replace('\r', ' '));
-              }
-            });
+                public void streamAppended(String text, IStreamMonitor monitor)
+                {
+                  context.log(text.replace('\r', ' '));
+                }
+              });
+            }
+
+            IStreamMonitor errorStreamMonitor = streamsProxy.getErrorStreamMonitor();
+            if (errorStreamMonitor != null)
+            {
+              errorStreamMonitor.addListener(new IStreamListener()
+              {
+                public void streamAppended(String text, IStreamMonitor monitor)
+                {
+                  context.log(text.replace('\r', ' '), Severity.ERROR);
+                }
+              });
+            }
+          }
+        }
+
+        for (;;)
+        {
+          Thread.sleep(1000);
+          if (context.isCanceled())
+          {
+            launch.terminate();
+            return;
           }
 
-          IStreamMonitor errorStreamMonitor = streamsProxy.getErrorStreamMonitor();
-          if (errorStreamMonitor != null)
+          if (launch.isTerminated())
           {
-            errorStreamMonitor.addListener(new IStreamListener()
-            {
-              public void streamAppended(String text, IStreamMonitor monitor)
-              {
-                context.log(text.replace('\r', ' '), Severity.ERROR);
-              }
-            });
+            HISTORY.setProperty(launcher, processes.length > 0 ? Integer.toString(processes[0].getExitValue()) : "-1");
+            return;
           }
         }
       }
-
-      for (;;)
-      {
-        Thread.sleep(1000);
-        if (context.isCanceled())
-        {
-          launch.terminate();
-          return;
-        }
-
-        if (launch.isTerminated())
-        {
-          HISTORY.setProperty(launcher, processes.length > 0 ? Integer.toString(processes[0].getExitValue()) : "-1");
-          return;
-        }
-      }
+    }
+    finally
+    {
+      launchPromptForErrorPreference.set(oldValue);
     }
   }
 } // LaunchTaskImpl
