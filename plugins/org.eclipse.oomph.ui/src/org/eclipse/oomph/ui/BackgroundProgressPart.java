@@ -147,9 +147,9 @@ public class BackgroundProgressPart extends ProgressMonitorPart
         {
           dispatch = false;
         }
-      }
 
-      runnables.add(runnable);
+        runnables.add(runnable);
+      }
 
       if (dispatch)
       {

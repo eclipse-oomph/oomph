@@ -513,6 +513,9 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
                   return;
                 }
 
+                int shellStyle = (Integer)ReflectUtil.invokeMethod("getShellStyle", dialog);
+                ReflectUtil.invokeMethod(ReflectUtil.getMethod(dialog, "setShellStyle", int.class), dialog, new Integer(shellStyle | SWT.MAX));
+
                 if (dialog.open() == Window.OK)
                 {
                   String value = (String)ReflectUtil.invokeMethod("getValue", dialog);

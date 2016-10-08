@@ -39,6 +39,8 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
+import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.presentation.SetupActionBarContributor.ToggleViewerInputAction;
@@ -151,6 +153,7 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
@@ -178,6 +181,8 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.browser.AuthenticationEvent;
+import org.eclipse.swt.browser.AuthenticationListener;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.custom.CTabFolder;
@@ -248,6 +253,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.HttpCookie;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -1647,12 +1653,30 @@ public class SetupEditor extends MultiPageEditorPart
     MenuManager contextMenu = new MenuManager("#PopUp")
     {
       @Override
-      public void addMenuListener(IMenuListener listener)
+      @SuppressWarnings("restriction")
+      protected boolean allowItem(IContributionItem itemToAdd)
       {
-        if (!"org.eclipse.ui.internal.PopupMenuExtender".equals(listener.getClass().getName()))
+        String id = itemToAdd.getId();
+        if (itemToAdd instanceof org.eclipse.ui.internal.PluginActionContributionItem)
         {
-          super.addMenuListener(listener);
+          // Hide these annoying actions.
+          return id != null && !id.contains("debug.ui") && !"ValidationAction".equals(id) && !id.contains("mylyn");
         }
+
+        if (itemToAdd instanceof MenuManager)
+        {
+          // Hide all sub menus except our own.
+          if (id != null)
+          {
+            if ("team.main".equals(id) || "replaceWithMenu".equals(id) || "compareWithMenu".equals(id))
+            {
+              System.err.println("####" + itemToAdd.getId());
+              itemToAdd.setVisible(false);
+            }
+          }
+        }
+
+        return true;
       }
     };
 
@@ -4131,6 +4155,8 @@ public class SetupEditor extends MultiPageEditorPart
 
     private ColumnViewerInformationControlToolTipSupport toolTipSupport;
 
+    private URI mostRecentChangingLocation;
+
     private SetupLocationListener(boolean editorSpecific)
     {
       super(null);
@@ -4204,16 +4230,34 @@ public class SetupEditor extends MultiPageEditorPart
       toolTipObjects.add(this.toolTipObject);
     }
 
+    private void updateEnablement()
+    {
+      backwardItem.setEnabled(toolTipIndex > 0);
+      forwardItem.setEnabled(toolTipIndex + 1 < toolTipObjects.size());
+      editSetupItem.setEnabled(SetupActionBarContributor.getEditURI(ToolTipObject.unwrap(toolTipObject), !editorSpecific) != null);
+      editTextItem.setEnabled(SetupActionBarContributor.getEditURI(ToolTipObject.unwrap(toolTipObject), true) != null);
+
+      if (editorSpecific)
+      {
+        showToolTipsItem.setSelection(SetupActionBarContributor.isShowTooltips());
+        liveValidationItem.setSelection(setupEditor.getActionBarContributor().isLiveValidation());
+      }
+    }
+
     @Override
     public void changed(LocationEvent event)
     {
       String url = browser.getUrl();
       if (!"about:blank".equals(url))
       {
+        URI uri = URI.createURI(event.location);
+        uri = ECFURIHandlerImpl.transform(uri, null);
+
         if (toolTipIndex >= 0 && toolTipIndex < toolTipObjects.size() && !toolTipObjects.get(toolTipIndex).getWrappedObject().toString().equals(url))
         {
           setToolTipObject(URI.createURI(url), setupEditor, toolTipSupport);
           toolTipIndex = toolTipObjects.size() - 1;
+          updateEnablement();
         }
       }
     }
@@ -4221,6 +4265,34 @@ public class SetupEditor extends MultiPageEditorPart
     @Override
     public void changing(LocationEvent event)
     {
+      // Transform the URI if necessary, checking if a login URI must be accessed first.
+      URI originalURI = URI.createURI(event.location);
+      URI uri = originalURI;
+      Map<Object, Object> options = new HashMap<Object, Object>();
+      uri = ECFURIHandlerImpl.transform(uri, options);
+      event.location = uri.toString();
+
+      // If there is a login URI, access it to authorize for the host and ensure that any cookies that are acquired are applied to the browser.
+      URI loginURI = (URI)options.get(ECFURIHandlerImpl.OPTION_LOGIN_URI);
+      if (loginURI != null)
+      {
+        try
+        {
+          options.clear();
+          options.put(ECFURIHandlerImpl.OPTION_AUTHORIZATION_HANDLER, SetupCoreUtil.AUTHORIZATION_HANDLER);
+          InputStream inputStream = SetupCoreUtil.URI_CONVERTER.createInputStream(loginURI, options);
+          inputStream.close();
+          applyCookies();
+        }
+        catch (IOException ex)
+        {
+          // Ignore.
+        }
+      }
+
+      // Record this event because the authentication listener is given a bogus location different from this most recent changing notification's location.
+      mostRecentChangingLocation = uri;
+
       Object source = event.getSource();
       if (source instanceof Browser)
       {
@@ -4231,6 +4303,27 @@ public class SetupEditor extends MultiPageEditorPart
         boolean toolBarCreated = false;
         if (toolBar == null)
         {
+          applyCookies();
+
+          browser.addAuthenticationListener(new AuthenticationListener()
+          {
+            public void authenticate(AuthenticationEvent event)
+            {
+              if (mostRecentChangingLocation != null)
+              {
+                Authorization authorization = SetupCoreUtil.AUTHORIZATION_HANDLER.authorize(mostRecentChangingLocation);
+                if (authorization.isAuthorized())
+                {
+                  event.user = authorization.getUser();
+                  event.password = authorization.getPassword();
+                  return;
+                }
+              }
+
+              event.doit = false;
+            }
+          });
+
           toolBarCreated = true;
 
           // Change the parent to use a grid layout.
@@ -4426,25 +4519,27 @@ public class SetupEditor extends MultiPageEditorPart
             toolTipObjects.add(toolTipObject);
           }
 
-          // Delay this until the shell has sized properly.
-          UIUtil.asyncExec(shell, new Runnable()
+          if (editorSpecific)
           {
-            public void run()
+            // Delay this until the shell has sized properly.
+            UIUtil.asyncExec(shell, new Runnable()
             {
-              // Increase the height by the height of the tool bar.
-              Point computeSize = toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-              Point size = shell.getSize();
-              size.y += computeSize.y;
-              shell.setSize(size);
-            }
-          });
+              public void run()
+              {
+                // Increase the height by the height of the tool bar.
+                Point computeSize = toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+                Point size = shell.getSize();
+                size.y += computeSize.y;
+                shell.setSize(size);
+              }
+            });
+          }
 
           parent.layout(true);
         }
 
         if (setupEditor != null)
         {
-          URI uri = URI.createURI(event.location);
           Resource resource = setupEditor.editingDomain.getResourceSet().getResource(uri.trimFragment(), false);
           Object selection = resource;
           if (resource != null)
@@ -4501,17 +4596,27 @@ public class SetupEditor extends MultiPageEditorPart
 
             event.doit = false;
           }
+          else if (!originalURI.equals(uri))
+          {
+            // If the URI was transformed, we don't want to change to the original one but rather navigate to the transformed URI.
+            browser.setUrl(uri.toString());
+            event.doit = false;
+          }
         }
 
-        backwardItem.setEnabled(toolTipIndex > 0);
-        forwardItem.setEnabled(toolTipIndex + 1 < toolTipObjects.size());
-        editSetupItem.setEnabled(SetupActionBarContributor.getEditURI(ToolTipObject.unwrap(toolTipObject), !editorSpecific) != null);
-        editTextItem.setEnabled(SetupActionBarContributor.getEditURI(ToolTipObject.unwrap(toolTipObject), true) != null);
+        updateEnablement();
+      }
+    }
 
-        if (editorSpecific)
+    private void applyCookies()
+    {
+      List<java.net.URI> uris = ECFURIHandlerImpl.COOKIE_STORE.getURIs();
+      for (java.net.URI cookieURI : uris)
+      {
+        String url = cookieURI.toString();
+        for (HttpCookie httpCookie : ECFURIHandlerImpl.COOKIE_STORE.get(cookieURI))
         {
-          showToolTipsItem.setSelection(SetupActionBarContributor.isShowTooltips());
-          liveValidationItem.setSelection(setupEditor.getActionBarContributor().isLiveValidation());
+          Browser.setCookie(httpCookie.getValue(), url);
         }
       }
     }
@@ -4675,6 +4780,11 @@ public class SetupEditor extends MultiPageEditorPart
      * There can be at most one per workbench window.
      */
     private static final Map<IWorkbenchWindow, BrowserDialog> BROWSERS = new HashMap<IWorkbenchWindow, BrowserDialog>();
+
+    /**
+     * Remember where the dialog is docked per workbench window.
+     */
+    private static final Map<IWorkbenchWindow, Set<IWorkbenchPartReference>> DOCKED_PARTS = new HashMap<IWorkbenchWindow, Set<IWorkbenchPartReference>>();
 
     private final IWorkbenchWindow workbenchWindow;
 
@@ -4853,12 +4963,20 @@ public class SetupEditor extends MultiPageEditorPart
         BROWSERS.put(workbenchWindow, browserDialog);
         browserDialog.open();
 
+        Set<IWorkbenchPartReference> dockedParts = DOCKED_PARTS.get(workbenchWindow);
+        if (dockedParts == null)
+        {
+          dockedParts = new HashSet<IWorkbenchPartReference>();
+          DOCKED_PARTS.put(workbenchWindow, dockedParts);
+        }
+
         // Be sure to clean it from the map when either the workbench window or the browser itself is disposed.
         DisposeListener disposeListener = new DisposeListener()
         {
           public void widgetDisposed(DisposeEvent e)
           {
             BROWSERS.remove(workbenchWindow);
+            DOCKED_PARTS.remove(workbenchWindow);
           }
         };
 
@@ -4866,17 +4984,13 @@ public class SetupEditor extends MultiPageEditorPart
         final Shell windowShell = workbenchWindow.getShell();
         windowShell.addDisposeListener(disposeListener);
 
-        // Also clean up if the browser is disposed.
-        final Shell shell = browserDialog.getShell();
-        shell.addDisposeListener(disposeListener);
-
         /**
          * This monitors the shell events, such as dragging to a new position.
          * It's primary purpose to to support docking of the browser shell into a part stack on a workbench window.
          *
          * @author Ed Merks
          */
-        class ShellHandler extends ShellAdapter implements ControlListener, Runnable
+        class ShellHandler extends ShellAdapter implements ControlListener, DisposeListener, Runnable
         {
           private final Shell shell;
 
@@ -4973,11 +5087,16 @@ public class SetupEditor extends MultiPageEditorPart
            */
           private Set<IWorkbenchPartReference> dockedParts;
 
-          public ShellHandler(Shell shell)
+          public ShellHandler(Shell shell, Set<IWorkbenchPartReference> dockedParts)
           {
             this.shell = shell;
+            this.dockedParts = dockedParts;
             display = shell.getDisplay();
             sizeAllCursor = display.getSystemCursor(SWT.CURSOR_SIZEALL);
+
+            shell.addShellListener(this);
+            shell.addControlListener(this);
+            shell.addDisposeListener(this);
           }
 
           @Override
@@ -5164,6 +5283,9 @@ public class SetupEditor extends MultiPageEditorPart
               dockedTabFolder.removeControlListener(dockingListener);
             }
 
+            // Clean up the docking points; they'll be populated new, if possible.
+            dockedParts.clear();
+
             for (Map.Entry<CTabFolder, Rectangle> entry : tabFolders.entrySet())
             {
               if (entry.getValue().equals(rectangle))
@@ -5173,14 +5295,13 @@ public class SetupEditor extends MultiPageEditorPart
                 windowShell.addControlListener(dockingListener);
                 dockedTabFolder = entry.getKey();
                 dockedTabFolder.addControlListener(dockingListener);
-                dockedParts = tabFolderParts.get(dockedTabFolder);
+                dockedParts.addAll(tabFolderParts.get(dockedTabFolder));
                 return;
               }
             }
 
             // Clear the recorded information to undock the shell.
             dockedTabFolder = null;
-            dockedParts = null;
           }
 
           private void dispose()
@@ -5193,17 +5314,25 @@ public class SetupEditor extends MultiPageEditorPart
             }
           }
 
+          public void widgetDisposed(DisposeEvent e)
+          {
+            BROWSERS.remove(workbenchWindow);
+            shell.removeShellListener(this);
+            shell.removeControlListener(this);
+            dispose();
+          }
+
           /**
            * This is called when the docking site or workbench window shell moves or changes because of perspective switching.
            */
           private void update()
           {
-            if (dockedTabFolder != null)
+            if (!dockedParts.isEmpty())
             {
               gatherTabFolders();
 
-              // If our docking site isn't visible.
-              if (!dockedTabFolder.isVisible())
+              // If our docking site available or isn't visible...
+              if (dockedTabFolder == null || !dockedTabFolder.isVisible())
               {
                 // Find a new corresponding docking site, i.e., one that contains one of the part references in the part stack to which we're currently docked.
                 for (IWorkbenchPartReference partReference : dockedParts)
@@ -5232,10 +5361,13 @@ public class SetupEditor extends MultiPageEditorPart
                   }
                 }
 
-                // There is no docking site, for minimize the shell and mark that as forced (as opposed to the user having mimimized the shell.
-                shell.setMinimized(true);
-                shell.setVisible(false);
-                shell.setData("forced", true);
+                if (dockedTabFolder != null)
+                {
+                  // There is no docking site, for minimize the shell and mark that as forced (as opposed to the user having mimimized the shell.
+                  shell.setMinimized(true);
+                  shell.setVisible(false);
+                  shell.setData("forced", true);
+                }
               }
               else
               {
@@ -5320,20 +5452,8 @@ public class SetupEditor extends MultiPageEditorPart
         }
 
         // Listen for shell and control events.
-        final ShellHandler shellHandler = new ShellHandler(shell);
-        shell.addShellListener(shellHandler);
-        shell.addControlListener(shellHandler);
-
-        // Clean up all these listeners when the shell is disposed.
-        shell.addDisposeListener(new DisposeListener()
-        {
-          public void widgetDisposed(DisposeEvent e)
-          {
-            shell.removeShellListener(shellHandler);
-            shell.removeControlListener(shellHandler);
-            shellHandler.dispose();
-          }
-        });
+        final Shell shell = browserDialog.getShell();
+        final ShellHandler shellHandler = new ShellHandler(shell, dockedParts);
 
         // Listen to perspective changes so we can update the docking site as needed.
         workbenchWindow.addPerspectiveListener(new PerspectiveAdapter()
@@ -5350,6 +5470,8 @@ public class SetupEditor extends MultiPageEditorPart
             });
           }
         });
+
+        shellHandler.update();
       }
       else
       {

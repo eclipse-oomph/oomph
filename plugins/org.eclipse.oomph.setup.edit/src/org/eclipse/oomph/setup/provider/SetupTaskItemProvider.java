@@ -13,14 +13,17 @@ package org.eclipse.oomph.setup.provider;
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Index;
+import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -252,20 +255,57 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
         List<Scope> scopes = getScopes(setupTask);
         int scopesSize = scopes.size();
         Collection<?> result = new ArrayList<Object>(choices);
-        for (Iterator<?> it = result.iterator(); it.hasNext();)
+        LOOP: for (Iterator<?> it = result.iterator(); it.hasNext();)
         {
           Object value = it.next();
           if (value instanceof SetupTask)
           {
-            SetupTask targetSetupTast = (SetupTask)value;
-            if ((direction ? !targetSetupTast.requires(setupTask) : !setupTask.requires(targetSetupTast)) && !onlyHasVariables(targetSetupTast))
+            SetupTask targetSetupTask = (SetupTask)value;
+            if (!targetSetupTask.eIsProxy() && (direction ? !targetSetupTask.requires(setupTask) : !setupTask.requires(targetSetupTask))
+                && !onlyHasVariables(targetSetupTask))
             {
-              if (scopesSize == 1 && scopes.get(0) instanceof User)
+              if (scopesSize == 1)
               {
-                continue;
+                Scope scope = scopes.get(0);
+                if (scope instanceof User)
+                {
+                  continue;
+                }
+                else if (scope instanceof Installation)
+                {
+                  Installation installation = (Installation)scope;
+                  ProductVersion productVersion = installation.getProductVersion();
+                  if (productVersion != null)
+                  {
+                    List<Scope> installationScopes = getScopes(productVersion);
+                    int installationScopesSize = installationScopes.size();
+                    List<Scope> targetScopes = getScopes(targetSetupTask);
+                    int targetScopesSize = targetScopes.size();
+                    if (targetScopesSize <= installationScopesSize && installationScopes.subList(0, targetScopesSize).equals(targetScopes))
+                    {
+                      continue;
+                    }
+                  }
+                }
+                else if (scope instanceof Workspace)
+                {
+                  List<Scope> targetScopes = getScopes(targetSetupTask);
+                  int targetScopesSize = targetScopes.size();
+
+                  Workspace workspace = (Workspace)scope;
+                  for (Stream stream : workspace.getStreams())
+                  {
+                    List<Scope> workspaceScopes = getScopes(stream);
+                    int workspaceScopesSize = workspaceScopes.size();
+                    if (targetScopesSize <= workspaceScopesSize && workspaceScopes.subList(0, targetScopesSize).equals(targetScopes))
+                    {
+                      continue LOOP;
+                    }
+                  }
+                }
               }
 
-              List<Scope> targetScopes = getScopes(targetSetupTast);
+              List<Scope> targetScopes = getScopes(targetSetupTask);
               int targetScopesSize = targetScopes.size();
               if (targetScopesSize <= scopesSize && scopes.subList(0, targetScopesSize).equals(targetScopes))
               {
@@ -289,8 +329,13 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
 
   private List<Scope> getScopes(SetupTask setupTask)
   {
+    return getScopes(setupTask.getScope());
+  }
+
+  private List<Scope> getScopes(Scope scope)
+  {
     List<Scope> scopes = new ArrayList<Scope>();
-    for (Scope scope = setupTask.getScope(); scope != null; scope = scope.getParentScope())
+    for (; scope != null; scope = scope.getParentScope())
     {
       scopes.add(0, scope);
     }

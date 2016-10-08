@@ -59,6 +59,7 @@ import org.eclipse.ecf.filetransfer.events.IIncomingFileTransferReceiveDoneEvent
 import org.eclipse.ecf.filetransfer.events.IIncomingFileTransferReceiveStartEvent;
 import org.eclipse.ecf.filetransfer.events.IRemoteFileSystemBrowseEvent;
 import org.eclipse.ecf.filetransfer.events.IRemoteFileSystemEvent;
+import org.eclipse.ecf.filetransfer.identity.IFileID;
 import org.eclipse.ecf.provider.filetransfer.identity.FileTransferID;
 import org.eclipse.ecf.provider.filetransfer.identity.FileTransferNamespace;
 import org.eclipse.ecf.provider.filetransfer.util.ProxySetupHelper;
@@ -67,6 +68,7 @@ import org.eclipse.equinox.p2.core.UIServices.AuthenticationInfo;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.StorageException;
 
+import org.apache.http.cookie.Cookie;
 import org.osgi.framework.Version;
 
 import java.io.ByteArrayInputStream;
@@ -75,9 +77,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.CookieManager;
+import java.net.CookieStore;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -93,8 +99,6 @@ import java.util.concurrent.CountDownLatch;
  */
 public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 {
-  private static final String FAILED_EXPECTED_ETAG = "-1";
-
   public static final String OPTION_CACHE_HANDLING = "OPTION_CACHE_HANDLING";
 
   public static final String OPTION_AUTHORIZATION_HANDLER = "OPTION_AUTHORIZATION_HANDLER";
@@ -103,7 +107,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
   public static final String OPTION_MONITOR = "OPTION_MONITOR";
 
-  private static final String OPTION_LOGIN_URI = "OPTION_LOGIN_URI";
+  public static final CookieStore COOKIE_STORE = new CookieManager().getCookieStore();
+
+  public static final String OPTION_LOGIN_URI = "OPTION_LOGIN_URI";
+
+  private static final String FAILED_EXPECTED_ETAG = "-1";
 
   private static final URI CACHE_FOLDER = SetupContext.GLOBAL_STATE_LOCATION_URI.appendSegment("cache");
 
@@ -1377,7 +1385,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
    */
   private static final class FileTransferListener implements IFileTransferListener
   {
-    @SuppressWarnings("restriction")
+    @SuppressWarnings("all")
     private static final org.apache.http.impl.client.BasicCookieStore COOKIE_STORE = new org.apache.http.impl.client.BasicCookieStore();
 
     public final CountDownLatch receiveLatch = new CountDownLatch(1);
@@ -1415,7 +1423,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           return;
         }
 
-        applyCookieStore(connectStartEvent.getAdapter(IIncomingFileTransfer.class));
+        applyCookieStore(connectStartEvent);
       }
       else if (event instanceof IIncomingFileTransferReceiveStartEvent)
       {
@@ -1528,14 +1536,61 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       }
     }
 
-    private static void applyCookieStore(IIncomingFileTransfer fileTransfer)
+    private static void applyCookieStore(final IFileTransferConnectStartEvent connectStartEvent)
     {
+      IIncomingFileTransfer fileTransfer = connectStartEvent.getAdapter(IIncomingFileTransfer.class);
+      final IFileID fileID = connectStartEvent.getFileID();
       try
       {
         if (fileTransfer != null)
         {
           Object httpClient = ReflectUtil.getValue("httpClient", fileTransfer);
-          ReflectUtil.setValue("cookieStore", httpClient, COOKIE_STORE);
+          ReflectUtil.setValue("cookieStore", httpClient, new org.apache.http.client.CookieStore()
+          {
+            public List<Cookie> getCookies()
+            {
+              return COOKIE_STORE.getCookies();
+            }
+
+            public boolean clearExpired(Date date)
+            {
+              synchronized (COOKIE_STORE)
+              {
+                List<Cookie> originalCookies = new ArrayList<Cookie>(COOKIE_STORE.getCookies());
+                COOKIE_STORE.clearExpired(date);
+                List<Cookie> remainingCookies = COOKIE_STORE.getCookies();
+                originalCookies.removeAll(remainingCookies);
+
+                for (Cookie cookie : originalCookies)
+                {
+                  ECFURIHandlerImpl.COOKIE_STORE.remove(null, new HttpCookie(cookie.getName(), cookie.getValue()));
+                }
+
+                return !originalCookies.isEmpty();
+              }
+            }
+
+            public void clear()
+            {
+              COOKIE_STORE.clear();
+              ECFURIHandlerImpl.COOKIE_STORE.removeAll();
+            }
+
+            public void addCookie(Cookie cookie)
+            {
+              try
+              {
+                java.net.URI uri = fileID.getURI();
+                ECFURIHandlerImpl.COOKIE_STORE.add(uri, new HttpCookie(cookie.getName(), cookie.getValue()));
+              }
+              catch (Exception ex)
+              {
+                // Ignore bad information.
+              }
+
+              COOKIE_STORE.addCookie(cookie);
+            }
+          });
         }
       }
       catch (Throwable throwable)
@@ -1766,7 +1821,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           arguments.put(assignment.get(0), assignment.get(1));
         }
 
-        URI outputURI = uri;
+        URI outputURI = uri.trimQuery();
         URI loginURI = null;
         Map<String, String> outputQuery = new LinkedHashMap<String, String>();
         for (Map.Entry<String, String> entry : arguments.entrySet())
@@ -2167,7 +2222,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     }
   }
 
-  private static URI transform(URI uri, Map<Object, Object> options)
+  public static URI transform(URI uri, Map<Object, Object> options)
   {
     return Main.transform(uri, options);
   }
