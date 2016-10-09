@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -46,6 +47,7 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.AdapterFactoryItemDelegator;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -88,14 +90,35 @@ public class ModelElementItemProvider extends ItemProviderAdapter
    * This returns the property descriptors for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
   {
     if (itemPropertyDescriptors == null)
     {
-      super.getPropertyDescriptors(object);
+      itemPropertyDescriptors = new ArrayList<IItemPropertyDescriptor>()
+      {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public boolean add(IItemPropertyDescriptor itemPropertyDescriptor)
+        {
+          int size = size();
+          if (size == 0)
+          {
+            super.add(itemPropertyDescriptor);
+          }
+          else
+          {
+            super.add(size - 1, itemPropertyDescriptor);
+          }
+
+          return true;
+        }
+      };
+
+      itemPropertyDescriptors.add(new EClassPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator()));
 
     }
     return itemPropertyDescriptors;
@@ -836,6 +859,53 @@ public class ModelElementItemProvider extends ItemProviderAdapter
       }
 
       super.copyAttributeValue(eAttribute, eObject, value, setting);
+    }
+  }
+
+  public static class EClassPropertyDescriptor extends ItemPropertyDescriptor
+  {
+    private static Object image;
+
+    private static final IItemLabelProvider LABEL_PROVIDER = new IItemLabelProvider()
+    {
+      public String getText(Object object)
+      {
+        EClass eClass = (EClass)object;
+        String instanceTypeName = eClass.getInstanceTypeName();
+        if (instanceTypeName != null)
+        {
+          return instanceTypeName;
+        }
+
+        return EcoreUtil.getURI(eClass).toString();
+      }
+
+      public Object getImage(Object object)
+      {
+        return image;
+      }
+    };
+
+    public EClassPropertyDescriptor(AdapterFactory adapterFactory, ResourceLocator resourceLocator)
+    {
+      super(adapterFactory, resourceLocator, "Model Class", "The model class of this object", EcorePackage.Literals.ECLASS__EID_ATTRIBUTE, false, false, false,
+          null, null, new String[] { "org.eclipse.ui.views.properties.expert" });
+      if (image == null)
+      {
+        image = itemDelegator.getImage(EcorePackage.Literals.ECLASS);
+      }
+    }
+
+    @Override
+    protected Object getValue(EObject object, EStructuralFeature feature)
+    {
+      return object.eClass();
+    }
+
+    @Override
+    public IItemLabelProvider getLabelProvider(Object object)
+    {
+      return LABEL_PROVIDER;
     }
   }
 }

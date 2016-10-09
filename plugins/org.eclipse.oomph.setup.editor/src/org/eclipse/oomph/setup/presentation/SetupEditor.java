@@ -2088,6 +2088,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       public String getToolTipText(Object object)
       {
         boolean extend = false;
+        boolean showAdvancedProperties = false;
         SetupLocationListener effectiveLocationListener;
         if (object instanceof ToolTipObject)
         {
@@ -2096,6 +2097,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           effectiveLocationListener = wrapper.getLocationListener();
           wrapper.getLocationListener().setToolTipObject(object, wrapper.getSetupEditor(), toolTipSupport);
           extend = wrapper.isExtended();
+          showAdvancedProperties = wrapper.isShowAdvancedProperties();
         }
         else
         {
@@ -2186,25 +2188,28 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         for (Iterator<IItemPropertyDescriptor> it = propertyDescriptors.iterator(); it.hasNext();)
         {
           IItemPropertyDescriptor itemPropertyDescriptor = it.next();
+          String[] filterFlags = itemPropertyDescriptor.getFilterFlags(object);
+          if (!showAdvancedProperties && filterFlags != null && filterFlags.length > 0 && "org.eclipse.ui.views.properties.expert".equals(filterFlags[0]))
+          {
+            it.remove();
+            continue;
+          }
+
           Object feature = itemPropertyDescriptor.getFeature(object);
-          Object propertyValue = itemPropertyDescriptor.getPropertyValue(object);
+          Object propertyValue = itemDelegator.getEditableValue(itemPropertyDescriptor.getPropertyValue(object));
           if (feature instanceof EStructuralFeature)
           {
             // Filter out the description property.
             EStructuralFeature eStructuralFeature = (EStructuralFeature)feature;
-            if ("description".equals(eStructuralFeature.getName()) && propertyValue instanceof IItemPropertySource)
+            if ("description".equals(eStructuralFeature.getName()) && propertyValue instanceof String)
             {
-              Object editableValue = ((IItemPropertySource)propertyValue).getEditableValue(object);
-              if (editableValue instanceof String)
+              String description = propertyValue.toString();
+              if (description != null)
               {
-                String description = editableValue.toString();
-                if (description != null)
-                {
-                  result.append("<h1>Description</h1>");
-                  result.append(description);
-                  it.remove();
-                  continue;
-                }
+                result.append("<h1>Description</h1>");
+                result.append(description);
+                it.remove();
+                continue;
               }
             }
             else if (feature == SetupPackage.Literals.SETUP_TASK__DISABLED)
@@ -4154,6 +4159,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private ToolItem forwardItem;
 
+    private ToolItem showAdvancedPropertiesItem;
+
     private SetupEditor setupEditor;
 
     private boolean editorSpecific;
@@ -4229,7 +4236,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     public void setToolTipObject(Object toolTipObject, SetupEditor setupEditor, ColumnViewerInformationControlToolTipSupport toolTipSupport)
     {
-      this.toolTipObject = new ToolTipObject(toolTipObject, this, setupEditor, false);
+      this.toolTipObject = new ToolTipObject(toolTipObject, this, setupEditor, false, false);
 
       setEditor(setupEditor);
       setToolTipSupport(toolTipSupport);
@@ -4374,11 +4381,13 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
                 Rectangle bounds = (forward ? forwardItem : backwardItem).getBounds();
                 Point location = new Point(bounds.x, bounds.y + bounds.height);
                 location = toolBar.toDisplay(location);
-                Menu menu = new Menu(browser.getShell());
 
+                List<ItemProvider> items = new ArrayList<ItemProvider>();
                 for (int i = toolTipObjects.size() - 1; i >= 0; --i)
                 {
                   ToolTipObject wrapper = toolTipObjects.get(i);
+                  ILabelProvider labelProvider = (ILabelProvider)wrapper.getSetupEditor().selectionViewer.getLabelProvider();
+
                   Object wrappedObject = wrapper.getWrappedObject();
                   String text;
                   if (wrappedObject instanceof URI)
@@ -4390,39 +4399,49 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
                     URI uri = SetupActionBarContributor.getEditURI(wrappedObject, true);
                     if (uri == null)
                     {
-                      continue;
+                      text = labelProvider.getText(wrappedObject);
                     }
-
-                    text = uri.toString();
-                  }
-
-                  MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
-                  menuItem.setText(text);
-                  if (i == toolTipIndex)
-                  {
-                    menuItem.setSelection(true);
-                  }
-
-                  ILabelProvider labelProvider = (ILabelProvider)wrapper.getSetupEditor().selectionViewer.getLabelProvider();
-                  Image image = labelProvider.getImage(wrappedObject);
-                  if (image != null)
-                  {
-                    menuItem.setImage(image);
-                  }
-
-                  final int index = i;
-                  menuItem.addSelectionListener(new SelectionAdapter()
-                  {
-                    @Override
-                    public void widgetSelected(SelectionEvent e)
+                    else
                     {
-                      navigate(index);
+                      text = uri.toString();
+                      text = labelProvider.getText(wrappedObject);
                     }
-                  });
+                  }
+
+                  Image image = labelProvider.getImage(wrappedObject);
+                  items.add(new ItemProvider(text, image));
                 }
 
-                menu.setLocation(location.x, location.y);
-                menu.setVisible(true);
+                int limit = 21;
+                int size = items.size();
+                int index = size - toolTipIndex - 1;
+
+                int start = 0;
+                int end = size;
+                if (size > limit)
+                {
+                  if (index - limit / 2 < 0)
+                  {
+                    start = 0;
+                  }
+                  else
+                  {
+                    start = index - limit / 2;
+                  }
+
+                  end = start + limit;
+                  if (end > size)
+                  {
+                    end = size;
+                    start = end - limit;
+                    if (start < 0)
+                    {
+                      start = 0;
+                    }
+                  }
+                }
+
+                showMenu(items, location, index, start, end, limit);
               }
               else if (forward)
               {
@@ -4432,6 +4451,106 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               {
                 navigate(toolTipIndex - 1);
               }
+            }
+
+            private void showMenu(final List<ItemProvider> items, final Point location, final int index, final int start, final int end, final int limit)
+            {
+              Menu menu = new Menu(browser.getShell());
+              final int size = items.size();
+              int adjustedStart = start;
+              if (end == size)
+              {
+                if (start > 0)
+                {
+                  --adjustedStart;
+                }
+              }
+
+              int adjustedEnd = end;
+              if (start == 0)
+              {
+                if (end < size)
+                {
+                  ++adjustedEnd;
+                }
+              }
+
+              for (int i = 0; i < size; ++i)
+              {
+                if (i < adjustedStart)
+                {
+                  if (i == adjustedStart - 1)
+                  {
+                    MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
+                    menuItem.setText("Forward More");
+                    menuItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("forward"));
+                    menuItem.addSelectionListener(new SelectionAdapter()
+                    {
+                      @Override
+                      public void widgetSelected(SelectionEvent e)
+                      {
+                        int newStart = start - limit;
+                        if (newStart < 0)
+                        {
+                          newStart = 0;
+                        }
+
+                        showMenu(items, location, index, newStart, newStart + limit, limit);
+                      }
+                    });
+                  }
+                }
+                else if (i == adjustedEnd)
+                {
+                  MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
+                  menuItem.setText("Back More");
+                  menuItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("backward"));
+                  menuItem.addSelectionListener(new SelectionAdapter()
+                  {
+                    @Override
+                    public void widgetSelected(SelectionEvent e)
+                    {
+                      int newEnd = end + limit;
+                      if (newEnd > size)
+                      {
+                        newEnd = size;
+                      }
+
+                      showMenu(items, location, index, newEnd - limit, newEnd, limit);
+                    }
+                  });
+                  break;
+                }
+                else
+                {
+                  MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
+                  ItemProvider item = items.get(i);
+                  menuItem.setText(item.getText());
+                  Image image = (Image)item.getImage();
+                  if (image != null)
+                  {
+                    menuItem.setImage(image);
+                  }
+
+                  if (i == index)
+                  {
+                    menuItem.setSelection(true);
+                  }
+
+                  final int itemIndex = i;
+                  menuItem.addSelectionListener(new SelectionAdapter()
+                  {
+                    @Override
+                    public void widgetSelected(SelectionEvent e)
+                    {
+                      navigate(size - itemIndex - 1);
+                    }
+                  });
+                }
+              }
+
+              menu.setLocation(location.x, location.y);
+              menu.setVisible(true);
             }
           }
 
@@ -4458,6 +4577,15 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             {
               Object unwrappedObject = ToolTipObject.unwrap(toolTipObject);
               setupEditor.getActionBarContributor().openInTextEditor(unwrappedObject);
+            }
+          });
+
+          showAdvancedPropertiesItem = createItem(SWT.CHECK, "filter_advanced_properties", "Show Advanced Properties", new SelectionAdapter()
+          {
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+              navigate(toolTipIndex);
             }
           });
 
@@ -4574,14 +4702,14 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             }
           }
 
-          if ("about:blank#".equals(event.location))
+          if (event.location.startsWith("about:blank#"))
           {
             event.doit = false;
           }
           else if ("about:blank?extend".equals(event.location))
           {
             ToolTipObject wrapper = toolTipObjects.get(toolTipIndex);
-            ToolTipObject extendedWrapper = new ToolTipObject(wrapper.getWrappedObject(), this, wrapper.getSetupEditor(), true);
+            ToolTipObject extendedWrapper = new ToolTipObject(wrapper.getWrappedObject(), this, wrapper.getSetupEditor(), true, false);
             toolTipObjects.set(toolTipIndex, extendedWrapper);
             navigate(toolTipIndex);
 
@@ -4590,7 +4718,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           else if ("about:blank?no-extend".equals(event.location))
           {
             ToolTipObject wrapper = toolTipObjects.get(toolTipIndex);
-            ToolTipObject extendedWrapper = new ToolTipObject(wrapper.getWrappedObject(), this, wrapper.getSetupEditor(), false);
+            ToolTipObject extendedWrapper = new ToolTipObject(wrapper.getWrappedObject(), this, wrapper.getSetupEditor(), false, false);
             toolTipObjects.set(toolTipIndex, extendedWrapper);
             navigate(toolTipIndex);
 
@@ -4684,7 +4812,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         else
         {
           IToolTipProvider toolTipProvider = (IToolTipProvider)setupEditor.selectionViewer.getLabelProvider();
-          String toolTipText = toolTipProvider.getToolTipText(toolTipObject);
+          String toolTipText = toolTipProvider.getToolTipText(new ToolTipObject(toolTipObject, showAdvancedPropertiesItem.getSelection()));
           browser.setText(getFullHTML(toolTipText), false);
         }
 
@@ -4700,7 +4828,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     protected void setSelection(Object object)
     {
       IToolTipProvider toolTipProvider = (IToolTipProvider)setupEditor.selectionViewer.getLabelProvider();
-      String toolTipText = toolTipProvider.getToolTipText(new ToolTipObject(object, this, setupEditor, false));
+      String toolTipText = toolTipProvider.getToolTipText(new ToolTipObject(object, this, setupEditor, false, showAdvancedPropertiesItem.getSelection()));
       if (!StringUtil.isEmpty(toolTipText))
       {
         ++toolTipIndex;
@@ -4728,14 +4856,27 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private final SetupEditor setupEditor;
 
-    private boolean extended;
+    private final boolean extended;
 
-    public ToolTipObject(Object wrappedObject, SetupLocationListener locationListener, SetupEditor setupEditor, boolean extended)
+    private final boolean showAdvancedProperties;
+
+    public ToolTipObject(Object wrappedObject, SetupLocationListener locationListener, SetupEditor setupEditor, boolean extended,
+        boolean showAdvancedProperties)
     {
       this.wrappedObject = wrappedObject;
       this.locationListener = locationListener;
       this.setupEditor = setupEditor;
       this.extended = extended;
+      this.showAdvancedProperties = showAdvancedProperties;
+    }
+
+    public ToolTipObject(ToolTipObject toolTipObject, boolean showAdvancedProperties)
+    {
+      wrappedObject = toolTipObject.wrappedObject;
+      locationListener = toolTipObject.locationListener;
+      setupEditor = toolTipObject.setupEditor;
+      extended = toolTipObject.extended;
+      this.showAdvancedProperties = showAdvancedProperties;
     }
 
     public Object getWrappedObject()
@@ -4756,6 +4897,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     public boolean isExtended()
     {
       return extended;
+    }
+
+    public boolean isShowAdvancedProperties()
+    {
+      return showAdvancedProperties;
     }
 
     @Override

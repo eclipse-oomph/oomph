@@ -13,12 +13,14 @@ package org.eclipse.oomph.ui;
 import org.eclipse.oomph.internal.ui.UIPlugin;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.ReflectUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.edit.provider.ComposedImage;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.ControlEvent;
@@ -194,7 +196,6 @@ public abstract class DockableDialog extends Dialog
       result.add(new Point());
       Point overlay = new Point();
       overlay.x = size.width - 7;
-      overlay.y = size.height - 8;
       result.add(overlay);
       return result;
     }
@@ -259,8 +260,10 @@ public abstract class DockableDialog extends Dialog
 
       Map<Class<?>, Set<IWorkbenchPartReference>> typedDockedParts = DOCKED_PARTS.get(workbenchWindow);
       Set<IWorkbenchPartReference> dockedParts = typedDockedParts == null ? null : typedDockedParts.get(type);
+      boolean isInitial = false;
       if (dockedParts == null)
       {
+        isInitial = true;
         dockedParts = new HashSet<IWorkbenchPartReference>();
         if (typedDockedParts == null)
         {
@@ -400,7 +403,6 @@ public abstract class DockableDialog extends Dialog
 
         public ShellHandler(DockableDialog dockableDialog, Set<IWorkbenchPartReference> dockedParts)
         {
-
           this.dockableDialog = dockableDialog;
           shell = dockableDialog.getShell();
           this.dockedParts = dockedParts;
@@ -675,6 +677,23 @@ public abstract class DockableDialog extends Dialog
             action.setChecked(false);
           }
 
+          IDialogSettings dialogBoundsSettings = dockableDialog.getDialogBoundsSettings();
+          if (dialogBoundsSettings != null)
+          {
+            StringBuilder partIDs = new StringBuilder();
+            for (IWorkbenchPartReference partReference : dockedParts)
+            {
+              if (partIDs.length() != 0)
+              {
+                partIDs.append(' ');
+              }
+
+              partIDs.append(partReference.getId());
+            }
+
+            dialogBoundsSettings.put("dockedParts", partIDs.toString());
+          }
+
           dispose();
         }
 
@@ -736,6 +755,30 @@ public abstract class DockableDialog extends Dialog
                 shell.setData("forced", null);
                 shell.setMinimized(false);
                 shell.setVisible(true);
+              }
+            }
+          }
+        }
+
+        private void initialize()
+        {
+          IDialogSettings dialogBoundsSettings = dockableDialog.getDialogBoundsSettings();
+          if (dialogBoundsSettings != null)
+          {
+            String dockedPartIDs = dialogBoundsSettings.get("dockedParts");
+            if (!StringUtil.isEmpty(dockedPartIDs))
+            {
+              gatherTabFolders();
+              List<String> ids = StringUtil.explode(dockedPartIDs, " ");
+              for (Set<IWorkbenchPartReference> partReferences : tabFolderParts.values())
+              {
+                for (IWorkbenchPartReference partReference : partReferences)
+                {
+                  if (ids.contains(partReference.getId()))
+                  {
+                    dockedParts.add(partReference);
+                  }
+                }
               }
             }
           }
@@ -826,6 +869,11 @@ public abstract class DockableDialog extends Dialog
           });
         }
       });
+
+      if (isInitial)
+      {
+        shellHandler.initialize();
+      }
 
       shellHandler.update();
     }

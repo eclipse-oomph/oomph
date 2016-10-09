@@ -219,7 +219,10 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
       {
         EObject eObject = (EObject)unwrappedValue;
         URI uri = EcoreUtil.getURI(eObject);
-        href = uri.toString();
+        if (!uri.isCurrentDocumentReference())
+        {
+          href = uri.toString();
+        }
       }
       else if (unwrappedValue instanceof Resource)
       {
@@ -255,8 +258,8 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
       Object image = propertyLabelProvider.getImage(propertyValue);
       if (image != null)
       {
-        result.append(
-            "<img style='margin-bottom: -2px;' src='" + ImageURIRegistry.INSTANCE.getImageURI(ExtendedImageRegistry.INSTANCE.getImage(image)) + "'/>&nbsp;");
+        result.append("<img style='margin-bottom: -2px; margin-right: 4px;' src='"
+            + ImageURIRegistry.INSTANCE.getImageURI(ExtendedImageRegistry.INSTANCE.getImage(image)) + "'/>");
       }
 
       if (!StringUtil.isEmpty(valueText))
