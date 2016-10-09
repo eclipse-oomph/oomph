@@ -50,12 +50,14 @@ import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
 import org.eclipse.oomph.setup.ui.SetupTransferSupport;
 import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
+import org.eclipse.oomph.ui.DockableDialog;
 import org.eclipse.oomph.ui.UIUtil;
-import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
+import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor;
+import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor.PreviewDialog.WorkingSetsProvider;
 
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.command.AbstractCommand;
@@ -160,7 +162,6 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -188,7 +189,6 @@ import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -196,10 +196,7 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.ShellAdapter;
-import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
@@ -221,20 +218,15 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
-import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWindowListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PerspectiveAdapter;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.ide.IGotoMarker;
@@ -280,8 +272,8 @@ import java.util.regex.Pattern;
  * <!-- end-user-doc -->
  * @generated not
  */
-public class SetupEditor extends MultiPageEditorPart
-    implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker, IRevertablePart
+public class SetupEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker,
+    IRevertablePart, WorkingSetsActionBarContributor.PreviewDialog.Previewable
 {
   private static final URI LEGACY_MODELS = URI.createURI("platform:/plugin/" + BasePlugin.INSTANCE.getSymbolicName() + "/model/legacy");
 
@@ -300,20 +292,7 @@ public class SetupEditor extends MultiPageEditorPart
     List<Object> images = new ArrayList<Object>(2);
     images.add(VARIABLE_GROUP_IMAGE);
     images.add(EMFEditUIPlugin.INSTANCE.getImage("full/ovr16/error_ovr.gif"));
-    ComposedImage composedImage = new ComposedImage(images)
-    {
-      @Override
-      public List<Point> getDrawPoints(Size size)
-      {
-        List<Point> result = new ArrayList<Point>();
-        result.add(new Point());
-        Point overlay = new Point();
-        overlay.y = 7;
-        result.add(overlay);
-        return result;
-      }
-    };
-
+    ComposedImage composedImage = new ErrorOverlayImage(images);
     UNDECLARED_VARIABLE_GROUP_IMAGE = ExtendedImageRegistry.INSTANCE.getImage(composedImage);
   }
 
@@ -452,7 +431,7 @@ public class SetupEditor extends MultiPageEditorPart
       }
       else if (!(p instanceof SetupEditor))
       {
-        ((org.eclipse.ui.internal.EditorSite)getEditorSite()).deactivateActionBars(false);
+        ((org.eclipse.ui.internal.EditorSite)getEditorSite()).deactivateActionBars(true);
       }
     }
 
@@ -778,6 +757,8 @@ public class SetupEditor extends MultiPageEditorPart
 
   private Runnable reproxifier;
 
+  protected SetupActionBarContributor.SetupWorkingSetsProvider workingSetsProvider = new SetupActionBarContributor.SetupWorkingSetsProvider();
+
   /**
    * This creates a model editor.
    * <!-- begin-user-doc -->
@@ -788,6 +769,11 @@ public class SetupEditor extends MultiPageEditorPart
   {
     super();
     initializeEditingDomain();
+  }
+
+  public WorkingSetsProvider getWorkingSetsProvider()
+  {
+    return workingSetsProvider;
   }
 
   /**
@@ -1514,6 +1500,28 @@ public class SetupEditor extends MultiPageEditorPart
   }
 
   /**
+   * @author Ed Merks
+   */
+  private static class ErrorOverlayImage extends ComposedImage
+  {
+    private ErrorOverlayImage(Collection<?> images)
+    {
+      super(images);
+    }
+
+    @Override
+    public List<Point> getDrawPoints(Size size)
+    {
+      List<Point> result = new ArrayList<Point>();
+      result.add(new Point());
+      Point overlay = new Point();
+      overlay.y = 7;
+      result.add(overlay);
+      return result;
+    }
+  }
+
+  /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1670,7 +1678,6 @@ public class SetupEditor extends MultiPageEditorPart
           {
             if ("team.main".equals(id) || "replaceWithMenu".equals(id) || "compareWithMenu".equals(id))
             {
-              System.err.println("####" + itemToAdd.getId());
               itemToAdd.setVisible(false);
             }
           }
@@ -4774,20 +4781,8 @@ public class SetupEditor extends MultiPageEditorPart
    *
    * @author Ed Merks
    */
-  public static class BrowserDialog extends Dialog
+  public static class BrowserDialog extends DockableDialog
   {
-    /**
-     * There can be at most one per workbench window.
-     */
-    private static final Map<IWorkbenchWindow, BrowserDialog> BROWSERS = new HashMap<IWorkbenchWindow, BrowserDialog>();
-
-    /**
-     * Remember where the dialog is docked per workbench window.
-     */
-    private static final Map<IWorkbenchWindow, Set<IWorkbenchPartReference>> DOCKED_PARTS = new HashMap<IWorkbenchWindow, Set<IWorkbenchPartReference>>();
-
-    private final IWorkbenchWindow workbenchWindow;
-
     private final SetupLocationListener locationListener = new SetupLocationListener(false);
 
     /**
@@ -4816,15 +4811,11 @@ public class SetupEditor extends MultiPageEditorPart
 
     protected BrowserDialog(IWorkbenchWindow workbenchWindow)
     {
-      super(workbenchWindow.getShell());
-
-      setShellStyle(getShellStyle() ^ SWT.APPLICATION_MODAL | SWT.MODELESS | SWT.RESIZE | SWT.MAX | SWT.MIN);
-      setBlockOnOpen(false);
-
-      this.workbenchWindow = workbenchWindow;
+      super(workbenchWindow);
     }
 
-    protected void setWorkbenchPart(IWorkbenchPart part)
+    @Override
+    protected boolean handleWorkbenchPart(IWorkbenchPart part)
     {
       // Determines if the part corresponds to one that can show a setup editor's information via its selection.
       SetupEditor setupEditor = null;
@@ -4845,22 +4836,7 @@ public class SetupEditor extends MultiPageEditorPart
 
       locationListener.setEditor(setupEditor);
 
-      // If there is no setup editor, hide the shell, otherwise show the shell.
-      Shell shell = getShell();
-      if (setupEditor == null)
-      {
-        shell.setVisible(false);
-        shell.setData("forced", true);
-        shell.setMinimized(true);
-        shell.notifyListeners(SWT.Iconify, new Event());
-      }
-      else if (Boolean.TRUE.equals(shell.getData("forced")))
-      {
-        shell.setMinimized(false);
-        shell.notifyListeners(SWT.Deiconify, new Event());
-        shell.setData("forced", false);
-        shell.setVisible(true);
-      }
+      return setupEditor != null;
     }
 
     /**
@@ -4924,7 +4900,7 @@ public class SetupEditor extends MultiPageEditorPart
       browser.addLocationListener(locationListener);
 
       // Hook up the selection listener and be sure we clean it up when the browser is disposed.
-      final ISelectionService selectionService = workbenchWindow.getSelectionService();
+      final ISelectionService selectionService = getWorkbenchWindow().getSelectionService();
       selectionService.addPostSelectionListener(selectionListener);
       browser.addDisposeListener(new DisposeListener()
       {
@@ -4939,15 +4915,19 @@ public class SetupEditor extends MultiPageEditorPart
     }
 
     /**
+     * Returns the instance for this workbench window, if there is one.
+     */
+    public static BrowserDialog getFor(IWorkbenchWindow workbenchWindow)
+    {
+      return DockableDialog.getFor(BrowserDialog.class, workbenchWindow);
+    }
+
+    /**
      * Close the instance for this workbench window, if there is one.
      */
-    public static void closeFor(final IWorkbenchWindow workbenchWindow)
+    public static void closeFor(IWorkbenchWindow workbenchWindow)
     {
-      BrowserDialog browserDialog = BROWSERS.get(workbenchWindow);
-      if (browserDialog != null)
-      {
-        browserDialog.close();
-      }
+      DockableDialog.closeFor(BrowserDialog.class, workbenchWindow);
     }
 
     /**
@@ -4955,535 +4935,15 @@ public class SetupEditor extends MultiPageEditorPart
      */
     public static BrowserDialog openFor(final IWorkbenchWindow workbenchWindow)
     {
-      // Create a new one if there isn't an existing one.
-      BrowserDialog browserDialog = BROWSERS.get(workbenchWindow);
-      if (browserDialog == null)
+      Factory<BrowserDialog> factory = new Factory<BrowserDialog>()
       {
-        browserDialog = new BrowserDialog(workbenchWindow);
-        BROWSERS.put(workbenchWindow, browserDialog);
-        browserDialog.open();
-
-        Set<IWorkbenchPartReference> dockedParts = DOCKED_PARTS.get(workbenchWindow);
-        if (dockedParts == null)
+        public BrowserDialog create(IWorkbenchWindow workbenchWindow)
         {
-          dockedParts = new HashSet<IWorkbenchPartReference>();
-          DOCKED_PARTS.put(workbenchWindow, dockedParts);
+          return new BrowserDialog(workbenchWindow);
         }
+      };
 
-        // Be sure to clean it from the map when either the workbench window or the browser itself is disposed.
-        DisposeListener disposeListener = new DisposeListener()
-        {
-          public void widgetDisposed(DisposeEvent e)
-          {
-            BROWSERS.remove(workbenchWindow);
-            DOCKED_PARTS.remove(workbenchWindow);
-          }
-        };
-
-        // Also clean up if the workbench window is disposed.
-        final Shell windowShell = workbenchWindow.getShell();
-        windowShell.addDisposeListener(disposeListener);
-
-        /**
-         * This monitors the shell events, such as dragging to a new position.
-         * It's primary purpose to to support docking of the browser shell into a part stack on a workbench window.
-         *
-         * @author Ed Merks
-         */
-        class ShellHandler extends ShellAdapter implements ControlListener, DisposeListener, Runnable
-        {
-          private final Shell shell;
-
-          private final Display display;
-
-          /**
-           * A map from a tab folder (corresponding to a part stack) to the absolute display bounds where it is located.
-           */
-          private final Map<CTabFolder, Rectangle> tabFolders = new HashMap<CTabFolder, Rectangle>();
-
-          /**
-           * A map from a tab folder to the part references in that part stack.
-           */
-          private final Map<CTabFolder, Set<IWorkbenchPartReference>> tabFolderParts = new HashMap<CTabFolder, Set<IWorkbenchPartReference>>();
-
-          /**
-           * The cursor we show when in a docking location.
-           */
-          private final Cursor sizeAllCursor;
-
-          /**
-           * A listener that listens to the tab folder and to the overall workbench window to track resizing and movement so that the docking position can be maintained.
-           */
-          private final ControlListener dockingListener = new ControlListener()
-          {
-            public void controlResized(ControlEvent e)
-            {
-              update();
-            }
-
-            public void controlMoved(ControlEvent e)
-            {
-              update();
-            }
-          };
-
-          /**
-           * The point at which we most recently hovered in a location where we could dock the shell.
-           */
-          private Point snapPoint;
-
-          /**
-           * This is true only while we are doing the positioning of the shell.
-           */
-          private boolean ignoreControlMoved;
-
-          /**
-           * Because we don't receive events such as mouse moves or mouse clicks from the shell, we keep track of how and whether the cursor is moving.
-           * @see #run()
-           */
-          private Point cursorLocation;
-
-          /**
-           * This records the most recent time the cursor has been moved to a different location.
-           * @see #run()
-           */
-          private long timeOfLastCursorChange;
-
-          /**
-           * This is the most recent bounds where we can dock the shell.
-           */
-          private Rectangle hotZone;
-
-          /**
-           * Because we want to be able to drag the docked shell slightly away from the docking site to undock it,
-           * we keep track of the hot zone changes and ignore it initially for a short period of time.
-           */
-          private long timeOfLastHotZoneChange;
-
-          /**
-           * It's very hard to clear the hotZone and the snapPoint because we could just get no events when the interaction ends.
-           * So we keep track of when the last time a moved happened and if a short period of time passes, we assume we're starting a new interaction.
-           */
-          private long timeOfLastMove;
-
-          /**
-           * This is set after docking.
-           * When we hover in a docking position for a short period of time, we set the shell to be at that bounds of that hot zone.
-           * But when the mouse is released the shell automatically will move to it's original position, for which we get an event,
-           * and then we can use these bounds to set the shell back yet again to the right bounds.
-           *
-           * @see #dock(Rectangle)
-           */
-          private Rectangle snapBounds;
-
-          /**
-           * This the part stack where we are docked and that we will track when it resizes or moves.
-           */
-          private CTabFolder dockedTabFolder;
-
-          /**
-           * These are the part references at the part stack.
-           * We record these so that if we turn to a new perspective, we can try to dock at a different part stack that contains one of the part references.
-           */
-          private Set<IWorkbenchPartReference> dockedParts;
-
-          public ShellHandler(Shell shell, Set<IWorkbenchPartReference> dockedParts)
-          {
-            this.shell = shell;
-            this.dockedParts = dockedParts;
-            display = shell.getDisplay();
-            sizeAllCursor = display.getSystemCursor(SWT.CURSOR_SIZEALL);
-
-            shell.addShellListener(this);
-            shell.addControlListener(this);
-            shell.addDisposeListener(this);
-          }
-
-          @Override
-          public void shellClosed(ShellEvent e)
-          {
-            BROWSERS.remove(workbenchWindow);
-          }
-
-          @Override
-          public void shellIconified(ShellEvent e)
-          {
-            shell.setVisible(false);
-          }
-
-          public void controlResized(ControlEvent e)
-          {
-            // Ignore.
-          }
-
-          public void controlMoved(ControlEvent e)
-          {
-            // When the shell is maximized, we get a moved event, and we can use that to clear the snap bounds
-            // so that the restore goes back to the right position rather than the snap position.
-            //
-            boolean maximized = shell.getMaximized();
-            if (maximized)
-            {
-              snapBounds = null;
-            }
-
-            // We do nothing we are the ones moving the shell or the shell is maximized.
-            if (!ignoreControlMoved && !maximized)
-            {
-              // We have snap bounds to apply, because releasing the mouse after docking moved the shell yet again, we can apply it now, and we never have to do
-              // it again.
-              if (snapBounds != null)
-              {
-                setBounds(snapBounds);
-                dock(snapBounds);
-                snapBounds = null;
-              }
-              else
-              {
-                // If we have a docking site...
-                if (dockedTabFolder != null)
-                {
-                  // And we moved outside of it...
-                  if (!getBounds(dockedTabFolder).equals(shell.getBounds()))
-                  {
-                    // Undock the shell.
-                    dock(null);
-                  }
-                  else
-                  {
-                    // Otherwise we have moved to exactly the docking site, in which case we don't want to do anything!
-                    return;
-                  }
-                }
-              }
-
-              // If we haven't moved the shell for a short white, assume we're staring a new interaction.
-              long newTimeOfLastMove = System.currentTimeMillis();
-              if (newTimeOfLastMove - timeOfLastMove > 1000)
-              {
-                hotZone = null;
-                snapPoint = null;
-              }
-
-              timeOfLastMove = newTimeOfLastMove;
-
-              // Determine the hot zone at the cursor location.
-              Point cursorLocation = display.getCursorLocation();
-              Rectangle newHotZone = getHotZone(cursorLocation);
-              if (newHotZone != null)
-              {
-                // If it's a new one...
-                if (!newHotZone.equals(hotZone))
-                {
-                  // Keep track of when we first entered this new hot zone.
-                  timeOfLastHotZoneChange = System.currentTimeMillis();
-                  hotZone = newHotZone;
-                }
-
-                // If we've been in this hot zone for a short period of time...
-                if (System.currentTimeMillis() - timeOfLastHotZoneChange > 400)
-                {
-                  // If we have no snap point for this yet...
-                  if (snapPoint == null)
-                  {
-                    // Show a different cursor and start the heartbeat runnable.
-                    shell.setCursor(sizeAllCursor);
-                    display.timerExec(100, this);
-                  }
-
-                  // keep track of where we started.
-                  snapPoint = cursorLocation;
-                }
-              }
-              else
-              {
-                // If we're outside of a hot zone, reset all the state.
-                shell.setCursor(null);
-                snapPoint = null;
-                hotZone = null;
-                dock(null);
-              }
-            }
-          }
-
-          /**
-           * This is the heartbeat runnable that's started once we've hovered over a hot zone for a short period of time.
-           */
-          public void run()
-          {
-            // Keep track of cursor movements, so that only if you hover for a while in the same location will the shell be snapped to the hot zone.
-            Point newCursorLocation = display.getCursorLocation();
-            if (cursorLocation == null || !cursorLocation.equals(newCursorLocation))
-            {
-              timeOfLastCursorChange = System.currentTimeMillis();
-              cursorLocation = newCursorLocation;
-            }
-
-            if (snapPoint == null)
-            {
-              // Not in hot zone.
-              shell.setCursor(null);
-            }
-            else if (System.currentTimeMillis() - timeOfLastCursorChange > 500)
-            {
-              // Get the bounds for the hot zone, and dock to that location.
-              snapBounds = getHotZone(snapPoint);
-              setBounds(snapBounds);
-              snapPoint = null;
-              timeOfLastCursorChange = System.currentTimeMillis();
-              dock(snapBounds);
-              shell.setCursor(null);
-            }
-            else
-            {
-              // Still moving the cursor, so check again in a while.
-              display.timerExec(100, this);
-            }
-          }
-
-          /**
-           * Returns the hot zone rectangle if the cursor is within the tab area of that zone.
-           */
-          private Rectangle getHotZone(Point cursorLocation)
-          {
-            for (Rectangle rectangle : getHotZones())
-            {
-              final Rectangle hotZone = new Rectangle(rectangle.x, rectangle.y, rectangle.width, 30);
-              if (hotZone.contains(cursorLocation))
-              {
-                return rectangle;
-              }
-            }
-
-            return null;
-          }
-
-          /**
-           * We call this when we set to bounds of the shell so that we can ignore the events we're causing ourselves.
-           */
-          private void setBounds(Rectangle bounds)
-          {
-            ignoreControlMoved = true;
-            shell.setBounds(bounds);
-            ignoreControlMoved = false;
-          }
-
-          /**
-           * Docks the shell at this rectangle.
-           * We listen to the tab folder and the workbench window shell, so we need to maintain those listeners properly.
-           */
-          private void dock(Rectangle rectangle)
-          {
-            gatherTabFolders();
-
-            // Remove any existing listeners.
-            windowShell.removeControlListener(dockingListener);
-            if (dockedTabFolder != null)
-            {
-              dockedTabFolder.removeControlListener(dockingListener);
-            }
-
-            // Clean up the docking points; they'll be populated new, if possible.
-            dockedParts.clear();
-
-            for (Map.Entry<CTabFolder, Rectangle> entry : tabFolders.entrySet())
-            {
-              if (entry.getValue().equals(rectangle))
-              {
-                // If we find an appropriate part stack, add the listeners and record the information about the docking site and the part references associated
-                // with it.
-                windowShell.addControlListener(dockingListener);
-                dockedTabFolder = entry.getKey();
-                dockedTabFolder.addControlListener(dockingListener);
-                dockedParts.addAll(tabFolderParts.get(dockedTabFolder));
-                return;
-              }
-            }
-
-            // Clear the recorded information to undock the shell.
-            dockedTabFolder = null;
-          }
-
-          private void dispose()
-          {
-            // Clear up any docking listeners that might currently be in place.
-            windowShell.removeControlListener(dockingListener);
-            if (dockedTabFolder != null)
-            {
-              dockedTabFolder.removeControlListener(dockingListener);
-            }
-          }
-
-          public void widgetDisposed(DisposeEvent e)
-          {
-            BROWSERS.remove(workbenchWindow);
-            shell.removeShellListener(this);
-            shell.removeControlListener(this);
-            dispose();
-          }
-
-          /**
-           * This is called when the docking site or workbench window shell moves or changes because of perspective switching.
-           */
-          private void update()
-          {
-            if (!dockedParts.isEmpty())
-            {
-              gatherTabFolders();
-
-              // If our docking site available or isn't visible...
-              if (dockedTabFolder == null || !dockedTabFolder.isVisible())
-              {
-                // Find a new corresponding docking site, i.e., one that contains one of the part references in the part stack to which we're currently docked.
-                for (IWorkbenchPartReference partReference : dockedParts)
-                {
-                  for (Map.Entry<CTabFolder, Set<IWorkbenchPartReference>> entry : tabFolderParts.entrySet())
-                  {
-                    if (entry.getValue().contains(partReference))
-                    {
-                      // Dock to this new replacement.
-                      CTabFolder tabFolder = entry.getKey();
-                      Rectangle bounds = getBounds(tabFolder);
-                      setBounds(bounds);
-                      dock(bounds);
-
-                      // If we've been forced to minimize the shell because there is no docking site in the perspective, but now we do have a docking site,
-                      // make the shell visible again.
-                      if (shell.getMinimized() && Boolean.TRUE.equals(shell.getData("forced")))
-                      {
-                        shell.setData("forced", null);
-                        shell.setMinimized(false);
-                        shell.setVisible(true);
-                      }
-
-                      return;
-                    }
-                  }
-                }
-
-                if (dockedTabFolder != null)
-                {
-                  // There is no docking site, for minimize the shell and mark that as forced (as opposed to the user having mimimized the shell.
-                  shell.setMinimized(true);
-                  shell.setVisible(false);
-                  shell.setData("forced", true);
-                }
-              }
-              else
-              {
-                // Get the new bounds for the docking site and apply them.
-                // Restore the shell if it's been forced into minimized state.
-                Rectangle bounds = getBounds(dockedTabFolder);
-                setBounds(bounds);
-                if (shell.getMinimized() && Boolean.TRUE.equals(shell.getData("forced")))
-                {
-                  shell.setData("forced", null);
-                  shell.setMinimized(false);
-                  shell.setVisible(true);
-                }
-              }
-            }
-          }
-
-          private Collection<Rectangle> getHotZones()
-          {
-            gatherTabFolders();
-            return tabFolders.values();
-          }
-
-          /**
-           * Gets the bounds for the tab folder in display absolute coordinates.
-           */
-          private Rectangle getBounds(CTabFolder tabFolder)
-          {
-            Rectangle bounds = tabFolder.getBounds();
-            Point displayPoint = tabFolder.getParent().toDisplay(bounds.x, bounds.y);
-            bounds.x = displayPoint.x;
-            bounds.y = displayPoint.y;
-            return bounds;
-          }
-
-          public void gatherTabFolders()
-          {
-            tabFolders.clear();
-            tabFolderParts.clear();
-
-            // Visit all the part references of the page.
-            IWorkbenchPage page = workbenchWindow.getActivePage();
-            if (page != null)
-            {
-              IViewReference[] viewReferences = page.getViewReferences();
-              for (IViewReference viewReference : viewReferences)
-              {
-                gatherTabFolders(viewReference);
-              }
-
-              IEditorReference[] editorReferences = page.getEditorReferences();
-              for (IEditorReference editorReference : editorReferences)
-              {
-                gatherTabFolders(editorReference);
-              }
-            }
-          }
-
-          private void gatherTabFolders(IWorkbenchPartReference partReference)
-          {
-            // Get the widget associated the the part...
-            Object part = ReflectUtil.getValue("part", partReference);
-            if (part != null)
-            {
-              Object widget = ReflectUtil.invokeMethod("getWidget", part);
-              if (widget instanceof Control)
-              {
-                // Walk up until we hit a visible tab folder.
-                for (Control control = (Control)widget; control != null; control = control.getParent())
-                {
-                  if (control.isVisible() && control instanceof CTabFolder)
-                  {
-                    // Add it to the map, keeping track of the part references in each part stack.
-                    CTabFolder tabFolder = (CTabFolder)control;
-                    tabFolders.put(tabFolder, getBounds(tabFolder));
-                    CollectionUtil.add(tabFolderParts, tabFolder, partReference);
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        // Listen for shell and control events.
-        final Shell shell = browserDialog.getShell();
-        final ShellHandler shellHandler = new ShellHandler(shell, dockedParts);
-
-        // Listen to perspective changes so we can update the docking site as needed.
-        workbenchWindow.addPerspectiveListener(new PerspectiveAdapter()
-        {
-          @Override
-          public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective)
-          {
-            UIUtil.asyncExec(shell, new Runnable()
-            {
-              public void run()
-              {
-                shellHandler.update();
-              }
-            });
-          }
-        });
-
-        shellHandler.update();
-      }
-      else
-      {
-        // Show the shell if it already exists.
-        final Shell shell = browserDialog.getShell();
-        shell.setMinimized(false);
-        shell.setVisible(true);
-        shell.setData("forced", null);
-        shell.setFocus();
-      }
-
-      return browserDialog;
+      return DockableDialog.openFor(BrowserDialog.class, factory, workbenchWindow);
     }
   }
 }

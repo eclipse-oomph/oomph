@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.ui.actions;
 
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -79,6 +80,7 @@ public class ToggleDisabledAction implements IObjectActionDelegate
     }
 
     action.setEnabled(!tasks.isEmpty());
+    action.setImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor(disabled ? "checkbox_checked" : "checkbox_unchecked"));
     action.setChecked(disabled);
   }
 

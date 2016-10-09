@@ -30,11 +30,14 @@ import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
 import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
+import org.eclipse.oomph.ui.DockableDialog;
+import org.eclipse.oomph.ui.DockableDialog.Factory;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.workingsets.WorkingSet;
 import org.eclipse.oomph.workingsets.WorkingSetsPackage;
-import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor.PreviewDialog;
+import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor;
+import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor.ShowPreviewAction;
 
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.EList;
@@ -80,6 +83,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.SubContributionItem;
 import org.eclipse.jface.bindings.Binding;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -88,8 +92,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.events.ShellAdapter;
-import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
@@ -104,6 +106,7 @@ import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
@@ -214,9 +217,9 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
    * This is the menu manager into which menu contribution items should be added for CreateChild actions.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
-  protected IMenuManager createChildMenuManager;
+  protected MenuManager createChildMenuManager;
 
   /**
    * This will contain one {@link org.eclipse.emf.edit.ui.action.CreateSiblingAction} corresponding to each descriptor
@@ -231,9 +234,9 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
    * This is the menu manager into which menu contribution items should be added for CreateSibling actions.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
-  protected IMenuManager createSiblingMenuManager;
+  protected MenuManager createSiblingMenuManager;
 
   private final ToggleViewerInputAction toggleViewerInputAction = new ToggleViewerInputAction();
 
@@ -258,6 +261,8 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
   private final ShowInformationBrowserAction showInformationBrowserAction = new ShowInformationBrowserAction();
 
+  protected final WorkingSetsActionBarContributor.ShowPreviewAction showPreviewAction = new ShowPreviewAction("Show Working Sets Preview");
+
   private int lastSubMenuID;
 
   /**
@@ -278,11 +283,12 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   @Override
   public void init(IActionBars actionBars)
   {
-    super.init(actionBars);
+    validateAction = null;
 
     showPropertiesViewAction.setPage(getPage());
     liveValidationAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("live_validation"));
     refreshViewerAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("refresh_view"));
+    controlAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("control"));
 
     loadResourceAction = new LoadResourceAction()
     {
@@ -313,6 +319,14 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
         }
       }
     };
+
+    loadResourceAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("load"));
+    loadResourceAction.setId("load");
+
+    controlAction.setId("control");
+    liveValidationAction.setId("live");
+
+    super.init(actionBars);
   }
 
   public final ToggleViewerInputAction getToggleViewerInputAction()
@@ -342,6 +356,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     toolBarManager.add(editorTableAction);
     // toolBarManager.add(testInstallAction);
     toolBarManager.add(showInformationBrowserAction);
+    toolBarManager.add(showPreviewAction);
     toolBarManager.add(toggleViewerInputAction);
     super.contributeToToolBar(toolBarManager);
     toolBarManager.add(new Separator("setup-additions"));
@@ -354,8 +369,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public void contributeToMenu(IMenuManager menuManager)
+  public void contributeToMenuGen(IMenuManager menuManager)
   {
     super.contributeToMenu(menuManager);
 
@@ -389,6 +403,14 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     addGlobalActions(submenuManager);
   }
 
+  @Override
+  public void contributeToMenu(IMenuManager menuManager)
+  {
+    contributeToMenuGen(menuManager);
+    createChildMenuManager.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("create_child"));
+    createSiblingMenuManager.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("create_sibling"));
+  }
+
   /**
    * When the active editor changes, this remembers the change and registers with it as a selection provider.
    * <!-- begin-user-doc -->
@@ -409,6 +431,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     openInTextEditorAction.setActiveWorkbenchPart(part);
     capturePreferencesAction.setActiveWorkbenchPart(part);
     importPreferencesAction.setActiveWorkbenchPart(part);
+    showPreviewAction.setActiveWorkbenchPart(part);
     showInformationBrowserAction.setActiveWorkbenchPart(part);
 
     // Switch to the new selection provider.
@@ -942,101 +965,23 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
    * This populates the pop-up menu before it appears.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
-  public void menuAboutToShowGen(IMenuManager menuManager)
+  @Override
+  public void menuAboutToShow(IMenuManager menuManager)
   {
     super.menuAboutToShow(menuManager);
     MenuManager submenuManager = null;
 
-    submenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item"));
+    submenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item"),
+        SetupEditorPlugin.INSTANCE.getImageDescriptor("create_child"), "CreateChild");
     populateManager(submenuManager, createChildActions, null);
     menuManager.insertBefore("edit", submenuManager);
 
-    submenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item"));
+    submenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item"),
+        SetupEditorPlugin.INSTANCE.getImageDescriptor("create_sibling"), "CreateSibling");
     populateManager(submenuManager, createSiblingActions, null);
     menuManager.insertBefore("edit", submenuManager);
-  }
-
-  @Override
-  public void menuAboutToShow(IMenuManager menuManager)
-  {
-    menuAboutToShowGen(menuManager);
-    menuManager.insertBefore("ui-actions", new Action()
-    {
-      @Override
-      public String getText()
-      {
-        return "Working Sets Preview...";
-      }
-
-      @Override
-      public void run()
-      {
-        Dialog dialog = new PreviewDialog(activeEditorPart.getSite().getShell(), activeEditorPart)
-        {
-          private List<WorkingSet> workingSets = new ArrayList<WorkingSet>();
-
-          @Override
-          protected void selectionChanged(IWorkbenchPart part, ISelection selection)
-          {
-            if (part == activeEditorPart)
-            {
-              List<WorkingSet> oldWorkingSets = workingSets;
-              workingSets = getWorkingSets();
-              if (workingSets != oldWorkingSets)
-              {
-                reconcile();
-                tree.setInput(input);
-                tree.expandAll();
-              }
-            }
-
-            super.selectionChanged(part, selection);
-          }
-
-          @Override
-          protected List<WorkingSet> getWorkingSets()
-          {
-            IStructuredSelection selection = (IStructuredSelection)((ISelectionProvider)activeEditorPart).getSelection();
-            LOOP: for (Object object : selection.toArray())
-            {
-              if (object instanceof EObject)
-              {
-                for (EObject eObject = (EObject)object; eObject != null; eObject = eObject.eContainer())
-                {
-                  List<WorkingSet> workingSets = getWorkingSets(eObject);
-                  if (workingSets != null)
-                  {
-                    this.workingSets = workingSets;
-                    break LOOP;
-                  }
-                }
-              }
-            }
-
-            return workingSets;
-          }
-
-          private List<WorkingSet> getWorkingSets(EObject eObject)
-          {
-            for (EReference eReference : eObject.eClass().getEAllReferences())
-            {
-              if (eReference.isMany() && eReference.getEType() == WorkingSetsPackage.Literals.WORKING_SET)
-              {
-                @SuppressWarnings("unchecked")
-                EList<WorkingSet> value = (EList<WorkingSet>)eObject.eGet(eReference);
-                return value;
-              }
-            }
-
-            return null;
-          }
-        };
-
-        dialog.open();
-      }
-    });
 
     menuManager.insertBefore("ui-actions", openInSetupEditorAction);
     menuManager.insertBefore("ui-actions", openInTextEditorAction);
@@ -1062,11 +1007,12 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   @Override
   protected void addGlobalActions(IMenuManager menuManager)
   {
-    liveValidationAction.setId("live");
     addGlobalActionsGen(menuManager);
     showTooltipsAction.setChecked(isShowTooltips());
     menuManager.insertAfter("live", new ActionContributionItem(showTooltipsAction));
     menuManager.insertBefore("properties", new ActionContributionItem(showInformationBrowserAction));
+    menuManager.insertBefore("properties", showPreviewAction);
+    menuManager.insertBefore("load", menuManager.remove("control"));
   }
 
   /**
@@ -1438,6 +1384,40 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
         return "UTF-8 is unsupported";
       }
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected Class<CommandTableDialog> getDialogClass()
+    {
+      return CommandTableDialog.class;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected DockableDialog.Factory<CommandTableDialog> getDialogFactory()
+    {
+      return new Factory<CommandTableDialog>()
+      {
+        public CommandTableDialog create(IWorkbenchWindow workbenchWindow)
+        {
+          return new CommandTableDialog(workbenchWindow, CommandTableAction.this);
+        }
+      };
+    }
+
+    private static final class CommandTableDialog extends TableDialog
+    {
+      public CommandTableDialog(IWorkbenchWindow workbenchWindow, AbstractTableAction tableAction)
+      {
+        super(workbenchWindow, tableAction);
+      }
+
+      @Override
+      protected IDialogSettings getDialogBoundsSettings()
+      {
+        return SetupEditorPlugin.INSTANCE.getDialogSettings("CommandTable");
+      }
+    }
   }
 
   /**
@@ -1478,6 +1458,40 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       catch (UnsupportedEncodingException ex)
       {
         return "UTF-8 is unsupported";
+      }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected Class<EditorTableDialog> getDialogClass()
+    {
+      return EditorTableDialog.class;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected DockableDialog.Factory<EditorTableDialog> getDialogFactory()
+    {
+      return new Factory<EditorTableDialog>()
+      {
+        public EditorTableDialog create(IWorkbenchWindow workbenchWindow)
+        {
+          return new EditorTableDialog(workbenchWindow, EditorTableAction.this);
+        }
+      };
+    }
+
+    private static final class EditorTableDialog extends TableDialog
+    {
+      public EditorTableDialog(IWorkbenchWindow workbenchWindow, AbstractTableAction tableAction)
+      {
+        super(workbenchWindow, tableAction);
+      }
+
+      @Override
+      protected IDialogSettings getDialogBoundsSettings()
+      {
+        return SetupEditorPlugin.INSTANCE.getDialogSettings("EditorTable");
       }
     }
   }
@@ -1850,27 +1864,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       }
 
       browserDialog.setInput(setupEditor, object);
-
-      browserDialog.getShell().addShellListener(new ShellAdapter()
-      {
-        @Override
-        public void shellClosed(ShellEvent e)
-        {
-          setChecked(false);
-        }
-
-        @Override
-        public void shellDeiconified(ShellEvent e)
-        {
-          setChecked(true);
-        }
-
-        @Override
-        public void shellIconified(ShellEvent e)
-        {
-          setChecked(false);
-        }
-      });
+      browserDialog.associate(this);
     }
 
     public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
@@ -1879,6 +1873,11 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       {
         setupEditor = (SetupEditor)workbenchPart;
         setEnabled(true);
+        BrowserDialog browserDialog = BrowserDialog.getFor(workbenchPart.getSite().getWorkbenchWindow());
+        if (browserDialog != null)
+        {
+          browserDialog.associate(this);
+        }
       }
       else
       {
@@ -1951,6 +1950,45 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       {
         SetupEditorPlugin.INSTANCE.log(exception);
       }
+    }
+  }
+
+  protected static class SetupWorkingSetsProvider extends WorkingSetsActionBarContributor.PreviewDialog.WorkingSetsProvider
+  {
+    @Override
+    protected List<WorkingSet> getWorkingSets(IStructuredSelection selection)
+    {
+      for (Object object : selection.toArray())
+      {
+        if (object instanceof EObject)
+        {
+          for (EObject eObject = (EObject)object; eObject != null; eObject = eObject.eContainer())
+          {
+            List<WorkingSet> workingSets = getWorkingSets(eObject);
+            if (workingSets != null)
+            {
+              return workingSets;
+            }
+          }
+        }
+      }
+
+      return Collections.emptyList();
+    }
+
+    private List<WorkingSet> getWorkingSets(EObject eObject)
+    {
+      for (EReference eReference : eObject.eClass().getEAllReferences())
+      {
+        if (eReference.isMany() && eReference.getEType() == WorkingSetsPackage.Literals.WORKING_SET)
+        {
+          @SuppressWarnings("unchecked")
+          EList<WorkingSet> value = (EList<WorkingSet>)eObject.eGet(eReference);
+          return value;
+        }
+      }
+
+      return null;
     }
   }
 }

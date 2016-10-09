@@ -175,7 +175,7 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
 
     public FindAction()
     {
-      super("Find/Replace...");
+      super("Find/Replace...", UIPlugin.INSTANCE.getImageDescriptor("search"));
     }
 
     @Override

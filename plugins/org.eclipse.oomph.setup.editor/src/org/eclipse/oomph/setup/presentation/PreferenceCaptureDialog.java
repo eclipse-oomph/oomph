@@ -33,6 +33,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -110,6 +111,12 @@ public class PreferenceCaptureDialog extends Dialog
     super.configureShell(shell);
     shell.setText(fromEclipsePreferenceFile ? "Import Preferences" : "Capture Preferences");
     shell.setImage(SetupEditorPlugin.INSTANCE.getSWTImage(fromEclipsePreferenceFile ? "preference_importer" : "preference_picker"));
+  }
+
+  @Override
+  protected IDialogSettings getDialogBoundsSettings()
+  {
+    return SetupEditorPlugin.INSTANCE.getDialogSettings(fromEclipsePreferenceFile ? "PreferenceImport" : "PreferenceCapture");
   }
 
   protected List<?> getAvailablePreferences()

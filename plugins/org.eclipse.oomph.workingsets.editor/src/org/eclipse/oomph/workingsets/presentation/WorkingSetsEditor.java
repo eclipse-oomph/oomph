@@ -13,6 +13,7 @@ package org.eclipse.oomph.workingsets.presentation;
 import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
 import org.eclipse.oomph.predicates.provider.PredicatesItemProviderAdapterFactory;
 import org.eclipse.oomph.workingsets.impl.PreferencesURIHandlerImpl;
+import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor.PreviewDialog.WorkingSetsProvider;
 import org.eclipse.oomph.workingsets.provider.WorkingSetsItemProviderAdapterFactory;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -136,9 +137,10 @@ import java.util.Map;
  * This is an example of a WorkingSets model editor.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
- * @generated
+ * @generated not
  */
-public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker
+public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker,
+    WorkingSetsActionBarContributor.PreviewDialog.Previewable
 {
   /**
    * This keeps track of the editing domain that is used to track all changes to the model.
@@ -513,6 +515,25 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
     }
   };
 
+  protected WorkingSetsActionBarContributor.PreviewDialog.WorkingSetsProvider workingSetsProvider = new WorkingSetsActionBarContributor.PreviewDialog.WorkingSetsProvider();
+
+  /**
+   * This creates a model editor.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public WorkingSetsEditor()
+  {
+    super();
+    initializeEditingDomain();
+  }
+
+  public WorkingSetsProvider getWorkingSetsProvider()
+  {
+    return workingSetsProvider;
+  }
+
   /**
    * Handles activation of the editor or it's associated views.
    * <!-- begin-user-doc -->
@@ -674,18 +695,6 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
   protected boolean handleDirtyConflict()
   {
     return MessageDialog.openQuestion(getSite().getShell(), getString("_UI_FileConflict_label"), getString("_WARN_FileConflict"));
-  }
-
-  /**
-   * This creates a model editor.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public WorkingSetsEditor()
-  {
-    super();
-    initializeEditingDomain();
   }
 
   /**

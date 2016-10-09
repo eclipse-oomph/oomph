@@ -10,20 +10,21 @@
  */
 package org.eclipse.oomph.setup.presentation;
 
+import org.eclipse.oomph.ui.DockableDialog;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 
 import java.io.File;
 
@@ -32,25 +33,42 @@ import java.io.File;
  */
 public abstract class AbstractTableAction extends Action
 {
+  private static final boolean BROWSE_AVAILBLE = UIUtil.isBrowserAvailable();
+
   private IWorkbenchPart part;
 
   public AbstractTableAction(String text)
   {
-    super(text);
+    super(text, BROWSE_AVAILBLE ? IAction.AS_CHECK_BOX : IAction.AS_PUSH_BUTTON);
   }
 
   public void setActivePart(IWorkbenchPart part)
   {
     this.part = part;
+    if (part != null)
+    {
+      DockableDialog dialog = DockableDialog.getFor(getDialogClass(), part.getSite().getWorkbenchWindow());
+      if (dialog != null)
+      {
+        dialog.associate(this);
+      }
+    }
   }
 
   @Override
   public void run()
   {
-    if (UIUtil.isBrowserAvailable())
+    if (BROWSE_AVAILBLE)
     {
-      Dialog dialog = new CommandTableDialog(part.getSite().getShell());
-      dialog.open();
+      if (isChecked())
+      {
+        DockableDialog dialog = DockableDialog.openFor(getDialogClass(), getDialogFactory(), part.getSite().getWorkbenchWindow());
+        dialog.associate(this);
+      }
+      else
+      {
+        DockableDialog.closeFor(getDialogClass(), part.getSite().getWorkbenchWindow());
+      }
     }
     else
     {
@@ -68,26 +86,37 @@ public abstract class AbstractTableAction extends Action
     }
   }
 
+  protected abstract <T extends DockableDialog> Class<T> getDialogClass();
+
+  protected abstract <T extends DockableDialog> DockableDialog.Factory<T> getDialogFactory();
+
   protected abstract String renderHTML();
 
   /**
    * @author Eike Stepper
    */
-  private final class CommandTableDialog extends Dialog
+  static class TableDialog extends DockableDialog
   {
-    public CommandTableDialog(Shell parentShell)
+    private final AbstractTableAction tableAction;
+
+    public TableDialog(IWorkbenchWindow workbenchWindow, AbstractTableAction tableAction)
     {
-      super(parentShell);
-      setShellStyle(getShellStyle() ^ SWT.APPLICATION_MODAL | SWT.MODELESS | SWT.RESIZE | SWT.MIN | SWT.MAX | SWT.DIALOG_TRIM);
-      setBlockOnOpen(false);
+      super(workbenchWindow);
+      this.tableAction = tableAction;
+    }
+
+    @Override
+    protected boolean handleWorkbenchPart(IWorkbenchPart part)
+    {
+      return true;
     }
 
     @Override
     protected Control createDialogArea(Composite parent)
     {
-      getShell().setText(getText());
+      getShell().setText(tableAction.getText());
 
-      String html = renderHTML();
+      String html = tableAction.renderHTML();
 
       Browser browser = new Browser(parent, SWT.NONE);
       browser.setText(html);

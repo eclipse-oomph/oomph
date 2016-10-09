@@ -12,8 +12,8 @@ package org.eclipse.oomph.workingsets.presentation;
 
 import org.eclipse.oomph.base.provider.BaseEditPlugin;
 import org.eclipse.oomph.predicates.provider.PredicatesEditPlugin;
+import org.eclipse.oomph.ui.OomphUIPlugin;
 
-import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -23,9 +23,9 @@ import org.osgi.framework.BundleContext;
  * This is the central singleton for the Workingsets editor plugin.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
- * @generated
+ * @generated not
  */
-public final class WorkingSetsEditorPlugin extends EMFPlugin
+public final class WorkingSetsEditorPlugin extends OomphUIPlugin
 {
   /**
    * Keep track of the singleton.
