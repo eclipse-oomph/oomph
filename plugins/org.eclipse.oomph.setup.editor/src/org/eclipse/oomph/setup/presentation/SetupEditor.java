@@ -4214,17 +4214,23 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             {
               editorDisposeListeners.remove(setupEditor);
 
+              int index = 0;
               for (Iterator<ToolTipObject> it = toolTipObjects.iterator(); it.hasNext();)
               {
                 ToolTipObject wrapper = it.next();
                 if (wrapper.getSetupEditor() == setupEditor)
                 {
                   it.remove();
-                  --toolTipIndex;
+                  if (index < toolTipIndex)
+                  {
+                    --toolTipIndex;
+                  }
                 }
+
+                ++index;
               }
 
-              navigate(toolTipIndex);
+              navigate(toolTipObjects.size() == 0 ? -1 : toolTipIndex);
             }
           };
 
@@ -4797,7 +4803,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     protected void navigate(int index)
     {
-      if (toolTipIndex == -1)
+      if (index == -1)
       {
         setEditor(null);
         toolTipObject = null;

@@ -79,6 +79,18 @@ public abstract class DockableDialog extends Dialog
    */
   private static final Map<IWorkbenchWindow, Map<Class<?>, Set<IWorkbenchPartReference>>> DOCKED_PARTS = new HashMap<IWorkbenchWindow, Map<Class<?>, Set<IWorkbenchPartReference>>>();
 
+  /**
+   * Be sure to clean the workbench from the map when the workbench window.
+   */
+  private static final DisposeListener WORKBENCH_DISPOSE_LISTENER = new DisposeListener()
+  {
+    public void widgetDisposed(DisposeEvent e)
+    {
+      DIALOGS.remove(e.getSource());
+      DOCKED_PARTS.remove(e.getSource());
+    }
+  };
+
   private final IWorkbenchWindow workbenchWindow;
 
   private final List<WeakReference<IAction>> actions = new ArrayList<WeakReference<IAction>>();
@@ -140,14 +152,19 @@ public abstract class DockableDialog extends Dialog
 
   public void setWorkbenchPart(IWorkbenchPart part)
   {
-    // If there is no setup editor, hide the shell, otherwise show the shell.
     Shell shell = getShell();
+    // If there is no support for this workbench part, hide the shell, otherwise show the shell.
     if (!handleWorkbenchPart(part))
     {
-      shell.setVisible(false);
-      shell.setData("forced", true);
-      shell.setMinimized(true);
-      shell.notifyListeners(SWT.Iconify, new Event());
+      // Only force it invisible if it isn't already invisible.
+      // The use may have minimized it himself, so we don't want to mark it forced unless we make it invisible.
+      if (shell.isVisible())
+      {
+        shell.setVisible(false);
+        shell.setData("forced", true);
+        shell.setMinimized(true);
+        shell.notifyListeners(SWT.Iconify, new Event());
+      }
     }
     else if (Boolean.TRUE.equals(shell.getData("forced")))
     {
@@ -274,19 +291,9 @@ public abstract class DockableDialog extends Dialog
         typedDockedParts.put(type, dockedParts);
       }
 
-      // Be sure to clean it from the map when either the workbench window or the dialog itself is disposed.
-      DisposeListener disposeListener = new DisposeListener()
-      {
-        public void widgetDisposed(DisposeEvent e)
-        {
-          DIALOGS.remove(workbenchWindow);
-          DOCKED_PARTS.remove(workbenchWindow);
-        }
-      };
-
       // Clean up if the workbench window is disposed.
       final Shell windowShell = workbenchWindow.getShell();
-      windowShell.addDisposeListener(disposeListener);
+      windowShell.addDisposeListener(WORKBENCH_DISPOSE_LISTENER);
 
       /**
        * This monitors the shell events, such as dragging to a new position.
