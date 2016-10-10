@@ -4241,7 +4241,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       setEditor(setupEditor);
       setToolTipSupport(toolTipSupport);
       toolTipObjects = new ArrayList<ToolTipObject>(toolTipObjects.subList(0, toolTipIndex + 1));
-      toolTipObjects.add(this.toolTipObject);
+      if (toolTipIndex == -1 || toolTipObjects.get(toolTipIndex).getWrappedObject() != toolTipObject)
+      {
+        toolTipObjects.add(this.toolTipObject);
+        toolTipIndex = toolTipObjects.size() - 1;
+      }
     }
 
     private void updateEnablement()
@@ -4535,6 +4539,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
                   if (i == index)
                   {
                     menuItem.setSelection(true);
+                    menu.setDefaultItem(menuItem);
                   }
 
                   final int itemIndex = i;
@@ -4831,7 +4836,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       String toolTipText = toolTipProvider.getToolTipText(new ToolTipObject(object, this, setupEditor, false, showAdvancedPropertiesItem.getSelection()));
       if (!StringUtil.isEmpty(toolTipText))
       {
-        ++toolTipIndex;
         browser.setText(getFullHTML(toolTipText), false);
       }
     }
