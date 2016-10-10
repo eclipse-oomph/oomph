@@ -34,7 +34,8 @@ public abstract class StringExpander
   {
     for (int i = 0, length = CONTROL_CHARACTER_REPLACEMENTS.length; i < length; ++i)
     {
-      CONTROL_CHARACTER_VALUES.put(CONTROL_CHARACTER_REPLACEMENTS[i].substring(2, 5), Character.toString((char)i));
+      String controlCharacterReplacement = CONTROL_CHARACTER_REPLACEMENTS[i];
+      CONTROL_CHARACTER_VALUES.put(controlCharacterReplacement.substring(2, controlCharacterReplacement.length() - 1), Character.toString((char)i));
     }
   }
 
