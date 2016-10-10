@@ -4486,7 +4486,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
                   if (i == adjustedStart - 1)
                   {
                     MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
-                    menuItem.setText("Forward More");
+                    int count = (adjustedStart + limit - 1) / limit;
+                    menuItem.setText("Forward More (" + count + ')');
                     menuItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("forward"));
                     menuItem.addSelectionListener(new SelectionAdapter()
                     {
@@ -4507,7 +4508,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
                 else if (i == adjustedEnd)
                 {
                   MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
-                  menuItem.setText("Back More");
+                  int count = (size - adjustedEnd + limit - 1) / limit;
+                  menuItem.setText("Back More (" + count + ')');
                   menuItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("backward"));
                   menuItem.addSelectionListener(new SelectionAdapter()
                   {
