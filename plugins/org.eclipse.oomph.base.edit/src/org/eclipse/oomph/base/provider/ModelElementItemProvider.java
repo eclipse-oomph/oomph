@@ -15,6 +15,7 @@ import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.edit.BasePasteCommand;
+import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandWrapper;
@@ -862,7 +863,10 @@ public class ModelElementItemProvider extends ItemProviderAdapter
     }
   }
 
-  public static class EClassPropertyDescriptor extends ItemPropertyDescriptor
+  /**
+   * @author Ed Merks
+   */
+  public static class EClassPropertyDescriptor implements IItemPropertyDescriptor
   {
     private static Object image;
 
@@ -888,24 +892,98 @@ public class ModelElementItemProvider extends ItemProviderAdapter
 
     public EClassPropertyDescriptor(AdapterFactory adapterFactory, ResourceLocator resourceLocator)
     {
-      super(adapterFactory, resourceLocator, "Model Class", "The model class of this object", EcorePackage.Literals.ECLASS__EID_ATTRIBUTE, false, false, false,
-          null, null, new String[] { "org.eclipse.ui.views.properties.expert" });
       if (image == null)
       {
-        image = itemDelegator.getImage(EcorePackage.Literals.ECLASS);
+        new AdapterFactoryItemDelegator(adapterFactory).getImage(EcorePackage.Literals.ECLASS);
       }
     }
 
-    @Override
-    protected Object getValue(EObject object, EStructuralFeature feature)
-    {
-      return object.eClass();
-    }
-
-    @Override
     public IItemLabelProvider getLabelProvider(Object object)
     {
       return LABEL_PROVIDER;
+    }
+
+    public Object getPropertyValue(Object object)
+    {
+      return ((EObject)object).eClass();
+    }
+
+    public boolean isPropertySet(Object object)
+    {
+      return true;
+    }
+
+    public boolean canSetProperty(Object object)
+    {
+      return false;
+    }
+
+    public void resetPropertyValue(Object object)
+    {
+    }
+
+    public void setPropertyValue(Object object, Object value)
+    {
+    }
+
+    public String getCategory(Object object)
+    {
+      return null;
+    }
+
+    public String getDescription(Object object)
+    {
+      return "The model class of this object";
+    }
+
+    public String getDisplayName(Object object)
+    {
+      return "Model Class";
+    }
+
+    public String[] getFilterFlags(Object object)
+    {
+      return PropertiesUtil.EXPERT_FILTER;
+    }
+
+    public Object getHelpContextIds(Object object)
+    {
+      return null;
+    }
+
+    public String getId(Object object)
+    {
+      return getDisplayName(object);
+    }
+
+    public boolean isCompatibleWith(Object object, Object anotherObject, IItemPropertyDescriptor anotherPropertyDescriptor)
+    {
+      return false;
+    }
+
+    public Object getFeature(Object object)
+    {
+      return "eClass";
+    }
+
+    public boolean isMany(Object object)
+    {
+      return false;
+    }
+
+    public Collection<?> getChoiceOfValues(Object object)
+    {
+      return Collections.emptyList();
+    }
+
+    public boolean isMultiLine(Object object)
+    {
+      return false;
+    }
+
+    public boolean isSortChoices(Object object)
+    {
+      return false;
     }
   }
 }
