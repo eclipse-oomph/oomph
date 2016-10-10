@@ -21,4 +21,13 @@
             genModel="model/Mylyn.genmodel"/>
    </extension>
 
+   <extension
+         point="org.eclipse.core.variables.dynamicVariables">
+      <variable
+            description="Returns various attributes of the active Mylyn task. The following (optional) arguments are supported: Id, Key, Url, Kind, Owner, OwnerId, Priority, RepositoryUrl, Summary, ConnectorKind, HandleIdentifier, CreationDate, CreationTime, CompletionDate, CompletionTime, DueDate, DueTime, ModificationDate, ModificationTime, @attribute. This variable is contributed by Oomph."
+            name="active_mylyn_task"
+            resolver="org.eclipse.oomph.setup.mylyn.ActiveMylynTaskVariableResolver"
+            supportsArgument="true"/>
+   </extension>
+
 </plugin>

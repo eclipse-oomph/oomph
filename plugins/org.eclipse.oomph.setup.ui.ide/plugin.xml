@@ -33,8 +33,10 @@
          point="org.eclipse.debug.ui.stringVariablePresentations">
       <variablePresentation
             argumentSelector="org.eclipse.oomph.setup.ui.internal.ide.URIArgumentSelector$ExtensionFactory"
-            variableName="file_uri">
-      </variablePresentation>
+            variableName="file_uri"/>
+      <variablePresentation
+            argumentSelector="org.eclipse.oomph.setup.ui.internal.ide.ActiveMylynTaskArgumentSelector"
+            variableName="active_mylyn_task"/>
    </extension>
 
 </plugin>
