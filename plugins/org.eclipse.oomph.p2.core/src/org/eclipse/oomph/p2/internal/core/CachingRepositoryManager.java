@@ -11,6 +11,7 @@
 package org.eclipse.oomph.p2.internal.core;
 
 import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OfflineMode;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
@@ -124,7 +125,7 @@ public class CachingRepositoryManager<T>
       URI rootLocation = agentLocation.getRootLocation();
       if (rootLocation != null)
       {
-        if (!LazyProfileRegistryComponent.OsgiHelper.canWrite(new File(rootLocation.getPath())))
+        if (!IOUtil.canWriteFolder(new File(rootLocation.getPath())))
         {
           ReflectUtil.setValue("agentLocation", delegate, null);
         }

@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry;
@@ -18,10 +19,8 @@ import org.eclipse.equinox.p2.core.IAgentLocation;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.spi.IAgentServiceFactory;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
-import org.eclipse.osgi.storage.StorageUtil;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Instantiates default instances of {@link IProfileRegistry}.
@@ -45,7 +44,7 @@ public class LazyProfileRegistryComponent implements IAgentServiceFactory
     {
       try
       {
-        registry = new LazyProfileRegistry(agent, directory, OsgiHelper.canWrite(directory));
+        registry = new LazyProfileRegistry(agent, directory, IOUtil.canWriteFolder(directory));
       }
       catch (Throwable ex)
       {
@@ -60,46 +59,5 @@ public class LazyProfileRegistryComponent implements IAgentServiceFactory
 
     registry.setEventBus((IProvisioningEventBus)agent.getService(IProvisioningEventBus.SERVICE_NAME));
     return registry;
-  }
-
-  /**
-   * @author Ed Merks
-   */
-  static class OsgiHelper
-  {
-    public static boolean canWrite(File installDir)
-    {
-      try
-      {
-        return StorageUtil.canWrite(installDir);
-      }
-      catch (NoClassDefFoundError ex)
-      {
-        if (!installDir.canWrite() || !installDir.isDirectory())
-        {
-          return false;
-        }
-
-        File fileTest = null;
-
-        try
-        {
-          fileTest = File.createTempFile("test", ".dll", installDir);
-        }
-        catch (IOException e)
-        {
-          return false;
-        }
-        finally
-        {
-          if (fileTest != null)
-          {
-            fileTest.delete();
-          }
-        }
-
-        return true;
-      }
-    }
   }
 }

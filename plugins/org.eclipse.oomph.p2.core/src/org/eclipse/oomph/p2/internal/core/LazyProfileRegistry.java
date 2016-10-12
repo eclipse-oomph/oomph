@@ -85,7 +85,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
     this.provisioningAgent = provisioningAgent;
     this.store = store;
 
-    canWrite = LazyProfileRegistryComponent.OsgiHelper.canWrite(store);
+    canWrite = IOUtil.canWriteFolder(store);
 
     Field selfField = ReflectUtil.getField(SimpleProfileRegistry.class, "self");
     self = (String)ReflectUtil.getValue(selfField, this);

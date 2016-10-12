@@ -241,6 +241,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private boolean hasSuccessfullyPerformed;
 
+  private File logFile;
+
   public SetupTaskPerformer(URIConverter uriConverter, SetupPrompter prompter, Trigger trigger, SetupContext setupContext, Stream stream)
   {
     super(uriConverter, prompter, trigger, setupContext);
@@ -1307,6 +1309,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return new ExecutableInfo(this);
   }
 
+  public File getLogFile()
+  {
+    return logFile;
+  }
+
   public File getInstallationLocation()
   {
     for (SetupTask setupTask : triggeredSetupTasks)
@@ -1865,7 +1872,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         File location = getProductConfigurationLocation();
         String path = SetupContext.OOMPH_NODE + "/" + SetupContext.LOG_FILE_NAME;
 
-        File logFile = new File(location, path);
+        logFile = new File(location, path);
         logFile.getParentFile().mkdirs();
 
         FileOutputStream out = new FileOutputStream(logFile, true);
@@ -1873,6 +1880,18 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
       catch (FileNotFoundException ex)
       {
+        try
+        {
+          logFile = File.createTempFile("OomphSetup", ".log");
+          FileOutputStream out = new FileOutputStream(logFile, true);
+          logStream = new PrintStream(out);
+          return logStream;
+        }
+        catch (IOException ex1)
+        {
+          // Throw original exception.
+        }
+
         throw new RuntimeException(ex);
       }
     }

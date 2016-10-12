@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
@@ -56,7 +57,7 @@ public class ProvisioningAgentProvider extends DefaultAgentProvider
             // If the folder corresponding to this path is not writable, then p2 has computed a bad agent location.
             // This happens in the case of an install that's using a shared pool.
             File folder = new File(path);
-            if (!LazyProfileRegistryComponent.OsgiHelper.canWrite(folder))
+            if (!IOUtil.canWriteFolder(folder))
             {
               try
               {

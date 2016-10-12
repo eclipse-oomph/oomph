@@ -1013,4 +1013,74 @@ public final class UIUtil
 
     return new Point(numberOfAverageCharacters, lines.length);
   }
+
+  /**
+   * This is a runnable for which {@link #schedule() schedule} can be called repeatedly.
+   * That will {@link UIUtil#timerExec(int, Runnable) timer execute} this runnable with the delay specified in the constructor,
+   * or, if the runnable has already been dispatched, will mark it for redispatching.
+   * As such, when {@link #run() run} is called, if schedule has been called in the meantime,
+   * the runnable will timer executed again,
+   * without calling {@link #perform() perform}.
+   * Otherwise, run will call perform to finally perform the delayed behavior.
+   * The {@link #prepareForDispatch() prepareForDispatch} method will be called immediate before any timer execute.
+   * In this default implementation is does nothing.
+   * If the control specified in the constructor is disposed when run is called, run will do nothing.
+   *
+   * @author Ed Merks
+   */
+  public static abstract class DelayedRunnable implements Runnable
+  {
+    final private Control control;
+
+    private int delay;
+
+    private boolean dispatched;
+
+    private boolean redispatch;
+
+    public DelayedRunnable(Control control, int milliseconds)
+    {
+      this.control = control;
+      delay = milliseconds;
+    }
+
+    protected abstract void perform();
+
+    protected void prepareForDispatch()
+    {
+    }
+
+    public void run()
+    {
+      if (!control.isDisposed())
+      {
+        dispatched = false;
+        if (redispatch)
+        {
+          schedule();
+        }
+        else
+        {
+          perform();
+        }
+      }
+    }
+
+    public void schedule()
+    {
+      if (dispatched)
+      {
+        redispatch = true;
+      }
+      else
+      {
+        prepareForDispatch();
+
+        dispatched = true;
+        redispatch = false;
+
+        UIUtil.timerExec(delay, this);
+      }
+    }
+  }
 }

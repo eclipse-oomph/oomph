@@ -732,9 +732,14 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   public void showMessage(String message, SimpleMessageOverlay.Type type, boolean dismissAutomatically, Runnable action)
   {
+    showMessage(message, type, dismissAutomatically, action, null);
+  }
+
+  public void showMessage(String message, SimpleMessageOverlay.Type type, boolean dismissAutomatically, Runnable action, Runnable closeAction)
+  {
     // Check if we can reuse the current message to reduce flickering.
     if (currentMessage == null || currentMessage.getType() != type || currentMessage.isDismissAutomatically() != dismissAutomatically
-        || currentMessage.getAction() != action)
+        || currentMessage.getAction() != action || currentMessage.getCloseAction() != closeAction)
     {
       clearMessage();
 
@@ -768,7 +773,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
           int height = pageStack.peek() instanceof SimpleProductPage ? 87 : 70;
           control.setBounds(x, y, width, height);
         }
-      }, dismissAutomatically, action);
+      }, dismissAutomatically, action, closeAction);
     }
 
     currentMessage.setMessage(message);

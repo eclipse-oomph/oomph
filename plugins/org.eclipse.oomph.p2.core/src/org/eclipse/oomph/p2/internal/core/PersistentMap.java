@@ -57,7 +57,7 @@ public abstract class PersistentMap<E>
 
       String name = file.getName();
       tempFile = new File(folder, name + ".temp");
-      lockFile = LazyProfileRegistryComponent.OsgiHelper.canWrite(folder) ? new File(folder, name + ".lock") : null;
+      lockFile = IOUtil.canWriteFolder(folder) ? new File(folder, name + ".lock") : null;
     }
     else
     {

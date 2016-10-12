@@ -1079,4 +1079,55 @@ public final class IOUtil
       return null;
     }
   }
+
+  /**
+   * Returns true only if the folder is a directory and is writable.
+   * I.e., it will return false if the argument is an existing file.
+   */
+  public static boolean canWriteFolder(File folder)
+  {
+    return OsgiHelper.canWriteFolder(folder);
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  static class OsgiHelper
+  {
+    @SuppressWarnings("restriction")
+    public static boolean canWriteFolder(File folder)
+    {
+      try
+      {
+        return org.eclipse.osgi.storage.StorageUtil.canWrite(folder);
+      }
+      catch (NoClassDefFoundError ex)
+      {
+        if (!folder.canWrite() || !folder.isDirectory())
+        {
+          return false;
+        }
+
+        File fileTest = null;
+
+        try
+        {
+          fileTest = File.createTempFile("test", ".dll", folder);
+        }
+        catch (IOException e)
+        {
+          return false;
+        }
+        finally
+        {
+          if (fileTest != null)
+          {
+            fileTest.delete();
+          }
+        }
+
+        return true;
+      }
+    }
+  }
 }

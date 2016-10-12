@@ -39,6 +39,7 @@ import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.internal.core.AbstractSetupTaskContext;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
@@ -61,6 +62,7 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
+import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
@@ -92,23 +94,43 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -230,6 +252,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
   private SimpleCheckbox createStartMenuEntryButton;
 
   private SimpleCheckbox createDesktopShortcutButton;
+
+  private Runnable preInstallAction;
 
   public SimpleVariablePage(final Composite parent, final SimpleInstallerDialog dialog, SelectionMemento selectionMemento)
   {
@@ -432,46 +456,26 @@ public class SimpleVariablePage extends SimpleInstallerPage
        * A class for delayed validation of the install folder.
        * @author Ed Merks
        */
-      class Validator implements Runnable
+      class Validator extends UIUtil.DelayedRunnable
       {
-        private boolean dispatched;
-
-        private boolean redispatch;
-
-        public void run()
+        public Validator()
         {
-          if (!getShell().isDisposed())
-          {
-            dispatched = false;
-            if (redispatch)
-            {
-              schedule();
-            }
-            else
-            {
-              validatePage();
-            }
-          }
+          super(folderText, 350);
         }
 
-        public void schedule()
+        @Override
+        protected void perform()
         {
-          if (dispatched)
-          {
-            redispatch = true;
-          }
-          else
-          {
-            // Immediately disable the install button if the install folder is currently invalid.
-            if (validateInstallFolder() != null)
-            {
-              installButton.setEnabled(false);
-            }
+          validatePage();
+        }
 
-            dispatched = true;
-            redispatch = false;
-
-            UIUtil.timerExec(350, this);
+        @Override
+        protected void prepareForDispatch()
+        {
+          // Immediately disable the install button if the install folder is currently invalid.
+          if (validateInstallFolder() != null)
+          {
+            installButton.setEnabled(false);
           }
         }
       }
@@ -484,7 +488,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         focusSelectionAdapter.setNextSelectionRange(folderText.getSelection());
 
         String folder = folderText.getText().trim();
-        installFolder = StringUtil.isEmpty(folder) ? "" : IOUtil.getCanonicalFile(new File(folder)).getAbsolutePath();
+        installFolder = folder;
         folderText.setToolTipText(installFolder);
 
         validator.schedule();
@@ -492,6 +496,15 @@ public class SimpleVariablePage extends SimpleInstallerPage
         String productInstallFolder = getProductInstallFolder().toString();
         installFolderLabel.setToolTipText("Install into the folder '" + productInstallFolder + "'");
         installButton.setToolTipText("Start installing the product into '" + productInstallFolder + "'");
+      }
+    });
+
+    folderText.addVerifyListener(new FileCompletionSupport(folderText)
+    {
+      @Override
+      protected void setFolderTextAndSelect(String folder)
+      {
+        SimpleVariablePage.this.setFolderText(folder);
       }
     });
 
@@ -681,6 +694,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
         }
         else
         {
+          if (preInstallAction != null)
+          {
+            preInstallAction.run();
+          }
+
           dialog.clearMessage();
           dialog.setButtonsEnabled(false);
 
@@ -1222,20 +1240,22 @@ public class SimpleVariablePage extends SimpleInstallerPage
       final Map<EClass, EList<SetupTask>> enablementTasks = EnablementComposite.getEnablementTasks(triggeredSetupTasks);
       if (!enablementTasks.isEmpty())
       {
-        UIUtil.syncExec(getDisplay(), new Runnable()
-        {
-          public void run()
-          {
-            EnablementDialog enablementDialog = new EnablementDialog(getShell(), "the installer", enablementTasks);
-            if (enablementDialog.open() == EnablementDialog.OK)
-            {
-              selectionMemento.setProductVersion(EcoreUtil.getURI(selectedProductVersion));
-              dialog.restart();
-            }
+        UIUtil.syncExec(
 
-            installCancel();
-          }
-        });
+            getDisplay(), new Runnable()
+            {
+              public void run()
+              {
+                EnablementDialog enablementDialog = new EnablementDialog(getShell(), "the installer", enablementTasks);
+                if (enablementDialog.open() == EnablementDialog.OK)
+                {
+                  selectionMemento.setProductVersion(EcoreUtil.getURI(selectedProductVersion));
+                  dialog.restart();
+                }
+
+                installCancel();
+              }
+            });
 
         throw new OperationCanceledException();
       }
@@ -1450,27 +1470,67 @@ public class SimpleVariablePage extends SimpleInstallerPage
     }
   }
 
-  private void setFolderText(String dir)
+  private void setFolderText(String folder)
   {
-    folderText.setText(dir);
+    folderText.setText(folder);
+
+    final FocusSelectionAdapter focusSelectionAdapter = (FocusSelectionAdapter)folderText.getData(FocusSelectionAdapter.ADAPTER_KEY);
+    int index = folder.length();
+    Point selection = new Point(index, index);
+    folderText.setSelection(selection);
+    focusSelectionAdapter.setNextSelectionRange(selection);
   }
 
   private void validatePage()
   {
+    preInstallAction = null;
+
     String errorMessage = null;
 
+    Type type = Type.ERROR;
     errorMessage = validateJREs();
 
     if (errorMessage == null)
     {
-      errorMessage = validateInstallFolder();
+      Pair<Type, String> folderValidationMesage = validateInstallFolder();
+      if (folderValidationMesage != null)
+      {
+        type = folderValidationMesage.getElement1();
+        errorMessage = folderValidationMesage.getElement2();
+      }
+
+      if (errorMessage == null || type == Type.WARNING)
+      {
+        OS os = OS.INSTANCE.getForBitness(javaController.getBitness());
+        String productFolderName = AbstractSetupTaskContext.getProductFolderName(selectedProductVersion, os);
+        String relativeProductFolderName = OS.INSTANCE.getRelativeProductFolder(productFolderName);
+        folderValidationMesage = validateChildFolder(IOUtil.getCanonicalFile(new File(folderText.getText().trim())), relativeProductFolderName, true);
+        if (folderValidationMesage != null)
+        {
+          type = folderValidationMesage.getElement1();
+          errorMessage = folderValidationMesage.getElement2();
+        }
+      }
     }
 
     if (isTop())
     {
       if (errorMessage != null)
       {
-        dialog.showMessage(errorMessage, Type.ERROR, false, null);
+        if (type == Type.WARNING)
+        {
+          preInstallAction = new Runnable()
+          {
+            public void run()
+            {
+              preInstallAction = null;
+              String folder = IOUtil.getCanonicalFile(new File(folderText.getText().trim())).toString();
+              setFolderText(folder);
+            }
+          };
+        }
+
+        dialog.showMessage(errorMessage, type, false, preInstallAction, preInstallAction);
       }
       else
       {
@@ -1478,7 +1538,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     }
 
-    installButton.setEnabled(errorMessage == null);
+    installButton.setEnabled(errorMessage == null || type == Type.WARNING);
   }
 
   @Override
@@ -1500,76 +1560,105 @@ public class SimpleVariablePage extends SimpleInstallerPage
     return null;
   }
 
-  private String validateInstallFolder()
+  private Pair<Type, String> validateInstallFolder()
   {
-    // TODO validate dir and set an appropriate error message
-    String errorMessage = null;
-
-    try
+    File folder = new File(installFolder);
+    File canonicalFolder = IOUtil.getCanonicalFile(folder);
+    File parentFolder = canonicalFolder.getParentFile();
+    Pair<Type, String> errorMessage = validateFolder(canonicalFolder.getParentFile(), canonicalFolder.getName());
+    if (errorMessage != null)
     {
-      if (StringUtil.isEmpty(installFolder))
-      {
-        return "Installation folder must be specified.";
-      }
-
-      File folder = IOUtil.getCanonicalFile(new File(installFolder));
-      File parentFolder = folder.getParentFile();
-
-      String name = folder.getName();
-      if (folder.exists())
-      {
-        if (folder.isFile())
-        {
-          return "Folder " + name + " cannot be created because a file exists at that location.";
-        }
-
-        if (!folder.canWrite())
-        {
-          return "Folder " + name + " is not writable.";
-        }
-      }
-      else
-      {
-        if (!isValidParentFolder(parentFolder))
-        {
-          if (StringUtil.isEmpty(name))
-          {
-            name = installFolder.toString();
-          }
-
-          return "Folder " + name + " cannot be created.";
-        }
-      }
-
-      installRoot = parentFolder == null ? folder.getAbsolutePath() : parentFolder.getAbsolutePath();
+      return errorMessage;
     }
-    catch (Exception ex)
+
+    if (!folder.isAbsolute())
     {
-      //$FALL-THROUGH$
+      return Pair.create(Type.WARNING, "The folder is not absolute so '" + canonicalFolder + "' will be used.");
     }
+
+    if (!canonicalFolder.toString().equals(installFolder.trim()))
+    {
+      return Pair.create(Type.WARNING, "The folder is specified as '" + installFolder + " but '" + canonicalFolder + "' will be used.");
+    }
+
+    installRoot = parentFolder == null ? canonicalFolder.getAbsolutePath() : parentFolder.getAbsolutePath();
 
     return errorMessage;
   }
 
-  private boolean isValidParentFolder(File parentFolder)
+  private Pair<Type, String> validateFolder(File parentFolder, String childFolder)
   {
     if (parentFolder == null)
     {
-      return false;
+      return Pair.create(Type.ERROR, "The product cannot be installed in the root of the file system.");
     }
 
     if (parentFolder.exists())
     {
-      return parentFolder.isDirectory() && parentFolder.canWrite();
+      if (parentFolder.isDirectory())
+      {
+        if (IOUtil.canWriteFolder(parentFolder))
+        {
+          try
+          {
+            new File(parentFolder, childFolder).getCanonicalFile();
+            return validateChildFolder(parentFolder, childFolder, false);
+          }
+          catch (Exception ex)
+          {
+            return Pair.create(Type.ERROR, "Folder '" + childFolder + "' cannot be created in the folder '" + parentFolder + "'.");
+          }
+        }
+
+        Pair<Type, String> result = validateChildFolder(parentFolder, childFolder, false);
+        if (result != null)
+        {
+          return result;
+        }
+
+        return Pair.create(Type.ERROR, "Folder '" + childFolder + "' cannot be created in the read-only folder '" + parentFolder + "'.");
+      }
+
+      return Pair.create(Type.ERROR,
+          "Folder '" + childFolder + "' cannot be created in the folder '" + parentFolder + "' because '" + parentFolder.getName() + "' exists as a file.");
     }
 
-    return isValidParentFolder(parentFolder.getParentFile());
+    return validateFolder(parentFolder.getParentFile(), parentFolder.getName());
+  }
+
+  private Pair<Type, String> validateChildFolder(File parentFolder, String childFolder, boolean isProductLocation)
+  {
+    String prefix = isProductLocation ? "Product folder '" : "Folder '";
+    File child = new File(parentFolder, childFolder);
+    if (child.exists())
+    {
+      if (child.isDirectory())
+      {
+        if (IOUtil.canWriteFolder(child))
+        {
+          return null;
+        }
+
+        return Pair.create(Type.ERROR, prefix + child + "' cannot be used because it is read-only.");
+      }
+
+      return Pair.create(Type.ERROR, prefix + child + "' cannot be used because it exists as file.");
+    }
+    try
+    {
+      new File(parentFolder, childFolder).getCanonicalFile();
+    }
+    catch (Exception ex)
+    {
+      return Pair.create(Type.ERROR, prefix + childFolder + "' cannot be created.");
+    }
+
+    return null;
   }
 
   private File getLogFile()
   {
-    String relativeProductFolder = performer.getRelativeProductFolder();
-    return new File(installFolder, relativeProductFolder + "/configuration/org.eclipse.oomph.setup/setup.log");
+    return performer.getLogFile();
   }
 
   private void openInstallLog()
@@ -2007,6 +2096,351 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       resetWatchdogTimer(System.currentTimeMillis());
       UIUtil.asyncExec(getDisplay(), this);
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static class FileCompletionSupport implements VerifyListener
+  {
+    private final Text folderText;
+
+    private Shell shell;
+
+    public FileCompletionSupport(Text text)
+    {
+      folderText = text;
+    }
+
+    protected void setFolderTextAndSelect(String folder)
+    {
+      folderText.setText(folder);
+      int length = folder.length();
+      folderText.setSelection(new Point(length, length));
+    }
+
+    public void verifyText(VerifyEvent e)
+    {
+      if (e.keyCode == ' ' && e.stateMask == SWT.CTRL)
+      {
+        e.doit = false;
+
+        if (shell == null)
+        {
+          new Dialog(folderText.getShell())
+          {
+            private org.eclipse.swt.widgets.List list;
+
+            private ModifyListener modifyListener = new ModifyListener()
+            {
+              public void modifyText(ModifyEvent e)
+              {
+                updater.schedule();
+              }
+            };
+
+            private FocusListener focusListener = new FocusAdapter()
+            {
+              @Override
+              public void focusLost(FocusEvent e)
+              {
+                checkFocus();
+              }
+            };
+
+            private MouseListener mouseListener = new MouseAdapter()
+            {
+              @Override
+              public void mouseDown(MouseEvent e)
+              {
+                checkFocus();
+              }
+            };
+
+            private ControlListener controlListener = new ControlListener()
+            {
+              public void controlResized(ControlEvent e)
+              {
+                shell.dispose();
+              }
+
+              public void controlMoved(ControlEvent e)
+              {
+                shell.dispose();
+              }
+            };
+
+            private KeyListener keyListener = new KeyAdapter()
+            {
+              @Override
+              public void keyReleased(KeyEvent e)
+              {
+                if (e.keyCode == SWT.ARROW_UP)
+                {
+                  int itemCount = list.getItemCount();
+                  if (itemCount > 0)
+                  {
+                    shell.setFocus();
+                    list.select(itemCount - 1);
+                    list.showSelection();
+                  }
+                }
+                else if (e.keyCode == SWT.ARROW_DOWN)
+                {
+                  int itemCount = list.getItemCount();
+                  if (itemCount > 0)
+                  {
+                    shell.setFocus();
+                    int selectionIndex = list.getSelectionIndex();
+                    list.select(selectionIndex + 1);
+                  }
+                }
+                else if (e.keyCode == '\r')
+                {
+                  int selectionIndex = list.getSelectionIndex();
+                  if (selectionIndex != -1)
+                  {
+                    String folder = list.getItem(selectionIndex);
+                    File file = new File(folder);
+                    if (!folder.endsWith(File.separator) && file.isDirectory() && !IOUtil.canWriteFolder(file))
+                    {
+                      folder += File.separator;
+                    }
+
+                    setFolderTextAndSelect(folder);
+                  }
+                }
+              }
+            };
+
+            /**
+             * A class for delayed update of the list.
+             * @author Ed Merks
+             */
+            class Updater extends UIUtil.DelayedRunnable
+            {
+              public Updater()
+              {
+                super(shell, 350);
+              }
+
+              @Override
+              protected void perform()
+              {
+                update();
+              }
+            }
+
+            Updater updater = new Updater();
+
+            private void checkFocus()
+            {
+              UIUtil.asyncExec(list, new Runnable()
+              {
+                public void run()
+                {
+                  if (shell.getDisplay().getActiveShell() != shell)
+                  {
+                    shell.dispose();
+                  }
+                }
+              });
+            }
+
+            public void open()
+            {
+              Shell parent = getParent();
+              shell = new Shell(parent, SWT.MODELESS | SWT.NO_TRIM);
+              Control wrapper = folderText.getParent();
+              Rectangle folderTextBounds = wrapper.getBounds();
+              Point position = wrapper.getParent().toDisplay(folderTextBounds.x, folderTextBounds.y + folderTextBounds.height);
+              shell.setBounds(position.x, position.y, folderTextBounds.width, 100);
+              shell.setLayout(new FillLayout());
+
+              list = new org.eclipse.swt.widgets.List(shell, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+
+              list.addMouseListener(new MouseAdapter()
+              {
+                @Override
+                public void mouseUp(MouseEvent e)
+                {
+                  int selectionIndex = list.getSelectionIndex();
+                  if (selectionIndex != -1)
+                  {
+                    apply(list.getItem(selectionIndex));
+                  }
+                }
+              });
+
+              list.addKeyListener(new KeyAdapter()
+              {
+                @Override
+                public void keyReleased(KeyEvent e)
+                {
+                  if (e.keyCode == '\r')
+                  {
+                    int selectionIndex = list.getSelectionIndex();
+                    if (selectionIndex != -1)
+                    {
+                      apply(list.getItem(selectionIndex));
+                    }
+                  }
+                }
+              });
+
+              shell.addShellListener(new ShellAdapter()
+              {
+                @Override
+                public void shellDeactivated(ShellEvent e)
+                {
+                  shell.dispose();
+                }
+              });
+
+              shell.addDisposeListener(new DisposeListener()
+              {
+                public void widgetDisposed(DisposeEvent e)
+                {
+                  folderText.removeModifyListener(modifyListener);
+                  folderText.removeFocusListener(focusListener);
+                  folderText.removeMouseListener(mouseListener);
+                  folderText.removeKeyListener(keyListener);
+                  if (!folderText.getShell().isDisposed())
+                  {
+                    folderText.getShell().removeControlListener(controlListener);
+                  }
+
+                  shell = null;
+                }
+              });
+
+              folderText.addModifyListener(modifyListener);
+              folderText.addFocusListener(focusListener);
+              folderText.addMouseListener(mouseListener);
+              folderText.addKeyListener(keyListener);
+              folderText.getShell().addControlListener(controlListener);
+
+              update();
+
+              shell.setVisible(true);
+            }
+
+            private void update()
+            {
+              if (!list.isDisposed())
+              {
+                list.removeAll();
+                Point selection = folderText.getSelection();
+                String folderLiteral = StringUtil.trimLeft(folderText.getText().substring(0, selection.x));
+                File folder = IOUtil.getCanonicalFile(new File(folderLiteral));
+                final String name = folder.getName().toLowerCase();
+                if (folderLiteral.length() == 0)
+                {
+                  File[] roots = File.listRoots();
+                  if (roots != null)
+                  {
+                    for (File root : roots)
+                    {
+                      list.add(root.getPath());
+                    }
+                  }
+                }
+                else
+                {
+                  boolean isExplicitFolder = folderLiteral.endsWith("/") || folderLiteral.endsWith("\\");
+                  final String nameFilter = isExplicitFolder ? "" : name;
+
+                  File searchFolder = isExplicitFolder ? folder : folder.getParentFile();
+                  if (searchFolder != null)
+                  {
+                    File[] folders = searchFolder.listFiles(new FileFilter()
+                    {
+                      public boolean accept(File file)
+                      {
+                        return file.isDirectory() && file.getName().toLowerCase().startsWith(nameFilter);
+                      }
+                    });
+
+                    if (folders != null)
+                    {
+                      for (File root : folders)
+                      {
+                        list.add(root.getPath());
+                      }
+                    }
+                  }
+                  else
+                  {
+                    File[] roots = File.listRoots();
+                    if (roots != null)
+                    {
+                      String lowerCaseFolderLiteral = folderLiteral.toLowerCase();
+                      for (File root : roots)
+                      {
+                        String path = root.getPath();
+                        if (path.length() == 1)
+                        {
+                          File[] folders = root.listFiles(new FileFilter()
+                          {
+                            public boolean accept(File file)
+                            {
+                              return file.isDirectory() && file.getName().toLowerCase().startsWith(nameFilter);
+                            }
+                          });
+
+                          if (folders != null)
+                          {
+                            for (File child : folders)
+                            {
+                              list.add(child.getPath());
+                            }
+                          }
+                        }
+                        else
+                        {
+                          if (path.toLowerCase().startsWith(lowerCaseFolderLiteral))
+                          {
+                            list.add(root.getPath());
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
+              if (list.getItemCount() != 0)
+              {
+                list.select(0);
+              }
+
+              int width = list.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+
+              Rectangle clientArea = shell.getClientArea();
+              Rectangle newClientArea = shell.computeTrim(clientArea.x, clientArea.y, width, clientArea.height);
+              Rectangle bounds = shell.getBounds();
+              if (bounds.width < newClientArea.width)
+              {
+                bounds.width = newClientArea.width;
+                shell.setBounds(bounds);
+              }
+            }
+
+            private void apply(String folder)
+            {
+              File file = new File(folder);
+              if (!folder.endsWith(File.separator) && file.isDirectory() && !IOUtil.canWriteFolder(file))
+              {
+                folder += File.separator;
+              }
+
+              setFolderTextAndSelect(folder);
+              shell.dispose();
+            }
+          }.open();
+        }
+      }
     }
   }
 }
