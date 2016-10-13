@@ -109,11 +109,13 @@ public final class ReflectUtil
     }
   }
 
-  public static Object invokeMethod(Method method, Object target, Object... arguments)
+  public static <T> T invokeMethod(Method method, Object target, Object... arguments)
   {
     try
     {
-      return method.invoke(target, arguments);
+      @SuppressWarnings("unchecked")
+      T value = (T)method.invoke(target, arguments);
+      return value;
     }
     catch (RuntimeException ex)
     {
@@ -135,7 +137,7 @@ public final class ReflectUtil
     }
   }
 
-  public static Object invokeMethod(String methodName, Object target)
+  public static <T> T invokeMethod(String methodName, Object target)
   {
     if (target instanceof Class)
     {

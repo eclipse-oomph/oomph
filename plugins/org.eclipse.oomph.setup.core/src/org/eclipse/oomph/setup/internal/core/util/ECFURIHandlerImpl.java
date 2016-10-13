@@ -1831,46 +1831,34 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           if ("oomph".equals(key))
           {
             String result = evaluate(value, uri);
-            if (result == null)
+            if (result != null)
             {
-              result = evaluate(value, uri);
-              return null;
+              outputURI = URI.createURI(result);
             }
 
-            outputURI = URI.createURI(result);
             continue;
           }
           else if ("oomph_login".equals(key))
           {
             String result = evaluate(value, uri);
-            if (result == null)
+            if (result != null)
             {
-              result = evaluate(value, uri);
-              return null;
+              loginURI = URI.createURI(result);
             }
 
-            loginURI = URI.createURI(result);
             continue;
           }
           else if (key.startsWith("oomph-"))
           {
             String result = evaluate(value, uri);
-            if (result == null)
+            if (result != null)
             {
-              result = evaluate(value, uri);
-              return null;
+              key = key.substring("oomph-".length());
+              value = result;
             }
-
-            key = key.substring("oomph-".length());
-            value = result;
           }
 
           outputQuery.put(key, value);
-        }
-
-        if (outputURI == null)
-        {
-          return null;
         }
 
         if (!outputQuery.isEmpty())

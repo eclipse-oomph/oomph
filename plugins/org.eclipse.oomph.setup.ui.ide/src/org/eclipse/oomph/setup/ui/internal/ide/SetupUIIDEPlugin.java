@@ -11,9 +11,22 @@
 package org.eclipse.oomph.setup.ui.internal.ide;
 
 import org.eclipse.oomph.ui.OomphUIPlugin;
+import org.eclipse.oomph.util.ReflectUtil;
+import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
+
+import org.eclipse.jface.text.templates.ContextTypeRegistry;
+import org.eclipse.jface.text.templates.SimpleTemplateVariableResolver;
+import org.eclipse.jface.text.templates.TemplateContext;
+import org.eclipse.jface.text.templates.TemplateContextType;
+import org.eclipse.jface.text.templates.TemplateVariableResolver;
+
+import org.osgi.framework.BundleContext;
+
+import java.util.Iterator;
 
 /**
  * @author Eike Stepper
@@ -43,6 +56,50 @@ public final class SetupUIIDEPlugin extends OomphUIPlugin
     public Implementation()
     {
       plugin = this;
+    }
+
+    @Override
+    public void start(BundleContext context) throws Exception
+    {
+      super.start(context);
+
+      // Modify the JDT's variable resolvers so that ${User} expands to a property author name,
+      // not simply to the System.getProperty("user.name") which is the account name and generally not appropriate as the author name.
+      if (!StringUtil.isEmpty(System.getProperty("jdt.user.name")))
+      {
+        try
+        {
+          Class<?> javaUIPluginClass = CommonPlugin.loadClass("org.eclipse.jdt.ui", "org.eclipse.jdt.internal.ui.JavaPlugin");
+          Object javaUIPlugin = ReflectUtil.invokeMethod("getDefault", javaUIPluginClass);
+          ContextTypeRegistry codeTemplateContextRegistry = ReflectUtil.invokeMethod("getCodeTemplateContextRegistry", javaUIPlugin);
+
+          for (@SuppressWarnings("unchecked")
+          Iterator<TemplateContextType> it = codeTemplateContextRegistry.contextTypes(); it.hasNext();)
+          {
+            TemplateContextType templateContextType = it.next();
+            for (@SuppressWarnings("unchecked")
+            Iterator<TemplateVariableResolver> it2 = templateContextType.resolvers(); it2.hasNext();)
+            {
+              TemplateVariableResolver templateVariableResolver = it2.next();
+              if ("user".equals(templateVariableResolver.getType()))
+              {
+                templateContextType
+                    .addResolver(new SimpleTemplateVariableResolver(templateVariableResolver.getType(), templateVariableResolver.getDescription())
+                    {
+                      @Override
+                      protected String resolve(TemplateContext context)
+                      {
+                        return System.getProperty("jdt.user.name", System.getProperty("user.name"));
+                      }
+                    });
+              }
+            }
+          }
+        }
+        catch (Exception ex)
+        {
+        }
+      }
     }
   }
 }
