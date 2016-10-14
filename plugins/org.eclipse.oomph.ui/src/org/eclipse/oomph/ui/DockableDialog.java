@@ -458,6 +458,11 @@ public abstract class DockableDialog extends Dialog
         public void shellIconified(ShellEvent e)
         {
           updateActions(false);
+
+          if (!OS.INSTANCE.isMac())
+          {
+            shell.setVisible(false);
+          }
         }
 
         @Override
