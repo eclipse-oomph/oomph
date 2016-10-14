@@ -140,7 +140,7 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
 
     if (object instanceof Index)
     {
-      return "Catalog " + itemProvider.getText(object);
+      return "Catalog Index " + itemProvider.getText(object);
     }
 
     if (object instanceof Product)

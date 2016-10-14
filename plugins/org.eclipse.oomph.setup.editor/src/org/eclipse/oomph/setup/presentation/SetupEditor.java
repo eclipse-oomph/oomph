@@ -52,6 +52,7 @@ import org.eclipse.oomph.setup.ui.SetupTransferSupport;
 import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
 import org.eclipse.oomph.ui.DockableDialog;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.ReflectUtil;
@@ -205,6 +206,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -4171,6 +4173,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private URI mostRecentChangingLocation;
 
+    private Canvas canvas;
+
     private SetupLocationListener(boolean editorSpecific)
     {
       super(null);
@@ -4215,6 +4219,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               editorDisposeListeners.remove(setupEditor);
 
               int index = 0;
+              int count = 0;
               for (Iterator<ToolTipObject> it = toolTipObjects.iterator(); it.hasNext();)
               {
                 ToolTipObject wrapper = it.next();
@@ -4223,13 +4228,14 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
                   it.remove();
                   if (index < toolTipIndex)
                   {
-                    --toolTipIndex;
+                    ++count;
                   }
                 }
 
                 ++index;
               }
 
+              toolTipIndex -= count;
               navigate(toolTipObjects.size() == 0 ? -1 : toolTipIndex);
             }
           };
@@ -4271,6 +4277,16 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     @Override
     public void changed(LocationEvent event)
     {
+      // This only ever happens on the Mac.
+      if (canvas != null)
+      {
+        canvas.dispose();
+        canvas = null;
+        GridData gridData = (GridData)browser.getLayoutData();
+        gridData.exclude = false;
+        browser.getParent().layout();
+      }
+
       String url = browser.getUrl();
       if (!"about:blank".equals(url))
       {
@@ -4291,6 +4307,28 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     {
       // Transform the URI if necessary, checking if a login URI must be accessed first.
       URI originalURI = URI.createURI(event.location);
+
+      if (OS.INSTANCE.isMac())
+      {
+        // On the Mac, the query URI isn't resolved against the blank page URI.
+        if (originalURI.trimQuery().isCurrentDocumentReference())
+        {
+          originalURI = URI.createURI("about:blank" + originalURI);
+        }
+
+        String query = originalURI.query();
+        if (query != null)
+        {
+          originalURI = originalURI.trimQuery().appendQuery(query.replace("%5B", "[").replaceAll("%5D", "]"));
+        }
+
+        String fragment = originalURI.fragment();
+        if (fragment != null)
+        {
+          originalURI = originalURI.trimFragment().appendFragment(fragment.replace("%5B", "[").replaceAll("%5D", "]"));
+        }
+      }
+
       URI uri = originalURI;
       Map<Object, Object> options = new HashMap<Object, Object>();
       uri = ECFURIHandlerImpl.transform(uri, options);
@@ -4715,7 +4753,21 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             }
           }
 
-          if (event.location.startsWith("about:blank#"))
+          if (event.location.equals("about:blank"))
+          {
+            // Force event processing; on the Mac this allows the browser to redraw the text.
+            if (OS.INSTANCE.isMac())
+            {
+              UIUtil.asyncExec(browser, new Runnable()
+              {
+                public void run()
+                {
+                  shell.getDisplay().readAndDispatch();
+                }
+              });
+            }
+          }
+          else if (event.location.startsWith("about:blank#"))
           {
             event.doit = false;
           }
@@ -4807,7 +4859,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         setEditor(null);
         toolTipObject = null;
-        browser.setText(getFullHTML("No history"), false);
+        toolTipIndex = -1;
+        setText("No history");
       }
       else
       {
@@ -4826,7 +4879,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           IToolTipProvider toolTipProvider = (IToolTipProvider)setupEditor.selectionViewer.getLabelProvider();
           String toolTipText = toolTipProvider.getToolTipText(new ToolTipObject(toolTipObject, showAdvancedPropertiesItem.getSelection()));
-          browser.setText(getFullHTML(toolTipText), false);
+          setText(toolTipText);
         }
 
         this.toolTipObjects = toolTipObjects;
@@ -4837,15 +4890,42 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       forwardItem.setEnabled(toolTipIndex + 1 < toolTipObjects.size());
     }
 
+    protected void setText(String text)
+    {
+      if (!StringUtil.isEmpty(text))
+      {
+        browser.setText(getFullHTML(text), false);
+      }
+
+      // On the Mac, the browser turns white for a while, which is ugly.
+      // So here we temporarily cover it with a canvas with the proper background color.
+      if (OS.INSTANCE.isMac() && canvas == null)
+      {
+        Composite parent = browser.getParent();
+
+        GridData gridData = (GridData)browser.getLayoutData();
+        gridData.exclude = true;
+        canvas = new Canvas(parent, SWT.NONE);
+
+        GridData canvasGridData = new GridData();
+        canvasGridData.verticalAlignment = GridData.FILL;
+        canvasGridData.grabExcessVerticalSpace = true;
+        canvasGridData.horizontalAlignment = GridData.FILL;
+        canvasGridData.grabExcessHorizontalSpace = true;
+
+        canvas.moveAbove(browser);
+        canvas.setLayoutData(canvasGridData);
+        canvas.setBackground(browser.getBackground());
+        parent.layout();
+      }
+    }
+
     @Override
     protected void setSelection(Object object)
     {
       IToolTipProvider toolTipProvider = (IToolTipProvider)setupEditor.selectionViewer.getLabelProvider();
       String toolTipText = toolTipProvider.getToolTipText(new ToolTipObject(object, this, setupEditor, false, showAdvancedPropertiesItem.getSelection()));
-      if (!StringUtil.isEmpty(toolTipText))
-      {
-        browser.setText(getFullHTML(toolTipText), false);
-      }
+      setText(toolTipText);
     }
 
     public void dispose()

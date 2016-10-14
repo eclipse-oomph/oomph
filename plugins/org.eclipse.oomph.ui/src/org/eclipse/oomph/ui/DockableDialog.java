@@ -12,6 +12,7 @@ package org.eclipse.oomph.ui;
 
 import org.eclipse.oomph.internal.ui.UIPlugin;
 import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -99,7 +100,9 @@ public abstract class DockableDialog extends Dialog
   {
     super(workbenchWindow.getShell());
 
-    setShellStyle(getShellStyle() ^ SWT.APPLICATION_MODAL | SWT.MODELESS | SWT.RESIZE | SWT.MAX | SWT.MIN);
+    // On the Mac, you can't have an invisible minimized child shell.
+    // Minimizing the child shell will minimize the parent shell.
+    setShellStyle(getShellStyle() ^ SWT.APPLICATION_MODAL | SWT.MODELESS | SWT.RESIZE | SWT.MAX | (OS.INSTANCE.isMac() ? SWT.NONE : SWT.MIN));
     setBlockOnOpen(false);
 
     this.workbenchWindow = workbenchWindow;
@@ -160,18 +163,39 @@ public abstract class DockableDialog extends Dialog
       // The use may have minimized it himself, so we don't want to mark it forced unless we make it invisible.
       if (shell.isVisible())
       {
-        shell.setVisible(false);
-        shell.setData("forced", true);
-        shell.setMinimized(true);
-        shell.notifyListeners(SWT.Iconify, new Event());
+        updateVisibility(shell, false);
       }
     }
     else if (Boolean.TRUE.equals(shell.getData("forced")))
     {
-      shell.setMinimized(false);
+      updateVisibility(shell, true);
+    }
+  }
+
+  private static void updateVisibility(Shell shell, boolean visible)
+  {
+    if (visible)
+    {
+      if (!OS.INSTANCE.isMac())
+      {
+        shell.setMinimized(false);
+      }
+
       shell.notifyListeners(SWT.Deiconify, new Event());
-      shell.setData("forced", false);
+      shell.setData("forced", null);
       shell.setVisible(true);
+    }
+    else
+    {
+      shell.setVisible(false);
+      shell.setData("forced", true);
+
+      if (!OS.INSTANCE.isMac())
+      {
+        shell.setMinimized(true);
+      }
+
+      shell.notifyListeners(SWT.Iconify, new Event());
     }
   }
 
@@ -199,6 +223,9 @@ public abstract class DockableDialog extends Dialog
     return ExtendedImageRegistry.INSTANCE.getImage(new DockedOverlayImage(images));
   }
 
+  /**
+   * @author Ed Merks
+   */
   private static class DockedOverlayImage extends ComposedImage
   {
     private DockedOverlayImage(Collection<?> images)
@@ -430,25 +457,29 @@ public abstract class DockableDialog extends Dialog
         @Override
         public void shellIconified(ShellEvent e)
         {
-          shell.setVisible(false);
-          for (IAction action : dockableDialog.getActions())
-          {
-            action.setChecked(false);
-          }
+          updateActions(false);
         }
 
         @Override
         public void shellDeiconified(ShellEvent e)
         {
+          updateActions(true);
+        }
+
+        protected void updateActions(boolean checked)
+        {
           for (IAction action : dockableDialog.getActions())
           {
-            action.setChecked(true);
+            action.setChecked(checked);
           }
         }
 
         public void controlResized(ControlEvent e)
         {
-          // Ignore.
+          if (OS.INSTANCE.isMac() && !ignoreControlMoved)
+          {
+            dock(null);
+          }
         }
 
         public void controlMoved(ControlEvent e)
@@ -469,8 +500,12 @@ public abstract class DockableDialog extends Dialog
             // it again.
             if (snapBounds != null)
             {
-              setBounds(snapBounds);
-              dock(snapBounds);
+              if (!OS.INSTANCE.isMac() || System.currentTimeMillis() - timeOfLastMove < 200)
+              {
+                setBounds(snapBounds);
+                dock(snapBounds);
+              }
+
               snapBounds = null;
             }
             else
@@ -492,12 +527,26 @@ public abstract class DockableDialog extends Dialog
               }
             }
 
-            // If we haven't moved the shell for a short white, assume we're staring a new interaction.
+            // If we haven't moved the shell for a short while, assume we're staring a new interaction.
             long newTimeOfLastMove = System.currentTimeMillis();
             if (newTimeOfLastMove - timeOfLastMove > 1000)
             {
-              hotZone = null;
-              snapPoint = null;
+              // On the Mac, we don't see any move events until the user stops moving the shell for a short while.
+              // As such, the very first move event could be the last move event we'll ever see.
+              // So in this case, start a new interaction only if we've not seen the cursor move for while.
+              if (!OS.INSTANCE.isMac() || newTimeOfLastMove - timeOfLastCursorChange > 1000)
+              {
+                hotZone = null;
+                snapPoint = null;
+                snapBounds = null;
+              }
+
+              if (OS.INSTANCE.isMac())
+              {
+                // For the Mac, we want to start the heart beat runnable and there we'll monitor whether the cursor stays over the shell title for a period of
+                // time.
+                display.timerExec(100, this);
+              }
             }
 
             timeOfLastMove = newTimeOfLastMove;
@@ -521,7 +570,7 @@ public abstract class DockableDialog extends Dialog
                 // If we have no snap point for this yet...
                 if (snapPoint == null)
                 {
-                  // Show a different cursor and start the heartbeat runnable.
+                  // Show a different cursor and start the heart beat runnable.
                   shell.setCursor(sizeAllCursor);
                   updateShellImage(true);
                   display.timerExec(100, this);
@@ -548,6 +597,11 @@ public abstract class DockableDialog extends Dialog
          */
         public void run()
         {
+          if (shell.isDisposed())
+          {
+            return;
+          }
+
           // Keep track of cursor movements, so that only if you hover for a while in the same location will the shell be snapped to the hot zone.
           Point newCursorLocation = display.getCursorLocation();
           if (cursorLocation == null || !cursorLocation.equals(newCursorLocation))
@@ -556,7 +610,9 @@ public abstract class DockableDialog extends Dialog
             cursorLocation = newCursorLocation;
           }
 
-          if (snapPoint == null)
+          // On the Mac, we'll check each time of the cursor control is not any part of any other window managed by SWT, i.e., it's staying inside the title
+          // area of the shell.
+          if (snapPoint == null && (!OS.INSTANCE.isMac() || display.getCursorControl() != null))
           {
             // Not in hot zone.
             shell.setCursor(null);
@@ -564,12 +620,16 @@ public abstract class DockableDialog extends Dialog
           else if (System.currentTimeMillis() - timeOfLastCursorChange > 500)
           {
             // Get the bounds for the hot zone, and dock to that location.
-            snapBounds = getHotZone(snapPoint);
-            setBounds(snapBounds);
-            snapPoint = null;
-            timeOfLastCursorChange = System.currentTimeMillis();
-            dock(snapBounds);
-            shell.setCursor(null);
+            // The case of the snapPoint being null happens only on the Mac, in which case we use the current cursor location as the snap point.
+            snapBounds = getHotZone(snapPoint == null ? cursorLocation : snapPoint);
+            if (snapBounds != null)
+            {
+              setBounds(snapBounds);
+              snapPoint = null;
+              timeOfLastCursorChange = System.currentTimeMillis();
+              dock(snapBounds);
+              shell.setCursor(null);
+            }
           }
           else
           {
@@ -731,11 +791,9 @@ public abstract class DockableDialog extends Dialog
 
                     // If we've been forced to minimize the shell because there is no docking site in the perspective, but now we do have a docking site,
                     // make the shell visible again.
-                    if (shell.getMinimized() && Boolean.TRUE.equals(shell.getData("forced")))
+                    if (!shell.isVisible() && Boolean.TRUE.equals(shell.getData("forced")))
                     {
-                      shell.setData("forced", null);
-                      shell.setMinimized(false);
-                      shell.setVisible(true);
+                      updateVisibility(shell, true);
                     }
 
                     return;
@@ -745,10 +803,7 @@ public abstract class DockableDialog extends Dialog
 
               if (dockedTabFolder != null)
               {
-                // There is no docking site, for minimize the shell and mark that as forced (as opposed to the user having mimimized the shell.
-                shell.setMinimized(true);
-                shell.setVisible(false);
-                shell.setData("forced", true);
+                updateVisibility(shell, false);
               }
             }
             else
@@ -757,11 +812,9 @@ public abstract class DockableDialog extends Dialog
               // Restore the shell if it's been forced into minimized state.
               Rectangle bounds = getBounds(dockedTabFolder);
               setBounds(bounds);
-              if (shell.getMinimized() && Boolean.TRUE.equals(shell.getData("forced")))
+              if (!shell.isVisible() && Boolean.TRUE.equals(shell.getData("forced")))
               {
-                shell.setData("forced", null);
-                shell.setMinimized(false);
-                shell.setVisible(true);
+                updateVisibility(shell, true);
               }
             }
           }
@@ -806,6 +859,17 @@ public abstract class DockableDialog extends Dialog
           Point displayPoint = tabFolder.getParent().toDisplay(bounds.x, bounds.y);
           bounds.x = displayPoint.x;
           bounds.y = displayPoint.y;
+
+          // Make the bounds one pixel smaller on on sizes so that the shell's resize handles don't completely cover the tab folder's resize handles.
+          if (OS.INSTANCE.isMac())
+          {
+            ++bounds.x;
+            bounds.width -= 2;
+
+            ++bounds.y;
+            bounds.height -= 2;
+          }
+
           return bounds;
         }
 
@@ -888,10 +952,7 @@ public abstract class DockableDialog extends Dialog
     {
       // Show the shell if it already exists.
       final Shell shell = dockableDialog.getShell();
-      shell.setMinimized(false);
-      shell.setVisible(true);
-      shell.setData("forced", null);
-      shell.setFocus();
+      updateVisibility(shell, true);
     }
 
     return dockableDialog;

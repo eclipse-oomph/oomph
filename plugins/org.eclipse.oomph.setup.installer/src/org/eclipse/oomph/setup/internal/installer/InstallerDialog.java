@@ -124,39 +124,42 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
         final Installer installer = getInstaller();
         installer.getIndexLoader().awaitIndexLoad();
 
-        final Runnable checkIndex = this;
-        shell.getDisplay().asyncExec(new Runnable()
+        if (!shell.isDisposed())
         {
-          public void run()
+          final Runnable checkIndex = this;
+          shell.getDisplay().asyncExec(new Runnable()
           {
-            UIPlugin.openRecorderIfEnabled();
-            SetupInstallerPlugin.runTests();
-
-            if (installer.getCatalogManager().getIndex() == null)
+            public void run()
             {
-              int answer = new MessageDialog(shell, "Network Problem", null,
-                  "The catalog could not be loaded. Please ensure that you have network access and, if needed, have configured your network proxy.",
-                  MessageDialog.ERROR, new String[] { "Retry", "Configure Network Proxy...", "Exit" }, 0).open();
-              switch (answer)
+              UIPlugin.openRecorderIfEnabled();
+              SetupInstallerPlugin.runTests();
+
+              if (installer.getCatalogManager().getIndex() == null)
               {
-                case 0:
-                  installer.reloadIndex(null);
-                  shell.getDisplay().asyncExec(checkIndex);
-                  return;
+                int answer = new MessageDialog(shell, "Network Problem", null,
+                    "The catalog could not be loaded. Please ensure that you have network access and, if needed, have configured your network proxy.",
+                    MessageDialog.ERROR, new String[] { "Retry", "Configure Network Proxy...", "Exit" }, 0).open();
+                switch (answer)
+                {
+                  case 0:
+                    installer.reloadIndex(null);
+                    shell.getDisplay().asyncExec(checkIndex);
+                    return;
 
-                case 1:
-                  new NetworkConnectionsDialog(getShell()).open();
-                  installer.reloadIndex(null);
-                  shell.getDisplay().asyncExec(checkIndex);
-                  return;
+                  case 1:
+                    new NetworkConnectionsDialog(getShell()).open();
+                    installer.reloadIndex(null);
+                    shell.getDisplay().asyncExec(checkIndex);
+                    return;
 
-                default:
-                  close();
-                  return;
+                  default:
+                    close();
+                    return;
+                }
               }
             }
-          }
-        });
+          });
+        }
       }
     });
   }
