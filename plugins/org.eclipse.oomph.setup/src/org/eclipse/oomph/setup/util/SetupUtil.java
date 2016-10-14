@@ -49,13 +49,9 @@ public final class SetupUtil
     }
 
     Matcher matcher = StringExpander.STRING_EXPANSION_PATTERN.matcher(string);
-    if (!matcher.find())
-    {
-      return string;
-    }
 
     StringBuffer result = new StringBuffer();
-    do
+    while (matcher.find())
     {
       String group1 = matcher.group(1);
       if ("$".equals(group1))
@@ -66,7 +62,7 @@ public final class SetupUtil
       {
         matcher.appendReplacement(result, "\\$$0");
       }
-    } while (matcher.find());
+    }
 
     matcher.appendTail(result);
 
