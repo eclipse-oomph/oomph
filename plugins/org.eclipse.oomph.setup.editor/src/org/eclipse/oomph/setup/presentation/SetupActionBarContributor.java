@@ -1888,7 +1888,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   }
 
   /**
-   * @author Ed merks
+   * @author Ed Merks
    */
   private static class ShowPropertiesViewAction extends Action
   {

@@ -102,7 +102,8 @@ public abstract class DockableDialog extends Dialog
 
     // On the Mac, you can't have an invisible minimized child shell.
     // Minimizing the child shell will minimize the parent shell.
-    setShellStyle(getShellStyle() ^ SWT.APPLICATION_MODAL | SWT.MODELESS | SWT.RESIZE | SWT.MAX | (OS.INSTANCE.isMac() ? SWT.NONE : SWT.MIN));
+    // On Linux, it just works very poorly.
+    setShellStyle(getShellStyle() ^ SWT.APPLICATION_MODAL | SWT.MODELESS | SWT.RESIZE | SWT.MAX | (OS.INSTANCE.isWin() ? SWT.MIN : SWT.NONE));
     setBlockOnOpen(false);
 
     this.workbenchWindow = workbenchWindow;
@@ -176,21 +177,22 @@ public abstract class DockableDialog extends Dialog
   {
     if (visible)
     {
-      if (!OS.INSTANCE.isMac())
+      shell.setData("forced", null);
+
+      if (OS.INSTANCE.isWin())
       {
         shell.setMinimized(false);
       }
 
-      shell.notifyListeners(SWT.Deiconify, new Event());
-      shell.setData("forced", null);
       shell.setVisible(true);
+      shell.notifyListeners(SWT.Deiconify, new Event());
     }
     else
     {
-      shell.setVisible(false);
       shell.setData("forced", true);
 
-      if (!OS.INSTANCE.isMac())
+      shell.setVisible(false);
+      if (OS.INSTANCE.isWin())
       {
         shell.setMinimized(true);
       }
@@ -390,6 +392,12 @@ public abstract class DockableDialog extends Dialog
         private long timeOfLastCursorChange;
 
         /**
+         * This records the most recent time {@link #update()} called {@link #setBounds(Rectangle)}.
+         * @see #run()
+         */
+        private long timeOfLastUpdate;
+
+        /**
          * This is the most recent bounds where we can dock the shell.
          */
         private Rectangle hotZone;
@@ -459,7 +467,7 @@ public abstract class DockableDialog extends Dialog
         {
           updateActions(false);
 
-          if (!OS.INSTANCE.isMac())
+          if (!OS.INSTANCE.isMac() && shell.isVisible())
           {
             shell.setVisible(false);
           }
@@ -468,7 +476,10 @@ public abstract class DockableDialog extends Dialog
         @Override
         public void shellDeiconified(ShellEvent e)
         {
-          updateActions(true);
+          if (shell.isVisible())
+          {
+            updateActions(true);
+          }
         }
 
         protected void updateActions(boolean checked)
@@ -498,8 +509,9 @@ public abstract class DockableDialog extends Dialog
             snapBounds = null;
           }
 
-          // We do nothing we are the ones moving the shell or the shell is maximized.
-          if (!ignoreControlMoved && !maximized)
+          // We do nothing if we are the ones moving the shell or the shell is maximized.
+          // On Linux we see moves of the shell even when we did the update so use the time to guard it.
+          if (!ignoreControlMoved && !maximized && (!OS.INSTANCE.isLinux() || System.currentTimeMillis() - timeOfLastUpdate > 500))
           {
             // We have snap bounds to apply, because releasing the mouse after docking moved the shell yet again, we can apply it now, and we never have to do
             // it again.
@@ -513,22 +525,19 @@ public abstract class DockableDialog extends Dialog
 
               snapBounds = null;
             }
-            else
+            // If we have a docking site...
+            else if (dockedTabFolder != null)
             {
-              // If we have a docking site...
-              if (dockedTabFolder != null)
+              // And we moved outside of it...
+              if (!getBounds(dockedTabFolder).equals(shell.getBounds()))
               {
-                // And we moved outside of it...
-                if (!getBounds(dockedTabFolder).equals(shell.getBounds()))
-                {
-                  // Undock the shell.
-                  dock(null);
-                }
-                else
-                {
-                  // Otherwise we have moved to exactly the docking site, in which case we don't want to do anything!
-                  return;
-                }
+                // Undock the shell.
+                dock(null);
+              }
+              else
+              {
+                // Otherwise we have moved to exactly the docking site, in which case we don't want to do anything!
+                return;
               }
             }
 
@@ -665,6 +674,13 @@ public abstract class DockableDialog extends Dialog
          */
         private void setBounds(Rectangle bounds)
         {
+          // On Linux we'll see later event for the move; one that we want to ignore.
+          if (OS.INSTANCE.isLinux())
+          {
+            snapBounds = bounds;
+            timeOfLastMove = System.currentTimeMillis();
+          }
+
           ignoreControlMoved = true;
           shell.setBounds(bounds);
           ignoreControlMoved = false;
@@ -794,6 +810,8 @@ public abstract class DockableDialog extends Dialog
                     setBounds(bounds);
                     dock(bounds);
 
+                    timeOfLastUpdate = System.currentTimeMillis();
+
                     // If we've been forced to minimize the shell because there is no docking site in the perspective, but now we do have a docking site,
                     // make the shell visible again.
                     if (!shell.isVisible() && Boolean.TRUE.equals(shell.getData("forced")))
@@ -817,6 +835,7 @@ public abstract class DockableDialog extends Dialog
               // Restore the shell if it's been forced into minimized state.
               Rectangle bounds = getBounds(dockedTabFolder);
               setBounds(bounds);
+              timeOfLastUpdate = System.currentTimeMillis();
               if (!shell.isVisible() && Boolean.TRUE.equals(shell.getData("forced")))
               {
                 updateVisibility(shell, true);

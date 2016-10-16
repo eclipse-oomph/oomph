@@ -15,6 +15,7 @@ import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.edit.provider.IItemFontProvider;
+import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 
 import org.eclipse.core.runtime.IStatus;
@@ -32,6 +33,7 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -799,12 +801,15 @@ public final class UIUtil
     }
   }
 
-  public static String stripHTMLFull(String html)
+  /**
+   * This returns HTML that can be rendered by styled text, which respects some HTML but not all of it well.
+   */
+  public static String getRenderableHTML(String html)
   {
-    return stripHTMLFull(html, false);
+    return stripHTMLFull(html, true);
   }
 
-  private static String stripHTMLFull(String html, boolean images)
+  private static String stripHTMLFull(String html, final boolean renderable)
   {
     try
     {
@@ -820,7 +825,14 @@ public final class UIUtil
         @Override
         public void handleText(char[] text, int pos)
         {
-          builder.append(text);
+          if (renderable)
+          {
+            builder.append(DiagnosticDecorator.escapeContent(new String(text)));
+          }
+          else
+          {
+            builder.append(text);
+          }
         }
 
         @Override
@@ -832,6 +844,11 @@ public final class UIUtil
           }
           else if (t.breaksFlow())
           {
+            if (renderable && builder == result)
+            {
+              builder.append("<br/>");
+            }
+
             builder.append("\n");
           }
         }
@@ -858,6 +875,10 @@ public final class UIUtil
           {
             appendLineFeed(true);
             appendLineFeed(false);
+            if (renderable)
+            {
+              builder.append("<b>");
+            }
           }
           else
           {
@@ -908,10 +929,10 @@ public final class UIUtil
               ++rowIndex;
             }
 
-            // for (int i = 0; i < widths.length; ++i)
-            // {
-            // widths[i] += 4;
-            // }
+            if (renderable)
+            {
+              builder.append("<pre>");
+            }
 
             for (String[][] row : tableEntries)
             {
@@ -921,18 +942,44 @@ public final class UIUtil
                 maxLines = Math.max(maxLines, column.length);
               }
 
-              for (int i = 0; i < maxLines; ++i)
+              if (renderable)
               {
-                builder.append("|  ");
-                int columnIndex = 0;
-                for (String[] column : row)
+                for (int i = 0; i < maxLines; ++i)
                 {
-                  append(i < column.length ? column[i] : "", widths[columnIndex++]);
-                  builder.append(i == maxLines - 1 ? "  |" : "  |  ");
+                  int columnIndex = 0;
+                  for (String[] column : row)
+                  {
+                    String columnText = i < column.length ? column[i] : "";
+                    int columnWidth = widths[columnIndex];
+                    append(columnText, columnWidth);
+                    ++columnIndex;
+                  }
+                  builder.append("\n");
                 }
-
-                appendLineFeed(false);
               }
+              else
+              {
+                appendLineFeed(true);
+                for (int i = 0; i < maxLines; ++i)
+                {
+                  builder.append("|  ");
+                  int columnIndex = 0;
+                  for (String[] column : row)
+                  {
+                    append(i < column.length ? column[i] : "", widths[columnIndex]);
+                    builder.append(columnIndex == row.length - 1 ? "  |" : "  |  ");
+                    ++columnIndex;
+                  }
+
+                  appendLineFeed(false);
+                }
+              }
+            }
+
+            if (renderable)
+            {
+              builder.append("</pre>");
+
             }
 
             table = null;
@@ -942,6 +989,14 @@ public final class UIUtil
           }
           else if ("td".equals(tagName))
           {
+          }
+          else if (tagName.startsWith("h") && tagName.length() > 1 && Character.isDigit(tagName.charAt(1)))
+          {
+            if (renderable)
+            {
+              builder.append("</b>");
+              appendLineFeed(true);
+            }
           }
           else
           {
@@ -973,6 +1028,11 @@ public final class UIUtil
             }
           }
 
+          if (renderable)
+          {
+            builder.append("<br/>");
+          }
+
           builder.append('\n');
         }
 
@@ -992,21 +1052,39 @@ public final class UIUtil
     GC gc = new GC(shell);
     FontRegistry fontRegistry = JFaceResources.getFontRegistry();
     Font font = fontRegistry.get(fontRegistry.hasValueFor("org.eclipse.jdt.ui.javadocfont") ? "org.eclipse.jdt.ui.javadocfont" : JFaceResources.DIALOG_FONT);
+    Font fixedPitchFont = JFaceResources.getTextFont();
+
+    gc.setFont(font);
+    FontMetrics fontMetrics = gc.getFontMetrics();
+    int averageCharWidth = fontMetrics.getAverageCharWidth();
 
     Font boldFont = ExtendedFontRegistry.INSTANCE.getFont(font, IItemFontProvider.BOLD_FONT);
     gc.setFont(boldFont);
 
-    String text = stripHTMLFull(html, true).trim();
+    boolean browerAvailable = isBrowserAvailable();
+
+    String text = stripHTMLFull(html, false).trim();
     String[] lines = text.split("\n");
     int pixelWidth = 0;
     for (String line : lines)
     {
-      pixelWidth = Math.max(pixelWidth, gc.textExtent(line).x);
+      boolean isTableRow = line.startsWith("|");
+      if (!browerAvailable && isTableRow)
+      {
+        gc.setFont(fixedPitchFont);
+      }
+
+      int lineWidth = gc.textExtent(line).x;
+      if (browerAvailable && isTableRow)
+      {
+        lineWidth += 4 * averageCharWidth;
+      }
+
+      pixelWidth = Math.max(pixelWidth, lineWidth);
       gc.setFont(font);
     }
 
-    int averageCharWidth = gc.getFontMetrics().getAverageCharWidth();
-    int numberOfAverageCharacters = pixelWidth / averageCharWidth + 5;
+    int numberOfAverageCharacters = pixelWidth / averageCharWidth + 2;
 
     gc.dispose();
     shell.dispose();

@@ -163,11 +163,16 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.AbstractHoverInformationControlManager;
+import org.eclipse.jface.text.AbstractInformationControlManager.IInformationControlCloser;
+import org.eclipse.jface.text.AbstractReusableInformationControlCreator;
+import org.eclipse.jface.text.DefaultInformationControl;
+import org.eclipse.jface.text.IInformationControl;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -188,6 +193,7 @@ import org.eclipse.swt.browser.AuthenticationListener;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
@@ -211,6 +217,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
@@ -1982,6 +1989,83 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     final ColumnViewerInformationControlToolTipSupport toolTipSupport = new ColumnViewerInformationControlToolTipSupport(viewer, locationListener);
 
+    final AbstractHoverInformationControlManager hoverInformationControlManager = ReflectUtil.getValue("hoverInformationControlManager", toolTipSupport);
+
+    @SuppressWarnings("restriction")
+    final org.eclipse.jface.internal.text.InformationControlReplacer informationControlReplacer = hoverInformationControlManager.getInternalAccessor()
+        .getInformationControlReplacer();
+
+    final IInformationControlCloser informationControlReplacerCloser = ReflectUtil.getValue("fInformationControlCloser", informationControlReplacer);
+
+    class Closer implements IInformationControlCloser, Listener
+    {
+      private IInformationControlCloser informationControlCloser;
+
+      private Shell shell;
+
+      public Closer(IInformationControlCloser informationControlCloser)
+      {
+        this.informationControlCloser = informationControlCloser;
+      }
+
+      public void setSubjectControl(Control subject)
+      {
+        informationControlCloser.setSubjectControl(subject);
+      }
+
+      public void setInformationControl(IInformationControl control)
+      {
+        if (shell != null)
+        {
+          shell.getDisplay().removeFilter(SWT.MouseEnter, this);
+          shell.getDisplay().removeFilter(SWT.MouseMove, this);
+          shell.getDisplay().removeFilter(SWT.MouseExit, this);
+        }
+
+        shell = control == null ? null : (Shell)ReflectUtil.getValue("fShell", control);
+        informationControlCloser.setInformationControl(control);
+      }
+
+      public void start(Rectangle subjectArea)
+      {
+        informationControlCloser.start(subjectArea);
+        shell.getDisplay().addFilter(SWT.MouseEnter, this);
+        shell.getDisplay().addFilter(SWT.MouseMove, this);
+        shell.getDisplay().addFilter(SWT.MouseExit, this);
+      }
+
+      public void stop()
+      {
+        informationControlCloser.stop();
+        if (shell != null)
+        {
+          shell.getDisplay().removeFilter(SWT.MouseEnter, this);
+          shell.getDisplay().removeFilter(SWT.MouseMove, this);
+          shell.getDisplay().removeFilter(SWT.MouseExit, this);
+        }
+      }
+
+      public void handleEvent(Event event)
+      {
+        if (event.widget instanceof Control)
+        {
+          if (shell.getDisplay().getActiveShell() != shell)
+          {
+            Control control = (Control)event.widget;
+            Point location = control.toDisplay(event.x, event.y);
+            Rectangle bounds = shell.getBounds();
+            Rectangle trim = shell.computeTrim(bounds.x, bounds.y, bounds.width, bounds.height);
+            if (!trim.contains(location))
+            {
+              ReflectUtil.invokeMethod("hideInformationControl", informationControlReplacer);
+            }
+          }
+        }
+      }
+    }
+
+    ReflectUtil.setValue("fInformationControlCloser", informationControlReplacer, new Closer(informationControlReplacerCloser));
+
     locationListener.setToolTipSupport(toolTipSupport);
 
     final SetupLabelProvider setupLabelProvider = new SetupLabelProvider(adapterFactory, viewer);
@@ -2128,7 +2212,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         String labelText = setupLabelProvider.getText(object);
         if (!extend)
         {
-          result.append("<a href='?extend' style='text-decoration: none; color: inherit;'>");
+          result.append("<a href='about:blank?extend' style='text-decoration: none; color: inherit;'>");
           result.append("<img style='padding-right: 2pt; margin-top: 2px; margin-bottom: -2pt;' src='");
           result.append(imageURI);
           result.append("'/><b>");
@@ -2160,7 +2244,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           }
 
           result.append("<div style='margin-left: ").append(indent).append("px;'>");
-          result.append("<a href='?no-extend' style='text-decoration: none; color: inherit;'>");
+          result.append("<a href='about:blank?no-extend' style='text-decoration: none; color: inherit;'>");
           result.append("<img style='padding-right: 2pt; margin-top: 2px; margin-bottom: -2pt;' src='");
           result.append(imageURI);
           result.append("'/><b>");
@@ -2275,7 +2359,12 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           // Ignore.
         }
 
-        return finalText;
+        if (UIUtil.isBrowserAvailable())
+        {
+          return finalText;
+        }
+
+        return UIUtil.getRenderableHTML(finalText);
       }
 
       @Override
@@ -4141,6 +4230,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private Browser browser;
 
+    private StyledText noBrowser;
+
+    private Composite content;
+
     private ToolBar toolBar;
 
     private ToolItem editTextItem;
@@ -4184,7 +4277,422 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     public void setToolTipSupport(ColumnViewerInformationControlToolTipSupport toolTipSupport)
     {
       this.toolTipSupport = toolTipSupport;
+      initializeCreator();
       initializeStyleSheet();
+    }
+
+    private void initializeCreator()
+    {
+      ReflectUtil.setValue("replacementInformationControlCreator", toolTipSupport, new AbstractReusableInformationControlCreator()
+      {
+        @Override
+        @SuppressWarnings("restriction")
+        protected IInformationControl doCreateInformationControl(Shell parent)
+        {
+          IInformationControl informationControl;
+          if (org.eclipse.jface.internal.text.html.BrowserInformationControl.isAvailable(parent))
+          {
+            String symbolicFont = ReflectUtil.invokeMethod("getSymbolicFont", toolTipSupport);
+            org.eclipse.jface.internal.text.html.BrowserInformationControl browserInformationControl = new org.eclipse.jface.internal.text.html.BrowserInformationControl(
+                parent, symbolicFont, true)
+            {
+              @Override
+              protected void createContent(Composite parent)
+              {
+                super.createContent(parent);
+                content = browser = ReflectUtil.getValue("fBrowser", this);
+                createToolBar();
+              }
+
+              @Override
+              public Rectangle computeTrim()
+              {
+                Rectangle trim = super.computeTrim();
+                trim.height += toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).y;
+                return trim;
+              }
+            };
+
+            initializeCreator();
+            browserInformationControl.addLocationListener(SetupLocationListener.this);
+            informationControl = browserInformationControl;
+          }
+          else
+          {
+            informationControl = new DefaultInformationControl(parent, (ToolBarManager)null)
+            {
+              @Override
+              protected void createContent(Composite parent)
+              {
+                super.createContent(parent);
+                content = noBrowser = ReflectUtil.getValue("fText", this);
+                createToolBar();
+              }
+
+              @Override
+              public Rectangle computeTrim()
+              {
+                Rectangle trim = super.computeTrim();
+                trim.height += toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).y;
+                return trim;
+              }
+            };
+          }
+
+          Color foregroundColor = ReflectUtil.getValue("foregroundColor", toolTipSupport);
+          if (foregroundColor != null)
+          {
+            informationControl.setForegroundColor(foregroundColor);
+          }
+
+          Color backgroundColor = ReflectUtil.getValue("backgroundColor", toolTipSupport);
+          if (backgroundColor != null)
+          {
+            informationControl.setBackgroundColor(backgroundColor);
+          }
+
+          return informationControl;
+        }
+      });
+    }
+
+    public void createToolBar(Browser browser, StyledText noBrowser)
+    {
+      this.browser = browser;
+      this.noBrowser = noBrowser;
+      content = browser == null ? noBrowser : browser;
+
+      createToolBar();
+    }
+
+    private void createToolBar()
+    {
+      Composite parent = content.getParent();
+      if (browser != null)
+      {
+        applyCookies();
+
+        browser.addAuthenticationListener(new AuthenticationListener()
+        {
+          public void authenticate(AuthenticationEvent event)
+          {
+            if (mostRecentChangingLocation != null)
+            {
+              Authorization authorization = SetupCoreUtil.AUTHORIZATION_HANDLER.authorize(mostRecentChangingLocation);
+              if (authorization.isAuthorized())
+              {
+                event.user = authorization.getUser();
+                event.password = authorization.getPassword();
+                return;
+              }
+            }
+
+            event.doit = false;
+          }
+        });
+      }
+
+      // Change the parent to use a grid layout.
+      GridLayout gridLayout = new GridLayout();
+      gridLayout.marginHeight = 0;
+      gridLayout.marginWidth = 0;
+      gridLayout.horizontalSpacing = 0;
+      gridLayout.verticalSpacing = 0;
+      parent.setLayout(gridLayout);
+
+      // The main control should fill everything as much as possible.
+      GridData controlGridData = new GridData();
+      controlGridData.verticalAlignment = GridData.FILL;
+      controlGridData.grabExcessVerticalSpace = true;
+      controlGridData.horizontalAlignment = GridData.FILL;
+      controlGridData.grabExcessHorizontalSpace = true;
+      content.setLayoutData(controlGridData);
+
+      // The tool bar should just be as tall as it needs to be and fill the horizontal space.
+      toolBar = new ToolBar(parent, SWT.FLAT | SWT.HORIZONTAL | SWT.SHADOW_OUT);
+      GridData toolBarGridData = new GridData();
+      toolBarGridData.verticalAlignment = GridData.FILL;
+      toolBarGridData.horizontalAlignment = GridData.FILL;
+      toolBarGridData.grabExcessHorizontalSpace = true;
+      toolBar.setLayoutData(toolBarGridData);
+
+      class NavigationListener extends SelectionAdapter
+      {
+        private final boolean forward;
+
+        public NavigationListener(boolean forward)
+        {
+          this.forward = forward;
+        }
+
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          if (e.detail == SWT.ARROW)
+          {
+            Rectangle bounds = (forward ? forwardItem : backwardItem).getBounds();
+            Point location = new Point(bounds.x, bounds.y + bounds.height);
+            location = toolBar.toDisplay(location);
+
+            List<ItemProvider> items = new ArrayList<ItemProvider>();
+            for (int i = toolTipObjects.size() - 1; i >= 0; --i)
+            {
+              ToolTipObject wrapper = toolTipObjects.get(i);
+              ILabelProvider labelProvider = (ILabelProvider)wrapper.getSetupEditor().selectionViewer.getLabelProvider();
+
+              Object wrappedObject = wrapper.getWrappedObject();
+              String text;
+              if (wrappedObject instanceof URI)
+              {
+                text = wrappedObject.toString();
+              }
+              else
+              {
+                URI uri = SetupActionBarContributor.getEditURI(wrappedObject, true);
+                if (uri == null)
+                {
+                  text = labelProvider.getText(wrappedObject);
+                }
+                else
+                {
+                  text = uri.toString();
+                  text = labelProvider.getText(wrappedObject);
+                }
+              }
+
+              Image image = labelProvider.getImage(wrappedObject);
+              items.add(new ItemProvider(text, image));
+            }
+
+            int limit = 21;
+            int size = items.size();
+            int index = size - toolTipIndex - 1;
+
+            int start = 0;
+            int end = size;
+            if (size > limit)
+            {
+              if (index - limit / 2 < 0)
+              {
+                start = 0;
+              }
+              else
+              {
+                start = index - limit / 2;
+              }
+
+              end = start + limit;
+              if (end > size)
+              {
+                end = size;
+                start = end - limit;
+                if (start < 0)
+                {
+                  start = 0;
+                }
+              }
+            }
+
+            showMenu(items, location, index, start, end, limit);
+          }
+          else if (forward)
+          {
+            navigate(toolTipIndex + 1);
+          }
+          else
+          {
+            navigate(toolTipIndex - 1);
+          }
+        }
+
+        private void showMenu(final List<ItemProvider> items, final Point location, final int index, final int start, final int end, final int limit)
+        {
+          Menu menu = new Menu(content.getShell());
+          final int size = items.size();
+          int adjustedStart = start;
+          if (end == size)
+          {
+            if (start > 0)
+            {
+              --adjustedStart;
+            }
+          }
+
+          int adjustedEnd = end;
+          if (start == 0)
+          {
+            if (end < size)
+            {
+              ++adjustedEnd;
+            }
+          }
+
+          for (int i = 0; i < size; ++i)
+          {
+            if (i < adjustedStart)
+            {
+              if (i == adjustedStart - 1)
+              {
+                MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
+                int count = (adjustedStart + limit - 1) / limit;
+                menuItem.setText("Forward More (" + count + ')');
+                menuItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("forward"));
+                menuItem.addSelectionListener(new SelectionAdapter()
+                {
+                  @Override
+                  public void widgetSelected(SelectionEvent e)
+                  {
+                    int newStart = start - limit;
+                    if (newStart < 0)
+                    {
+                      newStart = 0;
+                    }
+
+                    showMenu(items, location, index, newStart, newStart + limit, limit);
+                  }
+                });
+              }
+            }
+            else if (i == adjustedEnd)
+            {
+              MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
+              int count = (size - adjustedEnd + limit - 1) / limit;
+              menuItem.setText("Back More (" + count + ')');
+              menuItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("backward"));
+              menuItem.addSelectionListener(new SelectionAdapter()
+              {
+                @Override
+                public void widgetSelected(SelectionEvent e)
+                {
+                  int newEnd = end + limit;
+                  if (newEnd > size)
+                  {
+                    newEnd = size;
+                  }
+
+                  showMenu(items, location, index, newEnd - limit, newEnd, limit);
+                }
+              });
+              break;
+            }
+            else
+            {
+              MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
+              ItemProvider item = items.get(i);
+              menuItem.setText(item.getText());
+              Image image = (Image)item.getImage();
+              if (image != null)
+              {
+                menuItem.setImage(image);
+              }
+
+              if (i == index)
+              {
+                menuItem.setSelection(true);
+                menu.setDefaultItem(menuItem);
+              }
+
+              final int itemIndex = i;
+              menuItem.addSelectionListener(new SelectionAdapter()
+              {
+                @Override
+                public void widgetSelected(SelectionEvent e)
+                {
+                  navigate(size - itemIndex - 1);
+                }
+              });
+            }
+          }
+
+          menu.setLocation(location.x, location.y);
+          menu.setVisible(true);
+        }
+      }
+
+      backwardItem = createItem(SWT.DROP_DOWN, "backward", "Back", new NavigationListener(false));
+
+      forwardItem = createItem(SWT.DROP_DOWN, "forward", "Forward", new NavigationListener(true));
+
+      new ToolItem(toolBar, SWT.SEPARATOR);
+
+      editSetupItem = createItem(SWT.PUSH, "edit_setup", "Open in Setup Editor", new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          Object unwrappedObject = ToolTipObject.unwrap(toolTipObject);
+          setupEditor.getActionBarContributor().openInSetupEditor(unwrappedObject);
+        }
+      });
+
+      editTextItem = createItem(SWT.PUSH, "edit_text", "Open in Text Editor", new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          Object unwrappedObject = ToolTipObject.unwrap(toolTipObject);
+          setupEditor.getActionBarContributor().openInTextEditor(unwrappedObject);
+        }
+      });
+
+      showAdvancedPropertiesItem = createItem(SWT.CHECK, "filter_advanced_properties", "Show Advanced Properties", new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          navigate(toolTipIndex);
+        }
+      });
+
+      if (editorSpecific)
+      {
+        createItem(SWT.PUSH, "show_properties_view", "Show Properties View", new SelectionAdapter()
+        {
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            try
+            {
+              setupEditor.getSite().getWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.PropertySheet");
+            }
+            catch (PartInitException ex)
+            {
+              SetupEditorPlugin.INSTANCE.log(ex);
+            }
+          }
+        });
+
+        createItem(SWT.PUSH, "open_browser", "Open Information Browser", new SelectionAdapter()
+        {
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            setupEditor.getActionBarContributor().showInformationBrowser(ToolTipObject.unwrap(toolTipObject));
+          }
+        });
+
+        new ToolItem(toolBar, SWT.SEPARATOR);
+
+        showToolTipsItem = createItem(SWT.CHECK, "show_tooltips", "Show Tooltips (Alt-Mouse-Click)", new SelectionAdapter()
+        {
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            boolean show = showToolTipsItem.getSelection();
+            SetupActionBarContributor.setShowTooltips(show);
+          }
+        });
+
+        liveValidationItem = createItem(SWT.CHECK, "live_validation", "Live Validation", new SelectionAdapter()
+        {
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            boolean liveValidation = liveValidationItem.getSelection();
+            setupEditor.getActionBarContributor().setLiveValidation(liveValidation);
+          }
+        });
+      }
     }
 
     private void initializeStyleSheet()
@@ -4282,22 +4790,25 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         canvas.dispose();
         canvas = null;
-        GridData gridData = (GridData)browser.getLayoutData();
+        GridData gridData = (GridData)content.getLayoutData();
         gridData.exclude = false;
-        browser.getParent().layout();
+        content.getParent().layout();
       }
 
-      String url = browser.getUrl();
-      if (!"about:blank".equals(url))
+      if (browser != null)
       {
-        URI uri = URI.createURI(event.location);
-        uri = ECFURIHandlerImpl.transform(uri, null);
-
-        if (toolTipIndex >= 0 && toolTipIndex < toolTipObjects.size() && !toolTipObjects.get(toolTipIndex).getWrappedObject().toString().equals(url))
+        String url = browser.getUrl();
+        if (!"about:blank".equals(url))
         {
-          setToolTipObject(URI.createURI(url), setupEditor, toolTipSupport);
-          toolTipIndex = toolTipObjects.size() - 1;
-          updateEnablement();
+          URI uri = URI.createURI(event.location);
+          uri = ECFURIHandlerImpl.transform(uri, null);
+
+          if (toolTipIndex >= 0 && toolTipIndex < toolTipObjects.size() && !toolTipObjects.get(toolTipIndex).getWrappedObject().toString().equals(url))
+          {
+            setToolTipObject(URI.createURI(url), setupEditor, toolTipSupport);
+            toolTipIndex = toolTipObjects.size() - 1;
+            updateEnablement();
+          }
         }
       }
     }
@@ -4334,399 +4845,46 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       uri = ECFURIHandlerImpl.transform(uri, options);
       event.location = uri.toString();
 
-      // If there is a login URI, access it to authorize for the host and ensure that any cookies that are acquired are applied to the browser.
-      URI loginURI = (URI)options.get(ECFURIHandlerImpl.OPTION_LOGIN_URI);
-      if (loginURI != null)
-      {
-        try
-        {
-          options.clear();
-          options.put(ECFURIHandlerImpl.OPTION_AUTHORIZATION_HANDLER, SetupCoreUtil.AUTHORIZATION_HANDLER);
-          InputStream inputStream = SetupCoreUtil.URI_CONVERTER.createInputStream(loginURI, options);
-          inputStream.close();
-          applyCookies();
-        }
-        catch (IOException ex)
-        {
-          // Ignore.
-        }
-      }
-
       // Record this event because the authentication listener is given a bogus location different from this most recent changing notification's location.
       mostRecentChangingLocation = uri;
 
       Object source = event.getSource();
-      if (source instanceof Browser)
+      if (source instanceof Composite)
       {
-        browser = (Browser)source;
-        Composite parent = browser.getParent();
+        content = (Composite)source;
 
-        // If we've not created a tool bar yet, do it when the shell is becoming active the first time.
-        boolean toolBarCreated = false;
-        if (toolBar == null)
+        if (content instanceof Browser)
         {
-          applyCookies();
-
-          browser.addAuthenticationListener(new AuthenticationListener()
-          {
-            public void authenticate(AuthenticationEvent event)
-            {
-              if (mostRecentChangingLocation != null)
-              {
-                Authorization authorization = SetupCoreUtil.AUTHORIZATION_HANDLER.authorize(mostRecentChangingLocation);
-                if (authorization.isAuthorized())
-                {
-                  event.user = authorization.getUser();
-                  event.password = authorization.getPassword();
-                  return;
-                }
-              }
-
-              event.doit = false;
-            }
-          });
-
-          toolBarCreated = true;
-
-          // Change the parent to use a grid layout.
-          GridLayout gridLayout = new GridLayout();
-          gridLayout.marginHeight = 0;
-          gridLayout.marginWidth = 0;
-          gridLayout.horizontalSpacing = 0;
-          gridLayout.verticalSpacing = 0;
-          parent.setLayout(gridLayout);
-
-          // The main control should fill everything as much as possible.
-          GridData controlGridData = new GridData();
-          controlGridData.verticalAlignment = GridData.FILL;
-          controlGridData.grabExcessVerticalSpace = true;
-          controlGridData.horizontalAlignment = GridData.FILL;
-          controlGridData.grabExcessHorizontalSpace = true;
-          browser.setLayoutData(controlGridData);
-
-          // The tool bar should just be as tall as it needs to be and fill the horizontal space.
-          toolBar = new ToolBar(parent, SWT.FLAT | SWT.HORIZONTAL | SWT.SHADOW_OUT);
-          GridData toolBarGridData = new GridData();
-          toolBarGridData.verticalAlignment = GridData.FILL;
-          toolBarGridData.horizontalAlignment = GridData.FILL;
-          toolBarGridData.grabExcessHorizontalSpace = true;
-          toolBar.setLayoutData(toolBarGridData);
-
-          class NavigationListener extends SelectionAdapter
-          {
-            private final boolean forward;
-
-            public NavigationListener(boolean forward)
-            {
-              this.forward = forward;
-            }
-
-            @Override
-            public void widgetSelected(SelectionEvent e)
-            {
-              if (e.detail == SWT.ARROW)
-              {
-                Rectangle bounds = (forward ? forwardItem : backwardItem).getBounds();
-                Point location = new Point(bounds.x, bounds.y + bounds.height);
-                location = toolBar.toDisplay(location);
-
-                List<ItemProvider> items = new ArrayList<ItemProvider>();
-                for (int i = toolTipObjects.size() - 1; i >= 0; --i)
-                {
-                  ToolTipObject wrapper = toolTipObjects.get(i);
-                  ILabelProvider labelProvider = (ILabelProvider)wrapper.getSetupEditor().selectionViewer.getLabelProvider();
-
-                  Object wrappedObject = wrapper.getWrappedObject();
-                  String text;
-                  if (wrappedObject instanceof URI)
-                  {
-                    text = wrappedObject.toString();
-                  }
-                  else
-                  {
-                    URI uri = SetupActionBarContributor.getEditURI(wrappedObject, true);
-                    if (uri == null)
-                    {
-                      text = labelProvider.getText(wrappedObject);
-                    }
-                    else
-                    {
-                      text = uri.toString();
-                      text = labelProvider.getText(wrappedObject);
-                    }
-                  }
-
-                  Image image = labelProvider.getImage(wrappedObject);
-                  items.add(new ItemProvider(text, image));
-                }
-
-                int limit = 21;
-                int size = items.size();
-                int index = size - toolTipIndex - 1;
-
-                int start = 0;
-                int end = size;
-                if (size > limit)
-                {
-                  if (index - limit / 2 < 0)
-                  {
-                    start = 0;
-                  }
-                  else
-                  {
-                    start = index - limit / 2;
-                  }
-
-                  end = start + limit;
-                  if (end > size)
-                  {
-                    end = size;
-                    start = end - limit;
-                    if (start < 0)
-                    {
-                      start = 0;
-                    }
-                  }
-                }
-
-                showMenu(items, location, index, start, end, limit);
-              }
-              else if (forward)
-              {
-                navigate(toolTipIndex + 1);
-              }
-              else
-              {
-                navigate(toolTipIndex - 1);
-              }
-            }
-
-            private void showMenu(final List<ItemProvider> items, final Point location, final int index, final int start, final int end, final int limit)
-            {
-              Menu menu = new Menu(browser.getShell());
-              final int size = items.size();
-              int adjustedStart = start;
-              if (end == size)
-              {
-                if (start > 0)
-                {
-                  --adjustedStart;
-                }
-              }
-
-              int adjustedEnd = end;
-              if (start == 0)
-              {
-                if (end < size)
-                {
-                  ++adjustedEnd;
-                }
-              }
-
-              for (int i = 0; i < size; ++i)
-              {
-                if (i < adjustedStart)
-                {
-                  if (i == adjustedStart - 1)
-                  {
-                    MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
-                    int count = (adjustedStart + limit - 1) / limit;
-                    menuItem.setText("Forward More (" + count + ')');
-                    menuItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("forward"));
-                    menuItem.addSelectionListener(new SelectionAdapter()
-                    {
-                      @Override
-                      public void widgetSelected(SelectionEvent e)
-                      {
-                        int newStart = start - limit;
-                        if (newStart < 0)
-                        {
-                          newStart = 0;
-                        }
-
-                        showMenu(items, location, index, newStart, newStart + limit, limit);
-                      }
-                    });
-                  }
-                }
-                else if (i == adjustedEnd)
-                {
-                  MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
-                  int count = (size - adjustedEnd + limit - 1) / limit;
-                  menuItem.setText("Back More (" + count + ')');
-                  menuItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("backward"));
-                  menuItem.addSelectionListener(new SelectionAdapter()
-                  {
-                    @Override
-                    public void widgetSelected(SelectionEvent e)
-                    {
-                      int newEnd = end + limit;
-                      if (newEnd > size)
-                      {
-                        newEnd = size;
-                      }
-
-                      showMenu(items, location, index, newEnd - limit, newEnd, limit);
-                    }
-                  });
-                  break;
-                }
-                else
-                {
-                  MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
-                  ItemProvider item = items.get(i);
-                  menuItem.setText(item.getText());
-                  Image image = (Image)item.getImage();
-                  if (image != null)
-                  {
-                    menuItem.setImage(image);
-                  }
-
-                  if (i == index)
-                  {
-                    menuItem.setSelection(true);
-                    menu.setDefaultItem(menuItem);
-                  }
-
-                  final int itemIndex = i;
-                  menuItem.addSelectionListener(new SelectionAdapter()
-                  {
-                    @Override
-                    public void widgetSelected(SelectionEvent e)
-                    {
-                      navigate(size - itemIndex - 1);
-                    }
-                  });
-                }
-              }
-
-              menu.setLocation(location.x, location.y);
-              menu.setVisible(true);
-            }
-          }
-
-          backwardItem = createItem(SWT.DROP_DOWN, "backward", "Back", new NavigationListener(false));
-
-          forwardItem = createItem(SWT.DROP_DOWN, "forward", "Forward", new NavigationListener(true));
-
-          new ToolItem(toolBar, SWT.SEPARATOR);
-
-          editSetupItem = createItem(SWT.PUSH, "edit_setup", "Open in Setup Editor", new SelectionAdapter()
-          {
-            @Override
-            public void widgetSelected(SelectionEvent e)
-            {
-              Object unwrappedObject = ToolTipObject.unwrap(toolTipObject);
-              setupEditor.getActionBarContributor().openInSetupEditor(unwrappedObject);
-            }
-          });
-
-          editTextItem = createItem(SWT.PUSH, "edit_text", "Open in Text Editor", new SelectionAdapter()
-          {
-            @Override
-            public void widgetSelected(SelectionEvent e)
-            {
-              Object unwrappedObject = ToolTipObject.unwrap(toolTipObject);
-              setupEditor.getActionBarContributor().openInTextEditor(unwrappedObject);
-            }
-          });
-
-          showAdvancedPropertiesItem = createItem(SWT.CHECK, "filter_advanced_properties", "Show Advanced Properties", new SelectionAdapter()
-          {
-            @Override
-            public void widgetSelected(SelectionEvent e)
-            {
-              navigate(toolTipIndex);
-            }
-          });
-
-          if (editorSpecific)
-          {
-            createItem(SWT.PUSH, "show_properties_view", "Show Properties View", new SelectionAdapter()
-            {
-              @Override
-              public void widgetSelected(SelectionEvent e)
-              {
-                try
-                {
-                  setupEditor.getSite().getWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.PropertySheet");
-                }
-                catch (PartInitException ex)
-                {
-                  SetupEditorPlugin.INSTANCE.log(ex);
-                }
-              }
-            });
-
-            createItem(SWT.PUSH, "open_browser", "Open Information Browser", new SelectionAdapter()
-            {
-              @Override
-              public void widgetSelected(SelectionEvent e)
-              {
-                setupEditor.getActionBarContributor().showInformationBrowser(ToolTipObject.unwrap(toolTipObject));
-              }
-            });
-
-            new ToolItem(toolBar, SWT.SEPARATOR);
-
-            showToolTipsItem = createItem(SWT.CHECK, "show_tooltips", "Show Tooltips (Alt-Mouse-Click)", new SelectionAdapter()
-            {
-              @Override
-              public void widgetSelected(SelectionEvent e)
-              {
-                boolean show = showToolTipsItem.getSelection();
-                SetupActionBarContributor.setShowTooltips(show);
-              }
-            });
-
-            liveValidationItem = createItem(SWT.CHECK, "live_validation", "Live Validation", new SelectionAdapter()
-            {
-              @Override
-              public void widgetSelected(SelectionEvent e)
-              {
-                boolean liveValidation = liveValidationItem.getSelection();
-                setupEditor.getActionBarContributor().setLiveValidation(liveValidation);
-              }
-            });
-          }
+          browser = (Browser)content;
         }
-
-        final Shell shell = browser.getShell();
-        if (!shell.isVisible() && editorSpecific || toolBarCreated)
+        else if (content instanceof StyledText)
         {
-          toolTipObjects = new ArrayList<ToolTipObject>();
-          if (toolTipObject == null)
-          {
-            toolTipIndex = -1;
-          }
-          else
-          {
-            toolTipIndex = 0;
-            toolTipObjects.add(toolTipObject);
-          }
-
-          if (editorSpecific)
-          {
-            // Delay this until the shell has sized properly.
-            UIUtil.asyncExec(shell, new Runnable()
-            {
-              public void run()
-              {
-                // Increase the height by the height of the tool bar.
-                Point computeSize = toolBar.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-                Point size = shell.getSize();
-                size.y += computeSize.y;
-                shell.setSize(size);
-              }
-            });
-          }
-
-          parent.layout(true);
+          noBrowser = (StyledText)content;
         }
 
         if (setupEditor != null)
         {
-          Resource resource = setupEditor.editingDomain.getResourceSet().getResource(uri.trimFragment(), false);
+          ResourceSet resourceSet = setupEditor.editingDomain.getResourceSet();
+          URI trimmedURI = uri.trimFragment();
+          Resource resource = resourceSet.getResource(trimmedURI, false);
+
+          // It might be a reference to the logical schema location of a generated model.
+          if (resource == null)
+          {
+            for (Object value : resourceSet.getPackageRegistry().values())
+            {
+              if (value instanceof EPackage)
+              {
+                EPackage ePackage = (EPackage)value;
+                if (ePackage.eResource().getURI().equals(trimmedURI))
+                {
+                  resource = ePackage.eResource();
+                  break;
+                }
+              }
+            }
+          }
+
           Object selection = resource;
           if (resource != null)
           {
@@ -4762,7 +4920,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               {
                 public void run()
                 {
-                  shell.getDisplay().readAndDispatch();
+                  content.getDisplay().readAndDispatch();
                 }
               });
             }
@@ -4799,7 +4957,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           else if (!originalURI.equals(uri))
           {
             // If the URI was transformed, we don't want to change to the original one but rather navigate to the transformed URI.
-            browser.setUrl(uri.toString());
+            if (browser != null)
+            {
+              browser.setUrl(uri.toString());
+            }
             event.doit = false;
           }
         }
@@ -4844,8 +5005,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       FontData fontData = JFaceResources.getFontRegistry().getFontData(symbolicFont)[0];
       styleSheet = org.eclipse.jface.internal.text.html.HTMLPrinter.convertTopLevelFont(styleSheet, fontData);
-      Color foregroundColor = browser.getForeground();
-      Color backgroundColor = browser.getBackground();
+      Color foregroundColor = content.getForeground();
+      Color backgroundColor = content.getBackground();
 
       org.eclipse.jface.internal.text.html.HTMLPrinter.insertPageProlog(result, 0, foregroundColor == null ? null : foregroundColor.getRGB(),
           backgroundColor == null ? null : backgroundColor.getRGB(), styleSheet);
@@ -4873,7 +5034,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         Object wrappedObject = toolTipObject.getWrappedObject();
         if (wrappedObject instanceof URI)
         {
-          browser.setUrl(wrappedObject.toString());
+          if (browser != null)
+          {
+            browser.setUrl(wrappedObject.toString());
+          }
         }
         else
         {
@@ -4894,29 +5058,41 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     {
       if (!StringUtil.isEmpty(text))
       {
-        browser.setText(getFullHTML(text), false);
-      }
+        if (browser != null)
+        {
+          browser.setText(getFullHTML(text), true);
 
-      // On the Mac, the browser turns white for a while, which is ugly.
-      // So here we temporarily cover it with a canvas with the proper background color.
-      if (OS.INSTANCE.isMac() && canvas == null)
-      {
-        Composite parent = browser.getParent();
+          // On the Mac and Linux, the browser turns white for a while, which is ugly.
+          // So here we temporarily cover it with a canvas with the proper background color.
+          if (!OS.INSTANCE.isWin() && canvas == null)
+          {
+            Composite parent = browser.getParent();
 
-        GridData gridData = (GridData)browser.getLayoutData();
-        gridData.exclude = true;
-        canvas = new Canvas(parent, SWT.NONE);
+            GridData gridData = (GridData)browser.getLayoutData();
+            gridData.exclude = true;
+            canvas = new Canvas(parent, SWT.NONE);
 
-        GridData canvasGridData = new GridData();
-        canvasGridData.verticalAlignment = GridData.FILL;
-        canvasGridData.grabExcessVerticalSpace = true;
-        canvasGridData.horizontalAlignment = GridData.FILL;
-        canvasGridData.grabExcessHorizontalSpace = true;
+            GridData canvasGridData = new GridData();
+            canvasGridData.verticalAlignment = GridData.FILL;
+            canvasGridData.grabExcessVerticalSpace = true;
+            canvasGridData.horizontalAlignment = GridData.FILL;
+            canvasGridData.grabExcessHorizontalSpace = true;
 
-        canvas.moveAbove(browser);
-        canvas.setLayoutData(canvasGridData);
-        canvas.setBackground(browser.getBackground());
-        parent.layout();
+            canvas.moveAbove(browser);
+            canvas.setLayoutData(canvasGridData);
+            canvas.setBackground(browser.getBackground());
+            parent.layout();
+          }
+        }
+        else
+        {
+          @SuppressWarnings("restriction")
+          org.eclipse.jface.internal.text.html.HTMLTextPresenter htmlTextPresenter = new org.eclipse.jface.internal.text.html.HTMLTextPresenter(false);
+          org.eclipse.jface.text.TextPresentation textPresentation = new org.eclipse.jface.text.TextPresentation();
+          @SuppressWarnings("restriction")
+          String updatePresentation = htmlTextPresenter.updatePresentation(noBrowser, text, textPresentation, Integer.MAX_VALUE, Integer.MAX_VALUE);
+          noBrowser.setText(updatePresentation);
+        }
       }
     }
 
@@ -5047,6 +5223,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private Browser browser;
 
+    private StyledText noBrowser;
+
     protected BrowserDialog(IWorkbenchWindow workbenchWindow)
     {
       super(workbenchWindow);
@@ -5085,7 +5263,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       setWorkbenchPart(setupEditor);
 
       // If the input is a URI...
-      LocationEvent event = new LocationEvent(browser);
+      LocationEvent event = new LocationEvent(browser == null ? noBrowser : browser);
       if (input instanceof URI)
       {
         // Handle it just like we are following it as a link and set it into the browser as a URL.
@@ -5131,16 +5309,26 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       initializeDialogUnits(composite);
 
-      browser = new Browser(composite, SWT.NONE);
+      Composite content;
+      if (UIUtil.isBrowserAvailable())
+      {
+        content = browser = new Browser(composite, SWT.NONE);
+        browser.addLocationListener(locationListener);
+      }
+      else
+      {
+        content = noBrowser = new StyledText(composite, SWT.V_SCROLL | SWT.H_SCROLL);
+        noBrowser.setAlwaysShowScrollBars(false);
+      }
+
       Display display = parent.getDisplay();
-      browser.setForeground(display.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
-      browser.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-      browser.addLocationListener(locationListener);
+      content.setForeground(display.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
+      content.setBackground(display.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
 
       // Hook up the selection listener and be sure we clean it up when the browser is disposed.
       final ISelectionService selectionService = getWorkbenchWindow().getSelectionService();
       selectionService.addPostSelectionListener(selectionListener);
-      browser.addDisposeListener(new DisposeListener()
+      content.addDisposeListener(new DisposeListener()
       {
         public void widgetDisposed(DisposeEvent e)
         {
@@ -5148,6 +5336,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           selectionService.removePostSelectionListener(selectionListener);
         }
       });
+
+      locationListener.createToolBar(browser, noBrowser);
 
       return composite;
     }
