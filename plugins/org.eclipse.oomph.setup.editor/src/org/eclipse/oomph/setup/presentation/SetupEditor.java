@@ -173,6 +173,7 @@ import org.eclipse.jface.text.AbstractInformationControlManager.IInformationCont
 import org.eclipse.jface.text.AbstractReusableInformationControlCreator;
 import org.eclipse.jface.text.DefaultInformationControl;
 import org.eclipse.jface.text.IInformationControl;
+import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -5092,6 +5093,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           @SuppressWarnings("restriction")
           String updatePresentation = htmlTextPresenter.updatePresentation(noBrowser, text, textPresentation, Integer.MAX_VALUE, Integer.MAX_VALUE);
           noBrowser.setText(updatePresentation);
+          TextPresentation.applyTextPresentation(textPresentation, noBrowser);
         }
       }
     }
