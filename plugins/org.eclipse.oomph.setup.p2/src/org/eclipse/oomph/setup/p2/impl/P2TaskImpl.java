@@ -634,7 +634,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     P2TaskUISevices p2TaskUISevices = (P2TaskUISevices)context.get(P2TaskUISevices.class);
     if (trigger == Trigger.STARTUP && !unsatisifiedRequirements.isEmpty() && p2TaskUISevices != null)
     {
-      return p2TaskUISevices.handleMissingRequirements(unsatisifiedRequirements, installedUnits);
+      return p2TaskUISevices.handleUnsatisfiedRequirements(unsatisifiedRequirements, installedUnits);
     }
 
     return !unsatisifiedRequirements.isEmpty();

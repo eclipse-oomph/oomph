@@ -27,5 +27,5 @@ public abstract class P2TaskUISevices
   /**
    * This will prompt whether to proceed with installing the unsatisfied requirement.
    */
-  public abstract boolean handleMissingRequirements(Set<Requirement> unsatisifiedRequirements, Set<IInstallableUnit> availableIUs);
+  public abstract boolean handleUnsatisfiedRequirements(Set<Requirement> unsatisifiedRequirements, Set<IInstallableUnit> availableIUs);
 }

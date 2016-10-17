@@ -63,7 +63,7 @@ public class P2TaskUIServicesPrompter extends P2TaskUISevices
   }
 
   @Override
-  public boolean handleMissingRequirements(Set<Requirement> unsatisifiedRequirements, Set<IInstallableUnit> availableIUs)
+  public boolean handleUnsatisfiedRequirements(Set<Requirement> unsatisifiedRequirements, Set<IInstallableUnit> availableIUs)
   {
     Action action = getActionPreference();
     switch (action)
@@ -79,12 +79,12 @@ public class P2TaskUIServicesPrompter extends P2TaskUISevices
       case PROMPT:
       default:
       {
-        return promptMissingRequirements(unsatisifiedRequirements, availableIUs);
+        return promptUnsatisifiedRequirements(unsatisifiedRequirements, availableIUs);
       }
     }
   }
 
-  public boolean promptMissingRequirements(final Set<Requirement> unsatisifiedRequirements, final Set<IInstallableUnit> availableIUs)
+  public boolean promptUnsatisifiedRequirements(final Set<Requirement> unsatisifiedRequirements, final Set<IInstallableUnit> availableIUs)
   {
     final boolean[] result = new boolean[1];
     result[0] = true;
