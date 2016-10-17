@@ -114,6 +114,15 @@ public class CachingTransport extends Transport
 
     if (!isLoadingRepository(uri))
     {
+      // If an artifact is repeatedly downloaded, we limit the number of attempts to three.
+      // See org.eclipse.oomph.p2.internal.core.CachingRepositoryManager.Artifact.BetterMirrorSelector.ArtifactActivity.retry(ArtifactActivity)
+      if (CachingRepositoryManager.BOGUS_SCHEME.equals(uri.getScheme()))
+      {
+        IOException ex = new IOException("Repeated attemps to download " + uri.getRawSchemeSpecificPart() + " from the same site");
+        ex.fillInStackTrace();
+        return P2CorePlugin.INSTANCE.getStatus(ex);
+      }
+
       IStatus status = Status.CANCEL_STATUS;
 
       try
@@ -166,9 +175,10 @@ public class CachingTransport extends Transport
       try
       {
         cacheFile.getParentFile().mkdirs();
+        File tempCacheFile = new File(cacheFile.getPath() + ".downloading");
         try
         {
-          statefulTarget = new StatefulFileOutputStream(cacheFile);
+          statefulTarget = new StatefulFileOutputStream(tempCacheFile);
         }
         catch (IOException ex)
         {
@@ -183,6 +193,9 @@ public class CachingTransport extends Transport
           IOUtil.closeSilent(statefulTarget);
           if (status.isOK())
           {
+            cacheFile.delete();
+            tempCacheFile.renameTo(cacheFile);
+
             // Files can be many megabytes large, so download them directly to a file.
             cacheInputStream = new FileInputStream(cacheFile);
             IOUtil.copy(cacheInputStream, target);
@@ -207,7 +220,7 @@ public class CachingTransport extends Transport
           }
           else
           {
-            IOUtil.deleteBestEffort(cacheFile);
+            IOUtil.deleteBestEffort(tempCacheFile);
           }
         }
 
