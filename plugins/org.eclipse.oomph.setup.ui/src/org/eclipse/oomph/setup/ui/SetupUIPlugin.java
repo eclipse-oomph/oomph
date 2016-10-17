@@ -38,6 +38,7 @@ import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.p2.provider.SetupP2EditPlugin;
+import org.eclipse.oomph.setup.p2.util.P2TaskUISevices;
 import org.eclipse.oomph.setup.provider.SetupEditPlugin;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
@@ -100,6 +101,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
   public static final String PREF_HEADLESS = "headless.startup";
 
   public static final String PREF_SKIP_STARTUP_TASKS = "skip.startup.tasks";
+
+  public static final String PREF_P2_STARTUP_TASKS = "p2.startup.tasks";
 
   public static final String PREF_ENABLE_PREFERENCE_RECORDER = "enable.preference.recorder";
 
@@ -601,6 +604,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       try
       {
         // At this point we know that no prompt was needed.
+        performer.put(P2TaskUISevices.class, new P2TaskUIServicesPrompter());
         EList<SetupTask> neededTasks = performer.initNeededSetupTasks(MonitorUtil.create(monitor, 2));
         if (restarting)
         {

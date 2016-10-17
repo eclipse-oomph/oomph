@@ -33,6 +33,8 @@ import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.IndexManager;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.p2.util.P2TaskUISevices;
+import org.eclipse.oomph.setup.ui.P2TaskUIServicesPrompter;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupTransferSupport;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
@@ -168,7 +170,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     }
     else
     {
-      this.performer = performer;
+      setPerformer(performer);
       setTrigger(performer.getTrigger());
       setSetupContext(performer.getSetupContext());
       resourceSet = performer.getUser().eResource().getResourceSet();
@@ -449,6 +451,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     if (performer != null)
     {
       performer.put(CacheUsageConfirmer.class, new CacheUsageConfirmerUI());
+      performer.put(P2TaskUISevices.class, new P2TaskUIServicesPrompter());
     }
   }
 

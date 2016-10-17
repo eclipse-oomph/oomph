@@ -31,6 +31,7 @@ import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.internal.p2.SetupP2Plugin;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Package;
+import org.eclipse.oomph.setup.p2.util.P2TaskUISevices;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
 import org.eclipse.oomph.util.IOUtil;
@@ -80,6 +81,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -610,6 +612,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
 
     Set<IInstallableUnit> installedUnits = getInstalledUnits(agent);
+    Set<Requirement> unsatisifiedRequirements = new LinkedHashSet<Requirement>();
     for (Requirement requirement : getRequirements())
     {
       if (context.matchesFilterContext(requirement.getFilter()) && !requirement.isOptional())
@@ -623,12 +626,18 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
         if (!isInstalled(installedUnits, id, versionRange))
         {
-          return true;
+          unsatisifiedRequirements.add(requirement);
         }
       }
     }
 
-    return false;
+    P2TaskUISevices p2TaskUISevices = (P2TaskUISevices)context.get(P2TaskUISevices.class);
+    if (trigger == Trigger.STARTUP && !unsatisifiedRequirements.isEmpty() && p2TaskUISevices != null)
+    {
+      return p2TaskUISevices.handleMissingRequirements(unsatisifiedRequirements, installedUnits);
+    }
+
+    return !unsatisifiedRequirements.isEmpty();
   }
 
   public void perform(final SetupTaskContext context) throws Exception
