@@ -85,7 +85,7 @@ public class QuestionnaireImpl extends Questionnaire
               final String path = PreferencesFactory.eINSTANCE.convertURI(entry.getKey());
               transaction.setPolicy(path, true);
 
-              if (!SetupUtil.INSTALLER_PRODUCT)
+              if (!SetupUtil.INSTALLER_APPLICATION)
               {
                 UIUtil.syncExec(new Runnable()
                 {

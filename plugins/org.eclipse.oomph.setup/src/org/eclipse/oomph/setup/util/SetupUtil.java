@@ -30,12 +30,9 @@ public final class SetupUtil
   public static final String INSTALLER_UPDATE_URL = PropertiesUtil.getProperty(SetupProperties.PROP_INSTALLER_UPDATE_URL, DEFAULT_INSTALLER_UPDATE_URL)
       .replace('\\', '/');
 
-  public static final String INSTALLER_PRODUCT_ID = "org.eclipse.oomph.setup.installer.product";
+  public static final boolean INSTALLER_APPLICATION = "org.eclipse.oomph.setup.installer.application".equals(PropertiesUtil.getApplicationID());
 
-  public static final boolean INSTALLER_PRODUCT = INSTALLER_PRODUCT_ID.equals(PropertiesUtil.getProperty("eclipse.product"));
-
-  public static final boolean SETUP_ARCHIVER_APPLICATION = "org.eclipse.oomph.setup.core.SetupArchiver"
-      .equals(PropertiesUtil.getProperty("eclipse.application"));
+  public static final boolean SETUP_ARCHIVER_APPLICATION = "org.eclipse.oomph.setup.core.SetupArchiver".equals(PropertiesUtil.getApplicationID());
 
   private SetupUtil()
   {

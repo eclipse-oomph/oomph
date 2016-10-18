@@ -47,7 +47,6 @@ import org.eclipse.oomph.setup.internal.installer.SimpleInstallLaunchButton.Stat
 import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.Type;
 import org.eclipse.oomph.setup.internal.installer.SimpleProductPage.ProductComposite;
 import org.eclipse.oomph.setup.log.ProgressLog;
-import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.EnablementComposite;
 import org.eclipse.oomph.setup.ui.EnablementDialog;
 import org.eclipse.oomph.setup.ui.JREDownloadHandler;
@@ -518,7 +517,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       public void widgetSelected(SelectionEvent e)
       {
         DirectoryDialog dialog = new DirectoryDialog(getShell());
-        dialog.setText(AbstractSetupDialog.SHELL_TEXT);
+        dialog.setText(PropertiesUtil.getProductName());
         dialog.setMessage("Select an installation folder:");
 
         if (!StringUtil.isEmpty(installFolder))

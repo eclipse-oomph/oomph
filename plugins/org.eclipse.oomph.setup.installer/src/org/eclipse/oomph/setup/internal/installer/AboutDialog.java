@@ -17,6 +17,7 @@ import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.util.OomphPlugin;
+import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
@@ -224,5 +225,11 @@ public final class AboutDialog extends AbstractSetupDialog
     });
 
     createButton(parent, IDialogConstants.OK_ID, "Close", true);
+  }
+
+  @Override
+  protected String getShellText()
+  {
+    return PropertiesUtil.getProductName();
   }
 }

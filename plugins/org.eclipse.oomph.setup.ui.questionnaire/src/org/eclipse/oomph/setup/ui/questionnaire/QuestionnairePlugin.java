@@ -94,7 +94,7 @@ public final class QuestionnairePlugin extends OomphUIPlugin
               String path = PreferencesFactory.eINSTANCE.convertURI(entry.getKey());
               transaction.setPolicy(path, true);
 
-              if (!SetupUtil.INSTALLER_PRODUCT)
+              if (!SetupUtil.INSTALLER_APPLICATION)
               {
                 PreferenceProperty property = new PreferencesUtil.PreferenceProperty(path);
                 property.set(entry.getValue().getElement2());

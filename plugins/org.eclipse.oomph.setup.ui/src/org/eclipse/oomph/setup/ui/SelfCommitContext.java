@@ -23,6 +23,7 @@ import org.eclipse.oomph.setup.p2.impl.P2TaskImpl;
 import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.util.Confirmer;
+import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -55,11 +56,12 @@ public class SelfCommitContext extends CommitContext
     boolean installer = false;
 
     // TODO Remove this temporary range conversion when all users can be expected to have a major range.
+    String productID = PropertiesUtil.getProductID();
     VersionRange deprecatedVersionRange = new VersionRange("[1.0.0,1.1.0)");
     ProfileDefinition profileDefinition = transaction.getProfileDefinition();
     for (Requirement requirement : profileDefinition.getRequirements())
     {
-      if (IInstallableUnit.NAMESPACE_IU_ID.equals(requirement.getNamespace()) && SetupUtil.INSTALLER_PRODUCT_ID.equals(requirement.getName()))
+      if (IInstallableUnit.NAMESPACE_IU_ID.equals(requirement.getNamespace()) && productID.equals(requirement.getName()))
       {
         installer = true;
         if (deprecatedVersionRange.equals(requirement.getVersionRange()))

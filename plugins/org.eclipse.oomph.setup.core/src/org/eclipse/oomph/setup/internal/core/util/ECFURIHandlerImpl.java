@@ -144,13 +144,13 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     if (userAgentProperty == null)
     {
       StringBuilder userAgent = new StringBuilder("eclipse/oomph/");
-      if (SetupUtil.INSTALLER_PRODUCT)
+      if (SetupUtil.INSTALLER_APPLICATION)
       {
         userAgent.append("installer/");
       }
       else if (SetupUtil.SETUP_ARCHIVER_APPLICATION)
       {
-        userAgent.append("installer/");
+        userAgent.append("archiver/");
       }
 
       Version oomphVersion = SetupCorePlugin.INSTANCE.getBundle().getVersion();

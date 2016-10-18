@@ -20,8 +20,6 @@ import org.eclipse.swt.widgets.Shell;
  */
 public abstract class AbstractSetupDialog extends OomphDialog
 {
-  public static final String SHELL_TEXT = "Eclipse Installer";
-
   public AbstractSetupDialog(Shell parentShell, String title, int width, int height, OomphUIPlugin plugin, boolean helpAvailable)
   {
     super(parentShell, title, width, height, plugin, helpAvailable);
@@ -31,11 +29,5 @@ public abstract class AbstractSetupDialog extends OomphDialog
   protected String getImagePath()
   {
     return "install_wiz.png";
-  }
-
-  @Override
-  protected String getShellText()
-  {
-    return SHELL_TEXT;
   }
 }

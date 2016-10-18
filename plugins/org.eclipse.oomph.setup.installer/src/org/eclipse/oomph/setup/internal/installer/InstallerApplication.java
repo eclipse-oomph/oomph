@@ -16,7 +16,6 @@ import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
-import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
@@ -24,8 +23,11 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -46,11 +48,15 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import org.osgi.framework.Bundle;
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -116,15 +122,33 @@ public class InstallerApplication implements IApplication
     jreInitializer.setDaemon(true);
     jreInitializer.start();
 
-    int[] sizes = { 16, 32, 48, 64, 128, 256 };
-    Image[] images = new Image[sizes.length];
-    for (int i = 0; i < sizes.length; i++)
+    String windowImages = context.getBrandingProperty("windowImages");
+    if (windowImages != null)
     {
-      int size = sizes[i];
-      images[i] = SetupInstallerPlugin.INSTANCE.getSWTImage("oomph" + size + ".png");
-    }
+      List<Image> images = new ArrayList<Image>();
+      Bundle brandingBundle = context.getBrandingBundle();
+      for (String windowImageValue : StringUtil.explode(windowImages, ","))
+      {
+        URI windowImageURI = URI.createURI(windowImageValue);
+        if (windowImageURI.isRelative())
+        {
+          URL url = brandingBundle.getEntry(windowImageValue);
+          if (url == null)
+          {
+            continue;
+          }
 
-    Window.setDefaultImages(images);
+          windowImageURI = URI.createURI(url.toString());
+        }
+
+        images.add(ExtendedImageRegistry.INSTANCE.getImage(windowImageURI));
+      }
+
+      if (!images.isEmpty())
+      {
+        Window.setDefaultImages(images.toArray(new Image[images.size()]));
+      }
+    }
 
     boolean restarted = false;
     File restarting = new File(SetupContext.CONFIGURATION_STATE_LOCATION_URI.appendSegment("restarting").toFileString());
@@ -155,20 +179,17 @@ public class InstallerApplication implements IApplication
     }
 
     final Display display = Display.getDefault();
-    Display.setAppName(AbstractSetupDialog.SHELL_TEXT);
+    Display.setAppName(PropertiesUtil.getProductName());
     handleCocoaMenu(display, installerDialog);
 
-    if (context != null)
+    display.asyncExec(new Runnable()
     {
-      display.asyncExec(new Runnable()
+      public void run()
       {
-        public void run()
-        {
-          // End the splash screen once the dialog is up.
-          context.applicationRunning();
-        }
-      });
-    }
+        // End the splash screen once the dialog is up.
+        context.applicationRunning();
+      }
+    });
 
     String modeName = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_MODE);
     if (modeName == null)
@@ -193,7 +214,7 @@ public class InstallerApplication implements IApplication
         if (KeepInstallerUtil.canKeepInstaller())
         {
           Shell shell = new Shell(display);
-          if (MessageDialog.openQuestion(shell, AbstractSetupDialog.SHELL_TEXT,
+          if (MessageDialog.openQuestion(shell, PropertiesUtil.getProductName(),
               "As an advanced user, do you want to keep the installer in a permanent location?"))
           {
             if (new KeepInstallerDialog(shell, true).open() == KeepInstallerDialog.OK)

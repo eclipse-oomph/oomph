@@ -201,7 +201,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       {
         public void run()
         {
-          if (!SetupUtil.INSTALLER_PRODUCT)
+          if (!SetupUtil.INSTALLER_APPLICATION)
           {
             SetupPropertyTester.setStarting(true);
 

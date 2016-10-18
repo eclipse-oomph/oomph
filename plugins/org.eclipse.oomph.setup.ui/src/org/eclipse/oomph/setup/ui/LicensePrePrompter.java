@@ -49,10 +49,13 @@ public class LicensePrePrompter extends AbstractSetupDialog
 
   private Browser licenseBrowser;
 
+  private String shellText;
+
   public LicensePrePrompter(Shell parentShell, String license)
   {
     super(parentShell, DEFAULT_LICENSE_NAME, 700, 700, SetupUIPlugin.INSTANCE, false);
     this.license = license;
+    shellText = parentShell.getText();
   }
 
   @Override
@@ -164,5 +167,11 @@ public class LicensePrePrompter extends AbstractSetupDialog
     }
 
     return builder.toString();
+  }
+
+  @Override
+  protected String getShellText()
+  {
+    return shellText;
   }
 }

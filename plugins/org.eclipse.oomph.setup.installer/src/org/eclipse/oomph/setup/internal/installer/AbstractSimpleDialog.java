@@ -11,9 +11,9 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
-import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
 import org.eclipse.oomph.ui.MouseHandler;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.window.Window;
@@ -56,7 +56,7 @@ public abstract class AbstractSimpleDialog extends Shell
     setLayout(verticalLayout);
     setSize(width, height);
     setImages(Window.getDefaultImages());
-    setText(AbstractSetupDialog.SHELL_TEXT);
+    setText(PropertiesUtil.getProductName());
 
     setBackground(SetupInstallerPlugin.getColor(207, 207, 207));
 

@@ -52,7 +52,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
 
   public KeepInstallerDialog(Shell parentShell, boolean startPermanentInstaller)
   {
-    super(parentShell, SHELL_TEXT, 560, 270, SetupInstallerPlugin.INSTANCE, false);
+    super(parentShell, PropertiesUtil.getProductName(), 560, 270, SetupInstallerPlugin.INSTANCE, false);
     this.startPermanentInstaller = startPermanentInstaller;
   }
 
@@ -226,5 +226,11 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
     }
 
     super.okPressed();
+  }
+
+  @Override
+  protected String getShellText()
+  {
+    return PropertiesUtil.getProductName();
   }
 }
