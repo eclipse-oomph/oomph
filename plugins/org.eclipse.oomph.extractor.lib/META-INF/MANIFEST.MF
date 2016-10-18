@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.oomph.extractor.lib
-Bundle-Version: 1.2.0.qualifier
+Bundle-Version: 1.3.0.qualifier
 Bundle-Localization: plugin
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: JRE-1.1
 Bundle-ClassPath: .
-Export-Package: org.eclipse.oomph.extractor.lib;version="1.2.0"
+Export-Package: org.eclipse.oomph.extractor.lib;version="1.3.0"
