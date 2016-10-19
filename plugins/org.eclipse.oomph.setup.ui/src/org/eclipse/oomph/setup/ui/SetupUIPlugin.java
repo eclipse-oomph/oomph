@@ -52,8 +52,11 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.MonitorUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.ReflectUtil;
+import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -74,6 +77,11 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferenceManager;
+import org.eclipse.jface.text.templates.ContextTypeRegistry;
+import org.eclipse.jface.text.templates.SimpleTemplateVariableResolver;
+import org.eclipse.jface.text.templates.TemplateContext;
+import org.eclipse.jface.text.templates.TemplateContextType;
+import org.eclipse.jface.text.templates.TemplateVariableResolver;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -203,6 +211,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
         {
           if (!SetupUtil.INSTALLER_APPLICATION)
           {
+            initJDTTemplateVariables();
             SetupPropertyTester.setStarting(true);
 
             final IWorkbench workbench = PlatformUI.getWorkbench();
@@ -282,6 +291,66 @@ public final class SetupUIPlugin extends OomphUIPlugin
           }
         }
       });
+    }
+  }
+
+  private static void initJDTTemplateVariables()
+  {
+    // Modify the JDT's variable resolvers so that ${user} expands to a property author name,
+    // not simply to the System.getProperty("user.name") which is the account name and generally not appropriate as the author name.
+    try
+    {
+      boolean hasJDTUserName = !StringUtil.isEmpty(System.getProperty("jdt.user.name"));
+      Class<?> javaUIPluginClass = CommonPlugin.loadClass("org.eclipse.jdt.ui", "org.eclipse.jdt.internal.ui.JavaPlugin");
+      Object javaUIPlugin = ReflectUtil.invokeMethod("getDefault", javaUIPluginClass);
+      ContextTypeRegistry codeTemplateContextRegistry = ReflectUtil.invokeMethod("getCodeTemplateContextRegistry", javaUIPlugin);
+
+      for (@SuppressWarnings("unchecked")
+      Iterator<TemplateContextType> it = codeTemplateContextRegistry.contextTypes(); it.hasNext();)
+      {
+        TemplateContextType templateContextType = it.next();
+        for (@SuppressWarnings("unchecked")
+        Iterator<TemplateVariableResolver> it2 = templateContextType.resolvers(); it2.hasNext();)
+        {
+          TemplateVariableResolver templateVariableResolver = it2.next();
+          if ("user".equals(templateVariableResolver.getType()))
+          {
+            if (hasJDTUserName)
+            {
+              templateContextType.addResolver(new SimpleTemplateVariableResolver(templateVariableResolver.getType(), templateVariableResolver.getDescription())
+              {
+                @Override
+                protected String resolve(TemplateContext context)
+                {
+                  return PropertiesUtil.getProperty("jdt.user.name", PropertiesUtil.getProperty("user.name"));
+                }
+              });
+            }
+
+            templateContextType
+                .addResolver(new SimpleTemplateVariableResolver("location", "The user location as specified by the system property 'jdt.user.location'")
+                {
+                  @Override
+                  protected String resolve(TemplateContext context)
+                  {
+                    String result = PropertiesUtil.getProperty("jdt.user.location", "");
+                    if (!StringUtil.isEmpty(result) && !result.startsWith(" "))
+                    {
+                      result = " " + result;
+                    }
+
+                    return result;
+                  }
+                });
+
+            break;
+          }
+        }
+      }
+    }
+    catch (Exception ex)
+    {
+      // Ignore if anything goes wrong registering our variable resolvers.
     }
   }
 
