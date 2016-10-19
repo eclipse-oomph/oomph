@@ -1547,11 +1547,13 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           Object httpClient = ReflectUtil.getValue("httpClient", fileTransfer);
           ReflectUtil.setValue("cookieStore", httpClient, new org.apache.http.client.CookieStore()
           {
+            @SuppressWarnings("all")
             public List<Cookie> getCookies()
             {
               return COOKIE_STORE.getCookies();
             }
 
+            @SuppressWarnings("all")
             public boolean clearExpired(Date date)
             {
               synchronized (COOKIE_STORE)
@@ -1570,12 +1572,14 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
               }
             }
 
+            @SuppressWarnings("all")
             public void clear()
             {
               COOKIE_STORE.clear();
               ECFURIHandlerImpl.COOKIE_STORE.removeAll();
             }
 
+            @SuppressWarnings("all")
             public void addCookie(Cookie cookie)
             {
               try
