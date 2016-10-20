@@ -340,55 +340,7 @@ public final class SetupCoreUtil
     {
       uriMap.put(SetupContext.INDEX_ROOT_URI, SetupContext.INDEX_ROOT_LOCATION_URI);
 
-      Properties properties = System.getProperties();
-      Map<Object, Object> safeProperties;
-      synchronized (properties)
-      {
-        safeProperties = new HashMap<Object, Object>(properties);
-      }
-
-      for (Map.Entry<Object, Object> entry : safeProperties.entrySet())
-      {
-        Object key = entry.getKey();
-        if (key instanceof String)
-        {
-          if (((String)key).startsWith(SetupProperties.PROP_REDIRECTION_BASE))
-          {
-            String[] mapping = ((String)entry.getValue()).split("->");
-            if (mapping.length == 1)
-            {
-              URI sourceURI = URI.createURI(mapping[0]);
-              uriMap.remove(sourceURI);
-            }
-            else if (mapping.length == 2)
-            {
-              URI sourceURI = URI.createURI(mapping[0]);
-              URI targetURI = URI.createURI(mapping[1].replace("\\", "/"));
-
-              // Only include the mapping if the target exists.
-              // For example, we often include a redirection of the remote setup to the local git clone in an installed IDE,
-              // but if that clone hasn't been cloned yet, we want to continue to use the remote version.
-              //
-              if (targetURI.isFile())
-              {
-                // If the file is a relative path, interpret it as relative to the root folder of the installation.
-                if (targetURI.isRelative())
-                {
-                  targetURI = targetURI.resolve(SetupContext.PRODUCT_LOCATION.trimSegments(OS.INSTANCE.isMac() ? 2 : 0).appendSegment(""));
-                }
-
-                File file = new File(targetURI.toFileString());
-                if (!file.exists())
-                {
-                  continue;
-                }
-              }
-
-              uriMap.put(sourceURI, targetURI);
-            }
-          }
-        }
-      }
+      configureRedirections(uriMap);
 
       if (!SetupUtil.SETUP_ARCHIVER_APPLICATION)
       {
@@ -513,6 +465,59 @@ public final class SetupCoreUtil
     uriHandlers.add(5, new SelfProductCatalogURIHandlerImpl());
     uriHandlers.add(6, new PreferencesURIHandlerImpl());
     uriHandlers.add(7, new ECFURIHandlerImpl(AUTHORIZATION_HANDLER));
+  }
+
+  static void configureRedirections(Map<URI, URI> uriMap)
+  {
+    Properties properties = System.getProperties();
+    Map<Object, Object> safeProperties;
+    synchronized (properties)
+    {
+      safeProperties = new HashMap<Object, Object>(properties);
+    }
+
+    for (Map.Entry<Object, Object> entry : safeProperties.entrySet())
+    {
+      Object key = entry.getKey();
+      if (key instanceof String)
+      {
+        if (((String)key).startsWith(SetupProperties.PROP_REDIRECTION_BASE))
+        {
+          String[] mapping = ((String)entry.getValue()).split("->");
+          if (mapping.length == 1)
+          {
+            URI sourceURI = URI.createURI(mapping[0]);
+            uriMap.remove(sourceURI);
+          }
+          else if (mapping.length == 2)
+          {
+            URI sourceURI = URI.createURI(mapping[0]);
+            URI targetURI = URI.createURI(mapping[1].replace("\\", "/"));
+
+            // Only include the mapping if the target exists.
+            // For example, we often include a redirection of the remote setup to the local git clone in an installed IDE,
+            // but if that clone hasn't been cloned yet, we want to continue to use the remote version.
+            //
+            if (targetURI.isFile())
+            {
+              // If the file is a relative path, interpret it as relative to the root folder of the installation.
+              if (targetURI.isRelative())
+              {
+                targetURI = targetURI.resolve(SetupContext.PRODUCT_LOCATION.trimSegments(OS.INSTANCE.isMac() ? 2 : 0).appendSegment(""));
+              }
+
+              File file = new File(targetURI.toFileString());
+              if (!file.exists())
+              {
+                continue;
+              }
+            }
+
+            uriMap.put(sourceURI, targetURI);
+          }
+        }
+      }
+    }
   }
 
   private static void handleArchiveRedirection(final URIConverter uriConverter)

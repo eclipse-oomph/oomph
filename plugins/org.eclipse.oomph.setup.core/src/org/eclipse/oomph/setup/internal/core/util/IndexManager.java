@@ -172,7 +172,7 @@ public class IndexManager
           // the most recently used index for any application on this machine.
           URI indexLocation = URI.createURI(details.get(0).getKey());
           if (!indexLocation.equals(DEFAULT_INDEX_LOCATION) && currentIndexLocation.equals(SetupContext.INDEX_SETUP_LOCATION_URI)
-              || details.containsKey(currentIndexLocation.toString()))
+              || details.containsKey(currentIndexLocation.toString()) && !currentIndexLocation.equals(indexLocation))
           {
             configureForProxy(resourceSet, indexLocation);
           }
@@ -220,28 +220,35 @@ public class IndexManager
     Annotation annotation = (Annotation)EcoreUtil.getObjectByType(archiveResource.getContents(), BasePackage.Literals.ANNOTATION);
     if (annotation != null && !annotation.getDetails().isEmpty())
     {
-      // Redirect the default archive location to this archive's location.
+      // Clear any previous redirections and reestablish a clean set of redirections.
       URIConverter uriConverter = resourceSet.getURIConverter();
       Map<URI, URI> uriMap = uriConverter.getURIMap();
+      uriMap.clear();
+      SetupCoreUtil.configureRedirections(uriMap);
+
+      // Redirect the default archive location to this archive's location.
       uriMap.put(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI, setupArchiveURI);
 
       for (Map.Entry<String, String> entry : annotation.getDetails())
       {
         // Add mappings for each entry.
         URI sourceURI = URI.createURI(entry.getKey());
-        URI targtURI = URI.createURI(entry.getValue());
-        uriMap.put(sourceURI, targtURI);
-
-        // If this is the index resource itself...
-        if (SetupContext.INDEX_SETUP_NAME.equals(sourceURI.lastSegment()))
+        if (sourceURI.equals(uriConverter.normalize(sourceURI)))
         {
-          // Map the index location to this location,
-          // map the folder of the index location to this location's folder,
-          // and map the whole index folder to this locations's folder.
-          // This brute force approach is most likely to fully override any mappings that might already be in place in the resource set.
-          uriMap.put(SetupContext.INDEX_SETUP_LOCATION_URI, targtURI);
-          uriMap.put(SetupContext.INDEX_ROOT_LOCATION_URI, targtURI.trimSegments(1).appendSegment(""));
-          uriMap.put(SetupContext.INDEX_ROOT_URI, targtURI.trimSegments(1).appendSegment(""));
+          URI targtURI = URI.createURI(entry.getValue());
+          uriMap.put(sourceURI, targtURI);
+
+          // If this is the index resource itself...
+          if (SetupContext.INDEX_SETUP_NAME.equals(sourceURI.lastSegment()))
+          {
+            // Map the index location to this location,
+            // map the folder of the index location to this location's folder,
+            // and map the whole index folder to this locations's folder.
+            // This brute force approach is most likely to fully override any mappings that might already be in place in the resource set.
+            uriMap.put(SetupContext.INDEX_SETUP_LOCATION_URI, targtURI);
+            uriMap.put(SetupContext.INDEX_ROOT_LOCATION_URI, targtURI.trimSegments(1).appendSegment(""));
+            uriMap.put(SetupContext.INDEX_ROOT_URI, targtURI.trimSegments(1).appendSegment(""));
+          }
         }
       }
     }
