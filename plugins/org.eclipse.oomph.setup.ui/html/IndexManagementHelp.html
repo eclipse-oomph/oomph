@@ -18,13 +18,13 @@ function windowTitle()
 </head>
 <body bgcolor="white" onload="windowTitle();">
 
-<h1>Catalong Index Manager Dialog</h1>
+<h1>Catalog Index Manager Dialog</h1>
 
 <p>
   Oomph manages the catalog indices that are available for use in the Eclipse installer and in Eclipse applications.
   A catalog index is a container for product and project catalogs.
   You are likely familiar with the default index 
-  which is the so-called set archive located at <a href="http://www.eclipse.org/setups/setups.zip">http://www.eclipse.org/setups/setups.zip</a>.
+  which is the so-called setup archive located at <a href="http://www.eclipse.org/setups/setups.zip">http://www.eclipse.org/setups/setups.zip</a>.
   If you use an index <a href="https://wiki.eclipse.org/Eclipse_Oomph_Authoring#Hosting_your_own_index_.2F_catalogs">authored by a third party</a> 
   and hosted at a different location,
   this index location will also be managed by Oomph.
@@ -68,15 +68,15 @@ function windowTitle()
 <p>
   The Catalog Index Manager dialog does not provide the ability to add a new index.
   This can be easily accomplished by dragging and dropping to the title area of the setup wizard a setup archive file, 
-  a link to a set archive, 
+  a link to a setup archive, 
   a link to an index, i.e., to an <code>org.eclipse.setup</code>
   or an index file.
   Alternatively, you can copy any of these to the system clipboard, and apply it to the setup wizard.
-  In the simple mode, when the system clipboard contains a setup index, the Eclipse installer's menu will display an SWITCH CATALOG INDEX item.
-  In the advanced mode, the Product or Project page tool bar will display an addition control to apply the catalog index.
+  In the simple mode, when the system clipboard contains a setup index, the Eclipse installer's menu will display a SWITCH CATALOG INDEX item.
+  In the advanced mode, the Product or Project page tool bar will display an additional control to apply the catalog index.
   That being said,
   if your global <code>indices.xmi</code> contains an index not yet available in your local <code>indices.xmi</code>,
-  you can select the Local and Global scope to see those additional indices&mdash;it will be displayed with gray text&mdash;
+  you can select the Local and Global scope to see those additional indices &mdash; it will be displayed with gray text &mdash;
   and if you hit OK at this point, it will be added to your local <code>indices.xmi</code>
   to make it available in your application.
   This is a simple way to gain access to an index added by some other application.
