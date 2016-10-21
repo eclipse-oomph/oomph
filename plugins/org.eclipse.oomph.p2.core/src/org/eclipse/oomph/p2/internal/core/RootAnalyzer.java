@@ -77,11 +77,12 @@ public final class RootAnalyzer
   public static void removeImplicitUnits(Set<IInstallableUnit> ius, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor)
   {
     Set<IInstallableUnit> rootIUs = new HashSet<IInstallableUnit>(ius);
+    Set<IInstallableUnit> currentlyVisitingIUs = new HashSet<IInstallableUnit>();
     Set<IInstallableUnit> visitedIUs = new HashSet<IInstallableUnit>();
 
     for (IInstallableUnit iu : ius)
     {
-      removeImplicitUnits(iu, rootIUs, visitedIUs, queryable, monitor);
+      removeImplicitUnits(iu, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor);
     }
 
     if (rootIUs.size() < ius.size())
@@ -90,24 +91,27 @@ public final class RootAnalyzer
     }
   }
 
-  private static void removeImplicitUnits(IInstallableUnit iu, Set<IInstallableUnit> rootIUs, Set<IInstallableUnit> visitedIUs,
-      IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor)
+  private static void removeImplicitUnits(IInstallableUnit iu, Set<IInstallableUnit> rootIUs, Set<IInstallableUnit> currentlyVisitingIUs,
+      Set<IInstallableUnit> visitedIUs, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor)
   {
     if (visitedIUs.add(iu))
     {
+      currentlyVisitingIUs.add(iu);
       for (IRequirement requirement : iu.getRequirements())
       {
         for (IInstallableUnit requiredIU : P2Util.asIterable(queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null)))
         {
           P2CorePlugin.checkCancelation(monitor);
 
-          if (!iu.equals(requiredIU))
+          if (!currentlyVisitingIUs.contains(requiredIU))
           {
             rootIUs.remove(requiredIU);
-            removeImplicitUnits(requiredIU, rootIUs, visitedIUs, queryable, monitor);
+            removeImplicitUnits(requiredIU, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor);
           }
         }
       }
+
+      currentlyVisitingIUs.remove(iu);
     }
   }
 }
