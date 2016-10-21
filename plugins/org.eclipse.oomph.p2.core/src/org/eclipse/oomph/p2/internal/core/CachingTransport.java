@@ -302,8 +302,13 @@ public class CachingTransport extends Transport
           URI repositoryURI = new URI(repositoryLocation.toString());
           Method method = ReflectUtil.getMethod(cacheManager, "getCache", URI.class, String.class);
           File file = (File)ReflectUtil.invokeMethod(method, cacheManager, repositoryURI, prefix);
-          if (file != null && file.exists() && file.toString().endsWith(fileExtension))
+          if (file != null && file.exists())
           {
+            if (!file.toString().endsWith(fileExtension))
+            {
+              throw new FileNotFoundException("We're offline and there is a cached version, but with a different extension, so fail now and use that one.");
+            }
+
             return file.lastModified();
           }
         }
