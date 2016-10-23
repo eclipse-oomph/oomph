@@ -332,9 +332,13 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
       {
         setMessage(DESCRIPTION + " or apply the current selection.");
       }
-      else
+      else if (indexChoices.size() > 1 || !indexChoices.containsKey(originalIndex))
       {
         setMessage(DESCRIPTION + " or switch to a different catalog index.");
+      }
+      else
+      {
+        setMessage(DESCRIPTION + ".");
       }
     }
   }
