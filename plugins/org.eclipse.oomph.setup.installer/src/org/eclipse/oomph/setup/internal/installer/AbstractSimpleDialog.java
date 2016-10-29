@@ -15,12 +15,18 @@ import org.eclipse.oomph.ui.MouseHandler;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
+
+import org.eclipse.core.runtime.IProduct;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -28,6 +34,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+
+import org.osgi.framework.Bundle;
+
+import java.net.URL;
 
 /**
  * @author Eike Stepper
@@ -88,9 +98,40 @@ public abstract class AbstractSimpleDialog extends Shell
     titleComposite.setBackgroundMode(SWT.INHERIT_FORCE);
     titleComposite.setBackground(AbstractSimpleDialog.COLOR_LIGHTEST_GRAY);
 
-    Label titleImage = new Label(titleComposite, SWT.NONE);
-    titleImage.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).indent(SWT.DEFAULT, 26).align(SWT.BEGINNING, SWT.BEGINNING).create());
-    titleImage.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/title.png"));
+    Label titleImageLabel = new Label(titleComposite, SWT.NONE);
+    titleImageLabel.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).indent(SWT.DEFAULT, 26).align(SWT.BEGINNING, SWT.BEGINNING).create());
+
+    Image titleImage = null;
+    IProduct product = Platform.getProduct();
+    if (product != null)
+    {
+      Bundle brandingBundle = product.getDefiningBundle();
+      if (brandingBundle != null)
+      {
+        String titleImageKey = product.getProperty("titleImage");
+        if (titleImageKey != null)
+        {
+          URI titleImageURI = URI.createURI(titleImageKey);
+          if (titleImageURI.isRelative())
+          {
+            URL url = brandingBundle.getEntry(titleImageKey);
+            if (url != null)
+            {
+              titleImageURI = URI.createURI(url.toString());
+            }
+          }
+
+          titleImage = ExtendedImageRegistry.INSTANCE.getImage(titleImageURI);
+        }
+      }
+    }
+
+    if (titleImage == null)
+    {
+      titleImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/title.png");
+    }
+
+    titleImageLabel.setImage(titleImage);
   }
 
   public int show()

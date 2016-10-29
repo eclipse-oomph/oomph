@@ -36,7 +36,7 @@ public final class KeepInstallerUtil
 
   public static void createShortCut(String specialFolder, String target)
   {
-    createShortCut(specialFolder, null, target, "Eclipse Installer");
+    createShortCut(specialFolder, null, target, PropertiesUtil.getProductName());
   }
 
   public static void createShortCut(String specialFolder, String groupName, String target, String shortcutName)

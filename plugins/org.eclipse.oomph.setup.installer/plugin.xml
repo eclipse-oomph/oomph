@@ -39,17 +39,21 @@
       </application>
    </extension>
 
-   	<extension id="product" point="org.eclipse.core.runtime.products">
-      	<product
-        	name="%product.name"
+   <extension id="product" point="org.eclipse.core.runtime.products">
+      <product
+          name="%product.name"
           description="%product.description"
           application="org.eclipse.oomph.setup.installer.application">
-        		<property name="appName" value="%application.name"/>
-          <property
-                name="windowImages"
-                value="icons/oomph16.png,icons/oomph32.png,icons/oomph48.png,icons/oomph64.png,icons/oomph128.png,icons/oomph256.png">
-          </property>
-      	</product>
-   	</extension>
+        <property name="appName" value="%application.name"/>
+        <property
+           name="windowImages"
+           value="icons/oomph16.png,icons/oomph32.png,icons/oomph48.png,icons/oomph64.png,icons/oomph128.png,icons/oomph256.png">
+        </property>
+        <property
+           name="titleImage"
+           value="icons/simple/title.png">
+        </property>
+      </product>
+   </extension>
 
 </plugin>

@@ -12,6 +12,7 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.setup.ui.AbstractSetupDialog;
+import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -172,24 +173,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       desktopButton.setSelection(true);
     }
 
-    getShell().getDisplay().asyncExec(new Runnable()
-    {
-      public void run()
-      {
-        File home = new File(PropertiesUtil.getUserHome());
-        for (int i = 1; i < Integer.MAX_VALUE; i++)
-        {
-          File folder = new File(home, "eclipse-installer" + (i > 1 ? i : ""));
-          if (!folder.exists())
-          {
-            String path = folder.getAbsolutePath();
-            locationText.setText(path);
-            locationText.setSelection(path.length());
-            return;
-          }
-        }
-      }
-    });
+    setDefaultLocation(locationText);
   }
 
   @Override
@@ -232,5 +216,28 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
   protected String getShellText()
   {
     return PropertiesUtil.getProductName();
+  }
+
+  public static void setDefaultLocation(final Text locationText)
+  {
+    UIUtil.asyncExec(locationText, new Runnable()
+    {
+      public void run()
+      {
+        File home = new File(PropertiesUtil.getUserHome());
+        String folderName = PropertiesUtil.getProductName().toLowerCase().replace(' ', '-');
+        for (int i = 1; i < Integer.MAX_VALUE; i++)
+        {
+          File folder = new File(home, folderName + (i > 1 ? i : ""));
+          if (!folder.exists())
+          {
+            String path = folder.getAbsolutePath();
+            locationText.setText(path);
+            locationText.setSelection(path.length());
+            return;
+          }
+        }
+      }
+    });
   }
 }

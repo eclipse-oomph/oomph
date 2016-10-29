@@ -16,7 +16,6 @@ import org.eclipse.oomph.internal.ui.ImageHoverButton;
 import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.Type;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
-import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -236,24 +235,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
       }
     });
 
-    getShell().getDisplay().asyncExec(new Runnable()
-    {
-      public void run()
-      {
-        File home = new File(PropertiesUtil.getUserHome());
-        for (int i = 1; i < Integer.MAX_VALUE; i++)
-        {
-          File folder = new File(home, "eclipse-installer" + (i > 1 ? i : ""));
-          if (!folder.exists())
-          {
-            String path = folder.getAbsolutePath();
-            locationText.setText(path);
-            locationText.setSelection(path.length());
-            return;
-          }
-        }
-      }
-    });
+    KeepInstallerDialog.setDefaultLocation(locationText);
   }
 
   public void setStartPermanentInstaller(boolean startPermanentInstaller)

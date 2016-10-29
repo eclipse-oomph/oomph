@@ -125,28 +125,31 @@ public class InstallerApplication implements IApplication
     String windowImages = context.getBrandingProperty("windowImages");
     if (windowImages != null)
     {
-      List<Image> images = new ArrayList<Image>();
       Bundle brandingBundle = context.getBrandingBundle();
-      for (String windowImageValue : StringUtil.explode(windowImages, ","))
+      if (brandingBundle != null)
       {
-        URI windowImageURI = URI.createURI(windowImageValue);
-        if (windowImageURI.isRelative())
+        List<Image> images = new ArrayList<Image>();
+        for (String windowImageValue : StringUtil.explode(windowImages, ","))
         {
-          URL url = brandingBundle.getEntry(windowImageValue);
-          if (url == null)
+          URI windowImageURI = URI.createURI(windowImageValue);
+          if (windowImageURI.isRelative())
           {
-            continue;
+            URL url = brandingBundle.getEntry(windowImageValue);
+            if (url == null)
+            {
+              continue;
+            }
+
+            windowImageURI = URI.createURI(url.toString());
           }
 
-          windowImageURI = URI.createURI(url.toString());
+          images.add(ExtendedImageRegistry.INSTANCE.getImage(windowImageURI));
         }
 
-        images.add(ExtendedImageRegistry.INSTANCE.getImage(windowImageURI));
-      }
-
-      if (!images.isEmpty())
-      {
-        Window.setDefaultImages(images.toArray(new Image[images.size()]));
+        if (!images.isEmpty())
+        {
+          Window.setDefaultImages(images.toArray(new Image[images.size()]));
+        }
       }
     }
 

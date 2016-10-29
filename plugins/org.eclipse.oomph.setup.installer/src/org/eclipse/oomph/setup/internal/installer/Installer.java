@@ -18,6 +18,7 @@ import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
+import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -37,7 +38,7 @@ public class Installer extends SetupWizard
     setTrigger(Trigger.BOOTSTRAP);
     getResourceSet().getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
     setSetupContext(SetupContext.createUserOnly(getResourceSet()));
-    setWindowTitle("Eclipse Installer");
+    setWindowTitle(PropertiesUtil.getProductName());
   }
 
   public SelectionMemento getSelectionMemento()
