@@ -45,7 +45,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
@@ -939,41 +938,6 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
           }
           finally
           {
-            UIUtil.asyncExec(new Runnable()
-            {
-              public void run()
-              {
-                CatalogManager catalogManager = catalogSelector.getCatalogManager();
-                Index index = catalogManager.getIndex();
-                if (index == null)
-                {
-                  stackComposite.setTopControl(productList.getControl());
-                  setFocus();
-
-                  int answer = new MessageDialog(getShell(), "Network Problem", null,
-                      "The catalog could not be loaded. Please ensure that you have network access and, if needed, have configured your network proxy.",
-                      MessageDialog.ERROR, new String[] { "Retry", "Configure Network Proxy" + StringUtil.HORIZONTAL_ELLIPSIS, "Exit" }, 0).open();
-                  switch (answer)
-                  {
-                    case 0:
-                      installer.reloadIndex(null);
-                      return;
-
-                    case 1:
-                      new NetworkConnectionsDialog(getShell()).open();
-                      installer.reloadIndex(null);
-                      return;
-
-                    default:
-                      dialog.exitSelected();
-                      return;
-                  }
-                }
-
-                searchField.setEnabled(true);
-              }
-            });
-
             animator.stop();
           }
         }
@@ -990,6 +954,17 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
       stackComposite.setTopControl(productList.getControl());
       setFocus();
+
+      if (index == null)
+      {
+        if (!installer.handleMissingIndex(getShell()))
+        {
+          dialog.exitSelected();
+          return;
+        }
+      }
+
+      searchField.setEnabled(true);
     }
 
     @Override

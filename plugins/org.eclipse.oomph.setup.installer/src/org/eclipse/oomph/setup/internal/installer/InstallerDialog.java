@@ -24,7 +24,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IPageChangedListener;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -122,8 +121,6 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
       public void run()
       {
         final Installer installer = getInstaller();
-        installer.getIndexLoader().awaitIndexLoad();
-
         if (!shell.isDisposed())
         {
           final Runnable checkIndex = this;
@@ -131,30 +128,23 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
           {
             public void run()
             {
-              UIPlugin.openRecorderIfEnabled();
-              SetupInstallerPlugin.runTests();
-
-              if (installer.getCatalogManager().getIndex() == null)
+              if (!shell.isDisposed())
               {
-                int answer = new MessageDialog(shell, "Network Problem", null,
-                    "The catalog could not be loaded. Please ensure that you have network access and, if needed, have configured your network proxy.",
-                    MessageDialog.ERROR, new String[] { "Retry", "Configure Network Proxy...", "Exit" }, 0).open();
-                switch (answer)
+                installer.getIndexLoader().awaitIndexLoad();
+
+                UIPlugin.openRecorderIfEnabled();
+                SetupInstallerPlugin.runTests();
+
+                if (installer.getCatalogManager().getIndex() == null)
                 {
-                  case 0:
-                    installer.reloadIndex(null);
+                  if (installer.handleMissingIndex(shell))
+                  {
                     shell.getDisplay().asyncExec(checkIndex);
-                    return;
-
-                  case 1:
-                    new NetworkConnectionsDialog(getShell()).open();
-                    installer.reloadIndex(null);
-                    shell.getDisplay().asyncExec(checkIndex);
-                    return;
-
-                  default:
+                  }
+                  else
+                  {
                     close();
-                    return;
+                  }
                 }
               }
             }

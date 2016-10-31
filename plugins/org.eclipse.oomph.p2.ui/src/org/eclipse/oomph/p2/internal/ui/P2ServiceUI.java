@@ -68,27 +68,23 @@ public class P2ServiceUI extends UIServices
     final AuthenticationInfo[] result = new AuthenticationInfo[1];
     if (!suppressAuthentication())
     {
-      final Shell shell = getShell();
-      if (shell != null)
+      UIUtil.getDisplay().syncExec(new Runnable()
       {
-        shell.getDisplay().syncExec(new Runnable()
+        public void run()
         {
-          public void run()
+          String message = NLS.bind(ProvUIMessages.ServiceUI_LoginDetails, location);
+          UserValidationDialog dialog = new UserValidationDialog(getShell(), ProvUIMessages.ServiceUI_LoginRequired, null, message);
+          int dialogCode = dialog.open();
+          if (dialogCode == Window.OK)
           {
-            String message = NLS.bind(ProvUIMessages.ServiceUI_LoginDetails, location);
-            UserValidationDialog dialog = new UserValidationDialog(shell, ProvUIMessages.ServiceUI_LoginRequired, null, message);
-            int dialogCode = dialog.open();
-            if (dialogCode == Window.OK)
-            {
-              result[0] = dialog.getResult();
-            }
-            else if (dialogCode == Window.CANCEL)
-            {
-              result[0] = AUTHENTICATION_PROMPT_CANCELED;
-            }
+            result[0] = dialog.getResult();
           }
-        });
-      }
+          else if (dialogCode == Window.CANCEL)
+          {
+            result[0] = AUTHENTICATION_PROMPT_CANCELED;
+          }
+        }
+      });
     }
 
     return result[0];

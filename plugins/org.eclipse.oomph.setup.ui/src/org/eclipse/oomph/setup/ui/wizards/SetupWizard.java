@@ -703,6 +703,9 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     }
 
     // Do this later so that the modal context of the progress dialog, if there is one, is within IndexLoader.awaitIndexLoad() event loop.
+    // But set the flags early so that anything awaiting the load will await even before the processing threads are started.
+    indexLoader.reloading = true;
+    indexLoader.reloaded = false;
     UIUtil.asyncExec(getShell(), new Runnable()
     {
       public void run()
@@ -796,16 +799,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
       loadIndex(false, uris.toArray(new URI[uris.size()]));
     }
-
-    for (Resource resource : excludedResources)
-    {
-      EcoreUtil.resolveAll(resource);
-    }
-
-    for (Resource resource : retainedResources)
-    {
-      EcoreUtil.resolveAll(resource);
-    }
   }
 
   public void loadIndex()
@@ -834,6 +827,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   protected void indexLoaded(Index index)
   {
     setSetupContext(SetupContext.createInstallationWorkspaceAndUser(resourceSet));
+    ECFURIHandlerImpl.saveProxies();
   }
 
   @Override
@@ -1056,6 +1050,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
           public void run()
           {
             indexLoaded(index);
+
+            if (wizard.getShell().isDisposed())
+            {
+              return;
+            }
 
             if (wizard.indexLoadedAction != null)
             {

@@ -12,7 +12,6 @@ package org.eclipse.oomph.setup.internal.core.util;
 
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
-import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
@@ -26,12 +25,16 @@ import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.WorkerPool;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
 import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
+import org.eclipse.core.net.proxy.IProxyData;
+import org.eclipse.core.net.proxy.IProxyService;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -40,7 +43,9 @@ import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.ContainerFactory;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.security.ConnectContextFactory;
+import org.eclipse.ecf.core.util.ECFException;
 import org.eclipse.ecf.core.util.Proxy;
+import org.eclipse.ecf.core.util.ProxyAddress;
 import org.eclipse.ecf.filetransfer.BrowseFileTransferException;
 import org.eclipse.ecf.filetransfer.IFileTransferListener;
 import org.eclipse.ecf.filetransfer.IIncomingFileTransfer;
@@ -51,7 +56,6 @@ import org.eclipse.ecf.filetransfer.IRemoteFileSystemListener;
 import org.eclipse.ecf.filetransfer.IRetrieveFileTransferContainerAdapter;
 import org.eclipse.ecf.filetransfer.IRetrieveFileTransferOptions;
 import org.eclipse.ecf.filetransfer.IncomingFileTransferException;
-import org.eclipse.ecf.filetransfer.RemoteFileSystemException;
 import org.eclipse.ecf.filetransfer.UserCancelledException;
 import org.eclipse.ecf.filetransfer.events.IFileTransferConnectStartEvent;
 import org.eclipse.ecf.filetransfer.events.IFileTransferEvent;
@@ -104,6 +108,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
   public static final String OPTION_AUTHORIZATION_HANDLER = "OPTION_AUTHORIZATION_HANDLER";
 
   public static final String OPTION_AUTHORIZATION = "OPTION_AUTHORIZATION";
+
+  public static final String OPTION_PROXY_AUTHORIZATION = "OPTION_PROXY_AUTHORIZATION";
 
   public static final String OPTION_MONITOR = "OPTION_MONITOR";
 
@@ -200,239 +206,13 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       return super.getAttributes(uri, options);
     }
 
-    Set<String> requestedAttributes = getRequestedAttributes(options);
-
-    CacheHandling cacheHandling = getCacheHandling(options);
-    URIConverter uriConverter = getURIConverter(options);
-    URI cacheURI = getCacheFile(uri);
-    String eTag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getETag(uriConverter, cacheURI);
-    String expectedETag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getExpectedETag(uri);
-
-    String tracePrefix = null;
-    if (TRACE)
-    {
-      tracePrefix = ">? ECF: " + uri;
-      System.out.println(tracePrefix + " uri=" + uri);
-      System.out.println(tracePrefix + " cacheURI=" + cacheURI);
-      System.out.println(tracePrefix + " eTag=" + eTag);
-      System.out.println(tracePrefix + " expectedETag=" + expectedETag);
-    }
-
-    if (expectedETag != null || cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING)
-    {
-      if (cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? eTag != null : expectedETag.equals(eTag))
-      {
-        Map<String, ?> result = handleAttributes(requestedAttributes, uriConverter.getAttributes(cacheURI, options));
-        if (!result.isEmpty())
-        {
-          return result;
-        }
-      }
-    }
-
-    String host = getHost(uri);
-    if ("git.eclipse.org".equals(host))
-    {
-      return Collections.emptyMap();
-    }
-
-    String username;
-    String password;
-
-    String uriString = uri.toString();
-    Proxy proxy = ProxySetupHelper.getProxy(uriString);
-    if (proxy != null)
-    {
-      username = proxy.getUsername();
-      password = proxy.getPassword();
-    }
-    else
-    {
-      username = null;
-      password = null;
-    }
-
-    if (TRACE)
-    {
-      System.out.println(tracePrefix + " proxy=" + proxy);
-      System.out.println(tracePrefix + " username=" + username);
-      System.out.println(tracePrefix + " password=" + PreferencesUtil.encrypt(password));
-    }
-
-    IContainer container;
     try
     {
-      container = createContainer();
+      return new RemoteAttributionsConnectionHandler(uri, options).process();
     }
     catch (IOException ex)
     {
       return Collections.emptyMap();
-    }
-
-    AuthorizationHandler authorizatonHandler = getAuthorizatonHandler(options);
-    Authorization authorization = getAuthorizaton(options);
-
-    if (TRACE)
-    {
-      System.out.println(tracePrefix + " authorizationHandler=" + authorizatonHandler);
-    }
-
-    int triedReauthorization = 0;
-    for (int i = 0;; ++i)
-    {
-      if (TRACE)
-      {
-        System.out.println(tracePrefix + " trying=" + i);
-        System.out.println(tracePrefix + " triedReauthorization=" + triedReauthorization);
-        System.out.println(tracePrefix + " authorization=" + authorization);
-      }
-
-      IRemoteFileSystemBrowserContainerAdapter fileBrowser = container.getAdapter(IRemoteFileSystemBrowserContainerAdapter.class);
-
-      fileBrowser.setProxy(proxy);
-
-      if (username != null)
-      {
-        fileBrowser.setConnectContextForAuthentication(ConnectContextFactory.createUsernamePasswordConnectContext(username, password));
-      }
-      else if (password != null)
-      {
-        fileBrowser.setConnectContextForAuthentication(ConnectContextFactory.createPasswordConnectContext(password));
-      }
-
-      RemoteFileSystemListener fileSystemListener = new RemoteFileSystemListener();
-
-      try
-      {
-        FileTransferID fileTransferID = new FileTransferID(new FileTransferNamespace(), IOUtil.newURI(uriString));
-
-        // ECF doesn't support such options.
-        // I'm not sure how it can browser a file that's authorization protected and it also behind an authorization protected firewall.
-        // Map<Object, Object> requestOptions = new HashMap<Object, Object>();
-        // requestOptions.put(IRetrieveFileTransferOptions.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
-        // requestOptions.put(IRetrieveFileTransferOptions.READ_TIMEOUT, READ_TIMEOUT);
-        // if (authorization != null && authorization.isAuthorized())
-        // {
-        // requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, Collections.singletonMap("Authorization", authorization.getAuthorization()));
-        // }
-
-        fileBrowser.sendBrowseRequest(fileTransferID, fileSystemListener);
-      }
-      catch (RemoteFileSystemException ex)
-      {
-        return Collections.emptyMap();
-      }
-
-      try
-      {
-        fileSystemListener.receiveLatch.await();
-      }
-      catch (InterruptedException ex)
-      {
-        if (TRACE)
-        {
-          System.out.println(tracePrefix + " InterruptedException");
-          ex.printStackTrace(System.out);
-        }
-
-        return Collections.emptyMap();
-      }
-
-      if (fileSystemListener.exception != null)
-      {
-        if (TRACE)
-        {
-          System.out.println(tracePrefix + " transferLister.exception");
-          fileSystemListener.exception.printStackTrace(System.out);
-        }
-
-        if (!(fileSystemListener.exception instanceof UserCancelledException))
-        {
-          if (fileSystemListener.exception.getCause() instanceof SocketTimeoutException && i <= 2)
-          {
-            continue;
-          }
-
-          if (fileSystemListener.exception instanceof BrowseFileTransferException)
-          {
-            // We assume contents can be accessed via the github API https://developer.github.com/v3/repos/contents/#get-contents
-            // That API, for security reasons, does not return HTTP_UNAUTHORIZED, so we need this special case for that host.
-            BrowseFileTransferException browseFileTransferException = (BrowseFileTransferException)fileSystemListener.exception;
-            int errorCode = browseFileTransferException.getErrorCode();
-            if (TRACE)
-            {
-              System.out.println(tracePrefix + " errorCode=" + errorCode);
-            }
-
-            if (authorizatonHandler != null)
-            {
-              if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED || API_GITHUB_HOST.equals(getHost(uri)) && errorCode == HttpURLConnection.HTTP_NOT_FOUND)
-              {
-                if (authorization == null)
-                {
-                  authorization = authorizatonHandler.authorize(uri);
-                  if (authorization.isAuthorized())
-                  {
-                    --i;
-                    continue;
-                  }
-                }
-
-                if (!authorization.isUnauthorizeable() && triedReauthorization++ < 3)
-                {
-                  authorization = authorizatonHandler.reauthorize(uri, authorization);
-                  if (authorization.isAuthorized())
-                  {
-                    --i;
-                    continue;
-                  }
-                }
-              }
-            }
-
-            // We can't do a HEAD request.
-            if (errorCode == HttpURLConnection.HTTP_BAD_METHOD)
-            {
-              // Try instead to create an input stream and use the response to get at least the timestamp property.
-              Map<Object, Object> specializedOptions = new HashMap<Object, Object>(options);
-              Map<Object, Object> response = new HashMap<Object, Object>();
-              specializedOptions.put(URIConverter.OPTION_RESPONSE, response);
-              try
-              {
-                InputStream inputStream = createInputStream(uri, specializedOptions);
-                inputStream.close();
-                return handleResponseAttributes(requestedAttributes, response);
-              }
-              catch (IOException ex)
-              {
-                // This implies a GET request also fails, so continue the processing below.
-              }
-            }
-          }
-        }
-
-        if (!CacheHandling.CACHE_IGNORE.equals(cacheHandling) && uriConverter.exists(cacheURI, options)
-            && (!(fileSystemListener.exception instanceof RemoteFileSystemException)
-                || ((BrowseFileTransferException)fileSystemListener.exception).getErrorCode() != HttpURLConnection.HTTP_NOT_FOUND))
-        {
-          return handleAttributes(requestedAttributes, uriConverter.getAttributes(cacheURI, options));
-        }
-
-        if (TRACE)
-        {
-          System.out.println(tracePrefix + " failing");
-        }
-
-        return Collections.emptyMap();
-      }
-
-      // In the case of the Github API, the bytes will be JSON that contains a "content" pair containing the Base64 encoding of the actual contents.
-      if (API_GITHUB_HOST.equals(getHost(uri)))
-      {
-        // We should have a special case for that too.
-      }
-
-      return handleAttributes(requestedAttributes, fileSystemListener.info);
     }
   }
 
@@ -520,401 +300,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       return super.createInputStream(uri, options);
     }
 
-    Map<Object, Object> transformedOptions = new HashMap<Object, Object>(options);
-    uri = transform(uri, transformedOptions);
-    URI loginURI = (URI)transformedOptions.get(OPTION_LOGIN_URI);
-    if (loginURI != null)
-    {
-      try
-      {
-        InputStream inputStream = createInputStream(loginURI, options);
-        inputStream.close();
-      }
-      catch (IOException ex)
-      {
-        // Ignore this.
-        // The main URI should still be attempted, and if it can't get authorization and isn't in the cache,
-        // there will be an appropriate stack trace.
-      }
-    }
-
-    IProgressMonitor monitor = (IProgressMonitor)options.get(OPTION_MONITOR);
-
-    CountDownLatch countDownLatch = acquireLock(uri);
-    try
-    {
-      if (TEST_IO_EXCEPTION)
-      {
-        File folder = new File(CACHE_FOLDER.toFileString());
-        if (folder.isDirectory())
-        {
-          System.out.println("Deleting cache folder: " + folder);
-          IOUtil.deleteBestEffort(folder);
-        }
-
-        throw new IOException("Simulated network problem");
-      }
-
-      CacheHandling cacheHandling = getCacheHandling(options);
-      URIConverter uriConverter = getURIConverter(options);
-      URI cacheURI = getCacheFile(uri);
-      String eTag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getETag(uriConverter, cacheURI);
-      String expectedETag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getExpectedETag(uri);
-
-      String tracePrefix = null;
-      if (TRACE)
-      {
-        tracePrefix = "> ECF: " + uri;
-        System.out.println(tracePrefix + " uri=" + uri);
-        System.out.println(tracePrefix + " cacheURI=" + cacheURI);
-        System.out.println(tracePrefix + " eTag=" + eTag);
-        System.out.println(tracePrefix + " expectedETag=" + expectedETag);
-      }
-
-      // To prevent Eclipse's Git server from being overload, because it can't scale to thousands of users, we block all access.
-      String host = getHost(uri);
-      boolean isBlockedEclipseGitURI = !SetupUtil.SETUP_ARCHIVER_APPLICATION && "git.eclipse.org".equals(host);
-      if (isBlockedEclipseGitURI && uriConverter.exists(cacheURI, options))
-      {
-        // If the file is in the cache, it's okay to use that cached version, so try that first.
-        cacheHandling = CacheHandling.CACHE_ONLY;
-      }
-
-      // This is a URI that fails to load at all.
-      if (FAILED_EXPECTED_ETAG.equals(expectedETag))
-      {
-        throw EXPECTED_EXCEPTIONS.get(uri);
-      }
-
-      if (expectedETag != null || cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING)
-      {
-        if (cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? eTag != null : expectedETag.equals(eTag))
-        {
-          try
-          {
-            setExpectedETag(uri, expectedETag);
-            InputStream result = uriConverter.createInputStream(cacheURI, options);
-            if (TRACE)
-            {
-              System.out.println(tracePrefix + " returning cached content");
-            }
-
-            return result;
-          }
-          catch (IOException ex)
-          {
-            // Perhaps another JVM is busy writing this file.
-            // Proceed as if it doesn't exist.
-            if (TRACE)
-            {
-              System.out.println(tracePrefix + " unable to load cached content");
-            }
-          }
-        }
-      }
-
-      // In general all Eclipse-hosted setups should be in the Eclipse project or product catalog and therefore should be in
-      // SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI or should already be in the cache from running the setup archiver application.
-      if (isBlockedEclipseGitURI)
-      {
-        synchronized (this)
-        {
-          if (!loggedBlockedURI)
-          {
-            String launcher = OS.getCurrentLauncher(true);
-            if (launcher == null)
-            {
-              launcher = "eclipse";
-            }
-
-            // We'll log a single warning for this case.
-            SetupCorePlugin.INSTANCE.log(
-                "The Eclipse Git-hosted URI '" + uri + "' is blocked for direct access." + StringUtil.NL + //
-                    "Please open a Bugzilla to add it to an official Oomph catalog." + StringUtil.NL + //
-                    "For initial testing, use the file system local version of the resource." + StringUtil.NL + //
-                    "Alternatively, run the setup archiver application as follows:" + StringUtil.NL + //
-                    "  " + launcher + " -application org.eclipse.oomph.setup.core.SetupArchiver -consoleLog -noSplash -uris " + uri, //
-                IStatus.WARNING);
-            loggedBlockedURI = true;
-          }
-        }
-
-        throw new IOException("Eclipse Git access blocked: " + uri);
-      }
-
-      String username;
-      String password;
-
-      String uriString = uri.toString();
-      Proxy proxy = ProxySetupHelper.getProxy(uriString);
-      if (proxy != null)
-      {
-        username = proxy.getUsername();
-        password = proxy.getPassword();
-      }
-      else
-      {
-        username = null;
-        password = null;
-      }
-
-      if (TRACE)
-      {
-        System.out.println(tracePrefix + " proxy=" + proxy);
-        System.out.println(tracePrefix + " username=" + username);
-        System.out.println(tracePrefix + " password=" + PreferencesUtil.encrypt(password));
-      }
-
-      IContainer container = createContainer();
-
-      AuthorizationHandler authorizationHandler = getAuthorizatonHandler(options);
-      Authorization authorization = getAuthorizaton(options);
-
-      // If we don't an authorization in the options, but we have a handler,
-      // we might as well get the authorization that might exist in the secure storage so our first access uses the right credentials up front.
-      if (authorization == null && authorizationHandler != null)
-      {
-        authorization = authorizationHandler.authorize(uri);
-      }
-
-      if (TRACE)
-      {
-        System.out.println(tracePrefix + " authorizationHandler=" + authorizationHandler);
-      }
-
-      int triedReauthorization = 0;
-      for (int i = 0;; ++i)
-      {
-        if (TRACE)
-        {
-          System.out.println(tracePrefix + " trying=" + i);
-          System.out.println(tracePrefix + " triedReauthorization=" + triedReauthorization);
-          System.out.println(tracePrefix + " authorization=" + authorization);
-        }
-
-        IRetrieveFileTransferContainerAdapter fileTransfer = container.getAdapter(IRetrieveFileTransferContainerAdapter.class);
-
-        fileTransfer.setProxy(proxy);
-
-        if (username != null)
-        {
-          fileTransfer.setConnectContextForAuthentication(ConnectContextFactory.createUsernamePasswordConnectContext(username, password));
-        }
-        else if (password != null)
-        {
-          fileTransfer.setConnectContextForAuthentication(ConnectContextFactory.createPasswordConnectContext(password));
-        }
-
-        FileTransferListener transferListener = new FileTransferListener(eTag, monitor);
-
-        try
-        {
-          FileTransferID fileTransferID = new FileTransferID(new FileTransferNamespace(), IOUtil.newURI(uriString));
-          Map<Object, Object> requestOptions = new HashMap<Object, Object>();
-          requestOptions.put(IRetrieveFileTransferOptions.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
-          requestOptions.put(IRetrieveFileTransferOptions.READ_TIMEOUT, READ_TIMEOUT);
-          if (authorization != null && authorization.isAuthorized())
-          {
-            requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, Collections.singletonMap("Authorization", authorization.getAuthorization()));
-          }
-
-          if (!StringUtil.isEmpty(USER_AGENT) && host != null && host.endsWith(".eclipse.org"))
-          {
-            Map<String, String> requestHeaders = new HashMap<String, String>();
-            requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, requestHeaders);
-            requestHeaders.put("User-Agent", USER_AGENT);
-          }
-
-          fileTransfer.sendRetrieveRequest(fileTransferID, transferListener, requestOptions);
-        }
-        catch (IncomingFileTransferException ex)
-        {
-          if (TRACE)
-          {
-            System.out.println(tracePrefix + " IncomingFileTransferException");
-            ex.printStackTrace(System.out);
-          }
-
-          throw createIOException(uriString, ex);
-        }
-
-        try
-        {
-          transferListener.receiveLatch.await();
-        }
-        catch (InterruptedException ex)
-        {
-          if (TRACE)
-          {
-            System.out.println(tracePrefix + " InterruptedException");
-            ex.printStackTrace(System.out);
-          }
-
-          throw createIOException(uriString, ex);
-        }
-
-        if (transferListener.exception != null)
-        {
-          if (TRACE)
-          {
-            System.out.println(tracePrefix + " transferLister.exception");
-            transferListener.exception.printStackTrace(System.out);
-          }
-
-          if (!(transferListener.exception instanceof UserCancelledException))
-          {
-            if ((transferListener.exception instanceof SocketTimeoutException || transferListener.exception.getCause() instanceof SocketTimeoutException)
-                && i < 2)
-            {
-              continue;
-            }
-
-            if (authorizationHandler != null && transferListener.exception instanceof IncomingFileTransferException)
-            {
-              // We assume contents can be accessed via the github API https://developer.github.com/v3/repos/contents/#get-contents
-              // That API, for security reasons, does not return HTTP_UNAUTHORIZED, so we need this special case for that host.
-              IncomingFileTransferException incomingFileTransferException = (IncomingFileTransferException)transferListener.exception;
-              int errorCode = incomingFileTransferException.getErrorCode();
-              if (TRACE)
-              {
-                System.out.println(tracePrefix + " errorCode=" + errorCode);
-              }
-
-              if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED || API_GITHUB_HOST.equals(getHost(uri)) && errorCode == HttpURLConnection.HTTP_NOT_FOUND)
-              {
-                if (authorization == null)
-                {
-                  authorization = authorizationHandler.authorize(uri);
-                  if (authorization.isAuthorized())
-                  {
-                    --i;
-                    continue;
-                  }
-                }
-
-                if (!authorization.isUnauthorizeable() && triedReauthorization++ < 3)
-                {
-                  authorization = authorizationHandler.reauthorize(uri, authorization);
-                  if (authorization.isAuthorized())
-                  {
-                    --i;
-                    continue;
-                  }
-                }
-              }
-            }
-          }
-
-          if (!CacheHandling.CACHE_IGNORE.equals(cacheHandling) && uriConverter.exists(cacheURI, options)
-              && (!(transferListener.exception instanceof IncomingFileTransferException)
-                  || ((IncomingFileTransferException)transferListener.exception).getErrorCode() != HttpURLConnection.HTTP_NOT_FOUND)
-              || uri.equals(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI) || loginURI != null)
-          {
-            setExpectedETag(uri, transferListener.eTag == null ? eTag == null ? Long.toString(System.currentTimeMillis()) : eTag : transferListener.eTag);
-            if (TRACE)
-            {
-              System.out.println(tracePrefix + " returning cache content");
-            }
-
-            return uriConverter.createInputStream(cacheURI, options);
-          }
-
-          if (TRACE)
-          {
-            System.out.println(tracePrefix + " failing");
-          }
-
-          IOException ioException = createIOException(uriString, transferListener.exception);
-          EXPECTED_EXCEPTIONS.put(uri, ioException);
-          setExpectedETag(uri, FAILED_EXPECTED_ETAG);
-
-          throw ioException;
-        }
-
-        byte[] bytes = transferListener.out.toByteArray();
-
-        // In the case of the Github API, the bytes will be JSON that contains a "content" pair containing the Base64 encoding of the actual contents.
-        if (API_GITHUB_HOST.equals(getHost(uri)))
-        {
-          // Find the start tag in the JSON value.
-          String value = new String(bytes, "UTF-8");
-          int start = value.indexOf(CONTENT_TAG);
-          if (start != -1)
-          {
-            // Find the ending quote of the encoded contents.
-            start += CONTENT_TAG.length();
-            int end = value.indexOf('"', start);
-            if (end != -1)
-            {
-              // The content is delimited by \n so split on that during the conversion.
-              String content = value.substring(start, end);
-              String[] split = content.split("\\\\n");
-
-              // Write the converted bytes to a new stream and process those bytes instead.
-              ByteArrayOutputStream out = new ByteArrayOutputStream();
-              for (String line : split)
-              {
-                byte[] binary = XMLTypeFactory.eINSTANCE.createBase64Binary(line);
-                out.write(binary);
-              }
-
-              out.close();
-              bytes = out.toByteArray();
-            }
-          }
-        }
-
-        try
-        {
-          if (TRACE)
-          {
-            System.out.println(tracePrefix + " writing cache");
-          }
-
-          BaseUtil.writeFile(uriConverter, options, cacheURI, bytes);
-        }
-        catch (IORuntimeException ex)
-        {
-          // Ignore attempts to write out to the cache file.
-          // This may collide with another JVM doing exactly the same thing.
-          transferListener.eTag = null;
-
-          if (TRACE)
-          {
-            System.out.println(tracePrefix + " failed writing cache");
-            ex.printStackTrace(System.out);
-          }
-        }
-        finally
-        {
-          setETag(uriConverter, cacheURI, transferListener.eTag);
-        }
-
-        setExpectedETag(uri, transferListener.eTag);
-        Map<Object, Object> response = getResponse(options);
-        if (response != null)
-        {
-          response.put(URIConverter.RESPONSE_TIME_STAMP_PROPERTY, transferListener.lastModified);
-        }
-
-        ETagMirror etagMirror = (ETagMirror)options.get(ETagMirror.OPTION_ETAG_MIRROR);
-        if (etagMirror != null)
-        {
-          etagMirror.cacheUpdated(uri);
-        }
-
-        if (TRACE)
-        {
-          System.out.println(tracePrefix + " returning successful results");
-        }
-
-        return new ByteArrayInputStream(bytes);
-      }
-    }
-    finally
-    {
-      releaseLock(uri, countDownLatch);
-    }
+    return new InputStreamConnectionHandler(uri, options).process();
   }
 
   private CountDownLatch acquireLock(URI uri) throws IOException
@@ -1119,6 +505,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
   private static Authorization getAuthorizaton(Map<?, ?> options)
   {
     return (Authorization)options.get(OPTION_AUTHORIZATION);
+  }
+
+  private static Authorization getProxyAuthorizaton(Map<?, ?> options)
+  {
+    return (Authorization)options.get(OPTION_PROXY_AUTHORIZATION);
   }
 
   private static IOException createIOException(String url, Throwable cause)
@@ -1378,12 +769,25 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
       return currentAuthorization;
     }
+
+    @Override
+    public String toString()
+    {
+      StringBuilder result = new StringBuilder(super.toString());
+      result.append(" authorizations: ");
+      result.append(authorizations);
+      result.append(" securePreferences: ");
+      result.append(securePreferences);
+      result.append(" uiServices: ");
+      result.append(uiServices);
+      return result.toString();
+    }
   }
 
   /**
    * @author Eike Stepper
    */
-  private static final class FileTransferListener implements IFileTransferListener
+  private static final class FileTransferListener implements IFileTransferListener, ConnectionListener
   {
     @SuppressWarnings("all")
     private static final org.apache.http.impl.client.BasicCookieStore COOKIE_STORE = new org.apache.http.impl.client.BasicCookieStore();
@@ -1602,12 +1006,32 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         // Ignore.
       }
     }
+
+    public void await() throws InterruptedException
+    {
+      receiveLatch.await();
+    }
+
+    public Exception getException()
+    {
+      return exception;
+    }
+
+    public boolean hasTransferException()
+    {
+      return exception instanceof IncomingFileTransferException;
+    }
+
+    public int getErrorCode()
+    {
+      return ((IncomingFileTransferException)exception).getErrorCode();
+    }
   }
 
   /**
    * @author Ed Merks
    */
-  private static final class RemoteFileSystemListener implements IRemoteFileSystemListener
+  private static final class RemoteFileSystemListener implements IRemoteFileSystemListener, ConnectionListener
   {
     public final CountDownLatch receiveLatch = new CountDownLatch(1);
 
@@ -1636,6 +1060,26 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
         receiveLatch.countDown();
       }
+    }
+
+    public void await() throws InterruptedException
+    {
+      receiveLatch.await();
+    }
+
+    public Exception getException()
+    {
+      return exception;
+    }
+
+    public boolean hasTransferException()
+    {
+      return exception instanceof BrowseFileTransferException;
+    }
+
+    public int getErrorCode()
+    {
+      return ((BrowseFileTransferException)exception).getErrorCode();
     }
   }
 
@@ -1756,16 +1200,678 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     }
   }
 
-  // https://example.com/gerrit/gitweb?p=EXAMPLE.git;a=blob_plain;f=Src/com.example.releng/example.setup;hb=HEAD
-  //
+  /**
+   * @author Ed Merks
+   *
+   * An interface implemented by {@link FileTransferListener} and {@link RemoteFileSystemListener} for provide common processing support in {@link ConnectionHandler#process()}.
+   */
+  public interface ConnectionListener
+  {
+    public void await() throws InterruptedException;
 
+    public Exception getException();
+
+    public boolean hasTransferException();
+
+    public int getErrorCode();
+  }
+
+  /**
+   * @author Ed Merks
+   *
+   * A handler to unify the common processing logic for {@link ECFURIHandlerImpl#getRemoteAttributes(URI, Map)} and {@link ECFURIHandlerImpl#createInputStream(URI, Map)}.
+   */
+  private abstract class ConnectionHandler<T>
+  {
+    protected URI uri;
+
+    protected final Map<?, ?> options;
+
+    protected String tracePrefix;
+
+    public ConnectionHandler(URI uri, Map<?, ?> options) throws IOException
+    {
+      this.uri = uri;
+      this.options = options;
+    }
+
+    /**
+     * Performs all the processing for the connection and returns the result.
+     */
+    public T process() throws IOException
+    {
+      // First transform the URI, if necessary, extracting a login URI if one is needed.
+      Map<Object, Object> transformedOptions = new HashMap<Object, Object>(options);
+      uri = transform(uri, transformedOptions);
+      URI loginURI = (URI)transformedOptions.get(OPTION_LOGIN_URI);
+      if (loginURI != null)
+      {
+        try
+        {
+          InputStream inputStream = createInputStream(loginURI, options);
+          inputStream.close();
+        }
+        catch (IOException ex)
+        {
+          // Ignore this.
+          // The main URI should still be attempted.
+          // If it can't get authorization and isn't in the cache,
+          // there will be an appropriate stack trace for that URI.
+        }
+      }
+
+      // This is used to prefix all tracing statements.
+      tracePrefix = "> ECF: " + uri;
+
+      IProgressMonitor monitor = (IProgressMonitor)options.get(OPTION_MONITOR);
+
+      CountDownLatch countDownLatch = acquireLock(uri);
+      try
+      {
+        if (TEST_IO_EXCEPTION)
+        {
+          File folder = new File(CACHE_FOLDER.toFileString());
+          if (folder.isDirectory())
+          {
+            System.out.println("Deleting cache folder: " + folder);
+            IOUtil.deleteBestEffort(folder);
+          }
+
+          throw new IOException("Simulated network problem");
+        }
+
+        // Setup the basic context for subsquent processing.
+        CacheHandling cacheHandling = getCacheHandling(options);
+        URIConverter uriConverter = getURIConverter(options);
+        URI cacheURI = getCacheFile(uri);
+        String eTag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getETag(uriConverter, cacheURI);
+        String expectedETag = cacheHandling == CacheHandling.CACHE_IGNORE ? null : getExpectedETag(uri);
+
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " uri=" + uri);
+          System.out.println(tracePrefix + " cacheURI=" + cacheURI);
+          System.out.println(tracePrefix + " eTag=" + eTag);
+          System.out.println(tracePrefix + " expectedETag=" + expectedETag);
+        }
+
+        // To prevent Eclipse's Git server from being overload, because it can't scale to thousands of users, we block all direct access.
+        String host = getHost(uri);
+        boolean isBlockedEclipseGitURI = !SetupUtil.SETUP_ARCHIVER_APPLICATION && "git.eclipse.org".equals(host);
+        if (isBlockedEclipseGitURI && uriConverter.exists(cacheURI, options))
+        {
+          // If the file is in the cache, it's okay to use that cached version, so try that first.
+          cacheHandling = CacheHandling.CACHE_ONLY;
+        }
+
+        // This is a URI that fails to load at all, so fail quickly.
+        if (FAILED_EXPECTED_ETAG.equals(expectedETag))
+        {
+          throw EXPECTED_EXCEPTIONS.get(uri);
+        }
+
+        if (expectedETag != null || cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING)
+        {
+          if (cacheHandling == CacheHandling.CACHE_ONLY || //
+              cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? eTag != null : expectedETag.equals(eTag))
+          {
+            try
+            {
+              return handleCache(uriConverter, cacheURI, expectedETag);
+            }
+            catch (IOException ex)
+            {
+              // Perhaps another JVM is busy writing this file.
+              // Proceed as if it doesn't exist.
+              if (TRACE)
+              {
+                System.out.println(tracePrefix + " unable to load cached content");
+              }
+            }
+          }
+        }
+
+        // In general all Eclipse-hosted setups should be in the Eclipse project or product catalog and therefore should be in
+        // SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI or should already be in the cache from running the setup archiver application.
+        if (isBlockedEclipseGitURI)
+        {
+          synchronized (this)
+          {
+            if (!loggedBlockedURI)
+            {
+              String launcher = OS.getCurrentLauncher(true);
+              if (launcher == null)
+              {
+                launcher = "eclipse";
+              }
+
+              // We'll log a single warning for this case.
+              SetupCorePlugin.INSTANCE.log(
+                  "The Eclipse Git-hosted URI '" + uri + "' is blocked for direct access." + StringUtil.NL + //
+                      "Please open a Bugzilla to add it to an official Oomph catalog." + StringUtil.NL + //
+                      "For initial testing, use the file system local version of the resource." + StringUtil.NL + //
+                      "Alternatively, run the setup archiver application as follows:" + StringUtil.NL + //
+                      "  " + launcher + " -application org.eclipse.oomph.setup.core.SetupArchiver -consoleLog -noSplash -uris " + uri, //
+                  IStatus.WARNING);
+
+              loggedBlockedURI = true;
+            }
+          }
+
+          return handleEclipseGit();
+        }
+
+        // Encapsulate all the information needed to access and process the URI.
+        ProxyWrapper proxyWrapper = ProxyWrapper.create(uri);
+
+        // Create the container for the connection.
+        IContainer container = createContainer();
+
+        // Determine the authorization handler for handling credentials.
+        AuthorizationHandler authorizationHandler = getAuthorizatonHandler(options);
+
+        // If we don't have an authorization in the options, but we have a handler,
+        // we might as well get the authorization that might exist in the secure storage so our first access uses the right credentials up front.
+        Authorization authorization = getAuthorizaton(options);
+        if (authorization == null && authorizationHandler != null)
+        {
+          authorization = authorizationHandler.authorize(uri);
+        }
+
+        // If we don't have a proxy authorization in the options, but we have a handler,
+        // we might as well get the proxy authorization that might exist in the secure storage so our first access uses the right proxy credentials up front.
+        Authorization proxyAuthorization = getProxyAuthorizaton(options);
+        if (proxyWrapper.isProxified() && proxyAuthorization == null && authorizationHandler != null)
+        {
+          proxyAuthorization = authorizationHandler.authorize(proxyWrapper.getProxyURI());
+        }
+
+        // If we are using a proxy and it doesn't have an authorization, but we have a proxy authorization that is authorized,
+        // use those credentials for the proxy.
+        if (proxyWrapper.isProxified() && !proxyWrapper.hasAuthorization() && proxyAuthorization != null && proxyAuthorization.isAuthorized())
+        {
+          proxyWrapper.authorize(proxyAuthorization);
+        }
+
+        if (TRACE)
+        {
+          if (proxyWrapper.isProxified())
+          {
+            System.out.println(tracePrefix + " proxy=" + proxyWrapper);
+          }
+
+          System.out.println(tracePrefix + " authorizationHandler=" + authorizationHandler);
+        }
+
+        int triedReauthorization = 0;
+        int triedProxyReauthorization = 0;
+        for (int i = 0;; ++i)
+        {
+          if (TRACE)
+          {
+            System.out.println(tracePrefix + " trying=" + i);
+            System.out.println(tracePrefix + " triedReauthorization=" + triedReauthorization);
+            System.out.println(tracePrefix + " authorization=" + authorization);
+            System.out.println(tracePrefix + " triedProxyReauthorization=" + triedProxyReauthorization);
+            System.out.println(tracePrefix + " proxyAuthorization=" + proxyAuthorization);
+          }
+
+          // Configure the connection and its associated listener.
+          ConnectionListener transferListener = createConnectionListener(container, proxyWrapper, authorization, eTag, monitor);
+
+          try
+          {
+            // Start the connection for the URI's associated transfer ID.
+            FileTransferID fileTransferID = new FileTransferID(new FileTransferNamespace(), proxyWrapper.getURI());
+            sendConnectionRequest(fileTransferID, host);
+          }
+          catch (ECFException ex)
+          {
+            if (TRACE)
+            {
+              System.out.println(tracePrefix + " " + ex.getClass().getSimpleName());
+              ex.printStackTrace(System.out);
+            }
+
+            throw createIOException(uri.toString(), ex);
+          }
+
+          try
+          {
+            // Wait for the connection processing to complete.
+            transferListener.await();
+          }
+          catch (InterruptedException ex)
+          {
+            if (TRACE)
+            {
+              System.out.println(tracePrefix + " InterruptedException");
+              ex.printStackTrace(System.out);
+            }
+
+            throw createIOException(uri.toString(), ex);
+          }
+
+          // Handle any exception captured during the connection processing.
+          Exception exception = transferListener.getException();
+          if (exception != null)
+          {
+            if (TRACE)
+            {
+              System.out.println(tracePrefix + " transferLister.exception");
+              exception.printStackTrace(System.out);
+            }
+
+            // If it's not a cancel exception...
+            if (!(exception instanceof UserCancelledException))
+            {
+              // If it's a socked timeout exception, retry the socket 3 times before failing.
+              if ((exception instanceof SocketTimeoutException || exception.getCause() instanceof SocketTimeoutException) && i < 2)
+              {
+                continue;
+              }
+
+              // If there an authorization handler and the listener's exception is the specialized exception associated with the listener.
+              if (authorizationHandler != null && transferListener.hasTransferException())
+              {
+                // In this case the exception has an error code.
+                int errorCode = transferListener.getErrorCode();
+                if (TRACE)
+                {
+                  System.out.println(tracePrefix + " errorCode=" + errorCode);
+                }
+
+                // If we have a proxy authentication problem...
+                if (errorCode == HttpURLConnection.HTTP_PROXY_AUTH && proxyWrapper.isProxified())
+                {
+                  // Get the proxy authorization if we don't already have one.
+                  if (proxyAuthorization == null)
+                  {
+                    proxyAuthorization = authorizationHandler.authorize(proxyWrapper.getProxyURI());
+
+                    // If the proxy is already authorized, apply those credentials to the proxy.
+                    if (proxyAuthorization.isAuthorized())
+                    {
+                      proxyWrapper.authorize(proxyAuthorization);
+                      --i;
+                      continue;
+                    }
+                  }
+
+                  // If the proxy authorization remains authorizable, prompt for the password at most three times.
+                  if (!proxyAuthorization.isUnauthorizeable() && triedProxyReauthorization++ < 3)
+                  {
+                    proxyAuthorization = authorizationHandler.reauthorize(proxyWrapper.getProxyURI(), proxyAuthorization);
+                    if (proxyAuthorization.isAuthorized())
+                    {
+                      proxyWrapper.authorize(proxyAuthorization);
+                      --i;
+                      continue;
+                    }
+                  }
+                }
+                // We assume contents can be accessed via the github API https://developer.github.com/v3/repos/contents/#get-contents
+                // That API, for security reasons, does not return HTTP_UNAUTHORIZED, so we need this special case for that host.
+                else if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED
+                    || API_GITHUB_HOST.equals(getHost(uri)) && errorCode == HttpURLConnection.HTTP_NOT_FOUND)
+                {
+                  // Get the authorization if we don't already have one.
+                  if (authorization == null)
+                  {
+                    authorization = authorizationHandler.authorize(uri);
+
+                    // If it is authorized, use it now.
+                    if (authorization.isAuthorized())
+                    {
+                      --i;
+                      continue;
+                    }
+                  }
+
+                  // If the authorization remains authorizable, prompt for the password at most three times.
+                  if (!authorization.isUnauthorizeable() && triedReauthorization++ < 3)
+                  {
+                    authorization = authorizationHandler.reauthorize(uri, authorization);
+                    if (authorization.isAuthorized())
+                    {
+                      --i;
+                      continue;
+                    }
+                  }
+                }
+              }
+
+              if (transferListener.hasTransferException())
+              {
+                // We can't do a HEAD request.
+                int errorCode = transferListener.getErrorCode();
+                if (errorCode == HttpURLConnection.HTTP_BAD_METHOD)
+                {
+                  T result = handleBadMethod(options);
+                  if (result != null)
+                  {
+                    return result;
+                  }
+                }
+              }
+            }
+
+            if (!CacheHandling.CACHE_IGNORE.equals(cacheHandling) && uriConverter.exists(cacheURI, options)
+                && (!transferListener.hasTransferException() || transferListener.getErrorCode() != HttpURLConnection.HTTP_NOT_FOUND)
+                || uri.equals(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI) || loginURI != null)
+            {
+              return handleCache(uriConverter, cacheURI, eTag);
+            }
+
+            if (TRACE)
+            {
+              System.out.println(tracePrefix + " failing");
+            }
+
+            IOException ioException = createIOException(uri.toString(), transferListener.getException());
+            EXPECTED_EXCEPTIONS.put(uri, ioException);
+            setExpectedETag(uri, FAILED_EXPECTED_ETAG);
+
+            throw ioException;
+          }
+
+          // Saves the credentials for the proxy if they've been authorized at some point during the connection processing.
+          proxyWrapper.update();
+
+          return handleResult(uriConverter, cacheURI);
+        }
+      }
+      finally
+      {
+        releaseLock(uri, countDownLatch);
+      }
+    }
+
+    protected abstract T handleCache(URIConverter uriConverter, URI cacheURI, String expectedETag) throws IOException;
+
+    protected abstract T handleEclipseGit() throws IOException;
+
+    protected abstract ConnectionListener createConnectionListener(IContainer container, ProxyWrapper proxyWrapper, Authorization authorization, String eTag,
+        IProgressMonitor monitor);
+
+    protected abstract void sendConnectionRequest(FileTransferID fileTransferID, String host) throws ECFException;
+
+    protected T handleBadMethod(Map<?, ?> options)
+    {
+      return null;
+    }
+
+    protected abstract T handleResult(URIConverter uriConverter, URI cacheURI) throws IOException;
+  }
+
+  /**
+   * @author Ed Merks
+   *
+   * A connection handler used by {@link ECFURIHandlerImpl#createInputStream(URI, Map)}.
+   */
+  private class InputStreamConnectionHandler extends ConnectionHandler<InputStream>
+  {
+    private IRetrieveFileTransferContainerAdapter fileTransfer;
+
+    private FileTransferListener transferListener;
+
+    public InputStreamConnectionHandler(URI uri, Map<?, ?> options) throws IOException
+    {
+      super(uri, options);
+    }
+
+    @Override
+    protected InputStream handleCache(URIConverter uriConverter, URI cacheURI, String expectedETag) throws IOException
+    {
+      setExpectedETag(uri, transferListener == null ? expectedETag
+          : transferListener.eTag == null ? expectedETag == null ? Long.toString(System.currentTimeMillis()) : expectedETag : transferListener.eTag);
+      InputStream result = uriConverter.createInputStream(cacheURI, options);
+      if (TRACE)
+      {
+        System.out.println(tracePrefix + " returning cached content");
+      }
+
+      return result;
+    }
+
+    @Override
+    protected InputStream handleEclipseGit() throws IOException
+    {
+      throw new IOException("Eclipse Git access blocked: " + uri);
+    }
+
+    @Override
+    protected ConnectionListener createConnectionListener(IContainer container, ProxyWrapper proxyWrapper, Authorization authorization, String eTag,
+        IProgressMonitor monitor)
+    {
+      fileTransfer = container.getAdapter(IRetrieveFileTransferContainerAdapter.class);
+
+      fileTransfer.setProxy(proxyWrapper.getProxy());
+
+      if (authorization != null && authorization.isAuthorized())
+      {
+        fileTransfer.setConnectContextForAuthentication(
+            ConnectContextFactory.createUsernamePasswordConnectContext(authorization.getUser(), authorization.getPassword()));
+      }
+
+      transferListener = new FileTransferListener(eTag, monitor);
+      return transferListener;
+    }
+
+    @Override
+    protected void sendConnectionRequest(FileTransferID fileTransferID, String host) throws ECFException
+    {
+      Map<Object, Object> requestOptions = new HashMap<Object, Object>();
+      requestOptions.put(IRetrieveFileTransferOptions.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
+      requestOptions.put(IRetrieveFileTransferOptions.READ_TIMEOUT, READ_TIMEOUT);
+
+      if (!StringUtil.isEmpty(USER_AGENT) && host != null && host.endsWith(".eclipse.org"))
+      {
+        Map<String, String> requestHeaders = new HashMap<String, String>();
+        requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, requestHeaders);
+        requestHeaders.put("User-Agent", USER_AGENT);
+      }
+
+      fileTransfer.sendRetrieveRequest(fileTransferID, transferListener, requestOptions);
+    }
+
+    @Override
+    protected InputStream handleResult(URIConverter uriConverter, URI cacheURI) throws IOException
+    {
+      byte[] bytes = transferListener.out.toByteArray();
+
+      // In the case of the Github API, the bytes will be JSON that contains a "content" pair containing the Base64 encoding of the actual contents.
+      if (API_GITHUB_HOST.equals(getHost(uri)))
+      {
+        // Find the start tag in the JSON value.
+        String value = new String(bytes, "UTF-8");
+        int start = value.indexOf(CONTENT_TAG);
+        if (start != -1)
+        {
+          // Find the ending quote of the encoded contents.
+          start += CONTENT_TAG.length();
+          int end = value.indexOf('"', start);
+          if (end != -1)
+          {
+            // The content is delimited by \n so split on that during the conversion.
+            String content = value.substring(start, end);
+            String[] split = content.split("\\\\n");
+
+            // Write the converted bytes to a new stream and process those bytes instead.
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            for (String line : split)
+            {
+              byte[] binary = XMLTypeFactory.eINSTANCE.createBase64Binary(line);
+              out.write(binary);
+            }
+
+            out.close();
+            bytes = out.toByteArray();
+          }
+        }
+      }
+
+      try
+      {
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " writing cache");
+        }
+
+        BaseUtil.writeFile(uriConverter, options, cacheURI, bytes);
+      }
+      catch (IORuntimeException ex)
+      {
+        // Ignore attempts to write out to the cache file.
+        // This may collide with another JVM doing exactly the same thing.
+        transferListener.eTag = null;
+
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " failed writing cache");
+          ex.printStackTrace(System.out);
+        }
+      }
+      finally
+      {
+        setETag(uriConverter, cacheURI, transferListener.eTag);
+      }
+
+      setExpectedETag(uri, transferListener.eTag);
+      Map<Object, Object> response = getResponse(options);
+      if (response != null)
+      {
+        response.put(URIConverter.RESPONSE_TIME_STAMP_PROPERTY, transferListener.lastModified);
+      }
+
+      ETagMirror etagMirror = (ETagMirror)options.get(ETagMirror.OPTION_ETAG_MIRROR);
+      if (etagMirror != null)
+      {
+        etagMirror.cacheUpdated(uri);
+      }
+
+      if (TRACE)
+      {
+        System.out.println(tracePrefix + " returning successful results");
+      }
+
+      return new ByteArrayInputStream(bytes);
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   *
+   * A connection handler used by {@link ECFURIHandlerImpl#getRemoteAttributes(URI, Map)}
+   */
+  private class RemoteAttributionsConnectionHandler extends ConnectionHandler<Map<String, ?>>
+  {
+    private IRemoteFileSystemBrowserContainerAdapter fileBrowser;
+
+    private RemoteFileSystemListener fileSystemListener;
+
+    private final Set<String> requestedAttributes;
+
+    public RemoteAttributionsConnectionHandler(URI uri, Map<?, ?> options) throws IOException
+    {
+      super(uri, options);
+
+      requestedAttributes = getRequestedAttributes(options);
+    }
+
+    @Override
+    protected Map<String, ?> handleCache(URIConverter uriConverter, URI cacheURI, String expectedETag) throws IOException
+    {
+      Map<String, ?> result = handleAttributes(requestedAttributes, uriConverter.getAttributes(cacheURI, options));
+      return result;
+    }
+
+    @Override
+    protected Map<String, ?> handleEclipseGit() throws IOException
+    {
+      return Collections.emptyMap();
+    }
+
+    @Override
+    protected ConnectionListener createConnectionListener(IContainer container, ProxyWrapper proxyWrapper, Authorization authorization, String eTag,
+        IProgressMonitor monitor)
+    {
+      fileBrowser = container.getAdapter(IRemoteFileSystemBrowserContainerAdapter.class);
+
+      fileBrowser.setProxy(proxyWrapper.getProxy());
+
+      if (authorization != null && authorization.isAuthorized())
+      {
+        fileBrowser.setConnectContextForAuthentication(
+            ConnectContextFactory.createUsernamePasswordConnectContext(authorization.getUser(), authorization.getPassword()));
+      }
+
+      fileSystemListener = new RemoteFileSystemListener();
+      return fileSystemListener;
+    }
+
+    @Override
+    protected void sendConnectionRequest(FileTransferID fileTransferID, String host) throws ECFException
+    {
+      fileBrowser.sendBrowseRequest(fileTransferID, fileSystemListener);
+    }
+
+    @Override
+    protected Map<String, ?> handleResult(URIConverter uriConverter, URI cacheURI) throws IOException
+    {
+      // In the case of the Github API, the bytes will be JSON that contains a "content" pair containing the Base64 encoding of the actual contents.
+      if (API_GITHUB_HOST.equals(getHost(uri)))
+      {
+        // We should have a special case for that too.
+      }
+
+      return handleAttributes(requestedAttributes, fileSystemListener.info);
+    }
+
+    @Override
+    protected Map<String, ?> handleBadMethod(Map<?, ?> options)
+    {
+      if (TRACE)
+      {
+        System.out.println(tracePrefix + " unsupported HEAD request");
+      }
+
+      // Try instead to create an input stream and use the response to get at least the timestamp property.
+      Map<Object, Object> specializedOptions = new HashMap<Object, Object>(options);
+      Map<Object, Object> response = new HashMap<Object, Object>();
+      specializedOptions.put(URIConverter.OPTION_RESPONSE, response);
+      try
+      {
+        InputStream inputStream = createInputStream(uri, specializedOptions);
+        inputStream.close();
+        System.out.println(tracePrefix + " using response from GET request");
+        return handleResponseAttributes(requestedAttributes, response);
+      }
+      catch (IOException ex)
+      {
+        if (TRACE)
+        {
+          // This implies a GET request also fails, so continue the processing...
+          System.out.println(tracePrefix + " GET request failed");
+          ex.printStackTrace(System.out);
+        }
+      }
+
+      return null;
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   *
+   * https://example.com/gerrit/gitweb?p=EXAMPLE.git;a=blob_plain;f=Src/com.example.releng/example.setup;hb=HEAD
+   */
   public static class Main
   {
     public static void main(String[] args) throws Exception
     {
       // TODO
       // We might need to produce a result that is separated with & rather than ; for some servers?
-      // Note that a more standard representation separates arguments with an &
 
       URI expectedURI = URI.createURI("https://example.com/gerrit/gitweb?p=EXAMPLE.git;a=blob_plain;f=Src/com.example.releng/example.setup;hb=HEAD");
       URI inputURI = URI.createURI(
@@ -2217,5 +2323,238 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
   public static URI transform(URI uri, Map<Object, Object> options)
   {
     return Main.transform(uri, options);
+  }
+
+  public static void saveProxies()
+  {
+    if (CommonPlugin.IS_ECLIPSE_RUNNING)
+    {
+      ProxyHelper.saveProxyData();
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   *
+   * A wrapper class that holds the ECF proxy, the Core Net proxy data, the URI for that proxy, and the original URI being accessed.
+   */
+  private static class ProxyWrapper
+  {
+    private Proxy proxy;
+
+    private final IProxyData proxyData;
+
+    private final java.net.URI uri;
+
+    private final URI proxyURI;
+
+    private boolean authorized;
+
+    public ProxyWrapper(Proxy proxy, IProxyData proxyData, java.net.URI uri)
+    {
+      this.proxy = proxy;
+      this.proxyData = proxyData;
+      this.uri = uri;
+
+      if (proxy != null)
+      {
+        ProxyAddress address = proxy.getAddress();
+        String hostName = address.getHostName();
+        int port = address.getPort();
+        Proxy.Type type = proxy.getType();
+        proxyURI = URI.createURI(type.toString() + "://" + hostName + ":" + port);
+      }
+      else
+      {
+        proxyURI = null;
+      }
+    }
+
+    /**
+     * Updates the wrapped proxy with the credentials from the authorization.
+     */
+    public void authorize(Authorization proxyAuthorization)
+    {
+      authorized = true;
+      proxy = new Proxy(proxy.getType(), proxy.getAddress(), proxyAuthorization.getUser(), proxyAuthorization.getPassword());
+    }
+
+    /**
+     * Creates a wrapper for the URI being accessed, optionally with proxy information, if it's needed and available.
+     */
+    public static ProxyWrapper create(URI uri)
+    {
+      java.net.URI javaNetURI = IOUtil.newURI(uri.toString());
+      if (CommonPlugin.IS_ECLIPSE_RUNNING)
+      {
+        ProxyWrapper proxyWrapper = ProxyHelper.createProxyWrapper(javaNetURI);
+        if (proxyWrapper != null)
+        {
+          return proxyWrapper;
+        }
+      }
+
+      return new ProxyWrapper(null, null, javaNetURI);
+    }
+
+    /**
+     * Returns whether this wrapper includes proxy information.
+     */
+    public boolean isProxified()
+    {
+      return proxy != null;
+    }
+
+    /**
+     * Returns whether this wrapper includes proxy information that currently includes credentials.
+     */
+    public boolean hasAuthorization()
+    {
+      return proxy != null && !StringUtil.isEmpty(proxy.getPassword());
+    }
+
+    /**
+     * Returns the wrapped ECF proxy.
+     */
+    public Proxy getProxy()
+    {
+      return proxy;
+    }
+
+    /**
+     * Returns the URI that can be used to prompt for the proxy's credentials.
+     */
+    public URI getProxyURI()
+    {
+      return proxyURI;
+    }
+
+    /**
+     * Returns the URI being processed.
+     */
+    private java.net.URI getURI()
+    {
+      return uri;
+    }
+
+    /**
+     * Updates the Core Net proxy data with the credentials of the ECF proxy.
+     */
+    public void update()
+    {
+      if (authorized)
+      {
+        ProxyHelper.update(proxy, proxyData);
+      }
+    }
+
+    @Override
+    public String toString()
+    {
+      if (proxyData == null)
+      {
+        return "Unproxified";
+      }
+
+      // This is used for logging. We don't want to show the unobscured password in the log so we don't just use proxyData.toString.
+      StringBuilder stringBuffer = new StringBuilder();
+      stringBuffer.append("type: "); //$NON-NLS-1$
+      stringBuffer.append(proxyData.getType());
+      stringBuffer.append(" host: "); //$NON-NLS-1$
+      stringBuffer.append(proxyData.getHost());
+      stringBuffer.append(" port: "); //$NON-NLS-1$
+      stringBuffer.append(proxyData.getPort());
+      stringBuffer.append(" user: "); //$NON-NLS-1$
+      stringBuffer.append(proxyData.getUserId());
+      stringBuffer.append(" password: "); //$NON-NLS-1$
+      String password = proxyData.getPassword();
+      stringBuffer.append(password == null ? "" : XMLTypeFactory.eINSTANCE.convertBase64Binary(password.getBytes()));
+      stringBuffer.append(" reqAuth: "); //$NON-NLS-1$
+      stringBuffer.append(proxyData.isRequiresAuthentication());
+      return stringBuffer.toString();
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   *
+   * This helper class is used only when Eclipse is running in which case the Core Net bundle should be available.
+   */
+  protected static class ProxyHelper
+  {
+    private static final Set<IProxyData> PROXY_DATA = new HashSet<IProxyData>();
+
+    @SuppressWarnings("restriction")
+    private static final IProxyService PROXY_MANAGER = org.eclipse.core.internal.net.ProxyManager.getProxyManager();
+
+    /**
+     * Creates a wrapper using ECF and the Core Net infrastructure.
+     */
+    public static ProxyWrapper createProxyWrapper(java.net.URI uri)
+    {
+      if (PROXY_MANAGER.isProxiesEnabled())
+      {
+        synchronized (PROXY_MANAGER)
+        {
+          // This replicates the logic in ProxySetupHelper.getProxy so that we can also record the proxy data from which the proxy is created.
+          final IProxyData[] proxies = PROXY_MANAGER.select(uri);
+          IProxyData selectedProxy = ProxySetupHelper.selectProxyFromProxies(uri.getScheme(), proxies);
+          if (selectedProxy != null)
+          {
+            Proxy proxy = new Proxy(selectedProxy.getType().equalsIgnoreCase(IProxyData.SOCKS_PROXY_TYPE) ? Proxy.Type.SOCKS : Proxy.Type.HTTP,
+                new ProxyAddress(selectedProxy.getHost(), selectedProxy.getPort()), selectedProxy.getUserId(), selectedProxy.getPassword());
+            return new ProxyWrapper(proxy, selectedProxy, uri);
+          }
+        }
+      }
+
+      return null;
+    }
+
+    /**
+     * Updates the proxy data with the credentials of the ECF proxy.
+     */
+    protected static void update(Proxy proxy, IProxyData proxyData)
+    {
+      if (SetupUtil.INSTALLER_APPLICATION || SetupUtil.SETUP_ARCHIVER_APPLICATION)
+      {
+        synchronized (PROXY_MANAGER)
+        {
+          proxyData.setUserid(proxy.getUsername());
+          proxyData.setPassword(proxy.getPassword());
+          PROXY_DATA.add(proxyData);
+        }
+      }
+    }
+
+    /**
+     * Saves all the proxy data instances that have been used.
+     * This is useful when the system proxies require authentication and the password has been prompted from the user.
+     * In this case, we can switch the mode to Manual and save the proxies with their credentials so subsequent uses of the installer can reuse those saved credentials.
+     */
+    protected static void saveProxyData()
+    {
+      if (!PROXY_DATA.isEmpty())
+      {
+        synchronized (PROXY_MANAGER)
+        {
+          try
+          {
+            PROXY_MANAGER.setProxyData(PROXY_DATA.toArray(new IProxyData[PROXY_DATA.size()]));
+            PROXY_MANAGER.setSystemProxiesEnabled(false);
+
+            // This forces the preferences to be flushed.
+            PROXY_MANAGER.setProxiesEnabled(false);
+            PROXY_MANAGER.setProxiesEnabled(true);
+          }
+          catch (CoreException ex)
+          {
+            // Ignore.
+          }
+        }
+
+        PROXY_DATA.clear();
+      }
+    }
   }
 }

@@ -20,8 +20,13 @@ import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.util.PropertiesUtil;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+
 import org.eclipse.equinox.p2.core.UIServices;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Eike Stepper
@@ -32,9 +37,9 @@ public class Installer extends SetupWizard
 
   private final SelectionMemento selectionMemento;
 
-  public Installer(SelectionMemento selectionMemento)
+  public Installer(SelectionMemento theSelectionMemento)
   {
-    this.selectionMemento = selectionMemento;
+    selectionMemento = theSelectionMemento;
     setTrigger(Trigger.BOOTSTRAP);
     getResourceSet().getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
     setSetupContext(SetupContext.createUserOnly(getResourceSet()));
@@ -90,6 +95,35 @@ public class Installer extends SetupWizard
     if (performer != null)
     {
       performer.put(UIServices.class, SERVICE_UI);
+    }
+  }
+
+  public boolean handleMissingIndex(Shell shell)
+  {
+    int answer = new MessageDialog(shell, "Network Problem", null,
+        "The catalog could not be loaded. Please ensure that you have network access and, if needed, have configured your network proxy.", MessageDialog.ERROR,
+        new String[] { "Retry", "Configure Network Proxy...", "Exit" }, 0).open();
+    switch (answer)
+    {
+      case 1:
+      {
+        new NetworkConnectionsDialog(shell).open();
+      }
+      //$FALL-THROUGH$
+
+      case 0:
+      {
+        ResourceSet resourceSet = getResourceSet();
+        URI currentIndexLocation = resourceSet.getURIConverter().normalize(SetupContext.INDEX_SETUP_URI);
+        ECFURIHandlerImpl.clearExpectedETags();
+        reloadIndex(currentIndexLocation);
+        return true;
+      }
+
+      default:
+      {
+        return false;
+      }
     }
   }
 }
