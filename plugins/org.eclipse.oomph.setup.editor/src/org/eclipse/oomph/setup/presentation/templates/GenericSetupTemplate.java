@@ -709,6 +709,26 @@ public class GenericSetupTemplate extends SetupTemplate
           : "";
     }
 
+    if (filterName.equals("requiredJavaVersion"))
+    {
+      if ("Juno".equals(value))
+      {
+        return "1.5";
+      }
+
+      if ("Kepler".equals(value) || "Luna".equals(value))
+      {
+        return "1.6";
+      }
+
+      if ("Mars".equals(value))
+      {
+        return "1.7";
+      }
+
+      return "1.8";
+    }
+
     if (filterName.equals("isClonePath"))
     {
       return filter(variable, value, "clonePath").startsWith("...") ? "false" : "true";

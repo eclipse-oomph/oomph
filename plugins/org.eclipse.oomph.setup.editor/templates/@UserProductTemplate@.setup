@@ -60,6 +60,9 @@
         storageURI="scope://Workspace"
         label="Eclipse release train">
       <choice
+          value="Oxygen"
+          label="Eclipse Oxygen - 4.7"/>
+      <choice
           value="Neon"
           label="Eclipse Neon - 4.6"/>
       <choice
@@ -74,15 +77,6 @@
       <choice
           value="Juno"
           label="Eclipse Juno - 4.2"/>
-      <choice
-          value="Indigo"
-          label="Eclipse Indigo - 3.7"/>
-      <choice
-          value="Helios"
-          label="Eclipse Helios - 3.6"/>
-      <choice
-          value="Galileo"
-          label="Eclipse Galileo - 3.5"/>
       <description>Choose the compatibility level of the product</description>
     </setupTask>
     <setupTask
@@ -113,7 +107,7 @@
   </setupTask>
   <version name="${product.release.train|lower}"
       label="${product.release.train}"
-      requiredJavaVersion="1.7">
+      requiredJavaVersion="${product.release.train|requiredJavaVersion}">
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="${scope.product.label} (${scope.product.version.label})">
