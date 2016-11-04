@@ -848,7 +848,7 @@ public class GenericSetupTemplate extends SetupTemplate
                       {
                         if ("eclipse".equals(firstSegment))
                         {
-                          projectRemoteURIs = "github.remote.uris";
+                          projectRemoteURIs = "github.remoteURIs";
                         }
                       }
 
