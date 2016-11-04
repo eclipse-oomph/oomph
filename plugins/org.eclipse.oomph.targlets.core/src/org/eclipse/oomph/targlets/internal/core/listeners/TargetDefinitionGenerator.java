@@ -12,8 +12,9 @@ package org.eclipse.oomph.targlets.internal.core.listeners;
 
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.p2.Repository;
-import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
+import org.eclipse.oomph.p2.internal.core.ProfileTransactionImpl;
 import org.eclipse.oomph.p2.internal.core.RootAnalyzer;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.core.ITargletContainer;
@@ -22,18 +23,43 @@ import org.eclipse.oomph.targlets.core.TargletContainerEvent.WorkspaceUpdateFini
 import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
+import org.eclipse.oomph.targlets.internal.core.WorkspaceIUAnalyzer;
 import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.util.IORuntimeException;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.URIConverter.WriteableOutputStream;
+import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.ExtendedMetaData;
+import org.eclipse.emf.ecore.util.FeatureMap;
+import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.xmi.XMLHelper;
+import org.eclipse.emf.ecore.xmi.XMLOptions;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.XMLOptionsImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLSaveImpl;
+import org.eclipse.emf.ecore.xml.type.AnyType;
+import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
+import org.eclipse.equinox.internal.p2.repository.Credentials;
+import org.eclipse.equinox.internal.p2.repository.Credentials.LoginCanceledException;
+import org.eclipse.equinox.p2.core.UIServices.AuthenticationInfo;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
-import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.IVersionedId;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionedId;
@@ -43,10 +69,10 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -72,6 +98,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
   public static final String ANNOTATION_GENERATE_IMPLICIT_UNITS = "generateImplicitUnits";
 
+  public static final String ANNOTATION_MINIMIZE_IMPLICIT_UNITS = "minimizeImplicitUnits";
+
   public static final String ANNOTATION_GENERATE_VERSIONS = "generateVersions";
 
   public static final String ANNOTATION_INCLUDE_ALL_PLATFORMS = "includeAllPlatforms";
@@ -86,9 +114,15 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
   public static final String ANNOTATION_SINGLE_LOCATION = "singleLocation";
 
+  public static final String ANNOTATION_GENERATE_SERVER_XML = "generateServerXML";
+
+  public static final String NESTED_ANNOTATION_REPOSITORY_IDS = "RepositoryIDs";
+
   private static final Pattern SEQUENCE_NUMBER_PATTERN = Pattern.compile("sequenceNumber=\"([0-9]+)\"");
 
   private static final String TRUE = Boolean.TRUE.toString();
+
+  private static final String SETTINGS_NAMESPACE = "http://maven.apache.org/SETTINGS/1.0.0";
 
   public TargetDefinitionGenerator()
   {
@@ -115,7 +149,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   }
 
   private static void generateTargetDefinition(final Targlet targlet, Annotation annotation, Profile profile, IInstallableUnit artificialRoot,
-      List<IMetadataRepository> metadataRepositories, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, final IProgressMonitor monitor) throws Exception
+      final List<IMetadataRepository> metadataRepositories, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, final IProgressMonitor monitor)
+      throws Exception
   {
     monitor.setTaskName("Checking for generated target definition updates");
     EMap<String, String> details = annotation.getDetails();
@@ -136,14 +171,26 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     final List<String> preferredURLs = getPreferredRepositories(annotation);
     final boolean singleLocation = isAnnotationDetail(annotation, ANNOTATION_SINGLE_LOCATION, false);
     final boolean generateImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_GENERATE_IMPLICIT_UNITS, false);
+    final boolean minimizeImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_MINIMIZE_IMPLICIT_UNITS, false);
     final boolean versions = isAnnotationDetail(annotation, ANNOTATION_GENERATE_VERSIONS, false);
     final boolean includeAllPlatforms = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_ALL_PLATFORMS, targlet.isIncludeAllPlatforms());
     final boolean includeConfigurePhase = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_CONFIGURE_PHASE, true);
     final String includeMode = getAnnotationDetail(annotation, ANNOTATION_INCLUDE_MODE, targlet.isIncludeAllRequirements() ? "planner" : "slicer");
     final boolean includeSource = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_SOURCE, targlet.isIncludeSources());
+    final boolean generateServerXML = isAnnotationDetail(annotation, ANNOTATION_GENERATE_SERVER_XML, false);
+
+    final Map<String, String> repositoryIDs = new LinkedHashMap<String, String>();
+    Annotation repositoryIDsAnnotation = annotation.getAnnotation(NESTED_ANNOTATION_REPOSITORY_IDS);
+    if (repositoryIDsAnnotation != null)
+    {
+      for (Map.Entry<String, String> entry : repositoryIDsAnnotation.getDetails().entrySet())
+      {
+        repositoryIDs.put(entry.getKey(), entry.getValue());
+      }
+    }
 
     final Map<IMetadataRepository, Set<IInstallableUnit>> repositoryIUs = analyzeRepositories(targlet, profile, artificialRoot, metadataRepositories,
-        workspaceIUInfos, extraUnits, preferredURLs, generateImplicitUnits, singleLocation, monitor);
+        workspaceIUInfos, extraUnits, preferredURLs, generateImplicitUnits, minimizeImplicitUnits, singleLocation, monitor);
 
     new FileUpdater()
     {
@@ -210,7 +257,17 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
               }
             }
 
-            builder.append("      <repository location=\"" + escaper.escape(repository.getLocation()) + "\"/>");
+            builder.append("      <repository ");
+
+            java.net.URI repositoryLocation = repository.getLocation();
+            String repositoryID = repositoryIDs.get(repositoryLocation.toString());
+            if (repositoryID != null)
+            {
+
+              builder.append("id=\"").append(repositoryID).append("\" ");
+            }
+
+            builder.append("location=\"" + escaper.escape(repositoryLocation) + "\"/>");
             builder.append(nl);
           }
 
@@ -246,7 +303,17 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
                 builder.append(nl);
               }
 
-              builder.append("      <repository location=\"" + escaper.escape(repository.getLocation()) + "\"/>");
+              builder.append("      <repository ");
+
+              java.net.URI repositoryLocation = repository.getLocation();
+              String repositoryID = repositoryIDs.get(repositoryLocation.toString());
+              if (repositoryID != null)
+              {
+
+                builder.append("id=\"").append(repositoryID).append("\" ");
+              }
+
+              builder.append("location=\"" + escaper.escape(repositoryLocation) + "\"/>");
               builder.append(nl);
               builder.append("    </location>");
               builder.append(nl);
@@ -282,6 +349,215 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       }
 
     }.update(targetDefinition);
+
+    if (generateServerXML)
+    {
+      new FileUpdater()
+      {
+        @Override
+        protected String createNewContents(String oldContents, String encoding, String nl)
+        {
+          ResourceSet resourceSet = new ResourceSetImpl();
+          final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(resourceSet.getPackageRegistry());
+          resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xml", new ResourceFactoryImpl()
+          {
+            @Override
+            public Resource createResource(URI uri)
+            {
+              XMLResource result = new XMLResourceImpl(uri);
+              result.setEncoding("UTF-8");
+
+              result.getDefaultSaveOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
+              result.getDefaultLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
+
+              result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_LEXICAL_HANDLER, Boolean.TRUE);
+
+              result.getDefaultSaveOptions().put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
+              result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
+
+              result.getDefaultSaveOptions().put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
+
+              XMLOptions xmlOptions = new XMLOptionsImpl();
+
+              xmlOptions.setProcessAnyXML(true);
+
+              xmlOptions.setProcessSchemaLocations(false);
+
+              result.getDefaultLoadOptions().put(XMLResource.OPTION_XML_OPTIONS, xmlOptions);
+              return result;
+            }
+          });
+
+          Resource resource = resourceSet.createResource(URI.createURI("settings.xml"));
+          if (!StringUtil.isEmpty(oldContents))
+          {
+            try
+            {
+              resource.load(new URIConverter.ReadableInputStream(oldContents), null);
+            }
+            catch (IOException ex)
+            {
+              // Ignore.
+            }
+          }
+
+          if (resource.getContents().isEmpty())
+          {
+            EStructuralFeature settingsElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "settings", true);
+            EClass documentRootEClass = settingsElement.getEContainingClass();
+            EObject documentRoot = EcoreUtil.create(documentRootEClass);
+            AnyType settings = XMLTypeFactory.eINSTANCE.createAnyType();
+            documentRoot.eSet(settingsElement, settings);
+
+            @SuppressWarnings("unchecked")
+            EMap<String, String> xmlnsPrefixMap = (EMap<String, String>)documentRoot.eGet(extendedMetaData.getXMLNSPrefixMapFeature(documentRootEClass));
+            xmlnsPrefixMap.put("", SETTINGS_NAMESPACE);
+            xmlnsPrefixMap.put("xsi", XMLResource.XSI_URI);
+
+            EStructuralFeature schemaLocation = extendedMetaData.demandFeature(XMLResource.XSI_URI, "schemaLocation", false);
+            settings.eSet(schemaLocation, SETTINGS_NAMESPACE + " http://maven.apache.org/xsd/settings-1.0.0.xsd");
+
+            resource.getContents().add(documentRoot);
+          }
+
+          EObject documentRoot = resource.getContents().get(0);
+          AnyType rootElement = (AnyType)documentRoot.eContents().get(0);
+
+          EStructuralFeature serversElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "servers", true);
+
+          @SuppressWarnings("unchecked")
+          List<AnyType> serversGroup = (List<AnyType>)rootElement.eGet(serversElement);
+          FeatureMap servers;
+          if (serversGroup.isEmpty())
+          {
+            FeatureMapUtil.addText(rootElement.getMixed(), nl + "  ");
+            AnyType serversInstance = XMLTypeFactory.eINSTANCE.createAnyType();
+            serversGroup.add(serversInstance);
+            FeatureMapUtil.addText(rootElement.getMixed(), nl);
+            servers = serversInstance.getMixed();
+          }
+          else
+          {
+            servers = serversGroup.get(0).getMixed();
+          }
+
+          EStructuralFeature serverElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "server", true);
+          EStructuralFeature idElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "id", true);
+          EStructuralFeature usernameElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "username", true);
+          EStructuralFeature passwordElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "password", true);
+
+          boolean added = false;
+          LOOP: for (IMetadataRepository repository : metadataRepositories)
+          {
+            java.net.URI location = repository.getLocation();
+            try
+            {
+              String repositoryID = repositoryIDs.get(location.toString());
+              if (repositoryID == null)
+              {
+                repositoryID = location.toString();
+              }
+
+              AuthenticationInfo authenticationInfo = Credentials.forLocation(location, false);
+              if (authenticationInfo != null)
+              {
+                @SuppressWarnings("unchecked")
+                List<AnyType> serverElements = (List<AnyType>)servers.get(serverElement, true);
+
+                for (AnyType server : serverElements)
+                {
+                  FeatureMap mixed = server.getMixed();
+
+                  @SuppressWarnings("unchecked")
+                  List<AnyType> idElements = (List<AnyType>)mixed.get(idElement, true);
+                  if (idElements.size() == 1)
+                  {
+                    AnyType id = idElements.get(0);
+                    if (repositoryID.equals(id.getMixed().getValue(0)))
+                    {
+                      @SuppressWarnings("unchecked")
+                      List<AnyType> userNameElements = (List<AnyType>)mixed.get(usernameElement, true);
+                      if (userNameElements.size() == 1)
+                      {
+                        userNameElements.get(0).getMixed().setValue(0, authenticationInfo.getUserName());
+                      }
+
+                      @SuppressWarnings("unchecked")
+                      List<AnyType> passwordElements = (List<AnyType>)mixed.get(passwordElement, true);
+                      if (passwordElements.size() == 1)
+                      {
+                        passwordElements.get(0).getMixed().setValue(0, authenticationInfo.getPassword());
+                      }
+
+                      continue LOOP;
+                    }
+                  }
+                }
+
+                added = true;
+
+                AnyType server = XMLTypeFactory.eINSTANCE.createAnyType();
+                FeatureMapUtil.addText(servers, nl + "    ");
+                servers.add(FeatureMapUtil.createEntry(serverElement, server));
+
+                FeatureMap mixed = server.getMixed();
+
+                AnyType id = XMLTypeFactory.eINSTANCE.createAnyType();
+                FeatureMapUtil.addText(id.getMixed(), repositoryID);
+                FeatureMapUtil.addText(mixed, nl + "      ");
+                mixed.add(FeatureMapUtil.createEntry(idElement, id));
+
+                AnyType username = XMLTypeFactory.eINSTANCE.createAnyType();
+                FeatureMapUtil.addText(username.getMixed(), authenticationInfo.getUserName());
+                FeatureMapUtil.addText(mixed, nl + "      ");
+                mixed.add(FeatureMapUtil.createEntry(usernameElement, username));
+
+                AnyType password = XMLTypeFactory.eINSTANCE.createAnyType();
+                FeatureMapUtil.addText(password.getMixed(), authenticationInfo.getPassword());
+                FeatureMapUtil.addText(mixed, nl + "      ");
+                mixed.add(FeatureMapUtil.createEntry(passwordElement, password));
+                FeatureMapUtil.addText(mixed, nl + "    ");
+              }
+            }
+            catch (LoginCanceledException ex)
+            {
+              // Not possible because we're not prompting.
+            }
+            catch (CoreException ex)
+            {
+              // Ignore.
+            }
+          }
+
+          if (added)
+          {
+            FeatureMapUtil.addText(servers, nl + "  ");
+          }
+
+          try
+          {
+            StringWriter writer = new StringWriter();
+            WriteableOutputStream out = new URIConverter.WriteableOutputStream(writer, encoding);
+            resource.save(out, null);
+            out.close();
+            writer.write(nl);
+            writer.close();
+            return writer.toString();
+          }
+          catch (IOException ex)
+          {
+            throw new IORuntimeException(ex);
+          }
+        }
+
+        @Override
+        protected void setContents(URI uri, String encoding, String contents) throws IOException
+        {
+          super.setContents(uri, encoding, contents);
+        }
+
+      }.update(new File(PropertiesUtil.getUserHome(), ".m2/settings.xml"));
+    }
   }
 
   private static boolean isAnnotationDetail(Annotation annotation, String key, boolean defaultValue)
@@ -344,9 +620,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
   private static Map<IMetadataRepository, Set<IInstallableUnit>> analyzeRepositories(Targlet targlet, Profile profile, IInstallableUnit artificialRoot,
       List<IMetadataRepository> metadataRepositories, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, Set<IVersionedId> extraUnits,
-      List<String> preferredURLs, boolean generateImplicitUnits, boolean singleLocation, IProgressMonitor monitor)
+      List<String> preferredURLs, boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, IProgressMonitor monitor)
   {
-    Set<IRequiredCapability> rootRequirements = getRootRequirements(targlet, artificialRoot, workspaceIUInfos);
 
     Set<String> workspaceIDs = new HashSet<String>();
     for (IInstallableUnit iu : workspaceIUInfos.keySet())
@@ -354,104 +629,37 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       workspaceIDs.add(iu.getId());
     }
 
-    Set<IInstallableUnit> resolvedIUs = new HashSet<IInstallableUnit>();
-    for (IRequiredCapability requirement : rootRequirements)
+    Set<IInstallableUnit> profileIUs = new HashSet<IInstallableUnit>();
+    for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), monitor)))
     {
-      resolveRequirement(requirement, profile, workspaceIDs, resolvedIUs, new HashSet<IRequiredCapability>());
+      String id = iu.getId();
+      if (id.endsWith(".source") || id.endsWith(".source.feature.group") || id.endsWith(".source.feature.feature.group") || id.endsWith(".feature.jar")
+          || ProfileTransactionImpl.SOURCE_IU_ID.equals(id) || id.equals("a.jre"))
+      {
+        continue;
+      }
+
+      if ("true".equals(iu.getProperty(TargletContainer.IU_PROPERTY_SOURCE)))
+      {
+        continue;
+      }
+
+      if ("true".equals(iu.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)))
+      {
+        continue;
+      }
+
+      if (workspaceIDs.contains(id))
+      {
+        continue;
+      }
+
+      profileIUs.add(iu);
     }
 
     Map<String, IMetadataRepository> queryables = sortMetadataRepositories(targlet, metadataRepositories, preferredURLs, monitor);
 
-    return assignUnits(queryables, extraUnits, generateImplicitUnits, singleLocation, resolvedIUs, monitor);
-  }
-
-  private static Set<IRequiredCapability> getRootRequirements(Targlet targlet, IInstallableUnit artificialRoot,
-      Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos)
-  {
-    Map<String, Set<IRequiredCapability>> profileRequirements = new HashMap<String, Set<IRequiredCapability>>();
-    for (IRequirement profileRequirement : artificialRoot.getRequirements())
-    {
-      if (profileRequirement instanceof IRequiredCapability)
-      {
-        IRequiredCapability requiredCapability = (IRequiredCapability)profileRequirement;
-        String id = requiredCapability.getNamespace() + "/" + requiredCapability.getName();
-        CollectionUtil.add(profileRequirements, id, requiredCapability);
-      }
-    }
-
-    Set<IRequiredCapability> queue = new HashSet<IRequiredCapability>();
-    for (Requirement targletRequirement : targlet.getRequirements())
-    {
-      String namespace = targletRequirement.getNamespace();
-      String name = targletRequirement.getName();
-
-      // If this is a wildcard requirement, we want to expand it to all the IUs in the targlet's source locator.
-      if ("*".equals(name) && IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
-      {
-        for (IInstallableUnit iu : workspaceIUInfos.keySet())
-        {
-          for (IRequirement workspaceRequirement : iu.getRequirements())
-          {
-            if (workspaceRequirement instanceof IRequiredCapability)
-            {
-              IRequiredCapability requiredCapability = (IRequiredCapability)workspaceRequirement;
-              queue.add(requiredCapability);
-            }
-          }
-        }
-      }
-      else
-      {
-        String id = namespace + "/" + name;
-        Set<IRequiredCapability> set = profileRequirements.get(id);
-        if (set != null)
-        {
-          queue.addAll(set);
-        }
-      }
-    }
-
-    return queue;
-  }
-
-  private static void resolveRequirement(IRequiredCapability requirement, IQueryable<IInstallableUnit> queryable, Set<String> workspaceIDs,
-      Set<IInstallableUnit> result, Set<IRequiredCapability> visited)
-  {
-    if (visited.add(requirement))
-    {
-      for (IInstallableUnit iu : queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null))
-      {
-        String id = iu.getId();
-        if (id.endsWith(".source") || id.endsWith(".source.feature.group"))
-        {
-          continue;
-        }
-
-        if ("true".equals(iu.getProperty(TargletContainer.IU_PROPERTY_SOURCE)))
-        {
-          continue;
-        }
-
-        // This check is not ideal because it does not consider versions.
-        // But the binary IUs induced by the workspace IUs may have any version, just depending on the involved repositories.
-        // So for now, just exclude the IDs of all workspace IUs.
-        if (workspaceIDs.contains(id))
-        {
-          continue;
-        }
-
-        if (result.add(iu))
-        {
-          for (IRequirement iuRequirement : iu.getRequirements())
-          {
-            if (iuRequirement instanceof IRequiredCapability)
-            {
-              resolveRequirement((IRequiredCapability)iuRequirement, queryable, workspaceIDs, result, visited);
-            }
-          }
-        }
-      }
-    }
+    return assignUnits(queryables, extraUnits, generateImplicitUnits, minimizeImplicitUnits, singleLocation, profileIUs, monitor);
   }
 
   private static Map<String, IMetadataRepository> sortMetadataRepositories(Targlet targlet, List<IMetadataRepository> metadataRepositories,
@@ -514,7 +722,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   }
 
   private static Map<IMetadataRepository, Set<IInstallableUnit>> assignUnits(Map<String, IMetadataRepository> queryables, Set<IVersionedId> extraUnits,
-      boolean generateImplicitUnits, boolean singleLocation, Set<IInstallableUnit> resolvedIUs, IProgressMonitor monitor)
+      boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, Set<IInstallableUnit> resolvedIUs, IProgressMonitor monitor)
   {
     Map<IMetadataRepository, Set<IInstallableUnit>> result = new LinkedHashMap<IMetadataRepository, Set<IInstallableUnit>>();
 
@@ -545,7 +753,11 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
           if (!generateImplicitUnits)
           {
-            RootAnalyzer.removeImplicitUnits(ius, queryable, monitor);
+            RootAnalyzer.removeImplicitUnits(ius, queryable, monitor, false);
+          }
+          else if (minimizeImplicitUnits)
+          {
+            RootAnalyzer.removeImplicitUnits(ius, queryable, monitor, true);
           }
 
           first = false;
@@ -586,7 +798,11 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
       if (!generateImplicitUnits)
       {
-        RootAnalyzer.removeImplicitUnits(result, monitor);
+        RootAnalyzer.removeImplicitUnits(result, monitor, false);
+      }
+      else if (minimizeImplicitUnits)
+      {
+        RootAnalyzer.removeImplicitUnits(result, monitor, true);
       }
     }
 

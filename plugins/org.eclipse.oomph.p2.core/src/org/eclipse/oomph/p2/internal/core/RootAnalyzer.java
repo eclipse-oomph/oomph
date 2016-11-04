@@ -15,6 +15,7 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
+import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
@@ -59,22 +60,22 @@ public final class RootAnalyzer
       rootIUs.add(iu);
     }
 
-    removeImplicitUnits(rootIUs, queryable, monitor);
+    removeImplicitUnits(rootIUs, queryable, monitor, false);
     return rootIUs;
   }
 
-  public static void removeImplicitUnits(Map<IMetadataRepository, Set<IInstallableUnit>> result, IProgressMonitor monitor)
+  public static void removeImplicitUnits(Map<IMetadataRepository, Set<IInstallableUnit>> result, IProgressMonitor monitor, boolean onlyIfRedundant)
   {
     for (Map.Entry<IMetadataRepository, Set<IInstallableUnit>> entry : result.entrySet())
     {
       IMetadataRepository metadataRepository = entry.getKey();
       Set<IInstallableUnit> ius = entry.getValue();
 
-      removeImplicitUnits(ius, metadataRepository, monitor);
+      removeImplicitUnits(ius, metadataRepository, monitor, onlyIfRedundant);
     }
   }
 
-  public static void removeImplicitUnits(Set<IInstallableUnit> ius, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor)
+  public static void removeImplicitUnits(Set<IInstallableUnit> ius, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor, boolean onlyIfRedundant)
   {
     Set<IInstallableUnit> rootIUs = new HashSet<IInstallableUnit>(ius);
     Set<IInstallableUnit> currentlyVisitingIUs = new HashSet<IInstallableUnit>();
@@ -82,7 +83,7 @@ public final class RootAnalyzer
 
     for (IInstallableUnit iu : ius)
     {
-      removeImplicitUnits(iu, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor);
+      removeImplicitUnits(iu, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor, onlyIfRedundant);
     }
 
     if (rootIUs.size() < ius.size())
@@ -92,7 +93,7 @@ public final class RootAnalyzer
   }
 
   private static void removeImplicitUnits(IInstallableUnit iu, Set<IInstallableUnit> rootIUs, Set<IInstallableUnit> currentlyVisitingIUs,
-      Set<IInstallableUnit> visitedIUs, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor)
+      Set<IInstallableUnit> visitedIUs, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor, boolean onlyIfRedundant)
   {
     if (visitedIUs.add(iu))
     {
@@ -105,13 +106,30 @@ public final class RootAnalyzer
 
           if (!currentlyVisitingIUs.contains(requiredIU))
           {
-            rootIUs.remove(requiredIU);
-            removeImplicitUnits(requiredIU, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor);
+            if (!onlyIfRedundant || isExactRequirement(requirement))
+            {
+              rootIUs.remove(requiredIU);
+            }
+
+            removeImplicitUnits(requiredIU, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor, onlyIfRedundant);
           }
         }
       }
 
       currentlyVisitingIUs.remove(iu);
     }
+  }
+
+  @SuppressWarnings("restriction")
+  private static boolean isExactRequirement(IRequirement requirement)
+  {
+    if (requirement instanceof org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)
+    {
+      org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
+      VersionRange range = requiredCapability.getRange();
+      return range.getMinimum().equals(range.getMaximum());
+    }
+
+    return false;
   }
 }

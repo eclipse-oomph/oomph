@@ -126,9 +126,9 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
   public static final String ARTIFICIAL_ROOT_ID = "artificial_root";
 
-  private static final String OSGI_RESOLVER_USES_MODE = "osgi.resolver.usesMode";
+  public static final String SOURCE_IU_ID = "org.eclipse.oomph.p2.source.container"; //$NON-NLS-1$
 
-  private static final String SOURCE_IU_ID = "org.eclipse.oomph.p2.source.container"; //$NON-NLS-1$
+  private static final String OSGI_RESOLVER_USES_MODE = "osgi.resolver.usesMode";
 
   private static final IRequirement BUNDLE_REQUIREMENT = MetadataFactory.createRequirement("org.eclipse.equinox.p2.eclipse.type", "bundle", null, null, false, //$NON-NLS-1$ //$NON-NLS-2$
       false, false);
