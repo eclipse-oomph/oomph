@@ -1864,7 +1864,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       }
 
       browserDialog.setInput(setupEditor, object);
-      browserDialog.associate(this);
+      browserDialog.getDockable().associate(this);
     }
 
     public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
@@ -1876,7 +1876,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
         BrowserDialog browserDialog = BrowserDialog.getFor(workbenchPart.getSite().getWorkbenchWindow());
         if (browserDialog != null)
         {
-          browserDialog.associate(this);
+          browserDialog.getDockable().associate(this);
         }
       }
       else

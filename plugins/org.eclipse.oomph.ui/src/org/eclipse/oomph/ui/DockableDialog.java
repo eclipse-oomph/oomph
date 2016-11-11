@@ -65,7 +65,106 @@ import java.util.Set;
  */
 public abstract class DockableDialog extends Dialog
 {
-  public interface Factory<T extends DockableDialog>
+  /**
+   * @author Ed Merks
+   */
+  public static class Dockable
+  {
+    private final List<WeakReference<IAction>> actions = new ArrayList<WeakReference<IAction>>();
+
+    private Dialog dialog;
+
+    public Dockable(Dialog dialog)
+    {
+      this.dialog = dialog;
+    }
+
+    public Dialog getDialog()
+    {
+      return dialog;
+    }
+
+    public Shell getShell()
+    {
+      return dialog.getShell();
+    }
+
+    public boolean handleWorkbenchPart(IWorkbenchPart part)
+    {
+      return true;
+    }
+
+    /**
+     * The associated action will be checked and unchecked based on the visibility of the dialog.
+     */
+    public void associate(IAction action)
+    {
+      if (!getActions().contains(action))
+      {
+        actions.add(new WeakReference<IAction>(action));
+        action.setChecked(true);
+      }
+    }
+
+    public List<IAction> getActions()
+    {
+      List<IAction> result = new ArrayList<IAction>();
+      for (Iterator<WeakReference<IAction>> it = actions.iterator(); it.hasNext();)
+      {
+        WeakReference<IAction> actionReference = it.next();
+        IAction referencedAction = actionReference.get();
+        if (referencedAction == null)
+        {
+          it.remove();
+        }
+        else
+        {
+          result.add(referencedAction);
+        }
+      }
+
+      return result;
+    }
+
+    public IDialogSettings getBoundsSettings()
+    {
+      return ReflectUtil.invokeMethod("getDialogBoundsSettings", dialog);
+    }
+
+    public int open()
+    {
+      return dialog.open();
+    }
+
+    public boolean close()
+    {
+      return dialog.close();
+    }
+
+    public void setWorkbenchPart(IWorkbenchPart part)
+    {
+      Shell shell = getShell();
+      // If there is no support for this workbench part, hide the shell, otherwise show the shell.
+      if (!handleWorkbenchPart(part))
+      {
+        // Only force it invisible if it isn't already invisible.
+        // The use may have minimized it himself, so we don't want to mark it forced unless we make it invisible.
+        if (shell.isVisible())
+        {
+          updateVisibility(shell, false);
+        }
+      }
+      else if (Boolean.TRUE.equals(shell.getData("forced")))
+      {
+        updateVisibility(shell, true);
+      }
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public interface Factory<T extends Dialog>
   {
     public T create(IWorkbenchWindow workbenchWindow);
   }
@@ -73,7 +172,7 @@ public abstract class DockableDialog extends Dialog
   /**
    * There can be at most one per workbench window.
    */
-  private static final Map<IWorkbenchWindow, Map<Class<?>, DockableDialog>> DIALOGS = new HashMap<IWorkbenchWindow, Map<Class<?>, DockableDialog>>();
+  private static final Map<IWorkbenchWindow, Map<Class<?>, Dockable>> DIALOGS = new HashMap<IWorkbenchWindow, Map<Class<?>, Dockable>>();
 
   /**
    * Remember where the dialog is docked per workbench window.
@@ -94,7 +193,14 @@ public abstract class DockableDialog extends Dialog
 
   private final IWorkbenchWindow workbenchWindow;
 
-  private final List<WeakReference<IAction>> actions = new ArrayList<WeakReference<IAction>>();
+  private final Dockable dockable = new Dockable(this)
+  {
+    @Override
+    public boolean handleWorkbenchPart(IWorkbenchPart part)
+    {
+      return DockableDialog.this.handleWorkbenchPart(part);
+    }
+  };
 
   protected DockableDialog(IWorkbenchWindow workbenchWindow)
   {
@@ -109,68 +215,16 @@ public abstract class DockableDialog extends Dialog
     this.workbenchWindow = workbenchWindow;
   }
 
-  @Override
-  protected void configureShell(Shell newShell)
+  public abstract boolean handleWorkbenchPart(IWorkbenchPart part);
+
+  public Dockable getDockable()
   {
-    super.configureShell(newShell);
-  }
-
-  protected abstract boolean handleWorkbenchPart(IWorkbenchPart part);
-
-  /**
-   * The associated action will be checked and unchecked based on the visibility of the dialog.
-   */
-  public void associate(IAction action)
-  {
-    if (!getActions().contains(action))
-    {
-      actions.add(new WeakReference<IAction>(action));
-      action.setChecked(true);
-    }
-  }
-
-  public List<IAction> getActions()
-  {
-    List<IAction> result = new ArrayList<IAction>();
-    for (Iterator<WeakReference<IAction>> it = actions.iterator(); it.hasNext();)
-    {
-      WeakReference<IAction> actionReference = it.next();
-      IAction referencedAction = actionReference.get();
-      if (referencedAction == null)
-      {
-        it.remove();
-      }
-      else
-      {
-        result.add(referencedAction);
-      }
-    }
-
-    return result;
+    return dockable;
   }
 
   public IWorkbenchWindow getWorkbenchWindow()
   {
     return workbenchWindow;
-  }
-
-  public void setWorkbenchPart(IWorkbenchPart part)
-  {
-    Shell shell = getShell();
-    // If there is no support for this workbench part, hide the shell, otherwise show the shell.
-    if (!handleWorkbenchPart(part))
-    {
-      // Only force it invisible if it isn't already invisible.
-      // The use may have minimized it himself, so we don't want to mark it forced unless we make it invisible.
-      if (shell.isVisible())
-      {
-        updateVisibility(shell, false);
-      }
-    }
-    else if (Boolean.TRUE.equals(shell.getData("forced")))
-    {
-      updateVisibility(shell, true);
-    }
   }
 
   private static void updateVisibility(Shell shell, boolean visible)
@@ -250,14 +304,18 @@ public abstract class DockableDialog extends Dialog
   /**
    * Return the instance for this workbench window, if there is one.
    */
-  public static <T extends DockableDialog> T getFor(Class<T> type, IWorkbenchWindow workbenchWindow)
+  public static <T extends Dialog> T getFor(Class<T> type, IWorkbenchWindow workbenchWindow)
   {
-    Map<Class<?>, DockableDialog> typedDialogs = DIALOGS.get(workbenchWindow);
+    Map<Class<?>, Dockable> typedDialogs = DIALOGS.get(workbenchWindow);
     if (typedDialogs != null)
     {
-      @SuppressWarnings("unchecked")
-      T dockableDialog = (T)typedDialogs.get(type);
-      return dockableDialog;
+      Dockable dockable = typedDialogs.get(type);
+      if (dockable != null)
+      {
+        @SuppressWarnings("unchecked")
+        T dialog = (T)dockable.getDialog();
+        return dialog;
+      }
     }
 
     return null;
@@ -266,17 +324,17 @@ public abstract class DockableDialog extends Dialog
   /**
    * Close the instance for this workbench window, if there is one.
    */
-  public static void closeFor(Class<? extends DockableDialog> type, IWorkbenchWindow workbenchWindow)
+  public static void closeFor(Class<? extends Dialog> type, IWorkbenchWindow workbenchWindow)
   {
-    Map<Class<?>, DockableDialog> typedDialogs = DIALOGS.get(workbenchWindow);
+    Map<Class<?>, Dockable> typedDialogs = DIALOGS.get(workbenchWindow);
     if (typedDialogs != null)
     {
-      DockableDialog dockableDialog = typedDialogs.get(type);
-      if (dockableDialog != null)
+      Dockable dockable = typedDialogs.get(type);
+      if (dockable != null)
       {
-        Shell shell = dockableDialog.getShell();
+        Shell shell = dockable.getShell();
         shell.notifyListeners(SWT.Close, new Event());
-        dockableDialog.close();
+        dockable.close();
       }
     }
   }
@@ -284,25 +342,24 @@ public abstract class DockableDialog extends Dialog
   /**
    * Reopen or create the instance for this workbench window.
    */
-  public static <T extends DockableDialog> T openFor(final Class<T> type, Factory<T> factory, final IWorkbenchWindow workbenchWindow)
+  public static <T extends Dialog> T openFor(final Class<T> type, Factory<T> factory, final IWorkbenchWindow workbenchWindow)
   {
     // Create a new one if there isn't an existing one.
-    Map<Class<?>, DockableDialog> typedDialogs = DIALOGS.get(workbenchWindow);
+    Map<Class<?>, Dockable> typedDialogs = DIALOGS.get(workbenchWindow);
 
-    @SuppressWarnings("unchecked")
-    T dockableDialog = (T)(typedDialogs == null ? null : typedDialogs.get(type));
-    if (dockableDialog == null)
+    Dockable dockable = typedDialogs == null ? null : typedDialogs.get(type);
+    if (dockable == null)
     {
-      dockableDialog = factory.create(workbenchWindow);
+      dockable = ReflectUtil.invokeMethod("getDockable", factory.create(workbenchWindow));
       if (typedDialogs == null)
       {
-        typedDialogs = new HashMap<Class<?>, DockableDialog>();
+        typedDialogs = new HashMap<Class<?>, Dockable>();
         DIALOGS.put(workbenchWindow, typedDialogs);
       }
 
-      typedDialogs.put(type, dockableDialog);
+      typedDialogs.put(type, dockable);
 
-      dockableDialog.open();
+      dockable.open();
 
       Map<Class<?>, Set<IWorkbenchPartReference>> typedDockedParts = DOCKED_PARTS.get(workbenchWindow);
       Set<IWorkbenchPartReference> dockedParts = typedDockedParts == null ? null : typedDockedParts.get(type);
@@ -332,7 +389,7 @@ public abstract class DockableDialog extends Dialog
        */
       class ShellHandler extends ShellAdapter implements ControlListener, DisposeListener, Runnable
       {
-        private final DockableDialog dockableDialog;
+        private final Dockable dockableDialog;
 
         private final Shell shell;
 
@@ -443,7 +500,7 @@ public abstract class DockableDialog extends Dialog
 
         private final Image[] dockedShellImages;
 
-        public ShellHandler(DockableDialog dockableDialog, Set<IWorkbenchPartReference> dockedParts)
+        public ShellHandler(Dockable dockableDialog, Set<IWorkbenchPartReference> dockedParts)
         {
           this.dockableDialog = dockableDialog;
           shell = dockableDialog.getShell();
@@ -754,7 +811,7 @@ public abstract class DockableDialog extends Dialog
 
         public void widgetDisposed(DisposeEvent e)
         {
-          Map<Class<?>, DockableDialog> typedDialogs = DIALOGS.get(workbenchWindow);
+          Map<Class<?>, Dockable> typedDialogs = DIALOGS.get(workbenchWindow);
           if (typedDialogs != null)
           {
             typedDialogs.remove(type);
@@ -765,7 +822,7 @@ public abstract class DockableDialog extends Dialog
             action.setChecked(false);
           }
 
-          IDialogSettings dialogBoundsSettings = dockableDialog.getDialogBoundsSettings();
+          IDialogSettings dialogBoundsSettings = dockableDialog.getBoundsSettings();
           if (dialogBoundsSettings != null)
           {
             StringBuilder partIDs = new StringBuilder();
@@ -846,7 +903,7 @@ public abstract class DockableDialog extends Dialog
 
         private void initialize()
         {
-          IDialogSettings dialogBoundsSettings = dockableDialog.getDialogBoundsSettings();
+          IDialogSettings dialogBoundsSettings = dockableDialog.getBoundsSettings();
           if (dialogBoundsSettings != null)
           {
             String dockedPartIDs = dialogBoundsSettings.get("dockedParts");
@@ -946,8 +1003,8 @@ public abstract class DockableDialog extends Dialog
       }
 
       // Listen for shell and control events.
-      final Shell shell = dockableDialog.getShell();
-      final ShellHandler shellHandler = new ShellHandler(dockableDialog, dockedParts);
+      final Shell shell = dockable.getShell();
+      final ShellHandler shellHandler = new ShellHandler(dockable, dockedParts);
 
       // Listen to perspective changes so we can update the docking site as needed.
       workbenchWindow.addPerspectiveListener(new PerspectiveAdapter()
@@ -975,10 +1032,12 @@ public abstract class DockableDialog extends Dialog
     else
     {
       // Show the shell if it already exists.
-      final Shell shell = dockableDialog.getShell();
+      final Shell shell = dockable.getShell();
       updateVisibility(shell, true);
     }
 
-    return dockableDialog;
+    @SuppressWarnings("unchecked")
+    T dialog = (T)dockable.getDialog();
+    return dialog;
   }
 }

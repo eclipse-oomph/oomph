@@ -601,7 +601,7 @@ public class WorkingSetsActionBarContributor extends EditingDomainActionBarContr
       protected void selectionChanged(IWorkbenchPart part, ISelection selection)
       {
         List<WorkingSet> oldWorkingSets = workingSets;
-        previewDialog.setWorkbenchPart(part);
+        previewDialog.getDockable().setWorkbenchPart(part);
 
         if (selection instanceof IStructuredSelection)
         {
@@ -684,7 +684,7 @@ public class WorkingSetsActionBarContributor extends EditingDomainActionBarContr
     {
       public void selectionChanged(IWorkbenchPart part, ISelection selection)
       {
-        setWorkbenchPart(part);
+        getDockable().setWorkbenchPart(part);
         if (workingSetsProvider != null)
         {
           workingSetsProvider.selectionChanged(part, selection);
@@ -752,7 +752,7 @@ public class WorkingSetsActionBarContributor extends EditingDomainActionBarContr
     }
 
     @Override
-    protected boolean handleWorkbenchPart(IWorkbenchPart part)
+    public boolean handleWorkbenchPart(IWorkbenchPart part)
     {
       if (part instanceof ContentOutline)
       {
@@ -959,8 +959,9 @@ public class WorkingSetsActionBarContributor extends EditingDomainActionBarContr
       if (isChecked())
       {
         PreviewDialog previewDialog = PreviewDialog.openFor(activePart.getSite().getWorkbenchWindow());
-        previewDialog.setWorkbenchPart(activePart);
-        previewDialog.associate(this);
+        DockableDialog.Dockable dockable = previewDialog.getDockable();
+        dockable.setWorkbenchPart(activePart);
+        dockable.associate(this);
       }
       else
       {
@@ -977,7 +978,7 @@ public class WorkingSetsActionBarContributor extends EditingDomainActionBarContr
         PreviewDialog previewDialog = PreviewDialog.getFor(workbenchPart.getSite().getWorkbenchWindow());
         if (previewDialog != null)
         {
-          previewDialog.associate(this);
+          previewDialog.getDockable().associate(this);
         }
       }
       else

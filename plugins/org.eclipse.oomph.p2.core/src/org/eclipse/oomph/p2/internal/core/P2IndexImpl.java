@@ -12,6 +12,7 @@ package org.eclipse.oomph.p2.internal.core;
 
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl;
@@ -310,54 +311,57 @@ public class P2IndexImpl implements P2Index
 
   public Map<Repository, Set<Version>> lookupCapabilities(String namespace, String name)
   {
-    namespace = URI.encodeSegment(namespace, false);
-    name = URI.encodeSegment(name, false);
-
     Map<Repository, Set<Version>> capabilities = new HashMap<Repository, Set<Version>>();
-    BufferedReader reader = null;
-
-    try
+    if (!StringUtil.isEmpty(namespace) && !StringUtil.isEmpty(name))
     {
-      InputStream inputStream = new URL(INDEX_BASE + namespace + "/" + name).openStream();
-      reader = new BufferedReader(new InputStreamReader(inputStream));
+      namespace = URI.encodeSegment(namespace, false);
+      name = URI.encodeSegment(name, false);
 
-      String line = reader.readLine();
-      if (line == null)
+      BufferedReader reader = null;
+
+      try
       {
-        return capabilities;
-      }
+        InputStream inputStream = new URL(INDEX_BASE + namespace + "/" + name).openStream();
+        reader = new BufferedReader(new InputStreamReader(inputStream));
 
-      long timeStamp = Long.parseLong(line);
-      initRepositories(timeStamp != this.timeStamp);
-
-      while ((line = reader.readLine()) != null)
-      {
-        String[] tokens = line.split(",");
-        int repositoryID = Integer.parseInt(tokens[0]);
-        Repository repository = repositories.get(repositoryID);
-        if (repository != null)
+        String line = reader.readLine();
+        if (line == null)
         {
-          Set<Version> versions = new HashSet<Version>();
-          for (int i = 1; i < tokens.length; i++)
-          {
-            versions.add(Version.parseVersion(tokens[i]));
-          }
+          return capabilities;
+        }
 
-          capabilities.put(repository, versions);
+        long timeStamp = Long.parseLong(line);
+        initRepositories(timeStamp != this.timeStamp);
+
+        while ((line = reader.readLine()) != null)
+        {
+          String[] tokens = line.split(",");
+          int repositoryID = Integer.parseInt(tokens[0]);
+          Repository repository = repositories.get(repositoryID);
+          if (repository != null)
+          {
+            Set<Version> versions = new HashSet<Version>();
+            for (int i = 1; i < tokens.length; i++)
+            {
+              versions.add(Version.parseVersion(tokens[i]));
+            }
+
+            capabilities.put(repository, versions);
+          }
         }
       }
-    }
-    catch (FileNotFoundException ex)
-    {
-      // Ignore.
-    }
-    catch (Exception ex)
-    {
-      P2CorePlugin.INSTANCE.log(ex, IStatus.WARNING);
-    }
-    finally
-    {
-      IOUtil.close(reader);
+      catch (FileNotFoundException ex)
+      {
+        // Ignore.
+      }
+      catch (Exception ex)
+      {
+        P2CorePlugin.INSTANCE.log(ex, IStatus.WARNING);
+      }
+      finally
+      {
+        IOUtil.close(reader);
+      }
     }
 
     return capabilities;

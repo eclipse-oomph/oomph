@@ -47,10 +47,10 @@ public abstract class AbstractTableAction extends Action
     this.part = part;
     if (part != null)
     {
-      DockableDialog dialog = DockableDialog.getFor(getDialogClass(), part.getSite().getWorkbenchWindow());
+      TableDialog dialog = DockableDialog.getFor(getDialogClass(), part.getSite().getWorkbenchWindow());
       if (dialog != null)
       {
-        dialog.associate(this);
+        dialog.getDockable().associate(this);
       }
     }
   }
@@ -62,8 +62,8 @@ public abstract class AbstractTableAction extends Action
     {
       if (isChecked())
       {
-        DockableDialog dialog = DockableDialog.openFor(getDialogClass(), getDialogFactory(), part.getSite().getWorkbenchWindow());
-        dialog.associate(this);
+        TableDialog dialog = DockableDialog.openFor(getDialogClass(), getDialogFactory(), part.getSite().getWorkbenchWindow());
+        dialog.getDockable().associate(this);
       }
       else
       {
@@ -86,9 +86,9 @@ public abstract class AbstractTableAction extends Action
     }
   }
 
-  protected abstract <T extends DockableDialog> Class<T> getDialogClass();
+  protected abstract <T extends TableDialog> Class<T> getDialogClass();
 
-  protected abstract <T extends DockableDialog> DockableDialog.Factory<T> getDialogFactory();
+  protected abstract <T extends TableDialog> DockableDialog.Factory<T> getDialogFactory();
 
   protected abstract String renderHTML();
 
@@ -106,7 +106,7 @@ public abstract class AbstractTableAction extends Action
     }
 
     @Override
-    protected boolean handleWorkbenchPart(IWorkbenchPart part)
+    public boolean handleWorkbenchPart(IWorkbenchPart part)
     {
       return true;
     }

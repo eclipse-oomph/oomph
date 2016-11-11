@@ -5208,7 +5208,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     {
       public void selectionChanged(IWorkbenchPart part, ISelection selection)
       {
-        setWorkbenchPart(part);
+        getDockable().setWorkbenchPart(part);
         if (locationListener.setupEditor != null)
         {
           if (selection instanceof IStructuredSelection)
@@ -5233,7 +5233,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     }
 
     @Override
-    protected boolean handleWorkbenchPart(IWorkbenchPart part)
+    public boolean handleWorkbenchPart(IWorkbenchPart part)
     {
       // Determines if the part corresponds to one that can show a setup editor's information via its selection.
       SetupEditor setupEditor = null;
@@ -5262,7 +5262,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
      */
     protected void setInput(SetupEditor setupEditor, Object input)
     {
-      setWorkbenchPart(setupEditor);
+      getDockable().setWorkbenchPart(setupEditor);
 
       // If the input is a URI...
       LocationEvent event = new LocationEvent(browser == null ? noBrowser : browser);

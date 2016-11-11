@@ -82,6 +82,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
@@ -115,6 +117,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -131,10 +134,11 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private static final IDialogSettings SETTINGS = P2UIPlugin.INSTANCE.getDialogSettings(RepositoryExplorer.class.getSimpleName());
 
-  private static final int DND_OPERATIONS = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
+  static final int DND_OPERATIONS = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
 
-  private static final Transfer[] DND_TRANSFERS = OomphTransferDelegate.asTransfers(org.eclipse.oomph.internal.ui.OomphTransferDelegate.DELEGATES)
-      .toArray(new Transfer[OomphTransferDelegate.asTransfers(org.eclipse.oomph.internal.ui.OomphTransferDelegate.DELEGATES).size()]);
+  static final List<? extends OomphTransferDelegate> DND_DELEGATES = Collections.singletonList(new OomphTransferDelegate.TextTransferDelegate());
+
+  public static final Transfer[] DND_TRANSFERS = new Transfer[] { DND_DELEGATES.get(0).getTransfer() };
 
   private static final String DEFAULT_CAPABILITY_NAMESPACE = IInstallableUnit.NAMESPACE_IU_ID;
 
@@ -164,7 +168,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private final Mode capabilitiesMode = new CapabilitiesMode();
 
-  private final RepositoryFocusListener repositoryFocusListener = new RepositoryFocusListener();
+  private final RepositoryComboHandler repositoryComboHandler = new RepositoryComboHandler();
 
   private final RepositoryHistoryListener repositoryHistoryListener = new RepositoryHistoryListener();
 
@@ -255,10 +259,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   @Override
   public void setFocus()
   {
-    if (RepositoryManager.INSTANCE.getActiveRepository() != null)
-    {
-      repositoryCombo.setFocus();
-    }
+    repositoryCombo.setFocus();
   }
 
   private void updateMode()
@@ -358,14 +359,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     updateMode();
 
     String activeRepository = RepositoryManager.INSTANCE.getActiveRepository();
-    if (activeRepository == null)
+    repositoryComboHandler.setActiveRepository(activeRepository);
+    if (activeRepository != null)
     {
-      // Force hint to be shown.
-      repositoryFocusListener.focusLost(null);
-    }
-    else
-    {
-      repositoryCombo.setText(activeRepository);
       triggerLoad(activeRepository);
     }
 
@@ -402,7 +398,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   {
     repositoryCombo = createCombo(container, SWT.BORDER, true);
     repositoryCombo.setToolTipText("Repository location (type a URL, drop a repository or pick from the drop down history)");
-    repositoryCombo.addFocusListener(repositoryFocusListener);
+    repositoryCombo.addFocusListener(repositoryComboHandler);
     repositoryCombo.addKeyListener(repositoryHistoryListener);
 
     repositoryViewer = new ComboViewer(repositoryCombo);
@@ -410,6 +406,27 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     repositoryViewer.setLabelProvider(new LabelProvider());
     repositoryViewer.setInput(RepositoryManager.INSTANCE);
     repositoryViewer.addSelectionChangedListener(repositoryHistoryListener);
+
+    repositoryViewer.addDragSupport(DND_OPERATIONS, DND_TRANSFERS, new GeneralDragAdapter(repositoryViewer, new GeneralDragAdapter.DraggedObjectsFactory()
+    {
+      public List<EObject> createDraggedObjects(ISelection selection) throws Exception
+      {
+        List<EObject> result = new ArrayList<EObject>();
+        for (Object object : ((IStructuredSelection)selection).toArray())
+        {
+          if (object instanceof String)
+          {
+            String url = object.toString();
+            if (!StringUtil.isEmpty(url.trim()))
+            {
+              result.add(P2Factory.eINSTANCE.createRepository(url));
+            }
+          }
+        }
+
+        return result;
+      }
+    }, DND_DELEGATES));
 
     repositoryViewer.addDropSupport(DND_OPERATIONS, DND_TRANSFERS, new GeneralDropAdapter(repositoryViewer, P2Factory.eINSTANCE.createRepositoryList(),
         P2Package.Literals.REPOSITORY_LIST__REPOSITORIES, new DroppedObjectHandler()
@@ -715,7 +732,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
         return result;
       }
-    }));
+    }, DND_DELEGATES));
   }
 
   private static String[] sortStrings(Collection<String> c)
@@ -850,17 +867,40 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   {
     public SearchAction()
     {
-      super("Search", P2UIPlugin.INSTANCE.getImageDescriptor("tool16/search"));
+      super("Search", Action.AS_CHECK_BOX);
+      setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("tool16/search"));
       setToolTipText("Search Eclipse repositories by provided capabilities");
     }
 
     @Override
     public void run()
     {
-      SearchEclipseRepositoryDialog searchEclipseRepositoryDialog = new SearchEclipseRepositoryDialog(UIUtil.getShell());
-      if (searchEclipseRepositoryDialog.open() == Dialog.OK)
+      if (isChecked())
       {
-        activateAndLoadRepository(searchEclipseRepositoryDialog.getSelectedRepository());
+        final SearchEclipseRepositoryDialog searchEclipseRepositoryDialog = SearchEclipseRepositoryDialog.openFor(getSite().getWorkbenchWindow());
+        searchEclipseRepositoryDialog.getDockable().associate(this);
+        searchEclipseRepositoryDialog.getShell().addDisposeListener(new DisposeListener()
+        {
+          public void widgetDisposed(DisposeEvent e)
+          {
+            if (searchEclipseRepositoryDialog.getReturnCode() == Dialog.OK)
+            {
+              try
+              {
+                getViewSite().getWorkbenchWindow().getActivePage().showView(ID);
+                activateAndLoadRepository(searchEclipseRepositoryDialog.getSelectedRepository());
+              }
+              catch (PartInitException ex)
+              {
+                // This should never happen.
+              }
+            }
+          }
+        });
+      }
+      else
+      {
+        SearchEclipseRepositoryDialog.closeFor(getSite().getWorkbenchWindow());
       }
     }
   }
@@ -1545,36 +1585,48 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   /**
    * @author Eike Stepper
    */
-  private final class RepositoryFocusListener implements FocusListener
+  private final class RepositoryComboHandler implements FocusListener
   {
+    private static final String INITIAL_REPOSITORY_TEXT = "type repository url, drag and drop, or pick from list";
+
+    private Color initialTextForegroundColor;
+
     private Color originalForeground;
+
+    public void setActiveRepository(String activeRepository)
+    {
+      repositoryCombo.setForeground(getForegroundColor(activeRepository));
+      repositoryCombo.setText(activeRepository == null ? repositoryCombo.isFocusControl() ? "" : INITIAL_REPOSITORY_TEXT : activeRepository);
+    }
+
+    private Color getForegroundColor(String activeRepository)
+    {
+      if (originalForeground == null)
+      {
+        originalForeground = repositoryCombo.getForeground();
+      }
+
+      if (initialTextForegroundColor == null)
+      {
+        initialTextForegroundColor = formToolkit.getColors().getColor("initial_repository");
+      }
+
+      return activeRepository == null && !repositoryCombo.isFocusControl() ? initialTextForegroundColor : originalForeground;
+    }
 
     public void focusGained(FocusEvent e)
     {
-      if (originalForeground != null)
+      if (repositoryCombo.getText().equals(INITIAL_REPOSITORY_TEXT))
       {
-        repositoryCombo.setText("");
-        repositoryCombo.setForeground(originalForeground);
-        originalForeground = null;
+        setActiveRepository("");
       }
     }
 
     public void focusLost(FocusEvent e)
     {
-      String activeRepository = RepositoryManager.INSTANCE.getActiveRepository();
-      if (activeRepository == null)
+      if (StringUtil.isEmpty(repositoryCombo.getText().trim()))
       {
-        originalForeground = repositoryCombo.getForeground();
-        repositoryCombo.setText("type repository url, drag and drop, or pick from list");
-        Color color = formToolkit.getColors().getColor("initial_repository");
-        repositoryCombo.setForeground(color);
-      }
-      else
-      {
-        if (!activeRepository.equals(repositoryCombo.getText()))
-        {
-          repositoryCombo.setText(activeRepository);
-        }
+        setActiveRepository(null);
       }
     }
   }
@@ -1661,44 +1713,38 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     public void repositoriesChanged(RepositoryManager repositoryManager)
     {
-      UIUtil.asyncExec(new Runnable()
+      UIUtil.asyncExec(container, new Runnable()
       {
         public void run()
         {
-          if (!container.isDisposed())
-          {
-            repositoryViewer.refresh();
+          repositoryViewer.refresh();
 
-            UIUtil.asyncExec(new Runnable()
+          UIUtil.asyncExec(container, new Runnable()
+          {
+            public void run()
             {
-              public void run()
+              String activeRepository = RepositoryManager.INSTANCE.getActiveRepository();
+              if (activeRepository == null)
               {
-                if (!container.isDisposed())
-                {
-                  String activeRepository = RepositoryManager.INSTANCE.getActiveRepository();
-                  if (activeRepository == null)
-                  {
-                    repositoryViewer.setSelection(StructuredSelection.EMPTY);
-                    repositoryCombo.setText("");
-                  }
-                  else
-                  {
-                    ISelection selection = new StructuredSelection(activeRepository);
-                    repositoryViewer.setSelection(selection);
-                    repositoryCombo.setText(activeRepository);
-                    repositoryCombo.setSelection(new Point(0, activeRepository.length()));
-                  }
-                }
+                repositoryViewer.setSelection(StructuredSelection.EMPTY);
+                repositoryComboHandler.setActiveRepository(activeRepository);
               }
-            });
-          }
+              else
+              {
+                ISelection selection = new StructuredSelection(activeRepository);
+                repositoryViewer.setSelection(selection);
+                repositoryComboHandler.setActiveRepository(activeRepository);
+                repositoryCombo.setSelection(new Point(0, activeRepository.length()));
+              }
+            }
+          });
         }
       });
     }
 
     public void activeRepositoryChanged(RepositoryManager repositoryManager, String repository)
     {
-      // Do nothing.
+      repositoryComboHandler.setActiveRepository(repository);
     }
   }
 

@@ -10,14 +10,19 @@
  */
 package org.eclipse.oomph.p2.internal.ui;
 
+import org.eclipse.oomph.internal.ui.GeneralDragAdapter;
+import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.internal.core.P2Index;
 import org.eclipse.oomph.p2.internal.core.P2Index.Repository;
 import org.eclipse.oomph.p2.provider.P2EditPlugin;
+import org.eclipse.oomph.ui.DockableDialog;
+import org.eclipse.oomph.ui.DockableDialog.Factory;
 import org.eclipse.oomph.ui.FilteredTreeWithoutWorkbench;
 import org.eclipse.oomph.ui.OomphDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.util.OS;
 
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -28,6 +33,7 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.SegmentSequence;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedImage;
 import org.eclipse.emf.edit.provider.ItemProvider;
@@ -43,11 +49,13 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.Version;
+import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -70,8 +78,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.dialogs.PatternFilter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -90,6 +100,8 @@ public class SearchEclipseRepositoryDialog extends OomphDialog
 
   public static final String MESSAGE = "Search Eclipse repositories by entering the fully qualified name of a Java package or installable unit";
 
+  private final DockableDialog.Dockable dockable = new DockableDialog.Dockable(this);
+
   private String selectedRepository;
 
   private TreeViewer capabilitiesViewer;
@@ -101,7 +113,14 @@ public class SearchEclipseRepositoryDialog extends OomphDialog
   public SearchEclipseRepositoryDialog(Shell parentShell)
   {
     super(parentShell, TITLE, 700, 500, P2UIPlugin.INSTANCE, false);
-    setShellStyle(SWT.TITLE | SWT.MAX | SWT.RESIZE | SWT.BORDER | SWT.APPLICATION_MODAL);
+
+    setShellStyle(getShellStyle() ^ SWT.APPLICATION_MODAL | SWT.MODELESS | SWT.RESIZE | SWT.MAX | (OS.INSTANCE.isWin() ? SWT.MIN : SWT.NONE));
+    setBlockOnOpen(false);
+  }
+
+  public DockableDialog.Dockable getDockable()
+  {
+    return dockable;
   }
 
   @Override
@@ -249,6 +268,35 @@ public class SearchEclipseRepositoryDialog extends OomphDialog
       }
     });
 
+    capabilitiesViewer.addDragSupport(RepositoryExplorer.DND_OPERATIONS, RepositoryExplorer.DND_TRANSFERS,
+        new GeneralDragAdapter(capabilitiesViewer, new GeneralDragAdapter.DraggedObjectsFactory()
+        {
+          public List<EObject> createDraggedObjects(ISelection selection) throws Exception
+          {
+            List<EObject> result = new ArrayList<EObject>();
+            for (Object object : ((IStructuredSelection)selection).toArray())
+            {
+              if (object instanceof Item)
+              {
+                Item item = (Item)object;
+                if (item.isCapability())
+                {
+                  result.add(createRequirement(item));
+                }
+              }
+            }
+
+            return result;
+          }
+
+          private Requirement createRequirement(Item item)
+          {
+            Requirement requirement = P2Factory.eINSTANCE.createRequirement(item.getName());
+            requirement.setNamespace(item.getNamespace());
+            return requirement;
+          }
+        }, RepositoryExplorer.DND_DELEGATES));
+
     Composite detailsComposite = new Composite(sashForm, SWT.NONE);
     detailsComposite.setLayout(new FillLayout());
     detailsComposite.setForeground(capabilitiesTree.getForeground());
@@ -277,6 +325,50 @@ public class SearchEclipseRepositoryDialog extends OomphDialog
         }
       }
     });
+
+    detailsViewer.addDragSupport(RepositoryExplorer.DND_OPERATIONS, RepositoryExplorer.DND_TRANSFERS,
+        new GeneralDragAdapter(detailsViewer, new GeneralDragAdapter.DraggedObjectsFactory()
+        {
+          public List<EObject> createDraggedObjects(ISelection selection) throws Exception
+          {
+            List<EObject> result = new ArrayList<EObject>();
+            for (Object object : ((IStructuredSelection)selection).toArray())
+            {
+              if (object instanceof Item)
+              {
+                Item item = (Item)object;
+                if (item.isRepository())
+                {
+                  result.add(P2Factory.eINSTANCE.createRepository(item.getText()));
+                }
+                else if (item.isCapability())
+                {
+                  result.add(createRequirement(item));
+                }
+                else
+                {
+                  Requirement requirement = createRequirement(item.getParent());
+                  Version version = Version.create(item.getText());
+                  if (!Version.emptyVersion.equals(version))
+                  {
+                    requirement.setVersionRange(new VersionRange(version, true, version, true));
+                  }
+
+                  result.add(requirement);
+                }
+              }
+            }
+
+            return result;
+          }
+
+          private Requirement createRequirement(Item item)
+          {
+            Requirement requirement = P2Factory.eINSTANCE.createRequirement(item.getName());
+            requirement.setNamespace(item.getNamespace());
+            return requirement;
+          }
+        }, RepositoryExplorer.DND_DELEGATES));
 
     sashForm.setWeights(new int[] { 14, 5 });
 
@@ -623,6 +715,12 @@ public class SearchEclipseRepositoryDialog extends OomphDialog
       return super.getStyledText(object);
     }
 
+    @Override
+    public Item getParent()
+    {
+      return (Item)super.getParent();
+    }
+
     public EList<Item> getItems()
     {
       @SuppressWarnings("unchecked")
@@ -758,5 +856,37 @@ public class SearchEclipseRepositoryDialog extends OomphDialog
 
       return null;
     }
+  }
+
+  /**
+   * Returns the instance for this workbench window, if there is one.
+   */
+  public static SearchEclipseRepositoryDialog getFor(IWorkbenchWindow workbenchWindow)
+  {
+    return DockableDialog.getFor(SearchEclipseRepositoryDialog.class, workbenchWindow);
+  }
+
+  /**
+   * Close the instance for this workbench window, if there is one.
+   */
+  public static void closeFor(IWorkbenchWindow workbenchWindow)
+  {
+    DockableDialog.closeFor(SearchEclipseRepositoryDialog.class, workbenchWindow);
+  }
+
+  /**
+   * Reopen or create the instance for this workbench window.
+   */
+  public static SearchEclipseRepositoryDialog openFor(final IWorkbenchWindow workbenchWindow)
+  {
+    Factory<SearchEclipseRepositoryDialog> factory = new Factory<SearchEclipseRepositoryDialog>()
+    {
+      public SearchEclipseRepositoryDialog create(IWorkbenchWindow workbenchWindow)
+      {
+        return new SearchEclipseRepositoryDialog(workbenchWindow.getShell());
+      }
+    };
+
+    return DockableDialog.openFor(SearchEclipseRepositoryDialog.class, factory, workbenchWindow);
   }
 }

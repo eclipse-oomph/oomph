@@ -148,10 +148,14 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
       closeTray();
     }
 
-    Point size = getShell().getSize();
-    IDialogSettings settings = getDialogSettings();
-    settings.put(SETTING_DIALOG_WIDTH, size.x);
-    settings.put(SETTING_DIALOG_HEIGHT, size.y);
+    Shell shell = getShell();
+    if (shell != null)
+    {
+      Point size = shell.getSize();
+      IDialogSettings settings = getDialogSettings();
+      settings.put(SETTING_DIALOG_WIDTH, size.x);
+      settings.put(SETTING_DIALOG_HEIGHT, size.y);
+    }
 
     return super.close();
   }
