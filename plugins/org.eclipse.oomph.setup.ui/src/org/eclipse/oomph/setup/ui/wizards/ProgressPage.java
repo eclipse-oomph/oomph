@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.util.BaseUtil;
+import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.OomphAdapterFactoryContentProvider;
 import org.eclipse.oomph.setup.Installation;
@@ -50,6 +51,7 @@ import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.Pair;
+import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
 import org.eclipse.emf.common.util.BasicEList;
@@ -350,27 +352,36 @@ public class ProgressPage extends SetupWizardPage
 
     if (getWizard().getOS().isCurrentOS())
     {
-      if (getTrigger() == Trigger.BOOTSTRAP)
+      // If the property is not set, create a check box for controlling launchAutomatically. Otherwise use the property value directly.
+      final Boolean launchAutomaticallyPropertyValue = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_LAUNCH_AUTOMATICALLY);
+      if (launchAutomaticallyPropertyValue == null)
       {
-        launchButton = buttonBar.addCheckButton("Launch automatically", "Launch the installed product when all setup tasks have performed successfully", true,
-            "launchAutomatically");
+        if (getTrigger() == Trigger.BOOTSTRAP)
+        {
+          launchButton = buttonBar.addCheckButton("Launch automatically", "Launch the installed product when all setup tasks have performed successfully", true,
+              "launchAutomatically");
+        }
+        else
+        {
+          launchButton = buttonBar.addCheckButton("Restart automatically if needed",
+              "Restart the current product if the installation has been changed by setup tasks", false, "restartIfNeeded");
+        }
+
+        launchAutomatically = launchButton.getSelection();
+        launchButton.addSelectionListener(new SelectionAdapter()
+        {
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            launchAutomatically = launchButton.getSelection();
+          }
+        });
+        AccessUtil.setKey(launchButton, "launch");
       }
       else
       {
-        launchButton = buttonBar.addCheckButton("Restart automatically if needed",
-            "Restart the current product if the installation has been changed by setup tasks", false, "restartIfNeeded");
+        launchAutomatically = launchAutomaticallyPropertyValue;
       }
-
-      launchAutomatically = launchButton.getSelection();
-      launchButton.addSelectionListener(new SelectionAdapter()
-      {
-        @Override
-        public void widgetSelected(SelectionEvent e)
-        {
-          launchAutomatically = launchButton.getSelection();
-        }
-      });
-      AccessUtil.setKey(launchButton, "launch");
     }
   }
 

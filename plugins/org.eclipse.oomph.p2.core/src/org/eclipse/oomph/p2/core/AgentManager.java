@@ -23,7 +23,13 @@ import java.util.Set;
  */
 public interface AgentManager
 {
+  /**
+   * Specifies the location of the shared pool as a system property.
+   * The special value "@none" indicates that no shared pool should be used.
+   */
   public static final String PROP_BUNDLE_POOL_LOCATION = "oomph.p2.pool";
+
+  public static final String BUNDLE_POOL_LOCATION_NONE = "@none";
 
   public Agent getCurrentAgent();
 

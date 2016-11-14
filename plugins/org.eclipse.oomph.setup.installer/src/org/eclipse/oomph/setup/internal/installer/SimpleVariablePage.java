@@ -1161,7 +1161,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     }
     else
     {
-      System.clearProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION);
+      System.setProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION, AgentManager.BUNDLE_POOL_LOCATION_NONE);
     }
 
     JRE jre = javaController.getJRE();

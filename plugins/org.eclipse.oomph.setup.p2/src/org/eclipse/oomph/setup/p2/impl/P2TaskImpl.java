@@ -772,7 +772,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
       String bundlePoolLocation = (String)context.get(AgentManager.PROP_BUNDLE_POOL_LOCATION);
       boolean sharedPool;
-      if (bundlePoolLocation != null)
+      if (bundlePoolLocation != null && !AgentManager.BUNDLE_POOL_LOCATION_NONE.equalsIgnoreCase(bundlePoolLocation))
       {
         sharedPool = true;
         bundlePool = P2Util.getAgentManager().getBundlePool(new File(bundlePoolLocation));

@@ -157,7 +157,11 @@ public class ProductPage extends SetupWizardPage
 {
   public static final String PAGE_NAME = "ProductPage";
 
-  private static final boolean SHOW_BUNDLE_POOL_UI = PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION) == null;
+  /**
+   * Adds the p2 bundle pool buttons to the UI if the bundle pool location isn't specified or isn't specified to be '@none'.
+   */
+  private static final boolean SHOW_BUNDLE_POOL_UI = PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION) == null
+      || !AgentManager.BUNDLE_POOL_LOCATION_NONE.equalsIgnoreCase(PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION));
 
   private static final Product NO_PRODUCT = createNoProduct();
 
@@ -1170,7 +1174,7 @@ public class ProductPage extends SetupWizardPage
     }
     else
     {
-      System.clearProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION);
+      System.setProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION, AgentManager.BUNDLE_POOL_LOCATION_NONE);
     }
 
     currentBundlePool = pool;
