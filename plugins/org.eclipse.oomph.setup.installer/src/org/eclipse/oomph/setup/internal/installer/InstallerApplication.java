@@ -79,7 +79,7 @@ public class InstallerApplication implements IApplication
     agent.registerService(UIServices.SERVICE_NAME, Installer.SERVICE_UI);
 
     Location location = Platform.getInstanceLocation();
-    if (location != null)
+    if (location != null && !location.isSet())
     {
       Location configurationLocation = Platform.getConfigurationLocation();
       if (configurationLocation != null)
