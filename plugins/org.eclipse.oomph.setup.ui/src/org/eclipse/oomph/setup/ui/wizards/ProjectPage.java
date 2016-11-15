@@ -585,10 +585,16 @@ public class ProjectPage extends SetupWizardPage
       {
         super.notifyChanged(notification);
 
-        Workspace workspace = getWorkspace();
+        final Workspace workspace = getWorkspace();
         if (streamViewer.getInput() != workspace)
         {
-          streamViewer.setInput(workspace);
+          getShell().getDisplay().asyncExec(new Runnable()
+          {
+            public void run()
+            {
+              streamViewer.setInput(workspace);
+            }
+          });
         }
 
         if (notification.getFeature() == SetupPackage.Literals.CATALOG_SELECTION__PROJECT_CATALOGS)
