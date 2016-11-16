@@ -203,6 +203,11 @@ public final class JREData
       return 64;
     }
 
+    if ("64".equals(System.getProperty("com.ibm.vm.bitmode")))
+    {
+      return 64;
+    }
+
     if (System.getProperty("os.arch").endsWith("64")) // Don't use contains() because of ARCH_IA64_32!
     {
       return 64;
