@@ -17,7 +17,7 @@
       xsi:type="setup.p2:P2Task"
       label="${scope.project.label}">
     <requirement
-        name="org.eclipse.b3.aggregator.editor.feature.feature.group"/>
+        name="org.eclipse.cbi.p2repo.aggregator.editor.feature.feature.group"/>
     <requirement
         name="org.eclipse.mylyn.ide_feature.feature.group"/>
     <requirement
