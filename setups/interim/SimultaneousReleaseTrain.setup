@@ -41,7 +41,7 @@
     <requirement
         name="org.eclipse.egit.mylyn.feature.group"/>
     <repository
-        url="http://download.eclipse.org/cbi/updates/aggregator/ide/4.5/"/>
+        url="http://download.eclipse.org/cbi/updates/aggregator/ide/4.6/"/>
     <repository
         url="http://download.eclipse.org/egit/updates-stable-nightly"/>
     <repository
