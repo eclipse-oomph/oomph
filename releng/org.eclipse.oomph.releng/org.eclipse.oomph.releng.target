@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="30">
+<target name="Generated from Oomph" sequenceNumber="31">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
@@ -13,14 +13,15 @@
       <unit id="org.eclipse.nebula.widgets.tablecombo" version="0.0.0"/>
       <unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/releases/mars"/>
+      <repository location="http://download.eclipse.org/releases/neon"/>
       <repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
       <repository location="http://download.eclipse.org/technology/swtbot/releases/latest"/>
       <repository location="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
       <repository location="http://download.eclipse.org/oomph/uss/updates/latest"/>
-      <repository location="http://download.eclipse.org/eclipse/updates/4.5"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.6"/>
     </location>
   </locations>
 </target>

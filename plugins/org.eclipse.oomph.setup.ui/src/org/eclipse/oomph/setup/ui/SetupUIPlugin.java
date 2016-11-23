@@ -305,12 +305,10 @@ public final class SetupUIPlugin extends OomphUIPlugin
       Object javaUIPlugin = ReflectUtil.invokeMethod("getDefault", javaUIPluginClass);
       ContextTypeRegistry codeTemplateContextRegistry = ReflectUtil.invokeMethod("getCodeTemplateContextRegistry", javaUIPlugin);
 
-      for (@SuppressWarnings("unchecked")
-      Iterator<TemplateContextType> it = codeTemplateContextRegistry.contextTypes(); it.hasNext();)
+      for (Iterator<TemplateContextType> it = codeTemplateContextRegistry.contextTypes(); it.hasNext();)
       {
         TemplateContextType templateContextType = it.next();
-        for (@SuppressWarnings("unchecked")
-        Iterator<TemplateVariableResolver> it2 = templateContextType.resolvers(); it2.hasNext();)
+        for (Iterator<TemplateVariableResolver> it2 = templateContextType.resolvers(); it2.hasNext();)
         {
           TemplateVariableResolver templateVariableResolver = it2.next();
           if ("user".equals(templateVariableResolver.getType()))
