@@ -26,10 +26,12 @@ import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -142,20 +144,34 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
   protected final SetupTaskPerformer createPerformer(SetupPrompter prompter, boolean fullPrompt) throws Exception
   {
     User originalUser = getUser();
-    URI uri = originalUser.eResource().getURI();
+    Installation originalInstallation = getInstallation();
+    Workspace originalWorkspace = getWorkspace();
 
-    final User user = EcoreUtil.copy(originalUser);
-    Resource userResource = SetupCoreUtil.RESOURCE_FACTORY_REGISTRY.getFactory(uri).createResource(uri);
-    userResource.getContents().add(user);
+    Copier copier = new EcoreUtil.Copier();
+    User user = (User)copier.copy(originalUser);
+    Installation installation = (Installation)copier.copy(originalInstallation);
+    Workspace workspace = (Workspace)copier.copy(originalWorkspace);
+    copier.copyReferences();
 
-    Trigger trigger = getTrigger();
-    Installation installation = getInstallation();
-    Workspace workspace = getWorkspace();
+    createResource(originalUser, user);
+    createResource(originalInstallation, installation);
+    createResource(originalWorkspace, workspace);
 
-    URIConverter uriConverter = getResourceSet().getURIConverter();
     SetupContext context = SetupContext.create(installation, workspace, user);
 
+    URIConverter uriConverter = getResourceSet().getURIConverter();
+    Trigger trigger = getTrigger();
     return SetupTaskPerformer.create(uriConverter, prompter, trigger, context, fullPrompt);
+  }
+
+  private void createResource(EObject originalEObject, EObject copiedEObject)
+  {
+    if (originalEObject != null)
+    {
+      URI uri = originalEObject.eResource().getURI();
+      Resource resource = SetupCoreUtil.RESOURCE_FACTORY_REGISTRY.getFactory(uri).createResource(uri);
+      resource.getContents().add(copiedEObject);
+    }
   }
 
   public WizardFinisher getWizardFinisher()

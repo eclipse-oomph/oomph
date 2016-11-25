@@ -125,7 +125,14 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
+import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
+import org.eclipse.equinox.internal.p2.metadata.expression.LDAPFilter;
+import org.eclipse.equinox.internal.p2.metadata.expression.Member;
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.metadata.expression.IExpression;
+import org.eclipse.equinox.p2.metadata.expression.IExpressionVisitor;
+import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -188,6 +195,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private static final ThreadLocal<IProgressMonitor> CREATION_MONITOR = new ThreadLocal<IProgressMonitor>();
 
+  private final Set<String> filterProperties = new LinkedHashSet<String>();
+
   private ProgressLog progress;
 
   private boolean canceled;
@@ -221,11 +230,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private final Map<URI, String> passwords = new LinkedHashMap<URI, String>();
 
-  private final List<VariableTask> unresolvedVariables = new ArrayList<VariableTask>();
+  private final List<VariableTask> unresolvedVariables = new UniqueEList<VariableTask>();
 
-  private final List<VariableTask> resolvedVariables = new ArrayList<VariableTask>();
+  private final List<VariableTask> resolvedVariables = new UniqueEList<VariableTask>();
 
-  private final List<VariableTask> appliedRuleVariables = new ArrayList<VariableTask>();
+  private final List<VariableTask> appliedRuleVariables = new UniqueEList<VariableTask>();
 
   private final Map<String, VariableTask> allVariables = new LinkedHashMap<String, VariableTask>();
 
@@ -235,7 +244,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private final Map<VariableTask, EAttribute> ruleBasedAttributes = new LinkedHashMap<VariableTask, EAttribute>();
 
-  private final List<AttributeRule> attributeRules = new ArrayList<AttributeRule>();
+  private final List<AttributeRule> attributeRules = new UniqueEList<AttributeRule>();
 
   private final ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
 
@@ -266,15 +275,31 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return hasSuccessfullyPerformed;
   }
 
+  /**
+   * @author Ed Merks
+   */
+  private static enum Phase
+  {
+    FILTER_PHASE, GATHER_PHASE, COMPOSE_PHASE
+  }
+
   private void initTriggeredSetupTasks(Stream stream, boolean firstPhase)
+  {
+    initTriggeredSetupTasks(stream, firstPhase ? Phase.FILTER_PHASE : Phase.COMPOSE_PHASE);
+  }
+
+  private void initTriggeredSetupTasks(Stream stream, Phase phase)
   {
     Trigger trigger = getTrigger();
     User user = getUser();
 
+    Map<Object, Object> originalMap = new LinkedHashMap<Object, Object>(getMap());
+    SetupContext originalSetupContext = getSetupContext();
+
     // Gather all possible tasks.
     // Later this will be filtered to only the triggered tasks.
     // This approach ensures that implicit variables for all tasks (even for untriggered tasks) are created with the right values.
-    if (firstPhase)
+    if (phase != Phase.COMPOSE_PHASE)
     {
       triggeredSetupTasks = new BasicEList<SetupTask>(getSetupTasks(stream));
       bundles.add(SetupCorePlugin.INSTANCE.getBundle());
@@ -456,7 +481,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
       }
 
-      if (!firstPhase)
+      if (phase == Phase.COMPOSE_PHASE)
       {
         // Perform override merging.
         Map<SetupTask, SetupTask> overrides = new HashMap<SetupTask, SetupTask>();
@@ -740,6 +765,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
             String value = variable.getValue();
 
+            if (isFilterProperty(variable) && StringUtil.isEmpty(value))
+            {
+              unresolvedVariables.add(variable);
+            }
+
             // If it's not a full prompt user, we want to be sure we get the value from the variable page.
             if (!fullPromptUser)
             {
@@ -815,20 +845,59 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
       }
 
+      boolean hasFilterProperty = false;
       for (Iterator<SetupTask> it = triggeredSetupTasks.iterator(); it.hasNext();)
       {
         SetupTask setupTask = it.next();
         setupTask.consolidate();
         if (setupTask instanceof VariableTask)
         {
-          VariableTask contextVariableTask = (VariableTask)setupTask;
-          if (!unresolvedVariables.contains(contextVariableTask))
+          VariableTask variable = (VariableTask)setupTask;
+          if (phase == Phase.FILTER_PHASE)
           {
-            resolvedVariables.add(contextVariableTask);
+            if (isFilterProperty(variable))
+            {
+              String value = variable.getValue();
+              if (!StringUtil.isEmpty(value))
+              {
+                putFilterProperty(variable.getName(), value);
+              }
+
+              hasFilterProperty = true;
+            }
+          }
+
+          if (!unresolvedVariables.contains(variable))
+          {
+            resolvedVariables.add(variable);
           }
 
           it.remove();
         }
+      }
+
+      if (hasFilterProperty)
+      {
+        allVariables.clear();
+        appliedRuleVariables.clear();
+        attributeRules.clear();
+        bundles.clear();
+        copyMap = null;
+
+        originalMap.keySet().retainAll(originalMap.keySet());
+        originalMap.putAll(originalMap);
+        passwords.clear();
+        passwordVariables.clear();
+        resolvedVariables.clear();
+        ruleAttributes.clear();
+        ruleBasedAttributes.clear();
+
+        undeclaredVariables.clear();
+        unresolvedSettings.clear();
+        unresolvedVariables.clear();
+
+        setSetupContext(originalSetupContext);
+        initTriggeredSetupTasks(stream, Phase.GATHER_PHASE);
       }
     }
   }
@@ -1420,6 +1489,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       for (Scope scope : scopes)
       {
+        gatherFilters(configurableItems, scope);
+      }
+
+      for (Scope scope : scopes)
+      {
         ScopeType type = scope.getType();
         String name = scope.getName();
         String label = scope.getLabel();
@@ -1496,7 +1570,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           }
         }
 
-        getSetupTasks(result, configurableItems, scope);
+        getSetupTasks(result, configurableItems, scope, false);
       }
     }
 
@@ -1600,7 +1674,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return variable;
   }
 
-  private void getSetupTasks(EList<SetupTask> setupTasks, List<Scope> configurableItems, SetupTaskContainer setupTaskContainer)
+  private void getSetupTasks(EList<SetupTask> setupTasks, List<Scope> configurableItems, SetupTaskContainer setupTaskContainer, boolean isFiltered)
   {
     for (SetupTask setupTask : setupTaskContainer.getSetupTasks())
     {
@@ -1615,21 +1689,91 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         continue;
       }
 
-      if (!matchesFilterContext(setupTask.getFilter()))
+      if (setupTask instanceof VariableTask)
       {
-        continue;
+        VariableTask variable = (VariableTask)setupTask;
+        if (isFilterProperty(variable))
+        {
+          setupTasks.add(variable);
+          continue;
+        }
       }
+
+      boolean effectiveIsFiltered = isFiltered || !matchesFilterContext(setupTask.getFilter());
 
       if (setupTask instanceof SetupTaskContainer)
       {
         SetupTaskContainer container = (SetupTaskContainer)setupTask;
-        getSetupTasks(setupTasks, configurableItems, container);
+        getSetupTasks(setupTasks, configurableItems, container, effectiveIsFiltered);
       }
-      else
+      else if (!effectiveIsFiltered)
       {
         setupTasks.add(setupTask);
       }
     }
+  }
+
+  private void gatherFilters(List<Scope> configurableItems, SetupTaskContainer setupTaskContainer)
+  {
+    for (SetupTask setupTask : setupTaskContainer.getSetupTasks())
+    {
+      if (setupTask.isDisabled())
+      {
+        continue;
+      }
+
+      EList<Scope> restrictions = setupTask.getRestrictions();
+      if (!configurableItems.containsAll(restrictions))
+      {
+        continue;
+      }
+
+      filterProperties.addAll(getFilterProperties(setupTask));
+
+      if (setupTask instanceof SetupTaskContainer)
+      {
+        SetupTaskContainer container = (SetupTaskContainer)setupTask;
+        gatherFilters(configurableItems, container);
+      }
+    }
+  }
+
+  private Set<String> getFilterProperties(SetupTask setupTask)
+  {
+    final Set<String> filterProperties = new LinkedHashSet<String>();
+    String filter = setupTask.getFilter();
+    if (!StringUtil.isEmpty(filter))
+    {
+      try
+      {
+        IMatchExpression<IInstallableUnit> matchExpression = InstallableUnit.parseFilter(filter);
+        Object[] parameters = matchExpression.getParameters();
+        if (parameters.length == 1 && parameters[0] instanceof LDAPFilter)
+        {
+          LDAPFilter ldapFilter = (LDAPFilter)parameters[0];
+          ldapFilter.accept(new IExpressionVisitor()
+          {
+            public boolean visit(IExpression expression)
+            {
+              if (expression.getExpressionType() == IExpression.TYPE_MEMBER)
+              {
+                Member member = (Member)expression;
+                String name = member.getName();
+                filterProperties.add(name);
+              }
+
+              return true;
+            }
+          });
+        }
+      }
+      catch (Exception ex)
+      {
+        // Ignore.
+      }
+    }
+
+    return filterProperties;
   }
 
   public EList<SetupTask> initNeededSetupTasks(IProgressMonitor monitor) throws Exception
@@ -1919,6 +2063,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public boolean isRuleBased(VariableTask variable)
   {
     return ruleBasedAttributes.containsKey(variable);
+  }
+
+  public boolean isFilterProperty(VariableTask variable)
+  {
+    return filterProperties.contains(variable.getName());
   }
 
   public List<VariableTask> getUnresolvedVariables()
@@ -2222,6 +2371,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
 
     return result;
+  }
+
+  public boolean isFilterUsed(String name, EObject eObject)
+  {
+    return eObject instanceof SetupTask && getFilterProperties((SetupTask)eObject).contains(name);
   }
 
   public boolean isVariableUsed(String name, EObject eObject, boolean recursive)

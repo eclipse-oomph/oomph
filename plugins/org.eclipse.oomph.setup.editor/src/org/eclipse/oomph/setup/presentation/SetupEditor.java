@@ -2873,7 +2873,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               if (o instanceof EObject)
               {
                 EObject eObject = (EObject)o;
-                if (eObject.eResource() == resource && setupTaskPerformer.isVariableUsed(name, eObject, false))
+                if (eObject.eResource() == resource
+                    && (setupTaskPerformer.isVariableUsed(name, eObject, false) || setupTaskPerformer.isFilterUsed(name, eObject)))
                 {
                   variableUsages.add(eObject);
                 }

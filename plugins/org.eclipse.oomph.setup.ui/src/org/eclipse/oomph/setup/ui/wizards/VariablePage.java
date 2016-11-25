@@ -95,6 +95,10 @@ import java.util.regex.Pattern;
  */
 public class VariablePage extends SetupWizardPage implements SetupPrompter
 {
+  private static final String BASIC_DESCRIPTION = "Enter values for the required variables.";
+
+  private static final String AUGMENTED_DESCRIPTION = BASIC_DESCRIPTION + "  Bold variables may conditionally affect the set of required variables.";
+
   private static final String SETUP_TASK_ANALYSIS_TITLE = "Setup Task Analysis";
 
   private static final URI INSTALLATION_ID_URI = URI.createURI("#~installation.id");
@@ -150,7 +154,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   {
     super("VariablePage");
     setTitle("Variables");
-    setDescription("Enter values for the required variables.");
+    setDescription(BASIC_DESCRIPTION);
   }
 
   @Override
@@ -500,6 +504,18 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     {
       defaultsSet = true;
     }
+
+    boolean hasFilterProperties = false;
+    for (FieldHolder fieldHolder : manager)
+    {
+      if (fieldHolder.isFilterProperty())
+      {
+        hasFilterProperties = true;
+        break;
+      }
+    }
+
+    setDescription(hasFilterProperties ? AUGMENTED_DESCRIPTION : BASIC_DESCRIPTION);
 
     if (isPageComplete() ? setDefault : firstEmptyField == null || setDefault)
     {
@@ -858,6 +874,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     private String initialValue;
 
+    private boolean filterProperty;
+
     public FieldHolder(VariableTask variable)
     {
       field = PropertyField.createField(variable);
@@ -957,6 +975,20 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
           variable.setValue(value);
         }
       }
+    }
+
+    public void setFilterProperty(boolean filterProperty)
+    {
+      this.filterProperty = filterProperty;
+      if (field != null)
+      {
+        field.setBold(filterProperty);
+      }
+    }
+
+    public boolean isFilterProperty()
+    {
+      return filterProperty;
     }
 
     public void update()
@@ -1145,18 +1177,6 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
             }
           }
 
-          // for (VariableTask variable : fieldHolder.getVariables())
-          // {
-          // for (SetupTaskPerformer performer : allPerformers)
-          // {
-          // EStructuralFeature.Setting setting = performer.getImpliedVariableData(variable);
-          // if (setting != null)
-          // {
-          // continue LOOP;
-          // }
-          // }
-          // }
-
           for (VariableTask variable : fieldHolder.getVariables())
           {
             for (SetupTaskPerformer performer : allPerformers)
@@ -1193,6 +1213,25 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
           for (FieldHolderRecord dependantFieldHolderRecord : fieldHolderRecords)
           {
             fields.move(Math.min(index++, maxPosition), dependantFieldHolderRecord);
+          }
+        }
+
+        for (int i = 0; i < fields.size(); ++i)
+        {
+          FieldHolderRecord fieldHolderRecord = fields.get(i);
+          for (VariableTask variable : fieldHolderRecord.getFieldHolder().getVariables())
+          {
+            boolean isFilterProperty = false;
+            for (SetupTaskPerformer performer : allPerformers)
+            {
+              if (performer.isFilterProperty(variable))
+              {
+                isFilterProperty = true;
+                break;
+              }
+            }
+
+            fieldHolderRecord.getFieldHolder().setFilterProperty(isFilterProperty);
           }
         }
       }

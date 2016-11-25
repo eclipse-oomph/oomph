@@ -83,7 +83,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
 
   private String launcherName;
 
-  private IInstallableUnit filterContextIU;
+  private InstallableUnit filterContextIU;
 
   protected AbstractSetupTaskContext(URIConverter uriConverter, SetupPrompter prompter, Trigger trigger, SetupContext setupContext)
   {
@@ -141,7 +141,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     filterContext.put("osgi.os", os.getOsgiOS());
     filterContext.put("osgi.arch", os.getOsgiArch());
 
-    filterContextIU = InstallableUnit.contextIU(filterContext);
+    filterContextIU = (InstallableUnit)InstallableUnit.contextIU(filterContext);
 
     // Do this late because \ is replaced by / when looking at this property.
     put(PROP_UPDATE_URL, SetupCorePlugin.UPDATE_URL);
@@ -301,6 +301,11 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       // If the filter can't be parsed, assume it matches nothing.
       return false;
     }
+  }
+
+  protected void putFilterProperty(String key, String value)
+  {
+    filterContextIU.setProperty(key, value);
   }
 
   public File getProductLocation()

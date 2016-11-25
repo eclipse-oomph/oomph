@@ -27,6 +27,8 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.emf.edit.provider.IItemFontProvider;
+import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.runtime.IStatus;
@@ -220,6 +222,11 @@ public abstract class PropertyField
     }
 
     this.labelText = labelText.trim();
+  }
+
+  public final void setBold(boolean bold)
+  {
+    label.setFont(ExtendedFontRegistry.INSTANCE.getFont(label.getFont(), bold ? IItemFontProvider.BOLD_FONT : IItemFontProvider.NORMAL_FONT));
   }
 
   public final String getToolTip()
