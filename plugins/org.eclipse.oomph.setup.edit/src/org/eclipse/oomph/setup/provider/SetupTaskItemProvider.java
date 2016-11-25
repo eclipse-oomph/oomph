@@ -132,7 +132,7 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_SetupTask_predecessors_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_predecessors_feature", "_UI_SetupTask_type"),
-        SetupPackage.Literals.SETUP_TASK__PREDECESSORS, true, false, true, null, null, new String[] { "org.eclipse.ui.views.properties.expert" }));
+        SetupPackage.Literals.SETUP_TASK__PREDECESSORS, true, false, true, null, null, new String[] { "org.eclipse.ui.views.properties.expert.conditional" }));
   }
 
   /**
@@ -146,7 +146,7 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_SetupTask_successors_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_successors_feature", "_UI_SetupTask_type"), SetupPackage.Literals.SETUP_TASK__SUCCESSORS,
-        true, false, true, null, null, new String[] { "org.eclipse.ui.views.properties.expert" }));
+        true, false, true, null, null, new String[] { "org.eclipse.ui.views.properties.expert.conditional" }));
   }
 
   /**
@@ -173,7 +173,7 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_SetupTask_restrictions_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_restrictions_feature", "_UI_SetupTask_type"),
-        SetupPackage.Literals.SETUP_TASK__RESTRICTIONS, true, false, true, null, null, new String[] { "org.eclipse.ui.views.properties.expert" }));
+        SetupPackage.Literals.SETUP_TASK__RESTRICTIONS, true, false, true, null, null, new String[] { "org.eclipse.ui.views.properties.expert.conditional" }));
   }
 
   /**
@@ -187,7 +187,7 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_SetupTask_filter_feature"), getString("_UI_PropertyDescriptor_description", "_UI_SetupTask_filter_feature", "_UI_SetupTask_type"),
         SetupPackage.Literals.SETUP_TASK__FILTER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
-        new String[] { "org.eclipse.ui.views.properties.expert" }));
+        new String[] { "org.eclipse.ui.views.properties.expert.conditional" }));
   }
 
   @Override

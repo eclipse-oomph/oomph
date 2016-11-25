@@ -68,16 +68,16 @@
         <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
       </genFeatures>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTask/predecessors">
-        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert.conditional</propertyFilterFlags>
       </genFeatures>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTask/successors">
-        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert.conditional</propertyFilterFlags>
       </genFeatures>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//SetupTask/restrictions">
-        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert.conditional</propertyFilterFlags>
       </genFeatures>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/filter">
-        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert.conditional</propertyFilterFlags>
       </genFeatures>
       <genOperations ecoreOperation="Setup.ecore#//SetupTask/getScope"/>
       <genOperations ecoreOperation="Setup.ecore#//SetupTask/requires">

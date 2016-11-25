@@ -335,6 +335,28 @@ public class ModelElementItemProvider extends ItemProviderAdapter
         {
           return filterChoices(super.getChoiceOfValues(object), feature, object);
         }
+
+        @Override
+        public String[] getFilterFlags(Object object)
+        {
+          String[] filterFlags = super.getFilterFlags(object);
+
+          // If the filter flag one for a conditionally expert feature...
+          if (filterFlags != null && filterFlags.length == 1 && PropertiesUtil.CONDITIONAL_EXPERT_FILTER.equals(filterFlags[0]))
+          {
+            // If the feature is set, don't filter it.
+            EObject eObject = (EObject)object;
+            if (eObject.eIsSet(feature))
+            {
+              return null;
+            }
+
+            // Otherwise, treat it as an expert feature.
+            return PropertiesUtil.EXPERT_FILTER;
+          }
+
+          return filterFlags;
+        }
       };
     }
 
@@ -345,6 +367,28 @@ public class ModelElementItemProvider extends ItemProviderAdapter
       public Collection<?> getChoiceOfValues(Object object)
       {
         return filterChoices(super.getChoiceOfValues(object), feature, object);
+      }
+
+      @Override
+      public String[] getFilterFlags(Object object)
+      {
+        String[] filterFlags = super.getFilterFlags(object);
+
+        // If the filter flag one for a conditionally expert feature...
+        if (filterFlags != null && filterFlags.length == 1 && PropertiesUtil.CONDITIONAL_EXPERT_FILTER.equals(filterFlags[0]))
+        {
+          // If the feature is set, don't filter it.
+          EObject eObject = (EObject)object;
+          if (eObject.eIsSet(feature))
+          {
+            return null;
+          }
+
+          // Otherwise, treat it as an expert feature.
+          return PropertiesUtil.EXPERT_FILTER;
+        }
+
+        return filterFlags;
       }
     };
   }

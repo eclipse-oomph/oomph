@@ -36,6 +36,8 @@ import java.util.Vector;
  */
 public final class PropertiesUtil
 {
+  public static final String CONDITIONAL_EXPERT_FILTER = "org.eclipse.ui.views.properties.expert.conditional";
+
   public static final String[] EXPERT_FILTER = { "org.eclipse.ui.views.properties.expert" };
 
   private static final String TRUE = Boolean.TRUE.toString();
