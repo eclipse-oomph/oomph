@@ -232,6 +232,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWindowListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -2460,7 +2461,16 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         try
         {
-          getSite().getPage().showView("org.eclipse.ui.views.PropertySheet", null, IWorkbenchPage.VIEW_VISIBLE);
+          IViewPart propertiesView = getSite().getPage().showView("org.eclipse.ui.views.PropertySheet", null, IWorkbenchPage.VIEW_VISIBLE);
+          if (propertiesView instanceof PropertySheet)
+          {
+            // If the properties view wasn't showing, but is present in a different perspective,
+            // then it ends up being shown, but it doesn't show the current selection.
+            // If we just set the selection, it thinks that's still the same selection so we must change it twice to ensure that the current selection is shown.
+            PropertySheet propertySheet = (PropertySheet)propertiesView;
+            propertySheet.selectionChanged(SetupEditor.this, new StructuredSelection());
+            propertySheet.selectionChanged(SetupEditor.this, SetupEditor.this.getSelection());
+          }
         }
         catch (PartInitException ex)
         {
