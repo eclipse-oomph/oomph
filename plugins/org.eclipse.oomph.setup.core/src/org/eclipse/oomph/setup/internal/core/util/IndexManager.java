@@ -370,6 +370,11 @@ public class IndexManager
     }, resourceSet.getURIConverter(), indicesLocation);
 
     Annotation annotation = (Annotation)EcoreUtil.getObjectByType(indicesResource.getContents(), BasePackage.Literals.ANNOTATION);
+    if (annotation == null)
+    {
+      annotation = createDefaultIndex();
+    }
+
     return annotation;
   }
 
@@ -399,7 +404,7 @@ public class IndexManager
     }
   }
 
-  private void createDefaultIndex()
+  private Annotation createDefaultIndex()
   {
     Annotation annotation = null;
     if (globalIndexManager != null)
@@ -424,6 +429,7 @@ public class IndexManager
     EList<EObject> contents = indicesResource.getContents();
     contents.clear();
     contents.add(annotation);
+    return annotation;
   }
 
   private void save(final Annotation annotation)
