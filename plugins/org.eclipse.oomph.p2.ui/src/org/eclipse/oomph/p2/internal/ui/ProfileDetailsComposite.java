@@ -240,7 +240,7 @@ public class ProfileDetailsComposite extends Composite
     valueColumn.setText("Value");
     layout.setColumnData(valueColumn, new ColumnWeightData(60));
 
-    UIUtil.asyncExec(new Runnable()
+    UIUtil.asyncExec(viewer.getControl(), new Runnable()
     {
       public void run()
       {
