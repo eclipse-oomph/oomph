@@ -450,6 +450,8 @@ public final class SetupCoreUtil
               }
             }
 
+            zipInputStream.close();
+
             if (result == null)
             {
               throw new FileNotFoundException(uri.toString());
