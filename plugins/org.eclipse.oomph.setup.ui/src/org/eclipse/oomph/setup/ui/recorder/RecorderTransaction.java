@@ -656,24 +656,31 @@ public abstract class RecorderTransaction
         if (task instanceof PreferenceTask)
         {
           PreferenceTask preferenceTask = (PreferenceTask)task;
-          EObject eContainer = preferenceTask.eContainer();
-
-          String pluginID = URI.createURI(preferenceTask.getKey()).segment(1).toString();
-          CompoundTask pluginCompound = (CompoundTask)getPreferenceTask(preferenceContainer.getSetupTasks(), SetupPackage.Literals.COMPOUND_TASK__NAME,
-              pluginID, true);
-          pluginCompound.getSetupTasks().add(preferenceTask);
-
-          while (eContainer instanceof CompoundTask)
+          String key = preferenceTask.getKey();
+          if (key != null)
           {
-            CompoundTask oldCompound = (CompoundTask)eContainer;
-            if (oldCompound.getSetupTasks().isEmpty())
+            URI keyURI = URI.createURI(key);
+            if (keyURI.segmentCount() > 1)
             {
-              eContainer = oldCompound.eContainer();
-              EcoreUtil.remove(oldCompound);
-            }
-            else
-            {
-              break;
+              String pluginID = keyURI.segment(1).toString();
+              CompoundTask pluginCompound = (CompoundTask)getPreferenceTask(preferenceContainer.getSetupTasks(), SetupPackage.Literals.COMPOUND_TASK__NAME,
+                  pluginID, true);
+              pluginCompound.getSetupTasks().add(preferenceTask);
+
+              EObject eContainer = preferenceTask.eContainer();
+              while (eContainer instanceof CompoundTask)
+              {
+                CompoundTask oldCompound = (CompoundTask)eContainer;
+                if (oldCompound.getSetupTasks().isEmpty())
+                {
+                  eContainer = oldCompound.eContainer();
+                  EcoreUtil.remove(oldCompound);
+                }
+                else
+                {
+                  break;
+                }
+              }
             }
           }
         }
