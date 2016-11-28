@@ -86,7 +86,6 @@ import java.net.CookieStore;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -881,40 +880,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
             exception = new UserCancelledException();
             receiveLatch.countDown();
             return;
-          }
-
-          boolean isHTTPS;
-          try
-          {
-            isHTTPS = "https".equals(receiveStartEvent.getFileID().getURI().getScheme());
-          }
-          catch (URISyntaxException ex)
-          {
-            isHTTPS = false;
-          }
-
-          if (isHTTPS && responseHeaders.get("Set-Cookie") != null)
-          {
-            try
-            {
-              java.net.URI uri = ((IIncomingFileTransferReceiveStartEvent)event).getFileID().getURI();
-              if ("bitbucket.org".equals(uri.getHost()))
-              {
-                IncomingFileTransferException incomingFileTransferException = new IncomingFileTransferException(HttpURLConnection.HTTP_UNAUTHORIZED);
-                incomingFileTransferException.fillInStackTrace();
-                exception = incomingFileTransferException;
-                receiveStartEvent.cancel();
-
-                // Older versions of ECF don't produce a IIncomingFileTransferReceiveDoneEvent.
-                // exception = new UserCancelledException();
-                receiveLatch.countDown();
-                return;
-              }
-            }
-            catch (URISyntaxException ex)
-            {
-              // Ignore.
-            }
           }
         }
 
