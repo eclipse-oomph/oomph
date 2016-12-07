@@ -380,6 +380,12 @@ public final class RepositoryComposer
     return names;
   }
 
+  private static void scheduleExclusion(File folder) throws IOException
+  {
+    File marker = new File(folder, EXCLUDE_MARKER);
+    marker.createNewFile();
+  }
+
   private static void scheduleRemoval(File folder) throws IOException
   {
     File marker = new File(folder, REMOVE_MARKER);
