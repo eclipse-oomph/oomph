@@ -108,7 +108,7 @@ public final class RepositoryComposer
           {
             if (child.isDirectory() && child.getName().contains("-" + buildKey + "-"))
             {
-              scheduleRemoval(child);
+              scheduleExclusion(child);
               milestonesChanged = true;
             }
           }
