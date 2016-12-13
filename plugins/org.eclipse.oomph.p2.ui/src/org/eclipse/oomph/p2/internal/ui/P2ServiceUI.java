@@ -271,16 +271,26 @@ public class P2ServiceUI extends UIServices
   {
     try
     {
-      Shell shell = UIUtil.getShell();
-      for (Composite parent = shell.getParent(); parent != null; parent = parent.getParent())
+      final Shell shell = UIUtil.getShell();
+      final Shell[] result = new Shell[] { shell };
+      if (shell != null)
       {
-        if (parent instanceof Shell)
+        UIUtil.syncExec(shell, new Runnable()
         {
-          shell = (Shell)parent;
-        }
+          public void run()
+          {
+            for (Composite parent = shell.getParent(); parent != null; parent = parent.getParent())
+            {
+              if (parent instanceof Shell)
+              {
+                result[0] = (Shell)parent;
+              }
+            }
+          }
+        });
       }
 
-      return shell;
+      return result[0];
     }
     catch (Throwable ex)
     {
