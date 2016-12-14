@@ -48,7 +48,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -102,9 +102,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -115,7 +115,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -182,7 +182,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -236,9 +236,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -249,7 +249,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -459,7 +459,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -593,9 +593,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -606,7 +606,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/2.RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -753,7 +753,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -887,9 +887,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -900,7 +900,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/2.RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1202,7 +1202,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1270,9 +1270,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -1283,7 +1283,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1364,7 +1364,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1432,9 +1432,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -1445,7 +1445,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1657,7 +1657,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1717,9 +1717,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -1730,7 +1730,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1803,7 +1803,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1863,9 +1863,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -1876,7 +1876,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1941,7 +1941,7 @@
             url="http://download.eclipse.org/releases/neon/201610111000"/>
       </setupTask>
     </version>
-    <description>The essential tools for any JavaScript developer, including JavaScript language support, Git client, Mylyn and editors for JavaScript, HTML, CSS and XML.</description>
+    <description>The essential tools for any JavaScript developer, including JavaScript, HTML, CSS, XML languages support, Git client, Mylyn, and tools for Cordova applications.</description>
   </product>
   <product name="epp.package.php"
       label="Eclipse IDE for PHP Developers">
@@ -1960,7 +1960,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2004,9 +2004,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -2017,7 +2017,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2074,7 +2074,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2118,9 +2118,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -2131,7 +2131,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2250,7 +2250,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2342,9 +2342,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -2355,7 +2355,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2462,7 +2462,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2554,9 +2554,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -2567,7 +2567,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2725,7 +2725,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2755,9 +2755,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -2768,7 +2768,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2811,7 +2811,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2841,9 +2841,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -2854,7 +2854,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3052,7 +3052,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3162,9 +3162,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -3175,7 +3175,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/2.RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3298,7 +3298,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3408,9 +3408,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -3421,7 +3421,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Neon/2.RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3699,7 +3699,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3781,9 +3781,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -3794,7 +3794,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3889,7 +3889,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3971,9 +3971,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -3984,7 +3984,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4231,7 +4231,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4293,9 +4293,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -4306,7 +4306,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4381,7 +4381,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4443,9 +4443,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -4456,7 +4456,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-android-developers-includes-incubating-components/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4542,7 +4542,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4610,9 +4610,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -4623,7 +4623,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4704,7 +4704,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4772,9 +4772,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -4785,7 +4785,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5021,7 +5021,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5049,9 +5049,9 @@
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -5062,7 +5062,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5103,7 +5103,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5131,9 +5131,9 @@
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -5144,7 +5144,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5316,7 +5316,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5384,9 +5384,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -5397,7 +5397,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5478,7 +5478,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5546,9 +5546,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -5559,7 +5559,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5996,7 +5996,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -6046,9 +6046,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -6059,7 +6059,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -6122,7 +6122,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/oxygenm2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/oxygenm3</value>
         </detail>
       </annotation>
       <setupTask
@@ -6172,9 +6172,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M3"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -6185,7 +6185,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neon1a</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/neon2rc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -6396,7 +6396,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.7M3-201610270700/</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M3</value>
         </detail>
       </annotation>
       <setupTask
@@ -6412,7 +6412,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.7.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -6423,7 +6423,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.6.1-201609071200/</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.6.1-201609071200/</value>
         </detail>
       </annotation>
       <setupTask
@@ -6450,7 +6450,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.7M3-201610270700/</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M3</value>
         </detail>
       </annotation>
       <setupTask
@@ -6466,7 +6466,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.7.0,4.8.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201611041000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -6477,7 +6477,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.6.1-201609071200/</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.6.1-201609071200/</value>
         </detail>
       </annotation>
       <setupTask
@@ -6504,7 +6504,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.5.2-201602121500/</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.5.2-201602121500/</value>
         </detail>
       </annotation>
       <setupTask
