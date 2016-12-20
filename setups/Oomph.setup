@@ -519,6 +519,9 @@
           summary="Oomph Resolved in 1.6.0"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;resolution=FIXED&amp;resolution=DUPLICATE&amp;version=1.6.0"/>
       <query
+          summary="Oomph Resolved in 1.7.0"
+          url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;bug_status=CLOSED&amp;resolution=FIXED&amp;resolution=DUPLICATE&amp;version=1.7.0"/>
+      <query
           summary="Oomph Unspecified Version"
           url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Oomph&amp;version=unspecified"/>
     </setupTask>
@@ -558,6 +561,6 @@
   </stream>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
-      href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
+      href="org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
   <description>The Oomph project provides tools and frameworks to enhance the installation and usage of Eclipse.</description>
 </setup:Project>
