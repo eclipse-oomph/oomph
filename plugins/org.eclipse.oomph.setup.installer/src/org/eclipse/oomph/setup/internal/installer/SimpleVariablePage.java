@@ -156,6 +156,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private static final Preference PREF_DESKTOP_SHORTCUT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("desktopShortcut");
 
+  private static final String PROP_INSTALL_ROOT = "oomph.setup.install.root";
+
   private static final Preference PREF_INSTALL_ROOT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("installRoot");
 
   private static final File FILE_INSTALL_ROOT = new File(SetupInstallerPlugin.INSTANCE.getUserLocation().toFile(), PREF_INSTALL_ROOT.key() + ".txt");
@@ -1012,6 +1014,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
     }
 
     name += "-" + selectedProductVersion.getName().replace('.', '-');
+
+    if (installRoot == null)
+    {
+      installRoot = PropertiesUtil.getProperty(PROP_INSTALL_ROOT);
+    }
 
     if (installRoot == null)
     {
