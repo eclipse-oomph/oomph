@@ -337,7 +337,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
       if (topPage == productPage)
       {
-        Collection<? extends Resource> configurationResources = installer.getConfigurationResources();
+        Collection<? extends Resource> configurationResources = installer.getUnappliedConfigurationResources();
         URI indexLocation = ProjectPage.ConfigurationListener.getIndexURI(configurationResources);
         applyConfigurationMenuItem.setVisible(!configurationResources.isEmpty() && indexLocation == null);
         boolean switchCatalogVisible = indexLocation != null && !catalogManager.isCurrentIndex(indexLocation);

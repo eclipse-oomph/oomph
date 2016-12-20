@@ -16,6 +16,7 @@ import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
@@ -27,6 +28,7 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -51,12 +53,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.osgi.framework.Bundle;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -202,7 +207,11 @@ public class InstallerApplication implements IApplication
 
     mode = Mode.valueOf(modeName.toUpperCase());
 
-    Collection<? extends Resource> configurationResources = Collections.emptySet();
+    @SuppressWarnings("rawtypes")
+    Map arguments = context.getArguments();
+    String[] applicationArgs = arguments == null ? null : (String[])arguments.get(IApplicationContext.APPLICATION_ARGS);
+    Collection<? extends Resource> configurationResources = getConfigurationResources(applicationArgs);
+
     for (;;)
     {
       if (selectionMemento == null)
@@ -232,6 +241,7 @@ public class InstallerApplication implements IApplication
       }
       else
       {
+        installer.setConfigurationResources(configurationResources);
         SimpleInstallerDialog dialog = new SimpleInstallerDialog(display, installer, restarted);
         installer.setSimpleShell(dialog);
         installerDialog[0] = dialog;
@@ -242,6 +252,7 @@ public class InstallerApplication implements IApplication
       {
         setMode(Mode.SIMPLE);
         selectionMemento = null;
+        configurationResources = installer.getAppliedConfigurationResources();
         continue;
       }
 
@@ -249,7 +260,7 @@ public class InstallerApplication implements IApplication
       {
         setMode(Mode.ADVANCED);
         selectionMemento = null;
-        configurationResources = installer.getConfigurationResources();
+        configurationResources = installer.getAppliedConfigurationResources();
         continue;
       }
 
@@ -270,7 +281,7 @@ public class InstallerApplication implements IApplication
           try
           {
             // EXIT_RESTART often makes the new process come up behind other windows, so try a fresh native process first.
-            Runtime.getRuntime().exec(launcher);
+            launch(launcher);
             return EXIT_OK;
           }
           catch (Throwable ex)
@@ -290,6 +301,62 @@ public class InstallerApplication implements IApplication
   {
     this.mode = mode;
     PREF_MODE.set(mode.name());
+  }
+
+  private Set<Resource> getConfigurationResources(String[] applicationArgs)
+  {
+    Set<Resource> resources = new HashSet<Resource>();
+    ResourceSet resourceSet = null;
+
+    for (String arg : applicationArgs)
+    {
+      URI uri;
+
+      try
+      {
+        uri = getConfigurationResourceURI(arg);
+      }
+      catch (Throwable ex)
+      {
+        SetupInstallerPlugin.INSTANCE.log(ex);
+        continue;
+      }
+
+      if (resourceSet == null)
+      {
+        resourceSet = SetupCoreUtil.createResourceSet();
+      }
+
+      Resource resource = resourceSet.createResource(uri);
+      resources.add(resource);
+    }
+
+    return resources;
+  }
+
+  private URI getConfigurationResourceURI(String arg)
+  {
+    try
+    {
+      File file = new File(arg);
+      if (file.isFile() && file.canRead())
+      {
+        return URI.createFileURI(IOUtil.getCanonicalFile(file).toString());
+      }
+    }
+    catch (Throwable ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    URI uri = URI.createURI(arg);
+    String scheme = uri.scheme();
+    if (scheme == null || OS.INSTANCE.isWin() && scheme.length() == 1)
+    {
+      uri = URI.createFileURI(IOUtil.getCanonicalFile(new File(arg)).toString());
+    }
+
+    return uri;
   }
 
   private void handleCocoaMenu(final Display display, final InstallerUI[] installerDialog)
@@ -452,6 +519,16 @@ public class InstallerApplication implements IApplication
   public void stop()
   {
     // Do nothing.
+  }
+
+  static void launch(String launcher) throws IOException
+  {
+    String[] args = Platform.getCommandLineArgs();
+    String[] cmdarray = new String[1 + args.length];
+    cmdarray[0] = launcher;
+    System.arraycopy(args, 0, cmdarray, 1, args.length);
+
+    Runtime.getRuntime().exec(cmdarray);
   }
 
   /**

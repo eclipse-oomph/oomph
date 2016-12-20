@@ -46,6 +46,7 @@ import org.eclipse.oomph.util.OS;
 import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -130,6 +131,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   private Configuration configuration;
 
   private final List<Resource> configurationResources = new ArrayList<Resource>();
+
+  private final List<Resource> appliedConfigurationResources = new UniqueEList<Resource>();
 
   private SetupContext setupContext;
 
@@ -277,6 +280,27 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     return new ArrayList<Resource>(configurationResources);
   }
 
+  public Collection<? extends Resource> getUnappliedConfigurationResources()
+  {
+    List<Resource> result = new ArrayList<Resource>();
+
+    LOOP: for (Resource configurationResource : configurationResources)
+    {
+      URI uri = configurationResource.getURI();
+      for (Resource appliedConfigurationResource : appliedConfigurationResources)
+      {
+        if (uri.equals(appliedConfigurationResource.getURI()))
+        {
+          continue LOOP;
+        }
+      }
+
+      result.add(configurationResource);
+    }
+
+    return result;
+  }
+
   public void setConfigurationResources(Collection<? extends Resource> configurationResources)
   {
     if (!this.configurationResources.equals(new ArrayList<Resource>(configurationResources)))
@@ -285,6 +309,25 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       this.configurationResources.clear();
       this.configurationResources.addAll(configurationResources);
     }
+  }
+
+  public Collection<? extends Resource> getAppliedConfigurationResources()
+  {
+    return new ArrayList<Resource>(appliedConfigurationResources);
+  }
+
+  public void addAppliedConfigurationResource(Resource configurationResource)
+  {
+    URI uri = configurationResource.getURI();
+    for (Resource resource : appliedConfigurationResources)
+    {
+      if (uri.equals(resource.getURI()))
+      {
+        return;
+      }
+    }
+
+    appliedConfigurationResources.add(0, configurationResource);
   }
 
   public Configuration getConfiguration()
@@ -327,8 +370,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
           }
 
           Configuration configuration = (Configuration)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.CONFIGURATION);
-          this.configuration = configuration;
-          break;
+          if (configuration != null)
+          {
+            this.configuration = configuration;
+            break;
+          }
         }
 
         final Configuration configuration = (Configuration)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.CONFIGURATION);
@@ -344,14 +390,14 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
           String xml = (String)delegate.getData();
           if (xml != null)
           {
-            final URI syntheticConfigurationResourceURI = URI.createURI("dummy:/Configuration.setup");
-            Resource localResource = resourceSet.getResource(syntheticConfigurationResourceURI, false);
+            final URI uri = resource.getURI();
+            Resource localResource = resourceSet.getResource(uri, false);
             if (localResource != null)
             {
               resourceSet.getResources().remove(localResource);
             }
 
-            localResource = resourceSet.createResource(syntheticConfigurationResourceURI);
+            localResource = resourceSet.createResource(uri);
             try
             {
               localResource.load(new URIConverter.ReadableInputStream(xml), resourceSet.getLoadOptions());
@@ -361,7 +407,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                 @Override
                 protected void run(String taskName, IProgressMonitor monitor)
                 {
-                  perform(syntheticConfigurationResourceURI);
+                  perform(uri);
                   resolveProxies();
                 }
 
@@ -389,8 +435,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
               resourceMirror.begin(new NullProgressMonitor());
 
-              this.configuration = localConfiguration;
-              break;
+              if (localConfiguration != null)
+              {
+                this.configuration = localConfiguration;
+                break;
+              }
             }
             catch (IOException ex)
             {

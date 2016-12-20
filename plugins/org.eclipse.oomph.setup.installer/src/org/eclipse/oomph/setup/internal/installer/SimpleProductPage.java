@@ -965,6 +965,33 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       }
 
       searchField.setEnabled(true);
+
+      final Collection<? extends Resource> configurationResources = getWizard().getConfigurationResources();
+      if (!configurationResources.isEmpty())
+      {
+        UIUtil.asyncExec(getShell(), new Runnable()
+        {
+          private int count;
+
+          public void run()
+          {
+            IndexLoader indexLoader = getWizard().getIndexLoader();
+            if (indexLoader != null)
+            {
+              indexLoader.awaitIndexLoad();
+            }
+
+            if (++count < 10)
+            {
+              UIUtil.asyncExec(getShell(), this);
+            }
+            else
+            {
+              dialog.applyConfiguration();
+            }
+          }
+        });
+      }
     }
 
     @Override

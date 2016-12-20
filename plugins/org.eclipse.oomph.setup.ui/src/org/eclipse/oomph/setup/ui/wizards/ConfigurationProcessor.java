@@ -237,6 +237,8 @@ public class ConfigurationProcessor
 
     applyAttributes(setupInstallation, installation);
     applySetupTasks(setupInstallation, installation);
+
+    setupWizard.addAppliedConfigurationResource(installation.eResource());
   }
 
   protected void applyAttributes(Scope targetScope, Scope sourceScope)
@@ -309,7 +311,12 @@ public class ConfigurationProcessor
       {
         case 0:
         {
-          Collection<? extends Resource> configurationResources = setupWizard.getConfigurationResources();
+          if (configuration != null)
+          {
+            setupWizard.addAppliedConfigurationResource(configuration.eResource());
+          }
+
+          Collection<? extends Resource> configurationResources = setupWizard.getAppliedConfigurationResources();
           handleSwitchToAdvancedMode();
           setupWizard.setConfigurationResources(configurationResources);
           return false;
@@ -451,6 +458,8 @@ public class ConfigurationProcessor
       workspaceTask.setID("workspace");
       setupWorkspace.getSetupTasks().add(0, workspaceTask);
     }
+
+    setupWizard.addAppliedConfigurationResource(workspace.eResource());
 
     return true;
   }

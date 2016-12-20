@@ -12,6 +12,7 @@ package org.eclipse.oomph.internal.ui;
 
 import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.base.util.BaseResourceImpl;
+import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.EMFPlugin;
@@ -41,6 +42,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xml.namespace.XMLNamespacePackage;
+import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -66,6 +68,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.security.NoSuchAlgorithmException;
 import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1065,14 +1068,19 @@ public abstract class OomphTransferDelegate
     protected Collection<? extends EObject> fromXML(EditingDomain domain, String xml)
     {
       ResourceSet resourceSet = createResourceSet(domain);
-      XMLResource resource = (XMLResource)resourceSet.createResource(URI.createURI("dummy:/*.xmi"));
 
       try
       {
+        String name = XMLTypeFactory.eINSTANCE.convertHexBinary(IOUtil.getSHA1(xml));
+        XMLResource resource = (XMLResource)resourceSet.createResource(URI.createURI("dummy:/" + name + ".xmi"));
         resource.load(new InputSource(new StringReader(xml)), null);
         return resource.getContents();
       }
       catch (IOException ex)
+      {
+        // Ignore.
+      }
+      catch (NoSuchAlgorithmException ex)
       {
         // Ignore.
       }

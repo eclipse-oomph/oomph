@@ -597,7 +597,7 @@ public class ProductPage extends SetupWizardPage
     collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all"));
     AccessUtil.setKey(collapseAllButton, "collapse");
 
-    configurationListener = new ProjectPage.ConfigurationListener(getWizard().getTransferSupport(), catalogManager, filterToolBar);
+    configurationListener = new ProjectPage.ConfigurationListener(getWizard(), catalogManager, filterToolBar);
 
     final ToolItem catalogsButton = new ToolItem(filterToolBar, SWT.DROP_DOWN);
     catalogsButton.setToolTipText("Select Catalogs");
@@ -846,6 +846,10 @@ public class ProductPage extends SetupWizardPage
             if (isCurrentPage() && isPageComplete())
             {
               gotoNextPage();
+            }
+            else
+            {
+              updateSetupContext();
             }
 
             return true;
