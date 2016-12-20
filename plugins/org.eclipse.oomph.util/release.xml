@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <release>
-	<feature name="org.eclipse.e4.rcp" version="1.4.1">
-		<plugin name="org.eclipse.e4.core.services" version="2.0.0"/>
-		<plugin name="org.eclipse.e4.ui.workbench.swt" version="0.13.0"/>
-		<plugin name="org.eclipse.e4.core.commands" version="0.11.0"/>
-		<plugin name="org.eclipse.e4.ui.bindings" version="0.11.0"/>
-		<plugin name="org.eclipse.e4.ui.model.workbench" version="1.1.100"/>
-		<plugin name="org.eclipse.e4.ui.services" version="1.2.0"/>
-		<plugin name="org.eclipse.e4.ui.workbench.renderers.swt" version="0.13.0"/>
-		<plugin name="org.eclipse.e4.ui.workbench" version="1.3.1"/>
-		<plugin name="org.eclipse.e4.ui.css.core" version="0.11.0"/>
-		<plugin name="org.eclipse.e4.ui.css.swt" version="0.12.0"/>
+	<feature name="org.eclipse.e4.rcp" version="1.5.1">
+		<plugin name="org.eclipse.e4.core.services" version="2.0.100"/>
+		<plugin name="org.eclipse.e4.ui.workbench.swt" version="0.14.1"/>
+		<plugin name="org.eclipse.e4.core.commands" version="0.11.100"/>
+		<plugin name="org.eclipse.e4.ui.bindings" version="0.11.100"/>
+		<plugin name="org.eclipse.e4.ui.model.workbench" version="1.2.0"/>
+		<plugin name="org.eclipse.e4.ui.services" version="1.2.100"/>
+		<plugin name="org.eclipse.e4.ui.workbench.renderers.swt" version="0.14.0"/>
+		<plugin name="org.eclipse.e4.ui.workbench" version="1.4.0"/>
+		<plugin name="org.eclipse.e4.ui.css.core" version="0.12.0"/>
+		<plugin name="org.eclipse.e4.ui.css.swt" version="0.12.100"/>
 		<plugin name="org.apache.batik.css" version="1.7.0"/>
 		<plugin name="org.w3c.css.sac" version="1.3.1"/>
 		<plugin name="org.apache.batik.util" version="1.7.0"/>
@@ -19,221 +19,220 @@
 		<plugin name="org.w3c.dom.events" version="3.0.0"/>
 		<plugin name="javax.inject" version="1.0.0"/>
 		<plugin name="javax.annotation" version="1.2.0"/>
-		<plugin name="org.eclipse.e4.core.di" version="1.5.0"/>
-		<plugin name="org.eclipse.e4.core.contexts" version="1.4.0"/>
+		<plugin name="org.eclipse.e4.core.di" version="1.6.1"/>
+		<plugin name="org.eclipse.e4.core.contexts" version="1.5.0"/>
 		<plugin name="org.apache.batik.util.gui" version="1.7.0"/>
 		<plugin name="javax.xml" version="1.3.4"/>
-		<plugin name="org.eclipse.e4.core.di.extensions" version="0.13.0"/>
-		<plugin name="org.eclipse.e4.ui.css.swt.theme" version="0.10.0"/>
-		<plugin name="org.eclipse.e4.ui.di" version="1.1.0"/>
-		<plugin name="org.eclipse.e4.ui.widgets" version="1.1.0"/>
+		<plugin name="org.eclipse.e4.core.di.extensions" version="0.14.0"/>
+		<plugin name="org.eclipse.e4.ui.css.swt.theme" version="0.10.100"/>
+		<plugin name="org.eclipse.e4.ui.di" version="1.1.100"/>
+		<plugin name="org.eclipse.e4.ui.widgets" version="1.1.100"/>
 		<plugin name="org.eclipse.e4.ui.workbench.renderers.swt.cocoa" fragment="true" version="0.11.300"/>
-		<plugin name="org.eclipse.equinox.common" version="3.7.0"/>
-		<plugin name="org.eclipse.equinox.ds" version="1.4.300"/>
-		<plugin name="org.eclipse.equinox.event" version="1.3.100"/>
-		<plugin name="org.eclipse.core.commands" version="3.7.0"/>
-		<plugin name="org.eclipse.core.contenttype" version="3.5.0"/>
-		<plugin name="org.eclipse.core.databinding" version="1.5.0"/>
-		<plugin name="org.eclipse.core.databinding.beans" version="1.3.0"/>
-		<plugin name="org.eclipse.core.databinding.observable" version="1.5.0"/>
-		<plugin name="org.eclipse.core.databinding.property" version="1.5.0"/>
-		<plugin name="org.eclipse.core.expressions" version="3.5.0"/>
-		<plugin name="org.eclipse.core.jobs" version="3.7.0"/>
-		<plugin name="org.eclipse.core.runtime" version="3.11.1"/>
-		<plugin name="org.eclipse.equinox.app" version="1.3.300"/>
-		<plugin name="org.eclipse.equinox.launcher" version="1.3.100"/>
-		<plugin name="com.ibm.icu" version="54.1.1"/>
-		<plugin name="org.eclipse.equinox.preferences" version="3.5.300"/>
-		<plugin name="org.eclipse.equinox.registry" version="3.6.0"/>
-		<plugin name="org.eclipse.equinox.simpleconfigurator" version="1.1.100"/>
-		<plugin name="org.eclipse.osgi" version="3.10.102"/>
-		<plugin name="org.eclipse.osgi.compatibility.state" fragment="true" version="1.0.100"/>
-		<plugin name="org.eclipse.osgi.services" version="3.5.0"/>
-		<plugin name="org.eclipse.equinox.launcher.gtk.solaris.sparc" fragment="true" version="1.1.300"/>
-		<plugin name="org.eclipse.equinox.launcher.gtk.solaris.x86" fragment="true" version="1.1.300"/>
-		<plugin name="org.eclipse.equinox.launcher.cocoa.macosx.x86_64" fragment="true" version="1.1.300"/>
-		<plugin name="org.eclipse.equinox.launcher.gtk.linux.ppc" fragment="true" version="1.1.300"/>
-		<plugin name="org.eclipse.equinox.launcher.gtk.linux.ppc64" fragment="true" version="1.0.300"/>
-		<plugin name="org.eclipse.equinox.launcher.gtk.linux.ppc64le" fragment="true" version="1.0.300"/>
-		<plugin name="org.eclipse.equinox.launcher.gtk.linux.x86" fragment="true" version="1.1.300"/>
-		<plugin name="org.eclipse.equinox.launcher.gtk.linux.s390x" fragment="true" version="1.1.300"/>
-		<plugin name="org.eclipse.equinox.launcher.gtk.linux.s390" fragment="true" version="1.1.300"/>
-		<plugin name="org.eclipse.equinox.launcher.gtk.linux.x86_64" fragment="true" version="1.1.300"/>
-		<plugin name="org.eclipse.equinox.launcher.gtk.aix.ppc" fragment="true" version="1.1.200"/>
-		<plugin name="org.eclipse.equinox.launcher.gtk.aix.ppc64" fragment="true" version="1.1.200"/>
-		<plugin name="org.eclipse.equinox.launcher.gtk.hpux.ia64" fragment="true" version="1.0.200"/>
-		<plugin name="org.eclipse.equinox.launcher.win32.win32.x86" fragment="true" version="1.1.300"/>
-		<plugin name="org.eclipse.equinox.launcher.win32.win32.x86_64" fragment="true" version="1.1.300"/>
-		<plugin name="org.eclipse.swt" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.win32.win32.x86" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.win32.win32.x86_64" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.gtk.linux.x86" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.gtk.linux.s390x" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.gtk.linux.s390" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.gtk.solaris.sparc" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.gtk.solaris.x86" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.gtk.linux.ppc" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.gtk.linux.ppc64" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.gtk.linux.ppc64le" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.gtk.linux.x86_64" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.gtk.aix.ppc" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.gtk.aix.ppc64" fragment="true" version="3.104.2"/>
-		<plugin name="org.eclipse.swt.gtk.hpux.ia64" fragment="true" version="3.104.2"/>
+		<plugin name="org.eclipse.equinox.common" version="3.8.0"/>
+		<plugin name="org.eclipse.equinox.ds" version="1.4.400"/>
+		<plugin name="org.eclipse.equinox.event" version="1.3.200"/>
+		<plugin name="org.eclipse.core.commands" version="3.8.0"/>
+		<plugin name="org.eclipse.core.contenttype" version="3.5.100"/>
+		<plugin name="org.eclipse.core.databinding" version="1.6.0"/>
+		<plugin name="org.eclipse.core.databinding.beans" version="1.3.100"/>
+		<plugin name="org.eclipse.core.databinding.observable" version="1.6.0"/>
+		<plugin name="org.eclipse.core.databinding.property" version="1.6.0"/>
+		<plugin name="org.eclipse.core.expressions" version="3.5.100"/>
+		<plugin name="org.eclipse.core.jobs" version="3.8.0"/>
+		<plugin name="org.eclipse.core.runtime" version="3.12.0"/>
+		<plugin name="org.eclipse.equinox.app" version="1.3.400"/>
+		<plugin name="org.eclipse.equinox.launcher" version="1.3.200"/>
+		<plugin name="com.ibm.icu" version="56.1.0"/>
+		<plugin name="org.eclipse.equinox.preferences" version="3.6.1"/>
+		<plugin name="org.eclipse.equinox.registry" version="3.6.100"/>
+		<plugin name="org.eclipse.equinox.simpleconfigurator" version="1.1.200"/>
+		<plugin name="org.eclipse.osgi" version="3.11.1"/>
+		<plugin name="org.eclipse.osgi.compatibility.state" fragment="true" version="1.0.200"/>
+		<plugin name="org.eclipse.osgi.services" version="3.5.100"/>
+		<plugin name="org.eclipse.equinox.launcher.gtk.solaris.x86_64" fragment="true" version="1.1.300"/>
+		<plugin name="org.eclipse.equinox.launcher.gtk.solaris.sparcv9" fragment="true" version="1.1.300"/>
+		<plugin name="org.eclipse.equinox.launcher.cocoa.macosx.x86_64" fragment="true" version="1.1.400"/>
+		<plugin name="org.eclipse.equinox.launcher.gtk.linux.ppc" fragment="true" version="1.1.400"/>
+		<plugin name="org.eclipse.equinox.launcher.gtk.linux.ppc64" fragment="true" version="1.0.400"/>
+		<plugin name="org.eclipse.equinox.launcher.gtk.linux.ppc64le" fragment="true" version="1.0.400"/>
+		<plugin name="org.eclipse.equinox.launcher.gtk.linux.x86" fragment="true" version="1.1.400"/>
+		<plugin name="org.eclipse.equinox.launcher.gtk.linux.s390x" fragment="true" version="1.1.400"/>
+		<plugin name="org.eclipse.equinox.launcher.gtk.linux.s390" fragment="true" version="1.1.400"/>
+		<plugin name="org.eclipse.equinox.launcher.gtk.linux.x86_64" fragment="true" version="1.1.400"/>
+		<plugin name="org.eclipse.equinox.launcher.gtk.aix.ppc" fragment="true" version="1.1.300"/>
+		<plugin name="org.eclipse.equinox.launcher.gtk.aix.ppc64" fragment="true" version="1.1.300"/>
+		<plugin name="org.eclipse.equinox.launcher.gtk.hpux.ia64" fragment="true" version="1.0.300"/>
+		<plugin name="org.eclipse.equinox.launcher.win32.win32.x86" fragment="true" version="1.1.400"/>
+		<plugin name="org.eclipse.equinox.launcher.win32.win32.x86_64" fragment="true" version="1.1.400"/>
+		<plugin name="org.eclipse.swt" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.win32.win32.x86" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.win32.win32.x86_64" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.gtk.linux.x86" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.gtk.linux.s390x" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.gtk.linux.s390" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.gtk.solaris.x86_64" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.gtk.solaris.sparcv9" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.gtk.linux.ppc" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.gtk.linux.ppc64" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.gtk.linux.ppc64le" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.gtk.linux.x86_64" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.gtk.aix.ppc" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.gtk.aix.ppc64" fragment="true" version="3.105.1"/>
+		<plugin name="org.eclipse.swt.gtk.hpux.ia64" fragment="true" version="3.105.1"/>
 		<plugin name="org.eclipse.equinox.util" version="1.0.500"/>
-		<plugin name="org.eclipse.jface" version="3.11.1"/>
-		<plugin name="org.eclipse.jface.databinding" version="1.7.0"/>
-		<plugin name="org.eclipse.e4.ui.workbench3" version="0.13.0"/>
+		<plugin name="org.eclipse.jface" version="3.12.0"/>
+		<plugin name="org.eclipse.jface.databinding" version="1.8.0"/>
+		<plugin name="org.eclipse.e4.ui.workbench3" version="0.13.100"/>
 		<plugin name="org.apache.felix.gogo.command" version="0.10.0"/>
 		<plugin name="org.apache.felix.gogo.runtime" version="0.10.0"/>
 		<plugin name="org.apache.felix.gogo.shell" version="0.10.0"/>
-		<plugin name="org.eclipse.equinox.console" version="1.1.100"/>
-		<plugin name="org.eclipse.e4.ui.workbench.addons.swt" version="1.2.0"/>
-		<plugin name="org.eclipse.equinox.bidi" version="0.10.0"/>
-		<plugin name="org.eclipse.e4.ui.dialogs" version="1.0.0"/>
+		<plugin name="org.eclipse.equinox.console" version="1.1.200"/>
+		<plugin name="org.eclipse.e4.ui.workbench.addons.swt" version="1.2.100"/>
+		<plugin name="org.eclipse.equinox.bidi" version="1.0.0"/>
+		<plugin name="org.eclipse.e4.ui.dialogs" version="1.1.0"/>
 		<plugin name="org.apache.commons.jxpath" version="1.3.0"/>
-		<plugin name="org.eclipse.e4.emf.xpath" version="0.1.100"/>
-		<plugin name="org.eclipse.e4.core.di.annotations" version="1.4.0"/>
-		<plugin name="org.eclipse.e4.ui.swt.gtk" fragment="true" version="1.0.1"/>
+		<plugin name="org.eclipse.e4.emf.xpath" version="0.1.200"/>
+		<plugin name="org.eclipse.e4.core.di.annotations" version="1.5.0"/>
+		<plugin name="org.eclipse.e4.ui.swt.gtk" fragment="true" version="1.0.100"/>
 	</feature>
-	<feature name="org.eclipse.ecf.core.feature" version="1.2.0">
-		<plugin name="org.eclipse.ecf" version="3.7.0"/>
-		<plugin name="org.eclipse.ecf.identity" version="3.6.0"/>
+	<feature name="org.eclipse.ecf.core.feature" version="1.3.0">
+		<plugin name="org.eclipse.ecf" version="3.8.0"/>
+		<plugin name="org.eclipse.ecf.identity" version="3.7.0"/>
 	</feature>
-	<feature name="org.eclipse.emf.common" version="2.11.1">
-		<plugin name="org.eclipse.emf.common" version="2.11.1"/>
+	<feature name="org.eclipse.emf.common" version="2.12.0">
+		<plugin name="org.eclipse.emf.common" version="2.12.0"/>
 	</feature>
-	<feature name="org.eclipse.emf.common.ui" version="2.10.1">
-		<plugin name="org.eclipse.emf.common.ui" version="2.10.1"/>
+	<feature name="org.eclipse.emf.common.ui" version="2.11.0">
+		<plugin name="org.eclipse.emf.common.ui" version="2.11.0"/>
 	</feature>
-	<feature name="org.eclipse.emf.ecore" version="2.11.2">
-		<plugin name="org.eclipse.emf.ecore" version="2.11.2"/>
+	<feature name="org.eclipse.emf.ecore" version="2.12.0">
+		<plugin name="org.eclipse.emf.ecore" version="2.12.0"/>
 		<plugin name="org.eclipse.emf.ecore.change" version="2.11.0"/>
-		<plugin name="org.eclipse.emf.ecore.xmi" version="2.11.1"/>
+		<plugin name="org.eclipse.emf.ecore.xmi" version="2.12.0"/>
 	</feature>
-	<feature name="org.eclipse.emf.edit" version="2.11.1">
-		<plugin name="org.eclipse.emf.edit" version="2.11.1"/>
+	<feature name="org.eclipse.emf.edit" version="2.12.0">
+		<plugin name="org.eclipse.emf.edit" version="2.12.0"/>
 	</feature>
-	<feature name="org.eclipse.emf.edit.ui" version="2.11.1">
-		<plugin name="org.eclipse.emf.edit.ui" version="2.11.1"/>
+	<feature name="org.eclipse.emf.edit.ui" version="2.12.0">
+		<plugin name="org.eclipse.emf.edit.ui" version="2.12.0"/>
 	</feature>
-	<feature name="org.eclipse.equinox.p2.core.feature" version="1.3.100">
-		<plugin name="org.eclipse.equinox.p2.artifact.repository" version="1.1.400"/>
-		<plugin name="org.eclipse.equinox.p2.console" version="1.0.400"/>
-		<plugin name="org.eclipse.equinox.p2.core" version="2.4.0"/>
-		<plugin name="org.eclipse.equinox.p2.director" version="2.3.200"/>
-		<plugin name="org.eclipse.equinox.p2.engine" version="2.4.0"/>
-		<plugin name="org.eclipse.equinox.p2.garbagecollector" version="1.0.200"/>
-		<plugin name="org.eclipse.equinox.p2.metadata" version="2.3.0"/>
-		<plugin name="org.eclipse.equinox.p2.metadata.repository" version="1.2.200"/>
-		<plugin name="org.eclipse.equinox.p2.repository" version="2.3.100"/>
-		<plugin name="org.eclipse.equinox.p2.touchpoint.eclipse" version="2.1.300"/>
-		<plugin name="org.eclipse.equinox.p2.touchpoint.natives" version="1.2.0"/>
-		<plugin name="org.eclipse.equinox.simpleconfigurator.manipulator" version="2.0.100"/>
+	<feature name="org.eclipse.equinox.p2.core.feature" version="1.3.200">
+		<plugin name="org.eclipse.equinox.p2.artifact.repository" version="1.1.500"/>
+		<plugin name="org.eclipse.equinox.p2.console" version="1.0.500"/>
+		<plugin name="org.eclipse.equinox.p2.core" version="2.4.100"/>
+		<plugin name="org.eclipse.equinox.p2.director" version="2.3.300"/>
+		<plugin name="org.eclipse.equinox.p2.engine" version="2.4.100"/>
+		<plugin name="org.eclipse.equinox.p2.garbagecollector" version="1.0.300"/>
+		<plugin name="org.eclipse.equinox.p2.metadata" version="2.3.100"/>
+		<plugin name="org.eclipse.equinox.p2.metadata.repository" version="1.2.300"/>
+		<plugin name="org.eclipse.equinox.p2.repository" version="2.3.200"/>
+		<plugin name="org.eclipse.equinox.p2.touchpoint.eclipse" version="2.1.400"/>
+		<plugin name="org.eclipse.equinox.p2.touchpoint.natives" version="1.2.100"/>
+		<plugin name="org.eclipse.equinox.simpleconfigurator.manipulator" version="2.0.200"/>
 		<plugin name="org.sat4j.core" version="2.3.5"/>
 		<plugin name="org.sat4j.pb" version="2.3.5"/>
-		<plugin name="org.eclipse.equinox.frameworkadmin" version="2.0.200"/>
-		<plugin name="org.eclipse.equinox.frameworkadmin.equinox" version="1.0.600"/>
-		<plugin name="org.eclipse.equinox.preferences" version="3.5.300"/>
-		<plugin name="org.eclipse.equinox.security" version="1.2.100"/>
-		<plugin name="org.eclipse.equinox.p2.jarprocessor" version="1.0.400"/>
-		<plugin name="org.eclipse.equinox.p2.transport.ecf" version="1.1.100"/>
-		<plugin name="org.eclipse.equinox.p2.operations" version="2.4.100"/>
+		<plugin name="org.eclipse.equinox.frameworkadmin" version="2.0.300"/>
+		<plugin name="org.eclipse.equinox.frameworkadmin.equinox" version="1.0.700"/>
+		<plugin name="org.eclipse.equinox.preferences" version="3.6.1"/>
+		<plugin name="org.eclipse.equinox.security" version="1.2.200"/>
+		<plugin name="org.eclipse.equinox.p2.jarprocessor" version="1.0.500"/>
+		<plugin name="org.eclipse.equinox.p2.transport.ecf" version="1.1.200"/>
+		<plugin name="org.eclipse.equinox.p2.operations" version="2.4.200"/>
 		<plugin name="org.eclipse.equinox.security.macosx" fragment="true" version="1.100.200"/>
 		<plugin name="org.eclipse.equinox.security.win32.x86" fragment="true" version="1.0.300"/>
 		<plugin name="org.eclipse.equinox.security.win32.x86_64" fragment="true" version="1.0.100"/>
 		<plugin name="org.tukaani.xz" version="1.3.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.all" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<feature name="org.eclipse.oomph.gitbash" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.launches" version="1.3.0"/>
-		<feature name="org.eclipse.oomph.manifests" version="1.4.0"/>
-		<feature name="org.eclipse.oomph.p2" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.preferences" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.projectconfig" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.projectcopy" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.version" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.version.headless" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.ostools" version="1.4.0"/>
-		<feature name="org.eclipse.oomph.workingsets" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.targlets" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.util" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.setup.sdk" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.tests" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.util.pde" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.base" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.base.edit" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.predicates" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.predicates.edit" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.resources" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.resources.edit" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.all" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<feature name="org.eclipse.oomph.gitbash" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.launches" version="1.4.0"/>
+		<feature name="org.eclipse.oomph.manifests" version="1.5.0"/>
+		<feature name="org.eclipse.oomph.preferences" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.projectconfig" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.projectcopy" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.version" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.version.headless" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.ostools" version="1.5.0"/>
+		<feature name="org.eclipse.oomph.workingsets" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.targlets" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.util" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.setup.sdk" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.tests" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.util.pde" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.base" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.base.edit" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.predicates" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.predicates.edit" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.resources" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.resources.edit" version="1.6.0"/>
 		<plugin name="org.eclipse.nebula.widgets.tablecombo" version="1.0.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.gitbash" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.gitbash" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.gitbash" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.gitbash" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.launches" version="1.3.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.launches" version="1.3.0"/>
+	<feature name="org.eclipse.oomph.launches" version="1.4.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.launches" version="1.4.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.license" version="1.2.0"/>
-	<feature name="org.eclipse.oomph.manifests" version="1.4.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.manifests" version="1.4.0"/>
+	<feature name="org.eclipse.oomph.license" version="1.3.0"/>
+	<feature name="org.eclipse.oomph.manifests" version="1.5.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.manifests" version="1.5.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.ostools" version="1.4.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.ostools" version="1.4.0"/>
+	<feature name="org.eclipse.oomph.ostools" version="1.5.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.ostools" version="1.5.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.p2" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.p2" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.p2.core" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.p2.edit" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.p2.ui" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.p2.doc" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.p2" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.p2" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.p2.core" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.p2.edit" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.p2.ui" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.p2.doc" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.preferences" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.preferences" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.preferences.edit" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.preferences.editor" version="1.4.0"/>
+	<feature name="org.eclipse.oomph.preferences" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.preferences" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.preferences.edit" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.preferences.editor" version="1.5.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.projectconfig" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.projectconfig" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.projectconfig.edit" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.projectconfig.editor" version="1.4.0"/>
+	<feature name="org.eclipse.oomph.projectconfig" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.projectconfig" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.projectconfig.edit" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.projectconfig.editor" version="1.5.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.projectcopy" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.projectcopy" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.projectcopy" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.projectcopy" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<feature name="org.eclipse.oomph.setup.core" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.p2" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.editor" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.ui" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.doc" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.ui.questionnaire" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.jreinfo.ui" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<feature name="org.eclipse.oomph.setup.core" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.p2" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.editor" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.ui" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.doc" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.ui.questionnaire" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.jreinfo.ui" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.core" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.setup" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.edit" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.core" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.sync" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.p2" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.p2.edit" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.preferences" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.jreinfo" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.core" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.setup" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.edit" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.core" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.sync" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.p2" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.p2.edit" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.preferences" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.jreinfo" version="1.6.0"/>
 		<plugin name="org.eclipse.oomph.jreinfo.win32.x86" fragment="true" version="1.2.0"/>
 		<plugin name="org.eclipse.oomph.jreinfo.win32.x86_64" fragment="true" version="1.2.0"/>
-		<plugin name="org.eclipse.oomph.extractor.lib" version="1.2.0"/>
+		<plugin name="org.eclipse.oomph.extractor.lib" version="1.3.0"/>
 		<plugin name="org.apache.commons.logging" version="1.1.1"/>
 		<plugin name="org.apache.commons.codec" version="1.6.0"/>
 		<plugin name="org.apache.httpcomponents.httpclient" version="4.3.6"/>
@@ -241,180 +240,179 @@
 		<plugin name="org.eclipse.userstorage" version="1.0.0"/>
 		<plugin name="org.eclipse.userstorage.ui" version="1.0.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.git" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.setup.git" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.git.edit" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.git" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.setup.git" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.git.edit" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.installer" version="1.5.0">
-		<feature name="org.eclipse.oomph.p2" version="1.5.0"/>
-		<feature name="org.eclipse.ecf.core.feature" version="1.2.0"/>
-		<feature name="org.eclipse.emf.common" version="2.11.1"/>
-		<feature name="org.eclipse.emf.common.ui" version="2.10.1"/>
-		<feature name="org.eclipse.emf.ecore" version="2.11.2"/>
-		<feature name="org.eclipse.emf.edit" version="2.11.1"/>
-		<feature name="org.eclipse.emf.edit.ui" version="2.11.1"/>
-		<feature name="org.eclipse.rcp" version="4.5.2"/>
-		<feature name="org.eclipse.equinox.p2.core.feature" version="1.3.100"/>
-		<plugin name="org.eclipse.oomph.setup" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.edit" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.installer" version="1.5.0"/>
-		<plugin name="org.eclipse.ui.views" version="3.8.0"/>
-		<plugin name="org.eclipse.core.net" version="1.2.300"/>
-		<plugin name="org.eclipse.core.net.win32.x86" fragment="true" version="1.0.100"/>
-		<plugin name="org.eclipse.core.net.linux.x86_64" fragment="true" version="1.1.100"/>
-		<plugin name="org.eclipse.core.net.win32.x86_64" fragment="true" version="1.0.100"/>
-		<plugin name="org.eclipse.core.net.linux.x86" fragment="true" version="1.1.300"/>
-		<plugin name="org.eclipse.platform" version="4.5.2"/>
-		<plugin name="org.eclipse.equinox.p2.updatesite" version="1.0.500"/>
-		<plugin name="org.eclipse.ui.net" version="1.2.200"/>
-		<plugin name="org.eclipse.jsch.ui" version="1.2.0"/>
-		<plugin name="org.eclipse.oomph.setup.core" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.ui" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.p2" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.p2.edit" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.base" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.base.edit" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.preferences" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.ui" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.util" version="1.5.0"/>
-		<plugin name="org.eclipse.equinox.p2.ui" version="2.4.0"/>
-		<plugin name="org.eclipse.equinox.security.ui" version="1.1.201"/>
-		<plugin name="org.eclipse.oomph.util.doc" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.doc" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.ui.questionnaire" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.jreinfo" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.jreinfo.ui" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.installer" version="1.6.0">
+		<feature name="org.eclipse.oomph.p2" version="1.6.0"/>
+		<feature name="org.eclipse.ecf.core.feature" version="1.3.0"/>
+		<feature name="org.eclipse.emf.common" version="2.12.0"/>
+		<feature name="org.eclipse.emf.common.ui" version="2.11.0"/>
+		<feature name="org.eclipse.emf.ecore" version="2.12.0"/>
+		<feature name="org.eclipse.emf.edit" version="2.12.0"/>
+		<feature name="org.eclipse.emf.edit.ui" version="2.12.0"/>
+		<feature name="org.eclipse.rcp" version="4.6.1"/>
+		<feature name="org.eclipse.equinox.p2.core.feature" version="1.3.200"/>
+		<plugin name="org.eclipse.oomph.setup" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.edit" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.installer" version="1.6.0"/>
+		<plugin name="org.eclipse.ui.views" version="3.8.101"/>
+		<plugin name="org.eclipse.core.net" version="1.3.0"/>
+		<plugin name="org.eclipse.core.net.win32.x86" fragment="true" version="1.1.0"/>
+		<plugin name="org.eclipse.core.net.linux.x86_64" fragment="true" version="1.2.0"/>
+		<plugin name="org.eclipse.core.net.win32.x86_64" fragment="true" version="1.1.0"/>
+		<plugin name="org.eclipse.core.net.linux.x86" fragment="true" version="1.2.0"/>
+		<plugin name="org.eclipse.platform" version="4.6.1"/>
+		<plugin name="org.eclipse.equinox.p2.updatesite" version="1.0.600"/>
+		<plugin name="org.eclipse.ui.net" version="1.3.0"/>
+		<plugin name="org.eclipse.jsch.ui" version="1.3.0"/>
+		<plugin name="org.eclipse.oomph.setup.core" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.ui" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.p2" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.p2.edit" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.base" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.base.edit" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.preferences" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.ui" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.util" version="1.6.0"/>
+		<plugin name="org.eclipse.equinox.p2.ui" version="2.4.100"/>
+		<plugin name="org.eclipse.equinox.security.ui" version="1.1.300"/>
+		<plugin name="org.eclipse.oomph.util.doc" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.doc" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.ui.questionnaire" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.jreinfo" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.jreinfo.ui" version="1.6.0"/>
 		<plugin name="org.eclipse.oomph.jreinfo.win32.x86" fragment="true" version="1.2.0"/>
 		<plugin name="org.eclipse.oomph.jreinfo.win32.x86_64" fragment="true" version="1.2.0"/>
-		<plugin name="org.eclipse.oomph.extractor.lib" version="1.2.0"/>
+		<plugin name="org.eclipse.oomph.extractor.lib" version="1.3.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.jdt" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.setup.jdt" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.jdt.edit" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.jdt" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.setup.jdt" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.jdt.edit" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.launching" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.setup.launching" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.launching.edit" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.launching" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.setup.launching" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.launching.edit" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.maven" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.setup.maven" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.maven.edit" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.maven" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.setup.maven" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.maven.edit" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.mylyn" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.setup.mylyn" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.mylyn.edit" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.mylyn" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.setup.mylyn" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.mylyn.edit" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.pde" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.setup.pde" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.pde.edit" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.pde" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.setup.pde" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.pde.edit" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.projects" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.setup.projects" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.projects.edit" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.projects" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.setup.projects" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.projects.edit" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.projectset" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.setup.projectset" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.projectset.edit" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.projectset" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.setup.projectset" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.projectset.edit" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.sdk" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<feature name="org.eclipse.oomph.setup" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.setup.git" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.setup.jdt" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.setup.launching" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.setup.maven" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.setup.mylyn" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.setup.pde" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.setup.projects" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.setup.projectset" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.setup.targlets" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.setup.workbench" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.setup.workingsets" version="1.5.0"/>
-		<feature name="org.eclipse.oomph.setup.ui.ide" version="1.4.0"/>
+	<feature name="org.eclipse.oomph.setup.sdk" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<feature name="org.eclipse.oomph.setup.git" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.setup.jdt" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.setup.launching" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.setup.maven" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.setup.mylyn" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.setup.pde" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.setup.projects" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.setup.projectset" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.setup.targlets" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.setup.workbench" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.setup.workingsets" version="1.6.0"/>
+		<feature name="org.eclipse.oomph.setup.ui.ide" version="1.5.0"/>
 		<plugin name="org.eclipse.oomph.setup.sdk" version="1.4.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.targlets" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.setup.targlets" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.targlets.edit" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.targlets" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.setup.targlets" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.targlets.edit" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.ui.ide" version="1.4.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<feature name="org.eclipse.oomph.setup" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.ui.ide" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.ui.ide" version="1.5.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<feature name="org.eclipse.oomph.setup" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.ui.ide" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.workbench" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.setup.workbench" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.workbench.edit" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.workbench" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.setup.workbench" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.workbench.edit" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.setup.workingsets" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.setup.workingsets" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.workingsets.edit" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.setup.workingsets" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.setup.workingsets" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.workingsets.edit" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.targlets" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.targlets" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.targlets.core" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.targlets.edit" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.targlets.editor" version="1.4.0"/>
-		<plugin name="org.eclipse.oomph.targlets.ui" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.targlets.doc" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.targlets" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.targlets" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.targlets.core" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.targlets.edit" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.targlets.editor" version="1.5.0"/>
+		<plugin name="org.eclipse.oomph.targlets.ui" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.targlets.doc" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.tests" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.extractor.lib.tests" version="1.3.0"/>
-		<plugin name="org.eclipse.oomph.p2.tests" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.installer.tests" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.tests" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.targlets.tests" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.tests" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.ui.tests" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.version.tests" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.setup.sync.tests" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.tests" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.extractor.lib.tests" version="1.4.0"/>
+		<plugin name="org.eclipse.oomph.p2.tests" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.installer.tests" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.tests" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.targlets.tests" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.tests" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.ui.tests" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.version.tests" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.setup.sync.tests" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.util" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.ui" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.util" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.util.doc" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.util" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.ui" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.util" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.util.doc" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.version" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.version" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.version.digest" version="1.4.0"/>
-		<plugin name="org.eclipse.oomph.version.ui" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.version" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.version" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.version.digest" version="1.5.0"/>
+		<plugin name="org.eclipse.oomph.version.ui" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.version.headless" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.version" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.version.digest" version="1.4.0"/>
+	<feature name="org.eclipse.oomph.version.headless" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.version" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.version.digest" version="1.5.0"/>
 	</feature>
-	<feature name="org.eclipse.oomph.workingsets" version="1.5.0">
-		<feature name="org.eclipse.oomph.license" version="1.2.0" license="true"/>
-		<plugin name="org.eclipse.oomph.workingsets" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.workingsets.edit" version="1.5.0"/>
-		<plugin name="org.eclipse.oomph.workingsets.editor" version="1.5.0"/>
+	<feature name="org.eclipse.oomph.workingsets" version="1.6.0">
+		<feature name="org.eclipse.oomph.license" version="1.3.0" license="true"/>
+		<plugin name="org.eclipse.oomph.workingsets" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.workingsets.edit" version="1.6.0"/>
+		<plugin name="org.eclipse.oomph.workingsets.editor" version="1.6.0"/>
 	</feature>
-	<feature name="org.eclipse.rcp" version="4.5.2">
-		<feature name="org.eclipse.e4.rcp" version="1.4.1"/>
-		<plugin name="org.eclipse.help" version="3.6.0"/>
-		<plugin name="org.eclipse.ui" version="3.107.0"/>
-		<plugin name="org.eclipse.ui.workbench" version="3.107.1"/>
-		<plugin name="org.eclipse.update.configurator" version="3.3.300"/>
-		<plugin name="org.eclipse.rcp" version="4.5.2"/>
+	<feature name="org.eclipse.rcp" version="4.6.1">
+		<feature name="org.eclipse.e4.rcp" version="1.5.1"/>
+		<plugin name="org.eclipse.help" version="3.7.0"/>
+		<plugin name="org.eclipse.ui" version="3.108.0"/>
+		<plugin name="org.eclipse.ui.workbench" version="3.108.1"/>
+		<plugin name="org.eclipse.update.configurator" version="3.3.400"/>
+		<plugin name="org.eclipse.rcp" version="4.6.1"/>
 		<plugin name="org.eclipse.ui.cocoa" fragment="true" version="1.1.100"/>
 	</feature>
-	<plugin name="com.ibm.icu" version="54.1.1"/>
+	<plugin name="com.ibm.icu" version="56.1.0"/>
 	<plugin name="javax.annotation" version="1.2.0"/>
 	<plugin name="javax.inject" version="1.0.0"/>
 	<plugin name="javax.xml" version="1.3.4"/>
@@ -429,222 +427,222 @@
 	<plugin name="org.apache.felix.gogo.shell" version="0.10.0"/>
 	<plugin name="org.apache.httpcomponents.httpclient" version="4.3.6"/>
 	<plugin name="org.apache.httpcomponents.httpcore" version="4.3.3"/>
-	<plugin name="org.eclipse.core.commands" version="3.7.0"/>
-	<plugin name="org.eclipse.core.contenttype" version="3.5.0"/>
-	<plugin name="org.eclipse.core.databinding" version="1.5.0"/>
-	<plugin name="org.eclipse.core.databinding.beans" version="1.3.0"/>
-	<plugin name="org.eclipse.core.databinding.observable" version="1.5.0"/>
-	<plugin name="org.eclipse.core.databinding.property" version="1.5.0"/>
-	<plugin name="org.eclipse.core.expressions" version="3.5.0"/>
-	<plugin name="org.eclipse.core.jobs" version="3.7.0"/>
-	<plugin name="org.eclipse.core.net" version="1.2.300"/>
-	<plugin name="org.eclipse.core.net.linux.x86" fragment="true" version="1.1.300"/>
-	<plugin name="org.eclipse.core.net.linux.x86_64" fragment="true" version="1.1.100"/>
-	<plugin name="org.eclipse.core.net.win32.x86" fragment="true" version="1.0.100"/>
-	<plugin name="org.eclipse.core.net.win32.x86_64" fragment="true" version="1.0.100"/>
-	<plugin name="org.eclipse.core.runtime" version="3.11.1"/>
-	<plugin name="org.eclipse.e4.core.commands" version="0.11.0"/>
-	<plugin name="org.eclipse.e4.core.contexts" version="1.4.0"/>
-	<plugin name="org.eclipse.e4.core.di" version="1.5.0"/>
-	<plugin name="org.eclipse.e4.core.di.annotations" version="1.4.0"/>
-	<plugin name="org.eclipse.e4.core.di.extensions" version="0.13.0"/>
-	<plugin name="org.eclipse.e4.core.services" version="2.0.0"/>
-	<plugin name="org.eclipse.e4.emf.xpath" version="0.1.100"/>
-	<plugin name="org.eclipse.e4.ui.bindings" version="0.11.0"/>
-	<plugin name="org.eclipse.e4.ui.css.core" version="0.11.0"/>
-	<plugin name="org.eclipse.e4.ui.css.swt" version="0.12.0"/>
-	<plugin name="org.eclipse.e4.ui.css.swt.theme" version="0.10.0"/>
-	<plugin name="org.eclipse.e4.ui.di" version="1.1.0"/>
-	<plugin name="org.eclipse.e4.ui.dialogs" version="1.0.0"/>
-	<plugin name="org.eclipse.e4.ui.model.workbench" version="1.1.100"/>
-	<plugin name="org.eclipse.e4.ui.services" version="1.2.0"/>
-	<plugin name="org.eclipse.e4.ui.swt.gtk" fragment="true" version="1.0.1"/>
-	<plugin name="org.eclipse.e4.ui.widgets" version="1.1.0"/>
-	<plugin name="org.eclipse.e4.ui.workbench" version="1.3.1"/>
-	<plugin name="org.eclipse.e4.ui.workbench.addons.swt" version="1.2.0"/>
-	<plugin name="org.eclipse.e4.ui.workbench.renderers.swt" version="0.13.0"/>
+	<plugin name="org.eclipse.core.commands" version="3.8.0"/>
+	<plugin name="org.eclipse.core.contenttype" version="3.5.100"/>
+	<plugin name="org.eclipse.core.databinding" version="1.6.0"/>
+	<plugin name="org.eclipse.core.databinding.beans" version="1.3.100"/>
+	<plugin name="org.eclipse.core.databinding.observable" version="1.6.0"/>
+	<plugin name="org.eclipse.core.databinding.property" version="1.6.0"/>
+	<plugin name="org.eclipse.core.expressions" version="3.5.100"/>
+	<plugin name="org.eclipse.core.jobs" version="3.8.0"/>
+	<plugin name="org.eclipse.core.net" version="1.3.0"/>
+	<plugin name="org.eclipse.core.net.linux.x86" fragment="true" version="1.2.0"/>
+	<plugin name="org.eclipse.core.net.linux.x86_64" fragment="true" version="1.2.0"/>
+	<plugin name="org.eclipse.core.net.win32.x86" fragment="true" version="1.1.0"/>
+	<plugin name="org.eclipse.core.net.win32.x86_64" fragment="true" version="1.1.0"/>
+	<plugin name="org.eclipse.core.runtime" version="3.12.0"/>
+	<plugin name="org.eclipse.e4.core.commands" version="0.11.100"/>
+	<plugin name="org.eclipse.e4.core.contexts" version="1.5.0"/>
+	<plugin name="org.eclipse.e4.core.di" version="1.6.1"/>
+	<plugin name="org.eclipse.e4.core.di.annotations" version="1.5.0"/>
+	<plugin name="org.eclipse.e4.core.di.extensions" version="0.14.0"/>
+	<plugin name="org.eclipse.e4.core.services" version="2.0.100"/>
+	<plugin name="org.eclipse.e4.emf.xpath" version="0.1.200"/>
+	<plugin name="org.eclipse.e4.ui.bindings" version="0.11.100"/>
+	<plugin name="org.eclipse.e4.ui.css.core" version="0.12.0"/>
+	<plugin name="org.eclipse.e4.ui.css.swt" version="0.12.100"/>
+	<plugin name="org.eclipse.e4.ui.css.swt.theme" version="0.10.100"/>
+	<plugin name="org.eclipse.e4.ui.di" version="1.1.100"/>
+	<plugin name="org.eclipse.e4.ui.dialogs" version="1.1.0"/>
+	<plugin name="org.eclipse.e4.ui.model.workbench" version="1.2.0"/>
+	<plugin name="org.eclipse.e4.ui.services" version="1.2.100"/>
+	<plugin name="org.eclipse.e4.ui.swt.gtk" fragment="true" version="1.0.100"/>
+	<plugin name="org.eclipse.e4.ui.widgets" version="1.1.100"/>
+	<plugin name="org.eclipse.e4.ui.workbench" version="1.4.0"/>
+	<plugin name="org.eclipse.e4.ui.workbench.addons.swt" version="1.2.100"/>
+	<plugin name="org.eclipse.e4.ui.workbench.renderers.swt" version="0.14.0"/>
 	<plugin name="org.eclipse.e4.ui.workbench.renderers.swt.cocoa" fragment="true" version="0.11.300"/>
-	<plugin name="org.eclipse.e4.ui.workbench.swt" version="0.13.0"/>
-	<plugin name="org.eclipse.e4.ui.workbench3" version="0.13.0"/>
-	<plugin name="org.eclipse.ecf" version="3.7.0"/>
-	<plugin name="org.eclipse.ecf.identity" version="3.6.0"/>
-	<plugin name="org.eclipse.emf.common" version="2.11.1"/>
-	<plugin name="org.eclipse.emf.common.ui" version="2.10.1"/>
-	<plugin name="org.eclipse.emf.ecore" version="2.11.2"/>
+	<plugin name="org.eclipse.e4.ui.workbench.swt" version="0.14.1"/>
+	<plugin name="org.eclipse.e4.ui.workbench3" version="0.13.100"/>
+	<plugin name="org.eclipse.ecf" version="3.8.0"/>
+	<plugin name="org.eclipse.ecf.identity" version="3.7.0"/>
+	<plugin name="org.eclipse.emf.common" version="2.12.0"/>
+	<plugin name="org.eclipse.emf.common.ui" version="2.11.0"/>
+	<plugin name="org.eclipse.emf.ecore" version="2.12.0"/>
 	<plugin name="org.eclipse.emf.ecore.change" version="2.11.0"/>
-	<plugin name="org.eclipse.emf.ecore.xmi" version="2.11.1"/>
-	<plugin name="org.eclipse.emf.edit" version="2.11.1"/>
-	<plugin name="org.eclipse.emf.edit.ui" version="2.11.1"/>
-	<plugin name="org.eclipse.equinox.app" version="1.3.300"/>
-	<plugin name="org.eclipse.equinox.bidi" version="0.10.0"/>
-	<plugin name="org.eclipse.equinox.common" version="3.7.0"/>
-	<plugin name="org.eclipse.equinox.console" version="1.1.100"/>
-	<plugin name="org.eclipse.equinox.ds" version="1.4.300"/>
-	<plugin name="org.eclipse.equinox.event" version="1.3.100"/>
-	<plugin name="org.eclipse.equinox.frameworkadmin" version="2.0.200"/>
-	<plugin name="org.eclipse.equinox.frameworkadmin.equinox" version="1.0.600"/>
-	<plugin name="org.eclipse.equinox.launcher" version="1.3.100"/>
-	<plugin name="org.eclipse.equinox.launcher.cocoa.macosx.x86_64" fragment="true" version="1.1.300"/>
-	<plugin name="org.eclipse.equinox.launcher.gtk.aix.ppc" fragment="true" version="1.1.200"/>
-	<plugin name="org.eclipse.equinox.launcher.gtk.aix.ppc64" fragment="true" version="1.1.200"/>
-	<plugin name="org.eclipse.equinox.launcher.gtk.hpux.ia64" fragment="true" version="1.0.200"/>
-	<plugin name="org.eclipse.equinox.launcher.gtk.linux.ppc" fragment="true" version="1.1.300"/>
-	<plugin name="org.eclipse.equinox.launcher.gtk.linux.ppc64" fragment="true" version="1.0.300"/>
-	<plugin name="org.eclipse.equinox.launcher.gtk.linux.ppc64le" fragment="true" version="1.0.300"/>
-	<plugin name="org.eclipse.equinox.launcher.gtk.linux.s390" fragment="true" version="1.1.300"/>
-	<plugin name="org.eclipse.equinox.launcher.gtk.linux.s390x" fragment="true" version="1.1.300"/>
-	<plugin name="org.eclipse.equinox.launcher.gtk.linux.x86" fragment="true" version="1.1.300"/>
-	<plugin name="org.eclipse.equinox.launcher.gtk.linux.x86_64" fragment="true" version="1.1.300"/>
-	<plugin name="org.eclipse.equinox.launcher.gtk.solaris.sparc" fragment="true" version="1.1.300"/>
-	<plugin name="org.eclipse.equinox.launcher.gtk.solaris.x86" fragment="true" version="1.1.300"/>
-	<plugin name="org.eclipse.equinox.launcher.win32.win32.x86" fragment="true" version="1.1.300"/>
-	<plugin name="org.eclipse.equinox.launcher.win32.win32.x86_64" fragment="true" version="1.1.300"/>
-	<plugin name="org.eclipse.equinox.p2.artifact.repository" version="1.1.400"/>
-	<plugin name="org.eclipse.equinox.p2.console" version="1.0.400"/>
-	<plugin name="org.eclipse.equinox.p2.core" version="2.4.0"/>
-	<plugin name="org.eclipse.equinox.p2.director" version="2.3.200"/>
-	<plugin name="org.eclipse.equinox.p2.engine" version="2.4.0"/>
-	<plugin name="org.eclipse.equinox.p2.garbagecollector" version="1.0.200"/>
-	<plugin name="org.eclipse.equinox.p2.jarprocessor" version="1.0.400"/>
-	<plugin name="org.eclipse.equinox.p2.metadata" version="2.3.0"/>
-	<plugin name="org.eclipse.equinox.p2.metadata.repository" version="1.2.200"/>
-	<plugin name="org.eclipse.equinox.p2.operations" version="2.4.100"/>
-	<plugin name="org.eclipse.equinox.p2.repository" version="2.3.100"/>
-	<plugin name="org.eclipse.equinox.p2.touchpoint.eclipse" version="2.1.300"/>
-	<plugin name="org.eclipse.equinox.p2.touchpoint.natives" version="1.2.0"/>
-	<plugin name="org.eclipse.equinox.p2.transport.ecf" version="1.1.100"/>
-	<plugin name="org.eclipse.equinox.p2.ui" version="2.4.0"/>
-	<plugin name="org.eclipse.equinox.p2.updatesite" version="1.0.500"/>
-	<plugin name="org.eclipse.equinox.preferences" version="3.5.300"/>
-	<plugin name="org.eclipse.equinox.registry" version="3.6.0"/>
-	<plugin name="org.eclipse.equinox.security" version="1.2.100"/>
+	<plugin name="org.eclipse.emf.ecore.xmi" version="2.12.0"/>
+	<plugin name="org.eclipse.emf.edit" version="2.12.0"/>
+	<plugin name="org.eclipse.emf.edit.ui" version="2.12.0"/>
+	<plugin name="org.eclipse.equinox.app" version="1.3.400"/>
+	<plugin name="org.eclipse.equinox.bidi" version="1.0.0"/>
+	<plugin name="org.eclipse.equinox.common" version="3.8.0"/>
+	<plugin name="org.eclipse.equinox.console" version="1.1.200"/>
+	<plugin name="org.eclipse.equinox.ds" version="1.4.400"/>
+	<plugin name="org.eclipse.equinox.event" version="1.3.200"/>
+	<plugin name="org.eclipse.equinox.frameworkadmin" version="2.0.300"/>
+	<plugin name="org.eclipse.equinox.frameworkadmin.equinox" version="1.0.700"/>
+	<plugin name="org.eclipse.equinox.launcher" version="1.3.200"/>
+	<plugin name="org.eclipse.equinox.launcher.cocoa.macosx.x86_64" fragment="true" version="1.1.400"/>
+	<plugin name="org.eclipse.equinox.launcher.gtk.aix.ppc" fragment="true" version="1.1.300"/>
+	<plugin name="org.eclipse.equinox.launcher.gtk.aix.ppc64" fragment="true" version="1.1.300"/>
+	<plugin name="org.eclipse.equinox.launcher.gtk.hpux.ia64" fragment="true" version="1.0.300"/>
+	<plugin name="org.eclipse.equinox.launcher.gtk.linux.ppc" fragment="true" version="1.1.400"/>
+	<plugin name="org.eclipse.equinox.launcher.gtk.linux.ppc64" fragment="true" version="1.0.400"/>
+	<plugin name="org.eclipse.equinox.launcher.gtk.linux.ppc64le" fragment="true" version="1.0.400"/>
+	<plugin name="org.eclipse.equinox.launcher.gtk.linux.s390" fragment="true" version="1.1.400"/>
+	<plugin name="org.eclipse.equinox.launcher.gtk.linux.s390x" fragment="true" version="1.1.400"/>
+	<plugin name="org.eclipse.equinox.launcher.gtk.linux.x86" fragment="true" version="1.1.400"/>
+	<plugin name="org.eclipse.equinox.launcher.gtk.linux.x86_64" fragment="true" version="1.1.400"/>
+	<plugin name="org.eclipse.equinox.launcher.gtk.solaris.sparcv9" fragment="true" version="1.1.300"/>
+	<plugin name="org.eclipse.equinox.launcher.gtk.solaris.x86_64" fragment="true" version="1.1.300"/>
+	<plugin name="org.eclipse.equinox.launcher.win32.win32.x86" fragment="true" version="1.1.400"/>
+	<plugin name="org.eclipse.equinox.launcher.win32.win32.x86_64" fragment="true" version="1.1.400"/>
+	<plugin name="org.eclipse.equinox.p2.artifact.repository" version="1.1.500"/>
+	<plugin name="org.eclipse.equinox.p2.console" version="1.0.500"/>
+	<plugin name="org.eclipse.equinox.p2.core" version="2.4.100"/>
+	<plugin name="org.eclipse.equinox.p2.director" version="2.3.300"/>
+	<plugin name="org.eclipse.equinox.p2.engine" version="2.4.100"/>
+	<plugin name="org.eclipse.equinox.p2.garbagecollector" version="1.0.300"/>
+	<plugin name="org.eclipse.equinox.p2.jarprocessor" version="1.0.500"/>
+	<plugin name="org.eclipse.equinox.p2.metadata" version="2.3.100"/>
+	<plugin name="org.eclipse.equinox.p2.metadata.repository" version="1.2.300"/>
+	<plugin name="org.eclipse.equinox.p2.operations" version="2.4.200"/>
+	<plugin name="org.eclipse.equinox.p2.repository" version="2.3.200"/>
+	<plugin name="org.eclipse.equinox.p2.touchpoint.eclipse" version="2.1.400"/>
+	<plugin name="org.eclipse.equinox.p2.touchpoint.natives" version="1.2.100"/>
+	<plugin name="org.eclipse.equinox.p2.transport.ecf" version="1.1.200"/>
+	<plugin name="org.eclipse.equinox.p2.ui" version="2.4.100"/>
+	<plugin name="org.eclipse.equinox.p2.updatesite" version="1.0.600"/>
+	<plugin name="org.eclipse.equinox.preferences" version="3.6.1"/>
+	<plugin name="org.eclipse.equinox.registry" version="3.6.100"/>
+	<plugin name="org.eclipse.equinox.security" version="1.2.200"/>
 	<plugin name="org.eclipse.equinox.security.macosx" fragment="true" version="1.100.200"/>
-	<plugin name="org.eclipse.equinox.security.ui" version="1.1.201"/>
+	<plugin name="org.eclipse.equinox.security.ui" version="1.1.300"/>
 	<plugin name="org.eclipse.equinox.security.win32.x86" fragment="true" version="1.0.300"/>
 	<plugin name="org.eclipse.equinox.security.win32.x86_64" fragment="true" version="1.0.100"/>
-	<plugin name="org.eclipse.equinox.simpleconfigurator" version="1.1.100"/>
-	<plugin name="org.eclipse.equinox.simpleconfigurator.manipulator" version="2.0.100"/>
+	<plugin name="org.eclipse.equinox.simpleconfigurator" version="1.1.200"/>
+	<plugin name="org.eclipse.equinox.simpleconfigurator.manipulator" version="2.0.200"/>
 	<plugin name="org.eclipse.equinox.util" version="1.0.500"/>
-	<plugin name="org.eclipse.help" version="3.6.0"/>
-	<plugin name="org.eclipse.jface" version="3.11.1"/>
-	<plugin name="org.eclipse.jface.databinding" version="1.7.0"/>
-	<plugin name="org.eclipse.jsch.ui" version="1.2.0"/>
+	<plugin name="org.eclipse.help" version="3.7.0"/>
+	<plugin name="org.eclipse.jface" version="3.12.0"/>
+	<plugin name="org.eclipse.jface.databinding" version="1.8.0"/>
+	<plugin name="org.eclipse.jsch.ui" version="1.3.0"/>
 	<plugin name="org.eclipse.nebula.widgets.tablecombo" version="1.0.0"/>
-	<plugin name="org.eclipse.oomph.base" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.base.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.extractor.lib" version="1.2.0"/>
-	<plugin name="org.eclipse.oomph.extractor.lib.tests" version="1.3.0"/>
-	<plugin name="org.eclipse.oomph.gitbash" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.jreinfo" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.jreinfo.ui" version="1.5.0"/>
+	<plugin name="org.eclipse.oomph.base" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.base.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.extractor.lib" version="1.3.0"/>
+	<plugin name="org.eclipse.oomph.extractor.lib.tests" version="1.4.0"/>
+	<plugin name="org.eclipse.oomph.gitbash" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.jreinfo" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.jreinfo.ui" version="1.6.0"/>
 	<plugin name="org.eclipse.oomph.jreinfo.win32.x86" fragment="true" version="1.2.0"/>
 	<plugin name="org.eclipse.oomph.jreinfo.win32.x86_64" fragment="true" version="1.2.0"/>
-	<plugin name="org.eclipse.oomph.launches" version="1.3.0"/>
-	<plugin name="org.eclipse.oomph.manifests" version="1.4.0"/>
-	<plugin name="org.eclipse.oomph.ostools" version="1.4.0"/>
-	<plugin name="org.eclipse.oomph.p2" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.p2.core" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.p2.doc" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.p2.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.p2.tests" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.p2.ui" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.predicates" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.predicates.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.preferences" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.preferences.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.preferences.editor" version="1.4.0"/>
-	<plugin name="org.eclipse.oomph.projectconfig" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.projectconfig.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.projectconfig.editor" version="1.4.0"/>
-	<plugin name="org.eclipse.oomph.projectcopy" version="1.5.0"/>
+	<plugin name="org.eclipse.oomph.launches" version="1.4.0"/>
+	<plugin name="org.eclipse.oomph.manifests" version="1.5.0"/>
+	<plugin name="org.eclipse.oomph.ostools" version="1.5.0"/>
+	<plugin name="org.eclipse.oomph.p2" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.p2.core" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.p2.doc" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.p2.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.p2.tests" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.p2.ui" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.predicates" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.predicates.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.preferences" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.preferences.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.preferences.editor" version="1.5.0"/>
+	<plugin name="org.eclipse.oomph.projectconfig" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.projectconfig.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.projectconfig.editor" version="1.5.0"/>
+	<plugin name="org.eclipse.oomph.projectcopy" version="1.6.0"/>
 	<plugin name="org.eclipse.oomph.releng.helpcenter" version="1.3.0"/>
-	<plugin name="org.eclipse.oomph.resources" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.resources.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.core" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.doc" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.editor" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.git" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.git.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.installer" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.installer.tests" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.jdt" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.jdt.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.launching" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.launching.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.maven" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.maven.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.mylyn" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.mylyn.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.p2" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.p2.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.pde" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.pde.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.projects" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.projects.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.projectset" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.projectset.edit" version="1.5.0"/>
+	<plugin name="org.eclipse.oomph.resources" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.resources.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.core" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.doc" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.editor" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.git" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.git.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.installer" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.installer.tests" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.jdt" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.jdt.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.launching" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.launching.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.maven" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.maven.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.mylyn" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.mylyn.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.p2" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.p2.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.pde" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.pde.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.projects" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.projects.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.projectset" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.projectset.edit" version="1.6.0"/>
 	<plugin name="org.eclipse.oomph.setup.sdk" version="1.4.0"/>
-	<plugin name="org.eclipse.oomph.setup.sync" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.sync.tests" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.targlets" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.targlets.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.tests" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.ui" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.ui.ide" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.ui.questionnaire" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.workbench" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.workbench.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.workingsets" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.setup.workingsets.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.targlets" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.targlets.core" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.targlets.doc" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.targlets.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.targlets.editor" version="1.4.0"/>
-	<plugin name="org.eclipse.oomph.targlets.tests" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.targlets.ui" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.tests" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.ui" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.ui.tests" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.util" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.util.doc" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.util.pde" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.version" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.version.digest" version="1.4.0"/>
-	<plugin name="org.eclipse.oomph.version.tests" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.version.ui" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.workingsets" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.workingsets.edit" version="1.5.0"/>
-	<plugin name="org.eclipse.oomph.workingsets.editor" version="1.5.0"/>
-	<plugin name="org.eclipse.osgi" version="3.10.102"/>
-	<plugin name="org.eclipse.osgi.compatibility.state" fragment="true" version="1.0.100"/>
-	<plugin name="org.eclipse.osgi.services" version="3.5.0"/>
-	<plugin name="org.eclipse.platform" version="4.5.2"/>
-	<plugin name="org.eclipse.rcp" version="4.5.2"/>
-	<plugin name="org.eclipse.swt" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.gtk.aix.ppc" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.gtk.aix.ppc64" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.gtk.hpux.ia64" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.gtk.linux.ppc" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.gtk.linux.ppc64" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.gtk.linux.ppc64le" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.gtk.linux.s390" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.gtk.linux.s390x" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.gtk.linux.x86" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.gtk.linux.x86_64" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.gtk.solaris.sparc" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.gtk.solaris.x86" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.win32.win32.x86" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.swt.win32.win32.x86_64" fragment="true" version="3.104.2"/>
-	<plugin name="org.eclipse.ui" version="3.107.0"/>
+	<plugin name="org.eclipse.oomph.setup.sync" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.sync.tests" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.targlets" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.targlets.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.tests" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.ui" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.ui.ide" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.ui.questionnaire" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.workbench" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.workbench.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.workingsets" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.setup.workingsets.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.targlets" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.targlets.core" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.targlets.doc" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.targlets.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.targlets.editor" version="1.5.0"/>
+	<plugin name="org.eclipse.oomph.targlets.tests" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.targlets.ui" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.tests" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.ui" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.ui.tests" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.util" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.util.doc" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.util.pde" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.version" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.version.digest" version="1.5.0"/>
+	<plugin name="org.eclipse.oomph.version.tests" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.version.ui" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.workingsets" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.workingsets.edit" version="1.6.0"/>
+	<plugin name="org.eclipse.oomph.workingsets.editor" version="1.6.0"/>
+	<plugin name="org.eclipse.osgi" version="3.11.1"/>
+	<plugin name="org.eclipse.osgi.compatibility.state" fragment="true" version="1.0.200"/>
+	<plugin name="org.eclipse.osgi.services" version="3.5.100"/>
+	<plugin name="org.eclipse.platform" version="4.6.1"/>
+	<plugin name="org.eclipse.rcp" version="4.6.1"/>
+	<plugin name="org.eclipse.swt" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.cocoa.macosx.x86_64" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.gtk.aix.ppc" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.gtk.aix.ppc64" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.gtk.hpux.ia64" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.gtk.linux.ppc" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.gtk.linux.ppc64" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.gtk.linux.ppc64le" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.gtk.linux.s390" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.gtk.linux.s390x" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.gtk.linux.x86" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.gtk.linux.x86_64" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.gtk.solaris.sparcv9" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.gtk.solaris.x86_64" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.win32.win32.x86" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.swt.win32.win32.x86_64" fragment="true" version="3.105.1"/>
+	<plugin name="org.eclipse.ui" version="3.108.0"/>
 	<plugin name="org.eclipse.ui.cocoa" fragment="true" version="1.1.100"/>
-	<plugin name="org.eclipse.ui.net" version="1.2.200"/>
-	<plugin name="org.eclipse.ui.views" version="3.8.0"/>
-	<plugin name="org.eclipse.ui.workbench" version="3.107.1"/>
-	<plugin name="org.eclipse.update.configurator" version="3.3.300"/>
+	<plugin name="org.eclipse.ui.net" version="1.3.0"/>
+	<plugin name="org.eclipse.ui.views" version="3.8.101"/>
+	<plugin name="org.eclipse.ui.workbench" version="3.108.1"/>
+	<plugin name="org.eclipse.update.configurator" version="3.3.400"/>
 	<plugin name="org.eclipse.userstorage" version="1.0.0"/>
 	<plugin name="org.eclipse.userstorage.ui" version="1.0.0"/>
 	<plugin name="org.sat4j.core" version="2.3.5"/>
