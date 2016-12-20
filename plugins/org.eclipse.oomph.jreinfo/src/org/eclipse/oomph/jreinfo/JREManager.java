@@ -20,6 +20,7 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 
@@ -32,6 +33,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,6 +55,8 @@ public final class JREManager
 
   public static final JREManager INSTANCE = new JREManager();
 
+  private static final String PROP_DEFAULT_JRE = "oomph.default.jres";
+
   private final List<String> javaHomes = new ArrayList<String>();
 
   private String systemJavaHome;
@@ -62,11 +66,38 @@ public final class JREManager
     try
     {
       loadJavaHomes();
+
+      for (File defaultJavaHome : getDefaultJavaHomes())
+      {
+        addExtraJavaHomes(defaultJavaHome.toString(), new NullProgressMonitor());
+      }
     }
     catch (Throwable ex)
     {
       JREInfoPlugin.INSTANCE.log(ex);
     }
+  }
+
+  private Set<File> getDefaultJavaHomes()
+  {
+    Set<File> result = new LinkedHashSet<File>();
+    String defaultJREs = PropertiesUtil.getProperty(PROP_DEFAULT_JRE);
+    if (defaultJREs != null)
+    {
+      try
+      {
+        for (String defaultJRE : defaultJREs.split(File.pathSeparator))
+        {
+          result.add(new File(defaultJRE).getCanonicalFile());
+        }
+      }
+      catch (IOException ex)
+      {
+        //$FALL-THROUGH$
+      }
+    }
+
+    return result;
   }
 
   private void addExtraJavaHomes(List<String> extraJavaHomes, File folder, boolean root, Set<JRE> result, IProgressMonitor monitor)
@@ -165,6 +196,20 @@ public final class JREManager
 
   public String getDefaultJRE(int bitness, String javaVersion)
   {
+    Set<File> defaultJavaHomes = getDefaultJavaHomes();
+    if (!defaultJavaHomes.isEmpty())
+    {
+      JREFilter jreFilter = new JREFilter(javaVersion, bitness, null);
+      Map<File, JRE> jres = getJREs(jreFilter);
+      for (File defaultJavaHome : defaultJavaHomes)
+      {
+        if (jres.containsKey(defaultJavaHome))
+        {
+          return defaultJavaHome.toString();
+        }
+      }
+    }
+
     File defaultsFile = getDefaultsFile();
     Map<String, String> properties = PropertiesUtil.getProperties(defaultsFile);
     String javaHome = properties.get(getDefaultsKey(bitness, javaVersion));
