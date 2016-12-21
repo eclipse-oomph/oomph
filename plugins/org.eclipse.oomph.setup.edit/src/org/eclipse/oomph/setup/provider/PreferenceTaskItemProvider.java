@@ -243,7 +243,7 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
     Object parent = getParent(preferenceTask);
     if (parent != null)
     {
-      ItemProviderAdapter itemProvider = (ItemProviderAdapter)getAdapterFactory().adapt(parent, IItemLabelProvider.class);
+      ItemProviderAdapter itemProvider = (ItemProviderAdapter)getRootAdapterFactory().adapt(parent, IItemLabelProvider.class);
       if (itemProvider != null)
       {
         return itemProvider.getText(parent);
