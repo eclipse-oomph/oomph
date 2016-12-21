@@ -12,7 +12,7 @@
 <feature
       id="org.eclipse.oomph.setup.pde"
       label="%featureName"
-      version="1.6.0.qualifier"
+      version="1.7.0.qualifier"
       provider-name="%providerName"
       license-feature="org.eclipse.oomph.license"
       license-feature-version="0.0.0">
