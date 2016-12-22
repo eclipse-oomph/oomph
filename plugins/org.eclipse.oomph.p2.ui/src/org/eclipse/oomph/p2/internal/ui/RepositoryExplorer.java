@@ -26,6 +26,7 @@ import org.eclipse.oomph.p2.core.RepositoryProvider;
 import org.eclipse.oomph.p2.impl.RequirementImpl;
 import org.eclipse.oomph.p2.internal.ui.RepositoryManager.RepositoryManagerListener;
 import org.eclipse.oomph.p2.provider.RequirementItemProvider;
+import org.eclipse.oomph.ui.OomphDialog;
 import org.eclipse.oomph.ui.SearchField;
 import org.eclipse.oomph.ui.SearchField.FilterHandler;
 import org.eclipse.oomph.ui.UIUtil;
@@ -38,6 +39,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
@@ -62,9 +64,12 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -101,6 +106,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -111,7 +118,9 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -293,6 +302,18 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           else
           {
             versionsViewer.setInput(null);
+          }
+        }
+      });
+
+      itemsViewer.addDoubleClickListener(new IDoubleClickListener()
+      {
+        public void doubleClick(DoubleClickEvent event)
+        {
+          String id = getSelectedIUName();
+          if (id != null)
+          {
+            showIUDetails(id, null);
           }
         }
       });
@@ -512,6 +533,22 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     versionsViewer.setLabelProvider(versionProvider);
     addDragSupport(versionsViewer);
 
+    versionsViewer.addDoubleClickListener(new IDoubleClickListener()
+    {
+      public void doubleClick(DoubleClickEvent event)
+      {
+        String id = getSelectedIUName();
+        if (id != null)
+        {
+          Version version = getSelectedVersion();
+          if (version != null)
+          {
+            showIUDetails(id, version);
+          }
+        }
+      }
+    });
+
     formToolkit.adapt(versionsViewer.getControl(), false, false);
 
     Composite versionsGroup = formToolkit.createComposite(versionsComposite, SWT.NONE);
@@ -662,6 +699,65 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     if (location != null)
     {
       loadJob.reschedule(location);
+    }
+  }
+
+  private String getSelectedIUName()
+  {
+    Object firstItem = ((IStructuredSelection)itemsViewer.getSelection()).getFirstElement();
+    if (firstItem instanceof VersionedItem)
+    {
+      VersionedItem item = (VersionedItem)firstItem;
+      if (IInstallableUnit.NAMESPACE_IU_ID.equals(item.getNamespace()))
+      {
+        return item.getName();
+      }
+    }
+
+    return null;
+  }
+
+  private Version getSelectedVersion()
+  {
+    Object firstVersion = ((IStructuredSelection)versionsViewer.getSelection()).getFirstElement();
+    if (firstVersion instanceof VersionProvider.ItemVersion)
+    {
+      VersionProvider.ItemVersion itemVersion = (VersionProvider.ItemVersion)firstVersion;
+      return itemVersion.getVersion();
+    }
+
+    return null;
+  }
+
+  protected void showIUDetails(String id, Version version)
+  {
+    try
+    {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      IUWriter writer = new IUWriter(baos);
+      boolean first = true;
+
+      for (IInstallableUnit iu : installableUnits.query(QueryUtil.createIUQuery(id, version), new NullProgressMonitor()))
+      {
+        if (first)
+        {
+          first = false;
+        }
+        else
+        {
+          writer.newLine();
+        }
+
+        writer.writeInstallableUnit(iu);
+        writer.flush();
+      }
+
+      String xml = baos.toString("UTF-8");
+      new IUDialog(getSite().getShell(), xml).open();
+    }
+    catch (Exception ex)
+    {
+      P2UIPlugin.INSTANCE.log(ex);
     }
   }
 
@@ -830,6 +926,104 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     }
 
     return false;
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  @SuppressWarnings("restriction")
+  private static final class IUWriter extends org.eclipse.equinox.internal.p2.metadata.repository.io.MetadataWriter
+  {
+    private ByteArrayOutputStream output;
+
+    public IUWriter(ByteArrayOutputStream output) throws UnsupportedEncodingException
+    {
+      super(output, null);
+      this.output = output;
+
+      flush();
+      output.reset();
+    }
+
+    @Override
+    public void writeInstallableUnit(IInstallableUnit resolvedIU)
+    {
+      // Just make this method publicly available.
+      super.writeInstallableUnit(resolvedIU);
+    }
+
+    @Override
+    public void flush()
+    {
+      // Just make this method publicly available.
+      super.flush();
+    }
+
+    public void newLine()
+    {
+      try
+      {
+        byte[] nl = StringUtil.NL.getBytes("UTF-8");
+        for (byte b : nl)
+        {
+          output.write(b);
+        }
+      }
+      catch (Exception ex)
+      {
+        P2UIPlugin.INSTANCE.log(ex);
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class IUDialog extends OomphDialog
+  {
+    public static final String TITLE = "Installable Unit Details";
+
+    private final String xml;
+
+    public IUDialog(Shell parentShell, String xml)
+    {
+      super(parentShell, TITLE, 900, 750, P2UIPlugin.INSTANCE, false);
+      setShellStyle(SWT.TITLE | SWT.MAX | SWT.RESIZE | SWT.BORDER | SWT.APPLICATION_MODAL);
+      this.xml = xml;
+    }
+
+    @Override
+    protected String getShellText()
+    {
+      return TITLE;
+    }
+
+    @Override
+    protected String getDefaultMessage()
+    {
+      return "Browse the XML representation of the selected installable units.";
+    }
+
+    @Override
+    protected String getImagePath()
+    {
+      return "wizban/ProfileDetails.png";
+    }
+
+    @Override
+    protected void createUI(Composite parent)
+    {
+      Text text = new Text(parent, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
+      text.setLayoutData(new GridData(GridData.FILL_BOTH));
+      text.setText(xml);
+      text.setEditable(false);
+    }
+
+    @Override
+    protected void createButtonsForButtonBar(Composite parent)
+    {
+      createButton(parent, IDialogConstants.OK_ID, IDialogConstants.CLOSE_LABEL, true);
+    }
   }
 
   /**

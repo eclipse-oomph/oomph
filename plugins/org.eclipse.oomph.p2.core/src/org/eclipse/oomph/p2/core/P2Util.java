@@ -12,6 +12,8 @@ package org.eclipse.oomph.p2.core;
 
 import org.eclipse.oomph.p2.internal.core.AgentImpl;
 import org.eclipse.oomph.p2.internal.core.AgentManagerImpl;
+import org.eclipse.oomph.p2.internal.core.CachingRepositoryManager;
+import org.eclipse.oomph.p2.internal.core.CachingTransport;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.URIUtil;
@@ -29,6 +31,7 @@ import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescriptio
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.repository.IRepositoryManager;
+import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import java.io.File;
 import java.net.URI;
@@ -82,6 +85,23 @@ public final class P2Util
     }
 
     return result;
+  }
+
+  public static File getCacheFile(URI uri)
+  {
+    Agent agent = getAgentManager().getCurrentAgent();
+
+    IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
+    if (manager instanceof CachingRepositoryManager)
+    {
+      CachingTransport transport = ((CachingRepositoryManager<?>)manager).getTransport();
+      if (transport != null)
+      {
+        return transport.getCacheFile(uri);
+      }
+    }
+
+    return null;
   }
 
   @SuppressWarnings("all")

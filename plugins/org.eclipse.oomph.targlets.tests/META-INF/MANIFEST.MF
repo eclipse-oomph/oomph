@@ -2,14 +2,14 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.oomph.targlets.tests;singleton:=true
-Bundle-Version: 1.6.0.qualifier
+Bundle-Version: 1.7.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: org.eclipse.oomph.targlets.tests;version="1.6.0";x-internal:=true
-Require-Bundle: org.eclipse.oomph.p2.tests;bundle-version="[1.6.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.targlets.core;bundle-version="[1.6.0,2.0.0)";visibility:=reexport,
+Export-Package: org.eclipse.oomph.targlets.tests;version="1.7.0";x-internal:=true
+Require-Bundle: org.eclipse.oomph.p2.tests;bundle-version="[1.7.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.targlets.core;bundle-version="[1.7.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.util.pde;bundle-version="[1.6.0,2.0.0)",
  org.eclipse.pde.core;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.equinox.frameworkadmin;bundle-version="[2.0.0,3.0.0)"

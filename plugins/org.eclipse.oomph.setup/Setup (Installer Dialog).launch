@@ -10,7 +10,7 @@
 <setEntry value="org.eclipse.equinox.p2.discovery.compatibility:1.0.200.v20131211-1531:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.discovery:1.0.300.v20131210-1027:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.engine:2.4.0.v20150511-1532:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.extensionlocation:1.2.200.v20150423-1455:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.extensionlocation:1.2.201.v20160129-0947:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.garbagecollector:1.0.200.v20131115-1210:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.jarprocessor:1.0.400.v20150430-1836:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.metadata.repository:1.2.200.v20150428-1613:default:true"/>
@@ -25,7 +25,6 @@
 <setEntry value="org.eclipse.equinox.p2.touchpoint.natives:1.2.0.v20150519-1136:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.transport.ecf:1.1.100.v20150521-1342:default:true"/>
 <setEntry value="org.eclipse.equinox.p2.updatesite:1.0.500.v20150423-1455:default:true"/>
-<setEntry value="org.eclipse.swtbot.generator:2.3.0.201506081302:default:true"/>
 </setAttribute>
 <booleanAttribute key="append.args" value="true"/>
 <booleanAttribute key="askclear" value="false"/>
