@@ -24,7 +24,6 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.CopyCommand;
 import org.eclipse.emf.edit.command.DragAndDropCommand;
@@ -233,9 +232,13 @@ public class RepositoryListItemProvider extends ModelElementItemProvider
             Repository repository = P2Factory.eINSTANCE.createRepository(uri.toString());
             objects.add(repository);
           }
-          else
+          else if (object instanceof Repository)
           {
             objects.add(object);
+          }
+          else
+          {
+            return false;
           }
         }
 
@@ -244,15 +247,7 @@ public class RepositoryListItemProvider extends ModelElementItemProvider
           return false;
         }
 
-        dropCommand = AddCommand.create(domain, owner, null, objects);
-        if (!dropCommand.canExecute())
-        {
-          return false;
-        }
-
-        dropCommand.dispose();
         optimizedDropCommandOwner = owner;
-        dropCommand = null;
 
         dragCommand = CopyCommand.create(domain, objects);
 
