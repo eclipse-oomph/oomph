@@ -35,6 +35,7 @@ import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.ui.action.CopyAction;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -61,7 +62,10 @@ import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -106,13 +110,16 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -761,9 +768,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     }
   }
 
-  private void addDragSupport(StructuredViewer viewer)
+  private void addDragSupport(final StructuredViewer viewer)
   {
-    viewer.addDragSupport(DND_OPERATIONS, DND_TRANSFERS, new GeneralDragAdapter(viewer, new GeneralDragAdapter.DraggedObjectsFactory()
+    final GeneralDragAdapter.DraggedObjectsFactory draggedObjectsFactory = new GeneralDragAdapter.DraggedObjectsFactory()
     {
       public List<EObject> createDraggedObjects(ISelection selection) throws Exception
       {
@@ -787,7 +794,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
             filter = RequirementImpl.formatMatchExpression(itemVersion.getFilter());
 
-            element = ((IStructuredSelection)itemsViewer.getSelection()).getFirstElement();
+            element = itemVersion.getItem();
           }
 
           if (element instanceof Item)
@@ -828,7 +835,57 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
         return result;
       }
-    }, DND_DELEGATES));
+    };
+
+    final GeneralDragAdapter generalDragAdapter = new GeneralDragAdapter(viewer, draggedObjectsFactory, DND_DELEGATES);
+
+    viewer.addDragSupport(DND_OPERATIONS, DND_TRANSFERS, generalDragAdapter);
+
+    final CopyAction copyAction = new CopyAction(generalDragAdapter.getEditingDomain());
+
+    try
+    {
+      ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+      copyAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
+      copyAction.setText("Copy with Version Range");
+    }
+    catch (RuntimeException ex)
+    {
+      // Ignore it if we can't set an image.
+    }
+
+    Menu menu = viewer.getControl().getMenu();
+    MenuManager contextMenu = (MenuManager)menu.getData(MenuManager.MANAGER_KEY);
+    contextMenu.addMenuListener(new IMenuListener()
+    {
+      public void menuAboutToShow(IMenuManager manager)
+      {
+        IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
+        List<Object> versionItems = new ArrayList<Object>();
+        for (Object object : selection.toArray())
+        {
+          Object[] elements = versionProvider.getElements(object);
+          if (elements.length > 0)
+          {
+            versionItems.add(elements[elements.length - 1]);
+          }
+        }
+
+        try
+        {
+          List<EObject> draggedObjects = draggedObjectsFactory.createDraggedObjects(new StructuredSelection(versionItems));
+          if (!draggedObjects.isEmpty())
+          {
+            copyAction.updateSelection(new StructuredSelection(draggedObjects));
+            manager.add(copyAction);
+          }
+        }
+        catch (Exception ex)
+        {
+          P2UIPlugin.INSTANCE.log(ex);
+        }
+      }
+    });
   }
 
   private static String[] sortStrings(Collection<String> c)
@@ -2070,7 +2127,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           Set<ItemVersion> itemVersions = new HashSet<ItemVersion>();
           for (Map.Entry<Version, IMatchExpression<IInstallableUnit>> entry : versions.entrySet())
           {
-            ItemVersion itemVersion = getItemVersion(entry.getKey(), entry.getValue());
+            ItemVersion itemVersion = getItemVersion(versionedItem, entry.getKey(), entry.getValue());
             itemVersions.add(itemVersion);
           }
 
@@ -2089,12 +2146,12 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       return IMAGE;
     }
 
-    private ItemVersion getItemVersion(Version version, IMatchExpression<IInstallableUnit> filter)
+    private ItemVersion getItemVersion(VersionedItem item, Version version, IMatchExpression<IInstallableUnit> filter)
     {
       int segments = version.getSegmentCount();
       if (segments == 0)
       {
-        return new ItemVersion(version, "0.0.0", filter);
+        return new ItemVersion(item, version, "0.0.0", filter);
       }
 
       segments = Math.min(segments, versionSegment.ordinal() + 1);
@@ -2123,7 +2180,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         builder.append(".x");
       }
 
-      return new ItemVersion(version, builder.toString(), filter);
+      return new ItemVersion(item, version, builder.toString(), filter);
     }
 
     /**
@@ -2131,17 +2188,25 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
      */
     public static final class ItemVersion implements Comparable<ItemVersion>
     {
+      private final VersionedItem item;
+
       private final Version version;
 
       private final String label;
 
       private final IMatchExpression<IInstallableUnit> filter;
 
-      public ItemVersion(Version version, String label, IMatchExpression<IInstallableUnit> filter)
+      public ItemVersion(VersionedItem item, Version version, String label, IMatchExpression<IInstallableUnit> filter)
       {
+        this.item = item;
         this.version = version;
         this.label = label;
         this.filter = filter;
+      }
+
+      public VersionedItem getItem()
+      {
+        return item;
       }
 
       public Version getVersion()

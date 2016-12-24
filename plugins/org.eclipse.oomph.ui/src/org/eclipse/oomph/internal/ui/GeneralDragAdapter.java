@@ -47,6 +47,11 @@ public final class GeneralDragAdapter extends OomphDragAdapter
     createContextMenu(viewer.getControl());
   }
 
+  public EditingDomain getEditingDomain()
+  {
+    return domain;
+  }
+
   private void createContextMenu(Control control)
   {
     final CopyAction copyAction = new CopyAction(domain);
