@@ -101,6 +101,7 @@ import org.eclipse.emf.edit.EMFEditPlugin;
 import org.eclipse.emf.edit.command.AbstractOverrideableCommand;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CopyCommand;
+import org.eclipse.emf.edit.command.DragAndDropFeedback;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -1294,7 +1295,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               final Collection<?> collection)
           {
             final ResourceSet resourceSet = (ResourceSet)owner;
-            class LoadResourceCommand extends AbstractOverrideableCommand implements AbstractCommand.NonDirtying
+            class LoadResourceCommand extends AbstractOverrideableCommand implements AbstractCommand.NonDirtying, DragAndDropFeedback
             {
               protected LoadResourceCommand(EditingDomain domain)
               {
@@ -1333,7 +1334,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
                     catch (RuntimeException exception)
                     {
                       resource = resourceSet.getResource(uri, false);
-                      EMFEditPlugin.INSTANCE.log(exception);
                     }
                   }
 
@@ -1379,6 +1379,21 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               public String doGetLabel()
               {
                 return EMFEditPlugin.INSTANCE.getString("_UI_LoadResources_label");
+              }
+
+              public boolean validate(Object owner, float location, int operations, int operation, Collection<?> collection)
+              {
+                return true;
+              }
+
+              public int getFeedback()
+              {
+                return FEEDBACK_SELECT;
+              }
+
+              public int getOperation()
+              {
+                return DROP_COPY;
               }
             }
 

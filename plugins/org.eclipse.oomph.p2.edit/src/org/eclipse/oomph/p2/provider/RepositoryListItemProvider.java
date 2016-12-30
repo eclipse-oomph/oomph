@@ -13,19 +13,15 @@ package org.eclipse.oomph.p2.provider;
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.P2Package;
-import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.RepositoryList;
 
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.CommandParameter;
-import org.eclipse.emf.edit.command.CopyCommand;
 import org.eclipse.emf.edit.command.DragAndDropCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
@@ -33,6 +29,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -109,13 +106,18 @@ public class RepositoryListItemProvider extends ModelElementItemProvider
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   protected EStructuralFeature getChildFeature(Object object, Object child)
   {
     // Check the type of the specified child object and return the proper feature to use for
     // adding (see {@link AddCommand}) it as a child.
+
+    if (child instanceof URI)
+    {
+      return P2Package.Literals.REPOSITORY_LIST__REPOSITORIES;
+    }
 
     return super.getChildFeature(object, child);
   }
@@ -204,56 +206,39 @@ public class RepositoryListItemProvider extends ModelElementItemProvider
 
       Command command = createDragAndDropCommand(domain, commandParameter.getOwner(), detail.location, detail.operations, detail.operation,
           commandParameter.getCollection());
-      if (command != null && command.canExecute())
+      if (command != null)
       {
-        return command;
-      }
+        if (command.canExecute())
+        {
+          return command;
+        }
 
-      return UnexecutableCommand.INSTANCE;
+        command.dispose();
+      }
     }
 
     return super.createCommand(object, domain, commandClass, commandParameter);
   }
 
   @Override
-  protected Command createPrimaryDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+  protected Command createAddCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Collection<?> collection, int index)
   {
-    return new DragAndDropCommand(domain, owner, location, operations, operation, collection)
+    List<Object> filteredCollection = new ArrayList<Object>();
+    if (collection != null)
     {
-      @Override
-      protected boolean prepareDropCopyOn()
+      for (Object object : collection)
       {
-        EList<Object> objects = new BasicEList<Object>();
-        for (Object object : collection)
+        if (object instanceof URI)
         {
-          if (object instanceof URI)
-          {
-            URI uri = (URI)object;
-            Repository repository = P2Factory.eINSTANCE.createRepository(uri.toString());
-            objects.add(repository);
-          }
-          else if (object instanceof Repository)
-          {
-            objects.add(object);
-          }
-          else
-          {
-            return false;
-          }
+          filteredCollection.add(P2Factory.eINSTANCE.createRepository(object.toString()));
         }
-
-        if (objects.isEmpty())
+        else
         {
-          return false;
+          filteredCollection.add(object);
         }
-
-        optimizedDropCommandOwner = owner;
-
-        dragCommand = CopyCommand.create(domain, objects);
-
-        return dragCommand.canExecute();
       }
-    };
-  }
+    }
 
+    return super.createAddCommand(domain, owner, feature, filteredCollection, index);
+  }
 }

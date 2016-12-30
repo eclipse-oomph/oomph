@@ -12,10 +12,13 @@ package org.eclipse.oomph.edit;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.CopyCommand;
 import org.eclipse.emf.edit.command.PasteFromClipboardCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 
@@ -45,15 +48,28 @@ public class BaseAdapterFactoryEditingDomain extends AdapterFactoryEditingDomain
   @Override
   public Command createCommand(Class<? extends Command> commandClass, CommandParameter commandParameter)
   {
+    if (commandClass == CopyCommand.class)
+    {
+      if (commandClass == CopyCommand.class)
+      {
+        Object owner = commandParameter.getOwner();
+        if (owner instanceof URI || owner instanceof String)
+        {
+          return new IdentityCommand(owner);
+        }
+      }
+    }
+
     if (commandClass == PasteFromClipboardCommand.class)
     {
+      Object owner = commandParameter.getOwner();
       Collection<Object> clipboard = getClipboard();
-      Command primaryPasteCommand = new BasePasteFromClipboardCommand(this, commandParameter.getOwner(), commandParameter.getFeature(), clipboard,
-          commandParameter.getIndex(), true);
+      Object feature = commandParameter.getFeature();
+      int index = commandParameter.getIndex();
+      Command primaryPasteCommand = new BasePasteFromClipboardCommand(this, owner, feature, clipboard, index, true);
       if (!primaryPasteCommand.canExecute())
       {
-        BasePasteFromClipboardCommand alternativePasteCommand = new BasePasteFromClipboardCommand(this, commandParameter.getOwner(),
-            commandParameter.getFeature(), clipboard, commandParameter.getIndex(), false);
+        BasePasteFromClipboardCommand alternativePasteCommand = new BasePasteFromClipboardCommand(this, owner, feature, clipboard, index, false);
         if (alternativePasteCommand.canExecute())
         {
           primaryPasteCommand.dispose();

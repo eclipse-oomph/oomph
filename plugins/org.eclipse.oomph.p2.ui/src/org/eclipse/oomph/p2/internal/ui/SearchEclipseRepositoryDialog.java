@@ -33,7 +33,6 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.SegmentSequence;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedImage;
 import org.eclipse.emf.edit.provider.ItemProvider;
@@ -271,9 +270,9 @@ public class SearchEclipseRepositoryDialog extends OomphDialog
     capabilitiesViewer.addDragSupport(RepositoryExplorer.DND_OPERATIONS, RepositoryExplorer.DND_TRANSFERS,
         new GeneralDragAdapter(capabilitiesViewer, new GeneralDragAdapter.DraggedObjectsFactory()
         {
-          public List<EObject> createDraggedObjects(ISelection selection) throws Exception
+          public List<Object> createDraggedObjects(ISelection selection) throws Exception
           {
-            List<EObject> result = new ArrayList<EObject>();
+            List<Object> result = new ArrayList<Object>();
             for (Object object : ((IStructuredSelection)selection).toArray())
             {
               if (object instanceof Item)
@@ -329,9 +328,9 @@ public class SearchEclipseRepositoryDialog extends OomphDialog
     detailsViewer.addDragSupport(RepositoryExplorer.DND_OPERATIONS, RepositoryExplorer.DND_TRANSFERS,
         new GeneralDragAdapter(detailsViewer, new GeneralDragAdapter.DraggedObjectsFactory()
         {
-          public List<EObject> createDraggedObjects(ISelection selection) throws Exception
+          public List<Object> createDraggedObjects(ISelection selection) throws Exception
           {
-            List<EObject> result = new ArrayList<EObject>();
+            List<Object> result = new ArrayList<Object>();
             for (Object object : ((IStructuredSelection)selection).toArray())
             {
               if (object instanceof Item)

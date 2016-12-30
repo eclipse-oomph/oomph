@@ -10,7 +10,11 @@
  */
 package org.eclipse.oomph.p2.internal.ui;
 
+import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.util.ObjectUtil;
+
+import org.eclipse.emf.common.util.URI;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
 
@@ -36,16 +40,33 @@ public final class RepositoryManager
 
   private final LinkedList<String> repositories = new LinkedList<String>();
 
+  private String currentProfileLocation;
+
   private String activeRepository;
 
   private RepositoryManager()
   {
+    try
+    {
+      Profile currentProfile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
+      currentProfileLocation = URI.createFileURI(currentProfile.getLocation().toString()).toString();
+    }
+    catch (Throwable throwable)
+    {
+      // Ignore.
+    }
+
     settings = P2UIPlugin.INSTANCE.getDialogSettings(getClass().getSimpleName());
 
     String[] array = settings.getArray(REPOSITORIES_KEY);
     if (array != null)
     {
       repositories.addAll(Arrays.asList(array));
+    }
+
+    if (currentProfileLocation != null)
+    {
+      repositories.add(currentProfileLocation);
     }
 
     activeRepository = normalize(settings.get(ACTIVE_REPOSITORY_KEY));
@@ -65,10 +86,12 @@ public final class RepositoryManager
   {
     String[] array;
 
-    int size = repositories.size();
+    List<String> filteredRepositories = new ArrayList<String>(repositories);
+    filteredRepositories.remove(currentProfileLocation);
+    int size = filteredRepositories.size();
     if (size != 0)
     {
-      array = repositories.toArray(new String[size]);
+      array = filteredRepositories.toArray(new String[size]);
     }
     else
     {

@@ -16,16 +16,22 @@ import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Package;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.DragAndDropCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -131,13 +137,18 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   protected EStructuralFeature getChildFeature(Object object, Object child)
   {
     // Check the type of the specified child object and return the proper feature to use for
     // adding (see {@link AddCommand}) it as a child.
+
+    if (child instanceof URI)
+    {
+      return SetupP2Package.Literals.P2_TASK__REPOSITORIES;
+    }
 
     return super.getChildFeature(object, child);
   }
@@ -226,6 +237,50 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
   protected Collection<?> filterAlternatives(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> alternatives)
   {
     return super.filterAlternatives(domain, owner, location, operations, operation, RequirementItemProvider.filterAlternatives(alternatives));
+  }
+
+  @Override
+  public Command createCommand(Object object, EditingDomain domain, Class<? extends Command> commandClass, CommandParameter commandParameter)
+  {
+    if (commandClass == DragAndDropCommand.class)
+    {
+      DragAndDropCommand.Detail detail = (DragAndDropCommand.Detail)commandParameter.getFeature();
+      Command command = createDragAndDropCommand(domain, commandParameter.getOwner(), detail.location, detail.operations, detail.operation,
+          commandParameter.getCollection());
+      if (command != null)
+      {
+        if (command.canExecute())
+        {
+          return command;
+        }
+
+        command.dispose();
+      }
+    }
+
+    return super.createCommand(object, domain, commandClass, commandParameter);
+  }
+
+  @Override
+  protected Command createAddCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Collection<?> collection, int index)
+  {
+    List<Object> filteredCollection = new ArrayList<Object>();
+    if (collection != null)
+    {
+      for (Object object : collection)
+      {
+        if (object instanceof URI)
+        {
+          filteredCollection.add(P2Factory.eINSTANCE.createRepository(object.toString()));
+        }
+        else
+        {
+          filteredCollection.add(object);
+        }
+      }
+    }
+
+    return super.createAddCommand(domain, owner, feature, filteredCollection, index);
   }
 
   /**
