@@ -118,7 +118,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
@@ -500,8 +499,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           }
         }));
 
-    Menu menu = repositoryCombo.getMenu();
-    MenuManager contextMenu = (MenuManager)menu.getData(MenuManager.MANAGER_KEY);
+    MenuManager contextMenu = generalDragAdapter.getContextMenu();
     contextMenu.addMenuListener(new IMenuListener()
     {
       public void menuAboutToShow(IMenuManager manager)
@@ -987,8 +985,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       // Ignore it if we can't set an image.
     }
 
-    Menu menu = viewer.getControl().getMenu();
-    MenuManager contextMenu = (MenuManager)menu.getData(MenuManager.MANAGER_KEY);
+    MenuManager contextMenu = generalDragAdapter.getContextMenu();
 
     final CopyAction simpleCopyAction = generalDragAdapter.getCopyAction();
 

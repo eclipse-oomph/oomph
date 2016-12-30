@@ -43,6 +43,8 @@ public final class GeneralDragAdapter extends OomphDragAdapter
 {
   private CopyAction copyAction;
 
+  private MenuManager contextMenu;
+
   public GeneralDragAdapter(Viewer viewer, DraggedObjectsFactory factory, List<? extends OomphTransferDelegate> delegates)
   {
     super(createEditingDomain(delegates), createSelectionProvider(viewer, factory), delegates);
@@ -57,6 +59,11 @@ public final class GeneralDragAdapter extends OomphDragAdapter
   public CopyAction getCopyAction()
   {
     return copyAction;
+  }
+
+  public MenuManager getContextMenu()
+  {
+    return contextMenu;
   }
 
   private void createContextMenu(Control control)
@@ -74,7 +81,7 @@ public final class GeneralDragAdapter extends OomphDragAdapter
       // Ignore it if we can't set an image.
     }
 
-    MenuManager contextMenu = new MenuManager("#PopUp");
+    contextMenu = new MenuManager("#PopUp");
 
     contextMenu.add(new Separator("additions"));
     contextMenu.setRemoveAllWhenShown(true);
