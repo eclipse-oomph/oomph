@@ -12,6 +12,7 @@ package org.eclipse.oomph.internal.ui;
 
 import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.edit.command.DragAndDropCommand;
+import org.eclipse.emf.edit.command.DragAndDropFeedback;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.dnd.EditingDomainViewerDropAdapter;
 
@@ -95,8 +96,11 @@ public class OomphDropAdapter extends EditingDomainViewerDropAdapter
             return data;
           }
 
-          // If not, don't try to use this delegate again.
-          unavailableDelegates.add(delegate);
+          if (HAS_EARLY_DRAG_SOURCE)
+          {
+            // If not, don't try to use this delegate again.
+            unavailableDelegates.add(delegate);
+          }
         }
       }
 
@@ -154,6 +158,12 @@ public class OomphDropAdapter extends EditingDomainViewerDropAdapter
     {
       // Execute it.
       domain.getCommandStack().execute(command);
+
+      if (command instanceof DragAndDropFeedback)
+      {
+        DragAndDropFeedback feedback = (DragAndDropFeedback)command;
+        event.detail = feedback.getOperation();
+      }
     }
     else
     {
