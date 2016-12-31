@@ -10,6 +10,9 @@
  */
 package org.eclipse.oomph.p2.internal.ui;
 
+import org.eclipse.oomph.internal.ui.GeneralDragAdapter;
+import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
+import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.AgentManagerElement;
@@ -27,18 +30,26 @@ import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.SubMonitor;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
@@ -55,8 +66,10 @@ import org.eclipse.swt.widgets.Tree;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +81,12 @@ public class AgentManagerComposite extends Composite
 {
   // The standalone installer doesn't remember instance preferences in debug mode.
   private static final Preference PREF_SHOW_PROFILES = P2UIPlugin.INSTANCE.getConfigurationPreference("showProfiles");
+
+  private static final int DND_OPERATIONS = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
+
+  private static final List<? extends OomphTransferDelegate> DND_DELEGATES = Collections.singletonList(new OomphTransferDelegate.TextTransferDelegate());
+
+  private static final Transfer[] DND_TRANSFERS = new Transfer[] { DND_DELEGATES.get(0).getTransfer() };
 
   private TreeViewer treeViewer;
 
@@ -127,6 +146,8 @@ public class AgentManagerComposite extends Composite
         }
       }
     });
+
+    addDragSupport(treeViewer);
 
     tree.addKeyListener(new KeyAdapter()
     {
@@ -638,5 +659,52 @@ public class AgentManagerComposite extends Composite
     }
 
     return true;
+  }
+
+  static void addDragSupport(StructuredViewer viewer)
+  {
+    viewer.addDragSupport(DND_OPERATIONS, DND_TRANSFERS, new GeneralDragAdapter(viewer, new GeneralDragAdapter.DraggedObjectsFactory()
+    {
+      public List<Object> createDraggedObjects(ISelection selection) throws Exception
+      {
+        List<Object> result = new ArrayList<Object>();
+        for (Object object : ((IStructuredSelection)selection).toArray())
+        {
+          if (object instanceof AgentAnalyzer.AnalyzedProfile)
+          {
+            AgentAnalyzer.AnalyzedProfile analyzedProfile = (AnalyzedProfile)object;
+            object = analyzedProfile.getP2Profile();
+          }
+
+          if (object instanceof Profile)
+          {
+            Profile profile = (Profile)object;
+            File location = profile.getLocation();
+            if (location != null)
+            {
+              result.add(P2Factory.eINSTANCE.createRepository(URI.createFileURI(location.toString()).toString()));
+            }
+          }
+          else if (object instanceof AgentAnalyzer.AnalyzedProfile)
+          {
+            AgentAnalyzer.AnalyzedProfile analyzedProfile = (AnalyzedProfile)object;
+            analyzedProfile.getP2Profile();
+          }
+          else if (object instanceof AgentAnalyzer.AnalyzedArtifact)
+          {
+            AgentAnalyzer.AnalyzedArtifact analyzedArtifact = (AgentAnalyzer.AnalyzedArtifact)object;
+            String id = analyzedArtifact.getID();
+            String version = analyzedArtifact.getVersion();
+            result.add(P2Factory.eINSTANCE.createRequirement(id, new VersionRange(version)));
+          }
+          else if (object instanceof EObject)
+          {
+            result.add(object);
+          }
+        }
+
+        return result;
+      }
+    }, DND_DELEGATES));
   }
 }

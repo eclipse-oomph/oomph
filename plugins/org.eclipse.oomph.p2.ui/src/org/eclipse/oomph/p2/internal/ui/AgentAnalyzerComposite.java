@@ -370,6 +370,8 @@ public class AgentAnalyzerComposite extends Composite
       }
     });
 
+    AgentManagerComposite.addDragSupport(profileViewer);
+
     Composite profileButtonBar = new Composite(profileComposite, SWT.NONE);
     profileButtonBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
     profileButtonBar.setLayout(UIUtil.createGridLayout(5));
@@ -495,6 +497,8 @@ public class AgentAnalyzerComposite extends Composite
         }
       }
     });
+
+    AgentManagerComposite.addDragSupport(artifactViewer);
 
     Composite artifactButtonBar = new Composite(artifactComposite, SWT.NONE);
     artifactButtonBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
