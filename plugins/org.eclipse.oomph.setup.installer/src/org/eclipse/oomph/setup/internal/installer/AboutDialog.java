@@ -10,6 +10,10 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.internal.ui.GeneralDragAdapter;
+import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
+import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
@@ -25,7 +29,12 @@ import org.eclipse.equinox.p2.metadata.IProvidedCapability;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -56,6 +65,14 @@ public final class AboutDialog extends AbstractSetupDialog
 
   private static final String SHOW_ALL_PLUGINS = "SHOW_ALL_PLUGINS";
 
+  private static final int DND_OPERATIONS = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
+
+  private static final List<? extends OomphTransferDelegate> DND_DELEGATES = Collections.singletonList(new OomphTransferDelegate.TextTransferDelegate());
+
+  private static final Transfer[] DND_TRANSFERS = new Transfer[] { DND_DELEGATES.get(0).getTransfer() };
+
+  private static final int VERSION_COLUMN_PADDING = 10;
+
   private final IDialogSettings dialogSettings = getDialogSettings();
 
   private final String version;
@@ -82,7 +99,9 @@ public final class AboutDialog extends AbstractSetupDialog
         size.x -= bar.getSize().x;
       }
 
-      idColumn.setWidth(size.x - versionColumn.getWidth());
+      versionColumn.pack();
+
+      idColumn.setWidth(size.x - versionColumn.getWidth() - VERSION_COLUMN_PADDING);
     }
   };
 
@@ -104,7 +123,7 @@ public final class AboutDialog extends AbstractSetupDialog
   @Override
   protected void createUI(Composite parent)
   {
-    table = new Table(parent, SWT.FULL_SELECTION | SWT.NO_SCROLL | SWT.V_SCROLL);
+    table = new Table(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.NO_SCROLL | SWT.V_SCROLL);
     table.setHeaderVisible(true);
     table.setLinesVisible(true);
     table.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -126,6 +145,27 @@ public final class AboutDialog extends AbstractSetupDialog
     gray = getShell().getDisplay().getSystemColor(SWT.COLOR_DARK_BLUE);
 
     fillTable();
+
+    TableViewer tableViewer = new TableViewer(table);
+    GeneralDragAdapter generalDragAdapter = new GeneralDragAdapter(tableViewer, new GeneralDragAdapter.DraggedObjectsFactory()
+    {
+      public List<Object> createDraggedObjects(ISelection selection) throws Exception
+      {
+        List<Object> result = new ArrayList<Object>();
+        for (Object object : ((IStructuredSelection)selection).toArray())
+        {
+          if (object instanceof IInstallableUnit)
+          {
+            IInstallableUnit iu = (IInstallableUnit)object;
+            result.add(P2Factory.eINSTANCE.createRequirement(iu.getId(), P2Factory.eINSTANCE.createVersionRange(iu.getVersion(), VersionSegment.QUALIFIER)));
+          }
+        }
+
+        return result;
+      }
+    }, DND_DELEGATES);
+
+    tableViewer.addDragSupport(DND_OPERATIONS, DND_TRANSFERS, generalDragAdapter);
   }
 
   private void fillTable()
@@ -136,6 +176,7 @@ public final class AboutDialog extends AbstractSetupDialog
     for (IInstallableUnit plugin : plugins)
     {
       TableItem item = new TableItem(table, SWT.NONE);
+      item.setData(plugin);
 
       String id = plugin.getId();
       item.setText(0, id);
@@ -174,7 +215,7 @@ public final class AboutDialog extends AbstractSetupDialog
     }
 
     versionColumn.pack();
-    versionColumn.setWidth(versionColumn.getWidth() + 10);
+    versionColumn.setWidth(versionColumn.getWidth() + VERSION_COLUMN_PADDING);
 
     table.getDisplay().asyncExec(new Runnable()
     {
