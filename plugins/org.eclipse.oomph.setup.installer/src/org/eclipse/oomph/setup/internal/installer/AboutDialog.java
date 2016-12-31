@@ -13,7 +13,6 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.internal.ui.GeneralDragAdapter;
 import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
 import org.eclipse.oomph.p2.P2Factory;
-import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
@@ -26,6 +25,7 @@ import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IProvidedCapability;
+import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -157,7 +157,7 @@ public final class AboutDialog extends AbstractSetupDialog
           if (object instanceof IInstallableUnit)
           {
             IInstallableUnit iu = (IInstallableUnit)object;
-            result.add(P2Factory.eINSTANCE.createRequirement(iu.getId(), P2Factory.eINSTANCE.createVersionRange(iu.getVersion(), VersionSegment.QUALIFIER)));
+            result.add(P2Factory.eINSTANCE.createRequirement(iu.getId(), new VersionRange(iu.getVersion().toString())));
           }
         }
 
