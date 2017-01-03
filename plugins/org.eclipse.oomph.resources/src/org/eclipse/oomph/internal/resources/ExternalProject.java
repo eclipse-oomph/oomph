@@ -216,6 +216,10 @@ public final class ExternalProject extends ExternalContainer implements IProject
     return new IProject[0];
   }
 
+  public void clearCachedDynamicReferences()
+  {
+  }
+
   public boolean hasNature(String natureId) throws CoreException
   {
     return description.hasNature(natureId);
@@ -378,6 +382,7 @@ public final class ExternalProject extends ExternalContainer implements IProject
     {
     }
 
+    @Deprecated
     public void setDynamicReferences(IProject[] projects)
     {
     }

@@ -73,8 +73,6 @@
     <repository
         url="http://download.eclipse.org/egit/updates-stable-nightly"/>
     <repository
-        url="http://download.eclipse.org/mylyn/snapshots/3.19"/>
-    <repository
         url="http://download.eclipse.org/technology/swtbot/snapshots"/>
     <repository
         url="${oomph.update.url}"/>
@@ -277,17 +275,17 @@
           <repository
               url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11"/>
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.13milestones"/>
           <repository
-              url="http://download.eclipse.org/mylyn/snapshots/3.19"/>
+              url="http://download.eclipse.org/mylyn/snapshots/3.22"/>
           <repository
-              url="http://download.eclipse.org/technology/m2e/releases/1.6"/>
+              url="http://download.eclipse.org/technology/m2e/snapshots/1.8.0/latest"/>
           <repository
               url="http://download.eclipse.org/technology/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/technology/swtbot/snapshots"/>
           <repository
-              url="http://download.eclipse.org/webtools/downloads/drops/R3.7.0/R-3.7.0-20150609111814/repository"/>
+              url="http://download.eclipse.org/webtools/repository/oxygen"/>
         </repositoryList>
         <repositoryList
             name="Neon">

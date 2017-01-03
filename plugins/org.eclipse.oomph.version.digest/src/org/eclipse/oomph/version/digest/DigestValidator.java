@@ -532,12 +532,10 @@ public class DigestValidator extends VersionValidator
   {
     @SuppressWarnings("restriction")
     private static final String[] ICON_IDS = { org.eclipse.pde.internal.core.iproduct.ILauncherInfo.LINUX_ICON,
-        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.MACOSX_ICON, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.SOLARIS_LARGE,
-        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.SOLARIS_MEDIUM, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.SOLARIS_SMALL,
-        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.SOLARIS_TINY, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.SOLARIS_TINY,
-        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_16_HIGH, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_32_LOW,
-        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_32_HIGH, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_48_LOW,
-        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_48_HIGH, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_256_HIGH };
+        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.MACOSX_ICON, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_16_HIGH,
+        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_32_LOW, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_32_HIGH,
+        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_48_LOW, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_48_HIGH,
+        org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_256_HIGH };
 
     private Set<String> considered = new HashSet<String>();
 
