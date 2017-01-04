@@ -149,22 +149,26 @@ public class CachingTransport extends Transport
       File cacheFile = getCacheFile(uri);
       if (cacheFile.length() > 0)
       {
-        FileInputStream cacheInputStream = null;
+        String path = uri.getSchemeSpecificPart();
+        if (OfflineMode.isEnabled() || !path.endsWith("/site.xml") && !path.endsWith("/digest.zip"))
+        {
+          FileInputStream cacheInputStream = null;
 
-        try
-        {
-          cacheInputStream = new FileInputStream(cacheFile);
-          IOUtil.copy(cacheInputStream, target);
-          removeLock(uri);
-          return Status.OK_STATUS;
-        }
-        catch (Exception ex)
-        {
-          //$FALL-THROUGH$
-        }
-        finally
-        {
-          IOUtil.closeSilent(cacheInputStream);
+          try
+          {
+            cacheInputStream = new FileInputStream(cacheFile);
+            IOUtil.copy(cacheInputStream, target);
+            removeLock(uri);
+            return Status.OK_STATUS;
+          }
+          catch (Exception ex)
+          {
+            //$FALL-THROUGH$
+          }
+          finally
+          {
+            IOUtil.closeSilent(cacheInputStream);
+          }
         }
       }
 
@@ -433,14 +437,8 @@ public class CachingTransport extends Transport
 
   private static boolean isLoadingRepository(URI uri)
   {
-    String location = org.eclipse.emf.common.util.URI.createURI(uri.toString()).trimSegments(1).toString();
-    if (location.endsWith("/"))
-    {
-      location = location.substring(0, location.length() - 1);
-    }
-
     Stack<String> stack = REPOSITORY_LOCATIONS.get();
-    return !stack.isEmpty() && stack.peek().equals(location);
+    return !stack.isEmpty();
   }
 
   private static void log(String message)
