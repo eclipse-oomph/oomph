@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.oomph.predicates;singleton:=true
-Bundle-Version: 1.6.0.qualifier
+Bundle-Version: 1.7.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.oomph.internal.predicates.PredicatesPlugin$Implementation
 Bundle-Name: %pluginName
@@ -9,13 +9,13 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.emf.ecore;bundle-version="[2.10.0,3.0.0)";visibility:=reexport,
- org.eclipse.oomph.base;bundle-version="[1.6.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.base;bundle-version="[1.7.0,2.0.0)";visibility:=reexport,
  org.eclipse.core.resources;bundle-version="[3.5.0,4.0.0)";visibility:=reexport,
  org.eclipse.team.core;bundle-version="[3.6.0,4.0.0)";resolution:=optional,
  org.eclipse.egit.core;bundle-version="[3.0.0,5.0.0)";resolution:=optional
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: org.eclipse.oomph.internal.predicates;version="1.6.0";x-internal:=true,
- org.eclipse.oomph.predicates;version="1.6.0";x-internal:=true,
- org.eclipse.oomph.predicates.impl;version="1.6.0";x-internal:=true,
- org.eclipse.oomph.predicates.util;version="1.6.0";x-internal:=true
+Export-Package: org.eclipse.oomph.internal.predicates;version="1.7.0";x-internal:=true,
+ org.eclipse.oomph.predicates;version="1.7.0";x-internal:=true,
+ org.eclipse.oomph.predicates.impl;version="1.7.0";x-internal:=true,
+ org.eclipse.oomph.predicates.util;version="1.7.0";x-internal:=true

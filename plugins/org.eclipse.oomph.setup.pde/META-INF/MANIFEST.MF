@@ -2,20 +2,20 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.oomph.setup.pde;singleton:=true
-Bundle-Version: 1.6.0.qualifier
+Bundle-Version: 1.7.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.oomph.setup.internal.pde.PDEPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: org.eclipse.oomph.setup.internal.pde;version="1.6.0";x-internal:=true,
- org.eclipse.oomph.setup.pde;version="1.6.0";x-internal:=true,
- org.eclipse.oomph.setup.pde.impl;version="1.6.0";x-internal:=true,
- org.eclipse.oomph.setup.pde.util;version="1.6.0";x-internal:=true
+Export-Package: org.eclipse.oomph.setup.internal.pde;version="1.7.0";x-internal:=true,
+ org.eclipse.oomph.setup.pde;version="1.7.0";x-internal:=true,
+ org.eclipse.oomph.setup.pde.impl;version="1.7.0";x-internal:=true,
+ org.eclipse.oomph.setup.pde.util;version="1.7.0";x-internal:=true
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.core.resources;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.emf.ecore;bundle-version="[2.10.0,3.0.0)";visibility:=reexport,
- org.eclipse.oomph.setup;bundle-version="[1.6.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.setup;bundle-version="[1.7.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.util.pde;bundle-version="[1.6.0,2.0.0)",
  org.eclipse.pde.api.tools;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.pde.core;bundle-version="[3.5.0,4.0.0)"
