@@ -18,6 +18,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -218,8 +219,7 @@ public class AnnotationItemProvider extends ModelElementItemProvider
     newChildDescriptors
         .add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, BaseFactory.eINSTANCE.create(BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY)));
 
-    newChildDescriptors
-        .add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, org.eclipse.emf.ecore.xml.type.XMLTypeFactory.eINSTANCE.createAnyType()));
+    newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, XMLTypeFactory.eINSTANCE.createAnyType()));
   }
 
   @Override

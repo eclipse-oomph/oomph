@@ -76,7 +76,7 @@ public class NavigateHandler extends AbstractHandler
       updateSelection((IStructuredSelection)selection);
     }
 
-    setBaseEnabled(viewer != null && !targetSelection.isEmpty());
+    setBaseEnabled(viewer != null && targetSelection != null && !targetSelection.isEmpty());
   }
 
   public boolean updateSelection(IStructuredSelection selection)

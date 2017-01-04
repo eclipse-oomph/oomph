@@ -278,7 +278,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
 
   private static final Pattern OS_SPECIFIC_LINE_SEPARATOR_PATTERN = Pattern.compile(StringUtil.NL);
 
-  private static final Pattern NORMALIZED_LINE_SEPARATOR_PATTERN = Pattern.compile("\n");
+  private static final Pattern NORMALIZED_LINE_SEPARATOR_PATTERN = Pattern.compile("\r?\n");
 
   private static final boolean NEEDS_CONVERSION = !"\n".equals(StringUtil.NL);
 

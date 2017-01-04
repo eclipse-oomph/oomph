@@ -245,12 +245,12 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
       {
         for (String line : lines)
         {
-          result.append(DiagnosticDecorator.escapeContent(line)).append("<br/>");
+          result.append(escapeContent(line)).append("<br/>");
         }
       }
       else
       {
-        result.append(DiagnosticDecorator.escapeContent(valueText));
+        result.append(escapeContent(valueText));
       }
     }
     else
@@ -264,7 +264,7 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
 
       if (!StringUtil.isEmpty(valueText))
       {
-        result.append(StringUtil.isEmpty(valueText) ? "&nbsp;" : DiagnosticDecorator.escapeContent(valueText));
+        result.append(StringUtil.isEmpty(valueText) ? "&nbsp;" : escapeContent(valueText));
       }
     }
 
@@ -272,5 +272,10 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
     {
       result.append("<a/>");
     }
+  }
+
+  private static String escapeContent(String value)
+  {
+    return DiagnosticDecorator.escapeContent(value).replace(" ", "&nbsp;");
   }
 }

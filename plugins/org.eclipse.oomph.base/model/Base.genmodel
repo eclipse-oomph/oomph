@@ -29,7 +29,7 @@
     </genClasses>
     <genClasses ecoreClass="Base.ecore#//StringToStringMapEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Base.ecore#//StringToStringMapEntry/key"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Base.ecore#//StringToStringMapEntry/value"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Base.ecore#//StringToStringMapEntry/value"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

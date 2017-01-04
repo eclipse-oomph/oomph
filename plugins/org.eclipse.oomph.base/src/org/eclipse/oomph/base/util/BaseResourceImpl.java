@@ -248,7 +248,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
         {
           // Split what we know is a String value into lines.
           String stringValue = value.toString();
-          String[] lines = stringValue.split("\n", Integer.MAX_VALUE);
+          String[] lines = stringValue.split("\r?\n", Integer.MAX_VALUE);
           if (lines.length == 1)
           {
             // If there are no line separators, serialize just the string value.

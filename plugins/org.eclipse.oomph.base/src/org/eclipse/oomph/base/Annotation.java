@@ -102,7 +102,7 @@ public interface Annotation extends ModelElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Details</em>' map.
    * @see org.eclipse.oomph.base.BasePackage#getAnnotation_Details()
-   * @model mapType="org.eclipse.oomph.base.StringToStringMapEntry<org.eclipse.emf.ecore.EString, org.eclipse.oomph.base.Text>"
+   * @model mapType="org.eclipse.oomph.base.StringToStringMapEntry&lt;org.eclipse.emf.ecore.EString, org.eclipse.oomph.base.Text&gt;"
    *        extendedMetaData="name='detail'"
    * @generated
    */

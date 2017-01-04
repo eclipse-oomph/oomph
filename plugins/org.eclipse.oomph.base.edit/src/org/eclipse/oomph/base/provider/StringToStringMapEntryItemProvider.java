@@ -95,7 +95,7 @@ public class StringToStringMapEntryItemProvider extends ItemProviderAdapter
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_StringToStringMapEntry_value_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_StringToStringMapEntry_value_feature", "_UI_StringToStringMapEntry_type"),
-        BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY__VALUE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY__VALUE, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -142,7 +142,9 @@ public class StringToStringMapEntryItemProvider extends ItemProviderAdapter
   public String getText(Object object)
   {
     Map.Entry<?, ?> stringToStringMapEntry = (Map.Entry<?, ?>)object;
-    return "" + stringToStringMapEntry.getKey() + " -> " + stringToStringMapEntry.getValue();
+    String key = "" + stringToStringMapEntry.getKey();
+    String value = crop("" + stringToStringMapEntry.getValue());
+    return key + " -> " + value;
   }
 
   /**
