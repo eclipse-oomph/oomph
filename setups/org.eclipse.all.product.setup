@@ -65,7 +65,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.7.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+          url="http://download.eclipse.org/releases/oxygen"/>
     </setupTask>
   </version>
   <version name="latest.released"
@@ -163,7 +163,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.7.0,4.8.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+          url="http://download.eclipse.org/releases/oxygen"/>
     </setupTask>
   </version>
   <version name="neon"

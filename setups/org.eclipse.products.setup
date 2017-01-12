@@ -102,9 +102,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -236,9 +236,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -593,9 +593,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -887,9 +887,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -1270,9 +1270,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -1432,9 +1432,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -1717,9 +1717,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -1863,9 +1863,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -2004,9 +2004,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -2118,9 +2118,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -2342,9 +2342,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -2554,9 +2554,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -2755,9 +2755,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -2841,9 +2841,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -3162,9 +3162,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -3408,9 +3408,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -3781,9 +3781,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -3971,9 +3971,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -4293,9 +4293,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -4443,9 +4443,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -4610,9 +4610,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -4772,9 +4772,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -5049,9 +5049,9 @@
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -5131,9 +5131,9 @@
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -5384,9 +5384,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -5546,9 +5546,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -6046,9 +6046,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -6172,9 +6172,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen/M4"/>
+            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -6412,7 +6412,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.7.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -6423,7 +6423,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.6.1-201609071200/</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.6.2-201611241400/</value>
         </detail>
       </annotation>
       <setupTask
@@ -6466,7 +6466,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.7.0,4.8.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201612161000"/>
+            url="http://download.eclipse.org/releases/oxygen"/>
       </setupTask>
     </version>
     <version
@@ -6477,7 +6477,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.6.1-201609071200/</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.6.2-201611241400/</value>
         </detail>
       </annotation>
       <setupTask
