@@ -31,12 +31,13 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.ProgressMonitorWrapper;
 
 import java.io.InputStream;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -143,7 +144,7 @@ public abstract class BackendSystem extends BackendContainer
       return NO_MEMBERS;
     }
 
-    BackendResource[] result = new BackendResource[delegateMembers.length];
+    List<BackendResource> result = new ArrayList<BackendResource>(delegateMembers.length);
     for (int i = 0; i < delegateMembers.length; i++)
     {
       ResourcesPlugin.checkCancelation(monitor);
@@ -152,10 +153,14 @@ public abstract class BackendSystem extends BackendContainer
       String name = getDelegateName(delegateMember);
       URI systemRelativeURI = backendContainer.getSystemRelativeURI().appendSegment(URI.encodeSegment(name, false));
 
-      result[i] = createMember(delegateMember, systemRelativeURI, false);
+      BackendResource member = createMember(delegateMember, systemRelativeURI, false);
+      if (member != null)
+      {
+        result.add(member);
+      }
     }
 
-    Arrays.sort(result, new Comparator<BackendResource>()
+    result.sort(new Comparator<BackendResource>()
     {
       public int compare(BackendResource r1, BackendResource r2)
       {
@@ -174,7 +179,7 @@ public abstract class BackendSystem extends BackendContainer
       }
     });
 
-    return result;
+    return result.toArray(new BackendResource[result.size()]);
   }
 
   protected BackendResource findMember(BackendContainer backendContainer, URI relativeURI, IProgressMonitor monitor) throws Exception
