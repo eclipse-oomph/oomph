@@ -382,6 +382,10 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
 
     String option = getOption();
     String value = getValue();
+    if (value != null && value.trim().isEmpty())
+    {
+      value = null;
+    }
 
     if (isVm())
     {
