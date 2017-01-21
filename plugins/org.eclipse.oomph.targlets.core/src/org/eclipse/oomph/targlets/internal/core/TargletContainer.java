@@ -35,6 +35,7 @@ import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.util.HexUtil;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.SubMonitor;
@@ -174,6 +175,10 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
   private static final String PROP_OS = "osgi.os"; //$NON-NLS-1$
 
   private static final String PROP_WS = "osgi.ws"; //$NON-NLS-1$
+
+  private static final String IU_FILTER = PropertiesUtil.getProperty("oomph.targlets.iu.filter");
+
+  private static final Pattern IU_FILTER_PATTERN = IU_FILTER == null ? null : Pattern.compile(IU_FILTER);
 
   private String id;
 
@@ -621,6 +626,11 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
     for (IInstallableUnit unit : units)
     {
+      if (IU_FILTER_PATTERN != null && IU_FILTER_PATTERN.matcher(unit.getId()).matches())
+      {
+        continue;
+      }
+
       if (isOSGiBundle(unit))
       {
         generateBundle(unit, cache, bundles);
@@ -732,12 +742,24 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
   private void addTargetBundle(File file, List<TargetBundle> bundles) throws CoreException
   {
     TargetBundle bundle = new TargetBundle(file);
+
+    if (IU_FILTER_PATTERN != null && IU_FILTER_PATTERN.matcher(bundle.getBundleInfo().getSymbolicName()).matches())
+    {
+      return;
+    }
+
     bundles.add(bundle);
   }
 
   private void addTargetFeature(File file, List<TargetFeature> features) throws CoreException
   {
     TargetFeature feature = new TargetFeature(file);
+
+    if (IU_FILTER_PATTERN != null && IU_FILTER_PATTERN.matcher(feature.getId() + Requirement.FEATURE_SUFFIX).matches())
+    {
+      return;
+    }
+
     features.add(feature);
   }
 
