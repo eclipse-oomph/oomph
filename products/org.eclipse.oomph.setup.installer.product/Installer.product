@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Eclipse Installer" uid="org.eclipse.oomph.setup.installer.product" id="org.eclipse.oomph.setup.installer.product" application="org.eclipse.oomph.setup.installer.application" version="1.6.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Eclipse Installer" 
+         uid="org.eclipse.oomph.setup.installer.product" 
+         id="org.eclipse.oomph.setup.installer.product" 
+         version="1.7.0.qualifier" 
+         application="org.eclipse.oomph.setup.installer.application" 
+         useFeatures="true" 
+         includeLaunchers="true">
 
    <configIni use="">
    </configIni>
