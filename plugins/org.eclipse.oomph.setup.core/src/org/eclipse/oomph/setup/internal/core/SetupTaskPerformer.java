@@ -3347,7 +3347,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           {
             try
             {
-              EcorePlugin.getWorkspaceRoot().getWorkspace().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+              EcorePlugin.getWorkspaceRoot().getWorkspace().build(IncrementalProjectBuilder.AUTO_BUILD, monitor);
               return Status.OK_STATUS;
             }
             catch (CoreException ex)
