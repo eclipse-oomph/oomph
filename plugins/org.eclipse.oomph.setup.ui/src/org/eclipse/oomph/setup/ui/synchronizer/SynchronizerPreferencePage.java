@@ -263,8 +263,8 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
           }
         });
 
-        @SuppressWarnings("restriction")
-        PreferenceLinkArea credentialsLink = new PreferenceLinkArea(main, SWT.NONE, org.eclipse.userstorage.ui.internal.ServicesPreferencePage.ID,
+        // USS doesn't yet expose pref page ID
+        PreferenceLinkArea credentialsLink = new PreferenceLinkArea(main, SWT.NONE, "org.eclipse.userstorage.ui.PreferencePage",
             "See <a>''User Storage Service''</a> for credentials.", (IWorkbenchPreferenceContainer)getContainer(), null);
         credentialsLink.getControl().setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
 

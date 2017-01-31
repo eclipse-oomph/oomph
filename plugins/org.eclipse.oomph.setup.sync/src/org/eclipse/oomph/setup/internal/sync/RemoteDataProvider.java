@@ -92,6 +92,10 @@ public class RemoteDataProvider implements DataProvider
       uncompressContents(contents, file);
       return !cached;
     }
+    catch (org.eclipse.userstorage.util.NoServiceException ex)
+    {
+      throw new NotFoundException(getURI());
+    }
     catch (org.eclipse.userstorage.util.NotFoundException ex)
     {
       throw new NotFoundException(getURI());

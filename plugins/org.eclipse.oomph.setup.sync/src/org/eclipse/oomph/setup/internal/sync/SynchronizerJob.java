@@ -137,7 +137,10 @@ public class SynchronizerJob extends Job
     RemoteDataProvider remoteDataProvider = (RemoteDataProvider)synchronizer.getRemoteSnapshot().getDataProvider();
     IStorage storage = remoteDataProvider.getStorage();
     ICredentialsProvider oldCredentialsProvider = storage.getCredentialsProvider();
-    storage.setCredentialsProvider(credentialsProvider);
+    if (credentialsProvider != null)
+    {
+      storage.setCredentialsProvider(credentialsProvider);
+    }
 
     try
     {
@@ -178,7 +181,10 @@ public class SynchronizerJob extends Job
     }
     finally
     {
-      storage.setCredentialsProvider(oldCredentialsProvider);
+      if (credentialsProvider != null)
+      {
+        storage.setCredentialsProvider(oldCredentialsProvider);
+      }
     }
 
     return Status.OK_STATUS;

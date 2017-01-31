@@ -48,6 +48,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.StorageFactory;
+import org.eclipse.userstorage.oauth.EclipseOAuthCredentialsProvider;
 import org.eclipse.userstorage.spi.ICredentialsProvider;
 import org.eclipse.userstorage.spi.StorageCache;
 
@@ -106,6 +107,12 @@ public final class SynchronizerManager
   {
     StorageCache cache = new RemoteDataProvider.SyncStorageCache(SYNC_FOLDER);
     storage = StorageFactory.DEFAULT.create(RemoteDataProvider.APPLICATION_TOKEN, cache);
+
+    ICredentialsProvider credentialProvider = createCredentialProvider();
+    if (credentialProvider != null)
+    {
+      storage.setCredentialsProvider(credentialProvider);
+    }
 
     remoteDataProvider = new RemoteDataProvider(storage);
   }
@@ -399,6 +406,11 @@ public final class SynchronizerManager
     }
 
     return null;
+  }
+
+  private static ICredentialsProvider createCredentialProvider()
+  {
+    return new EclipseOAuthCredentialsProvider(new OAuthConstants());
   }
 
   /**
