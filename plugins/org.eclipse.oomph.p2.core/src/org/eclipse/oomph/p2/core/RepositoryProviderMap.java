@@ -13,6 +13,7 @@ package org.eclipse.oomph.p2.core;
 import org.eclipse.oomph.p2.RepositoryType;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.repository.IRepository;
@@ -58,8 +59,13 @@ public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R e
 
   public final synchronized R getRepository(URI location)
   {
+    return getRepository(location, new NullProgressMonitor());
+  }
+
+  public final synchronized R getRepository(URI location, IProgressMonitor monitor)
+  {
     P provider = getRepositoryProvider(location);
-    return provider.getRepository();
+    return provider.getRepository(monitor);
   }
 
   public final synchronized R createRepository(URI location, String name, String type, Map<String, String> properties)
