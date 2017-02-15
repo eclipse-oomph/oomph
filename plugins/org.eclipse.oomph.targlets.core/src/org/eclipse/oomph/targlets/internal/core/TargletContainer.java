@@ -440,6 +440,19 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return true;
   }
 
+  public boolean isIncludeBinaryEquivalents()
+  {
+    for (Targlet targlet : targlets)
+    {
+      if (!targlet.isIncludeBinaryEquivalents())
+      {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   public String getEnvironmentProperties()
   {
     StringBuilder builder = new StringBuilder();
@@ -870,7 +883,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         return null;
       }
 
-      TargletCommitContext commitContext = new TargletCommitContext(profile, workspaceIUAnalyzer, isIncludeAllPlatforms(), isIncludeAllRequirements());
+      TargletCommitContext commitContext = new TargletCommitContext(profile, workspaceIUAnalyzer, isIncludeAllPlatforms(), isIncludeAllRequirements(),
+          isIncludeBinaryEquivalents());
       transaction.commit(commitContext, progress.newChild());
 
       Map<IInstallableUnit, WorkspaceIUInfo> requiredProjects = getRequiredProjects(profile, workspaceIUAnalyzer.getWorkspaceIUInfos(), progress.newChild());
@@ -1204,12 +1218,16 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
     private boolean isIncludeAllRequirements;
 
-    public TargletCommitContext(Profile profile, WorkspaceIUAnalyzer workspaceIUAnalyzer, boolean isIncludeAllPlatforms, boolean isIncludeAllRequirements)
+    private boolean isIncludeBinaryEquivalents;
+
+    public TargletCommitContext(Profile profile, WorkspaceIUAnalyzer workspaceIUAnalyzer, boolean isIncludeAllPlatforms, boolean isIncludeAllRequirements,
+        boolean isIncludeBinaryEquivalents)
     {
       this.profile = profile;
       this.workspaceIUAnalyzer = workspaceIUAnalyzer;
       this.isIncludeAllPlatforms = isIncludeAllPlatforms;
       this.isIncludeAllRequirements = isIncludeAllRequirements;
+      this.isIncludeBinaryEquivalents = isIncludeBinaryEquivalents;
     }
 
     public IProvisioningPlan getProvisioningPlan()
@@ -1258,85 +1276,88 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
               ius.add(createGeneralizedIU(iu));
 
-              // If the binary IU corresponds to a synthetic source IU...
-              IInstallableUnit workspaceIU = idToIUMap.get(new IU(iu));
-              if (workspaceIU == null)
+              if (isIncludeBinaryEquivalents)
               {
-                workspaceIU = idToIUMap.get(new IU(iu.getId(), Version.emptyVersion));
-              }
-
-              if (workspaceIU != null)
-              {
-                // Ensure that if this binary IU is resolved that the corresponding source file is imported in the workspace.
-                WorkspaceIUInfo info = workspaceIUInfos.get(workspaceIU);
-                workspaceIUInfos.put(iu, info);
-
-                // We can remove our synthetic IU to ensure that, whenever possible, a binary resolution for it is included in the TP.
-                // That's only necessary if the IU is a singleton.
-                if (workspaceIU.isSingleton() || "true".equals(workspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP)))
+                // If the binary IU corresponds to a synthetic source IU...
+                IInstallableUnit workspaceIU = idToIUMap.get(new IU(iu));
+                if (workspaceIU == null)
                 {
-                  ius.remove(workspaceIU);
+                  workspaceIU = idToIUMap.get(new IU(iu.getId(), Version.emptyVersion));
                 }
 
-                // If the workspaceIU has any requirements not in the binary IU, then include those.
-                List<IRequirement> extraRequirements = new ArrayList<IRequirement>();
-                LOOP: for (IRequirement workspaceRequirement : workspaceIU.getRequirements())
+                if (workspaceIU != null)
                 {
-                  if (workspaceRequirement instanceof IRequiredCapability)
+                  // Ensure that if this binary IU is resolved that the corresponding source file is imported in the workspace.
+                  WorkspaceIUInfo info = workspaceIUInfos.get(workspaceIU);
+                  workspaceIUInfos.put(iu, info);
+
+                  // We can remove our synthetic IU to ensure that, whenever possible, a binary resolution for it is included in the TP.
+                  // That's only necessary if the IU is a singleton.
+                  if (workspaceIU.isSingleton() || "true".equals(workspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP)))
                   {
-                    IRequiredCapability workspaceRequiredCapability = (IRequiredCapability)workspaceRequirement;
-                    String namespace = workspaceRequiredCapability.getNamespace();
-                    String name = workspaceRequiredCapability.getName();
-                    for (IRequirement requirement : iu.getRequirements())
+                    ius.remove(workspaceIU);
+                  }
+
+                  // If the workspaceIU has any requirements not in the binary IU, then include those.
+                  List<IRequirement> extraRequirements = new ArrayList<IRequirement>();
+                  LOOP: for (IRequirement workspaceRequirement : workspaceIU.getRequirements())
+                  {
+                    if (workspaceRequirement instanceof IRequiredCapability)
                     {
-                      if (requirement instanceof IRequiredCapability)
+                      IRequiredCapability workspaceRequiredCapability = (IRequiredCapability)workspaceRequirement;
+                      String namespace = workspaceRequiredCapability.getNamespace();
+                      String name = workspaceRequiredCapability.getName();
+                      for (IRequirement requirement : iu.getRequirements())
                       {
-                        IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
-                        if (namespace.equals(requiredCapability.getNamespace()) && name.equals(requiredCapability.getName()))
+                        if (requirement instanceof IRequiredCapability)
                         {
-                          // It's already included, perhaps with a different version range, but we'll ignore it.
+                          IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
+                          if (namespace.equals(requiredCapability.getNamespace()) && name.equals(requiredCapability.getName()))
+                          {
+                            // It's already included, perhaps with a different version range, but we'll ignore it.
+                            continue LOOP;
+                          }
+                        }
+                      }
+
+                      // If it's an IU or bundle requirement...
+                      if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace) || BundlesAction.CAPABILITY_NS_OSGI_BUNDLE.equals(namespace))
+                      {
+                        // If it resolves to a workspace IU that's a singleton, generalize the requirement to include any version of that IU, because resolving
+                        // to any version will result in the import of the project.
+                        IInstallableUnit requiredWorkspaceIU = idToIUMap.get(new IU(name, Version.emptyVersion));
+                        if (requiredWorkspaceIU != null && (requiredWorkspaceIU.isSingleton()
+                            || "true".equals(requiredWorkspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP))))
+                        {
+                          extraRequirements
+                              .add(MetadataFactory.createRequirement(namespace, name, VersionRange.emptyRange, workspaceRequiredCapability.getFilter(),
+                                  workspaceRequiredCapability.getMin(), workspaceRequiredCapability.getMax(), workspaceRequiredCapability.isGreedy()));
                           continue LOOP;
                         }
                       }
                     }
 
-                    // If it's an IU or bundle requirement...
-                    if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace) || BundlesAction.CAPABILITY_NS_OSGI_BUNDLE.equals(namespace))
-                    {
-                      // If it resolves to a workspace IU that's a singleton, generalize the requirement to include any version of that IU, because resolving to
-                      // any version will result in the import of the project.
-                      IInstallableUnit requiredWorkspaceIU = idToIUMap.get(new IU(name, Version.emptyVersion));
-                      if (requiredWorkspaceIU != null
-                          && (requiredWorkspaceIU.isSingleton() || "true".equals(requiredWorkspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP))))
-                      {
-                        extraRequirements
-                            .add(MetadataFactory.createRequirement(namespace, name, VersionRange.emptyRange, workspaceRequiredCapability.getFilter(),
-                                workspaceRequiredCapability.getMin(), workspaceRequiredCapability.getMax(), workspaceRequiredCapability.isGreedy()));
-                        continue LOOP;
-                      }
-                    }
+                    // Otherwise add the requirement as is.
+                    extraRequirements.add(workspaceRequirement);
                   }
 
-                  // Otherwise add the requirement as is.
-                  extraRequirements.add(workspaceRequirement);
-                }
+                  // If there this workspace IU has a license...
+                  String licenseFeatureID = workspaceIU.getProperty(FeatureGenerator.PROP_REQUIRED_LICENCSE_FEATURE_ID);
+                  if (licenseFeatureID != null)
+                  {
+                    // Keep a requirement for this IU because binary IUs are generally not installed for license feature dependencies.
+                    VersionRange versionRange = new VersionRange(workspaceIU.getProperty(FeatureGenerator.PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE));
+                    IRequirement requirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, licenseFeatureID, versionRange, null, false,
+                        false);
+                    extraRequirements.add(requirement);
+                  }
 
-                // If there this workspace IU has a license...
-                String licenseFeatureID = workspaceIU.getProperty(FeatureGenerator.PROP_REQUIRED_LICENCSE_FEATURE_ID);
-                if (licenseFeatureID != null)
-                {
-                  // Keep a requirement for this IU because binary IUs are generally not installed for license feature dependencies.
-                  VersionRange versionRange = new VersionRange(workspaceIU.getProperty(FeatureGenerator.PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE));
-                  IRequirement requirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, licenseFeatureID, versionRange, null, false,
-                      false);
-                  extraRequirements.add(requirement);
-                }
-
-                if (!extraRequirements.isEmpty() && iu instanceof InstallableUnit)
-                {
-                  InstallableUnit binaryIU = (InstallableUnit)iu;
-                  extraRequirements.addAll(0, binaryIU.getRequirements());
-                  binaryIU.setRequiredCapabilities(extraRequirements.toArray(new IRequirement[extraRequirements.size()]));
+                  if (!extraRequirements.isEmpty() && iu instanceof InstallableUnit)
+                  {
+                    InstallableUnit binaryIU = (InstallableUnit)iu;
+                    extraRequirements.addAll(0, binaryIU.getRequirements());
+                    binaryIU.setRequiredCapabilities(extraRequirements.toArray(new IRequirement[extraRequirements.size()]));
+                  }
                 }
               }
             }

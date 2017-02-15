@@ -344,6 +344,16 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getTarglet_IncludeBinaryEquivalents()
+  {
+    return (EAttribute)targletEClass.getEStructuralFeatures().get(12);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getTarglet_RepositoryLists()
   {
     return (EReference)targletEClass.getEStructuralFeatures().get(4);
@@ -679,6 +689,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     createEAttribute(targletEClass, TARGLET__INCLUDE_ALL_PLATFORMS);
     createEAttribute(targletEClass, TARGLET__INCLUDE_ALL_REQUIREMENTS);
     createEReference(targletEClass, TARGLET__DROPIN_LOCATIONS);
+    createEAttribute(targletEClass, TARGLET__INCLUDE_BINARY_EQUIVALENTS);
 
     componentExtensionEClass = createEClass(COMPONENT_EXTENSION);
     createEReference(componentExtensionEClass, COMPONENT_EXTENSION__REQUIREMENTS);
@@ -805,6 +816,8 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTarglet_DropinLocations(), getDropinLocation(), null, "dropinLocations", null, 0, -1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTarglet_IncludeBinaryEquivalents(), ecorePackage.getEBoolean(), "includeBinaryEquivalents", "true", 0, 1, Targlet.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(componentExtensionEClass, ComponentExtension.class, "ComponentExtension", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getComponentExtension_Requirements(), theP2Package.getRequirement(), null, "requirements", null, 0, -1, ComponentExtension.class,

@@ -52,6 +52,7 @@ import java.util.Collection;
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeAllPlatforms <em>Include All Platforms</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeAllRequirements <em>Include All Requirements</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getDropinLocations <em>Dropin Locations</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeBinaryEquivalents <em>Include Binary Equivalents</em>}</li>
  * </ul>
  *
  * @generated
@@ -209,6 +210,26 @@ public class TargletImpl extends ModelElementImpl implements Targlet
   protected EList<DropinLocation> dropinLocations;
 
   /**
+   * The default value of the '{@link #isIncludeBinaryEquivalents() <em>Include Binary Equivalents</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIncludeBinaryEquivalents()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean INCLUDE_BINARY_EQUIVALENTS_EDEFAULT = true;
+
+  /**
+   * The cached value of the '{@link #isIncludeBinaryEquivalents() <em>Include Binary Equivalents</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIncludeBinaryEquivalents()
+   * @generated
+   * @ordered
+   */
+  protected boolean includeBinaryEquivalents = INCLUDE_BINARY_EQUIVALENTS_EDEFAULT;
+
+  /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -308,6 +329,32 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       dropinLocations = new EObjectContainmentEList<DropinLocation>(DropinLocation.class, this, TargletPackage.TARGLET__DROPIN_LOCATIONS);
     }
     return dropinLocations;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isIncludeBinaryEquivalents()
+  {
+    return includeBinaryEquivalents;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setIncludeBinaryEquivalents(boolean newIncludeBinaryEquivalents)
+  {
+    boolean oldIncludeBinaryEquivalents = includeBinaryEquivalents;
+    includeBinaryEquivalents = newIncludeBinaryEquivalents;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS, oldIncludeBinaryEquivalents,
+          includeBinaryEquivalents));
+    }
   }
 
   /**
@@ -530,6 +577,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return isIncludeAllRequirements();
       case TargletPackage.TARGLET__DROPIN_LOCATIONS:
         return getDropinLocations();
+      case TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS:
+        return isIncludeBinaryEquivalents();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -580,6 +629,9 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         getDropinLocations().clear();
         getDropinLocations().addAll((Collection<? extends DropinLocation>)newValue);
         return;
+      case TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS:
+        setIncludeBinaryEquivalents((Boolean)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -624,6 +676,9 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       case TargletPackage.TARGLET__DROPIN_LOCATIONS:
         getDropinLocations().clear();
         return;
+      case TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS:
+        setIncludeBinaryEquivalents(INCLUDE_BINARY_EQUIVALENTS_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -663,6 +718,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return includeAllRequirements != INCLUDE_ALL_REQUIREMENTS_EDEFAULT;
       case TargletPackage.TARGLET__DROPIN_LOCATIONS:
         return dropinLocations != null && !dropinLocations.isEmpty();
+      case TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS:
+        return includeBinaryEquivalents != INCLUDE_BINARY_EQUIVALENTS_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -691,6 +748,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
     result.append(includeAllPlatforms);
     result.append(", includeAllRequirements: ");
     result.append(includeAllRequirements);
+    result.append(", includeBinaryEquivalents: ");
+    result.append(includeBinaryEquivalents);
     result.append(')');
     return result.toString();
   }

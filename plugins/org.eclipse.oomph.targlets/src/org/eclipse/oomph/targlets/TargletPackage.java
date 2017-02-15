@@ -263,13 +263,22 @@ public interface TargletPackage extends EPackage
   int TARGLET__DROPIN_LOCATIONS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 11;
 
   /**
+   * The feature id for the '<em><b>Include Binary Equivalents</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET__INCLUDE_BINARY_EQUIVALENTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 12;
+
+  /**
    * The number of structural features of the '<em>Targlet</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGLET_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 12;
+  int TARGLET_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 13;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -1186,6 +1195,17 @@ public interface TargletPackage extends EPackage
   EReference getTarglet_DropinLocations();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.targlets.Targlet#isIncludeBinaryEquivalents <em>Include Binary Equivalents</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Include Binary Equivalents</em>'.
+   * @see org.eclipse.oomph.targlets.Targlet#isIncludeBinaryEquivalents()
+   * @see #getTarglet()
+   * @generated
+   */
+  EAttribute getTarglet_IncludeBinaryEquivalents();
+
+  /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.targlets.Targlet#getRepositoryLists <em>Repository Lists</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1484,7 +1504,7 @@ public interface TargletPackage extends EPackage
    * <!-- end-user-doc -->
    * @return the meta object for data type '<em>String To Version Map</em>'.
    * @see java.util.Map
-   * @model instanceClass="java.util.Map<java.lang.String, org.eclipse.equinox.p2.metadata.Version>" serializeable="false"
+   * @model instanceClass="java.util.Map&lt;java.lang.String, org.eclipse.equinox.p2.metadata.Version&gt;" serializeable="false"
    * @generated
    */
   EDataType getStringToVersionMap();
@@ -1588,6 +1608,14 @@ public interface TargletPackage extends EPackage
      * @generated
      */
     EReference TARGLET__DROPIN_LOCATIONS = eINSTANCE.getTarglet_DropinLocations();
+
+    /**
+     * The meta object literal for the '<em><b>Include Binary Equivalents</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET__INCLUDE_BINARY_EQUIVALENTS = eINSTANCE.getTarglet_IncludeBinaryEquivalents();
 
     /**
      * The meta object literal for the '<em><b>Repository Lists</b></em>' containment reference list feature.

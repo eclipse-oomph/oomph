@@ -205,6 +205,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
     targlet.setIncludeSources(source.isIncludeSources());
     targlet.setIncludeAllPlatforms(source.isIncludeAllPlatforms());
     targlet.setIncludeAllRequirements(source.isIncludeAllRequirements());
+    targlet.setIncludeBinaryEquivalents(source.isIncludeBinaryEquivalents());
 
     for (Annotation annotation : source.getAnnotations())
     {

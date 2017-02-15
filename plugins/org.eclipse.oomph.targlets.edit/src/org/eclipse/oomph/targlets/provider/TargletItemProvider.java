@@ -72,6 +72,7 @@ public class TargletItemProvider extends ModelElementItemProvider
       addIncludeSourcesPropertyDescriptor(object);
       addIncludeAllPlatformsPropertyDescriptor(object);
       addIncludeAllRequirementsPropertyDescriptor(object);
+      addIncludeBinaryEquivalentsPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -142,6 +143,20 @@ public class TargletItemProvider extends ModelElementItemProvider
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_Targlet_includeAllRequirements_feature"), getString("_UI_Targlet_includeAllRequirements_description"),
         TargletPackage.Literals.TARGLET__INCLUDE_ALL_REQUIREMENTS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Include Binary Equivalents feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addIncludeBinaryEquivalentsPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Targlet_includeBinaryEquivalents_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_Targlet_includeBinaryEquivalents_feature", "_UI_Targlet_type"),
+        TargletPackage.Literals.TARGLET__INCLUDE_BINARY_EQUIVALENTS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   @Override
@@ -287,6 +302,7 @@ public class TargletItemProvider extends ModelElementItemProvider
       case TargletPackage.TARGLET__INCLUDE_SOURCES:
       case TargletPackage.TARGLET__INCLUDE_ALL_PLATFORMS:
       case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
+      case TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
       case TargletPackage.TARGLET__REQUIREMENTS:

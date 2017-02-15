@@ -39,6 +39,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeAllPlatforms <em>Include All Platforms</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeAllRequirements <em>Include All Requirements</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getDropinLocations <em>Dropin Locations</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeBinaryEquivalents <em>Include Binary Equivalents</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet()
@@ -140,6 +141,33 @@ public interface Targlet extends ModelElement
    * @generated
    */
   EList<DropinLocation> getDropinLocations();
+
+  /**
+   * Returns the value of the '<em><b>Include Binary Equivalents</b></em>' attribute.
+   * The default value is <code>"true"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Include Binary Equivalents</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Include Binary Equivalents</em>' attribute.
+   * @see #setIncludeBinaryEquivalents(boolean)
+   * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_IncludeBinaryEquivalents()
+   * @model default="true"
+   * @generated
+   */
+  boolean isIncludeBinaryEquivalents();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.targlets.Targlet#isIncludeBinaryEquivalents <em>Include Binary Equivalents</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Include Binary Equivalents</em>' attribute.
+   * @see #isIncludeBinaryEquivalents()
+   * @generated
+   */
+  void setIncludeBinaryEquivalents(boolean value);
 
   /**
    * Returns the value of the '<em><b>Repository Lists</b></em>' containment reference list.

@@ -83,6 +83,8 @@
         <details key="name" value="dropinLocation"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeBinaryEquivalents"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ComponentExtension" eSuperTypes="http://www.eclipse.org/oomph/base/1.0#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="requirements" upperBound="-1"

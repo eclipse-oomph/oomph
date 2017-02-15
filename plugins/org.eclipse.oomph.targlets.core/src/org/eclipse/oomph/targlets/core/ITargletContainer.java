@@ -67,6 +67,8 @@ public interface ITargletContainer extends ITargetLocation
 
   public boolean isIncludeAllRequirements();
 
+  public boolean isIncludeBinaryEquivalents();
+
   public String getEnvironmentProperties();
 
   public String getNLProperty();
