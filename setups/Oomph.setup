@@ -79,47 +79,59 @@
   </setupTask>
   <setupTask
       xsi:type="setup:CompoundTask"
-      name="org.eclipse.ant.ui">
+      name="User Preferences">
     <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.ant.ui/problem_classpath"
-        value="ignore"/>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:CompoundTask"
-      name="org.eclipse.jdt.core">
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.ant.ui">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.ant.ui/problem_classpath"
+          value="ignore"/>
+    </setupTask>
     <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.compiler.problem.potentiallyUnclosedCloseable"
-        value="ignore"/>
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.egit.core">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.egit.core/core_autoIgnoreDerivedResources"
+          value="false"/>
+    </setupTask>
     <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.compiler.problem.unclosedCloseable"
-        value="ignore"/>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:CompoundTask"
-      name="org.eclipse.jdt.launching">
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.jdt.core">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.compiler.problem.potentiallyUnclosedCloseable"
+          value="ignore"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.compiler.problem.unclosedCloseable"
+          value="ignore"/>
+    </setupTask>
     <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="ignore"/>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:CompoundTask"
-      name="org.eclipse.pde.api.tools">
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.jdt.launching">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
+          value="ignore"/>
+    </setupTask>
     <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.pde.api.tools/missing_default_api_profile"
-        value="Ignore"/>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:CompoundTask"
-      name="org.eclipse.mylyn.team.ui">
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.mylyn.team.ui">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.mylyn.team.ui/org.eclipse.mylyn.team.commit.template"
+          value="[$${task.key}] $${task.description}&#xD;&#xA;&#xD;&#xA;$${task.url}"/>
+    </setupTask>
     <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.mylyn.team.ui/org.eclipse.mylyn.team.commit.template"
-        value="[$${task.key}] $${task.description}&#xD;&#xA;&#xD;&#xA;$${task.url}"/>
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.pde.api.tools">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.pde.api.tools/missing_default_api_profile"
+          value="Ignore"/>
+    </setupTask>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
