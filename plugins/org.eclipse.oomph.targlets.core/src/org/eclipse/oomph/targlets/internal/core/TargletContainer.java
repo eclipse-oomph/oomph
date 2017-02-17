@@ -65,6 +65,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.equinox.internal.p2.engine.DownloadManager;
@@ -118,6 +119,7 @@ import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.core.target.ITargetLocationFactory;
 import org.eclipse.pde.core.target.ITargetPlatformService;
+import org.eclipse.pde.core.target.LoadTargetDefinitionJob;
 import org.eclipse.pde.core.target.TargetBundle;
 import org.eclipse.pde.core.target.TargetFeature;
 import org.eclipse.pde.internal.core.target.AbstractBundleContainer;
@@ -558,16 +560,18 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       TargletContainerDescriptor descriptor = manager.getDescriptor(id, progress.newChild(4));
       progress.childDone();
 
-      boolean isDisplayThread = isDisplayThread();
+      boolean canResolve = canResolve();
       Profile profile = descriptor.getWorkingProfile();
       if (profile == null || //
-          !descriptor.getWorkingDigest().equals(digest) && !isDisplayThread && descriptor.getUpdateProblem() == null || //
+          !descriptor.getWorkingDigest().equals(digest) && canResolve && descriptor.getUpdateProblem() == null || //
           FORCE_UPDATE.get() == Boolean.TRUE)
       {
         try
         {
-          if (isDisplayThread)
+          if (!canResolve)
           {
+            // Defer resolution to a Job that happens on a background thread later in the lifecyle.
+            LoadTargetDefinitionJob.load(targetDefinition);
             throw new CoreException(Status.CANCEL_STATUS);
           }
 
@@ -586,7 +590,6 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         {
           if (profile == null)
           {
-            // This just leads to logging further down.
             throw ex;
           }
         }
@@ -598,6 +601,10 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
       generateUnits(descriptor, profile, progress.newChild(10));
       progress.done();
+    }
+    catch (CoreException ex)
+    {
+      throw ex;
     }
     catch (Throwable t)
     {
@@ -1131,20 +1138,47 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return providesNamespace(unit, "org.eclipse.update.feature");
   }
 
-  private static boolean isDisplayThread()
+  private static boolean canResolve()
   {
+    boolean isJobManagerSuspended = Job.getJobManager().isSuspended();
+    if (isJobManagerSuspended)
+    {
+      // We can't expect scheduled jobs to run, and we need that to load repositories.
+      // So we can't resolve in this case.
+      return false;
+    }
+
     try
     {
       Class<?> displayClass = CommonPlugin.loadClass("org.eclipse.swt", "org.eclipse.swt.widgets.Display");
       Method getCurrentMethod = ReflectUtil.getMethod(displayClass, "getCurrent");
-      return ReflectUtil.invokeMethod(getCurrentMethod, null) != null;
+      boolean isDisplayThread = ReflectUtil.invokeMethod(getCurrentMethod, null) != null;
+      if (isDisplayThread)
+      {
+        // We should never do a resolve in the display thread.
+        // The UI will hang for a long time, and it won't be possible to cancel progress.
+        // So we can't resolve in this case.
+        return false;
+      }
+
+      Class<?> platformUIClass = CommonPlugin.loadClass("org.eclipse.ui.workbench", "org.eclipse.ui.PlatformUI");
+      Object workbench = ReflectUtil.invokeMethod("getWorkbench", platformUIClass);
+      boolean isWorkbenchStarting = (Boolean)ReflectUtil.invokeMethod("isStarting", workbench);
+      if (isWorkbenchStarting)
+      {
+        // In Oxygen, the new Java indexer starts very early.
+        // At this point the job manager will be suspended, or is is about to be suspended because the workbench is starting its life cycle.
+        // So we can't resolve in this case.
+        return false;
+      }
     }
     catch (Throwable ex)
     {
       //$FALL-THROUGH$
     }
 
-    return false;
+    // All is good and we can resolve now on this thread.
+    return true;
   }
 
   private static boolean providesNamespace(IInstallableUnit unit, String namespace)
