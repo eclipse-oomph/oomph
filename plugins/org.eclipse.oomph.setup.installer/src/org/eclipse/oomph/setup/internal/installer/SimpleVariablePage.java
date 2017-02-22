@@ -174,6 +174,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   protected static final boolean JRE_CHOICE = Boolean.valueOf(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_JRE_CHOICE, "true"));
 
+  protected static final boolean INSTALL_CHOICE = Boolean.valueOf(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALL_CHOICE, "true"));
+
   private final SelectionMemento selectionMemento;
 
   private final Map<String, ProductVersion> productVersions = new HashMap<String, ProductVersion>();
@@ -215,6 +217,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
   private Control javaTrailingSpacer;
 
   private Text folderText;
+
+  private Label installFolderLabel;
+
+  private Control installFolderSpacer;
 
   private FlatButton folderButton;
 
@@ -446,9 +452,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
     javaTrailingSpacer = spacer(variablesComposite);
 
     // Row 5
-    final Label installFolderLabel = createLabel(variablesComposite, "Installation Folder");
-
-    spacer(variablesComposite);
+    installFolderLabel = createLabel(variablesComposite, "Installation Folder");
+    installFolderSpacer = spacer(variablesComposite);
 
     folderText = createTextField(variablesComposite);
     folderText.addModifyListener(new ModifyListener()
@@ -981,6 +986,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
     setVisible(javaViewer.getCCombo().getParent(), javaVisible);
     setVisible(javaButton, javaVisible);
     setVisible(javaTrailingSpacer, javaVisible);
+
+    setVisible(folderText, INSTALL_CHOICE);
+    setVisible(folderText.getParent(), INSTALL_CHOICE);
+    setVisible(installFolderLabel, INSTALL_CHOICE);
+    setVisible(installFolderSpacer, INSTALL_CHOICE);
+    setVisible(folderButton, INSTALL_CHOICE);
 
     container.layout(true, true);
   }
