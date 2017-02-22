@@ -37,7 +37,7 @@ public class StackComposite extends Composite
     if (layout.topControl != topControl)
     {
       layout.topControl = topControl;
-      layout();
+      requestLayout();
     }
   }
 }
