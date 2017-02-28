@@ -289,7 +289,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
         {
           return GET_ELEMENT_INDENT_METHOD.invoke(doc, extraIndent).toString();
         }
-        catch (Throwable ex)
+        catch (Exception ex)
         {
           return "";
         }

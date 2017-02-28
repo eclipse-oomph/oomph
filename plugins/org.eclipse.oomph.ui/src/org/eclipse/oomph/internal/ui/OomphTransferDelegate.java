@@ -93,7 +93,7 @@ public abstract class OomphTransferDelegate
 
   public static final List<? extends OomphTransferDelegate> DELEGATES = Collections.unmodifiableList(MODIFIABLE_DELEGATES);
 
-  public static final List<? extends Transfer> TRANSFERS = asTransfers(MODIFIABLE_DELEGATES);
+  protected static final List<? extends Transfer> TRANSFERS = asTransfers(MODIFIABLE_DELEGATES);
 
   public static Transfer[] transfers()
   {
@@ -620,7 +620,7 @@ public abstract class OomphTransferDelegate
         {
           private static final long serialVersionUID = 1L;
 
-          private Map<EObject, EObject> packageCopies;
+          private transient Map<EObject, EObject> packageCopies;
 
           public Copier()
           {
@@ -1199,7 +1199,7 @@ public abstract class OomphTransferDelegate
 
     private final BaseResourceImpl.BaseHelperImpl helper = new BaseResourceImpl.BaseHelperImpl(null);
 
-    private final Collection<Resource> excludedResources = new HashSet<Resource>();
+    private transient final Collection<Resource> excludedResources = new HashSet<Resource>();
 
     public ProxifyingCopier(boolean resolveProxies, boolean useOriginalReferences)
     {

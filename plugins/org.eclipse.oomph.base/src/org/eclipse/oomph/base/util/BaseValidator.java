@@ -219,7 +219,7 @@ public class BaseValidator extends EObjectValidator
     {
       return uri != null && uri.length() != 0 && uri.equals(URI.createURI(uri, true).toString());
     }
-    catch (Throwable exception)
+    catch (RuntimeException ex)
     {
       return false;
     }

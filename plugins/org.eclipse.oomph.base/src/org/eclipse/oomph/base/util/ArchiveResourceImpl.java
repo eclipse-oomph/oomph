@@ -47,9 +47,8 @@ public class ArchiveResourceImpl extends ResourceImpl implements BytesResource
   protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException
   {
     URI archiveURI = getURI();
-    ZipInputStream zipInputStream = null;
 
-    zipInputStream = new ZipInputStream(inputStream);
+    ZipInputStream zipInputStream = new ZipInputStream(inputStream);
     Annotation annotation = BaseFactory.eINSTANCE.createAnnotation();
     EMap<String, String> details = annotation.getDetails();
     for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry())

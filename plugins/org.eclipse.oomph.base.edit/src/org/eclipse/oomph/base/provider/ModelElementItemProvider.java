@@ -566,7 +566,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
     {
       if (object instanceof EList<?>)
       {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (Object child : (List<?>)object)
         {
           if (result.length() != 0)
@@ -855,7 +855,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
   {
     private static final long serialVersionUID = 1L;
 
-    private Map<EObject, EObject> conversionMap;
+    private transient Map<EObject, EObject> conversionMap;
 
     public ConversionCopier(Map<EObject, EObject> conversionMap)
     {

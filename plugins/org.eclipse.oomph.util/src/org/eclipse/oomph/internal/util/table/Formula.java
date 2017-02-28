@@ -134,6 +134,10 @@ public interface Formula
         }
       }
 
+      if (count == 0) // to avoid potential division by zero
+      {
+        ++count;
+      }
       return sum / count;
     }
   }
@@ -200,7 +204,9 @@ public interface Formula
         return null;
       }
 
-      if (sum == 0.0)
+      // Just to properly test equality for a double variable.
+      final double EPSILON = 0.00001;
+      if (sum >= -EPSILON && sum <= EPSILON)
       {
         return value < 0 ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
       }

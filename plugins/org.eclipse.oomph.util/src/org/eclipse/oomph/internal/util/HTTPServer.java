@@ -66,6 +66,8 @@ public final class HTTPServer
 
   private static final ImageContext IMAGE_CONTEXT = new ImageContext();
 
+  private static final String LOCALHOST = "http://127.0.0.1:";
+
   private static final String PATH_SEPARATOR = "/";
 
   private static final String STATUS_OK = "200 OK";
@@ -131,7 +133,7 @@ public final class HTTPServer
   public String getURL()
   {
     int port = acceptor != null ? acceptor.getPort() : 0;
-    return "http://127.0.0.1:" + port;
+    return LOCALHOST + port;
   }
 
   public synchronized void addContext(Context context)

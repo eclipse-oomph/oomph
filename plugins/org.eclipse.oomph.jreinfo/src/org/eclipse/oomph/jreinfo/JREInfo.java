@@ -105,7 +105,7 @@ public final class JREInfo
         jreInfo = searchFolder(jreInfo, search);
       }
     }
-    catch (Throwable ex)
+    catch (Exception ex)
     {
       JREInfoPlugin.INSTANCE.log(ex);
     }

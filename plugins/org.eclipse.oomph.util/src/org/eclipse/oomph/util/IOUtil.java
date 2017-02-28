@@ -83,6 +83,13 @@ public final class IOUtil
         {
           // Do nothing.
         }
+
+        @Override
+        public void close() throws IOException
+        {
+          // Do nothing.
+        }
+
       });
     }
     catch (IOException ex)

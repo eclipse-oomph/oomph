@@ -24,7 +24,7 @@ public final class Request extends HashMap<String, String>
 
   private static final long serialVersionUID = 1L;
 
-  private URI uri;
+  private transient URI uri;
 
   public Request()
   {

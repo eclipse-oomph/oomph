@@ -28,9 +28,9 @@ public class StructuredViewerTreeIterator extends AbstractTreeIterator<Object>
 {
   private static final long serialVersionUID = 1L;
 
-  private StructuredViewer viewer;
+  private transient StructuredViewer viewer;
 
-  private ITreeContentProvider treeContentProvider;
+  private transient ITreeContentProvider treeContentProvider;
 
   public StructuredViewerTreeIterator(StructuredViewer viewer)
   {
