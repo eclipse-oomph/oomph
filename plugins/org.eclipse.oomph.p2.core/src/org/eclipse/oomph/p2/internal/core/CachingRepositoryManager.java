@@ -160,86 +160,93 @@ public class CachingRepositoryManager<T>
     boolean added = false;
     IRepository<T> result = null;
 
+    CachingTransport.startLoadingRepository(location);
+
     try
     {
-      CachingTransport.startLoadingRepository(location);
       enterLoad(location, sub.newChild(5));
-
-      result = basicGetRepository(location);
-      if (result != null)
-      {
-        return result;
-      }
-
-      // Add the repository first so that it will be enabled, but don't send add event until after the load.
-      added = addRepository(location, true, false);
-
-      LocationProperties indexFile = loadIndexFile(location, sub.newChild(15));
-      String[] preferredOrder = getPreferredRepositorySearchOrder(indexFile);
-      String[] allSuffixes = getAllSuffixes();
-      String[] suffixes = sortSuffixes(allSuffixes, preferredOrder);
-
-      sub = SubMonitor.convert(sub, NLS.bind("Adding repository {0}", location), suffixes.length * 100);
-      ProvisionException failure = null;
 
       try
       {
-        for (int i = 0; i < suffixes.length; i++)
+        result = basicGetRepository(location);
+        if (result != null)
         {
-          if (sub.isCanceled())
+          return result;
+        }
+
+        // Add the repository first so that it will be enabled, but don't send add event until after the load.
+        added = addRepository(location, true, false);
+
+        LocationProperties indexFile = loadIndexFile(location, sub.newChild(15));
+        String[] preferredOrder = getPreferredRepositorySearchOrder(indexFile);
+        String[] allSuffixes = getAllSuffixes();
+        String[] suffixes = sortSuffixes(allSuffixes, preferredOrder);
+
+        sub = SubMonitor.convert(sub, NLS.bind("Adding repository {0}", location), suffixes.length * 100);
+        ProvisionException failure = null;
+
+        try
+        {
+          for (int i = 0; i < suffixes.length; i++)
           {
-            throw new OperationCanceledException();
+            if (sub.isCanceled())
+            {
+              throw new OperationCanceledException();
+            }
+
+            try
+            {
+              result = loadRepository(location, suffixes[i], type, flags, sub.newChild(100));
+            }
+            catch (ProvisionException e)
+            {
+              failure = e;
+              break;
+            }
+
+            if (result != null)
+            {
+              addRepository(result, false, suffixes[i]);
+              cacheIndexFile(location, suffixes[i]);
+              break;
+            }
+          }
+        }
+        finally
+        {
+          sub.done();
+        }
+
+        if (result == null)
+        {
+          // If we just added the repository, remove it because it cannot be loaded.
+          if (added)
+          {
+            removeRepository(location, false);
           }
 
-          try
+          // Eagerly cleanup missing system repositories.
+          if (Boolean.valueOf(delegate.getRepositoryProperty(location, IRepository.PROP_SYSTEM)).booleanValue())
           {
-            result = loadRepository(location, suffixes[i], type, flags, sub.newChild(100));
-          }
-          catch (ProvisionException e)
-          {
-            failure = e;
-            break;
+            delegate.removeRepository(location);
           }
 
-          if (result != null)
+          if (failure != null)
           {
-            addRepository(result, false, suffixes[i]);
-            cacheIndexFile(location, suffixes[i]);
-            break;
+            throw failure;
           }
+
+          fail(location, ProvisionException.REPOSITORY_NOT_FOUND);
         }
       }
       finally
       {
-        sub.done();
-      }
-
-      if (result == null)
-      {
-        // If we just added the repository, remove it because it cannot be loaded.
-        if (added)
-        {
-          removeRepository(location, false);
-        }
-
-        // Eagerly cleanup missing system repositories.
-        if (Boolean.valueOf(delegate.getRepositoryProperty(location, IRepository.PROP_SYSTEM)).booleanValue())
-        {
-          delegate.removeRepository(location);
-        }
-
-        if (failure != null)
-        {
-          throw failure;
-        }
-
-        fail(location, ProvisionException.REPOSITORY_NOT_FOUND);
+        exitLoad(location);
       }
     }
     finally
     {
       CachingTransport.stopLoadingRepository();
-      exitLoad(location);
     }
 
     // Broadcast the add event after releasing lock.

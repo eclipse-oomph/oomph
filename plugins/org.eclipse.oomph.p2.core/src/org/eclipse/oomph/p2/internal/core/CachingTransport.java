@@ -41,8 +41,8 @@ import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
-import java.util.Stack;
 
 /**
  * @author Eike Stepper
@@ -52,12 +52,12 @@ public class CachingTransport extends Transport
 {
   public static final String SERVICE_NAME = Transport.SERVICE_NAME;
 
-  private static final ThreadLocal<Stack<String>> REPOSITORY_LOCATIONS = new InheritableThreadLocal<Stack<String>>()
+  private static final ThreadLocal<LocationStack> REPOSITORY_LOCATIONS = new InheritableThreadLocal<LocationStack>()
   {
     @Override
-    protected Stack<String> initialValue()
+    protected LocationStack initialValue()
     {
-      return new Stack<String>();
+      return new LocationStack();
     }
   };
 
@@ -437,13 +437,13 @@ public class CachingTransport extends Transport
 
   private static boolean isLoadingRepository(URI uri)
   {
-    Stack<String> stack = REPOSITORY_LOCATIONS.get();
+    LocationStack stack = REPOSITORY_LOCATIONS.get();
     return !stack.isEmpty();
   }
 
   private static void log(String message)
   {
-    Stack<String> stack = REPOSITORY_LOCATIONS.get();
+    LocationStack stack = REPOSITORY_LOCATIONS.get();
     for (int i = 1; i < stack.size(); i++)
     {
       message = "   " + message;
@@ -460,7 +460,7 @@ public class CachingTransport extends Transport
       uri = uri.substring(0, uri.length() - 1);
     }
 
-    Stack<String> stack = REPOSITORY_LOCATIONS.get();
+    LocationStack stack = REPOSITORY_LOCATIONS.get();
     stack.push(uri);
 
     if (DEBUG && !uri.startsWith("file:"))
@@ -471,17 +471,54 @@ public class CachingTransport extends Transport
 
   static void stopLoadingRepository()
   {
-    Stack<String> stack = REPOSITORY_LOCATIONS.get();
-    if (DEBUG && !stack.isEmpty())
+    LocationStack stack = REPOSITORY_LOCATIONS.get();
+    int size = stack.size();
+    if (size != 0)
     {
-      String location = stack.peek();
-      if (!location.startsWith("file:"))
+      if (DEBUG)
       {
-        log("<-- " + location);
+        String location = stack.peek();
+        if (!location.startsWith("file:"))
+        {
+          log("<-- " + location);
+        }
+      }
+
+      if (size > 1)
+      {
+        stack.pop();
+      }
+      else
+      {
+        REPOSITORY_LOCATIONS.remove();
       }
     }
+  }
 
-    stack.pop();
+  /**
+   * @author Eike Stepper
+   */
+  private static final class LocationStack extends LinkedList<String>
+  {
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public void push(String location)
+    {
+      addLast(location);
+    }
+
+    @Override
+    public String pop()
+    {
+      return removeLast();
+    }
+
+    @Override
+    public String peek()
+    {
+      return isEmpty() ? null : getLast();
+    }
   }
 
   /**

@@ -73,8 +73,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * @author Eike Stepper
@@ -117,7 +117,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private final CatalogManager catalogManager;
 
-  private final Stack<SimpleInstallerPage> pageStack = new Stack<SimpleInstallerPage>();
+  private final PageStack pageStack = new PageStack();
 
   private Composite stack;
 
@@ -665,7 +665,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   {
     if (newPage != null)
     {
-      SimpleInstallerPage oldPage = !pageStack.isEmpty() ? pageStack.peek() : null;
+      SimpleInstallerPage oldPage = pageStack.peek();
       if (oldPage == null || oldPage != newPage)
       {
         pageStack.push(newPage);
@@ -993,6 +993,32 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       {
         SetupInstallerPlugin.INSTANCE.log(ex);
       }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class PageStack extends LinkedList<SimpleInstallerPage>
+  {
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public void push(SimpleInstallerPage page)
+    {
+      addLast(page);
+    }
+
+    @Override
+    public SimpleInstallerPage pop()
+    {
+      return removeLast();
+    }
+
+    @Override
+    public SimpleInstallerPage peek()
+    {
+      return isEmpty() ? null : getLast();
     }
   }
 }
