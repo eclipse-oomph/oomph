@@ -1563,7 +1563,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
   {
     super.aboutToShow();
     keepInstallerButton.setVisible(KeepInstallerUtil.canKeepInstaller());
-    validatePage();
+
+    if (!installed)
+    {
+      validatePage();
+    }
   }
 
   private String validateJREs()
