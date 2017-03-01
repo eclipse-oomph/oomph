@@ -2266,7 +2266,26 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    return result;
+    return new StringExpander()
+    {
+      @Override
+      protected String resolve(String key)
+      {
+        return specialResolve(key);
+      }
+
+      @Override
+      protected boolean isUnexpanded(String key)
+      {
+        return false;
+      }
+
+      @Override
+      protected String filter(String value, String filterName)
+      {
+        return SetupTaskPerformer.super.filter(value, filterName);
+      }
+    }.expandString(result);
   }
 
   @Override
