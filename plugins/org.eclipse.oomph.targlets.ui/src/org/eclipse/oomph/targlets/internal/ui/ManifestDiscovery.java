@@ -14,6 +14,7 @@ import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.targlets.core.ITargletContainer;
+import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.pde.TargetPlatformListener;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
@@ -57,6 +58,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IPageListener;
@@ -186,59 +188,66 @@ public class ManifestDiscovery
 
   public void start()
   {
-    try
+    final IWorkbench workbench = PlatformUI.getWorkbench();
+    final Display display = workbench.getDisplay();
+
+    UIUtil.asyncExec(display, new Runnable()
     {
-      final IWorkbench workbench = PlatformUI.getWorkbench();
-
-      for (IWorkbenchWindow window : workbench.getWorkbenchWindows())
+      public void run()
       {
-        for (IWorkbenchPage page : window.getPages())
+        try
         {
-          for (IEditorReference editorReference : page.getEditorReferences())
+          for (IWorkbenchWindow window : workbench.getWorkbenchWindows())
           {
-            if (IPDEUIConstants.MANIFEST_EDITOR_ID.equals(editorReference.getId()))
+            for (IWorkbenchPage page : window.getPages())
             {
-              IEditorPart editorPart = editorReference.getEditor(true);
-              if (editorPart instanceof ManifestEditor)
+              for (IEditorReference editorReference : page.getEditorReferences())
               {
-                final ManifestEditor manifestEditor = (ManifestEditor)editorPart;
-
-                workbench.getDisplay().syncExec(new Runnable()
+                if (IPDEUIConstants.MANIFEST_EDITOR_ID.equals(editorReference.getId()))
                 {
-                  public void run()
+                  IEditorPart editorPart = editorReference.getEditor(true);
+                  if (editorPart instanceof ManifestEditor)
                   {
-                    handleManifestEditor(manifestEditor);
-                  }
-                });
+                    final ManifestEditor manifestEditor = (ManifestEditor)editorPart;
 
-                manifestEditor.addPageChangedListener(pageChangedListener);
+                    display.syncExec(new Runnable()
+                    {
+                      public void run()
+                      {
+                        handleManifestEditor(manifestEditor);
+                      }
+                    });
+
+                    manifestEditor.addPageChangedListener(pageChangedListener);
+                  }
+                }
               }
+
+              page.addPartListener(partListener);
             }
+
+            window.addPageListener(pageListener);
           }
 
-          page.addPartListener(partListener);
+          workbench.addWindowListener(windowListener);
+
+          ITargetDefinition activeTargetDefinition = TargetPlatformUtil.getActiveTargetDefinition();
+          handleTargetDefinition(workbench, activeTargetDefinition);
+
+          TargetPlatformUtil.addListener(new TargetPlatformListener()
+          {
+            public void targetDefinitionActivated(ITargetDefinition oldTargetDefinition, ITargetDefinition newTargetDefinition) throws Exception
+            {
+              handleTargetDefinition(workbench, newTargetDefinition);
+            }
+          });
         }
-
-        window.addPageListener(pageListener);
-      }
-
-      workbench.addWindowListener(windowListener);
-
-      ITargetDefinition activeTargetDefinition = TargetPlatformUtil.getActiveTargetDefinition();
-      handleTargetDefinition(workbench, activeTargetDefinition);
-
-      TargetPlatformUtil.addListener(new TargetPlatformListener()
-      {
-        public void targetDefinitionActivated(ITargetDefinition oldTargetDefinition, ITargetDefinition newTargetDefinition) throws Exception
+        catch (Throwable ex)
         {
-          handleTargetDefinition(workbench, newTargetDefinition);
+          TargletsUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
         }
-      });
-    }
-    catch (Throwable ex)
-    {
-      TargletsUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
-    }
+      }
+    });
   }
 
   private void handleManifestEditor(final ManifestEditor manifestEditor)
