@@ -389,6 +389,7 @@ public class ProjectPage extends SetupWizardPage
     AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
 
     projectViewer = filteredTree.getViewer();
+    projectViewer.setUseHashlookup(true);
     projectViewer.setCheckStateProvider(new ICheckStateProvider()
     {
       private Set<ProjectContainer> projectContainers;
@@ -2517,7 +2518,7 @@ public class ProjectPage extends SetupWizardPage
           applyConfigurationButton.setToolTipText("Apply the configuration from the clipboard");
         }
       }
-      else if (applyConfigurationButton != null)
+      else
       {
         disposeApplyConfigurationButton();
       }
@@ -2540,11 +2541,14 @@ public class ProjectPage extends SetupWizardPage
 
     private void disposeApplyConfigurationButton()
     {
-      applyConfigurationButton.dispose();
-      applyConfigurationButton = null;
+      if (applyConfigurationButton != null)
+      {
+        applyConfigurationButton.dispose();
+        applyConfigurationButton = null;
 
-      toolBar.getParent().layout(true);
-      toolBar.layout(true);
+        toolBar.getParent().layout(true);
+        toolBar.layout(true);
+      }
     }
 
     public static boolean isIndexURI(URI uri)
