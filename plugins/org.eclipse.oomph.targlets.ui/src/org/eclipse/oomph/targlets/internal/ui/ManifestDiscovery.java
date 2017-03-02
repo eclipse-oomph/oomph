@@ -203,7 +203,7 @@ public class ManifestDiscovery
               {
                 if (IPDEUIConstants.MANIFEST_EDITOR_ID.equals(editorReference.getId()))
                 {
-                  IEditorPart editorPart = editorReference.getEditor(true);
+                  IEditorPart editorPart = editorReference.getEditor(false);
                   if (editorPart instanceof ManifestEditor)
                   {
                     ManifestEditor manifestEditor = (ManifestEditor)editorPart;
