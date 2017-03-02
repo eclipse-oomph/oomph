@@ -58,7 +58,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IPageListener;
@@ -189,9 +188,8 @@ public class ManifestDiscovery
   public void start()
   {
     final IWorkbench workbench = PlatformUI.getWorkbench();
-    final Display display = workbench.getDisplay();
 
-    UIUtil.asyncExec(display, new Runnable()
+    UIUtil.asyncExec(workbench.getDisplay(), new Runnable()
     {
       public void run()
       {
@@ -208,16 +206,8 @@ public class ManifestDiscovery
                   IEditorPart editorPart = editorReference.getEditor(true);
                   if (editorPart instanceof ManifestEditor)
                   {
-                    final ManifestEditor manifestEditor = (ManifestEditor)editorPart;
-
-                    display.syncExec(new Runnable()
-                    {
-                      public void run()
-                      {
-                        handleManifestEditor(manifestEditor);
-                      }
-                    });
-
+                    ManifestEditor manifestEditor = (ManifestEditor)editorPart;
+                    handleManifestEditor(manifestEditor);
                     manifestEditor.addPageChangedListener(pageChangedListener);
                   }
                 }
