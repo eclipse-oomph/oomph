@@ -28,7 +28,9 @@ import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Vector;
 
 /**
@@ -196,6 +198,26 @@ public final class PropertiesUtil
       Properties converter = new Properties()
       {
         private static final long serialVersionUID = 1L;
+
+        @Override
+        public Set<Entry<Object, Object>> entrySet()
+        {
+          Collection<String> keys = properties.keySet();
+          if (sort)
+          {
+            List<String> keyList = new ArrayList<String>(keys);
+            Collections.sort(keyList);
+            keys = keyList;
+          }
+
+          LinkedHashMap<Object, Object> objectMap = new LinkedHashMap<Object, Object>();
+          for (String key : keys)
+          {
+            objectMap.put(key, properties.get(key));
+          }
+
+          return objectMap.entrySet();
+        }
 
         @Override
         public synchronized Enumeration<Object> keys()
