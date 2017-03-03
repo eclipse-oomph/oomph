@@ -35,6 +35,7 @@ import org.eclipse.oomph.setup.SetupTask;
  *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.6' type='JRE' label='JRE 1.6 Location' description='The location of a JDK or JRE compatible with Java 1.6.'"
  *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.7' type='JRE' label='JRE 1.7 Location' description='The location of a JDK or JRE compatible with Java 1.7.'"
  *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.8' type='JRE' label='JRE 1.8 Location' description='The location of a JDK or JRE compatible with Java 1.8.'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.9' type='JRE' label='JRE 1.9 Location' description='The location of a JDK or JRE compatible with Java 1.9.'"
  * @generated
  */
 public interface JRETask extends SetupTask
