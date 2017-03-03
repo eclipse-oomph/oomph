@@ -53,6 +53,7 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
     VERSION_VARIABLES.put("JavaSE-1.6", "${jre.location-1.6}");
     VERSION_VARIABLES.put("JavaSE-1.7", "${jre.location-1.7}");
     VERSION_VARIABLES.put("JavaSE-1.8", "${jre.location-1.8}");
+    VERSION_VARIABLES.put("JavaSE-1.9", "${jre.location-1.9}");
   }
 
   /**
