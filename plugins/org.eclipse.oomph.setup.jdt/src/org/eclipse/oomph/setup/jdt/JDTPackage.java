@@ -187,13 +187,49 @@ public interface JDTPackage extends EPackage
   int JRE_TASK__LOCATION = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int JRE_TASK__NAME = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+
+  /**
+   * The feature id for the '<em><b>VM Install Type</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int JRE_TASK__VM_INSTALL_TYPE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
+
+  /**
+   * The feature id for the '<em><b>Execution Environment Default</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int JRE_TASK__EXECUTION_ENVIRONMENT_DEFAULT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
+
+  /**
+   * The feature id for the '<em><b>VM Arguments</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int JRE_TASK__VM_ARGUMENTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
+
+  /**
    * The number of structural features of the '<em>JRE Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int JRE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+  int JRE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.jdt.JRETask <em>JRE Task</em>}'.
@@ -226,6 +262,50 @@ public interface JDTPackage extends EPackage
    * @generated
    */
   EAttribute getJRETask_Location();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.jdt.JRETask#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.eclipse.oomph.setup.jdt.JRETask#getName()
+   * @see #getJRETask()
+   * @generated
+   */
+  EAttribute getJRETask_Name();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.jdt.JRETask#getVMInstallType <em>VM Install Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>VM Install Type</em>'.
+   * @see org.eclipse.oomph.setup.jdt.JRETask#getVMInstallType()
+   * @see #getJRETask()
+   * @generated
+   */
+  EAttribute getJRETask_VMInstallType();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.jdt.JRETask#isExecutionEnvironmentDefault <em>Execution Environment Default</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Execution Environment Default</em>'.
+   * @see org.eclipse.oomph.setup.jdt.JRETask#isExecutionEnvironmentDefault()
+   * @see #getJRETask()
+   * @generated
+   */
+  EAttribute getJRETask_ExecutionEnvironmentDefault();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.jdt.JRETask#getVMArguments <em>VM Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>VM Arguments</em>'.
+   * @see org.eclipse.oomph.setup.jdt.JRETask#getVMArguments()
+   * @see #getJRETask()
+   * @generated
+   */
+  EAttribute getJRETask_VMArguments();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -275,6 +355,38 @@ public interface JDTPackage extends EPackage
      * @generated
      */
     EAttribute JRE_TASK__LOCATION = eINSTANCE.getJRETask_Location();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute JRE_TASK__NAME = eINSTANCE.getJRETask_Name();
+
+    /**
+     * The meta object literal for the '<em><b>VM Install Type</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute JRE_TASK__VM_INSTALL_TYPE = eINSTANCE.getJRETask_VMInstallType();
+
+    /**
+     * The meta object literal for the '<em><b>Execution Environment Default</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute JRE_TASK__EXECUTION_ENVIRONMENT_DEFAULT = eINSTANCE.getJRETask_ExecutionEnvironmentDefault();
+
+    /**
+     * The meta object literal for the '<em><b>VM Arguments</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute JRE_TASK__VM_ARGUMENTS = eINSTANCE.getJRETask_VMArguments();
 
   }
 

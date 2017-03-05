@@ -46,8 +46,8 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <eAnnotations source="Choice">
-        <details key="value" value="${jre.location-1.9}"/>
-        <details key="label" value="JRE 1.9 Location"/>
+        <details key="value" value="${jre.location-9}"/>
+        <details key="label" value="JRE 9 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.1"/>
       <details key="type" value="JRE"/>
@@ -80,8 +80,8 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <eAnnotations source="Choice">
-        <details key="value" value="${jre.location-1.9}"/>
-        <details key="label" value="JRE 1.9 Location"/>
+        <details key="value" value="${jre.location-9}"/>
+        <details key="label" value="JRE 9 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.2"/>
       <details key="type" value="JRE"/>
@@ -110,8 +110,8 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <eAnnotations source="Choice">
-        <details key="value" value="${jre.location-1.9}"/>
-        <details key="label" value="JRE 1.9 Location"/>
+        <details key="value" value="${jre.location-9}"/>
+        <details key="label" value="JRE 9 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.3"/>
       <details key="type" value="JRE"/>
@@ -136,8 +136,8 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <eAnnotations source="Choice">
-        <details key="value" value="${jre.location-1.9}"/>
-        <details key="label" value="JRE 1.9 Location"/>
+        <details key="value" value="${jre.location-9}"/>
+        <details key="label" value="JRE 9 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.4"/>
       <details key="type" value="JRE"/>
@@ -158,8 +158,8 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <eAnnotations source="Choice">
-        <details key="value" value="${jre.location-1.9}"/>
-        <details key="label" value="JRE 1.9 Location"/>
+        <details key="value" value="${jre.location-9}"/>
+        <details key="label" value="JRE 9 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.5"/>
       <details key="type" value="JRE"/>
@@ -176,8 +176,8 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <eAnnotations source="Choice">
-        <details key="value" value="${jre.location-1.9}"/>
-        <details key="label" value="JRE 1.9 Location"/>
+        <details key="value" value="${jre.location-9}"/>
+        <details key="label" value="JRE 9 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.6"/>
       <details key="type" value="JRE"/>
@@ -190,8 +190,8 @@
         <details key="label" value="JRE 1.8 Location"/>
       </eAnnotations>
       <eAnnotations source="Choice">
-        <details key="value" value="${jre.location-1.9}"/>
-        <details key="label" value="JRE 1.9 Location"/>
+        <details key="value" value="${jre.location-9}"/>
+        <details key="label" value="JRE 9 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.7"/>
       <details key="type" value="JRE"/>
@@ -200,8 +200,8 @@
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/oomph/setup/Variable">
       <eAnnotations source="Choice">
-        <details key="value" value="${jre.location-1.9}"/>
-        <details key="label" value="JRE 1.9 Location"/>
+        <details key="value" value="${jre.location-9}"/>
+        <details key="label" value="JRE 9 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.8"/>
       <details key="type" value="JRE"/>
@@ -209,14 +209,30 @@
       <details key="description" value="The location of a JDK or JRE compatible with Java 1.8."/>
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/oomph/setup/Variable">
-      <details key="name" value="jre.location-1.9"/>
+      <details key="name" value="jre.location-9"/>
       <details key="type" value="JRE"/>
-      <details key="label" value="JRE 1.9 Location"/>
-      <details key="description" value="The location of a JDK or JRE compatible with Java 1.9."/>
+      <details key="label" value="JRE 9 Location"/>
+      <details key="description" value="The location of a JDK or JRE compatible with Java 9."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vMInstallType" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="vmInstallType"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executionEnvironmentDefault"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vMArguments" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="vmArguments"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>

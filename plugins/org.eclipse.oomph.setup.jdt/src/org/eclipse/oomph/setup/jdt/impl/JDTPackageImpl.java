@@ -141,6 +141,46 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getJRETask_Name()
+  {
+    return (EAttribute)jreTaskEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getJRETask_VMInstallType()
+  {
+    return (EAttribute)jreTaskEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getJRETask_ExecutionEnvironmentDefault()
+  {
+    return (EAttribute)jreTaskEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getJRETask_VMArguments()
+  {
+    return (EAttribute)jreTaskEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public JDTFactory getJDTFactory()
   {
     return (JDTFactory)getEFactoryInstance();
@@ -172,6 +212,10 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     jreTaskEClass = createEClass(JRE_TASK);
     createEAttribute(jreTaskEClass, JRE_TASK__VERSION);
     createEAttribute(jreTaskEClass, JRE_TASK__LOCATION);
+    createEAttribute(jreTaskEClass, JRE_TASK__NAME);
+    createEAttribute(jreTaskEClass, JRE_TASK__VM_INSTALL_TYPE);
+    createEAttribute(jreTaskEClass, JRE_TASK__EXECUTION_ENVIRONMENT_DEFAULT);
+    createEAttribute(jreTaskEClass, JRE_TASK__VM_ARGUMENTS);
   }
 
   /**
@@ -217,6 +261,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getJRETask_Location(), ecorePackage.getEString(), "location", null, 1, 1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getJRETask_Name(), ecorePackage.getEString(), "name", null, 0, 1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+        !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getJRETask_VMInstallType(), ecorePackage.getEString(), "vMInstallType", "org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType", 1, 1,
+        JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getJRETask_ExecutionEnvironmentDefault(), ecorePackage.getEBoolean(), "executionEnvironmentDefault", "true", 0, 1, JRETask.class,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getJRETask_VMArguments(), ecorePackage.getEString(), "vMArguments", null, 0, 1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore");
@@ -232,6 +284,8 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     createValidTriggersAnnotations();
     // http://www.eclipse.org/oomph/setup/Variable
     createVariableAnnotations();
+    // http:///org/eclipse/emf/ecore/util/ExtendedMetaData
+    createExtendedMetaDataAnnotations();
   }
 
   /**
@@ -264,7 +318,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.9}", "label", "JRE 1.9 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.2", "type", "JRE", "label", "JRE 1.2 Location", "description",
         "The location of a JDK or JRE compatible with Java 1.2." });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.3}", "label", "JRE 1.3 Location" });
@@ -273,7 +327,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.9}", "label", "JRE 1.9 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.3", "type", "JRE", "label", "JRE 1.3 Location", "description",
         "The location of a JDK or JRE compatible with Java 1.3." });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.4}", "label", "JRE 1.4 Location" });
@@ -281,34 +335,47 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.9}", "label", "JRE 1.9 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.4", "type", "JRE", "label", "JRE 1.4 Location", "description",
         "The location of a JDK or JRE compatible with Java 1.4." });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.5}", "label", "JRE 1.5 Location" });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.9}", "label", "JRE 1.9 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.5", "type", "JRE", "label", "JRE 1.5 Location", "description",
         "The location of a JDK or JRE compatible with Java 1.5." });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.9}", "label", "JRE 1.9 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.6", "type", "JRE", "label", "JRE 1.6 Location", "description",
         "The location of a JDK or JRE compatible with Java 1.6." });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.9}", "label", "JRE 1.9 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.7", "type", "JRE", "label", "JRE 1.7 Location", "description",
         "The location of a JDK or JRE compatible with Java 1.7." });
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.9}", "label", "JRE 1.9 Location" });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.8", "type", "JRE", "label", "JRE 1.8 Location", "description",
         "The location of a JDK or JRE compatible with Java 1.8." });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.9}", "label", "JRE 1.9 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.9", "type", "JRE", "label", "JRE 1.9 Location", "description",
-        "The location of a JDK or JRE compatible with Java 1.9." });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-9", "type", "JRE", "label", "JRE 9 Location", "description",
+        "The location of a JDK or JRE compatible with Java 9." });
+  }
+
+  /**
+   * Initializes the annotations for <b>http:///org/eclipse/emf/ecore/util/ExtendedMetaData</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createExtendedMetaDataAnnotations()
+  {
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
+    addAnnotation(getJRETask_VMInstallType(), source, new String[] { "kind", "attribute", "name", "vmInstallType" });
+    addAnnotation(getJRETask_VMArguments(), source, new String[] { "kind", "attribute", "name", "vmArguments" });
   }
 
   /**

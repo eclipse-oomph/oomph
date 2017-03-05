@@ -20,6 +20,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -27,6 +28,9 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import org.eclipse.jdt.launching.IVMInstallType;
+import org.eclipse.jdt.launching.JavaRuntime;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -53,7 +57,7 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
     VERSION_VARIABLES.put("JavaSE-1.6", "${jre.location-1.6}");
     VERSION_VARIABLES.put("JavaSE-1.7", "${jre.location-1.7}");
     VERSION_VARIABLES.put("JavaSE-1.8", "${jre.location-1.8}");
-    VERSION_VARIABLES.put("JavaSE-1.9", "${jre.location-1.9}");
+    VERSION_VARIABLES.put("JavaSE-9", "${jre.location-9}");
   }
 
   /**
@@ -82,6 +86,10 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
 
       addVersionPropertyDescriptor(object);
       addLocationPropertyDescriptor(object);
+      addNamePropertyDescriptor(object);
+      addVMInstallTypePropertyDescriptor(object);
+      addExecutionEnvironmentDefaultPropertyDescriptor(object);
+      addVMArgumentsPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -135,6 +143,81 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
   }
 
   /**
+   * This adds a property descriptor for the Name feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addNamePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_JRETask_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_JRETask_name_feature", "_UI_JRETask_type"),
+        JDTPackage.Literals.JRE_TASK__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the VM Install Type feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  protected void addVMInstallTypePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_JRETask_vMInstallType_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_JRETask_vMInstallType_feature", "_UI_JRETask_type"), JDTPackage.Literals.JRE_TASK__VM_INSTALL_TYPE,
+        true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
+    {
+      @Override
+      public Collection<?> getChoiceOfValues(Object object)
+      {
+        List<String> result = new UniqueEList<String>();
+        IVMInstallType[] vmInstallTypes = JavaRuntime.getVMInstallTypes();
+        for (IVMInstallType vmInstallType : vmInstallTypes)
+        {
+          result.add(vmInstallType.getId());
+        }
+
+        JRETask jreTask = (JRETask)object;
+        String vmInstallType = jreTask.getVMInstallType();
+        if (vmInstallType != null)
+        {
+          result.add(vmInstallType);
+        }
+
+        return result;
+      }
+    });
+  }
+
+  /**
+   * This adds a property descriptor for the Execution Environment Default feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addExecutionEnvironmentDefaultPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_JRETask_executionEnvironmentDefault_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_JRETask_executionEnvironmentDefault_feature", "_UI_JRETask_type"),
+        JDTPackage.Literals.JRE_TASK__EXECUTION_ENVIRONMENT_DEFAULT, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the VM Arguments feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addVMArgumentsPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_JRETask_vMArguments_feature"), getString("_UI_PropertyDescriptor_description", "_UI_JRETask_vMArguments_feature", "_UI_JRETask_type"),
+        JDTPackage.Literals.JRE_TASK__VM_ARGUMENTS, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
    * This returns JRETask.gif.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -167,15 +250,15 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
   public String getText(Object object)
   {
     JRETask jre = (JRETask)object;
-    String version = jre.getVersion();
+    String name = jre.getName();
     String location = jre.getLocation();
 
-    if (StringUtil.isEmpty(version))
+    if (StringUtil.isEmpty(name))
     {
       return getString("_UI_JRETask_type");
     }
 
-    String label = version;
+    String label = name;
     if (location != null)
     {
       if (location.length() == 0)
@@ -207,6 +290,10 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
     {
       case JDTPackage.JRE_TASK__VERSION:
       case JDTPackage.JRE_TASK__LOCATION:
+      case JDTPackage.JRE_TASK__NAME:
+      case JDTPackage.JRE_TASK__VM_INSTALL_TYPE:
+      case JDTPackage.JRE_TASK__EXECUTION_ENVIRONMENT_DEFAULT:
+      case JDTPackage.JRE_TASK__VM_ARGUMENTS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }

@@ -83,7 +83,7 @@ public abstract class PropertyField
 
   private static final String EMPTY = "";
 
-  private static final Pattern JRE_LOCATION_VARIABLE_PATTERN = Pattern.compile("\\$\\{jre\\.location-([0-9]*)\\.([0-9]*)\\}");
+  private static final Pattern JRE_LOCATION_VARIABLE_PATTERN = Pattern.compile("\\$\\{jre\\.location-([0-9]+)(?:\\.([0-9]+))?\\}");
 
   public static PropertyField createField(final VariableTask variable)
   {
@@ -111,7 +111,7 @@ public abstract class PropertyField
       case JRE:
         if (choices.isEmpty())
         {
-          JREField jreField = new JREField(new JREFilter(1, 8, null), choices);
+          JREField jreField = new JREField(new JREFilter(9, 0, null), choices);
           return jreField;
         }
 
@@ -124,8 +124,8 @@ public abstract class PropertyField
             if (matcher.matches())
             {
               int major = Integer.valueOf(matcher.group(1));
-              int minor = Integer.valueOf(matcher.group(2)) - 1;
-              return new JREField(new JREFilter(major, minor, null), choices);
+              int minor = matcher.group(2) == null ? -1 : Integer.valueOf(matcher.group(2)) - 1;
+              return new JREField(new JREFilter(minor == -1 ? 1 : major, minor == -1 ? major - 1 : minor, null), choices);
             }
           }
         }
@@ -1309,7 +1309,7 @@ public abstract class PropertyField
         {
           if (jre != null && (jreFilter == null || jre.isMatch(jreFilter)))
           {
-            transferValueToControl(jre.toString(), true);
+            transferValueToControl(jre.getJavaHome().getPath(), true);
           }
         }
 

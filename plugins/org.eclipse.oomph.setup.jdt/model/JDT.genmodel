@@ -12,6 +12,10 @@
     <genClasses ecoreClass="JDT.ecore#//JRETask" labelFeature="#//jdt/JRETask/version">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDT.ecore#//JRETask/version"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDT.ecore#//JRETask/location"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDT.ecore#//JRETask/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDT.ecore#//JRETask/vMInstallType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDT.ecore#//JRETask/executionEnvironmentDefault"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute JDT.ecore#//JRETask/vMArguments"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

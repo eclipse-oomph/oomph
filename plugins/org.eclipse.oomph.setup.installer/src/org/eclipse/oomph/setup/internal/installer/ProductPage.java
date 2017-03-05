@@ -823,6 +823,7 @@ public class ProductPage extends SetupWizardPage
           protected boolean applyEmptyProductVersion()
           {
             applyInstallation();
+            updateSetupContext();
             return true;
           }
 
