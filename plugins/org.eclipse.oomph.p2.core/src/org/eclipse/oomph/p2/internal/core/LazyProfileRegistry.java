@@ -18,6 +18,7 @@ import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
 import org.eclipse.emf.common.CommonPlugin;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.internal.p2.engine.EngineActivator;
 import org.eclipse.equinox.internal.p2.engine.Profile;
@@ -39,7 +40,9 @@ import java.lang.ref.SoftReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -120,6 +123,46 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
   public synchronized void resetProfiles()
   {
     profileMap = null;
+  }
+
+  @Override
+  public synchronized IProfile[] getProfiles()
+  {
+    return getProfiles(new NullProgressMonitor());
+  }
+
+  public synchronized IProfile[] getProfiles(IProgressMonitor monitor)
+  {
+    Map<String, Profile> profileMap = getProfileMap();
+    int size = profileMap.size();
+    monitor.beginTask("", size);
+
+    try
+    {
+      List<Profile> result = new ArrayList<Profile>(size);
+      for (Profile profile : profileMap.values())
+      {
+        monitor.subTask("Loading " + profile.getProfileId());
+
+        try
+        {
+          Profile snapshot = profile.snapshot();
+          result.add(snapshot);
+        }
+        catch (RuntimeException ex)
+        {
+          P2CorePlugin.INSTANCE.log(ex, ex instanceof IORuntimeException ? IStatus.WARNING : IStatus.ERROR);
+        }
+
+        monitor.worked(1);
+      }
+
+      return result.toArray(new Profile[result.size()]);
+    }
+    finally
+    {
+      monitor.done();
+    }
   }
 
   @Override

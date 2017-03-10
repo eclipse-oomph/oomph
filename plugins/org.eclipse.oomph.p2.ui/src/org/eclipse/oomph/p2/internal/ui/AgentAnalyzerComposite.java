@@ -184,6 +184,7 @@ public class AgentAnalyzerComposite extends Composite
     bundlePoolComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
     bundlePoolViewer = new TableViewer(bundlePoolComposite, TABLE_STYLE);
+    bundlePoolViewer.setUseHashlookup(true);
     Table bundlePoolTable = bundlePoolViewer.getTable();
     bundlePoolTable.setHeaderVisible(true);
     GridData bundlePoolData = new GridData(SWT.FILL, SWT.FILL, true, false);
@@ -304,6 +305,7 @@ public class AgentAnalyzerComposite extends Composite
     profileComposite.setLayout(profileLayout);
 
     profileViewer = new TableViewer(profileComposite, TABLE_STYLE | SWT.MULTI);
+    profileViewer.setUseHashlookup(true);
     Table profileTable = profileViewer.getTable();
     profileTable.setHeaderVisible(true);
     profileTable.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -444,6 +446,7 @@ public class AgentAnalyzerComposite extends Composite
     artifactComposite.setLayout(artifactLayout);
 
     artifactViewer = new TableViewer(artifactComposite, TABLE_STYLE | SWT.MULTI);
+    artifactViewer.setUseHashlookup(true);
     Table artifactTable = artifactViewer.getTable();
     artifactTable.setHeaderVisible(true);
     artifactTable.setLayoutData(new GridData(GridData.FILL_BOTH));

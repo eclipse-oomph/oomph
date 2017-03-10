@@ -18,6 +18,7 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.MonitorUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -25,6 +26,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.internal.p2.engine.CommitOperationEvent;
 import org.eclipse.equinox.internal.p2.repository.Transport;
@@ -168,7 +170,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       @Override
       protected void initializeFirstTime()
       {
-        fillProfileMap(this);
+        fillProfileMap(this, new NullProgressMonitor());
       }
     };
 
@@ -453,26 +455,37 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
   public void refreshProfiles(IProgressMonitor monitor)
   {
-    // monitor.subTask("Refreshing " + getLocation() + " profiles");
-    getProvisioningAgent();
+    monitor.beginTask("", 10);
 
-    if (profileRegistry instanceof LazyProfileRegistry)
+    try
     {
-      LazyProfileRegistry lazyProfileRegistry = (LazyProfileRegistry)profileRegistry;
-      lazyProfileRegistry.resetProfiles();
-      lazyProfileRegistry.getProfileMap(monitor);
+      getProvisioningAgent();
+
+      if (profileRegistry instanceof LazyProfileRegistry)
+      {
+        LazyProfileRegistry lazyProfileRegistry = (LazyProfileRegistry)profileRegistry;
+        lazyProfileRegistry.resetProfiles();
+        lazyProfileRegistry.getProfileMap(MonitorUtil.create(monitor, 1));
+      }
+      else
+      {
+        monitor.worked(1);
+      }
+
+      fillProfileMap(profileMap, MonitorUtil.create(monitor, 9));
+      profileMap.refresh();
     }
-
-    fillProfileMap(profileMap);
-    profileMap.refresh();
-
-    // monitor.done();
+    finally
+    {
+      monitor.done();
+    }
   }
 
-  private void fillProfileMap(PersistentMap<Profile> profileMap)
+  private void fillProfileMap(PersistentMap<Profile> profileMap, IProgressMonitor monitor)
   {
     IProfileRegistry profileRegistry = getProfileRegistry();
-    for (IProfile delegate : profileRegistry.getProfiles())
+    for (IProfile delegate : profileRegistry instanceof LazyProfileRegistry ? ((LazyProfileRegistry)profileRegistry).getProfiles(monitor)
+        : profileRegistry.getProfiles())
     {
       String key = delegate.getProfileId();
       String extraInfo = AgentImpl.getProfileExtraInfo(delegate);
