@@ -832,7 +832,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     // And will preserve the existing line feed convention if we need to add new lines.
     URI baseURI = URI.createFileURI(installFolder.toString()).appendSegment("");
     StringBuilder newContents = new StringBuilder();
-    String nl = null;
+    String nl;
     for (Map.Entry<String, String> entry : map.entrySet())
     {
       // The keys will generally include the line feed character, so we trim that off when inspecting the key.
@@ -975,7 +975,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     {
       URI configurationFolderURI = URI.createFileURI(configurationFolder.toString());
       Configuration configuration = Configuration.load(platformXML, null);
-      boolean changed = true;
+      boolean changed = false;
       for (Site site : configuration.getSites())
       {
         // If the site URI is of the form file:../<path> then we need to make it absolute.

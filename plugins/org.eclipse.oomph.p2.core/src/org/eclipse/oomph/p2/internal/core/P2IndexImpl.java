@@ -108,7 +108,7 @@ public class P2IndexImpl implements P2Index
         if (refreshed)
         {
           File validityFile = getCapabilitiesValidityFile();
-          IOUtil.writeLines(validityFile, "UTF-8", Collections.singletonList("" + (System.currentTimeMillis() + refreshHours * 60 * 60 * 1000)));
+          IOUtil.writeLines(validityFile, "UTF-8", Collections.singletonList("" + Long.toString(System.currentTimeMillis() + refreshHours * 60 * 60 * 1000)));
         }
       }
       catch (Exception ex)
@@ -165,7 +165,7 @@ public class P2IndexImpl implements P2Index
         if (refreshed)
         {
           File validityFile = getRepositoriesValidityFile();
-          IOUtil.writeLines(validityFile, "UTF-8", Collections.singletonList("" + (System.currentTimeMillis() + refreshHours * 60 * 60 * 1000)));
+          IOUtil.writeLines(validityFile, "UTF-8", Collections.singletonList("" + Long.toString(System.currentTimeMillis() + refreshHours * 60 * 60 * 1000)));
         }
 
         Map<RepositoryImpl, List<Integer>> composedRepositories = new HashMap<RepositoryImpl, List<Integer>>();

@@ -226,7 +226,7 @@ public class CachingRepositoryManager<T>
           }
 
           // Eagerly cleanup missing system repositories.
-          if (Boolean.valueOf(delegate.getRepositoryProperty(location, IRepository.PROP_SYSTEM)).booleanValue())
+          if (Boolean.parseBoolean(delegate.getRepositoryProperty(location, IRepository.PROP_SYSTEM)))
           {
             delegate.removeRepository(location);
           }
@@ -949,7 +949,7 @@ public class CachingRepositoryManager<T>
             String locationString = repositoryURI.toString();
             if (!locationString.endsWith("/"))
             {
-              locationString += '/';
+              locationString += Character.toString('/');
             }
 
             mirrorActivities = new MirrorActivity[] { new MirrorActivity(locationString) };
@@ -1130,7 +1130,7 @@ public class CachingRepositoryManager<T>
           failures.incrementAndGet();
         }
 
-        public long getSpeed()
+        public synchronized long getSpeed()
         {
           return speed.get();
         }

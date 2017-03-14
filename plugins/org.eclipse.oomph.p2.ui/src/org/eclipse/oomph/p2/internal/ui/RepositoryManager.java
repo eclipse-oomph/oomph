@@ -160,7 +160,7 @@ public final class RepositoryManager
     boolean changed = false;
     synchronized (repositories)
     {
-      if (repositories.size() == 0 || !repositories.getFirst().equals(repository))
+      if (repositories.isEmpty() || !repositories.getFirst().equals(repository))
       {
         repositories.remove(repository);
         repositories.addFirst(repository);
