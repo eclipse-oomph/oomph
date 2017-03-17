@@ -747,4 +747,31 @@ public final class SynchronizerManager
       }
     }
   }
+
+  /**
+   * @author Ed Merks
+   */
+  public static final class Availability
+  {
+    public static final boolean AVAILABLE;
+
+    static
+    {
+      boolean available;
+      try
+      {
+        available = SynchronizerManager.INSTANCE != null;
+      }
+      catch (NoClassDefFoundError error)
+      {
+        available = false;
+      }
+
+      AVAILABLE = available;
+    }
+
+    private Availability()
+    {
+    }
+  }
 }

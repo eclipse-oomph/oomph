@@ -394,7 +394,10 @@ public final class RecorderManager
   {
     try
     {
-      SynchronizerManager.INSTANCE.offerFirstTimeConnect(UIUtil.getShell());
+      if (SynchronizerManager.Availability.AVAILABLE)
+      {
+        SynchronizerManager.INSTANCE.offerFirstTimeConnect(UIUtil.getShell());
+      }
 
       RecorderTransaction transaction = editorPart == null ? RecorderTransaction.open() : RecorderTransaction.open(editorPart);
       transaction.setPreferences(values);
@@ -761,8 +764,11 @@ public final class RecorderManager
 
                 if (enableRecorder)
                 {
-                  boolean firstTime = SynchronizerManager.INSTANCE.offerFirstTimeConnect(shell);
-                  startEarlySynchronization(firstTime);
+                  if (SynchronizerManager.Availability.AVAILABLE)
+                  {
+                    boolean firstTime = SynchronizerManager.INSTANCE.offerFirstTimeConnect(shell);
+                    startEarlySynchronization(firstTime);
+                  }
 
                   createInitializeItem(shell, toolBar, dialog, preferenceManager);
                   buttonBar.layout();
@@ -1086,7 +1092,7 @@ public final class RecorderManager
 
     public boolean start(boolean interactive)
     {
-      if (!SynchronizerManager.ENABLED)
+      if (!SynchronizerManager.Availability.AVAILABLE || !SynchronizerManager.ENABLED)
       {
         return false;
       }
@@ -1164,7 +1170,7 @@ public final class RecorderManager
 
     public void stop()
     {
-      if (!SynchronizerManager.ENABLED)
+      if (!SynchronizerManager.Availability.AVAILABLE || !SynchronizerManager.ENABLED)
       {
         return;
       }
@@ -1195,7 +1201,7 @@ public final class RecorderManager
 
     public SyncInfo await()
     {
-      if (!SynchronizerManager.ENABLED)
+      if (!SynchronizerManager.Availability.AVAILABLE || !SynchronizerManager.ENABLED)
       {
         return null;
       }

@@ -36,10 +36,13 @@ public class SynchronizePreferencesHandler extends AbstractDropdownItemHandler
     }
     else
     {
-      Impact impact = SynchronizerManager.INSTANCE.performFullSynchronization();
-      if (impact != null && impact.hasLocalImpact())
+      if (SynchronizerManager.Availability.AVAILABLE)
       {
-        SetupWizard.Updater.perform(false);
+        Impact impact = SynchronizerManager.INSTANCE.performFullSynchronization();
+        if (impact != null && impact.hasLocalImpact())
+        {
+          SetupWizard.Updater.perform(false);
+        }
       }
     }
   }

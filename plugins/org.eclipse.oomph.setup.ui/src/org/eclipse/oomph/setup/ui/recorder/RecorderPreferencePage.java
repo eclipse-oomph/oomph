@@ -149,7 +149,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
         updateEnablement();
         RecorderManager.updateRecorderToggleButton();
 
-        if (enableRecorder)
+        if (enableRecorder && SynchronizerManager.Availability.AVAILABLE)
         {
           boolean firstTime = SynchronizerManager.INSTANCE.offerFirstTimeConnect(getShell());
           RecorderManager.INSTANCE.startEarlySynchronization(firstTime);

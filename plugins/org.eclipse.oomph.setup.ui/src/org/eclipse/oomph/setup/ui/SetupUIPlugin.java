@@ -200,7 +200,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     if (!PropertiesUtil.isProperty(PREF_HEADLESS) && !SetupUtil.SETUP_ARCHIVER_APPLICATION)
     {
       // These are only to force class loading on a background thread.
-      SynchronizerManager.INSTANCE.toString();
+      final boolean synchronizerAvailable = SynchronizerManager.Availability.AVAILABLE;
       SetupTaskPerformer.RULE_VARIABLE_ADAPTER.toString();
       RecorderManager.INSTANCE.toString();
 
@@ -222,7 +222,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
             }
             else
             {
-              if (!SynchronizerManager.ENABLED)
+              if (!synchronizerAvailable || !SynchronizerManager.ENABLED)
               {
                 PreferenceManager preferenceManager = workbench.getPreferenceManager();
                 preferenceManager.remove("/" + OomphPreferencePage.ID + "/" + SetupPreferencePage.ID + "/" + SynchronizerPreferencePage.ID);
@@ -519,13 +519,16 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
     SynchronizationController synchronizationController = null;
 
-    try
+    if (SynchronizerManager.Availability.AVAILABLE)
     {
-      synchronizationController = SynchronizerManager.INSTANCE.startSynchronization(false, false, false);
-    }
-    catch (Exception ex)
-    {
-      INSTANCE.log(ex);
+      try
+      {
+        synchronizationController = SynchronizerManager.INSTANCE.startSynchronization(false, false, false);
+      }
+      catch (Exception ex)
+      {
+        INSTANCE.log(ex);
+      }
     }
 
     monitor.setTaskName("Creating a setup task performer");

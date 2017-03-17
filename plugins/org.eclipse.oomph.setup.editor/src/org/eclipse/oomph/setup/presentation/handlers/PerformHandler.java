@@ -39,10 +39,13 @@ public class PerformHandler extends AbstractDropdownItemHandler
     }
     else
     {
-      Synchronization synchronization = SynchronizerManager.INSTANCE.synchronize(true, false, false);
-      if (synchronization != null)
+      if (SynchronizerManager.Availability.AVAILABLE)
       {
-        SynchronizerManager.INSTANCE.performSynchronization(synchronization, false, false);
+        Synchronization synchronization = SynchronizerManager.INSTANCE.synchronize(true, false, false);
+        if (synchronization != null)
+        {
+          SynchronizerManager.INSTANCE.performSynchronization(synchronization, false, false);
+        }
       }
 
       SetupWizard.Updater.perform(manual);
