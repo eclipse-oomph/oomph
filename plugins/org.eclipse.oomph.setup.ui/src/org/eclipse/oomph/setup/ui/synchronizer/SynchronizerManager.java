@@ -714,12 +714,12 @@ public final class SynchronizerManager
                 return null;
               }
 
-              throw exception;
+              SynchronizerManager.log(exception);
             }
           }
           catch (Throwable ex)
           {
-            SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
+            SetupUIPlugin.INSTANCE.log(ex);
           }
           finally
           {
@@ -746,6 +746,16 @@ public final class SynchronizerManager
         monitor.done();
       }
     }
+  }
+
+  public static void log(Throwable throwable)
+  {
+    final IStorage storage = SynchronizerManager.INSTANCE.getStorage();
+    IStorageService service = storage.getService();
+    String serviceLabel = service == null ? "Unknown" : service.getServiceLabel();
+    SetupUIPlugin.INSTANCE.log(
+        new Status(IStatus.WARNING, SetupUIPlugin.PLUGIN_ID, "Window -> Preferences -> Oomph -> Setup Tasks -> Preference Synchronizer -> 'Synchronize with "
+            + serviceLabel + "' is enabled and the synchronization has failed for the following reason:", throwable));
   }
 
   /**

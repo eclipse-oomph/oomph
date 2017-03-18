@@ -1227,7 +1227,7 @@ public final class RecorderManager
           }
           else if (earlyException != null)
           {
-            SetupUIPlugin.INSTANCE.log(earlyException, IStatus.WARNING);
+            SynchronizerManager.log(earlyException);
             return null;
           }
 

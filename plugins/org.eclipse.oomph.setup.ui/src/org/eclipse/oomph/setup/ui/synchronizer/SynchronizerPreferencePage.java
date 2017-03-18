@@ -30,12 +30,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.PreferenceLinkArea;
+import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.ui.StorageConfigurationComposite;
@@ -213,17 +212,15 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
           {
             performApply();
 
-            final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-            final Display display = window.getShell().getDisplay();
+            final Shell shell = getShell();
 
-            UIUtil.asyncExec(display, new Runnable()
+            UIUtil.asyncExec(shell, new Runnable()
             {
               public void run()
               {
                 try
                 {
-                  Shell activeShell = display.getActiveShell();
-                  Object data = activeShell.getData();
+                  Object data = shell.getData();
                   if (data instanceof PreferenceDialog)
                   {
                     PreferenceDialog preferenceDialog = (PreferenceDialog)data;
@@ -237,7 +234,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
               }
             });
 
-            UIUtil.asyncExec(display, new Runnable()
+            UIUtil.asyncExec(shell.getDisplay(), new Runnable()
             {
               public void run()
               {
@@ -265,6 +262,11 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
             });
           }
         });
+
+        @SuppressWarnings("restriction")
+        PreferenceLinkArea credentialsLink = new PreferenceLinkArea(main, SWT.NONE, org.eclipse.userstorage.ui.internal.ServicesPreferencePage.ID,
+            "See <a>''User Storage Service''</a> for credentials.", (IWorkbenchPreferenceContainer)getContainer(), null);
+        credentialsLink.getControl().setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
 
         // deleteButton = new Button(main, SWT.PUSH);
         // deleteButton.setText("Delete Remote Data");
