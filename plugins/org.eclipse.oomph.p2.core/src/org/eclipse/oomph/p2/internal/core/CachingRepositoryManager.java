@@ -49,6 +49,7 @@ import org.eclipse.equinox.p2.repository.IRepository;
 import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -200,8 +201,11 @@ public class CachingRepositoryManager<T>
             }
             catch (ProvisionException e)
             {
-              failure = e;
-              break;
+              if (!(e.getStatus().getException() instanceof FileNotFoundException))
+              {
+                failure = e;
+                break;
+              }
             }
 
             if (result != null)

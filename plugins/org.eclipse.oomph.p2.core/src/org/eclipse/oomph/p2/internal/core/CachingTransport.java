@@ -387,9 +387,24 @@ public class CachingTransport extends Transport
 
   private long delegateGetLastModified(URI uri, IProgressMonitor monitor) throws CoreException, FileNotFoundException, AuthenticationFailedException
   {
-    long lastModified = delegate.getLastModified(uri, monitor);
-
     File cacheFile = getCacheFile(uri);
+
+    long lastModified;
+
+    try
+    {
+      lastModified = delegate.getLastModified(uri, monitor);
+    }
+    catch (FileNotFoundException ex)
+    {
+      synchronized (getLock(uri))
+      {
+        cacheFile.delete();
+      }
+
+      throw ex;
+    }
+
     if (cacheFile.length() == 0)
     {
       return lastModified - 1;
