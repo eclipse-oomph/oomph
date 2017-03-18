@@ -171,7 +171,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform"
-        defaultValue="Neon"
+        defaultValue="Oxygen"
         storageURI="scope://Workspace"
         label="Target Platform">
       <description>Choose the compatibility level of the target platform</description>
@@ -280,13 +280,13 @@
           </predicate>
         </sourceLocator>
         <repositoryList
-            name="Oxygen">
+            name="Photon">
           <repository
-              url="http://download.eclipse.org/oomph/uss/updates/latest"/>
+              url="http://download.eclipse.org/usssdk/updates/latest"/>
           <repository
               url="http://download.eclipse.org/egit/updates"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+              url="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/emf/updates/2.13milestones"/>
           <repository
@@ -301,6 +301,19 @@
               url="http://download.eclipse.org/webtools/repository/oxygen"/>
         </repositoryList>
         <repositoryList
+            name="Oxygen">
+          <repository
+              url="http://download.eclipse.org/releases/oxygen"/>
+          <repository
+              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+          <repository
+              url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
+          <repository
+              url="http://download.eclipse.org/usssdk/updates/latest"/>
+        </repositoryList>
+        <repositoryList
             name="Neon">
           <repository
               url="http://download.eclipse.org/releases/neon"/>
@@ -309,9 +322,9 @@
           <repository
               url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+              url="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
           <repository
-              url="http://download.eclipse.org/oomph/uss/updates/latest"/>
+              url="http://download.eclipse.org/usssdk/updates/latest"/>
         </repositoryList>
         <repositoryList
             name="Mars">

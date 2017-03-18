@@ -199,6 +199,7 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
     }
 
     @Override
+    @SuppressWarnings("all")
     public ImageData getImageData()
     {
       throw new UnsupportedOperationException();
