@@ -52,7 +52,7 @@ import java.util.Map;
  */
 public final class BaseUtil
 {
-  private static final String BOGUS_SCHEME = URI.createURI("bogus:").scheme();
+  private static final String BOGUS_SCHEME = URI.createURI("bogus:bogus").scheme();
 
   private static final Adapter REDUCED = new Adapter()
   {
