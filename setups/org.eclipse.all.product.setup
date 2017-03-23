@@ -26,7 +26,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M4</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M6</value>
       </detail>
     </annotation>
     <setupTask
@@ -75,7 +75,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Neon/2</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Neon/3</value>
       </detail>
     </annotation>
     <setupTask
@@ -114,7 +114,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.6.0,4.7.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/neon/201612211000"/>
+          url="http://download.eclipse.org/releases/neon/201703231000"/>
     </setupTask>
   </version>
   <version name="oxygen"
@@ -124,7 +124,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M4</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Oxygen/M6</value>
       </detail>
     </annotation>
     <setupTask
@@ -173,7 +173,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Neon/2</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Neon/3</value>
       </detail>
     </annotation>
     <setupTask
@@ -212,7 +212,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.6.0,4.7.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/neon/201612211000"/>
+          url="http://download.eclipse.org/releases/neon/201703231000"/>
     </setupTask>
   </version>
   <version name="mars"
