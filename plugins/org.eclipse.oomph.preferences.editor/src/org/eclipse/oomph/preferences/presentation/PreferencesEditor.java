@@ -23,6 +23,7 @@ import org.eclipse.oomph.preferences.impl.PreferencesURIHandlerImpl;
 import org.eclipse.oomph.preferences.provider.PreferencesEditPlugin;
 import org.eclipse.oomph.preferences.provider.PreferencesItemProviderAdapterFactory;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
+import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
@@ -1265,7 +1266,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings({ "rawtypes", "unchecked" })
+  @SuppressWarnings("all")
   public Object getAdapterGen(Class key)
   {
     if (key.equals(IContentOutlinePage.class))
@@ -1286,17 +1287,17 @@ public class PreferencesEditor extends MultiPageEditorPart
     }
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings("all")
   @Override
-  public <T> T getAdapter(Class<T> adapter)
+  public Object getAdapter(Class adapter)
   {
     Object result = FindAndReplaceTarget.getAdapter(adapter, this);
     if (result != null)
     {
-      return (T)result;
+      return result;
     }
 
-    return (T)getAdapterGen(adapter);
+    return getAdapterGen(adapter);
   }
 
   public static abstract class OutlinePage extends ContentOutlinePage implements IAdaptable
@@ -1325,7 +1326,8 @@ public class PreferencesEditor extends MultiPageEditorPart
 
     protected abstract void setSelection(IStructuredSelection selection);
 
-    public <T> T getAdapter(Class<T> adapter)
+    @SuppressWarnings("all")
+    public Object getAdapter(Class adapter)
     {
       return null;
     }
@@ -1633,8 +1635,9 @@ public class PreferencesEditor extends MultiPageEditorPart
           selectionViewer = oldSelectionViewer;
         }
 
+        @SuppressWarnings("all")
         @Override
-        public <T> T getAdapter(Class<T> adapter)
+        public Object getAdapter(Class adapter)
         {
           return PreferencesEditor.this.getAdapter(adapter);
         }
@@ -1960,7 +1963,7 @@ public class PreferencesEditor extends MultiPageEditorPart
   public void init(IEditorSite site, IEditorInput editorInput)
   {
     initGen(site, editorInput);
-    IContextService contextService = site.getService(IContextService.class);
+    IContextService contextService = UIUtil.getService(site, IContextService.class);
     contextService.activateContext("org.eclipse.oomph.preferences.editor.context");
   }
 

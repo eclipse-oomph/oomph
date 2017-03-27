@@ -1663,7 +1663,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       Map<String, Set<IInstallableUnit>> ius = new HashMap<String, Set<IInstallableUnit>>();
       Map<String, Set<IRequirement>> categories = new HashMap<String, Set<IRequirement>>();
 
-      for (IInstallableUnit iu : installableUnits)
+      for (IInstallableUnit iu : P2Util.asIterable(installableUnits))
       {
         P2UIPlugin.checkCancelation(monitor);
         String id = iu.getId();
@@ -1896,7 +1896,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       Map<String, String> names = new HashMap<String, String>();
       Map<String, Map<Version, Set<IMatchExpression<IInstallableUnit>>>> versions = new HashMap<String, Map<Version, Set<IMatchExpression<IInstallableUnit>>>>();
 
-      for (IInstallableUnit iu : installableUnits)
+      for (IInstallableUnit iu : P2Util.asIterable(installableUnits))
       {
         P2UIPlugin.checkCancelation(monitor);
         String id = iu.getId();
@@ -2016,7 +2016,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       final Set<String> namespaces = new HashSet<String>();
       Map<String, Map<Version, Set<IMatchExpression<IInstallableUnit>>>> versions = new HashMap<String, Map<Version, Set<IMatchExpression<IInstallableUnit>>>>();
 
-      for (IInstallableUnit iu : installableUnits)
+      for (IInstallableUnit iu : P2Util.asIterable(installableUnits))
       {
         IMatchExpression<IInstallableUnit> filter = iu.getFilter();
         for (IProvidedCapability capability : iu.getProvidedCapabilities())

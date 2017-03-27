@@ -109,7 +109,7 @@ public final class P2Util
   {
     if (queryResult instanceof Iterable<?>)
     {
-      return queryResult;
+      return Iterable.class.cast(queryResult);
     }
 
     return new Iterable<T>()

@@ -324,11 +324,12 @@ public class StringFilterRegistry
 
     registerFilter("slashEncode", new StringFilter()
     {
+      @SuppressWarnings("restriction")
       public String filter(String value)
       {
         try
         {
-          return org.eclipse.equinox.internal.p2.engine.SlashEncode.encode(value);
+          return org.eclipse.equinox.internal.security.storage.SlashEncode.encode(value);
         }
         catch (Throwable ex)
         {
@@ -340,11 +341,12 @@ public class StringFilterRegistry
 
     registerFilter("slashDecode", new StringFilter()
     {
+      @SuppressWarnings("restriction")
       public String filter(String value)
       {
         try
         {
-          return org.eclipse.equinox.internal.p2.engine.SlashEncode.decode(value);
+          return org.eclipse.equinox.internal.security.storage.SlashEncode.decode(value);
         }
         catch (Throwable ex)
         {

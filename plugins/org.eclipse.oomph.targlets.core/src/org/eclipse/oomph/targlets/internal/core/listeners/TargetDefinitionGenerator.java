@@ -742,7 +742,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
           for (Iterator<IVersionedId> it = extraUnits.iterator(); it.hasNext();)
           {
             IVersionedId extraUnit = it.next();
-            for (IInstallableUnit extraIU : queryable.query(QueryUtil.createIUQuery(extraUnit), null))
+            for (IInstallableUnit extraIU : P2Util.asIterable(queryable.query(QueryUtil.createIUQuery(extraUnit), null)))
             {
               ius.add(extraIU);
               break;
@@ -775,7 +775,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         for (Iterator<IVersionedId> it = extraUnits.iterator(); it.hasNext();)
         {
           IVersionedId extraUnit = it.next();
-          for (IInstallableUnit extraIU : metadataRepository.query(QueryUtil.createIUQuery(extraUnit), null))
+          for (IInstallableUnit extraIU : P2Util.asIterable(metadataRepository.query(QueryUtil.createIUQuery(extraUnit), null)))
           {
             ius.add(extraIU);
             it.remove(); // TODO Why is it removed? Should we log left-overs?

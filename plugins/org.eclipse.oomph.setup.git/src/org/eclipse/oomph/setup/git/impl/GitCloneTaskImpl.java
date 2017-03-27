@@ -59,7 +59,6 @@ import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.CoreConfig.AutoCRLF;
-import org.eclipse.jgit.lib.ReflogEntry;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.transport.RefSpec;
@@ -913,7 +912,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     try
     {
       ReflogCommand reflogCommand = git.reflog();
-      Collection<ReflogEntry> reflog = reflogCommand.call();
+      Collection<?> reflog = reflogCommand.call();
       return !reflog.isEmpty();
     }
     catch (InvalidRefNameException ex)

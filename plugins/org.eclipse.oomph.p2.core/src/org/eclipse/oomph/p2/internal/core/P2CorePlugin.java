@@ -30,6 +30,7 @@ import org.eclipse.ecf.provider.filetransfer.retrieve.MultiProtocolRetrieveAdapt
 import org.osgi.framework.BundleContext;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -139,8 +140,10 @@ public final class P2CorePlugin extends OomphPlugin
         adapterManager.registerAdapters(retrieveAdapter, container.getClass());
 
         // Make sure it's used as the default.
-        for (List<IAdapterFactory> list : adapterManager.getFactories().values())
+        for (@SuppressWarnings("all")
+        Iterator<List<IAdapterFactory>> it = adapterManager.getFactories().values().iterator(); it.hasNext();)
         {
+          List<IAdapterFactory> list = it.next();
           if (list.remove(browserAdapter))
           {
             list.add(0, browserAdapter);

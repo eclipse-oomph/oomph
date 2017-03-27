@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.targlets.internal.core.variables;
 
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptorManager;
@@ -48,7 +49,7 @@ public class TargletContainerClasspath implements IDynamicVariableResolver
       {
         IFileArtifactRepository artifactRepository = profile.getBundlePool().getFileArtifactRepository();
 
-        for (IInstallableUnit iu : profile.query(QueryUtil.createIUAnyQuery(), new NullProgressMonitor()))
+        for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), new NullProgressMonitor())))
         {
           for (IArtifactKey artifactKey : iu.getArtifacts())
           {

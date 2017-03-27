@@ -867,6 +867,7 @@ public final class RecorderManager
   {
     Set<String> preferencePages = getInitializedPreferencePages();
     preferencePages.addAll(getIgnoredPreferencePages());
+    @SuppressWarnings("all")
     List<IPreferenceNode> preferenceNodes = preferenceManager.getElements(PreferenceManager.PRE_ORDER);
     for (IPreferenceNode element : preferenceNodes)
     {

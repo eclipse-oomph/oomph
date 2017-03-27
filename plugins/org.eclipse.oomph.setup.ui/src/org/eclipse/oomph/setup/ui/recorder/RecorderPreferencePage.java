@@ -337,6 +337,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
     });
 
     Set<String> preferencePages = RecorderManager.INSTANCE.getInitializedPreferencePages();
+    @SuppressWarnings("all")
     List<IPreferenceNode> preferenceNodes = preferenceManager.getElements(PreferenceManager.PRE_ORDER);
     for (IPreferenceNode element : preferenceNodes)
     {

@@ -1202,7 +1202,7 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings({ "rawtypes", "unchecked" })
+  @SuppressWarnings("all")
   @Override
   public Object getAdapter(Class key)
   {

@@ -979,7 +979,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       bitness64Button.setVisible(versionVisible && (enabled || bitness == 64));
     }
 
-    IStructuredSelection structuredSelection = javaViewer.getStructuredSelection();
+    IStructuredSelection structuredSelection = (IStructuredSelection)javaViewer.getSelection();
     boolean javaVisible = JRE_CHOICE || !(structuredSelection.getFirstElement() instanceof JRE);
     setVisible(javaLabel, javaVisible);
     setVisible(javaSpacer, javaVisible);

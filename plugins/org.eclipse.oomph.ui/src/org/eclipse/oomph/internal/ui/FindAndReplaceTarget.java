@@ -45,6 +45,7 @@ import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.StyledString;
@@ -297,7 +298,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     else
     {
       // Otherwise, use the first item selected in the viewer as our initial selection.
-      List<?> list = viewer.getStructuredSelection().toList();
+      List<?> list = ((IStructuredSelection)viewer.getSelection()).toList();
       for (FindAndReplaceTarget.Data data : new TextData(viewer))
       {
         if (list.contains(data.object))
@@ -478,7 +479,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     // This method is used only to compute region to pass to setScope.
     // So instead of computing something useless we use this opportunity to remember the viewer's selection.
     StructuredViewer viewer = getViewer();
-    selectionScope = viewer.getStructuredSelection().toList();
+    selectionScope = ((IStructuredSelection)viewer.getSelection()).toList();
     return new Point(0, 0);
   }
 
@@ -704,7 +705,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     }
 
     // Otherwise find the first item of an object in the selection.
-    List<?> list = viewer.getStructuredSelection().toList();
+    List<?> list = ((IStructuredSelection)viewer.getSelection()).toList();
     for (FindAndReplaceTarget.Data data : new TextData(viewer))
     {
       if (list.contains(data.object))

@@ -269,8 +269,9 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
     copyPropertyValueAction.selectionChanged((IStructuredSelection)selection);
   }
 
+  @SuppressWarnings("all")
   @Override
-  public <T> T getAdapter(Class<T> adapter)
+  public Object getAdapter(Class adapter)
   {
     if (adapter == IFindReplaceTarget.class)
     {

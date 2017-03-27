@@ -12,6 +12,7 @@ package org.eclipse.oomph.workingsets.presentation;
 
 import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
 import org.eclipse.oomph.predicates.provider.PredicatesItemProviderAdapterFactory;
+import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.workingsets.impl.PreferencesURIHandlerImpl;
 import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor.PreviewDialog.WorkingSetsProvider;
 import org.eclipse.oomph.workingsets.provider.WorkingSetsItemProviderAdapterFactory;
@@ -1002,7 +1003,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
           }
           else if (value instanceof IAdaptable)
           {
-            IResource resource = ((IAdaptable)value).getAdapter(IResource.class);
+            IResource resource = ObjectUtil.adapt(value, IResource.class);
             if (resource != null)
             {
               result.add(resource);
@@ -1249,7 +1250,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings({ "rawtypes", "unchecked" })
+  @SuppressWarnings("all")
   @Override
   public Object getAdapter(Class key)
   {

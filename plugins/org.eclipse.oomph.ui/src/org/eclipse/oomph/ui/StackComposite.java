@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.ui;
 
+import org.eclipse.oomph.util.ReflectUtil;
+
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -37,7 +39,16 @@ public class StackComposite extends Composite
     if (layout.topControl != topControl)
     {
       layout.topControl = topControl;
-      requestLayout();
+
+      try
+      {
+        ReflectUtil.invokeMethod(getClass().getMethod("requestLayout"), this);
+      }
+      catch (NoSuchMethodException ex)
+      {
+        // If this version of SWT doesn't have the request layout method, use this instead.
+        layout();
+      }
     }
   }
 }

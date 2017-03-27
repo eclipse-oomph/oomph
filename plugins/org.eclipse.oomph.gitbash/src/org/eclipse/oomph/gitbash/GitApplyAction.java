@@ -145,7 +145,7 @@ public class GitApplyAction extends BaseSelectionListenerAction implements IObje
     }
   }
 
-  @SuppressWarnings("restriction")
+  @SuppressWarnings("all")
   private Repository[] getRepositories()
   {
     return org.eclipse.egit.core.Activator.getDefault().getRepositoryCache().getAllRepositories();

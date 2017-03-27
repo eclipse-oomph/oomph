@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.internal.ui;
 
+import org.eclipse.oomph.util.ObjectUtil;
+
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.edit.ui.action.DeleteAction;
 import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
@@ -181,7 +183,7 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
     @Override
     public void run()
     {
-      IFindReplaceTarget adapter = workbenchPart.getAdapter(IFindReplaceTarget.class);
+      IFindReplaceTarget adapter = ObjectUtil.adapt(workbenchPart, IFindReplaceTarget.class);
       if (adapter instanceof FindAndReplaceTarget)
       {
         FindAndReplaceTarget findAndReplaceTarget = (FindAndReplaceTarget)adapter;

@@ -101,6 +101,7 @@ public class TargetPlatformClasspathFile implements IDynamicVariableResolver
   @SuppressWarnings("restriction")
   private static void appendFolder(StringBuilder builder, File bundleFolder) throws CoreException
   {
+    @SuppressWarnings("all")
     Map<String, String> manifest = org.eclipse.pde.internal.core.util.ManifestUtils.loadManifest(bundleFolder);
     String bundleClasspath = manifest.get(Constants.BUNDLE_CLASSPATH);
     if (bundleClasspath != null)

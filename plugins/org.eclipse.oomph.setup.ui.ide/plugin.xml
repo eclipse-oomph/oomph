@@ -35,7 +35,7 @@
             argumentSelector="org.eclipse.oomph.setup.ui.internal.ide.URIArgumentSelector$ExtensionFactory"
             variableName="file_uri"/>
       <variablePresentation
-            argumentSelector="org.eclipse.oomph.setup.ui.internal.ide.ActiveMylynTaskArgumentSelector"
+            argumentSelector="org.eclipse.oomph.setup.ui.internal.ide.ActiveMylynTaskArgumentSelector$ExtensionFactory"
             variableName="active_mylyn_task"/>
    </extension>
 

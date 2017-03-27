@@ -111,7 +111,7 @@ public class AgentManagerComposite extends Composite
   public AgentManagerComposite(Composite parent, int style, final Object selection)
   {
     super(parent, style);
-    setBackground(getDisplay().getSystemColor(SWT.COLOR_TRANSPARENT));
+    UIUtil.setTransparentBackgroundColor(this);
     setLayout(UIUtil.createGridLayout(2));
 
     final P2ContentProvider contentProvider = new P2ContentProvider();

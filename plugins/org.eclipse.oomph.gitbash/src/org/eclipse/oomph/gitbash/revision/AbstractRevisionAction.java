@@ -11,6 +11,7 @@
 package org.eclipse.oomph.gitbash.revision;
 
 import org.eclipse.oomph.gitbash.AbstractAction;
+import org.eclipse.oomph.util.ObjectUtil;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
@@ -76,7 +77,7 @@ public abstract class AbstractRevisionAction extends AbstractAction<RevObject>
 
     if (input instanceof IAdaptable)
     {
-      IResource resource = ((IAdaptable)input).getAdapter(IResource.class);
+      IResource resource = ObjectUtil.adapt(input, IResource.class);
       if (resource != null)
       {
         org.eclipse.egit.core.project.RepositoryMapping mapping = org.eclipse.egit.core.project.RepositoryMapping.getMapping(resource);

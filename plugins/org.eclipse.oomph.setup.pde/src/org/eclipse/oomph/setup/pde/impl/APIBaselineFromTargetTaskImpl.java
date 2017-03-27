@@ -16,6 +16,7 @@ import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.pde.APIBaselineFromTargetTask;
 import org.eclipse.oomph.setup.pde.PDEPackage;
 import org.eclipse.oomph.setup.util.SetupUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
@@ -23,12 +24,15 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.pde.api.tools.internal.ApiBaselineManager;
 import org.eclipse.pde.api.tools.internal.model.ApiModelFactory;
 import org.eclipse.pde.api.tools.internal.provisional.ApiPlugin;
 import org.eclipse.pde.api.tools.internal.provisional.IApiBaselineManager;
 import org.eclipse.pde.api.tools.internal.provisional.model.IApiBaseline;
 import org.eclipse.pde.core.target.ITargetDefinition;
+
+import java.lang.reflect.Method;
 
 /**
  * <!-- begin-user-doc -->
@@ -211,6 +215,16 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
+    Method isDerivedFromTargetMethod;
+    try
+    {
+      isDerivedFromTargetMethod = ApiModelFactory.class.getMethod("isDerivedFromTarget", IApiBaseline.class, ITargetDefinition.class);
+    }
+    catch (NoSuchMethodException ex)
+    {
+      return false;
+    }
+
     ApiPlugin apiPlugin = ApiPlugin.getDefault();
     if (apiPlugin == null)
     {
@@ -256,7 +270,7 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
     }
 
     wasActive = baselineManager.getDefaultApiBaseline() == baseline;
-    backupRequired = !ApiModelFactory.isDerivedFromTarget(baseline, target);
+    backupRequired = !ReflectUtil.<Boolean> invokeMethod(isDerivedFromTargetMethod, null, baseline, target);
 
     return backupRequired || target == null || !wasActive && isActivate() || hasTargetDefinitionUpdates;
   }
@@ -297,7 +311,8 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
     if (baseline == null)
     {
       context.log("Creating new baseline from target " + targetName);
-      baseline = ApiModelFactory.newApiBaselineFromTarget(baselineName, target, new ProgressLogMonitor(context));
+      ReflectUtil.invokeMethod(ApiModelFactory.class.getMethod("newApiBaselineFromTarget", String.class, ITargetDefinition.class, IProgressMonitor.class),
+          baselineName, target, new ProgressLogMonitor(context));
       baselineManager.addApiBaseline(baseline);
     }
 

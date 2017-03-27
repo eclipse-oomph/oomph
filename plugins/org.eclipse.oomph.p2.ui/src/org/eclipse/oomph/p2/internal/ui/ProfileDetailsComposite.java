@@ -16,6 +16,7 @@ import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.BundlePool;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
@@ -69,7 +70,7 @@ public class ProfileDetailsComposite extends Composite
   {
     super(parent, style);
     this.profile = profile;
-    setBackground(getDisplay().getSystemColor(SWT.COLOR_TRANSPARENT));
+    UIUtil.setTransparentBackgroundColor(this);
     GridLayout gridLayout = new GridLayout(3, false);
     gridLayout.marginHeight = 0;
     gridLayout.marginWidth = 0;
@@ -200,7 +201,7 @@ public class ProfileDetailsComposite extends Composite
       {
         EList<Requirement> children = new BasicEList<Requirement>();
 
-        for (IInstallableUnit iu : profile.query(QueryUtil.createIUAnyQuery(), null))
+        for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), null)))
         {
           String id = iu.getId();
           VersionRange versionRange = new VersionRange(iu.getVersion().toString());

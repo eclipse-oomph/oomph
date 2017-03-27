@@ -12,6 +12,7 @@ package org.eclipse.oomph.preferences.presentation.actions;
 
 import org.eclipse.oomph.preferences.PreferenceNode;
 import org.eclipse.oomph.preferences.presentation.PreferencesEditorPlugin;
+import org.eclipse.oomph.util.ObjectUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -56,7 +57,7 @@ public class ShowInExplorerAction extends ActionDelegate
     try
     {
       IViewPart packageExplorerView = page.showView("org.eclipse.jdt.ui.PackageExplorer");
-      IShowInTarget showInTarget = packageExplorerView.getAdapter(IShowInTarget.class);
+      IShowInTarget showInTarget = ObjectUtil.adapt(packageExplorerView, IShowInTarget.class);
       showInTarget.show(new ShowInContext(null, targetSelection));
     }
     catch (PartInitException ex)

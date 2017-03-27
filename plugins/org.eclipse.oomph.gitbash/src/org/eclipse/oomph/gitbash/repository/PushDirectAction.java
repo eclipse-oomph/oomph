@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Shell;
 /**
  * @author Eike Stepper
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings("all")
 public class PushDirectAction extends AbstractAction<Repository>
 {
   public PushDirectAction()

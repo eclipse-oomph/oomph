@@ -1441,7 +1441,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       IQueryResult<IInstallableUnit> ius = additions.query(QueryUtil.createIUQuery(id), null);
       if (!ius.isEmpty())
       {
-        for (IInstallableUnit iu : ius)
+        for (IInstallableUnit iu : P2Util.asIterable(ius))
         {
           if (firstVersion == null)
           {

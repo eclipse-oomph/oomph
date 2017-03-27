@@ -147,14 +147,15 @@ public class ListFilesAction extends AbstractAction<Repository>
 
       try
       {
-        walk.close();
+        Method closeMethod = walk.getClass().getMethod("close");
+        closeMethod.invoke(walk);
       }
       catch (Throwable ex)
       {
         try
         {
-          Method method = walk.getClass().getMethod("release");
-          method.invoke(walk);
+          Method releaseMethod = walk.getClass().getMethod("release");
+          releaseMethod.invoke(walk);
         }
         catch (Throwable ignore)
         {

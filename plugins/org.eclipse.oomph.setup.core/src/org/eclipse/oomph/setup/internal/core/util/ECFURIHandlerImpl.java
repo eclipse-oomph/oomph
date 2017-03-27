@@ -20,6 +20,7 @@ import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -907,7 +908,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
     private static void applyCookieStore(final IFileTransferConnectStartEvent connectStartEvent)
     {
-      IIncomingFileTransfer fileTransfer = connectStartEvent.getAdapter(IIncomingFileTransfer.class);
+      IIncomingFileTransfer fileTransfer = ObjectUtil.adapt(connectStartEvent, IIncomingFileTransfer.class);
       final IFileID fileID = connectStartEvent.getFileID();
       try
       {
@@ -1609,7 +1610,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     protected ConnectionListener createConnectionListener(IContainer container, ProxyWrapper proxyWrapper, Authorization authorization, String eTag,
         IProgressMonitor monitor)
     {
-      fileTransfer = container.getAdapter(IRetrieveFileTransferContainerAdapter.class);
+      fileTransfer = ObjectUtil.adapt(container, IRetrieveFileTransferContainerAdapter.class);
 
       fileTransfer.setProxy(proxyWrapper.getProxy());
 
@@ -1761,7 +1762,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     protected ConnectionListener createConnectionListener(IContainer container, ProxyWrapper proxyWrapper, Authorization authorization, String eTag,
         IProgressMonitor monitor)
     {
-      fileBrowser = container.getAdapter(IRemoteFileSystemBrowserContainerAdapter.class);
+      fileBrowser = ObjectUtil.adapt(container, IRemoteFileSystemBrowserContainerAdapter.class);
 
       fileBrowser.setProxy(proxyWrapper.getProxy());
 

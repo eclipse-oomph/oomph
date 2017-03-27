@@ -19,6 +19,7 @@ import org.eclipse.oomph.targlets.ComponentDefinition;
 import org.eclipse.oomph.targlets.SiteGenerator;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.TargletPackage;
+import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -28,7 +29,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.equinox.internal.p2.repository.Transport;
-import org.eclipse.equinox.internal.p2.updatesite.SiteBundle;
 import org.eclipse.equinox.internal.p2.updatesite.SiteFeature;
 import org.eclipse.equinox.internal.p2.updatesite.SiteModel;
 import org.eclipse.equinox.internal.p2.updatesite.UpdateSite;
@@ -40,6 +40,7 @@ import org.eclipse.equinox.p2.metadata.Version;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -110,11 +111,20 @@ public class SiteGeneratorImpl extends ModelElementImpl implements SiteGenerator
           requirements.add(P2Factory.eINSTANCE.createRequirement(id, version, true));
         }
 
-        for (SiteBundle bundle : site.getBundles())
+        try
         {
-          String id = bundle.getBundleIdentifier();
-          Version version = Version.create(bundle.getBundleVersion());
-          requirements.add(P2Factory.eINSTANCE.createRequirement(id, version, true));
+          List<Object> bundles = ReflectUtil.invokeMethod("getBundles", site);
+
+          for (Object bundle : bundles)
+          {
+            String id = ReflectUtil.invokeMethod("getBundleIdentifier", bundle);
+            Version version = Version.create(ReflectUtil.<String> invokeMethod("getBundleVersion", bundle));
+            requirements.add(P2Factory.eINSTANCE.createRequirement(id, version, true));
+          }
+        }
+        catch (RuntimeException ex)
+        {
+          // Ignore
         }
 
         IInstallableUnit iu = ComponentDefGeneratorImpl.generateIU(componentDefinition, qualifierReplacement);

@@ -53,6 +53,7 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.services.IServiceLocator;
 
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.html.HTML.Tag;
@@ -72,6 +73,8 @@ public final class UIUtil
 {
   public static final IWorkbench WORKBENCH;
 
+  private static final int COLOR_TRANSPARENT;
+
   private static Image errorImage;
 
   private static Image warningImage;
@@ -83,6 +86,7 @@ public final class UIUtil
   static
   {
     IWorkbench workbench = null;
+    int colorTransparent = -1;
 
     try
     {
@@ -93,7 +97,17 @@ public final class UIUtil
       // Workbench has not been created.
     }
 
+    try
+    {
+      colorTransparent = ReflectUtil.getValue("COLOR_TRANSPARENT", SWT.class);
+    }
+    catch (Throwable ex)
+    {
+      // This version of SWT doesn't support a transparent color.
+    }
+
     WORKBENCH = workbench;
+    COLOR_TRANSPARENT = colorTransparent;
   }
 
   private UIUtil()
@@ -1090,6 +1104,20 @@ public final class UIUtil
     shell.dispose();
 
     return new Point(numberOfAverageCharacters, lines.length);
+  }
+
+  public static void setTransparentBackgroundColor(Control control)
+  {
+    if (COLOR_TRANSPARENT != -1)
+    {
+      Color transparentColor = control.getDisplay().getSystemColor(COLOR_TRANSPARENT);
+      control.setBackground(transparentColor);
+    }
+  }
+
+  public static <T> T getService(IServiceLocator serviceLocator, Class<T> api)
+  {
+    return api.cast(serviceLocator.getService(api));
   }
 
   /**

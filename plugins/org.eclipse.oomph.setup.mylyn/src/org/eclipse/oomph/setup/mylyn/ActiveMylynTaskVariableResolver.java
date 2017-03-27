@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.mylyn;
 
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.CoreException;
@@ -58,7 +59,15 @@ public class ActiveMylynTaskVariableResolver implements IDynamicVariableResolver
 
       if ("OwnerId".equalsIgnoreCase(argument))
       {
-        return activeTask.getOwnerId();
+        try
+        {
+          return ReflectUtil.invokeMethod("getOwnerId", activeTask);
+          // return activeTask.getOwnerId();
+        }
+        catch (Throwable ex)
+        {
+          // Ignore.
+        }
       }
 
       if ("Priority".equalsIgnoreCase(argument))

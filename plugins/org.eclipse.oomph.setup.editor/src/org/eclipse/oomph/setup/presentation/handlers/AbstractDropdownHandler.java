@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.presentation.handlers;
 
 import org.eclipse.oomph.setup.presentation.SetupEditorPlugin;
+import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -112,7 +113,7 @@ public abstract class AbstractDropdownHandler extends AbstractHandler implements
     {
       EAGER_LOAD.set(Boolean.TRUE);
 
-      IHandlerService handlerService = window.getService(IHandlerService.class);
+      IHandlerService handlerService = UIUtil.getService(window, IHandlerService.class);
       handlerService.executeCommand(commandID, null);
     }
     catch (Exception ex)
@@ -124,7 +125,7 @@ public abstract class AbstractDropdownHandler extends AbstractHandler implements
       EAGER_LOAD.remove();
     }
 
-    ICommandService commandService = window.getService(ICommandService.class);
+    ICommandService commandService = UIUtil.getService(window, ICommandService.class);
     commandService.refreshElements(commandID, null);
   }
 

@@ -141,7 +141,7 @@ public class AgentAnalyzerComposite extends Composite
     super(parent, style);
     this.agent = agent;
 
-    setBackground(getDisplay().getSystemColor(SWT.COLOR_TRANSPARENT));
+    UIUtil.setTransparentBackgroundColor(this);
 
     GridLayout gridLayout = new GridLayout();
     gridLayout.marginWidth = margin;

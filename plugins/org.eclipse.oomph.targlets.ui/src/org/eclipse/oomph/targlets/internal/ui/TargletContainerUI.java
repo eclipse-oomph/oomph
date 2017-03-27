@@ -82,29 +82,29 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
     return ADAPTERS;
   }
 
-  @SuppressWarnings("unchecked")
-  public <T> T getAdapter(Object object, Class<T> adapterType)
+  @SuppressWarnings("all")
+  public Object getAdapter(Object object, Class adapterType)
   {
     if (object instanceof ITargletContainer)
     {
       if (adapterType == ITreeContentProvider.class)
       {
-        return (T)new ContainerContentProvider();
+        return new ContainerContentProvider();
       }
 
       if (adapterType == ILabelProvider.class)
       {
-        return (T)new ContainerLabelProvider();
+        return new ContainerLabelProvider();
       }
 
       if (adapterType == ITargetLocationEditor.class)
       {
-        return (T)this;
+        return this;
       }
 
       if (adapterType == ITargetLocationUpdater.class)
       {
-        return (T)this;
+        return this;
       }
     }
 

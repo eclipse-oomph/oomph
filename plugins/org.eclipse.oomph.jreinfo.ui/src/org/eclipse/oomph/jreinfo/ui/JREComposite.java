@@ -111,7 +111,7 @@ public class JREComposite extends Composite
     this.filter = filter;
     selectedElement = selection;
 
-    setBackground(getDisplay().getSystemColor(SWT.COLOR_TRANSPARENT));
+    UIUtil.setTransparentBackgroundColor(this);
     setLayout(UIUtil.createGridLayout(2));
     TreeColumnLayout treeLayout = new TreeColumnLayout();
 

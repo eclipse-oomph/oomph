@@ -175,6 +175,7 @@ import org.eclipse.jface.text.AbstractReusableInformationControlCreator;
 import org.eclipse.jface.text.DefaultInformationControl;
 import org.eclipse.jface.text.IInformationControl;
 import org.eclipse.jface.text.TextPresentation;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -183,7 +184,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.IToolTipProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
@@ -2772,7 +2772,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings({ "rawtypes", "unchecked" })
+  @SuppressWarnings("all")
   public Object getAdapterGen(Class key)
   {
     if (key.equals(IContentOutlinePage.class))
@@ -2793,7 +2793,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     }
   }
 
-  @SuppressWarnings({ "rawtypes", "unchecked" })
+  @SuppressWarnings("all")
   @Override
   public Object getAdapter(Class adapter)
   {
@@ -3455,10 +3455,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       getActionBarContributor().shareGlobalActions(this, actionBars);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T getAdapter(Class<T> adapter)
+    @SuppressWarnings("all")
+    public Object getAdapter(Class adapter)
     {
-      return (T)FindAndReplaceTarget.getAdapter(adapter, SetupEditor.this);
+      return FindAndReplaceTarget.getAdapter(adapter, SetupEditor.this);
     }
 
     public SetupEditor getSetupEditor()
@@ -5068,7 +5068,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
         else
         {
-          IToolTipProvider toolTipProvider = (IToolTipProvider)setupEditor.selectionViewer.getLabelProvider();
+          CellLabelProvider toolTipProvider = (CellLabelProvider)setupEditor.selectionViewer.getLabelProvider();
           String toolTipText = toolTipProvider.getToolTipText(new ToolTipObject(toolTipObject, showAdvancedPropertiesItem.getSelection()));
           setText(toolTipText);
         }
@@ -5127,7 +5127,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     @Override
     protected void setSelection(Object object)
     {
-      IToolTipProvider toolTipProvider = (IToolTipProvider)setupEditor.selectionViewer.getLabelProvider();
+      CellLabelProvider toolTipProvider = (CellLabelProvider)setupEditor.selectionViewer.getLabelProvider();
       String toolTipText = toolTipProvider.getToolTipText(new ToolTipObject(object, this, setupEditor, false, showAdvancedPropertiesItem.getSelection()));
       setText(toolTipText);
     }

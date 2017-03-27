@@ -213,18 +213,19 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     basicSetTarglets(targlets);
   }
 
-  @Override
+  @SuppressWarnings("all")
   protected int getResolveBundlesWork()
   {
     return 999;
   }
 
-  @Override
+  @SuppressWarnings("all")
   protected int getResolveFeaturesWork()
   {
     return 1;
   }
 
+  @SuppressWarnings("all")
   public boolean isContentEqual(AbstractBundleContainer container)
   {
     if (container instanceof TargletContainer)

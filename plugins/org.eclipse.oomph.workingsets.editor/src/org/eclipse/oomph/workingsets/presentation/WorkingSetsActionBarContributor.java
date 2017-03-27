@@ -11,6 +11,7 @@
 package org.eclipse.oomph.workingsets.presentation;
 
 import org.eclipse.oomph.ui.DockableDialog;
+import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.workingsets.WorkingSet;
 import org.eclipse.oomph.workingsets.WorkingSetGroup;
@@ -572,7 +573,7 @@ public class WorkingSetsActionBarContributor extends EditingDomainActionBarContr
 
       public ProjectPresentation(IProject project)
       {
-        super(project.getName(), ExtendedImageRegistry.INSTANCE.getImage(project.getAdapter(IWorkbenchAdapter.class).getImageDescriptor(project)));
+        super(project.getName(), ExtendedImageRegistry.INSTANCE.getImage(ObjectUtil.adapt(project, IWorkbenchAdapter.class).getImageDescriptor(project)));
 
         this.project = project;
       }
@@ -633,7 +634,7 @@ public class WorkingSetsActionBarContributor extends EditingDomainActionBarContr
 
             if (value instanceof IAdaptable)
             {
-              IProject project = ((IAdaptable)value).getAdapter(IProject.class);
+              IProject project = ObjectUtil.adapt(value, IProject.class);
               if (project != null)
               {
                 for (WorkingSetPresentation workingSet : previewDialog.input.getWorkingSets())

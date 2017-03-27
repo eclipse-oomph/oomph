@@ -11,6 +11,7 @@
 package org.eclipse.oomph.manifests.handlers;
 
 import org.eclipse.oomph.manifests.Activator;
+import org.eclipse.oomph.util.ObjectUtil;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -117,7 +118,7 @@ public class CleanBuildHandler extends AbstractHandler
 
           if (element == null)
           {
-            IMarker marker = adaptable.getAdapter(IMarker.class);
+            IMarker marker = ObjectUtil.adapt(adaptable, IMarker.class);
             if (marker != null)
             {
               element = marker.getResource();

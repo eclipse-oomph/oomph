@@ -22,6 +22,7 @@ import org.eclipse.oomph.projectconfig.WorkspaceConfiguration;
 import org.eclipse.oomph.projectconfig.impl.ProjectConfigURIHandlerImpl;
 import org.eclipse.oomph.projectconfig.provider.ProjectConfigItemProviderAdapterFactory;
 import org.eclipse.oomph.projectconfig.util.ProjectConfigUtil;
+import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
@@ -1480,7 +1481,7 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings({ "rawtypes", "unchecked" })
+  @SuppressWarnings("all")
   @Override
   public Object getAdapter(Class key)
   {
@@ -1824,7 +1825,7 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
   public void init(IEditorSite site, IEditorInput editorInput)
   {
     initGen(site, editorInput);
-    IContextService contextService = site.getService(IContextService.class);
+    IContextService contextService = UIUtil.getService(site, IContextService.class);
     contextService.activateContext("org.eclipse.oomph.projectconfig.editor.context");
   }
 

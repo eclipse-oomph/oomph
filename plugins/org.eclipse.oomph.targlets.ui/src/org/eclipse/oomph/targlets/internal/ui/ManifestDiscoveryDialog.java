@@ -196,7 +196,7 @@ public class ManifestDiscoveryDialog extends FilteredItemsSelectionDialog
       IQueryable<IInstallableUnit>[] array = queryables.toArray(new IQueryable[queryables.size()]);
       CompoundQueryable<IInstallableUnit> compoundQueryable = new CompoundQueryable<IInstallableUnit>(array);
 
-      for (IInstallableUnit iu : compoundQueryable.query(QueryUtil.createLatestIUQuery(), progress.newChild(1)))
+      for (IInstallableUnit iu : P2Util.asIterable(compoundQueryable.query(QueryUtil.createLatestIUQuery(), progress.newChild(1))))
       {
         if (!iu.getId().endsWith(".source"))
         {

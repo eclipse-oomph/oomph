@@ -415,8 +415,8 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
     {
       super(provisioningAgent);
 
-      // If there is a shared base agent.
-      IProvisioningAgent baseAgent = (IProvisioningAgent)provisioningAgent.getService(IProvisioningAgent.SHARED_BASE_AGENT);
+      // If there is a shared base agent. The IProvisioningAgent.SHARED_BASE_AGENT is not available in older versions of p2.
+      IProvisioningAgent baseAgent = (IProvisioningAgent)provisioningAgent.getService("org.eclipse.equinox.shared.base.agent");
       if (baseAgent != null)
       {
         // And it has a profile registry.

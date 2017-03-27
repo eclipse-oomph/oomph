@@ -13,6 +13,8 @@ package org.eclipse.oomph.util;
 
 import org.eclipse.oomph.internal.util.UtilPlugin;
 
+import org.eclipse.emf.common.CommonPlugin;
+
 import org.eclipse.core.runtime.IStatus;
 
 import org.w3c.dom.Document;
@@ -44,6 +46,7 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
@@ -1101,40 +1104,59 @@ public final class IOUtil
    */
   static class OsgiHelper
   {
-    @SuppressWarnings("restriction")
-    public static boolean canWriteFolder(File folder)
+    private static final Method CAN_WRITE_METHOD;
+
+    static
     {
+      Method canWriteMethod = null;
+
       try
       {
-        return org.eclipse.osgi.storage.StorageUtil.canWrite(folder);
+        canWriteMethod = CommonPlugin.loadClass("org.eclipse.osgi", "org.eclipse.osgi.storage.StorageUtil").getMethod("canWrite", File.class);
       }
-      catch (NoClassDefFoundError ex)
+      catch (ClassNotFoundException ex)
       {
-        if (!folder.canWrite() || !folder.isDirectory())
-        {
-          return false;
-        }
-
-        File fileTest = null;
-
-        try
-        {
-          fileTest = File.createTempFile("test", ".dll", folder);
-        }
-        catch (IOException e)
-        {
-          return false;
-        }
-        finally
-        {
-          if (fileTest != null)
-          {
-            fileTest.delete();
-          }
-        }
-
-        return true;
+        // Ignore.
       }
+      catch (NoSuchMethodException ex)
+      {
+        // Ignore.
+      }
+
+      CAN_WRITE_METHOD = canWriteMethod;
+    }
+
+    public static boolean canWriteFolder(File folder)
+    {
+      if (CAN_WRITE_METHOD != null)
+      {
+        return ReflectUtil.invokeMethod(CAN_WRITE_METHOD, null, folder);
+      }
+
+      if (!folder.canWrite() || !folder.isDirectory())
+      {
+        return false;
+      }
+
+      File fileTest = null;
+
+      try
+      {
+        fileTest = File.createTempFile("test", ".dll", folder);
+      }
+      catch (IOException e)
+      {
+        return false;
+      }
+      finally
+      {
+        if (fileTest != null)
+        {
+          fileTest.delete();
+        }
+      }
+
+      return true;
     }
   }
 }

@@ -16,6 +16,7 @@ import org.eclipse.oomph.setup.workbench.CommandParameter;
 import org.eclipse.oomph.setup.workbench.KeyBindingContext;
 import org.eclipse.oomph.setup.workbench.KeyBindingTask;
 import org.eclipse.oomph.setup.workbench.WorkbenchPackage;
+import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -539,7 +540,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    IBindingService bindingService = PlatformUI.getWorkbench().getService(IBindingService.class);
+    IBindingService bindingService = UIUtil.getService(PlatformUI.getWorkbench(), IBindingService.class);
     Binding[] bindings = bindingService.getBindings();
 
     for (KeyBindingContext keyBindingContext : getContexts())
@@ -615,7 +616,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    final IBindingService bindingService = PlatformUI.getWorkbench().getService(IBindingService.class);
+    final IBindingService bindingService = UIUtil.getService(PlatformUI.getWorkbench(), IBindingService.class);
     final List<Binding> bindings = new ArrayList<Binding>(Arrays.asList(bindingService.getBindings()));
 
     for (KeyBindingContext keyBindingContext : getContexts())
@@ -650,7 +651,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
 
   private ParameterizedCommand getParameterizedCommand() throws NotDefinedException
   {
-    ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
+    ICommandService commandService = UIUtil.getService(PlatformUI.getWorkbench(), ICommandService.class);
     Command command = commandService.getCommand(getCommand());
 
     @SuppressWarnings("rawtypes")

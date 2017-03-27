@@ -1311,7 +1311,7 @@ public class ProductCatalogGenerator implements IApplication
     IInstallableUnit maxProductIU = null;
     if (eppMetadataRepository != null)
     {
-      for (IInstallableUnit productIU : eppMetadataRepository.query(QueryUtil.createIUQuery(productName), null))
+      for (IInstallableUnit productIU : P2Util.asIterable(eppMetadataRepository.query(QueryUtil.createIUQuery(productName), null)))
       {
         if (maxProductIU == null || productIU.getVersion().compareTo(maxProductIU.getVersion()) > 0)
         {

@@ -103,7 +103,7 @@ public class TargletContainerComposite extends Composite
   public TargletContainerComposite(Composite parent, int style, String targletContainerID)
   {
     super(parent, style);
-    setBackground(getDisplay().getSystemColor(SWT.COLOR_TRANSPARENT));
+    UIUtil.setTransparentBackgroundColor(this);
     setLayout(new FillLayout());
 
     SashForm sashForm = new SashForm(this, SWT.SMOOTH | SWT.VERTICAL);
@@ -763,34 +763,35 @@ public class TargletContainerComposite extends Composite
       this.selectionProvider = selectionProvider;
     }
 
-    public <T> T getAdapter(Class<T> adapter)
+    @SuppressWarnings("all")
+    public Object getAdapter(Class adapter)
     {
       return Platform.getAdapterManager().getAdapter(this, adapter);
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
-    public <T> T getService(Class<T> api)
+    @SuppressWarnings("all")
+    public Object getService(Class api)
     {
       if (api == IPartService.class)
       {
-        return (T)partService;
+        return partService;
       }
 
       if (api == org.eclipse.ui.IKeyBindingService.class)
       {
-        return (T)keyBindingService;
+        return keyBindingService;
       }
 
       if (api == IHandlerService.class)
       {
-        return (T)handlerService;
+        return handlerService;
       }
 
       return null;
     }
 
-    @SuppressWarnings("deprecation")
-    public boolean hasService(Class<?> api)
+    @SuppressWarnings("all")
+    public boolean hasService(Class api)
     {
       if (api == IPartService.class)
       {

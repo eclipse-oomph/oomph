@@ -181,7 +181,9 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
     checkboxTreeViewer.setSubtreeChecked(root, true);
 
     Set<String> ignoredPreferencePages = RecorderManager.INSTANCE.getIgnoredPreferencePages();
-    for (IPreferenceNode preferenceNode : preferenceManager.getElements(PreferenceManager.PRE_ORDER))
+    @SuppressWarnings("all")
+    List<IPreferenceNode> preferenceNodes = preferenceManager.getElements(PreferenceManager.PRE_ORDER);
+    for (IPreferenceNode preferenceNode : preferenceNodes)
     {
       if (ignoredPreferencePages.contains(preferenceNode.getId()))
       {
@@ -217,7 +219,9 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
     }
 
     final Set<String> ignoredPreferencePages = new LinkedHashSet<String>();
-    for (IPreferenceNode preferenceNode : preferenceManager.getElements(PreferenceManager.PRE_ORDER))
+    @SuppressWarnings("all")
+    List<IPreferenceNode> preferenceNodes = preferenceManager.getElements(PreferenceManager.PRE_ORDER);
+    for (IPreferenceNode preferenceNode : preferenceNodes)
     {
       String id = preferenceNode.getId();
       if (!initializedOrCheckedPreferencePages.contains(id))

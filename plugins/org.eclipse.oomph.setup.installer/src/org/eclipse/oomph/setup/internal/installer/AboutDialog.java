@@ -229,7 +229,7 @@ public final class AboutDialog extends AbstractSetupDialog
   private List<IInstallableUnit> getPlugins()
   {
     List<IInstallableUnit> plugins = new ArrayList<IInstallableUnit>();
-    for (IInstallableUnit iu : profile.query(QueryUtil.createIUAnyQuery(), null))
+    for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), null)))
     {
       if (showAllPlugins || iu.getId().startsWith(SetupCoreUtil.OOMPH_NAMESPACE))
       {

@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.ui;
 
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.ui.URIEditorInput;
@@ -292,7 +293,8 @@ public final class SetupEditorSupport
 
       return new IStorageEditorInput()
       {
-        public <T> T getAdapter(Class<T> adapter)
+        @SuppressWarnings("all")
+        public Object getAdapter(Class adapter)
         {
           return null;
         }
@@ -326,7 +328,8 @@ public final class SetupEditorSupport
         {
           return new IStorage()
           {
-            public <T> T getAdapter(Class<T> adapter)
+            @SuppressWarnings("all")
+            public Object getAdapter(Class adapter)
             {
               return null;
             }
@@ -448,9 +451,9 @@ public final class SetupEditorSupport
   {
     try
     {
-      return EditUIUtil.getURI(editorInput, uriConverter);
+      return ReflectUtil.invokeMethod(EditUIUtil.class.getMethod("getURI", IEditorInput.class, URIConverter.class), null, editorInput, uriConverter);
     }
-    catch (NoSuchMethodError ex)
+    catch (NoSuchMethodException ex)
     {
       return EditUIUtil.getURI(editorInput);
     }

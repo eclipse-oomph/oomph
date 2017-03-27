@@ -33,6 +33,7 @@ import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
 import org.eclipse.oomph.ui.DockableDialog;
 import org.eclipse.oomph.ui.DockableDialog.Factory;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.workingsets.WorkingSet;
 import org.eclipse.oomph.workingsets.WorkingSetsPackage;
@@ -407,8 +408,9 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   public void contributeToMenu(IMenuManager menuManager)
   {
     contributeToMenuGen(menuManager);
-    createChildMenuManager.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("create_child"));
-    createSiblingMenuManager.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("create_sibling"));
+
+    ReflectUtil.setValue("image", createChildMenuManager, SetupEditorPlugin.INSTANCE.getImageDescriptor("create_child"));
+    ReflectUtil.setValue("image", createSiblingMenuManager, SetupEditorPlugin.INSTANCE.getImageDescriptor("create_sibling"));
   }
 
   /**
@@ -1288,11 +1290,11 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     @Override
     protected String renderHTML()
     {
-      IBindingService bindingService = PlatformUI.getWorkbench().getService(IBindingService.class);
+      IBindingService bindingService = UIUtil.getService(PlatformUI.getWorkbench(), IBindingService.class);
       Binding[] bindings = bindingService.getBindings();
       Map<String, List<Command>> map = new HashMap<String, List<Command>>();
 
-      ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
+      ICommandService commandService = UIUtil.getService(PlatformUI.getWorkbench(), ICommandService.class);
       for (Command command : commandService.getDefinedCommands())
       {
         try
@@ -1658,15 +1660,14 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       final Resource resource = object instanceof Resource ? (Resource)object : ((EObject)object).eResource();
       IStorageEditorInput editorInput = new IStorageEditorInput()
       {
-        public <T> T getAdapter(Class<T> adapter)
+        @SuppressWarnings("all")
+        public Object getAdapter(Class adapter)
         {
           if (adapter == IStorage.class)
           {
             try
             {
-              @SuppressWarnings("unchecked")
-              T storage = (T)getStorage();
-              return storage;
+              return getStorage();
             }
             catch (CoreException ex)
             {
@@ -1705,7 +1706,8 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
         {
           return new IStorage()
           {
-            public <T> T getAdapter(Class<T> adapter)
+            @SuppressWarnings("all")
+            public Object getAdapter(Class adapter)
             {
               return null;
             }
