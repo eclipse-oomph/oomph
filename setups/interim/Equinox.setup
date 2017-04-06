@@ -193,7 +193,7 @@
               project="org.eclipse.equinox.p2.core"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@projects[name='p2']/@setupTasks.6/@workingSets.1"/>
+              excludedWorkingSet="//@projects[name='p2']/@setupTasks.6/@workingSets.1 //@projects[name='p2']/@setupTasks.6/@workingSets.2"/>
         </predicate>
       </workingSet>
       <workingSet
@@ -206,6 +206,18 @@
           <operand
               xsi:type="predicates:NamePredicate"
               pattern=".*test($|s.*)"/>
+        </predicate>
+      </workingSet>
+      <workingSet
+          name="Equinox p2 Examples">
+        <predicate
+            xsi:type="predicates:AndPredicate">
+          <operand
+              xsi:type="predicates:RepositoryPredicate"
+              project="org.eclipse.equinox.p2.core"/>
+          <operand
+              xsi:type="predicates:NamePredicate"
+              pattern=".*examples.*"/>
         </predicate>
       </workingSet>
     </setupTask>
