@@ -52,7 +52,7 @@ public class CachingTransport extends Transport
 {
   public static final String SERVICE_NAME = Transport.SERVICE_NAME;
 
-  private static final ThreadLocal<LocationStack> REPOSITORY_LOCATIONS = new InheritableThreadLocal<LocationStack>()
+  private static final ThreadLocal<LocationStack> REPOSITORY_LOCATIONS = new ThreadLocal<LocationStack>()
   {
     @Override
     protected LocationStack initialValue()
