@@ -348,7 +348,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
         }
       }
     }
-    catch (Exception ex)
+    catch (Throwable ex)
     {
       // Ignore if anything goes wrong registering our variable resolvers.
     }
