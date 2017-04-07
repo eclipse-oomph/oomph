@@ -11,6 +11,7 @@
 package org.eclipse.oomph.p2.internal.core;
 
 import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OfflineMode;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -308,7 +309,15 @@ public class CachingRepositoryManager<T>
     // Cleanup; can be removed at some point in the future...
     properties.remove("generated");
 
-    PropertiesUtil.saveProperties(cachedIndexFile, properties, false);
+    try
+    {
+      PropertiesUtil.saveProperties(cachedIndexFile, properties, false);
+    }
+    catch (IORuntimeException ex)
+    {
+      // It's just an optimization so that next time we try the most likely expected factory first.
+      // So if we can't save the properties file, just ignore the problem.
+    }
   }
 
   private URI checkValidLocation(URI location)
