@@ -35,7 +35,16 @@ public class LazyProfileRegistryComponent implements IAgentServiceFactory
   public Object createService(IProvisioningAgent agent)
   {
     IAgentLocation location = (IAgentLocation)agent.getService(IAgentLocation.SERVICE_NAME);
-    File directory = LazyProfileRegistry.getDefaultRegistryDirectory(location);
+    File directory;
+
+    try
+    {
+      directory = LazyProfileRegistry.getDefaultRegistryDirectory(location);
+    }
+    catch (RuntimeException ex)
+    {
+      throw new RuntimeException("Problem creating registry directory for '" + location + "'", ex);
+    }
 
     SimpleProfileRegistry registry = null;
 
