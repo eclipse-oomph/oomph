@@ -1571,7 +1571,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
     private static final long serialVersionUID = 1L;
 
-    protected BasicEList<List<Map.Entry<URI, PreferenceHandler.Factory>>> prefixMaps = new BasicEList<List<Map.Entry<URI, PreferenceHandler.Factory>>>();
+    protected BasicEList<List<Map.Entry<URI, PreferenceHandler.Factory>>> prefixMaps;
 
     public PreferenceHandlerFactoryRegistry()
     {
@@ -1609,34 +1609,31 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     public PreferenceHandler.Factory getFactory(URI uri)
     {
       PreferenceHandler.Factory result = get(uri);
-      if (result == null)
+      if (result == null && prefixMaps != null && uri != null)
       {
-        if (prefixMaps != null)
+        for (int i = Math.min(prefixMaps.size() - 1, uri.segmentCount()); i >= 0; --i)
         {
-          for (int i = Math.min(prefixMaps.size() - 1, uri.segmentCount()); i >= 0; --i)
+          List<Map.Entry<URI, PreferenceHandler.Factory>> prefixes = prefixMaps.get(i);
+          LOOP: for (int j = prefixes.size() - 1; j >= 0; --j)
           {
-            List<Map.Entry<URI, PreferenceHandler.Factory>> prefixes = prefixMaps.get(i);
-            LOOP: for (int j = prefixes.size() - 1; j >= 0; --j)
+            Map.Entry<URI, PreferenceHandler.Factory> entry = prefixes.get(j);
+            URI key = entry.getKey();
+            if (ROOT_PREFIX.equals(key))
             {
-              Map.Entry<URI, PreferenceHandler.Factory> entry = prefixes.get(j);
-              URI key = entry.getKey();
-              if (ROOT_PREFIX.equals(key))
-              {
-                return entry.getValue();
-              }
+              return entry.getValue();
+            }
 
-              for (int k = key.segmentCount() - 2; k >= 0; --k)
+            for (int k = key.segmentCount() - 2; k >= 0; --k)
+            {
+              if (!key.segment(k).equals(uri.segment(k)))
               {
-                if (!key.segment(k).equals(uri.segment(k)))
-                {
-                  continue LOOP;
-                }
+                continue LOOP;
               }
+            }
 
-              if (key.authority().equals(uri.authority()))
-              {
-                return entry.getValue();
-              }
+            if (key.authority().equals(uri.authority()))
+            {
+              return entry.getValue();
             }
           }
         }
