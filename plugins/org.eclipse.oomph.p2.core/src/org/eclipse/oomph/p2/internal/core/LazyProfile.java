@@ -42,6 +42,12 @@ public final class LazyProfile extends org.eclipse.equinox.internal.p2.engine.Pr
 
   private org.eclipse.equinox.internal.p2.engine.Profile parent;
 
+  /**
+   * The value for this is never actually used, but it ensures there is a strong reference so that the delegate is never garbage collection.
+   */
+  @SuppressWarnings("unused")
+  private org.eclipse.equinox.internal.p2.engine.Profile self;
+
   public LazyProfile(LazyProfileRegistry registry, String profileId, File profileDirectory)
   {
     super(registry.getProvisioningAgent(), profileId, null, null);
@@ -76,6 +82,13 @@ public final class LazyProfile extends org.eclipse.equinox.internal.p2.engine.Pr
 
     referent.setParent(parent);
     delegate = new SoftReference<org.eclipse.equinox.internal.p2.engine.Profile>(referent);
+
+    // Keep a strong reference to the referenced profile if this is the self profile.
+    if (getProfileId().equals(registry.self))
+    {
+      self = referent;
+    }
+
     return referent;
   }
 

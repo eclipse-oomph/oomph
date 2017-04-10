@@ -71,7 +71,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
   private final File store;
 
-  private final String self;
+  final String self;
 
   private final boolean canWrite;
 
@@ -365,6 +365,22 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
     {
       throw new RuntimeException(ex);
     }
+  }
+
+  @Override
+  public synchronized void updateProfile(Profile profile)
+  {
+    // Keep a strong reference to the delegate profile during the update process.
+    // https://bugs.eclipse.org/bugs/show_bug.cgi?id=515012
+    // We already keep a strong reference of the self profile, but it's possible to perform transactions on any profile, so better safe than sorry.
+    String id = profile.getProfileId();
+    Profile current = getProfileMap().get(id);
+    if (current instanceof LazyProfile)
+    {
+      current = ((LazyProfile)current).getDelegate(true);
+    }
+
+    super.updateProfile(profile);
   }
 
   public static File findLatestProfileFile(File profileDirectory)
