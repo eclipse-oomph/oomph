@@ -114,7 +114,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.6.0,4.7.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/neon/201703231000"/>
+          url="http://download.eclipse.org/releases/neon"/>
     </setupTask>
   </version>
   <version name="oxygen"
@@ -212,7 +212,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.6.0,4.7.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/neon/201703231000"/>
+          url="http://download.eclipse.org/releases/neon"/>
     </setupTask>
   </version>
   <version name="mars"

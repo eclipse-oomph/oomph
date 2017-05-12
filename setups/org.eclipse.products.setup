@@ -173,7 +173,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -309,7 +309,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -748,7 +748,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -1044,7 +1044,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -1361,7 +1361,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -1523,7 +1523,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -1798,7 +1798,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -1942,7 +1942,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <description>The essential tools for any JavaScript developer, including JavaScript, HTML, CSS, XML languages support, Git client, and Mylyn.</description>
@@ -2075,7 +2075,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -2197,7 +2197,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -2471,7 +2471,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -2683,7 +2683,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -2820,7 +2820,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -2906,7 +2906,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -3307,7 +3307,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -3553,7 +3553,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -3898,7 +3898,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -4088,7 +4088,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -4390,7 +4390,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -4540,7 +4540,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <description>An IDE for developers creating Android applications.</description>
@@ -4713,7 +4713,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -4875,7 +4875,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -5112,7 +5112,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -5194,7 +5194,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -5487,7 +5487,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -5649,7 +5649,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -6131,7 +6131,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -6257,7 +6257,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -6459,7 +6459,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
@@ -6513,7 +6513,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,4.7.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201703231000"/>
+            url="http://download.eclipse.org/releases/neon"/>
       </setupTask>
     </version>
     <version
