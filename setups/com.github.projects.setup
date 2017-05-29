@@ -190,6 +190,7 @@
   </setupTask>
   <project href="user:/com.github.projects.setup?name='user.project',label='&lt;User>',description='A container project for local user projects that are virtual members of the Github.com project catalog'#/"/>
   <project href="https://raw.githubusercontent.com/JanKoehnlein/FXDiagram/master/de.fxdiagram.docs/FXDiagram.setup#/"/>
+  <project href="https://raw.githubusercontent.com/groovy/groovy-eclipse/master/groovy-eclipse.setup#/"/>
   <project href="https://raw.githubusercontent.com/LorenzoBettini/javamm/master/javamm.workspace/Javamm.setup#/"/>
   <project href="https://raw.githubusercontent.com/LorenzoBettini/jbase/master/jbase.workspace/Jbase.setup#/"/>
   <project href="https://raw.githubusercontent.com/m2e-code-quality/m2e-code-quality/master/m2e-code-quality.setup#/"/>
