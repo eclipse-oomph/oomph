@@ -3421,6 +3421,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       log("Product " + productVersion.getQualifiedName());
     }
 
+    File workspaceLocation = getWorkspaceLocation();
+    if (workspaceLocation != null)
+    {
+      log("Workspace " + workspaceLocation);
+    }
+
     Workspace workspace = setupContext.getWorkspace();
     if (workspace != null)
     {
