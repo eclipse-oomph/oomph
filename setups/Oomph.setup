@@ -208,8 +208,7 @@
       <targlet
           name="Oomph"
           activeRepositoryList="${eclipse.target.platform}"
-          includeAllPlatforms="true"
-          includeBinaryEquivalents="false">
+          includeAllPlatforms="true">
         <annotation
             source="http:/www.eclipse.org/oomph/targlets/PomArtifactUpdater">
           <detail
