@@ -1507,7 +1507,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     Type type = Type.ERROR;
     errorMessage = validateJREs();
 
-    if (errorMessage == null)
+    if (errorMessage == null && installFolder != null)
     {
       Pair<Type, String> folderValidationMesage = validateInstallFolder();
       if (folderValidationMesage != null)
