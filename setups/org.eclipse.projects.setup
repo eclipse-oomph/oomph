@@ -495,6 +495,7 @@
   <project href="http://git.eclipse.org/c/recommenders/org.eclipse.recommenders.git/plain/tools/oomph/recommenders.setup#/"/>
   <project href="interim/E4Tools.setup#/"/>
   <project href="https://git.eclipse.org/c/ease/org.eclipse.ease.core.git/plain/releng/org.eclipse.ease.releng/oomph/ease.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse/eclemma/master/EclEmma.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/elk/master/setups/EclipseLayoutKernel.setup#/"/>
   <project href="https://git.eclipse.org/c/ecoretools/org.eclipse.ecoretools.git/plain/org.eclipse.emf.ecoretools.build/EcoreTools.setup#/"/>
   <project href="https://git.eclipse.org/c/egit/egit.git/plain/tools/oomph/EGit.setup#/"/>
