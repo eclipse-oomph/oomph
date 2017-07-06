@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.oomph.setup.doc; singleton:=true
-Bundle-Version: 1.8.0.qualifier
+Bundle-Version: 1.9.0.qualifier
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
@@ -26,8 +26,8 @@ Require-Bundle: org.eclipse.help;bundle-version="[3.3.0,4.0.0)";resolution:=opti
  org.eclipse.oomph.setup.mylyn.edit;bundle-version="[1.8.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.p2;bundle-version="[1.8.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.p2.edit;bundle-version="[1.8.0,2.0.0)";resolution:=optional;visibility:=reexport,
- org.eclipse.oomph.setup.pde;bundle-version="[1.8.0,2.0.0)";resolution:=optional;visibility:=reexport,
- org.eclipse.oomph.setup.pde.edit;bundle-version="[1.8.0,2.0.0)";resolution:=optional;visibility:=reexport,
+ org.eclipse.oomph.setup.pde;bundle-version="[1.9.0,2.0.0)";resolution:=optional;visibility:=reexport,
+ org.eclipse.oomph.setup.pde.edit;bundle-version="[1.9.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.projects;bundle-version="[1.8.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.projects.edit;bundle-version="[1.8.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.projectset;bundle-version="[1.8.0,2.0.0)";resolution:=optional;visibility:=reexport,
@@ -40,11 +40,11 @@ Require-Bundle: org.eclipse.help;bundle-version="[3.3.0,4.0.0)";resolution:=opti
  org.eclipse.oomph.setup.workbench.edit;bundle-version="[1.8.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.workingsets;bundle-version="[1.8.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.workingsets.edit;bundle-version="[1.8.0,2.0.0)";resolution:=optional;visibility:=reexport
-Export-Package: org.eclipse.oomph.setup.doc;version="1.8.0";x-internal:=true,
- org.eclipse.oomph.setup.doc.concepts;version="1.8.0";x-internal:=true,
- org.eclipse.oomph.setup.doc.online;version="1.8.0";x-internal:=true,
- org.eclipse.oomph.setup.doc.reference;version="1.8.0";x-internal:=true,
- org.eclipse.oomph.setup.doc.reference.api;version="1.8.0";x-internal:=true,
- org.eclipse.oomph.setup.doc.reference.schema;version="1.8.0";x-internal:=true,
- org.eclipse.oomph.setup.doc.user;version="1.8.0";x-internal:=true,
- org.eclipse.oomph.setup.doc.user.wizard;version="1.8.0";x-internal:=true
+Export-Package: org.eclipse.oomph.setup.doc;version="1.9.0";x-internal:=true,
+ org.eclipse.oomph.setup.doc.concepts;version="1.9.0";x-internal:=true,
+ org.eclipse.oomph.setup.doc.online;version="1.9.0";x-internal:=true,
+ org.eclipse.oomph.setup.doc.reference;version="1.9.0";x-internal:=true,
+ org.eclipse.oomph.setup.doc.reference.api;version="1.9.0";x-internal:=true,
+ org.eclipse.oomph.setup.doc.reference.schema;version="1.9.0";x-internal:=true,
+ org.eclipse.oomph.setup.doc.user;version="1.9.0";x-internal:=true,
+ org.eclipse.oomph.setup.doc.user.wizard;version="1.9.0";x-internal:=true
