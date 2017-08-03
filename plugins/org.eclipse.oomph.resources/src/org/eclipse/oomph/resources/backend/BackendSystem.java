@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.ProgressMonitorWrapper;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -160,7 +161,7 @@ public abstract class BackendSystem extends BackendContainer
       }
     }
 
-    result.sort(new Comparator<BackendResource>()
+    Collections.sort(result, new Comparator<BackendResource>()
     {
       public int compare(BackendResource r1, BackendResource r2)
       {
