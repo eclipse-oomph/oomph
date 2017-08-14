@@ -246,6 +246,9 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
       <choice
+          value="Photon"
+          label="Eclipse Photon- 4.8"/>
+      <choice
           value="Oxygen"
           label="Eclipse Oxygen - 4.7"/>
       <choice
@@ -285,6 +288,9 @@
         label="API Baseline Target Platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <choice
+          value="Photon"
+          label="Eclipse Photon- 4.8"/>
       <choice
           value="Oxygen"
           label="Eclipse Oxygen - 4.7"/>
@@ -374,9 +380,14 @@
       <repositoryList
           name="None"/>
       <repositoryList
+          name="Photon">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.8-I-builds"/>
+      </repositoryList>
+      <repositoryList
           name="Oxygen">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.7-I-builds"/>
+            url="http://download.eclipse.org/eclipse/updates/4.7"/>
       </repositoryList>
       <repositoryList
           name="Neon">
@@ -432,9 +443,14 @@
       <repositoryList
           name="None"/>
       <repositoryList
+          name="Photon">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.8-I-builds"/>
+      </repositoryList>
+      <repositoryList
           name="Oxygen">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.7-I-builds"/>
+            url="http://download.eclipse.org/eclipse/updates/4.7"/>
       </repositoryList>
       <repositoryList
           name="Neon">
