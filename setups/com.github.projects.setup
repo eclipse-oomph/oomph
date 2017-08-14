@@ -141,6 +141,9 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
       <choice
+          value="Photon"
+          label="Eclipse Photon- 4.8"/>
+      <choice
           value="Oxygen"
           label="Eclipse Oxygen - 4.7"/>
       <choice
