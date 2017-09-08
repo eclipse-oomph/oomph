@@ -442,7 +442,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       }
 
       Profile currentProfile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
-      String installFolderLocation = currentProfile.getProperty(IProfile.PROP_INSTALL_FOLDER);
+      String installFolderLocation = currentProfile != null ? currentProfile.getProperty(IProfile.PROP_INSTALL_FOLDER) : null;
       if (installFolderLocation != null)
       {
         BundlePool bundlePool = currentProfile.getBundlePool();
