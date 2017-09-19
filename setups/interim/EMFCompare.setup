@@ -67,7 +67,7 @@
     <requirement
         name="org.eclipselabs.emf.loophole.feature.group"/>
     <requirement
-        name="com.mountainminds.eclemma.feature.feature.group"/>
+        name="org.eclipse.eclemma.feature.feature.group"/>
     <repository
         url="http://download.eclipse.org/egit/updates/"/>
     <repository
