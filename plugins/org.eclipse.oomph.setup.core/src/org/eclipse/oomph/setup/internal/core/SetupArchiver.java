@@ -25,19 +25,26 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
@@ -55,6 +62,90 @@ public class SetupArchiver implements IApplication
     // The default target file is the cache location of the local setup archive.
     final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
     final URIConverter uriConverter = resourceSet.getURIConverter();
+
+    for (ListIterator<URIHandler> it = uriConverter.getURIHandlers().listIterator(); it.hasNext();)
+    {
+      // Create a delegating handling for ECFURIHandler...
+      // The GITC is serving bytes that randomly have trailing garbage.
+      final URIHandler uriHandler = it.next();
+      if (uriHandler instanceof ECFURIHandlerImpl)
+      {
+        it.set(new URIHandler()
+        {
+          public void setAttributes(URI uri, Map<String, ?> attributes, Map<?, ?> options) throws IOException
+          {
+            uriHandler.setAttributes(uri, attributes, options);
+          }
+
+          public Map<String, ?> getAttributes(URI uri, Map<?, ?> options)
+          {
+            return uriHandler.getAttributes(uri, options);
+          }
+
+          public boolean exists(URI uri, Map<?, ?> options)
+          {
+            return uriHandler.exists(uri, options);
+          }
+
+          public void delete(URI uri, Map<?, ?> options) throws IOException
+          {
+            uriHandler.delete(uri, options);
+          }
+
+          public OutputStream createOutputStream(URI uri, Map<?, ?> options) throws IOException
+          {
+            return uriHandler.createOutputStream(uri, options);
+          }
+
+          public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
+          {
+            InputStream result = uriHandler.createInputStream(uri, options);
+            try
+            {
+              // Copy the bytes out of the stream.
+              ByteArrayOutputStream initialOut = new ByteArrayOutputStream();
+              IOUtil.copy(result, initialOut);
+              byte[] initialBytes = initialOut.toByteArray();
+
+              // Create yet another stream.
+              result = uriHandler.createInputStream(uri, options);
+
+              // Read this one too, and check if the bytes are the same.
+              ByteArrayOutputStream secondaryOut = new ByteArrayOutputStream();
+              IOUtil.copy(result, secondaryOut);
+              byte[] secondaryBytes = secondaryOut.toByteArray();
+              if (Arrays.equals(initialBytes, secondaryBytes))
+              {
+                // If so we can return a stream for those bytes.
+                return new ByteArrayInputStream(initialBytes);
+              }
+              else
+              {
+                // If not, we fail early so we don't even try to load the resource.
+                // This way we don't end up with a resource with what's likely to be bad contents.
+                // At least for XML parsing fails, but with images, we can't check if the image is valid.
+                throw new IOException("The server is delivering inconsistent results for " + uri);
+              }
+            }
+            catch (IORuntimeException ex)
+            {
+              throw new IOException(ex);
+            }
+          }
+
+          public Map<String, ?> contentDescription(URI uri, Map<?, ?> options) throws IOException
+          {
+            return uriHandler.contentDescription(uri, options);
+          }
+
+          public boolean canHandle(URI uri)
+          {
+            return uriHandler.canHandle(uri);
+          }
+        });
+      }
+    }
+
     URI archiveLocation = uriConverter.normalize(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI);
     File file = new File(ECFURIHandlerImpl.getCacheFile(archiveLocation).toFileString());
 
@@ -213,71 +304,92 @@ public class SetupArchiver implements IApplication
 
     uriMap.remove(SetupContext.INDEX_ROOT_LOCATION_URI);
 
-    boolean hasFailures = false;
+    // If Ecore models fail to load correct, the org.eclipse.setup will resolve the package proxies incorrectly and will look changed.
+    // We don't want that, so terminate early.
+    boolean hasEcoreFailures = false;
     for (Resource resource : resourceSet.getResources())
     {
       URI uri = resource.getURI();
-
       URI normalizedURI = uriConverter.normalize(uri);
-      String scheme = normalizedURI.scheme();
-      if (normalizedURI.query() == null && ("http".equals(scheme) || "https".equals(scheme)))
+      if ("ecore".equals(uri.fileExtension()) && (resource.getContents().isEmpty() || !resource.getErrors().isEmpty()))
       {
-        URI path = URI.createURI(scheme);
-        path = path.appendSegment(normalizedURI.authority());
-        path = path.appendSegments(normalizedURI.segments());
-        System.out.println("Mirroring " + normalizedURI);
+        System.err.println("FAILED to load " + normalizedURI);
+        printDiagnostics(resource.getErrors());
+        System.err.println("Aborting");
+        hasEcoreFailures = true;
+        break;
+      }
+    }
 
-        URI output = path.resolve(outputLocation);
-        entryNames.remove(path.toString());
-        uriMap.put(uri, output);
+    if (!hasEcoreFailures)
+    {
+      boolean hasFailures = false;
+      for (Resource resource : resourceSet.getResources())
+      {
+        URI uri = resource.getURI();
 
-        if (resource.getContents().isEmpty())
+        URI normalizedURI = uriConverter.normalize(uri);
+        String scheme = normalizedURI.scheme();
+        if (normalizedURI.query() == null && ("http".equals(scheme) || "https".equals(scheme)))
         {
-          System.err.println("FAILED to load " + normalizedURI);
-          hasFailures = true;
+          URI path = URI.createURI(scheme);
+          path = path.appendSegment(normalizedURI.authority());
+          path = path.appendSegments(normalizedURI.segments());
+          System.out.println("Mirroring " + normalizedURI);
+
+          URI output = path.resolve(outputLocation);
+          entryNames.remove(path.toString());
+          uriMap.put(uri, output);
+
+          if (resource.getContents().isEmpty() || !resource.getErrors().isEmpty())
+          {
+            System.err.println("FAILED to load " + normalizedURI);
+            printDiagnostics(resource.getErrors());
+            hasFailures = true;
+          }
+          else
+          {
+            try
+            {
+              long before = resource.getTimeStamp();
+              resource.save(options);
+              long after = resource.getTimeStamp();
+
+              if (after - before > 0)
+              {
+                System.err.println("CHANGED! " + normalizedURI);
+              }
+            }
+            catch (IOException ex)
+            {
+              System.err.println("FAILED to save " + normalizedURI);
+              ex.printStackTrace();
+            }
+          }
         }
         else
         {
-          try
-          {
-            long before = resource.getTimeStamp();
-            resource.save(options);
-            long after = resource.getTimeStamp();
-
-            if (after - before > 0)
-            {
-              System.err.println("CHANGED! " + normalizedURI);
-            }
-          }
-          catch (IOException ex)
-          {
-            System.err.println("FAILED to save " + normalizedURI);
-            ex.printStackTrace();
-          }
+          System.out.println("Ignoring  " + normalizedURI);
         }
+      }
+
+      if (hasFailures)
+      {
+        System.err.println("There were failures so no entries will be deleted from the archive");
       }
       else
       {
-        System.out.println("Ignoring  " + normalizedURI);
-      }
-    }
-
-    if (hasFailures)
-    {
-      System.err.println("There were failures so no entries will be deleted from the archive");
-    }
-    else
-    {
-      for (String entryName : entryNames)
-      {
-        URI archiveEntry = URI.createURI(outputLocation + entryName);
-        try
+        for (String entryName : entryNames)
         {
-          uriConverter.delete(archiveEntry, null);
-        }
-        catch (IOException ex)
-        {
-          ex.printStackTrace();
+          URI archiveEntry = URI.createURI(outputLocation + entryName);
+          try
+          {
+            uriConverter.delete(archiveEntry, null);
+          }
+          catch (IOException ex)
+          {
+            ex.printStackTrace();
+          }
         }
       }
     }
@@ -409,6 +521,14 @@ public class SetupArchiver implements IApplication
     }
 
     return false;
+  }
+
+  private void printDiagnostics(List<Resource.Diagnostic> diagnostics)
+  {
+    for (Resource.Diagnostic diagnostic : diagnostics)
+    {
+      System.err.println("  ERROR: " + diagnostic.getMessage() + " " + diagnostic.getLine() + " " + diagnostic.getLine() + " " + diagnostic.getColumn());
+    }
   }
 
   public void stop()
