@@ -228,6 +228,11 @@ public final class AboutDialog extends AbstractSetupDialog
 
   private List<IInstallableUnit> getPlugins()
   {
+    if (profile == null)
+    {
+      return Collections.emptyList();
+    }
+
     List<IInstallableUnit> plugins = new ArrayList<IInstallableUnit>();
     for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), null)))
     {

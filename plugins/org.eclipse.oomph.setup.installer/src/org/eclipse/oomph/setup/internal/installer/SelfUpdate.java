@@ -121,6 +121,11 @@ public class SelfUpdate
   {
     Agent agent = P2Util.getAgentManager().getCurrentAgent();
     Profile profile = agent.getCurrentProfile();
+    if (profile == null)
+    {
+      return null;
+    }
+
     ProfileTransaction transaction = profile.change();
 
     SelfCommitContext commitContext = new SelfCommitContext(user);
