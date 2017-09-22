@@ -56,12 +56,12 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Oxygen"
+      defaultValue="Photon"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.api.baseline.target.platform"
-      value="Neon"
+      value="Oxygen"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup:EclipseIniTask"
@@ -110,11 +110,18 @@
       <requirement
           name="org.eclipse.equinox.executable.feature.group"/>
       <repositoryList
+          name="Photon">
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
+        <repository
+            url="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
+      </repositoryList>
+      <repositoryList
           name="Oxygen">
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
         <repository
-            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+            url="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
       </repositoryList>
       <repositoryList
           name="Neon">
@@ -247,7 +254,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Oxygen"
+          value="Photon"
           storageURI="scope://Workspace"/>
     </stream>
   </project>
@@ -300,7 +307,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Oxygen"
+          value="Photon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform documentation</description>
@@ -384,7 +391,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Oxygen"
+          value="Photon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform Debug support</description>
@@ -429,6 +436,15 @@
             name="*"/>
         <sourceLocator
             rootFolder="${git.clone.platform.ui.tools.location}"/>
+        <repositoryList
+            name="Photon">
+          <repository
+              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+          <repository
+              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11.x"/>
+          <repository
+              url="http://download.eclipse.org/tools/gef/updates/releases"/>
+        </repositoryList>
         <repositoryList
             name="Oxygen">
           <repository
@@ -503,7 +519,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Oxygen"
+          value="Photon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Platform UI Tools support</description>
