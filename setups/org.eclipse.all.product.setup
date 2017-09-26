@@ -22,6 +22,13 @@
   <version name="latest"
       label="Latest (Photon)"
       requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/Photon/M2</value>
+      </detail>
+    </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (Photon)">
@@ -107,12 +114,19 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.7.0,4.8.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/oxygen/201706281000"/>
+          url="http://download.eclipse.org/releases/oxygen"/>
     </setupTask>
   </version>
   <version name="photon"
       label="Photon"
       requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/Photon/M2</value>
+      </detail>
+    </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (Photon)">
@@ -198,7 +212,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.7.0,4.8.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/oxygen/201706281000"/>
+          url="http://download.eclipse.org/releases/oxygen"/>
     </setupTask>
   </version>
   <version name="neon"
