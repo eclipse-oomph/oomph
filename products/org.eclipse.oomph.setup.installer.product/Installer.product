@@ -4,7 +4,7 @@
 <product name="Eclipse Installer" 
          uid="org.eclipse.oomph.setup.installer.product" 
          id="org.eclipse.oomph.setup.installer.product" 
-         version="1.7.0.qualifier" 
+         version="1.9.0.qualifier" 
          application="org.eclipse.oomph.setup.installer.application" 
          useFeatures="true" 
          includeLaunchers="true">
