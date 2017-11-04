@@ -1263,6 +1263,12 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
                   return uri;
                 }
+
+                @Override
+                public boolean isPropertySet(Object object)
+                {
+                  return true;
+                }
               });
             }
 
