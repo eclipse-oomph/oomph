@@ -167,6 +167,11 @@
           rootFolder="$${git.clone.${project.name}.location}"
           locateNestedProjects="true"/>
       <repositoryList
+          name="Photon">
+        <repository
+            url="http://download.eclipse.org/releases/photon"/>
+      </repositoryList>
+      <repositoryList
           name="Oxygen">
         <repository
             url="http://download.eclipse.org/releases/oxygen"/>

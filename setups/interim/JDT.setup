@@ -87,6 +87,11 @@
       <requirement
           name="org.eclipse.equinox.executable.feature.group"/>
       <repositoryList
+          name="Photon">
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
+      </repositoryList>
+      <repositoryList
           name="Oxygen">
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
@@ -156,6 +161,8 @@
           includeAllPlatforms="true">
         <sourceLocator
             rootFolder="${git.clone.jdt.location}"/>
+        <repositoryList
+            name="Photon"/>
         <repositoryList
             name="Oxygen"/>
         <repositoryList
@@ -229,6 +236,8 @@
             name="org.eclipse.jdt.apt.ui"/>
         <sourceLocator
             rootFolder="${git.clone.jdt.core.location}"/>
+        <repositoryList
+            name="Photon"/>
         <repositoryList
             name="Oxygen"/>
         <repositoryList

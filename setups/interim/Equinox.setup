@@ -70,6 +70,11 @@
       <requirement
           name="org.eclipse.equinox.executable.feature.group"/>
       <repositoryList
+          name="Photon">
+        <repository
+            url="http://download.eclipse.org/cbi/updates/license"/>
+      </repositoryList>
+      <repositoryList
           name="Oxygen">
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
@@ -318,6 +323,11 @@
             name="*"/>
         <sourceLocator
             rootFolder="${git.clone.equinox.bundles.location}"/>
+        <repositoryList
+            name="Photon">
+          <repository
+              url="http://download.eclipse.org/tools/ajdt/44/dev/update"/>
+        </repositoryList>
         <repositoryList
             name="Oxygen">
           <repository

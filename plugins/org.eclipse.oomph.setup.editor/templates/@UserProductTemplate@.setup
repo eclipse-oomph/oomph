@@ -60,6 +60,9 @@
         storageURI="scope://Workspace"
         label="Eclipse release train">
       <choice
+          value="Photon"
+          label="Eclipse Photon - 4.8"/>
+      <choice
           value="Oxygen"
           label="Eclipse Oxygen - 4.7"/>
       <choice
