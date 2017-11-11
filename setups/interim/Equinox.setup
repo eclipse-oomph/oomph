@@ -232,7 +232,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Oxygen"
+          defaultValue="Photon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Equinox P2 support</description>
@@ -286,7 +286,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Oxygen"
+          defaultValue="Photon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Equinox Framework support</description>
@@ -321,6 +321,8 @@
           activeRepositoryList="${eclipse.target.platform}">
         <requirement
             name="*"/>
+        <requirement
+            name="org.apache.sshd.core"/>
         <sourceLocator
             rootFolder="${git.clone.equinox.bundles.location}"/>
         <repositoryList
@@ -375,7 +377,7 @@
       <setupTask
           xsi:type="setup:VariableTask"
           name="eclipse.target.platform"
-          value="Oxygen"
+          defaultValue="Photon"
           storageURI="scope://Workspace"/>
     </stream>
     <description>The Equinox Bundles support</description>
