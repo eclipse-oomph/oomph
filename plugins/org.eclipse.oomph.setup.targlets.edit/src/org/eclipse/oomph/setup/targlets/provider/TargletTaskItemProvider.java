@@ -579,32 +579,36 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                         final String vmArguments = targetDefinition.getVMArguments();
 
                         // Consider each target location, and an IU bundle container.
-                        for (ITargetLocation targetLocation : targetDefinition.getTargetLocations())
+                        ITargetLocation[] targetLocations = targetDefinition.getTargetLocations();
+                        if (targetLocations != null)
                         {
-                          if (targetLocation instanceof org.eclipse.pde.internal.core.target.IUBundleContainer)
+                          for (ITargetLocation targetLocation : targetLocations)
                           {
-                            org.eclipse.pde.internal.core.target.IUBundleContainer iuBundleContainer = (org.eclipse.pde.internal.core.target.IUBundleContainer)targetLocation;
-
-                            // Create a repository for each repository of that container.
-                            java.net.URI[] repositories = iuBundleContainer.getRepositories();
-                            for (java.net.URI repo : repositories)
+                            if (targetLocation instanceof org.eclipse.pde.internal.core.target.IUBundleContainer)
                             {
-                              URI repoURI = URI.createURI(repo.toString());
-                              if (repoURI.hasTrailingPathSeparator())
+                              org.eclipse.pde.internal.core.target.IUBundleContainer iuBundleContainer = (org.eclipse.pde.internal.core.target.IUBundleContainer)targetLocation;
+
+                              // Create a repository for each repository of that container.
+                              java.net.URI[] repositories = iuBundleContainer.getRepositories();
+                              for (java.net.URI repo : repositories)
                               {
-                                repoURI = repoURI.trimSegments(1);
+                                URI repoURI = URI.createURI(repo.toString());
+                                if (repoURI.hasTrailingPathSeparator())
+                                {
+                                  repoURI = repoURI.trimSegments(1);
+                                }
+
+                                repos.add(P2Factory.eINSTANCE.createRepository(repoURI.toString()));
                               }
 
-                              repos.add(P2Factory.eINSTANCE.createRepository(repoURI.toString()));
-                            }
+                              // Reflectively get the underlying IDs and Versions.
+                              String[] ids = (String[])ReflectUtil.invokeMethod("getIds", iuBundleContainer);
+                              Version[] versions = (Version[])ReflectUtil.invokeMethod("getVersions", iuBundleContainer);
 
-                            // Reflectively get the underlying IDs and Versions.
-                            String[] ids = (String[])ReflectUtil.invokeMethod("getIds", iuBundleContainer);
-                            Version[] versions = (Version[])ReflectUtil.invokeMethod("getVersions", iuBundleContainer);
-
-                            for (int i = 0, length = ids.length; i < length; ++i)
-                            {
-                              requirements.add(P2Factory.eINSTANCE.createRequirement(ids[i], versions[i]));
+                              for (int i = 0, length = ids.length; i < length; ++i)
+                              {
+                                requirements.add(P2Factory.eINSTANCE.createRequirement(ids[i], versions[i]));
+                              }
                             }
                           }
                         }

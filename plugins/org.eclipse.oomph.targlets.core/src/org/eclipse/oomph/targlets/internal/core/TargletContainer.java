@@ -792,12 +792,16 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       MIRRORS.set(mirrors ? Boolean.TRUE : false);
 
       // Clear the resolution statuses of the involved targlet containers.
-      for (ITargetLocation targetLocation : targetDefinition.getTargetLocations())
+      ITargetLocation[] targetLocations = targetDefinition.getTargetLocations();
+      if (targetLocations != null)
       {
-        if (targetLocation instanceof ITargletContainer)
+        for (ITargetLocation targetLocation : targetLocations)
         {
-          TargletContainer targletContainer = (TargletContainer)targetLocation;
-          targletContainer.clearResolutionStatus();
+          if (targetLocation instanceof ITargletContainer)
+          {
+            TargletContainer targletContainer = (TargletContainer)targetLocation;
+            targletContainer.clearResolutionStatus();
+          }
         }
       }
 

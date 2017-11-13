@@ -319,12 +319,16 @@ public class ManifestDiscovery
 
     if (targetDefinition != null)
     {
-      for (ITargetLocation targetLocation : targetDefinition.getTargetLocations())
+      ITargetLocation[] targetLocations = targetDefinition.getTargetLocations();
+      if (targetLocations != null)
       {
-        if (targetLocation instanceof ITargletContainer)
+        for (ITargetLocation targetLocation : targetLocations)
         {
-          ITargletContainer targletContainer = (ITargletContainer)targetLocation;
-          result.add(targletContainer);
+          if (targetLocation instanceof ITargletContainer)
+          {
+            ITargletContainer targletContainer = (ITargletContainer)targetLocation;
+            result.add(targletContainer);
+          }
         }
       }
     }
