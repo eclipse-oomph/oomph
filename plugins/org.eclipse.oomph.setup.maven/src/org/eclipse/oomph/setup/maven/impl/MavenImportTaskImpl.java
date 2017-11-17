@@ -408,8 +408,11 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
         }
       }
 
-      Collection<MavenProjectInfo> projects = projectInfo.getProjects();
-      processMavenProject(sourceLocator, projectInfos, projects, MonitorUtil.create(monitor, 5));
+      if (sourceLocator.isLocateNestedProjects())
+      {
+        Collection<MavenProjectInfo> projects = projectInfo.getProjects();
+        processMavenProject(sourceLocator, projectInfos, projects, MonitorUtil.create(monitor, 5));
+      }
     }
     finally
     {
