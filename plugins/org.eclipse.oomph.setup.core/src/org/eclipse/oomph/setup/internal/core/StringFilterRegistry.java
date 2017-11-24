@@ -16,6 +16,8 @@ import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -26,6 +28,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -365,6 +368,41 @@ public class StringFilterRegistry
         return result == null ? "" : result;
       }
     });
+
+    registerFilter("base64", new ParameterizedStringFilter()
+    {
+      public String filter(String value)
+      {
+        return filter(value, null);
+      }
+
+      public String filter(String value, String argument)
+      {
+        try
+        {
+          Charset charset;
+          if (value.startsWith("<?xml"))
+          {
+            String xmlEncoding = URIConverter.ReadableInputStream.getEncoding(value);
+            charset = Charset.forName(xmlEncoding == null ? "UTF-8" : xmlEncoding);
+          }
+          else if (argument != null)
+          {
+            charset = Charset.forName(argument.toUpperCase());
+          }
+          else
+          {
+            charset = Charset.defaultCharset();
+          }
+
+          return XMLTypeFactory.eINSTANCE.convertBase64Binary(value.getBytes(charset));
+        }
+        catch (Exception ex)
+        {
+          return value;
+        }
+      }
+    });
   }
 
   public static void main(String[] args) throws UnsupportedEncodingException
@@ -375,12 +413,23 @@ public class StringFilterRegistry
   public String filter(String value, String filterName)
   {
     StringFilter filter = filters.get(filterName.toLowerCase());
-    if (filter != null)
+    if (filter == null)
     {
-      return filter.filter(value);
+      int argumentIndex = filterName.indexOf('.');
+      if (argumentIndex != -1)
+      {
+        filter = filters.get(filterName.substring(0, argumentIndex).toLowerCase());
+        if (filter instanceof ParameterizedStringFilter)
+        {
+          ParameterizedStringFilter parameterizedStringFilter = (ParameterizedStringFilter)filter;
+          return parameterizedStringFilter.filter(value, filterName.substring(argumentIndex + 1));
+        }
+      }
+
+      return value;
     }
 
-    return value;
+    return filter.filter(value);
   }
 
   void initContributions()

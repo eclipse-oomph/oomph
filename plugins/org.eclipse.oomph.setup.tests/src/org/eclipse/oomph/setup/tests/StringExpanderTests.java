@@ -12,14 +12,18 @@ package org.eclipse.oomph.setup.tests;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.eclipse.oomph.setup.internal.core.StringFilterRegistry;
 import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.tests.AbstractTest;
+
+import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -221,6 +225,40 @@ public class StringExpanderTests extends AbstractTest
         is("START${windows.path/ws|property}C:\\\\develop\\\\java-latest\\\\wsEND"));
   }
 
+  @Test
+  public void testBase64FilterTextWithDefaultEncoding() throws Exception
+  {
+    // NOTE: unparameterised base64 filter uses the platform default encoding.
+    String base64 = XMLTypeFactory.eINSTANCE.convertBase64Binary("CAFEBABE".getBytes(Charset.defaultCharset()));
+    assertThat(expander.expandString("START${text.ascii|base64}END"), is("START" + base64 + "END"));
+  }
+
+  @Test
+  public void testBase64FilterTextWithExplicitEncoding() throws Exception
+  {
+    // NOTE: test portability: every JRE is required to support UTF-8 and ISO-8859-1.
+    assertThat(expander.expandString("START${text.extended|base64.iso-8859-1}END"), is("STARTx8Teyd/F38s=END"));
+    assertThat(expander.expandString("START${text.extended|base64.utf-8}END"), is("STARTw4fDhMOew4nDn8OFw5/Diw==END"));
+  }
+
+  @Test
+  public void testBase64FilterXmlWithDefaultEncoding() throws Exception
+  {
+    String expected = "STARTPD94bWwgdmVyc2lvbj0iMS4wIj8+DQo8cm9vdCBpZD0idTEyMyI+DQoJPGNoaWxkPkNBRkVCQUJFPC9jaGlsZD4NCjwvcm9vdD4=END";
+    assertThat(expander.expandString("START${xml.default|base64}END"), is(expected));
+    // NOTE: A filter argument cannot override the default XML UTF-8 encoding.
+    assertThat(expander.expandString("START${xml.default|base64.iso-8859-1}END"), is(expected));
+  }
+
+  @Test
+  public void testBase64FilterXmlWithExplicitEncoding() throws Exception
+  {
+    // NOTE: A filter argument cannot override the explicit or implicit XML encoding.
+    String expected = "STARTPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/Pg0KPHJvb3QgaWQ9IrW5srMiPg0KCTxjaGlsZD7HxN7J38XfyzwvY2hpbGQ+DQo8L3Jvb3Q+END";
+    assertThat(expander.expandString("START${xml.iso-8859-1|base64}END"), is(expected));
+    assertThat(expander.expandString("START${xml.iso-8859-1|base64.utf-8}END"), is(expected));
+  }
+
   /**
    * @author Eike Stepper
    */
@@ -233,6 +271,12 @@ public class StringExpanderTests extends AbstractTest
       variables.put("windows.path", "C:\\develop\\java-latest");
       variables.put("unix.path", "/develop/java-latest");
       variables.put("user.name", "stepper");
+      variables.put("text.ascii", "CAFEBABE");
+      variables.put("text.extended", /* "ÇÄÞÉßÅßË" */"\u00C7\u00C4\u00DE\u00C9\u00DF\u00C5\u00DF\u00CB");
+      variables.put("xml.default", "<?xml version=\"1.0\"?>\r\n<root id=\"u123\">\r\n\t<child>CAFEBABE</child>\r\n</root>");
+      variables.put("xml.iso-8859-1",
+          /* "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n<root id=\"µ¹²³\">\r\n\t<child>ÇÄÞÉßÅßË</child>\r\n</root>" */
+          "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n<root id=\"\u00B5\u00B9\u00B2\u00B3\">\r\n\t<child>\u00C7\u00C4\u00DE\u00C9\u00DF\u00C5\u00DF\u00CB</child>\r\n</root>");
     }
 
     @Override
@@ -256,12 +300,7 @@ public class StringExpanderTests extends AbstractTest
     @Override
     protected String filter(String value, String filterName)
     {
-      if ("property".equals(filterName))
-      {
-        return value.replaceAll("\\\\", "\\\\\\\\");
-      }
-
-      return value;
+      return StringFilterRegistry.INSTANCE.filter(value, filterName);
     }
   }
 }

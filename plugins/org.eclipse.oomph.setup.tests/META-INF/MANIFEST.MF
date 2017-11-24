@@ -23,4 +23,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.oomph.p2.core;bundle-version="[1.8.0,2.0.0)",
  org.eclipse.oomph.setup.core;bundle-version="[1.9.0,2.0.0)",
  org.eclipse.oomph.setup.p2;bundle-version="[1.8.0,2.0.0)",
- org.eclipse.oomph.tests;bundle-version="[1.8.0,2.0.0)"
+ org.eclipse.oomph.tests;bundle-version="[1.8.0,2.0.0)",
+ org.eclipse.oomph.setup.jdt;bundle-version="[1.8.0,2.0.0)",
+ org.eclipse.jdt.launching;bundle-version="[3.6.0,4.0.0)"
