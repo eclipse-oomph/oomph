@@ -164,6 +164,29 @@ public abstract class ExternalResource extends PlatformObject implements IResour
     throw new ReadOnlyException();
   }
 
+  @Override
+  public int hashCode()
+  {
+    // Same as o.e.c.i.Resource.hashCode()
+    return getFullPath().hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj)
+  {
+    // Similar to o.e.c.i.Resource.equals(Object)
+    if (this == obj)
+    {
+      return true;
+    }
+    if (!(obj instanceof ExternalResource))
+    {
+      return false;
+    }
+    ExternalResource other = (ExternalResource)obj;
+    return getType() == other.getType() && getFullPath().equals(other.getFullPath());
+  }
+
   public boolean exists()
   {
     return backendResource.exists(new NullProgressMonitor());

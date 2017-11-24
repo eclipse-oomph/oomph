@@ -39,7 +39,10 @@ public interface ProjectHandler
 
     public void handleProject(IProject project, BackendContainer backendContainer)
     {
-      projectMap.put(project, backendContainer);
+      if (!projectMap.containsKey(project))
+      {
+        projectMap.put(project, backendContainer);
+      }
     }
 
     public Map<IProject, BackendContainer> getProjectMap()
