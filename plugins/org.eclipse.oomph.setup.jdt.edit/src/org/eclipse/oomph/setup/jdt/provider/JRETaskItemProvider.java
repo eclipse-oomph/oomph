@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.jdt.provider;
 
+import org.eclipse.oomph.setup.jdt.JDTFactory;
 import org.eclipse.oomph.setup.jdt.JDTPackage;
 import org.eclipse.oomph.setup.jdt.JRETask;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
@@ -296,6 +297,9 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
       case JDTPackage.JRE_TASK__VM_ARGUMENTS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
+      case JDTPackage.JRE_TASK__JRE_LIBRARIES:
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+        return;
     }
     super.notifyChanged(notification);
   }
@@ -311,6 +315,8 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+
+    newChildDescriptors.add(createChildParameter(JDTPackage.Literals.JRE_TASK__JRE_LIBRARIES, JDTFactory.eINSTANCE.createJRELibrary()));
   }
 
   /**

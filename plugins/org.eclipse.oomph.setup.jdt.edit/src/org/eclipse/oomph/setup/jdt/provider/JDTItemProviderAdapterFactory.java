@@ -119,6 +119,31 @@ public class JDTItemProviderAdapterFactory extends JDTAdapterFactory implements 
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.jdt.JRELibrary} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected JRELibraryItemProvider jreLibraryItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.jdt.JRELibrary}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createJRELibraryAdapter()
+  {
+    if (jreLibraryItemProvider == null)
+    {
+      jreLibraryItemProvider = new JRELibraryItemProvider(this);
+    }
+
+    return jreLibraryItemProvider;
+  }
+
+  /**
    * This returns the root adapter factory that contains this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -233,6 +258,10 @@ public class JDTItemProviderAdapterFactory extends JDTAdapterFactory implements 
     {
       jreTaskItemProvider.dispose();
     }
+    if (jreLibraryItemProvider != null)
+    {
+      jreLibraryItemProvider.dispose();
+    }
   }
 
   /**
@@ -288,6 +317,8 @@ public class JDTItemProviderAdapterFactory extends JDTAdapterFactory implements 
       public Object caseAnnotation(Annotation object)
       {
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, JDTFactory.eINSTANCE.createJRETask()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, JDTFactory.eINSTANCE.createJRELibrary()));
 
         return null;
       }

@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.jdt.util;
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.jdt.JDTPackage;
+import org.eclipse.oomph.setup.jdt.JRELibrary;
 import org.eclipse.oomph.setup.jdt.JRETask;
 
 import org.eclipse.emf.ecore.EObject;
@@ -100,6 +101,16 @@ public class JDTSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case JDTPackage.JRE_LIBRARY:
+      {
+        JRELibrary jreLibrary = (JRELibrary)theEObject;
+        T result = caseJRELibrary(jreLibrary);
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       default:
         return defaultCase(theEObject);
     }
@@ -117,6 +128,22 @@ public class JDTSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseJRETask(JRETask object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>JRE Library</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>JRE Library</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseJRELibrary(JRELibrary object)
   {
     return null;
   }

@@ -15,6 +15,7 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
@@ -223,13 +224,59 @@ public interface JDTPackage extends EPackage
   int JRE_TASK__VM_ARGUMENTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
 
   /**
+   * The feature id for the '<em><b>JRE Libraries</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int JRE_TASK__JRE_LIBRARIES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
+
+  /**
    * The number of structural features of the '<em>JRE Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int JRE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
+  int JRE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 7;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.jdt.impl.JRELibraryImpl <em>JRE Library</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.jdt.impl.JRELibraryImpl
+   * @see org.eclipse.oomph.setup.jdt.impl.JDTPackageImpl#getJRELibrary()
+   * @generated
+   */
+  int JRE_LIBRARY = 1;
+
+  /**
+   * The feature id for the '<em><b>Library Path</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int JRE_LIBRARY__LIBRARY_PATH = 0;
+
+  /**
+   * The feature id for the '<em><b>External Annotations Path</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int JRE_LIBRARY__EXTERNAL_ANNOTATIONS_PATH = 1;
+
+  /**
+   * The number of structural features of the '<em>JRE Library</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int JRE_LIBRARY_FEATURE_COUNT = 2;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.jdt.JRETask <em>JRE Task</em>}'.
@@ -306,6 +353,49 @@ public interface JDTPackage extends EPackage
    * @generated
    */
   EAttribute getJRETask_VMArguments();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.jdt.JRETask#getJRELibraries <em>JRE Libraries</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>JRE Libraries</em>'.
+   * @see org.eclipse.oomph.setup.jdt.JRETask#getJRELibraries()
+   * @see #getJRETask()
+   * @generated
+   */
+  EReference getJRETask_JRELibraries();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.jdt.JRELibrary <em>JRE Library</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>JRE Library</em>'.
+   * @see org.eclipse.oomph.setup.jdt.JRELibrary
+   * @generated
+   */
+  EClass getJRELibrary();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.jdt.JRELibrary#getLibraryPath <em>Library Path</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Library Path</em>'.
+   * @see org.eclipse.oomph.setup.jdt.JRELibrary#getLibraryPath()
+   * @see #getJRELibrary()
+   * @generated
+   */
+  EAttribute getJRELibrary_LibraryPath();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.jdt.JRELibrary#getExternalAnnotationsPath <em>External Annotations Path</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>External Annotations Path</em>'.
+   * @see org.eclipse.oomph.setup.jdt.JRELibrary#getExternalAnnotationsPath()
+   * @see #getJRELibrary()
+   * @generated
+   */
+  EAttribute getJRELibrary_ExternalAnnotationsPath();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -387,6 +477,40 @@ public interface JDTPackage extends EPackage
      * @generated
      */
     EAttribute JRE_TASK__VM_ARGUMENTS = eINSTANCE.getJRETask_VMArguments();
+
+    /**
+     * The meta object literal for the '<em><b>JRE Libraries</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference JRE_TASK__JRE_LIBRARIES = eINSTANCE.getJRETask_JRELibraries();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.jdt.impl.JRELibraryImpl <em>JRE Library</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.jdt.impl.JRELibraryImpl
+     * @see org.eclipse.oomph.setup.jdt.impl.JDTPackageImpl#getJRELibrary()
+     * @generated
+     */
+    EClass JRE_LIBRARY = eINSTANCE.getJRELibrary();
+
+    /**
+     * The meta object literal for the '<em><b>Library Path</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute JRE_LIBRARY__LIBRARY_PATH = eINSTANCE.getJRELibrary_LibraryPath();
+
+    /**
+     * The meta object literal for the '<em><b>External Annotations Path</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute JRE_LIBRARY__EXTERNAL_ANNOTATIONS_PATH = eINSTANCE.getJRELibrary_ExternalAnnotationsPath();
 
   }
 

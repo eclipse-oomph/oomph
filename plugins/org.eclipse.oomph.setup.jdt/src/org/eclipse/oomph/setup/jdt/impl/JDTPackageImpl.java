@@ -14,11 +14,13 @@ import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.jdt.JDTFactory;
 import org.eclipse.oomph.setup.jdt.JDTPackage;
+import org.eclipse.oomph.setup.jdt.JRELibrary;
 import org.eclipse.oomph.setup.jdt.JRETask;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -35,6 +37,13 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * @generated
    */
   private EClass jreTaskEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass jreLibraryEClass = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -83,8 +92,8 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     }
 
     // Obtain or create and register package
-    JDTPackageImpl theJDTPackage = (JDTPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof JDTPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI)
-        : new JDTPackageImpl());
+    Object registeredJDTPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    JDTPackageImpl theJDTPackage = registeredJDTPackage instanceof JDTPackageImpl ? (JDTPackageImpl)registeredJDTPackage : new JDTPackageImpl();
 
     isInited = true;
 
@@ -181,6 +190,46 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getJRETask_JRELibraries()
+  {
+    return (EReference)jreTaskEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getJRELibrary()
+  {
+    return jreLibraryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getJRELibrary_LibraryPath()
+  {
+    return (EAttribute)jreLibraryEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getJRELibrary_ExternalAnnotationsPath()
+  {
+    return (EAttribute)jreLibraryEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public JDTFactory getJDTFactory()
   {
     return (JDTFactory)getEFactoryInstance();
@@ -216,6 +265,11 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     createEAttribute(jreTaskEClass, JRE_TASK__VM_INSTALL_TYPE);
     createEAttribute(jreTaskEClass, JRE_TASK__EXECUTION_ENVIRONMENT_DEFAULT);
     createEAttribute(jreTaskEClass, JRE_TASK__VM_ARGUMENTS);
+    createEReference(jreTaskEClass, JRE_TASK__JRE_LIBRARIES);
+
+    jreLibraryEClass = createEClass(JRE_LIBRARY);
+    createEAttribute(jreLibraryEClass, JRE_LIBRARY__LIBRARY_PATH);
+    createEAttribute(jreLibraryEClass, JRE_LIBRARY__EXTERNAL_ANNOTATIONS_PATH);
   }
 
   /**
@@ -269,6 +323,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getJRETask_VMArguments(), ecorePackage.getEString(), "vMArguments", null, 0, 1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getJRETask_JRELibraries(), getJRELibrary(), null, "jRELibraries", null, 0, -1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(jreLibraryEClass, JRELibrary.class, "JRELibrary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getJRELibrary_LibraryPath(), ecorePackage.getEString(), "libraryPath", null, 1, 1, JRELibrary.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getJRELibrary_ExternalAnnotationsPath(), ecorePackage.getEString(), "externalAnnotationsPath", null, 1, 1, JRELibrary.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore");
@@ -376,6 +438,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
     addAnnotation(getJRETask_VMInstallType(), source, new String[] { "kind", "attribute", "name", "vmInstallType" });
     addAnnotation(getJRETask_VMArguments(), source, new String[] { "kind", "attribute", "name", "vmArguments" });
+    addAnnotation(getJRETask_JRELibraries(), source, new String[] { "name", "jreLibrary" });
   }
 
   /**

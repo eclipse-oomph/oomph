@@ -40,6 +40,15 @@ public interface JDTFactory extends EFactory
   JRETask createJRETask();
 
   /**
+   * Returns a new object of class '<em>JRE Library</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>JRE Library</em>'.
+   * @generated
+   */
+  JRELibrary createJRELibrary();
+
+  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

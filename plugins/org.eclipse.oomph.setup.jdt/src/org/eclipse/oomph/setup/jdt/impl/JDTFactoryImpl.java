@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.jdt.impl;
 
 import org.eclipse.oomph.setup.jdt.JDTFactory;
 import org.eclipse.oomph.setup.jdt.JDTPackage;
+import org.eclipse.oomph.setup.jdt.JRELibrary;
 import org.eclipse.oomph.setup.jdt.JRETask;
 
 import org.eclipse.emf.ecore.EClass;
@@ -74,6 +75,8 @@ public class JDTFactoryImpl extends EFactoryImpl implements JDTFactory
     {
       case JDTPackage.JRE_TASK:
         return createJRETask();
+      case JDTPackage.JRE_LIBRARY:
+        return createJRELibrary();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -88,6 +91,17 @@ public class JDTFactoryImpl extends EFactoryImpl implements JDTFactory
   {
     JRETaskImpl jreTask = new JRETaskImpl();
     return jreTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public JRELibrary createJRELibrary()
+  {
+    JRELibraryImpl jreLibrary = new JRELibraryImpl();
+    return jreLibrary;
   }
 
   /**

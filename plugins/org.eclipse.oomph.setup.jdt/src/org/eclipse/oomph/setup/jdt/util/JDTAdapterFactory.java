@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.jdt.util;
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.jdt.JDTPackage;
+import org.eclipse.oomph.setup.jdt.JRELibrary;
 import org.eclipse.oomph.setup.jdt.JRETask;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -89,6 +90,12 @@ public class JDTAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
+    public Adapter caseJRELibrary(JRELibrary object)
+    {
+      return createJRELibraryAdapter();
+    }
+
+    @Override
     public Adapter caseModelElement(ModelElement object)
     {
       return createModelElementAdapter();
@@ -132,6 +139,21 @@ public class JDTAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createJRETaskAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.jdt.JRELibrary <em>JRE Library</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.jdt.JRELibrary
+   * @generated
+   */
+  public Adapter createJRELibraryAdapter()
   {
     return null;
   }

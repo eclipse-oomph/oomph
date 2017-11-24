@@ -12,6 +12,8 @@ package org.eclipse.oomph.setup.jdt;
 
 import org.eclipse.oomph.setup.SetupTask;
 
+import org.eclipse.emf.common.util.EList;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>JRE Task</b></em>'.
@@ -27,6 +29,7 @@ import org.eclipse.oomph.setup.SetupTask;
  *   <li>{@link org.eclipse.oomph.setup.jdt.JRETask#getVMInstallType <em>VM Install Type</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.jdt.JRETask#isExecutionEnvironmentDefault <em>Execution Environment Default</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.jdt.JRETask#getVMArguments <em>VM Arguments</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.jdt.JRETask#getJRELibraries <em>JRE Libraries</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.jdt.JDTPackage#getJRETask()
@@ -202,5 +205,25 @@ public interface JRETask extends SetupTask
    * @generated
    */
   void setVMArguments(String value);
+
+  /**
+   * Returns the value of the '<em><b>JRE Libraries</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.oomph.setup.jdt.JRELibrary}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>JRE Libraries</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * <!-- begin-model-doc -->
+   * A list of JRE Library JARs for which external annotations are being supplied.
+   * <!-- end-model-doc -->
+   * @return the value of the '<em>JRE Libraries</em>' containment reference list.
+   * @see org.eclipse.oomph.setup.jdt.JDTPackage#getJRETask_JRELibraries()
+   * @model containment="true"
+   *        extendedMetaData="name='jreLibrary'"
+   * @generated
+   */
+  EList<JRELibrary> getJRELibraries();
 
 } // JRETask

@@ -14,27 +14,37 @@ import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.jdt.JDTPackage;
+import org.eclipse.oomph.setup.jdt.JRELibrary;
 import org.eclipse.oomph.setup.jdt.JRETask;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.launching.ExecutionArguments;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMInstallType;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.launching.LibraryLocation;
 import org.eclipse.jdt.launching.VMStandin;
 import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -51,6 +61,7 @@ import java.util.List;
  *   <li>{@link org.eclipse.oomph.setup.jdt.impl.JRETaskImpl#getVMInstallType <em>VM Install Type</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.jdt.impl.JRETaskImpl#isExecutionEnvironmentDefault <em>Execution Environment Default</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.jdt.impl.JRETaskImpl#getVMArguments <em>VM Arguments</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.jdt.impl.JRETaskImpl#getJRELibraries <em>JRE Libraries</em>}</li>
  * </ul>
  *
  * @generated
@@ -176,6 +187,16 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * @ordered
    */
   protected String vMArguments = VM_ARGUMENTS_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getJRELibraries() <em>JRE Libraries</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getJRELibraries()
+   * @generated
+   * @ordered
+   */
+  protected EList<JRELibrary> jRELibraries;
 
   /**
    * <!-- begin-user-doc -->
@@ -371,6 +392,36 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<JRELibrary> getJRELibraries()
+  {
+    if (jRELibraries == null)
+    {
+      jRELibraries = new EObjectContainmentEList<JRELibrary>(JRELibrary.class, this, JDTPackage.JRE_TASK__JRE_LIBRARIES);
+    }
+    return jRELibraries;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case JDTPackage.JRE_TASK__JRE_LIBRARIES:
+        return ((InternalEList<?>)getJRELibraries()).basicRemove(otherEnd, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
@@ -388,6 +439,8 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
         return isExecutionEnvironmentDefault();
       case JDTPackage.JRE_TASK__VM_ARGUMENTS:
         return getVMArguments();
+      case JDTPackage.JRE_TASK__JRE_LIBRARIES:
+        return getJRELibraries();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -397,6 +450,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
@@ -419,6 +473,10 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
         return;
       case JDTPackage.JRE_TASK__VM_ARGUMENTS:
         setVMArguments((String)newValue);
+        return;
+      case JDTPackage.JRE_TASK__JRE_LIBRARIES:
+        getJRELibraries().clear();
+        getJRELibraries().addAll((Collection<? extends JRELibrary>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -452,6 +510,9 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
       case JDTPackage.JRE_TASK__VM_ARGUMENTS:
         setVMArguments(VM_ARGUMENTS_EDEFAULT);
         return;
+      case JDTPackage.JRE_TASK__JRE_LIBRARIES:
+        getJRELibraries().clear();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -478,6 +539,8 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
         return executionEnvironmentDefault != EXECUTION_ENVIRONMENT_DEFAULT_EDEFAULT;
       case JDTPackage.JRE_TASK__VM_ARGUMENTS:
         return VM_ARGUMENTS_EDEFAULT == null ? vMArguments != null : !VM_ARGUMENTS_EDEFAULT.equals(vMArguments);
+      case JDTPackage.JRE_TASK__JRE_LIBRARIES:
+        return jRELibraries != null && !jRELibraries.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -495,7 +558,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (version: ");
     result.append(version);
     result.append(", location: ");
@@ -557,19 +620,19 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     return JREHelper.isNeeded(context, getName(), getVersion(), getLocation(), getVMInstallType(), isExecutionEnvironmentDefault(),
-        sanitizeArguments(getVMArguments()));
+        sanitizeArguments(getVMArguments()), getJRELibraries());
   }
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    JREHelper.perform(context, getName(), getVersion(), getLocation(), getVMInstallType(), isExecutionEnvironmentDefault(),
-        sanitizeArguments(getVMArguments()));
+    JREHelper.perform(context, getName(), getVersion(), getLocation(), getVMInstallType(), isExecutionEnvironmentDefault(), sanitizeArguments(getVMArguments()),
+        getJRELibraries());
   }
 
   private static class JREHelper
   {
     public static void perform(SetupTaskContext context, String name, String version, String location, String vmInstallTypeID,
-        boolean executionEnvironmentDefault, String vmArguments) throws Exception
+        boolean executionEnvironmentDefault, String vmArguments, Collection<JRELibrary> jreLibraries) throws Exception
     {
       IVMInstallType[] types = JavaRuntime.getVMInstallTypes();
       for (IVMInstallType type : types)
@@ -634,6 +697,45 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
             context.log("Setting VM arguments of " + name + " to " + StringUtil.implode(mergedVMArguments, '\0'));
           }
 
+          if (!jreLibraries.isEmpty())
+          {
+            if (vmStandin.getLibraryLocations() == null)
+            {
+              // We have to set this to an empty array first in order for the real setLibraryLocations() call to have any effect.
+              vmStandin.setLibraryLocations(new LibraryLocation[0]);
+              vmStandin.setLibraryLocations(type.getDefaultLibraryLocations(installLocation));
+            }
+
+            IPath installPath = new Path(installLocation.getCanonicalPath());
+            for (JRELibrary jreLibrary : jreLibraries)
+            {
+              String libraryPath = jreLibrary.getLibraryPath();
+              String externalAnnotationsPathLiteral = jreLibrary.getExternalAnnotationsPath();
+              if (libraryPath != null && externalAnnotationsPathLiteral != null)
+              {
+                IPath jreLibraryPath = installPath.append(libraryPath);
+                LibraryLocation[] libraryLocations = vmStandin.getLibraryLocations();
+                for (int i = 0; i < libraryLocations.length; i++)
+                {
+                  LibraryLocation libraryLocation = libraryLocations[i];
+                  IPath systemLibraryPath = libraryLocation.getSystemLibraryPath();
+                  if (jreLibraryPath.equals(systemLibraryPath))
+                  {
+                    Path externalAnnotationsPath = new Path(externalAnnotationsPathLiteral);
+                    if (!externalAnnotationsPath.equals(libraryLocation.getExternalAnnotationsPath()))
+                    {
+                      LibraryLocation newLibraryLocation = new LibraryLocation(systemLibraryPath, libraryLocation.getSystemLibrarySourcePath(),
+                          libraryLocation.getPackageRootPath(), libraryLocation.getJavadocLocation(), libraryLocation.getIndexLocation(),
+                          externalAnnotationsPath);
+                      libraryLocations[i] = newLibraryLocation;
+                    }
+                    break;
+                  }
+                }
+              }
+            }
+          }
+
           realVM = vmStandin.convertToRealVM();
           if (setAsDefault)
           {
@@ -663,7 +765,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
     }
 
     public static boolean isNeeded(SetupTaskContext context, String name, String version, String location, String vmInstallTypeID,
-        boolean executionEnvironmentDefault, String vmArguments) throws Exception
+        boolean executionEnvironmentDefault, String vmArguments, Collection<JRELibrary> jreLibraries) throws Exception
     {
       // If there is already a VM install for this name...
       IVMInstall vmInstall = getVMInstall(name, vmInstallTypeID);
@@ -710,6 +812,42 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
                 return true;
               }
             }
+          }
+        }
+
+        if (!jreLibraries.isEmpty())
+        {
+          File installLocation = new File(location);
+          IPath installPath = new Path(installLocation.getCanonicalPath());
+          for (JRELibrary jreLibrary : jreLibraries)
+          {
+            String libraryPath = jreLibrary.getLibraryPath();
+            String externalAnnotationsPathLiteral = jreLibrary.getExternalAnnotationsPath();
+            if (libraryPath != null && externalAnnotationsPathLiteral != null)
+            {
+              IPath jreLibraryPath = installPath.append(libraryPath);
+              LibraryLocation[] libraryLocations = vmInstall.getLibraryLocations();
+              if (libraryLocations == null)
+              {
+                // If it's still using the defaults, indicated by a null result, then the perform needs to initialize this to be non-null.
+                return true;
+              }
+
+              for (int i = 0; i < libraryLocations.length; i++)
+              {
+                LibraryLocation libraryLocation = libraryLocations[i];
+                if (jreLibraryPath.equals(libraryLocation.getSystemLibraryPath()))
+                {
+                  Path externalAnnotationsPath = new Path(externalAnnotationsPathLiteral);
+                  if (!externalAnnotationsPath.equals(libraryLocation.getExternalAnnotationsPath()))
+                  {
+                    return true;
+                  }
+                  break;
+                }
+              }
+            }
+            // NOTE: if we couldn't find the library we wouldn't be able to update it, so DON'T return true.
           }
         }
 
