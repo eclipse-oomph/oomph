@@ -763,19 +763,23 @@ public abstract class RecorderTransaction
     for (Map.Entry<URI, Pair<String, String>> entry : preferences.entrySet())
     {
       URI key = entry.getKey();
-      String oldValue = SetupUtil.escape(entry.getValue().getElement1());
-      String newValue = SetupUtil.escape(entry.getValue().getElement2());
-
       PreferenceHandler handler = PreferenceTaskImpl.PreferenceHandler.getHandler(key);
-      if (handler.isNeeded(oldValue, newValue))
+
+      String newValue = entry.getValue().getElement2();
+      boolean remove = newValue == REMOVE_PREFERENCE_MARKER;
+      if (!remove)
       {
-        newValue = handler.delta();
+        String oldValue = SetupUtil.escape(entry.getValue().getElement1());
+        newValue = SetupUtil.escape(newValue);
+
+        if (handler.isNeeded(oldValue, newValue))
+        {
+          newValue = handler.delta();
+        }
       }
 
       String pluginID = key.segment(0).toString();
       String path = PreferencesFactory.eINSTANCE.convertURI(key);
-
-      boolean remove = newValue == REMOVE_PREFERENCE_MARKER;
 
       CompoundTask pluginCompound = (CompoundTask)getPreferenceTask(setupTasks, SetupPackage.Literals.COMPOUND_TASK__NAME, pluginID, !remove);
       if (pluginCompound != null)
