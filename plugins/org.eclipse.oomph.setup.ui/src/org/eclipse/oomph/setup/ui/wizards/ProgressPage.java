@@ -479,8 +479,16 @@ public class ProgressPage extends SetupWizardPage
       User performerUser = performer.getUser();
 
       performer.setProgress(progressLog);
-      performer.put(ILicense.class, LICENSE_CONFIRMER);
-      performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(performerUser, false));
+
+      if (performer.get(ILicense.class) == null)
+      {
+        performer.put(ILicense.class, LICENSE_CONFIRMER);
+      }
+
+      if (performer.get(Certificate.class) == null)
+      {
+        performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(performerUser, false));
+      }
 
       File renamed = null;
       if (getTrigger() == Trigger.BOOTSTRAP)

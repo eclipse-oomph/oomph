@@ -1279,8 +1279,17 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       performer.getUnresolvedVariables().clear();
       performer.put(UIServices.class, Installer.SERVICE_UI);
-      performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
-      performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
+
+      if (performer.get(ILicense.class) == null)
+      {
+        performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
+      }
+
+      if (performer.get(Certificate.class) == null)
+      {
+        performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
+      }
+
       performer.setOffline(false);
       performer.setMirrors(true);
       performer.setProgress(progress);
