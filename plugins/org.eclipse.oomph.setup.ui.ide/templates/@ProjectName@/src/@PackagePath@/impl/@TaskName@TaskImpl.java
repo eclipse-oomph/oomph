@@ -69,7 +69,7 @@ public class @TaskName@TaskImpl extends SetupTaskImpl implements @TaskName@Task
   @Override
   public void dispose()
   {
-    // TODO Implement @TaskName@TaskImpl.perform() or remove this override if not needed
+    // TODO Implement @TaskName@TaskImpl.dispose() or remove this override if not needed
   }
 
 } // @TaskName@TaskImpl
