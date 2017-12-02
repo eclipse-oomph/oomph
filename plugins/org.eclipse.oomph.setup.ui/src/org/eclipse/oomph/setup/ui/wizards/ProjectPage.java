@@ -1236,14 +1236,13 @@ public class ProjectPage extends SetupWizardPage
     Workspace workspace = getWizard().getSetupContext().getWorkspace();
     if (workspace != null)
     {
-      List<Stream> streams = new ArrayList<Stream>(workspace.getStreams());
-      streams.removeAll(existingStreams);
-
       OS os = getPerformer().getOS();
-
-      for (Stream stream : streams)
+      for (Stream stream : workspace.getStreams())
       {
-        SetupCoreUtil.sendStats(success, stream, os);
+        if (!existingStreams.contains(EcoreUtil.getURI(stream)))
+        {
+          SetupCoreUtil.sendStats(success, stream, os);
+        }
       }
     }
   }

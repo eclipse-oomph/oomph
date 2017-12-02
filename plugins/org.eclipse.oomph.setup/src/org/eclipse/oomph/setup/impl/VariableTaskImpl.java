@@ -676,7 +676,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
           list.add(list.indexOf(this) + 1, stringSubstitutionTask);
         }
 
-        details.remove(ANNOTATION_KEY);
+        details.removeKey(ANNOTATION_KEY);
         if (annotation.getDetails().isEmpty())
         {
           getAnnotations().remove(annotation);

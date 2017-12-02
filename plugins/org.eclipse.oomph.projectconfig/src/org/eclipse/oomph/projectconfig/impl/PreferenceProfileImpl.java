@@ -267,7 +267,8 @@ public class PreferenceProfileImpl extends ModelElementImpl implements Preferenc
       return false;
     }
 
-    if (project.getName().equals(getProject().getPreferenceNode().getName()))
+    String projectName = project.getName();
+    if (projectName.equals(getProject().getPreferenceNode().getName()))
     {
       return true;
     }
@@ -280,7 +281,15 @@ public class PreferenceProfileImpl extends ModelElementImpl implements Preferenc
       }
     }
 
-    return getReferentProjects().contains(project);
+    for (Project referentProject : getReferentProjects())
+    {
+      if (projectName.equals(referentProject.getPreferenceNode().getName()))
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**

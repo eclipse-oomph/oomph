@@ -116,10 +116,10 @@ public class IndexManager
     Annotation annotation = getAnnotation();
     Annotation labelsAnnotation = annotation.getAnnotation("labels");
 
-    annotation.getDetails().remove(indexLocation.toString());
+    annotation.getDetails().removeKey(indexLocation.toString());
     if (labelsAnnotation != null)
     {
-      labelsAnnotation.getDetails().remove(indexLocation.toString());
+      labelsAnnotation.getDetails().removeKey(indexLocation.toString());
     }
 
     save(annotation);

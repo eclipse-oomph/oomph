@@ -487,7 +487,7 @@ public class WorkingSetManager
         Set<IAdaptable> elements = workingSets.get(name);
         if (elements != null)
         {
-          elements.remove(name);
+          elements.remove(project);
           result = true;
         }
       }

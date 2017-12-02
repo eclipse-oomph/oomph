@@ -618,7 +618,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
 
       if (remove)
       {
-        details.remove(ANNOTATION_KEY);
+        details.removeKey(ANNOTATION_KEY);
         if (annotation.getDetails().isEmpty())
         {
           getAnnotations().remove(annotation);
