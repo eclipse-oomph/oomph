@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.oomph.targlets.core;singleton:=true
-Bundle-Version: 1.8.0.qualifier
+Bundle-Version: 1.9.0.qualifier
 Bundle-ClassPath: .
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
@@ -27,14 +27,14 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.equinox.p2.updatesite;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.jdt.core;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.pde.core;bundle-version="[3.5.0,4.0.0)",
- org.eclipse.oomph.targlets;bundle-version="[1.8.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.targlets;bundle-version="[1.9.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.p2.core;bundle-version="[1.8.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.util.pde;bundle-version="[1.8.0,2.0.0)",
  org.eclipse.equinox.frameworkadmin;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.oomph.targlets.core;version="1.8.0";x-internal:=true,
- org.eclipse.oomph.targlets.internal.core;version="1.8.0";x-internal:=true,
- org.eclipse.oomph.targlets.internal.core.listeners;version="1.8.0";x-internal:=true,
- org.eclipse.oomph.targlets.internal.core.variables;version="1.8.0";x-internal:=true
+Export-Package: org.eclipse.oomph.targlets.core;version="1.9.0";x-internal:=true,
+ org.eclipse.oomph.targlets.internal.core;version="1.9.0";x-internal:=true,
+ org.eclipse.oomph.targlets.internal.core.listeners;version="1.9.0";x-internal:=true,
+ org.eclipse.oomph.targlets.internal.core.variables;version="1.9.0";x-internal:=true
 Bundle-Activator: org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin$Implementation
