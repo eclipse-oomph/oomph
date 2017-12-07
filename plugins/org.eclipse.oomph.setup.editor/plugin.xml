@@ -374,7 +374,7 @@
             locationURI="menu:help?before=org.eclipse.equinox.p2.ui.sdk.update">
          <command
                commandId="org.eclipse.oomph.setup.editor.perform"
-               icon="icons/update.gif"
+               icon="icons/update_gear.gif"
                label="Perform Setup Tasks..."
                style="push">
          </command>
