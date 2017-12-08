@@ -32,6 +32,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
@@ -96,7 +98,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
     final Object root = new Object();
 
     final Set<String> initializedPreferencePages = RecorderManager.INSTANCE.getInitializedPreferencePages();
-    checkboxTreeViewer = new ContainerCheckedTreeViewer(parent, SWT.NONE);
+    checkboxTreeViewer = new ContainerCheckedTreeViewer(parent, SWT.NONE | SWT.MULTI);
     checkboxTreeViewer.setContentProvider(new ITreeContentProvider()
     {
       public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
@@ -150,6 +152,34 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
         }
 
         return nodes.toArray();
+      }
+    });
+
+    checkboxTreeViewer.getTree().addKeyListener(new KeyAdapter()
+    {
+      @Override
+      public void keyPressed(KeyEvent e)
+      {
+        if (e.character == ' ')
+        {
+          IStructuredSelection selection = (IStructuredSelection)checkboxTreeViewer.getSelection();
+          boolean check = true;
+          for (Object object : selection.toArray())
+          {
+            if (checkboxTreeViewer.getChecked(object) || checkboxTreeViewer.getGrayed(object))
+            {
+              check = false;
+              break;
+            }
+          }
+
+          for (Object object : selection.toArray())
+          {
+            checkboxTreeViewer.setChecked(object, check);
+          }
+
+          e.doit = false;
+        }
       }
     });
 
