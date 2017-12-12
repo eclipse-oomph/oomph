@@ -886,7 +886,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                 {
                   for (IRequirement requirement : rootIU.getRequirements())
                   {
-                    if (requirement instanceof org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)
+                    if (P2Util.isSimpleRequiredCapability(requirement))
                     {
                       // Any IU requirement that matches the name of an existing requirement makes that existing requirement redundant.
                       org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;

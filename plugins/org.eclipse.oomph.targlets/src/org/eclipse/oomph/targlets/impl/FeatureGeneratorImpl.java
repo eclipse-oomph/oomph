@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.VersionSegment;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.targlets.FeatureGenerator;
 import org.eclipse.oomph.targlets.TargletPackage;
@@ -195,7 +196,7 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
         for (int i = 0; i < size; i++)
         {
           IRequirement requirement = requirements.get(i);
-          if (requirement instanceof RequiredCapability)
+          if (requirement instanceof RequiredCapability && P2Util.isSimpleRequiredCapability(requirement))
           {
             RequiredCapability capability = (RequiredCapability)requirement;
             final VersionRange originalRange = capability.getRange();

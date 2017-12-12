@@ -123,7 +123,7 @@ public final class RootAnalyzer
   @SuppressWarnings("restriction")
   private static boolean isExactRequirement(IRequirement requirement)
   {
-    if (requirement instanceof org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)
+    if (P2Util.isSimpleRequiredCapability(requirement))
     {
       org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
       VersionRange range = requiredCapability.getRange();

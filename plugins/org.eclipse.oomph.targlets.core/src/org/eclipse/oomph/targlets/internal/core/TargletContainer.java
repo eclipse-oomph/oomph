@@ -1341,14 +1341,14 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                   List<IRequirement> extraRequirements = new ArrayList<IRequirement>();
                   LOOP: for (IRequirement workspaceRequirement : workspaceIU.getRequirements())
                   {
-                    if (workspaceRequirement instanceof IRequiredCapability)
+                    if (P2Util.isSimpleRequiredCapability(workspaceRequirement))
                     {
                       IRequiredCapability workspaceRequiredCapability = (IRequiredCapability)workspaceRequirement;
                       String namespace = workspaceRequiredCapability.getNamespace();
                       String name = workspaceRequiredCapability.getName();
                       for (IRequirement requirement : iu.getRequirements())
                       {
-                        if (requirement instanceof IRequiredCapability)
+                        if (P2Util.isSimpleRequiredCapability(requirement))
                         {
                           IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
                           if (namespace.equals(requiredCapability.getNamespace()) && name.equals(requiredCapability.getName()))
@@ -1413,7 +1413,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               for (int i = 0; i < size; ++i)
               {
                 IRequirement workspaceRequirement = generalizedRequirements[i];
-                if (workspaceRequirement instanceof IRequiredCapability)
+                if (P2Util.isSimpleRequiredCapability(workspaceRequirement))
                 {
                   IRequiredCapability workspaceRequiredCapability = (IRequiredCapability)workspaceRequirement;
                   VersionRange versionRange = workspaceRequiredCapability.getRange();

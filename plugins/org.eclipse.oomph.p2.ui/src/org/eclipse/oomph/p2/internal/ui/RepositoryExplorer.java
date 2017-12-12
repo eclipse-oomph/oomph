@@ -1691,7 +1691,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         {
           P2UIPlugin.checkCancelation(monitor);
 
-          if (requirement instanceof org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)
+          if (P2Util.isSimpleRequiredCapability(requirement))
           {
             org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
             if (IInstallableUnit.NAMESPACE_IU_ID.equals(requiredCapability.getNamespace()))
@@ -1743,7 +1743,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       {
         P2UIPlugin.checkCancelation(monitor);
 
-        if (requirement instanceof org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)
+        if (P2Util.isSimpleRequiredCapability(requirement))
         {
           org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
           if (IInstallableUnit.NAMESPACE_IU_ID.equals(requiredCapability.getNamespace()))

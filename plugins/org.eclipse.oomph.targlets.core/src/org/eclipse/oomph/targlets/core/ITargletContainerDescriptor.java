@@ -11,6 +11,7 @@
 package org.eclipse.oomph.targlets.core;
 
 import org.eclipse.oomph.p2.core.BundlePool;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.util.IOUtil;
@@ -121,7 +122,7 @@ public interface ITargletContainerDescriptor
           {
             Explanation.MissingIU detailedExplanation = (Explanation.MissingIU)explanation;
             IRequirement req = detailedExplanation.req;
-            if (req instanceof IRequiredCapability)
+            if (P2Util.isSimpleRequiredCapability(req))
             {
               return new MissingIU(status, (IRequiredCapability)req);
             }

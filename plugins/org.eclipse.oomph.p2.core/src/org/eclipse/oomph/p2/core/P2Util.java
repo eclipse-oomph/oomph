@@ -121,6 +121,13 @@ public final class P2Util
     };
   }
 
+  @SuppressWarnings("restriction")
+  public static boolean isSimpleRequiredCapability(IRequirement requirement)
+  {
+    IMatchExpression<IInstallableUnit> matches = requirement.getMatches();
+    return matches != null && matches.getParameters().length >= 2 && requirement instanceof org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
+  }
+
   public static String getName(IInstallableUnit iu)
   {
     String name = iu.getProperty(IInstallableUnit.PROP_NAME, null);

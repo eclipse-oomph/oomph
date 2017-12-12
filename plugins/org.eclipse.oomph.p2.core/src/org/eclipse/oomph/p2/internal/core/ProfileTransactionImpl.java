@@ -427,7 +427,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       IQueryable<IInstallableUnit> futureState = provisioningPlan.getFutureState();
       for (IRequirement requirement : rootIU.getRequirements())
       {
-        if (requirement instanceof IRequiredCapability)
+        if (P2Util.isSimpleRequiredCapability(requirement))
         {
           IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
           for (IInstallableUnit installableUnit : P2Util
