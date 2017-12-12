@@ -815,6 +815,10 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
             monitor.worked(1);
           }
 
+          // If we get this far, but something else fails later, we don't want to delete the repo
+          // because then we can't determine what's wrong with the current state.
+          workDirExisted = true;
+
           if (!hasCheckout)
           {
             createBranch(context, cachedGit, checkoutBranch, remoteName);
