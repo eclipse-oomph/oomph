@@ -90,6 +90,9 @@
    <feature id="org.eclipse.oomph.all" version="0.0.0">
       <category name="org.eclipse.oomph.others.category"/>
    </feature>
+    <feature id="org.eclipse.oomph.all.source" version="0.0.0">
+      <category name="org.eclipse.oomph.others.category"/>
+   </feature>
    <feature id="org.eclipse.oomph.tests" version="0.0.0">
       <category name="org.eclipse.oomph.others.category"/>
    </feature>
