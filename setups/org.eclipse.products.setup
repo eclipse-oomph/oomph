@@ -106,9 +106,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -119,7 +119,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -168,6 +168,8 @@
             name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.news.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.recommenders.rcp.feature.feature.group"/>
         <requirement
@@ -246,9 +248,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -259,7 +261,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -308,6 +310,8 @@
             name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.news.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.recommenders.rcp.feature.feature.group"/>
         <requirement
@@ -676,9 +680,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -689,7 +693,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/1.RC4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -978,9 +982,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -991,7 +995,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/1.RC4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -1516,9 +1520,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -1529,7 +1533,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -1686,9 +1690,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -1699,7 +1703,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2054,9 +2058,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -2067,7 +2071,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2196,9 +2200,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -2209,7 +2213,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2364,7 +2368,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/photonm2</value>
         </detail>
       </annotation>
       <setupTask
@@ -2416,9 +2420,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -2429,7 +2433,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2472,6 +2476,8 @@
             name="org.eclipse.php.phpunit.feature.feature.group"/>
         <requirement
             name="org.eclipse.php.profiler.feature.group"/>
+        <requirement
+            name="org.eclipse.php.rdt.sync.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
@@ -2492,7 +2498,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M2</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/photonm2</value>
         </detail>
       </annotation>
       <setupTask
@@ -2544,9 +2550,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -2557,7 +2563,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -2600,6 +2606,8 @@
             name="org.eclipse.php.phpunit.feature.feature.group"/>
         <requirement
             name="org.eclipse.php.profiler.feature.group"/>
+        <requirement
+            name="org.eclipse.php.rdt.sync.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
@@ -2837,9 +2845,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -2850,7 +2858,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -3051,9 +3059,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -3064,7 +3072,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -3361,9 +3369,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -3374,7 +3382,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -3451,9 +3459,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -3464,7 +3472,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -3817,9 +3825,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -3830,7 +3838,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/1.RC4</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/1A</value>
         </detail>
       </annotation>
       <setupTask
@@ -4063,9 +4071,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -4076,7 +4084,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/1.RC4</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/1A</value>
         </detail>
       </annotation>
       <setupTask
@@ -4084,6 +4092,12 @@
           label="Eclipse IDE for Java and Report Developers (Oxygen)">
         <requirement
             name="epp.package.reporting"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.7.0,4.8.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
             versionRange="[4.7.0,4.8.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
@@ -4465,27 +4479,27 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (Oxygen)"
+        label="Latest (Photon)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/M2</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse Modeling Tools (Oxygen)">
+          label="Eclipse Modeling Tools (Photon)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.7.0,5.0.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,5.0.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,5.0.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.amalgam.discovery.feature.group"/>
         <requirement
@@ -4553,9 +4567,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -4566,7 +4580,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -4654,6 +4668,101 @@
       </setupTask>
     </version>
     <version
+        name="photon"
+        label="Photon"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/M2</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Modeling Tools (Photon)">
+        <requirement
+            name="epp.package.modeling"
+            versionRange="[4.8.0,4.9.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.8.0,4.9.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.8.0,4.9.0)"/>
+        <requirement
+            name="org.eclipse.amalgam.discovery.feature.group"/>
+        <requirement
+            name="org.eclipse.e4.core.tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.cdo.epp.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.ide.ui.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.ecoretools.design.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.ecoretools.explorer.contextual.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.ecp.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.emfstore.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.parsley.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.parsley.sdk.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.query.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.transaction.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.validation.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.gef.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.gmf.runtime.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.ocl.all.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"/>
+        <requirement
+            name="org.eclipse.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.uml2.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.xsd.sdk.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
+        <repository
+            url="http://download.eclipse.org/releases/photon"/>
+      </setupTask>
+    </version>
+    <version
         name="oxygen"
         label="Oxygen"
         requiredJavaVersion="1.8">
@@ -4661,7 +4770,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -5309,9 +5418,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -5322,7 +5431,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -5477,7 +5586,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -5488,7 +5597,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -5835,9 +5944,9 @@
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -5848,7 +5957,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -5917,9 +6026,9 @@
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -5930,7 +6039,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-testers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -6211,9 +6320,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -6224,7 +6333,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -6373,9 +6482,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -6386,7 +6495,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -6954,9 +7063,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -6967,7 +7076,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -7080,9 +7189,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/photon/M2"/>
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -7093,7 +7202,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/oxygen1rc4</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/oxygen1a</value>
         </detail>
       </annotation>
       <setupTask
@@ -7383,7 +7492,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.8.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -7394,7 +7503,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.7-201706120950/</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.7.1a-201710090410/</value>
         </detail>
       </annotation>
       <setupTask
@@ -7437,7 +7546,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.8.0,4.9.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201709221000"/>
+            url="http://download.eclipse.org/releases/photon"/>
       </setupTask>
     </version>
     <version
@@ -7448,7 +7557,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.7-201706120950/</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.7.1a-201710090410/</value>
         </detail>
       </annotation>
       <setupTask

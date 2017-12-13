@@ -65,7 +65,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.8.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/photon/201709221000"/>
+          url="http://download.eclipse.org/releases/photon"/>
     </setupTask>
   </version>
   <version name="latest.released"
@@ -75,7 +75,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Oxygen/1.RC4</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Oxygen/1A</value>
       </detail>
     </annotation>
     <setupTask
@@ -163,7 +163,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.8.0,4.9.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/photon/201709221000"/>
+          url="http://download.eclipse.org/releases/photon"/>
     </setupTask>
   </version>
   <version name="oxygen"
@@ -173,7 +173,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Oxygen/1.RC4</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Oxygen/1A</value>
       </detail>
     </annotation>
     <setupTask
