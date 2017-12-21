@@ -506,7 +506,7 @@
   <project href="https://git.eclipse.org/c/acceleo/org.eclipse.acceleo.git/plain/releng/org.eclipse.acceleo.releng/Acceleo.setup#/"/>
   <project href="https://git.eclipse.org/c/amalgam/org.eclipse.amalgam.git/plain/releng/org.eclipse.amalgam.releng/Amalgam.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/buildship/master/buildship.setup#/"/>
-  <project href="http://git.eclipse.org/c/cdo/cdo.git/plain/releng/org.eclipse.emf.cdo.releng/CDO.setup#/"/>
+  <project href="https://git.eclipse.org/c/cdo/cdo.git/plain/releng/org.eclipse.emf.cdo.releng/CDO.setup#/"/>
   <project href="http://git.eclipse.org/c/cdt/org.eclipse.cdt.git/plain/releng/CDT.setup#/"/>
   <project href="http://git.eclipse.org/c/recommenders/org.eclipse.recommenders.git/plain/tools/oomph/recommenders.setup#/"/>
   <project href="interim/E4Tools.setup#/"/>
