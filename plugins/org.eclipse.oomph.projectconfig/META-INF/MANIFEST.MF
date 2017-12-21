@@ -19,3 +19,4 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: org.eclipse.oomph.projectconfig;version="1.9.0";x-internal:=true,
  org.eclipse.oomph.projectconfig.impl;version="1.9.0";x-internal:=true,
  org.eclipse.oomph.projectconfig.util;version="1.9.0";x-internal:=true
+Automatic-Module-Name: org.eclipse.oomph.projectconfig

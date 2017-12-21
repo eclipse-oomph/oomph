@@ -19,3 +19,4 @@ Export-Package: org.eclipse.oomph.targlets.doc;version="1.9.0";x-internal:=true,
  org.eclipse.oomph.targlets.doc.reference;version="1.9.0";x-internal:=true,
  org.eclipse.oomph.targlets.doc.reference.api;version="1.9.0";x-internal:=true,
  org.eclipse.oomph.targlets.doc.reference.schema;version="1.9.0";x-internal:=true
+Automatic-Module-Name: org.eclipse.oomph.targlets.doc

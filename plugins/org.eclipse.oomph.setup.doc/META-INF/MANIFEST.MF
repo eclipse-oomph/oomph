@@ -48,3 +48,4 @@ Export-Package: org.eclipse.oomph.setup.doc;version="1.9.0";x-internal:=true,
  org.eclipse.oomph.setup.doc.reference.schema;version="1.9.0";x-internal:=true,
  org.eclipse.oomph.setup.doc.user;version="1.9.0";x-internal:=true,
  org.eclipse.oomph.setup.doc.user.wizard;version="1.9.0";x-internal:=true
+Automatic-Module-Name: org.eclipse.oomph.setup.doc

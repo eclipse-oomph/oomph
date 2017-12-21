@@ -30,3 +30,4 @@ Export-Package: org.eclipse.oomph.setup.internal.sync;version="1.9.0";x-friends:
  org.eclipse.oomph.setup.sync.impl;version="1.9.0";x-friends:="org.eclipse.oomph.setup.sync.tests,org.eclipse.oomph.setup.ui",
  org.eclipse.oomph.setup.sync.util;version="1.9.0";x-friends:="org.eclipse.oomph.setup.sync.tests,org.eclipse.oomph.setup.ui"
 Bundle-Activator: org.eclipse.oomph.setup.internal.sync.SetupSyncPlugin$Implementation
+Automatic-Module-Name: org.eclipse.oomph.setup.sync

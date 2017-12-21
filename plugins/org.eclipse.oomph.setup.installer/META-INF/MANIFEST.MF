@@ -35,3 +35,4 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.oomph.setup.internal.installer;version="1.9.0";x-internal:=true
+Automatic-Module-Name: org.eclipse.oomph.setup.installer

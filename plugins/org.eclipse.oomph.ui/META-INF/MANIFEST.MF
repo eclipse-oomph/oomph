@@ -22,3 +22,4 @@ Require-Bundle: org.eclipse.core.expressions;bundle-version="[3.4.0,4.0.0)",
 Export-Package: org.eclipse.oomph.internal.ui;version="1.9.0";x-internal:=true,
  org.eclipse.oomph.ui;version="1.9.0";x-internal:=true
 Eclipse-BuddyPolicy: dependent
+Automatic-Module-Name: org.eclipse.oomph.ui

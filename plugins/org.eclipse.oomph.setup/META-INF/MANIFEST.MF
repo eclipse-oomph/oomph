@@ -22,3 +22,4 @@ Export-Package: org.eclipse.oomph.internal.setup;version="1.9.0";x-internal:=tru
  org.eclipse.oomph.setup.log;version="1.9.0";x-internal:=true,
  org.eclipse.oomph.setup.util;version="1.9.0";x-internal:=true
 Bundle-Activator: org.eclipse.oomph.internal.setup.SetupPlugin$Implementation
+Automatic-Module-Name: org.eclipse.oomph.setup

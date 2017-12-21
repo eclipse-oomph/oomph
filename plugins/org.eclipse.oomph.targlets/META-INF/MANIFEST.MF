@@ -24,3 +24,4 @@ Export-Package: org.eclipse.oomph.internal.targlets;version="1.9.0";x-internal:=
  org.eclipse.oomph.targlets.util;version="1.9.0";x-internal:=true
 Bundle-Activator: org.eclipse.oomph.internal.targlets.TargletsPlugin$Implementation
 Service-Component: META-INF/noopPluginConverter.xml
+Automatic-Module-Name: org.eclipse.oomph.targlets

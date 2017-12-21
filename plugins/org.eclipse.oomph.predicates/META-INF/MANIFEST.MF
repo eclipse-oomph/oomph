@@ -19,3 +19,4 @@ Export-Package: org.eclipse.oomph.internal.predicates;version="1.9.0";x-internal
  org.eclipse.oomph.predicates;version="1.9.0";x-internal:=true,
  org.eclipse.oomph.predicates.impl;version="1.9.0";x-internal:=true,
  org.eclipse.oomph.predicates.util;version="1.9.0";x-internal:=true
+Automatic-Module-Name: org.eclipse.oomph.predicates
