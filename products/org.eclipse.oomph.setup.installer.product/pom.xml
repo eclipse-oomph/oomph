@@ -81,7 +81,7 @@
       </build>
     </profile>
     <profile>
-      <id>env-mac32</id>
+      <id>env-mac64</id>
       <activation>
         <property>
           <name>env</name>
