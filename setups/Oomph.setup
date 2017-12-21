@@ -80,6 +80,8 @@
   <setupTask
       xsi:type="setup:CompoundTask"
       name="User Preferences">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/UserPreferences"/>
     <setupTask
         xsi:type="setup:CompoundTask"
         name="org.eclipse.ant.ui">
@@ -87,6 +89,14 @@
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.ant.ui/problem_classpath"
           value="ignore"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.core.resources">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.core.resources/missingNatureMarkerSeverity"
+          value="-1"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
