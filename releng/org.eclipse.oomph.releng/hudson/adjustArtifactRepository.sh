@@ -17,7 +17,7 @@ cd "$REPO"
 unzip -qq artifacts.jar
 cd "$CURDIR"
 
-java -cp "$GIT/releng/org.eclipse.oomph.releng/bin/" ArtifactRepositoryAdjuster \
+java -cp "$GIT/releng/org.eclipse.oomph.releng/target/classes/" ArtifactRepositoryAdjuster \
   "$REPO" \
   "$REPO_FINAL" \
   "$REPO_NAME"\

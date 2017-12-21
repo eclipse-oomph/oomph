@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Copyright (c) 2014-2016 Eike Stepper (Berlin, Germany) and others.
+  Copyright (c) 2014, 2015 Eike Stepper (Berlin, Germany) and others.
   All rights reserved. This program and the accompanying materials
   are made available under the terms of the Eclipse Public License v1.0
   which accompanies this distribution, and is available at
@@ -13,26 +13,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.eclipse.oomph</groupId>
-    <artifactId>org.eclipse.oomph.plugins</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
-    <relativePath>../org.eclipse.oomph.parent/plugins</relativePath>
+	  <groupId>org.eclipse.oomph</groupId>
+	  <artifactId>org.eclipse.oomph.parent</artifactId>
+	  <version>1.0.0-SNAPSHOT</version>
+    <relativePath>..</relativePath>
   </parent>
   <groupId>org.eclipse.oomph</groupId>
-  <artifactId>org.eclipse.oomph.releng</artifactId>
+  <artifactId>org.eclipse.oomph.tp</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <packaging>eclipse-plugin</packaging>
-
-  <build>
-    <resources>
-      <resource>
-        <directory>.</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>about.mappings</include>
-        </includes>
-      </resource>
-    </resources>
-  </build>
-
+  <packaging>eclipse-target-definition</packaging>
 </project>

@@ -256,7 +256,7 @@
             source="http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator">
           <detail
               key="location">
-            <value>${git.clone.oomph.location/releng/org.eclipse.oomph.releng/org.eclipse.oomph.releng.target}</value>
+            <value>${git.clone.oomph.location/org.eclipse.oomph.parent/tp/org.eclipse.oomph.tp.target}</value>
           </detail>
           <detail
               key="extraUnits">
