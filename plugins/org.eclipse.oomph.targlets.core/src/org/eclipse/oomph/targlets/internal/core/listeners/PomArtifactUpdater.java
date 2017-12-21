@@ -11,6 +11,7 @@
 package org.eclipse.oomph.targlets.internal.core.listeners;
 
 import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.VersionSegment;
@@ -61,8 +62,7 @@ public class PomArtifactUpdater extends WorkspaceUpdateListener
     ITargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
     for (Targlet targlet : targletContainer.getTarglets())
     {
-      Annotation annotation = targlet.getAnnotation(ANNOTATION);
-      if (annotation != null)
+      for (Annotation annotation : BaseUtil.getAnnotations(targlet, ANNOTATION))
       {
         EMap<String, String> details = annotation.getDetails();
         boolean skipArtifactIDs = "true".equalsIgnoreCase(details.get(ANNOTATION_SKIP_ARTIFACT_IDS));

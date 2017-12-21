@@ -16,10 +16,12 @@ import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.ObjectUtil;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -340,6 +342,20 @@ public final class BaseUtil
     }
 
     return false;
+  }
+
+  public static EList<Annotation> getAnnotations(ModelElement modelElement, String sourceURI)
+  {
+    EList<Annotation> annotations = new BasicEList<Annotation>();
+    for (Annotation annotation : modelElement.getAnnotations())
+    {
+      if (ObjectUtil.equals(annotation.getSource(), sourceURI))
+      {
+        annotations.add(annotation);
+      }
+    }
+
+    return annotations;
   }
 
   public static String getAnnotation(ModelElement modelElement, String sourceURI, String key)

@@ -11,6 +11,7 @@
 package org.eclipse.oomph.targlets.internal.core.listeners;
 
 import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.ProfileUpdateSucceededEvent;
@@ -59,8 +60,7 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
 
     for (Targlet targlet : targletContainer.getTarglets())
     {
-      Annotation annotation = targlet.getAnnotation(ANNOTATION);
-      if (annotation != null)
+      for (Annotation annotation : BaseUtil.getAnnotations(targlet, ANNOTATION))
       {
         String location = annotation.getDetails().get(ANNOTATION_LOCATION);
         if (!StringUtil.isEmpty(location))

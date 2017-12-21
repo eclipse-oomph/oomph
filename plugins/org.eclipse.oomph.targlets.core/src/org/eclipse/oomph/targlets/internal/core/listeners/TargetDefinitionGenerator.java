@@ -11,6 +11,7 @@
 package org.eclipse.oomph.targlets.internal.core.listeners;
 
 import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
@@ -135,8 +136,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     ITargletContainer targletContainer = profileUpdateSucceededEvent.getSource();
     for (Targlet targlet : targletContainer.getTarglets())
     {
-      Annotation annotation = targlet.getAnnotation(ANNOTATION);
-      if (annotation != null)
+      for (Annotation annotation : BaseUtil.getAnnotations(targlet, ANNOTATION))
       {
         Profile profile = profileUpdateSucceededEvent.getProfile();
         IInstallableUnit artificialRoot = profileUpdateSucceededEvent.getArtificialRoot();
@@ -739,16 +739,6 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
         if (first)
         {
-          for (Iterator<IVersionedId> it = extraUnits.iterator(); it.hasNext();)
-          {
-            IVersionedId extraUnit = it.next();
-            for (IInstallableUnit extraIU : P2Util.asIterable(queryable.query(QueryUtil.createIUQuery(extraUnit), null)))
-            {
-              ius.add(extraIU);
-              break;
-            }
-          }
-
           ius.addAll(resolvedIUs);
 
           if (!generateImplicitUnits)
@@ -760,30 +750,22 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
             RootAnalyzer.removeImplicitUnits(ius, queryable, monitor, true);
           }
 
+          for (Iterator<IVersionedId> it = extraUnits.iterator(); it.hasNext();)
+          {
+            IVersionedId extraUnit = it.next();
+            for (IInstallableUnit extraIU : P2Util.asIterable(queryable.query(QueryUtil.createIUQuery(extraUnit), null)))
+            {
+              ius.add(extraIU);
+              break;
+            }
+          }
+
           first = false;
         }
       }
     }
     else
     {
-      // Use keySet() to preserve iteration order!
-      for (String url : queryables.keySet())
-      {
-        IMetadataRepository metadataRepository = queryables.get(url);
-        Set<IInstallableUnit> ius = CollectionUtil.getSet(result, metadataRepository);
-
-        for (Iterator<IVersionedId> it = extraUnits.iterator(); it.hasNext();)
-        {
-          IVersionedId extraUnit = it.next();
-          for (IInstallableUnit extraIU : P2Util.asIterable(metadataRepository.query(QueryUtil.createIUQuery(extraUnit), null)))
-          {
-            ius.add(extraIU);
-            it.remove(); // TODO Why is it removed? Should we log left-overs?
-            break;
-          }
-        }
-      }
-
       for (IInstallableUnit iu : resolvedIUs)
       {
         for (IMetadataRepository metadataRepository : queryables.values())
@@ -803,6 +785,24 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       else if (minimizeImplicitUnits)
       {
         RootAnalyzer.removeImplicitUnits(result, monitor, true);
+      }
+
+      // Use keySet() to preserve iteration order!
+      for (String url : queryables.keySet())
+      {
+        IMetadataRepository metadataRepository = queryables.get(url);
+        Set<IInstallableUnit> ius = CollectionUtil.getSet(result, metadataRepository);
+
+        for (Iterator<IVersionedId> it = extraUnits.iterator(); it.hasNext();)
+        {
+          IVersionedId extraUnit = it.next();
+          for (IInstallableUnit extraIU : P2Util.asIterable(metadataRepository.query(QueryUtil.createIUQuery(extraUnit), null)))
+          {
+            ius.add(extraIU);
+            it.remove(); // TODO Why is it removed? Should we log left-overs?
+            break;
+          }
+        }
       }
     }
 

@@ -12,8 +12,8 @@ Export-Package: org.eclipse.oomph.setup.workingsets.provider;version="1.5.0";x-i
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
  org.eclipse.oomph.setup.workingsets;bundle-version="[1.9.0,2.0.0)";visibility:=reexport,
  org.eclipse.emf.edit;bundle-version="[2.10.0,3.0.0)";visibility:=reexport,
- org.eclipse.oomph.base.edit;bundle-version="[1.8.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.predicates.edit;bundle-version="[1.8.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.base.edit;bundle-version="[1.9.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.predicates.edit;bundle-version="[1.9.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.setup.edit;bundle-version="[1.9.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.workingsets.edit;bundle-version="[1.8.0,2.0.0)";visibility:=reexport
+ org.eclipse.oomph.workingsets.edit;bundle-version="[1.9.0,2.0.0)";visibility:=reexport
 Bundle-ActivationPolicy: lazy
