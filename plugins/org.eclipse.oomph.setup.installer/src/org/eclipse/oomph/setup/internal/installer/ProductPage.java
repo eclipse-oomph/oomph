@@ -421,12 +421,20 @@ public class ProductPage extends SetupWizardPage
 
     if (SHOW_BUNDLE_POOL_UI)
     {
-      initBundlePool();
-
-      poolButton = PersistentButton.create(lowerComposite, SWT.CHECK | SWT.RIGHT, true, new DialogSettingsPersistence(getDialogSettings(), "useBundlePool"));
+      DialogSettingsPersistence useBundlePool = new DialogSettingsPersistence(getDialogSettings(), "useBundlePool");
+      poolButton = PersistentButton.create(lowerComposite, SWT.CHECK | SWT.RIGHT, true, useBundlePool);
       AccessUtil.setKey(poolButton, "pools");
       poolButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
       poolButton.setText("Bundle Pool:");
+
+      if (poolButton.getSelection())
+      {
+        initBundlePool();
+      }
+      else
+      {
+        setCurrentBundlePool(null);
+      }
 
       poolButton.addSelectionListener(new SelectionAdapter()
       {
