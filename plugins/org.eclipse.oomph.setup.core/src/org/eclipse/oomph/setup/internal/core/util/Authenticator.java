@@ -394,15 +394,35 @@ public abstract class Authenticator
       int responseCode = connection.getResponseCode();
       if (responseCode == HttpURLConnection.HTTP_OK)
       {
+        Map<String, List<String>> headerFields = connection.getHeaderFields();
         if (cookie == null)
         {
+          // If there is no verification URI but at verification pattern...
+          if (verificationURI == null && verificationPattern != null)
+          {
+            // Use it to match the links returned in the response.
+            List<String> links = headerFields.get("Link");
+            if (links != null)
+            {
+              for (String link : links)
+              {
+                // Return true if any link matches.
+                if (verificationPattern.matcher(link).matches())
+                {
+                  return true;
+                }
+              }
+            }
+
+            return false;
+          }
+
           // We're only checking that we get an HTTP_OK, and not HTTP_UNAUTHORIZED.
           return true;
         }
         else
         {
           // Look for the cookies...
-          Map<String, List<String>> headerFields = connection.getHeaderFields();
           List<String> list = headerFields.get("Set-Cookie");
           if (list != null)
           {

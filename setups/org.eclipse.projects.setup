@@ -74,51 +74,55 @@
         </detail>
         <detail
             key="form.url">
-          <value>https://dev.eclipse.org/site_login/</value>
-        </detail>
-        <detail
-            key="form.cookie">
-          <value>PHPSESSID</value>
+          <value>https://accounts.eclipse.org/</value>
         </detail>
         <detail
             key="form.parameters">
-          <value>username password submit</value>
+          <value>name pass op form_id</value>
         </detail>
         <detail
             key="form.secure.parameters">
-          <value>password</value>
+          <value>pass</value>
         </detail>
         <detail
             key="form.filter">
-          <value>username=anonymous\&amp;.*</value>
+          <value>name=anonymous\&amp;.*</value>
         </detail>
         <detail
-            key="form.parameter.username">
+            key="form.parameter.name">
           <value>$${bugzilla.id}</value>
         </detail>
         <detail
-            key="form.parameter.password">
+            key="form.parameter.pass">
           <value>$${value}</value>
         </detail>
         <detail
-            key="form.parameter.submit">
-          <value>Login</value>
+            key="form.parameter.op">
+          <value>Sign in</value>
+        </detail>
+        <detail
+            key="form.parameter.form_id">
+          <value>user_login</value>
+        </detail>
+        <detail
+            key="form.verification.matches">
+          <value>&lt;https://www.eclipse.org/user/.*>; rel=&quot;canonical&quot;.*</value>
         </detail>
         <detail
             key="form.ok">
-          <value>Valid password for $${form.parameter.username} at $${form.url}.</value>
+          <value>Valid password for $${form.parameter.name} at $${form.url}.</value>
         </detail>
         <detail
             key="form.info">
-          <value>Validate the password for $${form.parameter.username} at $${form.url}.</value>
+          <value>Validate the password for $${form.parameter.name} at $${form.url}.</value>
         </detail>
         <detail
             key="form.warning">
-          <value>Unable to validate the password for $${form.parameter.username} because $${form.url} is unreachable.</value>
+          <value>Unable to validate the password for $${form.parameter.name} because $${form.url} is unreachable.</value>
         </detail>
         <detail
             key="form.error">
-          <value>Invalid password for $${form.parameter.username} at $${form.url}.</value>
+          <value>Invalid password for $${form.parameter.name} at $${form.url}.</value>
         </detail>
       </annotation>
       <annotation
