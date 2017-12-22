@@ -15,6 +15,7 @@ import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.FlatButton;
 import org.eclipse.oomph.internal.ui.ImageHoverButton;
 import org.eclipse.oomph.internal.ui.ToggleSwitchButton;
+import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
@@ -40,6 +41,7 @@ import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
@@ -98,6 +100,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   private static final String EXIT_MENU_ITEM_TEXT = "EXIT";
 
   private static final Preference PREF_POOL_ENABLED = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("poolEnabled");
+
+  /**
+   * Adds the p2 bundle pool buttons to the UI if the bundle pool location isn't specified or isn't specified to be '@none'.
+   */
+  private static final boolean SHOW_BUNDLE_POOL_UI = PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION) == null
+      || !AgentManager.BUNDLE_POOL_LOCATION_NONE.equalsIgnoreCase(PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION));
 
   private static Font defaultFont;
 
@@ -286,7 +294,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     });
 
-    enablePool(PREF_POOL_ENABLED.get(true));
+    enablePool(SHOW_BUNDLE_POOL_UI && PREF_POOL_ENABLED.get(true));
 
     updateAvailable(false);
   }
@@ -387,13 +395,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       pool = null;
     }
 
-    bundlePoolSwitch.setSelected(poolEnabled);
-
-    // FIXME: Enabled/Disabled state for bundle pooling?
-    // if (poolButton != null)
-    // {
-    // poolButton.setImage(getBundlePoolImage());
-    // }
+    if (bundlePoolSwitch != null)
+    {
+      bundlePoolSwitch.setSelected(poolEnabled);
+    }
   }
 
   public BundlePool getPool()
@@ -500,28 +505,31 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     });
 
-    SimpleInstallerMenu.InstallerMenuItemWithToggle bundlePoolsItem = new SimpleInstallerMenu.InstallerMenuItemWithToggle(menu);
-    bundlePoolsItem.setText(BUNDLE_POOLS_MENU_ITEM_TEXT);
-    bundlePoolsItem.setToolTipText(AgentManagerDialog.MESSAGE);
-    // bundlePoolsItem.setDividerVisible(false);
-    bundlePoolsItem.addSelectionListener(new SelectionAdapter()
+    if (SHOW_BUNDLE_POOL_UI)
     {
-      @Override
-      public void widgetSelected(SelectionEvent e)
+      SimpleInstallerMenu.InstallerMenuItemWithToggle bundlePoolsItem = new SimpleInstallerMenu.InstallerMenuItemWithToggle(menu);
+      bundlePoolsItem.setText(BUNDLE_POOLS_MENU_ITEM_TEXT);
+      bundlePoolsItem.setToolTipText(AgentManagerDialog.MESSAGE);
+      // bundlePoolsItem.setDividerVisible(false);
+      bundlePoolsItem.addSelectionListener(new SelectionAdapter()
       {
-        manageBundlePools();
-      }
-    });
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          manageBundlePools();
+        }
+      });
 
-    bundlePoolSwitch = bundlePoolsItem.getToggleSwitch();
-    bundlePoolSwitch.addSelectionListener(new SelectionAdapter()
-    {
-      @Override
-      public void widgetSelected(SelectionEvent e)
+      bundlePoolSwitch = bundlePoolsItem.getToggleSwitch();
+      bundlePoolSwitch.addSelectionListener(new SelectionAdapter()
       {
-        enablePool(bundlePoolSwitch.isSelected());
-      }
-    });
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          enablePool(bundlePoolSwitch.isSelected());
+        }
+      });
+    }
 
     SimpleInstallerMenu.InstallerMenuItem aboutItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
     aboutItem.setText(ABOUT_MENU_ITEM_TEXT);
