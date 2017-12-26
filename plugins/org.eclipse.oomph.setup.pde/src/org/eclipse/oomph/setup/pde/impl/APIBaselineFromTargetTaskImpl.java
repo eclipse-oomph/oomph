@@ -311,8 +311,9 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
     if (baseline == null)
     {
       context.log("Creating new baseline from target " + targetName);
-      ReflectUtil.invokeMethod(ApiModelFactory.class.getMethod("newApiBaselineFromTarget", String.class, ITargetDefinition.class, IProgressMonitor.class), null,
-          baselineName, target, new ProgressLogMonitor(context));
+      baseline = ReflectUtil.invokeMethod(
+          ApiModelFactory.class.getMethod("newApiBaselineFromTarget", String.class, ITargetDefinition.class, IProgressMonitor.class), null, baselineName,
+          target, new ProgressLogMonitor(context));
       baselineManager.addApiBaseline(baseline);
     }
 
