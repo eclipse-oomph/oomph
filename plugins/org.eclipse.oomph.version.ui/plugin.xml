@@ -80,6 +80,27 @@
 	            </objectState>
          </visibility>
       </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="org.eclipse.oomph.version.ui.contribution4"
+            nameFilter="release.xml"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               class="org.eclipse.oomph.version.ui.actions.ConfigureBuildersAction"
+               enablesFor="1"
+               id="org.eclipse.oomph.ConfigureBuilderAction"
+               label="Configure Version Management..."
+               state="true"
+               style="push"
+               tooltip="Configure the Version Management builder of the associated project(s)">
+         </action>
+         <visibility>
+              <objectState
+                    name="projectNature"
+                    value="org.eclipse.oomph.version.VersionNature">
+              </objectState>
+         </visibility>
+      </objectContribution>
    </extension>
 
    <extension
