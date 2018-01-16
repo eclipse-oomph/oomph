@@ -87,7 +87,7 @@
             objectClass="org.eclipse.core.resources.IFile">
          <action
                class="org.eclipse.oomph.version.ui.actions.ConfigureBuildersAction"
-               enablesFor="1"
+               enablesFor="*"
                id="org.eclipse.oomph.ConfigureBuilderAction"
                label="Configure Version Management..."
                state="true"
@@ -138,5 +138,19 @@
          </action>
       </actionSet>
    </extension>
+
+<!--
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.eclipse.oomph.views"
+            class="org.eclipse.oomph.version.ui.views.VersionsView"
+            icon="icons/Project.gif"
+            id="org.eclipse.oomph.version.VersionsView"
+            name="Versions"
+            restorable="true">
+      </view>
+   </extension>
+-->
 
 </plugin>

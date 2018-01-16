@@ -11,6 +11,7 @@
 package org.eclipse.oomph.version;
 
 import org.eclipse.oomph.internal.version.Activator;
+import org.eclipse.oomph.internal.version.Activator.ReleaseCheckMode;
 import org.eclipse.oomph.internal.version.VersionBuilderArguments;
 import org.eclipse.oomph.util.IOUtil;
 
@@ -51,7 +52,10 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Provides static utility methods for {@link Version versions}, I/O tasks and access to the {@link IElement component} model.
@@ -303,6 +307,41 @@ public final class VersionUtil
     }
 
     throw new IllegalStateException("Unexpected model type " + componentModel);
+  }
+
+  public static void rebuildReleaseProjects(final Set<String> releasePaths)
+  {
+    new Job("Rebuilding workspace")
+    {
+      @Override
+      protected IStatus run(IProgressMonitor monitor)
+      {
+        try
+        {
+          Set<IBuildConfiguration> allBuildConfigurations = new LinkedHashSet<IBuildConfiguration>();
+          for (String releasePath : releasePaths)
+          {
+            if (Activator.getReleaseCheckMode(releasePath) == ReleaseCheckMode.NONE)
+            {
+              cleanReleaseProjects(releasePath);
+            }
+            else
+            {
+              IBuildConfiguration[] buildConfigs = getBuildConfigs(releasePath);
+              allBuildConfigurations.addAll(Arrays.asList(buildConfigs));
+            }
+          }
+
+          IBuildConfiguration[] buildConfigs = allBuildConfigurations.toArray(new IBuildConfiguration[allBuildConfigurations.size()]);
+          WORKSPACE.build(buildConfigs, IncrementalProjectBuilder.FULL_BUILD, true, monitor);
+          return Status.OK_STATUS;
+        }
+        catch (CoreException ex)
+        {
+          return ex.getStatus();
+        }
+      }
+    }.schedule();
   }
 
   public static void cleanReleaseProjects(final String releasePath)

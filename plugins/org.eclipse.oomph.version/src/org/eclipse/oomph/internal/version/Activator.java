@@ -188,6 +188,44 @@ public class Activator extends Plugin
     }
   }
 
+  public static LaxLowerBoundCheckMode getLaxLowerBoundCheckMode(String releasePath)
+  {
+    Preferences root = Platform.getPreferencesService().getRootNode();
+    try
+    {
+      if (root.nodeExists(PREFERENCE_NODE))
+      {
+        Preferences node = root.node(PREFERENCE_NODE + "/laxLowerBound");
+        String value = node.get(releasePath, null);
+        if (value != null)
+        {
+          return LaxLowerBoundCheckMode.valueOf(value);
+        }
+      }
+    }
+    catch (BackingStoreException ex)
+    {
+      Activator.log(ex);
+    }
+
+    return null;
+  }
+
+  public static void setLaxLowerBoundCheckMode(String releasePath, LaxLowerBoundCheckMode laxLowerBoundCheckMode)
+  {
+    Preferences root = Platform.getPreferencesService().getRootNode();
+    Preferences node = root.node(PREFERENCE_NODE + "/laxLowerBound");
+    node.put(releasePath, laxLowerBoundCheckMode.toString());
+    try
+    {
+      node.flush();
+    }
+    catch (BackingStoreException ex)
+    {
+      log(ex);
+    }
+  }
+
   public static BuildState getBuildState(IProject project)
   {
     String name = project.getName();
@@ -308,6 +346,14 @@ public class Activator extends Plugin
   public enum ReleaseCheckMode
   {
     NONE, PARTIAL, FULL
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public enum LaxLowerBoundCheckMode
+  {
+    SAME_RELEASE, ANY_RELEASE, ALL
   }
 
   /**

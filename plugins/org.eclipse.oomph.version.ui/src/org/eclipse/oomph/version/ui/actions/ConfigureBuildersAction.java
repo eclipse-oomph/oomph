@@ -23,7 +23,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -43,11 +45,20 @@ public class ConfigureBuildersAction extends AbstractAction<Map<IProject, Versio
   @Override
   protected Map<IProject, VersionBuilderArguments> promptArguments()
   {
-    Object element = ((IStructuredSelection)selection).getFirstElement();
-    if (element instanceof IFile)
+    IStructuredSelection structuredSelection = (IStructuredSelection)selection;
+    Collection<String> releasePaths = new HashSet<String>();
+    for (Object element : structuredSelection.toArray())
     {
-      IFile file = (IFile)element;
-      oldMap = collectVersionBuilderArguments(file);
+      if (element instanceof IFile)
+      {
+        IFile file = (IFile)element;
+        releasePaths.add(file.getFullPath().toString());
+      }
+    }
+
+    if (!releasePaths.isEmpty())
+    {
+      oldMap = collectVersionBuilderArguments(releasePaths);
 
       ExtendedConfigurationDialog dialog = new ExtendedConfigurationDialog(shell, oldMap);
       if (dialog.open() == ConfigurationDialog.OK)
@@ -77,9 +88,8 @@ public class ConfigureBuildersAction extends AbstractAction<Map<IProject, Versio
     }
   }
 
-  public static Map<IProject, VersionBuilderArguments> collectVersionBuilderArguments(IFile file)
+  public static Map<IProject, VersionBuilderArguments> collectVersionBuilderArguments(Collection<String> releasePaths)
   {
-    String releasePath = file.getFullPath().toString();
     Map<IProject, VersionBuilderArguments> map = new HashMap<IProject, VersionBuilderArguments>();
 
     for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects())
@@ -94,7 +104,7 @@ public class ConfigureBuildersAction extends AbstractAction<Map<IProject, Versio
           if (VersionUtil.BUILDER_ID.equals(command.getBuilderName()))
           {
             VersionBuilderArguments arguments = new VersionBuilderArguments(command.getArguments());
-            if (releasePath.equals(arguments.getReleasePath()))
+            if (releasePaths.contains(arguments.getReleasePath()))
             {
               map.put(project, arguments);
             }

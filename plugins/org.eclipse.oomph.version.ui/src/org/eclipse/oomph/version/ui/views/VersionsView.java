@@ -10,6 +10,11 @@
  */
 package org.eclipse.oomph.version.ui.views;
 
+import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.version.VersionUtil;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -20,13 +25,20 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.osgi.service.resolver.BundleDescription;
+import org.eclipse.osgi.service.resolver.BundleSpecification;
+import org.eclipse.osgi.service.resolver.ExportPackageDescription;
+import org.eclipse.osgi.service.resolver.ImportPackageSpecification;
+import org.eclipse.pde.core.IModel;
+import org.eclipse.pde.core.plugin.IPluginModelBase;
+import org.eclipse.pde.core.plugin.PluginRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -37,6 +49,13 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * @author Eike Stepper
  */
@@ -44,7 +63,7 @@ public class VersionsView extends ViewPart
 {
   public static final String ID = "org.eclipse.oomph.version.VersionsView";
 
-  private TableViewer viewer;
+  private TreeViewer viewer;
 
   private Action action1;
 
@@ -65,7 +84,7 @@ public class VersionsView extends ViewPart
   @Override
   public void createPartControl(Composite parent)
   {
-    viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+    viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
     viewer.setContentProvider(new ViewContentProvider());
     viewer.setLabelProvider(new ViewLabelProvider());
     viewer.setComparator(new NameSorter());
@@ -179,8 +198,29 @@ public class VersionsView extends ViewPart
   /**
    * @author Eike Stepper
    */
-  class ViewContentProvider implements IStructuredContentProvider
+  class ViewContentProvider implements ITreeContentProvider
   {
+    private final Map<String, Set<BundleDescription>> bundles = new HashMap<String, Set<BundleDescription>>();
+
+    private final Map<String, Set<ExportPackageDescription>> packages = new HashMap<String, Set<ExportPackageDescription>>();
+
+    public ViewContentProvider()
+    {
+      for (IPluginModelBase pluginModel : PluginRegistry.getActiveModels(true))
+      {
+        BundleDescription bundleDescription = pluginModel.getBundleDescription();
+        if (bundleDescription != null)
+        {
+          CollectionUtil.add(bundles, bundleDescription.getSymbolicName(), bundleDescription);
+        }
+
+        for (ExportPackageDescription exportPackageDescription : bundleDescription.getExportPackages())
+        {
+          CollectionUtil.add(packages, exportPackageDescription.getName(), exportPackageDescription);
+        }
+      }
+    }
+
     public void inputChanged(Viewer v, Object oldInput, Object newInput)
     {
     }
@@ -189,9 +229,73 @@ public class VersionsView extends ViewPart
     {
     }
 
+    public Object[] getChildren(Object parent)
+    {
+      List<Object> result = new ArrayList<Object>();
+      if (parent instanceof IPluginModelBase)
+      {
+        IPluginModelBase pluginModel = (IPluginModelBase)parent;
+        BundleDescription bundleDescription = pluginModel.getBundleDescription();
+        if (bundleDescription != null)
+        {
+          BundleSpecification[] requiredBundles = bundleDescription.getRequiredBundles();
+          ImportPackageSpecification[] importPackages = bundleDescription.getImportPackages();
+          result.addAll(Arrays.asList(requiredBundles));
+          result.addAll(Arrays.asList(importPackages));
+        }
+      }
+      else if (parent instanceof BundleSpecification)
+      {
+        BundleSpecification bundleSpecification = (BundleSpecification)parent;
+        Set<BundleDescription> resolvedBundles = bundles.get(bundleSpecification.getName());
+        if (resolvedBundles != null)
+        {
+          result.addAll(resolvedBundles);
+        }
+      }
+      else if (parent instanceof ImportPackageSpecification)
+      {
+        ImportPackageSpecification importPackageSpecification = (ImportPackageSpecification)parent;
+        Set<ExportPackageDescription> resolvedPackages = packages.get(importPackageSpecification.getName());
+        if (resolvedPackages != null)
+        {
+          result.addAll(resolvedPackages);
+        }
+      }
+
+      return result.toArray();
+    }
+
     public Object[] getElements(Object parent)
     {
-      return new String[] { "One", "Two", "Three" };
+
+      List<IModel> allComponentModels = new ArrayList<IModel>();
+      for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects())
+      {
+        if (project.isAccessible())
+        {
+          try
+          {
+            List<IModel> componentModels = VersionUtil.getComponentModels(project);
+            allComponentModels.addAll(componentModels);
+          }
+          catch (RuntimeException ex)
+          {
+          }
+        }
+      }
+
+      return allComponentModels.toArray();
+    }
+
+    public boolean hasChildren(Object element)
+    {
+      return getChildren(element).length > 0;
+    }
+
+    public Object getParent(Object element)
+    {
+      return null;
     }
   }
 

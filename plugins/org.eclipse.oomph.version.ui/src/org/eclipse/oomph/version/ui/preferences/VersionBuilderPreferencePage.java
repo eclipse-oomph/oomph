@@ -12,6 +12,7 @@ package org.eclipse.oomph.version.ui.preferences;
 
 import org.eclipse.oomph.internal.ui.AbstractPreferencePage;
 import org.eclipse.oomph.internal.version.Activator;
+import org.eclipse.oomph.internal.version.Activator.LaxLowerBoundCheckMode;
 import org.eclipse.oomph.internal.version.Activator.ReleaseCheckMode;
 import org.eclipse.oomph.version.VersionUtil;
 
@@ -28,6 +29,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -39,22 +42,51 @@ import org.eclipse.swt.widgets.TableItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Eike Stepper
  */
 public class VersionBuilderPreferencePage extends AbstractPreferencePage
 {
+  private final Map<String, ReleaseCheckMode> releaseCheckModes = new LinkedHashMap<String, ReleaseCheckMode>();
+
+  private final Map<String, LaxLowerBoundCheckMode> lowerBoundCheckModes = new LinkedHashMap<String, LaxLowerBoundCheckMode>();
+
   public VersionBuilderPreferencePage()
   {
-    noDefaultAndApplyButton();
+    noDefaultButton();
+
+    final List<String> releasePaths = new ArrayList<String>(Activator.getReleasePaths());
+    Collections.sort(releasePaths);
+    for (String releasePath : releasePaths)
+    {
+      ReleaseCheckMode releaseCheckMode = Activator.getReleaseCheckMode(releasePath);
+      if (releaseCheckMode == null)
+      {
+        releaseCheckMode = ReleaseCheckMode.FULL;
+      }
+
+      releaseCheckModes.put(releasePath, releaseCheckMode);
+
+      LaxLowerBoundCheckMode laxLowerBoundCheckMode = Activator.getLaxLowerBoundCheckMode(releasePath);
+      if (laxLowerBoundCheckMode == null)
+      {
+        laxLowerBoundCheckMode = LaxLowerBoundCheckMode.SAME_RELEASE;
+      }
+
+      lowerBoundCheckModes.put(releasePath, laxLowerBoundCheckMode);
+    }
   }
 
   @Override
   protected Control doCreateContents(Composite parent)
   {
-    java.util.List<String> releasePaths = new ArrayList<String>(Activator.getReleasePaths());
-    Collections.sort(releasePaths);
+    final Set<String> releasePaths = releaseCheckModes.keySet();
 
     final TableViewer viewer = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.NO_SCROLL | SWT.V_SCROLL);
 
@@ -73,6 +105,93 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
     checkModeColumn.setText("Check Mode");
     checkModeColumn.setResizable(false);
     checkModeColumn.setMoveable(false);
+    checkModeColumn.pack();
+    checkModeColumn.setWidth(checkModeColumn.getWidth() + 10);
+    checkModeColumn.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        boolean uniform = true;
+        ReleaseCheckMode minimumReleaseCheckMode = null;
+        for (String releasePath : releasePaths)
+        {
+          ReleaseCheckMode releaseCheckMode = releaseCheckModes.get(releasePath);
+          if (minimumReleaseCheckMode == null)
+          {
+            minimumReleaseCheckMode = releaseCheckMode;
+          }
+          else if (!minimumReleaseCheckMode.equals(releaseCheckMode))
+          {
+            uniform = false;
+            if (releaseCheckMode.compareTo(minimumReleaseCheckMode) < 0)
+            {
+              minimumReleaseCheckMode = releaseCheckMode;
+            }
+          }
+        }
+
+        if (uniform)
+        {
+          ReleaseCheckMode[] values = ReleaseCheckMode.values();
+          minimumReleaseCheckMode = values[(minimumReleaseCheckMode.ordinal() + 1) % values.length];
+        }
+
+        for (String releasePath : releasePaths)
+        {
+          releaseCheckModes.put(releasePath, minimumReleaseCheckMode);
+        }
+
+        viewer.refresh();
+      }
+    });
+
+    TableViewerColumn lowerBoundCheckModeViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
+    final TableColumn lowerBoundCheckModeColumn = lowerBoundCheckModeViewerColumn.getColumn();
+    lowerBoundCheckModeColumn.setText("Lower Bound Check Mode");
+    lowerBoundCheckModeColumn.setResizable(false);
+    lowerBoundCheckModeColumn.setMoveable(false);
+    lowerBoundCheckModeColumn.pack();
+    lowerBoundCheckModeColumn.setWidth(lowerBoundCheckModeColumn.getWidth() + 10);
+    lowerBoundCheckModeColumn.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        boolean uniform = true;
+        LaxLowerBoundCheckMode minimumLowerBoundCheckMode = null;
+        for (String releasePath : releasePaths)
+        {
+          LaxLowerBoundCheckMode lowerBoundCheckMode = lowerBoundCheckModes.get(releasePath);
+
+          if (minimumLowerBoundCheckMode == null)
+          {
+            minimumLowerBoundCheckMode = lowerBoundCheckMode;
+          }
+          else if (!minimumLowerBoundCheckMode.equals(lowerBoundCheckMode))
+          {
+            uniform = false;
+            if (lowerBoundCheckMode.compareTo(minimumLowerBoundCheckMode) < 0)
+            {
+              minimumLowerBoundCheckMode = lowerBoundCheckMode;
+            }
+          }
+        }
+
+        if (uniform)
+        {
+          LaxLowerBoundCheckMode[] values = LaxLowerBoundCheckMode.values();
+          minimumLowerBoundCheckMode = values[(minimumLowerBoundCheckMode.ordinal() + 1) % values.length];
+        }
+
+        for (String releasePath : releasePaths)
+        {
+          lowerBoundCheckModes.put(releasePath, minimumLowerBoundCheckMode);
+        }
+
+        viewer.refresh();
+      }
+    });
 
     final ControlAdapter columnResizer = new ControlAdapter()
     {
@@ -86,12 +205,9 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
           size.x -= bar.getSize().x;
         }
 
-        releaseColumn.setWidth(size.x - checkModeColumn.getWidth());
+        releaseColumn.setWidth(size.x - checkModeColumn.getWidth() - lowerBoundCheckModeColumn.getWidth());
       }
     };
-
-    checkModeColumn.pack();
-    checkModeColumn.setWidth(checkModeColumn.getWidth() + 10);
 
     table.addControlListener(columnResizer);
     table.getDisplay().asyncExec(new Runnable()
@@ -102,7 +218,7 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
       }
     });
 
-    viewer.setColumnProperties(new String[] { "releasePath", "checkMode" });
+    viewer.setColumnProperties(new String[] { "releasePath", "checkMode", "lowerBoundCheckMode" });
 
     viewer.setContentProvider(new ArrayContentProvider());
 
@@ -112,12 +228,17 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
     {
       public boolean canModify(Object element, String property)
       {
-        return "checkMode".equals(property);
+        return "checkMode".equals(property) || "lowerBoundCheckMode".equals(property);
       }
 
       public Object getValue(Object element, String property)
       {
-        return Activator.getReleaseCheckMode((String)element);
+        if (property.equals("checkMode"))
+        {
+          return releaseCheckModes.get(element);
+        }
+
+        return lowerBoundCheckModes.get(element);
       }
 
       public void modify(Object element, String property, Object value)
@@ -126,15 +247,23 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
         {
           element = ((TableItem)element).getData();
         }
+
         String releasePath = (String)element;
-        Activator.setReleaseCheckMode(releasePath, (ReleaseCheckMode)value);
+        if (property.equals("checkMode"))
+        {
+          releaseCheckModes.put(releasePath, (ReleaseCheckMode)value);
+        }
+        else
+        {
+          lowerBoundCheckModes.put(releasePath, (LaxLowerBoundCheckMode)value);
+        }
+
         viewer.update(element, new String[] { property });
-        VersionUtil.cleanReleaseProjects(releasePath);
       }
     });
 
-    ComboBoxViewerCellEditor cellEditor = new ComboBoxViewerCellEditor(table);
-    cellEditor.setContentProvider(new IStructuredContentProvider()
+    ComboBoxViewerCellEditor checkModeCellEditor = new ComboBoxViewerCellEditor(table, SWT.READ_ONLY);
+    checkModeCellEditor.setContentProvider(new IStructuredContentProvider()
     {
       public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
       {
@@ -150,19 +279,93 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
       }
     });
 
-    viewer.setCellEditors(new CellEditor[] { null, cellEditor });
-    cellEditor.setLabelProvider(new LabelProvider());
+    checkModeCellEditor.setLabelProvider(new LabelProvider());
+    checkModeCellEditor.setInput(releasePaths);
+
+    ComboBoxViewerCellEditor lowerBoundCheckModeCellEditor = new ComboBoxViewerCellEditor(table, SWT.READ_ONLY);
+    lowerBoundCheckModeCellEditor.setContentProvider(new IStructuredContentProvider()
+    {
+      public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
+      {
+      }
+
+      public void dispose()
+      {
+      }
+
+      public Object[] getElements(Object inputElement)
+      {
+        return LaxLowerBoundCheckMode.values();
+      }
+    });
+
+    lowerBoundCheckModeCellEditor.setLabelProvider(new LabelProvider());
+    lowerBoundCheckModeCellEditor.setInput(releasePaths);
+
+    viewer.setCellEditors(new CellEditor[] { null, checkModeCellEditor, lowerBoundCheckModeCellEditor });
 
     viewer.setInput(releasePaths);
-    cellEditor.setInput(releasePaths);
+
+    releaseColumn.pack();
+    table.setSize(releaseColumn.getWidth() + checkModeColumn.getWidth() + lowerBoundCheckModeColumn.getWidth(), 100);
 
     return table;
+  }
+
+  @Override
+  public boolean performOk()
+  {
+    performApply();
+    return true;
+  }
+
+  @Override
+  protected void performApply()
+  {
+    Set<String> changedReleases = new HashSet<String>();
+
+    for (Map.Entry<String, ReleaseCheckMode> entry : releaseCheckModes.entrySet())
+    {
+      String releasePath = entry.getKey();
+      ReleaseCheckMode releaseCheckMode = entry.getValue();
+      ReleaseCheckMode oldReleaseCheckMode = Activator.getReleaseCheckMode(releasePath);
+
+      if (releaseCheckMode != oldReleaseCheckMode)
+      {
+        Activator.setReleaseCheckMode(releasePath, releaseCheckMode);
+        if (oldReleaseCheckMode != null || releaseCheckMode != ReleaseCheckMode.FULL)
+        {
+          changedReleases.add(releasePath);
+        }
+      }
+    }
+
+    for (Map.Entry<String, LaxLowerBoundCheckMode> entry : lowerBoundCheckModes.entrySet())
+    {
+      String releasePath = entry.getKey();
+      LaxLowerBoundCheckMode laxLowerBoundCheckMode = entry.getValue();
+      LaxLowerBoundCheckMode oldLaxLowerBoundCheckMode = Activator.getLaxLowerBoundCheckMode(releasePath);
+
+      if (laxLowerBoundCheckMode != oldLaxLowerBoundCheckMode)
+      {
+        Activator.setLaxLowerBoundCheckMode(releasePath, laxLowerBoundCheckMode);
+        if (oldLaxLowerBoundCheckMode != null || laxLowerBoundCheckMode != LaxLowerBoundCheckMode.SAME_RELEASE)
+        {
+          changedReleases.add(releasePath);
+        }
+      }
+    }
+
+    if (!changedReleases.isEmpty())
+    {
+      VersionUtil.rebuildReleaseProjects(changedReleases);
+    }
   }
 
   /**
    * @author Eike Stepper
    */
-  private static final class ReleaseCheckModeLabelProvider extends LabelProvider implements ITableLabelProvider
+  private final class ReleaseCheckModeLabelProvider extends LabelProvider implements ITableLabelProvider
   {
     public Image getColumnImage(Object element, int columnIndex)
     {
@@ -177,8 +380,14 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
         return releasePath;
       }
 
-      ReleaseCheckMode releaseCheckMode = Activator.getReleaseCheckMode(releasePath);
-      return releaseCheckMode == null ? "bad" : releaseCheckMode.toString();
+      if (columnIndex == 1)
+      {
+        ReleaseCheckMode releaseCheckMode = releaseCheckModes.get(releasePath);
+        return releaseCheckMode.toString();
+      }
+
+      LaxLowerBoundCheckMode laxLowerBoundCheckMode = lowerBoundCheckModes.get(releasePath);
+      return laxLowerBoundCheckMode.toString();
     }
   }
 }

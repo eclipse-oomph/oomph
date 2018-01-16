@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.internal.version;
 
+import org.eclipse.oomph.internal.version.Activator.LaxLowerBoundCheckMode;
 import org.eclipse.oomph.internal.version.Activator.ReleaseCheckMode;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.version.IElement;
@@ -102,6 +103,12 @@ public class ReleaseManager implements IReleaseManager
         Activator.setReleaseCheckMode(releasePath, ReleaseCheckMode.FULL);
       }
 
+      LaxLowerBoundCheckMode laxLowerBoundCheckMode = Activator.getLaxLowerBoundCheckMode(releasePath);
+      if (laxLowerBoundCheckMode == null)
+      {
+        Activator.setLaxLowerBoundCheckMode(releasePath, LaxLowerBoundCheckMode.SAME_RELEASE);
+      }
+
       if (!file.exists())
       {
         throw new FileNotFoundException(releasePath);
@@ -130,7 +137,7 @@ public class ReleaseManager implements IReleaseManager
       {
         VersionBuilderArguments args = new VersionBuilderArguments(project);
         String releasePath = args.getReleasePath();
-        if (path.equals(releasePath))
+        if (path == null || path.equals(releasePath))
         {
           for (IModel componentModel : VersionUtil.getComponentModels(project))
           {

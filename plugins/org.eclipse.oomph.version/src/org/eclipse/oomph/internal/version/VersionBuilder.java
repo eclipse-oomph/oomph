@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.internal.version;
 
+import org.eclipse.oomph.internal.version.Activator.LaxLowerBoundCheckMode;
 import org.eclipse.oomph.internal.version.Activator.ReleaseCheckMode;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -167,26 +168,28 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
   private void ensureCacheExists() throws NoSuchAlgorithmException, CoreException, IOException
   {
-    String path = arguments.getReleasePath();
-    if (releasePaths.add(path))
+    for (String path : Activator.getReleasePaths())
     {
-      Map<IElement, IElement> elements = IReleaseManager.INSTANCE.createElements(arguments.getReleasePath(), false);
-      elementCache.putAll(elements);
-      for (IElement element : elements.keySet())
+      if (releasePaths.add(path))
       {
-        IElement.Type type = element.getType();
-        if (type == IElement.Type.FEATURE || type == IElement.Type.PRODUCT)
+        Map<IElement, IElement> elements = IReleaseManager.INSTANCE.createElements(path, false);
+        elementCache.putAll(elements);
+        for (IElement element : elements.keySet())
         {
-          for (IElement child : element.getChildren())
+          IElement.Type type = element.getType();
+          if (type == IElement.Type.FEATURE || type == IElement.Type.PRODUCT)
           {
-            Set<IElement> references = elementReferences.get(child);
-            if (references == null)
+            for (IElement child : element.getChildren())
             {
-              references = new HashSet<IElement>();
-              elementReferences.put(child, references);
-            }
+              Set<IElement> references = elementReferences.get(child);
+              if (references == null)
+              {
+                references = new HashSet<IElement>();
+                elementReferences.put(child, references);
+              }
 
-            references.add(element);
+              references.add(element);
+            }
           }
         }
       }
@@ -399,6 +402,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
           }
         }
 
+        IElement releaseElement = release.getElements().get(element.trimVersion());
         boolean contentMustChange = false;
         if (elementType == IElement.Type.PLUGIN)
         {
@@ -438,9 +442,13 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
             Markers.deleteAllMarkers(getProject().getFile(MANIFEST_PATH), Markers.LOWER_BOUND_VERSION_PROBLEM);
           }
 
-          if (!arguments.isIgnoreLaxLowerBoundDependencyVersions())
+          LaxLowerBoundCheckMode laxLowerBoundCheckMode = Activator.getLaxLowerBoundCheckMode(releasePathArg);
+          // Only check the lower bounds if the element itself has been modified.
+          // Only in this case does it potentially use changes to the bundles/packages it uses (except maybe for new overloaded methods).
+          if (!arguments.isIgnoreLaxLowerBoundDependencyVersions()
+              && (releaseElement == null || !releaseElement.getVersion().equals(element.getVersion()) || laxLowerBoundCheckMode == LaxLowerBoundCheckMode.ALL))
           {
-            contentMustChange = !checkLowerBoundVersions((IPluginModelBase)componentModel);
+            contentMustChange = !checkLowerBoundVersions((IPluginModelBase)componentModel, laxLowerBoundCheckMode);
           }
           else if (!oldVersionBuilderArguments.isIgnoreLaxLowerBoundDependencyVersions())
           {
@@ -506,7 +514,6 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
           Markers.deleteAllMarkers(project.getFile(MAVEN_POM_PATH), Markers.MAVEN_POM_PROBLEM);
         }
 
-        IElement releaseElement = release.getElements().get(element.trimVersion());
         if (releaseElement == null)
         {
           if (VersionUtil.DEBUG)
@@ -1378,45 +1385,102 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       VersionRange range = requiredBundle.getVersionRange();
       if (isUnspecified(getMaximum(range)))
       {
-        addRequireMarker(file, requiredBundle.getName(), "dependency must specify a version range");
+        VersionRange expectedVersionRange = null;
+        boolean missing;
+        if (VersionRange.emptyRange.equals(range))
+        {
+          missing = true;
+          String name = requiredBundle.getName();
+          for (BundleDescription bundleDescription : description.getResolvedRequires())
+          {
+            if (name.equals(bundleDescription.getSymbolicName()))
+            {
+              expectedVersionRange = createVersionRange(bundleDescription.getVersion());
+              break;
+            }
+          }
+        }
+        else
+        {
+          missing = false;
+          Version minVersion = range.getMinimum();
+          Version maxVersion = new Version(minVersion.getMajor() + 1, 0, 0);
+          expectedVersionRange = new VersionRange(minVersion, range.getIncludeMinimum(), maxVersion, false);
+        }
+
+        addRequireMarker(file, requiredBundle.getName(), "dependency must specify a version range", missing, expectedVersionRange);
       }
       else
       {
         if (!range.getIncludeMinimum())
         {
-          addRequireMarker(file, requiredBundle.getName(), "dependency range must include the minimum");
+          VersionRange expectedVersionRange = new VersionRange(range.getMinimum(), true, getMaximum(range), false);
+          addRequireMarker(file, requiredBundle.getName(), "dependency range must include the minimum", false, expectedVersionRange);
         }
 
         if (range.getIncludeMaximum())
         {
-          addRequireMarker(file, requiredBundle.getName(), "dependency range must not include the maximum");
+          VersionRange expectedVersionRange = new VersionRange(range.getMinimum(), true, getMaximum(range), false);
+          addRequireMarker(file, requiredBundle.getName(), "dependency range must not include the maximum", false, expectedVersionRange);
         }
       }
     }
 
-    for (ImportPackageSpecification importPackage : description.getImportPackages())
+    LOOP: for (ImportPackageSpecification importPackage : description.getImportPackages())
     {
       VersionRange range = importPackage.getVersionRange();
       if (isUnspecified(getMaximum(range)))
       {
-        addImportMarker(file, importPackage.getName(), "dependency must specify a version range");
+        VersionRange expectedVersionRange = null;
+        boolean missing;
+        if (VersionRange.emptyRange.equals(range))
+        {
+          // Don't report a problem if the package import resolves to a package with the empty version.
+          for (ExportPackageDescription exportPackageDescription : description.getResolvedImports())
+          {
+            if (exportPackageDescription.getName().equals(importPackage.getName()))
+            {
+              Version version = exportPackageDescription.getVersion();
+              if (Version.emptyVersion.equals(version))
+              {
+                continue LOOP;
+              }
+
+              expectedVersionRange = createVersionRange(version);
+
+              break;
+            }
+          }
+          missing = true;
+        }
+        else
+        {
+          missing = false;
+          Version minVersion = range.getMinimum();
+          Version maxVersion = new Version(minVersion.getMajor() + 1, 0, 0);
+          expectedVersionRange = new VersionRange(minVersion, range.getIncludeMinimum(), maxVersion, false);
+        }
+
+        addImportMarker(file, importPackage.getName(), "dependency must specify a version range", missing, expectedVersionRange);
       }
       else
       {
         if (!range.getIncludeMinimum())
         {
-          addImportMarker(file, importPackage.getName(), "dependency range must include the minimum");
+          VersionRange expectedVersionRange = new VersionRange(range.getMinimum(), true, getMaximum(range), false);
+          addImportMarker(file, importPackage.getName(), "dependency range must include the minimum", false, expectedVersionRange);
         }
 
         if (range.getIncludeMaximum())
         {
-          addImportMarker(file, importPackage.getName(), "dependency range must not include the maximum");
+          VersionRange expectedVersionRange = new VersionRange(range.getMinimum(), true, getMaximum(range), false);
+          addImportMarker(file, importPackage.getName(), "dependency range must not include the maximum", false, expectedVersionRange);
         }
       }
     }
   }
 
-  private boolean checkLowerBoundVersions(IPluginModelBase pluginModel) throws CoreException, IOException
+  private boolean checkLowerBoundVersions(IPluginModelBase pluginModel, LaxLowerBoundCheckMode laxLowerBoundCheckMode) throws CoreException, IOException
   {
     boolean result = true;
 
@@ -1429,7 +1493,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       String releasePath = arguments.getReleasePath();
       for (BundleSpecification requiredBundle : description.getRequiredBundles())
       {
-        if (!checkLowerBoundVersions(file, releasePath, requiredBundle, "bundle-version"))
+        if (!checkLowerBoundVersions(file, releasePath, requiredBundle, "bundle-version", laxLowerBoundCheckMode))
         {
           result = false;
         }
@@ -1437,7 +1501,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
       for (ImportPackageSpecification importPackage : description.getImportPackages())
       {
-        if (!checkLowerBoundVersions(file, releasePath, importPackage, "version"))
+        if (!checkLowerBoundVersions(file, releasePath, importPackage, "version", laxLowerBoundCheckMode))
         {
           result = false;
         }
@@ -1447,7 +1511,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     return result;
   }
 
-  private boolean checkLowerBoundVersions(IFile file, String releasePath, VersionConstraint versionConstraint, String versionAttribute)
+  private boolean checkLowerBoundVersions(IFile file, String releasePath, VersionConstraint versionConstraint, String versionAttribute,
+      LaxLowerBoundCheckMode laxLowerBoundCheckMode)
   {
     VersionRange requiredVersionRange = versionConstraint.getVersionRange();
     if (!VersionRange.emptyRange.equals(requiredVersionRange))
@@ -1456,7 +1521,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
       if (supplier != null)
       {
         Version version = supplier.getVersion();
-        version = new Version(version.getMajor(), version.getMinor(), version.getMicro());
+        version = new Version(version.getMajor(), version.getMinor(), 0);
         Version minimumRequiredVersion = requiredVersionRange.getMinimum();
         if (!minimumRequiredVersion.equals(version))
         {
@@ -1475,16 +1540,24 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
                   IProject project = underlyingResource.getProject();
                   VersionBuilderArguments versionBuilderArguments = new VersionBuilderArguments(project);
                   String elementReleasePath = versionBuilderArguments.getReleasePath();
-                  if (releasePath.equals(elementReleasePath))
+                  if (releasePath.equals(elementReleasePath) || laxLowerBoundCheckMode == LaxLowerBoundCheckMode.ANY_RELEASE && elementReleasePath != null
+                      || laxLowerBoundCheckMode == LaxLowerBoundCheckMode.ALL)
                   {
                     String name = versionConstraint.getName();
-                    VersionRange expectedVersionRange = new VersionRange(element.getVersion(), true, requiredVersionRange.getRight(),
+                    VersionRange expectedVersionRange = new VersionRange(version, true, getMaximum(requiredVersionRange),
                         requiredVersionRange.getIncludeMaximum());
                     addLaxLowerBoundMarker(file, name, "dependency range minimum must be " + version, expectedVersionRange, versionAttribute);
                     return false;
                   }
                 }
               }
+            }
+            else if (laxLowerBoundCheckMode == LaxLowerBoundCheckMode.ALL)
+            {
+              String name = versionConstraint.getName();
+              VersionRange expectedVersionRange = new VersionRange(version, true, getMaximum(requiredVersionRange), requiredVersionRange.getIncludeMaximum());
+              addLaxLowerBoundMarker(file, name, "dependency range minimum must be " + version, expectedVersionRange, versionAttribute);
+              return false;
             }
           }
         }
@@ -1681,23 +1754,38 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     return false;
   }
 
-  private void addRequireMarker(IFile file, String name, String message)
+  private void addRequireMarker(IFile file, String name, String message, boolean missing, VersionRange versionRange)
   {
     try
     {
-      String regex = name.replace(".", "\\.") + ";bundle-version=\"([^\\\"]*)\"";
+      String regex = missing ? "^Require-Bundle: (?:\r?\n |[^\r\n])*" + name.replace(".", "\\.") + "()(;[^,]*?)?(,|$)"
+          : name.replace(".", "\\.") + ";bundle-version=\"([^\\\"]*)\"";
 
       IMarker marker = Markers.addMarker(file, "'" + name + "' " + message, IMarker.SEVERITY_ERROR, regex);
       if (marker != null)
       {
         marker.setAttribute(Markers.PROBLEM_TYPE, Markers.DEPENDENCY_RANGE_PROBLEM);
         marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.IGNORE_DEPENDENCY_RANGES_ARGUMENT);
+
+        if (versionRange != null)
+        {
+          marker.setAttribute(Markers.QUICK_FIX_PATTERN, regex);
+          marker.setAttribute(Markers.QUICK_FIX_REPLACEMENT, missing ? ";bundle-version=\"" + versionRange.toString() + '"' : versionRange.toString());
+        }
       }
     }
     catch (Exception ex)
     {
       Activator.log(ex);
     }
+  }
+
+  private VersionRange createVersionRange(Version version)
+  {
+    Version minVersion = new Version(version.getMajor(), version.getMinor(), 0);
+    Version maxVersion = new Version(version.getMajor() + 1, 0, 0);
+    VersionRange versionRange = new VersionRange(minVersion, true, maxVersion, false);
+    return versionRange;
   }
 
   private void addLaxLowerBoundMarker(IFile file, String name, String message, VersionRange versionRange, String versionAttribute)
@@ -1721,17 +1809,24 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     }
   }
 
-  private void addImportMarker(IFile file, String name, String message)
+  private void addImportMarker(IFile file, String name, String message, boolean missing, VersionRange versionRange)
   {
     try
     {
-      String regex = name.replace(".", "\\.") + ";version=\"([^\\\"]*)\"";
+      String regex = missing ? "^Import-Package: (?:\r?\n |[^\r\n])*" + name.replace(".", "\\.") + "()(;[^,]*?)?(,|$)"
+          : name.replace(".", "\\.") + ";version=\"([^\\\"]*)\"";
 
       IMarker marker = Markers.addMarker(file, "'" + name + "' " + message, IMarker.SEVERITY_ERROR, regex);
       if (marker != null)
       {
         marker.setAttribute(Markers.PROBLEM_TYPE, Markers.DEPENDENCY_RANGE_PROBLEM);
         marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.IGNORE_DEPENDENCY_RANGES_ARGUMENT);
+
+        if (versionRange != null)
+        {
+          marker.setAttribute(Markers.QUICK_FIX_PATTERN, regex);
+          marker.setAttribute(Markers.QUICK_FIX_REPLACEMENT, missing ? ";version=\"" + versionRange.toString() + '"' : versionRange.toString());
+        }
       }
     }
     catch (Exception ex)

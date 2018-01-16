@@ -69,6 +69,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -266,7 +267,8 @@ public class ManifestDiscovery
           Button button = (Button)composite3.getChildren()[1];
           if (!(button.getData() instanceof DiscoverPluginsListener))
           {
-            Button newButton = new Button(composite3, SWT.PUSH);
+            FormToolkit toolkit = dependenciesPage.getManagedForm().getToolkit();
+            Button newButton = toolkit != null ? toolkit.createButton(composite3, "Discover...", SWT.PUSH) : new Button(composite3, SWT.PUSH);
             newButton.moveAbove(button);
             composite3.layout();
 
@@ -280,9 +282,10 @@ public class ManifestDiscovery
           Composite composite2 = (Composite)section.getChildren()[2];
           Composite composite3 = (Composite)composite2.getChildren()[1];
           Button button = (Button)composite3.getChildren()[1];
-          if (!(button.getData() instanceof DiscoverPluginsListener))
+          if (!(button.getData() instanceof DiscoverPackagesListener))
           {
-            Button newButton = new Button(composite3, SWT.PUSH);
+            FormToolkit toolkit = dependenciesPage.getManagedForm().getToolkit();
+            Button newButton = toolkit != null ? toolkit.createButton(composite3, "Discover...", SWT.PUSH) : new Button(composite3, SWT.PUSH);
             newButton.moveAbove(button);
             composite3.layout();
 

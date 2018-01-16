@@ -20,6 +20,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -192,6 +193,34 @@ public class ExtendedConfigurationDialog extends TitleAreaDialog
       TableColumn column = new TableColumn(table, SWT.CENTER);
       column.setWidth(10 + extent.x + 10);
       column.setText(header);
+
+      final ArrayList<Button> buttons = new ArrayList<Button>();
+      column.setData("buttons", buttons);
+      column.addSelectionListener(new SelectionListener()
+      {
+        public void widgetSelected(SelectionEvent e)
+        {
+          boolean selected = false;
+          for (Button button : buttons)
+          {
+            if (button.getSelection())
+            {
+              selected = true;
+            }
+          }
+
+          for (Button button : buttons)
+          {
+            button.setSelection(!selected);
+            button.notifyListeners(SWT.Selection, null);
+          }
+        }
+
+        public void widgetDefaultSelected(SelectionEvent e)
+        {
+        }
+      });
+
     }
 
     public void populateItem(Table table, TableItem item, final VersionBuilderArguments arguments, int column)
@@ -214,6 +243,10 @@ public class ExtendedConfigurationDialog extends TitleAreaDialog
       editor.minimumWidth = size.x;
       editor.minimumHeight = size.y;
       editor.setEditor(button, item, column);
+
+      @SuppressWarnings("unchecked")
+      List<Button> buttons = (List<Button>)table.getColumns()[column].getData("buttons");
+      buttons.add(button);
     }
 
     protected boolean isChecked(VersionBuilderArguments arguments)
