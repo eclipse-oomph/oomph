@@ -396,42 +396,42 @@
       <repositoryList
           name="Neon">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.6"/>
+            url="http://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400"/>
       </repositoryList>
       <repositoryList
           name="Mars">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.5"/>
+            url="http://download.eclipse.org/eclipse/updates/4.5/R-4.5.2-201602121500"/>
       </repositoryList>
       <repositoryList
           name="Luna">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.4"/>
+            url="http://download.eclipse.org/eclipse/updates/4.4/R-4.4.2-201502041700"/>
       </repositoryList>
       <repositoryList
           name="Kepler">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.3"/>
+            url="http://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700"/>
       </repositoryList>
       <repositoryList
           name="Juno">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.2"/>
+            url="http://download.eclipse.org/eclipse/updates/4.2/R-4.2.2-201302041200"/>
       </repositoryList>
       <repositoryList
           name="Indigo">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/3.7"/>
+            url="http://download.eclipse.org/eclipse/updates/3.7/R-3.7.2-201202080800"/>
       </repositoryList>
       <repositoryList
           name="Helios">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/3.6"/>
+            url="http://download.eclipse.org/eclipse/updates/3.6/R-3.6.2-201102101200"/>
       </repositoryList>
       <repositoryList
           name="Galileo">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/3.5"/>
+            url="http://download.eclipse.org/eclipse/updates/3.5/R-3.5.2-201002111343"/>
       </repositoryList>
     </targlet>
   </setupTask>
@@ -459,42 +459,42 @@
       <repositoryList
           name="Neon">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.6"/>
+            url="http://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400"/>
       </repositoryList>
       <repositoryList
           name="Mars">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.5"/>
+            url="http://download.eclipse.org/eclipse/updates/4.5/R-4.5.2-201602121500"/>
       </repositoryList>
       <repositoryList
           name="Luna">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.4"/>
+            url="http://download.eclipse.org/eclipse/updates/4.4/R-4.4.2-201502041700"/>
       </repositoryList>
       <repositoryList
           name="Kepler">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.3"/>
+            url="http://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700"/>
       </repositoryList>
       <repositoryList
           name="Juno">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.2"/>
+            url="http://download.eclipse.org/eclipse/updates/4.2/R-4.2.2-201302041200"/>
       </repositoryList>
       <repositoryList
           name="Indigo">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/3.7"/>
+            url="http://download.eclipse.org/eclipse/updates/3.7/R-3.7.2-201202080800"/>
       </repositoryList>
       <repositoryList
           name="Helios">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/3.6"/>
+            url="http://download.eclipse.org/eclipse/updates/3.6/R-3.6.2-201102101200"/>
       </repositoryList>
       <repositoryList
           name="Galileo">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/3.5"/>
+            url="http://download.eclipse.org/eclipse/updates/3.5/R-3.5.2-201002111343"/>
       </repositoryList>
     </targlet>
   </setupTask>
