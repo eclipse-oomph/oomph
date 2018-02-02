@@ -26,6 +26,11 @@
       <value>https://projects.eclipse.org/projects/tools.oomph</value>
     </detail>
   </annotation>
+  <annotation
+      source="ConfigurationReference">
+    <reference
+        href="configurations/OomphConfiguration.setup#/"/>
+  </annotation>
   <setupTask
       xsi:type="setup.p2:P2Task"
       label="Oomph">
@@ -176,16 +181,16 @@
       name="launcher.setup.ide.installation"
       value=""
       documentation="The folder location of the installation for the self hosting setup IDE."/>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      name="eclipse.target.platform"
+      defaultValue="Photon"
+      storageURI="scope://Workspace"
+      label="Target Platform">
+    <description>Choose the compatibility level of the target platform</description>
+  </setupTask>
   <stream name="master"
       label="Master">
-    <setupTask
-        xsi:type="setup:VariableTask"
-        name="eclipse.target.platform"
-        defaultValue="Oxygen"
-        storageURI="scope://Workspace"
-        label="Target Platform">
-      <description>Choose the compatibility level of the target platform</description>
-    </setupTask>
     <setupTask
         xsi:type="jdt:JRETask"
         version="JavaSE-1.8"
@@ -404,7 +409,7 @@
               pattern="org\.eclipse\.oomph\.setup.*"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@streams[name='master']/@setupTasks.4/@workingSets.1"/>
+              excludedWorkingSet="//@streams[name='master']/@setupTasks.3/@workingSets.1"/>
         </predicate>
       </workingSet>
       <workingSet

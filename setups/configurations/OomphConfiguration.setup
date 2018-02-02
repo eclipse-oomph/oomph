@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Configuration
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0">
+  <installation
+      name="oomph.development.environment.installation"
+      label="Oomph Development Environment Installation">
+    <productVersion
+        href="index:/org.eclipse.setup#//@productCatalogs[name='org.eclipse.products']/@products[name='epp.package.committers']/@versions[name='latest']"/>
+    <description>The Oomph Development Environment installation provides a full development environment for working on Oomph.</description>
+  </installation>
+  <workspace
+      name="oomph.development.environment.workspace"
+      label="Oomph Development Environment Workspace">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="eclipse.target.platform"
+        value="Photon"/>
+    <stream
+        href="index:/Oomph.setup#//@streams[name='master']"/>
+    <description>The Oomph Development Environment workspace contains all features and plugins from the Oomph Git repository.</description>
+  </workspace>
+</setup:Configuration>
