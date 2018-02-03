@@ -234,7 +234,7 @@ public class VariableChoiceImpl extends ModelElementImpl implements VariableChoi
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (value: ");
     result.append(value);
     result.append(", label: ");

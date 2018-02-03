@@ -30,6 +30,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.impl.ConfigurationImpl#getLabel <em>Label</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.ConfigurationImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ConfigurationImpl#getInstallation <em>Installation</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ConfigurationImpl#getWorkspace <em>Workspace</em>}</li>
  * </ul>
@@ -38,6 +40,46 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class ConfigurationImpl extends ModelElementImpl implements Configuration
 {
+  /**
+   * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected static final String LABEL_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected String label = LABEL_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDescription()
+   * @generated
+   * @ordered
+   */
+  protected static final String DESCRIPTION_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDescription()
+   * @generated
+   * @ordered
+   */
+  protected String description = DESCRIPTION_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getInstallation() <em>Installation</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -77,6 +119,56 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
   protected EClass eStaticClass()
   {
     return SetupPackage.Literals.CONFIGURATION;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getLabel()
+  {
+    return label;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setLabel(String newLabel)
+  {
+    String oldLabel = label;
+    label = newLabel;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.CONFIGURATION__LABEL, oldLabel, label));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getDescription()
+  {
+    return description;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setDescription(String newDescription)
+  {
+    String oldDescription = description;
+    description = newDescription;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.CONFIGURATION__DESCRIPTION, oldDescription, description));
+    }
   }
 
   /**
@@ -300,6 +392,10 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
   {
     switch (featureID)
     {
+      case SetupPackage.CONFIGURATION__LABEL:
+        return getLabel();
+      case SetupPackage.CONFIGURATION__DESCRIPTION:
+        return getDescription();
       case SetupPackage.CONFIGURATION__INSTALLATION:
         if (resolve)
         {
@@ -326,6 +422,12 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
   {
     switch (featureID)
     {
+      case SetupPackage.CONFIGURATION__LABEL:
+        setLabel((String)newValue);
+        return;
+      case SetupPackage.CONFIGURATION__DESCRIPTION:
+        setDescription((String)newValue);
+        return;
       case SetupPackage.CONFIGURATION__INSTALLATION:
         setInstallation((Installation)newValue);
         return;
@@ -346,6 +448,12 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
   {
     switch (featureID)
     {
+      case SetupPackage.CONFIGURATION__LABEL:
+        setLabel(LABEL_EDEFAULT);
+        return;
+      case SetupPackage.CONFIGURATION__DESCRIPTION:
+        setDescription(DESCRIPTION_EDEFAULT);
+        return;
       case SetupPackage.CONFIGURATION__INSTALLATION:
         setInstallation((Installation)null);
         return;
@@ -366,12 +474,38 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
   {
     switch (featureID)
     {
+      case SetupPackage.CONFIGURATION__LABEL:
+        return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
+      case SetupPackage.CONFIGURATION__DESCRIPTION:
+        return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
       case SetupPackage.CONFIGURATION__INSTALLATION:
         return installation != null;
       case SetupPackage.CONFIGURATION__WORKSPACE:
         return workspace != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy())
+    {
+      return super.toString();
+    }
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (label: ");
+    result.append(label);
+    result.append(", description: ");
+    result.append(description);
+    result.append(')');
+    return result.toString();
   }
 
 } // ConfigurationImpl

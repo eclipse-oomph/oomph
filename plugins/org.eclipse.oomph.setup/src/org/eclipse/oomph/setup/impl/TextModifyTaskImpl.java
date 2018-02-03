@@ -306,7 +306,7 @@ public class TextModifyTaskImpl extends SetupTaskImpl implements TextModifyTask
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (uRL: ");
     result.append(uRL);
     result.append(", encoding: ");

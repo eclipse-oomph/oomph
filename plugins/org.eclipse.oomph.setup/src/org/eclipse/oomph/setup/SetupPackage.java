@@ -1791,13 +1791,31 @@ public interface SetupPackage extends EPackage
   int CONFIGURATION__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
 
   /**
+   * The feature id for the '<em><b>Label</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIGURATION__LABEL = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Description</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIGURATION__DESCRIPTION = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+  /**
    * The feature id for the '<em><b>Installation</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONFIGURATION__INSTALLATION = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+  int CONFIGURATION__INSTALLATION = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Workspace</b></em>' containment reference.
@@ -1806,7 +1824,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CONFIGURATION__WORKSPACE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+  int CONFIGURATION__WORKSPACE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The number of structural features of the '<em>Configuration</em>' class.
@@ -1815,7 +1833,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CONFIGURATION_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+  int CONFIGURATION_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.impl.CompoundTaskImpl <em>Compound Task</em>}' class.
@@ -3814,6 +3832,28 @@ public interface SetupPackage extends EPackage
   EClass getConfiguration();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.Configuration#getLabel <em>Label</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Label</em>'.
+   * @see org.eclipse.oomph.setup.Configuration#getLabel()
+   * @see #getConfiguration()
+   * @generated
+   */
+  EAttribute getConfiguration_Label();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.Configuration#getDescription <em>Description</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Description</em>'.
+   * @see org.eclipse.oomph.setup.Configuration#getDescription()
+   * @see #getConfiguration()
+   * @generated
+   */
+  EAttribute getConfiguration_Description();
+
+  /**
    * Returns the meta object for the containment reference '{@link org.eclipse.oomph.setup.Configuration#getInstallation <em>Installation</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4884,7 +4924,7 @@ public interface SetupPackage extends EPackage
    * <!-- end-user-doc -->
    * @return the meta object for data type '<em>Trigger Set</em>'.
    * @see java.util.Set
-   * @model instanceClass="java.util.Set<org.eclipse.oomph.setup.Trigger>"
+   * @model instanceClass="java.util.Set&lt;org.eclipse.oomph.setup.Trigger&gt;"
    * @generated
    */
   EDataType getTriggerSet();
@@ -5240,6 +5280,22 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EClass CONFIGURATION = eINSTANCE.getConfiguration();
+
+    /**
+     * The meta object literal for the '<em><b>Label</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONFIGURATION__LABEL = eINSTANCE.getConfiguration_Label();
+
+    /**
+     * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONFIGURATION__DESCRIPTION = eINSTANCE.getConfiguration_Description();
 
     /**
      * The meta object literal for the '<em><b>Installation</b></em>' containment reference feature.

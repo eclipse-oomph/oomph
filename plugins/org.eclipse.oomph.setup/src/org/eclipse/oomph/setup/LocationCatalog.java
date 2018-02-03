@@ -45,7 +45,7 @@ public interface LocationCatalog extends EObject
    * <!-- end-user-doc -->
    * @return the value of the '<em>Installations</em>' map.
    * @see org.eclipse.oomph.setup.SetupPackage#getLocationCatalog_Installations()
-   * @model mapType="org.eclipse.oomph.setup.InstallationToWorkspacesMapEntry<org.eclipse.oomph.setup.Installation, org.eclipse.oomph.setup.Workspace>"
+   * @model mapType="org.eclipse.oomph.setup.InstallationToWorkspacesMapEntry&lt;org.eclipse.oomph.setup.Installation, org.eclipse.oomph.setup.Workspace&gt;"
    *        extendedMetaData="name='installation'"
    * @generated
    */
@@ -63,7 +63,7 @@ public interface LocationCatalog extends EObject
    * <!-- end-user-doc -->
    * @return the value of the '<em>Workspaces</em>' map.
    * @see org.eclipse.oomph.setup.SetupPackage#getLocationCatalog_Workspaces()
-   * @model mapType="org.eclipse.oomph.setup.WorkspaceToInstallationsMapEntry<org.eclipse.oomph.setup.Workspace, org.eclipse.oomph.setup.Installation>"
+   * @model mapType="org.eclipse.oomph.setup.WorkspaceToInstallationsMapEntry&lt;org.eclipse.oomph.setup.Workspace, org.eclipse.oomph.setup.Installation&gt;"
    *        extendedMetaData="name='workspace'"
    * @generated
    */

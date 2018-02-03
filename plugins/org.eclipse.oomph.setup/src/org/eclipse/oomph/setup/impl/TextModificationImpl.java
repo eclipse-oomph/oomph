@@ -219,7 +219,7 @@ public class TextModificationImpl extends ModelElementImpl implements TextModifi
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (pattern: ");
     result.append(pattern);
     result.append(", substitutions: ");

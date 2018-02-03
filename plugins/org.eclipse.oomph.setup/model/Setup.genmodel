@@ -180,6 +180,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//WorkspaceTask/location"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//Configuration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Configuration/label"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Setup.ecore#//Configuration/description"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//Configuration/installation"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//Configuration/workspace"/>
     </genClasses>

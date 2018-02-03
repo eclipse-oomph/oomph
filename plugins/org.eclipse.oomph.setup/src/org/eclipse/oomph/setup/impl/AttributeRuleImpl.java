@@ -235,7 +235,7 @@ public class AttributeRuleImpl extends ModelElementImpl implements AttributeRule
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (attributeURI: ");
     result.append(attributeURI);
     result.append(", value: ");

@@ -246,7 +246,7 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (location: ");
     result.append(location);
     result.append(", relativeProductFolder: ");

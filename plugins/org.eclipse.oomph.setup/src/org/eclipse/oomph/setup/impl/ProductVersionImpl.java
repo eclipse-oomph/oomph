@@ -323,7 +323,7 @@ public class ProductVersionImpl extends ScopeImpl implements ProductVersion
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (requiredJavaVersion: ");
     result.append(requiredJavaVersion);
     result.append(')');

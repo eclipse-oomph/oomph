@@ -83,7 +83,7 @@ public interface CatalogSelection extends ModelElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Default Product Versions</em>' map.
    * @see org.eclipse.oomph.setup.SetupPackage#getCatalogSelection_DefaultProductVersions()
-   * @model mapType="org.eclipse.oomph.setup.ProductToProductVersionMapEntry<org.eclipse.oomph.setup.Product, org.eclipse.oomph.setup.ProductVersion>"
+   * @model mapType="org.eclipse.oomph.setup.ProductToProductVersionMapEntry&lt;org.eclipse.oomph.setup.Product, org.eclipse.oomph.setup.ProductVersion&gt;"
    *        extendedMetaData="name='defaultProductVersion'"
    * @generated
    */
@@ -101,7 +101,7 @@ public interface CatalogSelection extends ModelElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Default Streams</em>' map.
    * @see org.eclipse.oomph.setup.SetupPackage#getCatalogSelection_DefaultStreams()
-   * @model mapType="org.eclipse.oomph.setup.ProjectToStreamMapEntry<org.eclipse.oomph.setup.Project, org.eclipse.oomph.setup.Stream>"
+   * @model mapType="org.eclipse.oomph.setup.ProjectToStreamMapEntry&lt;org.eclipse.oomph.setup.Project, org.eclipse.oomph.setup.Stream&gt;"
    *        extendedMetaData="name='defaultStream'"
    * @generated
    */

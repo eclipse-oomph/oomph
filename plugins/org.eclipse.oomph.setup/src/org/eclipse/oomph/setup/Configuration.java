@@ -21,6 +21,8 @@ import org.eclipse.oomph.base.ModelElement;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.Configuration#getLabel <em>Label</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.Configuration#getDescription <em>Description</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Configuration#getInstallation <em>Installation</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Configuration#getWorkspace <em>Workspace</em>}</li>
  * </ul>
@@ -31,6 +33,59 @@ import org.eclipse.oomph.base.ModelElement;
  */
 public interface Configuration extends ModelElement
 {
+  /**
+   * Returns the value of the '<em><b>Label</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Label</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Label</em>' attribute.
+   * @see #setLabel(String)
+   * @see org.eclipse.oomph.setup.SetupPackage#getConfiguration_Label()
+   * @model
+   * @generated
+   */
+  String getLabel();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.Configuration#getLabel <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Label</em>' attribute.
+   * @see #getLabel()
+   * @generated
+   */
+  void setLabel(String value);
+
+  /**
+   * Returns the value of the '<em><b>Description</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Description</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Description</em>' attribute.
+   * @see #setDescription(String)
+   * @see org.eclipse.oomph.setup.SetupPackage#getConfiguration_Description()
+   * @model dataType="org.eclipse.oomph.base.Text"
+   *        extendedMetaData="kind='element'"
+   * @generated
+   */
+  String getDescription();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.Configuration#getDescription <em>Description</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Description</em>' attribute.
+   * @see #getDescription()
+   * @generated
+   */
+  void setDescription(String value);
+
   /**
    * Returns the value of the '<em><b>Installation</b></em>' containment reference.
    * <!-- begin-user-doc -->

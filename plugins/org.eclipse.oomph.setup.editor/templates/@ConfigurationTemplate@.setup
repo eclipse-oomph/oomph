@@ -3,7 +3,9 @@
     xmi:version="2.0"
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0">
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    label="${configuration.label}"
+    description="${configuration.description}">
   <annotation>
     <content
         xsi:type="setup:CompoundTask"
@@ -13,15 +15,16 @@
           xsi:type="setup:VariableTask"
           name="configuration.label"
           value="My"
-          label="Base Label">
+          label="Configuration Label">
         <description>The title case name of the configuration, including spaces.</description>
       </setupTask>
       <setupTask
           xsi:type="setup:VariableTask"
-          name="installation.label"
-          value="${configuration.label} Installation"
-          label="Installation Label">
-        <description>The title case name of the installation including spaces.</description>
+          type="TEXT"
+          name="configuration.description"
+          value="The ${configuration.label} configuration provides cool stuff."
+          label="Configuration Description">
+        <description>An informative multi-line description of what the configuration does.</description>
       </setupTask>
       <setupTask
           xsi:type="setup:VariableTask"
@@ -32,18 +35,18 @@
       </setupTask>
       <setupTask
           xsi:type="setup:VariableTask"
-          type="TEXT"
-          name="installation.description"
-          value="${configuration.label} installation provides cool stuff."
-          label="Installation Description">
-        <description>An informative multi-line description of what the installation does.</description>
+          name="installation.label"
+          value="${configuration.label} Installation"
+          label="Installation Label">
+        <description>The title case name of the installation including spaces.</description>
       </setupTask>
       <setupTask
           xsi:type="setup:VariableTask"
-          name="workspace.label"
-          value="${configuration.label} Workspace"
-          label="Workspace Label">
-        <description>The title case name of the workspace including spaces.</description>
+          type="TEXT"
+          name="installation.description"
+          value="The ${configuration.label} installation provides cool stuff."
+          label="Installation Description">
+        <description>An informative multi-line description of what the installation does.</description>
       </setupTask>
       <setupTask
           xsi:type="setup:VariableTask"
@@ -54,9 +57,16 @@
       </setupTask>
       <setupTask
           xsi:type="setup:VariableTask"
+          name="workspace.label"
+          value="${configuration.label} Workspace"
+          label="Workspace Label">
+        <description>The title case name of the workspace including spaces.</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
           type="TEXT"
           name="workspace.description"
-          value="${configuration.label} workspace provides cool stuff."
+          value="The ${configuration.label} workspace provides cool stuff."
           label="Workspace Description">
         <description>An informative multi-line description of what the workspace does.</description>
       </setupTask>

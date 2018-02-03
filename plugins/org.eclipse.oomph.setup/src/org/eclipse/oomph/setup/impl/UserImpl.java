@@ -403,7 +403,7 @@ public class UserImpl extends ScopeImpl implements User
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (acceptedLicenses: ");
     result.append(acceptedLicenses);
     result.append(", unsignedPolicy: ");

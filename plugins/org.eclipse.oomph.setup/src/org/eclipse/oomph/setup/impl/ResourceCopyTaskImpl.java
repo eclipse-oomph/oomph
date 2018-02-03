@@ -241,7 +241,7 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (sourceURL: ");
     result.append(sourceURL);
     result.append(", targetURL: ");

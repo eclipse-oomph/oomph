@@ -421,8 +421,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     }
 
     // Obtain or create and register package
-    SetupPackageImpl theSetupPackage = (SetupPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof SetupPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new SetupPackageImpl());
+    Object registeredSetupPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    SetupPackageImpl theSetupPackage = registeredSetupPackage instanceof SetupPackageImpl ? (SetupPackageImpl)registeredSetupPackage : new SetupPackageImpl();
 
     isInited = true;
 
@@ -837,9 +837,29 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getConfiguration_Label()
+  {
+    return (EAttribute)configurationEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getConfiguration_Description()
+  {
+    return (EAttribute)configurationEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getConfiguration_Installation()
   {
-    return (EReference)configurationEClass.getEStructuralFeatures().get(0);
+    return (EReference)configurationEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -849,7 +869,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    */
   public EReference getConfiguration_Workspace()
   {
-    return (EReference)configurationEClass.getEStructuralFeatures().get(1);
+    return (EReference)configurationEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1945,6 +1965,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEAttribute(workspaceTaskEClass, WORKSPACE_TASK__LOCATION);
 
     configurationEClass = createEClass(CONFIGURATION);
+    createEAttribute(configurationEClass, CONFIGURATION__LABEL);
+    createEAttribute(configurationEClass, CONFIGURATION__DESCRIPTION);
     createEReference(configurationEClass, CONFIGURATION__INSTALLATION);
     createEReference(configurationEClass, CONFIGURATION__WORKSPACE);
 
@@ -2271,6 +2293,10 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(configurationEClass, Configuration.class, "Configuration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getConfiguration_Label(), ecorePackage.getEString(), "label", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getConfiguration_Description(), theBasePackage.getText(), "description", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getConfiguration_Installation(), getInstallation(), null, "installation", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getConfiguration_Workspace(), getWorkspace(), null, "workspace", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
@@ -2503,6 +2529,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addAnnotation(getLocationCatalog_Installations(), source, new String[] { "name", "installation" });
     addAnnotation(getLocationCatalog_Workspaces(), source, new String[] { "name", "workspace" });
     addAnnotation(getWorkspace_Streams(), source, new String[] { "name", "stream" });
+    addAnnotation(getConfiguration_Description(), source, new String[] { "kind", "element" });
     addAnnotation(getVariableTask_Choices(), source, new String[] { "name", "choice" });
     addAnnotation(getTextModifyTask_URL(), source, new String[] { "kind", "attribute", "name", "url" });
     addAnnotation(getTextModifyTask_Modifications(), source, new String[] { "name", "modification" });

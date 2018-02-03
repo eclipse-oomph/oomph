@@ -244,7 +244,7 @@ public class LinkLocationTaskImpl extends SetupTaskImpl implements LinkLocationT
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (path: ");
     result.append(path);
     result.append(", name: ");
