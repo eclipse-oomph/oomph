@@ -3,7 +3,8 @@
     xmi:version="2.0"
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0">
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    label="Oomph Development Environment">
   <installation
       name="oomph.development.environment.installation"
       label="Oomph Development Environment Installation">
@@ -22,4 +23,5 @@
         href="index:/Oomph.setup#//@streams[name='master']"/>
     <description>The Oomph Development Environment workspace contains all features and plugins from the Oomph Git repository.</description>
   </workspace>
+  <description>The Oomph Development Environment configuration provides a full development environment for working on Oomph.</description>
 </setup:Configuration>
