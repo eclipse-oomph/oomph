@@ -1290,7 +1290,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
       }
 
-      performer.setOffline(false);
+      performer.setOffline(PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP));
       performer.setMirrors(true);
       performer.setProgress(progress);
       performer.log("Executing " + performer.getTrigger().toString().toLowerCase() + " tasks");
