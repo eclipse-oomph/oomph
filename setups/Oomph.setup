@@ -74,7 +74,7 @@
         name="org.eclipse.pde.api.tools.ee.feature.feature.group"
         optional="true"/>
     <repository
-        url="http://download.eclipse.org/modeling/emf/emf/updates/nightly/core"/>
+        url="http://download.eclipse.org/modeling/emf/emf/builds/nightly/latest"/>
     <repository
         url="http://download.eclipse.org/egit/updates-stable-nightly"/>
     <repository
@@ -300,13 +300,13 @@
           <repository
               url="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.14milestones"/>
+              url="http://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
           <repository
               url="http://download.eclipse.org/mylyn/snapshots/3.24"/>
           <repository
               url="http://download.eclipse.org/technology/m2e/snapshots/1.9.0/latest"/>
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/technology/swtbot/snapshots"/>
           <repository
@@ -317,7 +317,7 @@
           <repository
               url="http://download.eclipse.org/releases/oxygen"/>
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
           <repository
@@ -330,7 +330,7 @@
           <repository
               url="http://download.eclipse.org/releases/neon"/>
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
           <repository
@@ -343,7 +343,7 @@
           <repository
               url="http://download.eclipse.org/releases/mars"/>
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
           <repository
@@ -356,7 +356,7 @@
           <repository
               url="http://download.eclipse.org/releases/luna"/>
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
           <repository
@@ -369,7 +369,7 @@
           <repository
               url="http://download.eclipse.org/releases/kepler"/>
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
           <repository
@@ -377,14 +377,14 @@
           <repository
               url="http://download.eclipse.org/usssdk/updates/latest"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
+              url="http://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
         </repositoryList>
         <repositoryList
             name="Juno">
           <repository
               url="http://download.eclipse.org/releases/juno"/>
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/technology/swtbot/releases/latest"/>
           <repository
@@ -392,7 +392,7 @@
           <repository
               url="http://download.eclipse.org/usssdk/updates/latest"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
+              url="http://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
           <repository
               url="http://download.eclipse.org/jetty/updates/jetty-bundles-9.x/"/>
         </repositoryList>
