@@ -439,7 +439,7 @@
         <repositoryList
             name="Photon">
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/emf/updates/2.11.x"/>
           <repository
@@ -448,7 +448,7 @@
         <repositoryList
             name="Oxygen">
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/emf/updates/2.11.x"/>
           <repository
@@ -457,7 +457,7 @@
         <repositoryList
             name="Neon">
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/emf/updates/2.11.x"/>
           <repository
@@ -466,7 +466,7 @@
         <repositoryList
             name="Mars">
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/emf/updates/2.11.x"/>
           <repository
@@ -475,7 +475,7 @@
         <repositoryList
             name="Luna">
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones/core"/>
           <repository
@@ -484,7 +484,7 @@
         <repositoryList
             name="Kepler">
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones/core"/>
           <repository
@@ -493,7 +493,7 @@
         <repositoryList
             name="Juno">
           <repository
-              url="http://download.eclipse.org/technology/nebula/snapshot"/>
+              url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones/core"/>
           <repository
