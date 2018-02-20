@@ -557,6 +557,7 @@
   <project href="http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.docs.vex.git/plain/org.eclipse.vex.releng/Vex.setup#/"/>
   <project href="https://git.eclipse.org/c/viatra/org.eclipse.viatra.git/plain/releng/org.eclipse.viatra.setup/VIATRAEMF.setup#/"/>
   <project href="http://git.eclipse.org/c/webtools/webtools.releng.git/plain/installer/WTP.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse/xsemantics/master/devtools/org.eclipse.xsemantics.workspace/Xsemantics.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/xtext-eclipse/master/releng/org.eclipse.xtext.contributor/Xtext.setup#/"/>
   <project href="http://git.eclipse.org/c/m2t/org.eclipse.xpand.git/plain/releng/org.eclipse.xpand.releng/Xpand.setup#/"/>
   <project href="http://git.eclipse.org/c/xsd/org.eclipse.xsd.git/plain/plugins/org.eclipse.xsd/XSD.setup#/"/>
