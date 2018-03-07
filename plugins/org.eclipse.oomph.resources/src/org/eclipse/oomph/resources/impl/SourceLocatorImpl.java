@@ -265,6 +265,12 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
   public IProject loadProject(EList<ProjectFactory> defaultProjectFactories, BackendContainer backendContainer, IProgressMonitor monitor)
   {
     BackendContainer rootContainer = SourceLocatorImpl.getRootContainer(this);
+    if (rootContainer == null)
+    {
+      monitor.setTaskName("Skipping root folder '" + getRootFolder() + "' because it doesn't exist");
+      return null;
+    }
+
     return loadProject(this, defaultProjectFactories, rootContainer, backendContainer, monitor);
   }
 
