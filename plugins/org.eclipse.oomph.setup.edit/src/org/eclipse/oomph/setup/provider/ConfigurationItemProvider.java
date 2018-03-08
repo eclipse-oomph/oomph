@@ -153,13 +153,13 @@ public class ConfigurationItemProvider extends ModelElementItemProvider
    * This returns the label text for the adapted class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public String getText(Object object)
   {
     String label = ((Configuration)object).getLabel();
-    return label == null || label.length() == 0 ? getString("_UI_Configuration_type") : getString("_UI_Configuration_type") + " " + label;
+    return label == null || label.length() == 0 ? getString("_UI_Configuration_type") : label;
   }
 
   /**

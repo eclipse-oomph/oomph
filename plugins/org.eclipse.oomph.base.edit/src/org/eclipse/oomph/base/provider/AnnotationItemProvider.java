@@ -14,11 +14,16 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DragAndDropCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -252,6 +257,22 @@ public class AnnotationItemProvider extends ModelElementItemProvider
       return getString("_UI_CreateChild_text2", new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
     }
     return super.getCreateChildText(owner, feature, child, selection);
+  }
+
+  @Override
+  protected Command createPrimaryDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+  {
+    return new DragAndDropCommand(domain, owner, location, operations, operation, collection)
+    {
+      @Override
+      protected boolean prepareDropLinkOn()
+      {
+        dragCommand = IdentityCommand.INSTANCE;
+        dropCommand = AddCommand.create(domain, owner, BasePackage.Literals.ANNOTATION__REFERENCES, collection);
+        boolean result = dropCommand.canExecute();
+        return result;
+      }
+    };
   }
 
 }
