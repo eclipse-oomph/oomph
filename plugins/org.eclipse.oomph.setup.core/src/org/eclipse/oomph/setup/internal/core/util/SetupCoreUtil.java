@@ -537,10 +537,7 @@ public final class SetupCoreUtil
         @Override
         protected void handle(EMap<String, String> details, URI uri, URI archiveEntry)
         {
-          if (uri.equals(uriConverter.normalize(uri)))
-          {
-            redirections.put(uri, archiveEntry);
-          }
+          redirections.put(uri, archiveEntry);
         }
       };
 
@@ -558,7 +555,17 @@ public final class SetupCoreUtil
       archiveExpectedETag = ECFURIHandlerImpl.getExpectedETag(indexSetupArchiveLocation);
     }
 
-    uriConverter.getURIMap().putAll(archiveRedirections);
+    Map<URI, URI> uriMap = uriConverter.getURIMap();
+    for (Map.Entry<URI, URI> entry : archiveRedirections.entrySet())
+    {
+      // Use the archive redirection only if the URI isn't already redirected elsewhere.
+      URI sourceURI = entry.getKey();
+      if (sourceURI.equals(uriConverter.normalize(sourceURI)))
+      {
+        URI targetURI = entry.getValue();
+        uriMap.put(sourceURI, targetURI);
+      }
+    }
   }
 
   public static <T> void reorder(EList<T> values, DependencyProvider<T> dependencyProvider)
