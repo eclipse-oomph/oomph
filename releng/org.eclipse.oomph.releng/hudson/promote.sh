@@ -12,7 +12,8 @@ if [[ "$BUILD_KEY" == "" ]]; then
   fi
 
   if [[ "$TYPE" != "" ]]; then
-    BUILD_KEY=$TYPE`echo $BUILD_ID | sed 's/\([0-9]*\)-\([0-9]*\)-\([0-9]*\)_\([0-9]*\)-\([0-9]*\)-\([0-9]*\)/\1\2\3-\4\5\6/g'`
+#    BUILD_KEY=$TYPE`echo $BUILD_TIMESTAMP | sed 's/\([0-9]*\)-\([0-9]*\)-\([0-9]*\)_\([0-9]*\)-\([0-9]*\)-\([0-9]*\)/\1\2\3-\4\5\6/g'`
+    BUILD_KEY=$TYPE$BUILD_TIMESTAMP
   fi
 fi
 
