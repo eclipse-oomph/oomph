@@ -132,10 +132,7 @@ public final class TargetPlatformUtil
     try
     {
       IStatus status = targetDefinition.resolve(MonitorUtil.create(monitor, 100));
-      if (status.getSeverity() == IStatus.ERROR)
-      {
-        throw new CoreException(status);
-      }
+      UtilPDEPlugin.INSTANCE.coreException(status);
     }
     finally
     {
@@ -150,16 +147,14 @@ public final class TargetPlatformUtil
 
     try
     {
-      targetDefinition.resolve(MonitorUtil.create(monitor, 50));
+      IStatus resolveStatus = targetDefinition.resolve(MonitorUtil.create(monitor, 50));
+      UtilPDEPlugin.INSTANCE.coreException(resolveStatus);
 
       LoadTargetDefinitionJob job = new LoadTargetDefinitionJob(targetDefinition);
 
       @SuppressWarnings("restriction")
       IStatus status = job.run(MonitorUtil.create(monitor, 50));
-      if (status.getSeverity() == IStatus.ERROR)
-      {
-        throw new CoreException(status);
-      }
+      UtilPDEPlugin.INSTANCE.coreException(status);
     }
     finally
     {
