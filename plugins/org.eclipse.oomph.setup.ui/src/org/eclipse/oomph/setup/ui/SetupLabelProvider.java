@@ -82,7 +82,7 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
     Image result = super.getImage(object);
     if (isDisabled(object))
     {
-      return getImageFromObject(new DisabledImageDescriptor(result));
+      return getImageFromObject(ImageDescriptor.createWithFlags(ImageDescriptor.createFromImage(result), SWT.IMAGE_DISABLE));
     }
 
     return result;
@@ -182,7 +182,10 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
 
   /**
    * @author Ed Merks
+   * @deprecated
+   * Use ImageDescriptor.createWithFlags(ImageDescriptor.createFromImage(result), SWT.IMAGE_DISABLE) instead.
    */
+  @Deprecated
   public static final class DisabledImageDescriptor extends ImageDescriptor
   {
     private final Image image;

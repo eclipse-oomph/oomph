@@ -35,7 +35,6 @@ import org.eclipse.oomph.setup.provider.ProjectCatalogItemProvider;
 import org.eclipse.oomph.setup.provider.ProjectItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
 import org.eclipse.oomph.setup.provider.WorkspaceItemProvider;
-import org.eclipse.oomph.setup.ui.SetupLabelProvider.DisabledImageDescriptor;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupTransferSupport;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
@@ -98,6 +97,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -1906,7 +1906,7 @@ public class ProjectPage extends SetupWizardPage
     {
       this.image = image;
       this.existingStreams = existingStreams;
-      disabledImage = ExtendedImageRegistry.INSTANCE.getImage(new DisabledImageDescriptor(image));
+      disabledImage = ExtendedImageRegistry.INSTANCE.getImage(ImageDescriptor.createWithFlags(ImageDescriptor.createFromImage(image), SWT.IMAGE_DISABLE));
     }
 
     @Override
