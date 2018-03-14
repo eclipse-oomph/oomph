@@ -122,7 +122,14 @@ public class JRETaskTest
               {
                 foundLibrary = true;
 
-                assertEquals("External annotations path incorrect;", EXT_ANNOTATIONS_PATH, libraryLocation.getExternalAnnotationsPath());
+                try
+                {
+                  assertEquals("External annotations path incorrect;", EXT_ANNOTATIONS_PATH, libraryLocation.getExternalAnnotationsPath());
+                }
+                catch (NoSuchMethodError ex)
+                {
+                  //$FALL-THROUGH$
+                }
               }
             }
             if (!foundLibrary)

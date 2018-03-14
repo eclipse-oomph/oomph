@@ -722,12 +722,19 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
                   if (jreLibraryPath.equals(systemLibraryPath))
                   {
                     Path externalAnnotationsPath = new Path(externalAnnotationsPathLiteral);
-                    if (!externalAnnotationsPath.equals(libraryLocation.getExternalAnnotationsPath()))
+                    try
                     {
-                      LibraryLocation newLibraryLocation = new LibraryLocation(systemLibraryPath, libraryLocation.getSystemLibrarySourcePath(),
-                          libraryLocation.getPackageRootPath(), libraryLocation.getJavadocLocation(), libraryLocation.getIndexLocation(),
-                          externalAnnotationsPath);
-                      libraryLocations[i] = newLibraryLocation;
+                      if (!externalAnnotationsPath.equals(libraryLocation.getExternalAnnotationsPath()))
+                      {
+                        LibraryLocation newLibraryLocation = new LibraryLocation(systemLibraryPath, libraryLocation.getSystemLibrarySourcePath(),
+                            libraryLocation.getPackageRootPath(), libraryLocation.getJavadocLocation(), libraryLocation.getIndexLocation(),
+                            externalAnnotationsPath);
+                        libraryLocations[i] = newLibraryLocation;
+                      }
+                    }
+                    catch (NoSuchMethodError ex)
+                    {
+                      //$FALL-THROUGH$
                     }
                     break;
                   }
@@ -839,9 +846,16 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
                 if (jreLibraryPath.equals(libraryLocation.getSystemLibraryPath()))
                 {
                   Path externalAnnotationsPath = new Path(externalAnnotationsPathLiteral);
-                  if (!externalAnnotationsPath.equals(libraryLocation.getExternalAnnotationsPath()))
+                  try
                   {
-                    return true;
+                    if (!externalAnnotationsPath.equals(libraryLocation.getExternalAnnotationsPath()))
+                    {
+                      return true;
+                    }
+                  }
+                  catch (NoSuchMethodError ex)
+                  {
+                    //$FALL-THROUGH$
                   }
                   break;
                 }

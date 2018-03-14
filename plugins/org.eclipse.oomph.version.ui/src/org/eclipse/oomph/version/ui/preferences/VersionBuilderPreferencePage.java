@@ -59,7 +59,14 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
 
   public VersionBuilderPreferencePage()
   {
-    noDefaultButton();
+    try
+    {
+      noDefaultButton();
+    }
+    catch (NoSuchMethodError ex)
+    {
+      //$FALL-THROUGH$
+    }
 
     final List<String> releasePaths = new ArrayList<String>(Activator.getReleasePaths());
     Collections.sort(releasePaths);
