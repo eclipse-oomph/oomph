@@ -232,7 +232,7 @@ public class ProjectPage extends SetupWizardPage
       {
         super.execute(command);
         final Collection<?> affectedObjects = command.getAffectedObjects();
-        UIUtil.asyncExec(new Runnable()
+        UIUtil.asyncExec(projectViewer.getControl(), new Runnable()
         {
           public void run()
           {
@@ -591,7 +591,7 @@ public class ProjectPage extends SetupWizardPage
         final Workspace workspace = getWorkspace();
         if (streamViewer.getInput() != workspace)
         {
-          getShell().getDisplay().asyncExec(new Runnable()
+          UIUtil.asyncExec(streamViewer.getControl(), new Runnable()
           {
             public void run()
             {
@@ -602,7 +602,7 @@ public class ProjectPage extends SetupWizardPage
 
         if (notification.getFeature() == SetupPackage.Literals.CATALOG_SELECTION__PROJECT_CATALOGS)
         {
-          getShell().getDisplay().asyncExec(new Runnable()
+          UIUtil.asyncExec(projectViewer.getControl(), new Runnable()
           {
             public void run()
             {
@@ -1073,7 +1073,7 @@ public class ProjectPage extends SetupWizardPage
     this.inactive = inactive;
     if (addButtonAnimator.shouldAnimate())
     {
-      display.asyncExec(addButtonAnimator);
+      UIUtil.asyncExec(getControl(), addButtonAnimator);
     }
   }
 
@@ -2108,7 +2108,7 @@ public class ProjectPage extends SetupWizardPage
       lowerComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
       applyDialogFont(lowerComposite);
 
-      parent.getDisplay().asyncExec(new Runnable()
+      UIUtil.asyncExec(main, new Runnable()
       {
         public void run()
         {
