@@ -1374,10 +1374,29 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                           continue LOOP;
                         }
                       }
-                    }
 
-                    // Otherwise add the requirement as is.
-                    extraRequirements.add(workspaceRequirement);
+                      extraRequirements.add(workspaceRequirement);
+                    }
+                    else
+                    {
+                      if (workspaceRequirement.getMin() > 0)
+                      {
+                        try
+                        {
+                          // See https://bugs.eclipse.org/bugs/show_bug.cgi?id=532569 for why we relax this requirement.
+                          extraRequirements.add(MetadataFactory.createRequirement(workspaceRequirement.getMatches(), workspaceRequirement.getFilter(), 0,
+                              workspaceRequirement.getMax(), true));
+                        }
+                        catch (RuntimeException exception)
+                        {
+                          //$FALL-THROUGH$
+                        }
+                      }
+                      else
+                      {
+                        extraRequirements.add(workspaceRequirement);
+                      }
+                    }
                   }
 
                   // If there this workspace IU has a license...
