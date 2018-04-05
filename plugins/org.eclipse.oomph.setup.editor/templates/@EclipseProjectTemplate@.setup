@@ -239,7 +239,7 @@
   <setupTask
       xsi:type="setup.workingsets:WorkingSetTask">
     <workingSet
-        name="${scope.project.name}">
+        name="${scope.project.label}">
       <predicate
           xsi:type="predicates:AndPredicate">
         <operand
