@@ -348,23 +348,31 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
     Map<String, WorkingSet> existingWorkingSets = getExistingWorkingSets(prefix, workingSets);
 
     EList<WorkingSet> newWorkingSetGroups = getWorkingSets();
-    int index = 0;
+    int insertionPoint = workingSets.size();
+    for (WorkingSet workingSet : newWorkingSetGroups)
+    {
+      context.checkCancelation();
+
+      String id = workingSet.getID();
+      WorkingSet existingWorkingSet = existingWorkingSets.get(id);
+      if (existingWorkingSet != null)
+      {
+        int index = workingSets.indexOf(existingWorkingSet);
+        if (index < insertionPoint)
+        {
+          insertionPoint = index;
+        }
+      }
+    }
+
     for (WorkingSet workingSet : new ArrayList<WorkingSet>(newWorkingSetGroups))
     {
       context.checkCancelation();
 
       String id = workingSet.getID();
       WorkingSet existingWorkingSet = existingWorkingSets.remove(id);
-      if (existingWorkingSet == null)
-      {
-        workingSets.add(index++, workingSet);
-      }
-      else
-      {
-        index = workingSets.indexOf(existingWorkingSet);
-        workingSets.set(index, workingSet);
-        ++index;
-      }
+      workingSets.remove(existingWorkingSet);
+      workingSets.add(insertionPoint++, workingSet);
     }
 
     workingSets.removeAll(existingWorkingSets.values());
