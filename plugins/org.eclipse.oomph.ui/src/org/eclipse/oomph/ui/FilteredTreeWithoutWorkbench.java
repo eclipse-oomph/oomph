@@ -92,6 +92,7 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
         {
           patternFilter.setPattern(null);
           treeViewer.refresh(true);
+          refreshed();
           return Status.OK_STATUS;
         }
 
@@ -149,7 +150,6 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
             updateToolbar(false);
           }
 
-          refreshed();
         }
         finally
         {
@@ -160,6 +160,8 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
           }
 
           redrawFalseControl.setRedraw(true);
+
+          refreshed();
         }
 
         return Status.OK_STATUS;

@@ -99,6 +99,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -148,6 +149,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -156,6 +158,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.PatternFilter;
 
 import java.io.File;
@@ -1097,7 +1100,8 @@ public class ProjectPage extends SetupWizardPage
           {
             // If there is an index loader, await for the index to finish loading.
             // This generally only happens if this page is the first page of the wizard, i.e., in the project importer wizard.
-            IndexLoader indexLoader = getWizard().getIndexLoader();
+            SetupWizard wizard = getWizard();
+            IndexLoader indexLoader = wizard.getIndexLoader();
             if (indexLoader != null)
             {
               indexLoader.awaitIndexLoad();
@@ -1151,6 +1155,30 @@ public class ProjectPage extends SetupWizardPage
             }
 
             tree.setRedraw(true);
+
+            if (wizard instanceof SetupWizard.Importer)
+            {
+              URI projectURI = ((SetupWizard.Importer)wizard).getProject();
+              if (projectURI != null)
+              {
+                EObject eObject = getResourceSet().getEObject(projectURI, false);
+                if (eObject instanceof Project)
+                {
+                  Project project = (Project)eObject;
+                  projectViewer.setSelection(new StructuredSelection(project), true);
+                  TreeItem[] treeSelection = projectViewer.getTree().getSelection();
+                  if (treeSelection.length > 0)
+                  {
+                    projectViewer.expandToLevel(project, AbstractTreeViewer.ALL_LEVELS);
+                    projectViewer.setChecked(project, true);
+                    Event event = new Event();
+                    event.item = treeSelection[0];
+                    event.detail = SWT.CHECK;
+                    projectViewer.getControl().notifyListeners(SWT.Selection, event);
+                  }
+                }
+              }
+            }
 
             checkPageComplete();
           }

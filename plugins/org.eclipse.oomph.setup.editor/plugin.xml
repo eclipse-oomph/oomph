@@ -132,6 +132,12 @@
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
+            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.OpenDiscoveredTypeHandler"
+            id="org.eclipse.oomph.setup.editor.openDiscoveredType"
+            name="Open Discovered Type">
+      </command>
+      <command
+            categoryId="org.eclipse.oomph.setup.category"
             defaultHandler="org.eclipse.oomph.setup.presentation.handlers.OpenLogHandler"
             id="org.eclipse.oomph.setup.editor.openLog"
             name="Open Setup Log">
@@ -382,6 +388,16 @@
                name="org.eclipse.oomph.setup.editor.perform.separator"
                visible="true">
          </separator>
+      </menuContribution>
+
+      <menuContribution
+            locationURI="menu:navigate?endof=open.ext2">
+         <command
+               commandId="org.eclipse.oomph.setup.editor.openDiscoveredType"
+               icon="icons/BrowseType.gif"
+               label="Open Discovered Type..."
+               style="push">
+         </command>
       </menuContribution>
 
       <menuContribution

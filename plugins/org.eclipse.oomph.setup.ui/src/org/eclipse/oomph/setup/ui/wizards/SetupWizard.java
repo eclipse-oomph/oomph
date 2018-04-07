@@ -1426,11 +1426,23 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   {
     public static final String WIZARD_ID = "org.eclipse.oomph.setup.ui.ImportWizard";
 
+    private URI projectURI;
+
     public Importer()
     {
       setTrigger(Trigger.MANUAL);
       setSetupContext(SetupContext.create(getResourceSet()));
       setWindowTitle("Eclipse Importer");
+    }
+
+    public void setProject(URI projectURI)
+    {
+      this.projectURI = projectURI;
+    }
+
+    public URI getProject()
+    {
+      return projectURI;
     }
 
     @Override

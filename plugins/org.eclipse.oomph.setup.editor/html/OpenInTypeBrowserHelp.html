@@ -1,0 +1,101 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<title>Open Type in Browser</title>
+
+<link rel="stylesheet" href="book.css">
+
+<noscript></noscript>
+<script type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Open Type in Browser";
+    }
+}
+</script>
+</head>
+<body bgcolor="white" onload="windowTitle();">
+
+<h1>Open Type in Browser</h1>
+
+<p>
+  This dialogs shows a tree outline of all Java packages and classes available in the Git repository index.
+  By default this index contains all Java packages and classes of each Git repository of every Eclipse-hosted project.
+  The filter field can be used to easily find specific classes or packages.
+  For example, entering "<tt>org.eclipse.jdt.ui.</tt>" will filter the top view to show only packages and classes whose qualified name contains "<tt>org.eclipse.jdt.ui.</tt>".
+  Similarly, entering "<tt>.JavaCore </tt>", note the space at the end, will filter the view to show only packages and classes with exactly the name "<tt>JavaCore</tt>".
+  The labels of items in the view are styled to show the matching characters in bold.
+</p>
+
+<p>
+  The search is generally case sensitive and similar to JDT's Open Type dialog, camel-case search is supported.
+  Entering "<tt>EPackage</tt>" will find all classes with this camel-case pattern.
+  The special characters <tt>*</tt>, and <tt>?</tt> match one or more characters or exactly one character, respectively.
+  A space at the start of the text will force the pattern to start matching at the start of the qualified name.
+  Similarly, a space at the end of the text will force the pattern to match up to the end of the qualified name.
+  A space in the middle of the text can be used to disable the camel-case matching behavior,
+  e.g., entering "<tt>.E Package </tt>" will match all classed with exactly the name "<tt>EPackage</tt>"
+</p>
+
+<p>
+The hover text of the top view shows the fully qualified name of the package or class; this is what the filter actually searches.
+If there exists an Oomph Project setup for the corresponding Git clone, the item label will be decorated with the name of that setup and the hover text will include a link to it.
+Clicking that link will open the Eclipse Importer with the corresponding Project setup selected.
+This allows you to clone the Git repository and to import its projects into your workspace.
+Double clicking a package item will expand it to its first contained class.
+</p>
+
+<p>
+Selecting an item in the top view will populate the bottom view with links to web pages for browsing the selected package or class.
+In the bottom view, the selected item of the top view is displayed as the root, with its fully qualified name.
+Below that are one or more links to the web page for browsing the root of an available Git repository.
+Below each of these are one or more links for browsing the specific selected package or class.
+As in the top view, if there exists an Oomph Project setup, the item is decorated with the name of that setup.
+</p>
+
+<p>
+The bottom view can be used to navigate to a web page, and, in the case that an Oomph Project setup exists, to open the Eclipse Importer.
+Furthermore, if the item is for a Java class, the item can be used to open the Java editor.
+This can be accomplished using the context menu, which includes the following menu items:
+</p>
+
+<ul>
+<li>
+<em>Copy</em> will copy the link to the system clip board.
+</li>
+<li>
+<em>Open in External Browser</em> will open the link in your configured external browser.
+</li>
+<li>
+<em>Open in Editor</em> will open the link in an editor using the internal browser, if available.
+</li>
+<li>
+<em>Open in View</em> will open the link in a view using the internal browser, if available.
+</li>
+<li>
+<em>Open in Java Editor</em> will open the link's contents in the Java editor. This is present only for Java classes and then only if the repository browser supports plain/raw links.
+</li>
+<li>
+<em>Open in Import Projects Wizard</em> will open the Eclipse Importer with the specified Project selected; this is only available if there exists a corresponding Oomph Project setup.
+</li>
+</ul>
+
+<p>
+The most recent "open" action used from the context menu is saved as a preference.
+Double clicking an item in the bottom view will open it using this preferred style.
+Similarly, selecting an item and pressing OK will also open the link using this preferred style.
+</p>
+
+<p>
+Note that this dialog is non-modal so it can be kept open for longer term browsing.
+Also note that the dialog can be docked on top of a view or editor in the Eclipse window.
+If you drag the title area of the dialog and hover with the mouse exactly over top of the tab of a view or editor,
+the mouse cursor will change, and releasing the mouse will cause the dialog to be fitted to be exactly in the area bounds of the view or editor.
+The dialog will remain docked and will resize to fit the view or editor boundary when the main window is moved or resized, and even when changing perspectives.
+To unlock it, simply drag it away from the docking site.
+</p>
+
+</body>
+</html>
