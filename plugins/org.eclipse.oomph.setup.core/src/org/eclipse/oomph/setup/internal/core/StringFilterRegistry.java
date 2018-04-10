@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.internal.core;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.preferences.util.PreferencesUtil.PreferenceProperty;
 import org.eclipse.oomph.setup.util.StringExpander;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
@@ -29,7 +30,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,24 +52,57 @@ public class StringFilterRegistry
 
   private StringFilterRegistry()
   {
-    registerFilter("file", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "file";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Converts a file: URI to an OS-specific file system path.";
+      }
+
       public String filter(String value)
       {
         return URI.createURI(value).toFileString();
       }
     });
 
-    registerFilter("uri", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "uri";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Converts a file system path to a file: URI.";
+      }
+
       public String filter(String value)
       {
         return URI.createFileURI(value).toString();
       }
     });
 
-    registerFilter("uriLastSegment", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "uriLastSegment";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Extracts the last path segment from a hierarchical URI or the authority from an opaque URI.";
+      }
+
       public String filter(String value)
       {
         URI uri = URI.createURI(value);
@@ -77,8 +115,19 @@ public class StringFilterRegistry
       }
     });
 
-    registerFilter("gitRepository", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "gitRepository";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Extracts the name of the repository from a Git URI (excluding a possible .git suffix).";
+      }
+
       public String filter(String value)
       {
         URI uri = URI.createURI(value);
@@ -97,16 +146,38 @@ public class StringFilterRegistry
       }
     });
 
-    registerFilter("username", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "username";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Escapes all \"at\" symbols (@) of a String value, so that the result can be used in URI that contain a username.";
+      }
+
       public String filter(String value)
       {
         return URI.encodeSegment(value, false).replace(":", "%3A").replace("@", "%40");
       }
     });
 
-    registerFilter("canonical", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "canonical";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Canonicalizes a file system path.";
+      }
+
       public String filter(String value)
       {
         // Don't canonicalize the value if it contains a unexpanded variable reference.
@@ -128,96 +199,234 @@ public class StringFilterRegistry
       }
     });
 
-    registerFilter("preferenceNode", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "preferenceNode";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Escapes all forward slashes (/) of a String value, so that the result can be used as a value in preference nodes.";
+      }
+
       public String filter(String value)
       {
         return value.replaceAll("/", "\\\\2f");
       }
     });
 
-    registerFilter("length", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "length";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Converts a String to a String that contains the alpha-numerical representation of the length of the original String.";
+      }
+
       public String filter(String value)
       {
         return Integer.toString(value.length());
       }
     });
 
-    registerFilter("trim", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "trim";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Removes all whitespace from the beginning and the end of a String.";
+      }
+
       public String filter(String value)
       {
         return value.trim();
       }
     });
 
-    registerFilter("trimLeft", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "trimLeft";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Removes all whitespace from the beginning of a String.";
+      }
+
       public String filter(String value)
       {
         return StringUtil.trimLeft(value);
       }
     });
 
-    registerFilter("trimRight", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "trimRight";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Removes all whitespace from the end of a String.";
+      }
+
       public String filter(String value)
       {
         return StringUtil.trimRight(value);
       }
     });
 
-    registerFilter("trimTrailingSlashes", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "trimTrailingSlashes";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Removes all slashes and backslashes from the end of a String.";
+      }
+
       public String filter(String value)
       {
         return StringUtil.trimTrailingSlashes(value);
       }
     });
 
-    registerFilter("upper", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "upper";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Converts all characters of a String value to upper-case.";
+      }
+
       public String filter(String value)
       {
         return value.toUpperCase();
       }
     });
 
-    registerFilter("lower", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "lower";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Converts all characters of a String value to lower-case.";
+      }
+
       public String filter(String value)
       {
         return value.toLowerCase();
       }
     });
 
-    registerFilter("cap", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "cap";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Capitalizes the first word of a String value.";
+      }
+
       public String filter(String value)
       {
         return StringUtil.cap(value);
       }
     });
 
-    registerFilter("allCap", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "capAll";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Capitalizes all words of a String value.";
+      }
+
+      @Override
+      public String[] getDeprecations()
+      {
+        return new String[] { "allCap" };
+      }
+
       public String filter(String value)
       {
         return StringUtil.capAll(value);
       }
     });
 
-    registerFilter("qualifiedName", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "qualifiedName";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Converts a camel case String value name to a qualified name.";
+      }
+
       public String filter(String value)
       {
         return value.trim().replaceAll("[^\\p{Alnum}]+", ".").toLowerCase();
       }
     });
 
-    registerFilter("camel", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "camel";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Converts a qualified name to camel case notation.";
+      }
+
       public String filter(String value)
       {
         Matcher matcher = CAMEL_PATTERN.matcher(value);
@@ -234,24 +443,57 @@ public class StringFilterRegistry
       }
     });
 
-    registerFilter("property", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "property";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Escapes all double back slashes (\\\\) of a String value, so that the result can be used as a value in properties.";
+      }
+
       public String filter(String value)
       {
         return value.replaceAll("\\\\", "\\\\\\\\");
       }
     });
 
-    registerFilter("path", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "path";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Extracts the path segments from a URI.";
+      }
+
       public String filter(String value)
       {
         return value.replaceAll("\\\\", "/");
       }
     });
 
-    registerFilter("basePath", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "basePath";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Removes the last segment from a file system path.";
+      }
+
       public String filter(String value)
       {
         value = value.replaceAll("\\\\", "/");
@@ -265,8 +507,19 @@ public class StringFilterRegistry
       }
     });
 
-    registerFilter("lastSegment", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "lastSegment";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Extracts the last segment from a file system path.";
+      }
+
       public String filter(String value)
       {
         int pos = Math.max(value.lastIndexOf('/'), value.lastIndexOf('\\'));
@@ -279,8 +532,19 @@ public class StringFilterRegistry
       }
     });
 
-    registerFilter("fileExtension", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "fileExtension";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Extracts the file extension from a URI or a file system path.";
+      }
+
       public String filter(String value)
       {
         int pos = value.lastIndexOf('.');
@@ -293,8 +557,38 @@ public class StringFilterRegistry
       }
     });
 
-    registerFilter("urlEncode", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "pathEncode";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Converts a file system path to a String value that can be used as a file name.";
+      }
+
+      public String filter(String value)
+      {
+        return IOUtil.encodeFileName(value);
+      }
+    });
+
+    registerFilter(new DocumentedStringFilter()
+    {
+      public String getName()
+      {
+        return "urlEncode";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "URL-encodes a String value.";
+      }
+
       public String filter(String value)
       {
         try
@@ -309,8 +603,19 @@ public class StringFilterRegistry
       }
     });
 
-    registerFilter("urlDecode", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "urlDecode";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Decodes a URL.";
+      }
+
       public String filter(String value)
       {
         try
@@ -325,8 +630,19 @@ public class StringFilterRegistry
       }
     });
 
-    registerFilter("slashEncode", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "slashEncode";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Encodes all slashes and backslashes of a String value.";
+      }
+
       @SuppressWarnings("restriction")
       public String filter(String value)
       {
@@ -342,8 +658,19 @@ public class StringFilterRegistry
       }
     });
 
-    registerFilter("slashDecode", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "slashDecode";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Decodes a slashEncoded String value.";
+      }
+
       @SuppressWarnings("restriction")
       public String filter(String value)
       {
@@ -359,8 +686,19 @@ public class StringFilterRegistry
       }
     });
 
-    registerFilter("propertyValue", new StringFilter()
+    registerFilter(new DocumentedStringFilter()
     {
+      public String getName()
+      {
+        return "propertyValue";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Interprets the String value as a preference property path and returns the value of that property.";
+      }
+
       public String filter(String value)
       {
         PreferenceProperty preferenceProperty = new PreferencesUtil.PreferenceProperty(value);
@@ -407,7 +745,54 @@ public class StringFilterRegistry
 
   public static void main(String[] args) throws UnsupportedEncodingException
   {
-    System.out.println(URLEncoder.encode("file:/C:/develop/", "UTF-8"));
+    List<Map.Entry<String, StringFilter>> entries = new ArrayList<Map.Entry<String, StringFilter>>(INSTANCE.filters.entrySet());
+    Collections.sort(entries, new Comparator<Map.Entry<String, StringFilter>>()
+    {
+      public int compare(Map.Entry<String, StringFilter> e1, Map.Entry<String, StringFilter> e2)
+      {
+        return e1.getKey().compareTo(e2.getKey());
+      }
+    });
+
+    System.out.println("{| class=\"wikitable\"");
+    boolean first = true;
+
+    for (Map.Entry<String, StringFilter> entry : entries)
+    {
+      String name;
+      String description;
+
+      StringFilter filter = entry.getValue();
+      if (filter instanceof DocumentedStringFilter)
+      {
+        name = ((DocumentedStringFilter)filter).getName();
+        description = ((DocumentedStringFilter)filter).getDescription();
+
+        boolean deprecated = !name.toLowerCase().equals(entry.getKey().toLowerCase());
+        if (deprecated)
+        {
+          continue;
+        }
+      }
+      else
+      {
+        name = entry.getKey();
+        description = "";
+      }
+
+      if (first)
+      {
+        first = false;
+      }
+      else
+      {
+        System.out.println("|-");
+      }
+
+      System.out.println("| '''" + name + "''' || " + description);
+    }
+
+    System.out.println("|}");
   }
 
   public String filter(String value, String filterName)
@@ -467,5 +852,36 @@ public class StringFilterRegistry
   private void registerFilter(String filterName, StringFilter filter)
   {
     filters.put(filterName.toLowerCase(), filter);
+  }
+
+  private void registerFilter(DocumentedStringFilter filter)
+  {
+    String name = filter.getName().toLowerCase();
+    filters.put(name, filter);
+
+    String[] deprecations = filter.getDeprecations();
+    if (deprecations != null)
+    {
+      for (String deprecatedName : deprecations)
+      {
+        filters.put(deprecatedName.toLowerCase(), filter);
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static abstract class DocumentedStringFilter implements StringFilter, StringFilterDocumentation
+  {
+    public String getDescription()
+    {
+      return null;
+    }
+
+    public String[] getDeprecations()
+    {
+      return null;
+    }
   }
 }
