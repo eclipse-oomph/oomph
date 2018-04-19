@@ -50,17 +50,17 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Luna"
+      value="Photon"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="jdt:JRETask"
-      version="JavaSE-1.7"
-      location="${jre.location-1.7}"/>
+      version="JavaSE-1.8"
+      location="${jre.location-1.8}"/>
   <setupTask
       xsi:type="setup.targlets:TargletTask">
     <targlet
         name="Equinox Platform"
-        activeRepositoryList="${eclipse.target.platform}">
+        activeRepositoryList="CBI+Orbit">
       <requirement
           name="org.eclipse.platform.feature.group"/>
       <requirement
@@ -70,39 +70,11 @@
       <requirement
           name="org.eclipse.equinox.executable.feature.group"/>
       <repositoryList
-          name="Photon">
+          name="CBI+Orbit">
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="Oxygen">
         <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="Neon">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="Mars">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="Luna">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="Kepler">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="Juno">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
+            url="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
       </repositoryList>
     </targlet>
   </setupTask>
@@ -127,6 +99,12 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>Equinox P2</description>
     </setupTask>
     <setupTask
@@ -176,8 +154,7 @@
     <setupTask
         xsi:type="setup.targlets:TargletTask">
       <targlet
-          name="Equinox P2"
-          activeRepositoryList="${eclipse.target.platform}">
+          name="Equinox P2">
         <requirement
             name="*"/>
         <sourceLocator
@@ -228,13 +205,7 @@
     </setupTask>
     <stream
         name="master"
-        label="Master">
-      <setupTask
-          xsi:type="setup:VariableTask"
-          name="eclipse.target.platform"
-          defaultValue="Photon"
-          storageURI="scope://Workspace"/>
-    </stream>
+        label="Master"/>
     <description>The Equinox P2 support</description>
   </project>
   <project name="framework"
@@ -258,13 +229,18 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>Equinox Framework</description>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
       <targlet
-          name="Equinox Framework"
-          activeRepositoryList="${eclipse.target.platform}">
+          name="Equinox Framework">
         <requirement
             name="*"/>
         <sourceLocator
@@ -282,13 +258,7 @@
     </setupTask>
     <stream
         name="master"
-        label="Master">
-      <setupTask
-          xsi:type="setup:VariableTask"
-          name="eclipse.target.platform"
-          defaultValue="Photon"
-          storageURI="scope://Workspace"/>
-    </stream>
+        label="Master"/>
     <description>The Equinox Framework support</description>
   </project>
   <project name="bundles"
@@ -312,54 +282,24 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>Equinox Bundles</description>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
       <targlet
-          name="Equinox Bundles"
-          activeRepositoryList="${eclipse.target.platform}">
+          name="Equinox Bundles">
         <requirement
             name="*"/>
         <requirement
             name="org.apache.sshd.core"/>
         <sourceLocator
             rootFolder="${git.clone.equinox.bundles.location}"/>
-        <repositoryList
-            name="Photon">
-          <repository
-              url="http://download.eclipse.org/tools/ajdt/44/dev/update"/>
-        </repositoryList>
-        <repositoryList
-            name="Oxygen">
-          <repository
-              url="http://download.eclipse.org/tools/ajdt/44/dev/update"/>
-        </repositoryList>
-        <repositoryList
-            name="Neon">
-          <repository
-              url="http://download.eclipse.org/tools/ajdt/44/dev/update"/>
-        </repositoryList>
-        <repositoryList
-            name="Mars">
-          <repository
-              url="http://download.eclipse.org/tools/ajdt/44/dev/update"/>
-        </repositoryList>
-        <repositoryList
-            name="Luna">
-          <repository
-              url="http://download.eclipse.org/tools/ajdt/44/dev/update"/>
-        </repositoryList>
-        <repositoryList
-            name="Kepler">
-          <repository
-              url="http://download.eclipse.org/tools/ajdt/44/dev/update"/>
-        </repositoryList>
-        <repositoryList
-            name="Juno">
-          <repository
-              url="http://download.eclipse.org/tools/ajdt/44/dev/update"/>
-        </repositoryList>
       </targlet>
     </setupTask>
     <setupTask
@@ -371,15 +311,19 @@
             project="org.eclipse.equinox.common"/>
       </workingSet>
     </setupTask>
+    <setupTask
+        xsi:type="setup:TextModifyTask"
+        excludedTriggers="BOOTSTRAP"
+        url="${git.clone.equinox.bundles.location|uri}/bundles/org.eclipse.equinox.security.linux.x86_64/.project"
+        encoding="UTF-8">
+      <modification
+          pattern="(&lt;nature>org.eclipse.m2e.core.maven2Nature&lt;/nature>)">
+        <substitution>&lt;!-- \1 --></substitution>
+      </modification>
+    </setupTask>
     <stream
         name="master"
-        label="Master">
-      <setupTask
-          xsi:type="setup:VariableTask"
-          name="eclipse.target.platform"
-          defaultValue="Photon"
-          storageURI="scope://Workspace"/>
-    </stream>
+        label="Master"/>
     <description>The Equinox Bundles support</description>
   </project>
   <logicalProjectContainer

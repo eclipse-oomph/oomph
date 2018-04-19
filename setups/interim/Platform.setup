@@ -15,7 +15,48 @@
     name="platform"
     label="Platform">
   <setupTask
-      xsi:type="setup.p2:P2Task">
+      xsi:type="setup:CompoundTask"
+      name="User Preferences">
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.core.resources">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.core.resources/refresh.enabled"
+          value="true"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.egit.core">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.egit.core/core_autoIgnoreDerivedResources"
+          value="false"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.epp.mpc.ui">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.epp.mpc.ui/org.eclipse.epp.mpc.naturelookup"
+          value="false"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.pde.api.tools">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.pde.api.tools/missing_default_api_profile"
+          value="Ignore"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.pde.api.tools/MISSING_EE_DESCRIPTIONS"
+          value="Warning"/>
+    </setupTask>
+  </setupTask>
+  <setupTask
+      xsi:type="setup.p2:P2Task"
+      label="Platform">
     <requirement
         name="org.eclipse.platform.feature.group"/>
     <requirement
@@ -26,37 +67,9 @@
         name="org.eclipse.pde.api.tools.ee.feature.feature.group"/>
   </setupTask>
   <setupTask
-      xsi:type="setup:CompoundTask"
-      name="org.eclipse.pde.api.tools">
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.pde.api.tools/missing_default_api_profile"
-        value="Ignore"/>
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.pde.api.tools/MISSING_EE_DESCRIPTIONS"
-        value="Warning"/>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:CompoundTask"
-      name="refresh.enabled">
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.core.resources/refresh.enabled"
-        value="true"/>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:CompoundTask"
-      name="org.eclipse.egit.core">
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.egit.core/core_autoIgnoreDerivedResources"
-        value="false"/>
-  </setupTask>
-  <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Photon"
+      value="Photon"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup:VariableTask"
@@ -100,7 +113,7 @@
       xsi:type="setup.targlets:TargletTask">
     <targlet
         name="Platform"
-        activeRepositoryList="${eclipse.target.platform}">
+        activeRepositoryList="CBI+Orbit">
       <requirement
           name="org.eclipse.platform.feature.group"/>
       <requirement
@@ -110,53 +123,11 @@
       <requirement
           name="org.eclipse.equinox.executable.feature.group"/>
       <repositoryList
-          name="Photon">
+          name="CBI+Orbit">
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
         <repository
             url="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
-      </repositoryList>
-      <repositoryList
-          name="Oxygen">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
-      </repositoryList>
-      <repositoryList
-          name="Neon">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
-      </repositoryList>
-      <repositoryList
-          name="Mars">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
-      </repositoryList>
-      <repositoryList
-          name="Luna">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
-      </repositoryList>
-      <repositoryList
-          name="Kepler">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
-      </repositoryList>
-      <repositoryList
-          name="Juno">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
       </repositoryList>
     </targlet>
   </setupTask>
@@ -181,6 +152,12 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>Platform Base, Update, and Ant</description>
     </setupTask>
     <setupTask
@@ -241,7 +218,7 @@
             xsi:type="predicates:AndPredicate">
           <operand
               xsi:type="predicates:RepositoryPredicate"
-              project="org.eclipse.update.core"/>
+              project="org.eclipse.update.configurator"/>
           <operand
               xsi:type="predicates:LocationPredicate"
               pattern=".*/eclipse\.platform/update/.*"/>
@@ -250,13 +227,7 @@
     </setupTask>
     <stream
         name="master"
-        label="Master">
-      <setupTask
-          xsi:type="setup:VariableTask"
-          name="eclipse.target.platform"
-          value="Photon"
-          storageURI="scope://Workspace"/>
-    </stream>
+        label="Master"/>
   </project>
   <project name="documentation"
       label="Documentation">
@@ -279,6 +250,12 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>Platform Documentation</description>
     </setupTask>
     <setupTask
@@ -303,13 +280,7 @@
     </setupTask>
     <stream
         name="master"
-        label="Master">
-      <setupTask
-          xsi:type="setup:VariableTask"
-          name="eclipse.target.platform"
-          value="Photon"
-          storageURI="scope://Workspace"/>
-    </stream>
+        label="Master"/>
     <description>The Platform documentation</description>
   </project>
   <project name="debug"
@@ -333,6 +304,12 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>Platform Debug</description>
     </setupTask>
     <setupTask
@@ -387,13 +364,7 @@
     </setupTask>
     <stream
         name="master"
-        label="Master">
-      <setupTask
-          xsi:type="setup:VariableTask"
-          name="eclipse.target.platform"
-          value="Photon"
-          storageURI="scope://Workspace"/>
-    </stream>
+        label="Master"/>
     <description>The Platform Debug support</description>
   </project>
   <project href="https://git.eclipse.org/c/platform/eclipse.platform.resources.git/plain/bundles/org.eclipse.core.resources.releng/platformResources.setup#/"/>
@@ -425,79 +396,31 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>Platform UI Tools</description>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
       <targlet
           name="Platform UI Tools"
-          activeRepositoryList="${eclipse.target.platform}">
+          activeRepositoryList="Nebula+EMF+GEF">
         <requirement
             name="*"/>
         <sourceLocator
             rootFolder="${git.clone.platform.ui.tools.location}"/>
         <repositoryList
-            name="Photon">
+            name="Nebula+EMF+GEF">
           <repository
               url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11.x"/>
+              url="http://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
           <repository
-              url="http://download.eclipse.org/tools/gef/updates/releases"/>
-        </repositoryList>
-        <repositoryList
-            name="Oxygen">
-          <repository
-              url="http://download.eclipse.org/nebula/snapshot"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11.x"/>
-          <repository
-              url="http://download.eclipse.org/tools/gef/updates/releases"/>
-        </repositoryList>
-        <repositoryList
-            name="Neon">
-          <repository
-              url="http://download.eclipse.org/nebula/snapshot"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11.x"/>
-          <repository
-              url="http://download.eclipse.org/tools/gef/updates/releases"/>
-        </repositoryList>
-        <repositoryList
-            name="Mars">
-          <repository
-              url="http://download.eclipse.org/nebula/snapshot"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11.x"/>
-          <repository
-              url="http://download.eclipse.org/tools/gef/updates/releases"/>
-        </repositoryList>
-        <repositoryList
-            name="Luna">
-          <repository
-              url="http://download.eclipse.org/nebula/snapshot"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones/core"/>
-          <repository
-              url="http://download.eclipse.org/tools/gef/updates/releases"/>
-        </repositoryList>
-        <repositoryList
-            name="Kepler">
-          <repository
-              url="http://download.eclipse.org/nebula/snapshot"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones/core"/>
-          <repository
-              url="http://download.eclipse.org/tools/gef/updates/releases"/>
-        </repositoryList>
-        <repositoryList
-            name="Juno">
-          <repository
-              url="http://download.eclipse.org/nebula/snapshot"/>
-          <repository
-              url="http://download.eclipse.org/modeling/emf/emf/updates/2.11milestones/core"/>
-          <repository
-              url="http://download.eclipse.org/tools/gef/updates/releases"/>
+              url="http://download.eclipse.org/tools/gef/updates/milestones"/>
         </repositoryList>
       </targlet>
     </setupTask>
@@ -515,13 +438,7 @@
     </setupTask>
     <stream
         name="master"
-        label="Master">
-      <setupTask
-          xsi:type="setup:VariableTask"
-          name="eclipse.target.platform"
-          value="Photon"
-          storageURI="scope://Workspace"/>
-    </stream>
+        label="Master"/>
     <description>The Platform UI Tools support</description>
   </project>
   <logicalProjectContainer
