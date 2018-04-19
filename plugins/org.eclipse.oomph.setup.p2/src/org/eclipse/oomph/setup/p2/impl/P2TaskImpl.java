@@ -43,6 +43,8 @@ import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.SegmentSequence;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -498,9 +500,11 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     if (!StringUtil.isEmpty(overriddenLabel))
     {
       String label = getLabel();
-      if (!StringUtil.isEmpty(label) && !overriddenLabel.contains(label))
+      if (!StringUtil.isEmpty(label))
       {
-        overriddenLabel += " + " + label;
+        List<String> labelSegments = new UniqueEList<String>(SegmentSequence.create(" + ", overriddenLabel).segmentsList());
+        labelSegments.addAll(SegmentSequence.create(" + ", label).segmentsList());
+        overriddenLabel = SegmentSequence.create(" + ", labelSegments.toArray(new String[labelSegments.size()])).toString();
       }
 
       setLabel(overriddenLabel);
