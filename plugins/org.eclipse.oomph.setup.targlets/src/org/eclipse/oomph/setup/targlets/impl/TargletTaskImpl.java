@@ -987,7 +987,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
           return true;
         }
 
-        if (!targetDefinition.getHandle().equals(activeTargetHandle))
+        if (isActivateTarget() && !targetDefinition.getHandle().equals(activeTargetHandle))
         {
           return true;
         }
