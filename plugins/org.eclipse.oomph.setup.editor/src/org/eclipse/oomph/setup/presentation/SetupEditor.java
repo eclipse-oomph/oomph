@@ -563,6 +563,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   protected EContentAdapter problemIndicationAdapter = new EContentAdapter()
   {
+    protected boolean dispatching;
+
     @Override
     public void notifyChanged(Notification notification)
     {
@@ -584,17 +586,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             {
               resourceToDiagnosticMap.remove(resource);
             }
-
-            if (updateProblemIndication)
-            {
-              getSite().getShell().getDisplay().asyncExec(new Runnable()
-              {
-                public void run()
-                {
-                  updateProblemIndication();
-                }
-              });
-            }
+            dispatchUpdateProblemIndication();
             break;
           }
         }
@@ -602,6 +594,22 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       else
       {
         super.notifyChanged(notification);
+      }
+    }
+
+    protected void dispatchUpdateProblemIndication()
+    {
+      if (updateProblemIndication && !dispatching)
+      {
+        dispatching = true;
+        getSite().getShell().getDisplay().asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            dispatching = false;
+            updateProblemIndication();
+          }
+        });
       }
     }
 
@@ -616,16 +624,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     {
       basicUnsetTarget(target);
       resourceToDiagnosticMap.remove(target);
-      if (updateProblemIndication)
-      {
-        getSite().getShell().getDisplay().asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            updateProblemIndication();
-          }
-        });
-      }
+      dispatchUpdateProblemIndication();
     }
   };
 
@@ -2727,9 +2726,9 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       setPageText(0, "");
       if (getContainer() instanceof CTabFolder)
       {
-        ((CTabFolder)getContainer()).setTabHeight(1);
         Point point = getContainer().getSize();
-        getContainer().setSize(point.x, point.y + 6);
+        Rectangle clientArea = getContainer().getClientArea();
+        getContainer().setSize(point.x, 2 * point.y - clientArea.height - clientArea.y);
       }
     }
   }
@@ -2748,9 +2747,9 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       setPageText(0, getString("_UI_SelectionPage_label"));
       if (getContainer() instanceof CTabFolder)
       {
-        ((CTabFolder)getContainer()).setTabHeight(SWT.DEFAULT);
         Point point = getContainer().getSize();
-        getContainer().setSize(point.x, point.y - 6);
+        Rectangle clientArea = getContainer().getClientArea();
+        getContainer().setSize(point.x, clientArea.height + clientArea.y);
       }
     }
   }
@@ -5024,7 +5023,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       return toolItem;
     }
 
-    @SuppressWarnings("restriction")
+    @SuppressWarnings({ "restriction", "deprecation" })
     private String getFullHTML(String text)
     {
       if (setupEditor == null)
@@ -5032,7 +5031,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         return text;
       }
 
-      StringBuffer result = new StringBuffer(text);
       String styleSheet = toolTipSupport.getStyleSheet();
       String symbolicFont = (String)ReflectUtil.invokeMethod("getSymbolicFont", toolTipSupport);
 
@@ -5041,6 +5039,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       Color foregroundColor = content.getForeground();
       Color backgroundColor = content.getBackground();
 
+      StringBuffer result = new StringBuffer(text);
       org.eclipse.jface.internal.text.html.HTMLPrinter.insertPageProlog(result, 0, foregroundColor == null ? null : foregroundColor.getRGB(),
           backgroundColor == null ? null : backgroundColor.getRGB(), styleSheet);
       org.eclipse.jface.internal.text.html.HTMLPrinter.addPageEpilog(result);

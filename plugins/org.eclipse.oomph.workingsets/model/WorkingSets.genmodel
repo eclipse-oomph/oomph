@@ -6,7 +6,7 @@
     updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
     copyrightFields="false" optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.base/model/Base.genmodel#//base"
-    operationReflection="true" decoration="Live" cleanup="true">
+    operationReflection="true" decoration="Live" cleanup="true" eclipsePlatformVersion="Juno">
   <foreignModel>WorkingSets.ecore</foreignModel>
   <genPackages prefix="WorkingSets" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
       multipleEditorPages="false" childCreationExtenders="true" ecorePackage="WorkingSets.ecore#/"

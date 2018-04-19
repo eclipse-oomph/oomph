@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.workingsets.presentation;
 
+import org.eclipse.oomph.internal.ui.OomphEditingDomainActionBarContributor;
 import org.eclipse.oomph.ui.DockableDialog;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.ReflectUtil;
@@ -31,7 +32,6 @@ import org.eclipse.emf.edit.provider.ItemProvider;
 import org.eclipse.emf.edit.ui.action.ControlAction;
 import org.eclipse.emf.edit.ui.action.CreateChildAction;
 import org.eclipse.emf.edit.ui.action.CreateSiblingAction;
-import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
 import org.eclipse.emf.edit.ui.action.LoadResourceAction;
 import org.eclipse.emf.edit.ui.action.ValidateAction;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -93,9 +93,9 @@ import java.util.Set;
  * This is the action bar contributor for the WorkingSets model editor.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
- * @generated
+ * @generated not
  */
-public class WorkingSetsActionBarContributor extends EditingDomainActionBarContributor implements ISelectionChangedListener
+public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBarContributor implements ISelectionChangedListener
 {
   /**
    * This keeps track of the active editor.
@@ -224,6 +224,7 @@ public class WorkingSetsActionBarContributor extends EditingDomainActionBarContr
   @Override
   public void contributeToToolBar(IToolBarManager toolBarManager)
   {
+    super.contributeToToolBar(toolBarManager);
     toolBarManager.add(new Separator("workingsets-settings"));
     toolBarManager.add(new Separator("workingsets-additions"));
   }

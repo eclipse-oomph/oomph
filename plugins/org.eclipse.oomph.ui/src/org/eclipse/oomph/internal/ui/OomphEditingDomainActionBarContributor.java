@@ -11,7 +11,9 @@
 package org.eclipse.oomph.internal.ui;
 
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.edit.ui.action.DeleteAction;
 import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
@@ -31,6 +33,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.texteditor.FindReplaceAction;
 
+import java.lang.reflect.Field;
 import java.util.ResourceBundle;
 
 /**
@@ -63,7 +66,27 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
       actionBars.setGlobalActionHandler(ActionFactory.FIND.getId(), findAction);
     }
 
-    collapseAllAction = createCollapseAllAction();
+    // Conditionally create EMF 2.14's expand-all and collapse-all actions.
+    // Avoiding creating our own collapse-all action when EMF's is available ensures that the two appear in the same group on the tool bar.
+    try
+    {
+      // Try to create EMF's expand-all action, which is new to EMF 2.14.
+      Field expandAllActionField = ReflectUtil.getField(EditingDomainActionBarContributor.class, "expandAllAction");
+      Class<?> expandAllActionClass = CommonPlugin.loadClass("org.eclipse.emf.edit.ui", "org.eclipse.emf.edit.ui.action.ExpandAllAction");
+      Object expandAllAction = expandAllActionClass.newInstance();
+      expandAllActionField.set(this, expandAllAction);
+
+      // Try to create EMF's collapse-all action, which is new to EMF 2.14.
+      Field collapseAllActionField = ReflectUtil.getField(EditingDomainActionBarContributor.class, "collapseAllAction");
+      Class<?> collapseAllActionClass = CommonPlugin.loadClass("org.eclipse.emf.edit.ui", "org.eclipse.emf.edit.ui.action.CollapseAllAction");
+      Object collapseAllAction = collapseAllActionClass.newInstance();
+      collapseAllActionField.set(this, collapseAllAction);
+    }
+    catch (Exception ex)
+    {
+      // Failing that, create our own collapse all action.
+      collapseAllAction = createCollapseAllAction();
+    }
 
     revertAction = createRevertAction();
     if (revertAction != null)

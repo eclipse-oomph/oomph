@@ -1070,6 +1070,7 @@ public final class UIUtil
 
     gc.setFont(font);
     FontMetrics fontMetrics = gc.getFontMetrics();
+    @SuppressWarnings("deprecation")
     int averageCharWidth = fontMetrics.getAverageCharWidth();
 
     Font boldFont = ExtendedFontRegistry.INSTANCE.getFont(font, IItemFontProvider.BOLD_FONT);

@@ -109,13 +109,16 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
     }
 
     // Obtain or create and register package
-    WorkingSetsPackageImpl theWorkingSetsPackage = (WorkingSetsPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof WorkingSetsPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new WorkingSetsPackageImpl());
+    Object registeredWorkingSetsPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    WorkingSetsPackageImpl theWorkingSetsPackage = registeredWorkingSetsPackage instanceof WorkingSetsPackageImpl
+        ? (WorkingSetsPackageImpl)registeredWorkingSetsPackage
+        : new WorkingSetsPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
     PredicatesPackage.eINSTANCE.eClass();
+    BasePackage.eINSTANCE.eClass();
 
     // Create package meta-data objects
     theWorkingSetsPackage.createPackageContents();

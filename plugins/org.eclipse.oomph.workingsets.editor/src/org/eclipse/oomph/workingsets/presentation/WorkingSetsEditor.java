@@ -100,6 +100,7 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
@@ -343,6 +344,8 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    */
   protected EContentAdapter problemIndicationAdapter = new EContentAdapter()
   {
+    protected boolean dispatching;
+
     @Override
     public void notifyChanged(Notification notification)
     {
@@ -364,17 +367,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
             {
               resourceToDiagnosticMap.remove(resource);
             }
-
-            if (updateProblemIndication)
-            {
-              getSite().getShell().getDisplay().asyncExec(new Runnable()
-              {
-                public void run()
-                {
-                  updateProblemIndication();
-                }
-              });
-            }
+            dispatchUpdateProblemIndication();
             break;
           }
         }
@@ -382,6 +375,22 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
       else
       {
         super.notifyChanged(notification);
+      }
+    }
+
+    protected void dispatchUpdateProblemIndication()
+    {
+      if (updateProblemIndication && !dispatching)
+      {
+        dispatching = true;
+        getSite().getShell().getDisplay().asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            dispatching = false;
+            updateProblemIndication();
+          }
+        });
       }
     }
 
@@ -396,16 +405,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
     {
       basicUnsetTarget(target);
       resourceToDiagnosticMap.remove(target);
-      if (updateProblemIndication)
-      {
-        getSite().getShell().getDisplay().asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            updateProblemIndication();
-          }
-        });
-      }
+      dispatchUpdateProblemIndication();
     }
   };
 
@@ -586,9 +586,10 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
   {
     if (!changedResources.isEmpty() && (!isDirty() || handleDirtyConflict()))
     {
+      ResourceSet resourceSet = editingDomain.getResourceSet();
       if (isDirty())
       {
-        changedResources.addAll(editingDomain.getResourceSet().getResources());
+        changedResources.addAll(resourceSet.getResources());
       }
       editingDomain.getCommandStack().flush();
 
@@ -600,7 +601,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
           resource.unload();
           try
           {
-            resource.load(Collections.EMPTY_MAP);
+            resource.load(resourceSet.getLoadOptions());
           }
           catch (IOException exception)
           {
@@ -1135,6 +1136,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
       selectionViewer = new TreeViewer(tree);
       setCurrentViewer(selectionViewer);
 
+      selectionViewer.setUseHashlookup(true);
       selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
       selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory),
           new DiagnosticDecorator(editingDomain, selectionViewer, WorkingSetsEditorPlugin.getPlugin().getDialogSettings())));
@@ -1152,7 +1154,10 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
       {
         public void run()
         {
-          setActivePage(0);
+          if (!getContainer().isDisposed())
+          {
+            setActivePage(0);
+          }
         }
       });
     }
@@ -1199,9 +1204,9 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
       setPageText(0, "");
       if (getContainer() instanceof CTabFolder)
       {
-        ((CTabFolder)getContainer()).setTabHeight(1);
         Point point = getContainer().getSize();
-        getContainer().setSize(point.x, point.y + 6);
+        Rectangle clientArea = getContainer().getClientArea();
+        getContainer().setSize(point.x, 2 * point.y - clientArea.height - clientArea.y);
       }
     }
   }
@@ -1220,9 +1225,9 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
       setPageText(0, getString("_UI_SelectionPage_label"));
       if (getContainer() instanceof CTabFolder)
       {
-        ((CTabFolder)getContainer()).setTabHeight(SWT.DEFAULT);
         Point point = getContainer().getSize();
-        getContainer().setSize(point.x, point.y - 6);
+        Rectangle clientArea = getContainer().getClientArea();
+        getContainer().setSize(point.x, clientArea.height + clientArea.y);
       }
     }
   }
@@ -1295,6 +1300,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
 
           // Set up the tree viewer.
           //
+          contentOutlineViewer.setUseHashlookup(true);
           contentOutlineViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
           contentOutlineViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory),
               new DiagnosticDecorator(editingDomain, contentOutlineViewer, WorkingSetsEditorPlugin.getPlugin().getDialogSettings())));
@@ -1449,8 +1455,10 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
         // Save the resources to the file system.
         //
         boolean first = true;
-        for (Resource resource : editingDomain.getResourceSet().getResources())
+        List<Resource> resources = editingDomain.getResourceSet().getResources();
+        for (int i = 0; i < resources.size(); ++i)
         {
+          Resource resource = resources.get(i);
           if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !editingDomain.isReadOnly(resource))
           {
             try
