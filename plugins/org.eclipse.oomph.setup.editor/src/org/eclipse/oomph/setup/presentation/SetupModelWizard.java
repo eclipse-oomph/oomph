@@ -926,6 +926,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
     {
       templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label3"));
       templateUsagePage.addTemplate("Simple Configuration", "@ConfigurationTemplate@.setup");
+      templateUsagePage.addTemplate("Copy Current Configuration", "@CopyConfigurationTemplate@.setup");
     }
   }
 

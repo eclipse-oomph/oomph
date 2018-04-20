@@ -16,11 +16,17 @@ import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.base.util.BaseResourceImpl;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.Configuration;
+import org.eclipse.oomph.setup.Installation;
+import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.editor.SetupTemplate;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.StringFilterRegistry;
 import org.eclipse.oomph.setup.ui.PropertyField;
 import org.eclipse.oomph.ui.LabelDecorator;
@@ -70,6 +76,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -376,7 +383,7 @@ public class GenericSetupTemplate extends SetupTemplate
       }
     }
 
-    computeProjectTemplateDefaults();
+    computeTemplateDefaults(true);
 
     Composite parent = composite.getParent();
     int currentHeight = composite.getSize().y;
@@ -415,7 +422,7 @@ public class GenericSetupTemplate extends SetupTemplate
 
   private void modelChanged(final VariableTask triggerVariable)
   {
-    computeProjectTemplateDefaults();
+    computeTemplateDefaults(false);
 
     Copier copier = new EcoreUtil.Copier();
     ModelElement copy = (ModelElement)copier.copy(setupModelElement);
@@ -780,7 +787,7 @@ public class GenericSetupTemplate extends SetupTemplate
     return StringFilterRegistry.INSTANCE.filter(value, filterName);
   }
 
-  private void computeProjectTemplateDefaults()
+  private void computeTemplateDefaults(boolean initial)
   {
     if (variables.containsKey("project.name"))
     {
@@ -912,6 +919,92 @@ public class GenericSetupTemplate extends SetupTemplate
       restoreDefaultValue("project.name");
       restoreDefaultValue("project.git.path");
       restoreDefaultValue("project.remote.uris");
+    }
+    else if (initial && templateLocation.lastSegment().contains("Copy") && setupModelElement instanceof Configuration)
+    {
+      Configuration configuration = (Configuration)setupModelElement;
+      SetupContext setupContext = SetupContext.create(setupModelElement.eResource().getResourceSet());
+
+      Installation installation = configuration.getInstallation();
+      if (installation != null)
+      {
+        Installation actualInstallation = setupContext.getInstallation();
+        if (actualInstallation != null)
+        {
+          ProductVersion productVersion = actualInstallation.getProductVersion();
+          if (productVersion != null)
+          {
+            Resource eResource = productVersion.eResource();
+            if (eResource != null && !"catalog".equals(eResource.getURI().scheme()))
+            {
+              installation.setProductVersion(productVersion);
+            }
+          }
+
+          copyContents(installation, actualInstallation);
+          computeDefaultAttributes(installation, actualInstallation, "installation.");
+        }
+      }
+
+      Workspace workspace = configuration.getWorkspace();
+      if (workspace != null)
+      {
+        Workspace actualWorkspace = setupContext.getWorkspace();
+        if (actualWorkspace != null)
+        {
+          EList<Stream> streams = actualWorkspace.getStreams();
+          workspace.getStreams().addAll(streams);
+          copyContents(workspace, actualWorkspace);
+          computeDefaultAttributes(workspace, actualWorkspace, "workspace.");
+        }
+      }
+    }
+  }
+
+  private void copyContents(Scope target, Scope source)
+  {
+    EList<Annotation> annotations = source.getAnnotations();
+    EList<SetupTask> setupTasks = source.getSetupTasks();
+
+    EcoreUtil.Copier copier = new EcoreUtil.Copier();
+    Collection<Annotation> annotationCopies = copier.copyAll(annotations);
+    Collection<SetupTask> setupTaskCopies = copier.copyAll(setupTasks);
+    copier.copyReferences();
+
+    target.getAnnotations().addAll(annotationCopies);
+    target.getSetupTasks().addAll(setupTaskCopies);
+
+    Set<EObject> eObjectsToDelete = new HashSet<EObject>();
+    for (Iterator<EObject> it = target.eAllContents(); it.hasNext();)
+    {
+      EObject eObject = it.next();
+      if (eObject instanceof SetupTask && !((SetupTask)eObject).getRestrictions().isEmpty())
+      {
+        eObjectsToDelete.add(eObject);
+      }
+    }
+
+    EcoreUtil.deleteAll(eObjectsToDelete, true);
+  }
+
+  private void computeDefaultAttributes(Scope target, Scope source, String variablePrefix)
+  {
+    String name = source.getName();
+    if (!StringUtil.isEmpty(name) && name != null && !(name + ".").equals(variablePrefix))
+    {
+      applyVariableValue(variablePrefix + "name", name);
+    }
+
+    String label = source.getLabel();
+    if (!StringUtil.isEmpty(label))
+    {
+      applyVariableValue(variablePrefix + "label", label);
+    }
+
+    String description = source.getDescription();
+    if (!StringUtil.isEmpty(description))
+    {
+      applyVariableValue(variablePrefix + "description", description);
     }
   }
 
