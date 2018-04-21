@@ -56,6 +56,8 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
 
   private Button ignoreDebugOptionsButton;
 
+  private Button ignoreAutomaticModuleNameButton;
+
   private Button ignoreMissingDependencyRangesButton;
 
   private Button ignoreLaxLowerBoundDependencyButton;
@@ -145,6 +147,11 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     ignoreDebugOptionsButton.setSelection(values.isIgnoreDebugOptions());
     ignoreDebugOptionsButton.addSelectionListener(buttonListener);
 
+    ignoreAutomaticModuleNameButton = new Button(composite, SWT.CHECK);
+    ignoreAutomaticModuleNameButton.setText("Ignore automatic module name");
+    ignoreAutomaticModuleNameButton.setSelection(values.isIgnoreAutomaticModuleName());
+    ignoreAutomaticModuleNameButton.addSelectionListener(buttonListener);
+
     ignoreMissingDependencyRangesButton = new Button(composite, SWT.CHECK);
     ignoreMissingDependencyRangesButton.setText("Ignore missing dependency version ranges");
     ignoreMissingDependencyRangesButton.setSelection(values.isIgnoreMissingDependencyRanges());
@@ -216,6 +223,7 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     values.setIgnoreFeatureNature(ignoreFeatureNatureButton.getSelection());
     values.setIgnoreSchemaBuilder(ignoreSchemaBuilderButton.getSelection());
     values.setIgnoreDebugOptions(ignoreDebugOptionsButton.getSelection());
+    values.setIgnoreAutomaticModuleName(ignoreAutomaticModuleNameButton.getSelection());
     values.setIgnoreMissingDependencyRanges(ignoreMissingDependencyRangesButton.getSelection());
     values.setIgnoreLaxLowerBoundDependencyVersions(ignoreLaxLowerBoundDependencyButton.getSelection());
     values.setIgnoreMissingExportVersions(ignoreMissingExportVersionsButton.getSelection());
@@ -255,6 +263,11 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
   public boolean isIgnoreDebugOptions()
   {
     return values.isIgnoreDebugOptions();
+  }
+
+  public boolean isIgnoreAutomaticModuleName()
+  {
+    return values.isIgnoreAutomaticModuleName();
   }
 
   public boolean isIgnoreMissingDependencyRanges()

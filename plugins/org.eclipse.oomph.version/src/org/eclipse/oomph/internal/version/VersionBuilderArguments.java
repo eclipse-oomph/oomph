@@ -116,6 +116,16 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.IGNORE_DEBUG_OPTIONS_ARGUMENT, value);
   }
 
+  public boolean isIgnoreAutomaticModuleName()
+  {
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_AUTOMATIC_MODULE_NAME_ARGUMENT));
+  }
+
+  public void setIgnoreAutomaticModuleName(boolean value)
+  {
+    setBoolean(IVersionBuilderArguments.IGNORE_AUTOMATIC_MODULE_NAME_ARGUMENT, value);
+  }
+
   public boolean isIgnoreMissingDependencyRanges()
   {
     return "true".equals(get(IVersionBuilderArguments.IGNORE_DEPENDENCY_RANGES_ARGUMENT));

@@ -57,6 +57,11 @@ public class ReplaceResolution extends AbstractDocumentResolution
       return "Change the debug option";
     }
 
+    if (Markers.AUTOMATIC_MODULE_NAME_PROBLEM.equals(problemType))
+    {
+      return "Change the automatic module name";
+    }
+
     if (Markers.MAVEN_POM_PROBLEM.equals(problemType))
     {
       String message = Markers.getAttribute(marker, IMarker.MESSAGE);

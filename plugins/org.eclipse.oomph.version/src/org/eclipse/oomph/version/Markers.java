@@ -46,6 +46,8 @@ public final class Markers
 
   public static final String DEBUG_OPTION_PROBLEM = "debug.option";
 
+  public static final String AUTOMATIC_MODULE_NAME_PROBLEM = "automatic.module.name";
+
   public static final String DEPENDENCY_RANGE_PROBLEM = "dependency.range";
 
   public static final String LOWER_BOUND_VERSION_PROBLEM = "lower.bound.version";

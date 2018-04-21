@@ -110,6 +110,10 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
   private static final Pattern DEBUG_OPTION_PATTERN = Pattern.compile("^( *)([^/ \\n\\r]+)/([^ =]+)( *=.*)$", Pattern.MULTILINE);
 
+  private static final String AUTOMATIC_MODULE_NAME_HEADER = "Automatic-Module-Name";
+
+  private static final Pattern AUTOMATIC_MODULE_NAME_PATTERN = Pattern.compile(AUTOMATIC_MODULE_NAME_HEADER + ":( *)(.*)");
+
   private static final Set<String> releasePaths = new HashSet<String>();
 
   private static final Map<IElement, IElement> elementCache = new HashMap<IElement, IElement>();
@@ -428,6 +432,18 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
           else if (!oldVersionBuilderArguments.isIgnoreDebugOptions())
           {
             Markers.deleteAllMarkers(project.getFile(OPTIONS_PATH), Markers.DEBUG_OPTION_PROBLEM);
+          }
+
+          if (!arguments.isIgnoreAutomaticModuleName())
+          {
+            if (delta == null || delta.findMember(MANIFEST_PATH) != null)
+            {
+              checkAutomaticModuleName((IPluginModelBase)componentModel);
+            }
+          }
+          else if (!oldVersionBuilderArguments.isIgnoreDebugOptions())
+          {
+            Markers.deleteAllMarkers(project.getFile(MANIFEST_PATH), Markers.DEBUG_OPTION_PROBLEM);
           }
 
           if (!arguments.isIgnoreMissingDependencyRanges())
@@ -1723,6 +1739,58 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
           marker.setAttribute(Markers.QUICK_FIX_PATTERN, regex);
           marker.setAttribute(Markers.QUICK_FIX_REPLACEMENT, symbolicName);
           marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.IGNORE_DEBUG_OPTIONS_ARGUMENT);
+        }
+      }
+    }
+  }
+
+  @SuppressWarnings("restriction")
+  private void checkAutomaticModuleName(IPluginModelBase pluginModel) throws CoreException, IOException
+  {
+    IFile file = getProject().getFile(MANIFEST_PATH);
+    if (file.isAccessible())
+    {
+      Markers.deleteAllMarkers(file, Markers.AUTOMATIC_MODULE_NAME_PROBLEM);
+
+      if (pluginModel instanceof org.eclipse.pde.internal.core.ibundle.IBundlePluginModelBase)
+      {
+        org.eclipse.pde.internal.core.ibundle.IBundleModel bundleModel = ((org.eclipse.pde.internal.core.ibundle.IBundlePluginModelBase)pluginModel)
+            .getBundleModel();
+        if (bundleModel != null)
+        {
+          org.eclipse.pde.internal.core.ibundle.IBundle bundle = bundleModel.getBundle();
+          if (bundle != null)
+          {
+            String header = bundle.getHeader(AUTOMATIC_MODULE_NAME_HEADER);
+            if (header != null)
+            {
+              String symbolicName = pluginModel.getBundleDescription().getSymbolicName();
+              if (!header.equals(symbolicName))
+              {
+                String content = VersionUtil.getContents(file);
+
+                Matcher matcher = AUTOMATIC_MODULE_NAME_PATTERN.matcher(content);
+                while (matcher.find())
+                {
+                  String moduleName = matcher.group(2);
+                  if (!symbolicName.equals(moduleName))
+                  {
+                    String whitespace = matcher.group(1);
+                    moduleName = moduleName.replace(".", "\\.");
+
+                    String regex = AUTOMATIC_MODULE_NAME_HEADER + ":" + whitespace + "(" + moduleName + ")";
+                    String msg = "Automatic module name should be '" + symbolicName + "'";
+
+                    IMarker marker = Markers.addMarker(file, msg, IMarker.SEVERITY_ERROR, regex);
+                    marker.setAttribute(Markers.PROBLEM_TYPE, Markers.AUTOMATIC_MODULE_NAME_PROBLEM);
+                    marker.setAttribute(Markers.QUICK_FIX_PATTERN, regex);
+                    marker.setAttribute(Markers.QUICK_FIX_REPLACEMENT, symbolicName);
+                    marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.IGNORE_AUTOMATIC_MODULE_NAME_ARGUMENT);
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

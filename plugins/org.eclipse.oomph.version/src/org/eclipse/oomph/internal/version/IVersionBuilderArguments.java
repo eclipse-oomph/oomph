@@ -34,6 +34,8 @@ public interface IVersionBuilderArguments extends Map<String, String>
 
   public static final String IGNORE_DEBUG_OPTIONS_ARGUMENT = "ignore.debug.options";
 
+  public static final String IGNORE_AUTOMATIC_MODULE_NAME_ARGUMENT = "ignore.automatic.module.name";
+
   public static final String IGNORE_DEPENDENCY_RANGES_ARGUMENT = "ignore.missing.dependency.ranges";
 
   public static final String IGNORE_LAX_LOWER_BOUND_VERSIONS_ARGUMENT = "ignore.lower.bound.dependency.ranges";
@@ -61,6 +63,8 @@ public interface IVersionBuilderArguments extends Map<String, String>
   public boolean isIgnoreSchemaBuilder();
 
   public boolean isIgnoreDebugOptions();
+
+  public boolean isIgnoreAutomaticModuleName();
 
   public boolean isIgnoreMissingDependencyRanges();
 
