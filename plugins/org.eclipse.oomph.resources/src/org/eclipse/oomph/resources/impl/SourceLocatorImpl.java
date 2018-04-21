@@ -548,7 +548,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
         }
 
         IProject project = loadProject(sourceLocator, defaultProjectFactories, rootContainer, container, monitor);
-        if (PredicatesUtil.matchesPredicates(project, sourceLocator.getPredicates()))
+        if (sourceLocator.matches(project))
         {
           try
           {
@@ -558,11 +558,11 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
           {
             SourceLocatorImpl.addStatus(status, ResourcesPlugin.INSTANCE, project.getName(), ex);
           }
+        }
 
-          if (!sourceLocator.isLocateNestedProjects())
-          {
-            return false;
-          }
+        if (project != null && !sourceLocator.isLocateNestedProjects())
+        {
+          return false;
         }
 
         return true;
