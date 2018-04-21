@@ -35,14 +35,6 @@
   </setupTask>
   <setupTask
       xsi:type="setup:CompoundTask"
-      name="org.eclipse.pde.api.tools">
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.pde.api.tools/missing_default_api_profile"
-        value="Ignore"/>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:CompoundTask"
       name="refresh.enabled">
     <setupTask
         xsi:type="setup:PreferenceTask"
@@ -64,17 +56,40 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Mars"
+      value="${eclipse.target.platform.latest}"
+      storageURI="scope://Workspace"/>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      name="eclipse.api.baseline.target.platform"
+      value="${eclipse.api.baseline.target.platform.latest.released}"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="jdt:JRETask"
       version="JavaSE-1.8"
       location="${jre.location-1.8}"/>
   <setupTask
+      xsi:type="setup.targlets:TargletTask"
+      targetName="Modular API Baseline Target"
+      activateTarget="false">
+    <targlet
+        name="Platform"
+        activeRepositoryList="${eclipse.api.baseline.target.platform}"
+        includeSources="false">
+      <requirement
+          name="org.eclipse.platform.feature.group"/>
+      <requirement
+          name="org.eclipse.jdt.feature.group"/>
+      <requirement
+          name="org.eclipse.pde.feature.group"/>
+      <requirement
+          name="org.eclipse.equinox.executable.feature.group"/>
+    </targlet>
+  </setupTask>
+  <setupTask
       xsi:type="setup.targlets:TargletTask">
     <targlet
         name="PDE"
-        activeRepositoryList="${eclipse.target.platform}">
+        activeRepositoryList="CBI">
       <requirement
           name="org.eclipse.platform.feature.group"/>
       <requirement
@@ -84,37 +99,7 @@
       <requirement
           name="org.eclipse.equinox.executable.feature.group"/>
       <repositoryList
-          name="Photon">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="Oxygen">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="Neon">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="Mars">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="Luna">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="Kepler">
-        <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
-      </repositoryList>
-      <repositoryList
-          name="Juno">
+          name="CBI">
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
@@ -141,6 +126,12 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>PDE Core</description>
     </setupTask>
     <setupTask
@@ -266,6 +257,12 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
       <description>PDE Core</description>
     </setupTask>
     <setupTask
@@ -310,20 +307,11 @@
         <predicate
             xsi:type="predicates:RepositoryPredicate"
             project="org.eclipse.pde.build"/>
-        <predicate
-            xsi:type="predicates:NamePredicate"
-            pattern="org\.eclipse\.equinox\.p2\.repository\.tools|org\.eclipse\.equinox\.p2\.jarprocessor"/>
       </workingSet>
     </setupTask>
     <stream
         name="master"
-        label="Master">
-      <setupTask
-          xsi:type="setup:VariableTask"
-          name="eclipse.target.platform"
-          value="Oxygen"
-          storageURI="scope://Workspace"/>
-    </stream>
+        label="Master"/>
     <description>The PDE Build</description>
   </project>
   <logicalProjectContainer

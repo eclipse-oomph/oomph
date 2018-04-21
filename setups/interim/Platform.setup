@@ -69,12 +69,12 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      value="Photon"
+      value="${eclipse.target.platform.latest}"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.api.baseline.target.platform"
-      value="Oxygen"
+      value="${eclipse.api.baseline.target.platform.latest.released}"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup:EclipseIniTask"

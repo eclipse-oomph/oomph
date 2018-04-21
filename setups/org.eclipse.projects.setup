@@ -286,6 +286,26 @@
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
+        name="eclipse.target.platform.latest"
+        value="Photon"
+        storageURI="scope://Workspace"
+        label="Target Platform Latest">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <description>The latest available compatibility level of the target platform. It may be the released stream but more likely the stream working toward the next release of the platform. This may be used to initialize the value of the eclipse.target.platform variable.</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="eclipse.target.platform.latest.released"
+        value="Oxygen"
+        storageURI="scope://Workspace"
+        label="Target Platform Latest Released">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <description>The latest available released compatibility level of the target platform. It will be updated to reference the most recently released stream of the platform. This may be used to initialize the value of the eclipse.target.platform variable.</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
         name="eclipse.api.baseline.target.platform"
         value="None"
         storageURI="scope://Workspace"
@@ -326,6 +346,16 @@
           value="None"
           label="None"/>
       <description>Choose the compatibility level of the target platform for the modular API baseline</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="eclipse.api.baseline.target.platform.latest.released"
+        value="Oxygen"
+        storageURI="scope://Workspace"
+        label="Target Platform Latest Released">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <description>The compatibility level of the target platform for the modular API baseline for the most recent released version of the platform.  Description	The latest available released compatibility level of the target platform. It will be updated to reference the most recently released stream of the platform. This may be used to initialize the value of the eclipse.target.platform variable. This may be used to initialize the value of the eclipse.api.baseline.target.platform variable.</description>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
