@@ -48,6 +48,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author Eike Stepper
@@ -172,9 +174,17 @@ public class ProjectCopyAction implements IObjectActionDelegate
         Replacer replacer = new Replacer("<name>" + oldName + "</name>", "<name>" + newName + "</name>");
         replacer.copy(source, target);
       }
+      else if (source.equals(new File(folder, ".options")))
+      {
+        Replacer replacer = new Replacer(true);
+        replacer.addSubstitution(oldName + "/", newName + "/");
+        replacer.copy(source, target);
+      }
       else if (source.equals(new File(new File(folder, "META-INF"), "MANIFEST.MF")))
       {
-        Replacer replacer = new Replacer("Bundle-SymbolicName: " + oldName, "Bundle-SymbolicName: " + newName);
+        Replacer replacer = new Replacer(true);
+        replacer.addSubstitution("Bundle-SymbolicName: " + oldName, "Bundle-SymbolicName: " + newName);
+        replacer.addSubstitution("Automatic-Module-Name: " + oldName, "Automatic-Module-Name: " + newName);
         replacer.copy(source, target);
       }
       else if (source.equals(new File(folder, "feature.xml")))
@@ -254,16 +264,26 @@ public class ProjectCopyAction implements IObjectActionDelegate
    */
   public static class Replacer
   {
-    private final String search;
+    private final Map<String, String> substitutions = new LinkedHashMap<String, String>();
 
-    private final String replace;
+    private final boolean multi;
 
-    private boolean done;
+    private boolean found;
+
+    public Replacer(boolean multi)
+    {
+      this.multi = multi;
+    }
 
     public Replacer(String search, String replace)
     {
-      this.search = search;
-      this.replace = replace;
+      addSubstitution(search, replace);
+      multi = false;
+    }
+
+    public void addSubstitution(String search, String replace)
+    {
+      substitutions.put(search, replace);
     }
 
     public final void copy(File source, File target) throws IOException
@@ -289,13 +309,19 @@ public class ProjectCopyAction implements IObjectActionDelegate
       String line;
       while ((line = reader.readLine()) != null)
       {
-        if (!done)
+        if (multi || !found)
         {
-          int start = line.indexOf(search);
-          if (start != -1)
+          for (Map.Entry<String, String> entry : substitutions.entrySet())
           {
-            line = line.substring(0, start) + replace + line.substring(start + search.length());
-            done = true;
+            String search = entry.getKey();
+            String replace = entry.getValue();
+
+            int start = line.indexOf(search);
+            if (start != -1)
+            {
+              line = line.substring(0, start) + replace + line.substring(start + search.length());
+              found = true;
+            }
           }
         }
 
