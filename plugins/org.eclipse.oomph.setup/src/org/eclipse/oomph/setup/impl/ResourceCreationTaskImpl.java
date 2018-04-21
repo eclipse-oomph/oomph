@@ -19,6 +19,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -350,12 +351,23 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
 
     context.log("Creating " + uriConverter.normalize(targetURI));
 
+    String content = getContent();
     OutputStream outputStream = uriConverter.createOutputStream(targetURI);
     String encoding = getEncoding();
-    Writer writer = encoding == null ? new OutputStreamWriter(outputStream) : new OutputStreamWriter(outputStream, encoding);
-    String content = getContent();
-    writer.write(content);
-    writer.close();
+    if ("base64".equals(encoding))
+    {
+      // Remove all whitespace.
+      content = content.replaceAll("\\s", "");
+      byte[] bytes = XMLTypeFactory.eINSTANCE.createBase64Binary(content);
+      outputStream.write(bytes);
+    }
+    else
+    {
+      Writer writer = encoding == null ? new OutputStreamWriter(outputStream) : new OutputStreamWriter(outputStream, encoding);
+      writer.write(content);
+      writer.close();
+    }
+
     outputStream.close();
   }
 
