@@ -1115,6 +1115,48 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
             }
           }
 
+          boolean includeAllPlatforms = targletContainer.isIncludeAllPlatforms();
+          context.log("Include All Platforms = " + includeAllPlatforms);
+          if (includeAllPlatforms)
+          {
+            for (Targlet targlet : targletContainer.getTarglets())
+            {
+              if (targlet.isIncludeAllPlatforms())
+              {
+                context.log("-> " + targlet.getName());
+              }
+            }
+          }
+
+          boolean includeAllRequirements = targletContainer.isIncludeAllRequirements();
+          context.log("Include All Requirements = " + includeAllRequirements);
+          if (!includeAllRequirements)
+          {
+            for (Targlet targlet : targletContainer.getTarglets())
+            {
+              if (!targlet.isIncludeAllRequirements())
+              {
+                context.log("-> " + targlet.getName());
+              }
+            }
+          }
+
+          boolean includeBinaryEquivalents = targletContainer.isIncludeBinaryEquivalents();
+          context.log("Include Binary Equivalents = " + includeBinaryEquivalents);
+          if (!includeBinaryEquivalents)
+          {
+            for (Targlet targlet : targletContainer.getTarglets())
+            {
+              if (!targlet.isIncludeBinaryEquivalents())
+              {
+                context.log("-> " + targlet.getName());
+              }
+            }
+          }
+
+          boolean includeSources = targletContainer.isIncludeSources();
+          context.log("Include Sources = " + includeSources);
+
           boolean mirrors = context.isMirrors();
 
           CacheUsageConfirmer cacheUsageConfirmer = (CacheUsageConfirmer)context.get(CacheUsageConfirmer.class);
