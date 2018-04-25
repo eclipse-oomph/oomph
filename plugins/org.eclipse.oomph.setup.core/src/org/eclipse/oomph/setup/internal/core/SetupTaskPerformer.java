@@ -2299,16 +2299,20 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         return null;
       }
 
-      String installationID;
-      String projectName = lookup("scope.project.root.name");
-      if (StringUtil.isEmpty(projectName))
+      String installationID = lookup("installation.id.default");
+      if (StringUtil.isEmpty(installationID))
       {
-        installationID = SegmentSequence.create(".", lookup("scope.product.name")).lastSegment() + "-" + lookup("scope.product.version.name").replace('.', '-');
-      }
-      else
-      {
-        String streamName = lookup("scope.project.stream.name");
-        installationID = escape(projectName, streamName);
+        String projectName = lookup("scope.project.root.name");
+        if (StringUtil.isEmpty(projectName))
+        {
+          installationID = SegmentSequence.create(".", lookup("scope.product.name")).lastSegment() + "-"
+              + lookup("scope.product.version.name").replace('.', '-');
+        }
+        else
+        {
+          String streamName = lookup("scope.project.stream.name");
+          installationID = escape(projectName, streamName);
+        }
       }
 
       String uniqueInstallationID = installationID;
@@ -2330,9 +2334,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         return null;
       }
 
-      String projectName = lookup("scope.project.root.name");
-      String streamName = lookup("scope.project.stream.name");
-      String workspaceID = escape(projectName, streamName) + "-ws";
+      String workspaceID = lookup("workspace.id.default");
+      if (StringUtil.isEmpty(workspaceID))
+      {
+        String projectName = lookup("scope.project.root.name");
+        String streamName = lookup("scope.project.stream.name");
+        workspaceID = escape(projectName, streamName) + "-ws";
+      }
 
       String uniqueWorkspaceID = workspaceID;
 
