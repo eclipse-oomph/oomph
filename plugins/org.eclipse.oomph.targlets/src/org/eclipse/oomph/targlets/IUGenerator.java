@@ -40,10 +40,8 @@ public interface IUGenerator extends ModelElement
       TargletFactory.eINSTANCE.createSiteGenerator(), //
       TargletFactory.eINSTANCE.createProductGenerator(), //
       TargletFactory.eINSTANCE.createComponentDefGenerator(), //
-      TargletFactory.eINSTANCE.createCSpecGenerator(), //
       TargletFactory.eINSTANCE.createProjectNameGenerator(), //
-      TargletFactory.eINSTANCE.createComponentExtGenerator(), //
-      TargletFactory.eINSTANCE.createCSpexGenerator() //
+      TargletFactory.eINSTANCE.createComponentExtGenerator() //
   );
 
   /**
