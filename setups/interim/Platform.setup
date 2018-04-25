@@ -14,6 +14,11 @@
     xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/jdt/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
     name="platform"
     label="Platform">
+  <annotation
+      source="ConfigurationReference">
+    <reference
+        href="PlatformSDKConfiguration.setup#/"/>
+  </annotation>
   <setupTask
       xsi:type="setup:CompoundTask"
       name="User Preferences">
@@ -229,60 +234,6 @@
         name="master"
         label="Master"/>
   </project>
-  <project name="documentation"
-      label="Documentation">
-    <setupTask
-        xsi:type="git:GitCloneTask"
-        id="git.clone.platform.common"
-        remoteURI="platform/eclipse.platform.common">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/InducedChoices">
-        <detail
-            key="inherit">
-          <value>eclipse.git.gerrit.remoteURIs</value>
-        </detail>
-        <detail
-            key="label">
-          <value>Platform Documentation Git or Gerrit Repository</value>
-        </detail>
-        <detail
-            key="target">
-          <value>remoteURI</value>
-        </detail>
-      </annotation>
-      <configSections
-          name="gerrit">
-        <properties
-            key="createchangeid"
-            value="true"/>
-      </configSections>
-      <description>Platform Documentation</description>
-    </setupTask>
-    <setupTask
-        xsi:type="setup.targlets:TargletTask">
-      <targlet
-          name="Platform Documentation"
-          activeRepositoryList="${eclipse.target.platform}">
-        <requirement
-            name="*"/>
-        <sourceLocator
-            rootFolder="${git.clone.platform.common.location}"/>
-      </targlet>
-    </setupTask>
-    <setupTask
-        xsi:type="setup.workingsets:WorkingSetTask">
-      <workingSet
-          name="Platform Documentation">
-        <predicate
-            xsi:type="predicates:RepositoryPredicate"
-            project="org.eclipse.platform.doc.user"/>
-      </workingSet>
-    </setupTask>
-    <stream
-        name="master"
-        label="Master"/>
-    <description>The Platform documentation</description>
-  </project>
   <project name="debug"
       label="Debug">
     <setupTask
@@ -366,6 +317,261 @@
         name="master"
         label="Master"/>
     <description>The Platform Debug support</description>
+  </project>
+  <project name="dependencies"
+      label="Dependencies">
+    <project
+        name="ecf"
+        label="ECF">
+      <setupTask
+          xsi:type="git:GitCloneTask"
+          id="git.clone.ecf"
+          remoteURI="ecf/org.eclipse.ecf">
+        <annotation
+            source="http://www.eclipse.org/oomph/setup/InducedChoices">
+          <detail
+              key="inherit">
+            <value>eclipse.git.gerrit.remoteURIs</value>
+          </detail>
+          <detail
+              key="label">
+            <value>ECF Git or Gerrit Repository</value>
+          </detail>
+          <detail
+              key="target">
+            <value>remoteURI</value>
+          </detail>
+        </annotation>
+        <configSections
+            name="gerrit">
+          <properties
+              key="createchangeid"
+              value="true"/>
+        </configSections>
+        <description>ECF</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:TextModifyTask"
+          excludedTriggers="BOOTSTRAP"
+          url="${git.clone.ecf.location|uri}/framework/bundles/org.eclipse.ecf.identity/src/org/eclipse/ecf/core/util/SystemLogService.java"
+          encoding="UTF-8">
+        <modification
+            pattern="(?im)public void log\(@SuppressWarnings\(&quot;rawtypes&quot;\) ServiceReference sr, int level, String message, Throwable exception\) \{\s+doLog\(sr, level, message, exception\);\s+\}\s+()\}(\s+)$">
+          <substitution>	public org.osgi.service.log.Logger getLogger(String name) {\2		throw new UnsupportedOperationException();\2	}\2\2	public org.osgi.service.log.Logger getLogger(Class&lt;?> clazz) {\2		throw new UnsupportedOperationException();\2	}\2\2	public &lt;L extends org.osgi.service.log.Logger> L getLogger(String name, Class&lt;L> LoggerType) {\2		throw new UnsupportedOperationException();\2	}\2\2	public &lt;L extends org.osgi.service.log.Logger> L getLogger(Class&lt;?> clazz, Class&lt;L> LoggerType) {\2		throw new UnsupportedOperationException();\2	}\2	public &lt;L extends org.osgi.service.log.Logger> L getLogger(org.osgi.framework.Bundle bundle, String name, Class&lt;L> LoggerType) {\2		throw new UnsupportedOperationException();\2	}\2</substitution>
+          <substitution>\2</substitution>
+        </modification>
+      </setupTask>
+      <setupTask
+          xsi:type="setup.targlets:TargletTask">
+        <targlet
+            name="ECF Dependency">
+          <sourceLocator
+              rootFolder="${git.clone.ecf.location}"
+              locateNestedProjects="true"/>
+        </targlet>
+      </setupTask>
+      <setupTask
+          xsi:type="setup.workingsets:WorkingSetTask">
+        <workingSet
+            name="Platform Dependency ECF">
+          <predicate
+              xsi:type="predicates:RepositoryPredicate"
+              project="org.eclipse.ecf"/>
+        </workingSet>
+      </setupTask>
+      <stream
+          name="master"
+          label="Master"/>
+      <description>The Platform's ECF dependencies</description>
+    </project>
+    <project
+        name="emf"
+        label="EMF">
+      <setupTask
+          xsi:type="git:GitCloneTask"
+          id="git.clone.emf"
+          remoteURI="emf/org.eclipse.emf">
+        <annotation
+            source="http://www.eclipse.org/oomph/setup/InducedChoices">
+          <detail
+              key="inherit">
+            <value>eclipse.git.gerrit.remoteURIs</value>
+          </detail>
+          <detail
+              key="label">
+            <value>EMF Git or Gerrit Repository</value>
+          </detail>
+          <detail
+              key="target">
+            <value>remoteURI</value>
+          </detail>
+        </annotation>
+        <configSections
+            name="gerrit">
+          <properties
+              key="createchangeid"
+              value="true"/>
+        </configSections>
+        <description>EMF</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup.targlets:TargletTask">
+        <targlet
+            name="EMF Dependency">
+          <sourceLocator
+              rootFolder="${git.clone.emf.location}"/>
+        </targlet>
+      </setupTask>
+      <setupTask
+          xsi:type="setup.workingsets:WorkingSetTask">
+        <workingSet
+            name="Platform Dependency EMF">
+          <predicate
+              xsi:type="predicates:RepositoryPredicate"
+              project="org.eclipse.emf.common"/>
+        </workingSet>
+      </setupTask>
+      <stream
+          name="master"
+          label="Master"/>
+      <description>The Platform's EMF dependencies</description>
+    </project>
+    <description>The Platform dependencies</description>
+  </project>
+  <project name="documentation"
+      label="Documentation">
+    <setupTask
+        xsi:type="git:GitCloneTask"
+        id="git.clone.platform.common"
+        remoteURI="platform/eclipse.platform.common">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Platform Documentation Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
+      <description>Platform Documentation</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.targlets:TargletTask">
+      <targlet
+          name="Platform Documentation"
+          activeRepositoryList="${eclipse.target.platform}">
+        <requirement
+            name="*"/>
+        <sourceLocator
+            rootFolder="${git.clone.platform.common.location}"/>
+      </targlet>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.workingsets:WorkingSetTask">
+      <workingSet
+          name="Platform Documentation">
+        <predicate
+            xsi:type="predicates:RepositoryPredicate"
+            project="org.eclipse.platform.doc.user"/>
+      </workingSet>
+    </setupTask>
+    <stream
+        name="master"
+        label="Master"/>
+    <description>The Platform documentation</description>
+  </project>
+  <project name="releng"
+      label="Releng">
+    <setupTask
+        xsi:type="git:GitCloneTask"
+        id="git.clone.platform.releng"
+        remoteURI="platform/eclipse.platform.releng">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Platform Releng Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
+      <description>Platform Releng</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.targlets:TargletTask">
+      <targlet
+          name="Platform Releng"
+          activeRepositoryList="EGit+JGit">
+        <requirement
+            name="*"/>
+        <requirement
+            name="org.eclipse.jgit"/>
+        <requirement
+            name="org.eclipse.egit.core"/>
+        <sourceLocator
+            rootFolder="${git.clone.platform.releng.location}"/>
+        <repositoryList
+            name="EGit+JGit">
+          <repository
+              url="http://download.eclipse.org/egit/updates"/>
+        </repositoryList>
+      </targlet>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.workingsets:WorkingSetTask">
+      <workingSet
+          name="Platform Releng">
+        <predicate
+            xsi:type="predicates:AndPredicate">
+          <operand
+              xsi:type="predicates:RepositoryPredicate"
+              project="org.eclipse.rcp"/>
+          <operand
+              xsi:type="workingsets:ExclusionPredicate"
+              excludedWorkingSet="//@projects[name='releng']/@setupTasks.2/@workingSets.1"/>
+        </predicate>
+      </workingSet>
+      <workingSet
+          name="Platform Releng Tests">
+        <predicate
+            xsi:type="predicates:AndPredicate">
+          <operand
+              xsi:type="predicates:RepositoryPredicate"
+              project="org.eclipse.rcp"/>
+          <operand
+              xsi:type="predicates:NamePredicate"
+              pattern=".*tests?.*"/>
+        </predicate>
+      </workingSet>
+    </setupTask>
+    <stream
+        name="master"
+        label="Master"/>
+    <description>The Platform Releng components</description>
   </project>
   <project href="https://git.eclipse.org/c/platform/eclipse.platform.resources.git/plain/bundles/org.eclipse.core.resources.releng/platformResources.setup#/"/>
   <project href="https://git.eclipse.org/c/platform/eclipse.platform.runtime.git/plain/bundles/org.eclipse.core.runtime.releng/platformRuntime.setup#/"/>

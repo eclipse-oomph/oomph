@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Configuration
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    label="Platform SDK">
+  <installation
+      name="platform.sdk.installation"
+      label="Platform SDK Installation">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="installation.id.default"
+        value="platform-sdk"/>
+    <productVersion
+        href="index:/org.eclipse.setup#//@productCatalogs[name='org.eclipse.products']/@products[name='epp.package.committers']/@versions[name='latest']"/>
+    <description>The Platform SDK installation provides the latest tools needed to work with the Eclipse Platform SDK's source code.</description>
+  </installation>
+  <workspace
+      name="platform.sdk.workspace"
+      label="Platform SDK Workspace">
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="workspace.id.default"
+        value="platform-sdk-ws"/>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="User Preferences">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/UserPreferences">
+        <detail
+            key="/instance/org.eclipse.oomph.setup.ui/showToolBarContributions">
+          <value>record</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup:CompoundTask"
+          name="org.eclipse.oomph.setup.ui">
+        <setupTask
+            xsi:type="setup:PreferenceTask"
+            key="/instance/org.eclipse.oomph.setup.ui/showToolBarContributions"
+            value="true"/>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:CompoundTask"
+          name="org.eclipse.ui.ide">
+        <setupTask
+            xsi:type="setup:PreferenceTask"
+            key="/instance/org.eclipse.ui.ide/WORKSPACE_NAME"
+            value="Platform SDK"/>
+      </setupTask>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:ResourceCreationTask"
+        content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;launchConfiguration type=&quot;org.eclipse.pde.ui.RuntimeWorkbench&quot;>&#xA;&lt;setAttribute key=&quot;additional_plugins&quot;/>&#xA;&lt;booleanAttribute key=&quot;append.args&quot; value=&quot;true&quot;/>&#xA;&lt;booleanAttribute key=&quot;askclear&quot; value=&quot;true&quot;/>&#xA;&lt;booleanAttribute key=&quot;automaticAdd&quot; value=&quot;true&quot;/>&#xA;&lt;booleanAttribute key=&quot;automaticValidate&quot; value=&quot;true&quot;/>&#xA;&lt;stringAttribute key=&quot;bootstrap&quot; value=&quot;&quot;/>&#xA;&lt;stringAttribute key=&quot;checked&quot; value=&quot;[NONE]&quot;/>&#xA;&lt;booleanAttribute key=&quot;clearConfig&quot; value=&quot;false&quot;/>&#xA;&lt;booleanAttribute key=&quot;clearws&quot; value=&quot;false&quot;/>&#xA;&lt;booleanAttribute key=&quot;clearwslog&quot; value=&quot;false&quot;/>&#xA;&lt;stringAttribute key=&quot;configLocation&quot; value=&quot;$${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/Runtime Workspace&quot;/>&#xA;&lt;booleanAttribute key=&quot;default&quot; value=&quot;false&quot;/>&#xA;&lt;stringAttribute key=&quot;featureDefaultLocation&quot; value=&quot;workspace&quot;/>&#xA;&lt;stringAttribute key=&quot;featurePluginResolution&quot; value=&quot;workspace&quot;/>&#xA;&lt;booleanAttribute key=&quot;includeOptional&quot; value=&quot;true&quot;/>&#xA;&lt;stringAttribute key=&quot;location&quot; value=&quot;$${workspace_loc}/../runtime-workspace&quot;/>&#xA;&lt;listAttribute key=&quot;org.eclipse.debug.ui.favoriteGroups&quot;>&#xA;&lt;listEntry value=&quot;org.eclipse.debug.ui.launchGroup.debug&quot;/>&#xA;&lt;listEntry value=&quot;org.eclipse.debug.ui.launchGroup.run&quot;/>&#xA;&lt;/listAttribute>&#xA;&lt;booleanAttribute key=&quot;org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD&quot; value=&quot;true&quot;/>&#xA;&lt;stringAttribute key=&quot;org.eclipse.jdt.launching.JRE_CONTAINER&quot; value=&quot;org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8&quot;/>&#xA;&lt;stringAttribute key=&quot;org.eclipse.jdt.launching.PROGRAM_ARGUMENTS&quot; value=&quot;-os $${target.os} -ws $${target.ws} -arch $${target.arch} -nl $${target.nl} -consoleLog&quot;/>&#xA;&lt;stringAttribute key=&quot;org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER&quot; value=&quot;org.eclipse.pde.ui.workbenchClasspathProvider&quot;/>&#xA;&lt;stringAttribute key=&quot;org.eclipse.jdt.launching.VM_ARGUMENTS&quot; value=&quot;-Xms256m&amp;#13;&amp;#10;-Xmx2048m&quot;/>&#xA;&lt;stringAttribute key=&quot;pde.version&quot; value=&quot;3.3&quot;/>&#xA;&lt;stringAttribute key=&quot;product&quot; value=&quot;org.eclipse.sdk.ide&quot;/>&#xA;&lt;setAttribute key=&quot;selected_features&quot;>&#xA;&lt;setEntry value=&quot;org.eclipse.e4.rcp:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.ecf.core.feature:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.ecf.core.ssl.feature:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.ecf.filetransfer.feature:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.ecf.filetransfer.httpclient4.feature:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.ecf.filetransfer.httpclient4.ssl.feature:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.ecf.filetransfer.ssl.feature:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.emf.common:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.emf.ecore:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.equinox.p2.core.feature:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.equinox.p2.extras.feature:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.equinox.p2.rcp.feature:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.equinox.p2.user.ui:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.help:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.jdt:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.pde:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.platform:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.rcp.source:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.rcp:default&quot;/>&#xA;&lt;setEntry value=&quot;org.eclipse.sdk:default&quot;/>&#xA;&lt;/setAttribute>&#xA;&lt;booleanAttribute key=&quot;show_selected_only&quot; value=&quot;false&quot;/>&#xA;&lt;stringAttribute key=&quot;templateConfig&quot; value=&quot;$${target_home}\configuration\config.ini&quot;/>&#xA;&lt;booleanAttribute key=&quot;tracing&quot; value=&quot;false&quot;/>&#xA;&lt;booleanAttribute key=&quot;useCustomFeatures&quot; value=&quot;true&quot;/>&#xA;&lt;booleanAttribute key=&quot;useDefaultConfig&quot; value=&quot;true&quot;/>&#xA;&lt;booleanAttribute key=&quot;useDefaultConfigArea&quot; value=&quot;true&quot;/>&#xA;&lt;booleanAttribute key=&quot;useProduct&quot; value=&quot;true&quot;/>&#xA;&lt;/launchConfiguration>&#xA;"
+        targetURL="${workspace.location|uri}/.metadata/.plugins/org.eclipse.debug.core/.launches/Runtime%20Workspace.launch"
+        encoding="UTF-8"/>
+    <setupTask
+        xsi:type="setup:ResourceCreationTask"
+        content="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&#xA;&lt;launchHistory>&#xA;&lt;launchGroup id=&quot;org.eclipse.debug.ui.launchGroup.debug&quot;>&#xA;&lt;mruHistory>&#xA;&lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;true&amp;quot; path=&amp;quot;Runtime Workspace&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>&#xA;&lt;/mruHistory>&#xA;&lt;favorites/>&#xA;&lt;/launchGroup>&#xA;&lt;launchGroup id=&quot;org.eclipse.debug.ui.launchGroup.profile&quot;>&#xA;&lt;mruHistory/>&#xA;&lt;favorites/>&#xA;&lt;/launchGroup>&#xA;&lt;launchGroup id=&quot;org.eclipse.eclemma.ui.launchGroup.coverage&quot;>&#xA;&lt;mruHistory>&#xA;&lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;true&amp;quot; path=&amp;quot;Runtime Workspace&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>&#xA;&lt;/mruHistory>&#xA;&lt;favorites/>&#xA;&lt;/launchGroup>&#xA;&lt;launchGroup id=&quot;org.eclipse.ui.externaltools.launchGroup&quot;>&#xA;&lt;mruHistory/>&#xA;&lt;favorites/>&#xA;&lt;/launchGroup>&#xA;&lt;launchGroup id=&quot;org.eclipse.debug.ui.launchGroup.run&quot;>&#xA;&lt;mruHistory>&#xA;&lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;true&amp;quot; path=&amp;quot;Runtime Workspace&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>&#xA;&lt;/mruHistory>&#xA;&lt;favorites/>&#xA;&lt;/launchGroup>&#xA;&lt;/launchHistory>&#xA;"
+        targetURL="${workspace.location|uri}/.metadata/.plugins/org.eclipse.debug.ui/launchConfigurationHistory.xml"
+        encoding="UTF-8"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='equinox']/@projects[name='bundles']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='equinox']/@projects[name='framework']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='equinox']/@projects[name='p2']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='jdt']/@projects[name='features']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='jdt']/@projects[name='core']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='jdt']/@projects[name='debug']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='jdt']/@projects[name='ui']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='jdt']/@projects[name='core']/@projects[name='tests']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='jdt']/@projects[name='core']/@projects[name='testbinaries']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='jdt']/@projects[name='debug']/@projects[name='tests']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='jdt']/@projects[name='ui']/@projects[name='tests']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='jdt']/@projects[name='ui']/@projects[name='examples']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='pde']/@projects[name='ui']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='pde']/@projects[name='build']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='platform']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='debug']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='dependencies']/@projects[name='ecf']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='dependencies']/@projects[name='emf']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='documentation']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='resources']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='runtime']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='swt']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='team']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='text']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='ua']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='ui']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='ui.tools']/@streams[name='master']"/>
+    <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='releng']/@streams[name='master']"/>
+    <description>The Platform SDK workspace provides all the source code of the Eclipse Platform SDK.</description>
+  </workspace>
+  <description>The Platform SDK configuration provides a full development environment for all projects that are part of the Platform SDK.</description>
+</setup:Configuration>
