@@ -1045,31 +1045,19 @@ public class ProductPage extends SetupWizardPage
 
     if (poolButton != null)
     {
-      poolButton.setEnabled(productSelected);
-
-      boolean poolNeeded = productSelected && poolButton.getSelection();
-      poolComboViewer.getControl().setEnabled(poolNeeded);
-      managePoolsButton.setEnabled(poolNeeded);
-
       currentBundlePoolChanging = true;
-      if (poolNeeded)
-      {
-        if (currentBundlePool != null)
-        {
-          poolComboViewer.setSelection(new StructuredSelection(currentBundlePool));
-        }
-        else
-        {
-          if (error == null)
-          {
-            error = "Select a bundle pool or disable the use of a bundle pool.";
-          }
 
-          poolComboViewer.setSelection(StructuredSelection.EMPTY);
-        }
+      if (currentBundlePool != null)
+      {
+        poolComboViewer.setSelection(new StructuredSelection(currentBundlePool));
       }
       else
       {
+        if (error == null && productSelected)
+        {
+          error = "Select a bundle pool or disable the use of a bundle pool.";
+        }
+
         poolComboViewer.setSelection(StructuredSelection.EMPTY);
       }
 
