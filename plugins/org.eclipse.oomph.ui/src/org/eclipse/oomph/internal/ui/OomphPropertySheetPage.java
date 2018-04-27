@@ -84,6 +84,24 @@ import java.text.MessageFormat;
  */
 public class OomphPropertySheetPage extends ExtendedPropertySheetPage
 {
+  private static final boolean HAS_EMF_COPY_VALUE_PROPERTY_ACTION;
+
+  static
+  {
+    boolean hasEMFCopyPropertyValueAction;
+    try
+    {
+      ReflectUtil.getField(ExtendedPropertySheetPage.class, "copyPropertyValueAction");
+      hasEMFCopyPropertyValueAction = true;
+    }
+    catch (Exception ex)
+    {
+      hasEMFCopyPropertyValueAction = false;
+    }
+
+    HAS_EMF_COPY_VALUE_PROPERTY_ACTION = hasEMFCopyPropertyValueAction;
+  }
+
   private Tree tree;
 
   private ControlAdapter columnResizer;
@@ -121,14 +139,17 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
     super.createControl(parent);
     addColumnResizer();
 
-    Menu menu = getControl().getMenu();
-    IMenuManager menuManager = (IMenuManager)menu.getData("org.eclipse.jface.action.MenuManager.managerKey");
-    menuManager.insertAfter("copy", getCopyPropertyValueAction());
+    if (!HAS_EMF_COPY_VALUE_PROPERTY_ACTION)
+    {
+      Menu menu = getControl().getMenu();
+      IMenuManager menuManager = (IMenuManager)menu.getData("org.eclipse.jface.action.MenuManager.managerKey");
+      menuManager.insertAfter("copy", getCopyPropertyValueAction());
+    }
   }
 
   private Action getCopyPropertyValueAction()
   {
-    if (copyPropertyValueAction == null)
+    if (!HAS_EMF_COPY_VALUE_PROPERTY_ACTION && copyPropertyValueAction == null)
     {
       Shell shell = getControl().getShell();
       clipboard = new Clipboard(shell.getDisplay());
@@ -266,7 +287,10 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
   {
     super.handleEntrySelection(selection);
 
-    copyPropertyValueAction.selectionChanged((IStructuredSelection)selection);
+    if (copyPropertyValueAction != null)
+    {
+      copyPropertyValueAction.selectionChanged((IStructuredSelection)selection);
+    }
   }
 
   @SuppressWarnings("all")
@@ -319,7 +343,10 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
   {
     super.dispose();
 
-    clipboard.dispose();
+    if (clipboard != null)
+    {
+      clipboard.dispose();
+    }
   }
 
   /**
