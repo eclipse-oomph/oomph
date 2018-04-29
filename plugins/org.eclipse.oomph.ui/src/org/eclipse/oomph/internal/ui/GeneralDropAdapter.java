@@ -11,6 +11,8 @@
 package org.eclipse.oomph.internal.ui;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -21,6 +23,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.CopyCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 
@@ -57,7 +61,24 @@ public final class GeneralDropAdapter extends OomphDropAdapter
 
     AdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
     EditingDomain editingDomain = new OomphEditingDomain(adapterFactory, new BasicCommandStack(), new HashMap<Resource, Boolean>(),
-        OomphTransferDelegate.DELEGATES);
+        OomphTransferDelegate.DELEGATES)
+    {
+      @Override
+      public Command createCommand(Class<? extends Command> commandClass, CommandParameter commandParameter)
+      {
+        if (commandClass == CopyCommand.class)
+        {
+          // Create an identity command for anything that can't be copied.
+          Object owner = commandParameter.getOwner();
+          if (((ComposedAdapterFactory)adapterFactory).getFactoryForType(owner) == null)
+          {
+            return new IdentityCommand(owner);
+          }
+        }
+
+        return super.createCommand(commandClass, commandParameter);
+      }
+    };
 
     containerObject.eAdapters().add(new AdapterImpl()
     {

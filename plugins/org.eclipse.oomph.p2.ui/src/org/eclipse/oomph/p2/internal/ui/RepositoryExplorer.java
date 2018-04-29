@@ -26,6 +26,8 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.RepositoryProvider;
 import org.eclipse.oomph.p2.impl.RequirementImpl;
 import org.eclipse.oomph.p2.internal.ui.RepositoryManager.RepositoryManagerListener;
+import org.eclipse.oomph.p2.provider.P2ItemProviderAdapterFactory;
+import org.eclipse.oomph.p2.provider.RepositoryListItemProvider;
 import org.eclipse.oomph.p2.provider.RequirementItemProvider;
 import org.eclipse.oomph.ui.OomphDialog;
 import org.eclipse.oomph.ui.SearchField;
@@ -33,12 +35,25 @@ import org.eclipse.oomph.ui.SearchField.FilterHandler;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.CommonPlugin;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EFactory;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.action.CopyAction;
 import org.eclipse.emf.edit.ui.action.PasteAction;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -58,6 +73,7 @@ import org.eclipse.equinox.p2.metadata.MetadataFactory;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
+import org.eclipse.equinox.p2.query.CollectionResult;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
@@ -135,6 +151,7 @@ import org.eclipse.ui.part.ViewPart;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -167,11 +184,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   public static final Transfer[] DND_TRANSFERS = new Transfer[] { DND_DELEGATES.get(0).getTransfer() };
 
-  static final List<? extends OomphTransferDelegate> DND_REPOSITORY_DELEGATES = Arrays
-      .asList(new OomphTransferDelegate[] { new OomphTransferDelegate.TextTransferDelegate(), new OomphTransferDelegate.FileTransferDelegate() });
+  static final List<? extends OomphTransferDelegate> DND_REPOSITORY_DELEGATES = OomphTransferDelegate.DELEGATES;
 
-  public static final Transfer[] DND_REPOSITORY_TRANSFERS = new Transfer[] { DND_REPOSITORY_DELEGATES.get(0).getTransfer(),
-      DND_REPOSITORY_DELEGATES.get(1).getTransfer() };
+  public static final Transfer[] DND_REPOSITORY_TRANSFERS = OomphTransferDelegate.transfers();
 
   private static final String DEFAULT_CAPABILITY_NAMESPACE = IInstallableUnit.NAMESPACE_IU_ID;
 
@@ -482,8 +497,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     repositoryViewer.addDragSupport(DND_OPERATIONS, DND_TRANSFERS, generalDragAdapter);
 
     final RepositoryList repositoryList = P2Factory.eINSTANCE.createRepositoryList();
-    repositoryViewer.addDropSupport(DND_OPERATIONS, DND_REPOSITORY_TRANSFERS,
-        new GeneralDropAdapter(repositoryViewer, repositoryList, P2Package.Literals.REPOSITORY_LIST__REPOSITORIES, new DroppedObjectHandler()
+    GeneralDropAdapter generalDropAdapter = new GeneralDropAdapter(repositoryViewer, repositoryList, P2Package.Literals.REPOSITORY_LIST__REPOSITORIES,
+        new DroppedObjectHandler()
         {
           public void handleDroppedObject(Object object) throws Exception
           {
@@ -497,7 +512,89 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
               }
             }
           }
-        }));
+        });
+
+    AdapterFactoryEditingDomain domain = ReflectUtil.getValue("domain", generalDropAdapter);
+
+    ComposedAdapterFactory composedAdapterFactory = (ComposedAdapterFactory)domain.getAdapterFactory();
+    AdapterFactory factoryForType = composedAdapterFactory.getFactoryForType(repositoryList);
+    if (factoryForType != null)
+    {
+      composedAdapterFactory.removeAdapterFactory(factoryForType);
+    }
+
+    composedAdapterFactory.addAdapterFactory(new P2ItemProviderAdapterFactory()
+    {
+      @Override
+      public Adapter createRepositoryListAdapter()
+      {
+        if (repositoryListItemProvider == null)
+        {
+          repositoryListItemProvider = new RepositoryListItemProvider(this)
+          {
+            @Override
+            protected EStructuralFeature getChildFeature(Object object, Object child)
+            {
+              return P2Package.Literals.REPOSITORY_LIST__REPOSITORIES;
+            }
+
+            @Override
+            protected Command createAddCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Collection<?> collection, int index)
+            {
+              List<Object> filteredCollection = new ArrayList<Object>();
+              if (collection != null)
+              {
+                for (Object object : collection)
+                {
+                  if (object instanceof org.eclipse.emf.common.util.URI)
+                  {
+                    org.eclipse.emf.common.util.URI uri = (org.eclipse.emf.common.util.URI)object;
+                    if (uri.isPlatform())
+                    {
+                      uri = CommonPlugin.resolve(uri);
+                    }
+
+                    filteredCollection.add(uri);
+                  }
+                  else
+                  {
+                    try
+                    {
+                      // Works for IJavaProject.
+                      IPath path = ReflectUtil.invokeMethod("getFullPath", ReflectUtil.invokeMethod("getResource", object));
+                      org.eclipse.emf.common.util.URI uri = CommonPlugin
+                          .resolve(org.eclipse.emf.common.util.URI.createPlatformResourceURI(path.toString(), true));
+                      filteredCollection.add(uri);
+                    }
+                    catch (Exception ex)
+                    {
+                      try
+                      {
+                        // Works for Git repository node.
+                        IPath path = ReflectUtil.invokeMethod("getPath", object);
+                        org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createFileURI(path.toFile().getAbsolutePath());
+                        filteredCollection.add(uri);
+                      }
+                      catch (Exception ex2)
+                      {
+                        // Failing those, just add the object.
+                        filteredCollection.add(object);
+                      }
+                    }
+                  }
+                }
+              }
+
+              return super.createAddCommand(domain, owner, feature, filteredCollection, index);
+            }
+          };
+        }
+
+        return repositoryListItemProvider;
+      }
+    });
+
+    repositoryViewer.addDropSupport(DND_OPERATIONS, DND_REPOSITORY_TRANSFERS, generalDropAdapter);
 
     MenuManager contextMenu = generalDragAdapter.getContextMenu();
     contextMenu.addMenuListener(new IMenuListener()
@@ -1503,7 +1600,42 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
       SubMonitor progress = SubMonitor.convert(monitor, 101);
 
-      IMetadataRepository repository = repositoryProvider.getRepository(progress.newChild(100));
+      IMetadataRepository repository = null;
+      try
+      {
+        repository = repositoryProvider.getRepository(progress.newChild(100));
+      }
+      catch (Exception ex)
+      {
+        List<IInstallableUnit> ius = null;
+        if ("file".equals(location.getScheme()))
+        {
+          try
+          {
+            String path = new File(location).getAbsolutePath();
+            ius = analyzeIUs(path);
+          }
+          catch (Exception ex2)
+          {
+            //$FALL-THROUGH$
+          }
+        }
+        else if ("platform".equals(location.getScheme()) && location.getPath() != null && location.getPath().startsWith("/resource/"))
+        {
+          // This URI can't be a p2 repository so allow any exceptions this might raise to propagate.
+          ius = analyzeIUs(location.toString());
+        }
+
+        if (ius != null)
+        {
+          installableUnits = new CollectionResult<IInstallableUnit>(ius);
+          analyzeJob.reschedule();
+          return;
+        }
+
+        throw ex;
+      }
+
       if (repository instanceof org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository)
       {
         org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository compositeRepository = (org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository)repository;
@@ -1550,6 +1682,28 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
       installableUnits = repository.query(QueryUtil.createIUAnyQuery(), progress.newChild(1));
       analyzeJob.reschedule();
+    }
+
+    private List<IInstallableUnit> analyzeIUs(String path) throws Exception
+    {
+      // final SourceLocator sourceLocator = ResourcesFactory.eINSTANCE.createSourceLocator(path.toString(), true);
+      EFactory eFactory = ReflectUtil.getValue("eINSTANCE",
+          CommonPlugin.loadClass("org.eclipse.oomph.resources", "org.eclipse.oomph.resources.ResourcesFactory"));
+      Method createSourceLocatorMethod = ReflectUtil.getMethod(eFactory, "createSourceLocator", String.class, boolean.class);
+      Object sourceLocator = ReflectUtil.invokeMethod(createSourceLocatorMethod, eFactory, path, true);
+
+      // WorkspaceIUAnalyzer workspaceIUAnalyzer = new WorkspaceIUAnalyzer();
+      Object workspaceIUAnalyzer = CommonPlugin.loadClass("org.eclipse.oomph.targlets.core", "org.eclipse.oomph.targlets.internal.core.WorkspaceIUAnalyzer")
+          .newInstance();
+
+      // EList<IInstallableUtil> result = workspaceIUAnalyzer.analyze(sourceLocator, IUGenerator.DEFAULTS, new NullProgressMonitor());
+      EList<?> iuGeneratorDefaults = ReflectUtil.getValue("DEFAULTS",
+          CommonPlugin.loadClass("org.eclipse.oomph.targlets", "org.eclipse.oomph.targlets.IUGenerator"));
+      EList<IInstallableUnit> result = ReflectUtil.invokeMethod(
+          ReflectUtil.getMethod(workspaceIUAnalyzer, "analyze", createSourceLocatorMethod.getReturnType(), EList.class, IProgressMonitor.class),
+          workspaceIUAnalyzer, sourceLocator, iuGeneratorDefaults, new NullProgressMonitor());
+
+      return result;
     }
   }
 
@@ -2222,6 +2376,26 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     private void selectRepository()
     {
       String newRepository = getSelectedRepository();
+
+      if (!StringUtil.isEmpty(newRepository))
+      {
+        try
+        {
+          // Check whether this as an absolute URI with a scheme that isn't a Windows drive letter.
+          org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createURI(newRepository);
+          if (uri.scheme() == null || uri.scheme().length() < 2)
+          {
+            // In that case, convert it to a file URI.
+            newRepository = org.eclipse.emf.common.util.URI.createFileURI(new File(newRepository).getAbsolutePath()).toString();
+            repositoryCombo.setText(newRepository);
+          }
+        }
+        catch (Exception ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+
       activateAndLoadRepository(newRepository);
     }
 
@@ -2823,6 +2997,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     private static final Image PACKAGE_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("full/obj16/Requirement_Package");
 
+    private static final Image PROJECT_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("full/obj16/Requirement_Project");
+
     private String namespace;
 
     public CapabilityItem()
@@ -2845,9 +3021,15 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     {
       if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
       {
-        if (getLabel().endsWith(Requirement.FEATURE_SUFFIX))
+        String label = getLabel();
+        if (label.endsWith(Requirement.FEATURE_SUFFIX))
         {
           return FEATURE_IMAGE;
+        }
+
+        if (label.endsWith(Requirement.PROJECT_SUFFIX))
+        {
+          return PROJECT_IMAGE;
         }
 
         return PLUGIN_IMAGE;

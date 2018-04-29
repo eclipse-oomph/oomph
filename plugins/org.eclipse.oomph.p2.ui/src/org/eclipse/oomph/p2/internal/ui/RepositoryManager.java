@@ -13,8 +13,10 @@ package org.eclipse.oomph.p2.internal.ui;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
 
@@ -64,6 +66,18 @@ public final class RepositoryManager
       repositories.addAll(Arrays.asList(array));
     }
 
+    try
+    {
+      if (ReflectUtil.invokeMethod("getWorkspaceRoot", EcorePlugin.class) != null)
+      {
+        repositories.add("platform:/resource/");
+      }
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$;
+    }
+
     if (currentProfileLocation != null)
     {
       repositories.add(currentProfileLocation);
@@ -88,6 +102,7 @@ public final class RepositoryManager
 
     List<String> filteredRepositories = new ArrayList<String>(repositories);
     filteredRepositories.remove(currentProfileLocation);
+    filteredRepositories.remove("platform:/resource/");
     int size = filteredRepositories.size();
     if (size != 0)
     {

@@ -50,13 +50,10 @@ public class BaseAdapterFactoryEditingDomain extends AdapterFactoryEditingDomain
   {
     if (commandClass == CopyCommand.class)
     {
-      if (commandClass == CopyCommand.class)
+      Object owner = commandParameter.getOwner();
+      if (owner instanceof URI || owner instanceof String)
       {
-        Object owner = commandParameter.getOwner();
-        if (owner instanceof URI || owner instanceof String)
-        {
-          return new IdentityCommand(owner);
-        }
+        return new IdentityCommand(owner);
       }
     }
 
