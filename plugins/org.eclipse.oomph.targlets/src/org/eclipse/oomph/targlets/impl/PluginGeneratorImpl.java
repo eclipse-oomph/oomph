@@ -11,6 +11,7 @@
 package org.eclipse.oomph.targlets.impl;
 
 import org.eclipse.oomph.base.impl.ModelElementImpl;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.targlets.PluginGenerator;
 import org.eclipse.oomph.targlets.TargletPackage;
@@ -40,6 +41,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.jar.JarFile;
 
@@ -153,6 +155,31 @@ public class PluginGeneratorImpl extends ModelElementImpl implements PluginGener
       {
         InstallableUnit installableUnit = (InstallableUnit)iu;
         installableUnit.setArtifacts(new IArtifactKey[0]);
+
+        List<IRequirement> requirements = new ArrayList<IRequirement>(iu.getRequirements());
+        boolean relaxed = false;
+        for (ListIterator<IRequirement> it = requirements.listIterator(); it.hasNext();)
+        {
+          IRequirement requirement = it.next();
+          if (!P2Util.isSimpleRequiredCapability(requirement))
+          {
+            try
+            {
+              // See https://bugs.eclipse.org/bugs/show_bug.cgi?id=532569 for why we relax this requirement.
+              it.set(MetadataFactory.createRequirement(requirement.getMatches(), requirement.getFilter(), 0, requirement.getMax(), true));
+              relaxed = true;
+            }
+            catch (RuntimeException exception)
+            {
+              //$FALL-THROUGH$
+            }
+          }
+        }
+
+        if (relaxed)
+        {
+          installableUnit.setRequiredCapabilities(requirements.toArray(new IRequirement[requirements.size()]));
+        }
 
         File buildPropertiesFile = new File(projectFolder, "build.properties");
         if (buildPropertiesFile.exists())
