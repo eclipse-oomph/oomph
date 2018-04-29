@@ -968,18 +968,15 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         {
           return hasRequirements(copyTarglets);
         }
-        else if (!hasRequirements(copyTarglets) && !hasRequirements(targletContainer.getTarglets()))
+
+        if (!hasRequirements(copyTarglets) && !hasRequirements(targletContainer.getTarglets()))
         {
           return false;
         }
 
-        for (Targlet targlet : copyTarglets)
+        if (!EcoreUtil.equals(targletContainer.getTarglets(), copyTarglets))
         {
-          Targlet existingTarglet = targletContainer.getTarglet(targlet.getName());
-          if (existingTarglet == null || !EcoreUtil.equals(existingTarglet, targlet))
-          {
-            return true;
-          }
+          return true;
         }
 
         if (context.getTrigger() == Trigger.MANUAL)

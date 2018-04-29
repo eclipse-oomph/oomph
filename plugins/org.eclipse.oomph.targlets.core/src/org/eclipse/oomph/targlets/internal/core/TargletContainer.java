@@ -231,21 +231,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     if (container instanceof TargletContainer)
     {
       TargletContainer targletContainer = (TargletContainer)container;
-      if (targlets.size() != targletContainer.targlets.size())
-      {
-        return false;
-      }
-
-      for (Targlet targlet : targletContainer.targlets)
-      {
-        Targlet existingTarglet = getTarglet(targlet.getName());
-        if (existingTarglet == null || !EcoreUtil.equals(existingTarglet, targlet))
-        {
-          return false;
-        }
-      }
-
-      return true;
+      return EcoreUtil.equals(targlets, targletContainer.targlets);
     }
 
     return false;
@@ -376,16 +362,6 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
   private void basicSetTarglets(Collection<? extends Targlet> targlets)
   {
-    Set<String> names = new HashSet<String>();
-    for (Targlet targlet : targlets)
-    {
-      String name = targlet.getName();
-      if (!names.add(name))
-      {
-        throw new IllegalArgumentException("Duplicate targlet name: " + name);
-      }
-    }
-
     this.targlets.clear();
     this.targlets.addAll(TargletFactory.eINSTANCE.copyTarglets(targlets));
   }
