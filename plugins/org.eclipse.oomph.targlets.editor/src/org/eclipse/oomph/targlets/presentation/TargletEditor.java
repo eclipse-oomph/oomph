@@ -12,6 +12,7 @@ package org.eclipse.oomph.targlets.presentation;
 
 import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
 import org.eclipse.oomph.internal.ui.OomphEditingDomain;
+import org.eclipse.oomph.internal.ui.OomphPropertySheetPage;
 import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
 import org.eclipse.oomph.p2.provider.P2ItemProviderAdapterFactory;
 import org.eclipse.oomph.predicates.provider.PredicatesItemProviderAdapterFactory;
@@ -96,6 +97,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -1002,6 +1005,25 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
     getSite().registerContextMenu(contextMenu, new UnwrappingSelectionProvider(viewer));
 
     ((OomphEditingDomain)editingDomain).registerDragAndDrop(viewer);
+
+    viewer.getControl().addMouseListener(new MouseAdapter()
+    {
+      @Override
+      public void mouseDoubleClick(MouseEvent event)
+      {
+        if (event.button == 1)
+        {
+          try
+          {
+            getEditorSite().getPage().showView("org.eclipse.ui.views.PropertySheet");
+          }
+          catch (PartInitException exception)
+          {
+            TargletEditorPlugin.INSTANCE.log(exception);
+          }
+        }
+      }
+    });
   }
 
   /**
@@ -1304,11 +1326,11 @@ public class TargletEditor extends MultiPageEditorPart implements IEditingDomain
    * This accesses a cached version of the property sheet.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public IPropertySheetPage getPropertySheetPage()
   {
-    PropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE,
+    PropertySheetPage propertySheetPage = new OomphPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE,
         TargletEditorPlugin.getPlugin().getDialogSettings())
     {
       @Override

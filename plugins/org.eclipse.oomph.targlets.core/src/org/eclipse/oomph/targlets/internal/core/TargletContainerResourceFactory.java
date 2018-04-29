@@ -19,8 +19,10 @@ import org.eclipse.emf.ecore.resource.Resource.Factory;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 
 import java.io.IOException;
 import java.util.Map;
@@ -47,18 +49,53 @@ public class TargletContainerResourceFactory implements Factory
 
     Resource resource = new ResourceImpl(uri)
     {
+      private Job updateJob;
+
       @Override
       public void save(Map<?, ?> options) throws IOException
       {
         if (targletContainer != null)
         {
-          boolean mirrors = options != null && options.containsKey(OPTION_MIRRORS) ? (Boolean)options.get(OPTION_MIRRORS)
+          final boolean mirrors = options != null && options.containsKey(OPTION_MIRRORS) ? (Boolean)options.get(OPTION_MIRRORS)
               : defaultSaveOptions != null ? (Boolean)defaultSaveOptions.get(OPTION_MIRRORS) : Boolean.TRUE;
 
           try
           {
             targletContainer.setTarglets(wrapper.getTarglets());
-            targletContainer.forceUpdate(false, mirrors, new NullProgressMonitor());
+            if (updateJob != null)
+            {
+              // Cancel the job and wait for it to stop running.
+              updateJob.cancel();
+              while (updateJob.getState() == Job.RUNNING)
+              {
+                try
+                {
+                  Thread.sleep(100);
+                }
+                catch (InterruptedException ex)
+                {
+                  //$FALL-THROUGH$
+                }
+              }
+            }
+
+            updateJob = new Job("Resolve Targlet Container " + targletContainer.getID())
+            {
+              @Override
+              protected IStatus run(IProgressMonitor monitor)
+              {
+                try
+                {
+                  targletContainer.forceUpdate(false, mirrors, monitor);
+                }
+                catch (CoreException ex)
+                {
+                  TargletsCorePlugin.INSTANCE.log(ex, IStatus.WARNING);
+                }
+                return Status.OK_STATUS;
+              }
+            };
+            updateJob.schedule();
           }
           catch (CoreException ex)
           {
