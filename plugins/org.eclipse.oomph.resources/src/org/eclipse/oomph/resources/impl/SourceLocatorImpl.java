@@ -23,6 +23,7 @@ import org.eclipse.oomph.resources.backend.BackendException;
 import org.eclipse.oomph.resources.backend.BackendResource;
 import org.eclipse.oomph.util.OomphPlugin;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -30,8 +31,10 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.core.resources.IProject;
@@ -472,11 +475,13 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
   public static BackendContainer getRootContainer(SourceLocator sourceLocator)
   {
     String rootFolder = sourceLocator.getRootFolder();
-
-    BackendResource rootResource = BackendResource.get(rootFolder);
-    if (rootResource instanceof BackendContainer)
+    if (rootFolder != null)
     {
-      return (BackendContainer)rootResource;
+      BackendResource rootResource = BackendResource.get(rootFolder);
+      if (rootResource instanceof BackendContainer)
+      {
+        return (BackendContainer)rootResource;
+      }
     }
 
     return null;
@@ -516,6 +521,44 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
 
   public static void handleProjects(final SourceLocator sourceLocator, final EList<ProjectFactory> defaultProjectFactories, final ProjectHandler projectHandler,
       final MultiStatus status, final IProgressMonitor monitor)
+  {
+    String rootFolder = sourceLocator.getRootFolder();
+    if ("platform:/resource/".equals(rootFolder))
+    {
+      for (IProject project : EcorePlugin.getWorkspaceRoot().getProjects())
+      {
+        if (project.isAccessible() && !"External Plug-in Libraries".equals(project.getName()))
+        {
+          URI uri = CommonPlugin.resolve(URI.createPlatformResourceURI(project.getFullPath().toString(), true));
+          if (uri.isFile())
+          {
+            SourceLocator projectSourceLocator = EcoreUtil.copy(sourceLocator);
+            projectSourceLocator.setLocateNestedProjects(false);
+            projectSourceLocator.setRootFolder(uri.toFileString());
+            handleProjects(projectSourceLocator, defaultProjectFactories, projectHandler, status, monitor);
+          }
+        }
+      }
+    }
+    else if (rootFolder != null && rootFolder.startsWith("platform:/resource/"))
+    {
+      URI uri = CommonPlugin.resolve(URI.createURI(rootFolder));
+      if (uri.isFile())
+      {
+        SourceLocator resourceSourceLocator = EcoreUtil.copy(sourceLocator);
+        resourceSourceLocator.setLocateNestedProjects(false);
+        resourceSourceLocator.setRootFolder(uri.toFileString());
+        handleProjects(resourceSourceLocator, defaultProjectFactories, projectHandler, status, monitor);
+      }
+    }
+    else
+    {
+      doHandleProjects(sourceLocator, defaultProjectFactories, projectHandler, status, monitor);
+    }
+  }
+
+  private static void doHandleProjects(final SourceLocator sourceLocator, final EList<ProjectFactory> defaultProjectFactories,
+      final ProjectHandler projectHandler, final MultiStatus status, final IProgressMonitor monitor)
   {
     final BackendContainer rootContainer = SourceLocatorImpl.getRootContainer(sourceLocator);
     if (rootContainer == null)
