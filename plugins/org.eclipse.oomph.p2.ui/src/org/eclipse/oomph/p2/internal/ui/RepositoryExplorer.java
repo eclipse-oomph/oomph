@@ -49,8 +49,10 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.ui.action.CopyAction;
 import org.eclipse.emf.edit.ui.action.PasteAction;
+import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -92,8 +94,10 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -103,6 +107,8 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -124,9 +130,11 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -136,8 +144,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -158,6 +168,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -177,6 +188,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   public static final String ID = "org.eclipse.oomph.p2.ui.RepositoryExplorer"; //$NON-NLS-1$
 
   private static final IDialogSettings SETTINGS = P2UIPlugin.INSTANCE.getDialogSettings(RepositoryExplorer.class.getSimpleName());
+
+  private static final Pattern WILDCARD_FILTER_PATTERN = Pattern.compile("(\\\\.|[*?])");
 
   static final int DND_OPERATIONS = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
 
@@ -224,7 +237,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private final CollapseAllAction collapseAllAction = new CollapseAllAction();
 
-  private final SearchAction searchAction = new SearchAction();
+  private final SearchRepositoriesAction searchRepositoriesAction = new SearchRepositoriesAction();
+
+  private final SearchRequirementsAction searchRequirementsAction = new SearchRequirementsAction();
 
   private Composite container;
 
@@ -258,6 +273,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private String filter;
 
+  private Pattern filterPattern;
+
   private FormToolkit formToolkit;
 
   public RepositoryExplorer()
@@ -281,6 +298,15 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     }
 
     compatibleVersion = SETTINGS.getBoolean(COMPATIBLE_VERSION_KEY);
+  }
+
+  @Override
+  public void init(IViewSite site, IMemento memento) throws PartInitException
+  {
+    super.init(site, memento);
+
+    searchRepositoriesAction.update();
+    searchRequirementsAction.update();
   }
 
   @Override
@@ -382,7 +408,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private boolean isFiltered(String string)
   {
-    return filter == null || string == null || string.toLowerCase().contains(filter);
+    return filter == null || string == null || filterPattern.matcher(string).find();
   }
 
   public void handleFilter(String filter)
@@ -390,10 +416,57 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     if (filter == null || filter.length() == 0)
     {
       this.filter = null;
+      filterPattern = null;
     }
     else
     {
-      this.filter = filter.toLowerCase();
+      StringBuffer pattern = new StringBuffer("(\\Q");
+      Matcher matcher = WILDCARD_FILTER_PATTERN.matcher(filter);
+      while (matcher.find())
+      {
+        String separator = matcher.group(1);
+        if (separator.length() == 2)
+        {
+          matcher.appendReplacement(pattern, "");
+          if ("\\E".equals(separator))
+          {
+            pattern.append("\\E\\\\E\\Q");
+          }
+          else if ("\\\\".equals(separator))
+          {
+            pattern.append("\\E\\\\\\Q");
+          }
+          else
+          {
+            pattern.append(separator.charAt(1));
+          }
+        }
+        else
+        {
+          char separatorChar = separator.charAt(0);
+          String tail;
+          switch (separatorChar)
+          {
+            case '*':
+              tail = ".*?";
+              break;
+            case '?':
+              tail = ".";
+              break;
+            default:
+              throw new IllegalStateException("Pattern " + WILDCARD_FILTER_PATTERN + " should match a single character");
+          }
+
+          matcher.appendReplacement(pattern, "\\\\E)");
+          pattern.append(tail).append("(\\Q");
+        }
+      }
+
+      matcher.appendTail(pattern);
+      pattern.append("\\E)");
+
+      this.filter = filter;
+      filterPattern = Pattern.compile(pattern.toString(), Pattern.CASE_INSENSITIVE);
     }
 
     analyzeJob.reschedule();
@@ -715,6 +788,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       }
     };
 
+    searchField.getFilterControl().setToolTipText("Filter text may use * to match any characters or ? to match one character)");
+
     searchField.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
     selectorComposite = formToolkit.createComposite(container, SWT.NONE);
@@ -863,12 +938,13 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     });
 
     toolbarManager.add(new Separator("search"));
-    toolbarManager.add(searchAction);
+    toolbarManager.add(searchRepositoriesAction);
+    toolbarManager.add(searchRequirementsAction);
 
     toolbarManager.add(new Separator("end"));
   }
 
-  private void activateAndLoadRepository(String repository)
+  void activateAndLoadRepository(String repository)
   {
     if (RepositoryManager.INSTANCE.setActiveRepository(repository))
     {
@@ -1272,28 +1348,77 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       if (page != null)
       {
         IViewPart view = page.findView(ID);
-        if (view == null)
+        try
         {
-          try
-          {
-            view = page.showView(ID);
-          }
-          catch (PartInitException ex)
-          {
-            P2UIPlugin.INSTANCE.log(ex);
-          }
+          view = page.showView(ID);
+        }
+        catch (PartInitException ex)
+        {
+          P2UIPlugin.INSTANCE.log(ex);
         }
 
         if (view instanceof RepositoryExplorer)
         {
-          RepositoryExplorer explorer = (RepositoryExplorer)view;
-          explorer.activateAndLoadRepository(repository);
+          if (!StringUtil.isEmpty(repository))
+          {
+            RepositoryExplorer explorer = (RepositoryExplorer)view;
+            explorer.activateAndLoadRepository(repository);
+          }
+
           return true;
         }
       }
     }
 
     return false;
+  }
+
+  public static SearchEclipseDialog.Repositories getSearchEclipseRepositoriesDialog()
+  {
+    IWorkbenchWindow window = UIUtil.WORKBENCH.getActiveWorkbenchWindow();
+    if (window != null)
+    {
+      IWorkbenchPage page = window.getActivePage();
+      if (page != null)
+      {
+        IViewPart view = page.findView(ID);
+        if (view instanceof RepositoryExplorer)
+        {
+          RepositoryExplorer repositoryExplorer = (RepositoryExplorer)view;
+          if (!repositoryExplorer.searchRepositoriesAction.isChecked())
+          {
+            repositoryExplorer.searchRepositoriesAction.setChecked(true);
+            repositoryExplorer.searchRepositoriesAction.run();
+          }
+        }
+      }
+    }
+
+    return SearchEclipseDialog.Repositories.openFor(window);
+  }
+
+  public static SearchEclipseDialog.Requirements getSearchEclipseRequirementDialog()
+  {
+    IWorkbenchWindow window = UIUtil.WORKBENCH.getActiveWorkbenchWindow();
+    if (window != null)
+    {
+      IWorkbenchPage page = window.getActivePage();
+      if (page != null)
+      {
+        IViewPart view = page.findView(ID);
+        if (view instanceof RepositoryExplorer)
+        {
+          RepositoryExplorer repositoryExplorer = (RepositoryExplorer)view;
+          if (!repositoryExplorer.searchRequirementsAction.isChecked())
+          {
+            repositoryExplorer.searchRequirementsAction.setChecked(true);
+            repositoryExplorer.searchRequirementsAction.run();
+          }
+        }
+      }
+    }
+
+    return SearchEclipseDialog.Requirements.openFor(window);
   }
 
   /**
@@ -1465,13 +1590,18 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   /**
    * @author Ed Merks
    */
-  private final class SearchAction extends Action
+  private final class SearchRepositoriesAction extends Action
   {
-    public SearchAction()
+    public SearchRepositoriesAction()
     {
       super("Search", Action.AS_CHECK_BOX);
-      setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("tool16/search"));
+      setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("tool16/search_repository.png"));
       setToolTipText("Search Eclipse repositories by provided capabilities");
+    }
+
+    public void update()
+    {
+      setChecked(SearchEclipseDialog.Repositories.getFor(getSite().getWorkbenchWindow()) != null);
     }
 
     @Override
@@ -1479,7 +1609,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     {
       if (isChecked())
       {
-        final SearchEclipseRepositoryDialog searchEclipseRepositoryDialog = SearchEclipseRepositoryDialog.openFor(getSite().getWorkbenchWindow());
+        final SearchEclipseDialog.Repositories searchEclipseRepositoryDialog = SearchEclipseDialog.Repositories.openFor(getSite().getWorkbenchWindow());
         searchEclipseRepositoryDialog.getDockable().associate(this);
         searchEclipseRepositoryDialog.getShell().addDisposeListener(new DisposeListener()
         {
@@ -1502,7 +1632,39 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       }
       else
       {
-        SearchEclipseRepositoryDialog.closeFor(getSite().getWorkbenchWindow());
+        SearchEclipseDialog.Repositories.closeFor(getSite().getWorkbenchWindow());
+      }
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private final class SearchRequirementsAction extends Action
+  {
+    public SearchRequirementsAction()
+    {
+      super("Search", Action.AS_CHECK_BOX);
+      setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("tool16/search_requirement.png"));
+      setToolTipText("Search Eclipse requirements by provided capabilities");
+    }
+
+    public void update()
+    {
+      setChecked(SearchEclipseDialog.Requirements.getFor(getSite().getWorkbenchWindow()) != null);
+    }
+
+    @Override
+    public void run()
+    {
+      if (isChecked())
+      {
+        final SearchEclipseDialog.Requirements searchEclipseRepositoryDialog = SearchEclipseDialog.Requirements.openFor(getSite().getWorkbenchWindow());
+        searchEclipseRepositoryDialog.getDockable().associate(this);
+      }
+      else
+      {
+        SearchEclipseDialog.Requirements.closeFor(getSite().getWorkbenchWindow());
       }
     }
   }
@@ -1802,7 +1964,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       TreeViewer categoriesViewer = new TreeViewer(parent, SWT.BORDER | SWT.MULTI);
       categoriesViewer.setUseHashlookup(true);
       categoriesViewer.setContentProvider(new ItemContentProvider());
-      categoriesViewer.setLabelProvider(new ItemLabelProvider());
+      categoriesViewer.setLabelProvider(new ItemLabelProvider(categoriesViewer.getControl().getFont()));
       addDragSupport(categoriesViewer);
 
       itemsViewer = categoriesViewer;
@@ -2038,7 +2200,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       TableViewer featuresViewer = new TableViewer(parent, SWT.BORDER | SWT.MULTI | SWT.VIRTUAL);
       featuresViewer.setUseHashlookup(true);
       featuresViewer.setContentProvider(new ItemContentProvider());
-      featuresViewer.setLabelProvider(new ItemLabelProvider());
+      featuresViewer.setLabelProvider(new ItemLabelProvider(featuresViewer.getControl().getFont()));
       addDragSupport(featuresViewer);
 
       itemsViewer = featuresViewer;
@@ -2158,7 +2320,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       TableViewer capabilitiesViewer = new TableViewer(parent, SWT.BORDER | SWT.MULTI | SWT.VIRTUAL);
       capabilitiesViewer.setUseHashlookup(true);
       capabilitiesViewer.setContentProvider(new ItemContentProvider());
-      capabilitiesViewer.setLabelProvider(new ItemLabelProvider());
+      capabilitiesViewer.setLabelProvider(new ItemLabelProvider(capabilitiesViewer.getControl().getFont()));
       addDragSupport(capabilitiesViewer);
       itemsViewer = capabilitiesViewer;
     }
@@ -2510,20 +2672,77 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   /**
   * @author Eike Stepper
   */
-  private static final class ItemLabelProvider extends LabelProvider
+  private final class ItemLabelProvider extends DelegatingStyledCellLabelProvider
   {
-    @Override
-    public Image getImage(Object element)
+    public ItemLabelProvider(final Font font)
     {
-      Item item = (Item)element;
-      return item.getImage();
-    }
+      super(new IStyledLabelProvider()
+      {
+        private final Styler bold = new Styler()
+        {
+          private final Font boldFont = ExtendedFontRegistry.INSTANCE.getFont(font, IItemFontProvider.BOLD_FONT);
 
-    @Override
-    public String getText(Object element)
-    {
-      Item item = (Item)element;
-      return item.getLabel();
+          @Override
+          public void applyStyles(TextStyle textStyle)
+          {
+            textStyle.font = boldFont;
+          }
+        };
+
+        public void removeListener(ILabelProviderListener listener)
+        {
+        }
+
+        public boolean isLabelProperty(Object element, String property)
+        {
+          return true;
+        }
+
+        public void dispose()
+        {
+        }
+
+        public void addListener(ILabelProviderListener listener)
+        {
+        }
+
+        public StyledString getStyledText(Object element)
+        {
+          Item item = (Item)element;
+          String text = item.getLabel();
+          if (filterPattern != null)
+          {
+            Matcher matcher = filterPattern.matcher(text);
+            if (matcher.find())
+            {
+              StyledString styledString = new StyledString();
+              int tail = matcher.start();
+              styledString.append(text.substring(0, tail));
+              int groupCount = matcher.groupCount();
+              for (int i = 1; i <= groupCount; ++i)
+              {
+                int start = matcher.start(i);
+                int end = matcher.end(i);
+                styledString.append(text.substring(tail, start));
+                styledString.append(text.substring(start, end), bold);
+                tail = end;
+              }
+
+              styledString.append(text.substring(tail, matcher.end()));
+              styledString.append(text.substring(matcher.end()));
+              return styledString;
+            }
+          }
+
+          return new StyledString(text);
+        }
+
+        public Image getImage(Object element)
+        {
+          Item item = (Item)element;
+          return item.getImage();
+        }
+      });
     }
   }
 
@@ -2689,7 +2908,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
       public int compareTo(ItemVersion o)
       {
-        return version.compareTo(o.version);
+        return -version.compareTo(o.version);
       }
 
       @Override
@@ -2717,6 +2936,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
    */
   private static abstract class Item implements Comparable<Item>
   {
+    private static final Comparator<String> COMPARATOR = CommonPlugin.INSTANCE.getComparator();
+
     protected static final Integer CATEGORY_ORDER = 0;
 
     protected static final Integer NON_CATEGORY_ORDER = 1;
@@ -2787,7 +3008,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       {
         String label1 = label.toLowerCase();
         String label2 = o.label.toLowerCase();
-        result = label1.compareTo(label2);
+        result = COMPARATOR.compare(label1, label2);
       }
 
       return result;

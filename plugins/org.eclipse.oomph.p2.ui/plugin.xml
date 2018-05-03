@@ -58,6 +58,16 @@
             id="org.eclipse.oomph.p2.ui.ExploreRepository"
             name="Explore Repository">
       </command>
+      <command
+            categoryId="org.eclipse.oomph"
+            id="org.eclipse.oomph.p2.ui.SearchRequirements"
+            name="Search Requirements">
+      </command>
+      <command
+            categoryId="org.eclipse.oomph"
+            id="org.eclipse.oomph.p2.ui.SearchRepositories"
+            name="Search Repositories">
+      </command>
    </extension>
 
    <extension
@@ -76,6 +86,39 @@
              </iterate>
          </activeWhen>
       </handler>
+      <handler
+            commandId="org.eclipse.oomph.p2.ui.SearchRequirements">
+         <class
+               class="org.eclipse.oomph.p2.internal.ui.SearchRequirementsHandler">
+         </class>
+         <activeWhen>
+             <iterate
+                   ifEmpty="false">
+                <adapt
+                      type="org.eclipse.oomph.p2.Requirement">
+                </adapt>
+             </iterate>
+         </activeWhen>
+      </handler>
+      <handler
+            commandId="org.eclipse.oomph.p2.ui.SearchRepositories">
+         <class
+               class="org.eclipse.oomph.p2.internal.ui.SearchRepositoriesHandler">
+         </class>
+         <activeWhen>
+             <iterate
+                   ifEmpty="false">
+                <or>
+                   <adapt
+                         type="org.eclipse.oomph.p2.Repository">
+                   </adapt>
+                   <adapt
+                         type="org.eclipse.oomph.p2.RepositoryList">
+                   </adapt>
+                </or>
+             </iterate>
+         </activeWhen>
+      </handler>
    </extension>
 
    <extension
@@ -87,6 +130,32 @@
                commandId="org.eclipse.oomph.p2.ui.ExploreRepository"
                icon="icons/obj16/repository.gif"
                label="Explore"
+               style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any">
+         <command
+               commandId="org.eclipse.oomph.p2.ui.SearchRequirements"
+               icon="icons/tool16/search_requirement.png"
+               label="Discover Eclipse Requirements..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any">
+         <command
+               commandId="org.eclipse.oomph.p2.ui.SearchRepositories"
+               icon="icons/tool16/search_repository.png"
+               label="Discover Eclipse Repositories..."
                style="push">
             <visibleWhen
                   checkEnabled="true">

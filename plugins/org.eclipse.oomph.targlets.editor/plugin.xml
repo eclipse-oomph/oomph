@@ -13,6 +13,23 @@
 
 <plugin>
 
+   <extension point="org.eclipse.ui.handlers">
+      <handler
+            commandId="org.eclipse.oomph.p2.ui.SearchRequirements">
+         <class
+               class="org.eclipse.oomph.p2.internal.ui.SearchRequirementsHandler">
+         </class>
+         <activeWhen>
+             <iterate
+                   ifEmpty="false">
+                <adapt
+                      type="org.eclipse.oomph.targlets.Targlet">
+                </adapt>
+             </iterate>
+         </activeWhen>
+      </handler>
+   </extension>
+
    <extension point="org.eclipse.ui.newWizards">
       <!-- @generated targlets not -->
       <category
@@ -61,7 +78,7 @@
          </contentTypeBinding>
       </editor>
    </extension>
-   
+
    <extension point="org.eclipse.ui.editors">
       <editor
             id="org.eclipse.oomph.targlets.presentation.CDefEditorID"

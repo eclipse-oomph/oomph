@@ -218,6 +218,34 @@
             </and>
          </enabledWhen>
       </handler>
+      <handler
+            commandId="org.eclipse.oomph.p2.ui.SearchRequirements">
+         <class
+               class="org.eclipse.oomph.p2.internal.ui.SearchRequirementsHandler">
+         </class>
+         <activeWhen>
+             <iterate
+                   ifEmpty="false">
+                <adapt
+                      type="org.eclipse.oomph.setup.p2.P2Task">
+                </adapt>
+             </iterate>
+         </activeWhen>
+      </handler>
+      <handler
+            commandId="org.eclipse.oomph.p2.ui.SearchRepositories">
+         <class
+               class="org.eclipse.oomph.p2.internal.ui.SearchRepositoriesHandler">
+         </class>
+         <activeWhen>
+             <iterate
+                   ifEmpty="false">
+                <adapt
+                      type="org.eclipse.oomph.setup.p2.P2Task">
+                </adapt>
+             </iterate>
+         </activeWhen>
+      </handler>
    </extension>
 
    <extension

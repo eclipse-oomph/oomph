@@ -1,0 +1,81 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<title>Eclipse Requirements Search Dialog</title>
+
+<link rel="stylesheet" href="book.css">
+
+<noscript></noscript>
+<script type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Eclipse Requirements Search";
+    }
+}
+</script>
+</head>
+<body bgcolor="white" onload="windowTitle();">
+
+<h1>Eclipse Search Requirements Dialog</h1>
+
+<p>
+Oomph indexes all p2 update sites hosted by download.eclipse.org.
+Each installable unit (IU) in each p2 update site provides so-called capabilities each of which consists of a namespace, name, and version.
+Each requirement in a p2 Director task or in a Targlet is ultimately resolved against such an IU capability.
+Similarly each <code>Require-Bundle</code> or <code>Import-Package</code> in a <code>MANIFEST.MF</code>,
+is resolved against such a capability in PDE's active target platform.
+</p>
+<p>
+The dialog's upper capabilities viewer shows a hierarchical tree of all capabilities of all p2 update sites.
+Each root element represents a capability namespace.
+The name of a capability is typically a dot separated name.
+As such, each child of each root element, i.e., each capability element, is displayed as hierarchical tree based on qualified names.
+A concrete capability, 
+i.e., one for which there exists a p2 update site containing an IU that provides that capability,
+is decorated with a small box in the lower right of the image.
+Double clicking an item in the tree will expand or collapse that item;
+when expanding, the tree will be expanded until the first concrete capability nested under that element is visible.
+</p>
+
+<p>
+The capabilities viewer supports filtering.
+E.g., entering <code>org.eclipse.emf.ecore</code> will filter to show only capabilities containing that qualified name.
+This includes both package capabilities, as resolved by <code>Import-Package</code> in a <code>MANIFEST.MF</code>,
+and IU capabilities, as resolved by <code>Require-Bundle</code> in a <code>MANIFEST.MF</code>.
+Enter <code>package/org.eclipse.emf.ecore</code> to show only package capabilities containing that qualified name,
+or enter <code>iu/org.eclipse.emf.ecore</code> to show only IU capabilities containing that qualified name.
+Note that if you have a Requirement instance available in some editor, you can drag it and drop it onto the filter to search for matching capabilities.
+</p>
+
+<p>
+Selecting a concrete capability will populate the lower details viewer with information about version ranges that can be expressed for requirements based on the available versions of the capability.
+The root element of the details viewer shows the fully qualified name of the capability.
+Each child element (a version rage element) of a root element represents a reasonable version range that can be resolved against an available version.
+The version range elements are represented as a tree with progressively narrower ranges nested more deeply in the tree.
+In this way, you can quickly determine reasonable version ranges for any requirement.
+</p>
+
+<p>
+The dialog is non-modal and dockable.
+To dock the dialog, drag its title area and hover the mouse position over the tab of an editor or view.
+The mouse cursor will change and releasing the mouse at this point will dock the dialog to the area occupied by the editor or viewer.
+The dialog will remain docked as the workbench window is moved or resized.
+To undock, simply drag the title area elsewhere.
+</p>
+
+<p>
+The "Apply" and the "Apply and Close" buttons are sensitive to the containing workbench window's active part and to its selection.
+If a p2 Director task is selected in a Setup Editor and a version range element is selected in the details, 
+"Apply" will create an Requirement instance with the selected capability's namespace and name and with the selected version range.
+Selecting a capability item directly can be used to create a Requirement with no version range.
+</p>
+
+<p>
+Both the capabilities viewer and the details viewer support drag and drop, as well as "Copy" via the context menu.
+This can be used to create Requirement instances in your Oomph models.
+</p>
+
+</body>
+</html>
