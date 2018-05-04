@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,13 +65,17 @@ public class P2IndexImpl implements P2Index
 
   private File capabilitiesCacheFile;
 
+  private int capabilitiesRefreshHours = -1;
+
+  private int repositoriesRefreshHours = -1;
+
   private P2IndexImpl()
   {
   }
 
   private synchronized void initCapabilities()
   {
-    if (capabilitiesMap == null)
+    if (capabilitiesMap == null || capabilitiesCacheFile.lastModified() + capabilitiesRefreshHours * 60 * 60 * 1000 < System.currentTimeMillis())
     {
       capabilitiesMap = new LinkedHashMap<String, Set<String>>();
 
@@ -79,7 +84,7 @@ public class P2IndexImpl implements P2Index
 
       try
       {
-        boolean refreshed = initCapabilitiesCacheFile();
+        initCapabilitiesCacheFile();
 
         zipFile = new ZipFile(capabilitiesCacheFile);
         ZipEntry zipEntry = zipFile.getEntry("capabilities");
@@ -92,7 +97,8 @@ public class P2IndexImpl implements P2Index
         options.put(BinaryResourceImpl.OPTION_BUFFER_CAPACITY, 8192);
 
         EObjectInputStream stream = new BinaryResourceImpl.EObjectInputStream(inputStream, options);
-        int refreshHours = stream.readInt();
+        capabilitiesRefreshHours = stream.readInt();
+
         int mapSize = stream.readCompressedInt();
         for (int i = 0; i < mapSize; ++i)
         {
@@ -103,12 +109,6 @@ public class P2IndexImpl implements P2Index
             String value = stream.readSegmentedString();
             CollectionUtil.add(capabilitiesMap, key, value);
           }
-        }
-
-        if (refreshed)
-        {
-          File validityFile = getCapabilitiesValidityFile();
-          IOUtil.writeLines(validityFile, "UTF-8", Collections.singletonList("" + Long.toString(System.currentTimeMillis() + refreshHours * 60 * 60 * 1000)));
         }
       }
       catch (Exception ex)
@@ -135,7 +135,7 @@ public class P2IndexImpl implements P2Index
 
   private synchronized void initRepositories(boolean force)
   {
-    if (repositories == null || force)
+    if (repositories == null || force || repositoriesCacheFile.lastModified() + repositoriesRefreshHours * 60 * 60 * 1000 < System.currentTimeMillis())
     {
       repositories = new HashMap<Integer, RepositoryImpl>();
 
@@ -144,7 +144,7 @@ public class P2IndexImpl implements P2Index
 
       try
       {
-        boolean refreshed = initRepositoriesCacheFile();
+        initRepositoriesCacheFile();
 
         zipFile = new ZipFile(repositoriesCacheFile);
         ZipEntry zipEntry = zipFile.getEntry("repositories");
@@ -159,14 +159,8 @@ public class P2IndexImpl implements P2Index
         EObjectInputStream stream = new BinaryResourceImpl.EObjectInputStream(inputStream, options);
 
         timeStamp = stream.readLong();
-        int refreshHours = stream.readInt();
+        repositoriesRefreshHours = stream.readInt();
         int repositoryCount = stream.readInt();
-
-        if (refreshed)
-        {
-          File validityFile = getRepositoriesValidityFile();
-          IOUtil.writeLines(validityFile, "UTF-8", Collections.singletonList("" + Long.toString(System.currentTimeMillis() + refreshHours * 60 * 60 * 1000)));
-        }
 
         Map<RepositoryImpl, List<Integer>> composedRepositories = new HashMap<RepositoryImpl, List<Integer>>();
         for (int id = 1; id <= repositoryCount; id++)
@@ -221,31 +215,7 @@ public class P2IndexImpl implements P2Index
       repositoriesCacheFile = new File(stateLocation.toOSString(), "repositories");
     }
 
-    if (repositoriesCacheFile.exists())
-    {
-      File validityFile = getRepositoriesValidityFile();
-      List<String> lines = IOUtil.readLines(validityFile, "UTF-8");
-      long validUntil = Long.parseLong(lines.get(0));
-      if (System.currentTimeMillis() <= validUntil)
-      {
-        return false;
-      }
-    }
-
-    InputStream inputStream = null;
-    OutputStream outputStream = null;
-
-    try
-    {
-      inputStream = new URL(INDEX_BASE + "repositories").openStream();
-      outputStream = new FileOutputStream(repositoriesCacheFile);
-      IOUtil.copy(inputStream, outputStream);
-    }
-    finally
-    {
-      IOUtil.close(outputStream);
-      IOUtil.close(inputStream);
-    }
+    downloadIfModifiedSince(new URL(INDEX_BASE + "repositories"), repositoriesCacheFile);
 
     return true;
   }
@@ -258,43 +228,9 @@ public class P2IndexImpl implements P2Index
       capabilitiesCacheFile = new File(stateLocation.toOSString(), "capabilities");
     }
 
-    if (capabilitiesCacheFile.exists())
-    {
-      File validityFile = getCapabilitiesValidityFile();
-      List<String> lines = IOUtil.readLines(validityFile, "UTF-8");
-      long validUntil = Long.parseLong(lines.get(0));
-      if (System.currentTimeMillis() <= validUntil)
-      {
-        return false;
-      }
-    }
-
-    InputStream inputStream = null;
-    OutputStream outputStream = null;
-
-    try
-    {
-      inputStream = new URL(INDEX_BASE + "capabilities").openStream();
-      outputStream = new FileOutputStream(capabilitiesCacheFile);
-      IOUtil.copy(inputStream, outputStream);
-    }
-    finally
-    {
-      IOUtil.close(outputStream);
-      IOUtil.close(inputStream);
-    }
+    downloadIfModifiedSince(new URL(INDEX_BASE + "capabilities"), capabilitiesCacheFile);
 
     return true;
-  }
-
-  private File getRepositoriesValidityFile()
-  {
-    return new File(repositoriesCacheFile.getParentFile(), "repositories.txt");
-  }
-
-  private File getCapabilitiesValidityFile()
-  {
-    return new File(capabilitiesCacheFile.getParentFile(), "capabilities.txt");
   }
 
   public Repository[] getRepositories()
@@ -393,6 +329,44 @@ public class P2IndexImpl implements P2Index
 
       set.addAll(versions);
       recurseComposedRepositories(capabilities, composite, versions);
+    }
+  }
+
+  private static void downloadIfModifiedSince(URL url, File file) throws IOException
+  {
+    long lastModified = -1L;
+    if (file.isFile())
+    {
+      lastModified = file.lastModified();
+    }
+
+    InputStream inputStream = null;
+    OutputStream outputStream = null;
+
+    try
+    {
+      HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+      if (lastModified != -1)
+      {
+        connection.setIfModifiedSince(lastModified);
+      }
+
+      connection.connect();
+      inputStream = connection.getInputStream();
+      if (connection.getResponseCode() == HttpURLConnection.HTTP_NOT_MODIFIED)
+      {
+        return;
+      }
+
+      outputStream = new FileOutputStream(file);
+      IOUtil.copy(inputStream, outputStream);
+      outputStream.close();
+      file.setLastModified(connection.getLastModified());
+    }
+    finally
+    {
+      IOUtil.close(outputStream);
+      IOUtil.close(inputStream);
     }
   }
 
