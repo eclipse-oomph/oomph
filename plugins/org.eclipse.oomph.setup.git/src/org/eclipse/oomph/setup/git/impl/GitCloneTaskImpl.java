@@ -1163,7 +1163,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         RefSpec refSpec = new RefSpec("refs/notes/*:refs/notes/*");
         if (remoteConfig.addFetchRefSpec(refSpec) && context.isPerforming())
         {
-          context.log("Adding push ref spec: " + refSpec);
+          context.log("Adding fetch ref spec: " + refSpec);
         }
 
         remoteConfig.update(config);
