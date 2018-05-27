@@ -1053,7 +1053,7 @@ public class ProductPage extends SetupWizardPage
       }
       else
       {
-        if (error == null && productSelected)
+        if (error == null && productSelected && poolButton.getSelection())
         {
           error = "Select a bundle pool or disable the use of a bundle pool.";
         }
