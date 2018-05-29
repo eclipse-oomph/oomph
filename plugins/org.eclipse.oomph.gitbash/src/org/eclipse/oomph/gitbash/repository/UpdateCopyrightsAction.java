@@ -39,9 +39,11 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -51,7 +53,10 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,23 +65,19 @@ import java.util.regex.Pattern;
  */
 public class UpdateCopyrightsAction extends AbstractAction<Repository>
 {
-  private static final String[] IGNORED_PATHS = { "resourcemanager.java", "menucardtemplate.java", "org.eclipse.oomph.version.tests/tests",
-      "org.eclipse.net4j.jms.api/src", "org/eclipse/net4j/util/ui/proposals/", "org.eclipse.emf.cdo.examples.installer/examples",
-      "org.eclipse.net4j.examples.installer/examples" };
+  private static final String[] DEFAULT_IGNORED_MESSAGE_VERBS = { "update", "adjust", "fix" };
 
-  private static final String[] REQUIRED_EXTENSIONS = { ".java", ".ant", "build.xml", "plugin.xml", "fragment.xml", "feature.xml", "plugin.properties",
+  private static final String[] DEFAULT_IGNORED_MESSAGE_NOUNS = { "copyright", "legal header" };
+
+  private static final String[] DEFAULT_IGNORED_PATHS = { "target", "resourcemanager.java" };
+
+  private static final String[] DEFAULT_CHECK_FILES = { ".java", ".ant", "build.xml", "plugin.xml", "fragment.xml", "feature.xml", "plugin.properties",
       "fragment.properties", "feature.properties", "about.properties", "build.properties", "messages.properties", "copyright.txt", ".exsd",
       "org.eclipse.jdt.ui.prefs" };
 
-  private static final String[] OPTIONAL_EXTENSIONS = { ".properties", ".xml", ".css", ".ecore", ".genmodel", ".mwe", ".xpt", ".ext" };
+  private static final String[] DEFAULT_UPDATE_FILES = { ".properties", ".xml", ".css", ".ecore", ".genmodel", ".mwe", ".xpt", ".ext" };
 
-  private static final String[] IGNORED_MESSAGE_VERBS = { "update", "adjust", "fix" };
-
-  private static final String[] IGNORED_MESSAGE_NOUNS = { "copyright", "legal header" };
-
-  private static final String[] IGNORED_MESSAGES = combineWords(IGNORED_MESSAGE_VERBS, IGNORED_MESSAGE_NOUNS);
-
-  private static final Pattern COPYRIGHT_PATTERN = Pattern.compile("(.*?)Copyright \\(c\\) ([0-9 ,-]+) (.*?) and others\\.(.*)");
+  private static final String DEFAULT_COPYRIGHT_PATTERN = "(.*?)Copyright \\(c\\) ([0-9 ,-]+) (.*?) and others\\.(.*)";
 
   private static final Calendar CALENDAR = GregorianCalendar.getInstance();
 
@@ -94,11 +95,19 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
 
   private int workTreeLength;
 
+  private String[] ignoredMessages;
+
+  private String[] ignoredPaths;
+
+  private Pattern[] checkFiles;
+
+  private Pattern[] updateFiles;
+
+  private Pattern copyrightPattern;
+
   private List<String> missingCopyrights = new ArrayList<String>();
 
   private int rewriteCount;
-
-  private int fileCount;
 
   public UpdateCopyrightsAction()
   {
@@ -115,6 +124,7 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
   {
     IRunnableWithProgress runnable = new IRunnableWithProgress()
     {
+
       public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
       {
         try
@@ -123,11 +133,15 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
           workTree = repository.getWorkTree();
           workTreeLength = workTree.getAbsolutePath().length() + 1;
 
-          fileCount = countFiles(workTree);
-          monitor.beginTask(getTitle(), fileCount);
+          initProperties();
+
+          final Map<File, Boolean> files = new TreeMap<File, Boolean>();
+          collectFiles(files, workTree);
+
+          monitor.beginTask(getTitle(), files.size());
 
           final long start = System.currentTimeMillis();
-          checkFolder(monitor, workTree);
+          checkFiles(files, start, monitor);
 
           shell.getDisplay().syncExec(new Runnable()
           {
@@ -135,7 +149,7 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
             {
               try
               {
-                handleResult(shell, workTree, formatDuration(start));
+                handleResult(shell, workTree, files.size(), formatDuration(start));
               }
               catch (Exception ex)
               {
@@ -156,7 +170,6 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
         {
           missingCopyrights.clear();
           rewriteCount = 0;
-          fileCount = 0;
           workTreeLength = 0;
           workTree = null;
           git = null;
@@ -168,140 +181,230 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
     WORKBENCH.getProgressService().run(true, true, runnable);
   }
 
-  private int countFiles(File folder) throws Exception
+  private void initProperties()
   {
-    int count = 0;
-    for (File file : folder.listFiles())
-    {
-      String fileName = file.getName();
-      if (file.isDirectory() && !fileName.equals(".git"))
-      {
-        count += countFiles(file);
-      }
-      else
-      {
-        String path = getPath(file);
-        if (hasString(path, IGNORED_PATHS))
-        {
-          continue;
-        }
+    Properties properties = new Properties();
 
-        ++count;
+    File file = new File(workTree, ".legalchecks");
+    if (file.isFile())
+    {
+      InputStream in = null;
+
+      try
+      {
+        in = new FileInputStream(file);
+        properties.load(in);
+      }
+      catch (IOException ex)
+      {
+        Activator.log(ex);
+      }
+      finally
+      {
+        close(in);
       }
     }
 
-    return count;
+    ignoredMessages = combineWords( //
+        getStrings(properties, "ignored.message.verbs", DEFAULT_IGNORED_MESSAGE_VERBS), //
+        getStrings(properties, "ignored.message.nouns", DEFAULT_IGNORED_MESSAGE_NOUNS));
+
+    ignoredPaths = getStrings(properties, "ignored.paths", DEFAULT_IGNORED_PATHS);
+    checkFiles = getPatterns(properties, "check.files", DEFAULT_CHECK_FILES);
+    updateFiles = getPatterns(properties, "update.files", DEFAULT_UPDATE_FILES);
+
+    String property = properties.getProperty("copyright.pattern");
+    if (property == null)
+    {
+      property = DEFAULT_COPYRIGHT_PATTERN;
+    }
+
+    copyrightPattern = Pattern.compile(property);
   }
 
-  private void checkFolder(IProgressMonitor monitor, File folder) throws Exception
+  private String[] getStrings(Properties properties, String key, String[] defaultValue)
+  {
+    String property = properties.getProperty(key);
+    if (property == null)
+    {
+      return defaultValue;
+    }
+
+    String[] result = property.split(",");
+    for (int i = 0; i < result.length; i++)
+    {
+      result[i] = result[i].trim();
+    }
+
+    return result;
+  }
+
+  private Pattern[] getPatterns(Properties properties, String key, String[] defaultValue)
+  {
+    String[] strings = getStrings(properties, key, defaultValue);
+
+    Pattern[] result = new Pattern[strings.length];
+    for (int i = 0; i < strings.length; i++)
+    {
+      String string = strings[i];
+      string = string.replace(".", "\\.");
+      string = string.replace("*", ".*");
+      string = string.replace("?", ".");
+
+      result[i] = Pattern.compile(string);
+    }
+
+    return result;
+  }
+
+  private void collectFiles(Map<File, Boolean> files, File folder) throws Exception
   {
     for (File file : folder.listFiles())
+    {
+      String path = getWorkTreeRelativePath(file);
+      if (!hasString(path, ignoredPaths))
+      {
+        String name = file.getName();
+        if (file.isDirectory())
+        {
+          if (name.equals(".git"))
+          {
+            continue;
+          }
+
+          if (name.equals("bin"))
+          {
+            continue;
+          }
+
+          collectFiles(files, file);
+        }
+        else
+        {
+          if (name.endsWith(".class"))
+          {
+            continue;
+          }
+
+          boolean required = matches(file, checkFiles);
+          if (required)
+          {
+            files.put(file, true);
+          }
+          else if (!isCheckOnly() && matches(file, updateFiles))
+          {
+            files.put(file, false);
+          }
+        }
+      }
+    }
+  }
+
+  private void checkFiles(Map<File, Boolean> files, long start, IProgressMonitor monitor) throws Exception
+  {
+    int i = 0;
+    int totalFiles = files.size();
+
+    for (Map.Entry<File, Boolean> entry : files.entrySet())
     {
       if (monitor.isCanceled())
       {
         throw new OperationCanceledException();
       }
 
-      String fileName = file.getName();
-      if (file.isDirectory() && !fileName.equals(".git"))
-      {
-        checkFolder(monitor, file);
-      }
-      else
-      {
-        if (checkFile(monitor, file))
-        {
-          monitor.worked(1);
-        }
-      }
+      File file = entry.getKey();
+      boolean required = entry.getValue();
+
+      checkFile(file, required);
+      monitor.worked(1);
+
+      double millis = System.currentTimeMillis() - start;
+      double millisPerFile = millis / ++i;
+
+      int remainingFiles = totalFiles - i;
+      int remainingSeconds = (int)(millisPerFile * remainingFiles / 1000);
+      int remainingMinutes = remainingSeconds / 60;
+      remainingSeconds -= remainingMinutes * 60;
+
+      monitor.subTask("Remaining files: " + remainingFiles + ", remaining minutes: " + remainingMinutes + ":" + String.format("%02d", remainingSeconds));
     }
   }
 
-  private boolean checkFile(IProgressMonitor monitor, File file) throws Exception
+  private void checkFile(File file, boolean required) throws Exception
   {
-    String path = getPath(file);
-    if (!hasString(path, IGNORED_PATHS))
+    String path = getWorkTreeRelativePath(file);
+
+    List<String> lines = new ArrayList<String>();
+    boolean copyrightFound = false;
+    boolean copyrightChanged = false;
+
+    FileReader fileReader = new FileReader(file);
+    BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+    try
     {
-      boolean required = hasExtension(file, REQUIRED_EXTENSIONS);
-      boolean optional = required || hasExtension(file, OPTIONAL_EXTENSIONS);
-
-      boolean checkOnly = isCheckOnly();
-      if (checkOnly ? required : optional)
+      String line;
+      while ((line = bufferedReader.readLine()) != null)
       {
-        monitor.subTask(path);
-
-        List<String> lines = new ArrayList<String>();
-        boolean copyrightFound = false;
-        boolean copyrightChanged = false;
-
-        FileReader fileReader = new FileReader(file);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-        try
+        Matcher matcher = copyrightPattern.matcher(line);
+        if (matcher.matches())
         {
-          String line;
-          while ((line = bufferedReader.readLine()) != null)
+          copyrightFound = true;
+          if (isCheckOnly())
           {
-            Matcher matcher = COPYRIGHT_PATTERN.matcher(line);
-            if (matcher.matches())
-            {
-              copyrightFound = true;
-              if (checkOnly)
-              {
-                break;
-              }
+            break;
+          }
 
-              String prefix = matcher.group(1);
-              String dates = matcher.group(2);
-              String owner = matcher.group(3);
-              String suffix = matcher.group(4);
+          String dates = matcher.group(2);
+          if (dates.endsWith(CURRENT_YEAR_STRING))
+          {
+            // This file must have been rewritten already in the current year
+            break;
+          }
 
-              if (dates.endsWith(CURRENT_YEAR_STRING))
-              {
-                // This file must have been rewritten already in the current year
-                break;
-              }
+          String prefix = matcher.group(1);
+          String owner = matcher.group(3);
+          String suffix = matcher.group(4);
 
-              String newLine = rewriteCopyright(path, line, prefix, dates, owner, suffix);
-              if (newLine != line)
-              {
-                line = newLine;
-                copyrightChanged = true;
-              }
-            }
-
-            lines.add(line);
+          String newLine = rewriteCopyright(path, line, prefix, dates, owner, suffix);
+          if (newLine != line)
+          {
+            line = newLine;
+            copyrightChanged = true;
           }
         }
-        finally
-        {
-          close(bufferedReader);
-          close(fileReader);
-        }
 
-        if (required && !copyrightFound)
-        {
-          missingCopyrights.add(path);
-        }
-
-        if (copyrightChanged)
-        {
-          writeLines(file, lines);
-          ++rewriteCount;
-        }
+        lines.add(line);
       }
-
-      return true;
+    }
+    finally
+    {
+      close(bufferedReader);
+      close(fileReader);
     }
 
-    return false;
+    if (required && !copyrightFound)
+    {
+      missingCopyrights.add(path);
+    }
+
+    if (copyrightChanged)
+    {
+      writeLines(file, lines);
+      ++rewriteCount;
+    }
   }
 
   private String rewriteCopyright(String path, String line, String prefix, String dates, String owner, String suffix) throws Exception
   {
     String newDates;
 
-    if (path.endsWith("org.eclipse.jdt.ui.prefs") || path.endsWith("copyright.txt") || path.endsWith("org.eclipse.emf.cdo.license-feature/feature.properties")
+    if (path.endsWith("org.eclipse.jdt.ui.prefs"))
+    {
+      // Special handling of JDT copyright template.
+      newDates = CURRENT_YEAR_STRING;
+    }
+    else if (path.endsWith("copyright.txt") || path.endsWith("org.eclipse.emf.cdo.license-feature/feature.properties")
         || suffix.equals(" All rights reserved.\\n\\"))
     {
       // Special handling of occurrences with a more global (then file-scoped) meaning.
@@ -315,7 +418,7 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
       for (RevCommit commit : git.log().addPath(path).call())
       {
         String message = commit.getFullMessage();
-        if (!hasString(message, IGNORED_MESSAGES))
+        if (!hasString(message, ignoredMessages))
         {
           CALENDAR.setTimeInMillis(1000L * commit.getCommitTime());
           int year = CALENDAR.get(Calendar.YEAR);
@@ -337,7 +440,7 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
       return line;
     }
 
-    return prefix + "Copyright (c) " + newDates + " " + owner + " and" + " others." + suffix;
+    return prefix + "Copyright (c) " + newDates + " " + owner + " and others." + suffix;
   }
 
   private String formatYears(Collection<Integer> years)
@@ -415,7 +518,7 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
     return (isCheckOnly() ? "Check" : "Update") + " Copyrights";
   }
 
-  private String getPath(File file)
+  private String getWorkTreeRelativePath(File file)
   {
     String path = file.getAbsolutePath().replace('\\', '/');
     return path.substring(workTreeLength);
@@ -435,12 +538,12 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
     return false;
   }
 
-  private boolean hasExtension(File file, String[] extensions)
+  private boolean matches(File file, Pattern[] patterns)
   {
     String fileName = file.getName().toLowerCase();
-    for (int i = 0; i < extensions.length; i++)
+    for (int i = 0; i < patterns.length; i++)
     {
-      if (fileName.endsWith(extensions[i]))
+      if (patterns[i].matcher(fileName).matches())
       {
         return true;
       }
@@ -449,7 +552,7 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
     return false;
   }
 
-  private void handleResult(Shell shell, File workTree, String duration) throws PartInitException
+  private void handleResult(Shell shell, File workTree, int fileCount, String duration) throws PartInitException
   {
     String message = "Copyrights missing: " + missingCopyrights.size();
     message += "\nCopyrights rewritten: " + rewriteCount;
