@@ -124,7 +124,6 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
   {
     IRunnableWithProgress runnable = new IRunnableWithProgress()
     {
-
       public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
       {
         try

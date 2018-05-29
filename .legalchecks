@@ -1,0 +1,40 @@
+ignored.message.verbs = update,\
+                        adjust,\
+                        fix
+               
+ignored.message.nouns = copyright,\
+                        legal header
+
+ignored.paths = target,\
+                resourcemanager.java,\
+                org.eclipse.oomph.version.tests/tests,\
+
+check.files = *.java,\
+              *.ant,\
+              *.exsd,\
+              build.xml,\
+              plugin.xml,\
+              fragment.xml,\
+              feature.xml,\
+              plugin.properties,\
+              fragment.properties,\
+              feature.properties,\
+              about.properties,\
+              build.properties,\
+              messages.properties,\
+              about.ini,\
+              about.mappings,\
+              pom.xml,\
+              copyright.txt,\
+              org.eclipse.jdt.ui.prefs
+
+update.files = *.properties,\
+               *.xml,\
+               *.css,\
+               *.ecore,\
+               *.genmodel,\
+               *.mwe,\
+               *.xpt,\
+               *.ext
+
+copyright.pattern = (.*?)Copyright \\(c\\) ([0-9 ,-]+) (.*?) and others\\.(.*)
