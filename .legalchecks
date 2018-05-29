@@ -22,11 +22,8 @@ check.files = *.java,\
               about.properties,\
               build.properties,\
               messages.properties,\
-              about.ini,\
-              about.mappings,\
               pom.xml,\
-              copyright.txt,\
-              org.eclipse.jdt.ui.prefs
+              copyright.txt
 
 update.files = *.properties,\
                *.xml,\
