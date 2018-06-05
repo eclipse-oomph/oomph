@@ -227,13 +227,7 @@
     </setupTask>
     <stream
         name="master"
-        label="Master">
-      <setupTask
-          xsi:type="setup:VariableTask"
-          name="eclipse.target.platform"
-          value="Oxygen"
-          storageURI="scope://Workspace"/>
-    </stream>
+        label="Master"/>
     <description>The PDE UI</description>
   </project>
   <project name="build"
