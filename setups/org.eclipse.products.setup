@@ -48,7 +48,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -103,6 +103,8 @@
             name="org.eclipse.recommenders.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
@@ -190,7 +192,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -245,6 +247,8 @@
             name="org.eclipse.recommenders.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
@@ -542,7 +546,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -570,15 +574,69 @@
         <requirement
             name="org.eclipse.datatools.connectivity.feature.feature.group"/>
         <requirement
+            name="org.eclipse.datatools.connectivity.oda.designer.core.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.designer.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.feature.feature.group"/>
+        <requirement
             name="org.eclipse.datatools.doc.user.feature.group"/>
         <requirement
+            name="org.eclipse.datatools.enablement.apache.derby.feature.feature.group"/>
+        <requirement
             name="org.eclipse.datatools.enablement.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.hsqldb.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.ibm.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.ingres.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.jdbc.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.jdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.msft.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.mysql.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oda.designer.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oda.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oracle.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.postgresql.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sap.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sqlite.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sybase.feature.feature.group"/>
         <requirement
             name="org.eclipse.datatools.intro.feature.group"/>
         <requirement
             name="org.eclipse.datatools.modelbase.feature.feature.group"/>
         <requirement
+            name="org.eclipse.datatools.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.data.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.ddl.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.ddlgen.feature.feature.group"/>
+        <requirement
             name="org.eclipse.datatools.sqldevtools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.parsers.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.results.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.schemaobjecteditor.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.sqlbuilder.feature.feature.group"/>
         <requirement
             name="org.eclipse.datatools.sqltools.doc.user.feature.group"/>
         <requirement
@@ -593,6 +651,10 @@
             name="org.eclipse.jpt.common.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.common.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.dbws.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jaxb.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.jaxb.feature.feature.group"/>
         <requirement
@@ -655,6 +717,8 @@
             name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.recommenders.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
@@ -836,7 +900,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -864,15 +928,69 @@
         <requirement
             name="org.eclipse.datatools.connectivity.feature.feature.group"/>
         <requirement
+            name="org.eclipse.datatools.connectivity.oda.designer.core.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.designer.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.feature.feature.group"/>
+        <requirement
             name="org.eclipse.datatools.doc.user.feature.group"/>
         <requirement
+            name="org.eclipse.datatools.enablement.apache.derby.feature.feature.group"/>
+        <requirement
             name="org.eclipse.datatools.enablement.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.hsqldb.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.ibm.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.ingres.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.jdbc.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.jdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.msft.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.mysql.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oda.designer.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oda.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oracle.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.postgresql.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sap.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sqlite.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sybase.feature.feature.group"/>
         <requirement
             name="org.eclipse.datatools.intro.feature.group"/>
         <requirement
             name="org.eclipse.datatools.modelbase.feature.feature.group"/>
         <requirement
+            name="org.eclipse.datatools.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.data.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.ddl.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.ddlgen.feature.feature.group"/>
+        <requirement
             name="org.eclipse.datatools.sqldevtools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.parsers.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.results.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.schemaobjecteditor.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.sqlbuilder.feature.feature.group"/>
         <requirement
             name="org.eclipse.datatools.sqltools.doc.user.feature.group"/>
         <requirement
@@ -887,6 +1005,10 @@
             name="org.eclipse.jpt.common.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.common.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.dbws.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jaxb.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.jaxb.feature.feature.group"/>
         <requirement
@@ -949,6 +1071,8 @@
             name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.recommenders.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
@@ -1432,7 +1556,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1448,19 +1572,35 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.8.0,5.0.0)"/>
         <requirement
+            name="org.eclipse.cdt.arduino.feature.group"/>
+        <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
             name="org.eclipse.cdt.build.crossgcc.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.cmake.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.debug.gdbjtag.feature.group"/>
         <requirement
             name="org.eclipse.cdt.debug.standalone.feature.group"/>
         <requirement
             name="org.eclipse.cdt.debug.ui.memory.feature.group"/>
         <requirement
+            name="org.eclipse.cdt.docker.launcher.feature.group"/>
+        <requirement
             name="org.eclipse.cdt.feature.group"/>
         <requirement
             name="org.eclipse.cdt.launch.remote.feature.group"/>
         <requirement
+            name="org.eclipse.cdt.launch.serial.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.meson.feature.group"/>
+        <requirement
             name="org.eclipse.cdt.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.qt.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -1600,7 +1740,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -1616,19 +1756,35 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.8.0,4.9.0)"/>
         <requirement
+            name="org.eclipse.cdt.arduino.feature.group"/>
+        <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
             name="org.eclipse.cdt.build.crossgcc.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.cmake.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.debug.gdbjtag.feature.group"/>
         <requirement
             name="org.eclipse.cdt.debug.standalone.feature.group"/>
         <requirement
             name="org.eclipse.cdt.debug.ui.memory.feature.group"/>
         <requirement
+            name="org.eclipse.cdt.docker.launcher.feature.group"/>
+        <requirement
             name="org.eclipse.cdt.feature.group"/>
         <requirement
             name="org.eclipse.cdt.launch.remote.feature.group"/>
         <requirement
+            name="org.eclipse.cdt.launch.serial.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.meson.feature.group"/>
+        <requirement
             name="org.eclipse.cdt.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.qt.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -1980,7 +2136,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2019,6 +2175,8 @@
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
@@ -2120,7 +2278,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2159,6 +2317,8 @@
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
@@ -2344,7 +2504,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-php-developers/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2474,7 +2634,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-php-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-php-developers/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2727,7 +2887,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -2941,7 +3101,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3313,7 +3473,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3403,7 +3563,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3691,7 +3851,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3723,15 +3883,69 @@
         <requirement
             name="org.eclipse.datatools.connectivity.feature.feature.group"/>
         <requirement
+            name="org.eclipse.datatools.connectivity.oda.designer.core.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.designer.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.feature.feature.group"/>
+        <requirement
             name="org.eclipse.datatools.doc.user.feature.group"/>
         <requirement
+            name="org.eclipse.datatools.enablement.apache.derby.feature.feature.group"/>
+        <requirement
             name="org.eclipse.datatools.enablement.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.hsqldb.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.ibm.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.ingres.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.jdbc.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.jdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.msft.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.mysql.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oda.designer.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oda.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oracle.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.postgresql.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sap.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sqlite.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sybase.feature.feature.group"/>
         <requirement
             name="org.eclipse.datatools.intro.feature.group"/>
         <requirement
             name="org.eclipse.datatools.modelbase.feature.feature.group"/>
         <requirement
+            name="org.eclipse.datatools.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.data.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.ddl.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.ddlgen.feature.feature.group"/>
+        <requirement
             name="org.eclipse.datatools.sqldevtools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.parsers.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.results.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.schemaobjecteditor.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.sqlbuilder.feature.feature.group"/>
         <requirement
             name="org.eclipse.datatools.sqltools.doc.user.feature.group"/>
         <requirement
@@ -3740,6 +3954,10 @@
             name="org.eclipse.jpt.common.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.common.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.dbws.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jaxb.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.jaxb.feature.feature.group"/>
         <requirement
@@ -3929,7 +4147,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -3961,15 +4179,69 @@
         <requirement
             name="org.eclipse.datatools.connectivity.feature.feature.group"/>
         <requirement
+            name="org.eclipse.datatools.connectivity.oda.designer.core.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.designer.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.feature.feature.group"/>
+        <requirement
             name="org.eclipse.datatools.doc.user.feature.group"/>
         <requirement
+            name="org.eclipse.datatools.enablement.apache.derby.feature.feature.group"/>
+        <requirement
             name="org.eclipse.datatools.enablement.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.hsqldb.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.ibm.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.ingres.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.jdbc.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.jdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.msft.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.mysql.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oda.designer.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oda.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oracle.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.postgresql.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sap.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sqlite.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sybase.feature.feature.group"/>
         <requirement
             name="org.eclipse.datatools.intro.feature.group"/>
         <requirement
             name="org.eclipse.datatools.modelbase.feature.feature.group"/>
         <requirement
+            name="org.eclipse.datatools.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.data.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.ddl.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.ddlgen.feature.feature.group"/>
+        <requirement
             name="org.eclipse.datatools.sqldevtools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.parsers.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.results.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.schemaobjecteditor.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.sqlbuilder.feature.feature.group"/>
         <requirement
             name="org.eclipse.datatools.sqltools.doc.user.feature.group"/>
         <requirement
@@ -3978,6 +4250,10 @@
             name="org.eclipse.jpt.common.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.common.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.dbws.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jaxb.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.jaxb.feature.feature.group"/>
         <requirement
@@ -4445,7 +4721,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4460,8 +4736,6 @@
         <requirement
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.8.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.amalgam.discovery.feature.group"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -4522,6 +4796,8 @@
             name="org.eclipse.pde.feature.group"/>
         <requirement
             name="org.eclipse.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.uml2.sdk.feature.group"/>
         <requirement
@@ -4635,7 +4911,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -4650,8 +4926,6 @@
         <requirement
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.8.0,4.9.0)"/>
-        <requirement
-            name="org.eclipse.amalgam.discovery.feature.group"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -4712,6 +4986,8 @@
             name="org.eclipse.pde.feature.group"/>
         <requirement
             name="org.eclipse.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.uml2.sdk.feature.group"/>
         <requirement
@@ -5308,7 +5584,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rcp-and-rap-developers/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5474,7 +5750,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rcp-and-rap-developers/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5876,7 +6152,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -5958,7 +6234,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -6212,7 +6488,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -6374,7 +6650,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-parallel-application-developers/photonm6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -6973,7 +7249,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-scout-developers/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -7036,7 +7312,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/3A</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/oxygen3a</value>
         </detail>
       </annotation>
       <setupTask
@@ -7099,7 +7375,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M6</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-scout-developers/photonrc3</value>
         </detail>
       </annotation>
       <setupTask
@@ -7162,7 +7438,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Oxygen/3A</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-scout-developers/oxygen3a</value>
         </detail>
       </annotation>
       <setupTask
@@ -7426,6 +7702,116 @@
     </version>
     <description>&lt;a href=&quot;http://www.eclipse.org/scout&quot;>Eclipse Scout&lt;/a> is a Java/HTML5 framework to develop business applications that run on the desktop, on tablets and mobile devices. This package includes Eclipse IDE support for Scout developers and source code.</description>
   </product>
+  <product name="epp.package.rust"
+      label="Eclipse IDE for Rust Developers">
+    <version
+        name="latest"
+        label="Latest (Photon)"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rust-developers/photonrc3</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Rust Developers (Photon)">
+        <requirement
+            name="epp.package.rust"
+            versionRange="[4.8.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.8.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.8.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.corrosion.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.gitflow.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.github.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
+        <repository
+            url="http://download.eclipse.org/releases/photon"/>
+      </setupTask>
+    </version>
+    <version
+        name="photon"
+        label="Photon"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rust-developers/photonrc3</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Rust Developers (Photon)">
+        <requirement
+            name="epp.package.rust"
+            versionRange="[4.8.0,4.9.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.8.0,4.9.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.8.0,4.9.0)"/>
+        <requirement
+            name="org.eclipse.corrosion.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.gitflow.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.github.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/photon"/>
+        <repository
+            url="http://download.eclipse.org/releases/photon"/>
+      </setupTask>
+    </version>
+    <description>The essential tools for any Rust developer, including Rust language support, Git client, command-line integration, Mylyn and editors.</description>
+  </product>
   <product name="org.eclipse.platform.ide"
       label="Eclipse Platform">
     <version
@@ -7436,7 +7822,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
@@ -7490,7 +7876,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/M6</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
         </detail>
       </annotation>
       <setupTask
