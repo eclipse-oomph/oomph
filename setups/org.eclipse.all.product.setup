@@ -26,7 +26,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
       </detail>
     </annotation>
     <setupTask
@@ -75,7 +75,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
       </detail>
     </annotation>
     <setupTask
@@ -124,7 +124,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+        <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
       </detail>
     </annotation>
     <setupTask

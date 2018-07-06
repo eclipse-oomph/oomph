@@ -48,7 +48,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -121,7 +121,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -194,7 +194,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -548,7 +548,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -751,7 +751,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -954,7 +954,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -1610,7 +1610,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -1709,7 +1709,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -1808,7 +1808,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2204,7 +2204,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2275,7 +2275,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2346,7 +2346,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-javascript-and-web-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2572,7 +2572,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-php-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-php-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2637,7 +2637,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-php-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-php-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2702,7 +2702,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-php-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-php-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -2955,7 +2955,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3062,7 +3062,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3169,7 +3169,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3541,7 +3541,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3586,7 +3586,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3631,7 +3631,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -3919,7 +3919,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -4092,7 +4092,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -4265,7 +4265,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-java-and-report-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -4839,7 +4839,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -4934,7 +4934,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -5029,7 +5029,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -5702,7 +5702,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rcp-and-rap-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rcp-and-rap-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -5785,7 +5785,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rcp-and-rap-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rcp-and-rap-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -5868,7 +5868,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rcp-and-rap-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rcp-and-rap-developers/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -6270,7 +6270,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
         </detail>
       </annotation>
       <setupTask
@@ -6311,7 +6311,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
         </detail>
       </annotation>
       <setupTask
@@ -6352,7 +6352,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
         </detail>
       </annotation>
       <setupTask
@@ -6606,7 +6606,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
         </detail>
       </annotation>
       <setupTask
@@ -6687,7 +6687,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
         </detail>
       </annotation>
       <setupTask
@@ -6768,7 +6768,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
         </detail>
       </annotation>
       <setupTask
@@ -7367,7 +7367,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-scout-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
         </detail>
       </annotation>
       <setupTask
@@ -7430,7 +7430,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-scout-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
         </detail>
       </annotation>
       <setupTask
@@ -7493,7 +7493,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-scout-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
         </detail>
       </annotation>
       <setupTask
@@ -7830,7 +7830,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rust-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rust-developers-includes-incubating-components/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -7883,7 +7883,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rust-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rust-developers-includes-incubating-components/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -7936,7 +7936,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rust-developers/photonrc3</value>
+          <value>https://www.eclipse.org/downloads/packages/eclipse-ide-rust-developers-includes-incubating-components/photonr</value>
         </detail>
       </annotation>
       <setupTask
@@ -7993,7 +7993,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
         </detail>
       </annotation>
       <setupTask
@@ -8020,7 +8020,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
         </detail>
       </annotation>
       <setupTask
@@ -8047,7 +8047,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/Photon/RC3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
         </detail>
       </annotation>
       <setupTask
