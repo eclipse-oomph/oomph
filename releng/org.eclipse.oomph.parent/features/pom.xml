@@ -27,11 +27,11 @@ Eike Stepper - initial API and implementation
 
   <modules>
     <module>../../../features/org.eclipse.oomph.all-feature</module>
-    <module>../../../features/org.eclipse.oomph.tests-feature</module>
     <module>../../../features/org.eclipse.oomph.gitbash-feature</module>
     <module>../../../features/org.eclipse.oomph.launches-feature</module>
     <module>../../../features/org.eclipse.oomph.license-feature</module>
     <module>../../../features/org.eclipse.oomph.manifests-feature</module>
+    <module>../../../features/org.eclipse.oomph.ostools-feature</module>
     <module>../../../features/org.eclipse.oomph.p2-feature</module>
     <module>../../../features/org.eclipse.oomph.preferences-feature</module>
     <module>../../../features/org.eclipse.oomph.projectconfig-feature</module>
@@ -53,10 +53,10 @@ Eike Stepper - initial API and implementation
     <module>../../../features/org.eclipse.oomph.setup.workbench-feature</module>
     <module>../../../features/org.eclipse.oomph.setup.workingsets-feature</module>
     <module>../../../features/org.eclipse.oomph.targlets-feature</module>
+    <module>../../../features/org.eclipse.oomph.tests-feature</module>
     <module>../../../features/org.eclipse.oomph.util-feature</module>
     <module>../../../features/org.eclipse.oomph.version-feature</module>
     <module>../../../features/org.eclipse.oomph.version.headless-feature</module>
-    <module>../../../features/org.eclipse.oomph.ostools-feature</module>
     <module>../../../features/org.eclipse.oomph.workingsets-feature</module>
   </modules>
 
