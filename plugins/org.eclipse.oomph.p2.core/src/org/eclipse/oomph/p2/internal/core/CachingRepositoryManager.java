@@ -951,7 +951,11 @@ public class CachingRepositoryManager<T>
           MirrorInfo[] mirrors = (MirrorInfo[])ReflectUtil.invokeMethod(method, this, monitor);
           if (mirrors == null)
           {
-            mirrors = new MirrorInfo[0];
+            mirrors = (MirrorInfo[])ReflectUtil.getValue("mirrors", this);
+            if (mirrors == null)
+            {
+              mirrors = new MirrorInfo[0];
+            }
           }
 
           // Use only the first two thirds of the list.
@@ -1030,7 +1034,7 @@ public class CachingRepositoryManager<T>
 
         public void setStart()
         {
-          this.start = System.currentTimeMillis();
+          start = System.currentTimeMillis();
         }
 
         public void setSize(long size)
