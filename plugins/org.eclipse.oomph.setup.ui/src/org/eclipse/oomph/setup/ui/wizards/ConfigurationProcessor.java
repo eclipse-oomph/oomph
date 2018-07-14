@@ -64,6 +64,10 @@ public class ConfigurationProcessor
 
   private final ScopeStatus status = new ScopeStatus(null, "Problems were encountered processing the configuration");
 
+  private final ScopeStatus installationStatus;
+
+  private final ScopeStatus workspaceStatus;
+
   public ConfigurationProcessor(SetupWizard setupWizard)
   {
     this.setupWizard = setupWizard;
@@ -79,8 +83,11 @@ public class ConfigurationProcessor
       workspace = configuration.getWorkspace();
     }
 
-    status.add(new ScopeStatus(installation, "Problems were encountered processing the installation"));
-    status.add(new ScopeStatus(null, "Problems were encountered processing the workspace"));
+    installationStatus = new ScopeStatus(installation, "Problems were encountered processing the installation");
+    status.add(installationStatus);
+
+    workspaceStatus = new ScopeStatus(workspace, "Problems were encountered processing the workspace");
+    status.add(workspaceStatus);
   }
 
   public IStatus getStatus()
@@ -143,6 +150,24 @@ public class ConfigurationProcessor
 
   protected boolean handleNullInstallation()
   {
+    if (configuration == null && setupWizard.isSimple())
+    {
+      StringBuilder uris = new StringBuilder();
+      for (Resource resource : setupWizard.getUnappliedConfigurationResources())
+      {
+        uris.append(resource.getURI());
+      }
+
+      installationStatus.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "No configuration could be loaded " + uris));
+      return false;
+    }
+
+    if (installation == null && workspace == null && setupWizard.isSimple())
+    {
+      installationStatus.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "The configuraton is empty"));
+      return false;
+    }
+
     return true;
   }
 
@@ -294,6 +319,24 @@ public class ConfigurationProcessor
 
   protected boolean handleNullWorkspace()
   {
+    if (configuration == null && !setupWizard.isSimple())
+    {
+      StringBuilder uris = new StringBuilder();
+      for (Resource resource : setupWizard.getUnappliedConfigurationResources())
+      {
+        uris.append(resource.getURI());
+      }
+
+      workspaceStatus.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "No configuration could be loaded " + uris));
+      return false;
+    }
+
+    if (installation == null && workspace == null && !setupWizard.isSimple())
+    {
+      workspaceStatus.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "The configuration is empty"));
+      return false;
+    }
+
     return true;
   }
 

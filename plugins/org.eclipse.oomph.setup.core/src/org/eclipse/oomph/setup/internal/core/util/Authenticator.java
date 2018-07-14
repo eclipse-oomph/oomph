@@ -16,11 +16,13 @@ import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
+import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.FormHandler;
 import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.util.IOUtil;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.SegmentSequence;
+import org.eclipse.emf.ecore.resource.URIConverter;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.ecf.core.util.Proxy;
@@ -28,6 +30,7 @@ import org.eclipse.ecf.provider.filetransfer.util.ProxySetupHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -36,6 +39,7 @@ import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -43,16 +47,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * @author Ed Merks
  */
 public abstract class Authenticator
 {
-  public static Set<? extends Authenticator> create(VariableTask variable, final StringExpander stringExpander)
+  public static Set<? extends Authenticator> create(VariableTask variable, final StringExpander stringExpander, URIConverter uriConverter)
   {
     Set<Authenticator> result = null;
-    Set<String> keys = null;
     if (variable.getType() == VariableType.PASSWORD)
     {
       for (Annotation annotation : variable.getAnnotations())
@@ -60,7 +64,8 @@ public abstract class Authenticator
         if (AnnotationConstants.ANNOTATION_PASSWORD_VERIFICATION.equals(annotation.getSource()))
         {
           EMap<String, String> details = annotation.getDetails();
-          if ("form".equals(details.get("type")))
+          String type = details.get("type");
+          if ("form".equals(type))
           {
             String cookie = details.get("form.cookie");
             String url = details.get("form.url");
@@ -72,9 +77,9 @@ public abstract class Authenticator
                 if (result == null)
                 {
                   result = new LinkedHashSet<Authenticator>();
-                  keys = new HashSet<String>();
                 }
 
+                Set<String> keys = new HashSet<String>();
                 final Map<String, String> map = new HashMap<String, String>();
                 String variableValue = variable.getValue();
                 map.put("value", variableValue);
@@ -171,6 +176,109 @@ public abstract class Authenticator
               }
             }
           }
+          else if ("form-post".equals(type))
+          {
+            String url = details.get("form.url");
+            String user = details.get("form.user");
+            String password = details.get("form.password");
+            String info = details.get("form.info");
+            String ok = details.get("form.ok");
+            String warning = details.get("form.warning");
+            String error = details.get("form.error");
+            String responseLocation = details.get("form.response.location.matches");
+            if (url != null && user != null && password != null && responseLocation != null && info != null && ok != null && warning != null && error != null)
+            {
+              if (result == null)
+              {
+                result = new LinkedHashSet<Authenticator>();
+              }
+
+              Set<String> keys = new HashSet<String>();
+              final Map<String, String> map = new HashMap<String, String>();
+              String variableValue = variable.getValue();
+              map.put("value", variableValue);
+              map.put("form.url", url);
+              StringExpander localExpander = new StringExpander()
+              {
+                @Override
+                protected String resolve(String key)
+                {
+                  return map.containsKey(key) ? map.get(key) : resolve(stringExpander, key);
+                }
+
+                @Override
+                protected boolean isUnexpanded(String key)
+                {
+                  return !map.containsKey(key) && isUnexpanded(stringExpander, key);
+                }
+
+                @Override
+                protected String filter(String value, String filterName)
+                {
+                  return filter(stringExpander, value, filterName);
+                }
+              };
+
+              String expandedUser = localExpander.expandString(user, keys);
+              if (expandedUser == null)
+              {
+                continue;
+              }
+
+              map.put("form.user", expandedUser);
+
+              String expandedPassword = localExpander.expandString(password, keys);
+              if (expandedPassword == null)
+              {
+                expandedPassword = PreferencesUtil.encrypt(" ");
+              }
+              map.put("form.password", expandedUser);
+
+              String formFilter = details.get("form.filter");
+              boolean isFiltered = formFilter != null && expandedUser.matches(formFilter);
+
+              String expandedResponseLocation = localExpander.expandString(responseLocation, keys);
+              if (expandedResponseLocation == null)
+              {
+                continue;
+              }
+
+              Pattern responseLocationPattern = null;
+              try
+              {
+                responseLocationPattern = Pattern.compile(expandedResponseLocation);
+              }
+              catch (PatternSyntaxException ex)
+              {
+                continue;
+              }
+
+              result.add(new FormPost(uriConverter, isFiltered, url, expandedUser, expandedPassword, localExpander.expandString(ok, keys),
+                  localExpander.expandString(info, keys), localExpander.expandString(warning, keys), localExpander.expandString(error, keys),
+                  responseLocationPattern));
+            }
+          }
+        }
+      }
+    }
+
+    if (result != null)
+    {
+      // Clean up old obsolete forms if there are new form-posts.
+      for (Authenticator authenticator : result)
+      {
+        if (authenticator instanceof FormPost)
+        {
+          for (Iterator<Authenticator> it = result.iterator(); it.hasNext();)
+          {
+            Authenticator otherAuthenticator = it.next();
+            if (otherAuthenticator instanceof Form)
+            {
+              it.remove();
+            }
+          }
+
+          break;
         }
       }
     }
@@ -545,6 +653,237 @@ public abstract class Authenticator
       {
         // Ignore.
       }
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class FormPost extends Authenticator
+  {
+    private final URIConverter uriConverter;
+
+    private final boolean isFiltered;
+
+    private final String uri;
+
+    private final String user;
+
+    private final String password;
+
+    private final Pattern responseLocation;
+
+    public FormPost(URIConverter uriConverter, boolean isFiltered, String uri, String user, String password, String ok, String info, String warning,
+        String error, Pattern responseLocation)
+    {
+      super(ok, info, warning, error);
+      this.uriConverter = uriConverter;
+      this.isFiltered = isFiltered;
+      this.uri = uri;
+      this.user = user;
+      this.password = password;
+      this.responseLocation = responseLocation;
+    }
+
+    @Override
+    public int hashCode()
+    {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + (isFiltered ? 1231 : 1237);
+      result = prime * result + (user == null ? 0 : user.hashCode());
+      result = prime * result + (password == null ? 0 : password.hashCode());
+      result = prime * result + (uri == null ? 0 : uri.hashCode());
+      result = prime * result + (responseLocation == null ? 0 : responseLocation.toString().hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+      if (this == obj)
+      {
+        return true;
+      }
+
+      if (obj == null)
+      {
+        return false;
+      }
+
+      if (getClass() != obj.getClass())
+      {
+        return false;
+      }
+
+      FormPost other = (FormPost)obj;
+      if (isFiltered != other.isFiltered)
+      {
+        return false;
+      }
+
+      if (user == null)
+      {
+        if (other.user != null)
+        {
+          return false;
+        }
+      }
+      else if (!user.equals(other.user))
+      {
+        return false;
+      }
+
+      if (password == null)
+      {
+        if (other.password != null)
+        {
+          return false;
+        }
+      }
+      else if (!password.equals(other.password))
+      {
+        return false;
+      }
+
+      if (uri == null)
+      {
+        if (other.uri != null)
+        {
+          return false;
+        }
+      }
+      else if (!uri.equals(other.uri))
+      {
+        return false;
+      }
+
+      if (responseLocation == null)
+      {
+        if (other.responseLocation != null)
+        {
+          return false;
+        }
+      }
+      else if (!responseLocation.toString().equals(other.responseLocation.toString()))
+      {
+        return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public boolean isFiltered()
+    {
+      return isFiltered;
+    }
+
+    @Override
+    public int validate()
+    {
+      int status = IStatus.WARNING;
+      for (int i = 0; i < 3; ++i)
+      {
+        try
+        {
+          status = sendPost() ? IStatus.OK : IStatus.ERROR;
+          break;
+        }
+        catch (IOException ex)
+        {
+          // Retry
+          ex.printStackTrace();
+        }
+      }
+
+      return status;
+    }
+
+    protected boolean sendPost() throws IOException
+    {
+      final Authorization authorization = new Authorization(user, PreferencesUtil.decrypt(password));
+      FormHandler formHandler = new ECFURIHandlerImpl.FormHandler(org.eclipse.emf.common.util.URI.createURI(uri), uriConverter,
+          new ECFURIHandlerImpl.AuthorizationHandler()
+          {
+            public Authorization authorize(org.eclipse.emf.common.util.URI uri)
+            {
+              return authorization;
+            }
+
+            public Authorization reauthorize(org.eclipse.emf.common.util.URI uri, Authorization authorization)
+            {
+              return Authorization.UNAUTHORIZEABLE;
+            }
+          })
+      {
+        @Override
+        protected boolean isRedo()
+        {
+          return true;
+        }
+
+        @Override
+        protected boolean validHeaders(Map<String, List<String>> headers)
+        {
+          if (super.validHeaders(headers))
+          {
+            List<String> locations = headers.get("Location");
+            if (locations != null)
+            {
+              for (String location : locations)
+              {
+                if (responseLocation.matcher(location).matches())
+                {
+                  return true;
+                }
+              }
+            }
+          }
+
+          return false;
+        }
+      };
+
+      return formHandler.process();
+    }
+
+    protected static String getForm(Map<String, String> parameters, Collection<String> secureKeys, boolean secure)
+    {
+      StringBuilder form = new StringBuilder();
+      for (Map.Entry<String, String> entry : parameters.entrySet())
+      {
+        String key = entry.getKey();
+        String value = entry.getValue();
+        if (secure && secureKeys != null && secureKeys.contains(key))
+        {
+          value = PreferencesUtil.decrypt(value);
+        }
+
+        if (form.length() != 0)
+        {
+          form.append('&');
+        }
+
+        form.append(key);
+        form.append('=');
+        try
+        {
+          form.append(URLEncoder.encode(value, "UTF-8"));
+        }
+        catch (UnsupportedEncodingException ex)
+        {
+          // UTF-8 is always supported.
+        }
+      }
+
+      return form.toString();
+    }
+
+    @Override
+    public String toString()
+    {
+      return "PostForm: uri=" + uri + " user=" + user + " password=" + (password == null ? null : PreferencesUtil.decrypt(password));
     }
   }
 

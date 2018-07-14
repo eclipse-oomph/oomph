@@ -877,6 +877,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   {
     setSetupContext(SetupContext.createInstallationWorkspaceAndUser(resourceSet));
     ECFURIHandlerImpl.saveProxies();
+    resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
   }
 
   @Override
@@ -1184,6 +1185,17 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                                 CollectionUtil.add(uriMap, eClass, uri);
                                 CollectionUtil.add(resourceMap, uri, resource);
                               }
+                            }
+                          }
+                          else
+                          {
+                            URI uri = uriConverter.normalize(resource.getURI());
+                            String scheme = uri.scheme();
+                            if ("https".equals(scheme))
+                            {
+                              // Group the URIs by object type so we can reload "the most import" types of objects first.
+                              CollectionUtil.add(uriMap, SetupPackage.Literals.PROJECT, uri);
+                              CollectionUtil.add(resourceMap, uri, resource);
                             }
                           }
                         }

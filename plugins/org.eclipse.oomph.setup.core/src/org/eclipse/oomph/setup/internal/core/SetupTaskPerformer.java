@@ -1599,11 +1599,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     addIndexRedirection(result, SetupContext.INDEX_SETUP_LOCATION_URI, ".location");
     addIndexRedirection(result, SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI, ".archive.location");
 
-    if (REMOTE_DEBUG)
+    boolean maybeRemoteDebug = "maybe".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_REMOTE_DEBUG));
+    if (REMOTE_DEBUG || maybeRemoteDebug)
     {
-      addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_SETUP_REMOTE_DEBUG, "=true");
-      addEclipseIniTask(result, true, "-Xdebug", "");
-      addEclipseIniTask(result, true, "-Xrunjdwp:transport", "=dt_socket,server=y,suspend=n,address=8123");
+      String prefix = maybeRemoteDebug ? "-D" : "-";
+      addEclipseIniTask(result, true, prefix + "D" + SetupProperties.PROP_SETUP_REMOTE_DEBUG, "=true");
+      addEclipseIniTask(result, true, prefix + "Xdebug", "");
+      addEclipseIniTask(result, true, prefix + "Xrunjdwp:transport", "=dt_socket,server=y,suspend=n,address=8123");
     }
 
     if (USER_HOME_REDIRECT)
@@ -4158,7 +4160,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
       };
 
-      return Authenticator.create(variable, stringExpander);
+      return Authenticator.create(variable, stringExpander, performer.getURIConverter());
     }
   }
 

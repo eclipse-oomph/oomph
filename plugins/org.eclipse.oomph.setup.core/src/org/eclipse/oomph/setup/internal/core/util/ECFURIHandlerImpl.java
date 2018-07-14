@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.internal.core.util;
 
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
@@ -74,10 +75,13 @@ import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.StorageException;
 
 import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.osgi.framework.Version;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,16 +91,23 @@ import java.net.CookieStore;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -113,9 +124,13 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
   public static final String OPTION_MONITOR = "OPTION_MONITOR";
 
-  public static final CookieStore COOKIE_STORE = new CookieManager().getCookieStore();
+  public static final CookieStore COOKIE_STORE = FileTransferListener.DELEGATING_COOKIE_STORE;
 
   public static final String OPTION_LOGIN_URI = "OPTION_LOGIN_URI";
+
+  public static final String OPTION_FORM_URI = "OPTION_FORM_URI";
+
+  public static final String OPTION_BASIC_AUTHENTICATION = "OPTION_BASIC_AUTHENTICATION";
 
   private static final String FAILED_EXPECTED_ETAG = "-1";
 
@@ -303,7 +318,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     return new InputStreamConnectionHandler(uri, options).process();
   }
 
-  private CountDownLatch acquireLock(URI uri) throws IOException
+  private static CountDownLatch acquireLock(URI uri) throws IOException
   {
     CountDownLatch countDownLatch = null;
     synchronized (LOCKS)
@@ -328,7 +343,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     }
   }
 
-  private void releaseLock(URI uri, CountDownLatch countDownLatch)
+  private static void releaseLock(URI uri, CountDownLatch countDownLatch)
   {
     synchronized (LOCKS)
     {
@@ -441,6 +456,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     }
 
     return defaultAuthorizationHandler;
+  }
+
+  private static String getHost(java.net.URI uri)
+  {
+    return uri.getHost();
   }
 
   private static String getHost(URI uri)
@@ -558,6 +578,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
       private final String password;
 
+      private boolean saved;
+
       public Authorization(String user, String password)
       {
         this.user = user == null ? "" : user;
@@ -646,11 +668,23 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         return true;
       }
 
+      public boolean isSaved()
+      {
+        return saved;
+      }
+
+      public void setSaved(boolean saved)
+      {
+        this.saved = saved;
+      }
+
       @Override
       public String toString()
       {
-        return this == UNAUTHORIZEABLE ? "Authorization [unauthorizeable]" : "Authorization [user=" + user + ", password=" + password + "]";
+        return this == UNAUTHORIZEABLE ? "Authorization [unauthorizeable]"
+            : "Authorization [user=" + user + ", password=" + password + "]" + (saved ? " saved" : "");
       }
+
     }
   }
 
@@ -698,6 +732,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
             Authorization authorization = new Authorization(user, password);
             if (authorization.isAuthorized())
             {
+              authorization.setSaved(true);
               authorizations.put(host, authorization);
               return authorization;
             }
@@ -721,7 +756,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     {
       // Double check that another thread hasn't already prompted and updated the secure store or has not already permanently failed to authorize.
       Authorization currentAuthorization = authorize(uri);
-      if (!currentAuthorization.equals(authorization) || currentAuthorization == Authorization.UNAUTHORIZEABLE)
+      if (!currentAuthorization.equals(authorization) && currentAuthorization.isAuthorized() || currentAuthorization == Authorization.UNAUTHORIZEABLE)
       {
         return currentAuthorization;
       }
@@ -731,7 +766,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         String host = getHost(uri);
         if (host != null)
         {
-          AuthenticationInfo authenticationInfo = uiServices.getUsernamePassword(uri.toString());
+          AuthenticationInfo currentAuthenticationInfo = new AuthenticationInfo(authorization.getUser(), authorization.getPassword(), authorization.isSaved());
+          AuthenticationInfo authenticationInfo = uiServices.getUsernamePassword(uri.toString(), currentAuthenticationInfo);
           String user = authenticationInfo.getUserName();
           String password = authenticationInfo.getPassword();
           Authorization reauthorization = new Authorization(user, password);
@@ -745,6 +781,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                 node.put("user", user, false);
                 node.put("password", password, true);
                 node.flush();
+                reauthorization.setSaved(true);
               }
               catch (IOException ex)
               {
@@ -791,6 +828,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
   {
     @SuppressWarnings("all")
     private static final org.apache.http.impl.client.BasicCookieStore COOKIE_STORE = new org.apache.http.impl.client.BasicCookieStore();
+
+    private static final DelegatingCookieStore DELEGATING_COOKIE_STORE = new DelegatingCookieStore(COOKIE_STORE);
 
     public final CountDownLatch receiveLatch = new CountDownLatch(1);
 
@@ -935,7 +974,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
                 for (Cookie cookie : originalCookies)
                 {
-                  ECFURIHandlerImpl.COOKIE_STORE.remove(null, new HttpCookie(cookie.getName(), cookie.getValue()));
+                  HttpCookie httpCookie = createCookie(cookie);
+                  DELEGATING_COOKIE_STORE.basicRemove(null, new HttpCookie(cookie.getName(), cookie.getValue()));
                 }
 
                 return !originalCookies.isEmpty();
@@ -946,7 +986,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
             public void clear()
             {
               COOKIE_STORE.clear();
-              ECFURIHandlerImpl.COOKIE_STORE.removeAll();
+              DELEGATING_COOKIE_STORE.basicRemoveAll();
             }
 
             @SuppressWarnings("all")
@@ -955,7 +995,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
               try
               {
                 java.net.URI uri = fileID.getURI();
-                ECFURIHandlerImpl.COOKIE_STORE.add(uri, new HttpCookie(cookie.getName(), cookie.getValue()));
+                HttpCookie httpCookie = createCookie(cookie);
+                DELEGATING_COOKIE_STORE.basicAdd(uri, httpCookie);
               }
               catch (Exception ex)
               {
@@ -963,6 +1004,15 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
               }
 
               COOKIE_STORE.addCookie(cookie);
+            }
+
+            public HttpCookie createCookie(Cookie cookie)
+            {
+              HttpCookie httpCookie = new HttpCookie(cookie.getName(), cookie.getValue());
+              httpCookie.setDomain(cookie.getDomain());
+              httpCookie.setPath(cookie.getPath());
+              httpCookie.setVersion(cookie.getVersion());
+              return httpCookie;
             }
           });
         }
@@ -991,6 +1041,104 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     public int getErrorCode()
     {
       return ((IncomingFileTransferException)exception).getErrorCode();
+    }
+
+    /**
+     * @author Ed Merks
+     */
+    private static class DelegatingCookieStore implements CookieStore
+    {
+      private final CookieStore delegate = new CookieManager().getCookieStore();
+
+      private final BasicCookieStore basicCookieStore;
+
+      public DelegatingCookieStore(BasicCookieStore basicCookieStore)
+      {
+        this.basicCookieStore = basicCookieStore;
+      }
+
+      public void add(java.net.URI uri, HttpCookie httpCookie)
+      {
+        basicAdd(uri, httpCookie);
+        basicCookieStore.addCookie(createCookie(uri, httpCookie));
+      }
+
+      public void basicAdd(java.net.URI uri, HttpCookie httpCookie)
+      {
+        if (TRACE)
+        {
+          System.out.println("> ECF: " + uri + " adding cookie: " + httpCookie);
+        }
+
+        delegate.add(uri, httpCookie);
+      }
+
+      public List<HttpCookie> get(java.net.URI uri)
+      {
+        return delegate.get(uri);
+      }
+
+      public List<HttpCookie> getCookies()
+      {
+        return delegate.getCookies();
+      }
+
+      public List<java.net.URI> getURIs()
+      {
+        return delegate.getURIs();
+      }
+
+      public boolean remove(java.net.URI uri, HttpCookie httpCookie)
+      {
+        BasicClientCookie basicClientCookie = createCookie(uri, httpCookie);
+        basicClientCookie.setExpiryDate(new Date(System.currentTimeMillis() - 1000));
+        basicCookieStore.addCookie(basicClientCookie);
+        return basicRemove(uri, httpCookie);
+      }
+
+      public boolean basicRemove(java.net.URI uri, HttpCookie cookie)
+      {
+        if (TRACE)
+        {
+          System.out.println("> ECF: " + uri + " adding cookie: " + cookie);
+        }
+
+        return delegate.remove(uri, cookie);
+      }
+
+      public boolean removeAll()
+      {
+        basicCookieStore.clear();
+        return basicRemoveAll();
+      }
+
+      public boolean basicRemoveAll()
+      {
+        return delegate.removeAll();
+      }
+
+      private BasicClientCookie createCookie(java.net.URI uri, HttpCookie httpCookie)
+      {
+        BasicClientCookie basicClientCookie = new BasicClientCookie(httpCookie.getName(), httpCookie.getValue());
+        basicClientCookie.setPath(httpCookie.getPath());
+        if (uri != null)
+        {
+          basicClientCookie.setDomain(uri.getHost());
+        }
+
+        if (httpCookie.hasExpired())
+        {
+          basicClientCookie.setExpiryDate(new Date(System.currentTimeMillis() - 1000));
+        }
+
+        return basicClientCookie;
+      }
+
+      @Override
+      public String toString()
+      {
+        return getCookies().toString();
+      }
     }
   }
 
@@ -1189,15 +1337,20 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
    */
   private abstract class ConnectionHandler<T>
   {
+    final protected URI originalURI;
+
     protected URI uri;
 
     protected final Map<?, ?> options;
 
     protected String tracePrefix;
 
+    protected Authorization forceAuthorization;
+
     public ConnectionHandler(URI uri, Map<?, ?> options) throws IOException
     {
       this.uri = uri;
+      this.originalURI = uri;
       this.options = options;
     }
 
@@ -1206,25 +1359,9 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
      */
     public T process() throws IOException
     {
-      // First transform the URI, if necessary, extracting a login URI if one is needed.
+      // First transform the URI, if necessary, extracting a login URI or form URI if one is needed.
       Map<Object, Object> transformedOptions = new HashMap<Object, Object>(options);
-      uri = transform(uri, transformedOptions);
-      URI loginURI = (URI)transformedOptions.get(OPTION_LOGIN_URI);
-      if (loginURI != null)
-      {
-        try
-        {
-          InputStream inputStream = createInputStream(loginURI, options);
-          inputStream.close();
-        }
-        catch (IOException ex)
-        {
-          // Ignore this.
-          // The main URI should still be attempted.
-          // If it can't get authorization and isn't in the cache,
-          // there will be an appropriate stack trace for that URI.
-        }
-      }
+      uri = transform(originalURI, transformedOptions);
 
       // This is used to prefix all tracing statements.
       tracePrefix = "> ECF: " + uri;
@@ -1312,12 +1449,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
               }
 
               // We'll log a single warning for this case.
-              SetupCorePlugin.INSTANCE.log(
-                  "The Eclipse Git-hosted URI '" + uri + "' is blocked for direct access." + StringUtil.NL + //
-                      "Please open a Bugzilla to add it to an official Oomph catalog." + StringUtil.NL + //
-                      "For initial testing, use the file system local version of the resource." + StringUtil.NL + //
-                      "Alternatively, run the setup archiver application as follows:" + StringUtil.NL + //
-                      "  " + launcher + " -application org.eclipse.oomph.setup.core.SetupArchiver -consoleLog -noSplash -uris " + uri, //
+              SetupCorePlugin.INSTANCE.log("The Eclipse Git-hosted URI '" + uri + "' is blocked for direct access." + StringUtil.NL + //
+                  "Please open a Bugzilla to add it to an official Oomph catalog." + StringUtil.NL + //
+                  "For initial testing, use the file system local version of the resource." + StringUtil.NL + //
+                  "Alternatively, run the setup archiver application as follows:" + StringUtil.NL + //
+                  "  " + launcher + " -application org.eclipse.oomph.setup.core.SetupArchiver -consoleLog -noSplash -uris " + uri, //
                   IStatus.WARNING);
 
               loggedBlockedURI = true;
@@ -1327,14 +1463,58 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           return handleEclipseGit();
         }
 
+        URI loginURI = (URI)transformedOptions.get(OPTION_LOGIN_URI);
+        if (loginURI != null)
+        {
+          try
+          {
+            if (TRACE)
+            {
+              System.out.println("> ECF: " + loginURI + " reading login URI");
+            }
+
+            InputStream inputStream = createInputStream(loginURI, options);
+            inputStream.close();
+          }
+          catch (IOException ex)
+          {
+            // Ignore this.
+            // The main URI should still be attempted.
+            // If it can't get authorization and isn't in the cache,
+            // there will be an appropriate stack trace for that URI.
+          }
+        }
+
+        // Determine the authorization handler for handling credentials.
+        AuthorizationHandler authorizationHandler = getAuthorizatonHandler(options);
+
+        URI formURI = (URI)transformedOptions.get(OPTION_FORM_URI);
+        if (formURI != null)
+        {
+          try
+          {
+            if (TRACE)
+            {
+              System.out.println("> ECF: " + formURI + " processing form URI");
+            }
+
+            FormHandler formHandler = new FormHandler(formURI, uriConverter, authorizationHandler);
+            formHandler.process();
+          }
+          catch (IOException ex)
+          {
+            // Ignore this.
+            // The main URI should still be attempted.
+            // If it can't get authorization and isn't in the cache,
+            // there will be an appropriate stack trace for that URI.
+          }
+        }
+
         // Encapsulate all the information needed to access and process the URI.
         ProxyWrapper proxyWrapper = ProxyWrapper.create(uri);
 
         // Create the container for the connection.
         IContainer container = createContainer();
-
-        // Determine the authorization handler for handling credentials.
-        AuthorizationHandler authorizationHandler = getAuthorizatonHandler(options);
 
         // If we don't have an authorization in the options, but we have a handler,
         // we might as well get the authorization that might exist in the secure storage so our first access uses the right credentials up front.
@@ -1342,6 +1522,20 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         if (authorization == null && authorizationHandler != null)
         {
           authorization = authorizationHandler.authorize(uri);
+        }
+
+        // If we are forcing basic authentication...
+        boolean basicAuthentication = Boolean.TRUE.equals(transformedOptions.get(OPTION_BASIC_AUTHENTICATION));
+        if (basicAuthentication)
+        {
+          // Ensure that we have an authorization, if possible.
+          if ((authorization == null || !authorization.isAuthorized()) && authorizationHandler != null)
+          {
+            authorization = authorizationHandler.reauthorize(uri, authorization);
+          }
+
+          // Record it so that it's definitely passed in the request header.
+          forceAuthorization = authorization;
         }
 
         // If we don't have a proxy authorization in the options, but we have a handler,
@@ -1479,7 +1673,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                 // We assume contents can be accessed via the github API https://developer.github.com/v3/repos/contents/#get-contents
                 // That API, for security reasons, does not return HTTP_UNAUTHORIZED, so we need this special case for that host.
                 else if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED
-                    || API_GITHUB_HOST.equals(getHost(uri)) && errorCode == HttpURLConnection.HTTP_NOT_FOUND)
+                    || API_GITHUB_HOST.equals(getHost(uri)) && errorCode == HttpURLConnection.HTTP_NOT_FOUND
+                    || forceAuthorization != null && errorCode == HttpURLConnection.HTTP_FORBIDDEN)
                 {
                   // Get the authorization if we don't already have one.
                   if (authorization == null)
@@ -1490,6 +1685,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                     if (authorization.isAuthorized())
                     {
                       --i;
+                      if (forceAuthorization != null)
+                      {
+                        forceAuthorization = authorization;
+                      }
+
                       continue;
                     }
                   }
@@ -1501,6 +1701,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                     if (authorization.isAuthorized())
                     {
                       --i;
+                      if (forceAuthorization != null)
+                      {
+                        forceAuthorization = authorization;
+                      }
+
                       continue;
                     }
                   }
@@ -1638,6 +1843,24 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         requestHeaders.put("User-Agent", USER_AGENT);
       }
 
+      if (forceAuthorization != null)
+      {
+        @SuppressWarnings("unchecked")
+        Map<String, String> requestHeaders = (Map<String, String>)requestOptions.get(IRetrieveFileTransferOptions.REQUEST_HEADERS);
+        if (requestHeaders == null)
+        {
+          requestHeaders = new HashMap<String, String>();
+          requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, requestHeaders);
+        }
+
+        requestHeaders.put("Authorization", forceAuthorization.getAuthorization());
+
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " forcing basic authentication: " + forceAuthorization);
+        }
+      }
+
       fileTransfer.sendRetrieveRequest(fileTransferID, transferListener, requestOptions);
     }
 
@@ -1713,7 +1936,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       ETagMirror etagMirror = (ETagMirror)options.get(ETagMirror.OPTION_ETAG_MIRROR);
       if (etagMirror != null)
       {
-        etagMirror.cacheUpdated(uri);
+        etagMirror.cacheUpdated(originalURI);
       }
 
       if (TRACE)
@@ -1834,7 +2057,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
    */
   public static class Main
   {
-    public static void main(String[] args) throws Exception
+    public void main(String[] args) throws Exception
     {
       // TODO
       // We might need to produce a result that is separated with & rather than ; for some servers?
@@ -1899,6 +2122,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
         URI outputURI = uri.trimQuery();
         URI loginURI = null;
+        URI formURI = null;
+        boolean basicAuthentication = false;
         Map<String, String> outputQuery = new LinkedHashMap<String, String>();
         for (Map.Entry<String, String> entry : arguments.entrySet())
         {
@@ -1914,6 +2139,16 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
             continue;
           }
+          else if ("oomph_form".equals(key))
+          {
+            String result = evaluate(value, uri);
+            if (result != null)
+            {
+              formURI = URI.createURI(result);
+            }
+
+            continue;
+          }
           else if ("oomph_login".equals(key))
           {
             String result = evaluate(value, uri);
@@ -1922,6 +2157,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
               loginURI = URI.createURI(result);
             }
 
+            continue;
+          }
+          else if ("oomph_basic_auth".equals(key))
+          {
+            basicAuthentication = "true".equals(value);
             continue;
           }
           else if (key.startsWith("oomph-"))
@@ -1958,6 +2198,16 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           options.put(OPTION_LOGIN_URI, loginURI);
         }
 
+        if (formURI != null && options != null)
+        {
+          options.put(OPTION_FORM_URI, formURI);
+        }
+
+        if (basicAuthentication && options != null)
+        {
+          options.put(OPTION_BASIC_AUTHENTICATION, Boolean.TRUE);
+        }
+
         return outputURI;
       }
 
@@ -1992,7 +2242,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       for (int i = 0, length = expression.length(); i < length; ++i)
       {
         char character = expression.charAt(i);
-        if (quote && character != '\'')
+        if (quote && character != '\'' && (character != '%' || i + 2 > length || expression.charAt(i + 1) != '2' || expression.charAt(i + 2) != '7'))
         {
           result.append(character);
         }
@@ -2012,6 +2262,25 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                 quote = !quote;
               }
               break;
+            }
+            case '%':
+            {
+              if (i + 2 < length && expression.charAt(i + 1) == '2' && expression.charAt(i + 2) == '7')
+              {
+                if (i + 5 < length && expression.charAt(i + 3) == '%' && expression.charAt(i + 4) == '2' && expression.charAt(i + 5) == '7')
+                {
+                  i += 5;
+                  result.append("%27");
+                }
+                else
+                {
+                  i += 2;
+                  quote = !quote;
+                }
+                break;
+              }
+
+              return null;
             }
             case 's':
             {
@@ -2521,6 +2790,426 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
         PROXY_DATA.clear();
       }
+    }
+  }
+
+  /**
+   *
+   * @author Ed Merks
+   */
+  public static class FormHandler
+  {
+    private static final Map<URI, Authorization> AUTHORIZED_FORMS = Collections.synchronizedMap(new HashMap<URI, Authorization>());
+
+    private static final Pattern FORM_PATTERN = Pattern.compile("<\\s*form\\s*([^>]*)>(.*?)</\\s*form\\s*>", Pattern.DOTALL);
+
+    private static final Pattern INPUT_ELEMENT_PATTERN = Pattern.compile("<\\s*input\\s*([^>]*)>");
+
+    private static final Pattern ACTION_ATTRIBUTE_PATTERN = getAttributePattern("action");
+
+    private static final Pattern NAME_ATTRIBUTE_PATTERN = getAttributePattern("name");
+
+    private static final Pattern TYPE_ATTRIBUTE_PATTERN = getAttributePattern("type");
+
+    private static final Pattern VALUE_ATTRIBUTE_PATTERN = getAttributePattern("value");
+
+    private static final Pattern HEX_ENTITY_PATTERN = Pattern.compile("&#x([0-9]+);");
+
+    private final URI formURI;
+
+    private final URIConverter uriConverter;
+
+    private final Map<String, String> parameterTypes = new LinkedHashMap<String, String>();
+
+    private final Map<String, String> parameterValues = new LinkedHashMap<String, String>();
+
+    private final Set<String> secureParameters = new LinkedHashSet<String>();
+
+    private final AuthorizationHandler authorizationHandler;
+
+    public FormHandler(URI formURI, URIConverter uriConverter, AuthorizationHandler authorizationHandler)
+    {
+      this.formURI = formURI;
+      this.uriConverter = uriConverter;
+      this.authorizationHandler = authorizationHandler;
+    }
+
+    public boolean process() throws IOException
+    {
+      boolean result = false;
+      if (authorizationHandler != null)
+      {
+        Authorization authorization = authorizationHandler.authorize(formURI);
+        URI formLockURI = URI.createURI("form:" + formURI);
+        CountDownLatch countDownLatch = acquireLock(formLockURI);
+        try
+        {
+          // If we've previously successfully authorized with the same credentials...
+          if (authorization.equals(AUTHORIZED_FORMS.get(formLockURI)))
+          {
+            if (!isRedo())
+            {
+              // Return here so that we don't needlessly put the same authorization back the map.
+              return true;
+            }
+
+            java.net.URI javaNetFormURI;
+            try
+            {
+              javaNetFormURI = new java.net.URI(formURI.toString());
+            }
+            catch (URISyntaxException ex)
+            {
+              throw new IOExceptionWithCause(ex);
+            }
+
+            for (HttpCookie httpCookie : COOKIE_STORE.get(javaNetFormURI))
+            {
+              COOKIE_STORE.remove(javaNetFormURI, httpCookie);
+            }
+          }
+
+          URI formActionURI = readForm(formURI);
+
+          if (!secureParameters.isEmpty() && formActionURI != null)
+          {
+            int limit = 3;
+            if (!authorization.isAuthorized())
+            {
+              --limit;
+              authorization = authorizationHandler.reauthorize(formURI, authorization);
+            }
+
+            Set<String> emptyKeys = new HashSet<String>();
+            for (int i = 0; i < limit && !authorization.isUnauthorizeable(); ++i)
+            {
+              if (authorization.isAuthorized())
+              {
+                for (Map.Entry<String, String> entry : parameterValues.entrySet())
+                {
+                  String key = entry.getKey();
+                  String value = entry.getValue();
+                  if (StringUtil.isEmpty(value) || emptyKeys.contains(key))
+                  {
+                    String type = parameterTypes.get(key);
+                    if ("password".equals(type))
+                    {
+                      parameterValues.put(key, PreferencesUtil.encrypt(authorization.getPassword()));
+                    }
+                    else
+                    {
+                      emptyKeys.add(key);
+                      parameterValues.put(key, authorization.getUser());
+                    }
+                  }
+                }
+
+                if (postForm(formActionURI))
+                {
+                  result = true;
+                  break;
+                }
+
+                authorization = authorizationHandler.reauthorize(formURI, authorization);
+              }
+            }
+          }
+        }
+        finally
+        {
+          if (result)
+          {
+            AUTHORIZED_FORMS.put(formLockURI, authorization);
+          }
+
+          releaseLock(formLockURI, countDownLatch);
+        }
+      }
+
+      return result;
+    }
+
+    protected boolean isRedo()
+    {
+      return false;
+    }
+
+    private URI readForm(URI formURI) throws IOException
+    {
+      InputStream in = null;
+      ByteArrayOutputStream out = null;
+      try
+      {
+        String tracePrefix = "> ECF: " + formURI;
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " reading form");
+        }
+
+        // Ensure that the input stream really reads the remote form, not something from the cache.
+        // This is to ensure that the cookies of the response header are properly processed.
+        HashMap<Object, Object> options = new HashMap<Object, Object>();
+        options.put(OPTION_CACHE_HANDLING, CacheHandling.CACHE_IGNORE);
+        options.put(OPTION_AUTHORIZATION_HANDLER, null);
+        in = uriConverter.createInputStream(formURI, options);
+
+        // Copy the result into memory and convert it to string.
+        out = new ByteArrayOutputStream();
+        IOUtil.copy(in, out);
+        String contents = out.toString("UTF-8");
+
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " finding form contents");
+        }
+
+        // Look for the form.
+        for (Matcher formMatcher = FORM_PATTERN.matcher(contents); formMatcher.find();)
+        {
+          parameterValues.clear();
+          parameterTypes.clear();
+
+          // The form must have an action attribute.
+          String action = getAttributeValue(ACTION_ATTRIBUTE_PATTERN, formMatcher.group(1));
+          if (action != null)
+          {
+            // This is the URI to which we must post the form data.
+            URI formActionURI = URI.createURI(action).resolve(formURI);
+            if (formActionURI != null)
+            {
+              String formContents = formMatcher.group(2);
+
+              // Look for all the input elements of the form.
+              for (Matcher inputMatcher = INPUT_ELEMENT_PATTERN.matcher(formContents); inputMatcher.find();)
+              {
+                String inputElement = inputMatcher.group(1);
+
+                String name = getAttributeValue(NAME_ATTRIBUTE_PATTERN, inputElement);
+                String type = getAttributeValue(TYPE_ATTRIBUTE_PATTERN, inputElement);
+                String value = getAttributeValue(VALUE_ATTRIBUTE_PATTERN, inputElement);
+
+                // Record the values of all well-formed inputs.
+                if (name != null && type != null)
+                {
+                  parameterValues.put(name, value == null ? "" : value);
+                  parameterTypes.put(name, type);
+                  if ("password".equals(type))
+                  {
+                    secureParameters.add(name);
+                  }
+                }
+              }
+            }
+
+            if (!secureParameters.isEmpty())
+            {
+              if (TRACE)
+              {
+                StringBuilder details = new StringBuilder();
+                for (Map.Entry<String, String> entry : parameterValues.entrySet())
+                {
+                  details.append(StringUtil.NL).append("   ").append(entry.getKey()).append("='").append(entry.getValue()).append("' type=")
+                      .append(parameterTypes.get(entry.getKey()));
+                }
+
+                System.out.println(tracePrefix + " form parameters " + details);
+              }
+              return formActionURI;
+            }
+          }
+        }
+
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " form contents not found");
+        }
+
+        return null;
+      }
+      finally
+      {
+        IOUtil.closeSilent(in);
+      }
+    }
+
+    private boolean postForm(URI formActionURI) throws IOException
+    {
+      boolean result = false;
+      URL url = new URL(formActionURI.toString());
+
+      String tracePrefix = "> ECF: " + formActionURI;
+      if (TRACE)
+      {
+        System.out.println(tracePrefix + " posting form");
+      }
+
+      // Establish a connection that looks just like a browser connection to post the form data.
+      HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+
+      connection.setUseCaches(false);
+      connection.setConnectTimeout(5000);
+      connection.setRequestMethod("POST");
+      connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+      connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+      connection.setDoOutput(true);
+      connection.setInstanceFollowRedirects(false);
+
+      java.net.URI uri;
+      try
+      {
+        uri = url.toURI();
+      }
+      catch (URISyntaxException ex)
+      {
+        throw new IOExceptionWithCause(ex);
+      }
+
+      // Be sure to add cookies, e.g., any cookies returned when the form was read earlier.
+      List<HttpCookie> cookies = COOKIE_STORE.get(uri);
+      for (HttpCookie httpCookie : cookies)
+      {
+        connection.addRequestProperty("Cookie", httpCookie.toString().replace("\"", ""));
+      }
+
+      if (TRACE)
+      {
+        StringBuilder details = new StringBuilder();
+        for (HttpCookie httpCookie : cookies)
+        {
+          details.append(StringUtil.NL).append("    ").append(httpCookie);
+        }
+
+        System.out.println(tracePrefix + (details.length() == 0 ? " using no cookies" : " using cookies" + details));
+      }
+
+      handleProxy(connection);
+
+      // Write the form data to connection.
+      DataOutputStream data = new DataOutputStream(connection.getOutputStream());
+      String form = getForm(parameterValues, secureParameters, true);
+
+      if (TRACE)
+      {
+        System.out.println(tracePrefix + " posting parameters" + StringUtil.NL + "    " + getForm(parameterValues, secureParameters, false));
+      }
+
+      data.writeBytes(form);
+      data.close();
+
+      // If we receive a valid response...
+      int responseCode = connection.getResponseCode();
+      if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_MOVED_TEMP)
+      {
+        // Look for the cookies...
+        Map<String, List<String>> headerFields = connection.getHeaderFields();
+        List<String> list = headerFields.get("Set-Cookie");
+        if (list != null)
+        {
+          for (String value : list)
+          {
+            List<HttpCookie> httpCookies = HttpCookie.parse(value);
+            for (HttpCookie httpCookie : httpCookies)
+            {
+              httpCookie.setDomain(getHost(uri));
+
+              // Some sites serve up bogus expiry information that results in the cookie not being added to the store.
+              if (httpCookie.getMaxAge() == 0)
+              {
+                httpCookie.setMaxAge(-1);
+              }
+
+              ECFURIHandlerImpl.COOKIE_STORE.add(uri, httpCookie);
+              result = true;
+            }
+          }
+        }
+
+        // Allow subclasses to also inspect the header fields.
+        if (result)
+        {
+          result = validHeaders(headerFields);
+        }
+      }
+
+      return result;
+    }
+
+    protected boolean validHeaders(Map<String, List<String>> headers)
+    {
+      return true;
+    }
+
+    private static String getForm(Map<String, String> parameters, Collection<String> secureKeys, boolean secure)
+    {
+      StringBuilder form = new StringBuilder();
+      for (Map.Entry<String, String> entry : parameters.entrySet())
+      {
+        String key = entry.getKey();
+        String value = entry.getValue();
+        if (secure && secureKeys != null && secureKeys.contains(key))
+        {
+          value = PreferencesUtil.decrypt(value);
+        }
+
+        if (form.length() != 0)
+        {
+          form.append('&');
+        }
+
+        form.append(key);
+        form.append('=');
+        try
+        {
+          form.append(URLEncoder.encode(value, "UTF-8"));
+        }
+        catch (UnsupportedEncodingException ex)
+        {
+          // UTF-8 is always supported.
+        }
+      }
+
+      return form.toString();
+    }
+
+    private void handleProxy(HttpURLConnection connection)
+    {
+      try
+      {
+        // If there are proxy settings, ensure that the proper proxy authorization is established.
+        Proxy proxy = ProxySetupHelper.getProxy(formURI.toString());
+        if (proxy != null)
+        {
+          Authorization authorization = new ECFURIHandlerImpl.AuthorizationHandler.Authorization(proxy.getUsername(), proxy.getPassword());
+          if (authorization.isAuthorized())
+          {
+            connection.setRequestProperty("Proxy-Authorization", authorization.getAuthorization());
+          }
+        }
+      }
+      catch (NoClassDefFoundError ex)
+      {
+        // Ignore.
+      }
+    }
+
+    private static Pattern getAttributePattern(String attributeName)
+    {
+      return Pattern.compile("\\s*" + attributeName + "\\s*=\\s*(\"[^\"]*\"|'[^']*')");
+    }
+
+    private static String getAttributeValue(Pattern attributePattern, String attributes)
+    {
+      Matcher matcher = attributePattern.matcher(attributes);
+      if (matcher.find())
+      {
+        String quotedValue = matcher.group(1);
+        for (Matcher entityMatcher = HEX_ENTITY_PATTERN.matcher(quotedValue); entityMatcher.find();)
+        {
+          quotedValue = quotedValue.replace(entityMatcher.group(), new String(Character.toChars(Integer.valueOf(entityMatcher.group(1), 16))));
+        }
+        return quotedValue.substring(1, quotedValue.length() - 1);
+      }
+      return null;
     }
   }
 }
