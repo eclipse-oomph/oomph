@@ -20,18 +20,11 @@
       value="5g"
       vm="true"/>
   <version name="latest"
-      label="Latest (Photon)"
+      label="Latest (2018-09)"
       requiredJavaVersion="1.8">
-    <annotation
-        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
-      </detail>
-    </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse Eierlegende Wollmilchsau (Photon)">
+        label="Eclipse Eierlegende Wollmilchsau (2018-09)">
       <requirement
           name="Application Development Frameworks"/>
       <requirement
@@ -63,9 +56,9 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.8.0,5.0.0)"/>
+          versionRange="[4.9.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/photon"/>
+          url="http://download.eclipse.org/releases/2018-09"/>
     </setupTask>
   </version>
   <version name="latest.released"
@@ -114,7 +107,49 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.8.0,4.9.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/photon"/>
+          url="http://download.eclipse.org/releases/photon/201806271001"/>
+    </setupTask>
+  </version>
+  <version name="2018-09"
+      label="2018-09"
+      requiredJavaVersion="1.8">
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Eierlegende Wollmilchsau (2018-09)">
+      <requirement
+          name="Application Development Frameworks"/>
+      <requirement
+          name="Business Intelligence, Reporting and Charting"/>
+      <requirement
+          name="Cloud Tools"/>
+      <requirement
+          name="Collaboration"/>
+      <requirement
+          name="Database Development"/>
+      <requirement
+          name="General Purpose Tools"/>
+      <requirement
+          name="Linux Tools"
+          filter="(osgi.os=linux)"/>
+      <requirement
+          name="Mobile and Device Development"/>
+      <requirement
+          name="Modeling"/>
+      <requirement
+          name="Performance, Profiling and Tracing Tools"/>
+      <requirement
+          name="Programming Languages"/>
+      <requirement
+          name="SOA Development"/>
+      <requirement
+          name="Testing"/>
+      <requirement
+          name="Web, XML, Java EE and OSGi Enterprise Development"/>
+      <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.9.0,4.10.0)"/>
+      <repository
+          url="http://download.eclipse.org/releases/2018-09"/>
     </setupTask>
   </version>
   <version name="photon"
@@ -163,7 +198,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.8.0,4.9.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/photon"/>
+          url="http://download.eclipse.org/releases/photon/201806271001"/>
     </setupTask>
   </version>
   <version name="oxygen"
