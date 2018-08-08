@@ -207,7 +207,7 @@ public class ConfigurationProcessor
         if (isUserProductCatalog(scope))
         {
           ProductCatalog userProductCatalog = (ProductCatalog)scope;
-          userProductCatalog.getProducts().add(product);
+          userProductCatalog.getProducts().add(0, product);
           BaseUtil.saveEObject(userProductCatalog);
           catalogManager.selectCatalog(true, userProductCatalog, true);
           added = true;
@@ -529,7 +529,7 @@ public class ConfigurationProcessor
     {
       if (isUserProject(catalogProject))
       {
-        catalogProject.getProjects().add(project);
+        catalogProject.getProjects().add(0, project);
         BaseUtil.saveEObject(catalogProject);
         catalogManager.selectCatalog(false, projectCatalog, true);
         return true;
