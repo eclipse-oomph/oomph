@@ -148,7 +148,7 @@ import java.util.zip.ZipInputStream;
  */
 public class OpenDiscoveredType extends OomphDialog
 {
-  public static final String TITLE = "Open Dicovered Type";
+  public static final String TITLE = "Open Discovered Type";
 
   public static final String MESSAGE = "Search Git repositories by entering the fully qualified name of a Java class or package";
 
