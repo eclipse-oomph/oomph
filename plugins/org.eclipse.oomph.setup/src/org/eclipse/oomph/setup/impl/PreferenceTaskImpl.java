@@ -797,7 +797,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     {
       final String itemSeparatorStr = new String(new char[] { itemSeparator });
       final String itemPattern = "([^" + itemSeparatorStr + "]+)";
-      final String keyPattern = keySeparator == (char)0 ? ".*" : "([^" + new String(new char[] { keySeparator }) + "]+)";
+      final String keyPattern = keySeparator == (char)0 ? "(.*)" : "([^" + new String(new char[] { keySeparator }) + "]+)";
 
       PreferenceHandlerFactoryRegistry registry = (PreferenceHandlerFactoryRegistry)Factory.Registry.INSTANCE;
       registry.put(URI.createURI(key), new Factory()
@@ -826,6 +826,8 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       });
 
       registerListHandlerFactory("//instance/org.eclipse.ui.workbench/ENABLED_DECORATORS", ',', ':');
+      registerListHandlerFactory("//instance/org.eclipse.ui.navigator/org.eclipse.ui.navigator.ProjectExplorer.activatedExtensions", ';', '=');
+      registerListHandlerFactory("//instance/org.eclipse.ui.navigator/org.eclipse.ui.navigator.ProjectExplorer.filterActivation", ':');
 
       // See Javadoc on PreferenceHandler:
       // registerListHandlerFactory("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.typefilter.disabled", ';');
