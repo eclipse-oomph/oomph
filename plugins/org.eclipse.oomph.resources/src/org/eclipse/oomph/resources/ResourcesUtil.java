@@ -258,25 +258,31 @@ public final class ResourcesUtil
     IProject project = root.getProject(projectName);
     if (project.exists())
     {
-      File existingLocation = new File(project.getLocation().toOSString()).getCanonicalFile();
-      if (!existingLocation.equals(location))
-      {
-        ResourcesPlugin.INSTANCE.log("Project " + projectName + " exists in different location: " + existingLocation);
-        return ImportResult.EXISTED_DIFFERENT_LOCATION;
-      }
-
-      return ImportResult.EXISTED;
+      return importExistingProject(project, projectName, location);
     }
-
-    monitor.setTaskName("Importing project " + projectName);
 
     IPath locationPath = new Path(location.getAbsolutePath());
     IPath parentPath = locationPath.removeLastSegments(1);
     IPath defaultDefaultLocation = root.getLocation();
     if (isPrefixOf(parentPath, defaultDefaultLocation) && isPrefixOf(defaultDefaultLocation, parentPath))
     {
+      String lastSegment = locationPath.lastSegment();
+      if (!projectName.equals(lastSegment))
+      {
+        // Replicate the behavior of the manual import wizard for this strange case.
+        // https://bugs.eclipse.org/bugs/show_bug.cgi?id=538128
+        project = root.getProject(lastSegment);
+        projectName = lastSegment;
+        if (project.exists())
+        {
+          return importExistingProject(project, projectName, location);
+        }
+      }
+
       locationPath = null;
     }
+
+    monitor.setTaskName("Importing project " + projectName);
 
     IProjectDescription projectDescription = workspace.newProjectDescription(projectName);
     projectDescription.setLocation(locationPath);
@@ -289,6 +295,18 @@ public final class ResourcesUtil
     }
 
     return ImportResult.IMPORTED;
+  }
+
+  private static ImportResult importExistingProject(IProject project, String projectName, File location) throws IOException
+  {
+    File existingLocation = new File(project.getLocation().toOSString()).getCanonicalFile();
+    if (!existingLocation.equals(location))
+    {
+      ResourcesPlugin.INSTANCE.log("Project " + projectName + " exists in different location: " + existingLocation);
+      return ImportResult.EXISTED_DIFFERENT_LOCATION;
+    }
+
+    return ImportResult.EXISTED;
   }
 
   @SuppressWarnings("restriction")
