@@ -23,6 +23,7 @@ import org.eclipse.equinox.internal.p2.ui.dialogs.UserValidationDialog;
 import org.eclipse.equinox.internal.p2.ui.viewers.CertificateLabelProvider;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.p2.ui.LoadMetadataRepositoryJob;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -284,6 +285,16 @@ public class P2ServiceUI extends UIServices
               if (parent instanceof Shell)
               {
                 result[0] = (Shell)parent;
+              }
+            }
+
+            // During a self-update, there will be a progress dialog and if it's not the parent of any created dialog, that dialog will be unusable.
+            for (Shell child : result[0].getShells())
+            {
+              if (child.isVisible() && child.getData() instanceof Dialog)
+              {
+                result[0] = child;
+                break;
               }
             }
           }
