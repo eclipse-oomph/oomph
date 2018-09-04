@@ -13,6 +13,8 @@
 
 <plugin>
 
+   <extension-point id="deferredEarlyStart" name="Deferred Early Start" schema="schema/deferredEarlyStart.exsd"/>
+
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -111,6 +113,12 @@
             properties="showOffline"
             type="java.lang.Object">
       </propertyTester>
+   </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.eclipse.oomph.internal.ui.EarlyStart">
+      </startup>
    </extension>
 
 </plugin>

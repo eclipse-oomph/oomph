@@ -14,10 +14,8 @@
 <plugin>
 
    <extension
-         point="org.eclipse.ui.startup">
-      <startup
-            class="org.eclipse.oomph.targlets.internal.ui.EarlyStartup">
-      </startup>
+         point="org.eclipse.oomph.ui.deferredEarlyStart">
+      <startup class="org.eclipse.oomph.targlets.internal.ui.EarlyStartup"/>
    </extension>
 
    <extension

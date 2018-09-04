@@ -101,10 +101,8 @@
    </extension>
 
    <extension
-         point="org.eclipse.ui.startup">
-      <startup
-            class="org.eclipse.oomph.projectconfig.presentation.sync.ProjectConfigSynchronizer">
-      </startup>
+         point="org.eclipse.oomph.ui.deferredEarlyStart">
+      <startup class="org.eclipse.oomph.projectconfig.presentation.sync.ProjectConfigSynchronizer"/>
    </extension>
 
 </plugin>

@@ -17,10 +17,8 @@
    <extension-point id="preferencePolicies" name="Preference Policies" schema="schema/preferencePolicies.exsd"/>
 
    <extension
-         point="org.eclipse.ui.startup">
-      <startup
-            class="org.eclipse.oomph.setup.ui.EarlyStartup">
-      </startup>
+         point="org.eclipse.oomph.ui.deferredEarlyStart">
+      <startup class="org.eclipse.oomph.setup.ui.EarlyStartup"/>
    </extension>
 
    <extension

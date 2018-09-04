@@ -46,12 +46,10 @@
       </decorator>
       -->
    </extension>
-   
+
    <extension
-         point="org.eclipse.ui.startup">
-      <startup
-            class="org.eclipse.oomph.launches.EarlyStartup">
-      </startup>
+         point="org.eclipse.oomph.ui.deferredEarlyStart">
+      <startup class="org.eclipse.oomph.launches.EarlyStartup"/>
    </extension>
 
 </plugin>
