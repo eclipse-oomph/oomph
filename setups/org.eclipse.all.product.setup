@@ -22,6 +22,13 @@
   <version name="latest"
       label="Latest (2018-09)"
       requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/2018-09/rc1</value>
+      </detail>
+    </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2018-09)">
@@ -68,7 +75,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
+        <value>https://www.eclipse.org/downloads/packages/release/photon/r</value>
       </detail>
     </annotation>
     <setupTask
@@ -113,6 +120,13 @@
   <version name="2018-09"
       label="2018-09"
       requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/2018-09/rc1</value>
+      </detail>
+    </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2018-09)">
@@ -159,7 +173,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Photon/R</value>
+        <value>https://www.eclipse.org/downloads/packages/release/photon/r</value>
       </detail>
     </annotation>
     <setupTask
@@ -208,7 +222,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Oxygen/3A</value>
+        <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a</value>
       </detail>
     </annotation>
     <setupTask
@@ -257,7 +271,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Neon/3</value>
+        <value>https://www.eclipse.org/downloads/packages/release/neon/3</value>
       </detail>
     </annotation>
     <setupTask
@@ -306,7 +320,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Mars/2</value>
+        <value>https://www.eclipse.org/downloads/packages/release/mars/2</value>
       </detail>
     </annotation>
     <setupTask
@@ -353,7 +367,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Luna/SR2</value>
+        <value>https://www.eclipse.org/downloads/packages/release/luna/sr2</value>
       </detail>
     </annotation>
     <setupTask
@@ -398,7 +412,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Kepler/SR2</value>
+        <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2</value>
       </detail>
     </annotation>
     <setupTask
@@ -445,7 +459,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/Juno/SR2</value>
+        <value>https://www.eclipse.org/downloads/packages/release/juno/sr2</value>
       </detail>
     </annotation>
     <setupTask

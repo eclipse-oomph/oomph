@@ -115,7 +115,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final String ICON_URL_PREFIX = "http://www.eclipse.org/downloads/images/";
 
-  private static final URI PACKAGES_URI = URI.createURI("https://www.eclipse.org/downloads/packages/");
+  private static final URI PACKAGES_URI = URI.createURI("https://www.eclipse.org/downloads/packages/release/");
 
   private static final String ICON_DEFAULT = ICON_URL_PREFIX + "committers.png";
 
@@ -1578,45 +1578,50 @@ public class ProductCatalogGenerator implements IApplication
 
   private void getPackageBrandingSites()
   {
-    InputStream packages = null;
-    try
+    PackageLocationLoader packageLocationLoader = new PackageLocationLoader(this);
+    Set<URI> locations = new LinkedHashSet<URI>();
+    for (String train : getTrains())
     {
-      URL packagesURL = new URL(PACKAGES_URI.toString());
-      packages = packagesURL.openStream();
-      List<String> lines = IOUtil.readLines(packages, "UTF-8");
-      Pattern pattern = Pattern.compile("<a href=\"([^\"]+)\"[^>]*><span>([\\w]+)</span> Packages</a></span>");
-      PackageLocationLoader packageLocationLoader = new PackageLocationLoader(this);
-      Set<URI> locations = new LinkedHashSet<URI>();
-      for (String line : lines)
+      InputStream packages = null;
+      try
       {
-        Matcher matcher = pattern.matcher(line);
-        if (matcher.find())
+        URI packagesURI = PACKAGES_URI.trimSegments(1).appendSegment(train).appendSegment("");
+        URL packagesURL = new URL(packagesURI.toString());
+        packages = packagesURL.openStream();
+        List<String> lines = IOUtil.readLines(packages, "UTF-8");
+        Pattern pattern = Pattern.compile("<li class=\"[0-9][^>]+><a href=\"([^\"]+)\"[^>]*>([\\w]+) Packages</a></li>");
+        for (String line : lines)
         {
-          URI siteURI = URI.createURI(matcher.group(1));
-          String releaseName = matcher.group(2);
-          System.out.println(releaseName + " -> " + siteURI);
-          Map<URI, Map<String, URI>> releaseLocations = new LinkedHashMap<URI, Map<String, URI>>();
-          Map<String, URI> packageLocations = new LinkedHashMap<String, URI>();
-          releaseLocations.put(siteURI, packageLocations);
-          sites.put(releaseName.toLowerCase(), releaseLocations);
-          locations.add(siteURI);
+          Matcher matcher = pattern.matcher(line);
+          if (matcher.find())
+          {
+            URI siteURI = URI.createURI(matcher.group(1)).resolve(PACKAGES_URI);
+            System.out.println(train + " -> " + siteURI);
+            Map<URI, Map<String, URI>> releaseLocations = new LinkedHashMap<URI, Map<String, URI>>();
+            Map<String, URI> packageLocations = new LinkedHashMap<String, URI>();
+            releaseLocations.put(siteURI, packageLocations);
+            sites.put(train, releaseLocations);
+            locations.add(siteURI);
+            break;
+          }
         }
+
       }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+      }
+      finally
+      {
+        IOUtil.closeSilent(packages);
+      }
+    }
 
-      URI releasePackages = URI.createURI("http://download.eclipse.org/eclipse/downloads/");
-      getPlatformPackageBrandingSites(releasePackages);
-      getPlatformPackageBrandingSites(URI.createURI("http://archive.eclipse.org/eclipse/downloads/"));
+    URI releasePackages = URI.createURI("http://download.eclipse.org/eclipse/downloads/");
+    getPlatformPackageBrandingSites(releasePackages);
+    getPlatformPackageBrandingSites(URI.createURI("http://archive.eclipse.org/eclipse/downloads/"));
 
-      packageLocationLoader.perform(locations);
-    }
-    catch (Exception ex)
-    {
-      ex.printStackTrace();
-    }
-    finally
-    {
-      IOUtil.closeSilent(packages);
-    }
+    packageLocationLoader.perform(locations);
   }
 
   private void getGeneralPackageBrandingSites(URI releasePackages)
@@ -1627,7 +1632,9 @@ public class ProductCatalogGenerator implements IApplication
       URL releasePackagesURL = new URL(releasePackages.toString());
       inputStream = releasePackagesURL.openStream();
       List<String> lines = IOUtil.readLines(inputStream, "UTF-8");
-      Pattern pattern = Pattern.compile("<div class='package-teaser-title'><a href=\"([^\"]+)\">([^<]+)</a></div>");
+      Pattern pattern = Pattern.compile("^\\s+<a href=\"([^\"]+)\" title=[^>]*>([^<]+)</a>\\s*$");
+      // <a href="/downloads/packages/release/oxygen/3a/eclipse-ide-eclipse-committers" title="Eclipse IDE for Eclipse Committers">Eclipse IDE for Eclipse
+      // Committers</a>
       for (String line : lines)
       {
         Matcher matcher = pattern.matcher(line);
@@ -1638,7 +1645,7 @@ public class ProductCatalogGenerator implements IApplication
           URI packageURI = URI.createURI(matcher.group(1));
           if (packageURI.isRelative())
           {
-            packageURI = packageURI.resolve(PACKAGES_URI);
+            packageURI = packageURI.resolve(releasePackages);
           }
 
           synchronized (sites)
