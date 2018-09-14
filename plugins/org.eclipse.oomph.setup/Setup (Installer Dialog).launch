@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
 <setAttribute key="additional_plugins">
-<setEntry value="org.eclipse.equinox.p2.artifact.repository:1.1.400.v20150513-2116:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.console:1.0.400.v20150423-1455:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.core:2.4.0.v20150527-1706:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.director.app:1.0.400.v20150423-1455:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.director:2.3.200.v20150423-1455:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.directorywatcher:1.1.100.v20150423-1455:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.discovery.compatibility:1.0.200.v20131211-1531:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.discovery:1.0.300.v20131210-1027:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.engine:2.4.0.v20150511-1532:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.extensionlocation:1.2.201.v20160129-0947:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.garbagecollector:1.0.200.v20131115-1210:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.jarprocessor:1.0.400.v20150430-1836:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.metadata.repository:1.2.200.v20150428-1613:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.metadata:2.3.0.v20150511-1532:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.operations:2.4.100.v20150423-1455:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.publisher.eclipse:1.2.0.v20150601-1708:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.publisher:1.4.0.v20141117-0929:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.reconciler.dropins:1.1.300.v20150423-1455:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.repository.tools:2.1.100.v20150423-1455:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.repository:2.3.100.v20150428-1613:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.touchpoint.eclipse:2.1.300.v20150423-1455:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.touchpoint.natives:1.2.0.v20150519-1136:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.transport.ecf:1.1.100.v20150521-1342:default:true"/>
-<setEntry value="org.eclipse.equinox.p2.updatesite:1.0.500.v20150423-1455:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.artifact.repository:1.2.100.v20180626-2028:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.console:1.1.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.core:2.5.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.director.app:1.1.200.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.director:2.4.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.directorywatcher:1.2.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.discovery.compatibility:1.1.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.discovery:1.1.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.engine:2.6.100.v20180612-1032:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.extensionlocation:1.3.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.garbagecollector:1.1.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.jarprocessor:1.1.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.metadata.repository:1.3.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.metadata:2.4.100.v20180613-1328:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.operations:2.5.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.publisher.eclipse:1.3.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.publisher:1.5.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.reconciler.dropins:1.2.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.repository.tools:2.2.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.repository:2.4.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.touchpoint.eclipse:2.2.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.touchpoint.natives:1.3.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.transport.ecf:1.2.100.v20180611-1351:default:true"/>
+<setEntry value="org.eclipse.equinox.p2.updatesite:1.1.100.v20180611-1351:default:true"/>
 </setAttribute>
 <booleanAttribute key="append.args" value="true"/>
 <booleanAttribute key="askclear" value="false"/>
@@ -42,10 +42,6 @@
 <booleanAttribute key="generateProfile" value="true"/>
 <booleanAttribute key="includeOptional" value="true"/>
 <stringAttribute key="location" value="@none"/>
-<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
-<listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
-<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
-</listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog"/>
