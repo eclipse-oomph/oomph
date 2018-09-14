@@ -184,6 +184,12 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
       <choice
+          value="2018-12"
+          label="Eclipse 2018-12 - 4.10"/>
+      <choice
+          value="2018-09"
+          label="Eclipse 2018-09 - 4.9"/>
+      <choice
           value="Photon"
           label="Eclipse Photon- 4.8"/>
       <choice
