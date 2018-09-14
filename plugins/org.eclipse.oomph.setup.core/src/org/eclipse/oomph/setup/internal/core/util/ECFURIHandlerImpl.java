@@ -95,6 +95,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -1015,6 +1016,15 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
               return httpCookie;
             }
           });
+
+          // The following ensures that more permissive date patterns are used to parse the expiration date of cookies.
+          Object defaultParameters = ReflectUtil.getValue("defaultParams", httpClient);
+          @SuppressWarnings("deprecation")
+          String[] permissiveDatePatterns = ReflectUtil.getValue("DEFAULT_DATE_PATTERNS", org.apache.http.impl.cookie.BrowserCompatSpec.class);
+          @SuppressWarnings("deprecation")
+          String datePatternsParameterName = org.apache.http.cookie.params.CookieSpecPNames.DATE_PATTERNS;
+          ReflectUtil.invokeMethod(ReflectUtil.getMethod(defaultParameters, "setParameter", String.class, Object.class), defaultParameters,
+              datePatternsParameterName, Arrays.asList(permissiveDatePatterns));
         }
       }
       catch (Throwable throwable)
