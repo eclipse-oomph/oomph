@@ -97,7 +97,7 @@ public abstract class OS
   public int getBitness()
   {
     String osgiArch = getOsgiArch();
-    if (Platform.ARCH_IA64_32.equals(osgiArch) || Platform.ARCH_X86.equals(osgiArch))
+    if (Platform.ARCH_X86.equals(osgiArch))
     {
       return 32;
     }
@@ -606,22 +606,12 @@ public abstract class OS
         {
           return createLinux(Platform.ARCH_X86);
         }
-
-        if (Platform.ARCH_IA64.equals(osgiArch))
-        {
-          return createLinux(Platform.ARCH_IA64_32);
-        }
       }
       else
       {
         if (Platform.ARCH_X86.equals(osgiArch))
         {
           return createLinux(Platform.ARCH_X86_64);
-        }
-
-        if (Platform.ARCH_IA64_32.equals(osgiArch))
-        {
-          return createLinux(Platform.ARCH_IA64);
         }
       }
 
