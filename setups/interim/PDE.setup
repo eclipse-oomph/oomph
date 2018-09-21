@@ -102,6 +102,8 @@
           name="CBI">
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
+        <repository
+            url="http://download.eclipse.org/reddeer/snapshots"/>
       </repositoryList>
     </targlet>
   </setupTask>
@@ -221,7 +223,7 @@
               project="org.eclipse.pde"/>
           <operand
               xsi:type="predicates:NamePredicate"
-              pattern=".*\.tests"/>
+              pattern=".*\.tests.*"/>
         </predicate>
       </workingSet>
     </setupTask>

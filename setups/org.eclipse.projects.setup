@@ -337,7 +337,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.release.p2"
-        value="http://download.eclipse.org/eclipse/updates/4.8/R-4.8-201806110500"
+        value="http://download.eclipse.org/eclipse/updates/4.9/R-4.9-201809060745"
         label="Eclipse Latest Release p2 Repository - 4.8">
       <description>The update site of the latest released Eclipse project's builds, always an R-Build for the most recent release</description>
     </setupTask>
@@ -393,7 +393,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest"
-        value="2018-09"
+        value="2018-12"
         storageURI="scope://Workspace"
         label="Target Platform Latest">
       <annotation
@@ -403,7 +403,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest.released"
-        value="Photon"
+        value="2018-12"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -459,7 +459,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.api.baseline.target.platform.latest.released"
-        value="Photon"
+        value="2018-09"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -530,7 +530,7 @@
       <repositoryList
           name="2018-09">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.9-I-builds"/>
+            url="http://download.eclipse.org/eclipse/updates/4.9/R-4.9-201809060745"/>
       </repositoryList>
       <repositoryList
           name="Photon">
@@ -603,7 +603,7 @@
       <repositoryList
           name="2018-09">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.9-I-builds"/>
+            url="http://download.eclipse.org/eclipse/updates/4.9/R-4.9-201809060745"/>
       </repositoryList>
       <repositoryList
           name="Photon">
