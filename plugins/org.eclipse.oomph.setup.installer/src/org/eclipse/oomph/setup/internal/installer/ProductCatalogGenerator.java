@@ -141,6 +141,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private boolean stagingEPPLocationIsActual;
 
+  private boolean latestReleased;
+
   private boolean stagingUseComposite;
 
   private List<String> compositeTrains = new ArrayList<String>();
@@ -166,8 +168,6 @@ public class ProductCatalogGenerator implements IApplication
   private final String[] TRAINS = getTrains();
 
   private final String LATEST_TRAIN = TRAINS[TRAINS.length - 1];
-
-  private final boolean LATEST_RELEASED = !testNewUnreleasedProduct() && isLatestReleased();
 
   public Object start(IApplicationContext context) throws Exception
   {
@@ -245,6 +245,10 @@ public class ProductCatalogGenerator implements IApplication
         else if ("-actual".equals(option))
         {
           stagingEPPLocationIsActual = true;
+        }
+        else if ("-latestReleased".equals(option))
+        {
+          latestReleased = true;
         }
         else if ("-useComposite".equals(option))
         {
@@ -330,12 +334,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private boolean isLatestReleased()
   {
-    return false;
-  }
-
-  private boolean testNewUnreleasedProduct()
-  {
-    return false;
+    return latestReleased;
   }
 
   public void generate()
@@ -369,15 +368,6 @@ public class ProductCatalogGenerator implements IApplication
               .getLocation().toString())).toString();
 
       new RepositoryLoader(this).perform(TRAINS);
-
-      if (testNewUnreleasedProduct())
-      {
-        List<TrainAndVersion> list = new ArrayList<TrainAndVersion>();
-        list.add(new TrainAndVersion("mars", null, null, null, null));
-
-        trainsAndVersions.put("test.product", list);
-        labels.put("test.product", "Eclipse Test Product");
-      }
 
       System.out.println("#################################################################################################################");
       System.out.println();
@@ -502,11 +492,6 @@ public class ProductCatalogGenerator implements IApplication
   private void generateProduct(String id)
   {
     String label = labels.get(id);
-    if (id.contains(".rust"))
-    {
-      label = "Eclipse IDE for Rust Developers";
-    }
-
     String p2TaskLabel = label;
 
     List<TrainAndVersion> list = trainsAndVersions.get(id);
@@ -523,7 +508,7 @@ public class ProductCatalogGenerator implements IApplication
     // label += " (discontinued after " + latestTrainLabel + ")";
     // }
 
-    boolean latestUnreleased = latestTrain == LATEST_TRAIN && !LATEST_RELEASED;
+    boolean latestUnreleased = latestTrain == LATEST_TRAIN && !isLatestReleased();
     // if (latestUnreleased && size == 1)
     // {
     // label += " (unreleased before " + latestTrainLabel + ")";
@@ -637,7 +622,7 @@ public class ProductCatalogGenerator implements IApplication
       IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, originalEPPURI, isStaging ? stagingTrainLocation : releaseURI,
           !compositeTrains.contains(train) && (!isStaging || !stagingUseComposite));
       releaseURI = trimEmptyTrailingSegment(URI.createURI(releaseMetaDataRepository.getLocation().toString()));
-      if (isStaging && stagingUseComposite)
+      if (compositeTrains.contains(train) || isStaging && stagingUseComposite)
       {
         releaseURI = releaseURI.trimSegments(1);
       }
