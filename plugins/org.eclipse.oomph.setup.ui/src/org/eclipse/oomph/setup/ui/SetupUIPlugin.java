@@ -82,7 +82,6 @@ import org.eclipse.jface.text.templates.TemplateContext;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.TemplateVariableResolver;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.text.templates.ContextTypeRegistry;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -303,10 +302,10 @@ public final class SetupUIPlugin extends OomphUIPlugin
       boolean hasJDTUserName = !StringUtil.isEmpty(System.getProperty("jdt.user.name"));
       Class<?> javaUIPluginClass = CommonPlugin.loadClass("org.eclipse.jdt.ui", "org.eclipse.jdt.internal.ui.JavaPlugin");
       Object javaUIPlugin = ReflectUtil.invokeMethod("getDefault", javaUIPluginClass);
-      ContextTypeRegistry codeTemplateContextRegistry = ReflectUtil.invokeMethod("getCodeTemplateContextRegistry", javaUIPlugin);
+      Object codeTemplateContextRegistry = ReflectUtil.invokeMethod("getCodeTemplateContextRegistry", javaUIPlugin);
 
       for (@SuppressWarnings("all")
-      Iterator<TemplateContextType> it = codeTemplateContextRegistry.contextTypes(); it.hasNext();)
+      Iterator<TemplateContextType> it = ReflectUtil.invokeMethod("contentTypes", codeTemplateContextRegistry); it.hasNext();)
       {
         TemplateContextType templateContextType = it.next();
         for (@SuppressWarnings("all")
