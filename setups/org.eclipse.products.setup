@@ -42,27 +42,27 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java Developers (2018-09)">
+          label="Eclipse IDE for Java Developers (2018-12)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -110,9 +110,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -188,6 +188,81 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java Developers (2018-12)">
+        <requirement
+            name="epp.package.java"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.buildship.feature.group"/>
+        <requirement
+            name="org.eclipse.eclemma.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jgit.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.logback.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.news.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tips.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -621,27 +696,27 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-java-ee-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (2018-09)">
+          label="Eclipse IDE for Java EE Developers (2018-12)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -819,9 +894,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -1027,6 +1102,211 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java EE Developers (2018-12)">
+        <requirement
+            name="epp.package.jee"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.buildship.feature.group"/>
+        <requirement
+            name="org.eclipse.cft.server.core.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.cft.server.ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.common.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.designer.core.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.designer.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.apache.derby.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.hsqldb.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.ibm.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.ingres.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.jdbc.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.jdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.msft.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.mysql.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oda.designer.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oda.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oracle.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.postgresql.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sap.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sqlite.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sybase.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.intro.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.modelbase.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.data.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.ddl.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.ddlgen.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.parsers.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.results.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.schemaobjecteditor.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.sqlbuilder.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqltools.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.eclemma.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.common.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.common.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.dbws.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jaxb.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jaxb.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jpa.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jpa.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jsf.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.common.fproj.enablement.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.enterprise_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.jsf.apache.trinidad.tagsupport.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.server_adapters.ext.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.server_adapters.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.server_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.web_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.webpageeditor.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.ws.axis2tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.ws.cxf.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.ws.jaxws.dom.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.ws.jaxws.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.logback.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.wtp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.wtp.jaxrs.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.wtp.jpa.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.wtp.jsf.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tips.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.common.fproj.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.jsdt.chromium.debug.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.jsdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.server_adapters.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.web_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xsl.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -1892,27 +2172,27 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-cc-developers</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for C/C++ Developers (2018-09)">
+          label="Eclipse IDE for C/C++ Developers (2018-12)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.arduino.feature.group"/>
         <requirement
@@ -1986,9 +2266,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -2090,6 +2370,107 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-cc-developers</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for C/C++ Developers (2018-12)">
+        <requirement
+            name="epp.package.cpp"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.cdt.arduino.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.autotools.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.build.crossgcc.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.cmake.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.debug.gdbjtag.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.debug.standalone.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.debug.ui.memory.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.docker.launcher.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.launch.remote.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.launch.serial.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.meson.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.qt.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.cdt.libhover.devhelp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.cdt.libhover.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.changelog.c.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.gcov.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.gprof.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.rpm.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.valgrind.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tm.terminal.connector.cdtserial.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tracecompass.gdbtrace.feature.group"/>
+        <requirement
+            name="org.eclipse.tracecompass.lttng2.control.feature.group"/>
+        <requirement
+            name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
+        <requirement
+            name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -2591,27 +2972,27 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-javascript-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-javascript-and-web-developers</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (2018-09)">
+          label="Eclipse IDE for JavaScript and Web Developers (2018-12)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -2657,9 +3038,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -2733,6 +3114,79 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-javascript-and-web-developers</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for JavaScript and Web Developers (2018-12)">
+        <requirement
+            name="epp.package.javascript"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.gitflow.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.package.common.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.equinox.p2.user.ui.feature.group"/>
+        <requirement
+            name="org.eclipse.help.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.github.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tips.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.jsdt.chromium.debug.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.jsdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.json_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.server_adapters.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.server_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.web_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -3036,27 +3490,27 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for PHP Developers (2018-09)">
+          label="Eclipse IDE for PHP Developers (2018-12)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3096,9 +3550,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -3166,6 +3620,73 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for PHP Developers (2018-12)">
+        <requirement
+            name="epp.package.php"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.gitflow.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.github.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.php.composer.feature.group"/>
+        <requirement
+            name="org.eclipse.php.feature.group"/>
+        <requirement
+            name="org.eclipse.php.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.php.phpunit.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.php.profiler.feature.group"/>
+        <requirement
+            name="org.eclipse.php.rdt.sync.feature.group"/>
+        <requirement
+            name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.jsdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -3490,27 +4011,27 @@
       label="Eclipse IDE for Eclipse Committers">
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Eclipse Committers (2018-09)">
+          label="Eclipse IDE for Eclipse Committers (2018-12)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -3592,9 +4113,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -3704,6 +4225,115 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Eclipse Committers (2018-12)">
+        <requirement
+            name="epp.package.committers"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.buildship.feature.group"/>
+        <requirement
+            name="org.eclipse.cvs.feature.group"/>
+        <requirement
+            name="org.eclipse.e4.core.tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.eclemma.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.gitflow.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.source.feature.group"/>
+        <requirement
+            name="org.eclipse.jgit.http.apache.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.builds.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.notifications.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.discovery.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.gerrit.dashboard.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.gerrit.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.reviews.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"/>
+        <requirement
+            name="org.eclipse.pde.source.feature.group"/>
+        <requirement
+            name="org.eclipse.platform.source.feature.group"/>
+        <requirement
+            name="org.eclipse.rcp.source.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.news.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.json_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -4189,30 +4819,30 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-java-and-dsl-developers</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse DSL Tools (2018-09)">
+          label="Eclipse DSL Tools (2018-12)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.15.0,4.0.0)"/>
+            versionRange="[3.16.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
             versionRange="[3.13.0,4.0.0)"/>
@@ -4229,9 +4859,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -4279,6 +4909,53 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse DSL Tools (2018-12)">
+        <requirement
+            name="epp.package.dsl"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.16.0,3.17.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.13.0,3.15.0)"/>
+        <requirement
+            name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.mwe2.language.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.lsp4j.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.xtext.sdk.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -4618,27 +5295,27 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-java-and-report-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java and Report Developers (2018-09)">
+          label="Eclipse IDE for Java and Report Developers (2018-12)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
         <requirement
@@ -4786,9 +5463,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -4964,6 +5641,181 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Java and Report Developers (2018-12)">
+        <requirement
+            name="epp.package.reporting"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.birt.chart.cshelp.feature.group"/>
+        <requirement
+            name="org.eclipse.birt.cshelp.feature.group"/>
+        <requirement
+            name="org.eclipse.birt.doc.feature.group"/>
+        <requirement
+            name="org.eclipse.birt.example.feature.group"/>
+        <requirement
+            name="org.eclipse.birt.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.common.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.designer.core.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.designer.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.connectivity.oda.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.apache.derby.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.hsqldb.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.ibm.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.ingres.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.jdbc.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.jdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.msft.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.mysql.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oda.designer.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oda.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.oracle.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.postgresql.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sap.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sqlite.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.enablement.sybase.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.intro.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.modelbase.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.data.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.ddl.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.ddlgen.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.parsers.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.results.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.schemaobjecteditor.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqldevtools.sqlbuilder.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.datatools.sqltools.doc.user.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.common.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.common.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.dbws.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jaxb.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jaxb.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jpa.eclipselink.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jpt.jpa.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jsf.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.common.fproj.enablement.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.enterprise_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.jsf.apache.trinidad.tagsupport.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.server_adapters.ext.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.server_adapters.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.server_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.web_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.webpageeditor.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.ws.axis2tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.common.fproj.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.jsdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.server_adapters.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.web_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xsl.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -6681,30 +7533,30 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for RCP and RAP Developers (2018-09)">
+          label="Eclipse for RCP and RAP Developers (2018-12)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.15.0,4.0.0)"/>
+            versionRange="[3.16.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
             versionRange="[3.13.0,4.0.0)"/>
@@ -6759,9 +7611,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -6847,6 +7699,91 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-rcp-and-rap-developers</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for RCP and RAP Developers (2018-12)">
+        <requirement
+            name="epp.package.rcp"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"
+            versionRange="[3.16.0,3.17.0)"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"
+            versionRange="[3.13.0,3.15.0)"/>
+        <requirement
+            name="org.eclipse.buildship.feature.group"/>
+        <requirement
+            name="org.eclipse.e4.core.tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.eclemma.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.logback.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.gerrit.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.rap.tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.swtbot.eclipse.feature.group"/>
+        <requirement
+            name="org.eclipse.swtbot.eclipse.gef.feature.group"/>
+        <requirement
+            name="org.eclipse.swtbot.ide.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -7338,27 +8275,27 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-testers</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Testers (2018-09)">
+          label="Eclipse for Testers (2018-12)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
@@ -7374,9 +8311,9 @@
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -7420,6 +8357,49 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-testers</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Testers (2018-12)">
+        <requirement
+            name="epp.package.testing"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.jubula.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -7721,27 +8701,27 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (2018-09)">
+          label="Eclipse for Parallel Application Developers (2018-12)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -7797,9 +8777,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -7883,6 +8863,89 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Parallel Application Developers (2018-12)">
+        <requirement
+            name="epp.package.parallel"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.cdt.autotools.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.bupc.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.core.parser.upc.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.debug.ui.memory.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.platform.feature.group"/>
+        <requirement
+            name="org.eclipse.cdt.xlc.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.jgit.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.debug.sdm.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.fortran.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.pldt.upc.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.rdt.sync.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.remote.terminal.feature.group"/>
+        <requirement
+            name="org.eclipse.ptp.rm.jaxb.contrib.feature.group"/>
+        <requirement
+            name="org.eclipse.remote.console.feature.group"/>
+        <requirement
+            name="org.eclipse.remote.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -8569,27 +9632,27 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-scout-developers</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Scout Developers (2018-09)">
+          label="Eclipse for Scout Developers (2018-12)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -8627,9 +9690,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -8695,6 +9758,71 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-scout-developers</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse for Scout Developers (2018-12)">
+        <requirement
+            name="epp.package.scout"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.help.source.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.source.feature.group"/>
+        <requirement
+            name="org.eclipse.jgit.feature.group"/>
+        <requirement
+            name="org.eclipse.jst.web_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.scout.sdk-feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -9101,27 +10229,27 @@
       label="Eclipse IDE for Rust Developers">
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-rust-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Rust Developers (2018-09)">
+          label="Eclipse IDE for Rust Developers (2018-12)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
         <requirement
@@ -9149,9 +10277,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -9207,6 +10335,61 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse IDE for Rust Developers (2018-12)">
+        <requirement
+            name="epp.package.rust"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.corrosion.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.gitflow.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.mylyn.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.github.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -9323,29 +10506,29 @@
       label="Eclipse Platform">
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse Platform (2018-09)">
+          label="Eclipse Platform (2018-12)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -9373,6 +10556,33 @@
             versionRange="[4.9.0,4.10.0)"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Platform (2018-12)">
+        <requirement
+            name="org.eclipse.platform.ide"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,4.11.0)"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version

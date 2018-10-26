@@ -296,7 +296,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private String[] getTrains()
   {
-    return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09" };
+    return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12" };
   }
 
   private int compareTrains(String train1, String train2)
@@ -622,7 +622,7 @@ public class ProductCatalogGenerator implements IApplication
       IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, originalEPPURI, isStaging ? stagingTrainLocation : releaseURI,
           !compositeTrains.contains(train) && (!isStaging || !stagingUseComposite));
       releaseURI = trimEmptyTrailingSegment(URI.createURI(releaseMetaDataRepository.getLocation().toString()));
-      if (compositeTrains.contains(train) || isStaging && stagingUseComposite)
+      if (!compositeTrains.contains(train) && !isStaging && stagingUseComposite)
       {
         releaseURI = releaseURI.trimSegments(1);
       }
