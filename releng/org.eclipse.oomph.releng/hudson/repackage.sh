@@ -79,6 +79,7 @@ for f in *.zip; do
       rm -f unsigned.zip signed.zip
     fi
 
+    chmod -R a-st "Eclipse Installer.app"
     chmod a+x "Eclipse Installer.app/Contents/MacOS/eclipse-inst"
     tar -czf $PRODUCTS/eclipse-inst-mac$bitness.tar.gz "Eclipse Installer.app"
     ls -sailR "Eclipse Installer.app"
