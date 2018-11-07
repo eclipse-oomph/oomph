@@ -135,6 +135,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final String EPP_INSTALL_ROOTS_FILTER = "(org.eclipse.epp.install.roots=true)";
 
+  private static final boolean IS_RANGE_NARROW = Boolean.FALSE;
+
   private URI outputLocation;
 
   private String stagingTrain;
@@ -435,7 +437,10 @@ public class ProductCatalogGenerator implements IApplication
       System.out.println("#################################################################################################################");
       System.out.println();
 
-      checkVersionRanges(productCatalog);
+      if (IS_RANGE_NARROW)
+      {
+        checkVersionRanges(productCatalog);
+      }
       // addIntegrationVersions(productCatalog);
       postProcess(productCatalog);
 
@@ -544,9 +549,9 @@ public class ProductCatalogGenerator implements IApplication
       String releasedTrainLabel = getTrainLabel(releasedTrain);
       Version releasedVersion = releasedTrainAndVersion.getVersion();
 
-      addProductVersion(log, product, releasedVersion, VersionSegment.MINOR, releasedTrainAndVersion.getTrainURI(), releasedTrainAndVersion.getEPPURI(),
-          releasedTrain, eppMetaDataRepositories, "latest.released", "Latest Release (" + releasedTrainLabel + ")", p2TaskLabel,
-          releasedTrainAndVersion.getIUs(), emfRepositoryLocation);
+      addProductVersion(log, product, releasedVersion, IS_RANGE_NARROW ? VersionSegment.MINOR : VersionSegment.MAJOR, releasedTrainAndVersion.getTrainURI(),
+          releasedTrainAndVersion.getEPPURI(), releasedTrain, eppMetaDataRepositories, "latest.released", "Latest Release (" + releasedTrainLabel + ")",
+          p2TaskLabel, releasedTrainAndVersion.getIUs(), emfRepositoryLocation);
     }
 
     for (int i = 0; i < size; i++)
@@ -556,8 +561,8 @@ public class ProductCatalogGenerator implements IApplication
       String trainLabel = getTrainLabel(train);
       Version version = entry.getVersion();
 
-      addProductVersion(log, product, version, VersionSegment.MINOR, entry.getTrainURI(), entry.getEPPURI(), train, eppMetaDataRepositories, train, trainLabel,
-          p2TaskLabel, entry.getIUs(), emfRepositoryLocation);
+      addProductVersion(log, product, version, IS_RANGE_NARROW ? VersionSegment.MINOR : VersionSegment.MAJOR, entry.getTrainURI(), entry.getEPPURI(), train,
+          eppMetaDataRepositories, train, trainLabel, p2TaskLabel, entry.getIUs(), emfRepositoryLocation);
     }
 
     System.out.println(log);

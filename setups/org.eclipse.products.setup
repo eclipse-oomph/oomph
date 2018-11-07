@@ -131,13 +131,13 @@
           label="Eclipse IDE for Java Developers (2018-09)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -206,13 +206,13 @@
           label="Eclipse IDE for Java Developers (2018-12)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -281,13 +281,13 @@
           label="Eclipse IDE for Java Developers (2018-09)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -356,13 +356,13 @@
           label="Eclipse IDE for Java Developers (Photon)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -429,13 +429,13 @@
           label="Eclipse IDE for Java Developers (Oxygen)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -500,13 +500,13 @@
           label="Eclipse IDE for Java Developers (Neon)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -567,16 +567,16 @@
           label="Eclipse IDE for Java Developers (Mars)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -599,16 +599,16 @@
           label="Eclipse IDE for Java Developers (Luna)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -631,16 +631,16 @@
           label="Eclipse IDE for Java Developers (Kepler)">
         <requirement
             name="epp.package.java"
-            versionRange="[2.0.0,2.1.0)"/>
+            versionRange="[2.0.0,3.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
@@ -665,16 +665,16 @@
           label="Eclipse IDE for Java Developers (Juno)">
         <requirement
             name="epp.package.java"
-            versionRange="[1.5.0,1.6.0)"/>
+            versionRange="[1.5.0,2.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
@@ -915,13 +915,13 @@
           label="Eclipse IDE for Java EE Developers (2018-09)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -1120,13 +1120,13 @@
           label="Eclipse IDE for Java EE Developers (2018-12)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -1325,13 +1325,13 @@
           label="Eclipse IDE for Java EE Developers (2018-09)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -1530,13 +1530,13 @@
           label="Eclipse IDE for Java EE Developers (Photon)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -1733,13 +1733,13 @@
           label="Eclipse IDE for Java EE Developers (Oxygen)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -1884,13 +1884,13 @@
           label="Eclipse IDE for Java EE Developers (Neon)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cft.server.core.feature.feature.group"/>
         <requirement
@@ -2031,19 +2031,19 @@
           label="Eclipse IDE for Java EE Developers (Mars)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -2066,19 +2066,19 @@
           label="Eclipse IDE for Java EE Developers (Luna)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -2101,19 +2101,19 @@
           label="Eclipse IDE for Java EE Developers (Kepler)">
         <requirement
             name="epp.package.jee"
-            versionRange="[2.0.0,2.1.0)"/>
+            versionRange="[2.0.0,3.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
@@ -2138,19 +2138,19 @@
           label="Eclipse IDE for Java EE Developers (Juno)">
         <requirement
             name="epp.package.jee"
-            versionRange="[1.5.0,1.6.0)"/>
+            versionRange="[1.5.0,2.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
@@ -2159,7 +2159,12 @@
             url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
       </setupTask>
     </version>
-    <description>Tools for Java developers creating Java EE and Web applications, including a Java IDE, tools for Java EE, JPA, JSF, Mylyn, EGit and others.</description>
+    <description>
+      Tools for Java developers creating Enterprise Java and Web applications, including a Java IDE, tools for Enterprise Java, JPA, JSF, Mylyn, Maven, Git and more.&lt;br/>
+      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?classification=WebTools&quot;>here&lt;/a> to file a bug against Eclipse Web Tools Platform.&lt;br/>
+      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br/>
+      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=M2E-WTP&quot;>here&lt;/a> to file a bug against Maven integration for web projects.
+    </description>
   </product>
   <product name="epp.package.cpp"
       label="Eclipse IDE for C/C++ Developers">
@@ -2287,13 +2292,13 @@
           label="Eclipse IDE for C/C++ Developers (2018-09)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.arduino.feature.group"/>
         <requirement
@@ -2388,13 +2393,13 @@
           label="Eclipse IDE for C/C++ Developers (2018-12)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.arduino.feature.group"/>
         <requirement
@@ -2489,13 +2494,13 @@
           label="Eclipse IDE for C/C++ Developers (2018-09)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.arduino.feature.group"/>
         <requirement
@@ -2590,13 +2595,13 @@
           label="Eclipse IDE for C/C++ Developers (Photon)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.arduino.feature.group"/>
         <requirement
@@ -2689,13 +2694,13 @@
           label="Eclipse IDE for C/C++ Developers (Oxygen)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -2774,13 +2779,13 @@
           label="Eclipse IDE for C/C++ Developers (Neon)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -2855,13 +2860,13 @@
           label="Eclipse IDE for C/C++ Developers (Mars)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -2884,13 +2889,13 @@
           label="Eclipse IDE for C/C++ Developers (Luna)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -2913,13 +2918,13 @@
           label="Eclipse IDE for C/C++ Developers (Kepler)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[2.0.0,2.1.0)"/>
+            versionRange="[2.0.0,3.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
@@ -2944,13 +2949,13 @@
           label="Eclipse IDE for C/C++ Developers (Juno)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[1.5.0,1.6.0)"/>
+            versionRange="[1.5.0,2.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
@@ -3059,13 +3064,13 @@
           label="Eclipse IDE for JavaScript and Web Developers (2018-09)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3132,13 +3137,13 @@
           label="Eclipse IDE for JavaScript and Web Developers (2018-12)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3205,13 +3210,13 @@
           label="Eclipse IDE for JavaScript and Web Developers (2018-09)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3278,13 +3283,13 @@
           label="Eclipse IDE for JavaScript and Web Developers (Photon)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3349,13 +3354,13 @@
           label="Eclipse IDE for JavaScript and Web Developers (Oxygen)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3420,13 +3425,13 @@
           label="Eclipse IDE for JavaScript and Web Developers (Neon)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3571,13 +3576,13 @@
           label="Eclipse IDE for PHP Developers (2018-09)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3638,13 +3643,13 @@
           label="Eclipse IDE for PHP Developers (2018-12)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3705,13 +3710,13 @@
           label="Eclipse IDE for PHP Developers (2018-09)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3772,13 +3777,13 @@
           label="Eclipse IDE for PHP Developers (Photon)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3837,13 +3842,13 @@
           label="Eclipse IDE for PHP Developers (Oxygen)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3902,13 +3907,13 @@
           label="Eclipse IDE for PHP Developers (Neon)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3963,13 +3968,13 @@
           label="Eclipse IDE for PHP Developers (Mars)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -3992,13 +3997,13 @@
           label="Eclipse IDE for PHP Developers (Luna)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -4134,13 +4139,13 @@
           label="Eclipse IDE for Eclipse Committers (2018-09)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -4243,13 +4248,13 @@
           label="Eclipse IDE for Eclipse Committers (2018-12)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -4352,13 +4357,13 @@
           label="Eclipse IDE for Eclipse Committers (2018-09)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -4461,13 +4466,13 @@
           label="Eclipse IDE for Eclipse Committers (Photon)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -4568,13 +4573,13 @@
           label="Eclipse IDE for Eclipse Committers (Oxygen)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -4675,13 +4680,13 @@
           label="Eclipse IDE for Eclipse Committers (Neon)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -4782,19 +4787,19 @@
           label="Eclipse IDE for Eclipse Committers (Mars)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -4880,19 +4885,19 @@
           label="Eclipse DSL Tools (2018-09)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.15.0,3.16.0)"/>
+            versionRange="[3.15.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,3.14.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
         <requirement
@@ -4927,19 +4932,19 @@
           label="Eclipse DSL Tools (2018-12)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.16.0,3.17.0)"/>
+            versionRange="[3.16.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,3.15.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
         <requirement
@@ -4974,19 +4979,19 @@
           label="Eclipse DSL Tools (2018-09)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.15.0,3.16.0)"/>
+            versionRange="[3.15.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,3.14.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
         <requirement
@@ -5021,19 +5026,19 @@
           label="Eclipse DSL Tools (Photon)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.14.0,3.15.0)"/>
+            versionRange="[3.14.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,3.14.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
         <requirement
@@ -5066,19 +5071,19 @@
           label="Eclipse DSL Tools (Oxygen)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.13.0,3.14.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,3.14.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
         <requirement
@@ -5111,19 +5116,19 @@
           label="Eclipse DSL Tools (Neon)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.12.0,3.13.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.12.0,3.13.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <requirement
             name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
         <requirement
@@ -5154,19 +5159,19 @@
           label="Eclipse DSL Tools (Mars)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -5189,19 +5194,19 @@
           label="Eclipse DSL Tools (Luna)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -5224,19 +5229,19 @@
           label="Eclipse DSL Tools (Kepler)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[2.0.0,2.1.0)"/>
+            versionRange="[2.0.0,3.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
@@ -5261,19 +5266,19 @@
           label="Eclipse DSL Tools (Juno)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[1.5.0,1.6.0)"/>
+            versionRange="[1.5.0,2.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
@@ -5484,13 +5489,13 @@
           label="Eclipse IDE for Java and Report Developers (2018-09)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
         <requirement
@@ -5659,13 +5664,13 @@
           label="Eclipse IDE for Java and Report Developers (2018-12)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
         <requirement
@@ -5834,13 +5839,13 @@
           label="Eclipse IDE for Java and Report Developers (2018-09)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
         <requirement
@@ -6009,13 +6014,13 @@
           label="Eclipse IDE for Java and Report Developers (Photon)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
         <requirement
@@ -6182,13 +6187,13 @@
           label="Eclipse IDE for Java and Report Developers (Oxygen)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
         <requirement
@@ -6305,13 +6310,13 @@
           label="Eclipse IDE for Java and Report Developers (Neon)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
         <requirement
@@ -6428,19 +6433,19 @@
           label="Eclipse IDE for Java and Report Developers (Mars)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -6463,19 +6468,19 @@
           label="Eclipse IDE for Java and Report Developers (Luna)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -6498,19 +6503,19 @@
           label="Eclipse IDE for Java and Report Developers (Kepler)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[2.0.0,2.1.0)"/>
+            versionRange="[2.0.0,3.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
@@ -6535,19 +6540,19 @@
           label="Eclipse IDE for Java and Report Developers (Juno)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[1.5.0,1.6.0)"/>
+            versionRange="[1.5.0,2.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
@@ -6680,13 +6685,13 @@
           label="Eclipse Modeling Tools (2018-09)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -6777,13 +6782,13 @@
           label="Eclipse Modeling Tools (2018-09)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -6874,13 +6879,13 @@
           label="Eclipse Modeling Tools (Photon)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -6969,13 +6974,13 @@
           label="Eclipse Modeling Tools (Oxygen)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.amalgam.discovery.feature.group"/>
         <requirement
@@ -7064,13 +7069,13 @@
           label="Eclipse Modeling Tools (Neon)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.amalgam.discovery.feature.group"/>
         <requirement
@@ -7159,19 +7164,19 @@
           label="Eclipse Modeling Tools (Mars)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -7194,19 +7199,19 @@
           label="Eclipse Modeling Tools (Luna)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -7229,19 +7234,19 @@
           label="Eclipse Modeling Tools (Kepler)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[2.0.0,2.1.0)"/>
+            versionRange="[2.0.0,3.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
@@ -7266,19 +7271,19 @@
           label="Eclipse Modeling Tools (Juno)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[1.5.0,1.6.0)"/>
+            versionRange="[1.5.0,2.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
@@ -7386,13 +7391,13 @@
           label="Eclipse for Android Developers (Neon)">
         <requirement
             name="epp.package.android"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.andmore.android.basic.feature.feature.group"/>
         <requirement
@@ -7461,13 +7466,13 @@
           label="Eclipse for Android Developers (Neon)">
         <requirement
             name="epp.package.android"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.andmore.android.basic.feature.feature.group"/>
         <requirement
@@ -7632,19 +7637,19 @@
           label="Eclipse for RCP and RAP Developers (2018-09)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.15.0,3.16.0)"/>
+            versionRange="[3.15.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,3.14.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -7717,19 +7722,19 @@
           label="Eclipse for RCP and RAP Developers (2018-12)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.16.0,3.17.0)"/>
+            versionRange="[3.16.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,3.15.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -7802,19 +7807,19 @@
           label="Eclipse for RCP and RAP Developers (2018-09)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.15.0,3.16.0)"/>
+            versionRange="[3.15.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,3.14.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -7887,19 +7892,19 @@
           label="Eclipse for RCP and RAP Developers (Photon)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.14.0,3.15.0)"/>
+            versionRange="[3.14.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,3.14.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -7970,19 +7975,19 @@
           label="Eclipse for RCP and RAP Developers (Oxygen)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.13.0,3.14.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,3.14.0)"/>
+            versionRange="[3.13.0,4.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -8053,19 +8058,19 @@
           label="Eclipse for RCP and RAP Developers (Neon)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.12.0,3.13.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.12.0,3.13.0)"/>
+            versionRange="[3.12.0,4.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -8134,19 +8139,19 @@
           label="Eclipse for RCP and RAP Developers (Mars)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -8169,19 +8174,19 @@
           label="Eclipse for RCP and RAP Developers (Luna)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -8204,19 +8209,19 @@
           label="Eclipse for RCP and RAP Developers (Kepler)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[2.0.0,2.1.0)"/>
+            versionRange="[2.0.0,3.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
@@ -8241,19 +8246,19 @@
           label="Eclipse for RCP and RAP Developers (Juno)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[1.5.0,1.6.0)"/>
+            versionRange="[1.5.0,2.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
@@ -8332,13 +8337,13 @@
           label="Eclipse for Testers (2018-09)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
@@ -8375,13 +8380,13 @@
           label="Eclipse for Testers (2018-12)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
@@ -8418,13 +8423,13 @@
           label="Eclipse for Testers (2018-09)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
@@ -8461,13 +8466,13 @@
           label="Eclipse for Testers (Photon)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jubula.feature.feature.group"/>
         <requirement
@@ -8502,13 +8507,13 @@
           label="Eclipse for Testers (Oxygen)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jubula.feature.feature.group"/>
         <requirement
@@ -8543,13 +8548,13 @@
           label="Eclipse for Testers (Neon)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jubula.feature.feature.group"/>
         <requirement
@@ -8584,13 +8589,13 @@
           label="Eclipse for Testers (Mars)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -8613,13 +8618,13 @@
           label="Eclipse for Testers (Luna)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -8642,13 +8647,13 @@
           label="Eclipse for Testers (Kepler)">
         <requirement
             name="epp.package.testing"
-            versionRange="[2.0.0,2.1.0)"/>
+            versionRange="[2.0.0,3.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
@@ -8673,13 +8678,13 @@
           label="Eclipse for Testers (Juno)">
         <requirement
             name="epp.package.testing"
-            versionRange="[1.5.0,1.6.0)"/>
+            versionRange="[1.5.0,2.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
@@ -8798,13 +8803,13 @@
           label="Eclipse for Parallel Application Developers (2018-09)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -8881,13 +8886,13 @@
           label="Eclipse for Parallel Application Developers (2018-12)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -8964,13 +8969,13 @@
           label="Eclipse for Parallel Application Developers (2018-09)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -9047,13 +9052,13 @@
           label="Eclipse for Parallel Application Developers (Photon)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -9128,13 +9133,13 @@
           label="Eclipse for Parallel Application Developers (Oxygen)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -9209,13 +9214,13 @@
           label="Eclipse for Parallel Application Developers (Neon)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -9290,13 +9295,13 @@
           label="Eclipse for Parallel Application Developers (Mars)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -9319,13 +9324,13 @@
           label="Eclipse for Parallel Application Developers (Luna)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -9348,13 +9353,13 @@
           label="Eclipse for Parallel Application Developers (Kepler)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[2.0.0,2.1.0)"/>
+            versionRange="[2.0.0,3.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
@@ -9379,13 +9384,13 @@
           label="Eclipse for Parallel Application Developers (Juno)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[1.5.0,1.6.0)"/>
+            versionRange="[1.5.0,2.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
@@ -9456,19 +9461,19 @@
           label="Eclipse IDE for Automotive Software Developers (Mars)">
         <requirement
             name="epp.package.automotive"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -9491,19 +9496,19 @@
           label="Eclipse IDE for Automotive Software Developers (Mars)">
         <requirement
             name="epp.package.automotive"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -9526,19 +9531,19 @@
           label="Eclipse IDE for Automotive Software Developers (Luna)">
         <requirement
             name="epp.package.automotive"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -9561,19 +9566,19 @@
           label="Eclipse IDE for Automotive Software Developers (Kepler)">
         <requirement
             name="epp.package.automotive"
-            versionRange="[2.0.0,2.1.0)"/>
+            versionRange="[2.0.0,3.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
@@ -9598,19 +9603,19 @@
           label="Eclipse IDE for Automotive Software Developers (Juno)">
         <requirement
             name="epp.package.automotive"
-            versionRange="[1.5.0,1.6.0)"/>
+            versionRange="[1.5.0,2.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
@@ -9711,13 +9716,13 @@
           label="Eclipse for Scout Developers (2018-09)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -9776,13 +9781,13 @@
           label="Eclipse for Scout Developers (2018-12)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -9841,13 +9846,13 @@
           label="Eclipse for Scout Developers (2018-09)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -9906,13 +9911,13 @@
           label="Eclipse for Scout Developers (Photon)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -9969,13 +9974,13 @@
           label="Eclipse for Scout Developers (Oxygen)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -10032,13 +10037,13 @@
           label="Eclipse for Scout Developers (Neon)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -10095,19 +10100,19 @@
           label="Eclipse for Scout Developers (Mars)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.11.0,3.12.0)"/>
+            versionRange="[3.11.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
@@ -10130,19 +10135,19 @@
           label="Eclipse for Scout Developers (Luna)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -10165,19 +10170,19 @@
           label="Eclipse for Scout Developers (Kepler)">
         <requirement
             name="epp.package.scout"
-            versionRange="[2.0.0,2.1.0)"/>
+            versionRange="[2.0.0,3.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
@@ -10202,19 +10207,19 @@
           label="Eclipse for Scout Developers (Juno)">
         <requirement
             name="epp.package.scout"
-            versionRange="[1.5.0,1.6.0)"/>
+            versionRange="[1.5.0,2.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.8.0,3.9.0)"/>
+            versionRange="[3.8.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
@@ -10298,13 +10303,13 @@
           label="Eclipse IDE for Rust Developers (2018-09)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
         <requirement
@@ -10353,13 +10358,13 @@
           label="Eclipse IDE for Rust Developers (2018-12)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
         <requirement
@@ -10408,13 +10413,13 @@
           label="Eclipse IDE for Rust Developers (2018-09)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
         <requirement
@@ -10463,13 +10468,13 @@
           label="Eclipse IDE for Rust Developers (Photon)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
         <requirement
@@ -10547,13 +10552,13 @@
           label="Eclipse Platform (2018-09)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
       </setupTask>
@@ -10574,13 +10579,13 @@
           label="Eclipse Platform (2018-12)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.10.0,4.11.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
@@ -10601,13 +10606,13 @@
           label="Eclipse Platform (2018-09)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,4.10.0)"/>
+            versionRange="[4.9.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
       </setupTask>
@@ -10628,13 +10633,13 @@
           label="Eclipse Platform (Photon)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.8.0,4.9.0)"/>
+            versionRange="[4.8.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/photon/201806271001"/>
       </setupTask>
@@ -10655,13 +10660,13 @@
           label="Eclipse Platform (Oxygen)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.7.0,4.8.0)"/>
+            versionRange="[4.7.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/oxygen/201804111000"/>
       </setupTask>
@@ -10682,13 +10687,13 @@
           label="Eclipse Platform (Neon)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.6.0,4.7.0)"/>
+            versionRange="[4.6.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/neon/201705151400"/>
       </setupTask>
@@ -10709,13 +10714,13 @@
           label="Eclipse Platform (Mars)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.5.0,4.6.0)"/>
+            versionRange="[4.5.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/mars/201602261000"/>
       </setupTask>
@@ -10736,13 +10741,13 @@
           label="Eclipse Platform (Luna)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/luna/201502271000"/>
       </setupTask>
@@ -10763,13 +10768,13 @@
           label="Eclipse Platform (Kepler)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/kepler/201402280900"/>
         <repository
@@ -10792,13 +10797,13 @@
           label="Eclipse Platform (Juno)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.2.0,4.3.0)"/>
+            versionRange="[4.2.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/juno/201303010900"/>
         <repository
@@ -10860,19 +10865,19 @@
           label="Eclipse Standard (Luna)">
         <requirement
             name="epp.package.standard"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -10895,19 +10900,19 @@
           label="Eclipse Standard (Luna)">
         <requirement
             name="epp.package.standard"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.4.0,4.5.0)"/>
+            versionRange="[4.4.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.10.0,3.11.0)"/>
+            versionRange="[3.10.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
@@ -10930,19 +10935,19 @@
           label="Eclipse Standard (Kepler)">
         <requirement
             name="epp.package.standard"
-            versionRange="[2.0.0,2.1.0)"/>
+            versionRange="[2.0.0,3.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.3.0,4.4.0)"/>
+            versionRange="[4.3.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.9.0,3.10.0)"/>
+            versionRange="[3.9.0,4.0.0)"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository

@@ -112,7 +112,7 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.9.0,4.10.0)"/>
+          versionRange="[4.9.0,5.0.0)"/>
       <repository
           url="http://download.eclipse.org/releases/2018-09/201809191002"/>
     </setupTask>
@@ -161,7 +161,7 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.10.0,4.11.0)"/>
+          versionRange="[4.10.0,5.0.0)"/>
       <repository
           url="http://download.eclipse.org/releases/2018-12"/>
     </setupTask>
@@ -210,7 +210,7 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.9.0,4.10.0)"/>
+          versionRange="[4.9.0,5.0.0)"/>
       <repository
           url="http://download.eclipse.org/releases/2018-09/201809191002"/>
     </setupTask>
@@ -259,7 +259,7 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.8.0,4.9.0)"/>
+          versionRange="[4.8.0,5.0.0)"/>
       <repository
           url="http://download.eclipse.org/releases/photon/201806271001"/>
     </setupTask>
@@ -308,7 +308,7 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.7.0,4.8.0)"/>
+          versionRange="[4.7.0,5.0.0)"/>
       <repository
           url="http://download.eclipse.org/releases/oxygen/201804111000"/>
     </setupTask>
@@ -357,7 +357,7 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.6.0,4.7.0)"/>
+          versionRange="[4.6.0,5.0.0)"/>
       <repository
           url="http://download.eclipse.org/releases/neon/201705151400"/>
     </setupTask>
@@ -404,7 +404,7 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.5.0,4.6.0)"/>
+          versionRange="[4.5.0,5.0.0)"/>
       <repository
           url="http://download.eclipse.org/releases/mars/201602261000"/>
     </setupTask>
@@ -449,7 +449,7 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.4.0,4.5.0)"/>
+          versionRange="[4.4.0,5.0.0)"/>
       <repository
           url="http://download.eclipse.org/releases/luna/201502271000"/>
     </setupTask>
@@ -494,7 +494,7 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.3.0,4.4.0)"/>
+          versionRange="[4.3.0,5.0.0)"/>
       <repository
           url="http://download.eclipse.org/releases/kepler/201402280900"/>
       <repository
@@ -541,7 +541,7 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.2.0,4.3.0)"/>
+          versionRange="[4.2.0,5.0.0)"/>
       <repository
           url="http://download.eclipse.org/releases/juno/201303010900"/>
       <repository
