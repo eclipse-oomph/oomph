@@ -128,7 +128,7 @@ mkdir $PRODUCTS_TMP
 mkdir $PRODUCTS_TMP/latest
 
 cd $WORKSPACE/products
-for f in *.exe *.tar.gz; do
+for f in *.exe *.tar.gz *.dmg; do
   echo "Promoting $f to $PRODUCTS_TMP/latest"
   cp -a $f $PRODUCTS_TMP/latest
 
