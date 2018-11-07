@@ -166,7 +166,9 @@ else
   cp -a $PRODUCTS/*.exe $PRODUCTS_TMP
   cp -a $PRODUCTS/*.tar.gz $PRODUCTS_TMP
   for f in $PRODUCTS/*.dmg; do
-    cp -a $f $PRODUCTS_TMP
+    if [[ -f $f ]]; then
+      cp -a $f $PRODUCTS_TMP
+    fi
   done
   cp -a $PRODUCTS/repository $PRODUCTS_TMP
 fi
