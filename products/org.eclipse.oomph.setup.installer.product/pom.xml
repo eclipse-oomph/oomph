@@ -27,33 +27,6 @@
 
   <profiles>
     <profile>
-      <id>env-win32</id>
-      <activation>
-        <property>
-          <name>env</name>
-          <value>win32</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.eclipse.tycho</groupId>
-            <artifactId>target-platform-configuration</artifactId>
-            <version>${tycho-version}</version>
-            <configuration>
-              <environments>
-                <environment>
-                  <os>win32</os>
-                  <ws>win32</ws>
-                  <arch>x86</arch>
-                </environment>
-              </environments>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
       <id>env-win64</id>
       <activation>
         <property>
@@ -127,33 +100,6 @@
                   <os>linux</os>
                   <ws>gtk</ws>
                   <arch>x86_64</arch>
-                </environment>
-              </environments>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>env-linux32</id>
-      <activation>
-        <property>
-          <name>env</name>
-          <value>linux32</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.eclipse.tycho</groupId>
-            <artifactId>target-platform-configuration</artifactId>
-            <version>${tycho-version}</version>
-            <configuration>
-              <environments>
-                <environment>
-                  <os>linux</os>
-                  <ws>gtk</ws>
-                  <arch>x86</arch>
                 </environment>
               </environments>
             </configuration>

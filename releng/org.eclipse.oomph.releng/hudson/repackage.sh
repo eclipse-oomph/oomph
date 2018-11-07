@@ -81,6 +81,7 @@ for f in *.zip; do
 
     chmod a+x "Eclipse Installer.app/Contents/MacOS/eclipse-inst"
     tar -czf $PRODUCTS/eclipse-inst-mac$bitness.tar.gz "Eclipse Installer.app"
+    curl -o $PRODUCTS/eclipse-inst-mac$bitness.dmg --write-out '%{http_code}\n' -F sign=true -F source=@$PRODUCTS/eclipse-inst-mac$bitness.tar.gz http://build.eclipse.org:31338/dmg-packager
 
   elif [[ $f == *win32* ]]; then
     rm -f eclipsec.exe

@@ -165,6 +165,7 @@ else
   cp -a $PRODUCTS/product.properties $PRODUCTS_TMP
   cp -a $PRODUCTS/*.exe $PRODUCTS_TMP
   cp -a $PRODUCTS/*.tar.gz $PRODUCTS_TMP
+  cp -a $PRODUCTS/*.dmg $PRODUCTS_TMP
   cp -a $PRODUCTS/repository $PRODUCTS_TMP
 fi
 
