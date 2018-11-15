@@ -87,6 +87,20 @@
       </repositoryList>
     </targlet>
   </setupTask>
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      name="Preferences">
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.egit.ui">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.egit.ui/commit_dialog_signed_off_by"
+          value="true">
+        <description>Insert Signed-off-by Footer</description>
+      </setupTask>
+    </setupTask>
+  </setupTask>
   <project name="bundles"
       label="Bundles">
     <setupTask

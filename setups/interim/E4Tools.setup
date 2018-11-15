@@ -20,7 +20,6 @@
       location="${jre.location-1.6}"/>
   <setupTask
       xsi:type="jdt:JRETask"
-      id=""
       version="JavaSE-1.7"
       location="${jre.location-1.7}"/>
   <setupTask
@@ -62,14 +61,6 @@
       encoding="UTF-8"/>
   <setupTask
       xsi:type="setup:CompoundTask"
-      name="org.eclipse.jdt.launching">
-    <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
-        value="ignore"/>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:CompoundTask"
       name="E4 Tools Eclipse Preferences">
     <setupTask
         xsi:type="setup:PreferenceTask"
@@ -82,11 +73,33 @@
   </setupTask>
   <setupTask
       xsi:type="setup:CompoundTask"
-      name="org.eclipse.mylyn.team.ui">
+      name="Preferences">
     <setupTask
-        xsi:type="setup:PreferenceTask"
-        key="/instance/org.eclipse.mylyn.team.ui/org.eclipse.mylyn.team.commit.template"
-        value="[$${task.key}] $${task.description} &#xD;&#xA;$${task.url}"/>
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.egit.ui">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.egit.ui/commit_dialog_signed_off_by"
+          value="true">
+        <description>Insert Signed-off-by Footer</description>
+      </setupTask>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.jdt.launching">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
+          value="ignore"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.mylyn.team.ui">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.mylyn.team.ui/org.eclipse.mylyn.team.commit.template"
+          value="[$${task.key}] $${task.description} &#xD;&#xA;$${task.url}"/>
+    </setupTask>
   </setupTask>
   <setupTask
       xsi:type="git:GitCloneTask"
