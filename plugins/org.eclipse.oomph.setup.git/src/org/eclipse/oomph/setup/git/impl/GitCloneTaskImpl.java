@@ -755,7 +755,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       String pushURI = getPushURI();
       configureRepository(context, repository, checkoutBranch, isRestrictToCheckoutBranch(), remoteName, remoteURI, pushURI, getConfigSections());
 
-      hasCheckout = repository.getAllRefs().containsKey("refs/heads/" + checkoutBranch);
+      hasCheckout = repository.getRefDatabase().getRef("refs/heads/" + checkoutBranch) != null;
       if (!hasCheckout)
       {
         cachedGit = git;
