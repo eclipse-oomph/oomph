@@ -271,6 +271,11 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       {
         public Object run(ITargetPlatformService service) throws CoreException
         {
+          // Internally the latest PDE implementation represent state via org.eclipse.pde.internal.core.target.TargetDefinition.getDocument()
+          // This is only updated when setTargetLocations is called.
+          // So the following forces the DOM representation to be updated before we save.
+          targetDefinition.setTargetLocations(targetDefinition.getTargetLocations());
+
           service.saveTargetDefinition(targetDefinition);
           return null;
         }
