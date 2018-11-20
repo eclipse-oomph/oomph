@@ -48,7 +48,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-enterprise-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -198,7 +198,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-enterprise-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -702,7 +702,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2</value>
         </detail>
       </annotation>
       <setupTask
@@ -1112,7 +1112,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2</value>
         </detail>
       </annotation>
       <setupTask
@@ -2183,7 +2183,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-cc-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -2385,7 +2385,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-cc-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -2983,7 +2983,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-javascript-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-javascript-and-web-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -3129,7 +3129,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-javascript-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-javascript-and-web-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -3501,7 +3501,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-php-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -3635,7 +3635,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-php-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -4022,7 +4022,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-eclipse-committers</value>
         </detail>
       </annotation>
       <setupTask
@@ -4240,7 +4240,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-eclipse-committers</value>
         </detail>
       </annotation>
       <setupTask
@@ -4830,7 +4830,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-java-and-dsl-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -4924,7 +4924,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-java-and-dsl-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -5306,7 +5306,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-java-and-report-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -5656,7 +5656,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-java-and-report-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -6574,27 +6574,27 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2018-09)"
+        label="Latest (2018-12)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-modeling-tools</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse Modeling Tools (2018-09)">
+          label="Eclipse Modeling Tools (2018-12)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.9.0,5.0.0)"/>
+            versionRange="[4.10.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -6611,8 +6611,6 @@
             name="org.eclipse.emf.compare.source.feature.group"/>
         <requirement
             name="org.eclipse.emf.ecoretools.design.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.ecoretools.explorer.contextual.feature.group"/>
         <requirement
             name="org.eclipse.emf.ecp.sdk.feature.feature.group"/>
         <requirement
@@ -6664,9 +6662,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -6764,6 +6762,101 @@
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
             url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+      </setupTask>
+    </version>
+    <version
+        name="2018-12"
+        label="2018-12"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-modeling-tools</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Modeling Tools (2018-12)">
+        <requirement
+            name="epp.package.modeling"
+            versionRange="[4.10.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.10.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.10.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.e4.core.tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.cdo.epp.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.ide.ui.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.ecoretools.design.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.ecp.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.emfstore.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.parsley.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.parsley.sdk.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.query.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.transaction.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.validation.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.gef.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.gmf.runtime.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.ocl.all.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"/>
+        <requirement
+            name="org.eclipse.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.tips.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.uml2.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.xsd.sdk.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
+        <repository
+            url="http://download.eclipse.org/releases/2018-12"/>
       </setupTask>
     </version>
     <version
@@ -7544,7 +7637,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -7714,7 +7807,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -8286,7 +8379,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-testers</value>
         </detail>
       </annotation>
       <setupTask
@@ -8372,7 +8465,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-testers</value>
         </detail>
       </annotation>
       <setupTask
@@ -8712,7 +8805,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2</value>
         </detail>
       </annotation>
       <setupTask
@@ -8878,7 +8971,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2</value>
         </detail>
       </annotation>
       <setupTask
@@ -9643,7 +9736,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-scout-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -9773,7 +9866,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-scout-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -10240,7 +10333,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -10350,7 +10443,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -10517,7 +10610,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2</value>
         </detail>
       </annotation>
       <setupTask
@@ -10544,7 +10637,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.9-201809060745/</value>
         </detail>
       </annotation>
       <setupTask
@@ -10571,7 +10664,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2</value>
         </detail>
       </annotation>
       <setupTask
@@ -10598,7 +10691,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.9-201809060745/</value>
         </detail>
       </annotation>
       <setupTask
