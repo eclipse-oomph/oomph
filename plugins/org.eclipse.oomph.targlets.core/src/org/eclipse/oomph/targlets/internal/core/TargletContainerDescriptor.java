@@ -71,6 +71,8 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
 
   private transient Profile transactionProfile;
 
+  private transient Runnable restoreBundlePoolTimestamps;
+
   public TargletContainerDescriptor()
   {
   }
@@ -276,6 +278,7 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
     }
 
     transactionProfile = getOrCreateProfile(id, poolLocation, environmentProperties, nlProperty, digest, monitor);
+    restoreBundlePoolTimestamps = P2Util.preserveBundlePoolTimestamps(poolLocation);
     return transactionProfile;
   }
 
@@ -284,6 +287,12 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
     if (transactionProfile == null)
     {
       throw new ProvisionException("No update transaction is ongoing");
+    }
+
+    if (restoreBundlePoolTimestamps != null)
+    {
+      restoreBundlePoolTimestamps.run();
+      restoreBundlePoolTimestamps = null;
     }
 
     transactionProfile = null;
@@ -296,6 +305,12 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
 
   void rollbackUpdateTransaction(Throwable t, IProgressMonitor monitor) throws CoreException
   {
+    if (restoreBundlePoolTimestamps != null)
+    {
+      restoreBundlePoolTimestamps.run();
+      restoreBundlePoolTimestamps = null;
+    }
+
     transactionProfile = null;
 
     if (t != null)

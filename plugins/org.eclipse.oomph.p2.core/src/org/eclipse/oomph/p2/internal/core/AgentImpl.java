@@ -28,7 +28,10 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.equinox.internal.p2.engine.BeginOperationEvent;
 import org.eclipse.equinox.internal.p2.engine.CommitOperationEvent;
+import org.eclipse.equinox.internal.p2.engine.RollbackOperationEvent;
+import org.eclipse.equinox.internal.p2.engine.TransactionEvent;
 import org.eclipse.equinox.internal.p2.repository.Transport;
 import org.eclipse.equinox.internal.p2.touchpoint.eclipse.EclipseTouchpoint;
 import org.eclipse.equinox.internal.p2.touchpoint.eclipse.Util;
@@ -522,16 +525,46 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       {
         eventBus.addListener(new SynchronousProvisioningListener()
         {
+          private Runnable restoreBundlePoolTimestamps;
+
           public void notify(EventObject event)
           {
-            if (event instanceof CommitOperationEvent)
+            if (event instanceof TransactionEvent)
             {
-              CommitOperationEvent commitOperationEvent = (CommitOperationEvent)event;
-              IProfile profile = commitOperationEvent.getProfile();
-              if (Profile.TYPE_INSTALLATION.equals(profile.getProperty(Profile.PROP_PROFILE_TYPE)))
+              TransactionEvent transactionEvent = (TransactionEvent)event;
+              IProfile profile = transactionEvent.getProfile();
+              if ("true".equals(profile.getProperty(Profile.PROP_PROFILE_SHARED_POOL)))
               {
-                // If this is a commit of an Oomph-created installation profile, then adjust the installation details.
-                adjustInstallation(profile);
+                String cache = profile.getProperty(IProfile.PROP_CACHE);
+                if (cache != null)
+                {
+                  File bundlePoolLocation = new File(cache).getAbsoluteFile();
+                  if (bundlePoolLocation.exists())
+                  {
+                    if (event instanceof BeginOperationEvent)
+                    {
+                      // Remember the time stamps of these folders before we start.
+                      restoreBundlePoolTimestamps = P2Util.preserveBundlePoolTimestamps(bundlePoolLocation);
+                    }
+                    else if (event instanceof CommitOperationEvent || event instanceof RollbackOperationEvent)
+                    {
+                      // Restore the time stamps of these folders after we finish regardless of either success or failure.
+                      if (restoreBundlePoolTimestamps != null)
+                      {
+                        restoreBundlePoolTimestamps.run();
+                      }
+                    }
+                  }
+                }
+              }
+
+              if (event instanceof CommitOperationEvent)
+              {
+                if (Profile.TYPE_INSTALLATION.equals(profile.getProperty(Profile.PROP_PROFILE_TYPE)))
+                {
+                  // If this is a commit of an Oomph-created installation profile, then adjust the installation details.
+                  adjustInstallation(profile);
+                }
               }
             }
           }

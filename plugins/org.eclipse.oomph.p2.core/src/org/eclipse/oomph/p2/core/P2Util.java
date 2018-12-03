@@ -127,6 +127,30 @@ public final class P2Util
     return requirement instanceof org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
   }
 
+  public static Runnable preserveBundlePoolTimestamps(File bundlePoolLocation)
+  {
+    final File featuresFolder = new File(bundlePoolLocation, "features");
+    final long featuresFolderLastModified = featuresFolder.lastModified();
+    final File pluginsFolder = new File(bundlePoolLocation, "plugins");
+    final long pluginsFolderLastModified = pluginsFolder.lastModified();
+
+    return new Runnable()
+    {
+      public void run()
+      {
+        if (featuresFolderLastModified != 0L)
+        {
+          featuresFolder.setLastModified(featuresFolderLastModified);
+        }
+
+        if (pluginsFolderLastModified != 0L)
+        {
+          pluginsFolder.setLastModified(pluginsFolderLastModified);
+        }
+      }
+    };
+  }
+
   public static String getName(IInstallableUnit iu)
   {
     String name = iu.getProperty(IInstallableUnit.PROP_NAME, null);
