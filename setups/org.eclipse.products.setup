@@ -48,7 +48,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -97,14 +97,6 @@
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.news.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
@@ -198,7 +190,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -247,14 +239,6 @@
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.news.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
@@ -702,7 +686,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1</value>
         </detail>
       </annotation>
       <setupTask
@@ -810,8 +794,6 @@
         <requirement
             name="org.eclipse.jpt.common.feature.feature.group"/>
         <requirement
-            name="org.eclipse.jpt.dbws.eclipselink.feature.feature.group"/>
-        <requirement
             name="org.eclipse.jpt.jaxb.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.jaxb.feature.feature.group"/>
@@ -871,10 +853,6 @@
             name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.pde.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
@@ -1112,7 +1090,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1</value>
         </detail>
       </annotation>
       <setupTask
@@ -1220,8 +1198,6 @@
         <requirement
             name="org.eclipse.jpt.common.feature.feature.group"/>
         <requirement
-            name="org.eclipse.jpt.dbws.eclipselink.feature.feature.group"/>
-        <requirement
             name="org.eclipse.jpt.jaxb.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.jaxb.feature.feature.group"/>
@@ -1281,10 +1257,6 @@
             name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.pde.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
@@ -2183,7 +2155,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-cc-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -2385,7 +2357,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-cc-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -2983,7 +2955,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-javascript-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-javascript-and-web-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -3016,8 +2988,6 @@
             name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"/>
         <requirement
@@ -3129,7 +3099,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-javascript-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-javascript-and-web-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -3162,8 +3132,6 @@
             name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"/>
         <requirement
@@ -3501,7 +3469,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-php-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -3528,8 +3496,6 @@
             name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"/>
         <requirement
@@ -3635,7 +3601,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-php-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -3662,8 +3628,6 @@
             name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"/>
         <requirement
@@ -4022,7 +3986,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-eclipse-committers</value>
         </detail>
       </annotation>
       <setupTask
@@ -4105,14 +4069,6 @@
             name="org.eclipse.platform.source.feature.group"/>
         <requirement
             name="org.eclipse.rcp.source.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.news.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.json_ui.feature.feature.group"/>
         <requirement
@@ -4240,7 +4196,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-eclipse-committers</value>
         </detail>
       </annotation>
       <setupTask
@@ -4323,14 +4279,6 @@
             name="org.eclipse.platform.source.feature.group"/>
         <requirement
             name="org.eclipse.rcp.source.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.news.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.json_ui.feature.feature.group"/>
         <requirement
@@ -4830,7 +4778,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-java-and-dsl-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -4924,7 +4872,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-java-and-dsl-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -5306,7 +5254,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-java-and-report-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1</value>
         </detail>
       </annotation>
       <setupTask
@@ -5411,8 +5359,6 @@
             name="org.eclipse.jpt.common.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.common.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.jpt.dbws.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.jaxb.eclipselink.feature.feature.group"/>
         <requirement
@@ -5656,7 +5602,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-java-and-report-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1</value>
         </detail>
       </annotation>
       <setupTask
@@ -5761,8 +5707,6 @@
             name="org.eclipse.jpt.common.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.common.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.jpt.dbws.eclipselink.feature.feature.group"/>
         <requirement
             name="org.eclipse.jpt.jaxb.eclipselink.feature.feature.group"/>
         <requirement
@@ -6580,7 +6524,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-modeling-tools</value>
         </detail>
       </annotation>
       <setupTask
@@ -6772,7 +6716,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-modeling-tools</value>
         </detail>
       </annotation>
       <setupTask
@@ -7637,7 +7581,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -7694,12 +7638,6 @@
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.swtbot.eclipse.feature.group"/>
         <requirement
@@ -7807,7 +7745,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -7864,12 +7802,6 @@
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.mylyn.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.rcp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.recommenders.snipmatch.rcp.feature.feature.group"/>
         <requirement
             name="org.eclipse.swtbot.eclipse.feature.group"/>
         <requirement
@@ -8379,7 +8311,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-testers</value>
         </detail>
       </annotation>
       <setupTask
@@ -8465,7 +8397,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-testers</value>
         </detail>
       </annotation>
       <setupTask
@@ -8805,7 +8737,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1</value>
         </detail>
       </annotation>
       <setupTask
@@ -8971,7 +8903,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1</value>
         </detail>
       </annotation>
       <setupTask
@@ -9736,7 +9668,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-scout-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -9866,7 +9798,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-scout-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -10333,7 +10265,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-rust-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -10362,8 +10294,6 @@
             name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"/>
         <requirement
@@ -10443,7 +10373,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2/eclipse-ide-rust-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -10472,8 +10402,6 @@
             name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"/>
         <requirement
@@ -10610,7 +10538,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1</value>
         </detail>
       </annotation>
       <setupTask
@@ -10664,7 +10592,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/m2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/rc1</value>
         </detail>
       </annotation>
       <setupTask

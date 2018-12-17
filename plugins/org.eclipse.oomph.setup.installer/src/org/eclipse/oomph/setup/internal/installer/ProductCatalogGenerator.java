@@ -627,13 +627,13 @@ public class ProductCatalogGenerator implements IApplication
       IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, originalEPPURI, isStaging ? stagingTrainLocation : releaseURI,
           !compositeTrains.contains(train) && (!isStaging || !stagingUseComposite));
       releaseURI = trimEmptyTrailingSegment(URI.createURI(releaseMetaDataRepository.getLocation().toString()));
-      if (!compositeTrains.contains(train) && !isStaging && stagingUseComposite)
+      if (compositeTrains.contains(train) || isStaging && stagingUseComposite)
       {
         releaseURI = releaseURI.trimSegments(1);
       }
       log.append(" -> ").append(releaseURI).append('\n');
 
-      generateFullTrainProduct(train, releaseMetaDataRepository);
+      generateFullTrainProduct(train, releaseMetaDataRepository, releaseURI);
 
       Set<String> requirements = new HashSet<String>();
 
@@ -750,7 +750,7 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
-  private void generateFullTrainProduct(String train, IMetadataRepository releaseMetaDataRepository)
+  private void generateFullTrainProduct(String train, IMetadataRepository releaseMetaDataRepository, URI releaseURI)
   {
     Map<String, IInstallableUnit> ius = new HashMap<String, IInstallableUnit>();
 
@@ -801,7 +801,6 @@ public class ProductCatalogGenerator implements IApplication
       for (String specialProductID : SPECIAL_PRODUCT_IDS)
       {
         IInstallableUnit ide = ius.get(specialProductID);
-        URI releaseURI = URI.createURI(releaseMetaDataRepository.getLocation().toString());
         boolean added = false;
         for (int i = 0, size = list.size(); i < size; ++i)
         {
@@ -1237,7 +1236,7 @@ public class ProductCatalogGenerator implements IApplication
     {
       return "JavaScript";
     }
-    else if (productLabel.contains(" EE ") || productLabel.contains("Web"))
+    else if (productLabel.contains("Enterprise") || productLabel.contains(" EE ") || productLabel.contains("Web"))
     {
       return "EE";
     }
