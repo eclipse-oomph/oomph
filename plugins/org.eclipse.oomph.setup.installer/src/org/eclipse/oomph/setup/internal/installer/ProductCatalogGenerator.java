@@ -256,10 +256,10 @@ public class ProductCatalogGenerator implements IApplication
         {
           if (i + 1 < arguments.length && Arrays.asList(getTrains()).contains(arguments[i + 1]))
           {
-            while (++i < arguments.length && Arrays.asList(getTrains()).contains(arguments[i]))
+            do
             {
-              compositeTrains.add(arguments[i]);
-            }
+              compositeTrains.add(arguments[++i]);
+            } while (i + 1 < arguments.length && Arrays.asList(getTrains()).contains(arguments[i + 1]));
           }
           else
           {
