@@ -104,7 +104,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -171,7 +171,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -238,7 +238,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -866,7 +866,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -1065,7 +1065,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -1264,7 +1264,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -2231,7 +2231,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -2332,7 +2332,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -2433,7 +2433,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -3001,7 +3001,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -3072,7 +3072,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -3143,7 +3143,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -3507,7 +3507,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -3572,7 +3572,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -3637,7 +3637,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -4058,7 +4058,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -4159,7 +4159,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -4260,7 +4260,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -4788,7 +4788,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -4835,7 +4835,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -4882,7 +4882,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -5390,7 +5390,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -5563,7 +5563,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -5736,7 +5736,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -6580,7 +6580,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -6675,7 +6675,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -6770,7 +6770,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -7619,7 +7619,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -7698,7 +7698,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -7777,7 +7777,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -8307,7 +8307,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -8350,7 +8350,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -8393,7 +8393,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -8773,7 +8773,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -8856,7 +8856,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -8939,7 +8939,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -9686,7 +9686,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -9751,7 +9751,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -9816,7 +9816,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -10271,7 +10271,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -10324,7 +10324,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -10377,7 +10377,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -10516,7 +10516,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.10.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -10543,7 +10543,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.10.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version
@@ -10570,7 +10570,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.10.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
       </setupTask>
     </version>
     <version

@@ -330,14 +330,14 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.p2"
-        value="http://download.eclipse.org/eclipse/updates/4.10-I-builds"
-        label="Eclipse Latest I-Build p2 Repository - 4.10">
+        value="http://download.eclipse.org/eclipse/updates/4.11-I-builds"
+        label="Eclipse Latest I-Build p2 Repository - 4.11">
       <description>The update site of the latest Eclipse project's builds, typically an I-Build for the next release</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.release.p2"
-        value="http://download.eclipse.org/eclipse/updates/4.9/R-4.9-201809060745"
+        value="http://download.eclipse.org/eclipse/updates/4.10/R-4.10-201812060815"
         label="Eclipse Latest Release p2 Repository - 4.8">
       <description>The update site of the latest released Eclipse project's builds, always an R-Build for the most recent release</description>
     </setupTask>
@@ -349,6 +349,9 @@
         label="Target Platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <choice
+          value="2019-03"
+          label="Eclipse 2019-03 - 4.11"/>
       <choice
           value="2018-12"
           label="Eclipse 2018-12 - 4.10"/>
@@ -393,7 +396,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest"
-        value="2018-12"
+        value="2019-03"
         storageURI="scope://Workspace"
         label="Target Platform Latest">
       <annotation
@@ -418,6 +421,9 @@
         label="API Baseline Target Platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <choice
+          value="2018-12"
+          label="Eclipse 2018-12 - 4.10"/>
       <choice
           value="2018-09"
           label="Eclipse 2018-09 - 4.9"/>
@@ -459,7 +465,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.api.baseline.target.platform.latest.released"
-        value="2018-09"
+        value="2018-12"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -523,9 +529,14 @@
       <repositoryList
           name="None"/>
       <repositoryList
+          name="2019-03">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.11-I-builds"/>
+      </repositoryList>
+      <repositoryList
           name="2018-12">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.10-I-builds"/>
+            url="http://download.eclipse.org/eclipse/updates/4.10/R-4.10-201812060815"/>
       </repositoryList>
       <repositoryList
           name="2018-09">
@@ -596,9 +607,14 @@
       <repositoryList
           name="None"/>
       <repositoryList
+          name="2019-03">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.11-I-builds"/>
+      </repositoryList>
+      <repositoryList
           name="2018-12">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.10-I-builds"/>
+            url="http://download.eclipse.org/eclipse/updates/4.10/R-4.10-201812060815"/>
       </repositoryList>
       <repositoryList
           name="2018-09">
