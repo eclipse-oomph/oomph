@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.maven.impl;
 
+import org.eclipse.oomph.base.BasePackage;
+import org.eclipse.oomph.predicates.PredicatesPackage;
 import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.maven.MavenFactory;
@@ -84,12 +86,14 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
     }
 
     // Obtain or create and register package
-    MavenPackageImpl theMavenPackage = (MavenPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof MavenPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new MavenPackageImpl());
+    Object registeredMavenPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    MavenPackageImpl theMavenPackage = registeredMavenPackage instanceof MavenPackageImpl ? (MavenPackageImpl)registeredMavenPackage : new MavenPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
+    PredicatesPackage.eINSTANCE.eClass();
     ResourcesPackage.eINSTANCE.eClass();
     SetupPackage.eINSTANCE.eClass();
 
@@ -142,6 +146,16 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getMavenImportTask_Profiles()
+  {
+    return (EAttribute)mavenImportTaskEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public MavenFactory getMavenFactory()
   {
     return (MavenFactory)getEFactoryInstance();
@@ -173,6 +187,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
     mavenImportTaskEClass = createEClass(MAVEN_IMPORT_TASK);
     createEReference(mavenImportTaskEClass, MAVEN_IMPORT_TASK__SOURCE_LOCATORS);
     createEAttribute(mavenImportTaskEClass, MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE);
+    createEAttribute(mavenImportTaskEClass, MAVEN_IMPORT_TASK__PROFILES);
   }
 
   /**
@@ -219,6 +234,8 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMavenImportTask_ProjectNameTemplate(), ecorePackage.getEString(), "projectNameTemplate", null, 0, 1, MavenImportTask.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getMavenImportTask_Profiles(), ecorePackage.getEString(), "profiles", null, 0, -1, MavenImportTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore");
@@ -299,6 +316,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
     addAnnotation(getMavenImportTask_SourceLocators(), source, new String[] { "name", "sourceLocator" });
+    addAnnotation(getMavenImportTask_Profiles(), source, new String[] { "kind", "element", "name", "profile" });
   }
 
 } // MavenPackageImpl

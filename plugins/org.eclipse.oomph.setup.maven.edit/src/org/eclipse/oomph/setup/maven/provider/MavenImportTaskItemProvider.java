@@ -60,6 +60,7 @@ public class MavenImportTaskItemProvider extends SetupTaskItemProvider
       super.getPropertyDescriptors(object);
 
       addProjectNameTemplatePropertyDescriptor(object);
+      addProfilesPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -76,6 +77,20 @@ public class MavenImportTaskItemProvider extends SetupTaskItemProvider
         getString("_UI_MavenImportTask_projectNameTemplate_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_MavenImportTask_projectNameTemplate_feature", "_UI_MavenImportTask_type"),
         MavenPackage.Literals.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Profiles feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addProfilesPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_MavenImportTask_profiles_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_MavenImportTask_profiles_feature", "_UI_MavenImportTask_type"),
+        MavenPackage.Literals.MAVEN_IMPORT_TASK__PROFILES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -161,6 +176,7 @@ public class MavenImportTaskItemProvider extends SetupTaskItemProvider
     switch (notification.getFeatureID(MavenImportTask.class))
     {
       case MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE:
+      case MavenPackage.MAVEN_IMPORT_TASK__PROFILES:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
       case MavenPackage.MAVEN_IMPORT_TASK__SOURCE_LOCATORS:

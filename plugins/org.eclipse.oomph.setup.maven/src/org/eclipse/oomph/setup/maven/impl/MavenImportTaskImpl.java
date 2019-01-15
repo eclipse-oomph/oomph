@@ -28,6 +28,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -60,6 +61,7 @@ import java.util.Set;
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenImportTaskImpl#getSourceLocators <em>Source Locators</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenImportTaskImpl#getProjectNameTemplate <em>Project Name Template</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenImportTaskImpl#getProfiles <em>Profiles</em>}</li>
  * </ul>
  *
  * @generated
@@ -97,6 +99,16 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
    * @ordered
    */
   protected String projectNameTemplate = PROJECT_NAME_TEMPLATE_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getProfiles() <em>Profiles</em>}' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProfiles()
+   * @generated
+   * @ordered
+   */
+  protected EList<String> profiles;
 
   /**
    * <!-- begin-user-doc -->
@@ -164,6 +176,20 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<String> getProfiles()
+  {
+    if (profiles == null)
+    {
+      profiles = new EDataTypeUniqueEList<String>(String.class, this, MavenPackage.MAVEN_IMPORT_TASK__PROFILES);
+    }
+    return profiles;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -189,6 +215,8 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
         return getSourceLocators();
       case MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE:
         return getProjectNameTemplate();
+      case MavenPackage.MAVEN_IMPORT_TASK__PROFILES:
+        return getProfiles();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -211,6 +239,10 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
       case MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE:
         setProjectNameTemplate((String)newValue);
         return;
+      case MavenPackage.MAVEN_IMPORT_TASK__PROFILES:
+        getProfiles().clear();
+        getProfiles().addAll((Collection<? extends String>)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -231,6 +263,9 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
       case MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE:
         setProjectNameTemplate(PROJECT_NAME_TEMPLATE_EDEFAULT);
         return;
+      case MavenPackage.MAVEN_IMPORT_TASK__PROFILES:
+        getProfiles().clear();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -249,6 +284,8 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
         return sourceLocators != null && !sourceLocators.isEmpty();
       case MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE:
         return PROJECT_NAME_TEMPLATE_EDEFAULT == null ? projectNameTemplate != null : !PROJECT_NAME_TEMPLATE_EDEFAULT.equals(projectNameTemplate);
+      case MavenPackage.MAVEN_IMPORT_TASK__PROFILES:
+        return profiles != null && !profiles.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -266,9 +303,11 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (projectNameTemplate: ");
     result.append(projectNameTemplate);
+    result.append(", profiles: ");
+    result.append(profiles);
     result.append(')');
     return result.toString();
   }
@@ -339,6 +378,15 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
         if (!StringUtil.isEmpty(projectNameTemplate))
         {
           projectImportConfiguration.setProjectNameTemplate(projectNameTemplate);
+        }
+
+        EList<String> profiles = getProfiles();
+        if (!profiles.isEmpty())
+        {
+          for (MavenProjectInfo mavenProjectInfo : projectInfos)
+          {
+            mavenProjectInfo.addProfiles(profiles);
+          }
         }
 
         projectConfigurationManager.importProjects(projectInfos, projectImportConfiguration, MonitorUtil.create(monitor, size));

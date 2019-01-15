@@ -190,13 +190,22 @@ public interface MavenPackage extends EPackage
   int MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
+   * The feature id for the '<em><b>Profiles</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MAVEN_IMPORT_TASK__PROFILES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+
+  /**
    * The number of structural features of the '<em>Import Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MAVEN_IMPORT_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+  int MAVEN_IMPORT_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.maven.MavenImportTask <em>Import Task</em>}'.
@@ -229,6 +238,17 @@ public interface MavenPackage extends EPackage
    * @generated
    */
   EAttribute getMavenImportTask_ProjectNameTemplate();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.eclipse.oomph.setup.maven.MavenImportTask#getProfiles <em>Profiles</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Profiles</em>'.
+   * @see org.eclipse.oomph.setup.maven.MavenImportTask#getProfiles()
+   * @see #getMavenImportTask()
+   * @generated
+   */
+  EAttribute getMavenImportTask_Profiles();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -278,6 +298,14 @@ public interface MavenPackage extends EPackage
      * @generated
      */
     EAttribute MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE = eINSTANCE.getMavenImportTask_ProjectNameTemplate();
+
+    /**
+     * The meta object literal for the '<em><b>Profiles</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MAVEN_IMPORT_TASK__PROFILES = eINSTANCE.getMavenImportTask_Profiles();
 
   }
 
