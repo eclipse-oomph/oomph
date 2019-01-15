@@ -108,10 +108,13 @@ public final class SynchronizerManager
     StorageCache cache = new RemoteDataProvider.SyncStorageCache(SYNC_FOLDER);
     storage = StorageFactory.DEFAULT.create(RemoteDataProvider.APPLICATION_TOKEN, cache);
 
-    ICredentialsProvider credentialProvider = createCredentialProvider();
-    if (credentialProvider != null)
+    if (!PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_SYNC_CREDENTIAL_PROVIDER_SKIP_DEFAULT))
     {
-      storage.setCredentialsProvider(credentialProvider);
+      ICredentialsProvider credentialProvider = createCredentialProvider();
+      if (credentialProvider != null)
+      {
+        storage.setCredentialsProvider(credentialProvider);
+      }
     }
 
     remoteDataProvider = new RemoteDataProvider(storage);

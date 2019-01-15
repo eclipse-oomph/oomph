@@ -48,6 +48,8 @@ public class SetupProperties
 
   public static final String PROP_SETUP_SYNC_TIMEOUT = "oomph.setup.sync.timeout";
 
+  public static final String PROP_SETUP_SYNC_CREDENTIAL_PROVIDER_SKIP_DEFAULT = "oomph.setup.sync.credential.provider.skip.default";
+
   /**
    * The value 'simple' starts the installer in simple mode, 'advanced' in advanced mode.
    * The property is not case sensitive.
