@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.git.impl;
 
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.git.ConfigProperty;
 import org.eclipse.oomph.setup.git.ConfigSection;
@@ -107,12 +108,13 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
     }
 
     // Obtain or create and register package
-    GitPackageImpl theGitPackage = (GitPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof GitPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI)
-        : new GitPackageImpl());
+    Object registeredGitPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    GitPackageImpl theGitPackage = registeredGitPackage instanceof GitPackageImpl ? (GitPackageImpl)registeredGitPackage : new GitPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
     SetupPackage.eINSTANCE.eClass();
 
     // Create package meta-data objects

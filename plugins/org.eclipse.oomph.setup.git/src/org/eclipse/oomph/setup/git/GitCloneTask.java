@@ -108,6 +108,8 @@ public interface GitCloneTask extends SetupTask
    * @see #setRemoteURI(String)
    * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask_RemoteURI()
    * @model required="true"
+   *        annotation="http://www.eclipse.org/oomph/setup/RemoteResource"
+   *        annotation="http://www.eclipse.org/oomph/setup/Redirect"
    * @generated
    */
   String getRemoteURI();
@@ -133,7 +135,7 @@ public interface GitCloneTask extends SetupTask
    * @return the value of the '<em>Push URI</em>' attribute.
    * @see #setPushURI(String)
    * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask_PushURI()
-   * @model
+   * @model annotation="http://www.eclipse.org/oomph/setup/Redirect"
    * @generated
    */
   String getPushURI();

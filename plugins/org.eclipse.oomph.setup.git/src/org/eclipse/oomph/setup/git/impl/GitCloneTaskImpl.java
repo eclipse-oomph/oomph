@@ -59,6 +59,7 @@ import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.ConfigConstants;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.CoreConfig.AutoCRLF;
+import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.transport.RefSpec;
@@ -642,7 +643,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (location: ");
     result.append(location);
     result.append(", remoteName: ");
@@ -755,7 +756,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       String pushURI = getPushURI();
       configureRepository(context, repository, checkoutBranch, isRestrictToCheckoutBranch(), remoteName, remoteURI, pushURI, getConfigSections());
 
-      hasCheckout = repository.getRefDatabase().getRef("refs/heads/" + checkoutBranch) != null;
+      hasCheckout = repository.getRefDatabase().getRef(Constants.R_HEADS + checkoutBranch) != null;
       if (!hasCheckout)
       {
         cachedGit = git;
@@ -821,11 +822,24 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
           if (!hasCheckout)
           {
-            createBranch(context, cachedGit, checkoutBranch, remoteName);
-            monitor.worked(1);
+            Ref branchRef = cachedGit.getRepository().getRefDatabase().getRef(Constants.R_REMOTES + remoteName + "/" + checkoutBranch);
+            Ref tagRef = cachedGit.getRepository().getRefDatabase().getRef(Constants.R_TAGS + checkoutBranch);
+            if (branchRef == null && tagRef != null)
+            {
+              createTag(context, cachedGit, checkoutBranch);
+              monitor.worked(1);
 
-            checkout(context, cachedGit, checkoutBranch);
-            monitor.worked(1);
+              checkoutTag(context, cachedGit, checkoutBranch);
+              monitor.worked(1);
+            }
+            else
+            {
+              createBranch(context, cachedGit, checkoutBranch, remoteName);
+              monitor.worked(1);
+
+              checkoutBranch(context, cachedGit, checkoutBranch);
+              monitor.worked(1);
+            }
 
             resetHard(context, cachedGit);
             monitor.worked(1);
@@ -1228,7 +1242,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     CreateBranchCommand command = git.branchCreate();
     command.setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM);
     command.setName(checkoutBranch);
-    command.setStartPoint("refs/remotes/" + remoteName + "/" + checkoutBranch);
+    command.setStartPoint(Constants.R_REMOTES + remoteName + "/" + checkoutBranch);
     command.call();
 
     StoredConfig config = git.getRepository().getConfig();
@@ -1236,7 +1250,30 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     config.save();
   }
 
-  private static void checkout(SetupTaskContext context, Git git, String checkoutBranch) throws Exception
+  private static void createTag(SetupTaskContext context, Git git, String checkoutTag) throws Exception
+  {
+    context.log("Creating local tag " + checkoutTag);
+    CreateBranchCommand command = git.branchCreate();
+    command.setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM);
+    command.setName(checkoutTag);
+    command.setStartPoint(Constants.R_TAGS + checkoutTag);
+    command.call();
+
+    StoredConfig config = git.getRepository().getConfig();
+    config.setBoolean(ConfigConstants.CONFIG_BRANCH_SECTION, checkoutTag, ConfigConstants.CONFIG_KEY_REBASE, true);
+    config.save();
+  }
+
+  private static void checkoutTag(SetupTaskContext context, Git git, String checkoutTag) throws Exception
+  {
+    context.log("Checking out local branch " + checkoutTag);
+
+    CheckoutCommand command = git.checkout();
+    command.setName(Constants.R_HEADS + checkoutTag);
+    command.call();
+  }
+
+  private static void checkoutBranch(SetupTaskContext context, Git git, String checkoutBranch) throws Exception
   {
     context.log("Checking out local branch " + checkoutBranch);
 
