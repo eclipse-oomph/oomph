@@ -101,6 +101,7 @@ public interface Query extends ModelElement
    * @see #setURL(String)
    * @see org.eclipse.oomph.setup.mylyn.MylynPackage#getQuery_URL()
    * @model extendedMetaData="kind='attribute' name='url'"
+   *        annotation="http://www.eclipse.org/oomph/setup/Redirect"
    * @generated
    */
   String getURL();
@@ -127,7 +128,7 @@ public interface Query extends ModelElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Attributes</em>' map.
    * @see org.eclipse.oomph.setup.mylyn.MylynPackage#getQuery_Attributes()
-   * @model mapType="org.eclipse.oomph.setup.mylyn.QueryAttribute<org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EString>"
+   * @model mapType="org.eclipse.oomph.setup.mylyn.QueryAttribute&lt;org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EString&gt;"
    *        extendedMetaData="name='attribute'"
    * @generated
    */

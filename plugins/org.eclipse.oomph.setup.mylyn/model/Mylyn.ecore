@@ -54,8 +54,8 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="userID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="buildPlans" lowerBound="1"
-        upperBound="-1" eType="#//BuildPlan" containment="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buildPlans" upperBound="-1"
+        eType="#//BuildPlan" containment="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="name" value="buildPlan"/>
       </eAnnotations>

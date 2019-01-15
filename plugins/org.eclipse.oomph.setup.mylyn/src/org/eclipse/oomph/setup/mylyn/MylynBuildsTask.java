@@ -76,6 +76,7 @@ public interface MylynBuildsTask extends SetupTask
    * @see #setServerURL(String)
    * @see org.eclipse.oomph.setup.mylyn.MylynPackage#getMylynBuildsTask_ServerURL()
    * @model required="true"
+   *        annotation="http://www.eclipse.org/oomph/setup/Redirect"
    * @generated
    */
   String getServerURL();
@@ -101,7 +102,7 @@ public interface MylynBuildsTask extends SetupTask
    * <!-- end-user-doc -->
    * @return the value of the '<em>Build Plans</em>' containment reference list.
    * @see org.eclipse.oomph.setup.mylyn.MylynPackage#getMylynBuildsTask_BuildPlans()
-   * @model containment="true" required="true"
+   * @model containment="true"
    *        extendedMetaData="name='buildPlan'"
    * @generated
    */

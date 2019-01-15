@@ -76,6 +76,7 @@ public interface MylynQueriesTask extends SetupTask
    * @see #setRepositoryURL(String)
    * @see org.eclipse.oomph.setup.mylyn.MylynPackage#getMylynQueriesTask_RepositoryURL()
    * @model required="true"
+   *        annotation="http://www.eclipse.org/oomph/setup/Redirect"
    * @generated
    */
   String getRepositoryURL();

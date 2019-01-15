@@ -408,7 +408,7 @@ public class QueryImpl extends ModelElementImpl implements Query
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (summary: ");
     result.append(summary);
     result.append(", uRL: ");

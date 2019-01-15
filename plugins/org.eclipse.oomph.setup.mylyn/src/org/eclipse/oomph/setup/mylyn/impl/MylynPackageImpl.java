@@ -117,12 +117,13 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
     }
 
     // Obtain or create and register package
-    MylynPackageImpl theMylynPackage = (MylynPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof MylynPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new MylynPackageImpl());
+    Object registeredMylynPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    MylynPackageImpl theMylynPackage = registeredMylynPackage instanceof MylynPackageImpl ? (MylynPackageImpl)registeredMylynPackage : new MylynPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
     SetupPackage.eINSTANCE.eClass();
 
     // Create package meta-data objects
@@ -483,7 +484,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMylynBuildsTask_Password(), ecorePackage.getEString(), "password", null, 0, 1, MylynBuildsTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getMylynBuildsTask_BuildPlans(), getBuildPlan(), null, "buildPlans", null, 1, -1, MylynBuildsTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getMylynBuildsTask_BuildPlans(), getBuildPlan(), null, "buildPlans", null, 0, -1, MylynBuildsTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(buildPlanEClass, BuildPlan.class, "BuildPlan", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
