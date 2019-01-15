@@ -769,33 +769,36 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         {
           AuthenticationInfo currentAuthenticationInfo = new AuthenticationInfo(authorization.getUser(), authorization.getPassword(), authorization.isSaved());
           AuthenticationInfo authenticationInfo = uiServices.getUsernamePassword(uri.toString(), currentAuthenticationInfo);
-          String user = authenticationInfo.getUserName();
-          String password = authenticationInfo.getPassword();
-          Authorization reauthorization = new Authorization(user, password);
-          if (reauthorization.isAuthorized())
+          if (authenticationInfo != null)
           {
-            if (authenticationInfo.saveResult() && securePreferences != null)
+            String user = authenticationInfo.getUserName();
+            String password = authenticationInfo.getPassword();
+            Authorization reauthorization = new Authorization(user, password);
+            if (reauthorization.isAuthorized())
             {
-              try
+              if (authenticationInfo.saveResult() && securePreferences != null)
               {
-                ISecurePreferences node = securePreferences.node(host);
-                node.put("user", user, false);
-                node.put("password", password, true);
-                node.flush();
-                reauthorization.setSaved(true);
+                try
+                {
+                  ISecurePreferences node = securePreferences.node(host);
+                  node.put("user", user, false);
+                  node.put("password", password, true);
+                  node.flush();
+                  reauthorization.setSaved(true);
+                }
+                catch (IOException ex)
+                {
+                  SetupCorePlugin.INSTANCE.log(ex);
+                }
+                catch (StorageException ex)
+                {
+                  SetupCorePlugin.INSTANCE.log(ex);
+                }
               }
-              catch (IOException ex)
-              {
-                SetupCorePlugin.INSTANCE.log(ex);
-              }
-              catch (StorageException ex)
-              {
-                SetupCorePlugin.INSTANCE.log(ex);
-              }
-            }
 
-            authorizations.put(host, reauthorization);
-            return reauthorization;
+              authorizations.put(host, reauthorization);
+              return reauthorization;
+            }
           }
           else
           {
