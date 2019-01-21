@@ -44,6 +44,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-java-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (2019-03)">
@@ -97,7 +104,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -171,6 +178,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-java-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (2019-03)">
@@ -224,7 +238,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -727,6 +741,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-enterprise-java-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java EE Developers (2019-03)">
@@ -912,7 +933,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -1118,6 +1139,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-enterprise-java-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java EE Developers (2019-03)">
@@ -1303,7 +1331,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -2375,6 +2403,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-cc-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (2019-03)">
@@ -2462,7 +2497,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -2570,6 +2605,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-cc-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (2019-03)">
@@ -2657,7 +2699,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -3262,6 +3304,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-javascript-and-web-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for JavaScript and Web Developers (2019-03)">
@@ -3319,7 +3368,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -3397,6 +3446,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-javascript-and-web-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for JavaScript and Web Developers (2019-03)">
@@ -3454,7 +3510,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -3831,6 +3887,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-php-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (2019-03)">
@@ -3882,7 +3945,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -3954,6 +4017,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-php-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (2019-03)">
@@ -4005,7 +4075,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -4397,6 +4467,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-eclipse-committers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (2019-03)">
@@ -4484,7 +4561,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -4592,6 +4669,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-eclipse-committers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (2019-03)">
@@ -4679,7 +4763,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -5268,6 +5352,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (2019-03)">
@@ -5301,7 +5392,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -5355,6 +5446,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (2019-03)">
@@ -5388,7 +5486,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -5777,6 +5875,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-java-and-report-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (2019-03)">
@@ -5936,7 +6041,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -6116,6 +6221,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-java-and-report-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (2019-03)">
@@ -6275,7 +6387,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -7204,6 +7316,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-modeling-tools</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (2019-03)">
@@ -7285,7 +7404,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -7387,6 +7506,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-modeling-tools</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (2019-03)">
@@ -7468,7 +7594,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -8340,6 +8466,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-rcp-and-rap-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (2019-03)">
@@ -8405,7 +8538,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -8491,6 +8624,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-rcp-and-rap-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (2019-03)">
@@ -8556,7 +8696,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -9129,6 +9269,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-testers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Testers (2019-03)">
@@ -9158,7 +9305,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -9208,6 +9355,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-testers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Testers (2019-03)">
@@ -9237,7 +9391,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -9584,6 +9738,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Parallel Application Developers (2019-03)">
@@ -9653,7 +9814,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -9743,6 +9904,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Parallel Application Developers (2019-03)">
@@ -9812,7 +9980,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -10584,6 +10752,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-scout-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (2019-03)">
@@ -10635,7 +10810,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -10707,6 +10882,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-scout-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (2019-03)">
@@ -10758,7 +10940,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -11232,6 +11414,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Rust Developers (2019-03)">
@@ -11271,7 +11460,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -11331,6 +11520,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Rust Developers (2019-03)">
@@ -11370,7 +11566,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -11542,6 +11738,13 @@
         name="latest"
         label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (2019-03)">
@@ -11555,7 +11758,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.11.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
@@ -11589,6 +11792,13 @@
         name="2019-03"
         label="2019-03"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (2019-03)">
@@ -11602,7 +11812,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.11.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03"/>
+            url="http://download.eclipse.org/releases"/>
       </setupTask>
     </version>
     <version
