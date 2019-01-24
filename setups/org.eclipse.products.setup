@@ -104,7 +104,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -238,7 +238,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -729,7 +729,7 @@
     <description>The essential tools for any Java developer, including a Java IDE, a Git client, XML Editor, Mylyn, Maven and Gradle integration</description>
   </product>
   <product name="epp.package.jee"
-      label="Eclipse IDE for Java EE Developers">
+      label="Eclipse IDE for Enterprise Java Developers">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
@@ -750,7 +750,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (2019-03)">
+          label="Eclipse IDE for Enterprise Java Developers (2019-03)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.11.0,5.0.0)"/>
@@ -933,7 +933,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -949,7 +949,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (2018-12)">
+          label="Eclipse IDE for Enterprise Java Developers (2018-12)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.10.0,5.0.0)"/>
@@ -1148,7 +1148,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (2019-03)">
+          label="Eclipse IDE for Enterprise Java Developers (2019-03)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.11.0,5.0.0)"/>
@@ -1331,7 +1331,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -1347,7 +1347,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (2018-12)">
+          label="Eclipse IDE for Enterprise Java Developers (2018-12)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.10.0,5.0.0)"/>
@@ -1546,7 +1546,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (2018-09)">
+          label="Eclipse IDE for Enterprise Java Developers (2018-09)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.9.0,5.0.0)"/>
@@ -1751,7 +1751,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (Photon)">
+          label="Eclipse IDE for Enterprise Java Developers (Photon)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.8.0,5.0.0)"/>
@@ -1954,7 +1954,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (Oxygen)">
+          label="Eclipse IDE for Enterprise Java Developers (Oxygen)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.7.0,5.0.0)"/>
@@ -2105,7 +2105,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (Neon)">
+          label="Eclipse IDE for Enterprise Java Developers (Neon)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.6.0,5.0.0)"/>
@@ -2252,7 +2252,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (Mars)">
+          label="Eclipse IDE for Enterprise Java Developers (Mars)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.5.0,5.0.0)"/>
@@ -2287,7 +2287,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (Luna)">
+          label="Eclipse IDE for Enterprise Java Developers (Luna)">
         <requirement
             name="epp.package.jee"
             versionRange="[4.4.0,5.0.0)"/>
@@ -2322,7 +2322,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (Kepler)">
+          label="Eclipse IDE for Enterprise Java Developers (Kepler)">
         <requirement
             name="epp.package.jee"
             versionRange="[2.0.0,3.0.0)"/>
@@ -2359,7 +2359,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java EE Developers (Juno)">
+          label="Eclipse IDE for Enterprise Java Developers (Juno)">
         <requirement
             name="epp.package.jee"
             versionRange="[1.5.0,2.0.0)"/>
@@ -2497,7 +2497,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -2699,7 +2699,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -3368,7 +3368,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -3510,7 +3510,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -3945,7 +3945,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -4075,7 +4075,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -4561,7 +4561,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -4763,7 +4763,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -5392,7 +5392,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -5486,7 +5486,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -6041,7 +6041,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -6387,7 +6387,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -7404,7 +7404,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -7594,7 +7594,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -8538,7 +8538,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -8696,7 +8696,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -9305,7 +9305,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -9391,7 +9391,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -9726,7 +9726,7 @@
     <description>This package contains Eclipse features that support the software development quality assurance process, such as Jubula and Mylyn.</description>
   </product>
   <product name="epp.package.parallel"
-      label="Eclipse for Parallel Application Developers">
+      label="Eclipse for Scientific Computing">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
@@ -9742,12 +9742,12 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-scientific-computing</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (2019-03)">
+          label="Eclipse for Scientific Computing (2019-03)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.11.0,5.0.0)"/>
@@ -9814,7 +9814,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -9825,12 +9825,12 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-scientific-computing</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (2018-12)">
+          label="Eclipse for Scientific Computing (2018-12)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.10.0,5.0.0)"/>
@@ -9908,12 +9908,12 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/m1/eclipse-ide-scientific-computing</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (2019-03)">
+          label="Eclipse for Scientific Computing (2019-03)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.11.0,5.0.0)"/>
@@ -9980,7 +9980,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -9991,12 +9991,12 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-scientific-computing</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (2018-12)">
+          label="Eclipse for Scientific Computing (2018-12)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.10.0,5.0.0)"/>
@@ -10074,12 +10074,12 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-scientific-computing</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (2018-09)">
+          label="Eclipse for Scientific Computing (2018-09)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.9.0,5.0.0)"/>
@@ -10157,12 +10157,12 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/photon/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-scientific-computing</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Photon)">
+          label="Eclipse for Scientific Computing (Photon)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.8.0,5.0.0)"/>
@@ -10238,12 +10238,12 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-parallel-application-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Oxygen)">
+          label="Eclipse for Scientific Computing (Oxygen)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.7.0,5.0.0)"/>
@@ -10319,12 +10319,12 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-parallel-application-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/3</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Neon)">
+          label="Eclipse for Scientific Computing (Neon)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.6.0,5.0.0)"/>
@@ -10400,12 +10400,12 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-parallel-application-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/2</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Mars)">
+          label="Eclipse for Scientific Computing (Mars)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.5.0,5.0.0)"/>
@@ -10429,12 +10429,12 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-parallel-application-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Luna)">
+          label="Eclipse for Scientific Computing (Luna)">
         <requirement
             name="epp.package.parallel"
             versionRange="[4.4.0,5.0.0)"/>
@@ -10458,12 +10458,12 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-parallel-application-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Kepler)">
+          label="Eclipse for Scientific Computing (Kepler)">
         <requirement
             name="epp.package.parallel"
             versionRange="[2.0.0,3.0.0)"/>
@@ -10489,12 +10489,12 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-parallel-application-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/juno/sr2</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Parallel Application Developers (Juno)">
+          label="Eclipse for Scientific Computing (Juno)">
         <requirement
             name="epp.package.parallel"
             versionRange="[1.5.0,2.0.0)"/>
@@ -10810,7 +10810,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -10940,7 +10940,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -11460,7 +11460,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -11566,7 +11566,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -11758,7 +11758,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.11.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version
@@ -11812,7 +11812,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.11.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases"/>
+            url="http://download.eclipse.org/releases/2019-03"/>
       </setupTask>
     </version>
     <version

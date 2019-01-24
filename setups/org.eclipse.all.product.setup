@@ -65,7 +65,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.11.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases"/>
+          url="http://download.eclipse.org/releases/2019-03"/>
     </setupTask>
   </version>
   <version name="latest.released"
@@ -163,7 +163,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.11.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases"/>
+          url="http://download.eclipse.org/releases/2019-03"/>
     </setupTask>
   </version>
   <version name="2018-12"
