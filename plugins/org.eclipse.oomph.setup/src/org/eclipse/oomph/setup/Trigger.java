@@ -336,6 +336,8 @@ public enum Trigger implements Enumerator
 
   public static final Set<Trigger> ALL_TRIGGERS = toSet(values());
 
+  public static final Set<Trigger> BOOTSTRAP_TRIGGERS = toSet(Trigger.BOOTSTRAP);
+
   public static final Set<Trigger> IDE_TRIGGERS = toSet(Trigger.STARTUP, Trigger.MANUAL);
 
 } // Trigger

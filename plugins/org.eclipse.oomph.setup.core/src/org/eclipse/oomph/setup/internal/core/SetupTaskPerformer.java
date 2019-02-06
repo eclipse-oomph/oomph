@@ -64,6 +64,7 @@ import org.eclipse.oomph.setup.log.ProgressLogMonitor;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.setup.p2.impl.P2TaskImpl;
+import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IOUtil;
@@ -4222,6 +4223,15 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   public static EList<SetupTask> createEnablementTasks(EModelElement eModelElement, boolean withVariables)
   {
+    if (eModelElement instanceof EClass && SetupPackage.Literals.SETUP_TASK.isSuperTypeOf((EClass)eModelElement))
+    {
+      Set<Trigger> triggers = SetupUtil.getTriggers((EClass)eModelElement);
+      if (triggers.equals(Trigger.BOOTSTRAP_TRIGGERS))
+      {
+        return null;
+      }
+    }
+
     EList<SetupTask> enablementTasks = null;
 
     for (EAnnotation eAnnotation : eModelElement.getEAnnotations())

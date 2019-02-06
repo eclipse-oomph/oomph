@@ -11,7 +11,6 @@
 package org.eclipse.oomph.setup.impl;
 
 import org.eclipse.oomph.base.impl.ModelElementImpl;
-import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -27,6 +26,7 @@ import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
+import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.util.UserCallback;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -38,13 +38,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -70,8 +67,6 @@ import java.util.Set;
  */
 public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTask
 {
-  private static Map<EClass, Set<Trigger>> TRIGGERS = Collections.synchronizedMap(new HashMap<EClass, Set<Trigger>>());
-
   /**
    * The default value of the '{@link #getID() <em>ID</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -493,33 +488,6 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
     return visitPredecessorsFast(setupTask, new HashSet<SetupTask>()) || ((SetupTaskImpl)setupTask).visitSuccessorsFast(this, new HashSet<SetupTask>());
   }
 
-  private static Set<Trigger> getTriggers(EClass eClass)
-  {
-    Set<Trigger> result = TRIGGERS.get(eClass);
-    if (result == null)
-    {
-      String triggers = EcoreUtil.getAnnotation(eClass, EAnnotationConstants.ANNOTATION_VALID_TRIGGERS, EAnnotationConstants.KEY_TRIGGERS);
-      if (triggers != null)
-      {
-        String[] triggerValueLiterals = triggers.split("\\s");
-        Trigger[] triggerValues = new Trigger[triggerValueLiterals.length];
-        for (int i = 0; i < triggerValueLiterals.length; ++i)
-        {
-          triggerValues[i] = Trigger.get(triggerValueLiterals[i]);
-        }
-
-        result = Trigger.toSet(triggerValues);
-      }
-      else
-      {
-        result = Trigger.ALL_TRIGGERS;
-      }
-      TRIGGERS.put(eClass, result);
-    }
-
-    return result;
-  }
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -527,7 +495,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    */
   public final Set<Trigger> getValidTriggers()
   {
-    return getTriggers(eClass());
+    return SetupUtil.getTriggers(eClass());
   }
 
   public int getPriority()

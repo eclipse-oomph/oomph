@@ -11,10 +11,18 @@
 package org.eclipse.oomph.setup.util;
 
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.setup.SetupTaskContext;
+import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.util.PropertiesUtil;
 
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 
@@ -26,6 +34,8 @@ public final class SetupUtil
   private static final String DEFAULT_INSTALLER_UPDATE_URL = "http://download.eclipse.org/oomph/products/repository";
 
   private static final String RESOLVING_TARGET_PLATFORM_DEFINITIONS = "oomph.setup.resolving.target.platform.definitions";
+
+  private static final Map<EClass, Set<Trigger>> TRIGGERS = Collections.synchronizedMap(new HashMap<EClass, Set<Trigger>>());
 
   public static final String INSTALLER_UPDATE_URL = PropertiesUtil.getProperty(SetupProperties.PROP_INSTALLER_UPDATE_URL, DEFAULT_INSTALLER_UPDATE_URL)
       .replace('\\', '/');
@@ -89,4 +99,32 @@ public final class SetupUtil
 
     return targetDefinitions;
   }
+
+  public static Set<Trigger> getTriggers(EClass eClass)
+  {
+    Set<Trigger> result = TRIGGERS.get(eClass);
+    if (result == null)
+    {
+      String triggers = EcoreUtil.getAnnotation(eClass, EAnnotationConstants.ANNOTATION_VALID_TRIGGERS, EAnnotationConstants.KEY_TRIGGERS);
+      if (triggers != null)
+      {
+        String[] triggerValueLiterals = triggers.split("\\s");
+        Trigger[] triggerValues = new Trigger[triggerValueLiterals.length];
+        for (int i = 0; i < triggerValueLiterals.length; ++i)
+        {
+          triggerValues[i] = Trigger.get(triggerValueLiterals[i]);
+        }
+
+        result = Trigger.toSet(triggerValues);
+      }
+      else
+      {
+        result = Trigger.ALL_TRIGGERS;
+      }
+      TRIGGERS.put(eClass, result);
+    }
+
+    return result;
+  }
+
 }
