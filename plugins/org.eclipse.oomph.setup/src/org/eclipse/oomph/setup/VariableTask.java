@@ -86,6 +86,7 @@ public interface VariableTask extends SetupTask
    * @see #setName(String)
    * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask_Name()
    * @model required="true"
+   *        annotation="http://www.eclipse.org/oomph/setup/NoExpand"
    * @generated
    */
   String getName();

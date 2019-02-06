@@ -1097,7 +1097,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getResourceCopyTask_SourceURL()
+  public EAttribute getResourceCopyTask_Force()
   {
     return (EAttribute)resourceCopyTaskEClass.getEStructuralFeatures().get(0);
   }
@@ -1107,9 +1107,19 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getResourceCopyTask_TargetURL()
+  public EAttribute getResourceCopyTask_SourceURL()
   {
     return (EAttribute)resourceCopyTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getResourceCopyTask_TargetURL()
+  {
+    return (EAttribute)resourceCopyTaskEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1507,7 +1517,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getResourceCreationTask_Content()
+  public EAttribute getResourceCreationTask_Force()
   {
     return (EAttribute)resourceCreationTaskEClass.getEStructuralFeatures().get(0);
   }
@@ -1517,7 +1527,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getResourceCreationTask_TargetURL()
+  public EAttribute getResourceCreationTask_Content()
   {
     return (EAttribute)resourceCreationTaskEClass.getEStructuralFeatures().get(1);
   }
@@ -1527,9 +1537,19 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getResourceCreationTask_Encoding()
+  public EAttribute getResourceCreationTask_TargetURL()
   {
     return (EAttribute)resourceCreationTaskEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getResourceCreationTask_Encoding()
+  {
+    return (EAttribute)resourceCreationTaskEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -2009,10 +2029,12 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEAttribute(preferenceTaskEClass, PREFERENCE_TASK__VALUE);
 
     resourceCopyTaskEClass = createEClass(RESOURCE_COPY_TASK);
+    createEAttribute(resourceCopyTaskEClass, RESOURCE_COPY_TASK__FORCE);
     createEAttribute(resourceCopyTaskEClass, RESOURCE_COPY_TASK__SOURCE_URL);
     createEAttribute(resourceCopyTaskEClass, RESOURCE_COPY_TASK__TARGET_URL);
 
     resourceCreationTaskEClass = createEClass(RESOURCE_CREATION_TASK);
+    createEAttribute(resourceCreationTaskEClass, RESOURCE_CREATION_TASK__FORCE);
     createEAttribute(resourceCreationTaskEClass, RESOURCE_CREATION_TASK__CONTENT);
     createEAttribute(resourceCreationTaskEClass, RESOURCE_CREATION_TASK__TARGET_URL);
     createEAttribute(resourceCreationTaskEClass, RESOURCE_CREATION_TASK__ENCODING);
@@ -2363,12 +2385,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(resourceCopyTaskEClass, ResourceCopyTask.class, "ResourceCopyTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getResourceCopyTask_Force(), ecorePackage.getEBoolean(), "force", null, 0, 1, ResourceCopyTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getResourceCopyTask_SourceURL(), ecorePackage.getEString(), "sourceURL", null, 1, 1, ResourceCopyTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getResourceCopyTask_TargetURL(), ecorePackage.getEString(), "targetURL", null, 1, 1, ResourceCopyTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(resourceCreationTaskEClass, ResourceCreationTask.class, "ResourceCreationTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getResourceCreationTask_Force(), ecorePackage.getEBoolean(), "force", null, 0, 1, ResourceCreationTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getResourceCreationTask_Content(), ecorePackage.getEString(), "content", null, 1, 1, ResourceCreationTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getResourceCreationTask_TargetURL(), ecorePackage.getEString(), "targetURL", null, 1, 1, ResourceCreationTask.class, !IS_TRANSIENT,

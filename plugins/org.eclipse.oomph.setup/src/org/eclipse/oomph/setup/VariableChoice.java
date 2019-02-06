@@ -43,6 +43,7 @@ public interface VariableChoice extends ModelElement
    * @see #setValue(String)
    * @see org.eclipse.oomph.setup.SetupPackage#getVariableChoice_Value()
    * @model required="true"
+   *        annotation="http://www.eclipse.org/oomph/setup/NoExpand"
    * @generated
    */
   String getValue();

@@ -227,10 +227,12 @@
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Setup.ecore#//PreferenceTask/value"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//ResourceCopyTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCopyTask/force"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCopyTask/sourceURL"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCopyTask/targetURL"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//ResourceCreationTask" labelFeature="#//setup/ResourceCreationTask/targetURL">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCreationTask/force"/>
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCreationTask/content"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCreationTask/targetURL"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCreationTask/encoding"/>

@@ -33,6 +33,7 @@ import java.io.OutputStream;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCopyTaskImpl#isForce <em>Force</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCopyTaskImpl#getSourceURL <em>Source URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCopyTaskImpl#getTargetURL <em>Target URL</em>}</li>
  * </ul>
@@ -41,6 +42,26 @@ import java.io.OutputStream;
  */
 public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyTask
 {
+  /**
+   * The default value of the '{@link #isForce() <em>Force</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isForce()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean FORCE_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isForce() <em>Force</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isForce()
+   * @generated
+   * @ordered
+   */
+  protected boolean force = FORCE_EDEFAULT;
+
   /**
    * The default value of the '{@link #getSourceURL() <em>Source URL</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -107,6 +128,31 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
    * <!-- end-user-doc -->
    * @generated
    */
+  public boolean isForce()
+  {
+    return force;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setForce(boolean newForce)
+  {
+    boolean oldForce = force;
+    force = newForce;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.RESOURCE_COPY_TASK__FORCE, oldForce, force));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getSourceURL()
   {
     return sourceURL;
@@ -162,6 +208,8 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
   {
     switch (featureID)
     {
+      case SetupPackage.RESOURCE_COPY_TASK__FORCE:
+        return isForce();
       case SetupPackage.RESOURCE_COPY_TASK__SOURCE_URL:
         return getSourceURL();
       case SetupPackage.RESOURCE_COPY_TASK__TARGET_URL:
@@ -180,6 +228,9 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
   {
     switch (featureID)
     {
+      case SetupPackage.RESOURCE_COPY_TASK__FORCE:
+        setForce((Boolean)newValue);
+        return;
       case SetupPackage.RESOURCE_COPY_TASK__SOURCE_URL:
         setSourceURL((String)newValue);
         return;
@@ -200,6 +251,9 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
   {
     switch (featureID)
     {
+      case SetupPackage.RESOURCE_COPY_TASK__FORCE:
+        setForce(FORCE_EDEFAULT);
+        return;
       case SetupPackage.RESOURCE_COPY_TASK__SOURCE_URL:
         setSourceURL(SOURCE_URL_EDEFAULT);
         return;
@@ -220,6 +274,8 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
   {
     switch (featureID)
     {
+      case SetupPackage.RESOURCE_COPY_TASK__FORCE:
+        return force != FORCE_EDEFAULT;
       case SetupPackage.RESOURCE_COPY_TASK__SOURCE_URL:
         return SOURCE_URL_EDEFAULT == null ? sourceURL != null : !SOURCE_URL_EDEFAULT.equals(sourceURL);
       case SetupPackage.RESOURCE_COPY_TASK__TARGET_URL:
@@ -242,7 +298,9 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (sourceURL: ");
+    result.append(" (force: ");
+    result.append(force);
+    result.append(", sourceURL: ");
     result.append(sourceURL);
     result.append(", targetURL: ");
     result.append(targetURL);
@@ -273,16 +331,16 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
       {
         if (uriConverter.normalize(targetURI).isFile() && uriConverter.normalize(sourceURI).isFile())
         {
-          return !uriConverter.exists(targetURI, null);
+          return isForce() || !uriConverter.exists(targetURI, null);
         }
 
         return true;
       }
 
-      return !uriConverter.exists(targetURI.appendSegment(sourceURI.lastSegment()), null);
+      return isForce() || !uriConverter.exists(targetURI.appendSegment(sourceURI.lastSegment()), null);
     }
 
-    return !uriConverter.exists(targetURI, null);
+    return isForce() || !uriConverter.exists(targetURI, null);
   }
 
   public void perform(SetupTaskContext context) throws Exception

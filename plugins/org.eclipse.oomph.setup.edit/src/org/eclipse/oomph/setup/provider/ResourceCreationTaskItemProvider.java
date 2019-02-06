@@ -55,11 +55,26 @@ public class ResourceCreationTaskItemProvider extends SetupTaskItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addForcePropertyDescriptor(object);
       addContentPropertyDescriptor(object);
       addTargetURLPropertyDescriptor(object);
       addEncodingPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Force feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addForcePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_ResourceCreationTask_force_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_ResourceCreationTask_force_feature", "_UI_ResourceCreationTask_type"),
+        SetupPackage.Literals.RESOURCE_CREATION_TASK__FORCE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -154,6 +169,7 @@ public class ResourceCreationTaskItemProvider extends SetupTaskItemProvider
 
     switch (notification.getFeatureID(ResourceCreationTask.class))
     {
+      case SetupPackage.RESOURCE_CREATION_TASK__FORCE:
       case SetupPackage.RESOURCE_CREATION_TASK__CONTENT:
       case SetupPackage.RESOURCE_CREATION_TASK__TARGET_URL:
       case SetupPackage.RESOURCE_CREATION_TASK__ENCODING:

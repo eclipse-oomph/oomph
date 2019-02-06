@@ -33,6 +33,7 @@ import java.io.Writer;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCreationTaskImpl#isForce <em>Force</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCreationTaskImpl#getContent <em>Content</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCreationTaskImpl#getTargetURL <em>Target URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCreationTaskImpl#getEncoding <em>Encoding</em>}</li>
@@ -42,6 +43,26 @@ import java.io.Writer;
  */
 public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceCreationTask
 {
+  /**
+   * The default value of the '{@link #isForce() <em>Force</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isForce()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean FORCE_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isForce() <em>Force</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isForce()
+   * @generated
+   * @ordered
+   */
+  protected boolean force = FORCE_EDEFAULT;
+
   /**
    * The default value of the '{@link #getContent() <em>Content</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -121,6 +142,31 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
   protected EClass eStaticClass()
   {
     return SetupPackage.Literals.RESOURCE_CREATION_TASK;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isForce()
+  {
+    return force;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setForce(boolean newForce)
+  {
+    boolean oldForce = force;
+    force = newForce;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.RESOURCE_CREATION_TASK__FORCE, oldForce, force));
+    }
   }
 
   /**
@@ -208,6 +254,8 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
   {
     switch (featureID)
     {
+      case SetupPackage.RESOURCE_CREATION_TASK__FORCE:
+        return isForce();
       case SetupPackage.RESOURCE_CREATION_TASK__CONTENT:
         return getContent();
       case SetupPackage.RESOURCE_CREATION_TASK__TARGET_URL:
@@ -228,6 +276,9 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
   {
     switch (featureID)
     {
+      case SetupPackage.RESOURCE_CREATION_TASK__FORCE:
+        setForce((Boolean)newValue);
+        return;
       case SetupPackage.RESOURCE_CREATION_TASK__CONTENT:
         setContent((String)newValue);
         return;
@@ -251,6 +302,9 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
   {
     switch (featureID)
     {
+      case SetupPackage.RESOURCE_CREATION_TASK__FORCE:
+        setForce(FORCE_EDEFAULT);
+        return;
       case SetupPackage.RESOURCE_CREATION_TASK__CONTENT:
         setContent(CONTENT_EDEFAULT);
         return;
@@ -274,6 +328,8 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
   {
     switch (featureID)
     {
+      case SetupPackage.RESOURCE_CREATION_TASK__FORCE:
+        return force != FORCE_EDEFAULT;
       case SetupPackage.RESOURCE_CREATION_TASK__CONTENT:
         return CONTENT_EDEFAULT == null ? content != null : !CONTENT_EDEFAULT.equals(content);
       case SetupPackage.RESOURCE_CREATION_TASK__TARGET_URL:
@@ -341,7 +397,7 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     URI targetURI = createResolvedURI(getTargetURL());
-    return targetURI != null && !context.getURIConverter().exists(targetURI, null);
+    return targetURI != null && (isForce() || !context.getURIConverter().exists(targetURI, null));
   }
 
   public void perform(SetupTaskContext context) throws Exception

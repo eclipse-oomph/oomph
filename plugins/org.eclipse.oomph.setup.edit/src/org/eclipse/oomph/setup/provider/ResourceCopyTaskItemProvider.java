@@ -55,10 +55,25 @@ public class ResourceCopyTaskItemProvider extends SetupTaskItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addForcePropertyDescriptor(object);
       addSourceURLPropertyDescriptor(object);
       addTargetURLPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Force feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addForcePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_ResourceCopyTask_force_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_ResourceCopyTask_force_feature", "_UI_ResourceCopyTask_type"),
+        SetupPackage.Literals.RESOURCE_COPY_TASK__FORCE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -139,6 +154,7 @@ public class ResourceCopyTaskItemProvider extends SetupTaskItemProvider
 
     switch (notification.getFeatureID(ResourceCopyTask.class))
     {
+      case SetupPackage.RESOURCE_COPY_TASK__FORCE:
       case SetupPackage.RESOURCE_COPY_TASK__SOURCE_URL:
       case SetupPackage.RESOURCE_COPY_TASK__TARGET_URL:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

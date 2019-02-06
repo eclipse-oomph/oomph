@@ -67,6 +67,7 @@ public interface SetupTask extends ModelElement
    * @see org.eclipse.oomph.setup.SetupPackage#getSetupTask_ID()
    * @model id="true" dataType="org.eclipse.oomph.base.ID"
    *        extendedMetaData="kind='attribute' name='id'"
+   *        annotation="http://www.eclipse.org/oomph/setup/NoExpand"
    * @generated
    */
   String getID();
@@ -141,6 +142,7 @@ public interface SetupTask extends ModelElement
    * @see #setFilter(String)
    * @see org.eclipse.oomph.setup.SetupPackage#getSetupTask_Filter()
    * @model dataType="org.eclipse.oomph.setup.Filter"
+   *        annotation="http://www.eclipse.org/oomph/setup/NoExpand"
    * @generated
    */
   String getFilter();

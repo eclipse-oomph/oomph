@@ -2884,13 +2884,22 @@ public interface SetupPackage extends EPackage
   int RESOURCE_COPY_TASK__FILTER = SETUP_TASK__FILTER;
 
   /**
+   * The feature id for the '<em><b>Force</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RESOURCE_COPY_TASK__FORCE = SETUP_TASK_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Source URL</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RESOURCE_COPY_TASK__SOURCE_URL = SETUP_TASK_FEATURE_COUNT + 0;
+  int RESOURCE_COPY_TASK__SOURCE_URL = SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Target URL</b></em>' attribute.
@@ -2899,7 +2908,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int RESOURCE_COPY_TASK__TARGET_URL = SETUP_TASK_FEATURE_COUNT + 1;
+  int RESOURCE_COPY_TASK__TARGET_URL = SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>Resource Copy Task</em>' class.
@@ -2908,7 +2917,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int RESOURCE_COPY_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 2;
+  int RESOURCE_COPY_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -3001,13 +3010,22 @@ public interface SetupPackage extends EPackage
   int RESOURCE_CREATION_TASK__FILTER = SETUP_TASK__FILTER;
 
   /**
+   * The feature id for the '<em><b>Force</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RESOURCE_CREATION_TASK__FORCE = SETUP_TASK_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Content</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RESOURCE_CREATION_TASK__CONTENT = SETUP_TASK_FEATURE_COUNT + 0;
+  int RESOURCE_CREATION_TASK__CONTENT = SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Target URL</b></em>' attribute.
@@ -3016,7 +3034,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int RESOURCE_CREATION_TASK__TARGET_URL = SETUP_TASK_FEATURE_COUNT + 1;
+  int RESOURCE_CREATION_TASK__TARGET_URL = SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Encoding</b></em>' attribute.
@@ -3025,7 +3043,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int RESOURCE_CREATION_TASK__ENCODING = SETUP_TASK_FEATURE_COUNT + 2;
+  int RESOURCE_CREATION_TASK__ENCODING = SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
    * The number of structural features of the '<em>Resource Creation Task</em>' class.
@@ -3034,7 +3052,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int RESOURCE_CREATION_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 3;
+  int RESOURCE_CREATION_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -4114,6 +4132,17 @@ public interface SetupPackage extends EPackage
   EClass getResourceCopyTask();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.ResourceCopyTask#isForce <em>Force</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Force</em>'.
+   * @see org.eclipse.oomph.setup.ResourceCopyTask#isForce()
+   * @see #getResourceCopyTask()
+   * @generated
+   */
+  EAttribute getResourceCopyTask_Force();
+
+  /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.ResourceCopyTask#getSourceURL <em>Source URL</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4563,6 +4592,17 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   EClass getResourceCreationTask();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.ResourceCreationTask#isForce <em>Force</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Force</em>'.
+   * @see org.eclipse.oomph.setup.ResourceCreationTask#isForce()
+   * @see #getResourceCreationTask()
+   * @generated
+   */
+  EAttribute getResourceCreationTask_Force();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.ResourceCreationTask#getContent <em>Content</em>}'.
@@ -5498,6 +5538,14 @@ public interface SetupPackage extends EPackage
     EClass RESOURCE_COPY_TASK = eINSTANCE.getResourceCopyTask();
 
     /**
+     * The meta object literal for the '<em><b>Force</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute RESOURCE_COPY_TASK__FORCE = eINSTANCE.getResourceCopyTask_Force();
+
+    /**
      * The meta object literal for the '<em><b>Source URL</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5852,6 +5900,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EClass RESOURCE_CREATION_TASK = eINSTANCE.getResourceCreationTask();
+
+    /**
+     * The meta object literal for the '<em><b>Force</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute RESOURCE_CREATION_TASK__FORCE = eINSTANCE.getResourceCreationTask_Force();
 
     /**
      * The meta object literal for the '<em><b>Content</b></em>' attribute feature.

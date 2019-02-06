@@ -978,9 +978,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   {
     if (!changedResources.isEmpty() && (!isDirty() || handleDirtyConflict()))
     {
+      ResourceSet resourceSet = editingDomain.getResourceSet();
       if (isDirty())
       {
-        changedResources.addAll(editingDomain.getResourceSet().getResources());
+        changedResources.addAll(resourceSet.getResources());
       }
       editingDomain.getCommandStack().flush();
 
@@ -992,7 +993,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           resource.unload();
           try
           {
-            resource.load(Collections.EMPTY_MAP);
+            resource.load(resourceSet.getLoadOptions());
           }
           catch (IOException exception)
           {
@@ -2778,19 +2779,19 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * @generated
    */
   @SuppressWarnings("all")
-  public Object getAdapterGen(Class key)
+  public <T> T getAdapterGen(Class<T> key)
   {
     if (key.equals(IContentOutlinePage.class))
     {
-      return showOutlineView() ? getContentOutlinePage() : null;
+      return showOutlineView() ? key.cast(getContentOutlinePage()) : null;
     }
     else if (key.equals(IPropertySheetPage.class))
     {
-      return getPropertySheetPage();
+      return key.cast(getPropertySheetPage());
     }
     else if (key.equals(IGotoMarker.class))
     {
-      return this;
+      return key.cast(this);
     }
     else
     {

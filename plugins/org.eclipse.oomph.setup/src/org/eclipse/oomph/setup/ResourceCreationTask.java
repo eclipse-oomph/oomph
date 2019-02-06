@@ -19,6 +19,7 @@ package org.eclipse.oomph.setup;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.ResourceCreationTask#isForce <em>Force</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.ResourceCreationTask#getContent <em>Content</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.ResourceCreationTask#getTargetURL <em>Target URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.ResourceCreationTask#getEncoding <em>Encoding</em>}</li>
@@ -30,6 +31,32 @@ package org.eclipse.oomph.setup;
  */
 public interface ResourceCreationTask extends SetupTask
 {
+  /**
+   * Returns the value of the '<em><b>Force</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Force</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Force</em>' attribute.
+   * @see #setForce(boolean)
+   * @see org.eclipse.oomph.setup.SetupPackage#getResourceCreationTask_Force()
+   * @model
+   * @generated
+   */
+  boolean isForce();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.ResourceCreationTask#isForce <em>Force</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Force</em>' attribute.
+   * @see #isForce()
+   * @generated
+   */
+  void setForce(boolean value);
+
   /**
    * Returns the value of the '<em><b>Content</b></em>' attribute.
    * <!-- begin-user-doc -->
