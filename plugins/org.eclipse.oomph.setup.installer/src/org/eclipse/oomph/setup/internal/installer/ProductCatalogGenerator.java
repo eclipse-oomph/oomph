@@ -625,7 +625,7 @@ public class ProductCatalogGenerator implements IApplication
       log.append(releaseURI);
 
       IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, originalEPPURI, isStaging ? stagingTrainLocation : releaseURI, true);
-      if (!compositeTrains.contains(train) && (!isStaging || !stagingUseComposite))
+      if (compositeTrains.contains(train) || isStaging && stagingUseComposite)
       {
         URI latestURI = trimEmptyTrailingSegment(URI.createURI(releaseMetaDataRepository.getLocation().toString()));
         if (!latestURI.equals(releaseURI))
@@ -633,10 +633,16 @@ public class ProductCatalogGenerator implements IApplication
           releaseURI = latestURI.trimSegments(1);
         }
       }
+      else
+      {
+        releaseURI = trimEmptyTrailingSegment(URI.createURI(releaseMetaDataRepository.getLocation().toString()));
+      }
+
       log.append(" -> ").append(releaseURI).append('\n');
 
       generateFullTrainProduct(train, releaseMetaDataRepository, releaseURI);
 
+      String mostRecentTrain = getMostRecentTrain();
       Set<String> requirements = new HashSet<String>();
 
       for (IInstallableUnit iu : P2Util.asIterable(eppMetaDataRepository.query(QueryUtil.createLatestIUQuery(), null)))
@@ -661,12 +667,21 @@ public class ProductCatalogGenerator implements IApplication
         }
 
         IInstallableUnit existingIU = ius.get(id);
+        if ("epp.package.jee".equals(id))
+        {
+          System.err.println("####" + label);
+        }
+
         if (existingIU == null)
         {
           ius.put(id, iu);
           synchronized (labels)
           {
-            labels.put(id, label);
+            String existingLabel = labels.get(id);
+            if (existingLabel == null || train.equals(mostRecentTrain))
+            {
+              labels.put(id, label);
+            }
           }
         }
       }
