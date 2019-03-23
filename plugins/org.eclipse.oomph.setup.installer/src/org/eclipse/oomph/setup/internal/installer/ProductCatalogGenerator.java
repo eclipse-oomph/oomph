@@ -111,6 +111,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final String PACKAGES = "http://download.eclipse.org/technology/epp/packages";
 
+  private static final String HTTPS_PACKAGES = "https://download.eclipse.org/technology/epp/packages";
+
   private static final String RELEASES = "http://download.eclipse.org/releases";
 
   private static final String ICON_URL_PREFIX = "http://www.eclipse.org/downloads/images/";
@@ -298,7 +300,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private String[] getTrains()
   {
-    return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03" };
+    return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06" };
   }
 
   private int compareTrains(String train1, String train2)
@@ -667,11 +669,6 @@ public class ProductCatalogGenerator implements IApplication
         }
 
         IInstallableUnit existingIU = ius.get(id);
-        if ("epp.package.jee".equals(id))
-        {
-          System.err.println("####" + label);
-        }
-
         if (existingIU == null)
         {
           ius.put(id, iu);
@@ -901,10 +898,10 @@ public class ProductCatalogGenerator implements IApplication
       long latest = Integer.MIN_VALUE;
       for (java.net.URI childURI : compositeRepository.getChildren())
       {
-        URI trimmedURI = trimEmptyTrailingSegment(URI.createURI(childURI.toString()));
-        if (!trimmedURI.equals(eppURI))
+        String trimmedChildURI = trimEmptyTrailingSegment(URI.createURI(childURI.toString())).toString();
+        if (!trimmedChildURI.startsWith(PACKAGES) && !trimmedChildURI.startsWith(HTTPS_PACKAGES))
         {
-          childURI = new java.net.URI(trimmedURI.toString());
+          childURI = new java.net.URI(trimmedChildURI);
           IMetadataRepository childRepository = manager.loadRepository(childURI, null);
           String value = childRepository.getProperties().get(IRepository.PROP_TIMESTAMP);
           long timestamp = Long.parseLong(value);
