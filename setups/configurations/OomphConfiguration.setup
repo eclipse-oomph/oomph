@@ -18,7 +18,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform"
-        value="2018-12"/>
+        value="2019-06"/>
     <stream
         href="index:/Oomph.setup#//@streams[name='master']"/>
     <description>The Oomph Development Environment workspace contains all features and plugins from the Oomph Git repository.</description>
