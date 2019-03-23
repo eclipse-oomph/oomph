@@ -370,6 +370,12 @@ public class ModelElementItemProvider extends ItemProviderAdapter
       }
 
       @Override
+      public boolean isChoiceArbitrary(Object object)
+      {
+        return ModelElementItemProvider.this.isChoiceArbitrary(feature, object);
+      }
+
+      @Override
       public String[] getFilterFlags(Object object)
       {
         String[] filterFlags = super.getFilterFlags(object);
@@ -401,6 +407,11 @@ public class ModelElementItemProvider extends ItemProviderAdapter
   protected Collection<?> filterChoices(Collection<?> choices, EStructuralFeature feature, Object object)
   {
     return choices;
+  }
+
+  protected boolean isChoiceArbitrary(EStructuralFeature feature, Object object)
+  {
+    return false;
   }
 
   /**

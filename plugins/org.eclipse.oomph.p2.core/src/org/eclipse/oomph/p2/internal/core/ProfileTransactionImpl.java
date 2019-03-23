@@ -523,7 +523,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
           // We won't register our listener if better mirror selection is not enabled.
           IProvisioningEventBus eventBus = CachingRepositoryManager.isBetterMirrorSelection()
-              ? (IProvisioningEventBus)agent.getProvisioningAgent().getService(IProvisioningEventBus.SERVICE_NAME) : null;
+              ? (IProvisioningEventBus)agent.getProvisioningAgent().getService(IProvisioningEventBus.SERVICE_NAME)
+              : null;
 
           try
           {
@@ -934,7 +935,9 @@ public class ProfileTransactionImpl implements ProfileTransaction
       boolean optional = requirement.isOptional();
       boolean greedy = requirement.isGreedy();
 
-      IRequirement rootRequirement = MetadataFactory.createRequirement(namespace, name, versionRange, filter, optional ? 0 : 1, 1, !optional || greedy);
+      IRequirement rootRequirement = name == null || !name.contains("(")
+          ? MetadataFactory.createRequirement(namespace, name, versionRange, filter, optional ? 0 : 1, 1, !optional || greedy)
+          : MetadataFactory.createRequirement(namespace, name, filter, optional ? 0 : 1, 1, !optional || greedy);
       rootRequirements.add(rootRequirement);
 
       // If this is a requirement for an IU...

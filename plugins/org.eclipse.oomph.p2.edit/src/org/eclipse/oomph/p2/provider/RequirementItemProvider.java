@@ -304,6 +304,12 @@ public class RequirementItemProvider extends ModelElementItemProvider
     return super.filterChoices(choices, feature, object);
   }
 
+  @Override
+  protected boolean isChoiceArbitrary(EStructuralFeature feature, Object object)
+  {
+    return feature == P2Package.Literals.REQUIREMENT__NAMESPACE;
+  }
+
   /**
    * This returns InstallableUnit.gif.
    * <!-- begin-user-doc -->
