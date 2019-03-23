@@ -756,7 +756,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       String pushURI = getPushURI();
       configureRepository(context, repository, checkoutBranch, isRestrictToCheckoutBranch(), remoteName, remoteURI, pushURI, getConfigSections());
 
-      hasCheckout = repository.getRefDatabase().getRef(Constants.R_HEADS + checkoutBranch) != null;
+      hasCheckout = repository.getRefDatabase().findRef(Constants.R_HEADS + checkoutBranch) != null;
       if (!hasCheckout)
       {
         cachedGit = git;
@@ -822,8 +822,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
           if (!hasCheckout)
           {
-            Ref branchRef = cachedGit.getRepository().getRefDatabase().getRef(Constants.R_REMOTES + remoteName + "/" + checkoutBranch);
-            Ref tagRef = cachedGit.getRepository().getRefDatabase().getRef(Constants.R_TAGS + checkoutBranch);
+            Ref branchRef = cachedGit.getRepository().getRefDatabase().findRef(Constants.R_REMOTES + remoteName + "/" + checkoutBranch);
+            Ref tagRef = cachedGit.getRepository().getRefDatabase().findRef(Constants.R_TAGS + checkoutBranch);
             if (branchRef == null && tagRef != null)
             {
               createTag(context, cachedGit, checkoutBranch);
