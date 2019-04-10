@@ -340,7 +340,7 @@ public final class JREManager
     while (info != null)
     {
       // Ignore the JRE that is embedded in the installation itself.
-      if (installerLocation != null && !info.javaHome.startsWith(installerLocation))
+      if (installerLocation == null || !info.javaHome.startsWith(installerLocation))
       {
         javaHomes.add(info.javaHome);
       }
