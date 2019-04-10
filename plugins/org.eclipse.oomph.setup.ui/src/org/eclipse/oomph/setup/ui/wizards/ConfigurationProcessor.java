@@ -155,6 +155,11 @@ public class ConfigurationProcessor
       StringBuilder uris = new StringBuilder();
       for (Resource resource : setupWizard.getUnappliedConfigurationResources())
       {
+        if (uris.length() != 0)
+        {
+          uris.append(' ');
+        }
+
         uris.append(resource.getURI());
       }
 

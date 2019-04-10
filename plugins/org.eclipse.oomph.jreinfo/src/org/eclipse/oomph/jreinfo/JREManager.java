@@ -18,11 +18,15 @@ import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.util.URI;
+
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.osgi.service.datalocation.Location;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -331,10 +335,16 @@ public final class JREManager
   {
     javaHomes.clear();
 
+    String installerLocation = getInstallerLocation();
     JREInfo info = JREInfo.getAll();
     while (info != null)
     {
-      javaHomes.add(info.javaHome);
+      // Ignore the JRE that is embedded in the installation itself.
+      if (installerLocation != null && !info.javaHome.startsWith(installerLocation))
+      {
+        javaHomes.add(info.javaHome);
+      }
+
       info = info.next;
     }
   }
@@ -473,5 +483,35 @@ public final class JREManager
     }
 
     return 32;
+  }
+
+  private static String getInstallerLocation()
+  {
+    try
+    {
+      String productID = PropertiesUtil.getProductID();
+      if ("org.eclipse.oomph.setup.installer.product".equals(productID))
+      {
+        Location location = Platform.getInstallLocation();
+        if (location != null)
+        {
+          URI result = URI.createURI(FileLocator.resolve(location.getURL()).toString());
+          if (result.isFile())
+          {
+            if (!result.hasTrailingPathSeparator())
+            {
+              result = result.appendSegment("");
+            }
+            return result.toFileString();
+          }
+        }
+      }
+    }
+    catch (Throwable ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    return null;
   }
 }

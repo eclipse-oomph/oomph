@@ -16,8 +16,13 @@ import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 
+import org.eclipse.core.runtime.Platform;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Eike Stepper
@@ -172,9 +177,13 @@ public final class KeepInstallerUtil
 
     if (startPermanentInstaller)
     {
+      // Include the application arguments in this launch.
+      List<String> command = new ArrayList<String>();
+      command.add(permanentLauncher);
+      command.addAll(Arrays.asList(Platform.getApplicationArgs()));
       try
       {
-        Runtime.getRuntime().exec(permanentLauncher);
+        Runtime.getRuntime().exec(command.toArray(new String[command.size()]));
       }
       catch (Exception ex)
       {

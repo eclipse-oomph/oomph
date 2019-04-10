@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Enumeration;
@@ -34,10 +35,15 @@ public final class BINExtractor extends IO
 {
   private static final String NL = System.getProperty("line.separator");
 
-  private static final String UTF_8 = "UTF-8";
+  private static final boolean DEBUG = "true".equals(System.getProperty("org.eclipse.oomph.extractor.lib.BINExtractor.log"));
 
   public static void main(String[] args) throws Exception
   {
+    if (args.length < 2)
+    {
+      exit();
+    }
+
     String executable = args[0];
     String targetFolder = args[1];
     String javaHome = null;
@@ -48,21 +54,45 @@ public final class BINExtractor extends IO
     File libdataFile = null;
     File descriptorFile = null;
     File zipFile = null;
+    File jreTarCabFile = null;
+    int extraArgs = args.length;
 
     if (args.length > 2)
     {
-      if ("-export".equals(args[2]))
+      String arg = args[2];
+      if ("-export".equals(arg))
       {
+        if (args.length < 7)
+        {
+          exit();
+        }
+
         export = true;
         markerFile = new File(args[3]);
         extractorFile = new File(args[4]);
         libdataFile = new File(args[5]);
         descriptorFile = new File(args[6]);
         zipFile = new File(targetFolder);
+        if (args.length > 7)
+        {
+          jreTarCabFile = new File(args[7]);
+        }
+        else
+        {
+          jreTarCabFile = new File(zipFile.getAbsoluteFile().getParentFile(), "jre.tar.cab");
+        }
+      }
+      else if ("--".equals(arg))
+      {
+        extraArgs = 3;
       }
       else
       {
-        javaHome = args[2];
+        javaHome = arg;
+        if (args.length > 3 && "--".equals(args[3]))
+        {
+          extraArgs = 4;
+        }
       }
     }
 
@@ -120,6 +150,12 @@ public final class BINExtractor extends IO
       {
         unzip(kmpStream, targetFolder);
       }
+
+      if (export && descriptor.getFormat() == 2)
+      {
+        kmpStream = new KMPInputStream(stream, pattern, failure);
+        copy(kmpStream, jreTarCabFile);
+      }
     }
     finally
     {
@@ -128,14 +164,72 @@ public final class BINExtractor extends IO
 
     if (!export)
     {
-      if (javaHome != null)
+      Vector vmArgs = null;
+      int vmArgStart = args.length;
+      int vmArgCount = 0;
+      for (int i = extraArgs; i < args.length; ++i)
       {
-        adjustIni(targetFolder + File.separator + descriptor.getIniPath(), javaHome);
+        String arg = args[i];
+        if ("-vmargs".equals(arg))
+        {
+          vmArgStart = i;
+          ++vmArgCount;
+          vmArgs = new Vector();
+        }
+        else if (vmArgs != null)
+        {
+          ++vmArgCount;
+          vmArgs.add(arg);
+        }
       }
 
+      PrintStream log = DEBUG ? new PrintStream(new File(targetFolder, "extractor.log"), "UTF-8") : null;
+      if (DEBUG)
+      {
+        for (int i = 0; i < args.length; ++i)
+        {
+          log.println("arg[" + i + "]='" + args[i] + "'");
+        }
+        log.println();
+
+        log.println("executable=" + executable);
+        log.println("targetFolder=" + targetFolder);
+        log.println("javaHome=" + javaHome);
+        log.println("vmArgs=" + vmArgs);
+        log.println();
+      }
+
+      if (javaHome != null || vmArgs != null && !vmArgs.isEmpty())
+      {
+        adjustIni(targetFolder + File.separator + descriptor.getIniPath(), javaHome, vmArgs);
+      }
+
+      String[] command = new String[args.length - extraArgs - vmArgCount + 1];
       String launcher = targetFolder + File.separator + descriptor.getLauncherPath();
-      Runtime.getRuntime().exec(launcher);
+      command[0] = launcher;
+      for (int i = extraArgs, j = 1; i < vmArgStart; ++i, ++j)
+      {
+        command[j] = args[i];
+      }
+
+      if (DEBUG)
+      {
+        for (int i = 0; i < command.length; ++i)
+        {
+          log.println("command[" + i + "]='" + command[i] + "'");
+        }
+
+        log.close();
+      }
+
+      Runtime.getRuntime().exec(command);
     }
+  }
+
+  private static void exit()
+  {
+    System.out.println("Usage: <product>.exe <product.zip> -export <marker.txt> <extractor>.exe <extractor-lib>.jar <product-descriptor> [<jre.tar.cab>]");
+    System.exit(1);
   }
 
   private static void copy(InputStream source, File targetFile) throws IOException
@@ -158,7 +252,7 @@ public final class BINExtractor extends IO
     }
   }
 
-  private static void adjustIni(String iniPath, String javaHome) throws IOException
+  private static void adjustIni(String iniPath, String javaHome, Vector vmArgs) throws IOException
   {
     File file = new File(iniPath);
     Vector lines = new Vector();
@@ -166,7 +260,7 @@ public final class BINExtractor extends IO
     if (file.exists())
     {
       InputStream in = new FileInputStream(file);
-      Reader reader = new InputStreamReader(in, UTF_8);
+      Reader reader = new InputStreamReader(in);
       BufferedReader bufferedReader = new BufferedReader(reader);
 
       String line;
@@ -180,32 +274,47 @@ public final class BINExtractor extends IO
       in.close();
     }
 
-    String value = getVMPath(javaHome);
-    String option = "-vm";
-    int optionIndex = lines.indexOf(option);
-
-    if (optionIndex != -1)
+    if (javaHome != null)
     {
-      lines.set(optionIndex + 1, value);
+      String value = getVMPath(javaHome);
+      String option = "-vm";
+      int optionIndex = lines.indexOf(option);
+
+      if (optionIndex != -1)
+      {
+        lines.set(optionIndex + 1, value);
+      }
+      else
+      {
+        int vmargsIndex = lines.indexOf("-vmargs");
+        if (vmargsIndex == -1)
+        {
+          vmargsIndex = lines.size();
+        }
+
+        lines.add(vmargsIndex, option);
+        lines.add(vmargsIndex + 1, value);
+      }
     }
-    else
+
+    if (vmArgs != null && !vmArgs.isEmpty())
     {
       int vmargsIndex = lines.indexOf("-vmargs");
       if (vmargsIndex == -1)
       {
+        lines.add("-vmargs");
         vmargsIndex = lines.size();
       }
 
-      lines.add(vmargsIndex, option);
-      lines.add(vmargsIndex + 1, value);
+      for (Enumeration it = vmArgs.elements(); it.hasMoreElements();)
+      {
+        lines.add(it.nextElement());
+      }
     }
-
-    // lines.add("-Xdebug");
-    // lines.add("-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8123");
 
     OutputStream out = new FileOutputStream(file);
 
-    Writer writer = new OutputStreamWriter(out, UTF_8);
+    Writer writer = new OutputStreamWriter(out);
     BufferedWriter bufferedWriter = new BufferedWriter(writer);
 
     for (Enumeration it = lines.elements(); it.hasMoreElements();)
@@ -226,6 +335,6 @@ public final class BINExtractor extends IO
       return new File(javaHome).getParent();
     }
 
-    return javaHome + File.separator + "bin";
+    return new File(javaHome, "bin").toString();
   }
 }

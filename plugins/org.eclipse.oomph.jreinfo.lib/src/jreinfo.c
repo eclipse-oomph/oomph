@@ -109,9 +109,13 @@ findAllJREs ()
 {
   JRE* jres = NULL;
   jres = findJREs (jres, _T("Software\\Wow6432Node\\JavaSoft\\Java Development Kit"), 1);
+  jres = findJREs (jres, _T("Software\\Wow6432Node\\JavaSoft\\JDK"), 1);
   jres = findJREs (jres, _T("Software\\Wow6432Node\\JavaSoft\\Java Runtime Environment"), 0);
+  jres = findJREs (jres, _T("Software\\Wow6432Node\\JavaSoft\\JRE"), 0);
   jres = findJREs (jres, _T("Software\\JavaSoft\\Java Development Kit"), 1);
+  jres = findJREs (jres, _T("Software\\JavaSoft\\JDK"), 1);
   jres = findJREs (jres, _T("Software\\JavaSoft\\Java Runtime Environment"), 0);
+  jres = findJREs (jres, _T("Software\\JavaSoft\\JRE"), 0);
   jres = findJavaHome (jres);
   return jres;
 }

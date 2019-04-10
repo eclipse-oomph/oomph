@@ -19,7 +19,9 @@
 #include "extractor.h"
 #include "resources.h"
 
-static _TCHAR* lib = NULL;
+static char* lib = NULL;
+static char* cab = NULL;
+static BOOL debug = FALSE;
 
 // See https://de.wikipedia.org/wiki/DLL_Hijacking
 static void
@@ -34,30 +36,65 @@ protectAgainstDLLHijacking ()
   (CALLBACK*AddrSetDefaultDllDirectories) (DWORD);
 
   AddrSetDefaultDllDirectories addrSetDefaultDllDirectories = (AddrSetDefaultDllDirectories) //
-      GetProcAddress (GetModuleHandle (_T("kernel32.dll")), _T("SetDefaultDllDirectories"));
+      GetProcAddress (GetModuleHandle ("kernel32.dll"), "SetDefaultDllDirectories");
   if (addrSetDefaultDllDirectories)
   {
     addrSetDefaultDllDirectories (LOAD_LIBRARY_SEARCH_SYSTEM32);
   }
 }
 
-static _TCHAR*
-getTempFile (_TCHAR* prefix)
+static char*
+convertUTF16ToUTF8 (wchar_t* string)
 {
-  _TCHAR tempFolder[MAX_PATH];
+  // First compute the number of bytes needed to represent the UTF-16 string as UTF-8 characters, including room for the terminating null character.
+  int length = WideCharToMultiByte (CP_UTF8, 0, string, -1, NULL, 0, NULL, NULL) + 1;
+
+  // Allocate a buffer big enough to hold the result.
+  char *result = malloc (sizeof(char) * length);
+
+  // Do the actual conversion and return the result;
+  WideCharToMultiByte (CP_UTF8, 0, string, -1, result, length, NULL, NULL);
+
+  return result;
+}
+
+static wchar_t*
+convertUTF8ToUTF16 (char* string)
+{
+  // First compute the number of UTF-16 characters needed to represent the string's UTF-8 characters, including room for the terminating null character.
+  int length = MultiByteToWideChar (CP_UTF8, 0, string, -1, NULL, 0) + 1;
+
+  // Allocate a buffer big enough to hold the result.
+  wchar_t *result = malloc (sizeof(wchar_t) * length);
+
+  // Do the actual conversion and return the result;
+  MultiByteToWideChar (CP_UTF8, 0, string, -1, result, length);
+
+  return result;
+}
+
+static char*
+getTempFile (char* prefix, char* suffix)
+{
+  char tempFolder[MAX_PATH];
   DWORD dwRetVal = GetTempPath (MAX_PATH, tempFolder);
   if (dwRetVal == 0 || dwRetVal > MAX_PATH)
   {
     return NULL;
   }
 
-  _TCHAR tempFile[MAX_PATH];
+  char tempFile[MAX_PATH];
   if (GetTempFileName (tempFolder, prefix, 0, tempFile) == 0)
   {
     return NULL;
   }
 
-  return _tcsdup (tempFile);
+  char* result = malloc (strlen (tempFile) + strlen (suffix) + 2);
+  result[0] = 0;
+  strcat (result, tempFile);
+  strcat (result, suffix);
+
+  return result;
 }
 
 /****************************************************************************************
@@ -77,13 +114,13 @@ browseCallback (HWND hWnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
   return 0;
 }
 
-static _TCHAR*
+static char*
 browseForFolder (HWND hwndOwner, LPCTSTR lpszTitle)
 {
   CoInitialize (NULL);
 
-  _TCHAR* result = NULL;
-  TCHAR buffer[MAX_PATH];
+  char* result = NULL;
+  char buffer[MAX_PATH];
 
   BROWSEINFO browseInfo = { 0 };
   browseInfo.hwndOwner = hwndOwner;
@@ -98,7 +135,7 @@ browseForFolder (HWND hwndOwner, LPCTSTR lpszTitle)
   {
     if (SHGetPathFromIDList (itemIDList, buffer))
     {
-      result = _tcsdup (buffer);
+      result = strdup (buffer);
     }
 
     CoTaskMemFree (itemIDList);
@@ -108,10 +145,10 @@ browseForFolder (HWND hwndOwner, LPCTSTR lpszTitle)
   return result;
 }
 
-static _TCHAR*
+static char*
 browseForFile (HWND hwndOwner, LPCTSTR lpszTitle, LPCTSTR lpszFilter)
 {
-  _TCHAR szFile[MAX_PATH];
+  char szFile[MAX_PATH];
   szFile[0] = 0;
 
   OPENFILENAME ofn;
@@ -148,15 +185,15 @@ typedef struct req_s
   int micro;
   int bitness;
   int jdk;
-  _TCHAR* launcherPath;
-  _TCHAR* iniPath;
-  _TCHAR* productName;
-  _TCHAR* productURI;
-  _TCHAR* imageURI;
+  char* launcherPath;
+  char* iniPath;
+  char* productName;
+  char* productURI;
+  char* imageURI;
 } REQ;
 
 static BOOL
-findDescriptor (_TCHAR* executable, REQ* req)
+findDescriptor (char* executable, REQ* req, BOOL ignoreCab)
 {
   marker[0] = 32;
   int size = sizeof(marker);
@@ -182,15 +219,19 @@ findDescriptor (_TCHAR* executable, REQ* req)
     ++i;
   }
 
-  FILE* file = fopen (executable, "rb");
+  wchar_t* wideExecutable = convertUTF8ToUTF16 (executable);
+  FILE* file = _wfopen (wideExecutable, L"rb");
+
   BOOL retcode = FALSE;
   byte b;
   long pos = 0;
   byte libdata[60000];
   int libdataSize = 0;
 
+  FILE *cabFile = NULL;
   int o;
-  for (o = 0; o < 2; ++o)
+  int markerLimit = 6;
+  for (o = 0; o < markerLimit; ++o)
   {
     int k = 0;
     for (;;)
@@ -203,6 +244,10 @@ findDescriptor (_TCHAR* executable, REQ* req)
       if (o == 1)
       {
         libdata[libdataSize++] = b;
+      }
+      else if (cabFile != NULL)
+      {
+        fwrite (&b, 1, 1, cabFile);
       }
 
       while (k > 0 && marker[k] != b)
@@ -220,61 +265,110 @@ findDescriptor (_TCHAR* executable, REQ* req)
         if (o == 0)
         {
           // We've found the marker that precedes libdata.jar. Skip...
+          if (debug)
+          {
+            printf ("Found marker\n");
+            fflush (stdout);
+          }
         }
         else if (o == 1)
         {
-          // Save the captured libdata.jar bytes to a temporary file.
-          lib = getTempFile (_T("ext"));
+          // We've found the libdata.jar. Skip...
+          if (debug)
+          {
+            printf ("Found libdata.jar\n");
+            fflush (stdout);
+          }
 
-          FILE *fp = fopen (lib, "wb");
+          // Save the captured libdata.jar bytes to a temporary file.
+          lib = getTempFile ("ext", ".jar");
+
+          FILE *fp = _wfopen (convertUTF8ToUTF16 (lib), L"wb");
           fwrite (libdata, libdataSize - size, 1, fp);
           fclose (fp);
 
           // Extract the product descriptor.
           int size = 2048;
-          _TCHAR buffer[size];
+          char buffer[size];
 
           fgets (buffer, size, file);
-          sscanf (buffer, _T("%d"), &req->format);
+          sscanf (buffer, "%d", &req->format);
+
+          if (req->format == 1 || ignoreCab)
+          {
+            markerLimit = 2;
+          }
 
           fgets (buffer, size, file);
-          sscanf (buffer, _T("%d"), &req->major);
+          sscanf (buffer, "%d", &req->major);
 
           fgets (buffer, size, file);
-          sscanf (buffer, _T("%d"), &req->minor);
+          sscanf (buffer, "%d", &req->minor);
 
           fgets (buffer, size, file);
-          sscanf (buffer, _T("%d"), &req->micro);
+          sscanf (buffer, "%d", &req->micro);
 
           fgets (buffer, size, file);
-          sscanf (buffer, _T("%d"), &req->bitness);
+          sscanf (buffer, "%d", &req->bitness);
 
           fgets (buffer, size, file);
-          sscanf (buffer, _T("%d"), &req->jdk);
+          sscanf (buffer, "%d", &req->jdk);
 
           fgets (buffer, size, file);
-          req->launcherPath = _tcsdup (_tcstok (buffer, _T("\n\r")));
+          req->launcherPath = strdup (strtok (buffer, "\n\r"));
 
           fgets (buffer, size, file);
-          req->iniPath = _tcsdup (_tcstok (buffer, _T("\n\r")));
+          req->iniPath = strdup (strtok (buffer, "\n\r"));
 
           fgets (buffer, size, file);
-          req->productName = _tcsdup (_tcstok (buffer, _T("\n\r")));
+          req->productName = strdup (strtok (buffer, "\n\r"));
 
           fgets (buffer, size, file);
-          req->productURI = _tcsdup (_tcstok (buffer, _T("\n\r")));
+          req->productURI = strdup (strtok (buffer, "\n\r"));
 
           fgets (buffer, size, file);
-          req->imageURI = _tcsdup (_tcstok (buffer, _T("\n\r")));
+          req->imageURI = strdup (strtok (buffer, "\n\r"));
 
           retcode = TRUE;
         }
+        else if (o == 2)
+        {
+          // We've found the preceding libdata.jar. Skip...
+          if (debug)
+          {
+            printf ("Finished libdata.jar\n");
+            fflush (stdout);
+          }
+        }
+        else if (o == 3)
+        {
+          if (debug)
+          {
+            printf ("Found start of cab\n");
+            fflush (stdout);
+          }
+          cab = getTempFile ("jre", ".cab");
+          cabFile = _wfopen (convertUTF8ToUTF16 (cab), L"wb");
+        }
+        else if (o == 4)
+        {
+          if (debug)
+          {
+            printf ("Found end of cab\n");
+            fflush (stdout);
+          }
 
-        break;
-      }
+          fclose (cabFile);
+        }
+        else
+        {
+          if (debug)
+          {
+            printf ("Found %d\n", o);
+            fflush (stdout);
+          }
+        }
 
-      if (retcode)
-      {
         break;
       }
 
@@ -286,43 +380,31 @@ findDescriptor (_TCHAR* executable, REQ* req)
   return retcode;
 }
 
-/****************************************************************************************
- * Java Library Management
- ***************************************************************************************/
-
 static BOOL
-execLib (_TCHAR* javaHome, _TCHAR* className, _TCHAR* args)
+execCommand (char *cmdline)
 {
+  if (debug)
+  {
+    printf ("Executing: %s\n", cmdline);
+    fflush (stdout);
+  }
+
   BOOL result = FALSE;
 
-  _TCHAR cmdline[2 * MAX_PATH];
-
-  _TCHAR* lastDot = strrchr (javaHome, '.');
-  if (lastDot != NULL && strcmp (lastDot, _T(".exe")) == 0)
-  {
-    if (snprintf (cmdline, sizeof(cmdline), _T("\"%s\" -cp \"%s\" %s %s"), javaHome, lib, className, args) >= sizeof(cmdline))
-    {
-      return FALSE;
-    }
-  }
-  else
-  {
-    if (snprintf (cmdline, sizeof(cmdline), _T("\"%s\\bin\\javaw\" -cp \"%s\" %s %s"), javaHome, lib, className, args) >= sizeof(cmdline))
-    {
-      return FALSE;
-    }
-  }
-
-  STARTUPINFO si;
+  STARTUPINFOW si;
   PROCESS_INFORMATION pi;
 
   ZeroMemory(&si, sizeof(si) );
   si.cb = sizeof(si);
+  si.dwFlags = STARTF_USESHOWWINDOW;
+  si.wShowWindow = SW_HIDE;
+
   ZeroMemory(&pi, sizeof(pi) );
 
-  // Start the child process.
-  if (!CreateProcess (NULL,   // No module name (use command line)
-      cmdline,        // Command line
+  // Start the child process using the UTF-16 command line.
+  wchar_t* wideCommandLine = convertUTF8ToUTF16 (cmdline);
+  if (!CreateProcessW (NULL,   // No module name (use command line)
+      wideCommandLine,        // Command line
       NULL,           // Process handle not inheritable
       NULL,           // Thread handle not inheritable
       FALSE,          // Set handle inheritance to FALSE
@@ -339,7 +421,7 @@ execLib (_TCHAR* javaHome, _TCHAR* className, _TCHAR* args)
   WaitForSingleObject (pi.hProcess, INFINITE);
 
   DWORD exitCode;
-  if (FALSE != GetExitCodeProcess (pi.hProcess, &exitCode))
+  if (GetExitCodeProcess (pi.hProcess, &exitCode) != FALSE)
   {
     result = exitCode == 0;
   }
@@ -348,13 +430,60 @@ execLib (_TCHAR* javaHome, _TCHAR* className, _TCHAR* args)
   CloseHandle (pi.hProcess);
   CloseHandle (pi.hThread);
 
-  //  exitCode = system (cmdline);
-  //  result = exitCode == 0;
-
-  //  exitCode = WinExec (cmdline, SW_HIDE);
-  //  result= exitCode > 31;
+  free (wideCommandLine);
 
   return result;
+}
+
+/****************************************************************************************
+ * Java Library Management
+ ***************************************************************************************/
+
+static BOOL
+execLib (char* javaHome, char *vmargs, char* className, char* args)
+{
+  size_t cmdlineSize = sizeof(char) * (strlen (javaHome) + (vmargs == NULL ? 0 : strlen (vmargs)) + strlen (className) + strlen (args) + MAX_PATH);
+
+  char* cmdline = malloc (cmdlineSize);
+
+  char* lastDot = strrchr (javaHome, '.');
+  if (lastDot != NULL && strcmp (lastDot, ".exe") == 0)
+  {
+    if (vmargs == NULL)
+    {
+      if (snprintf (cmdline, cmdlineSize, "\"%s\" -cp \"%s\" %s %s", javaHome, lib, className, args) >= cmdlineSize)
+      {
+        return FALSE;
+      }
+    }
+    else
+    {
+      if (snprintf (cmdline, cmdlineSize, "\"%s\" %s -cp \"%s\" %s %s", javaHome, vmargs, lib, className, args) >= cmdlineSize)
+      {
+        return FALSE;
+      }
+
+    }
+  }
+  else
+  {
+    if (vmargs == NULL)
+    {
+      if (snprintf (cmdline, cmdlineSize, "\"%s\\bin\\javaw\" -cp \"%s\" %s %s", javaHome, lib, className, args) >= cmdlineSize)
+      {
+        return FALSE;
+      }
+    }
+    else
+    {
+      if (snprintf (cmdline, cmdlineSize, "\"%s\\bin\\javaw\" %s -cp \"%s\" %s %s", javaHome, vmargs, lib, className, args) >= cmdlineSize)
+      {
+        return FALSE;
+      }
+    }
+  }
+
+  return execCommand (cmdline);
 }
 
 static BOOL
@@ -365,43 +494,44 @@ validateJRE (JRE* jre, REQ* req)
     return FALSE;
   }
 
-  _TCHAR args[4 * 12];
-  if (snprintf (args, sizeof(args), _T("%d %d %d %d"), req->major, req->minor, req->micro, req->bitness) >= sizeof(args))
+  char args[4 * 12];
+  if (snprintf (args, sizeof(args), "%d %d %d %d", req->major, req->minor, req->micro, req->bitness) >= sizeof(args))
   {
     return FALSE;
   }
 
-  return execLib (jre->javaHome, _T("org.eclipse.oomph.extractor.lib.JREValidator"), args);
+  return execLib (jre->javaHome, NULL, "org.eclipse.oomph.extractor.lib.JREValidator", args);
 }
 
 static BOOL
-extractProduct (JRE* jre, JRE* argJRE, _TCHAR* executable, _TCHAR* targetFolder)
+extractProduct (JRE* jre, JRE* argJRE, char* vmargs, char* executable, char* targetFolder, char* productCommandLineArguments)
 {
-  _TCHAR args[MAX_PATH];
+  size_t size = sizeof(char) * (MAX_PATH + strlen (productCommandLineArguments));
+  char* args = malloc (size);
 
   if (argJRE == NULL)
   {
-    if (snprintf (args, sizeof(args), _T("\"%s\" \"%s\""), executable, targetFolder) >= sizeof(args))
+    if (snprintf (args, size, "\"%s\" \"%s\" -- %s", executable, targetFolder, productCommandLineArguments) >= size)
     {
       return FALSE;
     }
   }
   else
   {
-    if (snprintf (args, sizeof(args), _T("\"%s\" \"%s\" \"%s\""), executable, targetFolder, argJRE->javaHome) >= sizeof(args))
+    if (snprintf (args, size, "\"%s\" \"%s\" \"%s\" -- %s", executable, targetFolder, argJRE->javaHome, productCommandLineArguments) >= size)
     {
       return FALSE;
     }
   }
 
-  return execLib (jre->javaHome, _T("org.eclipse.oomph.extractor.lib.BINExtractor"), args);
+  return execLib (jre->javaHome, vmargs, "org.eclipse.oomph.extractor.lib.BINExtractor", args);
 }
 
-static _TCHAR*
-getVM (_TCHAR* path)
+static char*
+getVM (char* path)
 {
-  _TCHAR vm[MAX_PATH];
-  if (snprintf (vm, sizeof(vm), _T("%s\\javaw.exe"), path) >= sizeof(vm))
+  char vm[MAX_PATH];
+  if (snprintf (vm, sizeof(vm), "%s\\javaw.exe", path) >= sizeof(vm))
   {
     return NULL;
   }
@@ -420,13 +550,13 @@ findAllJREsAndVMs (JRE** defaultJRE)
 {
   JRE* jres = findAllJREs ();
 
-  _TCHAR path[32000] = _T("");
-  if (GetEnvironmentVariable (_T("PATH"), path, sizeof(path)) != 0)
+  char path[32000] = "";
+  if (GetEnvironmentVariable ("PATH", path, sizeof(path)) != 0)
   {
-    _TCHAR* token = strtok (path, _T(";"));
+    char* token = strtok (path, ";");
     while (token != NULL)
     {
-      _TCHAR* vm = getVM (token);
+      char* vm = getVM (token);
       if (vm != NULL)
       {
         JRE* jre = malloc (sizeof(JRE));
@@ -444,7 +574,7 @@ findAllJREsAndVMs (JRE** defaultJRE)
         }
       }
 
-      token = strtok (NULL, _T(";"));
+      token = strtok (NULL, ";");
     }
 
     if (*defaultJRE != NULL)
@@ -457,58 +587,525 @@ findAllJREsAndVMs (JRE** defaultJRE)
   return jres;
 }
 
-/****************************************************************************************
- * Main Entry Point
- ***************************************************************************************/
-
-int
-main (int argc, char *argv[])
+static char*
+getProductCommandLineArguments (int argc, char*argv[])
 {
-  protectAgainstDLLHijacking ();
-
-  BOOL validateJREs = TRUE;
-  if (argc > 1)
+  // Compute the length of the result.
+  // Each argument will be surrounded by quotes and separated by a space, so include room for these three additional characters.
+  // Also include room for the terminating null character.
+  int length = 1;
+  int i = 0;
+  while (++i < argc)
   {
-    _TCHAR* option = argv[1];
-    if (_tcscmp (option, _T("-web")) == 0)
+    char * arg = argv[i];
+    length += strlen (arg) + 3;
+  }
+
+  // Allocate the result and initialize the bytes.
+  char* result = malloc (sizeof(char) * length);
+  memset (result, 0, sizeof(char) * length);
+
+  // Compose the arguments.
+  i = 0;
+  while (++i < argc)
+  {
+    if (i == 1 && strcmp ("-vm", argv[i]) == 0)
     {
-      validateJREs = FALSE;
+      // Ignore the VM argument and the value that follows.
+      ++i;
+    }
+    else
+    {
+      if (strlen (result) == 0)
+      {
+        strncat (result, "\"", length);
+      }
+      else
+      {
+        strncat (result, " \"", length);
+      }
+      strncat (result, argv[i], length);
+      strncat (result, "\"", length);
     }
   }
 
-  _TCHAR* executable = argv[0];
+  return result;
+}
+
+static int
+getArgv (char** argv[])
+{
+  // On Windows, the value of main's argv is not UTF-8 encoded but rather is using the system encoding, e.g., Latin-1.
+  // So we'd best get the raw Windows command line via Windows APIs, which uses a UTF-16 encoding.
+
+  // Get the command line using Windows API.
+  LPWSTR commandLineW = GetCommandLineW ();
+
+  // Split the command line into wide character (UTF-16) arguments.
+  int utf16Argc;
+  LPWSTR *utf16Argv = CommandLineToArgvW (commandLineW, &utf16Argc);
+
+  char** utf8Argv = malloc (sizeof(char*) * utf16Argc);
+
+  int i = -1;
+  while (++i < utf16Argc)
+  {
+    LPWSTR utf16Arg = utf16Argv[i];
+    utf8Argv[i] = convertUTF16ToUTF8 (utf16Arg);
+  }
+
+  *argv = utf8Argv;
+  return utf16Argc;
+}
+
+/****************************************************************************************
+ * Untar
+ ***************************************************************************************/
+
+/* Parse an octal number, ignoring leading and trailing nonsense. */
+static int
+parseoct (const char *p, size_t n)
+{
+  int i = 0;
+
+  while (*p < '0' || *p > '7')
+  {
+    ++p;
+    --n;
+  }
+  while (*p >= '0' && *p <= '7' && n > 0)
+  {
+    i *= 8;
+    i += *p - '0';
+    ++p;
+    --n;
+  }
+  return (i);
+}
+
+/* Returns true if this is 512 zero bytes. */
+static int
+is_end_of_archive (const char *p)
+{
+  int n;
+  for (n = 511; n >= 0; --n)
+    if (p[n] != '\0')
+      return (0);
+  return (1);
+}
+
+static char*
+getAbsolutePath (char* pathname, char* targetDir)
+{
+  size_t size = strlen (pathname) + strlen (targetDir) + 3;
+  char * result = malloc (sizeof(char) * size);
+  result[0] = 0;
+  strcat (result, targetDir);
+  strcat (result, pathname);
+  char*p = result;
+  while (*p != 0)
+  {
+    if (*p == '/')
+    {
+      *p = '\\';
+    }
+    ++p;
+  }
+
+  return result;
+}
+
+/* Create a directory, including parent directories as necessary. */
+static void
+create_dir (char *pathname, char *targetDir)
+{
+  char *p;
+  int r;
+
+  /* Strip trailing '/' */
+  if (pathname[strlen (pathname) - 1] == '/')
+  {
+    pathname[strlen (pathname) - 1] = '\0';
+  }
+
+  char* path = getAbsolutePath (pathname, targetDir);
+
+  /* Try creating the directory. */
+  r = mkdir (path);
+
+  if (r != 0)
+  {
+    /* On failure, try creating parent directory. */
+    p = strrchr (pathname, '/');
+    if (p != NULL)
+    {
+      *p = '\0';
+      create_dir (pathname, targetDir);
+      *p = '/';
+      r = mkdir (path);
+    }
+  }
+  if (r != 0)
+  {
+    fprintf (stderr, "Could not create directory %s\n", path);
+    fflush (stderr);
+  }
+}
+
+/* Create a file, including parent directory as necessary. */
+static FILE *
+create_file (char *pathname, char * targetDir)
+{
+  FILE *f;
+
+  char* path = getAbsolutePath (pathname, targetDir);
+  f = fopen (path, "wb");
+  if (f == NULL)
+  {
+    /* Try creating parent dir and then creating file. */
+    char *p = strrchr (pathname, '/');
+    if (p != NULL)
+    {
+      *p = '\0';
+      create_dir (pathname, targetDir);
+      *p = '/';
+      f = fopen (path, "wb");
+    }
+  }
+  return f;
+}
+
+/* Verify the tar checksum. */
+static int
+verify_checksum (const char *p)
+{
+  int n, u = 0;
+  for (n = 0; n < 512; ++n)
+  {
+    if (n < 148 || n > 155)
+      /* Standard tar checksum adds unsigned bytes. */
+      u += ((unsigned char *) p)[n];
+    else
+      u += 0x20;
+
+  }
+  return (u == parseoct (p + 148, 8));
+}
+
+/* Extract a tar archive. */
+static void
+untar (FILE *a, char *path, char* targetDir)
+{
+  char buff[512];
+  FILE *f = NULL;
+  size_t bytes_read;
+  int filesize;
+
+  if (debug)
+  {
+    printf ("Extracting from %s to %s\n", path, targetDir);
+    fflush (stdout);
+  }
+
+  for (;;)
+  {
+    bytes_read = fread (buff, 1, 512, a);
+    if (bytes_read < 512)
+    {
+      fprintf (stderr, "Short read on %s: expected 512, got %lu\n", path, (unsigned long) bytes_read);
+      fflush (stderr);
+      return;
+    }
+
+    if (is_end_of_archive (buff))
+    {
+      if (debug)
+      {
+        printf ("End of %s\n", path);
+        fflush (stdout);
+      }
+
+      return;
+    }
+    if (!verify_checksum (buff))
+    {
+      fprintf (stderr, "Checksum failure\n");
+      fflush (stderr);
+      return;
+    }
+    filesize = parseoct (buff + 124, 12);
+    switch (buff[156])
+    {
+      case '1':
+        if (debug)
+        {
+          printf (" Ignoring hardlink %s\n", buff);
+          fflush (stdout);
+        }
+        break;
+      case '2':
+        if (debug)
+        {
+          printf (" Ignoring symlink %s\n", buff);
+          fflush (stdout);
+        }
+        break;
+      case '3':
+        if (debug)
+        {
+          printf (" Ignoring character device %s\n", buff);
+          fflush (stdout);
+        }
+        break;
+      case '4':
+        if (debug)
+        {
+          printf (" Ignoring block device %s\n", buff);
+          fflush (stdout);
+        }
+        break;
+      case '5':
+        if (debug)
+        {
+          printf (" Extracting dir %s\n", buff);
+          fflush (stdout);
+        }
+
+        create_dir (buff, targetDir);
+        filesize = 0;
+        break;
+      case '6':
+        if (debug)
+        {
+          printf (" Ignoring FIFO %s\n", buff);
+          fflush (stdout);
+        }
+        break;
+      default:
+        if (debug)
+        {
+          printf (" Extracting file %s\n", buff);
+          fflush (stdout);
+        }
+        f = create_file (buff, targetDir);
+        break;
+    }
+    while (filesize > 0)
+    {
+      bytes_read = fread (buff, 1, 512, a);
+      if (bytes_read < 512)
+      {
+        fprintf (stderr, "Short read on %s: Expected 512, got %lu\n", path, (unsigned long) bytes_read);
+        fflush (stderr);
+        return;
+      }
+      if (filesize < 512)
+        bytes_read = filesize;
+      if (f != NULL)
+      {
+        if (fwrite (buff, 1, bytes_read, f) != bytes_read)
+        {
+          fprintf (stderr, "Failed write\n");
+          fflush (stderr);
+          fclose (f);
+          f = NULL;
+        }
+      }
+      filesize -= bytes_read;
+    }
+    if (f != NULL)
+    {
+      fclose (f);
+      f = NULL;
+    }
+  }
+}
+
+static BOOL
+extractTar (char * tarFile, char *targetDir, BOOL createRoot)
+{
+  char root[2];
+  root[0] = '/';
+  root[1] = 0;
+
+  if (createRoot)
+  {
+    create_dir (root, targetDir);
+  }
+
+  FILE *a = fopen (tarFile, "rb");
+  if (a == NULL)
+  {
+    fprintf (stderr, "Unable to open %s\n", tarFile);
+    fflush (stderr);
+    return 1;
+  }
+  else
+  {
+    untar (a, tarFile, targetDir);
+    fclose (a);
+    return 0;
+  }
+}
+
+/****************************************************************************************
+ * Main Entry Point
+ *
+ * On Windows the argv for the standard main function is not UTF-8 encoded rather is encoded using the system encoding, e.g., Latin-1.
+ * So it's best to use getArgv to convert the UTF-16 command line arguments to UTF-8.
+ ***************************************************************************************/
+
+int
+main (int argcIgnored, char** argvIngored)
+{
+  protectAgainstDLLHijacking ();
+
+  char** argv;
+  int argc = getArgv (&argv);
+
+  if (argc > 1 && strcmp (argv[1], "--debug") == 0)
+  {
+    debug = TRUE;
+
+    // Shift the args to remove this one.
+    --argc;
+    {
+      int i;
+      for (i = 1; i < argc; ++i)
+      {
+        argv[i] = argv[i + 1];
+      }
+    }
+  }
+
+  BOOL validateJREs = TRUE;
+  char* explicitJRE = NULL;
+  if (argc > 1)
+  {
+    char* option = argv[1];
+    if (strcmp (option, "-web") == 0)
+    {
+      validateJREs = FALSE;
+    }
+    else if (strcmp (option, "-vm") == 0 && argc > 2)
+    {
+      explicitJRE = argv[2];
+    }
+  }
+
+  char* executable = argv[0];
   REQ req;
 
-  if (!findDescriptor (executable, &req))
+  if (!findDescriptor (executable, &req, explicitJRE != NULL))
   {
-    printf (_T("No product descriptor\n"));
+    fprintf (stderr, "No product descriptor\n");
+    fflush (stderr);
     return EXIT_FAILURE_PRODUCT_DESCRIPTION;
+  }
+
+  char sysdir[MAX_PATH];
+  if (!GetSystemDirectory (sysdir, sizeof(sysdir)))
+  {
+    return EXIT_FAILURE_SYSTEM_DIRECTORY;
+  }
+
+  char * tarFile = NULL;
+  if (cab != NULL && validateJREs)
+  {
+    if (debug)
+    {
+      printf ("CabFile in %s\n", cab);
+      fflush (stdout);
+    }
+
+    char * targetFolder = malloc (strlen (cab) + 10);
+    targetFolder[0] = 0;
+    strcat (targetFolder, cab);
+    strcat (targetFolder, ".jre");
+
+    char root[2];
+    root[0] = '/';
+    root[1] = 0;
+    create_dir (root, targetFolder);
+
+    if (debug)
+    {
+      printf ("targetFolder=%s\n", targetFolder);
+      fflush (stdout);
+    }
+
+    char expand[4 * MAX_PATH];
+    if (snprintf (expand, sizeof(expand), "\"%s\\expand.exe\" -r \"%s\" \"%s\"", sysdir, cab, targetFolder) >= sizeof(expand))
+    {
+      return EXIT_FAILURE_BUFFER_OVERFLOW;
+    }
+
+    execCommand (expand);
+
+    tarFile = malloc (strlen (targetFolder) + 30);
+    tarFile[0] = 0;
+    strcat (tarFile, targetFolder);
+    strcat (tarFile, "\\jre.tar");
+    strcat (targetFolder, "\\");
+    extractTar (tarFile, targetFolder, FALSE);
+    explicitJRE = malloc (strlen (targetFolder) + 30);
+    explicitJRE[0] = 0;
+    strcat (explicitJRE, targetFolder);
+    strcat (explicitJRE, "\\jre");
   }
 
   if (validateJREs)
   {
     JRE* defaultJRE = NULL;
-    JRE* jre = findAllJREsAndVMs (&defaultJRE);
+    JRE* jre = NULL;
+    JRE* validatedJRE = NULL;
 
-    if (jre == NULL)
+    if (explicitJRE != NULL)
     {
-      _TCHAR message[400];
-      if (snprintf (message, sizeof(message),
-                    _T("The required %d-bit Java %d.%d.%d virtual machine could not be found.\nDo you want to browse your system for it?"), req.bitness,
-                    req.major, req.minor, req.micro) >= sizeof(message))
-      {
-        return EXIT_FAILURE_BUFFER_OVERFLOW;
-      }
+      jre = malloc (sizeof(JRE));
+      jre->javaHome = explicitJRE;
+      jre->jdk = 0;
+      jre->next = NULL;
 
-      if (MessageBox (NULL, message, _T("Eclipse Installer"), MB_YESNO | MB_ICONQUESTION) == IDYES)
+      if (!validateJRE (jre, &req))
       {
-        _TCHAR label[100];
-        if (snprintf (label, sizeof(label), _T("Select a %d-Bit Java %d.%d.%d Virtual Machine"), req.bitness, req.major, req.minor, req.micro) >= sizeof(label))
+        char message[400 + MAX_PATH];
+        if (snprintf (message, sizeof(message), "The required %d-bit Java %d.%d.%d virtual machine could not be found at the following location: '%s'",
+                      req.bitness, req.major, req.minor, req.micro, explicitJRE) >= sizeof(message))
         {
           return EXIT_FAILURE_BUFFER_OVERFLOW;
         }
 
-        _TCHAR* vm = browseForFile (NULL, label, _T("javaw.exe\0javaw.exe\0\0"));
+        MessageBox (NULL, message, "Eclipse Installer", MB_OK | MB_ICONERROR);
+        return EXIT_CANCEL;
+      }
+
+      validatedJRE = jre;
+    }
+    else
+    {
+      jre = findAllJREsAndVMs (&defaultJRE);
+    }
+
+    if (jre == NULL)
+    {
+      char message[400];
+      if (snprintf (message, sizeof(message),
+                    "The required %d-bit Java %d.%d.%d virtual machine could not be found.\nDo you want to browse your system for it?", req.bitness, req.major,
+                    req.minor, req.micro) >= sizeof(message))
+      {
+        return EXIT_FAILURE_BUFFER_OVERFLOW;
+      }
+
+      if (MessageBox (NULL, message, "Eclipse Installer", MB_YESNO | MB_ICONQUESTION) == IDYES)
+      {
+        char label[100];
+        if (snprintf (label, sizeof(label), "Select a %d-Bit Java %d.%d.%d Virtual Machine", req.bitness, req.major, req.minor, req.micro) >= sizeof(label))
+        {
+          return EXIT_FAILURE_BUFFER_OVERFLOW;
+        }
+
+        char* vm = browseForFile (NULL, label, "javaw.exe\0javaw.exe\0\0");
         if (vm != NULL)
         {
           jre = malloc (sizeof(JRE));
@@ -521,13 +1118,13 @@ main (int argc, char *argv[])
 
     while (jre)
     {
-      if (validateJRE (jre, &req))
+      if (jre == validatedJRE || validateJRE (jre, &req))
       {
-        _TCHAR* targetFolder = getTempFile (_T("eoi"));
+        char* targetFolder = getTempFile ("eoi", "");
         if (targetFolder == NULL)
         {
-          _TCHAR label[MAX_PATH];
-          if (snprintf (label, sizeof(label), _T("Extract %s to:"), req.productName) >= sizeof(label))
+          char label[MAX_PATH];
+          if (snprintf (label, sizeof(label), "Extract %s to:", req.productName) >= sizeof(label))
           {
             return EXIT_FAILURE_BUFFER_OVERFLOW;
           }
@@ -544,8 +1141,20 @@ main (int argc, char *argv[])
           return EXIT_CANCEL;
         }
 
-        JRE* argJRE = jre == defaultJRE ? NULL : jre;
-        if (extractProduct (jre, argJRE, executable, targetFolder))
+        if (tarFile != NULL)
+        {
+          char *jreTargetFolder = malloc (MAX_PATH);
+          jreTargetFolder[0] = 0;
+          strcat (jreTargetFolder, targetFolder);
+          strcat (jreTargetFolder, "\\");
+          extractTar (tarFile, jreTargetFolder, TRUE);
+          free (jreTargetFolder);
+        }
+
+        char* productCommandLineArguments = getProductCommandLineArguments (argc, argv);
+        JRE* argJRE = tarFile != NULL || jre == defaultJRE ? NULL : jre;
+        if (extractProduct (jre, argJRE, (debug ? "-Dorg.eclipse.oomph.extractor.lib.BINExtractor.log=true" : NULL), executable, targetFolder,
+                            productCommandLineArguments))
         {
           return EXIT_SUCCESS;
         }
@@ -557,15 +1166,9 @@ main (int argc, char *argv[])
     }
   }
 
-  _TCHAR sysdir[MAX_PATH];
-  if (!GetSystemDirectory (sysdir, sizeof(sysdir)))
-  {
-    return EXIT_FAILURE_SYSTEM_DIRECTORY;
-  }
-
-  _TCHAR url[4 * MAX_PATH];
+  char url[4 * MAX_PATH];
   if (snprintf (url, sizeof(url),
-                _T("\"%s\\rundll32.exe\" %s\\url.dll,FileProtocolHandler \"http://download.eclipse.org/oomph/jre/?vm=1_%d_%d_%d_%d_%d&pn=%s&pu=%s&pi=%s\""), //
+                "\"%s\\rundll32.exe\" %s\\url.dll,FileProtocolHandler \"http://download.eclipse.org/oomph/jre/?vm=1_%d_%d_%d_%d_%d&pn=%s&pu=%s&pi=%s\"", //
                 sysdir, sysdir, req.major, req.minor, req.micro, req.bitness, req.jdk, req.productName, req.productURI, req.imageURI) >= sizeof(url))
   {
     return EXIT_FAILURE_BUFFER_OVERFLOW;
