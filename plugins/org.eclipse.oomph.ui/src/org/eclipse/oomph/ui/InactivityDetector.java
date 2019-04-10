@@ -33,26 +33,6 @@ public abstract class InactivityDetector
     }
   };
 
-  private final Runnable detectorRunnable = new Runnable()
-  {
-    public void run()
-    {
-      if (System.currentTimeMillis() - lastActivity > inactivityThreshold)
-      {
-        if (!inactive)
-        {
-          inactive = true;
-          handleInactivity(display, inactive);
-        }
-      }
-
-      if (!display.isDisposed())
-      {
-        display.timerExec(detectorInterval, this);
-      }
-    }
-  };
-
   private final int detectorInterval;
 
   private final int inactivityThreshold;
@@ -89,7 +69,28 @@ public abstract class InactivityDetector
           if (display == null)
           {
             display = controlDisplay;
-            display.timerExec(detectorInterval, detectorRunnable);
+            display.timerExec(detectorInterval, new Runnable()
+            {
+              public void run()
+              {
+                if (!control.isDisposed())
+                {
+                  if (System.currentTimeMillis() - lastActivity > inactivityThreshold)
+                  {
+                    if (!inactive)
+                    {
+                      inactive = true;
+                      handleInactivity(display, inactive);
+                    }
+                  }
+
+                  if (!display.isDisposed())
+                  {
+                    display.timerExec(detectorInterval, this);
+                  }
+                }
+              }
+            });
           }
         }
       }

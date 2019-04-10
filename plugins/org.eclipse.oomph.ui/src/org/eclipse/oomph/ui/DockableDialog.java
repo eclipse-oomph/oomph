@@ -1007,7 +1007,7 @@ public abstract class DockableDialog extends Dialog
       final ShellHandler shellHandler = new ShellHandler(dockable, dockedParts);
 
       // Listen to perspective changes so we can update the docking site as needed.
-      workbenchWindow.addPerspectiveListener(new PerspectiveAdapter()
+      final PerspectiveAdapter perspectiveListener = new PerspectiveAdapter()
       {
         @Override
         public void perspectiveActivated(IWorkbenchPage page, IPerspectiveDescriptor perspective)
@@ -1019,6 +1019,16 @@ public abstract class DockableDialog extends Dialog
               shellHandler.update();
             }
           });
+        }
+      };
+
+      workbenchWindow.addPerspectiveListener(perspectiveListener);
+
+      shell.addDisposeListener(new DisposeListener()
+      {
+        public void widgetDisposed(DisposeEvent e)
+        {
+          workbenchWindow.removePerspectiveListener(perspectiveListener);
         }
       });
 
