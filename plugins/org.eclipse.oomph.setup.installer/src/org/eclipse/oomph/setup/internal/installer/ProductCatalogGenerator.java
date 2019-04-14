@@ -626,7 +626,8 @@ public class ProductCatalogGenerator implements IApplication
       URI releaseURI = URI.createURI(RELEASES + "/" + train);
       log.append(releaseURI);
 
-      IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, originalEPPURI, isStaging ? stagingTrainLocation : releaseURI, true);
+      IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, originalEPPURI, isStaging ? stagingTrainLocation : releaseURI,
+          !(compositeTrains.contains(train) || isStaging && stagingUseComposite));
       if (compositeTrains.contains(train) || isStaging && stagingUseComposite)
       {
         URI latestURI = trimEmptyTrailingSegment(URI.createURI(releaseMetaDataRepository.getLocation().toString()));
