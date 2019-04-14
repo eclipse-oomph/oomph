@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.jdt.provider;
 
+import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.setup.jdt.JDTFactory;
 import org.eclipse.oomph.setup.jdt.JDTPackage;
 import org.eclipse.oomph.setup.jdt.JRETask;
@@ -20,8 +21,10 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.common.util.UniqueEList;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -50,15 +53,26 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
 
   static
   {
-    VERSION_VARIABLES.put("JRE-1.1", "${jre.location-1.1}");
-    VERSION_VARIABLES.put("J2SE-1.2", "${jre.location-1.2}");
-    VERSION_VARIABLES.put("J2SE-1.3", "${jre.location-1.3}");
-    VERSION_VARIABLES.put("J2SE-1.4", "${jre.location-1.4}");
-    VERSION_VARIABLES.put("J2SE-1.5", "${jre.location-1.5}");
-    VERSION_VARIABLES.put("JavaSE-1.6", "${jre.location-1.6}");
-    VERSION_VARIABLES.put("JavaSE-1.7", "${jre.location-1.7}");
-    VERSION_VARIABLES.put("JavaSE-1.8", "${jre.location-1.8}");
-    VERSION_VARIABLES.put("JavaSE-9", "${jre.location-9}");
+    for (EAnnotation eAnnotation : JDTPackage.Literals.JRE_TASK.getEAnnotations())
+    {
+      String source = eAnnotation.getSource();
+      if (EAnnotationConstants.ANNOTATION_VARIABLE.equals(source))
+      {
+        EMap<String, String> details = eAnnotation.getDetails();
+        String name = details.get("name");
+        if (!StringUtil.isEmpty(name))
+        {
+          String version = details.get("version");
+          if (StringUtil.isEmpty(version))
+          {
+            int index = name.lastIndexOf('-');
+            version = "JavaSE-" + name.substring(index + 1);
+          }
+
+          VERSION_VARIABLES.put(version, "${" + name + "}");
+        }
+      }
+    }
   }
 
   /**

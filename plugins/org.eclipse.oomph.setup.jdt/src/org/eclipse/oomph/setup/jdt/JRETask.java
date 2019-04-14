@@ -34,19 +34,19 @@ import org.eclipse.emf.common.util.EList;
  *
  * @see org.eclipse.oomph.setup.jdt.JDTPackage#getJRETask()
  * @model annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
- *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.1' type='JRE' label='JRE 1.1 Location' description='The location of a JDK or JRE compatible with Java 1.1.'"
- *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.2' type='JRE' label='JRE 1.2 Location' description='The location of a JDK or JRE compatible with Java 1.2.'"
- *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.3' type='JRE' label='JRE 1.3 Location' description='The location of a JDK or JRE compatible with Java 1.3.'"
- *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.4' type='JRE' label='JRE 1.4 Location' description='The location of a JDK or JRE compatible with Java 1.4.'"
- *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.5' type='JRE' label='JRE 1.5 Location' description='The location of a JDK or JRE compatible with Java 1.5.'"
- *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.6' type='JRE' label='JRE 1.6 Location' description='The location of a JDK or JRE compatible with Java 1.6.'"
- *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.7' type='JRE' label='JRE 1.7 Location' description='The location of a JDK or JRE compatible with Java 1.7.'"
- *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.8' type='JRE' label='JRE 1.8 Location' description='The location of a JDK or JRE compatible with Java 1.8.'"
- *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-9' type='JRE' label='JRE 9 Location' description='The location of a JDK or JRE compatible with Java 9.'"
- *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-10' type='JRE' label='JRE 10 Location' description='The location of a JDK or JRE compatible with Java 10.'"
- *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-11' type='JRE' label='JRE 11 Location' description='The location of a JDK or JRE compatible with Java 11.'"
- *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-12' type='JRE' label='JRE 12 Location' description='The location of a JDK or JRE compatible with Java 12.'"
- *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-13' type='JRE' label='JRE 13 Location' description='The location of a JDK or JRE compatible with Java 13.'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.1' type='JRE' label='JRE 1.1 Location' description='The location of a JDK or JRE compatible with Java 1.1.' version='JRE-1.1'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.2' type='JRE' label='JRE 1.2 Location' description='The location of a JDK or JRE compatible with Java 1.2.' version='J2SE-1.2'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.3' type='JRE' label='JRE 1.3 Location' description='The location of a JDK or JRE compatible with Java 1.3.' version='J2SE-1.3'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.4' type='JRE' label='JRE 1.4 Location' description='The location of a JDK or JRE compatible with Java 1.4.' version='J2SE-1.4'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.5' type='JRE' label='JRE 1.5 Location' description='The location of a JDK or JRE compatible with Java 1.5.' version='J2SE-1.5'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.6' type='JRE' label='JRE 1.6 Location' description='The location of a JDK or JRE compatible with Java 1.6.' version='JavaSE-1.6'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.7' type='JRE' label='JRE 1.7 Location' description='The location of a JDK or JRE compatible with Java 1.7.' version='JavaSE-1.7'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-1.8' type='JRE' label='JRE 1.8 Location' description='The location of a JDK or JRE compatible with Java 1.8.' version='JavaSE-1.8'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-9' type='JRE' label='JRE 9 Location' description='The location of a JDK or JRE compatible with Java 9.' version='JavaSE-9'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-10' type='JRE' label='JRE 10 Location' description='The location of a JDK or JRE compatible with Java 10.' version='JavaSE-10'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-11' type='JRE' label='JRE 11 Location' description='The location of a JDK or JRE compatible with Java 11.' version='JavaSE-11'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-12' type='JRE' label='JRE 12 Location' description='The location of a JDK or JRE compatible with Java 12.' version='JavaSE-12'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-13' type='JRE' label='JRE 13 Location' description='The location of a JDK or JRE compatible with Java 13.' version='JavaSE-13'"
  * @generated
  */
 public interface JRETask extends SetupTask
