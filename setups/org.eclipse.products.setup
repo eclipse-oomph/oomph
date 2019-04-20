@@ -44,18 +44,25 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-java-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (2019-06)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -171,18 +178,25 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-java-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (2019-06)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -794,18 +808,25 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-enterprise-java-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Enterprise Java Developers (2019-06)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -1185,18 +1206,25 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-enterprise-java-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Enterprise Java Developers (2019-06)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -2641,18 +2669,25 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-cc-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (2019-06)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.arduino.feature.group"/>
         <requirement
@@ -2836,18 +2871,25 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-cc-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (2019-06)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.arduino.feature.group"/>
         <requirement
@@ -3617,7 +3659,7 @@
     <description>An IDE for C/C++ developers with Mylyn integration.</description>
   </product>
   <product name="epp.package.javascript"
-      label="Eclipse IDE for JavaScript and Web Developers">
+      label="Eclipse IDE for JavaScript and Web Developers (includes incubating components)">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
@@ -3629,18 +3671,25 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-javascript-and-web-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (2019-06)">
+          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-06)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3666,23 +3715,17 @@
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
+            name="org.eclipse.rse.feature.group"/>
+        <requirement
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
-            name="org.eclipse.wst.jsdt.chromium.debug.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wst.jsdt.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wst.json_ui.feature.feature.group"/>
+            name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.server_adapters.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.server_ui.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wst.web_ui.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
@@ -3702,7 +3745,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (2019-03)">
+          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-03)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.11.0,5.0.0)"/>
@@ -3764,18 +3807,25 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-javascript-and-web-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (2019-06)">
+          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-06)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -3801,23 +3851,17 @@
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
+            name="org.eclipse.rse.feature.group"/>
+        <requirement
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
-            name="org.eclipse.wst.jsdt.chromium.debug.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wst.jsdt.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wst.json_ui.feature.feature.group"/>
+            name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.server_adapters.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.server_ui.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wst.web_ui.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
@@ -3837,7 +3881,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (2019-03)">
+          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-03)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.11.0,5.0.0)"/>
@@ -3908,7 +3952,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (2018-12)">
+          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2018-12)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.10.0,5.0.0)"/>
@@ -3979,7 +4023,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (2018-09)">
+          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2018-09)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.9.0,5.0.0)"/>
@@ -4052,7 +4096,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (Photon)">
+          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (Photon)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.8.0,5.0.0)"/>
@@ -4123,7 +4167,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (Oxygen)">
+          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (Oxygen)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.7.0,5.0.0)"/>
@@ -4194,7 +4238,7 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (Neon)">
+          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (Neon)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.6.0,5.0.0)"/>
@@ -4269,18 +4313,25 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-php-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (2019-06)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -4392,18 +4443,25 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-php-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (2019-06)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -4900,18 +4958,25 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-eclipse-committers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (2019-06)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -5095,18 +5160,25 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-eclipse-committers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (2019-06)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -5872,24 +5944,31 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (2019-06)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.17.0,4.0.0)"/>
+            versionRange="[3.18.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,4.0.0)"/>
+            versionRange="[3.14.0,4.0.0)"/>
         <requirement
             name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
         <requirement
@@ -5959,24 +6038,31 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (2019-06)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.17.0,4.0.0)"/>
+            versionRange="[3.18.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,4.0.0)"/>
+            versionRange="[3.14.0,4.0.0)"/>
         <requirement
             name="org.eclipse.emf.ecore.xcore.sdk.feature.group"/>
         <requirement
@@ -6428,18 +6514,25 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-java-and-report-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (2019-06)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
         <requirement
@@ -6767,18 +6860,25 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-java-and-report-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java and Report Developers (2019-06)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
         <requirement
@@ -8026,11 +8126,18 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2019-06)"
+        label="Latest (2019-03)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-modeling-tools</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse Modeling Tools (2019-06)">
+          label="Eclipse Modeling Tools (2019-03)">
         <requirement
             name="epp.package.modeling"
             versionRange="[4.11.0,5.0.0)"/>
@@ -8107,9 +8214,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
       </setupTask>
     </version>
     <version
@@ -8205,94 +8312,6 @@
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
             url="http://download.eclipse.org/releases/2019-03/201903201000"/>
-      </setupTask>
-    </version>
-    <version
-        name="2019-06"
-        label="2019-06"
-        requiredJavaVersion="1.8">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse Modeling Tools (2019-06)">
-        <requirement
-            name="epp.package.modeling"
-            versionRange="[4.11.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.e4.core.tools.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.egit.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.cdo.epp.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.compare.egit.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.compare.ide.ui.source.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.compare.source.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.ecoretools.design.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.ecp.sdk.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.emfstore.sdk.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.parsley.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.parsley.sdk.source.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.query.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.transaction.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.validation.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.epp.mpc.feature.group"/>
-        <requirement
-            name="org.eclipse.gef.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.gmf.runtime.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.pde_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.ocl.all.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"/>
-        <requirement
-            name="org.eclipse.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.tips.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.uml2.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.xsd.sdk.feature.group"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
-        <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
       </setupTask>
     </version>
     <version
@@ -9259,24 +9278,31 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-rcp-and-rap-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (2019-06)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.17.0,4.0.0)"/>
+            versionRange="[3.18.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,4.0.0)"/>
+            versionRange="[3.14.0,4.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -9410,24 +9436,31 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-rcp-and-rap-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (2019-06)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
-            versionRange="[3.17.0,4.0.0)"/>
+            versionRange="[3.18.0,4.0.0)"/>
         <requirement
             name="org.eclipse.pde.feature.group"
-            versionRange="[3.13.0,4.0.0)"/>
+            versionRange="[3.14.0,4.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -10127,18 +10160,25 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-testers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Testers (2019-06)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
@@ -10206,18 +10246,25 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-testers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Testers (2019-06)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
@@ -10625,18 +10672,25 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-scientific-computing</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scientific Computing (2019-06)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -10796,18 +10850,25 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-scientific-computing</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scientific Computing (2019-06)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -11732,18 +11793,25 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-scout-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (2019-06)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -11855,18 +11923,25 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-scout-developers</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (2019-06)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -12445,18 +12520,25 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Rust Developers (2019-06)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
         <requirement
@@ -12544,18 +12626,25 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Rust Developers (2019-06)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
         <requirement
@@ -12808,18 +12897,25 @@
         name="latest"
         label="Latest (2019-06)"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (2019-06)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/2019-06"/>
       </setupTask>
@@ -12855,18 +12951,25 @@
         name="2019-06"
         label="2019-06"
         requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m1</value>
+        </detail>
+      </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (2019-06)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/2019-06"/>
       </setupTask>
