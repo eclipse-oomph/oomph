@@ -14,6 +14,7 @@ import org.eclipse.oomph.setup.ResourceCopyTask;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.ZIPUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
@@ -22,6 +23,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.resource.URIConverter;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -314,6 +316,38 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
     return 2;
   }
 
+  protected boolean isFile(URI uri)
+  {
+    if (uri.isFile())
+    {
+      return true;
+    }
+
+    URI archiveURI = getArchiveURI(uri);
+    return archiveURI != null && archiveURI.isFile();
+  }
+
+  protected URI getArchiveURI(URI uri)
+  {
+    if (uri.isArchive())
+    {
+      String authority = uri.authority();
+      if (authority != null && authority.endsWith("!"))
+      {
+        URI archiveURI = URI.createURI(authority.substring(0, authority.length() - 1));
+        archiveURI.appendQuery(uri.query());
+        return archiveURI;
+      }
+    }
+
+    return null;
+  }
+
+  protected boolean isFolder(URI uri)
+  {
+    return uri.hasTrailingPathSeparator() || uri.lastSegment() == null;
+  }
+
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     URI sourceURI = createResolvedURI(getSourceURL());
@@ -325,11 +359,11 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
     }
 
     URIConverter uriConverter = context.getURIConverter();
-    if (targetURI.hasTrailingPathSeparator())
+    if (isFolder(targetURI))
     {
-      if (sourceURI.hasTrailingPathSeparator())
+      if (isFolder(sourceURI))
       {
-        if (uriConverter.normalize(targetURI).isFile() && uriConverter.normalize(sourceURI).isFile())
+        if (isFile(uriConverter.normalize(targetURI)))
         {
           return isForce() || !uriConverter.exists(targetURI, null);
         }
@@ -343,6 +377,24 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
     return isForce() || !uriConverter.exists(targetURI, null);
   }
 
+  protected void copy(URIConverter uriConverter, URI sourceURI, URI targetURI) throws IOException
+  {
+    InputStream input = null;
+    OutputStream output = null;
+
+    try
+    {
+      input = uriConverter.createInputStream(sourceURI);
+      output = uriConverter.createOutputStream(targetURI, null);
+      IOUtil.copy(input, output);
+    }
+    finally
+    {
+      IOUtil.closeSilent(input);
+      IOUtil.closeSilent(output);
+    }
+  }
+
   public void perform(SetupTaskContext context) throws Exception
   {
     URI sourceURI = createResolvedURI(getSourceURL());
@@ -351,12 +403,31 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
 
     URI normalizedSourceURI = uriConverter.normalize(sourceURI);
     URI normalizedTargetURI = uriConverter.normalize(targetURI);
-    if (targetURI.hasTrailingPathSeparator())
+    if (isFolder(targetURI))
     {
-      if (sourceURI.hasTrailingPathSeparator())
+      if (isFolder(sourceURI))
       {
-        if (normalizedTargetURI.isFile() && normalizedSourceURI.isFile())
+        if (normalizedSourceURI.isArchive() && isFile(normalizedTargetURI))
         {
+          URI archiveURI = getArchiveURI(normalizedSourceURI);
+          if (isFile(archiveURI))
+          {
+            context.log("Unzipping resource " + normalizedSourceURI + " to " + normalizedTargetURI);
+            ZIPUtil.unzip(new File(archiveURI.toFileString()), new File(normalizedTargetURI.toFileString()));
+          }
+          else
+          {
+            File tempZipFile = File.createTempFile("archive", "zip");
+            context.log("Downloading resource " + uriConverter.normalize(archiveURI) + " to temp file " + tempZipFile);
+            copy(uriConverter, archiveURI, URI.createFileURI(tempZipFile.getAbsolutePath()));
+
+            context.log("Unzipping temp file " + tempZipFile + " to " + normalizedTargetURI);
+            ZIPUtil.unzip(tempZipFile, new File(normalizedTargetURI.toFileString()));
+          }
+        }
+        else if (isFile(normalizedTargetURI) && isFile(normalizedSourceURI))
+        {
+          context.log("Copying folder " + normalizedSourceURI + " to " + normalizedTargetURI);
           IOUtil.copyTree(new File(normalizedSourceURI.toFileString()), new File(normalizedTargetURI.toFileString()));
         }
         else
@@ -368,41 +439,13 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
       {
         URI targetResourceURI = targetURI.appendSegment(sourceURI.lastSegment());
         context.log("Copying resource " + normalizedSourceURI + " to " + uriConverter.normalize(targetResourceURI));
-
-        InputStream input = null;
-        OutputStream output = null;
-
-        try
-        {
-          input = uriConverter.createInputStream(sourceURI);
-          output = uriConverter.createOutputStream(targetResourceURI, null);
-          IOUtil.copy(input, output);
-        }
-        finally
-        {
-          IOUtil.closeSilent(input);
-          IOUtil.closeSilent(output);
-        }
+        copy(uriConverter, sourceURI, targetResourceURI);
       }
     }
     else if (uriConverter.exists(sourceURI, null))
     {
       context.log("Copying resource " + normalizedSourceURI + " to " + normalizedTargetURI);
-
-      InputStream input = null;
-      OutputStream output = null;
-
-      try
-      {
-        input = uriConverter.createInputStream(sourceURI);
-        output = uriConverter.createOutputStream(targetURI, null);
-        IOUtil.copy(input, output);
-      }
-      finally
-      {
-        IOUtil.closeSilent(input);
-        IOUtil.closeSilent(output);
-      }
+      copy(uriConverter, sourceURI, targetURI);
     }
     else
     {
