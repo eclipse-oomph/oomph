@@ -355,6 +355,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     versionLink = new Link(parent, SWT.NO_FOCUS);
     versionLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_CENTER));
     versionLink.setToolTipText("About");
+    versionLink.setText("<a>0.0.0</a>");
     AccessUtil.setKey(versionLink, "version");
 
     Thread thread = new ProductVersionInitializer();
