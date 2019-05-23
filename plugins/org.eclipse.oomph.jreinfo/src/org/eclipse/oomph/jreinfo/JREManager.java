@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.service.datalocation.Location;
 
 import java.io.File;
@@ -422,7 +423,7 @@ public final class JREManager
       }
       catch (IOException ex)
       {
-        JREInfoPlugin.INSTANCE.log(ex, IStatus.WARNING);
+        JREInfoPlugin.INSTANCE.log(new Status(IStatus.WARNING, JREInfoPlugin.INSTANCE.getSymbolicName(), "Problem processing:" + javaHome, ex));
       }
     }
 
