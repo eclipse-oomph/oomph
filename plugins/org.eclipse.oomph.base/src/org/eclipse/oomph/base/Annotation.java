@@ -75,7 +75,7 @@ public interface Annotation extends ModelElement
    * @return the value of the '<em>Source</em>' attribute.
    * @see #setSource(String)
    * @see org.eclipse.oomph.base.BasePackage#getAnnotation_Source()
-   * @model
+   * @model annotation="http://www.eclipse.org/oomph/setup/NoExpand"
    * @generated
    */
   String getSource();

@@ -949,7 +949,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
     {
       if (image == null)
       {
-        new AdapterFactoryItemDelegator(adapterFactory).getImage(EcorePackage.Literals.ECLASS);
+        image = new AdapterFactoryItemDelegator(adapterFactory).getImage(EcorePackage.Literals.ECLASS);
       }
     }
 

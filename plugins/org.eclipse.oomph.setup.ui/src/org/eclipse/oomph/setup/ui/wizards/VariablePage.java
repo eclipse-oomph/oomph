@@ -271,7 +271,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
               boolean isUsedInActualTriggeredTask = false;
               for (SetupTask setupTask : setupTaskPerformer.getTriggeredSetupTasks())
               {
-                if (setupTask.getTriggers().contains(trigger) && setupTaskPerformer.isVariableUsed(name, setupTask, true))
+                if (setupTask.getTriggers().contains(trigger) && SetupTaskPerformer.isVariableUsed(name, setupTask, true))
                 {
                   isUsedInActualTriggeredTask = true;
                   break;
@@ -548,9 +548,9 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
         @Override
         protected Dialog createDialog()
         {
-          return createDialog(getShell(), SETUP_TASK_ANALYSIS_TITLE, null,
-              "Analyzing the needed setup tasks has taken more than " + (System.currentTimeMillis() - getStart()) / 1000
-                  + " seconds.  The Next button will be disabled, though animated, until it completes.  You may continue to modify the values of the variables.",
+          return createDialog(getShell(), SETUP_TASK_ANALYSIS_TITLE, null, "Analyzing the needed setup tasks has taken more than "
+              + (System.currentTimeMillis() - getStart()) / 1000
+              + " seconds.  The Next button will be disabled, though animated, until it completes.  You may continue to modify the values of the variables.",
               MessageDialog.INFORMATION, new String[] { IDialogConstants.OK_LABEL }, 0);
         }
 

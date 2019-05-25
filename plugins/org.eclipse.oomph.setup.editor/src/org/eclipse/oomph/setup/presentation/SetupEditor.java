@@ -14,16 +14,21 @@ import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.base.provider.BaseEditUtil.IconReflectiveItemProvider;
 import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
 import org.eclipse.oomph.base.util.BaseResourceImpl;
+import org.eclipse.oomph.edit.NoChildrenDelegatingWrapperItemProvider;
 import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.ui.FindAndReplaceTarget;
 import org.eclipse.oomph.internal.ui.IRevertablePart;
 import org.eclipse.oomph.internal.ui.OomphEditingDomain;
 import org.eclipse.oomph.internal.ui.OomphPropertySheetPage;
+import org.eclipse.oomph.setup.Argument;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
+import org.eclipse.oomph.setup.Macro;
+import org.eclipse.oomph.setup.MacroTask;
+import org.eclipse.oomph.setup.Parameter;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -35,6 +40,7 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.Trigger;
+import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
@@ -81,12 +87,16 @@ import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.SegmentSequence;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.UniqueEList;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
@@ -96,6 +106,7 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.edit.EMFEditPlugin;
 import org.eclipse.emf.edit.command.AbstractOverrideableCommand;
@@ -114,6 +125,7 @@ import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.IWrapperItemProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptorDecorator;
@@ -127,6 +139,7 @@ import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.DecoratingColumLabelProvider;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
+import org.eclipse.emf.edit.ui.provider.ExtendedColorRegistry;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
@@ -184,9 +197,13 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
@@ -267,14 +284,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EventObject;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -296,6 +315,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   private static final Pattern HEADER_PATTERN = Pattern.compile("(<h1)(>)");
 
   private static final Pattern IMAGE_PATTERN = Pattern.compile("(<img )(src=)");
+
+  private static final URI COMPOSITE_OUTLINE_COLOR = URI.createURI("color://rgb/138/110/85");
 
   private static final Object UNDECLARED_VARIABLE_GROUP_IMAGE;
 
@@ -756,7 +777,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     }
   };
 
-  private ResourceMirror resourceMirror;
+  private AtomicReference<ResourceMirror> resourceMirror;
 
   private final ItemProvider loadingResourceInput = new ItemProvider(Collections.singleton(new ItemProvider("Loading resource...")));
 
@@ -769,6 +790,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   private Runnable reproxifier;
 
   protected SetupActionBarContributor.SetupWorkingSetsProvider workingSetsProvider = new SetupActionBarContributor.SetupWorkingSetsProvider();
+
+  private AdapterFactoryContentProvider selectionViewerContentProvider;
 
   /**
    * This creates a model editor.
@@ -838,7 +861,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         ResourceSet resourceSet = editingDomain.getResourceSet();
         URIConverter uriConverter = resourceSet.getURIConverter();
-        final Set<IFile> files = new HashSet<IFile>();
+        final Set<IFile> files = new LinkedHashSet<IFile>();
 
         for (Resource resource : resourceSet.getResources())
         {
@@ -924,7 +947,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         if (!changedResources.isEmpty())
         {
-          // Only the first resource is modifiable, so if other resources are removed, we can just unload them, an ignore them form further dirty handling.
+          // Only the first resource is modifiable, so if other resources are removed, we can just unload them, an ignore them from further dirty handling.
           List<Resource> changedResources = new ArrayList<Resource>(this.changedResources);
           if (!changedResources.remove(resourceSet.getResources().get(0)))
           {
@@ -956,6 +979,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
             updateProblemIndication = true;
             updateProblemIndication();
+
+            // Force updates such a revalidation and content out update.
+            ReflectUtil.invokeMethod("notifyListeners", editingDomain.getCommandStack());
+            selectionViewer.refresh();
           }
         }
 
@@ -1151,7 +1178,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             for (Iterator<PropertySheetPage> i = propertySheetPages.iterator(); i.hasNext();)
             {
               PropertySheetPage propertySheetPage = i.next();
-              if (propertySheetPage.getControl().isDisposed())
+              if (propertySheetPage.getControl() == null || propertySheetPage.getControl().isDisposed())
               {
                 i.remove();
               }
@@ -1205,11 +1232,23 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             ResourceSet resourceSet = resource.getResourceSet();
             if (resourceSet != null && resourceSet.getResources().get(0) != resource)
             {
+              if (children != null)
+              {
+                for (DelegatingWrapperItemProvider child : children)
+                {
+                  if (((EObject)child.getValue()).eIsProxy())
+                  {
+                    children = null;
+                    break;
+                  }
+                }
+              }
+
               if (children == null)
               {
                 children = new ArrayList<DelegatingWrapperItemProvider>();
                 int index = 0;
-                for (Object child : contents)
+                for (EObject child : contents)
                 {
                   children.add(new DelegatingWrapperItemProvider(child, resource, null, index++, resourceItemProviderAdapterFactory));
                 }
@@ -1414,7 +1453,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     // Create the editing domain with a special command stack.
     //
-    Map<Resource, Boolean> readOnlyMap = new HashMap<Resource, Boolean>()
+    Map<Resource, Boolean> readOnlyMap = new LinkedHashMap<Resource, Boolean>()
     {
       private static final long serialVersionUID = 1L;
 
@@ -1504,14 +1543,35 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       // If we're trying to select a resource in the selection viewer, make sure resources are visible there.
       if (currentViewer == selectionViewer)
       {
+        List<Object> effectiveCollection = new ArrayList<Object>();
+        boolean selectResource = false;
         for (Object object : collection)
         {
           if (object instanceof Resource)
           {
-            toggleInput(true);
-            break;
+            selectResource = true;
+            Object[] children = selectionViewerContentProvider.getChildren(object);
+            if (children.length == 0)
+            {
+              effectiveCollection.add(object);
+            }
+            else
+            {
+              effectiveCollection.add(children[0]);
+            }
+          }
+          else
+          {
+            effectiveCollection.add(object);
           }
         }
+
+        if (selectResource)
+        {
+          toggleInput(true);
+        }
+
+        collection = effectiveCollection;
       }
 
       setSelectionToViewerGen(collection);
@@ -1742,7 +1802,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     // If the index's folder is redirected to the local file system...
     URIConverter uriConverter = resourceSet.getURIConverter();
     Map<URI, URI> uriMap = uriConverter.getURIMap();
-    Map<URI, URI> workspaceMappings = new HashMap<URI, URI>();
+    Map<URI, URI> workspaceMappings = new LinkedHashMap<URI, URI>();
     for (URI uri : uriMap.values())
     {
       if (uri.isFile() && !uri.isRelative())
@@ -1787,7 +1847,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     uriMap.putAll(workspaceMappings);
 
     URI resourceURI = SetupEditorSupport.getURI(getEditorInput(), resourceSet.getURIConverter());
-    resourceMirror.perform(resourceURI);
+    resourceMirror.get().perform(resourceURI);
 
     final Resource mainResource = resourceSet.getResource(resourceURI, false);
     EList<EObject> contents = mainResource.getContents();
@@ -1912,7 +1972,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           };
         }
 
-        resourceMirror.perform(SetupContext.INDEX_SETUP_URI);
+        resourceMirror.get().perform(SetupContext.INDEX_SETUP_URI);
       }
     }
 
@@ -1927,7 +1987,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     editingDomain.getResourceSet().eAdapters().add(problemIndicationAdapter);
 
-    if (!resourceMirror.isCanceled() && rootObject != null)
+    if (!resourceMirror.get().isCanceled() && rootObject != null)
     {
       Display display = getSite().getShell().getDisplay();
       display.asyncExec(new Runnable()
@@ -2005,7 +2065,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     }
   }
 
-  private void configure(ColumnViewer viewer, final boolean foreignResourceDecoration)
+  private void configure(ColumnViewer viewer, final Set<Resource> primaryResources, final Set<EObject> syntheticEObjects)
   {
     final SetupLocationListener locationListener = new SetupLocationListener(true);
     locationListener.setEditor(this);
@@ -2108,6 +2168,16 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           return super.getText(object);
         }
       };
+
+      @Override
+      protected void decorate(Map<Object, BasicDiagnostic> objects)
+      {
+        // Don't decorate the outline.
+        if (primaryResources == null)
+        {
+          super.decorate(objects);
+        }
+      }
 
       @Override
       protected BasicDiagnostic decorate(Map<Object, BasicDiagnostic> decorations, Object object, Diagnostic diagnostic, List<Integer> path)
@@ -2409,6 +2479,9 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     };
 
+    // private static final URI FOREGROUND_COLOR = URI.createURI("color://rgb/85/113/138");
+
+    final Color syntheticColor = ExtendedColorRegistry.INSTANCE.getColor(null, null, URI.createURI("color://rgb/85/113/138"));
     final Font font = viewer.getControl().getFont();
     viewer.setLabelProvider(new DecoratingColumLabelProvider(setupLabelProvider, diagnosticDecorator)
     {
@@ -2458,17 +2531,25 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
 
       @Override
+      public Color getForeground(Object element)
+      {
+        Color foreground = super.getForeground(element);
+        if (foreground == null && syntheticEObjects != null && syntheticEObjects.contains(element))
+        {
+          foreground = syntheticColor;
+        }
+
+        return foreground;
+      }
+
+      @Override
       public Font getFont(Object object)
       {
         Font result = super.getFont(object);
-        if (foreignResourceDecoration && object instanceof SetupTask)
+        Object unwrappedObject = AdapterFactoryEditingDomain.unwrap(object);
+        if (primaryResources != null && unwrappedObject instanceof EObject && !primaryResources.contains(((EObject)unwrappedObject).eResource()))
         {
-          SetupTask setupTask = (SetupTask)object;
-          Resource resource = setupTask.eResource();
-          if (resource == null || !editingDomain.getResourceSet().getResources().get(0).getURI().equals(resource.getURI()))
-          {
-            result = ExtendedFontRegistry.INSTANCE.getFont(result != null ? result : font, IItemFontProvider.ITALIC_FONT);
-          }
+          result = ExtendedFontRegistry.INSTANCE.getFont(result != null ? result : font, IItemFontProvider.ITALIC_FONT);
         }
 
         return result;
@@ -2547,9 +2628,9 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     selectionViewer = new TreeViewer(tree);
     setCurrentViewer(selectionViewer);
 
-    configure(selectionViewer, false);
+    configure(selectionViewer, null, null);
 
-    selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
+    selectionViewerContentProvider = new AdapterFactoryContentProvider(adapterFactory)
     {
       @Override
       public Object getParent(Object object)
@@ -2566,7 +2647,9 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         return super.getParent(object);
       }
-    });
+    };
+
+    selectionViewer.setContentProvider(selectionViewerContentProvider);
 
     selectionViewer.setInput(loadingResourceInput);
 
@@ -2611,6 +2694,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   protected void doLoad()
   {
+    resourceMirror = new AtomicReference<ResourceMirror>();
     final Tree tree = selectionViewer.getTree();
     Job job = new Job("Loading Model")
     {
@@ -2631,7 +2715,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           @Override
           protected void run(String taskName, IProgressMonitor monitor)
           {
-            SetupEditor.this.resourceMirror = this;
+            SetupEditor.this.resourceMirror.set(this);
             createModel();
             resolveProxies();
             dialogSettings.setLiveValidation(true);
@@ -2821,13 +2905,29 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private Trigger trigger;
 
-    private Map<Object, Set<Object>> copyMap = new HashMap<Object, Set<Object>>();
+    private final Map<Object, Set<Object>> copyMap = new LinkedHashMap<Object, Set<Object>>();
 
-    private Map<Object, Set<Object>> inverseCopyMap = new HashMap<Object, Set<Object>>();
+    private final Map<Object, Set<Object>> inverseCopyMap = new LinkedHashMap<Object, Set<Object>>();
 
-    private List<Notifier> notifiers = new ArrayList<Notifier>();
+    private final Map<SetupTask, Set<VariableTask>> inducedIDVariables = new LinkedHashMap<SetupTask, Set<VariableTask>>();
 
-    private Map<Object, Object> parents = new HashMap<Object, Object>();
+    private final List<Notifier> notifiers = new ArrayList<Notifier>();
+
+    private final Set<EObject> syntheticObjects = new LinkedHashSet<EObject>();
+
+    private final Map<Object, Object> parents = new LinkedHashMap<Object, Object>();
+
+    private final List<Scope> previewableScopes = new UniqueEList<Scope>();
+
+    private final Set<Resource> primaryResources = new LinkedHashSet<Resource>();
+
+    private final Stream compositeStream = SetupFactory.eINSTANCE.createStream();
+
+    private final Configuration compositeConfiguration = SetupFactory.eINSTANCE.createConfiguration();
+
+    private final Macro compositeMacro = SetupFactory.eINSTANCE.createMacro();
+
+    private OutlineItemProvider root;
 
     private AdapterFactoryEditingDomain.EditingDomainProvider editingDomainProvider = new AdapterFactoryEditingDomain.EditingDomainProvider(editingDomain);
 
@@ -2835,9 +2935,27 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private AdapterFactoryItemDelegator itemDelegator;
 
+    private PreviewAction previewAction;
+
+    public OutlinePreviewPage()
+    {
+      compositeStream.setLabel("Composite Stream");
+      compositeStream.setName("composite");
+      compositeStream.setDescription("This is a stream to represent the composition of all the workspace's streams");
+
+      compositeConfiguration.setLabel("Configurations");
+      compositeConfiguration.setDescription("All available configurations");
+
+      compositeMacro.setName("macros");
+      compositeMacro.setLabel("Macros");
+      compositeMacro.setDescription("All available macros");
+    }
+
     private class VariableContainer extends ItemProvider
     {
       private SetupTaskPerformer setupTaskPerformer;
+
+      private Map<Pair<Object, Object>, IWrapperItemProvider> wrappers = new LinkedHashMap<Pair<Object, Object>, IWrapperItemProvider>();
 
       public VariableContainer(SetupTaskPerformer setupTaskPerformer, String text, Object image)
       {
@@ -2849,6 +2967,42 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         return setupTaskPerformer;
       }
+
+      public IWrapperItemProvider wrapper(Object variable, Object child)
+      {
+        Pair<Object, Object> key = Pair.create(variable, child);
+        IWrapperItemProvider wrapper = wrappers.get(key);
+        if (wrapper == null)
+        {
+          wrapper = new NoChildrenDelegatingWrapperItemProvider(child, variable, SetupEditor.this.adapterFactory);
+          add(inverseCopyMap, wrapper, child);
+          wrappers.put(key, wrapper);
+        }
+
+        return wrapper;
+      }
+    }
+
+    public List<Scope> getPreviewableScopes()
+    {
+      for (ListIterator<Scope> it = previewableScopes.listIterator(); it.hasNext();)
+      {
+        Scope scope = it.next();
+        if (scope.eIsProxy())
+        {
+          EObject resolvedScope = EcoreUtil.resolve(scope, editingDomain.getResourceSet());
+          if (!resolvedScope.eIsProxy() && resolvedScope instanceof Scope)
+          {
+            it.set((Scope)resolvedScope);
+          }
+          else
+          {
+            it.remove();
+          }
+        }
+      }
+
+      return previewableScopes;
     }
 
     @Override
@@ -2865,6 +3019,9 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       });
 
       contentOutlineViewer = getTreeViewer();
+
+      previewAction = new PreviewAction();
+
       contentOutlineViewer.addSelectionChangedListener(this);
 
       contentOutlineViewer.addDoubleClickListener(new IDoubleClickListener()
@@ -2886,42 +3043,129 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         @Override
         public boolean hasChildren(Object object)
         {
-          return object instanceof VariableTask && parents.get(object) instanceof VariableContainer || super.hasChildren(object);
+          return getVariableContainer(object) != null || super.hasChildren(object);
+        }
+
+        private VariableContainer getVariableContainer(Object object)
+        {
+          if (object instanceof VariableTask)
+          {
+            Object parent = parents.get(object);
+            if (parent instanceof VariableContainer)
+            {
+              return (VariableContainer)parent;
+            }
+          }
+
+          return null;
         }
 
         @Override
         public Object[] getChildren(Object object)
         {
-          if (object instanceof VariableTask && parents.get(object) instanceof VariableContainer)
+          VariableContainer variableContainer = getVariableContainer(object);
+          if (variableContainer != null)
           {
-            Resource resource = editingDomain.getResourceSet().getResources().get(0);
-            SetupTaskPerformer setupTaskPerformer = ((VariableContainer)parents.get(object)).getSetupTaskPerformer();
             VariableTask contextVariableTask = (VariableTask)object;
             String name = contextVariableTask.getName();
-            List<EObject> variableUsages = new ArrayList<EObject>();
-            for (Object o : copyMap.keySet())
+            if (!StringUtil.isEmpty(name))
             {
-              if (o instanceof EObject)
+              boolean isMacro = false;
+              List<Object> variableUsages = new UniqueEList<Object>();
+              Set<Object> inverses = inverseCopyMap.get(object);
+              if (inverses != null)
               {
-                EObject eObject = (EObject)o;
-                if (eObject.eResource() == resource
-                    && (setupTaskPerformer.isVariableUsed(name, eObject, false) || setupTaskPerformer.isFilterUsed(name, eObject)))
+                for (Object inverse : inverses)
                 {
-                  variableUsages.add(eObject);
+                  Object unwrappedInverse = AdapterFactoryEditingDomain.unwrap(inverse);
+                  if (unwrappedInverse instanceof Parameter)
+                  {
+                    String actualName = ((Parameter)unwrappedInverse).getName();
+                    Object unwrappedParent = AdapterFactoryEditingDomain.unwrap(selectionViewerContentProvider.getParent(inverse));
+                    if (unwrappedParent instanceof Macro)
+                    {
+                      isMacro = true;
+                      Macro macro = (Macro)unwrappedParent;
+                      variableUsages.addAll(getMatchingUsages(variableContainer, object, macro, actualName));
+                    }
+                  }
+                  else if (unwrappedInverse instanceof VariableTask)
+                  {
+                    VariableTask variableTask = (VariableTask)unwrappedInverse;
+                    String actualName = variableTask.getName();
+                    if (!name.equals(actualName))
+                    {
+                      EObject rootContainer = EcoreUtil.getRootContainer(variableTask);
+                      if (rootContainer instanceof Macro)
+                      {
+                        isMacro = true;
+                        variableUsages.addAll(getMatchingUsages(variableContainer, object, rootContainer, actualName));
+                      }
+                    }
+                  }
                 }
               }
-            }
 
-            variableUsages.addAll(contextVariableTask.getChoices());
-            for (EObject eObject : variableUsages)
-            {
-              parents.put(eObject, object);
-            }
+              if (!isMacro)
+              {
+                variableUsages.addAll(getMatchingUsages(variableContainer, object, null, name));
+              }
 
-            return variableUsages.toArray();
+              return variableUsages.toArray();
+            }
           }
 
           return super.getChildren(object);
+        }
+
+        private List<Object> getMatchingUsages(VariableContainer variableContainer, Object object, EObject context, String actualName)
+        {
+          List<Object> variableUsages = new ArrayList<Object>();
+          SetupTaskPerformer setupTaskPerformer = variableContainer.getSetupTaskPerformer();
+          for (Object original : copyMap.keySet())
+          {
+            Object unwrappedOriginal = AdapterFactoryEditingDomain.unwrap(original);
+            if (unwrappedOriginal instanceof EObject)
+            {
+              EObject unwrappedOriginalEObject = (EObject)unwrappedOriginal;
+              if (context == null)
+              {
+                Macro containingMacro = getContainingMacro(original);
+                if (containingMacro != null && !setupTaskPerformer.getMacroCopyMap().containsKey(original))
+                {
+                  continue;
+                }
+              }
+              else if (!EcoreUtil.isAncestor(context, unwrappedOriginalEObject))
+              {
+                continue;
+              }
+
+              if (SetupTaskPerformer.isVariableUsed(actualName, unwrappedOriginalEObject, false)
+                  || SetupTaskPerformer.isFilterUsed(actualName, unwrappedOriginalEObject))
+              {
+                variableUsages.add(variableContainer.wrapper(object, original));
+              }
+            }
+          }
+
+          return variableUsages;
+        }
+
+        private Macro getContainingMacro(Object object)
+        {
+          if (object instanceof EObject)
+          {
+            for (EObject eContainer = ((EObject)object).eContainer(); eContainer != null; eContainer = eContainer.eContainer())
+            {
+              if (eContainer instanceof Macro)
+              {
+                return (Macro)eContainer;
+              }
+            }
+          }
+
+          return null;
         }
 
         @Override
@@ -2934,16 +3178,26 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       contentOutlineViewer.setContentProvider(contentProvider);
 
-      configure(contentOutlineViewer, true);
+      configure(contentOutlineViewer, primaryResources, syntheticObjects);
+      Menu menu = contentOutlineViewer.getControl().getMenu();
+      IMenuManager menuManager = (IMenuManager)menu.getData(MenuManager.MANAGER_KEY);
+      menuManager.addMenuListener(new IMenuListener()
+      {
+        public void menuAboutToShow(IMenuManager manager)
+        {
+          manager.insertBefore("edit", previewAction);
+        }
+      });
 
       labelProvider = (ILabelProvider)contentOutlineViewer.getLabelProvider();
+      root = new OutlineItemProvider(null, false);
 
       selectionViewer.addSelectionChangedListener(new ISelectionChangedListener()
       {
         public void selectionChanged(SelectionChangedEvent event)
         {
           IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-          if (selectionViewer != null && !selection.isEmpty() && contentOutlinePage != null)
+          if (selectionViewer != null && selectionViewer.getControl().isFocusControl() && !selection.isEmpty() && contentOutlinePage != null)
           {
             ArrayList<Object> selectionList = new ArrayList<Object>();
             for (Object object : selection.toArray())
@@ -2962,19 +3216,30 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         private void collectSelection(List<Object> selection, Object object)
         {
-          if (object instanceof CompoundTask)
+          Object unwrappedObject = AdapterFactoryEditingDomain.unwrap(object);
+          if (unwrappedObject instanceof CompoundTask || unwrappedObject instanceof Macro)
           {
-            for (SetupTask setupTask : ((CompoundTask)object).getSetupTasks())
+            Collection<?> children = object instanceof ITreeItemContentProvider ? ((ITreeItemContentProvider)object).getChildren(object)
+                : ((EObject)unwrappedObject).eContents();
+            for (Object child : children)
             {
-              collectSelection(selection, setupTask);
+              collectSelection(selection, child);
             }
           }
           else
           {
             Set<Object> copies = contentOutlinePage.getCopies(object);
-            if (copies != null)
+            for (Object copy : copies)
             {
-              selection.addAll(copies);
+              Object unwrappedCopy = AdapterFactoryEditingDomain.unwrap(copy);
+              if (unwrappedCopy instanceof CompoundTask)
+              {
+                collectSelection(selection, copy);
+              }
+              else
+              {
+                selection.add(copy);
+              }
             }
           }
         }
@@ -2985,13 +3250,44 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     public Set<Object> getOriginals(Object object)
     {
-      Set<Object> result = inverseCopyMap.get(object);
-      return result == null ? Collections.singleton(object) : result;
+      Set<Object> originals = inverseCopyMap.get(object);
+      if (originals == null)
+      {
+        return copyMap.containsKey(object) ? Collections.singleton(object) : Collections.emptySet();
+      }
+
+      return originals;
     }
 
     public Set<Object> getCopies(Object object)
     {
-      return copyMap.get(object);
+      Set<Object> copies = copyMap.get(object);
+      if (copies == null)
+      {
+        return inverseCopyMap.containsKey(object) ? Collections.singleton(object) : Collections.emptySet();
+
+      }
+      return copies;
+    }
+
+    private boolean isPreviewableScope(Object scope)
+    {
+      return scope instanceof Macro || scope instanceof Workspace || scope instanceof Installation || scope instanceof Stream || scope instanceof ProductVersion
+          || scope instanceof User;
+    }
+
+    protected Index getIndex()
+    {
+      for (Resource resource : editingDomain.getResourceSet().getResources())
+      {
+        Index index = (Index)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
+        if (index != null)
+        {
+          return index;
+        }
+      }
+
+      return null;
     }
 
     public void update(int expandLevel)
@@ -3000,6 +3296,9 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         copyMap.clear();
         inverseCopyMap.clear();
+        inducedIDVariables.clear();
+        primaryResources.clear();
+        syntheticObjects.clear();
 
         ResourceSet resourceSet = editingDomain.getResourceSet();
         if (resourceLocator != null)
@@ -3021,11 +3320,80 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           EList<Resource> resources = resourceSet.getResources();
           if (!resources.isEmpty())
           {
-            Project project = (Project)EcoreUtil.getObjectByType(resources.get(0).getContents(), SetupPackage.Literals.PROJECT);
-            if (project != null)
+            Resource resource = resources.get(0);
+            primaryResources.add(resource);
+            EList<EObject> contents = resource.getContents();
+            if (!contents.isEmpty())
             {
-              ItemProvider input = getTriggeredTasks(project);
-              getTreeViewer().setInput(input);
+              EObject rootEObject = contents.get(0);
+              boolean hasEmptyInput = getTreeViewer().getInput() == null;
+              if (hasEmptyInput)
+              {
+                if (isPreviewableScope(rootEObject))
+                {
+                  previewableScopes.add((Scope)rootEObject);
+                }
+                else if (rootEObject instanceof Project)
+                {
+                  previewableScopes.addAll(((Project)rootEObject).getStreams());
+                }
+                else if (rootEObject instanceof Product)
+                {
+                  previewableScopes.addAll(((Product)rootEObject).getVersions());
+                }
+              }
+
+              List<Object> newRootChildren = new ArrayList<Object>();
+              newRootChildren.add(reconcileOutline(root, null, rootEObject));
+              if (rootEObject instanceof Workspace || rootEObject instanceof Installation || rootEObject instanceof Configuration)
+              {
+                Index index = getIndex();
+                if (index != null)
+                {
+                  newRootChildren.add(reconcileOutline(root, null, index));
+                }
+              }
+
+              OutlineItemProvider macroOutline = reconcileCompositeOutline(root, compositeMacro);
+              if (macroOutline != null)
+              {
+                newRootChildren.add(macroOutline);
+              }
+
+              if (rootEObject instanceof Configuration || rootEObject instanceof Index)
+              {
+                OutlineItemProvider configurationOutline = reconcileCompositeOutline(root, compositeConfiguration);
+                if (configurationOutline != null)
+                {
+                  newRootChildren.add(configurationOutline);
+                }
+              }
+
+              ECollections.setEList(root.getChildren(), newRootChildren);
+
+              if (hasEmptyInput)
+              {
+                getTreeViewer().setInput(root);
+                if (!previewableScopes.isEmpty())
+                {
+                  Set<Object> elements = copyMap.get(previewableScopes.get(0));
+                  if (elements != null)
+                  {
+                    for (Object object : elements)
+                    {
+                      if (object instanceof OutlineItemProvider)
+                      {
+                        getTreeViewer().setExpandedState(object, true);
+                        break;
+                      }
+                    }
+                  }
+                }
+              }
+              else
+              {
+                getTreeViewer().refresh();
+              }
             }
           }
         }
@@ -3034,24 +3402,71 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           SetupEditorPlugin.INSTANCE.log(ex);
         }
 
+        // Invert the copy map.
         for (Map.Entry<Object, Set<Object>> entry : copyMap.entrySet())
         {
-          Set<Object> values = entry.getValue();
-          for (Object value : values)
+          Object original = entry.getKey();
+          Set<Object> copies = entry.getValue();
+          for (Object value : copies)
           {
-            Set<Object> eObjects = inverseCopyMap.get(value);
-            if (eObjects == null)
-            {
-              eObjects = new HashSet<Object>();
-              inverseCopyMap.put(value, eObjects);
-            }
+            add(inverseCopyMap, value, original);
+          }
+        }
 
-            eObjects.add(entry.getKey());
+        // Map induced variables back to the task from which they are induced.
+        for (Map.Entry<SetupTask, Set<VariableTask>> entry : inducedIDVariables.entrySet())
+        {
+          SetupTask setupTask = entry.getKey();
+          Set<VariableTask> variables = entry.getValue();
+          Set<Object> inverses = inverseCopyMap.get(setupTask);
+          if (inverses != null)
+          {
+            for (VariableTask variable : variables)
+            {
+              addAll(inverseCopyMap, variable, inverses);
+            }
           }
         }
 
         getTreeViewer().expandToLevel(expandLevel);
       }
+    }
+
+    private OutlineItemProvider reconcileCompositeOutline(OutlineItemProvider parent, EObject composite)
+    {
+      EClass eClass = composite.eClass();
+      EList<Resource> resources = editingDomain.getResourceSet().getResources();
+      OutlineItemProvider compositeOutline = null;
+      List<OutlineItemProvider> newChildren = new ArrayList<OutlineItemProvider>();
+      for (int i = 1, size = resources.size(); i < size; ++i)
+      {
+        Resource otherResource = resources.get(i);
+        EObject instance = (EObject)EcoreUtil.getObjectByType(otherResource.getContents(), eClass);
+        if (instance != null)
+        {
+          if (compositeOutline == null)
+          {
+            compositeOutline = reconcileOutline(parent, null, composite);
+          }
+
+          newChildren.add(reconcileOutline(compositeOutline, null, instance));
+        }
+      }
+
+      if (compositeOutline != null)
+      {
+        Collections.sort(newChildren, new Comparator<OutlineItemProvider>()
+        {
+          public int compare(OutlineItemProvider o1, OutlineItemProvider o2)
+          {
+            return CommonPlugin.INSTANCE.getComparator().compare(o1.getText(), o2.getText());
+          }
+        });
+
+        ECollections.setEList(compositeOutline.getChildren(), newChildren);
+      }
+
+      return compositeOutline;
     }
 
     private List<String> sortStrings(Collection<? extends String> strings)
@@ -3135,271 +3550,723 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       return result;
     }
 
-    private ItemProvider getTriggeredTasks(final Project project)
+    private OutlineItemProvider reconcileOutline(OutlineItemProvider parentItemProvider, Scope context, EObject scope)
     {
-      class ProjectItemProvider extends ItemProvider implements IWrapperItemProvider
+      OutlineItemProvider outlineItemProvider = parentItemProvider.getOutlineItemProvider(scope);
+      if (outlineItemProvider == null)
       {
-        public ProjectItemProvider()
-        {
-          super(labelProvider.getText(project), labelProvider.getImage(project));
-        }
+        outlineItemProvider = new OutlineItemProvider(scope, context != null);
+      }
+      else
+      {
+        outlineItemProvider.update();
+      }
 
-        public Object getValue()
-        {
-          return project;
-        }
+      add(copyMap, scope, outlineItemProvider);
 
-        public Object getOwner()
-        {
-          return project;
-        }
+      List<Object> newChildren = new ArrayList<Object>();
+      if (getPreviewableScopes().contains(scope))
+      {
+        newChildren.addAll(gatherSetupTasks(outlineItemProvider, context, (Scope)scope));
+      }
 
-        public EStructuralFeature getFeature()
+      EClass eClass = scope.eClass();
+      for (EReference eReference : eClass.getEAllContainments())
+      {
+        if (SetupPackage.Literals.SCOPE.isSuperTypeOf(eReference.getEReferenceType()))
         {
-          return null;
-        }
-
-        public int getIndex()
-        {
-          return 0;
-        }
-
-        public void setIndex(int index)
-        {
+          if (eReference.isMany())
+          {
+            @SuppressWarnings("unchecked")
+            List<Scope> scopes = (List<Scope>)scope.eGet(eReference);
+            for (Scope childScope : scopes)
+            {
+              newChildren.add(reconcileOutline(outlineItemProvider, null, childScope));
+            }
+          }
+          else
+          {
+            Scope childScope = (Scope)scope.eGet(eReference);
+            if (childScope != null)
+            {
+              newChildren.add(reconcileOutline(outlineItemProvider, null, childScope));
+            }
+          }
         }
       }
 
-      final ItemProvider projectItem = new ProjectItemProvider();
-
-      EList<Object> projectItemChildren = projectItem.getChildren();
-      EList<Stream> streams = project.getStreams();
-      for (final Stream stream : streams)
+      for (EReference eReference : eClass.getEAllReferences())
       {
-        class BranchItemProvider extends ItemProvider implements IItemPropertySource
+        if (eReference == SetupPackage.Literals.WORKSPACE__STREAMS || eReference == SetupPackage.Literals.INSTALLATION__PRODUCT_VERSION)
         {
-          public BranchItemProvider()
+          if (eReference.isMany())
           {
-            super(labelProvider.getText(stream), labelProvider.getImage(stream));
-          }
-
-          public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
-          {
-            List<IItemPropertyDescriptor> descriptors = itemDelegator.getPropertyDescriptors(stream);
-
-            List<IItemPropertyDescriptor> result = new ArrayList<IItemPropertyDescriptor>();
-            for (IItemPropertyDescriptor descriptor : descriptors)
+            @SuppressWarnings("unchecked")
+            List<Scope> scopes = (List<Scope>)scope.eGet(eReference);
+            if (!scopes.isEmpty())
             {
-              result.add(new ItemPropertyDescriptorDecorator(stream, descriptor));
-            }
+              newChildren.add(reconcileOutline(outlineItemProvider, (Scope)scope, compositeStream));
 
-            return result;
-          }
-
-          public IItemPropertyDescriptor getPropertyDescriptor(Object object, Object propertyID)
-          {
-            IItemPropertyDescriptor descriptor = itemDelegator.getPropertyDescriptor(stream, propertyID);
-            if (descriptor != null)
-            {
-              return new ItemPropertyDescriptorDecorator(stream, descriptor);
-            }
-
-            return null;
-          }
-
-          public Object getEditableValue(Object object)
-          {
-            return itemDelegator.getEditableValue(stream);
-          }
-        }
-
-        final ItemProvider branchItem = new BranchItemProvider();
-        projectItemChildren.add(branchItem);
-
-        ProductVersion version = null;
-        ProjectCatalog projectCatalog = project.getProjectCatalog();
-        if (projectCatalog != null)
-        {
-          EObject rootContainer = EcoreUtil.getRootContainer(projectCatalog);
-          if (!(rootContainer instanceof Index))
-          {
-            for (Resource resource : editingDomain.getResourceSet().getResources())
-            {
-              Object index = EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.INDEX);
-              if (index != null)
+              for (Scope childScope : scopes)
               {
-                rootContainer = (EObject)index;
+                newChildren.add(reconcileOutline(outlineItemProvider, (Scope)scope, childScope));
               }
             }
           }
-
-          if (rootContainer instanceof Index)
+          else
           {
-            Index index = (Index)rootContainer;
-            LOOP: for (ProductCatalog productCatalog : index.getProductCatalogs())
+            Scope childScope = (Scope)scope.eGet(eReference);
+            if (childScope != null)
             {
-              for (Product product : productCatalog.getProducts())
-              {
-                for (ProductVersion productVersion : product.getVersions())
-                {
-                  version = productVersion;
-                  break LOOP;
-                }
-              }
+              newChildren.add(reconcileOutline(outlineItemProvider, (Scope)scope, childScope));
             }
           }
         }
-
-        if (version != null)
-        {
-          // Clear out the self induced installation location.
-          for (SetupTask setupTask : version.getProduct().getSetupTasks())
-          {
-            if (setupTask instanceof VariableTask)
-            {
-              VariableTask variable = (VariableTask)setupTask;
-              if ("installation.location".equals(variable.getName()))
-              {
-                EcoreUtil.delete(variable);
-                break;
-              }
-            }
-          }
-
-          version.getSetupTasks().clear();
-
-          SetupContext setupContext = SetupContext.create(version, stream);
-          ResourceSet resourceSet = getEditingDomain().getResourceSet();
-          URIConverter uriConverter = resourceSet.getURIConverter();
-
-          SetupTaskPerformer setupTaskPerformer = new SetupTaskPerformer(uriConverter, SetupPrompter.CANCEL, trigger, setupContext, stream);
-          List<SetupTask> triggeredSetupTasks = new ArrayList<SetupTask>(setupTaskPerformer.getTriggeredSetupTasks());
-          setupTaskPerformer.redirectTriggeredSetupTasks();
-
-          if (!triggeredSetupTasks.isEmpty())
-          {
-            URI baseURI = URI.createURI("performer:/" + stream.getQualifiedName());
-            URI uri = baseURI.appendSegment("tasks.setup");
-
-            Resource fakeResource = new BaseResourceImpl(uri);
-            fakeResource.eAdapters().add(editingDomainProvider);
-            EList<EObject> fakeResourceContents = fakeResource.getContents();
-            resourceLocator.map(uri, fakeResource);
-
-            for (EObject eObject : setupTaskPerformer.getCopyMap().values())
-            {
-              notifiers.add(eObject);
-
-              Resource resource = ((InternalEObject)eObject).eDirectResource();
-              if (resource != null && !resource.eAdapters().contains(editingDomainProvider))
-              {
-                resource.eAdapters().add(editingDomainProvider);
-                notifiers.add(resource);
-
-                URI originalURI = resource.getURI();
-                URI newURI = baseURI.appendSegment(originalURI.scheme() + ":").appendSegments(originalURI.segments());
-                resource.setURI(newURI);
-                resourceLocator.map(newURI, resource);
-              }
-
-              resource = eObject.eResource();
-              if (resource == null || resource == fakeResource)
-              {
-                try
-                {
-                  EcoreUtil.setID(eObject, null);
-                }
-                catch (IllegalArgumentException ex)
-                {
-                  // Ignore.
-                }
-
-                if (eObject.eContainer() == null)
-                {
-                  fakeResourceContents.add(eObject);
-                }
-              }
-            }
-
-            ItemProvider undeclaredVariablesItem = new VariableContainer(setupTaskPerformer, "Undeclared Variables", UNDECLARED_VARIABLE_GROUP_IMAGE);
-            EList<Object> undeclaredVariablesItemChildren = undeclaredVariablesItem.getChildren();
-            Set<String> undeclaredVariables = setupTaskPerformer.getUndeclaredVariables();
-            for (String key : sortStrings(undeclaredVariables))
-            {
-              VariableTask contextVariableTask = SetupFactory.eINSTANCE.createVariableTask();
-              fakeResourceContents.add(contextVariableTask);
-              contextVariableTask.setName(key);
-              undeclaredVariablesItemChildren.add(contextVariableTask);
-              parents.put(contextVariableTask, undeclaredVariablesItem);
-            }
-
-            if (!undeclaredVariablesItemChildren.isEmpty())
-            {
-              branchItem.getChildren().add(undeclaredVariablesItem);
-            }
-
-            ItemProvider unresolvedVariablesItem = new VariableContainer(setupTaskPerformer, "Unresolved Variables", VARIABLE_GROUP_IMAGE);
-            EList<Object> unresolvedVariablesItemChildren = unresolvedVariablesItem.getChildren();
-            List<VariableTask> unresolvedVariables = setupTaskPerformer.getUnresolvedVariables();
-            for (VariableTask contextVariableTask : sortVariables(unresolvedVariables))
-            {
-              if (contextVariableTask.eContainer() == null && contextVariableTask.eResource() == null)
-              {
-                fakeResourceContents.add(contextVariableTask);
-              }
-
-              unresolvedVariablesItemChildren.add(contextVariableTask);
-              parents.put(contextVariableTask, unresolvedVariablesItem);
-            }
-
-            if (!unresolvedVariablesItemChildren.isEmpty())
-            {
-              branchItem.getChildren().add(unresolvedVariablesItem);
-            }
-
-            ItemProvider resolvedVariablesItem = new VariableContainer(setupTaskPerformer, "Resolved Variables", VARIABLE_GROUP_IMAGE);
-            EList<Object> resolvedVariablesItemChildren = resolvedVariablesItem.getChildren();
-            List<VariableTask> resolvedVariables = setupTaskPerformer.getResolvedVariables();
-            for (VariableTask contextVariableTask : sortVariables(resolvedVariables))
-            {
-              if (contextVariableTask.eContainer() == null && contextVariableTask.eResource() == null)
-              {
-                fakeResourceContents.add(contextVariableTask);
-              }
-
-              resolvedVariablesItemChildren.add(contextVariableTask);
-              parents.put(contextVariableTask, resolvedVariablesItem);
-            }
-
-            if (!resolvedVariablesItemChildren.isEmpty())
-            {
-              branchItem.getChildren().add(resolvedVariablesItem);
-            }
-
-            branchItem.getChildren().addAll(triggeredSetupTasks);
-
-            for (SetupTask setupTask : triggeredSetupTasks)
-            {
-              parents.put(setupTask, branchItem);
-            }
-
-            for (Map.Entry<EObject, EObject> entry : setupTaskPerformer.getCopyMap().entrySet())
-            {
-              add(copyMap, entry.getKey(), entry.getValue());
-            }
-
-            add(copyMap, stream, branchItem);
-          }
-        }
-
-        add(copyMap, project, projectItem);
       }
 
-      for (Project subproject : project.getProjects())
+      ECollections.setEList(outlineItemProvider.getChildren(), newChildren);
+
+      return outlineItemProvider;
+    }
+
+    private class OutlineItemProvider extends ItemProvider implements IWrapperItemProvider, IItemPropertySource
+    {
+      private final EObject eObject;
+
+      private boolean qualified;
+
+      public OutlineItemProvider(EObject eObject, boolean qualified)
       {
-        projectItemChildren.add(getTriggeredTasks(subproject));
+        super(qualified ? ((Scope)eObject).getQualifiedLabel() : labelProvider.getText(eObject), labelProvider.getImage(eObject));
+        this.eObject = eObject;
+        this.qualified = qualified;
       }
 
-      return projectItem;
+      public void update()
+      {
+        setText(qualified ? ((Scope)eObject).getQualifiedLabel() : labelProvider.getText(eObject));
+      }
+
+      public OutlineItemProvider getOutlineItemProvider(EObject eObject)
+      {
+        for (Object child : getChildren())
+        {
+          if (child instanceof OutlineItemProvider && ((OutlineItemProvider)child).eObject == eObject)
+          {
+            return (OutlineItemProvider)child;
+          }
+        }
+
+        return null;
+      }
+
+      @Override
+      public Object getFont(Object object)
+      {
+        if (eObject == compositeStream || eObject == compositeConfiguration || eObject == compositeMacro)
+        {
+          return ITALIC_FONT;
+        }
+
+        return super.getFont(object);
+      }
+
+      @Override
+      public Object getForeground(Object object)
+      {
+        if (eObject == compositeStream || eObject == compositeConfiguration || eObject == compositeMacro)
+        {
+          return COMPOSITE_OUTLINE_COLOR;
+        }
+
+        return super.getForeground(object);
+      }
+
+      public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
+      {
+        List<IItemPropertyDescriptor> descriptors = itemDelegator.getPropertyDescriptors(eObject);
+
+        List<IItemPropertyDescriptor> result = new ArrayList<IItemPropertyDescriptor>();
+        for (IItemPropertyDescriptor descriptor : descriptors)
+        {
+          result.add(new ItemPropertyDescriptorDecorator(eObject, descriptor));
+        }
+
+        return result;
+      }
+
+      public IItemPropertyDescriptor getPropertyDescriptor(Object object, Object propertyID)
+      {
+        IItemPropertyDescriptor descriptor = itemDelegator.getPropertyDescriptor(eObject, propertyID);
+        if (descriptor != null)
+        {
+          return new ItemPropertyDescriptorDecorator(eObject, descriptor);
+        }
+
+        return null;
+      }
+
+      public Object getEditableValue(Object object)
+      {
+        return itemDelegator.getEditableValue(eObject);
+      }
+
+      public Object getValue()
+      {
+        return eObject;
+      }
+
+      public Object getOwner()
+      {
+        return getParent();
+      }
+
+      public EStructuralFeature getFeature()
+      {
+        return null;
+      }
+
+      public int getIndex()
+      {
+        return 0;
+      }
+
+      public void setIndex(int index)
+      {
+      }
+    }
+
+    private List<Object> gatherSetupTasks(OutlineItemProvider container, Scope context, Scope scope)
+    {
+      List<Object> result = new ArrayList<Object>();
+      ProductVersion version = scope instanceof ProductVersion ? (ProductVersion)scope : null;
+      Stream stream = scope instanceof Stream ? (Stream)scope : null;
+      Macro macro = scope instanceof Macro ? (Macro)scope : null;
+
+      if (version == null)
+      {
+        EObject rootContainer = null;
+        if (stream != null)
+        {
+          Project project = stream.getProject();
+          if (project != null)
+          {
+            ProjectCatalog projectCatalog = project.getProjectCatalog();
+            rootContainer = EcoreUtil.getRootContainer(projectCatalog);
+          }
+        }
+
+        if (!(rootContainer instanceof Index))
+        {
+          Index index = getIndex();
+          if (index != null)
+          {
+            rootContainer = index;
+          }
+        }
+
+        if (rootContainer instanceof Index)
+        {
+          Index index = (Index)rootContainer;
+          for (ProductCatalog productCatalog : index.getProductCatalogs())
+          {
+            // The first should be the self product catalog, so find the last version which should be the empty version.
+            for (Product product : productCatalog.getProducts())
+            {
+              // This should be the self product, so find the last version which should be the empty version.
+              for (ProductVersion productVersion : product.getVersions())
+              {
+                version = productVersion;
+              }
+            }
+
+            break;
+          }
+        }
+
+        if (version == null)
+        {
+          return result;
+        }
+      }
+
+      SetupContext setupContext = SetupContext.create(version, stream);
+
+      EcoreUtil.Copier copier = new EcoreUtil.Copier();
+      if (scope instanceof Workspace)
+      {
+        Workspace workspaceCopy = (Workspace)copier.copy(scope);
+        copier.copyReferences();
+        workspaceCopy.getStreams().clear();
+
+        Resource fakeWorkspaceResource = new BaseResourceImpl(scope.eResource().getURI());
+        fakeWorkspaceResource.getContents().add(workspaceCopy);
+        setupContext = SetupContext.create(setupContext.getInstallation(), workspaceCopy, setupContext.getUser());
+      }
+      else if (scope instanceof Installation)
+      {
+        Installation installationCopy = (Installation)copier.copy(scope);
+        copier.copyReferences();
+        installationCopy.setProductVersion(version);
+
+        Resource fakeInstallationResource = new BaseResourceImpl(scope.eResource().getURI());
+        fakeInstallationResource.getContents().add(installationCopy);
+        setupContext = SetupContext.create(installationCopy, setupContext.getWorkspace(), setupContext.getUser());
+      }
+      else if (scope instanceof User)
+      {
+        User userCopy = (User)copier.copy(scope);
+        copier.copyReferences();
+
+        Resource fakeUserResource = new BaseResourceImpl(scope.eResource().getURI());
+        fakeUserResource.getContents().add(userCopy);
+        setupContext = SetupContext.create(setupContext.getInstallation(), setupContext.getWorkspace(), userCopy);
+      }
+
+      if (context instanceof Installation)
+      {
+        Installation installationCopy = (Installation)copier.copy(context);
+        copier.copyReferences();
+        installationCopy.setProductVersion(version);
+
+        Resource fakeInstallationResource = new BaseResourceImpl(context.eResource().getURI());
+        fakeInstallationResource.getContents().add(installationCopy);
+        setupContext = SetupContext.create(installationCopy, setupContext.getWorkspace(), setupContext.getUser());
+      }
+      else if (context instanceof Workspace)
+      {
+        Installation installation = setupContext.getInstallation();
+        Workspace workspaceCopy = (Workspace)copier.copy(context);
+        if (stream == compositeStream)
+        {
+          EObject eContainer = context.eContainer();
+          if (eContainer instanceof Configuration)
+          {
+            Configuration configuration = (Configuration)eContainer;
+            Installation configurationInstallation = configuration.getInstallation();
+            if (configurationInstallation != null)
+            {
+              Installation configurationInstallationCopy = (Installation)copier.copy(configurationInstallation);
+              installation = configurationInstallationCopy;
+              Resource fakeInstallationResource = new BaseResourceImpl(context.eResource().getURI());
+              fakeInstallationResource.getContents().add(configurationInstallationCopy);
+            }
+          }
+
+          copier.copyReferences();
+        }
+        else
+        {
+          copier.copyReferences();
+          workspaceCopy.getStreams().clear();
+          workspaceCopy.getStreams().add(stream);
+        }
+
+        Resource fakeWorkspaceResource = new BaseResourceImpl(context.eResource().getURI());
+        fakeWorkspaceResource.getContents().add(workspaceCopy);
+        setupContext = SetupContext.create(installation, workspaceCopy, setupContext.getUser());
+      }
+
+      MacroTask macroTask = null;
+      List<VariableTask> macroTaskVariables = new ArrayList<VariableTask>();
+      if (macro != null)
+      {
+        Workspace workspace = setupContext.getWorkspace();
+        macroTask = SetupFactory.eINSTANCE.createMacroTask();
+        macroTask.setMacro(macro);
+        workspace.getSetupTasks().add(macroTask);
+
+        String id = macro.getName();
+        macroTask.setID(StringUtil.isEmpty(id) ? "macro" : id);
+        EList<Parameter> parameters = macro.getParameters();
+        EList<Argument> arguments = macroTask.getArguments();
+        for (Parameter parameter : parameters)
+        {
+          VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
+          String parameterName = parameter.getName();
+          variable.setName(parameterName);
+          workspace.getSetupTasks().add(variable);
+          macroTaskVariables.add(variable);
+
+          Argument argument = SetupFactory.eINSTANCE.createArgument();
+          argument.setParameter(parameter);
+          argument.setValue("${" + parameterName + "}");
+          arguments.add(argument);
+        }
+
+        Resource resource = workspace.eResource();
+        if (resource == null)
+        {
+          Resource fakeWorkspaceResource = new BaseResourceImpl(macro.eResource().getURI());
+          fakeWorkspaceResource.getContents().add(workspace);
+          resource = fakeWorkspaceResource;
+        }
+
+        primaryResources.add(resource);
+      }
+
+      ResourceSet resourceSet = getEditingDomain().getResourceSet();
+      URIConverter uriConverter = resourceSet.getURIConverter();
+
+      SetupTaskPerformer setupTaskPerformer;
+
+      try
+      {
+        setupTaskPerformer = SetupTaskPerformer.create(uriConverter, SetupPrompter.OK, trigger, setupContext, false, true);
+      }
+      catch (Exception ex)
+      {
+        return result;
+      }
+
+      List<SetupTask> triggeredSetupTasks = new ArrayList<SetupTask>(setupTaskPerformer.getTriggeredSetupTasks());
+
+      if (!triggeredSetupTasks.isEmpty())
+      {
+        // Propagate the copied mappings to the performer's copy map.
+        final Map<EObject, Set<EObject>> performerCopyMap = setupTaskPerformer.getCopyMap();
+        for (Map.Entry<EObject, EObject> entry : copier.entrySet())
+        {
+          EObject key = entry.getKey();
+          EObject value = entry.getValue();
+          performerCopyMap.put(key, performerCopyMap.get(value));
+        }
+
+        URI baseURI = URI.createURI("performer:/" + scope.getQualifiedName());
+        URI uri = baseURI.appendSegment("tasks.setup");
+        URI scopeURI = context == null ? scope.eResource().getURI() : context.eResource().getURI();
+
+        Resource fakeResource = new BaseResourceImpl(uri);
+        fakeResource.eAdapters().add(editingDomainProvider);
+        EList<EObject> fakeResourceContents = fakeResource.getContents();
+        resourceLocator.map(uri, fakeResource);
+
+        Set<EObject> eObjects = new LinkedHashSet<EObject>();
+        for (Set<EObject> copies : performerCopyMap.values())
+        {
+          eObjects.addAll(copies);
+        }
+
+        Map<EObject, Set<EObject>> performerMacroCopyMap = setupTaskPerformer.getMacroCopyMap();
+        for (Set<EObject> copies : performerMacroCopyMap.values())
+        {
+          eObjects.addAll(copies);
+        }
+
+        for (EObject eObject : eObjects)
+        {
+          notifiers.add(eObject);
+
+          Resource resource = ((InternalEObject)eObject).eDirectResource();
+          if (resource != null && !resource.eAdapters().contains(editingDomainProvider))
+          {
+            resource.eAdapters().add(editingDomainProvider);
+            notifiers.add(resource);
+
+            URI originalURI = resource.getURI();
+            URI newURI = baseURI.appendSegment(originalURI.scheme() + ":").appendSegments(originalURI.segments());
+            resource.setURI(newURI);
+
+            if (scopeURI.equals(originalURI))
+            {
+              primaryResources.add(resource);
+            }
+
+            resourceLocator.map(newURI, resource);
+          }
+
+          resource = eObject.eResource();
+          if (resource == null || resource == fakeResource)
+          {
+            EClass eClass = eObject.eClass();
+            EAttribute eIDAttribute = eClass.getEIDAttribute();
+            if (eIDAttribute != null)
+            {
+              eObject.eUnset(eIDAttribute);
+            }
+
+            if (eObject.eContainer() == null)
+            {
+              fakeResourceContents.add(eObject);
+            }
+
+            syntheticObjects.add(eObject);
+          }
+        }
+
+        ItemProvider undeclaredVariablesItem = new VariableContainer(setupTaskPerformer, "Undeclared Variables", UNDECLARED_VARIABLE_GROUP_IMAGE);
+        EList<Object> undeclaredVariablesItemChildren = undeclaredVariablesItem.getChildren();
+        Set<String> undeclaredVariables = setupTaskPerformer.getUndeclaredVariables();
+        for (String key : sortStrings(undeclaredVariables))
+        {
+          VariableTask contextVariableTask = SetupFactory.eINSTANCE.createVariableTask();
+          fakeResourceContents.add(contextVariableTask);
+          contextVariableTask.setName(key);
+          undeclaredVariablesItemChildren.add(contextVariableTask);
+          parents.put(contextVariableTask, undeclaredVariablesItem);
+        }
+
+        if (!undeclaredVariablesItemChildren.isEmpty())
+        {
+          result.add(undeclaredVariablesItem);
+        }
+
+        Map<String, VariableTask> variablesMap = new LinkedHashMap<String, VariableTask>();
+
+        ItemProvider unresolvedVariablesItem = new VariableContainer(setupTaskPerformer, "Unresolved Variables", VARIABLE_GROUP_IMAGE);
+        EList<Object> unresolvedVariablesItemChildren = unresolvedVariablesItem.getChildren();
+        List<VariableTask> unresolvedVariables = setupTaskPerformer.getUnresolvedVariables();
+        for (VariableTask variable : sortVariables(unresolvedVariables))
+        {
+          if (variable.eContainer() == null && variable.eResource() == null)
+          {
+            fakeResourceContents.add(variable);
+          }
+
+          unresolvedVariablesItemChildren.add(variable);
+          parents.put(variable, unresolvedVariablesItem);
+          variablesMap.put(variable.getName(), variable);
+        }
+
+        if (!unresolvedVariablesItemChildren.isEmpty())
+        {
+          result.add(unresolvedVariablesItem);
+        }
+
+        ItemProvider resolvedVariablesItem = new VariableContainer(setupTaskPerformer, "Resolved Variables", VARIABLE_GROUP_IMAGE);
+        EList<Object> resolvedVariablesItemChildren = resolvedVariablesItem.getChildren();
+        List<VariableTask> resolvedVariables = setupTaskPerformer.getResolvedVariables();
+        for (VariableTask variable : sortVariables(resolvedVariables))
+        {
+          if (variable.eContainer() == null && variable.eResource() == null)
+          {
+            fakeResourceContents.add(variable);
+          }
+
+          resolvedVariablesItemChildren.add(variable);
+          parents.put(variable, resolvedVariablesItem);
+          variablesMap.put(variable.getName(), variable);
+        }
+
+        if (!resolvedVariablesItemChildren.isEmpty())
+        {
+          result.add(resolvedVariablesItem);
+        }
+
+        result.addAll(triggeredSetupTasks);
+
+        for (SetupTask setupTask : triggeredSetupTasks)
+        {
+          parents.put(setupTask, container);
+        }
+
+        // Establish a mapping from wrapper item providers for macro tasks to their underlying wrapped objects.
+        Map<Object, Set<Object>> macroTaskMap = new LinkedHashMap<Object, Set<Object>>();
+        Map<Object, Set<Object>> argumentBindingMap = new LinkedHashMap<Object, Set<Object>>();
+        for (EObject eObject : performerCopyMap.keySet())
+        {
+          if (eObject instanceof MacroTask)
+          {
+            MacroTask originalMacroTask = (MacroTask)eObject;
+            String id = originalMacroTask.getID();
+            if (id != null)
+            {
+              if (originalMacroTask == macroTask)
+              {
+                // Start directly from the macro we are previewing.
+                gatherMacroChild(macroTaskMap, argumentBindingMap, true, id, macro);
+                for (VariableTask variableTask : macroTaskVariables)
+                {
+                  String name = variableTask.getName();
+                  String qualifiedName = SetupTaskPerformer.createQualifiedName(macroTask.getID(), name);
+                  Set<Object> argumentsVariables = macroTaskMap.get(qualifiedName);
+                  if (argumentsVariables != null)
+                  {
+                    addAll(macroTaskMap, variableTask, argumentsVariables);
+                  }
+                }
+              }
+              else if (macroTask == null || !EcoreUtil.isAncestor(macroTask, originalMacroTask))
+              {
+                // The above guard ensures that we don't walk nested macro task children multiple times, but only once starting from the root.
+                Object[] children = selectionViewerContentProvider.getChildren(originalMacroTask);
+                gatherMacroChildren(macroTaskMap, argumentBindingMap, false, id, children);
+              }
+            }
+          }
+        }
+
+        // Propagate the performer's macro copy map to the macro task map.
+        for (Map.Entry<EObject, Set<EObject>> entry : performerMacroCopyMap.entrySet())
+        {
+          EObject original = entry.getKey();
+          Set<Object> macroTaskMappings = macroTaskMap.get(original);
+          if (macroTaskMappings != null)
+          {
+            Set<EObject> copies = entry.getValue();
+            for (EObject copy : copies)
+            {
+              addAll(macroTaskMap, copy, macroTaskMappings);
+            }
+          }
+        }
+
+        // Copy over the performer's copy map into the overall copy map.
+        for (Map.Entry<EObject, Set<EObject>> entry : performerCopyMap.entrySet())
+        {
+          EObject original = entry.getKey();
+          Set<EObject> copies = entry.getValue();
+          addAll(copyMap, original, copies);
+
+          Set<Object> macroTaskMappings = macroTaskMap.get(original);
+          if (macroTaskMappings != null)
+          {
+            // Include any mappings from the macro task map.
+            for (Object object : macroTaskMappings)
+            {
+              addAll(copyMap, object, copies);
+            }
+          }
+
+          if (original instanceof VariableTask)
+          {
+            VariableTask variableTask = (VariableTask)original;
+            String name = variableTask.getName();
+            Set<Object> variableMappings = macroTaskMap.get(name);
+            if (variableMappings != null)
+            {
+              // Include mappings from the parameter wrappers to the copies of the induced parameter variables.
+              for (Object object : variableMappings)
+              {
+                addAll(copyMap, object, copies);
+              }
+            }
+          }
+        }
+
+        // Copy the performer's macro copy map to the overall copy map.
+        for (Map.Entry<EObject, Set<EObject>> entry : performerMacroCopyMap.entrySet())
+        {
+          EObject key = entry.getKey();
+          Set<EObject> copies = entry.getValue();
+          addAll(copyMap, key, copies);
+
+          for (EObject eObject : copies)
+          {
+            // Also propagate any subsequent copies to flatten the map's indirections.
+            Set<Object> otherCopies = copyMap.get(eObject);
+            if (otherCopies != null)
+            {
+              addAll(copyMap, key, otherCopies);
+            }
+          }
+        }
+
+        // Copy over all the argument bindings to the overall copy map.
+        for (Map.Entry<Object, Set<Object>> entry : argumentBindingMap.entrySet())
+        {
+          Object argument = entry.getKey();
+          Set<Object> bindings = entry.getValue();
+          for (Object binding : bindings)
+          {
+            Set<Object> copiedBindings = copyMap.get(binding);
+            if (copiedBindings != null)
+            {
+              for (Object copiedBinding : copiedBindings)
+              {
+                add(copyMap, argument, AdapterFactoryEditingDomain.unwrap(copiedBinding));
+              }
+            }
+          }
+        }
+
+        for (SetupTask setupTask : triggeredSetupTasks)
+        {
+          String id = setupTask.getID();
+          if (!StringUtil.isEmpty(id))
+          {
+            for (EAttribute eAttribute : setupTask.eClass().getEAllAttributes())
+            {
+              if (eAttribute != SetupPackage.Literals.SETUP_TASK__ID && !eAttribute.isMany() && eAttribute.getEType().getInstanceClass() == String.class)
+              {
+                String variableName = id + "." + ExtendedMetaData.INSTANCE.getName(eAttribute);
+                VariableTask variable = variablesMap.get(variableName);
+                if (variable != null)
+                {
+                  add(inducedIDVariables, setupTask, variable);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return result;
+    }
+
+    private void gatherMacroChildren(Map<Object, Set<Object>> macroTaskMap, Map<Object, Set<Object>> argumentBindingMap, boolean handleParameters, String id,
+        Object children[])
+    {
+      for (Object child : children)
+      {
+        gatherMacroChild(macroTaskMap, argumentBindingMap, handleParameters, id, child);
+      }
+    }
+
+    private void gatherMacroChild(Map<Object, Set<Object>> macroTaskMap, Map<Object, Set<Object>> argumentBindingMap, boolean handleParameters, String id,
+        Object object)
+    {
+      Object unwrappedObject = AdapterFactoryEditingDomain.unwrap(object);
+      if (unwrappedObject instanceof EObject)
+      {
+        EObject eObject = (EObject)unwrappedObject;
+        if (eObject.eResource() != null)
+        {
+          add(macroTaskMap, eObject, object);
+
+          Object[] children = selectionViewerContentProvider.getChildren(object);
+          if (eObject instanceof MacroTask)
+          {
+            MacroTask macroTask = (MacroTask)eObject;
+            String macroTaskID = macroTask.getID();
+            if (macroTaskID != null)
+            {
+              String qualifiedTaskID = id == null ? macroTaskID : id + "*" + macroTaskID;
+              gatherMacroChildren(macroTaskMap, argumentBindingMap, false, qualifiedTaskID, children);
+            }
+          }
+          else if (eObject instanceof Parameter)
+          {
+            Parameter parameter = (Parameter)eObject;
+            String parameterName = parameter.getName();
+            String qualifiedParameterName = SetupTaskPerformer.createQualifiedName(id, parameterName);
+            Set<Object> argumentBindings = macroTaskMap.get(qualifiedParameterName);
+            if (argumentBindings != null)
+            {
+              addAll(argumentBindingMap, object, argumentBindings);
+            }
+
+            add(macroTaskMap, qualifiedParameterName, parameter);
+            gatherMacroChildren(macroTaskMap, argumentBindingMap, false, id, children);
+          }
+          else if (eObject instanceof Argument)
+          {
+            Argument argument = (Argument)eObject;
+            Parameter parameter = argument.getParameter();
+            if (parameter != null)
+            {
+              String parameterName = parameter.getName();
+              String qualifiedParameterName = SetupTaskPerformer.createQualifiedName(id, parameterName);
+              add(macroTaskMap, qualifiedParameterName, argument);
+            }
+            gatherMacroChildren(macroTaskMap, argumentBindingMap, false, id, children);
+          }
+          else
+          {
+            gatherMacroChildren(macroTaskMap, argumentBindingMap, eObject instanceof Macro, id, children);
+          }
+        }
+      }
     }
 
     private <K, V> void add(Map<K, Set<V>> map, K key, V value)
@@ -3407,10 +4274,23 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       Set<V> set = map.get(key);
       if (set == null)
       {
-        set = new HashSet<V>();
+        set = new LinkedHashSet<V>();
         map.put(key, set);
       }
+
       set.add(value);
+    }
+
+    private <K, V> void addAll(Map<K, Set<V>> map, K key, Set<? extends V> values)
+    {
+      Set<V> set = map.get(key);
+      if (set == null)
+      {
+        set = new LinkedHashSet<V>();
+        map.put(key, set);
+      }
+
+      set.addAll(values);
     }
 
     @Override
@@ -3425,7 +4305,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     {
       super.setActionBars(actionBars);
 
-      actionBars.getToolBarManager().add(new Action("Show tasks for all triggers", IAction.AS_RADIO_BUTTON)
+      IToolBarManager toolBarManager = actionBars.getToolBarManager();
+
+      toolBarManager.add(previewAction);
+
+      toolBarManager.add(new Action("Show tasks for all triggers", IAction.AS_RADIO_BUTTON)
       {
         {
           setChecked(true);
@@ -3443,7 +4327,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       for (final Trigger trigger : Trigger.VALUES)
       {
         final String label = trigger.getLiteral().toLowerCase();
-        actionBars.getToolBarManager().add(new Action("Show tasks for the " + label + " trigger", IAction.AS_RADIO_BUTTON)
+        toolBarManager.add(new Action("Show tasks for the " + label + " trigger", IAction.AS_RADIO_BUTTON)
         {
           {
             setImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(SetupEditorPlugin.INSTANCE.getImage(StringUtil.cap(label) + "Trigger")));
@@ -3489,6 +4373,82 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       public void dispose()
       {
         super.dispose();
+      }
+    }
+
+    protected class PreviewAction extends Action implements ISelectionChangedListener
+    {
+      final List<Scope> selectedPeviewableScopes = new ArrayList<Scope>();
+
+      final Map<Scope, Object> scopes = new LinkedHashMap<Scope, Object>();
+
+      public PreviewAction()
+      {
+        super("Preview Triggered Tasks", IAction.AS_CHECK_BOX);
+        setImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(SetupEditorPlugin.INSTANCE.getImage("preview.png")));
+        contentOutlineViewer.addPostSelectionChangedListener(this);
+      }
+
+      public void selectionChanged(SelectionChangedEvent event)
+      {
+        update((ITreeSelection)event.getSelection());
+      }
+
+      protected void update()
+      {
+        update((ITreeSelection)contentOutlineViewer.getSelection());
+      }
+
+      protected void update(ITreeSelection treeSelection)
+      {
+        selectedPeviewableScopes.clear();
+        scopes.clear();
+
+        for (TreePath treePath : treeSelection.getPaths())
+        {
+          Object object = treePath.getLastSegment();
+          Object unwrappedObject = AdapterFactoryEditingDomain.unwrap(object);
+          if (isPreviewableScope(unwrappedObject))
+          {
+            Scope scope = (Scope)unwrappedObject;
+            selectedPeviewableScopes.add(scope);
+            scopes.put(scope, treePath);
+          }
+        }
+
+        if (selectedPeviewableScopes.isEmpty())
+        {
+          setEnabled(false);
+          setChecked(false);
+        }
+        else
+        {
+          List<Scope> previewableScopes = getPreviewableScopes();
+          boolean disjoint = Collections.disjoint(selectedPeviewableScopes, previewableScopes);
+          setEnabled(true);
+          setChecked(!disjoint);
+        }
+      }
+
+      @Override
+      public void run()
+      {
+        List<Scope> previewableScopes = getPreviewableScopes();
+        if (!previewableScopes.containsAll(selectedPeviewableScopes))
+        {
+          previewableScopes.addAll(selectedPeviewableScopes);
+          OutlinePreviewPage.this.update(2);
+
+          for (Scope scope : selectedPeviewableScopes)
+          {
+            contentOutlineViewer.setExpandedState(scopes.get(scope), true);
+          }
+        }
+        else
+        {
+          previewableScopes.removeAll(selectedPeviewableScopes);
+          OutlinePreviewPage.this.update(2);
+        }
       }
     }
   }
@@ -3573,26 +4533,88 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   public void handleContentOutlineSelection(ISelection selection)
   {
-    if (contentOutlinePage != null && selectionViewer != null && !selection.isEmpty() && selection instanceof IStructuredSelection)
+    if (contentOutlinePage != null && contentOutlineViewer.getControl().isFocusControl() && selectionViewer != null && !selection.isEmpty()
+        && selection instanceof IStructuredSelection)
     {
       Iterator<?> selectedElements = ((IStructuredSelection)selection).iterator();
       if (selectedElements.hasNext())
       {
         Object selectedElement = selectedElements.next();
 
-        ArrayList<Object> selectionList = new ArrayList<Object>();
+        List<Object> selectionList = new ArrayList<Object>();
         selectionList.addAll(contentOutlinePage.getOriginals(selectedElement));
         while (selectedElements.hasNext())
         {
           selectionList.addAll(contentOutlinePage.getOriginals(selectedElements.next()));
         }
 
-        TreeViewer oldSectionViewer = selectionViewer;
-        selectionViewer = null;
-        oldSectionViewer.setSelection(new StructuredSelection(selectionList));
-        selectionViewer = oldSectionViewer;
+        if (!selectionList.isEmpty())
+        {
+          TreeViewer oldSectionViewer = selectionViewer;
+          IStructuredSelection structuredSelection = createSelection(selectionList);
+          selectionViewer = null;
+          oldSectionViewer.setSelection(structuredSelection, true);
+          selectionViewer = oldSectionViewer;
+        }
       }
     }
+  }
+
+  protected IStructuredSelection createSelection(List<Object> objects)
+  {
+    // If we're only showing the one resource we can just use a structured selection.
+    Object input = selectionViewer.getInput();
+    if (input instanceof Resource)
+    {
+      return new StructuredSelection(objects);
+    }
+
+    // All but the first resource use delegating wrappers for children, so we need to find those wrappers and create a tree path based on those.
+    List<TreePath> treePaths = new ArrayList<TreePath>();
+    ITreeContentProvider treeContentProvider = (ITreeContentProvider)selectionViewer.getContentProvider();
+    for (Object object : objects)
+    {
+      List<Object> path = new ArrayList<Object>();
+      computePath(path, treeContentProvider, object);
+      treePaths.add(new TreePath(path.toArray()));
+    }
+
+    return new TreeSelection(treePaths.toArray(new TreePath[treePaths.size()]));
+  }
+
+  protected Object computePath(List<Object> path, ITreeContentProvider treeContentProvider, Object object)
+  {
+    if (object instanceof Resource)
+    {
+      path.add(object);
+      return object;
+    }
+
+    Object parent = treeContentProvider.getParent(object);
+    if (parent == null)
+    {
+      // This is a root object, so we can't do anything else with it.
+      path.add(object);
+      return object;
+    }
+
+    // Compute the past recursively for the parent, using the wrapper for the parent when determining children.
+    Object actualParent = computePath(path, treeContentProvider, parent);
+    if (actualParent != null)
+    {
+      Object[] children = treeContentProvider.getChildren(actualParent);
+      for (Object child : children)
+      {
+        // Find the corresponding wrapper, add it to the path, and return it.
+        if (child == object || child instanceof IWrapperItemProvider && ((IWrapperItemProvider)child).getValue() == object)
+        {
+          path.add(child);
+          return child;
+        }
+      }
+    }
+
+    return null;
   }
 
   /**
@@ -3637,7 +4659,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   {
     // Save only resources that have actually changed.
     //
-    final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
+    final Map<Object, Object> saveOptions = new LinkedHashMap<Object, Object>();
     saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
     saveOptions.put(Resource.OPTION_LINE_DELIMITER, Resource.OPTION_LINE_DELIMITER_UNSPECIFIED);
 
@@ -3830,7 +4852,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   private void toggleInput(boolean forceResourceSet)
   {
-    ISelection selection = selectionViewer.getSelection();
+    Object[] selection = ((IStructuredSelection)selectionViewer.getSelection()).toArray();
     Object[] expandedElements = selectionViewer.getExpandedElements();
     Object input = selectionViewer.getInput();
     if (input instanceof ResourceSet)
@@ -3862,7 +4884,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     }
 
     selectionViewer.setExpandedElements(expandedElements);
-    selectionViewer.setSelection(selection);
+    selectionViewer.setSelection(new StructuredSelection(selection));
   }
 
   /**
@@ -4273,6 +5295,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private ToolItem editSetupItem;
 
+    private ToolItem showSetupItem;
+
     private ToolItem showToolTipsItem;
 
     private ToolItem liveValidationItem;
@@ -4293,7 +5317,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private boolean editorSpecific;
 
-    private final Map<SetupEditor, DisposeListener> editorDisposeListeners = new HashMap<SetupEditor, DisposeListener>();
+    private final Map<SetupEditor, DisposeListener> editorDisposeListeners = new LinkedHashMap<SetupEditor, DisposeListener>();
 
     private ColumnViewerInformationControlToolTipSupport toolTipSupport;
 
@@ -4648,6 +5672,35 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       new ToolItem(toolBar, SWT.SEPARATOR);
 
+      if (editorSpecific)
+      {
+        showSetupItem = createItem(SWT.PUSH, "locate_value", "Show in this Setup Editor", new SelectionAdapter()
+        {
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            Object unwrappedObject = ToolTipObject.unwrap(toolTipObject);
+            Object selectionViewerInput = setupEditor.selectionViewer.getInput();
+            if (selectionViewerInput instanceof Resource)
+            {
+              if (unwrappedObject instanceof EObject)
+              {
+                EObject eObject = (EObject)unwrappedObject;
+                Resource resource = eObject.eResource();
+                if (resource != selectionViewerInput)
+                {
+                  setupEditor.toggleInput(true);
+                }
+              }
+            }
+
+            IStructuredSelection structuredSelection = setupEditor.createSelection(Collections.singletonList(unwrappedObject));
+            setupEditor.selectionViewer.setSelection(structuredSelection, true);
+            setupEditor.selectionViewer.getControl().setFocus();
+          }
+        });
+      }
+
       editSetupItem = createItem(SWT.PUSH, "edit_setup", "Open in Setup Editor", new SelectionAdapter()
       {
         @Override
@@ -4805,11 +5858,14 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     {
       backwardItem.setEnabled(toolTipIndex > 0);
       forwardItem.setEnabled(toolTipIndex + 1 < toolTipObjects.size());
-      editSetupItem.setEnabled(SetupActionBarContributor.getEditURI(ToolTipObject.unwrap(toolTipObject), !editorSpecific) != null);
-      editTextItem.setEnabled(SetupActionBarContributor.getEditURI(ToolTipObject.unwrap(toolTipObject), true) != null);
+      Object unwrappedToolTipObject = ToolTipObject.unwrap(toolTipObject);
+      editSetupItem.setEnabled(SetupActionBarContributor.getEditURI(unwrappedToolTipObject, !editorSpecific) != null);
+      boolean enabled = SetupActionBarContributor.getEditURI(unwrappedToolTipObject, true) != null;
+      editTextItem.setEnabled(enabled);
 
       if (editorSpecific)
       {
+        showSetupItem.setEnabled(enabled);
         showToolTipsItem.setSelection(SetupActionBarContributor.isShowTooltips());
         liveValidationItem.setSelection(setupEditor.getActionBarContributor().isLiveValidation());
       }
@@ -4874,7 +5930,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
 
       URI uri = originalURI;
-      Map<Object, Object> options = new HashMap<Object, Object>();
+      Map<Object, Object> options = new LinkedHashMap<Object, Object>();
       uri = ECFURIHandlerImpl.transform(uri, options);
       event.location = uri.toString();
 

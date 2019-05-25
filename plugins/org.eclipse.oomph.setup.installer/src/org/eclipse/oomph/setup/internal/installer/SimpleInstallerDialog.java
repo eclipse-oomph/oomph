@@ -35,6 +35,7 @@ import org.eclipse.oomph.setup.ui.wizards.ConfigurationProcessor;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ErrorDialog;
+import org.eclipse.oomph.ui.StatusDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ExceptionHandler;
 import org.eclipse.oomph.util.IOExceptionWithCause;
@@ -44,6 +45,7 @@ import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 
@@ -204,7 +206,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     IStatus status = configurationProcessor.getStatus();
     if (!status.isOK())
     {
-      org.eclipse.jface.dialogs.ErrorDialog.openError(getShell(), "Confirgation Problems", null, status);
+      new StatusDialog(getShell(), "Configuration Problems", null, status, Diagnostic.ERROR).open();
     }
   }
 

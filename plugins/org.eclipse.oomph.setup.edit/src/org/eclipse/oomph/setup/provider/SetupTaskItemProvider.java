@@ -26,9 +26,11 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.util.PropertiesUtil;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.AdapterFactoryItemDelegator;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -491,7 +493,8 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
    * <!-- end-user-doc -->
    * @generated
    */
-  public void notifyChangedGen(Notification notification)
+  @SuppressWarnings("unused")
+  private void notifyChangedGen(Notification notification)
   {
     updateChildren(notification);
 
@@ -543,4 +546,39 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
   }
+
+  @Override
+  protected Command createPrimaryDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+  {
+    return new BaseDragAndDropCommand(domain, owner, location, operations, operation, collection)
+    {
+      protected boolean preparingDropLinkInsert;
+
+      @Override
+      protected boolean prepareDropLinkInsert(Object parent, Collection<?> children, int index)
+      {
+        try
+        {
+          preparingDropLinkInsert = true;
+          return super.prepareDropLinkInsert(parent, children, index);
+        }
+        finally
+        {
+          preparingDropLinkInsert = false;
+        }
+      }
+
+      @Override
+      protected boolean analyzeForNonContainment(Command command)
+      {
+        if (preparingDropLinkInsert)
+        {
+          return true;
+        }
+
+        return super.analyzeForNonContainment(command);
+      }
+    };
+  }
+
 }

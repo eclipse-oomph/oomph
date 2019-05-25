@@ -981,4 +981,17 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
       templateUsagePage.addTemplate("Simple User Product", "@UserProductTemplate@.setup");
     }
   }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class NewMacroWizard extends SetupModelWizard
+  {
+    @Override
+    protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
+    {
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label7"));
+      templateUsagePage.addTemplate("Macro", "@MacroTemplate@.setup");
+    }
+  }
 }

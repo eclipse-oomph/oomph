@@ -16,6 +16,7 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
+import org.eclipse.oomph.base.util.BaseResourceImpl;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
@@ -26,12 +27,16 @@ import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
+import org.eclipse.oomph.setup.Argument;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
+import org.eclipse.oomph.setup.Macro;
+import org.eclipse.oomph.setup.MacroTask;
+import org.eclipse.oomph.setup.Parameter;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -156,14 +161,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -180,7 +184,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   public static final Adapter RULE_VARIABLE_ADAPTER = new AdapterImpl();
 
-  private static final Map<String, ValueConverter> CONVERTERS = new HashMap<String, ValueConverter>();
+  private static final Pattern FILTER_MEMBER_PATTERN = Pattern.compile("(\\(\\s*)([^~<>=\\(\\)]+)([~<>=\\\\(\\\\)])");
+
+  private static final Map<String, ValueConverter> CONVERTERS = new LinkedHashMap<String, ValueConverter>();
 
   static
   {
@@ -206,11 +212,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private EList<SetupTask> triggeredSetupTasks;
 
-  private Map<EObject, EObject> copyMap;
+  private final Map<EObject, Set<EObject>> copyMap = new LinkedHashMap<EObject, Set<EObject>>();
+
+  private final Map<EObject, Set<EObject>> macroCopyMap = new LinkedHashMap<EObject, Set<EObject>>();
 
   private EList<SetupTask> neededSetupTasks;
 
-  private final Set<Bundle> bundles = new HashSet<Bundle>();
+  private final Set<Bundle> bundles = new LinkedHashSet<Bundle>();
 
   /**
    * A list that contains instances of String and/or Pair<String, ProgressLog.Severity>.
@@ -464,7 +472,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       Map<SetupTask, SetupTask> substitutions = getSubstitutions(triggeredSetupTasks);
 
       // Shorten the paths through the substitutions map
-      Map<SetupTask, SetupTask> directSubstitutions = new HashMap<SetupTask, SetupTask>(substitutions);
+      Map<SetupTask, SetupTask> directSubstitutions = new LinkedHashMap<SetupTask, SetupTask>(substitutions);
       for (Map.Entry<SetupTask, SetupTask> entry : directSubstitutions.entrySet())
       {
         SetupTask task = entry.getValue();
@@ -485,7 +493,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       if (phase == Phase.COMPOSE_PHASE)
       {
         // Perform override merging.
-        Map<SetupTask, SetupTask> overrides = new HashMap<SetupTask, SetupTask>();
+        Map<SetupTask, SetupTask> overrides = new LinkedHashMap<SetupTask, SetupTask>();
         for (Map.Entry<SetupTask, SetupTask> entry : substitutions.entrySet())
         {
           SetupTask overriddenSetupTask = entry.getKey();
@@ -620,7 +628,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         copySetup(stream, triggeredSetupTasks, substitutions, directSubstitutions);
 
         // 2.4. Build variable map in the context
-        Map<String, VariableTask> explicitKeys = new HashMap<String, VariableTask>();
+        Map<String, VariableTask> explicitKeys = new LinkedHashMap<String, VariableTask>();
         for (SetupTask setupTask : triggeredSetupTasks)
         {
           if (setupTask instanceof VariableTask)
@@ -883,7 +891,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         appliedRuleVariables.clear();
         attributeRules.clear();
         bundles.clear();
-        copyMap = null;
+        copyMap.clear();
+        macroCopyMap.clear();
 
         originalMap.keySet().retainAll(originalMap.keySet());
         originalMap.putAll(originalMap);
@@ -905,8 +914,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private String getAttributeRuleVariableName(EAttribute eAttribute)
   {
-    String attributeName = ExtendedMetaData.INSTANCE.getName(eAttribute);
-    String variableName = "@<id>." + eAttribute.getEContainingClass() + "." + attributeName;
+    EClass eContainingClass = eAttribute.getEContainingClass();
+    String instanceTypeName = eContainingClass.getInstanceTypeName();
+    String variableName = "@<id>."
+        + (instanceTypeName != null ? instanceTypeName + "." + ExtendedMetaData.INSTANCE.getName(eAttribute) : getAttributeURI(eAttribute));
     return variableName;
   }
 
@@ -1488,9 +1499,16 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       String qualifier = null;
       Scope rootProject = null;
 
+      // Expand all the macros, effectively to make a deep recursive copy of all the tasks.
+      Map<MacroTask, Macro> expandedMacros = new LinkedHashMap<MacroTask, Macro>();
       for (Scope scope : scopes)
       {
-        gatherFilters(configurableItems, scope);
+        expandMacroTasks(macroCopyMap, expandedMacros, scope);
+      }
+
+      for (Scope scope : scopes)
+      {
+        gatherFilters(configurableItems, expandedMacros, scope);
       }
 
       for (Scope scope : scopes)
@@ -1569,9 +1587,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             generateScopeVariables(result, "user", qualifier, name, label, description);
             break;
           }
+          case MACRO:
+          {
+            // Macros do not generate any scope variables.
+            break;
+          }
         }
 
-        getSetupTasks(result, configurableItems, scope, false);
+        getSetupTasks(result, configurableItems, expandedMacros, scope, false);
       }
     }
 
@@ -1651,7 +1674,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     task.setVm(vm);
     task.setOption(option);
     task.setValue(value);
-    task.setExcludedTriggers(new HashSet<Trigger>(Arrays.asList(new Trigger[] { Trigger.STARTUP, Trigger.MANUAL })));
+    task.setExcludedTriggers(new LinkedHashSet<Trigger>(Arrays.asList(new Trigger[] { Trigger.STARTUP, Trigger.MANUAL })));
     result.add(task);
   }
 
@@ -1677,8 +1700,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return variable;
   }
 
-  private void getSetupTasks(EList<SetupTask> setupTasks, List<Scope> configurableItems, SetupTaskContainer setupTaskContainer, boolean isFiltered)
+  private void getSetupTasks(EList<SetupTask> setupTasks, List<Scope> configurableItems, Map<MacroTask, Macro> expandedMacros,
+      SetupTaskContainer setupTaskContainer, boolean isFiltered)
   {
+    // Visit the container's contents.
     for (SetupTask setupTask : setupTaskContainer.getSetupTasks())
     {
       if (setupTask.isDisabled())
@@ -1706,17 +1731,433 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       if (setupTask instanceof SetupTaskContainer)
       {
+        // If it's a container, visit the contents.
         SetupTaskContainer container = (SetupTaskContainer)setupTask;
-        getSetupTasks(setupTasks, configurableItems, container, effectiveIsFiltered);
+        getSetupTasks(setupTasks, configurableItems, expandedMacros, container, effectiveIsFiltered);
       }
-      else if (!effectiveIsFiltered)
+      else
       {
-        setupTasks.add(setupTask);
+        // If the task is a macro task that has been expanded, visit the expanded macro instead.
+        Macro macro = expandedMacros.get(setupTask);
+        if (macro != null)
+        {
+          getSetupTasks(setupTasks, configurableItems, expandedMacros, macro, effectiveIsFiltered);
+        }
+        else if (!effectiveIsFiltered)
+        {
+          // Otherwise add the leaf task.
+          setupTasks.add(setupTask);
+        }
       }
     }
   }
 
-  private void gatherFilters(List<Scope> configurableItems, SetupTaskContainer setupTaskContainer)
+  private void expandMacroTasks(Map<EObject, Set<EObject>> macroCopies, Map<MacroTask, Macro> expandedMacros, SetupTaskContainer setupTaskContainer)
+  {
+    for (SetupTask setupTask : setupTaskContainer.getSetupTasks())
+    {
+      if (setupTask instanceof MacroTask)
+      {
+        MacroTask macroTask = (MacroTask)setupTask;
+        Macro macro = macroTask.getMacro();
+        if (macro != null)
+        {
+          // Deeply copy the macro for this macro task, keep track of this task as the logical container, and put it in the map.
+          Macro copiedAndExpandedMacro = copyAndExpandMacro(macroCopies, new LinkedHashSet<Macro>(), macroTask, macro);
+          copiedAndExpandedMacro.setLogicalContainer(macroTask);
+          expandedMacros.put(macroTask, copiedAndExpandedMacro);
+        }
+      }
+      else if (setupTask instanceof SetupTaskContainer)
+      {
+        // Visit all the recursively contained tasks.
+        SetupTaskContainer container = (SetupTaskContainer)setupTask;
+        expandMacroTasks(macroCopies, expandedMacros, container);
+      }
+    }
+  }
+
+  public static CompoundTask expand(MacroTask macroTask)
+  {
+    Macro macro = macroTask.getMacro();
+    if (macro != null)
+    {
+      Macro copiedAndExpandedMacro = copyAndExpandMacro(new LinkedHashMap<EObject, Set<EObject>>(), new LinkedHashSet<Macro>(), macroTask, macro);
+      return (CompoundTask)copiedAndExpandedMacro.getSetupTasks().get(0);
+    }
+
+    return null;
+  }
+
+  private static Macro copyAndExpandMacro(final Map<EObject, Set<EObject>> macroCopies, final Set<Macro> visited, final MacroTask macroTask, final Macro macro)
+  {
+    // Prevent infinite recursion of macro expansion.
+    if (visited.add(macro))
+    {
+      EcoreUtil.Copier copier = new EcoreUtil.Copier(true, false)
+      {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public <T> Collection<T> copyAll(Collection<? extends T> eObjects)
+        {
+          Collection<T> result = new ArrayList<T>(eObjects.size());
+          for (Object object : eObjects)
+          {
+            // A macro might not be expanded, i.e., if it's circular.
+            @SuppressWarnings("unchecked")
+            T t = (T)copy((EObject)object);
+            if (t != null)
+            {
+              result.add(t);
+            }
+          }
+
+          return result;
+        }
+
+        @Override
+        public EObject copy(EObject eObject)
+        {
+          if (eObject instanceof MacroTask)
+          {
+            // Recursively create an independent copy of the macro task's macro.
+            MacroTask macroTask = (MacroTask)eObject;
+            Macro macro = macroTask.getMacro();
+            Macro copiedAndExpandedMacro = copyAndExpandMacro(macroCopies, visited, macroTask, macro);
+            if (copiedAndExpandedMacro == null)
+            {
+              return null;
+            }
+
+            // The copy will have exactly one task because a compound task is created.
+            // This task will be a replacement, i.e., act as the copy of the macro task.
+            SetupTask setupTask = copiedAndExpandedMacro.getSetupTasks().get(0);
+            put(macroTask, setupTask);
+            return setupTask;
+          }
+          else if (eObject == macro)
+          {
+            Macro copiedMacro = (Macro)super.copy(macro);
+            applyArguments(macroCopies, macroTask, copiedMacro);
+
+            // When coping a macro, embed all the tasks in a compound task and copy over all the "containing" macro tasks features.
+            // This ensures that filters, restrictions, predecessors, and successors are properly preserved/respected for the macro expansion.
+            CompoundTask compoundTask = SetupFactory.eINSTANCE.createCompoundTask(copiedMacro.getLabel());
+            for (EStructuralFeature eStructuralFeature : SetupPackage.Literals.SETUP_TASK.getEAllStructuralFeatures())
+            {
+              if (eStructuralFeature.isChangeable() && macroTask.eIsSet(eStructuralFeature))
+              {
+                Object value = macroTask.eGet(eStructuralFeature);
+                if (eStructuralFeature instanceof EReference && ((EReference)eStructuralFeature).isContainment())
+                {
+                  @SuppressWarnings("unchecked")
+                  Collection<EObject> listValue = (Collection<EObject>)value;
+                  value = EcoreUtil.copyAll(listValue);
+
+                }
+                compoundTask.eSet(eStructuralFeature, value);
+              }
+            }
+
+            // Replace the setup tasks with this compound task.
+            compoundTask.getSetupTasks().addAll(copiedMacro.getSetupTasks());
+            copiedMacro.getSetupTasks().add(compoundTask);
+
+            return copiedMacro;
+          }
+
+          // Otherwise do a normal copy.
+          return super.copy(eObject);
+        }
+
+        @Override
+        protected void copyReference(EReference eReference, EObject eObject, EObject copyEObject)
+        {
+          // Don't copy the macro task's macro reference.
+          if (eReference != SetupPackage.Literals.MACRO_TASK__MACRO)
+          {
+            super.copyReference(eReference, eObject, copyEObject);
+          }
+        }
+      };
+
+      // Copy the macro and its references and then forget that we've visited it.
+      Macro copy = (Macro)copier.copy(macro);
+      copier.copyReferences();
+
+      for (Map.Entry<EObject, EObject> entry : copier.entrySet())
+      {
+        EObject key = entry.getKey();
+        EObject value = entry.getValue();
+        if (value != null)
+        {
+          Set<EObject> copies = macroCopies.get(key);
+          if (copies == null)
+          {
+            copies = new LinkedHashSet<EObject>();
+            macroCopies.put(key, copies);
+          }
+          copies.add(value);
+        }
+      }
+
+      visited.remove(macro);
+      return copy;
+    }
+    else
+    {
+      // We should not keep copying forever.
+      return null;
+    }
+  }
+
+  private static void applyArguments(Map<EObject, Set<EObject>> macroCopies, MacroTask macroTask, Macro macro)
+  {
+    final String macroTaskID = StringUtil.isEmpty(macroTask.getID()) ? "macro" : macroTask.getID();
+    EList<Parameter> parameters = macro.getParameters();
+    EList<Argument> arguments = macroTask.getArguments();
+
+    // These are variable names that will be redirected to used qualified names.
+    final Map<String, String> variableSubstitutions = new LinkedHashMap<String, String>();
+    final Set<VariableTask> parameterVariables = new LinkedHashSet<VariableTask>();
+    if (!parameters.isEmpty())
+    {
+      // Add variable tasks to bind arguments to parameters.
+      EList<SetupTask> setupTasks = macro.getSetupTasks();
+      int index = 0;
+      for (Parameter parameter : parameters)
+      {
+        String parameterName = parameter.getName();
+        if (parameterName != null)
+        {
+          // Find the corresponding argument by finding the argument with a parameter whose name matches.
+          // At this point, the macro copy references contains copies of the parameters.
+          Argument correspondingArgument = null;
+          for (Argument argument : arguments)
+          {
+            Parameter argumentParameter = argument.getParameter();
+            if (argumentParameter != null)
+            {
+              String argumentParameterName = argumentParameter.getName();
+              if (parameterName.equals(argumentParameterName))
+              {
+                correspondingArgument = argument;
+                break;
+              }
+            }
+          }
+
+          String argumentValue = correspondingArgument == null || correspondingArgument.getValue() == null ? parameter.getDefaultValue()
+              : correspondingArgument.getValue();
+
+          // Create the variable and add it at the start, it's marked local and will be qualified in the loop that follows.
+          VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
+          variable.setName("*" + parameterName);
+          variable.setValue(argumentValue);
+          setupTasks.add(index++, variable);
+
+          // Map the argument to the variable used to bind its value.
+          if (correspondingArgument != null)
+          {
+            Set<EObject> set = new LinkedHashSet<EObject>();
+            set.add(variable);
+            macroCopies.put(correspondingArgument, set);
+          }
+
+          // Map the parameter to the variable used to bind its value.
+          Set<EObject> set = new LinkedHashSet<EObject>();
+          set.add(variable);
+          macroCopies.put(parameter, set);
+
+          // Remember these so that we don't process the value when replacing references.
+          parameterVariables.add(variable);
+
+          // Qualify the parameter name with the task's ID.
+          String qualifiedName = createQualifiedName(macroTaskID, parameterName);
+
+          // Redirect any references to the parameter name to use the qualified name instead.
+          variableSubstitutions.put(parameterName, qualifiedName);
+        }
+      }
+    }
+
+    // Any variable references that start with an ID as a qualifier will be redirected to use a more uniquely qualified ID.
+    final Set<String> ids = new LinkedHashSet<String>();
+    for (Iterator<EObject> it = macro.eAllContents(); it.hasNext();)
+    {
+      EObject eObject = it.next();
+      if (eObject instanceof SetupTask)
+      {
+        SetupTask setupTask = (SetupTask)eObject;
+        String id = setupTask.getID();
+        if (!StringUtil.isEmpty(id))
+        {
+          // If the task has an ID, remember it and update it to be qualified by the task's ID.
+          ids.add(id);
+          setupTask.setID(macroTaskID + '.' + id);
+        }
+
+        if (setupTask instanceof VariableTask)
+        {
+          // If it's a variable and the name is "marked" to indicate it's a local variable...
+          VariableTask variable = (VariableTask)setupTask;
+          String name = variable.getName();
+          if (name != null && name.startsWith("*"))
+          {
+            // Change the name to be qualified, and remember to redirect uses of this variable name to the new local qualified name.
+            String baseName = name.substring(1);
+            String qualifiedName = createQualifiedName(macroTaskID, baseName);
+            variable.setName(qualifiedName);
+            variableSubstitutions.put(name, qualifiedName);
+          }
+        }
+      }
+    }
+
+    class ValueTransformer
+    {
+      public String transform(String string)
+      {
+        if (!StringUtil.isEmpty(string))
+        {
+          // Find all variable references and replace them with the remapped name.
+          Matcher matcher = StringExpander.STRING_EXPANSION_PATTERN.matcher(string);
+          if (matcher.find())
+          {
+            StringBuffer result = new StringBuffer();
+            do
+            {
+              String group1 = matcher.group(1);
+              if ("$".equals(group1))
+              {
+                matcher.appendReplacement(result, "\\$\\$");
+              }
+              else
+              {
+                String key = matcher.group(2);
+                matcher.appendReplacement(result, "\\${" + remap(key).replace("$", "\\$") + "$3}");
+              }
+            } while (matcher.find());
+
+            matcher.appendTail(result);
+            return result.toString();
+          }
+        }
+
+        return string;
+      }
+
+      public String remap(String variableName)
+      {
+        // If the variable name is directly redirected, return that substitution.
+        String variableSubstitution = variableSubstitutions.get(variableName);
+        if (variableSubstitution != null)
+        {
+          return variableSubstitution;
+        }
+
+        for (String id : ids)
+        {
+          // Check if the variable name is qualified by any ID.
+          if (variableName.startsWith(id) && (id.equals(variableName) || variableName.charAt(id.length()) == '.'))
+          {
+            // If so, redirect it to the more qualified name.
+            return macroTaskID + '.' + variableName;
+          }
+        }
+
+        return variableName;
+      }
+    }
+
+    // Transform all contents in the macro.
+    final ValueTransformer valueTransformer = new ValueTransformer();
+    for (Iterator<EObject> it = macro.eAllContents(); it.hasNext();)
+    {
+      // Don't expand the values of the variables containing the parameter values.
+      // They are resolved in the scope of the containing context.
+      EObject eObject = it.next();
+      if (!parameterVariables.contains(eObject))
+      {
+        EClass eClass = eObject.eClass();
+        for (EAttribute attribute : eClass.getEAllAttributes())
+        {
+          if (attribute == SetupPackage.Literals.SETUP_TASK__FILTER)
+          {
+            // If it's the filter property, we need to look variable references in the filter.
+            SetupTask setupTask = (SetupTask)eObject;
+            Set<String> filterProperties = getFilterProperties(setupTask);
+            if (!filterProperties.isEmpty())
+            {
+              // Re-compose the filter, redirecting any member names that correspond to remapped variables.
+              String filter = setupTask.getFilter();
+              StringBuffer result = new StringBuffer();
+              Matcher matcher = FILTER_MEMBER_PATTERN.matcher(filter);
+              while (matcher.find())
+              {
+                String memberName = matcher.group(2);
+                String remappedMemberName = valueTransformer.remap(memberName);
+                matcher.appendReplacement(result, "$1" + remappedMemberName.replace("$", "\\$") + "$3");
+              }
+
+              matcher.appendTail(result);
+              setupTask.setFilter(result.toString());
+            }
+          }
+          else if (attribute.isChangeable() && attribute.getEAnnotation(EAnnotationConstants.ANNOTATION_NO_EXPAND) == null)
+          {
+            // Visit all the values that might validly contain variable references.
+            String instanceClassName = attribute.getEAttributeType().getInstanceClassName();
+            ValueConverter valueConverter = CONVERTERS.get(instanceClassName);
+            if (valueConverter != null)
+            {
+              if (attribute.isMany())
+              {
+                List<?> values = (List<?>)eObject.eGet(attribute);
+                List<Object> newValues = new ArrayList<Object>();
+                for (Object value : values)
+                {
+                  String newValue = valueTransformer.transform(valueConverter.convertToString(value));
+                  newValues.add(valueConverter.createFromString(newValue));
+                }
+
+                eObject.eSet(attribute, newValues);
+              }
+              else
+              {
+                Object value = eObject.eGet(attribute);
+                if (value != null)
+                {
+                  String newValue = valueTransformer.transform(valueConverter.convertToString(value));
+                  eObject.eSet(attribute, valueConverter.createFromString(newValue));
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Dump the result.
+    if (Boolean.FALSE)
+    {
+      BaseResourceImpl resource = new BaseResourceImpl(URI.createURI("dummy.setup"));
+      resource.getContents().add(EcoreUtil.copy(macro));
+      try
+      {
+        System.out.println(macro.getLabel() + " : " + macroTaskID);
+        resource.doSave(System.out, null);
+        System.out.println();
+      }
+      catch (IOException ex)
+      {
+        ex.printStackTrace();
+      }
+    }
+  }
+
+  private void gatherFilters(List<Scope> configurableItems, Map<MacroTask, Macro> expandedMacros, SetupTaskContainer setupTaskContainer)
   {
     for (SetupTask setupTask : setupTaskContainer.getSetupTasks())
     {
@@ -1733,17 +2174,47 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       filterProperties.addAll(getFilterProperties(setupTask));
 
-      if (setupTask instanceof SetupTaskContainer)
+      // If the task has a macro expansion/substitution, process that instead.
+      Macro macro = expandedMacros.get(setupTask);
+      if (macro != null)
+      {
+        gatherFilters(configurableItems, expandedMacros, macro);
+      }
+      else if (setupTask instanceof SetupTaskContainer)
       {
         SetupTaskContainer container = (SetupTaskContainer)setupTask;
-        gatherFilters(configurableItems, container);
+        gatherFilters(configurableItems, expandedMacros, container);
       }
     }
   }
 
-  private Set<String> getFilterProperties(SetupTask setupTask)
+  private static Set<String> getFilterProperties(SetupTask setupTask)
   {
     final Set<String> filterProperties = new LinkedHashSet<String>();
+    LDAPFilter ldapFilter = getLDAPFilter(setupTask);
+    if (ldapFilter != null)
+    {
+      ldapFilter.accept(new IExpressionVisitor()
+      {
+        public boolean visit(IExpression expression)
+        {
+          if (expression.getExpressionType() == IExpression.TYPE_MEMBER)
+          {
+            Member member = (Member)expression;
+            String name = member.getName();
+            filterProperties.add(name);
+          }
+
+          return true;
+        }
+      });
+    }
+
+    return filterProperties;
+  }
+
+  private static LDAPFilter getLDAPFilter(SetupTask setupTask)
+  {
     String filter = setupTask.getFilter();
     if (!StringUtil.isEmpty(filter))
     {
@@ -1754,20 +2225,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         if (parameters.length == 1 && parameters[0] instanceof LDAPFilter)
         {
           LDAPFilter ldapFilter = (LDAPFilter)parameters[0];
-          ldapFilter.accept(new IExpressionVisitor()
-          {
-            public boolean visit(IExpression expression)
-            {
-              if (expression.getExpressionType() == IExpression.TYPE_MEMBER)
-              {
-                Member member = (Member)expression;
-                String name = member.getName();
-                filterProperties.add(name);
-              }
-
-              return true;
-            }
-          });
+          return ldapFilter;
         }
       }
       catch (Exception ex)
@@ -1776,7 +2234,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    return filterProperties;
+    return null;
   }
 
   public EList<SetupTask> initNeededSetupTasks(IProgressMonitor monitor) throws Exception
@@ -1841,9 +2299,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return neededSetupTasks;
   }
 
-  public Map<EObject, EObject> getCopyMap()
+  public Map<EObject, Set<EObject>> getCopyMap()
   {
     return copyMap;
+  }
+
+  public Map<EObject, Set<EObject>> getMacroCopyMap()
+  {
+    return macroCopyMap;
   }
 
   public IProgressMonitor getProgressMonitor(boolean working)
@@ -2403,12 +2866,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return result;
   }
 
-  public boolean isFilterUsed(String name, EObject eObject)
+  public static boolean isFilterUsed(String name, EObject eObject)
   {
     return eObject instanceof SetupTask && getFilterProperties((SetupTask)eObject).contains(name);
   }
 
-  public boolean isVariableUsed(String name, EObject eObject, boolean recursive)
+  public static boolean isVariableUsed(String name, EObject eObject, boolean recursive)
   {
     for (EAttribute attribute : eObject.eClass().getEAllAttributes())
     {
@@ -2470,15 +2933,34 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       EList<SetupTask> predecessors = setupTask.getPredecessors();
       for (EObject eContainer = setupTask.eContainer(); eContainer instanceof SetupTask; eContainer = eContainer.eContainer())
       {
-        predecessors.addAll(((SetupTask)eContainer).getPredecessors());
+        predecessors.addAll(collectChildren(new ArrayList<SetupTask>(), ((SetupTask)eContainer).getPredecessors()));
       }
 
       EList<SetupTask> successors = setupTask.getSuccessors();
       for (EObject eContainer = setupTask.eContainer(); eContainer instanceof SetupTask; eContainer = eContainer.eContainer())
       {
-        successors.addAll(((SetupTask)eContainer).getSuccessors());
+        successors.addAll(collectChildren(new ArrayList<SetupTask>(), ((SetupTask)eContainer).getSuccessors()));
       }
     }
+  }
+
+  private List<SetupTask> collectChildren(List<SetupTask> result, List<SetupTask> setupTasks)
+  {
+    for (SetupTask setupTask : setupTasks)
+    {
+      if (setupTask instanceof CompoundTask)
+      {
+        // Expand a compound task to all its leaf setup tasks.
+        // This ensures predecessor/successor reference to a compound task is expanded to references all the contained leaf tasks.
+        CompoundTask compoundTask = (CompoundTask)setupTask;
+        collectChildren(result, compoundTask.getSetupTasks());
+      }
+      else
+      {
+        result.add(setupTask);
+      }
+    }
+    return result;
   }
 
   private void flattenPredecessorsAndSuccessors(EList<SetupTask> setupTasks)
@@ -2649,7 +3131,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           {
             // Look for an attribute with the name of the detail's key.
             EStructuralFeature eStructuralFeature = eClass.getEStructuralFeature(detail.getKey());
-            if (eStructuralFeature instanceof EAttribute)
+            if (eStructuralFeature instanceof EAttribute && eStructuralFeature.getEAnnotation(EAnnotationConstants.ANNOTATION_NO_EXPAND) == null)
             {
               try
               {
@@ -3174,6 +3656,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     Profile profile = getProfile();
     File installFolder = profile.getInstallFolder();
+    if (installFolder == null)
+    {
+      log("No install folder found for profile", false, Severity.WARNING);
+      monitor.worked(3);
+      return;
+    }
+
     File bundlePool = profile.getBundlePool().getLocation();
     if (!installFolder.equals(bundlePool))
     {
@@ -3606,6 +4095,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             result.add(t);
           }
         }
+
         return result;
       }
 
@@ -3619,9 +4109,59 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
         return super.createCopy(eObject);
       }
+
+      @Override
+      protected void copyReference(EReference eReference, EObject eObject, EObject copyEObject)
+      {
+        // Do not copy any references of a macro task (it will be replaced later) and do not copy a macro's logical container.
+        if (!(eObject instanceof MacroTask) && eReference != SetupPackage.Literals.MACRO__LOGICAL_CONTAINER)
+        {
+          super.copyReference(eReference, eObject, copyEObject);
+        }
+      }
     };
 
     copier.copyAll(roots);
+
+    // All the expanded macros will be in the scopes to copy.
+    // Now we need to replace the macro task with the copied macro's contained compound task.
+    for (Iterator<Scope> it = scopesToCopy.iterator(); it.hasNext();)
+    {
+      Scope scope = it.next();
+      if (scope instanceof Macro)
+      {
+        // We recorded the logical container of the macro while expanding it.
+        Macro originalMacro = (Macro)scope;
+        MacroTask originalLogicalContainer = originalMacro.getLogicalContainer();
+
+        // There should be a corresponding copy of that macro task.
+        MacroTask copiedMacroTask = (MacroTask)copier.get(originalLogicalContainer);
+        if (copiedMacroTask != null)
+        {
+          // It should have a container.
+          EObject eContainer = copiedMacroTask.eContainer();
+          if (eContainer instanceof SetupTaskContainer)
+          {
+            // This is the list containing the copied macro task.
+            EList<SetupTask> targetSetupTasks = ((SetupTaskContainer)eContainer).getSetupTasks();
+
+            // The macro itself will definitely have been copied as a root object.
+            Macro copiedMacro = (Macro)copier.get(originalMacro);
+
+            // It will have a single compound task.
+            SetupTask compoundTask = copiedMacro.getSetupTasks().get(0);
+
+            // Replace the macro task with this compound task in its containing list.
+            int index = targetSetupTasks.indexOf(copiedMacroTask);
+            targetSetupTasks.set(index, compoundTask);
+
+            // Record the macro task as if it were copied as this compound task.
+            // This ensures that references to the macro task will be mapped as references to the compound task representing the macro expansion.
+            copier.put(originalLogicalContainer, compoundTask);
+          }
+        }
+      }
+    }
 
     // Determine all the copied objects for which the original object is directly contained in a resource.
     // For each such resource, create a copy of that resource.
@@ -3699,7 +4239,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       copier.put(overriddenTask, copy == null ? overridingTask : copy);
     }
 
-    copyMap = copier;
+    for (Map.Entry<EObject, EObject> entry : copier.entrySet())
+    {
+      Set<EObject> copies = new LinkedHashSet<EObject>();
+      copies.add(entry.getValue());
+      copyMap.put(entry.getKey(), copies);
+    }
 
     copier.copyReferences();
 
@@ -3867,6 +4412,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     SetupCorePlugin.checkCancelation(CREATION_MONITOR.get());
   }
 
+  public static String createQualifiedName(String id, String name)
+  {
+    return "*" + id + "." + name;
+  }
+
   /**
    * Used in IDE.
    */
@@ -3881,12 +4431,23 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public static SetupTaskPerformer create(URIConverter uriConverter, final SetupPrompter prompter, Trigger trigger, SetupContext setupContext,
       boolean fullPrompt) throws Exception
   {
+    return create(uriConverter, prompter, trigger, setupContext, fullPrompt, false);
+  }
+
+  /**
+   * Used with full composition true only for the outline preview in the setup editor.
+   */
+  public static SetupTaskPerformer create(URIConverter uriConverter, final SetupPrompter prompter, Trigger trigger, SetupContext setupContext,
+      boolean fullPrompt, boolean fullComposition) throws Exception
+  {
     List<SetupTaskPerformer> performers = new ArrayList<SetupTaskPerformer>();
     boolean needsPrompt = false;
 
-    Map<Object, Set<Object>> composedMap = new HashMap<Object, Set<Object>>();
+    Map<Object, Set<Object>> composedMap = new LinkedHashMap<Object, Set<Object>>();
     List<VariableTask> allAppliedRuleVariables = new ArrayList<VariableTask>();
+    Set<String> allUndeclaredVariables = new LinkedHashSet<String>();
     List<VariableTask> allUnresolvedVariables = new ArrayList<VariableTask>();
+    List<VariableTask> allResolvedVariables = new ArrayList<VariableTask>();
     List<VariableTask> allPasswordVariables = new ArrayList<VariableTask>();
     Map<VariableTask, EAttribute> allRuleAttributes = new LinkedHashMap<VariableTask, EAttribute>();
 
@@ -3918,6 +4479,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             variable.getAnnotations().add(BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_UNDECLARED_VARIABLE));
             unresolvedVariables.add(variable);
             demandCreatedUnresolvedVariables.add(variable);
+          }
+
+          if (fullComposition)
+          {
+            allUndeclaredVariables.addAll(undeclaredVariables);
           }
 
           undeclaredVariables.clear();
@@ -4012,6 +4578,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
         allAppliedRuleVariables.addAll(performer.getAppliedRuleVariables());
         allUnresolvedVariables.addAll(performer.getUnresolvedVariables());
+        allResolvedVariables.addAll(performer.getResolvedVariables());
         allPasswordVariables.addAll(performer.getPasswordVariables());
         allRuleAttributes.putAll(performer.getRuleAttributes());
         performers.add(performer);
@@ -4044,7 +4611,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     // The per-stream performers from above have triggered task lists that must be composed into a single setup for multiple streams.
 
     EList<SetupTask> setupTasks = new BasicEList<SetupTask>();
-    Set<Bundle> bundles = new HashSet<Bundle>();
+    Set<Bundle> bundles = new LinkedHashSet<Bundle>();
     for (SetupTaskPerformer performer : performers)
     {
       setupTasks.addAll(performer.getTriggeredSetupTasks());
@@ -4059,25 +4626,69 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     composedPerformer.getRuleAttributes().putAll(allRuleAttributes);
     composedPerformer.redirectTriggeredSetupTasks();
 
-    File workspaceLocation = composedPerformer.getWorkspaceLocation();
-    if (workspaceLocation != null)
+    if (fullComposition)
     {
-      File workspaceSetupLocation = new File(workspaceLocation, ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup");
-      URI workspaceURI = URI.createFileURI(workspaceSetupLocation.toString());
-      for (SetupTaskPerformer performer : performers)
+      composedPerformer.getUndeclaredVariables().addAll(allUndeclaredVariables);
+      composedPerformer.getResolvedVariables().addAll(allResolvedVariables);
+      Map<EObject, Set<EObject>> copyMap = composedPerformer.getCopyMap();
+      Map<EObject, Set<EObject>> macroCopyMap = composedPerformer.getMacroCopyMap();
+      for (SetupTaskPerformer setupTaskPerformer : performers)
       {
-        performer.getWorkspace().eResource().setURI(workspaceURI);
+        Map<EObject, Set<EObject>> performerCopyMap = setupTaskPerformer.getCopyMap();
+        for (Entry<EObject, Set<EObject>> entry : performerCopyMap.entrySet())
+        {
+          EObject key = entry.getKey();
+          Set<EObject> copies = entry.getValue();
+          Set<EObject> combinedCopies = copyMap.get(key);
+          if (combinedCopies == null)
+          {
+            copyMap.put(key, copies);
+          }
+          else
+          {
+            combinedCopies.addAll(copies);
+          }
+        }
+
+        Map<EObject, Set<EObject>> performerMacroCopyMap = setupTaskPerformer.getMacroCopyMap();
+        for (Entry<EObject, Set<EObject>> entry : performerMacroCopyMap.entrySet())
+        {
+          EObject key = entry.getKey();
+          Set<EObject> copies = entry.getValue();
+          Set<EObject> combinedCopies = macroCopyMap.get(key);
+          if (combinedCopies == null)
+          {
+            macroCopyMap.put(key, copies);
+          }
+          else
+          {
+            combinedCopies.addAll(copies);
+          }
+        }
       }
     }
-
-    File configurationLocation = composedPerformer.getProductConfigurationLocation();
-    if (configurationLocation != null)
+    else
     {
-      File installationLocation = new File(configurationLocation, "org.eclipse.oomph.setup/installation.setup");
-      URI installationURI = URI.createFileURI(installationLocation.toString());
-      for (SetupTaskPerformer performer : performers)
+      File workspaceLocation = composedPerformer.getWorkspaceLocation();
+      if (workspaceLocation != null)
       {
-        performer.getInstallation().eResource().setURI(installationURI);
+        File workspaceSetupLocation = new File(workspaceLocation, ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup");
+        URI workspaceURI = URI.createFileURI(workspaceSetupLocation.toString());
+        for (SetupTaskPerformer performer : performers)
+        {
+          performer.getWorkspace().eResource().setURI(workspaceURI);
+        }
+      }
+
+      File configurationLocation = composedPerformer.getProductConfigurationLocation();
+      if (configurationLocation != null)
+      {
+        File installationLocation = new File(configurationLocation, "org.eclipse.oomph.setup/installation.setup");
+        URI installationURI = URI.createFileURI(installationLocation.toString());
+        for (SetupTaskPerformer performer : performers)
+        {
+          performer.getInstallation().eResource().setURI(installationURI);
+        }
       }
     }
 

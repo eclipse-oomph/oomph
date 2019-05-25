@@ -11,22 +11,35 @@
 package org.eclipse.oomph.setup.provider;
 
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
+import org.eclipse.oomph.setup.Argument;
 import org.eclipse.oomph.setup.InstallationTask;
+import org.eclipse.oomph.setup.Macro;
+import org.eclipse.oomph.setup.MacroTask;
+import org.eclipse.oomph.setup.Parameter;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProjectCatalog;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.WorkspaceTask;
+import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -150,7 +163,7 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void collectNewChildDescriptorsGen(Collection<Object> newChildDescriptors, Object object)
+  private void collectNewChildDescriptorsGen(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
@@ -178,6 +191,8 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
     newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, SetupFactory.eINSTANCE.createResourceCreationTask()));
 
     newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, SetupFactory.eINSTANCE.createTextModifyTask()));
+
+    newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, SetupFactory.eINSTANCE.createMacroTask()));
   }
 
   @Override
@@ -226,4 +241,113 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
     return false;
   }
 
+  @Override
+  protected Command factorAddCommand(EditingDomain domain, CommandParameter commandParameter)
+  {
+    return super.factorAddCommand(domain, transformCommandParameter(domain, commandParameter));
+  }
+
+  public static CommandParameter transformCommandParameter(EditingDomain domain, CommandParameter commandParameter)
+  {
+    Collection<?> collection = commandParameter.getCollection();
+    if (collection != null && !collection.isEmpty())
+    {
+      EObject eOwner = commandParameter.getEOwner();
+      if (eOwner != null)
+      {
+        List<Object> augmentedCollection = new ArrayList<Object>();
+        for (Object object : collection)
+        {
+          Object unwrappedObject = AdapterFactoryEditingDomain.unwrap(object);
+          if (unwrappedObject instanceof Macro)
+          {
+            Macro macro = (Macro)unwrappedObject;
+            if (macro.eResource() != null)
+            {
+              MacroTask macroTask = SetupFactory.eINSTANCE.createMacroTask();
+              macroTask.setMacro(macro);
+
+              String id = getID(macro.getName());
+              String uniqueID = id;
+              Resource resource = eOwner.eResource();
+              if (resource != null)
+              {
+                int count = 0;
+                while (resource.getEObject(uniqueID) != null)
+                {
+                  if (Character.isDigit(id.charAt(id.length() - 1)))
+                  {
+                    uniqueID = id + "_" + ++count;
+                  }
+                  else
+                  {
+                    uniqueID = id + ++count;
+                  }
+                }
+              }
+
+              macroTask.setID(uniqueID);
+
+              EList<Parameter> parameters = macro.getParameters();
+              if (!parameters.isEmpty())
+              {
+                List<Argument> arguments = macroTask.getArguments();
+                for (Parameter parameter : parameters)
+                {
+                  Argument argument = SetupFactory.eINSTANCE.createArgument();
+                  argument.setParameter(parameter);
+                  if (parameter.getDefaultValue() == null)
+                  {
+                    String parameterName = parameter.getName();
+                    argument.setValue(parameterName + "_value");
+                  }
+
+                  arguments.add(argument);
+                }
+              }
+
+              augmentedCollection.add(macroTask);
+            }
+            else
+            {
+              augmentedCollection.add(macro);
+            }
+          }
+          else
+          {
+            augmentedCollection.add(object);
+          }
+        }
+
+        return new CommandParameter(commandParameter.getOwner(), commandParameter.getFeature(), commandParameter.getValue(), augmentedCollection,
+            commandParameter.getIndex());
+      }
+    }
+
+    return commandParameter;
+  }
+
+  private static String getID(String label)
+  {
+    if (StringUtil.isEmpty(label))
+    {
+      return "macro";
+    }
+
+    String lowerCaseLabel = label.toLowerCase();
+    List<String> explode = StringUtil.explode(lowerCaseLabel.replaceAll("[^\\p{IsAlphabetic}\\p{Digit}]", "."), ".");
+    explode.removeAll(Collections.singleton(""));
+    String implode = StringUtil.implode(explode, '.');
+    if (StringUtil.isEmpty(implode))
+    {
+      return "macro";
+    }
+
+    if (!Character.isAlphabetic(implode.charAt(0)))
+    {
+      return "_" + implode;
+    }
+
+    return implode;
+  }
 }

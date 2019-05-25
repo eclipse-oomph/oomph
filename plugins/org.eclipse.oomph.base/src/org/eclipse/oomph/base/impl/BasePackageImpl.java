@@ -131,8 +131,8 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
     }
 
     // Obtain or create and register package
-    BasePackageImpl theBasePackage = (BasePackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof BasePackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new BasePackageImpl());
+    Object registeredBasePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    BasePackageImpl theBasePackage = registeredBasePackage instanceof BasePackageImpl ? (BasePackageImpl)registeredBasePackage : new BasePackageImpl();
 
     isInited = true;
 
@@ -450,6 +450,8 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
     createExtendedMetaDataAnnotations();
     // http://www.eclipse.org/emf/2002/Ecore
     createEcoreAnnotations();
+    // http://www.eclipse.org/oomph/setup/NoExpand
+    createNoExpandAnnotations();
   }
 
   /**
@@ -492,6 +494,19 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore";
     addAnnotation(annotationEClass, source, new String[] { "constraints", "WellFormedSourceURI" });
+  }
+
+  /**
+   * Initializes the annotations for <b>http://www.eclipse.org/oomph/setup/NoExpand</b>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void createNoExpandAnnotations()
+  {
+    String source = "http://www.eclipse.org/oomph/setup/NoExpand";
+    addAnnotation(getAnnotation_Source(), source, new String[] {});
+    addAnnotation(getStringToStringMapEntry_Key(), source, new String[] {});
   }
 
 } // BasePackageImpl

@@ -141,4 +141,12 @@ public interface Scope extends SetupTaskContainer
    */
   ScopeType getType();
 
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model kind="operation"
+   * @generated
+   */
+  String getQualifiedLabel();
+
 } // Scope

@@ -247,7 +247,7 @@ public interface SetupTask extends ModelElement
    * @return the value of the '<em>Disabled</em>' attribute.
    * @see #setDisabled(boolean)
    * @see org.eclipse.oomph.setup.SetupPackage#getSetupTask_Disabled()
-   * @model
+   * @model annotation="http://www.eclipse.org/oomph/setup/NoExpand"
    * @generated
    */
   boolean isDisabled();

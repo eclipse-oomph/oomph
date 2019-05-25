@@ -55,6 +55,7 @@ import org.eclipse.oomph.setup.ui.wizards.SetupWizardPage;
 import org.eclipse.oomph.ui.FilteredTreeWithoutWorkbench;
 import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.PersistentButton.DialogSettingsPersistence;
+import org.eclipse.oomph.ui.StatusDialog;
 import org.eclipse.oomph.ui.ToolButton;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
@@ -67,6 +68,7 @@ import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.dialogs.ResourceDialog;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
@@ -873,7 +875,7 @@ public class ProductPage extends SetupWizardPage
         IStatus status = configurationProcessor.getStatus();
         if (!status.isOK())
         {
-          ErrorDialog.openError(getShell(), "Installation Problems", null, status);
+          new StatusDialog(getShell(), "Installation Problems", null, status, Diagnostic.ERROR).open();
         }
       }
     };

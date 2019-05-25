@@ -58,6 +58,18 @@
                tooltip="Changes the enablement of the task">
          </action>
       </objectContribution>
+      <objectContribution
+            id="org.eclipse.oomph.setup.contribution2"
+            objectClass="org.eclipse.oomph.setup.MacroTask">
+         <action
+               class="org.eclipse.oomph.setup.ui.actions.InlineMacroTaskAction"
+               enablesFor="multiple"
+               id="org.eclipse.oomph.setup.InlineMacroTaskAction"
+               label="Inline"
+               style="push"
+               tooltip="Replace the macro task with an inline copy">
+         </action>
+      </objectContribution>
    </extension>
 
    <extension

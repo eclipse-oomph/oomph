@@ -17,8 +17,6 @@ public final class AnnotationConstants
 {
   public static final String ANNOTATION_BRANDING_INFO = "http://www.eclipse.org/oomph/setup/BrandingInfo";
 
-  public static final String KEY_URI = "uri";
-
   public static final String KEY_IMAGE_URI = "imageURI";
 
   public static final String KEY_README_PATH = "readmePath";
@@ -28,6 +26,8 @@ public final class AnnotationConstants
   public static final String KEY_SITE_URI = "siteURI";
 
   public static final String ANNOTATION_STATS_SENDING = "http://www.eclipse.org/oomph/setup/StatsSending";
+
+  public static final String KEY_URI = "uri";
 
   public static final String ANNOTATION_USER_PREFERENCES = "http://www.eclipse.org/oomph/setup/UserPreferences";
 

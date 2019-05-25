@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.impl;
 
+import org.eclipse.oomph.setup.Argument;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.CompoundTask;
@@ -21,6 +22,9 @@ import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.LinkLocationTask;
 import org.eclipse.oomph.setup.LocationCatalog;
+import org.eclipse.oomph.setup.Macro;
+import org.eclipse.oomph.setup.MacroTask;
+import org.eclipse.oomph.setup.Parameter;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -173,6 +177,14 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
         return (EObject)createInstallationToWorkspacesMapEntry();
       case SetupPackage.WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY:
         return (EObject)createWorkspaceToInstallationsMapEntry();
+      case SetupPackage.MACRO:
+        return createMacro();
+      case SetupPackage.PARAMETER:
+        return createParameter();
+      case SetupPackage.MACRO_TASK:
+        return createMacroTask();
+      case SetupPackage.ARGUMENT:
+        return createArgument();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -487,6 +499,50 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
   {
     WorkspaceToInstallationsMapEntryImpl workspaceToInstallationsMapEntry = new WorkspaceToInstallationsMapEntryImpl();
     return workspaceToInstallationsMapEntry;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Macro createMacro()
+  {
+    MacroImpl macro = new MacroImpl();
+    return macro;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Parameter createParameter()
+  {
+    ParameterImpl parameter = new ParameterImpl();
+    return parameter;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MacroTask createMacroTask()
+  {
+    MacroTaskImpl macroTask = new MacroTaskImpl();
+    return macroTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Argument createArgument()
+  {
+    ArgumentImpl argument = new ArgumentImpl();
+    return argument;
   }
 
   /**

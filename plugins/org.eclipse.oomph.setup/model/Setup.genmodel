@@ -25,6 +25,7 @@
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/Installation"/>
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/Workspace"/>
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/User"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//ScopeType/Macro"/>
     </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="Setup.ecore#//Trigger">
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//Trigger/BOOTSTRAP"/>
@@ -96,6 +97,7 @@
       <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Scope/qualifiedName"/>
       <genOperations ecoreOperation="Setup.ecore#//Scope/getParentScope"/>
       <genOperations ecoreOperation="Setup.ecore#//Scope/getType"/>
+      <genOperations ecoreOperation="Setup.ecore#//Scope/getQualifiedLabel"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//Index">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Index/name"/>
@@ -167,14 +169,16 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//LocationCatalog/workspaces"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//Installation">
-      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//Installation/productVersion"/>
+      <genFeatures children="true" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference Setup.ecore#//Installation/productVersion"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//InstallationTask" labelFeature="#//setup/InstallationTask/location">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//InstallationTask/location"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//InstallationTask/relativeProductFolder"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//Workspace">
-      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//Workspace/streams"/>
+      <genFeatures children="true" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference Setup.ecore#//Workspace/streams"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//WorkspaceTask" labelFeature="#//setup/WorkspaceTask/location">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//WorkspaceTask/location"/>
@@ -264,6 +268,26 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//WorkspaceToInstallationsMapEntry/key"/>
       <genFeatures children="true" createChild="false" propertySortChoices="true"
           ecoreFeature="ecore:EReference Setup.ecore#//WorkspaceToInstallationsMapEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//Macro">
+      <genFeatures property="None" notify="false" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference Setup.ecore#//Macro/logicalContainer"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Setup.ecore#//Macro/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//Parameter">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Parameter/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Parameter/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Parameter/defaultValue"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//MacroTask">
+      <genFeatures property="None" children="true" createChild="true" propertyMultiLine="true"
+          ecoreFeature="ecore:EReference Setup.ecore#//MacroTask/arguments"/>
+      <genFeatures children="true" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference Setup.ecore#//MacroTask/macro"/>
+    </genClasses>
+    <genClasses ecoreClass="Setup.ecore#//Argument">
+      <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//Argument/parameter"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Argument/value"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

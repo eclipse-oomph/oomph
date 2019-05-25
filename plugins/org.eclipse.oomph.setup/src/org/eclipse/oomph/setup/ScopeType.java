@@ -116,7 +116,16 @@ public enum ScopeType implements Enumerator
    * @generated
    * @ordered
    */
-  USER(9, "User", "User");
+  USER(9, "User", "User"),
+  /**
+   * The '<em><b>Macro</b></em>' literal object.
+   * <!-- begin-user-doc -->
+  * <!-- end-user-doc -->
+   * @see #MACRO_VALUE
+   * @generated
+   * @ordered
+   */
+  MACRO(10, "Macro", "Macro");
 
   /**
    * The '<em><b>None</b></em>' literal value.
@@ -269,13 +278,24 @@ public enum ScopeType implements Enumerator
   public static final int USER_VALUE = 9;
 
   /**
+   * The '<em><b>Macro</b></em>' literal value.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #MACRO
+   * @model name="Macro"
+   * @generated
+   * @ordered
+   */
+  public static final int MACRO_VALUE = 10;
+
+  /**
    * An array of all the '<em><b>Scope Type</b></em>' enumerators.
    * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
    * @generated
    */
   private static final ScopeType[] VALUES_ARRAY = new ScopeType[] { NONE, PRODUCT_CATALOG, PRODUCT, PRODUCT_VERSION, PROJECT_CATALOG, PROJECT, STREAM,
-      INSTALLATION, WORKSPACE, USER, };
+      INSTALLATION, WORKSPACE, USER, MACRO, };
 
   /**
    * A public read-only list of all the '<em><b>Scope Type</b></em>' enumerators.
@@ -359,6 +379,8 @@ public enum ScopeType implements Enumerator
         return WORKSPACE;
       case USER_VALUE:
         return USER;
+      case MACRO_VALUE:
+        return MACRO;
     }
     return null;
   }

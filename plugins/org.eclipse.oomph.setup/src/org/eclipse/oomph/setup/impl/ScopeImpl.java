@@ -13,10 +13,14 @@ package org.eclipse.oomph.setup.impl;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <!-- begin-user-doc -->
@@ -226,6 +230,62 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    * @generated NOT
    */
   public abstract ScopeType getType();
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public String getQualifiedLabel()
+  {
+    String label = getLabel();
+    if (StringUtil.isEmpty(label))
+    {
+      label = getName();
+    }
+
+    List<String> labelQualifiers = new ArrayList<String>();
+    for (Scope parentScope = getParentScope(); parentScope != null; parentScope = parentScope.getParentScope())
+    {
+      String parentLabel = parentScope.getLabel();
+      if (StringUtil.isEmpty(parentLabel))
+      {
+        parentLabel = parentScope.getName();
+      }
+
+      if (!StringUtil.isEmpty(parentLabel))
+      {
+        labelQualifiers.add(0, parentLabel);
+      }
+    }
+
+    if (!labelQualifiers.isEmpty())
+    {
+      StringBuilder result = new StringBuilder(label);
+      result.append(" (");
+      boolean first = true;
+      for (String labelQualifier : labelQualifiers)
+      {
+        if (first)
+        {
+          first = false;
+        }
+        else
+        {
+          result.append(" - ");
+
+        }
+
+        result.append(labelQualifier);
+      }
+
+      result.append(")");
+
+      label = result.toString();
+    }
+
+    return label;
+  }
 
   /**
    * <!-- begin-user-doc -->

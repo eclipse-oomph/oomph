@@ -3374,6 +3374,325 @@ public interface SetupPackage extends EPackage
   int WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY_FEATURE_COUNT = 2;
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.impl.MacroImpl <em>Macro</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.impl.MacroImpl
+   * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getMacro()
+   * @generated
+   */
+  int MACRO = 36;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO__ANNOTATIONS = SCOPE__ANNOTATIONS;
+
+  /**
+   * The feature id for the '<em><b>Setup Tasks</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO__SETUP_TASKS = SCOPE__SETUP_TASKS;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO__NAME = SCOPE__NAME;
+
+  /**
+   * The feature id for the '<em><b>Label</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO__LABEL = SCOPE__LABEL;
+
+  /**
+   * The feature id for the '<em><b>Description</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO__DESCRIPTION = SCOPE__DESCRIPTION;
+
+  /**
+   * The feature id for the '<em><b>Qualified Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO__QUALIFIED_NAME = SCOPE__QUALIFIED_NAME;
+
+  /**
+   * The feature id for the '<em><b>Logical Container</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO__LOGICAL_CONTAINER = SCOPE_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO__PARAMETERS = SCOPE_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Macro</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 2;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.impl.ParameterImpl <em>Parameter</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.impl.ParameterImpl
+   * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getParameter()
+   * @generated
+   */
+  int PARAMETER = 37;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAMETER__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAMETER__NAME = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Description</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAMETER__DESCRIPTION = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Default Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAMETER__DEFAULT_VALUE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+  /**
+   * The number of structural features of the '<em>Parameter</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAMETER_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.impl.MacroTaskImpl <em>Macro Task</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.impl.MacroTaskImpl
+   * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getMacroTask()
+   * @generated
+   */
+  int MACRO_TASK = 38;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_TASK__ANNOTATIONS = SETUP_TASK__ANNOTATIONS;
+
+  /**
+   * The feature id for the '<em><b>ID</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_TASK__ID = SETUP_TASK__ID;
+
+  /**
+   * The feature id for the '<em><b>Description</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_TASK__DESCRIPTION = SETUP_TASK__DESCRIPTION;
+
+  /**
+   * The feature id for the '<em><b>Scope Type</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_TASK__SCOPE_TYPE = SETUP_TASK__SCOPE_TYPE;
+
+  /**
+   * The feature id for the '<em><b>Excluded Triggers</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_TASK__EXCLUDED_TRIGGERS = SETUP_TASK__EXCLUDED_TRIGGERS;
+
+  /**
+   * The feature id for the '<em><b>Disabled</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_TASK__DISABLED = SETUP_TASK__DISABLED;
+
+  /**
+   * The feature id for the '<em><b>Predecessors</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_TASK__PREDECESSORS = SETUP_TASK__PREDECESSORS;
+
+  /**
+   * The feature id for the '<em><b>Successors</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_TASK__SUCCESSORS = SETUP_TASK__SUCCESSORS;
+
+  /**
+   * The feature id for the '<em><b>Restrictions</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_TASK__RESTRICTIONS = SETUP_TASK__RESTRICTIONS;
+
+  /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_TASK__FILTER = SETUP_TASK__FILTER;
+
+  /**
+   * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_TASK__ARGUMENTS = SETUP_TASK_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Macro</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_TASK__MACRO = SETUP_TASK_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Macro Task</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MACRO_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 2;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.impl.ArgumentImpl <em>Argument</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.impl.ArgumentImpl
+   * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getArgument()
+   * @generated
+   */
+  int ARGUMENT = 39;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ARGUMENT__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+  /**
+   * The feature id for the '<em><b>Parameter</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ARGUMENT__PARAMETER = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ARGUMENT__VALUE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Argument</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ARGUMENT_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+  /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.ScopeType <em>Scope Type</em>}' enum.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3381,7 +3700,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getScopeType()
    * @generated
    */
-  int SCOPE_TYPE = 36;
+  int SCOPE_TYPE = 40;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.Trigger <em>Trigger</em>}' enum.
@@ -3391,7 +3710,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getTrigger()
    * @generated
    */
-  int TRIGGER = 37;
+  int TRIGGER = 41;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.VariableType <em>Variable Type</em>}' enum.
@@ -3401,7 +3720,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getVariableType()
    * @generated
    */
-  int VARIABLE_TYPE = 38;
+  int VARIABLE_TYPE = 42;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.UnsignedPolicy <em>Unsigned Policy</em>}' enum.
@@ -3411,7 +3730,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getUnsignedPolicy()
    * @generated
    */
-  int UNSIGNED_POLICY = 39;
+  int UNSIGNED_POLICY = 43;
 
   /**
    * The meta object id for the '<em>License Info</em>' data type.
@@ -3421,7 +3740,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getLicenseInfo()
    * @generated
    */
-  int LICENSE_INFO = 41;
+  int LICENSE_INFO = 45;
 
   /**
    * The meta object id for the '<em>Filter</em>' data type.
@@ -3431,7 +3750,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getFilter()
    * @generated
    */
-  int FILTER = 42;
+  int FILTER = 46;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.Index <em>Index</em>}'.
@@ -3560,7 +3879,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getTriggerSet()
    * @generated
    */
-  int TRIGGER_SET = 40;
+  int TRIGGER_SET = 44;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.Project <em>Project</em>}'.
@@ -4380,6 +4699,145 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   EReference getWorkspaceToInstallationsMapEntry_Value();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.Macro <em>Macro</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Macro</em>'.
+   * @see org.eclipse.oomph.setup.Macro
+   * @generated
+   */
+  EClass getMacro();
+
+  /**
+   * Returns the meta object for the reference '{@link org.eclipse.oomph.setup.Macro#getLogicalContainer <em>Logical Container</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Logical Container</em>'.
+   * @see org.eclipse.oomph.setup.Macro#getLogicalContainer()
+   * @see #getMacro()
+   * @generated
+   */
+  EReference getMacro_LogicalContainer();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.Macro#getParameters <em>Parameters</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Parameters</em>'.
+   * @see org.eclipse.oomph.setup.Macro#getParameters()
+   * @see #getMacro()
+   * @generated
+   */
+  EReference getMacro_Parameters();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.Parameter <em>Parameter</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Parameter</em>'.
+   * @see org.eclipse.oomph.setup.Parameter
+   * @generated
+   */
+  EClass getParameter();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.Parameter#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.eclipse.oomph.setup.Parameter#getName()
+   * @see #getParameter()
+   * @generated
+   */
+  EAttribute getParameter_Name();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.Parameter#getDescription <em>Description</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Description</em>'.
+   * @see org.eclipse.oomph.setup.Parameter#getDescription()
+   * @see #getParameter()
+   * @generated
+   */
+  EAttribute getParameter_Description();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.Parameter#getDefaultValue <em>Default Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Default Value</em>'.
+   * @see org.eclipse.oomph.setup.Parameter#getDefaultValue()
+   * @see #getParameter()
+   * @generated
+   */
+  EAttribute getParameter_DefaultValue();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.MacroTask <em>Macro Task</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Macro Task</em>'.
+   * @see org.eclipse.oomph.setup.MacroTask
+   * @generated
+   */
+  EClass getMacroTask();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.MacroTask#getArguments <em>Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Arguments</em>'.
+   * @see org.eclipse.oomph.setup.MacroTask#getArguments()
+   * @see #getMacroTask()
+   * @generated
+   */
+  EReference getMacroTask_Arguments();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.Argument <em>Argument</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Argument</em>'.
+   * @see org.eclipse.oomph.setup.Argument
+   * @generated
+   */
+  EClass getArgument();
+
+  /**
+   * Returns the meta object for the reference '{@link org.eclipse.oomph.setup.Argument#getParameter <em>Parameter</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Parameter</em>'.
+   * @see org.eclipse.oomph.setup.Argument#getParameter()
+   * @see #getArgument()
+   * @generated
+   */
+  EReference getArgument_Parameter();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.Argument#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Value</em>'.
+   * @see org.eclipse.oomph.setup.Argument#getValue()
+   * @see #getArgument()
+   * @generated
+   */
+  EAttribute getArgument_Value();
+
+  /**
+   * Returns the meta object for the reference '{@link org.eclipse.oomph.setup.MacroTask#getMacro <em>Macro</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Macro</em>'.
+   * @see org.eclipse.oomph.setup.MacroTask#getMacro()
+   * @see #getMacroTask()
+   * @generated
+   */
+  EReference getMacroTask_Macro();
 
   /**
    * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Key</em>}'.
@@ -5724,6 +6182,118 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EReference WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY__VALUE = eINSTANCE.getWorkspaceToInstallationsMapEntry_Value();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.MacroImpl <em>Macro</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.impl.MacroImpl
+     * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getMacro()
+     * @generated
+     */
+    EClass MACRO = eINSTANCE.getMacro();
+
+    /**
+     * The meta object literal for the '<em><b>Logical Container</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MACRO__LOGICAL_CONTAINER = eINSTANCE.getMacro_LogicalContainer();
+
+    /**
+     * The meta object literal for the '<em><b>Parameters</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MACRO__PARAMETERS = eINSTANCE.getMacro_Parameters();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.ParameterImpl <em>Parameter</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.impl.ParameterImpl
+     * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getParameter()
+     * @generated
+     */
+    EClass PARAMETER = eINSTANCE.getParameter();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PARAMETER__NAME = eINSTANCE.getParameter_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PARAMETER__DESCRIPTION = eINSTANCE.getParameter_Description();
+
+    /**
+     * The meta object literal for the '<em><b>Default Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PARAMETER__DEFAULT_VALUE = eINSTANCE.getParameter_DefaultValue();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.MacroTaskImpl <em>Macro Task</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.impl.MacroTaskImpl
+     * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getMacroTask()
+     * @generated
+     */
+    EClass MACRO_TASK = eINSTANCE.getMacroTask();
+
+    /**
+     * The meta object literal for the '<em><b>Arguments</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MACRO_TASK__ARGUMENTS = eINSTANCE.getMacroTask_Arguments();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.ArgumentImpl <em>Argument</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.impl.ArgumentImpl
+     * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getArgument()
+     * @generated
+     */
+    EClass ARGUMENT = eINSTANCE.getArgument();
+
+    /**
+     * The meta object literal for the '<em><b>Parameter</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ARGUMENT__PARAMETER = eINSTANCE.getArgument_Parameter();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ARGUMENT__VALUE = eINSTANCE.getArgument_Value();
+
+    /**
+     * The meta object literal for the '<em><b>Macro</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference MACRO_TASK__MACRO = eINSTANCE.getMacroTask_Macro();
 
     /**
      * The meta object literal for the '<em><b>Key</b></em>' reference feature.

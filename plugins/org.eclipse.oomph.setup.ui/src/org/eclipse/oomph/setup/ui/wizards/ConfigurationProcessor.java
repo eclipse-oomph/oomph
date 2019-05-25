@@ -23,6 +23,7 @@ import org.eclipse.oomph.setup.ProjectCatalog;
 import org.eclipse.oomph.setup.ProjectContainer;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
+import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContainer;
 import org.eclipse.oomph.setup.Stream;
@@ -35,9 +36,12 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.XMIException;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -152,18 +156,7 @@ public class ConfigurationProcessor
   {
     if (configuration == null && setupWizard.isSimple())
     {
-      StringBuilder uris = new StringBuilder();
-      for (Resource resource : setupWizard.getUnappliedConfigurationResources())
-      {
-        if (uris.length() != 0)
-        {
-          uris.append(' ');
-        }
-
-        uris.append(resource.getURI());
-      }
-
-      installationStatus.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "No configuration could be loaded " + uris));
+      installationStatus.add(createResourceStatus(setupWizard.getUnappliedConfigurationResources(), SetupPackage.Literals.CONFIGURATION));
       return false;
     }
 
@@ -326,13 +319,7 @@ public class ConfigurationProcessor
   {
     if (configuration == null && !setupWizard.isSimple())
     {
-      StringBuilder uris = new StringBuilder();
-      for (Resource resource : setupWizard.getUnappliedConfigurationResources())
-      {
-        uris.append(resource.getURI());
-      }
-
-      workspaceStatus.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "No configuration could be loaded " + uris));
+      workspaceStatus.add(createResourceStatus(setupWizard.getUnappliedConfigurationResources(), SetupPackage.Literals.CONFIGURATION));
       return false;
     }
 
@@ -343,6 +330,66 @@ public class ConfigurationProcessor
     }
 
     return true;
+  }
+
+  protected IStatus createResourceStatus(Collection<? extends Resource> resources, EClass expectedEClass)
+  {
+    StringBuilder uris = new StringBuilder();
+    List<IStatus> childStatuses = new ArrayList<IStatus>();
+    for (Resource resource : resources)
+    {
+      if (uris.length() != 0)
+      {
+        uris.append(' ');
+      }
+
+      uris.append(resource.getURI());
+
+      EList<Resource.Diagnostic> errors = resource.getErrors();
+      if (errors.isEmpty())
+      {
+        EList<EObject> contents = resource.getContents();
+        if (contents.isEmpty())
+        {
+          childStatuses.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "The resource is empty"));
+        }
+        else
+        {
+          childStatuses.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "The resource contains a " + contents.get(0).eClass().getName()));
+        }
+      }
+      else
+      {
+        for (Resource.Diagnostic diagnostic : errors)
+        {
+          String message = diagnostic.getMessage();
+          Throwable throwable = null;
+          if (diagnostic instanceof Throwable)
+          {
+            throwable = (Throwable)diagnostic;
+            if (throwable instanceof XMIException)
+            {
+              Throwable cause = throwable.getCause();
+              if (cause != null)
+              {
+                XMIException xmiException = (XMIException)throwable;
+                message = cause.getMessage();
+                int line = xmiException.getLine();
+                if (line != 0)
+                {
+                  message += " (" + line + ", " + xmiException.getColumn() + ")";
+                }
+              }
+            }
+          }
+
+          childStatuses.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, message, throwable));
+        }
+      }
+    }
+
+    return new MultiStatus(SetupUIPlugin.PLUGIN_ID, 0, childStatuses.toArray(new IStatus[childStatuses.size()]),
+        "No " + expectedEClass.getName() + " could be loaded from " + uris, null);
   }
 
   protected boolean handleWorkspace()

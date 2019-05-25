@@ -195,6 +195,42 @@ public interface SetupFactory extends EFactory
   TextModification createTextModification();
 
   /**
+   * Returns a new object of class '<em>Macro</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Macro</em>'.
+   * @generated
+   */
+  Macro createMacro();
+
+  /**
+   * Returns a new object of class '<em>Parameter</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Parameter</em>'.
+   * @generated
+   */
+  Parameter createParameter();
+
+  /**
+   * Returns a new object of class '<em>Macro Task</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Macro Task</em>'.
+   * @generated
+   */
+  MacroTask createMacroTask();
+
+  /**
+   * Returns a new object of class '<em>Argument</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Argument</em>'.
+   * @generated
+   */
+  Argument createArgument();
+
+  /**
    * Returns a new object of class '<em>String Substitution Task</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

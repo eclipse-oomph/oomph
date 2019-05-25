@@ -75,6 +75,15 @@
          <description>%_UI_SetupModelWizard_description6</description>
          <selection class="org.eclipse.core.resources.IResource"/>
       </wizard>
+      <wizard
+            id="org.eclipse.oomph.setup.presentation.SetupModelMacroWizardID"
+            name="%_UI_SetupModelWizard_label7"
+            class="org.eclipse.oomph.setup.presentation.SetupModelWizard$NewMacroWizard"
+            category="org.eclipse.oomph"
+            icon="icons/full/obj16/SetupModelFile.gif">
+         <description>%_UI_SetupModelWizard_description7</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
    </extension>
 
 

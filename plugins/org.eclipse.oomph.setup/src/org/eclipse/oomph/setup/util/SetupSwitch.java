@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.util;
 
 import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.setup.Argument;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.CompoundTask;
@@ -21,6 +22,9 @@ import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.LinkLocationTask;
 import org.eclipse.oomph.setup.LocationCatalog;
+import org.eclipse.oomph.setup.Macro;
+import org.eclipse.oomph.setup.MacroTask;
+import org.eclipse.oomph.setup.Parameter;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -747,6 +751,74 @@ public class SetupSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case SetupPackage.MACRO:
+      {
+        Macro macro = (Macro)theEObject;
+        T result = caseMacro(macro);
+        if (result == null)
+        {
+          result = caseScope(macro);
+        }
+        if (result == null)
+        {
+          result = caseSetupTaskContainer(macro);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(macro);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case SetupPackage.PARAMETER:
+      {
+        Parameter parameter = (Parameter)theEObject;
+        T result = caseParameter(parameter);
+        if (result == null)
+        {
+          result = caseModelElement(parameter);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case SetupPackage.MACRO_TASK:
+      {
+        MacroTask macroTask = (MacroTask)theEObject;
+        T result = caseMacroTask(macroTask);
+        if (result == null)
+        {
+          result = caseSetupTask(macroTask);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(macroTask);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
+      case SetupPackage.ARGUMENT:
+      {
+        Argument argument = (Argument)theEObject;
+        T result = caseArgument(argument);
+        if (result == null)
+        {
+          result = caseModelElement(argument);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       default:
         return defaultCase(theEObject);
     }
@@ -1180,6 +1252,70 @@ public class SetupSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseWorkspaceToInstallationsMapEntry(Map.Entry<Workspace, EList<Installation>> object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Macro</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Macro</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMacro(Macro object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Parameter</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Parameter</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseParameter(Parameter object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Macro Task</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Macro Task</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMacroTask(MacroTask object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Argument</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Argument</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseArgument(Argument object)
   {
     return null;
   }

@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.util;
 
 import org.eclipse.oomph.internal.setup.SetupPlugin;
+import org.eclipse.oomph.setup.Argument;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.CompoundTask;
@@ -22,6 +23,9 @@ import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.LinkLocationTask;
 import org.eclipse.oomph.setup.LocationCatalog;
+import org.eclipse.oomph.setup.Macro;
+import org.eclipse.oomph.setup.MacroTask;
+import org.eclipse.oomph.setup.Parameter;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -34,6 +38,7 @@ import org.eclipse.oomph.setup.ResourceCopyTask;
 import org.eclipse.oomph.setup.ResourceCreationTask;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.ScopeType;
+import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContainer;
@@ -55,6 +60,7 @@ import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -62,6 +68,11 @@ import org.eclipse.emf.ecore.util.EObjectValidator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -101,12 +112,32 @@ public class SetupValidator extends EObjectValidator
   private static final int GENERATED_DIAGNOSTIC_CODE_COUNT = 0;
 
   /**
+   * @see #validateMacroTask_IDRequired(MacroTask, DiagnosticChain, Map)
+   */
+  public static final int MACRO_TASK_ID_REQUIRED = GENERATED_DIAGNOSTIC_CODE_COUNT + 1;
+
+  /**
+   * @see #validateMacroTask_ArgumentsCorrespondToParameters(MacroTask, DiagnosticChain, Map)
+   */
+  public static final int MACRO_TASK_ARGUMENTS_CORRESPOND_TO_PARAMETERS = GENERATED_DIAGNOSTIC_CODE_COUNT + 2;
+
+  /**
+   * @see #validateArgument_ConsistentParameterBinding(Argument, DiagnosticChain, Map)
+   */
+  public static final int ARGUMENT_CONSISTENT_PARAMETER_BINDING = GENERATED_DIAGNOSTIC_CODE_COUNT + 3;
+
+  /**
+   * @see #validateMacro_NoRecursion(Macro, DiagnosticChain, Map)
+   */
+  public static final int MACRO_NO_RECURSION = GENERATED_DIAGNOSTIC_CODE_COUNT + 4;
+
+  /**
    * A constant with a fixed name that can be used as the base value for additional hand written constants in a derived class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
-  protected static final int DIAGNOSTIC_CODE_COUNT = GENERATED_DIAGNOSTIC_CODE_COUNT;
+  protected static final int DIAGNOSTIC_CODE_COUNT = MACRO_NO_RECURSION;
 
   private static boolean parseFilterMethodInitialized;
 
@@ -219,6 +250,14 @@ public class SetupValidator extends EObjectValidator
         return validateInstallationToWorkspacesMapEntry((Map.Entry<?, ?>)value, diagnostics, context);
       case SetupPackage.WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY:
         return validateWorkspaceToInstallationsMapEntry((Map.Entry<?, ?>)value, diagnostics, context);
+      case SetupPackage.MACRO:
+        return validateMacro((Macro)value, diagnostics, context);
+      case SetupPackage.PARAMETER:
+        return validateParameter((Parameter)value, diagnostics, context);
+      case SetupPackage.MACRO_TASK:
+        return validateMacroTask((MacroTask)value, diagnostics, context);
+      case SetupPackage.ARGUMENT:
+        return validateArgument((Argument)value, diagnostics, context);
       case SetupPackage.SCOPE_TYPE:
         return validateScopeType((ScopeType)value, diagnostics, context);
       case SetupPackage.TRIGGER:
@@ -599,6 +638,386 @@ public class SetupValidator extends EObjectValidator
       Map<Object, Object> context)
   {
     return validate_EveryDefaultConstraint((EObject)workspaceToInstallationsMapEntry, diagnostics, context);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean validateMacro(Macro macro, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
+    if (!validate_NoCircularContainment(macro, diagnostics, context))
+    {
+      return false;
+    }
+    boolean result = validate_EveryMultiplicityConforms(macro, diagnostics, context);
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryDataValueConforms(macro, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryReferenceIsContained(macro, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryBidirectionalReferenceIsPaired(macro, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryProxyResolves(macro, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_UniqueID(macro, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryKeyUnique(macro, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryMapEntryUnique(macro, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validateMacro_NoRecursion(macro, diagnostics, context);
+    }
+    return result;
+  }
+
+  /**
+   * Validates the NoRecursion constraint of '<em>Macro</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public boolean validateMacro_NoRecursion(Macro macro, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
+    Map<Macro, MacroTask> visitedMacros = new LinkedHashMap<Macro, MacroTask>();
+    MacroTask fakeRootMacroTask = SetupFactory.eINSTANCE.createMacroTask();
+    if (isRecursive(visitedMacros, macro, fakeRootMacroTask))
+    {
+      if (diagnostics != null)
+      {
+        List<String> choices = new ArrayList<String>();
+        List<Object> data = new ArrayList<Object>();
+        data.add(macro);
+        data.add(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS);
+
+        // Gather the chain of objects that lead to the recursion.
+        // The fake root macro task will have been replaced with an actual macro task that finally resulted in the recursion.
+        MacroTask finalRecursiveMacroTask = null;
+        for (Map.Entry<Macro, MacroTask> entry : visitedMacros.entrySet())
+        {
+          Macro otherMacro = entry.getKey();
+          choices.add(getObjectLabel(otherMacro, context));
+
+          MacroTask macroTask = entry.getValue();
+          if (finalRecursiveMacroTask == null)
+          {
+            // The initial replaced macro task should be last in the data list.
+            finalRecursiveMacroTask = macroTask;
+          }
+          else
+          {
+            data.add(macroTask);
+          }
+
+          if (otherMacro != macro)
+          {
+            data.add(otherMacro);
+          }
+        }
+
+        data.add(finalRecursiveMacroTask);
+
+        diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, MACRO_NO_RECURSION, "_UI_MacroNoRecursion_diagnostic",
+            new Object[] { getAvailableChoices(choices, true, "'", Integer.MAX_VALUE) }, data.toArray(), context));
+      }
+
+      return false;
+    }
+
+    return true;
+  }
+
+  private boolean isRecursive(Map<Macro, MacroTask> visitedMacros, Macro macro, MacroTask macroTask)
+  {
+    MacroTask put = visitedMacros.put(macro, macroTask);
+    if (put == null)
+    {
+      for (Iterator<EObject> it = macro.eAllContents(); it.hasNext();)
+      {
+        EObject eObject = it.next();
+        if (eObject instanceof MacroTask)
+        {
+          MacroTask reachableMacroTask = (MacroTask)eObject;
+          Macro reachableMacro = reachableMacroTask.getMacro();
+          if (reachableMacro != null)
+          {
+            if (isRecursive(visitedMacros, reachableMacro, reachableMacroTask))
+            {
+              return true;
+            }
+          }
+        }
+      }
+
+      visitedMacros.remove(macro);
+      return false;
+    }
+    else
+    {
+      return visitedMacros.keySet().iterator().next() == macro;
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean validateParameter(Parameter parameter, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
+    return validate_EveryDefaultConstraint(parameter, diagnostics, context);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean validateMacroTask(MacroTask macroTask, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
+    if (!validate_NoCircularContainment(macroTask, diagnostics, context))
+    {
+      return false;
+    }
+    boolean result = validate_EveryMultiplicityConforms(macroTask, diagnostics, context);
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryDataValueConforms(macroTask, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryReferenceIsContained(macroTask, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryBidirectionalReferenceIsPaired(macroTask, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryProxyResolves(macroTask, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_UniqueID(macroTask, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryKeyUnique(macroTask, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryMapEntryUnique(macroTask, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validateMacroTask_IDRequired(macroTask, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validateMacroTask_ArgumentsCorrespondToParameters(macroTask, diagnostics, context);
+    }
+    return result;
+  }
+
+  /**
+   * Validates the IDRequired constraint of '<em>Macro Task</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public boolean validateMacroTask_IDRequired(MacroTask macroTask, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
+    if (StringUtil.isEmpty(macroTask.getID()))
+    {
+      if (diagnostics != null)
+      {
+        diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, MACRO_TASK_ID_REQUIRED, "_UI_MacroTaskDRequired_diagnostic", null,
+            new Object[] { macroTask, SetupPackage.Literals.SETUP_TASK__ID }, context));
+      }
+
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Validates the ArgumentsCorrespondToParameters constraint of '<em>Macro Task</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public boolean validateMacroTask_ArgumentsCorrespondToParameters(MacroTask macroTask, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
+    Macro macro = macroTask.getMacro();
+    if (macro != null && !macro.eIsProxy())
+    {
+      EList<Parameter> parameters = macro.getParameters();
+      EList<Argument> arguments = macroTask.getArguments();
+      Set<Parameter> boundParameters = new LinkedHashSet<Parameter>();
+      for (Argument argument : arguments)
+      {
+        boundParameters.add(argument.getParameter());
+      }
+
+      Set<String> unboundParameters = new LinkedHashSet<String>();
+      for (Parameter parameter : parameters)
+      {
+        if (!boundParameters.contains(parameter) && parameter.getDefaultValue() == null)
+        {
+          unboundParameters.add(parameter.getName());
+        }
+      }
+
+      if (!unboundParameters.isEmpty())
+      {
+        if (diagnostics != null)
+        {
+          diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, MACRO_TASK_ARGUMENTS_CORRESPOND_TO_PARAMETERS,
+              "_UI_MacroTaskMissingArgument_diagnostic", new Object[] { getAvailableChoices(unboundParameters, true, "'", Integer.MAX_VALUE) },
+              new Object[] { macroTask, SetupPackage.Literals.MACRO_TASK__ARGUMENTS }, context));
+        }
+
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean validateArgument(Argument argument, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
+    if (!validate_NoCircularContainment(argument, diagnostics, context))
+    {
+      return false;
+    }
+    boolean result = validate_EveryMultiplicityConforms(argument, diagnostics, context);
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryDataValueConforms(argument, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryReferenceIsContained(argument, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryBidirectionalReferenceIsPaired(argument, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryProxyResolves(argument, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_UniqueID(argument, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryKeyUnique(argument, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validate_EveryMapEntryUnique(argument, diagnostics, context);
+    }
+    if (result || diagnostics != null)
+    {
+      result &= validateArgument_ConsistentParameterBinding(argument, diagnostics, context);
+    }
+    return result;
+  }
+
+  /**
+   * Validates the ConsistentParameterBinding constraint of '<em>Argument</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public boolean validateArgument_ConsistentParameterBinding(Argument argument, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
+    boolean result = true;
+    Parameter parameter = argument.getParameter();
+    if (parameter != null && !parameter.eIsProxy())
+    {
+      if (argument.getValue() == null && parameter.getDefaultValue() == null)
+      {
+        if (diagnostics != null)
+        {
+          diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, ARGUMENT_CONSISTENT_PARAMETER_BINDING,
+              "_UI_ArgumentValueMustBeSpecified_diagnostic", null, new Object[] { argument, SetupPackage.Literals.ARGUMENT__VALUE }, context));
+          result = false;
+        }
+        else
+        {
+          return false;
+        }
+      }
+
+      EObject eContainer = argument.eContainer();
+      if (eContainer instanceof MacroTask)
+      {
+        MacroTask macroTask = (MacroTask)eContainer;
+        EList<Argument> arguments = macroTask.getArguments();
+        for (int i = 0, index = arguments.indexOf(argument); i < index; ++i)
+        {
+          if (arguments.get(i).getParameter() == parameter)
+          {
+            if (diagnostics != null)
+            {
+              diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, ARGUMENT_CONSISTENT_PARAMETER_BINDING,
+                  "_UI_ArgumentParameterAlreadyBound_diagnostic", null, new Object[] { argument, SetupPackage.Literals.ARGUMENT__PARAMETER }, context));
+              result = false;
+            }
+            else
+            {
+              return false;
+            }
+          }
+        }
+
+        Macro macro = macroTask.getMacro();
+        if (macro != null && !macro.eIsProxy())
+        {
+          EList<Parameter> parameters = macro.getParameters();
+          if (!parameters.contains(parameter))
+          {
+            if (diagnostics != null)
+            {
+              diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, ARGUMENT_CONSISTENT_PARAMETER_BINDING,
+                  "_UI_ArgumentParameterOutOfScope_diagnostic", null, new Object[] { argument, SetupPackage.Literals.ARGUMENT__PARAMETER }, context));
+              result = false;
+            }
+            else
+            {
+              return false;
+            }
+          }
+        }
+      }
+    }
+
+    return result;
   }
 
   /**

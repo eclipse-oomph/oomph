@@ -28,7 +28,9 @@
         changeable="false" volatile="true" transient="true" derived="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="excludedTriggers" lowerBound="1"
         eType="#//TriggerSet" defaultValueLiteral=""/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/oomph/setup/NoExpand"/>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="predecessors" upperBound="-1"
         eType="#//SetupTask">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -63,6 +65,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Scope" abstract="true" eSuperTypes="#//SetupTaskContainer">
     <eOperations name="getParentScope" eType="#//Scope"/>
     <eOperations name="getType" lowerBound="1" eType="#//ScopeType"/>
+    <eOperations name="getQualifiedLabel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType ../../org.eclipse.oomph.base/model/Base.ecore#//Text">
@@ -337,22 +340,27 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VariableTask" eSuperTypes="#//SetupTask">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//VariableType"
-        defaultValueLiteral="STRING"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        defaultValueLiteral="STRING">
       <eAnnotations source="http://www.eclipse.org/oomph/setup/NoExpand"/>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="storePromptedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         volatile="true" transient="true" defaultValueLiteral="true" derived="true">
+      <eAnnotations source="http://www.eclipse.org/oomph/setup/NoExpand"/>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="suppressedSetVisibility" value="true"/>
         <details key="suppressedGetVisibility" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="storageURI" eType="ecore:EDataType ../../org.eclipse.oomph.base/model/Base.ecore#//URI"
-        defaultValueLiteral="scope://"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        defaultValueLiteral="scope://">
+      <eAnnotations source="http://www.eclipse.org/oomph/setup/NoExpand"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/oomph/setup/NoExpand"/>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="choices" upperBound="-1"
         eType="#//VariableChoice" containment="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -472,6 +480,52 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
         eType="#//Installation"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Macro" eSuperTypes="#//Scope">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="NoRecursion"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="logicalContainer" eType="#//MacroTask"
+        transient="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true" resolveProxies="false" eKeys="#//Parameter/name">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="parameter"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/oomph/setup/NoExpand"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType ../../org.eclipse.oomph.base/model/Base.ecore#//Text">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MacroTask" eSuperTypes="#//SetupTask">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="IDRequired ArgumentsCorrespondToParameters"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//Argument" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="argument"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="macro" lowerBound="1" eType="#//Macro"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Argument" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="ConsistentParameterBinding"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+        eType="#//Parameter"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="ScopeType">
     <eLiterals name="None"/>
     <eLiterals name="ProductCatalog" value="1"/>
@@ -483,6 +537,7 @@
     <eLiterals name="Installation" value="7"/>
     <eLiterals name="Workspace" value="8"/>
     <eLiterals name="User" value="9"/>
+    <eLiterals name="Macro" value="10"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="Trigger">
     <eLiterals name="BOOTSTRAP"/>

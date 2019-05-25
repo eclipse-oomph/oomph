@@ -14,9 +14,12 @@ import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -209,6 +212,8 @@ public class CompoundTaskItemProvider extends SetupTaskItemProvider
     newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, SetupFactory.eINSTANCE.createResourceCreationTask()));
 
     newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, SetupFactory.eINSTANCE.createTextModifyTask()));
+
+    newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, SetupFactory.eINSTANCE.createMacroTask()));
   }
 
   @Override
@@ -218,4 +223,9 @@ public class CompoundTaskItemProvider extends SetupTaskItemProvider
     SetupTaskContainerItemProvider.removeUnwantedTasks(newChildDescriptors, object);
   }
 
+  @Override
+  protected Command factorAddCommand(EditingDomain domain, CommandParameter commandParameter)
+  {
+    return super.factorAddCommand(domain, SetupTaskContainerItemProvider.transformCommandParameter(domain, commandParameter));
+  }
 }

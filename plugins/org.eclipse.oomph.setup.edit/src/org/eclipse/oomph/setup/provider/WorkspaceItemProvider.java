@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.provider;
 
+import org.eclipse.oomph.edit.NoChildrenDelegatingWrapperItemProvider;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.Stream;
@@ -20,6 +21,8 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
@@ -28,6 +31,7 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -81,6 +85,75 @@ public class WorkspaceItemProvider extends ScopeItemProvider
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_Workspace_streams_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Workspace_streams_feature", "_UI_Workspace_type"),
         SetupPackage.Literals.WORKSPACE__STREAMS, true, false, true, null, null, null));
+  }
+
+  /**
+   * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+   * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+   * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private Collection<? extends EStructuralFeature> getChildrenFeaturesGen(Object object)
+  {
+    if (childrenFeatures == null)
+    {
+      super.getChildrenFeatures(object);
+      childrenFeatures.add(SetupPackage.Literals.WORKSPACE__STREAMS);
+    }
+    return childrenFeatures;
+  }
+
+  @Override
+  public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object)
+  {
+    if (childrenFeatures == null)
+    {
+      getChildrenFeaturesGen(object);
+      childrenFeatures.remove(SetupPackage.Literals.WORKSPACE__STREAMS);
+      childrenFeatures.add(0, SetupPackage.Literals.WORKSPACE__STREAMS);
+    }
+
+    return childrenFeatures;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  protected EStructuralFeature getChildFeature(Object object, Object child)
+  {
+    // Check the type of the specified child object and return the proper feature to use for
+    // adding (see {@link AddCommand}) it as a child.
+
+    return super.getChildFeature(object, child);
+  }
+
+  @Override
+  protected boolean isWrappingNeeded(Object object)
+  {
+    return true;
+  }
+
+  @Override
+  protected Object createWrapper(EObject object, EStructuralFeature feature, Object value, int index)
+  {
+    if (feature == SetupPackage.Literals.WORKSPACE__STREAMS)
+    {
+      return new NoChildrenDelegatingWrapperItemProvider(value, object, feature, index, adapterFactory)
+      {
+        @Override
+        public String getText(Object object)
+        {
+          return ((Stream)value).getQualifiedLabel();
+        }
+      };
+    }
+
+    return null;
   }
 
   /**
@@ -154,7 +227,7 @@ public class WorkspaceItemProvider extends ScopeItemProvider
     switch (notification.getFeatureID(Workspace.class))
     {
       case SetupPackage.WORKSPACE__STREAMS:
-        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;
     }
     super.notifyChanged(notification);
@@ -164,23 +237,31 @@ public class WorkspaceItemProvider extends ScopeItemProvider
   protected Command factorAddCommand(EditingDomain domain, CommandParameter commandParameter)
   {
     Collection<?> collection = commandParameter.getCollection();
+    Collection<Object> streams = new ArrayList<Object>();
     if (collection != null)
     {
       for (Object object : collection)
       {
         if (object instanceof Stream)
         {
-          return AddCommand.create(domain, commandParameter.getOwner(), SetupPackage.Literals.WORKSPACE__STREAMS, object);
+          streams.add(object);
         }
         else if (object instanceof Project)
         {
           Project project = (Project)object;
-          EList<Stream> streams = project.getStreams();
-          if (!streams.isEmpty())
+          EList<Stream> projectStreams = project.getStreams();
+          if (!projectStreams.isEmpty())
           {
-            return AddCommand.create(domain, commandParameter.getOwner(), SetupPackage.Literals.WORKSPACE__STREAMS, streams.get(0));
+            streams.add(projectStreams.get(0));
           }
         }
+      }
+
+      Workspace workspace = (Workspace)commandParameter.getOwner();
+      streams.removeAll(workspace.getStreams());
+      if (!streams.isEmpty())
+      {
+        return AddCommand.create(domain, workspace, SetupPackage.Literals.WORKSPACE__STREAMS, streams);
       }
     }
 

@@ -13,6 +13,8 @@ package org.eclipse.oomph.base;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EFactory;
 
+import java.util.Map;
+
 /**
  * <!-- begin-user-doc -->
  * The <b>Factory</b> for the model.
@@ -47,6 +49,8 @@ public interface BaseFactory extends EFactory
   Annotation createWarningAnnotation(String diagnostic);
 
   Annotation createInfoAnnotation(String diagnostic);
+
+  Map.Entry<String, String> createStringToStringMapEntry();
 
   /**
    * Returns an instance of data type '<em>URI</em>' corresponding the given literal.

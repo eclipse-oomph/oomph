@@ -303,7 +303,10 @@ public class SetupContext
     User user = createUser();
 
     Workspace workspace = createWorkspace();
-    workspace.getStreams().add(stream);
+    if (stream != null)
+    {
+      workspace.getStreams().add(stream);
+    }
 
     Installation installation = createInstallation();
     installation.setProductVersion(productVersion);

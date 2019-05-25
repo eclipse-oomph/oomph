@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.provider;
 
+import org.eclipse.oomph.edit.NoChildrenDelegatingWrapperItemProvider;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -20,6 +21,8 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -82,6 +85,75 @@ public class InstallationItemProvider extends ScopeItemProvider
         getString("_UI_Installation_productVersion_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_Installation_productVersion_feature", "_UI_Installation_type"),
         SetupPackage.Literals.INSTALLATION__PRODUCT_VERSION, true, false, true, null, null, null));
+  }
+
+  /**
+   * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+   * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+   * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private Collection<? extends EStructuralFeature> getChildrenFeaturesGen(Object object)
+  {
+    if (childrenFeatures == null)
+    {
+      super.getChildrenFeatures(object);
+      childrenFeatures.add(SetupPackage.Literals.INSTALLATION__PRODUCT_VERSION);
+    }
+    return childrenFeatures;
+  }
+
+  @Override
+  public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object)
+  {
+    if (childrenFeatures == null)
+    {
+      getChildrenFeaturesGen(object);
+      childrenFeatures.remove(SetupPackage.Literals.INSTALLATION__PRODUCT_VERSION);
+      childrenFeatures.add(0, SetupPackage.Literals.INSTALLATION__PRODUCT_VERSION);
+    }
+
+    return childrenFeatures;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  protected EStructuralFeature getChildFeature(Object object, Object child)
+  {
+    // Check the type of the specified child object and return the proper feature to use for
+    // adding (see {@link AddCommand}) it as a child.
+
+    return super.getChildFeature(object, child);
+  }
+
+  @Override
+  protected boolean isWrappingNeeded(Object object)
+  {
+    return true;
+  }
+
+  @Override
+  protected Object createWrapper(EObject object, EStructuralFeature feature, Object value, int index)
+  {
+    if (feature == SetupPackage.Literals.INSTALLATION__PRODUCT_VERSION)
+    {
+      return new NoChildrenDelegatingWrapperItemProvider(value, object, feature, index, adapterFactory)
+      {
+        @Override
+        public String getText(Object object)
+        {
+          return ((ProductVersion)value).getQualifiedLabel();
+        }
+      };
+    }
+
+    return null;
   }
 
   /**
@@ -155,7 +227,7 @@ public class InstallationItemProvider extends ScopeItemProvider
     switch (notification.getFeatureID(Installation.class))
     {
       case SetupPackage.INSTALLATION__PRODUCT_VERSION:
-        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;
     }
     super.notifyChanged(notification);

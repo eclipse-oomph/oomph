@@ -34,6 +34,7 @@ import org.eclipse.emf.common.util.URI;
  * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask()
  * @model features="storePromptedValue"
  *        storePromptedValueDefault="true" storePromptedValueDataType="org.eclipse.emf.ecore.EBoolean" storePromptedValueTransient="true" storePromptedValueVolatile="true" storePromptedValueDerived="true" storePromptedValueSuppressedGetVisibility="true" storePromptedValueSuppressedSetVisibility="true"
+ *        storePromptedValueAnnotation="http://www.eclipse.org/oomph/setup/NoExpand"
  * @generated
  */
 public interface VariableTask extends SetupTask
@@ -59,6 +60,7 @@ public interface VariableTask extends SetupTask
    * @see #setType(VariableType)
    * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask_Type()
    * @model default="STRING" required="true"
+   *        annotation="http://www.eclipse.org/oomph/setup/NoExpand"
    * @generated
    */
   VariableType getType();
@@ -86,7 +88,6 @@ public interface VariableTask extends SetupTask
    * @see #setName(String)
    * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask_Name()
    * @model required="true"
-   *        annotation="http://www.eclipse.org/oomph/setup/NoExpand"
    * @generated
    */
   String getName();
@@ -166,6 +167,7 @@ public interface VariableTask extends SetupTask
    * @see #setStorageURI(URI)
    * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask_StorageURI()
    * @model default="scope://" dataType="org.eclipse.oomph.base.URI"
+   *        annotation="http://www.eclipse.org/oomph/setup/NoExpand"
    * @generated
    */
   URI getStorageURI();
@@ -191,7 +193,7 @@ public interface VariableTask extends SetupTask
    * @return the value of the '<em>Label</em>' attribute.
    * @see #setLabel(String)
    * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask_Label()
-   * @model
+   * @model annotation="http://www.eclipse.org/oomph/setup/NoExpand"
    * @generated
    */
   String getLabel();

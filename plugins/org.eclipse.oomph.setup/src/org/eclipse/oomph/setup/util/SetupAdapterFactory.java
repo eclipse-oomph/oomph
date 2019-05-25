@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.util;
 
 import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.setup.Argument;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.CompoundTask;
@@ -21,6 +22,9 @@ import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.LinkLocationTask;
 import org.eclipse.oomph.setup.LocationCatalog;
+import org.eclipse.oomph.setup.Macro;
+import org.eclipse.oomph.setup.MacroTask;
+import org.eclipse.oomph.setup.Parameter;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -329,6 +333,30 @@ public class SetupAdapterFactory extends AdapterFactoryImpl
     public Adapter caseWorkspaceToInstallationsMapEntry(Map.Entry<Workspace, EList<Installation>> object)
     {
       return createWorkspaceToInstallationsMapEntryAdapter();
+    }
+
+    @Override
+    public Adapter caseMacro(Macro object)
+    {
+      return createMacroAdapter();
+    }
+
+    @Override
+    public Adapter caseParameter(Parameter object)
+    {
+      return createParameterAdapter();
+    }
+
+    @Override
+    public Adapter caseMacroTask(MacroTask object)
+    {
+      return createMacroTaskAdapter();
+    }
+
+    @Override
+    public Adapter caseArgument(Argument object)
+    {
+      return createArgumentAdapter();
     }
 
     @Override
@@ -684,6 +712,66 @@ public class SetupAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createWorkspaceToInstallationsMapEntryAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.Macro <em>Macro</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.Macro
+   * @generated
+   */
+  public Adapter createMacroAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.Parameter <em>Parameter</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.Parameter
+   * @generated
+   */
+  public Adapter createParameterAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.MacroTask <em>Macro Task</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.MacroTask
+   * @generated
+   */
+  public Adapter createMacroTaskAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.Argument <em>Argument</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.Argument
+   * @generated
+   */
+  public Adapter createArgumentAdapter()
   {
     return null;
   }

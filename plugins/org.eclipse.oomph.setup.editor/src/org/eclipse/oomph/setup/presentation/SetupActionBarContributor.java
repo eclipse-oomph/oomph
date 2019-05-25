@@ -11,16 +11,26 @@
 package org.eclipse.oomph.setup.presentation;
 
 import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
+import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.base.provider.BaseEditUtil.IconReflectiveItemProvider;
 import org.eclipse.oomph.base.util.EAnnotations;
 import org.eclipse.oomph.internal.ui.OomphEditingDomainActionBarContributor;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.setup.InstallationTask;
+import org.eclipse.oomph.setup.Product;
+import org.eclipse.oomph.setup.ProductCatalog;
+import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.Project;
+import org.eclipse.oomph.setup.ProjectCatalog;
 import org.eclipse.oomph.setup.RedirectionTask;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.WorkspaceTask;
 import org.eclipse.oomph.setup.impl.DynamicSetupTaskImpl;
@@ -42,7 +52,9 @@ import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributo
 
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -128,6 +140,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -547,7 +560,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   protected Collection<IAction> generateCreateChildActions(Collection<?> descriptors, ISelection selection)
   {
     Collection<IAction> actions = generateCreateChildActionsGen(descriptors, selection);
-    return addEnablementActions(descriptors, selection, false, actions);
+    return addSpecializedAnnotationCreationActions(descriptors, selection, false, addEnablementActions(descriptors, selection, false, actions));
   }
 
   /**
@@ -573,7 +586,155 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   protected Collection<IAction> generateCreateSiblingActions(Collection<?> descriptors, ISelection selection)
   {
     Collection<IAction> actions = generateCreateSiblingActionsGen(descriptors, selection);
-    return addEnablementActions(descriptors, selection, true, actions);
+    return addSpecializedAnnotationCreationActions(descriptors, selection, true, addEnablementActions(descriptors, selection, true, actions));
+  }
+
+  private Collection<IAction> addSpecializedAnnotationCreationActions(Collection<?> descriptors, ISelection selection, boolean sibling,
+      Collection<IAction> actions)
+  {
+    actions = new ArrayList<IAction>(actions);
+    if (selection instanceof IStructuredSelection && ((IStructuredSelection)selection).size() == 1)
+    {
+      EditingDomain domain = ((IEditingDomainProvider)activeEditorPart).getEditingDomain();
+      Object object = ((IStructuredSelection)selection).getFirstElement();
+      if (sibling)
+      {
+        object = domain.getParent(object);
+      }
+
+      if (object instanceof VariableTask)
+      {
+        VariableTask variable = (VariableTask)object;
+        if (variable.getAnnotation(AnnotationConstants.ANNOTATION_GLOBAL_VARIABLE) == null)
+        {
+          String name = variable.getName();
+          if (name != null && !name.startsWith("*"))
+          {
+            Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_GLOBAL_VARIABLE);
+            CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
+            Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
+            action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_GLOBAL_VARIABLE);
+            actions.add(action);
+          }
+        }
+
+        if (variable.getAnnotation(AnnotationConstants.ANNOTATION_INHERITED_CHOICES) == null)
+        {
+          Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_INHERITED_CHOICES);
+          annotation.getDetails().put(AnnotationConstants.KEY_INHERIT, "");
+          CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
+          Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
+          action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_INHERITED_CHOICES);
+          actions.add(action);
+        }
+      }
+      else if (object instanceof ModelElement)
+      {
+        ModelElement modelElement = (ModelElement)object;
+        if (modelElement.getAnnotation(AnnotationConstants.ANNOTATION_FEATURE_SUBSTITUTION) == null
+            && !getFeatureSubstitutionAttributes(modelElement).isEmpty())
+        {
+          Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_FEATURE_SUBSTITUTION);
+          CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
+          Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
+          action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_FEATURE_SUBSTITUTION);
+          actions.add(action);
+        }
+
+        if (modelElement instanceof Annotation)
+        {
+          Annotation annotation = (Annotation)modelElement;
+          if (AnnotationConstants.ANNOTATION_FEATURE_SUBSTITUTION.equals(annotation.getSource()))
+          {
+            EMap<String, String> details = annotation.getDetails();
+            Set<EAttribute> featureSubstitutionAttributes = getFeatureSubstitutionAttributes(annotation.getModelElement());
+            for (EAttribute eAttribute : featureSubstitutionAttributes)
+            {
+              String name = eAttribute.getName();
+              if (!details.containsKey(name))
+              {
+                Map.Entry<String, String> detail = BaseFactory.eINSTANCE.createStringToStringMapEntry();
+                ((EObject)detail).eSet(BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY__KEY, name);
+                CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.ANNOTATION__DETAILS, detail);
+                Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
+                action.setText(action.getText() + " - " + name);
+                actions.add(action);
+              }
+            }
+          }
+        }
+        else if (modelElement instanceof SetupTask)
+        {
+          if (modelElement.getAnnotation(AnnotationConstants.ANNOTATION_INDUCED_CHOICES) == null)
+          {
+            Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_INDUCED_CHOICES);
+            annotation.getDetails().put(AnnotationConstants.KEY_INHERIT, "");
+            annotation.getDetails().put(AnnotationConstants.KEY_LABEL, "");
+            annotation.getDetails().put(AnnotationConstants.KEY_TARGET, "");
+            annotation.getDetails().put(AnnotationConstants.KEY_DESCRIPTION, "");
+            CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
+            Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
+            action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_INDUCED_CHOICES);
+            actions.add(action);
+          }
+        }
+        else if (modelElement instanceof VariableChoice)
+        {
+          if (modelElement.getAnnotation(AnnotationConstants.ANNOTATION_MATCH_CHOICE) == null)
+          {
+            Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_MATCH_CHOICE);
+            CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
+            Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
+            action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_MATCH_CHOICE);
+            actions.add(action);
+          }
+        }
+        else if (modelElement instanceof ProjectCatalog || modelElement instanceof Project || modelElement instanceof ProductCatalog
+            || modelElement instanceof Product || modelElement instanceof ProductVersion)
+        {
+          if (modelElement.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO) == null)
+          {
+            Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+
+            EMap<String, String> details = annotation.getDetails();
+            if (modelElement instanceof ProductCatalog || modelElement instanceof Product || modelElement instanceof ProductVersion)
+            {
+              details.put(AnnotationConstants.KEY_README_PATH, null);
+              details.put(AnnotationConstants.KEY_FOLDER_NAME, null);
+            }
+
+            details.put(AnnotationConstants.KEY_IMAGE_URI, null);
+            details.put(AnnotationConstants.KEY_SITE_URI, null);
+
+            CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
+            Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
+            action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_BRANDING_INFO);
+            actions.add(action);
+          }
+        }
+      }
+    }
+
+    return actions;
+  }
+
+  private Set<EAttribute> getFeatureSubstitutionAttributes(ModelElement modelElement)
+  {
+    Set<EAttribute> result = new LinkedHashSet<EAttribute>();
+
+    for (EAttribute eAttribute : modelElement.eClass().getEAllAttributes())
+    {
+      if (eAttribute.isChangeable() && eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_NO_EXPAND) == null)
+      {
+        String instanceClassName = eAttribute.getEAttributeType().getInstanceClassName();
+        if (!"java.lang.String".equals(instanceClassName) && !"org.eclipse.emf.common.util.URI".equals(instanceClassName))
+        {
+          result.add(eAttribute);
+        }
+      }
+    }
+
+    return result;
   }
 
   private Collection<IAction> addEnablementActions(Collection<?> descriptors, ISelection selection, boolean sibling, Collection<IAction> actions)

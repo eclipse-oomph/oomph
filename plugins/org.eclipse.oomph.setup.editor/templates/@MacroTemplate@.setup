@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Macro
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    name="${macro.name}"
+    label="${macro.label}">
+  <annotation>
+    <content
+        xsi:type="setup:CompoundTask"
+        id="template.variables"
+        name="@TemplateVariables@">
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="macro.label"
+          value="My"
+          label="Macro Label">
+        <description>The title case name of the macro, including spaces.</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="macro.name"
+          value="${macro.label|qualifiedName}"
+          label="Name">
+        <description>The lower case name of the macro</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          type="TEXT"
+          name="macro.description"
+          value="The ${macro.label} macro provides cool stuff."
+          label="Macro Description">
+        <description>An informative multi-line description of what the macro does.</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          type="CONTAINER"
+          name="setup.location"
+          label="Folder">
+        <description>The workspace folder of the new macro setup model.</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="setup.filename"
+          value="${macro.label|camel}Macro.setup"
+          label="Filename">
+        <description>The camel case filename of the new macro setup model.</description>
+      </setupTask>
+    </content>
+  </annotation>
+  <description>${macro.description}</description>
+</setup:Macro>

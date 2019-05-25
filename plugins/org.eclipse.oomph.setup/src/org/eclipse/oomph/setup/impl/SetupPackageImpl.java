@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.impl;
 
 import org.eclipse.oomph.base.BasePackage;
+import org.eclipse.oomph.setup.Argument;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.CompoundTask;
@@ -22,6 +23,9 @@ import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.LinkLocationTask;
 import org.eclipse.oomph.setup.LocationCatalog;
+import org.eclipse.oomph.setup.Macro;
+import org.eclipse.oomph.setup.MacroTask;
+import org.eclipse.oomph.setup.Parameter;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -226,6 +230,34 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * @generated
    */
   private EClass workspaceToInstallationsMapEntryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass macroEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass parameterEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass macroTaskEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass argumentEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1317,6 +1349,136 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getMacro()
+  {
+    return macroEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMacro_LogicalContainer()
+  {
+    return (EReference)macroEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMacro_Parameters()
+  {
+    return (EReference)macroEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getParameter()
+  {
+    return parameterEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getParameter_Name()
+  {
+    return (EAttribute)parameterEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getParameter_Description()
+  {
+    return (EAttribute)parameterEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getParameter_DefaultValue()
+  {
+    return (EAttribute)parameterEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getMacroTask()
+  {
+    return macroTaskEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMacroTask_Arguments()
+  {
+    return (EReference)macroTaskEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getArgument()
+  {
+    return argumentEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getArgument_Parameter()
+  {
+    return (EReference)argumentEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getArgument_Value()
+  {
+    return (EAttribute)argumentEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getMacroTask_Macro()
+  {
+    return (EReference)macroTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getWorkspaceToInstallationsMapEntry_Key()
   {
     return (EReference)workspaceToInstallationsMapEntryEClass.getEStructuralFeatures().get(0);
@@ -2065,6 +2227,23 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEReference(workspaceToInstallationsMapEntryEClass, WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY__KEY);
     createEReference(workspaceToInstallationsMapEntryEClass, WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY__VALUE);
 
+    macroEClass = createEClass(MACRO);
+    createEReference(macroEClass, MACRO__LOGICAL_CONTAINER);
+    createEReference(macroEClass, MACRO__PARAMETERS);
+
+    parameterEClass = createEClass(PARAMETER);
+    createEAttribute(parameterEClass, PARAMETER__NAME);
+    createEAttribute(parameterEClass, PARAMETER__DESCRIPTION);
+    createEAttribute(parameterEClass, PARAMETER__DEFAULT_VALUE);
+
+    macroTaskEClass = createEClass(MACRO_TASK);
+    createEReference(macroTaskEClass, MACRO_TASK__ARGUMENTS);
+    createEReference(macroTaskEClass, MACRO_TASK__MACRO);
+
+    argumentEClass = createEClass(ARGUMENT);
+    createEReference(argumentEClass, ARGUMENT__PARAMETER);
+    createEAttribute(argumentEClass, ARGUMENT__VALUE);
+
     // Create enums
     scopeTypeEEnum = createEEnum(SCOPE_TYPE);
     triggerEEnum = createEEnum(TRIGGER);
@@ -2144,6 +2323,10 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     resourceCreationTaskEClass.getESuperTypes().add(getSetupTask());
     textModifyTaskEClass.getESuperTypes().add(getSetupTask());
     textModificationEClass.getESuperTypes().add(theBasePackage.getModelElement());
+    macroEClass.getESuperTypes().add(getScope());
+    parameterEClass.getESuperTypes().add(theBasePackage.getModelElement());
+    macroTaskEClass.getESuperTypes().add(getSetupTask());
+    argumentEClass.getESuperTypes().add(theBasePackage.getModelElement());
 
     // Initialize classes and features; add operations and parameters
     initEClass(setupTaskEClass, SetupTask.class, "SetupTask", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2192,6 +2375,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addEOperation(scopeEClass, getScope(), "getParentScope", 0, 1, IS_UNIQUE, IS_ORDERED);
 
     addEOperation(scopeEClass, getScopeType(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+    addEOperation(scopeEClass, ecorePackage.getEString(), "getQualifiedLabel", 0, 1, IS_UNIQUE, IS_ORDERED);
 
     initEClass(indexEClass, Index.class, "Index", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getIndex_Name(), ecorePackage.getEString(), "name", null, 1, 1, Index.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
@@ -2445,6 +2630,33 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     initEReference(getWorkspaceToInstallationsMapEntry_Value(), getInstallation(), null, "value", null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    initEClass(macroEClass, Macro.class, "Macro", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getMacro_LogicalContainer(), getMacroTask(), null, "logicalContainer", null, 0, 1, Macro.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMacro_Parameters(), getParameter(), null, "parameters", null, 0, -1, Macro.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    getMacro_Parameters().getEKeys().add(getParameter_Name());
+
+    initEClass(parameterEClass, Parameter.class, "Parameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getParameter_Name(), ecorePackage.getEString(), "name", null, 1, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getParameter_Description(), theBasePackage.getText(), "description", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getParameter_DefaultValue(), ecorePackage.getEString(), "defaultValue", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(macroTaskEClass, MacroTask.class, "MacroTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getMacroTask_Arguments(), getArgument(), null, "arguments", null, 0, -1, MacroTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMacroTask_Macro(), getMacro(), null, "macro", null, 1, 1, MacroTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
+        IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(argumentEClass, Argument.class, "Argument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getArgument_Parameter(), getParameter(), null, "parameter", null, 1, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getArgument_Value(), ecorePackage.getEString(), "value", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
     // Initialize enums and add enum literals
     initEEnum(scopeTypeEEnum, ScopeType.class, "ScopeType");
     addEEnumLiteral(scopeTypeEEnum, ScopeType.NONE);
@@ -2457,6 +2669,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addEEnumLiteral(scopeTypeEEnum, ScopeType.INSTALLATION);
     addEEnumLiteral(scopeTypeEEnum, ScopeType.WORKSPACE);
     addEEnumLiteral(scopeTypeEEnum, ScopeType.USER);
+    addEEnumLiteral(scopeTypeEEnum, ScopeType.MACRO);
 
     initEEnum(triggerEEnum, Trigger.class, "Trigger");
     addEEnumLiteral(triggerEEnum, Trigger.BOOTSTRAP);
@@ -2564,6 +2777,9 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addAnnotation(getProductToProductVersionMapEntry_Value(), source, new String[] { "kind", "attribute" });
     addAnnotation(getProjectToStreamMapEntry_Key(), source, new String[] { "kind", "attribute" });
     addAnnotation(getProjectToStreamMapEntry_Value(), source, new String[] { "kind", "attribute" });
+    addAnnotation(getMacro_Parameters(), source, new String[] { "kind", "element", "name", "parameter" });
+    addAnnotation(getParameter_Description(), source, new String[] { "kind", "element" });
+    addAnnotation(getMacroTask_Arguments(), source, new String[] { "kind", "element", "name", "argument" });
   }
 
   /**
@@ -2576,9 +2792,14 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
   {
     String source = "http://www.eclipse.org/oomph/setup/NoExpand";
     addAnnotation(getSetupTask_ID(), source, new String[] {});
+    addAnnotation(getSetupTask_Disabled(), source, new String[] {});
     addAnnotation(getSetupTask_Filter(), source, new String[] {});
-    addAnnotation(getVariableTask_Name(), source, new String[] {});
+    addAnnotation(getVariableTask_Type(), source, new String[] {});
+    addAnnotation(getVariableTask_StorePromptedValue(), source, new String[] {});
+    addAnnotation(getVariableTask_StorageURI(), source, new String[] {});
+    addAnnotation(getVariableTask_Label(), source, new String[] {});
     addAnnotation(getVariableChoice_Value(), source, new String[] {});
+    addAnnotation(getParameter_Name(), source, new String[] {});
   }
 
   /**
@@ -2625,6 +2846,9 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
   protected void createEcoreAnnotations()
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore";
+    addAnnotation(macroEClass, source, new String[] { "constraints", "NoRecursion" });
+    addAnnotation(macroTaskEClass, source, new String[] { "constraints", "IDRequired ArgumentsCorrespondToParameters" });
+    addAnnotation(argumentEClass, source, new String[] { "constraints", "ConsistentParameterBinding" });
     addAnnotation(filterEDataType, source, new String[] { "constraints", "WellformedFilterExpression" });
   }
 

@@ -394,6 +394,7 @@ public interface BasePackage extends EPackage
    * @return the meta object for class '<em>String To String Map Entry</em>'.
    * @see java.util.Map.Entry
    * @model keyDataType="org.eclipse.emf.ecore.EString"
+   *        keyAnnotation="http://www.eclipse.org/oomph/setup/NoExpand"
    *        valueDataType="org.eclipse.oomph.base.Text"
    *        valueExtendedMetaData="kind='element'"
    * @generated

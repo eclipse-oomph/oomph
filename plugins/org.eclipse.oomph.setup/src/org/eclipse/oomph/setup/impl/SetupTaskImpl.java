@@ -11,21 +11,12 @@
 package org.eclipse.oomph.setup.impl;
 
 import org.eclipse.oomph.base.impl.ModelElementImpl;
-import org.eclipse.oomph.setup.Installation;
-import org.eclipse.oomph.setup.Product;
-import org.eclipse.oomph.setup.ProductCatalog;
-import org.eclipse.oomph.setup.ProductVersion;
-import org.eclipse.oomph.setup.Project;
-import org.eclipse.oomph.setup.ProjectCatalog;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
-import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.Trigger;
-import org.eclipse.oomph.setup.User;
-import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.util.UserCallback;
 
@@ -314,7 +305,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  public ScopeType getScopeType()
+  public final ScopeType getScopeType()
   {
     return getScope(this);
   }
@@ -419,49 +410,9 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
 
   private ScopeType getScope(EObject object)
   {
-    if (object instanceof ProjectCatalog)
+    if (object instanceof Scope)
     {
-      return ScopeType.PROJECT_CATALOG;
-    }
-
-    if (object instanceof Installation)
-    {
-      return ScopeType.INSTALLATION;
-    }
-
-    if (object instanceof Workspace)
-    {
-      return ScopeType.WORKSPACE;
-    }
-
-    if (object instanceof ProductCatalog)
-    {
-      return ScopeType.PRODUCT_CATALOG;
-    }
-
-    if (object instanceof Product)
-    {
-      return ScopeType.PRODUCT;
-    }
-
-    if (object instanceof ProductVersion)
-    {
-      return ScopeType.PRODUCT_VERSION;
-    }
-
-    if (object instanceof Project)
-    {
-      return ScopeType.PROJECT;
-    }
-
-    if (object instanceof Stream)
-    {
-      return ScopeType.STREAM;
-    }
-
-    if (object instanceof User)
-    {
-      return ScopeType.USER;
+      return ((Scope)object).getType();
     }
 
     EObject container = object.eContainer();

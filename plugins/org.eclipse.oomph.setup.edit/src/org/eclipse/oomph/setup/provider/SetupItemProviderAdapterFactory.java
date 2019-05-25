@@ -652,6 +652,106 @@ public class SetupItemProviderAdapterFactory extends SetupAdapterFactory
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.Macro} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected MacroItemProvider macroItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.Macro}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createMacroAdapter()
+  {
+    if (macroItemProvider == null)
+    {
+      macroItemProvider = new MacroItemProvider(this);
+    }
+
+    return macroItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.Parameter} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected ParameterItemProvider parameterItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.Parameter}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createParameterAdapter()
+  {
+    if (parameterItemProvider == null)
+    {
+      parameterItemProvider = new ParameterItemProvider(this);
+    }
+
+    return parameterItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.MacroTask} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected MacroTaskItemProvider macroTaskItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.MacroTask}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createMacroTaskAdapter()
+  {
+    if (macroTaskItemProvider == null)
+    {
+      macroTaskItemProvider = new MacroTaskItemProvider(this);
+    }
+
+    return macroTaskItemProvider;
+  }
+
+  /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.Argument} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected ArgumentItemProvider argumentItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.Argument}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createArgumentAdapter()
+  {
+    if (argumentItemProvider == null)
+    {
+      argumentItemProvider = new ArgumentItemProvider(this);
+    }
+
+    return argumentItemProvider;
+  }
+
+  /**
    * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.StringSubstitutionTask} instances.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1170,6 +1270,22 @@ public class SetupItemProviderAdapterFactory extends SetupAdapterFactory
     {
       workspaceToInstallationsMapEntryItemProvider.dispose();
     }
+    if (macroItemProvider != null)
+    {
+      macroItemProvider.dispose();
+    }
+    if (parameterItemProvider != null)
+    {
+      parameterItemProvider.dispose();
+    }
+    if (macroTaskItemProvider != null)
+    {
+      macroTaskItemProvider.dispose();
+    }
+    if (argumentItemProvider != null)
+    {
+      argumentItemProvider.dispose();
+    }
   }
 
   /**
@@ -1291,6 +1407,14 @@ public class SetupItemProviderAdapterFactory extends SetupAdapterFactory
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS,
             SetupFactory.eINSTANCE.create(SetupPackage.Literals.WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY)));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupFactory.eINSTANCE.createMacro()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupFactory.eINSTANCE.createParameter()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupFactory.eINSTANCE.createMacroTask()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, SetupFactory.eINSTANCE.createArgument()));
 
         return null;
       }

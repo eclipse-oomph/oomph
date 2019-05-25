@@ -43,6 +43,7 @@ import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ButtonAnimator;
 import org.eclipse.oomph.ui.FilteredTreeWithoutWorkbench;
+import org.eclipse.oomph.ui.StatusDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.StringUtil;
@@ -57,6 +58,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.dialogs.ResourceDialog;
 import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
@@ -1053,7 +1055,7 @@ public class ProjectPage extends SetupWizardPage
         IStatus status = configurationProcessor.getStatus();
         if (!status.isOK())
         {
-          ErrorDialog.openError(getShell(), "Workspace Problems", null, status);
+          new StatusDialog(getShell(), "Workspace Problems", null, status, Diagnostic.ERROR).open();
         }
       }
     };
@@ -1892,6 +1894,18 @@ public class ProjectPage extends SetupWizardPage
             }
 
             return childrenFeatures;
+          }
+
+          @Override
+          protected boolean isWrappingNeeded(Object object)
+          {
+            return false;
+          }
+
+          @Override
+          protected Object createWrapper(EObject object, EStructuralFeature feature, Object value, int index)
+          {
+            return null;
           }
 
           @Override
