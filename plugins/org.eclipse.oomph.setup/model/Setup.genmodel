@@ -286,6 +286,8 @@
           ecoreFeature="ecore:EReference Setup.ecore#//MacroTask/macro"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//Argument">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference Setup.ecore#//Argument/macroTask"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Argument/name"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//Argument/parameter"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//Argument/value"/>
     </genClasses>

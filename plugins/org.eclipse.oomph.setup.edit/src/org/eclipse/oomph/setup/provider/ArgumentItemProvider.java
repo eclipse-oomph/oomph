@@ -22,7 +22,6 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.ResourceLocator;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -143,10 +142,9 @@ public class ArgumentItemProvider extends ModelElementItemProvider
     if (feature == SetupPackage.Literals.ARGUMENT__PARAMETER)
     {
       Argument argument = (Argument)object;
-      EObject eContainer = argument.eContainer();
-      if (eContainer instanceof MacroTask)
+      MacroTask macroTask = argument.getMacroTask();
+      if (macroTask != null)
       {
-        MacroTask macroTask = (MacroTask)eContainer;
         Macro macro = macroTask.getMacro();
         if (macro != null)
         {

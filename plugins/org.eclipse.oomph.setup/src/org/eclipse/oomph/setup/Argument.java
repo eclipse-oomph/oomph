@@ -21,16 +21,32 @@ import org.eclipse.oomph.base.ModelElement;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.Argument#getMacroTask <em>Macro Task</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Argument#getParameter <em>Parameter</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.Argument#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getArgument()
- * @model annotation="http://www.eclipse.org/emf/2002/Ecore constraints='ConsistentParameterBinding'"
+ * @model features="name"
+ *        nameDataType="org.eclipse.emf.ecore.EString" nameVolatile="true" nameSuppressedGetVisibility="true" nameSuppressedSetVisibility="true" nameSuppressedIsSetVisibility="true" nameSuppressedUnsetVisibility="true"
+ *        annotation="http://www.eclipse.org/emf/2002/Ecore constraints='ConsistentParameterBinding'"
  * @generated
  */
 public interface Argument extends ModelElement
 {
+  /**
+   * Returns the value of the '<em><b>Macro Task</b></em>' container reference.
+   * It is bidirectional and its opposite is '{@link org.eclipse.oomph.setup.MacroTask#getArguments <em>Arguments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Macro Task</em>' container reference.
+   * @see org.eclipse.oomph.setup.SetupPackage#getArgument_MacroTask()
+   * @see org.eclipse.oomph.setup.MacroTask#getArguments
+   * @model opposite="arguments" resolveProxies="false" changeable="false"
+   * @generated
+   */
+  MacroTask getMacroTask();
+
   /**
    * Returns the value of the '<em><b>Parameter</b></em>' reference.
    * <!-- begin-user-doc -->
@@ -38,7 +54,7 @@ public interface Argument extends ModelElement
    * @return the value of the '<em>Parameter</em>' reference.
    * @see #setParameter(Parameter)
    * @see org.eclipse.oomph.setup.SetupPackage#getArgument_Parameter()
-   * @model required="true"
+   * @model unsettable="true" required="true" suppressedIsSetVisibility="true" suppressedUnsetVisibility="true"
    * @generated
    */
   Parameter getParameter();

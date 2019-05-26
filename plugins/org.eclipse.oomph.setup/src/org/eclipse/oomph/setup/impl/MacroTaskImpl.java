@@ -22,7 +22,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import java.util.Collection;
@@ -93,7 +93,7 @@ public class MacroTaskImpl extends SetupTaskImpl implements MacroTask
   {
     if (arguments == null)
     {
-      arguments = new EObjectContainmentEList<Argument>(Argument.class, this, SetupPackage.MACRO_TASK__ARGUMENTS);
+      arguments = new EObjectContainmentWithInverseEList<Argument>(Argument.class, this, SetupPackage.MACRO_TASK__ARGUMENTS, SetupPackage.ARGUMENT__MACRO_TASK);
     }
     return arguments;
   }
@@ -159,6 +159,23 @@ public class MacroTaskImpl extends SetupTaskImpl implements MacroTask
     {
       eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.MACRO_TASK__MACRO, oldMacro, macro));
     }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case SetupPackage.MACRO_TASK__ARGUMENTS:
+        return ((InternalEList<InternalEObject>)(InternalEList<?>)getArguments()).basicAdd(otherEnd, msgs);
+    }
+    return super.eInverseAdd(otherEnd, featureID, msgs);
   }
 
   /**

@@ -3666,13 +3666,31 @@ public interface SetupPackage extends EPackage
   int ARGUMENT__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
 
   /**
+   * The feature id for the '<em><b>Macro Task</b></em>' container reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ARGUMENT__MACRO_TASK = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ARGUMENT__NAME = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+  /**
    * The feature id for the '<em><b>Parameter</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ARGUMENT__PARAMETER = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+  int ARGUMENT__PARAMETER = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -3681,7 +3699,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ARGUMENT__VALUE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+  int ARGUMENT__VALUE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The number of structural features of the '<em>Argument</em>' class.
@@ -3690,7 +3708,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ARGUMENT_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+  int ARGUMENT_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.ScopeType <em>Scope Type</em>}' enum.
@@ -4805,6 +4823,28 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   EClass getArgument();
+
+  /**
+   * Returns the meta object for the container reference '{@link org.eclipse.oomph.setup.Argument#getMacroTask <em>Macro Task</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the container reference '<em>Macro Task</em>'.
+   * @see org.eclipse.oomph.setup.Argument#getMacroTask()
+   * @see #getArgument()
+   * @generated
+   */
+  EReference getArgument_MacroTask();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.Argument <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.eclipse.oomph.setup.Argument
+   * @see #getArgument()
+   * @generated
+   */
+  EAttribute getArgument_Name();
 
   /**
    * Returns the meta object for the reference '{@link org.eclipse.oomph.setup.Argument#getParameter <em>Parameter</em>}'.
@@ -6270,6 +6310,22 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EClass ARGUMENT = eINSTANCE.getArgument();
+
+    /**
+     * The meta object literal for the '<em><b>Macro Task</b></em>' container reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ARGUMENT__MACRO_TASK = eINSTANCE.getArgument_MacroTask();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ARGUMENT__NAME = eINSTANCE.getArgument_Name();
 
     /**
      * The meta object literal for the '<em><b>Parameter</b></em>' reference feature.

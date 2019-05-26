@@ -1449,7 +1449,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getArgument_Parameter()
+  public EReference getArgument_MacroTask()
   {
     return (EReference)argumentEClass.getEStructuralFeatures().get(0);
   }
@@ -1459,9 +1459,29 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getArgument_Value()
+  public EAttribute getArgument_Name()
   {
     return (EAttribute)argumentEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getArgument_Parameter()
+  {
+    return (EReference)argumentEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getArgument_Value()
+  {
+    return (EAttribute)argumentEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -2241,6 +2261,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEReference(macroTaskEClass, MACRO_TASK__MACRO);
 
     argumentEClass = createEClass(ARGUMENT);
+    createEReference(argumentEClass, ARGUMENT__MACRO_TASK);
+    createEAttribute(argumentEClass, ARGUMENT__NAME);
     createEReference(argumentEClass, ARGUMENT__PARAMETER);
     createEAttribute(argumentEClass, ARGUMENT__VALUE);
 
@@ -2646,14 +2668,18 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(macroTaskEClass, MacroTask.class, "MacroTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getMacroTask_Arguments(), getArgument(), null, "arguments", null, 0, -1, MacroTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMacroTask_Arguments(), getArgument(), getArgument_MacroTask(), "arguments", null, 0, -1, MacroTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMacroTask_Macro(), getMacro(), null, "macro", null, 1, 1, MacroTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
         IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(argumentEClass, Argument.class, "Argument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getArgument_MacroTask(), getMacroTask(), getMacroTask_Arguments(), "macroTask", null, 0, 1, Argument.class, IS_TRANSIENT, !IS_VOLATILE,
+        !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getArgument_Name(), ecorePackage.getEString(), "name", null, 0, 1, Argument.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+        !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getArgument_Parameter(), getParameter(), null, "parameter", null, 1, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getArgument_Value(), ecorePackage.getEString(), "value", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -2780,6 +2806,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addAnnotation(getMacro_Parameters(), source, new String[] { "kind", "element", "name", "parameter" });
     addAnnotation(getParameter_Description(), source, new String[] { "kind", "element" });
     addAnnotation(getMacroTask_Arguments(), source, new String[] { "kind", "element", "name", "argument" });
+    addAnnotation(getMacroTask_Macro(), source, new String[] { "kind", "attribute" });
   }
 
   /**

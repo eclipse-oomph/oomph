@@ -64,6 +64,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EObjectValidator;
 
 import java.lang.reflect.InvocationTargetException;
@@ -948,6 +949,20 @@ public class SetupValidator extends EObjectValidator
     return result;
   }
 
+  @Override
+  protected boolean validate_MultiplicityConforms(EObject eObject, EStructuralFeature eStructuralFeature, DiagnosticChain diagnostics,
+      Map<Object, Object> context)
+  {
+    if (eStructuralFeature == SetupPackage.Literals.ARGUMENT__PARAMETER && ((Argument)eObject).getParameter() != null)
+    {
+      // Because the parameter, even when present, will be considered not set when it's properly a parameter of the containing macro task's macro,
+      // we will get a validation error, because it's a required unsettable feature, and we don't want that.
+      return true;
+    }
+
+    return super.validate_MultiplicityConforms(eObject, eStructuralFeature, diagnostics, context);
+  }
+
   /**
    * Validates the ConsistentParameterBinding constraint of '<em>Argument</em>'.
    * <!-- begin-user-doc -->
@@ -974,10 +989,9 @@ public class SetupValidator extends EObjectValidator
         }
       }
 
-      EObject eContainer = argument.eContainer();
-      if (eContainer instanceof MacroTask)
+      MacroTask macroTask = argument.getMacroTask();
+      if (macroTask != null)
       {
-        MacroTask macroTask = (MacroTask)eContainer;
         EList<Argument> arguments = macroTask.getArguments();
         for (int i = 0, index = arguments.indexOf(argument); i < index; ++i)
         {

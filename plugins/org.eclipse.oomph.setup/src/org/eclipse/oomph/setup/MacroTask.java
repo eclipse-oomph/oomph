@@ -34,11 +34,13 @@ public interface MacroTask extends SetupTask
   /**
    * Returns the value of the '<em><b>Arguments</b></em>' containment reference list.
    * The list contents are of type {@link org.eclipse.oomph.setup.Argument}.
+   * It is bidirectional and its opposite is '{@link org.eclipse.oomph.setup.Argument#getMacroTask <em>Macro Task</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Arguments</em>' containment reference list.
    * @see org.eclipse.oomph.setup.SetupPackage#getMacroTask_Arguments()
-   * @model containment="true"
+   * @see org.eclipse.oomph.setup.Argument#getMacroTask
+   * @model opposite="macroTask" containment="true"
    *        extendedMetaData="kind='element' name='argument'"
    * @generated
    */
@@ -52,6 +54,7 @@ public interface MacroTask extends SetupTask
    * @see #setMacro(Macro)
    * @see org.eclipse.oomph.setup.SetupPackage#getMacroTask_Macro()
    * @model required="true"
+   *        extendedMetaData="kind='attribute'"
    * @generated
    */
   Macro getMacro();
