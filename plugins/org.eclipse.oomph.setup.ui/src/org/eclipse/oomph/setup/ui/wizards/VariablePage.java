@@ -48,6 +48,7 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -488,7 +489,12 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
           String name = variable.getName();
           if (name.startsWith("@<id>"))
           {
-            name = name.substring(name.indexOf("name: ") + 6, name.indexOf(')'));
+            EAttribute eAttribute = SetupTaskPerformer.getAttributeRuleVariableData(variable);
+            if (eAttribute != null)
+            {
+              EClass eContainingClass = eAttribute.getEContainingClass();
+              name = eContainingClass.getEPackage().getName() + "." + eContainingClass.getName() + "." + eAttribute.getName();
+            }
           }
 
           AccessUtil.setKey(label, name + ".label");
@@ -1166,23 +1172,20 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
           controls.add(control);
           for (VariableTask variable : fieldHolder.getVariables())
           {
-            for (SetupTaskPerformer performer : allPerformers)
+            EAttribute eAttribute = SetupTaskPerformer.getAttributeRuleVariableData(variable);
+            if (eAttribute != null)
             {
-              EAttribute eAttribute = performer.getAttributeRuleVariableData(variable);
-              if (eAttribute != null)
-              {
-                CollectionUtil.addAll(ruleUses, fieldHolderRecord, Collections.<FieldHolderRecord> emptySet());
-                continue LOOP;
-              }
+              CollectionUtil.addAll(ruleUses, fieldHolderRecord, Collections.<FieldHolderRecord> emptySet());
+              continue LOOP;
             }
           }
 
           for (VariableTask variable : fieldHolder.getVariables())
           {
-            for (SetupTaskPerformer performer : allPerformers)
+            VariableTask dependantVariable = SetupTaskPerformer.getRuleVariableData(variable);
+            if (dependantVariable != null)
             {
-              VariableTask dependantVariable = performer.getRuleVariableData(variable);
-              if (dependantVariable != null)
+              for (SetupTaskPerformer performer : allPerformers)
               {
                 VariableTask ruleVariable = performer.getRuleVariable(dependantVariable);
                 if (ruleVariable != null)

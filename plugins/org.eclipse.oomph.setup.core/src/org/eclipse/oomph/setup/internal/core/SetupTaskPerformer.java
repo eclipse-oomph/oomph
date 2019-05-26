@@ -1164,7 +1164,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     annotate(variable, "AttributeRuleVariable", eAttribute);
   }
 
-  public EAttribute getAttributeRuleVariableData(VariableTask variable)
+  public static EAttribute getAttributeRuleVariableData(VariableTask variable)
   {
     Annotation annotation = variable.getAnnotation("AttributeRuleVariable");
     if (annotation != null)
@@ -1198,7 +1198,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     annotate(variable, "RuleVariable", dependentVariable);
   }
 
-  public VariableTask getRuleVariableData(VariableTask variable)
+  public static VariableTask getRuleVariableData(VariableTask variable)
   {
     Annotation annotation = variable.getAnnotation("RuleVariable");
     if (annotation != null)
