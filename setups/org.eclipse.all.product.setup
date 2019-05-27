@@ -600,7 +600,7 @@
       <repository
           url="http://download.eclipse.org/releases/kepler/201402280900"/>
       <repository
-          url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
+          url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
     </setupTask>
   </version>
   <version name="juno"
@@ -647,7 +647,7 @@
       <repository
           url="http://download.eclipse.org/releases/juno/201303010900"/>
       <repository
-          url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
+          url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
     </setupTask>
   </version>
   <description>This package contains all categorized features of the release train. It can do &lt;a href='https://en.wiktionary.org/wiki/eierlegende_Wollmilchsau'>everything&lt;/a>, but it's not pretty.</description>

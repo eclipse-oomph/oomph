@@ -388,11 +388,11 @@ public class ProductCatalogGenerator implements IApplication
       installationTask.setID("installation");
       productCatalog.getSetupTasks().add(installationTask);
 
-      P2Task p2Task = createOomphP2Task();
+      P2Task p2Task = createOomphP2Task(null);
       productCatalog.getSetupTasks().add(p2Task);
 
       emfRepositoryLocation = trimEmptyTrailingSegment(
-          URI.createURI(loadLatestRepository(manager, null, URI.createURI("http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core"), true)
+          URI.createURI(loadLatestRepository(manager, null, URI.createURI("http://download.eclipse.org/modeling/emf/emf/builds/release/latest"), true)
               .getLocation().toString())).toString();
 
       new RepositoryLoader(this).perform(TRAINS);
@@ -528,7 +528,7 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
-  private P2Task createOomphP2Task()
+  private P2Task createOomphP2Task(String emfRepository)
   {
     Requirement oomphRequirement = P2Factory.eINSTANCE.createRequirement("org.eclipse.oomph.setup.feature.group");
     Repository oomphRepository = P2Factory.eINSTANCE.createRepository("${" + SetupProperties.PROP_UPDATE_URL + "}");
@@ -536,6 +536,12 @@ public class ProductCatalogGenerator implements IApplication
     P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
     p2Task.getRequirements().add(oomphRequirement);
     p2Task.getRepositories().add(oomphRepository);
+
+    if (emfRepository != null)
+    {
+      p2Task.getRepositories().add(P2Factory.eINSTANCE.createRepository(emfRepository));
+    }
+
     return p2Task;
   }
 
@@ -566,7 +572,7 @@ public class ProductCatalogGenerator implements IApplication
 
     if (ALL_PRODUCT_ID.equals(id) || ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(id))
     {
-      product.getSetupTasks().add(createOomphP2Task());
+      product.getSetupTasks().add(createOomphP2Task(ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(id) ? emfRepositoryLocation : null));
     }
 
     String eclipseVersionPrefix = "";

@@ -13,6 +13,8 @@
         name="org.eclipse.oomph.setup.feature.group"/>
     <repository
         url="${oomph.update.url}"/>
+    <repository
+        url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
@@ -258,7 +260,7 @@
       <repository
           url="http://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700"/>
       <repository
-          url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
+          url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
     </setupTask>
   </version>
   <version name="4.2"
@@ -280,7 +282,7 @@
       <repository
           url="http://download.eclipse.org/eclipse/updates/4.2/R-4.2.2-201302041200"/>
       <repository
-          url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
+          url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
     </setupTask>
   </version>
   <description>This package contains the IDE provided by the Eclipse project's platform build.</description>
