@@ -986,7 +986,18 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           }
         }
 
+        // Controlled resources will be explicitly marked as not read only.
+        // But the call handleActivateGen will clear the map, so we need to ensure we restore the map, and only force recomputation for the primary resource.
+        Map<Resource, Boolean> resourceToReadOnlyMap = editingDomain.getResourceToReadOnlyMap();
+        Map<Resource, Boolean> resourceToReadOnlyMapCopy = new LinkedHashMap<Resource, Boolean>(resourceToReadOnlyMap);
         handleActivateGen();
+        EList<Resource> resources = resourceSet.getResources();
+        if (!resources.isEmpty())
+        {
+          resourceToReadOnlyMapCopy.remove(resources.get(0));
+        }
+
+        resourceToReadOnlyMap.putAll(resourceToReadOnlyMapCopy);
       }
       finally
       {

@@ -283,7 +283,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
    * This creates an instance of the contributor.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   public SetupActionBarContributor()
   {
@@ -291,7 +291,30 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     loadResourceAction = new LoadResourceAction();
     validateAction = new ValidateAction();
     liveValidationAction = new DiagnosticDecorator.LiveValidator.LiveValidationAction(SetupEditorPlugin.getPlugin().getDialogSettings());
-    controlAction = new ControlAction();
+    controlAction = new ControlAction()
+    {
+      @Override
+      public void run()
+      {
+        super.run();
+
+        if (command != null && domain instanceof AdapterFactoryEditingDomain)
+        {
+          for (Object object : command.getResult())
+          {
+            if (object instanceof EObject)
+            {
+              Resource resource = ((EObject)object).eResource();
+              if (resource != null)
+              {
+                // Ensure that this resource can be saved.
+                ((AdapterFactoryEditingDomain)domain).getResourceToReadOnlyMap().put(resource, Boolean.FALSE);
+              }
+            }
+          }
+        }
+      }
+    };
   }
 
   @Override
