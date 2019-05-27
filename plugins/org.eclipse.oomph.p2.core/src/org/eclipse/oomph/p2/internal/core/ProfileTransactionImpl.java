@@ -935,7 +935,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       boolean optional = requirement.isOptional();
       boolean greedy = requirement.isGreedy();
 
-      IRequirement rootRequirement = name == null || !name.contains("(")
+      IRequirement rootRequirement = name == null || !name.startsWith("(")
           ? MetadataFactory.createRequirement(namespace, name, versionRange, filter, optional ? 0 : 1, 1, !optional || greedy)
           : MetadataFactory.createRequirement(namespace, name, filter, optional ? 0 : 1, 1, !optional || greedy);
       rootRequirements.add(rootRequirement);

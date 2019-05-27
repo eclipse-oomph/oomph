@@ -331,10 +331,15 @@
         <requirement
             name="*"/>
         <sourceLocator
-            rootFolder="${git.clone.equinox.p2.location}">
-          <excludedPath>org.eclipse.equinox.p2.releng.buckminster</excludedPath>
+            rootFolder="${git.clone.equinox.p2.location/bundles}">
           <excludedPath>bundles/org.eclipse.equinox.p2.testserver</excludedPath>
         </sourceLocator>
+        <sourceLocator
+            rootFolder="${git.clone.equinox.p2.location/examples}"/>
+        <sourceLocator
+            rootFolder="${git.clone.equinox.p2.location/features}"/>
+        <sourceLocator
+            rootFolder="${git.clone.equinox.p2.location/org.eclipse.equinox.p2.releng}"/>
       </targlet>
     </setupTask>
     <setupTask
