@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Product
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
+    name="eclipse.platform.sdk"
+    label="Eclipse SDK">
+  <setupTask
+      xsi:type="setup.p2:P2Task">
+    <requirement
+        name="org.eclipse.oomph.setup.feature.group"/>
+    <repository
+        url="${oomph.update.url}"/>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:EclipseIniTask"
+      option="-Xmx"
+      value="3g"
+      vm="true"/>
+  <version name="latest"
+      label="Latest (4.12 - 2019-06)"
+      requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://download.eclipse.org/eclipse/downloads/</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.12 - 2019-06)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.12.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.12-I-builds"/>
+    </setupTask>
+  </version>
+  <version name="latest.released"
+      label="Latest Release (4.11 - 2019-03)"
+      requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.11-201903070500/</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.11 - 2019-03)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.11.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.11/R-4.11-201903070500"/>
+    </setupTask>
+  </version>
+  <version name="4.12"
+      label="4.12 - 2019-06"
+      requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://download.eclipse.org/eclipse/downloads/</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.12 - 2019-06)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.12.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.12-I-builds"/>
+    </setupTask>
+  </version>
+  <version name="4.11"
+      label="4.11 - 2019-03"
+      requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.11-201903070500/</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.11 - 2019-03)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.11.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.11/R-4.11-201903070500"/>
+    </setupTask>
+  </version>
+  <version name="4.10"
+      label="4.10 - 2018-12"
+      requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.10-201812060815/</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.10 - 2018-12)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.10.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.10/R-4.10-201812060815"/>
+    </setupTask>
+  </version>
+  <version name="4.9"
+      label="4.9 - 2018-09"
+      requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.9-201809060745/</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.9 - 2018-09)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.9.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.9/R-4.9-201809060745"/>
+    </setupTask>
+  </version>
+  <version name="4.8"
+      label="4.8 - Photon"
+      requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.8-201806110500/</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.8 - Photon)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.8.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.8/R-4.8-201806110500"/>
+    </setupTask>
+  </version>
+  <version name="4.7"
+      label="4.7 - Oxygen"
+      requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.7.3a-201803300640/</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.7 - Oxygen)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.7.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.7/R-4.7.3a-201803300640"/>
+    </setupTask>
+  </version>
+  <version name="4.6"
+      label="4.6 - Neon"
+      requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.6.3-201703010400/</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.6 - Neon)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.6.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400"/>
+    </setupTask>
+  </version>
+  <version name="4.5"
+      label="4.5 - Mars"
+      requiredJavaVersion="1.7">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.5.2-201602121500/</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.5 - Mars)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.5.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.5/R-4.5.2-201602121500"/>
+    </setupTask>
+  </version>
+  <version name="4.4"
+      label="4.4 - Luna"
+      requiredJavaVersion="1.6">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.4.1-201409250400/</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.4 - Luna)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.4.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.4/R-4.4.2-201502041700"/>
+    </setupTask>
+  </version>
+  <version name="4.3"
+      label="4.3 - Kepler"
+      requiredJavaVersion="1.6">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.3.2-201402211700/</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.3 - Kepler)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.3.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700"/>
+      <repository
+          url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
+    </setupTask>
+  </version>
+  <version name="4.2"
+      label="4.2 - Juno"
+      requiredJavaVersion="1.5">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.2.2-201302041200/</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.2 - Juno)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.2.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.2/R-4.2.2-201302041200"/>
+      <repository
+          url="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201501230452"/>
+    </setupTask>
+  </version>
+  <description>This package contains the IDE provided by the Eclipse project's platform build.</description>
+</setup:Product>
