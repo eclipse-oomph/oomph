@@ -871,6 +871,10 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         }
 
         applyCookieStore(connectStartEvent);
+        if ("true".equals(PropertiesUtil.getProperty("oomph.setup.ecf.force.large.connection.pool", "false")))
+        {
+          forceLargeConnectionPool(connectStartEvent);
+        }
       }
       else if (event instanceof IIncomingFileTransferReceiveStartEvent)
       {
@@ -946,6 +950,22 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         }
 
         receiveLatch.countDown();
+      }
+    }
+
+    private static void forceLargeConnectionPool(final IFileTransferConnectStartEvent connectStartEvent)
+    {
+      try
+      {
+        IIncomingFileTransfer fileTransfer = ObjectUtil.adapt(connectStartEvent, IIncomingFileTransfer.class);
+        Object httpClient = ReflectUtil.getValue("httpClient", fileTransfer);
+        Object connManager = ReflectUtil.getValue("connManager", httpClient);
+        Object pool = ReflectUtil.getValue("pool", connManager);
+        ReflectUtil.invokeMethod(ReflectUtil.getMethod(pool, "setDefaultMaxPerRoute", int.class), pool, 1000);
+        ReflectUtil.invokeMethod(ReflectUtil.getMethod(pool, "setMaxTotal", int.class), pool, 10000);
+      }
+      catch (Throwable throwable)
+      {
       }
     }
 
@@ -1896,7 +1916,9 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     {
       Map<Object, Object> requestOptions = new HashMap<Object, Object>();
       requestOptions.put(IRetrieveFileTransferOptions.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
+      requestOptions.put("org.eclipse.ecf.provider.filetransfer.httpclient4.retrieve.connectTimeout", CONNECT_TIMEOUT);
       requestOptions.put(IRetrieveFileTransferOptions.READ_TIMEOUT, READ_TIMEOUT);
+      requestOptions.put("org.eclipse.ecf.provider.filetransfer.httpclient4.retrieve.readTimeout", READ_TIMEOUT);
 
       if (!StringUtil.isEmpty(USER_AGENT) && host != null && host.endsWith(".eclipse.org"))
       {
