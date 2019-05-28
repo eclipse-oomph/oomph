@@ -107,6 +107,7 @@ public class SetupArchiver implements IApplication
               // Copy the bytes out of the stream.
               ByteArrayOutputStream initialOut = new ByteArrayOutputStream();
               IOUtil.copy(result, initialOut);
+              result.close();
               byte[] initialBytes = initialOut.toByteArray();
 
               // Create yet another stream.
@@ -115,6 +116,7 @@ public class SetupArchiver implements IApplication
               // Read this one too, and check if the bytes are the same.
               ByteArrayOutputStream secondaryOut = new ByteArrayOutputStream();
               IOUtil.copy(result, secondaryOut);
+              result.close();
               byte[] secondaryBytes = secondaryOut.toByteArray();
               if (Arrays.equals(initialBytes, secondaryBytes))
               {
