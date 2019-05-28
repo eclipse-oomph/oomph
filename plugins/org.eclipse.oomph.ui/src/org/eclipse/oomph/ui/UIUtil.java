@@ -809,6 +809,12 @@ public final class UIUtil
 
       return builder.toString();
     }
+    catch (LinkageError ex)
+    {
+      // If the JDK doesn't provide AWT support this can happen.
+      // https://bugs.eclipse.org/bugs/show_bug.cgi?id=544340
+      return html;
+    }
     catch (IOException ex)
     {
       return html;
@@ -1053,6 +1059,12 @@ public final class UIUtil
       }, Boolean.TRUE);
 
       return result.toString();
+    }
+    catch (LinkageError ex)
+    {
+      // If the JDK doesn't provide AWT support this can happen.
+      // https://bugs.eclipse.org/bugs/show_bug.cgi?id=544340
+      return html;
     }
     catch (IOException ex)
     {
