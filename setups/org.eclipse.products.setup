@@ -104,7 +104,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -171,7 +174,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -238,7 +244,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -305,7 +314,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -372,7 +384,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -447,7 +462,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -520,7 +538,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -591,7 +612,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -658,7 +682,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -690,7 +717,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -722,7 +752,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -754,7 +787,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler/201402280900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -788,7 +824,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno/201303010900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -1000,7 +1039,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -1199,7 +1241,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -1398,7 +1443,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -1597,7 +1645,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -1796,7 +1847,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -2001,7 +2055,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -2204,7 +2261,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -2355,7 +2415,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -2502,7 +2565,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -2537,7 +2603,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -2572,7 +2641,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -2607,7 +2679,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler/201402280900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -2644,7 +2719,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno/201303010900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -2763,7 +2841,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -2864,7 +2945,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -2965,7 +3049,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -3066,7 +3153,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -3167,7 +3257,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -3268,7 +3361,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -3367,7 +3463,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -3452,7 +3551,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -3533,7 +3635,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -3562,7 +3667,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -3591,7 +3699,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -3620,7 +3731,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler/201402280900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -3651,7 +3765,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno/201303010900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -3729,7 +3846,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -3800,7 +3920,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -3865,7 +3988,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -3936,7 +4062,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4007,7 +4136,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4080,7 +4212,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4151,7 +4286,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4222,7 +4360,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4295,7 +4436,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <description>The essential tools for any JavaScript developer, including JavaScript, TypeScript, HTML, CSS, XML, Yaml, Markdown... languages support; Kubernetes, Angular and React frameworks support;  Node.js debugger; Git client; Mylyn task management; integrated terminal and remote filesystem explorer; Web and application server management.</description>
@@ -4371,7 +4515,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4436,7 +4583,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4501,7 +4651,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4566,7 +4719,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4631,7 +4787,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4698,7 +4857,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4763,7 +4925,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4828,7 +4993,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4889,7 +5057,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4918,7 +5089,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -4947,7 +5121,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <description>The essential tools for any PHP developer, including PHP language support, Git client, Mylyn and editors for JavaScript, HTML, CSS and XML.</description>
@@ -5052,7 +5229,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -5153,7 +5333,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -5254,7 +5437,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -5355,7 +5541,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -5456,7 +5645,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -5565,7 +5757,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -5672,7 +5867,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -5779,7 +5977,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -5886,7 +6087,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -5921,7 +6125,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <description>
@@ -5984,7 +6191,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -6031,7 +6241,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -6078,7 +6291,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -6125,7 +6341,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -6172,7 +6391,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -6219,7 +6441,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -6264,7 +6489,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -6309,7 +6537,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -6352,7 +6583,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -6387,7 +6621,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -6422,7 +6659,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -6457,7 +6697,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler/201402280900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -6494,7 +6737,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno/201303010900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -6680,7 +6926,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -6853,7 +7102,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -7026,7 +7278,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -7199,7 +7454,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -7372,7 +7630,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -7547,7 +7808,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -7720,7 +7984,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -7843,7 +8110,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -7966,7 +8236,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -8001,7 +8274,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -8036,7 +8312,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -8071,7 +8350,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler/201402280900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -8108,7 +8390,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno/201303010900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -8216,7 +8501,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -8311,7 +8599,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -8406,7 +8697,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -8501,7 +8795,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -8598,7 +8895,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -8693,7 +8993,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -8788,7 +9091,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -8883,7 +9189,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -8918,7 +9227,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -8953,7 +9265,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -8988,7 +9303,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler/201402280900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -9025,7 +9343,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno/201303010900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -9110,7 +9431,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -9185,7 +9509,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -9260,7 +9587,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <description>An IDE for developers creating Android applications.</description>
@@ -9350,7 +9680,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -9429,7 +9762,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -9508,7 +9844,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -9587,7 +9926,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -9666,7 +10008,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -9751,7 +10096,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -9834,7 +10182,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -9917,7 +10268,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -9998,7 +10352,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10033,7 +10390,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10068,7 +10428,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10103,7 +10466,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler/201402280900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -10140,7 +10506,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno/201303010900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -10196,7 +10565,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10239,7 +10611,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10282,7 +10657,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10325,7 +10703,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10368,7 +10749,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10411,7 +10795,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10452,7 +10839,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10493,7 +10883,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10534,7 +10927,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10563,7 +10959,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10592,7 +10991,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10621,7 +11023,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler/201402280900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -10652,7 +11057,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno/201303010900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -10754,7 +11162,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10843,7 +11254,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -10932,7 +11346,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11021,7 +11438,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11104,7 +11524,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11187,7 +11610,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11268,7 +11694,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11349,7 +11778,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11430,7 +11862,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11459,7 +11894,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11488,7 +11926,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11517,7 +11958,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler/201402280900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -11548,7 +11992,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno/201303010900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -11596,7 +12043,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11631,7 +12081,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11666,7 +12119,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11701,7 +12157,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11736,7 +12195,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler/201402280900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -11773,7 +12235,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno/201303010900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -11851,7 +12316,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11916,7 +12384,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -11981,7 +12452,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12046,7 +12520,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12111,7 +12588,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12176,7 +12656,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12239,7 +12722,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12302,7 +12788,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/oxygen"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12365,7 +12854,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/neon"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12400,7 +12892,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/mars"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12435,7 +12930,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12470,7 +12968,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler/201402280900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -12507,7 +13008,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/juno"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno/201303010900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -12566,7 +13070,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12619,7 +13126,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12672,7 +13182,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12725,7 +13238,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12778,7 +13294,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-12"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12833,7 +13352,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2018-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12886,7 +13408,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/photon"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <description>The essential tools for any Rust developer, including Rust language support, Git client, command-line integration, Mylyn and editors.</description>
@@ -12917,7 +13442,10 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12944,7 +13472,10 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.11.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12971,7 +13502,10 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06"/>
+            url="http://download.eclipse.org/releases/2019-06">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -12998,7 +13532,10 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.11.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000"/>
+            url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -13025,7 +13562,10 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.10.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-12/201812191000"/>
+            url="http://download.eclipse.org/releases/2018-12/201812191000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -13052,7 +13592,10 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.9.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2018-09/201809191002"/>
+            url="http://download.eclipse.org/releases/2018-09/201809191002">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -13079,7 +13622,10 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.8.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/photon/201806271001"/>
+            url="http://download.eclipse.org/releases/photon/201806271001">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -13106,7 +13652,10 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.7.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/oxygen/201804111000"/>
+            url="http://download.eclipse.org/releases/oxygen/201804111000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -13133,7 +13682,10 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.6.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/neon/201705151400"/>
+            url="http://download.eclipse.org/releases/neon/201705151400">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -13160,7 +13712,10 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.5.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/mars/201602261000"/>
+            url="http://download.eclipse.org/releases/mars/201602261000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -13187,7 +13742,10 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.4.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -13214,7 +13772,10 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.3.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler/201402280900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -13243,7 +13804,10 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.2.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/juno/201303010900"/>
+            url="http://download.eclipse.org/releases/juno/201303010900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
@@ -13284,7 +13848,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -13319,7 +13886,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -13354,7 +13924,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/luna"/>
         <repository
-            url="http://download.eclipse.org/releases/luna/201502271000"/>
+            url="http://download.eclipse.org/releases/luna/201502271000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
       </setupTask>
     </version>
     <version
@@ -13389,7 +13962,10 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/kepler"/>
         <repository
-            url="http://download.eclipse.org/releases/kepler/201402280900"/>
+            url="http://download.eclipse.org/releases/kepler/201402280900">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
         <repository
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
       </setupTask>
