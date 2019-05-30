@@ -65,7 +65,8 @@
     <requirement
         name="org.eclipse.oomph.version.feature.group"/>
     <requirement
-        name="org.eclipse.emf.ecoretools.sdk.feature.group"/>
+        name="org.eclipse.emf.ecoretools.sdk.feature.group"
+        optional="true"/>
     <requirement
         name="org.eclipse.swtbot.ide.feature.group"/>
     <requirement
