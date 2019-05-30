@@ -14,7 +14,14 @@
     <repository
         url="${oomph.update.url}"/>
     <repository
-        url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+        url="${oomph.emf.update.url}"/>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      name="oomph.emf.update.url"
+      value="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"
+      label="Oomph's EMF Repository Location">
+    <description>The location of the EMF repository for satisifying Oomph's dependencies on EMF</description>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"

@@ -465,7 +465,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
     addAnnotation(this, source,
         new String[] { "variableName", "setup.git.p2", "repository", "${oomph.update.url}", "installableUnits", "org.eclipse.oomph.setup.git.feature.group" });
     addAnnotation(this, source, new String[] { "variableName", "setup.egit.p2", "repository", "http://download.eclipse.org/egit/updates", "installableUnits",
-        "org.eclipse.egit.feature.group" });
+        "org.eclipse.egit.feature.group", "releaseTrainAlternate", "true" });
   }
 
   /**

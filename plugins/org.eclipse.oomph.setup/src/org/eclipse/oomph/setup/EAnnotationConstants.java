@@ -31,6 +31,8 @@ public final class EAnnotationConstants
 
   public static final String KEY_INSTALLABLE_UNITS = "installableUnits";
 
+  public static final String KEY_RELEASE_TRAIN_ALTERNATE = "releaseTrainAlternate";
+
   public static final String ANNOTATION_VARIABLE = "http://www.eclipse.org/oomph/setup/Variable";
 
   public static final String KEY_EXPLICIT_TYPE = "explicitType";

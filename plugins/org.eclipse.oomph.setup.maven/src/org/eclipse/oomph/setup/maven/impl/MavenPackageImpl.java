@@ -277,8 +277,9 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
     addAnnotation(this, source, new String[] { "variableName", "setup.maven.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.maven.feature.group" });
     addAnnotation(this, source, new String[] { "variableName", "setup.m2e.p2", "repository", "http://download.eclipse.org/technology/m2e/milestones/1.5",
-        "installableUnits", "org.eclipse.m2e.feature.feature.group" });
-    addAnnotation(this, source, new String[] { "variableName", "setup.webtools.p2", "repository", "http://download.eclipse.org/webtools/repository/luna" });
+        "installableUnits", "org.eclipse.m2e.feature.feature.group", "releaseTrainAlternate", "true" });
+    addAnnotation(this, source, new String[] { "variableName", "setup.webtools.p2", "repository", "http://download.eclipse.org/webtools/repository/luna",
+        "releaseTrainAlternate", "true" });
   }
 
   /**

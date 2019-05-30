@@ -22,6 +22,7 @@ import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.p2.internal.core.CachingRepositoryManager;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
@@ -525,15 +526,32 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       }
     }
 
+    EList<Repository> repositories = getRepositories();
     Set<String> repositoryKeys = new HashSet<String>();
-    for (Iterator<Repository> it = getRepositories().iterator(); it.hasNext();)
+    Set<Repository> releaseTrainAlternates = new HashSet<Repository>();
+    boolean containsReleaseTrain = false;
+    for (Iterator<Repository> it = repositories.iterator(); it.hasNext();)
     {
       Repository repository = it.next();
+      if (repository.getAnnotation(AnnotationConstants.ANNOTATION_RELEASE_TRAIN) != null)
+      {
+        containsReleaseTrain = true;
+      }
+
       String url = repository.getURL();
       if (StringUtil.isEmpty(url) || !repositoryKeys.add(url))
       {
         it.remove();
       }
+      else if (repository.getAnnotation(AnnotationConstants.ANNOTATION_RELEASE_TRAIN_ALTERNATE) != null)
+      {
+        releaseTrainAlternates.add(repository);
+      }
+    }
+
+    if (containsReleaseTrain)
+    {
+      repositories.removeAll(releaseTrainAlternates);
     }
   }
 

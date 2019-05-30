@@ -548,7 +548,8 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
     String source = "http://www.eclipse.org/oomph/setup/Enablement";
     addAnnotation(this, source, new String[] { "variableName", "setup.mylyn.p2", "repository", "${oomph.update.url}", "installableUnits",
         "org.eclipse.oomph.setup.mylyn.feature.group" });
-    addAnnotation(this, source, new String[] { "variableName", "setup.mylyn.p2", "repository", "http://download.eclipse.org/mylyn/releases/latest" });
+    addAnnotation(this, source, new String[] { "variableName", "setup.mylyn.updates.p2", "repository", "http://download.eclipse.org/mylyn/releases/latest",
+        "releaseTrainAlternate", "true" });
     addAnnotation(mylynQueriesTaskEClass, source, new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" });
     addAnnotation(mylynBuildsTaskEClass, source, new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" });
   }

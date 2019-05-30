@@ -30,6 +30,8 @@ import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.SetupFactory;
+import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
@@ -388,8 +390,7 @@ public class ProductCatalogGenerator implements IApplication
       installationTask.setID("installation");
       productCatalog.getSetupTasks().add(installationTask);
 
-      P2Task p2Task = createOomphP2Task(null);
-      productCatalog.getSetupTasks().add(p2Task);
+      productCatalog.getSetupTasks().addAll(createOomphP2Task(null));
 
       emfRepositoryLocation = trimEmptyTrailingSegment(
           URI.createURI(loadLatestRepository(manager, null, URI.createURI("http://download.eclipse.org/modeling/emf/emf/builds/release/latest"), true)
@@ -528,21 +529,30 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
-  private P2Task createOomphP2Task(String emfRepository)
+  private List<SetupTask> createOomphP2Task(String emfRepository)
   {
+    List<SetupTask> result = new ArrayList<SetupTask>();
     Requirement oomphRequirement = P2Factory.eINSTANCE.createRequirement("org.eclipse.oomph.setup.feature.group");
     Repository oomphRepository = P2Factory.eINSTANCE.createRepository("${" + SetupProperties.PROP_UPDATE_URL + "}");
 
     P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
     p2Task.getRequirements().add(oomphRequirement);
     p2Task.getRepositories().add(oomphRepository);
+    result.add(p2Task);
 
     if (emfRepository != null)
     {
-      p2Task.getRepositories().add(P2Factory.eINSTANCE.createRepository(emfRepository));
+      VariableTask emfVariable = SetupFactory.eINSTANCE.createVariableTask();
+      emfVariable.setName("oomph.emf.update.url");
+      emfVariable.setValue(emfRepository);
+      emfVariable.setLabel("Oomph's EMF Repository Location");
+      emfVariable.setDescription("The location of the EMF repository for satisifying Oomph's dependencies on EMF");
+      result.add(emfVariable);
+
+      p2Task.getRepositories().add(P2Factory.eINSTANCE.createRepository("${oomph.emf.update.url}"));
     }
 
-    return p2Task;
+    return result;
   }
 
   private void generateProduct(String id)
@@ -572,7 +582,7 @@ public class ProductCatalogGenerator implements IApplication
 
     if (ALL_PRODUCT_ID.equals(id) || ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(id))
     {
-      product.getSetupTasks().add(createOomphP2Task(ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(id) ? emfRepositoryLocation : null));
+      product.getSetupTasks().addAll(createOomphP2Task(ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(id) ? emfRepositoryLocation : null));
     }
 
     String eclipseVersionPrefix = "";
@@ -1235,6 +1245,11 @@ public class ProductCatalogGenerator implements IApplication
 
     Repository releaseRepository = P2Factory.eINSTANCE.createRepository();
     releaseRepository.setURL(trainURI.toString());
+
+    if (!ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName))
+    {
+      releaseRepository.getAnnotations().add(BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_RELEASE_TRAIN));
+    }
 
     P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
     p2Task.setLabel(p2TaskLabel);

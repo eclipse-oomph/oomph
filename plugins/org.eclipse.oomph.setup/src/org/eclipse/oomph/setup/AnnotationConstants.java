@@ -53,6 +53,10 @@ public final class AnnotationConstants
 
   public static final String KEY_DESCRIPTION = "description";
 
+  public static final String ANNOTATION_RELEASE_TRAIN = "http://www.eclipse.org/oomph/setup/ReleaseTrain";
+
+  public static final String ANNOTATION_RELEASE_TRAIN_ALTERNATE = "http://www.eclipse.org/oomph/setup/ReleaseTrainAlternate";
+
   private AnnotationConstants()
   {
   }

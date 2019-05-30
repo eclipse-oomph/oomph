@@ -11,8 +11,9 @@
     <details key="installableUnits" value="org.eclipse.oomph.setup.mylyn.feature.group"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
-    <details key="variableName" value="setup.mylyn.p2"/>
+    <details key="variableName" value="setup.mylyn.updates.p2"/>
     <details key="repository" value="http://download.eclipse.org/mylyn/releases/latest"/>
+    <details key="releaseTrainAlternate" value="true"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/base/LabelProvider">
     <details key="imageBaseURI" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.mylyn.edit/icons/full/obj16"/>

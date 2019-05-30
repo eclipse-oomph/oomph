@@ -4855,12 +4855,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           enablementTasks = new BasicEList<SetupTask>();
         }
 
-        String repositoryLocation = eAnnotation.getDetails().get(EAnnotationConstants.KEY_REPOSITORY);
+        EMap<String, String> details = eAnnotation.getDetails();
+        boolean isReleaseTrainAlternate = false;
+        String repositoryLocation = details.get(EAnnotationConstants.KEY_REPOSITORY);
         if (!StringUtil.isEmpty(repositoryLocation))
         {
           if (withVariables)
           {
-            String variableName = eAnnotation.getDetails().get(EAnnotationConstants.KEY_VARIABLE_NAME);
+            String variableName = details.get(EAnnotationConstants.KEY_VARIABLE_NAME);
             if (!StringUtil.isEmpty(variableName))
             {
               VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
@@ -4869,13 +4871,15 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               enablementTasks.add(0, variable);
 
               repositoryLocation = getVariableReference(variableName, null);
+
+              isReleaseTrainAlternate = "true".equals(details.get(EAnnotationConstants.KEY_RELEASE_TRAIN_ALTERNATE));
             }
           }
         }
 
         P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
         EList<Requirement> requirements = p2Task.getRequirements();
-        String ius = eAnnotation.getDetails().get(EAnnotationConstants.KEY_INSTALLABLE_UNITS);
+        String ius = details.get(EAnnotationConstants.KEY_INSTALLABLE_UNITS);
         if (!StringUtil.isEmpty(ius))
         {
           for (String requirementSpecification : ius.split("\\s"))
@@ -4899,6 +4903,10 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         {
           Repository repository = P2Factory.eINSTANCE.createRepository(repositoryLocation);
           p2Task.getRepositories().add(repository);
+          if (isReleaseTrainAlternate)
+          {
+            repository.getAnnotations().add(BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_RELEASE_TRAIN_ALTERNATE));
+          }
         }
 
         // Ensure that these are first so that these are the targets for merging rather than the sources.
