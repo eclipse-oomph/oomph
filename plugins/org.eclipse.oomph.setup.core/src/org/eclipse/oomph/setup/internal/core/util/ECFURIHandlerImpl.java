@@ -871,10 +871,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         }
 
         applyCookieStore(connectStartEvent);
-        if ("true".equals(PropertiesUtil.getProperty("oomph.setup.ecf.force.large.connection.pool", "false")))
-        {
-          forceLargeConnectionPool(connectStartEvent);
-        }
       }
       else if (event instanceof IIncomingFileTransferReceiveStartEvent)
       {
@@ -950,22 +946,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         }
 
         receiveLatch.countDown();
-      }
-    }
-
-    private static void forceLargeConnectionPool(final IFileTransferConnectStartEvent connectStartEvent)
-    {
-      try
-      {
-        IIncomingFileTransfer fileTransfer = ObjectUtil.adapt(connectStartEvent, IIncomingFileTransfer.class);
-        Object httpClient = ReflectUtil.getValue("httpClient", fileTransfer);
-        Object connManager = ReflectUtil.getValue("connManager", httpClient);
-        Object pool = ReflectUtil.getValue("pool", connManager);
-        ReflectUtil.invokeMethod(ReflectUtil.getMethod(pool, "setDefaultMaxPerRoute", int.class), pool, 1000);
-        ReflectUtil.invokeMethod(ReflectUtil.getMethod(pool, "setMaxTotal", int.class), pool, 10000);
-      }
-      catch (Throwable throwable)
-      {
       }
     }
 

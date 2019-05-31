@@ -57,8 +57,6 @@ public class SetupArchiver implements IApplication
 {
   public Object start(IApplicationContext context)
   {
-    System.setProperty("oomph.setup.ecf.force.large.connection.pool", "true");
-
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
 
     // The default target file is the cache location of the local setup archive.
