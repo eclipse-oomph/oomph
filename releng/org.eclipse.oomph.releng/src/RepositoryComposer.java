@@ -141,7 +141,7 @@ public final class RepositoryComposer
     else
     {
       String folder = buildKey;
-      if (buildLabel.length() != 0)
+      if (buildLabel != null && buildLabel.length() != 0)
       {
         folder += "-" + buildLabel;
       }
