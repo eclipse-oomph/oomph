@@ -134,7 +134,7 @@ public final class RepositoryComposer
     composeRepository(updatesFolder, "Oomph All", getComposites(updatesFolder));
 
     String latestDropFolderSuffix;
-    if (cleanup)
+    if (cleanup && new File(downloadsFolder, "updates/" + LATEST + "/" + DROP_PROPERTIES).isFile())
     {
       latestDropFolderSuffix = IO.readUTF8(new File(downloadsFolder, "updates/" + LATEST + "/" + DROP_PROPERTIES));
     }
