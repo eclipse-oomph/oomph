@@ -185,8 +185,6 @@ public final class RepositoryComposer
   private static boolean composeRepositories(File dropTypeFolder, File updateTypeFolder, Comparator<String> comparator, int max) throws IOException
   {
     List<String> dropNames = getSortedChildren(dropTypeFolder, comparator);
-    System.out.println("folder=" + dropTypeFolder);
-    System.out.println("dropNames=" + dropNames);
     if (dropNames.isEmpty())
     {
       return false;
