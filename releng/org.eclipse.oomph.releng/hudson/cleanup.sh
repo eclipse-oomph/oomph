@@ -25,7 +25,7 @@ UPDATES_TMP=$UPDATES.tmp
 # DOWNLOADS/UPDATES #
 #####################
 
-rm -rf $UPDATES_TMP
+rm -rf $UPDATES_TMP $UPDATES $UPDATES.bak
 cp -a $UPDATES $UPDATES_TMP
 
 $BASH $SCRIPTS/composeRepositories.sh \
