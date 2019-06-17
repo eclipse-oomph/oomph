@@ -48,7 +48,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -188,7 +188,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -792,7 +792,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <version
@@ -829,7 +829,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <description>The essential tools for any Java developer, including a Java IDE, a Git client, XML Editor, Mylyn, Maven and Gradle integration</description>
@@ -851,7 +851,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-enterprise-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -1255,7 +1255,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-enterprise-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -2684,7 +2684,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <version
@@ -2724,7 +2724,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <description>
@@ -2751,7 +2751,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-cc-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -2959,7 +2959,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-cc-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -3736,7 +3736,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <version
@@ -3770,7 +3770,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <description>An IDE for C/C++ developers with Mylyn integration.</description>
@@ -3792,7 +3792,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-javascript-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -3934,7 +3934,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-javascript-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -4461,7 +4461,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-php-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -4597,7 +4597,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-php-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -5139,7 +5139,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-eclipse-committers</value>
         </detail>
       </annotation>
       <setupTask
@@ -5347,7 +5347,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-eclipse-committers</value>
         </detail>
       </annotation>
       <setupTask
@@ -6155,7 +6155,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-and-dsl-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -6255,7 +6255,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-and-dsl-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -6702,7 +6702,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <version
@@ -6742,7 +6742,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <description>The essential tools for Java and DSL developers, including a Java &amp; Xtend IDE, a DSL Framework (Xtext), a Git client, XML Editor, and Maven integration.</description>
@@ -6764,7 +6764,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-java-and-report-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-and-report-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -7116,7 +7116,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-java-and-report-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-and-report-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -8355,7 +8355,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <version
@@ -8395,7 +8395,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <description>Java EE tools and BIRT reporting tool for Java developers to create Java EE and Web applications that also have reporting needs.</description>
@@ -8411,27 +8411,27 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2019-03)"
+        label="Latest (2019-06)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-modeling-tools</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse Modeling Tools (2019-03)">
+          label="Eclipse Modeling Tools (2019-06)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.11.0,5.0.0)"/>
+            versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -8499,9 +8499,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-03/201903201000">
+            url="http://download.eclipse.org/releases/2019-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8600,6 +8600,104 @@
             url="http://download.eclipse.org/technology/epp/packages/2019-03"/>
         <repository
             url="http://download.eclipse.org/releases/2019-03/201903201000">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+        </repository>
+      </setupTask>
+    </version>
+    <version
+        name="2019-06"
+        label="2019-06"
+        requiredJavaVersion="1.8">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-modeling-tools</value>
+        </detail>
+      </annotation>
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Modeling Tools (2019-06)">
+        <requirement
+            name="epp.package.modeling"
+            versionRange="[4.12.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.platform.feature.group"
+            versionRange="[4.12.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.rcp.feature.group"
+            versionRange="[4.12.0,5.0.0)"/>
+        <requirement
+            name="org.eclipse.e4.core.tools.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.cdo.epp.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.ide.ui.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.compare.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.ecoretools.design.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.ecp.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.emfstore.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.parsley.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.parsley.sdk.source.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.query.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.transaction.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.validation.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.gef.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.gmf.runtime.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn_feature.feature.group"/>
+        <requirement
+            name="org.eclipse.ocl.all.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.pde.feature.group"/>
+        <requirement
+            name="org.eclipse.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.tips.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.uml2.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.xsd.sdk.feature.group"/>
+        <repository
+            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+        <repository
+            url="http://download.eclipse.org/releases/2019-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9308,7 +9406,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <version
@@ -9348,7 +9446,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <description>
@@ -9612,7 +9710,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -9776,7 +9874,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -10471,7 +10569,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <version
@@ -10511,7 +10609,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <description>A complete set of tools for developers who want to create Eclipse plug-ins, Rich Client Applications or Remote Application Platform (RCP+RAP), plus Maven and Gradle tooling, and an XML editor. It contains the EGit tooling for accessing Git version control systems.</description>
@@ -10533,7 +10631,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-testers</value>
         </detail>
       </annotation>
       <setupTask
@@ -10625,7 +10723,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-testers</value>
         </detail>
       </annotation>
       <setupTask
@@ -11028,7 +11126,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <version
@@ -11062,7 +11160,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <description>This package contains Eclipse features that support the software development quality assurance process, such as Jubula and Mylyn.</description>
@@ -11084,7 +11182,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-scientific-computing</value>
         </detail>
       </annotation>
       <setupTask
@@ -11268,7 +11366,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-scientific-computing</value>
         </detail>
       </annotation>
       <setupTask
@@ -11963,7 +12061,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <version
@@ -11997,7 +12095,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <description>Tools for C, C++, Fortran, and UPC, including MPI, OpenMP, OpenACC, a parallel debugger, and remotely building, running and monitoring applications.</description>
@@ -12200,7 +12298,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <version
@@ -12240,7 +12338,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <description>This package contains frameworks and tools used for the development of embedded automotive software: In addition to Eclipse Platform, Java Development Tools, and Plug-in Development Environment, it includes EMF, Sphinx, GMF, Xtext, Xtend, Xpand, UML2, selected other modeling components, C/C++ development tools, and XML/XSD editors and tools. To keep the package at a reasonable size, it includes only the runtime binaries but no source code and no developer documentation.</description>
@@ -12262,7 +12360,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-scout-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -12398,7 +12496,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-scout-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -12973,7 +13071,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <version
@@ -13013,7 +13111,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <description>&lt;a href=&quot;http://www.eclipse.org/scout&quot;>Eclipse Scout&lt;/a> is a Java/HTML5 framework to develop business applications that run on the desktop, on tablets and mobile devices. This package includes Eclipse IDE support for Scout developers and source code.</description>
@@ -13028,7 +13126,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-rust-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -13065,8 +13163,6 @@
             name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
@@ -13140,7 +13236,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/m2/eclipse-ide-rust-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -13177,8 +13273,6 @@
             name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
@@ -13777,7 +13871,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <version
@@ -13809,7 +13903,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <description>This package contains the absolute minimal IDE, suitable only as a base for installing other tools.</description>
@@ -13967,7 +14061,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.17"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.18"/>
       </setupTask>
     </version>
     <description>
