@@ -330,15 +330,15 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.p2"
-        value="http://download.eclipse.org/eclipse/updates/4.12-I-builds"
-        label="Eclipse Latest I-Build p2 Repository - 4.12">
+        value="http://download.eclipse.org/eclipse/updates/4.13-I-builds"
+        label="Eclipse Latest I-Build p2 Repository - 4.13">
       <description>The update site of the latest Eclipse project's builds, typically an I-Build for the next release</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.release.p2"
-        value="http://download.eclipse.org/eclipse/updates/4.11/R-4.11-201903070500"
-        label="Eclipse Latest Release p2 Repository - 4.11">
+        value="http://download.eclipse.org/eclipse/updates/4.12/R-4.12-201906051800"
+        label="Eclipse Latest Release p2 Repository - 4.12">
       <description>The update site of the latest released Eclipse project's builds, always an R-Build for the most recent release</description>
     </setupTask>
     <setupTask
@@ -409,7 +409,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest.released"
-        value="2019-03"
+        value="2019-06"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -471,7 +471,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.api.baseline.target.platform.latest.released"
-        value="2019-03"
+        value="2019-06"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -535,9 +535,14 @@
       <repositoryList
           name="None"/>
       <repositoryList
+          name="2019-09">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.13-I-builds"/>
+      </repositoryList>
+      <repositoryList
           name="2019-06">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.12-I-builds"/>
+            url="http://download.eclipse.org/eclipse/updates/4.12/R-4.12-201906051800"/>
       </repositoryList>
       <repositoryList
           name="2019-03">
@@ -618,9 +623,14 @@
       <repositoryList
           name="None"/>
       <repositoryList
+          name="2019-09">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.13-I-builds"/>
+      </repositoryList>
+      <repositoryList
           name="2019-06">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.12-I-builds"/>
+            url="http://download.eclipse.org/eclipse/updates/4.12/R-4.12-201906051800"/>
       </repositoryList>
       <repositoryList
           name="2019-03">

@@ -48,7 +48,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -56,12 +56,6 @@
           label="Eclipse IDE for Java Developers (2019-06)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
@@ -104,7 +98,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -118,7 +112,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -126,12 +120,6 @@
           label="Eclipse IDE for Java Developers (2019-06)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
@@ -174,7 +162,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -188,7 +176,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -196,12 +184,6 @@
           label="Eclipse IDE for Java Developers (2019-06)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
@@ -244,7 +226,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -851,7 +833,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-enterprise-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -859,12 +841,6 @@
           label="Eclipse IDE for Enterprise Java Developers (2019-06)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
@@ -1039,7 +1015,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1053,7 +1029,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-enterprise-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -1061,12 +1037,6 @@
           label="Eclipse IDE for Enterprise Java Developers (2019-06)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
@@ -1241,7 +1211,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1255,7 +1225,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-enterprise-java-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -1263,12 +1233,6 @@
           label="Eclipse IDE for Enterprise Java Developers (2019-06)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
@@ -1443,7 +1407,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2751,7 +2715,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-cc-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -2759,12 +2723,6 @@
           label="Eclipse IDE for C/C++ Developers (2019-06)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.arduino.feature.group"/>
@@ -2841,7 +2799,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2855,7 +2813,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-cc-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -2863,12 +2821,6 @@
           label="Eclipse IDE for C/C++ Developers (2019-06)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.arduino.feature.group"/>
@@ -2945,7 +2897,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2959,7 +2911,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-cc-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -2967,12 +2919,6 @@
           label="Eclipse IDE for C/C++ Developers (2019-06)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.arduino.feature.group"/>
@@ -3049,7 +2995,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -3792,7 +3738,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -3800,12 +3746,6 @@
           label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-06)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
@@ -3846,7 +3786,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -3860,7 +3800,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -3868,12 +3808,6 @@
           label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-06)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
@@ -3914,7 +3848,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -3928,7 +3862,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -3936,12 +3870,6 @@
           label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-06)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
@@ -3982,7 +3910,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4455,7 +4383,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-php-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -4463,12 +4391,6 @@
           label="Eclipse IDE for PHP Developers (2019-06)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
@@ -4509,7 +4431,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4523,7 +4445,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-php-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -4531,12 +4453,6 @@
           label="Eclipse IDE for PHP Developers (2019-06)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
@@ -4577,7 +4493,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4591,7 +4507,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-php-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -4599,12 +4515,6 @@
           label="Eclipse IDE for PHP Developers (2019-06)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
@@ -4645,7 +4555,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -5133,7 +5043,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-eclipse-committers</value>
         </detail>
       </annotation>
       <setupTask
@@ -5141,12 +5051,6 @@
           label="Eclipse IDE for Eclipse Committers (2019-06)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
@@ -5223,7 +5127,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -5237,7 +5141,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-eclipse-committers</value>
         </detail>
       </annotation>
       <setupTask
@@ -5245,12 +5149,6 @@
           label="Eclipse IDE for Eclipse Committers (2019-06)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
@@ -5327,7 +5225,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -5341,7 +5239,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-eclipse-committers</value>
         </detail>
       </annotation>
       <setupTask
@@ -5349,12 +5247,6 @@
           label="Eclipse IDE for Eclipse Committers (2019-06)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
@@ -5431,7 +5323,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6149,7 +6041,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -6185,7 +6077,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6199,7 +6091,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -6235,7 +6127,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6249,7 +6141,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -6285,7 +6177,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6758,7 +6650,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-and-report-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r</value>
         </detail>
       </annotation>
       <setupTask
@@ -6766,12 +6658,6 @@
           label="Eclipse IDE for Java and Report Developers (2019-06)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
@@ -6920,7 +6806,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6934,7 +6820,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-and-report-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r</value>
         </detail>
       </annotation>
       <setupTask
@@ -6942,12 +6828,6 @@
           label="Eclipse IDE for Java and Report Developers (2019-06)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
@@ -7096,7 +6976,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7110,7 +6990,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-java-and-report-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r</value>
         </detail>
       </annotation>
       <setupTask
@@ -7118,12 +6998,6 @@
           label="Eclipse IDE for Java and Report Developers (2019-06)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
@@ -7272,7 +7146,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8411,7 +8285,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-modeling-tools</value>
         </detail>
       </annotation>
       <setupTask
@@ -8419,12 +8293,6 @@
           label="Eclipse Modeling Tools (2019-06)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
@@ -8495,7 +8363,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8509,7 +8377,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-modeling-tools</value>
         </detail>
       </annotation>
       <setupTask
@@ -8517,12 +8385,6 @@
           label="Eclipse Modeling Tools (2019-06)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
@@ -8593,7 +8455,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8607,7 +8469,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-modeling-tools</value>
         </detail>
       </annotation>
       <setupTask
@@ -8615,12 +8477,6 @@
           label="Eclipse Modeling Tools (2019-06)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
@@ -8691,7 +8547,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9704,7 +9560,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -9713,18 +9569,6 @@
         <requirement
             name="epp.package.rcp"
             versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.18.0,4.0.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.14.0,4.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -9772,7 +9616,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9786,7 +9630,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -9795,18 +9639,6 @@
         <requirement
             name="epp.package.rcp"
             versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.18.0,4.0.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.14.0,4.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -9854,7 +9686,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9868,7 +9700,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -9877,18 +9709,6 @@
         <requirement
             name="epp.package.rcp"
             versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.jdt.feature.group"
-            versionRange="[3.18.0,4.0.0)"/>
-        <requirement
-            name="org.eclipse.pde.feature.group"
-            versionRange="[3.14.0,4.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -9936,7 +9756,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -10625,7 +10445,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-testers</value>
         </detail>
       </annotation>
       <setupTask
@@ -10633,12 +10453,6 @@
           label="Eclipse for Testers (2019-06)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
@@ -10657,7 +10471,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -10671,7 +10485,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-testers</value>
         </detail>
       </annotation>
       <setupTask
@@ -10679,12 +10493,6 @@
           label="Eclipse for Testers (2019-06)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
@@ -10703,7 +10511,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -10717,7 +10525,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-testers</value>
         </detail>
       </annotation>
       <setupTask
@@ -10725,12 +10533,6 @@
           label="Eclipse for Testers (2019-06)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
@@ -10749,7 +10551,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11176,7 +10978,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-scientific-computing</value>
         </detail>
       </annotation>
       <setupTask
@@ -11184,12 +10986,6 @@
           label="Eclipse for Scientific Computing (2019-06)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
@@ -11254,7 +11050,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11268,7 +11064,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-scientific-computing</value>
         </detail>
       </annotation>
       <setupTask
@@ -11276,12 +11072,6 @@
           label="Eclipse for Scientific Computing (2019-06)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
@@ -11346,7 +11136,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11360,7 +11150,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-scientific-computing</value>
         </detail>
       </annotation>
       <setupTask
@@ -11368,12 +11158,6 @@
           label="Eclipse for Scientific Computing (2019-06)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
@@ -11438,7 +11222,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12354,7 +12138,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-scout-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -12362,12 +12146,6 @@
           label="Eclipse for Scout Developers (2019-06)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
@@ -12408,7 +12186,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12422,7 +12200,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-scout-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -12430,12 +12208,6 @@
           label="Eclipse for Scout Developers (2019-06)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
@@ -12476,7 +12248,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12490,7 +12262,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-scout-developers</value>
         </detail>
       </annotation>
       <setupTask
@@ -12498,12 +12270,6 @@
           label="Eclipse for Scout Developers (2019-06)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
@@ -12544,7 +12310,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13120,7 +12886,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-rust-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -13128,12 +12894,6 @@
           label="Eclipse IDE for Rust Developers (2019-06)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
@@ -13160,7 +12920,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13174,7 +12934,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-rust-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -13182,12 +12942,6 @@
           label="Eclipse IDE for Rust Developers (2019-06)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
@@ -13214,7 +12968,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13228,7 +12982,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1/eclipse-ide-rust-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
       </annotation>
       <setupTask
@@ -13236,12 +12990,6 @@
           label="Eclipse IDE for Rust Developers (2019-06)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
@@ -13268,7 +13016,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13512,7 +13260,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://download.eclipse.org/eclipse/downloads/</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.12-201906051800/</value>
         </detail>
       </annotation>
       <setupTask
@@ -13528,7 +13276,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13542,7 +13290,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://download.eclipse.org/eclipse/downloads/</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.12-201906051800/</value>
         </detail>
       </annotation>
       <setupTask
@@ -13558,7 +13306,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13572,7 +13320,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://download.eclipse.org/eclipse/downloads/</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.12-201906051800/</value>
         </detail>
       </annotation>
       <setupTask
@@ -13588,7 +13336,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.12.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06">
+            url="http://download.eclipse.org/releases/2019-06/201906191000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>

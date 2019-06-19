@@ -35,7 +35,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://download.eclipse.org/eclipse/downloads/</value>
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.12-201906051800/</value>
       </detail>
     </annotation>
     <setupTask
@@ -55,7 +55,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://download.eclipse.org/eclipse/downloads/</value>
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.12-201906051800/</value>
       </detail>
     </annotation>
     <setupTask
@@ -75,7 +75,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://download.eclipse.org/eclipse/downloads/</value>
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.12-201906051800/</value>
       </detail>
     </annotation>
     <setupTask

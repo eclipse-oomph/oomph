@@ -1021,7 +1021,7 @@ public class ProductCatalogGenerator implements IApplication
         IMetadataRepository childRepository = manager.loadRepository(childURI, null);
         String value = childRepository.getProperties().get(IRepository.PROP_TIMESTAMP);
         long timestamp = Long.parseLong(value);
-        if (timestamp > latest)
+        if (timestamp > latest && !childURI.toString().endsWith("categories"))
         {
           result = childRepository;
           latest = timestamp;

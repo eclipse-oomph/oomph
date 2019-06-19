@@ -26,7 +26,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2019-06/r</value>
       </detail>
     </annotation>
     <setupTask
@@ -67,7 +67,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.12.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2019-06">
+          url="http://download.eclipse.org/releases/2019-06/201906191000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -80,7 +80,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2019-06/r</value>
       </detail>
     </annotation>
     <setupTask
@@ -121,7 +121,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.12.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2019-06">
+          url="http://download.eclipse.org/releases/2019-06/201906191000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -134,7 +134,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2019-06/rc1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2019-06/r</value>
       </detail>
     </annotation>
     <setupTask
@@ -175,7 +175,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.12.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2019-06">
+          url="http://download.eclipse.org/releases/2019-06/201906191000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
