@@ -45,27 +45,27 @@
           name="org.eclipse.sdk.ide"
           versionRange="[4.12.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/eclipse/updates/4.12-I-builds"/>
+          url="http://download.eclipse.org/eclipse/updates/4.12/R-4.12-201906051800"/>
     </setupTask>
   </version>
   <version name="latest.released"
-      label="Latest Release (4.11 - 2019-03)"
+      label="Latest Release (4.12 - 2019-06)"
       requiredJavaVersion="1.8">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.11-201903070500/</value>
+        <value>https://download.eclipse.org/eclipse/downloads/</value>
       </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse SDK (4.11 - 2019-03)">
+        label="Eclipse SDK (4.12 - 2019-06)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.11.0,5.0.0)"/>
+          versionRange="[4.12.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/eclipse/updates/4.11/R-4.11-201903070500"/>
+          url="http://download.eclipse.org/eclipse/updates/4.12/R-4.12-201906051800"/>
     </setupTask>
   </version>
   <version name="4.12"
@@ -85,7 +85,7 @@
           name="org.eclipse.sdk.ide"
           versionRange="[4.12.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/eclipse/updates/4.12-I-builds"/>
+          url="http://download.eclipse.org/eclipse/updates/4.12/R-4.12-201906051800"/>
     </setupTask>
   </version>
   <version name="4.11"

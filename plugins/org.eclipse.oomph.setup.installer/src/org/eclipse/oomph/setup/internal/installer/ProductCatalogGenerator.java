@@ -161,6 +161,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private URI stagingTrainLocation;
 
+  private URI stagingEclipePlatformLocation;
+
   private final Map<String, Map<URI, Map<String, URI>>> sites = new LinkedHashMap<String, Map<URI, Map<String, URI>>>();
 
   private final IMetadataRepositoryManager manager = getMetadataRepositoryManager();
@@ -251,6 +253,10 @@ public class ProductCatalogGenerator implements IApplication
           stagingTrain = arguments[++i];
           stagingEPPLocation = URI.createURI(arguments[++i]);
           stagingTrainLocation = URI.createURI(arguments[++i]);
+          if (i < arguments.length && !arguments[i].startsWith("-"))
+          {
+            stagingEclipePlatformLocation = URI.createURI(arguments[++i]);
+          }
         }
         else if ("-actual".equals(option))
         {
@@ -316,6 +322,11 @@ public class ProductCatalogGenerator implements IApplication
     {
       if (trains[i].equals(train))
       {
+        if (train.equals(stagingTrain) && stagingEclipePlatformLocation != null)
+        {
+          return stagingEclipePlatformLocation;
+        }
+
         String versionSegment = "4." + (i + 2);
         if (i + 1 == trains.length && !isLatestReleased())
         {
