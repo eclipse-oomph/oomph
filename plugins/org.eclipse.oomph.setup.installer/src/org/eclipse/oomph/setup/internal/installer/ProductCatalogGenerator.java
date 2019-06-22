@@ -238,6 +238,8 @@ public class ProductCatalogGenerator implements IApplication
     // luna
     // -staging mars staging-epp staging-train
 
+    System.out.println("user.home=" + System.getProperty("user.home"));
+
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
     if (arguments != null)
     {
@@ -312,7 +314,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private String[] getTrains()
   {
-    return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06" };
+    return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06", "2019-09" };
   }
 
   private URI getEclipsePlatformSite(String train)

@@ -399,7 +399,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest"
-        value="2019-06"
+        value="2019-09"
         storageURI="scope://Workspace"
         label="Target Platform Latest">
       <annotation
@@ -476,7 +476,7 @@
         label="Target Platform Latest Released">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
-      <description>The compatibility level of the target platform for the modular API baseline for the most recent released version of the platform.  Description	The latest available released compatibility level of the target platform. It will be updated to reference the most recently released stream of the platform. This may be used to initialize the value of the eclipse.target.platform variable. This may be used to initialize the value of the eclipse.api.baseline.target.platform variable.</description>
+      <description>The compatibility level of the target platform for the modular API baseline for the most recent released version of the platform.  It will be updated to reference the most recently released stream of the platform. This may be used to initialize the value of the eclipse.api.baseline.target.platform variable.</description>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
