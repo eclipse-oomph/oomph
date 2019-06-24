@@ -14,6 +14,7 @@ import org.eclipse.oomph.gitbash.AbstractAction;
 import org.eclipse.oomph.util.ObjectUtil;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevObject;
@@ -88,7 +89,7 @@ public abstract class AbstractRevisionAction extends AbstractAction<RevObject>
       }
     }
 
-    Repository repo = org.eclipse.egit.core.AdapterUtils.adapt(input, Repository.class);
+    Repository repo = Adapters.adapt(input, Repository.class);
     if (repo != null)
     {
       return repo;
