@@ -350,6 +350,9 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
       <choice
+          value="2019-09"
+          label="Eclipse 2019-09 - 4.13"/>
+      <choice
           value="2019-06"
           label="Eclipse 2019-06 - 4.12"/>
       <choice
@@ -424,6 +427,9 @@
         label="API Baseline Target Platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <choice
+          value="2019-06"
+          label="Eclipse 2019-06 - 4.12"/>
       <choice
           value="2019-03"
           label="Eclipse 2019-03 - 4.11"/>
