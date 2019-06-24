@@ -13,7 +13,7 @@
         name="installation.id.default"
         value="platform-sdk"/>
     <productVersion
-        href="index:/org.eclipse.setup#//@productCatalogs[name='org.eclipse.products']/@products[name='epp.package.committers']/@versions[name='latest']"/>
+        href="index:/org.eclipse.setup#//@productCatalogs[name='org.eclipse.applications']/@products[name='eclipse.platform.sdk']/@versions[name='latest']"/>
     <description>The Platform SDK installation provides the latest tools needed to work with the Eclipse Platform SDK's source code.</description>
   </installation>
   <workspace
