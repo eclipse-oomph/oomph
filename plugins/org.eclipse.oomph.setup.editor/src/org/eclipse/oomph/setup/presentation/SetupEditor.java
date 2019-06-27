@@ -877,12 +877,15 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             }
             else if (normalizedURI.isFile())
             {
-              Map<String, ?> attributes = uriConverter.getAttributes(normalizedURI,
-                  Collections.singletonMap(URIConverter.OPTION_REQUESTED_ATTRIBUTES, Collections.singleton(URIConverter.ATTRIBUTE_TIME_STAMP)));
-              Long timeStamp = (Long)attributes.get(URIConverter.ATTRIBUTE_TIME_STAMP);
-              if (timeStamp != null && timeStamp != resource.getTimeStamp())
+              if (!resource.getContents().isEmpty())
               {
-                changedResources.add(resource);
+                Map<String, ?> attributes = uriConverter.getAttributes(normalizedURI,
+                    Collections.singletonMap(URIConverter.OPTION_REQUESTED_ATTRIBUTES, Collections.singleton(URIConverter.ATTRIBUTE_TIME_STAMP)));
+                Long timeStamp = (Long)attributes.get(URIConverter.ATTRIBUTE_TIME_STAMP);
+                if (timeStamp != null && timeStamp != resource.getTimeStamp())
+                {
+                  changedResources.add(resource);
+                }
               }
             }
           }
