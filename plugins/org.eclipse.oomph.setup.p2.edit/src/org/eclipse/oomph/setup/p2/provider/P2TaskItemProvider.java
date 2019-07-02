@@ -11,18 +11,24 @@
 package org.eclipse.oomph.setup.p2.provider;
 
 import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.provider.RequirementItemProvider;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Package;
+import org.eclipse.oomph.setup.p2.util.MarketPlaceListing;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.DragAndDropCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -265,13 +271,32 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
   protected Command createAddCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Collection<?> collection, int index)
   {
     List<Object> filteredCollection = new ArrayList<Object>();
+    List<Requirement> requirements = new ArrayList<Requirement>();
     if (collection != null)
     {
       for (Object object : collection)
       {
         if (object instanceof URI)
         {
-          filteredCollection.add(P2Factory.eINSTANCE.createRepository(object.toString()));
+          URI uri = (URI)object;
+          Resource resource = owner.eResource();
+          if (resource != null)
+          {
+            ResourceSet resourceSet = resource.getResourceSet();
+            if (resourceSet != null)
+            {
+              URIConverter uriConverter = resourceSet.getURIConverter();
+              MarketPlaceListing marketPlaceListing = MarketPlaceListing.getMarketPlaceListing(uri, uriConverter);
+              if (marketPlaceListing != null && marketPlaceListing.getUpdateSite() != null)
+              {
+                filteredCollection.add(P2Factory.eINSTANCE.createRepository(marketPlaceListing.getUpdateSite().toString()));
+                requirements.addAll(marketPlaceListing.getRequirements());
+                continue;
+              }
+            }
+          }
+
+          filteredCollection.add(P2Factory.eINSTANCE.createRepository(uri.toString()));
         }
         else
         {
@@ -280,7 +305,17 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
       }
     }
 
-    return super.createAddCommand(domain, owner, feature, filteredCollection, index);
+    Command result = super.createAddCommand(domain, owner, feature, filteredCollection, index);
+    if (!requirements.isEmpty())
+    {
+      CompoundCommand compoundCommand = new CompoundCommand(CompoundCommand.MERGE_COMMAND_ALL);
+      compoundCommand.append(result);
+      compoundCommand
+          .append(createAddCommand(domain, owner, (EStructuralFeature)SetupP2Package.Literals.P2_TASK__REQUIREMENTS, requirements, CommandParameter.NO_INDEX));
+      result = compoundCommand;
+    }
+
+    return result;
   }
 
   /**

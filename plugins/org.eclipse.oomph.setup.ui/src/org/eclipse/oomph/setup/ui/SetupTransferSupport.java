@@ -16,6 +16,7 @@ import org.eclipse.oomph.internal.ui.OomphEditingDomain;
 import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.p2.util.MarketPlaceListing;
 
 import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -411,7 +412,8 @@ class LoadResourceCommand extends ResourceCommand
 
       URI uri = (URI)object;
       String fileExtension = uri.fileExtension();
-      if (!"setup".equals(fileExtension) && !"zip".equals(fileExtension))
+      if (!"setup".equals(fileExtension) && !"zip".equals(fileExtension)
+          && MarketPlaceListing.getMarketPlaceListing(uri, domain.getResourceSet().getURIConverter()) == null)
       {
         return false;
       }
@@ -428,7 +430,13 @@ class LoadResourceCommand extends ResourceCommand
     for (Object object : collection)
     {
       URI uri = (URI)object;
-      Resource resource = resourceSet.getResource(uri, false);
+      MarketPlaceListing marketPlaceListing = MarketPlaceListing.getMarketPlaceListing(uri, resourceSet.getURIConverter());
+      if (marketPlaceListing != null)
+      {
+        uri = marketPlaceListing.getListing();
+      }
+
+      Resource resource = resourceSet.getResource(uri, marketPlaceListing != null);
       if (resource == null)
       {
         resource = resourceSet.createResource(uri);

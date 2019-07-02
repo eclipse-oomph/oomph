@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.FlatButton;
 import org.eclipse.oomph.internal.ui.ImageHoverButton;
@@ -32,6 +33,7 @@ import org.eclipse.oomph.setup.internal.installer.SimpleInstallerMenu.InstallerM
 import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.ControlRelocator;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.ConfigurationProcessor;
+import org.eclipse.oomph.setup.ui.wizards.MarketPlaceListingProcessor;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ErrorDialog;
@@ -96,7 +98,9 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private static final String UPDATE_MENU_ITEM_TEXT = "UPDATE";
 
-  private static final String ADVANCED_MENU_ITEM_TEXT = "ADVANCED MODE...";
+  private static final String ADVANCED_MENU_ITEM_TEXT = "ADVANCED MODE" + StringUtil.HORIZONTAL_ELLIPSIS;
+
+  private static final String MARKET_PLACE_MENU_ITEM_TEXT = "MARKETPLACE" + StringUtil.HORIZONTAL_ELLIPSIS;
 
   private static final String ABOUT_MENU_ITEM_TEXT = "ABOUT";
 
@@ -109,6 +113,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
    */
   private static final boolean SHOW_BUNDLE_POOL_UI = PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION) == null
       || !AgentManager.BUNDLE_POOL_LOCATION_NONE.equalsIgnoreCase(PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION));
+
+  private static final boolean MARKETPLACE_MENU_ITEM_ENABLED = !"false".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_MARKETPLACE));
 
   private static Font defaultFont;
 
@@ -171,42 +177,55 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   protected void applyConfiguration()
   {
-    ConfigurationProcessor configurationProcessor = new ConfigurationProcessor(installer)
+    MarketPlaceListingProcessor marketPlaceListingProcessor = new MarketPlaceListingProcessor(installer);
+    if (marketPlaceListingProcessor.isMarketPlaceListing())
     {
-      @Override
-      protected void handleSwitchToAdvancedMode()
+      marketPlaceListingProcessor.processMarketPlaceListing();
+      IStatus status = marketPlaceListingProcessor.getStatus();
+      if (!status.isOK())
       {
-        switchToAdvancedMode();
+        new StatusDialog(getShell(), "Marketplace Listing Problems", null, status, Diagnostic.ERROR).open();
       }
-
-      @Override
-      protected boolean applyEmptyProductVersion()
-      {
-        applyInstallation();
-        return true;
-      }
-
-      @Override
-      protected boolean applyProductVersion(ProductVersion productVersion)
-      {
-        applyInstallation();
-
-        productPage.handleFilter("");
-        productPage.productSelected(productVersion.getProduct());
-        variablePage.setProductVersion(productVersion);
-        return true;
-      }
-    };
-
-    if (configurationProcessor.processWorkspace())
-    {
-      configurationProcessor.processInstallation();
     }
-
-    IStatus status = configurationProcessor.getStatus();
-    if (!status.isOK())
+    else
     {
-      new StatusDialog(getShell(), "Configuration Problems", null, status, Diagnostic.ERROR).open();
+      ConfigurationProcessor configurationProcessor = new ConfigurationProcessor(installer)
+      {
+        @Override
+        protected void handleSwitchToAdvancedMode()
+        {
+          switchToAdvancedMode();
+        }
+
+        @Override
+        protected boolean applyEmptyProductVersion()
+        {
+          applyInstallation();
+          return true;
+        }
+
+        @Override
+        protected boolean applyProductVersion(ProductVersion productVersion)
+        {
+          applyInstallation();
+
+          productPage.handleFilter("");
+          productPage.productSelected(productVersion.getProduct());
+          variablePage.setProductVersion(productVersion);
+          return true;
+        }
+      };
+
+      if (configurationProcessor.processWorkspace())
+      {
+        configurationProcessor.processInstallation();
+      }
+
+      IStatus status = configurationProcessor.getStatus();
+      if (!status.isOK())
+      {
+        new StatusDialog(getShell(), "Configuration Problems", null, status, Diagnostic.ERROR).open();
+      }
     }
   }
 
@@ -536,6 +555,21 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         public void widgetSelected(SelectionEvent e)
         {
           enablePool(bundlePoolSwitch.isSelected());
+        }
+      });
+    }
+
+    if (MARKETPLACE_MENU_ITEM_ENABLED)
+    {
+      SimpleInstallerMenu.InstallerMenuItem marketPlaceItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+      marketPlaceItem.setText(MARKET_PLACE_MENU_ITEM_TEXT);
+      marketPlaceItem.setToolTipText("Browse for marketplace listings and drag them onto the installer's title");
+      marketPlaceItem.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          OS.INSTANCE.openSystemBrowser("https://marketplace.eclipse.org");
         }
       });
     }

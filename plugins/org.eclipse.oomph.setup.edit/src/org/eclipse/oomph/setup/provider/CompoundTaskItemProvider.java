@@ -17,6 +17,7 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -221,6 +222,12 @@ public class CompoundTaskItemProvider extends SetupTaskItemProvider
   {
     collectNewChildDescriptorsGen(newChildDescriptors, object);
     SetupTaskContainerItemProvider.removeUnwantedTasks(newChildDescriptors, object);
+  }
+
+  @Override
+  protected Command createAddCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Collection<?> collection, int index)
+  {
+    return SetupTaskContainerItemProvider.createAddCommandWithMacroTaskSupport(domain, owner, feature, collection, index);
   }
 
   @Override

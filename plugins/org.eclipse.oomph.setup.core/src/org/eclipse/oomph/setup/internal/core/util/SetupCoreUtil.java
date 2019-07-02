@@ -16,18 +16,30 @@ import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.base.util.ArchiveResourceImpl;
+import org.eclipse.oomph.base.util.BaseResource;
 import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
+import org.eclipse.oomph.base.util.BaseResourceImpl;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.P2Package;
+import org.eclipse.oomph.p2.Repository;
+import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.preferences.impl.PreferencesURIHandlerImpl;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
+import org.eclipse.oomph.setup.Macro;
+import org.eclipse.oomph.setup.Parameter;
 import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandlerImpl;
+import org.eclipse.oomph.setup.p2.P2Task;
+import org.eclipse.oomph.setup.p2.SetupP2Factory;
+import org.eclipse.oomph.setup.p2.util.MarketPlaceListing;
 import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
@@ -61,8 +73,10 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.emf.ecore.resource.impl.ArchiveURIHandlerImpl;
 import org.eclipse.emf.ecore.resource.impl.FileURIHandlerImpl;
+import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.XMIException;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 
 import org.eclipse.core.runtime.IStatus;
@@ -142,6 +156,78 @@ public final class SetupCoreUtil
     AUTHORIZATION_HANDLER = new AuthorizationHandlerImpl(uiServices, securePreferences);
   }
 
+  private static Resource.Factory MARKET_PLACE_LISTING_RESOURCE_FACTORY = new BaseResourceFactoryImpl()
+  {
+    @Override
+    protected BaseResource basicCreateResource(URI uri)
+    {
+      return new BaseResourceImpl(uri)
+      {
+        @Override
+        public void load(Map<?, ?> options) throws IOException
+        {
+          Macro macro = SetupFactory.eINSTANCE.createMacro();
+          MarketPlaceListing marketPlaceListing = MarketPlaceListing.getMarketPlaceListing(uri, getURIConverter());
+          if (marketPlaceListing != null)
+          {
+            IOException exception = marketPlaceListing.getException();
+            if (exception != null)
+            {
+              getErrors().add(new XMIException(exception));
+            }
+            else
+            {
+              macro.setLabel(marketPlaceListing.getLabel());
+              macro.setName(marketPlaceListing.getListing().lastSegment());
+              macro.setDescription("<a href='" + marketPlaceListing.getListing() + "?'>" + marketPlaceListing.getLabel() + "</a>");
+              P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
+              p2Task.setLabel(marketPlaceListing.getLabel());
+              EList<Parameter> parameters = macro.getParameters();
+              List<Requirement> requirements = marketPlaceListing.getRequirements();
+              for (Requirement requirement : requirements)
+              {
+                if (!MarketPlaceListing.isRequired(requirement))
+                {
+                  String name = requirement.getName();
+                  if (name.endsWith(Requirement.FEATURE_SUFFIX))
+                  {
+                    name = name.substring(0, name.length() - Requirement.FEATURE_SUFFIX.length());
+                  }
+
+                  name += ".enabled";
+
+                  Parameter parameter = SetupFactory.eINSTANCE.createParameter();
+                  parameter.setName(name);
+                  parameter.setDescription("Whether to include '" + name + "' in the installation");
+                  parameter.setDefaultValue(MarketPlaceListing.isSelected(requirement) ? "true" : "false");
+                  parameters.add(parameter);
+
+                  Annotation featureSubstitutionAnnotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_FEATURE_SUBSTITUTION);
+                  featureSubstitutionAnnotation.getDetails().put(P2Package.Literals.REQUIREMENT__OPTIONAL.getName(), "${" + name + "|not}");
+                  featureSubstitutionAnnotation.getDetails().put(P2Package.Literals.REQUIREMENT__GREEDY.getName(), "${" + name + "}");
+                  requirement.getAnnotations().add(featureSubstitutionAnnotation);
+                }
+              }
+
+              p2Task.getRequirements().addAll(requirements);
+
+              URI updateSite = marketPlaceListing.getUpdateSite();
+              if (updateSite != null)
+              {
+                Repository repository = P2Factory.eINSTANCE.createRepository(marketPlaceListing.getUpdateSite().toString());
+                p2Task.getRepositories().add(repository);
+              }
+
+              macro.getSetupTasks().add(p2Task);
+            }
+          }
+
+          getContents().add(macro);
+        }
+      };
+    }
+  };
+
   private SetupCoreUtil()
   {
   }
@@ -176,7 +262,39 @@ public final class SetupCoreUtil
 
   private static void configureResourceSet(final ResourceSet resourceSet, boolean configureURIMappings)
   {
-    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().putAll(RESOURCE_FACTORY_REGISTRY.getExtensionToFactoryMap());
+    final Resource.Factory.Registry resourceFactoryRegistry = resourceSet.getResourceFactoryRegistry();
+
+    final Resource.Factory.Registry specializedResourceFactoryRegistry = new ResourceFactoryRegistryImpl()
+    {
+      @Override
+      protected Resource.Factory delegatedGetFactory(URI uri, String contentTypeIdentifier)
+      {
+        if (MarketPlaceListing.isMarketPlaceListing(uri))
+        {
+          return MARKET_PLACE_LISTING_RESOURCE_FACTORY;
+        }
+
+        return resourceFactoryRegistry.getFactory(uri, contentTypeIdentifier);
+      }
+
+      @Override
+      protected URIConverter getURIConverter()
+      {
+        return resourceSet.getURIConverter();
+      }
+
+      @Override
+      protected Map<?, ?> getContentDescriptionOptions()
+      {
+        Map<?, ?> contentDescriptionOptions = super.getContentDescriptionOptions();
+        Map<Object, Object> result = new HashMap<Object, Object>(contentDescriptionOptions);
+        result.putAll(resourceSet.getLoadOptions());
+        return result;
+      }
+    };
+
+    specializedResourceFactoryRegistry.getExtensionToFactoryMap().putAll(RESOURCE_FACTORY_REGISTRY.getExtensionToFactoryMap());
+    resourceSet.setResourceFactoryRegistry(specializedResourceFactoryRegistry);
 
     URIConverter uriConverter = resourceSet.getURIConverter();
     Map<URI, URI> uriMap = uriConverter.getURIMap();
@@ -191,7 +309,7 @@ public final class SetupCoreUtil
       {
         uriConverter = resourceSet.getURIConverter();
         packageRegistry = resourceSet.getPackageRegistry();
-        resourceFactoryRegistry = resourceSet.getResourceFactoryRegistry();
+        resourceFactoryRegistry = specializedResourceFactoryRegistry;
         loadOptions = resourceSet.getLoadOptions();
       }
 

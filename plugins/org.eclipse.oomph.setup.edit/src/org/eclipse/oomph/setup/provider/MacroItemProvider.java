@@ -137,7 +137,7 @@ public class MacroItemProvider extends ScopeItemProvider
   public String getText(Object object)
   {
     String label = ((Macro)object).getLabel();
-    return label == null || label.length() == 0 ? getString("_UI_Fragment_type") : label;
+    return label == null || label.length() == 0 ? getString("_UI_Macro_type") : label;
   }
 
   /**

@@ -46,7 +46,7 @@ public class BaseResourceFactoryImpl extends ResourceFactoryImpl
   @Override
   public Resource createResource(URI uri)
   {
-    BaseResourceImpl result = new BaseResourceImpl(uri);
+    BaseResource result = basicCreateResource(uri);
     result.setEncoding("UTF-8");
 
     Map<Object, Object> defaultLoadOptions = result.getDefaultLoadOptions();
@@ -64,6 +64,11 @@ public class BaseResourceFactoryImpl extends ResourceFactoryImpl
     defaultSaveOptions.put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
 
     return result;
+  }
+
+  protected BaseResource basicCreateResource(URI uri)
+  {
+    return new BaseResourceImpl(uri);
   }
 
 } // SetupResourceFactoryImpl

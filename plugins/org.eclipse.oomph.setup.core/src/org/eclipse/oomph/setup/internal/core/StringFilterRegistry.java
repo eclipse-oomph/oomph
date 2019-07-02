@@ -741,6 +741,26 @@ public class StringFilterRegistry
         }
       }
     });
+
+    registerFilter(new DocumentedStringFilter()
+    {
+      public String getName()
+      {
+        return "not";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "The boolean logical negation, i.e., 'false' if the value is 'true', and 'true' if the value is 'false' (or anything else).";
+      }
+
+      public String filter(String value)
+      {
+        return "true".equalsIgnoreCase(value) ? "false" : "true";
+      }
+    });
+
   }
 
   public static void main(String[] args) throws UnsupportedEncodingException

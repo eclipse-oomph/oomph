@@ -47,6 +47,7 @@ import org.eclipse.oomph.setup.ui.SetupTransferSupport;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.CatalogSelector;
 import org.eclipse.oomph.setup.ui.wizards.ConfigurationProcessor;
+import org.eclipse.oomph.setup.ui.wizards.MarketPlaceListingProcessor;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
@@ -826,6 +827,19 @@ public class ProductPage extends SetupWizardPage
       {
         SetupWizard setupWizard = getWizard();
         setupWizard.setConfigurationResources(resources);
+
+        MarketPlaceListingProcessor marketPlaceListingProcessor = new MarketPlaceListingProcessor(setupWizard);
+        if (marketPlaceListingProcessor.isMarketPlaceListing())
+        {
+          marketPlaceListingProcessor.processMarketPlaceListing();
+          IStatus status = marketPlaceListingProcessor.getStatus();
+          if (!status.isOK())
+          {
+            new StatusDialog(getShell(), "Marketplace Listing Problems", null, status, Diagnostic.ERROR).open();
+          }
+
+          return;
+        }
 
         ConfigurationProcessor configurationProcessor = new ConfigurationProcessor(getWizard())
         {

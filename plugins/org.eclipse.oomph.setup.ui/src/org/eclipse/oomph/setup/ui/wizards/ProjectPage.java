@@ -986,6 +986,12 @@ public class ProjectPage extends SetupWizardPage
         SetupWizard setupWizard = getWizard();
         setupWizard.setConfigurationResources(resources);
 
+        MarketPlaceListingProcessor marketPlaceListingProcessor = new MarketPlaceListingProcessor(setupWizard);
+        if (marketPlaceListingProcessor.isMarketPlaceListing())
+        {
+          return;
+        }
+
         ConfigurationProcessor configurationProcessor = new ConfigurationProcessor(getWizard())
         {
           @Override

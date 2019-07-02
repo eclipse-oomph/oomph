@@ -121,7 +121,7 @@ public class SelfUpdate
   {
     Agent agent = P2Util.getAgentManager().getCurrentAgent();
     Profile profile = agent.getCurrentProfile();
-    if (profile == null)
+    if (profile == null || profile.isSelfHosting())
     {
       return null;
     }

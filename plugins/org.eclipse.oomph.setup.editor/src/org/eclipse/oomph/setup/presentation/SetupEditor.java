@@ -49,6 +49,7 @@ import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler.Authorization;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.p2.util.MarketPlaceListing;
 import org.eclipse.oomph.setup.presentation.SetupActionBarContributor.ToggleViewerInputAction;
 import org.eclipse.oomph.setup.provider.PreferenceTaskItemProvider;
 import org.eclipse.oomph.setup.provider.SetupItemProviderAdapterFactory;
@@ -56,6 +57,7 @@ import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.SetupLabelProvider;
 import org.eclipse.oomph.setup.ui.SetupTransferSupport;
 import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
+import org.eclipse.oomph.setup.ui.actions.ConfigureMarketPlaceListingAction;
 import org.eclipse.oomph.ui.DockableDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
@@ -111,7 +113,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.edit.EMFEditPlugin;
 import org.eclipse.emf.edit.command.AbstractOverrideableCommand;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.CopyCommand;
+import org.eclipse.emf.edit.command.DragAndDropCommand;
 import org.eclipse.emf.edit.command.DragAndDropFeedback;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
@@ -213,6 +217,7 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
@@ -1275,6 +1280,23 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           }
 
           @Override
+          public Object getImage(Object object)
+          {
+            Resource resource = (Resource)object;
+            URI uri = resource.getURI();
+            ResourceSet resourceSet = resource.getResourceSet();
+            if (uri != null && resourceSet != null)
+            {
+              if (MarketPlaceListing.getMarketPlaceListing(uri, resourceSet.getURIConverter()) != null)
+              {
+                return SetupEditorPlugin.INSTANCE.getImage("marketplace16.png");
+              }
+            }
+
+            return super.getImage(object);
+          }
+
+          @Override
           public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
           {
             if (itemPropertyDescriptors == null)
@@ -1351,38 +1373,51 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           @Override
           protected Command createDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation,
-              final Collection<?> collection)
+              Collection<?> collection)
           {
+            final List<CommandParameter> commandParameters = domain instanceof OomphEditingDomain
+                ? new ArrayList<CommandParameter>(((OomphEditingDomain)domain).getCommandParameters())
+                : Collections.<CommandParameter> emptyList();
+
+            final Set<URI> uris = new LinkedHashSet<URI>();
+            for (Object object : collection)
+            {
+              if (object instanceof URI)
+              {
+                URI uri = (URI)object;
+                MarketPlaceListing marketPlaceListing = MarketPlaceListing.getMarketPlaceListing(uri, domain.getResourceSet().getURIConverter());
+                uris.add(marketPlaceListing == null ? uri : marketPlaceListing.getListing());
+              }
+              else
+              {
+                return UnexecutableCommand.INSTANCE;
+              }
+            }
+
             final ResourceSet resourceSet = (ResourceSet)owner;
             class LoadResourceCommand extends AbstractOverrideableCommand implements AbstractCommand.NonDirtying, DragAndDropFeedback
             {
+              protected List<Resource> resources;
+
               protected LoadResourceCommand(EditingDomain domain)
               {
                 super(domain);
               }
 
-              protected List<Resource> resources;
-
               @Override
               protected boolean prepare()
               {
-                for (Object object : collection)
-                {
-                  if (!(object instanceof URI))
-                  {
-                    return false;
-                  }
-                }
-                return true;
+                return !uris.isEmpty();
               }
 
               @Override
               public void doExecute()
               {
                 resources = new ArrayList<Resource>();
-                for (Object object : collection)
+                int index = 1;
+                Macro macro = null;
+                for (URI uri : uris)
                 {
-                  URI uri = (URI)object;
                   Resource resource = resourceSet.getResource(uri, false);
                   if (resource == null)
                   {
@@ -1398,14 +1433,45 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
                   if (resource != null)
                   {
+                    macro = (Macro)EcoreUtil.getObjectByType(resource.getContents(), SetupPackage.Literals.MACRO);
+
                     EList<Resource> resourceSetResources = resourceSet.getResources();
                     if (resourceSetResources.indexOf(resource) != 0)
                     {
-                      resourceSetResources.move(1, resource);
+                      resourceSetResources.move(index++, resource);
                     }
 
                     resources.add(resource);
                   }
+                }
+
+                if (macro != null && !commandParameters.isEmpty())
+                {
+                  CommandParameter commandParameter = commandParameters.get(commandParameters.size() - 1);
+                  final Object feature = commandParameter.getFeature();
+                  final Object rootOwner = commandParameter.getOwner();
+                  final Macro finalMacro = macro;
+                  UIUtil.asyncExec(getContainer(), new Runnable()
+                  {
+                    public void run()
+                    {
+                      // Drop the macro onto the original owner.
+                      float location = 0.5f;
+                      int operations = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
+                      int operation = DND.DROP_LINK;
+                      if (feature instanceof DragAndDropCommand.Detail)
+                      {
+                        DragAndDropCommand.Detail detail = (DragAndDropCommand.Detail)feature;
+                        location = detail.location;
+                        operations = detail.operations;
+                        operation = detail.operation;
+                      }
+
+                      Command dragAndDropCommand = DragAndDropCommand.create(domain, rootOwner, location, operations, operation,
+                          Collections.singleton(finalMacro));
+                      domain.getCommandStack().execute(dragAndDropCommand);
+                    }
+                  });
                 }
               }
 
@@ -1488,7 +1554,27 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     };
 
-    editingDomain = new OomphEditingDomain(adapterFactory, editingDomain.getCommandStack(), readOnlyMap, SetupTransferSupport.USER_RESOLVING_DELEGATES);
+    editingDomain = new OomphEditingDomain(adapterFactory, editingDomain.getCommandStack(), readOnlyMap, SetupTransferSupport.USER_RESOLVING_DELEGATES)
+    {
+      @Override
+      public void handledAdditions(final Collection<?> collection)
+      {
+        UIUtil.asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            for (Object object : collection)
+            {
+              if (object instanceof MacroTask)
+              {
+                MacroTask macroTask = (MacroTask)object;
+                ConfigureMarketPlaceListingAction.configure(getSite().getShell(), editingDomain, macroTask);
+              }
+            }
+          }
+        });
+      }
+    };
 
     // Add a listener to set the most recent command's affected objects to be the selection of the viewer with focus.
     //
@@ -4835,7 +4921,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void doSaveAs(URI uri, IEditorInput editorInput)
+  protected void doSaveAsGen(URI uri, IEditorInput editorInput)
   {
     editingDomain.getResourceSet().getResources().get(0).setURI(uri);
     setInputWithNotify(editorInput);
@@ -4843,6 +4929,12 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     IProgressMonitor progressMonitor = getActionBars().getStatusLineManager() != null ? getActionBars().getStatusLineManager().getProgressMonitor()
         : new NullProgressMonitor();
     doSave(progressMonitor);
+  }
+
+  protected void doSaveAs(URI uri, IEditorInput editorInput)
+  {
+    editingDomain.getResourceToReadOnlyMap().remove(editingDomain.getResourceSet().getResources().get(0));
+    doSaveAsGen(uri, editorInput);
   }
 
   /**
@@ -4878,6 +4970,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       Resource resource = editingDomain.getResourceSet().getResources().get(0);
       selectionViewer.setInput(resource);
+      getActionBarContributor().getToggleViewerInputAction().setChecked(false);
     }
     else if (input instanceof Resource)
     {
@@ -4891,6 +4984,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
 
       selectionViewer.setInput(loadingResourceSetInput);
+      getActionBarContributor().getToggleViewerInputAction().setChecked(true);
     }
     else if (input == loadingResourceSetInput)
     {

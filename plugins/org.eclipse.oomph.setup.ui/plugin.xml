@@ -67,7 +67,19 @@
                id="org.eclipse.oomph.setup.InlineMacroTaskAction"
                label="Inline"
                style="push"
-               tooltip="Replace the macro task with an inline copy">
+               tooltip="Replace the macro expansion task with an inline copy">
+         </action>
+      </objectContribution>
+      <objectContribution
+            id="org.eclipse.oomph.setup.contribution3"
+            objectClass="org.eclipse.oomph.setup.MacroTask">
+         <action
+               class="org.eclipse.oomph.setup.ui.actions.ConfigureMarketPlaceListingAction"
+               enablesFor="1"
+               id="org.eclipse.oomph.setup.ConfigureMarketPlaceListingAction"
+               label="Configure Marketplace Listing..."
+               style="push"
+               tooltip="Configure the marketplace listing to select the features to install">
          </action>
       </objectContribution>
    </extension>

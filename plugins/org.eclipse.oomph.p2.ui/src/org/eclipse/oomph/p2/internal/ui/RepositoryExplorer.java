@@ -78,6 +78,7 @@ import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.query.CollectionResult;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.jface.action.Action;
@@ -1754,6 +1755,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       agent.flushRepositoryCaches();
 
       IMetadataRepositoryManager repositoryManager = agent.getMetadataRepositoryManager();
+      List<URI> originalKnownRepositories = Arrays.asList(repositoryManager.getKnownRepositories(IRepositoryManager.REPOSITORIES_ALL));
       if (repositoryProvider == null || !repositoryProvider.getLocation().equals(location))
       {
         disposeRepositoryProvider();
@@ -1796,6 +1798,17 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         }
 
         throw ex;
+      }
+      finally
+      {
+        URI[] finalKnownRepositories = repositoryManager.getKnownRepositories(IRepositoryManager.REPOSITORIES_ALL);
+        for (URI uri : finalKnownRepositories)
+        {
+          if (!originalKnownRepositories.contains(uri))
+          {
+            repositoryManager.removeRepository(uri);
+          }
+        }
       }
 
       if (repository instanceof org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository)

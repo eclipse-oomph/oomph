@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.provider;
 
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
+import org.eclipse.oomph.edit.BaseAdapterFactoryEditingDomain;
 import org.eclipse.oomph.setup.Argument;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.Macro;
@@ -31,6 +32,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -247,6 +249,30 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
     return super.factorAddCommand(domain, transformCommandParameter(domain, commandParameter));
   }
 
+  @Override
+  protected Command createAddCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Collection<?> collection, int index)
+  {
+    return createAddCommandWithMacroTaskSupport(domain, owner, feature, collection, index);
+  }
+
+  public static Command createAddCommandWithMacroTaskSupport(EditingDomain domain, EObject owner, EStructuralFeature feature, Collection<?> collection,
+      int index)
+  {
+    return new AddCommand(domain, owner, feature, collection, index)
+    {
+      @Override
+      public void doExecute()
+      {
+        super.doExecute();
+
+        if (domain instanceof BaseAdapterFactoryEditingDomain)
+        {
+          ((BaseAdapterFactoryEditingDomain)domain).handledAdditions(collection);
+        }
+      }
+    };
+  }
+
   public static CommandParameter transformCommandParameter(EditingDomain domain, CommandParameter commandParameter)
   {
     Collection<?> collection = commandParameter.getCollection();
@@ -264,48 +290,7 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
             Macro macro = (Macro)unwrappedObject;
             if (macro.eResource() != null)
             {
-              MacroTask macroTask = SetupFactory.eINSTANCE.createMacroTask();
-              macroTask.setMacro(macro);
-
-              String id = getID(macro.getName());
-              String uniqueID = id;
-              Resource resource = eOwner.eResource();
-              if (resource != null)
-              {
-                int count = 0;
-                while (resource.getEObject(uniqueID) != null)
-                {
-                  if (Character.isDigit(id.charAt(id.length() - 1)))
-                  {
-                    uniqueID = id + "_" + ++count;
-                  }
-                  else
-                  {
-                    uniqueID = id + ++count;
-                  }
-                }
-              }
-
-              macroTask.setID(uniqueID);
-
-              EList<Parameter> parameters = macro.getParameters();
-              if (!parameters.isEmpty())
-              {
-                List<Argument> arguments = macroTask.getArguments();
-                for (Parameter parameter : parameters)
-                {
-                  Argument argument = SetupFactory.eINSTANCE.createArgument();
-                  argument.setParameter(parameter);
-                  if (parameter.getDefaultValue() == null)
-                  {
-                    String parameterName = parameter.getName();
-                    argument.setValue(parameterName + "_value");
-                  }
-
-                  arguments.add(argument);
-                }
-              }
-
+              MacroTask macroTask = createMacroTask((SetupTaskContainer)eOwner, macro);
               augmentedCollection.add(macroTask);
             }
             else
@@ -349,5 +334,52 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
     }
 
     return implode;
+  }
+
+  public static MacroTask createMacroTask(SetupTaskContainer setupTaskContainer, Macro macro)
+  {
+    MacroTask macroTask = SetupFactory.eINSTANCE.createMacroTask();
+    macroTask.setMacro(macro);
+
+    String id = getID(macro.getName());
+    String uniqueID = id;
+    Resource resource = setupTaskContainer.eResource();
+    if (resource != null)
+    {
+      int count = 0;
+      while (resource.getEObject(uniqueID) != null)
+      {
+        if (Character.isDigit(id.charAt(id.length() - 1)))
+        {
+          uniqueID = id + "_" + ++count;
+        }
+        else
+        {
+          uniqueID = id + ++count;
+        }
+      }
+    }
+
+    macroTask.setID(uniqueID);
+
+    EList<Parameter> parameters = macro.getParameters();
+    if (!parameters.isEmpty())
+    {
+      List<Argument> arguments = macroTask.getArguments();
+      for (Parameter parameter : parameters)
+      {
+        Argument argument = SetupFactory.eINSTANCE.createArgument();
+        argument.setParameter(parameter);
+        if (parameter.getDefaultValue() == null)
+        {
+          String parameterName = parameter.getName();
+          argument.setValue(parameterName + "_value");
+        }
+
+        arguments.add(argument);
+      }
+    }
+
+    return macroTask;
   }
 }

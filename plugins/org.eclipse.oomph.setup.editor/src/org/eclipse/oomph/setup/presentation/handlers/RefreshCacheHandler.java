@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.presentation.handlers;
 
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
+import org.eclipse.oomph.setup.p2.util.MarketPlaceListing;
 import org.eclipse.oomph.setup.presentation.SetupEditorPlugin;
 
 import org.eclipse.emf.common.util.URI;
@@ -37,6 +38,7 @@ public class RefreshCacheHandler extends AbstractDropdownItemHandler
     try
     {
       Set<? extends URI> uris = ECFURIHandlerImpl.clearExpectedETags();
+      MarketPlaceListing.flush();
       Job mirror = ECFURIHandlerImpl.mirror(uris);
       IWorkbench workbench = PlatformUI.getWorkbench();
       IProgressService progressService = workbench.getProgressService();

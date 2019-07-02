@@ -23,6 +23,9 @@ import org.eclipse.emf.edit.command.PasteFromClipboardCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +33,8 @@ import java.util.Map;
  */
 public class BaseAdapterFactoryEditingDomain extends AdapterFactoryEditingDomain
 {
+  private LinkedList<CommandParameter> commandParameters = new LinkedList<CommandParameter>();
+
   public BaseAdapterFactoryEditingDomain(AdapterFactory adapterFactory, CommandStack commandStack)
   {
     super(adapterFactory, commandStack);
@@ -45,40 +50,57 @@ public class BaseAdapterFactoryEditingDomain extends AdapterFactoryEditingDomain
     super(adapterFactory, commandStack, resourceSet);
   }
 
+  public List<CommandParameter> getCommandParameters()
+  {
+    return Collections.unmodifiableList(commandParameters);
+  }
+
+  public void handledAdditions(Collection<?> collection)
+  {
+  }
+
   @Override
   public Command createCommand(Class<? extends Command> commandClass, CommandParameter commandParameter)
   {
-    if (commandClass == CopyCommand.class)
+    commandParameters.push(commandParameter);
+    try
     {
-      Object owner = commandParameter.getOwner();
-      if (owner instanceof URI || owner instanceof String)
+      if (commandClass == CopyCommand.class)
       {
-        return new IdentityCommand(owner);
-      }
-    }
-
-    if (commandClass == PasteFromClipboardCommand.class)
-    {
-      Object owner = commandParameter.getOwner();
-      Collection<Object> clipboard = getClipboard();
-      Object feature = commandParameter.getFeature();
-      int index = commandParameter.getIndex();
-      Command primaryPasteCommand = new BasePasteFromClipboardCommand(this, owner, feature, clipboard, index, true);
-      if (!primaryPasteCommand.canExecute())
-      {
-        BasePasteFromClipboardCommand alternativePasteCommand = new BasePasteFromClipboardCommand(this, owner, feature, clipboard, index, false);
-        if (alternativePasteCommand.canExecute())
+        Object owner = commandParameter.getOwner();
+        if (owner instanceof URI || owner instanceof String)
         {
-          primaryPasteCommand.dispose();
-          return alternativePasteCommand;
+          return new IdentityCommand(owner);
+        }
+      }
+
+      if (commandClass == PasteFromClipboardCommand.class)
+      {
+        Object owner = commandParameter.getOwner();
+        Collection<Object> clipboard = getClipboard();
+        Object feature = commandParameter.getFeature();
+        int index = commandParameter.getIndex();
+        Command primaryPasteCommand = new BasePasteFromClipboardCommand(this, owner, feature, clipboard, index, true);
+        if (!primaryPasteCommand.canExecute())
+        {
+          BasePasteFromClipboardCommand alternativePasteCommand = new BasePasteFromClipboardCommand(this, owner, feature, clipboard, index, false);
+          if (alternativePasteCommand.canExecute())
+          {
+            primaryPasteCommand.dispose();
+            return alternativePasteCommand;
+          }
+
+          alternativePasteCommand.dispose();
         }
 
-        alternativePasteCommand.dispose();
+        return primaryPasteCommand;
       }
 
-      return primaryPasteCommand;
+      return super.createCommand(commandClass, commandParameter);
     }
-
-    return super.createCommand(commandClass, commandParameter);
+    finally
+    {
+      commandParameters.pop();
+    }
   }
 }

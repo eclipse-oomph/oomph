@@ -13,15 +13,16 @@ package org.eclipse.oomph.setup.ui.actions;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Macro;
 import org.eclipse.oomph.setup.MacroTask;
+import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
-import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.ReplaceCommand;
@@ -65,7 +66,7 @@ public class InlineMacroTaskAction implements IObjectActionDelegate
         {
           MacroTask macroTask = (MacroTask)element;
           Macro macro = macroTask.getMacro();
-          if (macro != null && macroTask.getArguments().size() == macro.getParameters().size() && !StringUtil.isEmpty(macroTask.getID()))
+          if (macro != null && Diagnostician.INSTANCE.validate(macro.eClass(), macro, null, Diagnostician.INSTANCE.createDefaultContext()))
           {
             macroTasks.add(macroTask);
           }
@@ -94,8 +95,11 @@ public class InlineMacroTaskAction implements IObjectActionDelegate
       Collection<EStructuralFeature.Setting> inverseReferences = eCrossReferenceAdapter.getInverseReferences(macroTask);
       for (EStructuralFeature.Setting setting : inverseReferences)
       {
-        compoundCommand
-            .append(ReplaceCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), macroTask, Collections.singleton(replacement)));
+        if (setting.getEStructuralFeature() != SetupPackage.Literals.ARGUMENT__MACRO_TASK)
+        {
+          compoundCommand
+              .append(ReplaceCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), macroTask, Collections.singleton(replacement)));
+        }
       }
     }
 

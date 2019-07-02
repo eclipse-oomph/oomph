@@ -56,6 +56,8 @@ public class SetupProperties
    */
   public static final String PROP_SETUP_INSTALLER_MODE = "oomph.setup.installer.mode";
 
+  public static final String PROP_SETUP_INSTALLER_MARKETPLACE = "oomph.setup.installer.marketplace";
+
   public static final String PROP_SETUP_PRODUCT_CATALOG_FILTER = "oomph.setup.product.catalog.filter";
 
   public static final String PROP_SETUP_PRODUCT_FILTER = "oomph.setup.product.filter";

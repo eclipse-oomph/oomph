@@ -35,6 +35,7 @@ import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.WorkspaceTask;
 import org.eclipse.oomph.setup.impl.DynamicSetupTaskImpl;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.p2.util.MarketPlaceListing;
 import org.eclipse.oomph.setup.presentation.SetupEditor.BrowserDialog;
 import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
@@ -96,6 +97,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.SubContributionItem;
 import org.eclipse.jface.bindings.Binding;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
@@ -142,6 +144,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
@@ -334,23 +337,54 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       {
         ResourceSet resourceSet = domain.getResourceSet();
         EList<Resource> resources = resourceSet.getResources();
-        List<Resource> originalResources = new ArrayList<Resource>(resources);
-        super.run();
-        synchronized (resourceSet)
+        final Set<URI> loadedURIs = new LinkedHashSet<URI>();
+        LoadResourceDialog loadResourceDialog = new LoadResourceDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), domain)
         {
-          List<Resource> finalResources = new ArrayList<Resource>(resources);
-          finalResources.removeAll(originalResources);
-          if (!finalResources.isEmpty())
+          @Override
+          public List<URI> getURIs()
           {
-            int index = 0;
-            for (Resource resource : finalResources)
+            List<URI> uris = super.getURIs();
+            for (ListIterator<URI> it = uris.listIterator(); it.hasNext();)
             {
-              resources.move(++index, resource);
+              URI uri = it.next();
+              MarketPlaceListing marketPlaceListing = MarketPlaceListing.getMarketPlaceListing(uri, domain.getResourceSet().getURIConverter());
+              if (marketPlaceListing != null)
+              {
+                it.set(marketPlaceListing.getListing());
+              }
             }
 
-            if (!toggleViewerInputAction.isChecked())
+            loadedURIs.clear();
+            loadedURIs.addAll(uris);
+
+            return uris;
+          }
+        };
+
+        if (loadResourceDialog.open() == IDialogConstants.OK_ID)
+        {
+          synchronized (resourceSet)
+          {
+            int index = 0;
+            List<Resource> loadedResources = new ArrayList<Resource>();
+            for (URI uri : loadedURIs)
             {
-              toggleViewerInputAction.run();
+              Resource resource = resourceSet.getResource(uri, false);
+              if (resource != null)
+              {
+                loadedResources.add(resource);
+                resources.move(++index, resource);
+              }
+            }
+
+            if (!loadedResources.isEmpty())
+            {
+              if (!toggleViewerInputAction.isChecked())
+              {
+                toggleViewerInputAction.run();
+              }
+
+              toggleViewerInputAction.select(new StructuredSelection(loadedResources));
             }
           }
         }
@@ -1697,6 +1731,11 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     public void run()
     {
       setupEditor.toggleInput();
+    }
+
+    public void select(ISelection selection)
+    {
+      setupEditor.selectionViewer.setSelection(selection, true);
     }
 
     public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
