@@ -178,5 +178,8 @@ public class OomphDropAdapter extends EditingDomainViewerDropAdapter
     source = null;
     dragAndDropCommandInformation = null;
     unavailableDelegates = null;
+
+    // Prevent other listeners from reacting.
+    event.currentDataType = null;
   }
 }
