@@ -273,7 +273,7 @@ public class MarketPlaceListingProcessor
 
         hasOptionalFeatures = requiredRequirements.size() < requirements.size();
 
-        requirementsViewer = CheckboxTableViewer.newCheckList(parent, SWT.MULTI);
+        requirementsViewer = CheckboxTableViewer.newCheckList(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
         requirementsViewer.getTable().setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
         final Font tableFont = requirementsViewer.getTable().getFont();
         final Font boldFont = ExtendedFontRegistry.INSTANCE.getFont(tableFont, IItemFontProvider.BOLD_FONT);
