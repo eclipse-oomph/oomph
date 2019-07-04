@@ -14,6 +14,8 @@ import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.Argument;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CatalogSelection;
+import org.eclipse.oomph.setup.CertificateInfo;
+import org.eclipse.oomph.setup.CertificatePolicy;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.EclipseIniTask;
@@ -348,6 +350,13 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  private EEnum certificatePolicyEEnum = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   private EClass userEClass = null;
 
   /**
@@ -398,6 +407,13 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * @generated
    */
   private EDataType filterEDataType = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EDataType certificateInfoEDataType = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1809,6 +1825,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EEnum getCertificatePolicy()
+  {
+    return certificatePolicyEEnum;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getUser()
   {
     return userEClass;
@@ -1839,7 +1865,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getUser_UnsignedPolicy()
+  public EAttribute getUser_AcceptedCertificates()
   {
     return (EAttribute)userEClass.getEStructuralFeatures().get(2);
   }
@@ -1849,7 +1875,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getUser_QuestionnaireDate()
+  public EAttribute getUser_UnsignedPolicy()
   {
     return (EAttribute)userEClass.getEStructuralFeatures().get(3);
   }
@@ -1859,9 +1885,29 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getUser_PreferenceRecorderDefault()
+  public EAttribute getUser_CertificatePolicy()
   {
     return (EAttribute)userEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getUser_QuestionnaireDate()
+  {
+    return (EAttribute)userEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getUser_PreferenceRecorderDefault()
+  {
+    return (EAttribute)userEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -2039,6 +2085,16 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EDataType getCertificateInfo()
+  {
+    return certificateInfoEDataType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EDataType getTriggerSet()
   {
     return triggerSetEDataType;
@@ -2141,7 +2197,9 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     userEClass = createEClass(USER);
     createEReference(userEClass, USER__ATTRIBUTE_RULES);
     createEAttribute(userEClass, USER__ACCEPTED_LICENSES);
+    createEAttribute(userEClass, USER__ACCEPTED_CERTIFICATES);
     createEAttribute(userEClass, USER__UNSIGNED_POLICY);
+    createEAttribute(userEClass, USER__CERTIFICATE_POLICY);
     createEAttribute(userEClass, USER__QUESTIONNAIRE_DATE);
     createEAttribute(userEClass, USER__PREFERENCE_RECORDER_DEFAULT);
 
@@ -2271,11 +2329,13 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     triggerEEnum = createEEnum(TRIGGER);
     variableTypeEEnum = createEEnum(VARIABLE_TYPE);
     unsignedPolicyEEnum = createEEnum(UNSIGNED_POLICY);
+    certificatePolicyEEnum = createEEnum(CERTIFICATE_POLICY);
 
     // Create data types
     triggerSetEDataType = createEDataType(TRIGGER_SET);
     licenseInfoEDataType = createEDataType(LICENSE_INFO);
     filterEDataType = createEDataType(FILTER);
+    certificateInfoEDataType = createEDataType(CERTIFICATE_INFO);
   }
 
   /**
@@ -2484,8 +2544,12 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     getUser_AttributeRules().getEKeys().add(getAttributeRule_AttributeURI());
     initEAttribute(getUser_AcceptedLicenses(), getLicenseInfo(), "acceptedLicenses", null, 0, -1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getUser_AcceptedCertificates(), getCertificateInfo(), "acceptedCertificates", null, 0, -1, User.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getUser_UnsignedPolicy(), getUnsignedPolicy(), "unsignedPolicy", "PROMPT", 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getUser_CertificatePolicy(), getCertificatePolicy(), "certificatePolicy", "PROMPT", 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getUser_QuestionnaireDate(), ecorePackage.getEDate(), "questionnaireDate", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getUser_PreferenceRecorderDefault(), ecorePackage.getEBoolean(), "preferenceRecorderDefault", "true", 0, 1, User.class, !IS_TRANSIENT,
@@ -2723,11 +2787,17 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addEEnumLiteral(unsignedPolicyEEnum, UnsignedPolicy.ACCEPT);
     addEEnumLiteral(unsignedPolicyEEnum, UnsignedPolicy.DECLINE);
 
+    initEEnum(certificatePolicyEEnum, CertificatePolicy.class, "CertificatePolicy");
+    addEEnumLiteral(certificatePolicyEEnum, CertificatePolicy.PROMPT);
+    addEEnumLiteral(certificatePolicyEEnum, CertificatePolicy.ACCEPT);
+    addEEnumLiteral(certificatePolicyEEnum, CertificatePolicy.DECLINE);
+
     // Initialize data types
     initEDataType(triggerSetEDataType, Set.class, "TriggerSet", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS,
         "java.util.Set<org.eclipse.oomph.setup.Trigger>");
     initEDataType(licenseInfoEDataType, LicenseInfo.class, "LicenseInfo", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
     initEDataType(filterEDataType, String.class, "Filter", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(certificateInfoEDataType, CertificateInfo.class, "CertificateInfo", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
     // Create resource
     createResource(eNS_URI);
@@ -2791,6 +2861,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addAnnotation(getProject_Streams(), source, new String[] { "name", "stream" });
     addAnnotation(getUser_AttributeRules(), source, new String[] { "name", "attributeRule" });
     addAnnotation(getUser_AcceptedLicenses(), source, new String[] { "name", "acceptedLicense" });
+    addAnnotation(getUser_AcceptedCertificates(), source, new String[] { "name", "acceptedCertificate" });
     addAnnotation(getLocationCatalog_Installations(), source, new String[] { "name", "installation" });
     addAnnotation(getLocationCatalog_Workspaces(), source, new String[] { "name", "workspace" });
     addAnnotation(getWorkspace_Streams(), source, new String[] { "name", "stream" });

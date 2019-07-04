@@ -13,13 +13,16 @@ package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.jreinfo.JREManager;
+import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
+import org.eclipse.oomph.p2.internal.ui.P2ServiceUI;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
@@ -63,6 +66,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Eike Stepper
@@ -81,7 +85,28 @@ public class InstallerApplication implements IApplication
   {
     // This must come very early, before the first model is accessed, so that HTTPS can be authorized.
     IProvisioningAgent agent = P2Util.getCurrentProvisioningAgent();
-    agent.registerService(UIServices.SERVICE_NAME, Installer.SERVICE_UI);
+    final AtomicReference<Installer> currentInstaller = new AtomicReference<Installer>();
+    agent.registerService(UIServices.SERVICE_NAME, new P2ServiceUI()
+    {
+      @Override
+      protected UIServices getDelegate()
+      {
+        Installer installer = currentInstaller.get();
+        return installer == null ? null : installer.getUiServices();
+      }
+
+      @Override
+      protected CertificateConfirmer getCertificateConfirmer()
+      {
+        return null;
+      }
+
+      @Override
+      protected Confirmer getUnsignedContentConfirmer()
+      {
+        return null;
+      }
+    });
 
     Location location = Platform.getInstanceLocation();
     if (location != null && !location.isSet())
@@ -220,6 +245,7 @@ public class InstallerApplication implements IApplication
       }
 
       Installer installer = new Installer(selectionMemento);
+      currentInstaller.set(installer);
 
       if (mode == Mode.ADVANCED)
       {

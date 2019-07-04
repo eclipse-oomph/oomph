@@ -14,6 +14,7 @@ import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
@@ -105,6 +106,17 @@ public class SelfCommitContext extends CommitContext
     P2TaskImpl.processLicenses(provisioningPlan, ProgressPage.LICENSE_CONFIRMER, user, true, new NullProgressMonitor());
 
     return UnsignedContentDialog.createUnsignedContentConfirmer(user, true);
+  }
+
+  @Override
+  public CertificateConfirmer getCertficateConfirmer()
+  {
+    if (user == null)
+    {
+      return CertificateConfirmer.ACCEPT;
+    }
+
+    return SetupCoreUtil.createCertificateConfirmer(user, true);
   }
 
   private boolean changeRepositoryIfNeeded(ProfileDefinition profileDefinition)

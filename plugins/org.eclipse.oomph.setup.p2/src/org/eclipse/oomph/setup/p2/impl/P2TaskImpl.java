@@ -16,6 +16,7 @@ import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
+import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
@@ -718,6 +719,12 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       public Confirmer getUnsignedContentConfirmer()
       {
         return (Confirmer)context.get(Certificate.class);
+      }
+
+      @Override
+      public CertificateConfirmer getCertficateConfirmer()
+      {
+        return (CertificateConfirmer)context.get(CertificateConfirmer.class);
       }
     };
 

@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.p2.internal.ui;
 
+import org.eclipse.oomph.p2.core.CertificateConfirmer;
+import org.eclipse.oomph.p2.core.DelegatingUIServices;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.core.runtime.IStatus;
@@ -26,12 +28,19 @@ import org.eclipse.equinox.p2.ui.LoadMetadataRepositoryJob;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
@@ -39,13 +48,14 @@ import org.eclipse.swt.widgets.Shell;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The default GUI-based implementation of {@link UIServices}.
  * The service declaration is made in the serviceui_component.xml file.
  */
 @SuppressWarnings("restriction")
-public class P2ServiceUI extends UIServices
+public abstract class P2ServiceUI extends DelegatingUIServices
 {
   static class OkCancelErrorDialog extends ErrorDialog
   {
@@ -63,9 +73,19 @@ public class P2ServiceUI extends UIServices
     }
   }
 
+  public P2ServiceUI()
+  {
+  }
+
   @Override
   public AuthenticationInfo getUsernamePassword(final String location)
   {
+    UIServices delegate = getDelegate();
+    if (delegate != null)
+    {
+      return delegate.getUsernamePassword(location);
+    }
+
     final AuthenticationInfo[] result = new AuthenticationInfo[1];
     if (!suppressAuthentication())
     {
@@ -86,6 +106,53 @@ public class P2ServiceUI extends UIServices
           }
         }
       });
+    }
+
+    return result[0];
+  }
+
+  @Override
+  public AuthenticationInfo getUsernamePassword(final String location, final AuthenticationInfo previousInfo)
+  {
+    UIServices delegate = getDelegate();
+    if (delegate != null)
+    {
+      delegate.getUsernamePassword(location);
+    }
+
+    final AuthenticationInfo[] result = new AuthenticationInfo[1];
+    if (!suppressAuthentication())
+    {
+      final Shell shell = getShell();
+      if (shell != null)
+      {
+        UIUtil.getDisplay().syncExec(new Runnable()
+        {
+          public void run()
+          {
+            String message = null;
+            if (previousInfo.saveResult())
+            {
+              message = NLS.bind(ProvUIMessages.ProvUIMessages_SavedNotAccepted_EnterFor_0, location);
+            }
+            else
+            {
+              message = NLS.bind(ProvUIMessages.ProvUIMessages_NotAccepted_EnterFor_0, location);
+            }
+
+            UserValidationDialog dialog = new UserValidationDialog(previousInfo, shell, ProvUIMessages.ServiceUI_LoginRequired, null, message);
+            int dialogCode = dialog.open();
+            if (dialogCode == Window.OK)
+            {
+              result[0] = dialog.getResult();
+            }
+            else if (dialogCode == Window.CANCEL)
+            {
+              result[0] = AUTHENTICATION_PROMPT_CANCELED;
+            }
+          }
+        });
+      }
     }
 
     return result[0];
@@ -144,6 +211,8 @@ public class P2ServiceUI extends UIServices
     }
 
     // We've established trust for unsigned content, now examine the untrusted chains.
+    final AtomicBoolean remember = new AtomicBoolean();
+    final AtomicBoolean always = new AtomicBoolean();
     if (shell != null && untrustedChains != null && untrustedChains.length > 0)
     {
       final Object[] result = new Object[1];
@@ -188,24 +257,76 @@ public class P2ServiceUI extends UIServices
 
               shell.setText(ProvUIMessages.TrustCertificateDialog_Title);
             }
+
+            @Override
+            protected Button createButton(Composite parent, int id, String label, boolean defaultButton)
+            {
+              if (IDialogConstants.SELECT_ALL_ID == id)
+              {
+                ((GridData)parent.getLayoutData()).horizontalAlignment = SWT.FILL;
+                ((GridLayout)parent.getLayout()).numColumns++;
+                final Button rememberButton = new Button(parent, SWT.CHECK);
+                rememberButton.setText("Remember accepted certificates");
+                rememberButton.setFont(JFaceResources.getDialogFont());
+                GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+                rememberButton.setLayoutData(data);
+                rememberButton.addSelectionListener(new SelectionListener()
+                {
+                  public void widgetSelected(SelectionEvent e)
+                  {
+                    remember.set(rememberButton.getSelection());
+                  }
+
+                  public void widgetDefaultSelected(SelectionEvent e)
+                  {
+                    remember.set(rememberButton.getSelection());
+                  }
+                });
+              }
+              else if (IDialogConstants.OK_ID == id)
+              {
+                ((GridData)parent.getLayoutData()).horizontalAlignment = SWT.FILL;
+                ((GridLayout)parent.getLayout()).numColumns++;
+                final Button alwaysButton = new Button(parent, SWT.CHECK);
+                alwaysButton.setText("Always accept certificates");
+                alwaysButton.setFont(JFaceResources.getDialogFont());
+                GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+                alwaysButton.setLayoutData(data);
+                alwaysButton.addSelectionListener(new SelectionListener()
+                {
+                  public void widgetSelected(SelectionEvent e)
+                  {
+                    always.set(alwaysButton.getSelection());
+                  }
+
+                  public void widgetDefaultSelected(SelectionEvent e)
+                  {
+                    always.set(alwaysButton.getSelection());
+                  }
+                });
+
+              }
+
+              return super.createButton(parent, id, label, defaultButton);
+            }
           };
 
           trustCertificateDialog.open();
-          Certificate[] values = new Certificate[trustCertificateDialog.getResult() == null ? 0 : trustCertificateDialog.getResult().length];
+          Object[] dialogResult = trustCertificateDialog.getResult();
+          Certificate[] values = new Certificate[dialogResult == null ? 0 : dialogResult.length];
           for (int i = 0; i < values.length; i++)
           {
-            values[i] = (Certificate)((TreeNode)trustCertificateDialog.getResult()[i]).getValue();
+            values[i] = (Certificate)((TreeNode)dialogResult[i]).getValue();
           }
 
           result[0] = values;
         }
       });
 
-      persistTrust = true;
       trusted = (Certificate[])result[0];
     }
 
-    return new TrustInfo(trusted, persistTrust, trustUnsigned);
+    return new CertificateConfirmer.TrustInfoWithPolicy(trusted, remember.get(), trustUnsigned, always.get());
   }
 
   private TreeNode[] createTreeNodes(Certificate[][] certificates)
@@ -225,47 +346,6 @@ public class P2ServiceUI extends UIServices
       }
     }
     return children;
-  }
-
-  @Override
-  public AuthenticationInfo getUsernamePassword(final String location, final AuthenticationInfo previousInfo)
-  {
-    final AuthenticationInfo[] result = new AuthenticationInfo[1];
-    if (!suppressAuthentication())
-    {
-      final Shell shell = getShell();
-      if (shell != null)
-      {
-        UIUtil.getDisplay().syncExec(new Runnable()
-        {
-          public void run()
-          {
-            String message = null;
-            if (previousInfo.saveResult())
-            {
-              message = NLS.bind(ProvUIMessages.ProvUIMessages_SavedNotAccepted_EnterFor_0, location);
-            }
-            else
-            {
-              message = NLS.bind(ProvUIMessages.ProvUIMessages_NotAccepted_EnterFor_0, location);
-            }
-
-            UserValidationDialog dialog = new UserValidationDialog(previousInfo, shell, ProvUIMessages.ServiceUI_LoginRequired, null, message);
-            int dialogCode = dialog.open();
-            if (dialogCode == Window.OK)
-            {
-              result[0] = dialog.getResult();
-            }
-            else if (dialogCode == Window.CANCEL)
-            {
-              result[0] = AUTHENTICATION_PROMPT_CANCELED;
-            }
-          }
-        });
-      }
-    }
-
-    return result[0];
   }
 
   protected Shell getShell()

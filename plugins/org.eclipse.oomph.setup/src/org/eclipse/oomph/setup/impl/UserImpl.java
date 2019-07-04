@@ -11,6 +11,8 @@
 package org.eclipse.oomph.setup.impl;
 
 import org.eclipse.oomph.setup.AttributeRule;
+import org.eclipse.oomph.setup.CertificateInfo;
+import org.eclipse.oomph.setup.CertificatePolicy;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.ScopeType;
 import org.eclipse.oomph.setup.SetupPackage;
@@ -40,7 +42,9 @@ import java.util.Date;
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getAttributeRules <em>Attribute Rules</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getAcceptedLicenses <em>Accepted Licenses</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getAcceptedCertificates <em>Accepted Certificates</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getUnsignedPolicy <em>Unsigned Policy</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getCertificatePolicy <em>Certificate Policy</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#getQuestionnaireDate <em>Questionnaire Date</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.UserImpl#isPreferenceRecorderDefault <em>Preference Recorder Default</em>}</li>
  * </ul>
@@ -70,6 +74,16 @@ public class UserImpl extends ScopeImpl implements User
   protected EList<LicenseInfo> acceptedLicenses;
 
   /**
+   * The cached value of the '{@link #getAcceptedCertificates() <em>Accepted Certificates</em>}' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getAcceptedCertificates()
+   * @generated
+   * @ordered
+   */
+  protected EList<CertificateInfo> acceptedCertificates;
+
+  /**
    * The default value of the '{@link #getUnsignedPolicy() <em>Unsigned Policy</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -88,6 +102,26 @@ public class UserImpl extends ScopeImpl implements User
    * @ordered
    */
   protected UnsignedPolicy unsignedPolicy = UNSIGNED_POLICY_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getCertificatePolicy() <em>Certificate Policy</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getCertificatePolicy()
+   * @generated
+   * @ordered
+   */
+  protected static final CertificatePolicy CERTIFICATE_POLICY_EDEFAULT = CertificatePolicy.PROMPT;
+
+  /**
+   * The cached value of the '{@link #getCertificatePolicy() <em>Certificate Policy</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getCertificatePolicy()
+   * @generated
+   * @ordered
+   */
+  protected CertificatePolicy certificatePolicy = CERTIFICATE_POLICY_EDEFAULT;
 
   /**
    * The default value of the '{@link #getQuestionnaireDate() <em>Questionnaire Date</em>}' attribute.
@@ -169,6 +203,20 @@ public class UserImpl extends ScopeImpl implements User
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<CertificateInfo> getAcceptedCertificates()
+  {
+    if (acceptedCertificates == null)
+    {
+      acceptedCertificates = new EDataTypeUniqueEList<CertificateInfo>(CertificateInfo.class, this, SetupPackage.USER__ACCEPTED_CERTIFICATES);
+    }
+    return acceptedCertificates;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public UnsignedPolicy getUnsignedPolicy()
   {
     return unsignedPolicy;
@@ -186,6 +234,31 @@ public class UserImpl extends ScopeImpl implements User
     if (eNotificationRequired())
     {
       eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.USER__UNSIGNED_POLICY, oldUnsignedPolicy, unsignedPolicy));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public CertificatePolicy getCertificatePolicy()
+  {
+    return certificatePolicy;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setCertificatePolicy(CertificatePolicy newCertificatePolicy)
+  {
+    CertificatePolicy oldCertificatePolicy = certificatePolicy;
+    certificatePolicy = newCertificatePolicy == null ? CERTIFICATE_POLICY_EDEFAULT : newCertificatePolicy;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.USER__CERTIFICATE_POLICY, oldCertificatePolicy, certificatePolicy));
     }
   }
 
@@ -295,8 +368,12 @@ public class UserImpl extends ScopeImpl implements User
         return getAttributeRules();
       case SetupPackage.USER__ACCEPTED_LICENSES:
         return getAcceptedLicenses();
+      case SetupPackage.USER__ACCEPTED_CERTIFICATES:
+        return getAcceptedCertificates();
       case SetupPackage.USER__UNSIGNED_POLICY:
         return getUnsignedPolicy();
+      case SetupPackage.USER__CERTIFICATE_POLICY:
+        return getCertificatePolicy();
       case SetupPackage.USER__QUESTIONNAIRE_DATE:
         return getQuestionnaireDate();
       case SetupPackage.USER__PREFERENCE_RECORDER_DEFAULT:
@@ -324,8 +401,15 @@ public class UserImpl extends ScopeImpl implements User
         getAcceptedLicenses().clear();
         getAcceptedLicenses().addAll((Collection<? extends LicenseInfo>)newValue);
         return;
+      case SetupPackage.USER__ACCEPTED_CERTIFICATES:
+        getAcceptedCertificates().clear();
+        getAcceptedCertificates().addAll((Collection<? extends CertificateInfo>)newValue);
+        return;
       case SetupPackage.USER__UNSIGNED_POLICY:
         setUnsignedPolicy((UnsignedPolicy)newValue);
+        return;
+      case SetupPackage.USER__CERTIFICATE_POLICY:
+        setCertificatePolicy((CertificatePolicy)newValue);
         return;
       case SetupPackage.USER__QUESTIONNAIRE_DATE:
         setQuestionnaireDate((Date)newValue);
@@ -353,8 +437,14 @@ public class UserImpl extends ScopeImpl implements User
       case SetupPackage.USER__ACCEPTED_LICENSES:
         getAcceptedLicenses().clear();
         return;
+      case SetupPackage.USER__ACCEPTED_CERTIFICATES:
+        getAcceptedCertificates().clear();
+        return;
       case SetupPackage.USER__UNSIGNED_POLICY:
         setUnsignedPolicy(UNSIGNED_POLICY_EDEFAULT);
+        return;
+      case SetupPackage.USER__CERTIFICATE_POLICY:
+        setCertificatePolicy(CERTIFICATE_POLICY_EDEFAULT);
         return;
       case SetupPackage.USER__QUESTIONNAIRE_DATE:
         setQuestionnaireDate(QUESTIONNAIRE_DATE_EDEFAULT);
@@ -380,8 +470,12 @@ public class UserImpl extends ScopeImpl implements User
         return attributeRules != null && !attributeRules.isEmpty();
       case SetupPackage.USER__ACCEPTED_LICENSES:
         return acceptedLicenses != null && !acceptedLicenses.isEmpty();
+      case SetupPackage.USER__ACCEPTED_CERTIFICATES:
+        return acceptedCertificates != null && !acceptedCertificates.isEmpty();
       case SetupPackage.USER__UNSIGNED_POLICY:
         return unsignedPolicy != UNSIGNED_POLICY_EDEFAULT;
+      case SetupPackage.USER__CERTIFICATE_POLICY:
+        return certificatePolicy != CERTIFICATE_POLICY_EDEFAULT;
       case SetupPackage.USER__QUESTIONNAIRE_DATE:
         return QUESTIONNAIRE_DATE_EDEFAULT == null ? questionnaireDate != null : !QUESTIONNAIRE_DATE_EDEFAULT.equals(questionnaireDate);
       case SetupPackage.USER__PREFERENCE_RECORDER_DEFAULT:
@@ -406,8 +500,12 @@ public class UserImpl extends ScopeImpl implements User
     StringBuilder result = new StringBuilder(super.toString());
     result.append(" (acceptedLicenses: ");
     result.append(acceptedLicenses);
+    result.append(", acceptedCertificates: ");
+    result.append(acceptedCertificates);
     result.append(", unsignedPolicy: ");
     result.append(unsignedPolicy);
+    result.append(", certificatePolicy: ");
+    result.append(certificatePolicy);
     result.append(", questionnaireDate: ");
     result.append(questionnaireDate);
     result.append(", preferenceRecorderDefault: ");

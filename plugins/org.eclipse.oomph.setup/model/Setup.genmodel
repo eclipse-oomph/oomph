@@ -53,9 +53,15 @@
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//UnsignedPolicy/ACCEPT"/>
       <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//UnsignedPolicy/DECLINE"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="Setup.ecore#//CertificatePolicy">
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//CertificatePolicy/PROMPT"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//CertificatePolicy/ACCEPT"/>
+      <genEnumLiterals ecoreEnumLiteral="Setup.ecore#//CertificatePolicy/DECLINE"/>
+    </genEnums>
     <genDataTypes ecoreDataType="Setup.ecore#//TriggerSet"/>
     <genDataTypes ecoreDataType="Setup.ecore#//LicenseInfo"/>
     <genDataTypes ecoreDataType="Setup.ecore#//Filter"/>
+    <genDataTypes ecoreDataType="Setup.ecore#//CertificateInfo"/>
     <genClasses image="false" ecoreClass="Setup.ecore#//SetupTask">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/iD"/>
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Setup.ecore#//SetupTask/description"/>
@@ -152,7 +158,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/acceptedLicenses">
         <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
       </genFeatures>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/acceptedCertificates">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/unsignedPolicy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/certificatePolicy"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//User/questionnaireDate">
         <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
       </genFeatures>

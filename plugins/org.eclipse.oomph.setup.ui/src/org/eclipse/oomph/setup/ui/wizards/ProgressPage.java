@@ -14,6 +14,8 @@ import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.OomphAdapterFactoryContentProvider;
+import org.eclipse.oomph.p2.core.CertificateConfirmer;
+import org.eclipse.oomph.setup.CertificatePolicy;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.LicenseInfo;
 import org.eclipse.oomph.setup.PreferenceTask;
@@ -488,6 +490,11 @@ public class ProgressPage extends SetupWizardPage
       if (performer.get(Certificate.class) == null)
       {
         performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(performerUser, false));
+      }
+
+      if (performer.get(CertificateConfirmer.class) == null)
+      {
+        performer.put(CertificateConfirmer.class, SetupCoreUtil.createCertificateConfirmer(performerUser, false));
       }
 
       File renamed = null;
@@ -1027,6 +1034,15 @@ public class ProgressPage extends SetupWizardPage
     if (userUnsignedPolicy != performerUserUnsignedPolicy)
     {
       user.setUnsignedPolicy(performerUserUnsignedPolicy);
+      shouldSave = true;
+    }
+
+    shouldSave = user.getAcceptedCertificates().addAll(performerUser.getAcceptedCertificates());
+    CertificatePolicy userCertificatePolicy = user.getCertificatePolicy();
+    CertificatePolicy performerUserCertificatePolicy = performerUser.getCertificatePolicy();
+    if (userCertificatePolicy != performerUserCertificatePolicy)
+    {
+      user.setCertificatePolicy(performerUserCertificatePolicy);
       shouldSave = true;
     }
 

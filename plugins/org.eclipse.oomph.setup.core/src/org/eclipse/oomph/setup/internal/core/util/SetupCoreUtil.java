@@ -25,14 +25,18 @@ import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.P2Package;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
+import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.preferences.impl.PreferencesURIHandlerImpl;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
+import org.eclipse.oomph.setup.CertificateInfo;
+import org.eclipse.oomph.setup.CertificatePolicy;
 import org.eclipse.oomph.setup.Macro;
 import org.eclipse.oomph.setup.Parameter;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
+import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler;
@@ -91,6 +95,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -821,6 +826,71 @@ public final class SetupCoreUtil
     }
 
     return null;
+  }
+
+  public static CertificateConfirmer createCertificateConfirmer(final User user, final boolean saveChangedUser)
+  {
+    Boolean propPolicy = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_CERTIFICATE_POLICY);
+    if (propPolicy != null)
+    {
+      return propPolicy ? CertificateConfirmer.ACCEPT : CertificateConfirmer.DECLINE;
+    }
+
+    if (user != null)
+    {
+      CertificatePolicy userPolicy = user.getCertificatePolicy();
+      if (userPolicy == CertificatePolicy.ACCEPT)
+      {
+        return CertificateConfirmer.ACCEPT;
+      }
+
+      if (userPolicy == CertificatePolicy.DECLINE)
+      {
+        return CertificateConfirmer.DECLINE;
+      }
+
+      return new CertificateConfirmer()
+      {
+        @Override
+        public boolean isTrusted(Certificate[] certificateChain)
+        {
+          EList<CertificateInfo> acceptedCertificates = user.getAcceptedCertificates();
+          for (Certificate certificate : certificateChain)
+          {
+            if (acceptedCertificates.contains(new CertificateInfo(certificate)))
+            {
+              return true;
+            }
+          }
+
+          return false;
+        }
+
+        @Override
+        public void trust(Certificate[] certificateChain)
+        {
+          if (certificateChain == null)
+          {
+            user.setCertificatePolicy(CertificatePolicy.ACCEPT);
+          }
+          else
+          {
+            EList<CertificateInfo> acceptedCertificates = user.getAcceptedCertificates();
+            for (Certificate certificate : certificateChain)
+            {
+              acceptedCertificates.add(new CertificateInfo(certificate));
+            }
+          }
+
+          if (saveChangedUser)
+          {
+            BaseUtil.saveEObject(user);
+          }
+        }
+      };
+    }
+
+    return CertificateConfirmer.ALWAYS_PROMPT;
   }
 
   /**

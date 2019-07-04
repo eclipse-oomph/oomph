@@ -14,6 +14,8 @@ import org.eclipse.oomph.internal.setup.SetupPlugin;
 import org.eclipse.oomph.setup.Argument;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CatalogSelection;
+import org.eclipse.oomph.setup.CertificateInfo;
+import org.eclipse.oomph.setup.CertificatePolicy;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.EclipseIniTask;
@@ -267,12 +269,16 @@ public class SetupValidator extends EObjectValidator
         return validateVariableType((VariableType)value, diagnostics, context);
       case SetupPackage.UNSIGNED_POLICY:
         return validateUnsignedPolicy((UnsignedPolicy)value, diagnostics, context);
+      case SetupPackage.CERTIFICATE_POLICY:
+        return validateCertificatePolicy((CertificatePolicy)value, diagnostics, context);
       case SetupPackage.TRIGGER_SET:
         return validateTriggerSet((Set<Trigger>)value, diagnostics, context);
       case SetupPackage.LICENSE_INFO:
         return validateLicenseInfo((LicenseInfo)value, diagnostics, context);
       case SetupPackage.FILTER:
         return validateFilter((String)value, diagnostics, context);
+      case SetupPackage.CERTIFICATE_INFO:
+        return validateCertificateInfo((CertificateInfo)value, diagnostics, context);
       default:
         return true;
     }
@@ -1079,6 +1085,16 @@ public class SetupValidator extends EObjectValidator
    * <!-- end-user-doc -->
    * @generated
    */
+  public boolean validateCertificatePolicy(CertificatePolicy certificatePolicy, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
+    return true;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public boolean validateTriggerSet(Set<Trigger> triggerSet, DiagnosticChain diagnostics, Map<Object, Object> context)
   {
     return true;
@@ -1168,6 +1184,16 @@ public class SetupValidator extends EObjectValidator
       return false;
     }
 
+    return true;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean validateCertificateInfo(CertificateInfo certificateInfo, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
     return true;
   }
 

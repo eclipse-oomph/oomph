@@ -13,6 +13,8 @@ package org.eclipse.oomph.setup.impl;
 import org.eclipse.oomph.setup.Argument;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.CatalogSelection;
+import org.eclipse.oomph.setup.CertificateInfo;
+import org.eclipse.oomph.setup.CertificatePolicy;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.EclipseIniTask;
@@ -219,12 +221,16 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
         return createVariableTypeFromString(eDataType, initialValue);
       case SetupPackage.UNSIGNED_POLICY:
         return createUnsignedPolicyFromString(eDataType, initialValue);
+      case SetupPackage.CERTIFICATE_POLICY:
+        return createCertificatePolicyFromString(eDataType, initialValue);
       case SetupPackage.TRIGGER_SET:
         return createTriggerSetFromString(eDataType, initialValue);
       case SetupPackage.LICENSE_INFO:
         return createLicenseInfoFromString(eDataType, initialValue);
       case SetupPackage.FILTER:
         return createFilterFromString(eDataType, initialValue);
+      case SetupPackage.CERTIFICATE_INFO:
+        return createCertificateInfoFromString(eDataType, initialValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -248,12 +254,16 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
         return convertVariableTypeToString(eDataType, instanceValue);
       case SetupPackage.UNSIGNED_POLICY:
         return convertUnsignedPolicyToString(eDataType, instanceValue);
+      case SetupPackage.CERTIFICATE_POLICY:
+        return convertCertificatePolicyToString(eDataType, instanceValue);
       case SetupPackage.TRIGGER_SET:
         return convertTriggerSetToString(eDataType, instanceValue);
       case SetupPackage.LICENSE_INFO:
         return convertLicenseInfoToString(eDataType, instanceValue);
       case SetupPackage.FILTER:
         return convertFilterToString(eDataType, instanceValue);
+      case SetupPackage.CERTIFICATE_INFO:
+        return convertCertificateInfoToString(eDataType, instanceValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -722,6 +732,31 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
     return instanceValue == null ? null : instanceValue.toString();
   }
 
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public CertificatePolicy createCertificatePolicyFromString(EDataType eDataType, String initialValue)
+  {
+    CertificatePolicy result = CertificatePolicy.get(initialValue);
+    if (result == null)
+    {
+      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    }
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertCertificatePolicyToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
+  }
+
   public CompoundTask createCompoundTask(String name)
   {
     CompoundTask compoundSetupTask = createCompoundTask();
@@ -800,6 +835,26 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
   public String convertFilterToString(EDataType eDataType, Object instanceValue)
   {
     return instanceValue == null ? null : instanceValue.toString();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public CertificateInfo createCertificateInfoFromString(EDataType eDataType, String initialValue)
+  {
+    return (CertificateInfo)super.createFromString(eDataType, initialValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertCertificateInfoToString(EDataType eDataType, Object instanceValue)
+  {
+    return super.convertToString(eDataType, instanceValue);
   }
 
   /**

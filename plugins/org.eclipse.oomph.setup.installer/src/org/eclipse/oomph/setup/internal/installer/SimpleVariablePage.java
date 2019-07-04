@@ -22,6 +22,7 @@ import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.jreinfo.ui.JREController;
 import org.eclipse.oomph.p2.core.AgentManager;
+import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.internal.core.DownloadArtifactEvent;
 import org.eclipse.oomph.setup.AnnotationConstants;
@@ -1278,7 +1279,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
 
       performer.getUnresolvedVariables().clear();
-      performer.put(UIServices.class, Installer.SERVICE_UI);
+
+      performer.put(UIServices.class, installer.getUiServices());
 
       if (performer.get(ILicense.class) == null)
       {
@@ -1288,6 +1290,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
       if (performer.get(Certificate.class) == null)
       {
         performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
+      }
+
+      if (performer.get(CertificateConfirmer.class) == null)
+      {
+        performer.put(CertificateConfirmer.class, SetupCoreUtil.createCertificateConfirmer(user, false));
       }
 
       performer.setOffline(PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP));

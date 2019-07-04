@@ -111,6 +111,14 @@ public interface ProfileTransaction
     }
 
     /**
+     * Called early during {@link Resolution#commit(IProgressMonitor) commit}.
+     */
+    public CertificateConfirmer getCertficateConfirmer()
+    {
+      return null;
+    }
+
+    /**
      * Called late during {@link Resolution#commit(IProgressMonitor) commit}.
      */
     public void handleExecutionResult(IStatus status)

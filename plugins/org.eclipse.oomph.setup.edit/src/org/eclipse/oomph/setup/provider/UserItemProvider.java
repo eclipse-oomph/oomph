@@ -58,7 +58,9 @@ public class UserItemProvider extends ScopeItemProvider
       super.getPropertyDescriptors(object);
 
       addAcceptedLicensesPropertyDescriptor(object);
+      addAcceptedCertificatesPropertyDescriptor(object);
       addUnsignedPolicyPropertyDescriptor(object);
+      addCertificatePolicyPropertyDescriptor(object);
       addQuestionnaireDatePropertyDescriptor(object);
       addPreferenceRecorderDefaultPropertyDescriptor(object);
     }
@@ -80,6 +82,21 @@ public class UserItemProvider extends ScopeItemProvider
   }
 
   /**
+   * This adds a property descriptor for the Accepted Certificates feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addAcceptedCertificatesPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_User_acceptedCertificates_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_User_acceptedCertificates_feature", "_UI_User_type"),
+        SetupPackage.Literals.USER__ACCEPTED_CERTIFICATES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
+        new String[] { "org.eclipse.ui.views.properties.expert" }));
+  }
+
+  /**
    * This adds a property descriptor for the Unsigned Policy feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -90,6 +107,19 @@ public class UserItemProvider extends ScopeItemProvider
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_User_unsignedPolicy_feature"), getString("_UI_PropertyDescriptor_description", "_UI_User_unsignedPolicy_feature", "_UI_User_type"),
         SetupPackage.Literals.USER__UNSIGNED_POLICY, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Certificate Policy feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addCertificatePolicyPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_User_certificatePolicy_feature"), getString("_UI_PropertyDescriptor_description", "_UI_User_certificatePolicy_feature", "_UI_User_type"),
+        SetupPackage.Literals.USER__CERTIFICATE_POLICY, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -212,7 +242,9 @@ public class UserItemProvider extends ScopeItemProvider
     switch (notification.getFeatureID(User.class))
     {
       case SetupPackage.USER__ACCEPTED_LICENSES:
+      case SetupPackage.USER__ACCEPTED_CERTIFICATES:
       case SetupPackage.USER__UNSIGNED_POLICY:
+      case SetupPackage.USER__CERTIFICATE_POLICY:
       case SetupPackage.USER__QUESTIONNAIRE_DATE:
       case SetupPackage.USER__PREFERENCE_RECORDER_DEFAULT:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

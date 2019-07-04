@@ -204,7 +204,15 @@
         <details key="name" value="acceptedLicense"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="acceptedCertificates" upperBound="-1"
+        eType="#//CertificateInfo">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="acceptedCertificate"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="unsignedPolicy" eType="#//UnsignedPolicy"
+        defaultValueLiteral="PROMPT"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="certificatePolicy" eType="#//CertificatePolicy"
         defaultValueLiteral="PROMPT"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="questionnaireDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="preferenceRecorderDefault"
@@ -592,4 +600,10 @@
       <details key="constraints" value="WellformedFilterExpression"/>
     </eAnnotations>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CertificatePolicy">
+    <eLiterals name="PROMPT"/>
+    <eLiterals name="ACCEPT" value="1"/>
+    <eLiterals name="DECLINE" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="CertificateInfo" instanceClassName="org.eclipse.oomph.setup.CertificateInfo"/>
 </ecore:EPackage>

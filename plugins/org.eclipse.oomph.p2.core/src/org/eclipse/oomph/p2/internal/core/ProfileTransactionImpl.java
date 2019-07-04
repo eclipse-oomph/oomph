@@ -16,6 +16,8 @@ import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.BundlePool;
+import org.eclipse.oomph.p2.core.CertificateConfirmer;
+import org.eclipse.oomph.p2.core.DelegatingUIServices;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
@@ -23,7 +25,6 @@ import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext.DeltaType;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext.ResolutionInfo;
 import org.eclipse.oomph.p2.internal.core.CachingRepositoryManager.Artifact.BetterMirrorSelector;
 import org.eclipse.oomph.util.Confirmer;
-import org.eclipse.oomph.util.Confirmer.Confirmation;
 import org.eclipse.oomph.util.MonitorUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.Pair;
@@ -99,7 +100,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URI;
-import java.security.cert.Certificate;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -720,70 +720,29 @@ public class ProfileTransactionImpl implements ProfileTransaction
   private void initUnsignedContentConfirmer(final CommitContext context, final Agent agent, final List<Runnable> cleanup)
   {
     final Confirmer unsignedContentConfirmer = context.getUnsignedContentConfirmer();
-    if (unsignedContentConfirmer != null)
+    final CertificateConfirmer certificateConfirmer = context.getCertficateConfirmer();
+    if (unsignedContentConfirmer != null || certificateConfirmer != null)
     {
       final IProvisioningAgent provisioningAgent = agent.getProvisioningAgent();
       final UIServices oldUIServices = (UIServices)provisioningAgent.getService(UIServices.SERVICE_NAME);
-      final UIServices newUIServices = new UIServices()
+      final UIServices newUIServices = new DelegatingUIServices()
       {
         @Override
-        public AuthenticationInfo getUsernamePassword(String location)
+        protected UIServices getDelegate()
         {
-          if (oldUIServices != null)
-          {
-            return oldUIServices.getUsernamePassword(location);
-          }
-
-          return null;
+          return oldUIServices;
         }
 
         @Override
-        public AuthenticationInfo getUsernamePassword(String location, AuthenticationInfo previousInfo)
+        protected CertificateConfirmer getCertificateConfirmer()
         {
-          if (oldUIServices != null)
-          {
-            return oldUIServices.getUsernamePassword(location, previousInfo);
-          }
-
-          return null;
+          return certificateConfirmer;
         }
 
         @Override
-        public TrustInfo getTrustInfo(Certificate[][] untrustedChains, String[] unsignedDetail)
+        protected Confirmer getUnsignedContentConfirmer()
         {
-          if (unsignedDetail != null && unsignedDetail.length != 0)
-          {
-            Confirmation confirmation = unsignedContentConfirmer.confirm(true, unsignedDetail);
-            if (!confirmation.isConfirmed())
-            {
-              return new TrustInfo(new Certificate[0], false, false);
-            }
-
-            // We've checked trust already; prevent oldUIServices to check it again.
-            unsignedDetail = null;
-          }
-
-          if (oldUIServices != null)
-          {
-            return oldUIServices.getTrustInfo(untrustedChains, unsignedDetail);
-          }
-
-          // The rest is copied from org.eclipse.equinox.internal.p2.director.app.DirectorApplication.AvoidTrustPromptService
-          final Certificate[] trusted;
-          if (untrustedChains == null)
-          {
-            trusted = null;
-          }
-          else
-          {
-            trusted = new Certificate[untrustedChains.length];
-            for (int i = 0; i < untrustedChains.length; i++)
-            {
-              trusted[i] = untrustedChains[i][0];
-            }
-          }
-
-          return new TrustInfo(trusted, false, true);
+          return unsignedContentConfirmer;
         }
       };
 

@@ -40,6 +40,11 @@ public class SetupProperties
    */
   public static final String PROP_SETUP_UNSIGNED_POLICY = "eclipse.p2.unsignedPolicy";
 
+  /**
+   * Automatically accepts certificates content if set to 'true'.
+   */
+  public static final String PROP_SETUP_CERTIFICATE_POLICY = "eclipse.p2.certificatePolicy";
+
   public static final String PROP_SETUP_REMOTE_DEBUG = "oomph.setup.remote.debug";
 
   public static final String PROP_SETUP_USER_HOME_REDIRECT = "oomph.setup.user.home.redirect";

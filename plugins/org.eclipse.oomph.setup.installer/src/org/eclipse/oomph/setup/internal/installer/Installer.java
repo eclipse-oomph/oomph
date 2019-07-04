@@ -10,14 +10,18 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.p2.internal.ui.P2ServiceUI;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
+import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
+import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.util.URI;
@@ -33,9 +37,9 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class Installer extends SetupWizard
 {
-  public static final P2ServiceUI SERVICE_UI = new P2ServiceUI();
-
   private final SelectionMemento selectionMemento;
+
+  public final UIServices uiServices;
 
   public Installer(SelectionMemento theSelectionMemento)
   {
@@ -44,6 +48,31 @@ public class Installer extends SetupWizard
     getResourceSet().getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
     setSetupContext(SetupContext.createUserOnly(getResourceSet()));
     setWindowTitle(PropertiesUtil.getProductName());
+    uiServices = new P2ServiceUI()
+    {
+      @Override
+      protected Confirmer getUnsignedContentConfirmer()
+      {
+        return UnsignedContentDialog.createUnsignedContentConfirmer(getUser(), false);
+      }
+
+      @Override
+      protected CertificateConfirmer getCertificateConfirmer()
+      {
+        return SetupCoreUtil.createCertificateConfirmer(getUser(), false);
+      }
+
+      @Override
+      protected UIServices getDelegate()
+      {
+        return null;
+      }
+    };
+  }
+
+  public UIServices getUiServices()
+  {
+    return uiServices;
   }
 
   public SelectionMemento getSelectionMemento()
@@ -94,7 +123,7 @@ public class Installer extends SetupWizard
 
     if (performer != null)
     {
-      performer.put(UIServices.class, SERVICE_UI);
+      performer.put(UIServices.class, getUiServices());
     }
   }
 

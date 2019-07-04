@@ -25,7 +25,9 @@ import java.util.Date;
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.User#getAttributeRules <em>Attribute Rules</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.User#getAcceptedLicenses <em>Accepted Licenses</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.User#getAcceptedCertificates <em>Accepted Certificates</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.User#getUnsignedPolicy <em>Unsigned Policy</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.User#getCertificatePolicy <em>Certificate Policy</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.User#getQuestionnaireDate <em>Questionnaire Date</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.User#isPreferenceRecorderDefault <em>Preference Recorder Default</em>}</li>
  * </ul>
@@ -52,6 +54,19 @@ public interface User extends Scope
    * @generated
    */
   EList<LicenseInfo> getAcceptedLicenses();
+
+  /**
+   * Returns the value of the '<em><b>Accepted Certificates</b></em>' attribute list.
+   * The list contents are of type {@link org.eclipse.oomph.setup.CertificateInfo}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Accepted Certificates</em>' attribute list.
+   * @see org.eclipse.oomph.setup.SetupPackage#getUser_AcceptedCertificates()
+   * @model dataType="org.eclipse.oomph.setup.CertificateInfo"
+   *        extendedMetaData="name='acceptedCertificate'"
+   * @generated
+   */
+  EList<CertificateInfo> getAcceptedCertificates();
 
   /**
    * Returns the value of the '<em><b>Unsigned Policy</b></em>' attribute.
@@ -82,6 +97,32 @@ public interface User extends Scope
    * @generated
    */
   void setUnsignedPolicy(UnsignedPolicy value);
+
+  /**
+   * Returns the value of the '<em><b>Certificate Policy</b></em>' attribute.
+   * The default value is <code>"PROMPT"</code>.
+   * The literals are from the enumeration {@link org.eclipse.oomph.setup.CertificatePolicy}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Certificate Policy</em>' attribute.
+   * @see org.eclipse.oomph.setup.CertificatePolicy
+   * @see #setCertificatePolicy(CertificatePolicy)
+   * @see org.eclipse.oomph.setup.SetupPackage#getUser_CertificatePolicy()
+   * @model default="PROMPT"
+   * @generated
+   */
+  CertificatePolicy getCertificatePolicy();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.User#getCertificatePolicy <em>Certificate Policy</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Certificate Policy</em>' attribute.
+   * @see org.eclipse.oomph.setup.CertificatePolicy
+   * @see #getCertificatePolicy()
+   * @generated
+   */
+  void setCertificatePolicy(CertificatePolicy value);
 
   /**
    * Returns the value of the '<em><b>Questionnaire Date</b></em>' attribute.

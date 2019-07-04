@@ -1294,13 +1294,31 @@ public interface SetupPackage extends EPackage
   int USER__ACCEPTED_LICENSES = SCOPE_FEATURE_COUNT + 1;
 
   /**
+   * The feature id for the '<em><b>Accepted Certificates</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int USER__ACCEPTED_CERTIFICATES = SCOPE_FEATURE_COUNT + 2;
+
+  /**
    * The feature id for the '<em><b>Unsigned Policy</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int USER__UNSIGNED_POLICY = SCOPE_FEATURE_COUNT + 2;
+  int USER__UNSIGNED_POLICY = SCOPE_FEATURE_COUNT + 3;
+
+  /**
+   * The feature id for the '<em><b>Certificate Policy</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int USER__CERTIFICATE_POLICY = SCOPE_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Questionnaire Date</b></em>' attribute.
@@ -1309,7 +1327,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int USER__QUESTIONNAIRE_DATE = SCOPE_FEATURE_COUNT + 3;
+  int USER__QUESTIONNAIRE_DATE = SCOPE_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Preference Recorder Default</b></em>' attribute.
@@ -1318,7 +1336,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int USER__PREFERENCE_RECORDER_DEFAULT = SCOPE_FEATURE_COUNT + 4;
+  int USER__PREFERENCE_RECORDER_DEFAULT = SCOPE_FEATURE_COUNT + 6;
 
   /**
    * The number of structural features of the '<em>User</em>' class.
@@ -1327,7 +1345,7 @@ public interface SetupPackage extends EPackage
    * @generated
    * @ordered
    */
-  int USER_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 5;
+  int USER_FEATURE_COUNT = SCOPE_FEATURE_COUNT + 7;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -3751,6 +3769,16 @@ public interface SetupPackage extends EPackage
   int UNSIGNED_POLICY = 43;
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.CertificatePolicy <em>Certificate Policy</em>}' enum.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.CertificatePolicy
+   * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getCertificatePolicy()
+   * @generated
+   */
+  int CERTIFICATE_POLICY = 44;
+
+  /**
    * The meta object id for the '<em>License Info</em>' data type.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3758,7 +3786,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getLicenseInfo()
    * @generated
    */
-  int LICENSE_INFO = 45;
+  int LICENSE_INFO = 46;
 
   /**
    * The meta object id for the '<em>Filter</em>' data type.
@@ -3768,7 +3796,17 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getFilter()
    * @generated
    */
-  int FILTER = 46;
+  int FILTER = 47;
+
+  /**
+   * The meta object id for the '<em>Certificate Info</em>' data type.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.CertificateInfo
+   * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getCertificateInfo()
+   * @generated
+   */
+  int CERTIFICATE_INFO = 48;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.Index <em>Index</em>}'.
@@ -3897,7 +3935,7 @@ public interface SetupPackage extends EPackage
    * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getTriggerSet()
    * @generated
    */
-  int TRIGGER_SET = 44;
+  int TRIGGER_SET = 45;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.Project <em>Project</em>}'.
@@ -5209,6 +5247,16 @@ public interface SetupPackage extends EPackage
   EEnum getUnsignedPolicy();
 
   /**
+   * Returns the meta object for enum '{@link org.eclipse.oomph.setup.CertificatePolicy <em>Certificate Policy</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for enum '<em>Certificate Policy</em>'.
+   * @see org.eclipse.oomph.setup.CertificatePolicy
+   * @generated
+   */
+  EEnum getCertificatePolicy();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.User <em>User</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5241,6 +5289,17 @@ public interface SetupPackage extends EPackage
   EAttribute getUser_AcceptedLicenses();
 
   /**
+   * Returns the meta object for the attribute list '{@link org.eclipse.oomph.setup.User#getAcceptedCertificates <em>Accepted Certificates</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Accepted Certificates</em>'.
+   * @see org.eclipse.oomph.setup.User#getAcceptedCertificates()
+   * @see #getUser()
+   * @generated
+   */
+  EAttribute getUser_AcceptedCertificates();
+
+  /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.User#getUnsignedPolicy <em>Unsigned Policy</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5250,6 +5309,17 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   EAttribute getUser_UnsignedPolicy();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.User#getCertificatePolicy <em>Certificate Policy</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Certificate Policy</em>'.
+   * @see org.eclipse.oomph.setup.User#getCertificatePolicy()
+   * @see #getUser()
+   * @generated
+   */
+  EAttribute getUser_CertificatePolicy();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.User#getQuestionnaireDate <em>Questionnaire Date</em>}'.
@@ -5455,6 +5525,17 @@ public interface SetupPackage extends EPackage
    * @generated
    */
   EDataType getFilter();
+
+  /**
+   * Returns the meta object for data type '{@link org.eclipse.oomph.setup.CertificateInfo <em>Certificate Info</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for data type '<em>Certificate Info</em>'.
+   * @see org.eclipse.oomph.setup.CertificateInfo
+   * @model instanceClass="org.eclipse.oomph.setup.CertificateInfo"
+   * @generated
+   */
+  EDataType getCertificateInfo();
 
   /**
    * Returns the meta object for data type '{@link java.util.Set <em>Trigger Set</em>}'.
@@ -6624,6 +6705,16 @@ public interface SetupPackage extends EPackage
     EEnum UNSIGNED_POLICY = eINSTANCE.getUnsignedPolicy();
 
     /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.CertificatePolicy <em>Certificate Policy</em>}' enum.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.CertificatePolicy
+     * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getCertificatePolicy()
+     * @generated
+     */
+    EEnum CERTIFICATE_POLICY = eINSTANCE.getCertificatePolicy();
+
+    /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.UserImpl <em>User</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -6650,12 +6741,28 @@ public interface SetupPackage extends EPackage
     EAttribute USER__ACCEPTED_LICENSES = eINSTANCE.getUser_AcceptedLicenses();
 
     /**
+     * The meta object literal for the '<em><b>Accepted Certificates</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute USER__ACCEPTED_CERTIFICATES = eINSTANCE.getUser_AcceptedCertificates();
+
+    /**
      * The meta object literal for the '<em><b>Unsigned Policy</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EAttribute USER__UNSIGNED_POLICY = eINSTANCE.getUser_UnsignedPolicy();
+
+    /**
+     * The meta object literal for the '<em><b>Certificate Policy</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute USER__CERTIFICATE_POLICY = eINSTANCE.getUser_CertificatePolicy();
 
     /**
      * The meta object literal for the '<em><b>Questionnaire Date</b></em>' attribute feature.
@@ -6822,6 +6929,16 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EDataType FILTER = eINSTANCE.getFilter();
+
+    /**
+     * The meta object literal for the '<em>Certificate Info</em>' data type.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.CertificateInfo
+     * @see org.eclipse.oomph.setup.impl.SetupPackageImpl#getCertificateInfo()
+     * @generated
+     */
+    EDataType CERTIFICATE_INFO = eINSTANCE.getCertificateInfo();
 
     /**
      * The meta object literal for the '<em>Trigger Set</em>' data type.
