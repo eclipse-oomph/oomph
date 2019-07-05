@@ -200,10 +200,22 @@ public final class ReflectUtil
   {
     if (target instanceof Class)
     {
-      return getValue(getField((Class<?>)target, fieldName), null);
+      Field field = getField((Class<?>)target, fieldName);
+      if (field == null)
+      {
+        throw new ReflectionException("No field " + fieldName);
+      }
+
+      return getValue(field, null);
     }
 
-    return getValue(getField(target.getClass(), fieldName), target);
+    Field field = getField(target.getClass(), fieldName);
+    if (field == null)
+    {
+      throw new ReflectionException("No field " + fieldName);
+    }
+
+    return getValue(field, target);
   }
 
   public static void setValue(String fieldName, Object target, Object value)
