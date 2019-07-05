@@ -298,7 +298,7 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
       }
 
       @Override
-      public void add(Object parentElementOrTreePath, Object[] childElements)
+      public void add(Object parentElementOrTreePath, Object... childElements)
       {
         clearPatternFilterCaches();
         super.add(parentElementOrTreePath, childElements);
@@ -347,14 +347,14 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
       }
 
       @Override
-      public void remove(Object parent, Object[] elements)
+      public void remove(Object parent, Object... elements)
       {
         clearPatternFilterCaches();
         super.remove(parent, elements);
       }
 
       @Override
-      public void remove(Object[] elementsOrTreePaths)
+      public void remove(Object... elementsOrTreePaths)
       {
         clearPatternFilterCaches();
         super.remove(elementsOrTreePaths);
