@@ -23,6 +23,7 @@ import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
+import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -45,6 +46,7 @@ import org.osgi.framework.BundleContext;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.net.URL;
@@ -146,6 +148,16 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
         temporaryIconsFolder.mkdir();
         temporaryIconsFolder.deleteOnExit();
         ReflectUtil.setValue("imageDirectory", ImageURIRegistry.INSTANCE, temporaryIconsFolder);
+
+        try
+        {
+          Field field = ReflectUtil.getField(EMFPlugin.class, "IS_RESOURCES_BUNDLE_AVAILABLE");
+          ReflectUtil.setValue(field, null, false, true);
+        }
+        catch (Throwable throwable)
+        {
+          // We only need this at development time.
+        }
       }
 
       // Replace the default UI Callback Provider with our own because the default one doesn't work when there is no workbench.

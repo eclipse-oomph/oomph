@@ -241,9 +241,7 @@ public final class ReflectUtil
     {
       if ((field.getModifiers() & Modifier.FINAL) != 0 && force)
       {
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        makeAccessible(modifiersField);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        AccessUtil.setNonFinal(field);
       }
 
       Class<?> type = field.getType();
