@@ -756,7 +756,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       String pushURI = getPushURI();
       configureRepository(context, repository, checkoutBranch, isRestrictToCheckoutBranch(), remoteName, remoteURI, pushURI, getConfigSections());
 
-      hasCheckout = repository.getRefDatabase().findRef(Constants.R_HEADS + checkoutBranch) != null;
+      hasCheckout = findRef(repository, Constants.R_HEADS + checkoutBranch) != null;
       if (!hasCheckout)
       {
         cachedGit = git;
@@ -822,8 +822,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
           if (!hasCheckout)
           {
-            Ref branchRef = cachedGit.getRepository().getRefDatabase().findRef(Constants.R_REMOTES + remoteName + "/" + checkoutBranch);
-            Ref tagRef = cachedGit.getRepository().getRefDatabase().findRef(Constants.R_TAGS + checkoutBranch);
+            Ref branchRef = findRef(cachedGit.getRepository(), Constants.R_REMOTES + remoteName + "/" + checkoutBranch);
+            Ref tagRef = findRef(cachedGit.getRepository(), Constants.R_TAGS + checkoutBranch);
             if (branchRef == null && tagRef != null)
             {
               createTag(context, cachedGit, checkoutBranch);
@@ -1301,6 +1301,12 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     ResetCommand command = git.reset();
     command.setMode(ResetType.HARD);
     command.call();
+  }
+
+  @Deprecated
+  private static final Ref findRef(Repository repository, String name) throws IOException
+  {
+    return repository.getRefDatabase().getRef(name);
   }
 
 } // GitCloneTaskImpl
