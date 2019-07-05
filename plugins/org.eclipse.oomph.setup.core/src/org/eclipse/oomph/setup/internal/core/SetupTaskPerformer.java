@@ -646,7 +646,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           SetupTask setupTask = it.next();
 
           String id = setupTask.getID();
-          if (!StringUtil.isEmpty(id))
+          if (!StringUtil.isEmpty(id) && !(setupTask instanceof VariableTask))
           {
             EClass eClass = setupTask.eClass();
             for (EAttribute eAttribute : eClass.getEAllAttributes())
