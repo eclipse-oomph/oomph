@@ -22,6 +22,13 @@
   <version name="latest"
       label="Latest (2019-09)"
       requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/2019-09/m2</value>
+      </detail>
+    </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2019-09)">
@@ -58,7 +65,7 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.12.0,5.0.0)"/>
+          versionRange="[4.13.0,5.0.0)"/>
       <repository
           url="http://download.eclipse.org/releases/2019-09">
         <annotation
@@ -123,6 +130,13 @@
   <version name="2019-09"
       label="2019-09"
       requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/2019-09/m2</value>
+      </detail>
+    </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2019-09)">
@@ -159,7 +173,7 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.12.0,5.0.0)"/>
+          versionRange="[4.13.0,5.0.0)"/>
       <repository
           url="http://download.eclipse.org/releases/2019-09">
         <annotation

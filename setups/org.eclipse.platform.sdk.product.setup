@@ -31,6 +31,13 @@
   <version name="latest"
       label="Latest (4.13 - 2019-09)"
       requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://download.eclipse.org/eclipse/downloads/</value>
+      </detail>
+    </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.13 - 2019-09)">
@@ -64,6 +71,13 @@
   <version name="4.13"
       label="4.13 - 2019-09"
       requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://download.eclipse.org/eclipse/downloads/</value>
+      </detail>
+    </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.13 - 2019-09)">
