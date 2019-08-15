@@ -2895,7 +2895,6 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addAnnotation(getVariableTask_Type(), source, new String[] {});
     addAnnotation(getVariableTask_StorePromptedValue(), source, new String[] {});
     addAnnotation(getVariableTask_StorageURI(), source, new String[] {});
-    addAnnotation(getVariableTask_Label(), source, new String[] {});
     addAnnotation(getVariableChoice_Value(), source, new String[] {});
     addAnnotation(getParameter_Name(), source, new String[] {});
   }

@@ -193,7 +193,7 @@ public interface VariableTask extends SetupTask
    * @return the value of the '<em>Label</em>' attribute.
    * @see #setLabel(String)
    * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask_Label()
-   * @model annotation="http://www.eclipse.org/oomph/setup/NoExpand"
+   * @model
    * @generated
    */
   String getLabel();
