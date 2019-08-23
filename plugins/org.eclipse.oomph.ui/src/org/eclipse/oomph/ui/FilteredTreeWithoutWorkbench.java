@@ -44,12 +44,14 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
 
   private int expansionCount;
 
+  @SuppressWarnings("deprecation")
   public FilteredTreeWithoutWorkbench(Composite parent, int style)
   {
     super(parent, style, new PatternFilter(), true);
     expansionFilter = null;
   }
 
+  @SuppressWarnings("deprecation")
   public FilteredTreeWithoutWorkbench(Composite parent, int style, PatternFilter patternFilter, ExpansionFilter expansionFilter)
   {
     super(parent, style, patternFilter, true);

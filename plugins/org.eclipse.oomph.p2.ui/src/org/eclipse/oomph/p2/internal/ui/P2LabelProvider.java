@@ -135,6 +135,7 @@ public final class P2LabelProvider extends LabelProvider implements IColorProvid
         String icon = configurationElement.getAttribute("icon");
         if (icon != null)
         {
+          @SuppressWarnings("deprecation")
           ImageDescriptor descriptor = AbstractUIPlugin.imageDescriptorFromPlugin(configurationElement.getNamespaceIdentifier(), icon);
           return P2UIPlugin.INSTANCE.getSWTImage(descriptor);
         }

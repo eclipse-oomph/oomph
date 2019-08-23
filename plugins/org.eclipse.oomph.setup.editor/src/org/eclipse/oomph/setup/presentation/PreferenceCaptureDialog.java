@@ -618,6 +618,7 @@ public class PreferenceCaptureDialog extends Dialog
 
     private ToolItem defaultsToolItem;
 
+    @SuppressWarnings("deprecation")
     public PreferenceFilteredTree(Composite parent, int treeStyle, PatternFilter filter)
     {
       super(parent, treeStyle, filter, true);

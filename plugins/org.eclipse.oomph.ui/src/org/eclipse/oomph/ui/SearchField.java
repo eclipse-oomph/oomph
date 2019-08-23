@@ -38,6 +38,7 @@ public class SearchField extends Composite
 {
   private final FilteredTree filteredTree;
 
+  @SuppressWarnings("deprecation")
   public SearchField(Composite parent, final FilterHandler filterHandler)
   {
     super(parent, SWT.NONE);

@@ -16,6 +16,7 @@ import org.eclipse.oomph.version.ui.Activator;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -104,7 +105,9 @@ public class ExtendedConfigurationDialog extends TitleAreaDialog
     setTitle(BUILDER_CONFIGURATION);
     setMessage("Select a release specification file and check additional settings.");
 
-    projectImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/Project.gif").createImage();
+    @SuppressWarnings("deprecation")
+    ImageDescriptor imageDescriptor = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/Project.gif");
+    projectImage = imageDescriptor.createImage();
 
     Composite dialogArea = (Composite)super.createDialogArea(parent);
 
