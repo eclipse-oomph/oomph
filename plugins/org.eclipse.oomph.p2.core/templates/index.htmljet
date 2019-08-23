@@ -1,0 +1,776 @@
+<%@jet
+  package="org.eclipse.oomph.p2.internal.core"
+  class="RepositoryIndex"
+  imports="java.security.cert.Certificate java.util.* org.eclipse.equinox.p2.metadata.* org.eclipse.oomph.p2.internal.core.RepositoryIntegrityAnalyzer.Report org.eclipse.oomph.p2.internal.core.RepositoryIntegrityAnalyzer.Report.LicenseDetail"
+  minimize="true"%>
+<%Report report = (Report)argument;
+  List<Report> children = report.getChildren();
+
+  class Helper {
+    public String getStyle(LicenseDetail license) {
+      StringBuilder result = new StringBuilder();
+      result.append(license.isMatchedSUA() ? "color: DarkOrange;" : "color: SaddleBrown;");
+      result.append(license.isSUA() ? " font-weight: bold;" : " text-decoration: line-through;");
+      return result.toString();
+    }
+
+    // public StringBuilder append(StringBuilder builder, Object object) {
+    // if (builder.length() > 0) {
+    // builder.append(' ');
+    // }
+    // builder.append(object);
+    // return builder;
+    // }
+  }
+
+  Helper helper = new Helper();
+  Collection<IInstallableUnit> categories = report.getCategories();%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title><%=report.getTitle()%></title>
+  <meta name="keywords" content="eclipse,update site"/>
+  <meta name="description" content="Update Sites Reports"/>
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700,300,600,100" rel="stylesheet" type="text/css"/>
+  <link rel="stylesheet" href="https://www.eclipse.org/eclipse.org-common/themes/solstice/public/stylesheets/styles.min.css"/>
+  <link rel="icon" type="image/ico" href="https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/favicon.ico"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<%-[StyleSheet]-%>
+  <style>
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+.font-smaller {
+  font-size: 90%;
+}
+
+.fit-image {
+  width: 2ex;
+  height: 2ex;
+}
+
+.xml-iu {
+  white-space: pre;
+  border: none;
+  padding: 0px 0px;
+  margin-top: -2ex;
+  margin-bottom: -2ex;
+  margin-left: 2em;
+}
+
+.xml-token {
+  color: SteelBlue;
+  font-family: monospace;
+  font-size: 80%;
+}
+
+.xml-attribute {
+  color: MediumAquaMarine;
+  font-family: monospace;
+  font-size: 80%;
+}
+
+.xml-element {
+  color: MediumOrchid;
+  font-family: monospace;
+  font-size: 80%;
+}
+
+.xml-attribute-value {
+  color: DarkSlateGray;
+  font-size: 90%;
+}
+
+.xml-element-value {
+  color: SaddleBrown;
+  font-size: 90%;
+}
+
+.bb {
+  background-color: white;
+  border: none;
+  padding: 0px 0px;
+}
+
+.filter {
+  background-color: white;
+}
+
+.iu-link {
+  padding: -2pt -2pt -2pt -2pt;
+  margin: 0px 0px 0px 0px;
+}
+
+.resolved-requirement {
+  color: SeaGreen;
+  font-size: 90%;
+}
+
+.unresolved-requirement {
+  color: IndianRed;
+  font-size: 90%;
+}
+  </style>
+</head>
+
+  <body id="body_solstice">
+    <script>
+      function filterIU(className) {
+        var ius = document.getElementsByClassName('iu-li');
+        var targets = document.getElementsByClassName(className);
+        var targetsArray = [].slice.call(targets);
+        for (var i = 0; i < ius.length; i++) {
+          var iu = ius[i];
+          if (!targetsArray.includes(iu)) {
+            iu.style.display = 'none';
+          } else {
+            iu.style.display = 'block';
+          }
+        }
+      }
+
+      function copyToClipboard(element) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(element).text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+      }
+
+      function clickOnButton(id) {
+        var e = document.getElementById(id);
+        e.click();
+      }
+
+      function clickOnToggleButton(id) {
+        var e = document.getElementById(id);
+        var state = e.innerHTML;
+        if (e.innerHTML == '<%='\u25B7'%>'){
+          e.click();
+        }
+      }
+
+      function navigateTo(id) {
+        var e = document.getElementById(id);
+        e.scrollIntoView();
+      }
+
+      function toggle(id) {
+        var e = document.getElementById(id);
+        if (e.title == 'Expand All') {
+          e.title= 'Collapse All';
+          e.innerHTML = '&#x25E2;';
+        } else {
+          e.title= 'Expand All';
+          e.innerHTML = '&#x25B7;';
+        }
+      }
+
+      function expand2(self, id) {
+        var t = document.getElementById(self);
+        var e = document.getElementById(id);
+        var f = document.getElementById(id+"_arrows");
+        if (t.title == 'Collapse All'){
+          e.style.display = 'block';
+          f.innerHTML = '&#x25E2;';
+        } else {
+          e.style.display = 'none';
+          f.innerHTML = '&#x25B7;';
+        }
+      }
+
+      function expand3(self, id) {
+        var t = document.getElementById(self);
+        var e = document.getElementById(id);
+        var f = document.getElementById(id+"_arrows");
+        if (t.title != 'Collapse All'){
+          e.style.display = 'none';
+          f.innerHTML = '&#x25B7;';
+        }
+      }
+
+      function expand(id) {
+        var t = document.getElementById('all');
+        var e = document.getElementById(id);
+        var f = document.getElementById(id+"_arrows");
+        if (t.title == 'Collapse All'){
+          e.style.display = 'block';
+          f.innerHTML = '&#x25E2;';
+        } else {
+          e.style.display = 'none';
+          f.innerHTML = '&#x25B7;';
+        }
+      }
+
+      function expand_collapse(id) {
+        var e = document.getElementById(id);
+        var f = document.getElementById(id+"_arrows");
+        if (e.style.display == 'none'){
+          e.style.display = 'block';
+          f.innerHTML = '&#x25E2;';
+        } else {
+          e.style.display = 'none';
+          f.innerHTML = '&#x25B7;';
+        }
+      }
+
+      function expand_collapse_inline(id) {
+        var e = document.getElementById(id);
+        var f = document.getElementById(id+"_arrows");
+        if (e.style.display == 'none'){
+          e.style.display = 'inline';
+          if (f != null) {
+            f.innerHTML = '&#x25E2;';
+          }
+        } else {
+          e.style.display = 'none';
+          if (f !=null) {
+            f.innerHTML = '&#x25B7;';
+          }
+        }
+      }
+
+    </script>
+
+    <header role="banner" id="header-wrapper">
+      <div class="container">
+        <div class="row" id="header-row">
+          <div class="hidden-xs col-sm-8 col-md-6 col-lg-5" id="header-left">
+            <div class="wrapper-logo-default">
+              <a href="https://www.eclipse.org/">
+                <img class="logo-eclipse-default img-responsive hidden-xs" alt="Eclipse Log" src="https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-426x100.png"/>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+<%-[Breadcrumb]-%>
+    <section class="hidden-print default-breadcrumbs" id="breadcrumb">
+      <div class="container">
+        <h3 class="sr-only">Breadcrumbs</h3>
+        <div class="row">
+          <div class="col-sm-16 padding-left-30">
+            <ol class="breadcrumb">
+              <li><a href="https://www.eclipse.org/">Home</a></li>
+              <li><a href="https://www.eclipse.org/downloads/">Downloads</a></li>
+<%for (Map.Entry<String, String> entry : report.getBreadcrumbs().entrySet()) {%>
+  <%if (entry.getValue() == null) {%>
+              <li class="active"><%=entry.getKey()%></li>
+  <%}
+    else {%>
+              <li><a href="<%=entry.getValue()%>"><%=entry.getKey()%></a></li>
+  <%}%>
+<%}%>
+            </ol>
+          </div>
+          <div class="col-sm-8 margin-top-15"></div>
+        </div>
+      </div>
+    </section>
+
+    <main class="no-promo">
+    <div class="novaContent container" id="novaContent">
+
+<%-[NavigationBar]-%>
+      <!-- navigation sidebar -->
+      <aside id="leftcol" class="col-md-4 font-smaller">
+        <ul id="leftnav" class="ul-left-nav fa-ul hidden-print">
+          <li class="separator">
+           <a class="separator" href="https://www.eclipse.org/downloads">Home</a>
+          </li>
+<%for (Map.Entry<String, String> entry : report.getNavigation().entrySet()) {
+    String label = entry.getValue();
+    boolean isTopLevel = !label.startsWith("-");
+    if (!isTopLevel)
+      label = label.substring(1);
+    int index = label.indexOf('@');
+    if (index != -1)
+      label = label.substring(0, label.length() - 1);
+    {%>
+          <li<%if (isTopLevel) {%> class="separator"<%}%>>
+    <%if (!isTopLevel) {%>
+            <tt class="orange">&#xbb;</tt>
+    <%}%>
+            <a class="separator" href="<%=entry.getKey()%>">
+            <%=label%>
+    <%if (index != -1) {%>
+            <div style="float: right;"><tt class="orange">&#xab;</tt></div>
+    <%}%>
+            </a>
+          </li>
+  <%}
+  }%>
+        </ul>
+      </aside>
+
+      <div id="maincontent">
+        <div id="midcolumn" style="width: 70%;">
+          <h2 style="text-align: center;"><%=report.getTitle()%></h2>
+          <p style="font-size: 125%; text-align: center;">
+<%if (!report.isRoot()) {
+    String date = report.getDate();
+    if (date != null) {%>
+            <b>Built: <%=date%></b>
+  <%}
+  }%>
+            <br/><b>Reported: <%=report.getNow()%></b>
+          </p>
+<%if (!report.isRoot()) {%>
+          <p style="text-align: center;">
+            <button title="Copy to Clipboard" class="orange bb" style="font-size: 150%;" onclick="copyToClipboard('#p1')">&#x270e;</button>
+            <span id="p1" style="font-size: 125%"><%=report.getSiteURL()%></span>
+          </p>
+<%}%>
+          <br/>
+          <img style="float:right" src="https://wiki.eclipse.org/images/d/dc/Oomph_Project_Logo.png" alt=""/>
+<%if (report.isRoot()) {%>
+           <p>This is the generated report index.</p>
+           <p>These reports are produced by <a href="https://ci.eclipse.org/oomph/" target="oomph_jipp">https://ci.eclipse.org/oomph/</a>.</p>
+<%}
+  else {
+    String id = "_root_";%>
+           <p>
+             This is a generated report for the following p2 update site:
+           </p>
+           <p style="margin-left: 1em">
+             <button title="Copy to Clipboard" class="orange bb" style="font-size: 125%;" onclick="copyToClipboard('#<%=id%>')">&#x270e;</button>
+             <a href="<%=report.getSiteURL()%>" id="<%=id%>" style="font-weight: normal;"><%=report.getSiteURL()%></a>
+           </p>
+<%}%>
+<%if (!children.isEmpty()) {%>
+           <p>
+  <%if (!report.isRoot()) {%>
+             This is a composite update site.
+  <%}%>
+             In addition to this composite report, reports are also generated for each of the following composed children:
+           </p>
+  <%for (Report child : children) {
+      String id = report.getFolderID(child.getRelativeIndexURL());%>
+           <h3><a href="<%=child.getRelativeIndexURL()%>" style="font-weight: normal;"><%=child.getTitle()%></a></h3>
+           <p style="margin-left: 1em">
+             <button title="Copy to Clipboard" class="orange bb" style="font-size: 125%;" onclick="copyToClipboard('#<%=id%>')">&#x270e;</button>
+             <a href="<%=child.getSiteURL()%>" id="<%=id%>" style="font-weight: normal;"><%=child.getSiteURL()%></a>
+           </p>
+  <%}%>
+<%}%>
+<%{%>
+<%-[License]-%>
+  <%Map<LicenseDetail, Set<IInstallableUnit>> licenses = report.getLicenses();
+    if (!licenses.isEmpty()) {
+      String display = "block";
+      String displayButton = "inline";
+      int nonConformant = 0;
+      for (LicenseDetail license : licenses.keySet()) {
+        if (!license.isSUA())
+          ++nonConformant;
+      }
+      String licenseImage = report.getLicenseImage();%>
+           <h3>
+           <button id="licenses_arrows" class="orange bb" onclick="expand_collapse('licenses'); expand_collapse_inline('licenses_all_arrows');">&#x25B7;</button>
+           <img class="fit-image" src="<%=licenseImage%>"/>
+           Licenses
+           <span style="color: DarkCyan;"><%=licenses.size()%></span>
+    <%if (nonConformant != 0) {%>
+           <span style="color: FireBrick; font-size: 60%;">(<%=nonConformant%> Invalid Licenses)</span>
+    <%}%>
+    <%{
+        StringBuilder onClick = new StringBuilder();
+        for (LicenseDetail license : licenses.keySet()) {
+          String id = license.getUUID();
+          onClick.append("expand2('licenses_all_arrows', '").append("_" + id).append("');");
+          onClick.append("expand2('licenses_all_arrows', '").append("__" + id).append("');");
+          onClick.append("expand3('licenses_all_arrows', '").append("_f" + id).append("');");
+        }%>
+           <button id="licenses_all_arrows" title="Expand All" class="orange bb" style="display: <%=displayButton%>;" onclick="toggle('licenses_all_arrows');<%=onClick%>">&#x25B7;</button>
+    <%}%>
+           </h3>
+           <ul id="licenses" style="display: <%=display%>; margin-left: -1em; list-style-type: none; padding: 0; margin: 0;">
+    <%for (Map.Entry<LicenseDetail, Set<IInstallableUnit>> entry : licenses.entrySet()) {
+        LicenseDetail license = entry.getKey();
+        String id = license.getUUID();
+        List<String> features = report.getFeatures(entry.getValue());
+        String backgroundColor = license.isSUA() ? "HoneyDew" : license.isMatchedSUA() ? "SeaShell" : "MistyRose";
+        String replacementFontSize = !license.getReplacement().isEmpty() && license.getReplacement().length() < 5 ? "font-size: 300%;" : "";
+        String mismatchingFontSize = license.getMismatching().length() < 5 ? "font-size: 300%;" : "";
+        {%>
+             <li>
+               <button id="__<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('__<%=id%>');">&#x25B7;</button>
+               <img class="fit-image" src="<%=licenseImage%>"/>
+               <span style="<%=helper.getStyle(license)%>"><%=license.getVersion()%></span>
+               -
+               <span style="color: DarkCyan;"><%=features.size()%></span>
+               <ul style="display:none; list-style-type: none; padding: 0; margin: 0;" id="__<%=id%>">
+                 <li style="margin-left: 1em;">
+                   <button id="_<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('_<%=id%>');">&#x25B7;</button>
+                   <%=id%><br/>
+                   <pre id="_<%=id%>" style="display:none; margin-left: 2em; background-color: <%=backgroundColor%>"><%=license.getMatchingPrefix()%><span style="color: red; text-decoration: line-through; <%=mismatchingFontSize%>"><%=license.getMismatching()%></span><span style="color: green; text-decoration: underline; <%=replacementFontSize%>"><%=license.getReplacement()%></span><%=license.getMatchingSuffix()%></pre>
+                 </li>
+                 <li style="margin-left: 1em;">
+                   <button id="_f<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('_f<%=id%>');">&#x25B7;</button>
+                   Features
+                   <ul style="display:none; padding: 0; margin: 0; margin-left: 3em;" id="_f<%=id%>">
+        <%for (String feature : features) {%>
+                    <li class="font-smaller text-nowrap"><%=feature.replace(" ", "&nbsp;")%></li>
+        <%}%>
+                   </ul>
+                 </li>
+               </ul>
+             </li>
+      <%}
+      }%>
+           </ul>
+  <%}%>
+<%-[Certificates]-%>
+  <%{
+      Map<List<Certificate>, Map<String, IInstallableUnit>> allCertificates = report.getCertificates();
+      int idCount = 0;
+      Map<String, IInstallableUnit> unsigned = allCertificates.get(Collections.emptyList());
+      boolean isInitiallyExpanded = false;
+      String display = isInitiallyExpanded ? "block" : "none";
+      String displayButton = isInitiallyExpanded ? "inline" : "none";%>
+           <p></p>
+           <h3>
+           <button id="certificates_arrows" class="orange bb" onclick="expand_collapse('certificates'); expand_collapse_inline('certificates_all_arrows');">&#x25B7;</button>
+           <img class="fit-image" src="<%=report.getSignedImage(true)%>"/>
+           Signing Certificates
+           <span style="color: DarkCyan;"><%=allCertificates.size()%></span>
+    <%if (unsigned != null) {%>
+           <span style="color: FireBrick; font-size: 60%;">(<%=unsigned.size()%> Unsigned Artifacts)</span>
+    <%}%>
+    <%{
+        StringBuilder onClick = new StringBuilder();
+        for (int i = 0, size = allCertificates.size(); i < size; ++i) {
+          String id = "certificates" + ++idCount;
+          onClick.append("expand2('certificates_all_arrows', '").append(id).append("');");
+        }
+        idCount = 0;%>
+           <button id="certificates_all_arrows" title="Expand All" class="orange bb" style="display: <%=displayButton%>;" onclick="toggle('certificates_all_arrows');<%=onClick%>">&#x25B7;</button>
+    <%}%>
+           </h3>
+           <ul id="certificates" style="display:<%=display%>; margin-left: -1em; list-style-type: none;">
+    <%for (Map.Entry<List<Certificate>, Map<String, IInstallableUnit>> entry : allCertificates.entrySet()) {
+        List<Certificate> certificates = entry.getKey();
+        String id = "certificates" + ++idCount;%>
+           <li>
+      <%if (certificates.isEmpty()) {%>
+             <div style="text-indent: -2em">
+               <button id="<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('<%=id%>');">&#x25B7;</button>
+               <img class="fit-image" src="<%=report.getSignedImage(false)%>"/>
+               <span style="color: FireBrick;">(<%=entry.getValue().size()%>) Unsigned</span>
+             </div>
+      <%}
+        else {%>
+        <%int count = 0;
+          for (Certificate certificate : certificates) {
+            Map<String, String> components = report.getCertificateComponents(certificate);%>
+             <div class="font-smaller" style="margin-left: <%=count++ + 2%>em; text-indent: -4em;">
+          <%if (count == 1) {%>
+               <button id="<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('<%=id%>');">&#x25B7;</button>
+          <%}
+            else {%>
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <%}%>
+               <img alt="Signed" class="fit-image" src="<%=report.getSignedImage(true)%>"/>
+          <%if (count == 1) {%>
+               <span style="color: DarkCyan; font-size: 110%;">(<%=entry.getValue().size()%>)</span>
+          <%}%>
+          <%for (Map.Entry<String, String> component : components.entrySet()) {
+              String key = component.getKey();
+              String value = component.getValue();%>
+               <span clas="text-nowrap"><span style="color: SteelBlue; font-size: 75%;"><%=key%>=</span><%=value%></span>
+          <%}%>
+             </div>
+        <%}
+        }%>
+             <ul class="font-smaller" style="display:none; margin-left: -2em;" id="<%=id%>">
+      <%Map<String, IInstallableUnit> artifacts = entry.getValue();
+        for (Map.Entry<String, IInstallableUnit> artifact : artifacts.entrySet()) {%>
+               <li>
+                 <%=artifact.getKey()%>
+               </li>
+      <%}%>
+             </ul>
+           </li>
+    <%}%>
+           </ul>
+  <%}%>
+<!--- providers -->
+<%-[Providers]-%>
+  <%Map<String, Set<IInstallableUnit>> featureProviders = report.getFeatureProviders();
+    int nonEclipse = 0;
+    for (String provider : featureProviders.keySet()) {
+      if (!provider.toLowerCase().contains("eclipse"))
+        ++nonEclipse;
+    }%>
+           <p></p>
+           <h3>
+           <button id="feature_providers_arrows" class="orange bb" onclick="expand_collapse('feature_providers');">&#x25B7;</button>
+           <img class="fit-image" src="<%=report.getProviderImage()%>"/>
+           Providers
+           <span style="color: DarkCyan;"><%=featureProviders.size()%></span>
+  <%if (nonEclipse != 0) {%>
+           <span style="color: FireBrick; font-size: 60%;">(<%=nonEclipse%> Not Provided by Eclipse)</span>
+  <%}%>
+           </h3>
+           <ul id="feature_providers" style="display:none; margin-left: -1em; list-style-type: none;">
+  <%int count = 0;
+    for (Map.Entry<String, Set<IInstallableUnit>> provider : featureProviders.entrySet()) {
+      String style = !provider.getKey().toLowerCase().contains("eclipse") ? " style=\"color: FireBrick;\"" : "";
+      Set<IInstallableUnit> features = provider.getValue();
+      String id = "nested_feature_providers" + ++count;%>
+             <li>
+               <button id="<%=id%>_arrows" class="orange bb" onclick="expand_collapse('<%=id%>');">&#x25B7;</button>
+    <%for (String image : report.getBrandingImages(features)) {%>
+               <img alt="Branding Image" class="fit-image" src="<%=image%>"/>
+    <%}%>
+               <span <%=style%>><%=provider.getKey()%></span>
+               <span style="color: DarkCyan;"><%=features.size()%></span>
+               <ul id="<%=id%>" style="display:none; margin-left: -1em; list-style-type: none;">
+    <%for (IInstallableUnit feature : features) {
+        String brandingImage = report.getBrandingImage(feature);%>
+                 <li>
+                   <img alt="Branding Image" class="fit-image" src="<%=brandingImage%>"/>
+                   <%=report.getName(feature)%>
+                   <span style="color: DarkOliveGreen;"><%=report.getVersion(feature)%></span>
+                 </li>
+    <%}%>
+               </ul>
+             </li>
+  <%}%>
+           </ul>
+<%-[Features]-%>
+  <%List<IInstallableUnit> features = report.getFeatureIUs();
+    if (!features.isEmpty()) {
+      int brokenBranding = 0;
+      int noBranding = 0;
+      for (IInstallableUnit feature : features) {
+        if (report.hasBrokenBrandingImage(feature))
+          ++brokenBranding;
+        else if (!report.hasBrandingImage(feature))
+          ++noBranding;
+      }%>
+           <p></p>
+           <h3>
+           <button id="features_arrows" class="orange bb" onclick="expand_collapse('features');">&#x25B7;</button>
+           <img class="fit-image" src="<%=report.getFeatureImage()%>"/>
+           Features
+           <span style="color: DarkCyan;"><%=features.size()%></span>
+    <%if (brokenBranding != 0) {%>
+           <span style="color: FireBrick; font-size: 60%;">(<%=brokenBranding%> Broken Branding Images)</span>
+    <%}%>
+    <%if (noBranding != 0) {%>
+           <span style="color: FireBrick; font-size: 60%;">(<%=noBranding%> No Branding Images)</span>
+    <%}%>
+           </h3>
+           <ul id="features" style="display: none;">
+    <%for (IInstallableUnit feature : features) {
+        String brandingImage = report.getBrandingImage(feature);%>
+             <li style="font-size: 100%; white-space: nowrap;">
+               <img class="fit-image" src="<%=brandingImage%>"/>
+               <%=report.getName(feature)%>
+               <span style="color: DarkOliveGreen;"><%=report.getVersion(feature)%></span>
+      <%Map<String, String> licenseReplacements = new HashMap<String, String>();
+        for (LicenseDetail license : report.getLicenses(feature)) {
+          String id = license.getUUID();
+          licenseReplacements.put(">" + id, "><button class='bb search-for-me' style='" + helper.getStyle(license) + "' onclick=\"clickOnButton('lic_" + id
+              + "');\">" + license.getVersion() + "</button>");%>
+               <button id="lic_<%=id%>" class="bb" style="<%=helper.getStyle(license)%>" onclick="clickOnToggleButton('licenses_arrows'); clickOnToggleButton('__<%=id%>_arrows'); clickOnToggleButton('_<%=id%>_arrows'); navigateTo('_<%=id%>');"><%=license.getVersion()%></button>
+      <%}%>
+             </li>
+    <%}%>
+           </ul>
+  <%}%>
+<%-[Products]-%>
+  <%{
+      Collection<IInstallableUnit> products = report.getProducts();
+      if (!products.isEmpty()) {
+        boolean isInitiallyExpanded = false;
+        String display = isInitiallyExpanded ? "block" : "none";
+        String displayButton = isInitiallyExpanded ? "inline" : "none";%>
+           <p></p>
+           <h3>
+           <button id="products_arrows" class="orange bb" onclick="expand_collapse('products'); expand_collapse_inline('products_all_arrows');">&#x25B7;</button>
+           <img class="fit-image> src="<%=report.getProductImage()%>"/>
+           Products
+           <span style="color: DarkCyan;"><%=products.size()%></span>
+      <%{
+          StringBuilder onClick = new StringBuilder();
+          for (IInstallableUnit product : products) {
+            String productID = "_product_" + report.getIUID(product);
+            onClick.append("expand2('products_all_arrows', '").append(productID).append("');");
+          }%>
+           <button id="products_all_arrows" title="Expand All" class="orange bb" style="display: <%=displayButton%>;" onclick="toggle('products_all_arrows');<%=onClick%>">&#x25B7;</button>
+      <%}%>
+           </h3>
+           <ul id="products" style="display: <%=display%>; margin-left: -1em; list-style-type: none; padding: 0; margin: 0;">
+      <%for (IInstallableUnit product : products) {
+          String productImage = report.getIUImage(product);
+          String productID = "_product_" + report.getIUID(product);
+          Set<IInstallableUnit> requiredIUs = report.getSortedByName(report.getResolvedRequirements(product));%>
+             <li style="font-size: 100%; white-space: nowrap;">
+        <%if (!requiredIUs.isEmpty()) {%>
+               <button id="<%=productID%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('<%=productID%>');">&#x25B7;</button>
+        <%}%>
+               <img class="fit-image" src="<%=productImage%>"/>
+               <%=report.getName(product)%>
+               <span style="color: DarkOliveGreen;"><%=report.getVersion(product)%></span>
+        <%if (!requiredIUs.isEmpty()) {%>
+               <ul class="font-smaller" id="<%=productID%>" style="display: none;">
+          <%for (IInstallableUnit requiredIU : requiredIUs) {%>
+                 <li>
+                   <img class="fit-image" src="<%=report.getIUImage(requiredIU)%>"/>
+                   <%=report.getName(requiredIU)%>
+                   <span style="color: DarkOliveGreen;"><%=report.getVersion(requiredIU)%></span>
+                 </li>
+          <%}%>
+               </ul>
+        <%}%>
+             </li>
+      <%}%>
+           </ul>
+    <%}
+    }%>
+<%-[Categories]-%>
+  <%if (!categories.isEmpty()) {
+      boolean isInitiallyExpanded = false;
+      String display = isInitiallyExpanded ? "block" : "none";
+      String displayButton = isInitiallyExpanded ? "inline" : "none";%>
+           <p></p>
+           <h3>
+           <button id="categories_arrows" class="orange bb" onclick="expand_collapse('categories'); expand_collapse_inline('categories_all_arrows');">&#x25B7;</button>
+           <img class="fit-image" src="<%=report.getCategoryImage()%>"/>
+           Categories
+           <span style="color: DarkCyan;"><%=categories.size()%></span>
+    <%{
+        StringBuilder onClick = new StringBuilder();
+        for (IInstallableUnit category : categories) {
+          String categoryID = "_category_" + report.getIUID(category);
+          onClick.append("expand2('categories_all_arrows', '").append(categoryID).append("');");
+        }%>
+           <button id="categories_all_arrows" title="Expand All" class="orange bb" style="display: <%=displayButton%>;" onclick="toggle('categories_all_arrows');<%=onClick%>">&#x25B7;</button>
+    <%}%>
+           </h3>
+           <ul id="categories" style="display: <%=display%>; margin-left: -1em; list-style-type: none; padding: 0; margin: 0;">
+    <%for (IInstallableUnit category : categories) {
+        String categoryImage = report.getIUImage(category);
+        String categoryID = "_category_" + report.getIUID(category);
+        Set<IInstallableUnit> requiredIUs = report.getSortedByName(report.getResolvedRequirements(category));%>
+             <li style="font-size: 100%; white-space: nowrap;">
+      <%if (!requiredIUs.isEmpty()) {%>
+               <button id="<%=categoryID%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('<%=categoryID%>');">&#x25B7;</button>
+      <%}%>
+               <img class="fit-image" src="<%=categoryImage%>"/>
+               <%=report.getName(category)%>
+      <%if (!requiredIUs.isEmpty()) {%>
+               <ul class="font-smaller" id="<%=categoryID%>" style="display: none;">
+        <%for (IInstallableUnit requiredIU : requiredIUs) {%>
+                 <li>
+                   <img class="fit-image" src="<%=report.getIUImage(requiredIU)%>"/>
+                   <%=report.getName(requiredIU)%>
+                   <span style="color: DarkOliveGreen;"><%=report.getVersion(requiredIU)%></span>
+                 </li>
+        <%}%>
+               </ul>
+      <%}%>
+             </li>
+    <%}%>
+           </ul>
+  <%}%>
+<%-[IUs]-%>
+  <%Collection<IInstallableUnit> ius = report.getAllIUs();
+    if (!ius.isEmpty()) {
+      Collection<IInstallableUnit> pluginsWithMissingPackGZ = report.getPluginsWithMissingPackGZ();
+      Map<String, Set<Version>> iuVersions = report.getIUVersions();
+      int duplicateCount = 0;
+      for (Set<Version> versions : iuVersions.values()) {
+        if (versions.size() > 1)
+          ++duplicateCount;
+      }%>
+           <h3>
+           <button id="ius_arrows" class="orange bb" onclick="expand_collapse('ius');expand_collapse('ius_details');">&#x25B7;</button>
+           <img class="fit-image" src="<%=report.getBundleImage()%>"/>
+           Installable Units
+           <span style="color: DarkCyan;"><%=ius.size()%></span>
+    <%if (!pluginsWithMissingPackGZ.isEmpty()) {%>
+           <span style="color: FireBrick; font-size: 60%;">(<%=pluginsWithMissingPackGZ.size()%> Missing *.pack.gz)</span>
+    <%}%>
+    <%if (duplicateCount > 0) {%>
+           <span style="color: FireBrick; font-size: 60%;">(<%=duplicateCount%> with Multiple Versions)</span>
+    <%}%>
+           </h3>
+           <div id="ius" style="display:none;">
+             <span style="margin-left: 1em;">
+               Filters:
+               <button id="filter" class="filter" onclick="filterIU('iu-li');">All</button>
+               <button id="duplicates" class="filter" onclick="filterIU('duplicate');">Duplicates</button>
+               <button id="missing" class="filter" onclick="filterIU('missing');">Missing .pack.gz</button>
+             </span>
+           <ul style="margin-left: -1em; list-style-type: none; padding: 0; margin: 0;">
+    <%for (IInstallableUnit iu : ius) {
+        String iuID = iu.getId();
+        String id = report.getIUID(iu);
+        boolean duplicateVersions = iuVersions.get(iu.getId()).size() > 1;
+        String versionStyle = duplicateVersions ? " font-weight: bold;" : "";
+        StringBuilder classNames = new StringBuilder();
+        if (duplicateVersions) {
+          classNames.append(" duplicate");
+        }
+        if (pluginsWithMissingPackGZ.contains(iu)) {
+          classNames.append(" missing");
+        }%>
+             <li id="_iu_<%=id%>" class="iu-li<%=classNames%> font-smaller">
+              <button id="<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('<%=id%>');"><%-&#x25B7;-%>&bull;</button>
+              <img class="fit-image" src="<%=report.getIUImage(iu)%>"/>
+              <span style="font-size:100%;"><%=iuID%></span>
+              <span style="color: DarkOliveGreen;<%=versionStyle%>"><%=report.getVersion(iu)%></span>
+      <%Map<String, String> licenseReplacements = new HashMap<String, String>();
+        if (report.isFeature(iu)) {
+          for (LicenseDetail license : report.getLicenses(iu)) {
+            String licenseID = license.getUUID();
+            licenseReplacements.put(">" + licenseID, "><button class='bb search-for-me' style='" + helper.getStyle(license)
+                + "' onclick=\"clickOnButton('lic_" + licenseID + "');\">" + license.getVersion() + "</button>");%>
+              <button id="lic_<%=licenseID%>" class="bb" style="<%=helper.getStyle(license)%>" onclick="clickOnToggleButton('licenses_arrows'); clickOnToggleButton('__<%=licenseID%>_arrows'); clickOnToggleButton('_<%=licenseID%>_arrows'); navigateTo('_<%=licenseID%>');"><%=license.getVersion()%></button>
+        <%}%>
+      <%}%>
+      <%Map<String, Boolean> artifacts = report.getIUArtifacts(iu);
+        for (Map.Entry<String, Boolean> entry : artifacts.entrySet()) {
+          String artifact = entry.getKey();
+          Boolean signed = entry.getValue();%>
+             (
+        <%if (signed != null) {%>
+             <img class="fit-image" src="<%=report.getSignedImage(signed)%>"/>
+        <%}%>
+             <img class="fit-image" src="<%=report.getArtifactImage(artifact)%>"/>
+             <span style="color: DarkCyan;"><%=report.getArtifactSize(artifact)%></span>
+             )
+      <%}%>
+      <%if (pluginsWithMissingPackGZ.contains(iu)) {%>
+             (
+             <img class="fit-image" src="<%=report.getErrorImage()%>"/>
+             <img class="fit-image" src="<%=report.getArtifactImage("*.jar.pack.gz")%>"/>
+             )
+      <%}%>
+<%-
+              <div id="<%=id%>" class="xml-iu" style="display:none; margin-left: 2em;">
+      <%for (String xml : report.getXML(iu, licenseReplacements)) {%>
+<!--------------><%=xml%>
+      <%}%>
+              </div>
+-%>
+            </li>
+    <%}%>
+           </ul>
+           </div>
+  <%}%>
+<%}%>
+
+        </div>
+      </div>
+     </div>
+     </main>
+  </body>
+</html>

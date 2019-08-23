@@ -22,4 +22,17 @@
             supportsArgument="true"/>
    </extension>
 
+   <extension
+         id="RepositoryIntegrityAnalyzer"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="org.eclipse.oomph.p2.internal.core.RepositoryIntegrityAnalyzer">
+         </run>
+      </application>
+   </extension>
+ 
 </plugin>
