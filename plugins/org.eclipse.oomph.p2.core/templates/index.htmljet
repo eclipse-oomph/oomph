@@ -350,7 +350,7 @@
            </p>
   <%for (Report child : children) {
       String id = report.getFolderID(child.getRelativeIndexURL());%>
-           <h3><a href="<%=child.getRelativeIndexURL()%>" style="font-weight: normal;"><%=child.getTitle()%></a></h3>
+           <h3 style="font-weight: bold;"><a href="<%=child.getRelativeIndexURL()%>" style="font-weight: normal;"><%=child.getTitle()%></a></h3>
            <p style="margin-left: 1em">
              <button title="Copy to Clipboard" class="orange bb" style="font-size: 125%;" onclick="copyToClipboard('#<%=id%>')">&#x270e;</button>
              <a href="<%=child.getSiteURL()%>" id="<%=id%>" style="font-weight: normal;"><%=child.getSiteURL()%></a>
@@ -369,7 +369,7 @@
           ++nonConformant;
       }
       String licenseImage = report.getLicenseImage();%>
-           <h3>
+           <h3 style="font-weight: bold;">
            <button id="licenses_arrows" class="orange bb" onclick="expand_collapse('licenses'); expand_collapse_inline('licenses_all_arrows');">&#x25B7;</button>
            <img class="fit-image" src="<%=licenseImage%>"/>
            Licenses
@@ -433,7 +433,7 @@
       String display = isInitiallyExpanded ? "block" : "none";
       String displayButton = isInitiallyExpanded ? "inline" : "none";%>
            <p></p>
-           <h3>
+           <h3 style="font-weight: bold;">
            <button id="certificates_arrows" class="orange bb" onclick="expand_collapse('certificates'); expand_collapse_inline('certificates_all_arrows');">&#x25B7;</button>
            <img class="fit-image" src="<%=report.getSignedImage(true)%>"/>
            Signing Certificates
@@ -507,7 +507,7 @@
         ++nonEclipse;
     }%>
            <p></p>
-           <h3>
+           <h3 style="font-weight: bold;">
            <button id="feature_providers_arrows" class="orange bb" onclick="expand_collapse('feature_providers');">&#x25B7;</button>
            <img class="fit-image" src="<%=report.getProviderImage()%>"/>
            Providers
@@ -554,7 +554,7 @@
           ++noBranding;
       }%>
            <p></p>
-           <h3>
+           <h3 style="font-weight: bold;">
            <button id="features_arrows" class="orange bb" onclick="expand_collapse('features');">&#x25B7;</button>
            <img class="fit-image" src="<%=report.getFeatureImage()%>"/>
            Features
@@ -592,7 +592,7 @@
         String display = isInitiallyExpanded ? "block" : "none";
         String displayButton = isInitiallyExpanded ? "inline" : "none";%>
            <p></p>
-           <h3>
+           <h3 style="font-weight: bold;">
            <button id="products_arrows" class="orange bb" onclick="expand_collapse('products'); expand_collapse_inline('products_all_arrows');">&#x25B7;</button>
            <img class="fit-image> src="<%=report.getProductImage()%>"/>
            Products
@@ -640,7 +640,7 @@
       String display = isInitiallyExpanded ? "block" : "none";
       String displayButton = isInitiallyExpanded ? "inline" : "none";%>
            <p></p>
-           <h3>
+           <h3 style="font-weight: bold;">
            <button id="categories_arrows" class="orange bb" onclick="expand_collapse('categories'); expand_collapse_inline('categories_all_arrows');">&#x25B7;</button>
            <img class="fit-image" src="<%=report.getCategoryImage()%>"/>
            Categories
@@ -690,7 +690,7 @@
         if (versions.size() > 1)
           ++duplicateCount;
       }%>
-           <h3>
+           <h3 style="font-weight: bold;">
            <button id="ius_arrows" class="orange bb" onclick="expand_collapse('ius');expand_collapse('ius_details');">&#x25B7;</button>
            <img class="fit-image" src="<%=report.getBundleImage()%>"/>
            Installable Units

@@ -135,8 +135,8 @@ public class RepositoryIndex
   protected static final String _115 = "<div style=\"text-indent: -2em\">";
   protected static final String _116 = "<h2 style=\"text-align: center;\">";
   protected static final String _117 = "<h3 class=\"sr-only\">Breadcrumbs</h3>";
-  protected static final String _118 = "<h3>";
-  protected static final String _119 = "<h3><a href=\"";
+  protected static final String _118 = "<h3 style=\"font-weight: bold;\">";
+  protected static final String _119 = "<h3 style=\"font-weight: bold;\"><a href=\"";
   protected static final String _120 = "<head>";
   protected static final String _121 = "<header role=\"banner\" id=\"header-wrapper\">";
   protected static final String _122 = "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">";
