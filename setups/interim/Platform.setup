@@ -583,6 +583,63 @@
         label="Master"/>
     <description>The Platform Releng components</description>
   </project>
+  <project name="releng.aggregator"
+      label="Releng Aggregator">
+    <setupTask
+        xsi:type="git:GitCloneTask"
+        id="git.clone.platform.releng.aggregator"
+        remoteURI="platform/eclipse.platform.releng.aggregator">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Platform Releng Aggregator Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
+      <description>Platform Releng Aggregator</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.targlets:TargletTask">
+      <targlet
+          name="Platform Releng Aggregator">
+        <requirement
+            name="org.eclipse.platform.releng.tychoeclipsebuilder.plain.project"/>
+        <sourceLocator
+            rootFolder="${git.clone.platform.releng.aggregator.location}"
+            locateNestedProjects="true"/>
+      </targlet>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.workingsets:WorkingSetTask">
+      <workingSet
+          name="Platform Releng Aggregator">
+        <predicate
+            xsi:type="predicates:AndPredicate">
+          <operand
+              xsi:type="predicates:RepositoryPredicate"
+              project="org.eclipse.platform.releng.tychoeclipsebuilder"/>
+        </predicate>
+      </workingSet>
+    </setupTask>
+    <stream
+        name="master"
+        label="Master"/>
+    <description>The Platform Releng Agrregator components, including the Platform's products</description>
+  </project>
   <project href="https://git.eclipse.org/c/platform/eclipse.platform.resources.git/plain/bundles/org.eclipse.core.resources.releng/platformResources.setup#/"/>
   <project href="https://git.eclipse.org/c/platform/eclipse.platform.runtime.git/plain/bundles/org.eclipse.core.runtime.releng/platformRuntime.setup#/"/>
   <project href="https://git.eclipse.org/c/platform/eclipse.platform.swt.git/plain/bundles/org.eclipse.swt.tools/Oomph/platformSwt.setup#/"/>
