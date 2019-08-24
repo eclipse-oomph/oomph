@@ -264,8 +264,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
       shutDownExecutor();
 
-      images.clear();
-
       RepositoryIndex repositoryIndex = RepositoryIndex.create("\n");
       emitReport(new HashSet<Report>(), report, reportLocation, repositoryIndex);
 
@@ -274,6 +272,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         File reportPublishLocation = new File(publishLocation, relativePath);
         publish(reportLocation, reportPublishLocation);
       }
+
+      images.clear();
+      reports.clear();
+      details.clear();
     }
 
     return null;
@@ -281,8 +283,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private static java.net.URI toInternalRepositoryLocation(URI uri) throws URISyntaxException
   {
-    System.err.println("convertingToInternal " + uri + " ?" + DOWNLOAD_ECLIPSE_ORG_FOLDER.exists());
-
     if (DOWNLOAD_ECLIPSE_ORG_AUTHORITY.equals(uri.authority()) && DOWNLOAD_ECLIPSE_ORG_FOLDER.exists())
     {
       File file = DOWNLOAD_ECLIPSE_ORG_FOLDER;
@@ -290,8 +290,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       {
         file = new File(file, segment);
       }
-
-      System.err.println("convertingToInternal and looking at " + file);
 
       if (file.exists())
       {
