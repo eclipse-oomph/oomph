@@ -1017,9 +1017,10 @@ public class RepositoryIndex
       boolean isSimple = report.isSimple();
       int duplicateCount = 0;
       if (isSimple) {
-        for (Set<Version> versions : iuVersions.values()) {
-          if (versions.size() > 1)
+        for (Map.Entry<String, Set<Version>> entry : iuVersions.entrySet()) {
+          if (entry.getValue().size() > 1 && !report.isDuplicationExpected(entry.getKey())) {
             ++duplicateCount;
+          }
         }
       }
     stringBuffer.append(_391);
@@ -1041,7 +1042,7 @@ public class RepositoryIndex
     for (IInstallableUnit iu : ius) {
         String iuID = iu.getId();
         String id = report.getIUID(iu);
-        boolean duplicateVersions = isSimple && iuVersions.get(iu.getId()).size() > 1;
+        boolean duplicateVersions = isSimple && !report.isDuplicationExpected(iu.getId()) && iuVersions.get(iu.getId()).size() > 1;
         String versionStyle = duplicateVersions ? " font-weight: bold;" : "";
         StringBuilder classNames = new StringBuilder();
         if (duplicateVersions) {

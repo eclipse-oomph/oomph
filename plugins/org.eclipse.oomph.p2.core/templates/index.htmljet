@@ -1,7 +1,14 @@
 <%@jet
   package="org.eclipse.oomph.p2.internal.core"
   class="RepositoryIndex"
-  imports="java.security.cert.Certificate java.util.* org.eclipse.equinox.p2.metadata.* org.eclipse.oomph.p2.internal.core.RepositoryIntegrityAnalyzer.Report org.eclipse.oomph.p2.internal.core.RepositoryIntegrityAnalyzer.Report.LicenseDetail"
+  imports=
+    "
+      java.security.cert.Certificate
+      java.util.*
+      org.eclipse.equinox.p2.metadata.*
+      org.eclipse.oomph.p2.internal.core.RepositoryIntegrityAnalyzer.Report
+      org.eclipse.oomph.p2.internal.core.RepositoryIntegrityAnalyzer.Report.LicenseDetail
+    "
   minimize="true"%>
 <%Report report = (Report)argument;
   List<Report> children = report.getChildren();
@@ -675,9 +682,10 @@
       boolean isSimple = report.isSimple();
       int duplicateCount = 0;
       if (isSimple) {
-        for (Set<Version> versions : iuVersions.values()) {
-          if (versions.size() > 1)
+        for (Map.Entry<String, Set<Version>> entry : iuVersions.entrySet()) {
+          if (entry.getValue().size() > 1 && !report.isDuplicationExpected(entry.getKey())) {
             ++duplicateCount;
+          }
         }
       }%>
            <h3 style="font-weight: bold;">
@@ -703,7 +711,7 @@
     <%for (IInstallableUnit iu : ius) {
         String iuID = iu.getId();
         String id = report.getIUID(iu);
-        boolean duplicateVersions = isSimple && iuVersions.get(iu.getId()).size() > 1;
+        boolean duplicateVersions = isSimple && !report.isDuplicationExpected(iu.getId()) && iuVersions.get(iu.getId()).size() > 1;
         String versionStyle = duplicateVersions ? " font-weight: bold;" : "";
         StringBuilder classNames = new StringBuilder();
         if (duplicateVersions) {

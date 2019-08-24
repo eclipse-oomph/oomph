@@ -531,10 +531,31 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         licenseIUs.put(getLicenseDetail(sua, true), new LinkedHashSet<IInstallableUnit>());
       }
 
+      final Set<String> expectedDuplicates = new HashSet<String>();
+      expectedDuplicates.add("a.jre.javase");
+      expectedDuplicates.add("config.a.jre.javase");
       IQueryResult<IInstallableUnit> groupQuery = metadataRepository.query(QueryUtil.createIUGroupQuery(), new NullProgressMonitor());
-      for (IInstallableUnit installableUnit : P2Util.asIterable(groupQuery))
+      for (IInstallableUnit iu : P2Util.asIterable(groupQuery))
       {
-        CollectionUtil.addAll(licenseIUs, getLicenses(installableUnit), installableUnit);
+        CollectionUtil.addAll(licenseIUs, getLicenses(iu), iu);
+
+        Set<String> ids = new HashSet<String>();
+        for (final IRequirement requirement : iu.getRequirements())
+        {
+          if (requirement instanceof IRequiredCapability)
+          {
+            IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
+            String namespace = requiredCapability.getNamespace();
+            if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
+            {
+              String name = requiredCapability.getName();
+              if (!ids.add(name))
+              {
+                expectedDuplicates.add(name);
+              }
+            }
+          }
+        }
       }
 
       final Map<Report.LicenseDetail, Set<IInstallableUnit>> sortedLicenseIUs = new LinkedHashMap<Report.LicenseDetail, Set<IInstallableUnit>>();
@@ -1160,6 +1181,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         public Set<IInstallableUnit> getProducts()
         {
           return productIUs;
+        }
+
+        @Override
+        public boolean isDuplicationExpected(String id)
+        {
+          return expectedDuplicates.contains(id);
         }
 
         @Override
@@ -2295,6 +2322,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     }
 
     public abstract Map<String, List<String>> getBundles();
+
+    public abstract boolean isDuplicationExpected(String id);
 
     public abstract Set<IInstallableUnit> getAllIUs();
 
