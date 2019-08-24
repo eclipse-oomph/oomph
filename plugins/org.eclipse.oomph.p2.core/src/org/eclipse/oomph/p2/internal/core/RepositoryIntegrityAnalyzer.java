@@ -275,7 +275,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
       images.clear();
       reports.clear();
-      details.clear();
     }
 
     return null;

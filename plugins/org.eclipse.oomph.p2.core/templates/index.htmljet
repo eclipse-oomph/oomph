@@ -377,7 +377,7 @@
     <%for (Map.Entry<LicenseDetail, Set<IInstallableUnit>> entry : licenses.entrySet()) {
         LicenseDetail license = entry.getKey();
         String id = license.getUUID();
-        List<String> features = report.getFeatures(entry.getValue());
+        Set<IInstallableUnit> ius = entry.getValue();
         String backgroundColor = license.isSUA() ? "HoneyDew" : license.isMatchedSUA() ? "SeaShell" : "MistyRose";
         String replacementFontSize = !license.getReplacement().isEmpty() && license.getReplacement().length() < 5 ? "font-size: 300%;" : "";
         String mismatchingFontSize = license.getMismatching().length() < 5 ? "font-size: 300%;" : "";
@@ -387,7 +387,7 @@
                <img class="fit-image" src="<%=licenseImage%>"/>
                <span style="<%=helper.getStyle(license)%>"><%=license.getVersion()%></span>
                -
-               <span style="color: DarkCyan;"><%=features.size()%></span>
+               <span style="color: DarkCyan;"><%=ius.size()%></span>
                <ul style="display:none; list-style-type: none; padding: 0; margin: 0;" id="__<%=id%>">
                  <li style="margin-left: 1em;">
                    <button id="_<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('_<%=id%>');">&#x25B7;</button>
@@ -396,10 +396,14 @@
                  </li>
                  <li style="margin-left: 1em;">
                    <button id="_f<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('_f<%=id%>');">&#x25B7;</button>
-                   Features
+                   Features/Products
                    <ul style="display:none; padding: 0; margin: 0; margin-left: 3em;" id="_f<%=id%>">
-        <%for (String feature : features) {%>
-                    <li class="font-smaller text-nowrap"><%=feature.replace(" ", "&nbsp;")%></li>
+        <%for (IInstallableUnit iu : ius) {%>
+                    <li class="font-smaller text-nowrap">
+                      <img class="fit-image" src="<%=report.getIUImage(iu)%>"/>
+                      <%=report.getName(iu).replace(" ", "&nbsp;")%>
+                      <span style="color: DarkOliveGreen;"><%=report.getVersion(iu)%></span>
+                    </li>
         <%}%>
                    </ul>
                  </li>
