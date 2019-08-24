@@ -260,8 +260,7 @@
 <%for (Map.Entry<String, String> entry : report.getBreadcrumbs().entrySet()) {%>
   <%if (entry.getValue() == null) {%>
               <li class="active"><%=entry.getKey()%></li>
-  <%}
-    else {%>
+  <%} else {%>
               <li><a href="<%=entry.getValue()%>"><%=entry.getKey()%></a></li>
   <%}%>
 <%}%>
@@ -309,38 +308,24 @@
 
       <div id="maincontent">
         <div id="midcolumn" style="width: 70%;">
-          <h2 style="text-align: center;"><%=report.getTitle()%></h2>
+          <h2 style="text-align: center;"><%=report.getTitle(true)%></h2>
           <p style="font-size: 125%; text-align: center;">
-<%if (!report.isRoot()) {
-    String date = report.getDate();
-    if (date != null) {%>
-            <b>Built: <%=date%></b>
-  <%}
-  }%>
+<%-[Prelude]-%>
+<%if (report.getDate() != null) {%>
+            <b>Built: <%=report.getDate()%></b>
+<%}%>
             <br/><b>Reported: <%=report.getNow()%></b>
           </p>
-<%if (!report.isRoot()) {%>
           <p style="text-align: center;">
             <button title="Copy to Clipboard" class="orange bb" style="font-size: 150%;" onclick="copyToClipboard('#p1')">&#x270e;</button>
             <span id="p1" style="font-size: 125%"><%=report.getSiteURL()%></span>
           </p>
-<%}%>
           <br/>
-          <img style="float:right" src="https://wiki.eclipse.org/images/d/dc/Oomph_Project_Logo.png" alt=""/>
+          <img style="float:right" src="<%=report.getReportBrandingImage()%>" alt=""/>
 <%if (report.isRoot()) {%>
            <p>This is the generated report index.</p>
-           <p>These reports are produced by <a href="https://ci.eclipse.org/oomph/" target="oomph_jipp">https://ci.eclipse.org/oomph/</a>.</p>
-<%}
-  else {
-    String id = "_root_";%>
-           <p>
-             This is a generated report for the following p2 update site:
-           </p>
-           <p style="margin-left: 1em">
-             <button title="Copy to Clipboard" class="orange bb" style="font-size: 125%;" onclick="copyToClipboard('#<%=id%>')">&#x270e;</button>
-             <a href="<%=report.getSiteURL()%>" id="<%=id%>" style="font-weight: normal;"><%=report.getSiteURL()%></a>
-           </p>
 <%}%>
+           <p>This report is produced by <a href="<%=report.getReportSource()%>" target="report_source"><%=report.getReportSource()%></a>.</p>
 <%if (!children.isEmpty()) {%>
            <p>
   <%if (!report.isRoot()) {%>
@@ -350,7 +335,7 @@
            </p>
   <%for (Report child : children) {
       String id = report.getFolderID(child.getRelativeIndexURL());%>
-           <h3 style="font-weight: bold;"><a href="<%=child.getRelativeIndexURL()%>" style="font-weight: normal;"><%=child.getTitle()%></a></h3>
+           <h3 style="font-weight: bold;"><a href="<%=child.getRelativeIndexURL()%>" style="font-weight: normal;"><%=child.getTitle(false)%> <span class="orange" style="font-size: 60%;">&#x1F517;</span></a></h3>
            <p style="margin-left: 1em">
              <button title="Copy to Clipboard" class="orange bb" style="font-size: 125%;" onclick="copyToClipboard('#<%=id%>')">&#x270e;</button>
              <a href="<%=child.getSiteURL()%>" id="<%=id%>" style="font-weight: normal;"><%=child.getSiteURL()%></a>
@@ -462,16 +447,14 @@
                <img class="fit-image" src="<%=report.getSignedImage(false)%>"/>
                <span style="color: FireBrick;">(<%=entry.getValue().size()%>) Unsigned</span>
              </div>
-      <%}
-        else {%>
+      <%} else {%>
         <%int count = 0;
           for (Certificate certificate : certificates) {
             Map<String, String> components = report.getCertificateComponents(certificate);%>
              <div class="font-smaller" style="margin-left: <%=count++ + 2%>em; text-indent: -4em;">
           <%if (count == 1) {%>
                <button id="<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('<%=id%>');">&#x25B7;</button>
-          <%}
-            else {%>
+          <%} else {%>
                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <%}%>
                <img alt="Signed" class="fit-image" src="<%=report.getSignedImage(true)%>"/>
@@ -685,10 +668,13 @@
     if (!ius.isEmpty()) {
       Collection<IInstallableUnit> pluginsWithMissingPackGZ = report.getPluginsWithMissingPackGZ();
       Map<String, Set<Version>> iuVersions = report.getIUVersions();
+      boolean isSimple = report.isSimple();
       int duplicateCount = 0;
-      for (Set<Version> versions : iuVersions.values()) {
-        if (versions.size() > 1)
-          ++duplicateCount;
+      if (isSimple) {
+        for (Set<Version> versions : iuVersions.values()) {
+          if (versions.size() > 1)
+            ++duplicateCount;
+        }
       }%>
            <h3 style="font-weight: bold;">
            <button id="ius_arrows" class="orange bb" onclick="expand_collapse('ius');expand_collapse('ius_details');">&#x25B7;</button>
@@ -713,7 +699,7 @@
     <%for (IInstallableUnit iu : ius) {
         String iuID = iu.getId();
         String id = report.getIUID(iu);
-        boolean duplicateVersions = iuVersions.get(iu.getId()).size() > 1;
+        boolean duplicateVersions = isSimple && iuVersions.get(iu.getId()).size() > 1;
         String versionStyle = duplicateVersions ? " font-weight: bold;" : "";
         StringBuilder classNames = new StringBuilder();
         if (duplicateVersions) {

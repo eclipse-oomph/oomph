@@ -136,6 +136,14 @@ import java.util.regex.Pattern;
 @SuppressWarnings("restriction")
 public class RepositoryIntegrityAnalyzer implements IApplication
 {
+  private static final String DOWNLOAD_ECLIPSE_ORG_AUTHORITY = "download.eclipse.org";
+
+  private static final File DOWNLOAD_ECLIPSE_ORG_FOLDER = new File("/home/data/httpd/" + DOWNLOAD_ECLIPSE_ORG_AUTHORITY);
+
+  private static final String DOWNLOAD_ECLIPSE_ORG_FOLDER_URI = DOWNLOAD_ECLIPSE_ORG_FOLDER.toURI().toString();
+
+  private static final String DOWNLOAD_ECLIPSE_ORG_SERVER_URI = "https://" + DOWNLOAD_ECLIPSE_ORG_AUTHORITY + "/";
+
   private static final String PROCESSED = ".processed";
 
   private static final Comparator<IInstallableUnit> NAME_VERSION_COMPARATOR = new Comparator<IInstallableUnit>()
@@ -184,29 +192,52 @@ public class RepositoryIntegrityAnalyzer implements IApplication
   {
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
     Set<URI> uris = new LinkedHashSet<URI>();
-    URI outputLocation = null;
+    File outputLocation = new File(".").getCanonicalFile();
+    File publishLocation = null;
+    String reportSource = "https://ci.eclipse.org/oomph/job/repository-analyzer/";
+    String reportBranding = "https://wiki.eclipse.org/images/d/dc/Oomph_Project_Logo.png";
     if (arguments != null)
     {
       for (int i = 0; i < arguments.length; ++i)
       {
         String option = arguments[i];
-        if ("-outputLocation".equals(option) || "-o".equals(option))
+        if ("-output".equals(option) || "-o".equals(option))
         {
-          outputLocation = URI.createURI(arguments[++i]);
+          File file = new File(arguments[++i]);
+          outputLocation = file.getCanonicalFile();
+        }
+        else if ("-publish".equals(option) || "-p".equals(option))
+        {
+          File file = new File(arguments[++i]);
+          publishLocation = file.getCanonicalFile();
+        }
+        else if ("-source".equals(option) || "-s".equals(option))
+        {
+          reportSource = arguments[++i];
+        }
+        else if ("-branding".equals(option) || "-b".equals(option))
+        {
+          reportBranding = arguments[++i];
         }
         else
         {
-          uris.add(URI.createURI(arguments[i]));
+          URI uri = URI.createURI(arguments[i]);
+          if ("".equals(uri.lastSegment()))
+          {
+            uri = uri.trimSegments(1);
+          }
+          uris.add(uri);
         }
       }
     }
+
+    createFolders(outputLocation);
 
     CompositeMetadataRepository metadataRepository = CompositeMetadataRepository.createMemoryComposite(getAgent().getProvisioningAgent());
     metadataRepositories.put(metadataRepository.getLocation(), metadataRepository);
     for (URI uri : uris)
     {
-      java.net.URI location = new java.net.URI(uri.toString());
-      metadataRepository.addChild(location);
+      metadataRepository.addChild(toInternalRepositoryLocation(uri));
     }
 
     CompositeArtifactRepository artifactRepository = CompositeArtifactRepository.createMemoryComposite(getAgent().getProvisioningAgent());
@@ -214,24 +245,179 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     for (URI uri : uris)
     {
-      java.net.URI location = new java.net.URI(uri.toString());
-      artifactRepository.addChild(location);
+      artifactRepository.addChild(toInternalRepositoryLocation(uri));
     }
 
-    File cache = outputLocation == null ? null : new File(outputLocation.toFileString(), "artifacts");
-    Report report = generateReport(URI.createURI(metadataRepository.getLocation().toString()), cache);
+    File artifactCacheLocation = new File(outputLocation, "artifacts");
+    artifactCacheLocation.mkdir();
 
-    ExecutorService executor = getExecutor();
-    executor.shutdown();
-    executor.awaitTermination(30, TimeUnit.MINUTES);
+    for (URI uri : uris)
+    {
+      String relativePath = toRelativePath(uri);
+      File reportLocation = new File(outputLocation, relativePath);
 
-    RepositoryIndex repositoryIndex = RepositoryIndex.create("\n");
-    emitReport(new HashSet<Report>(), report, outputLocation, repositoryIndex);
+      // Clean it up before creating it.
+      IOUtil.deleteBestEffort(reportLocation);
+      createFolders(reportLocation);
+
+      Report report = generateReport(uri, uri, reportLocation, artifactCacheLocation, reportSource, reportBranding);
+
+      shutDownExecutor();
+
+      RepositoryIndex repositoryIndex = RepositoryIndex.create("\n");
+      emitReport(new HashSet<Report>(), report, reportLocation, repositoryIndex);
+
+      if (publishLocation != null)
+      {
+        File reportPublishLocation = new File(publishLocation, relativePath);
+        publish(reportLocation, reportPublishLocation);
+      }
+    }
 
     return null;
   }
 
-  private void emitReport(Set<Report> visited, Report report, URI outputLocation, RepositoryIndex repositoryIndexEmitter) throws IOException
+  private static java.net.URI toInternalRepositoryLocation(URI uri) throws URISyntaxException
+  {
+    if (DOWNLOAD_ECLIPSE_ORG_AUTHORITY.equals(uri.authority()) && DOWNLOAD_ECLIPSE_ORG_FOLDER.exists())
+    {
+      File file = DOWNLOAD_ECLIPSE_ORG_FOLDER;
+      for (String segment : uri.segments())
+      {
+        file = new File(file, segment);
+      }
+
+      if (file.exists())
+      {
+        return file.toURI();
+      }
+    }
+
+    java.net.URI location = new java.net.URI(uri.toString());
+    return location;
+  }
+
+  private static URI toExternalRepositoryLocation(java.net.URI child)
+  {
+    String childLocation = child.toString();
+    String downloadEclipseOrgFolderLocation = DOWNLOAD_ECLIPSE_ORG_FOLDER_URI.toString();
+    if (childLocation.startsWith(downloadEclipseOrgFolderLocation))
+    {
+      URI.createURI(DOWNLOAD_ECLIPSE_ORG_SERVER_URI + childLocation.substring(DOWNLOAD_ECLIPSE_ORG_FOLDER_URI.length()));
+    }
+
+    URI uri = URI.createURI(child.toString());
+    if ("".equals(uri.lastSegment()))
+    {
+      uri = uri.trimSegments(1);
+    }
+
+    return uri;
+  }
+
+  private static String toRelativePath(URI uri)
+  {
+    StringBuilder result = new StringBuilder();
+    String authority = uri.authority();
+    if (!StringUtil.isEmpty(authority))
+    {
+      result.append(IOUtil.encodeFileName(authority));
+    }
+
+    String device = uri.device();
+    if (!StringUtil.isEmpty(device))
+    {
+      if (result.length() != 0)
+      {
+        result.append("/");
+      }
+
+      result.append(IOUtil.encodeFileName(device));
+    }
+
+    for (String segment : uri.segments())
+    {
+      if (!StringUtil.isEmpty(segment))
+      {
+        if (result.length() != 0)
+        {
+          result.append("/");
+        }
+
+        result.append(IOUtil.encodeFileName(segment));
+      }
+    }
+
+    return result.toString();
+  }
+
+  private static void publish(File outputLocation, File publishLocation) throws IOException
+  {
+    File newPublishLocation = new File(publishLocation.toString() + ".new");
+    if (newPublishLocation.exists())
+    {
+      if (!IOUtil.deleteBestEffort(newPublishLocation))
+      {
+        throw new IOException("The location '" + newPublishLocation + "' cannot be deleted");
+      }
+    }
+
+    for (File file : outputLocation.listFiles())
+    {
+      if (file.isFile())
+      {
+        IOUtil.copyFile(file, new File(newPublishLocation, file.getName()));
+      }
+    }
+
+    File oldPublishLocation = null;
+    if (publishLocation.exists())
+    {
+      oldPublishLocation = new File(publishLocation.toString() + ".old");
+      if (oldPublishLocation.exists())
+      {
+        if (!IOUtil.deleteBestEffort(oldPublishLocation))
+        {
+          throw new IOException("The location '" + oldPublishLocation + "' cannot be deleted");
+        }
+      }
+
+      if (!publishLocation.renameTo(oldPublishLocation))
+      {
+        throw new IOException("The location '" + publishLocation + "' cannot be renamed to '" + oldPublishLocation + "'");
+      }
+    }
+
+    if (!newPublishLocation.renameTo(publishLocation))
+    {
+      throw new IOException("The location '" + newPublishLocation + "' cannot be renamed to '" + publishLocation + "'");
+    }
+
+    if (oldPublishLocation != null)
+    {
+      IOUtil.deleteBestEffort(oldPublishLocation);
+    }
+  }
+
+  private static void createFolders(File folder) throws IOException
+  {
+    if (folder.exists())
+    {
+      if (!folder.isDirectory())
+      {
+        throw new IOException("The location '" + folder + "' already exists as a file");
+      }
+    }
+    else
+    {
+      if (!folder.mkdirs())
+      {
+        throw new IOException("The location '" + folder + "' cannot be created as a directory");
+      }
+    }
+  }
+
+  private void emitReport(Set<Report> visited, Report report, File outputLocation, RepositoryIndex repositoryIndexEmitter) throws IOException
   {
     if (visited.add(report))
     {
@@ -247,7 +433,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         OutputStream out = null;
         try
         {
-          out = URIConverter.INSTANCE.createOutputStream(outputLocation.appendSegment(relativeIndexURL));
+          out = new FileOutputStream(new File(outputLocation, relativeIndexURL));
           new PrintStream(out, false, "UTF-8").print(result);
         }
         finally
@@ -313,7 +499,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     return result;
   }
 
-  public Report generateReport(final URI uri, final File cache) throws Exception
+  public Report generateReport(final URI rootURI, final URI uri, final File outputLocation, final File artifactCacheFolder, final String reportSource,
+      final String reportBranding) throws Exception
   {
     Report report = reports.get(uri);
     if (report == null)
@@ -325,14 +512,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
       final Map<IArtifactKey, Future<Map<IArtifactDescriptor, File>>> artifactCache = new LinkedHashMap<IArtifactKey, Future<Map<IArtifactDescriptor, File>>>();
       final Set<IInstallableUnit> allIUs = query(metadataRepository, QueryUtil.createIUAnyQuery());
-      if (cache != null && artifactRepository != null)
+      for (IInstallableUnit iu : allIUs)
       {
-        for (IInstallableUnit iu : allIUs)
+        for (IArtifactKey artifactKey : iu.getArtifacts())
         {
-          for (IArtifactKey artifactKey : iu.getArtifacts())
-          {
-            getArtifacts(artifactKey, artifactRepository, artifactCache, cache);
-          }
+          getArtifacts(artifactKey, artifactRepository, artifactCache, artifactCacheFolder);
         }
       }
 
@@ -387,21 +571,15 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       Collections.sort(featureIUs, NAME_VERSION_COMPARATOR);
 
       final Map<IInstallableUnit, Future<URI>> brandingImages = new LinkedHashMap<IInstallableUnit, Future<URI>>();
-      if (artifactRepository != null && cache != null)
+      for (IInstallableUnit featureIU : featureIUs)
       {
-        for (IInstallableUnit featureIU : featureIUs)
-        {
-          getBrandingImage(featureIU, metadataRepository, artifactRepository, brandingImages, artifactCache, cache);
-        }
+        getBrandingImage(featureIU, metadataRepository, artifactRepository, brandingImages, artifactCache, artifactCacheFolder);
       }
 
       Map<IInstallableUnit, Map<File, Future<SignedContent>>> signedContentCache = new LinkedHashMap<IInstallableUnit, Map<File, Future<SignedContent>>>();
-      if (cache != null && artifactRepository != null)
+      for (IInstallableUnit iu : allIUs)
       {
-        for (IInstallableUnit iu : allIUs)
-        {
-          getSignedContent(iu, artifactCache, signedContentCache);
-        }
+        getSignedContent(iu, artifactCache, signedContentCache);
       }
 
       final Map<List<String>, IRequirement> requiredCapabilities = new HashMap<List<String>, IRequirement>();
@@ -480,7 +658,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         List<java.net.URI> children = compositeRepository.getChildren();
         for (java.net.URI child : children)
         {
-          Report childReport = generateReport(URI.createURI(child.toString()), cache);
+          Report childReport = generateReport(rootURI, toExternalRepositoryLocation(child), outputLocation, artifactCacheFolder, reportSource, reportBranding);
           childReports.add(childReport);
         }
       }
@@ -512,10 +690,34 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
 
         @Override
+        public boolean isSimple()
+        {
+          return !(metadataRepository instanceof ICompositeRepository<?>);
+        }
+
+        @Override
+        public boolean isRoot()
+        {
+          return rootURI.equals(uri);
+        }
+
+        @Override
+        public String getReportSource()
+        {
+          return reportSource;
+        }
+
+        @Override
+        public String getReportBrandingImage()
+        {
+          return getImage(URI.createURI(reportBranding.replaceFirst("https:", "http:")), outputLocation);
+        }
+
+        @Override
         public boolean hasBrandingImage(IInstallableUnit iu)
         {
           String brandingImage = getBrandingImage(iu);
-          return !brandingImage.equals(getWarningImage(cache)) && !brandingImage.equals(getErrorImage());
+          return !brandingImage.equals(getWarningImage(outputLocation)) && !brandingImage.equals(getErrorImage());
         }
 
         @Override
@@ -536,10 +738,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               URI brandingImageURI = brandingImage.get();
               if (brandingImageURI != null)
               {
-                return getImage(brandingImageURI, cache);
+                return getImage(brandingImageURI, outputLocation);
               }
 
-              return getWarningImage(cache);
+              return getWarningImage(outputLocation);
             }
             catch (Exception ex)
             {
@@ -572,7 +774,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             result.add(getBrandingImage(iu));
           }
 
-          String image = getWarningImage(cache);
+          String image = getWarningImage(outputLocation);
           if (result.size() > 1)
           {
             result.remove(image);
@@ -584,7 +786,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public String getSignedImage(boolean signed)
         {
-          return getImage("org.eclipse.ui", signed ? "icons/full/obj16/signed_yes_tbl.png" : "icons/full/obj16/signed_no_tbl.png", cache);
+          return getImage("org.eclipse.ui", signed ? "icons/full/obj16/signed_yes_tbl.png" : "icons/full/obj16/signed_no_tbl.png", outputLocation);
         }
 
         @Override
@@ -617,7 +819,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           for (File file : files)
           {
             SignedContent signedContent = fileSignedContents.get(file);
-            int prefixLength = cache.toString().length() + 1;
+            int prefixLength = artifactCacheFolder.toString().length() + 1;
             String path = file.toString().substring(prefixLength).replace('\\', '/');
             result.put(path, signedContent == null || path.startsWith("binary/") ? null : signedContent.isSigned());
           }
@@ -662,7 +864,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             }
           };
 
-          int prefixLength = cache.toString().length() + 1;
+          int prefixLength = artifactCacheFolder.toString().length() + 1;
           Map<List<Certificate>, Map<String, IInstallableUnit>> result = new TreeMap<List<Certificate>, Map<String, IInstallableUnit>>(certificateComparator);
           for (Map.Entry<IInstallableUnit, Set<File>> entry : iuFiles.entrySet())
           {
@@ -834,7 +1036,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public String getErrorImage()
         {
-          return RepositoryIntegrityAnalyzer.this.getErrorImage(cache);
+          return RepositoryIntegrityAnalyzer.this.getErrorImage(outputLocation);
         }
 
         @Override
@@ -849,7 +1051,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           Map<String, String> result = new LinkedHashMap<String, String>();
           for (Report report : reports.values())
           {
-            String title = report.getTitle();
+            String title = report.getTitle(true);
             if (report == this)
             {
               title += '@';
@@ -877,12 +1079,21 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         public String getTitle()
         {
           String name = metadataRepository.getName();
+          return name.isEmpty() ? uri.lastSegment() : name;
+        }
+
+        @Override
+        public String getTitle(boolean narrow)
+        {
+          String name = metadataRepository.getName();
           if (StringUtil.isEmpty(name))
           {
-            name = "No Name: " + uri.lastSegment();
+            name = "<span style=\"color: FireBrick;\">Unnamed Repository</span>";
           }
 
-          return name.startsWith("memory:") ? "Report Index" : name;
+          String repoIdentifier = uri.lastSegment();
+
+          return name + (narrow ? "<br style=\"line-height: 4ex;\"/>" : "") + "<span style=\"color: DarkOliveGreen;\">" + repoIdentifier + "</span>";
         }
 
         @Override
@@ -986,7 +1197,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           if (artifact.endsWith(".pack.gz"))
           {
             return getPackGZImage();
-
           }
 
           return null;
@@ -995,7 +1205,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public String getArtifactSize(String artifact)
         {
-          long length = new File(cache, artifact).length();
+          long length = new File(artifactCacheFolder, artifact).length();
           return format(length);
         }
 
@@ -1003,13 +1213,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           return getImage(
               URI.createURI("https://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/bundles/org.eclipse.ui.ide/icons/full/etool16/build_exec@2x.png"),
-              cache);
+              outputLocation);
         }
 
         public String getJarImage()
         {
           return getImage(URI.createURI("https://git.eclipse.org/c/jdt/eclipse.jdt.ui.git/plain/org.eclipse.jdt.ui/icons/full/etool16/exportjar_wiz@2x.png"),
-              cache);
+              outputLocation);
         }
 
         public String getPackGZImage()
@@ -1017,7 +1227,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           return getImage(
               URI.createURI(
                   "https://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/bundles/org.eclipse.ui.ide/icons/full/etool16/exportzip_wiz@2x.png"),
-              cache);
+              outputLocation);
         }
 
         @Override
@@ -1062,37 +1272,41 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public String getLicenseImage()
         {
-          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/license_obj@2x.png"), cache);
+          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/license_obj@2x.png"),
+              outputLocation);
         }
 
         @Override
         public String getProviderImage()
         {
-          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde/eclipse32.png"), cache);
+          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde/eclipse32.png"), outputLocation);
         }
 
         @Override
         public String getFeatureImage()
         {
-          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/feature_obj@2x.png"), cache);
+          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/feature_obj@2x.png"),
+              outputLocation);
         }
 
         @Override
         public String getProductImage()
         {
           return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/product_xml_obj@2x.png"),
-              cache);
+              outputLocation);
         }
 
         public String getPluginImage()
         {
-          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/plugin_obj@2x.png"), cache);
+          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/plugin_obj@2x.png"),
+              outputLocation);
         }
 
         @Override
         public String getBundleImage()
         {
-          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/bundle_obj@2x.png"), cache);
+          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/bundle_obj@2x.png"),
+              outputLocation);
         }
 
         @Override
@@ -1100,7 +1314,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           return getImage(
               URI.createURI("https://git.eclipse.org/c/equinox/rt.equinox.p2.git/plain/bundles/org.eclipse.equinox.p2.ui/icons/obj/category_obj@2x.png"),
-              cache);
+              outputLocation);
         }
 
         @Override
@@ -1374,7 +1588,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           File locationFile = new File(cache, location);
           imageOut = new FileOutputStream(locationFile);
           IOUtil.copy(new ByteArrayInputStream(imageBytes), imageOut);
-          result = cache.getName() + "/" + location;
+          result = location;
           images.put(key, result);
           images.put(imageURI, result);
         }
@@ -1611,6 +1825,16 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     }
 
     return executor;
+  }
+
+  private void shutDownExecutor() throws InterruptedException
+  {
+    if (executor != null)
+    {
+      executor.shutdown();
+      executor.awaitTermination(30, TimeUnit.MINUTES);
+      executor = null;
+    }
   }
 
   public Agent getAgent()
@@ -1960,6 +2184,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public static final int RETAINED_NIGHTLY_BUILDS = -1;
 
+    public abstract String getReportSource();
+
+    public abstract String getReportBrandingImage();
+
     public abstract Map<Report.LicenseDetail, Set<IInstallableUnit>> getLicenses();
 
     public abstract List<String> getFeatures(Iterable<IInstallableUnit> features);
@@ -2018,10 +2246,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public abstract Set<IInstallableUnit> getPluginsWithMissingPackGZ();
 
-    public boolean isRoot()
-    {
-      return getSiteURL().startsWith("memory:");
-    }
+    public abstract boolean isSimple();
+
+    public abstract boolean isRoot();
 
     public abstract String getDate();
 
@@ -2117,8 +2344,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public String getRelativeIndexURL()
     {
-      String siteURL = getSiteURL();
-      String location = siteURL.startsWith("memory:") ? "index.html" : IOUtil.encodeFileName(siteURL) + ".html";
+      String location = isRoot() ? "index.html" : IOUtil.encodeFileName(getSiteURL()) + ".html";
       return location;
     }
 
@@ -2135,6 +2361,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public abstract Map<String, String> getNavigation();
 
     public abstract String getSiteURL();
+
+    public abstract String getTitle(boolean narrow);
 
     public abstract String getTitle();
 
