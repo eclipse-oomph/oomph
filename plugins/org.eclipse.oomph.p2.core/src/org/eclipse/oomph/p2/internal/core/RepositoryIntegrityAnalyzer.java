@@ -511,15 +511,26 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       reports.put(uri, null);
 
       final IMetadataRepository metadataRepository = loadMetadataRepository(getMetadataRepositoryManager(), uri);
-      final IArtifactRepository artifactRepository = loadArtifactRepository(getArtifactRepositoryManager(), uri);
+      IArtifactRepository artifactRepository = null;
+      try
+      {
+        artifactRepository = loadArtifactRepository(getArtifactRepositoryManager(), uri);
+      }
+      catch (ProvisionException exception)
+      {
+        // Not all repositories are also artificts repositories.
+      }
 
       final Map<IArtifactKey, Future<Map<IArtifactDescriptor, File>>> artifactCache = new LinkedHashMap<IArtifactKey, Future<Map<IArtifactDescriptor, File>>>();
       final Set<IInstallableUnit> allIUs = query(metadataRepository, QueryUtil.createIUAnyQuery());
-      for (IInstallableUnit iu : allIUs)
+      if (artifactRepository != null)
       {
-        for (IArtifactKey artifactKey : iu.getArtifacts())
+        for (IInstallableUnit iu : allIUs)
         {
-          getArtifacts(artifactKey, artifactRepository, artifactCache, artifactCacheFolder);
+          for (IArtifactKey artifactKey : iu.getArtifacts())
+          {
+            getArtifacts(artifactKey, artifactRepository, artifactCache, artifactCacheFolder);
+          }
         }
       }
 
@@ -595,9 +606,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       Collections.sort(featureIUs, NAME_VERSION_COMPARATOR);
 
       final Map<IInstallableUnit, Future<URI>> brandingImages = new LinkedHashMap<IInstallableUnit, Future<URI>>();
-      for (IInstallableUnit featureIU : featureIUs)
+      if (artifactRepository != null)
       {
-        getBrandingImage(featureIU, metadataRepository, artifactRepository, brandingImages, artifactCache, artifactCacheFolder);
+        for (IInstallableUnit featureIU : featureIUs)
+        {
+          getBrandingImage(featureIU, metadataRepository, artifactRepository, brandingImages, artifactCache, artifactCacheFolder);
+        }
       }
 
       Map<IInstallableUnit, Map<File, Future<SignedContent>>> signedContentCache = new LinkedHashMap<IInstallableUnit, Map<File, Future<SignedContent>>>();

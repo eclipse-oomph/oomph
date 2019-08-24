@@ -468,7 +468,6 @@ public class RepositoryIndex
   }
 
   Helper helper = new Helper();
-  Collection<IInstallableUnit> categories = report.getCategories();
     stringBuffer.append(_291);
     stringBuffer.append(report.getTitle());
     stringBuffer.append(_292);
@@ -565,17 +564,16 @@ public class RepositoryIndex
     stringBuffer.append(_319);
     }
     }
-    {
     Map<LicenseDetail, Set<IInstallableUnit>> licenses = report.getLicenses();
-    if (!licenses.isEmpty()) {
-      String display = "block";
-      String displayButton = "inline";
-      int nonConformant = 0;
-      for (LicenseDetail license : licenses.keySet()) {
-        if (!license.isSUA())
-          ++nonConformant;
-      }
-      String licenseImage = report.getLicenseImage();
+  if (!licenses.isEmpty()) {
+    String display = "block";
+    String displayButton = "inline";
+    int nonConformant = 0;
+    for (LicenseDetail license : licenses.keySet()) {
+      if (!license.isSUA())
+        ++nonConformant;
+    }
+    String licenseImage = report.getLicenseImage();
     stringBuffer.append(_320);
     stringBuffer.append(licenseImage);
     stringBuffer.append(_321);
@@ -587,13 +585,13 @@ public class RepositoryIndex
     stringBuffer.append(_3);
     }
     {
-        StringBuilder onClick = new StringBuilder();
-        for (LicenseDetail license : licenses.keySet()) {
-          String id = license.getUUID();
-          onClick.append("expand2('licenses_all_arrows', '").append("_" + id).append("');");
-          onClick.append("expand2('licenses_all_arrows', '").append("__" + id).append("');");
-          onClick.append("expand3('licenses_all_arrows', '").append("_f" + id).append("');");
-        }
+      StringBuilder onClick = new StringBuilder();
+      for (LicenseDetail license : licenses.keySet()) {
+        String id = license.getUUID();
+        onClick.append("expand2('licenses_all_arrows', '").append("_" + id).append("');");
+        onClick.append("expand2('licenses_all_arrows', '").append("__" + id).append("');");
+        onClick.append("expand3('licenses_all_arrows', '").append("_f" + id).append("');");
+      }
     stringBuffer.append(_323);
     stringBuffer.append(displayButton);
     stringBuffer.append(_43);
@@ -604,13 +602,13 @@ public class RepositoryIndex
     stringBuffer.append(display);
     stringBuffer.append(_39);
     for (Map.Entry<LicenseDetail, Set<IInstallableUnit>> entry : licenses.entrySet()) {
-        LicenseDetail license = entry.getKey();
-        String id = license.getUUID();
-        Set<IInstallableUnit> ius = entry.getValue();
-        String backgroundColor = license.isSUA() ? "HoneyDew" : license.isMatchedSUA() ? "SeaShell" : "MistyRose";
-        String replacementFontSize = !license.getReplacement().isEmpty() && license.getReplacement().length() < 5 ? "font-size: 300%;" : "";
-        String mismatchingFontSize = license.getMismatching().length() < 5 ? "font-size: 300%;" : "";
-        {
+      LicenseDetail license = entry.getKey();
+      String id = license.getUUID();
+      Set<IInstallableUnit> ius = entry.getValue();
+      String backgroundColor = license.isSUA() ? "HoneyDew" : license.isMatchedSUA() ? "SeaShell" : "MistyRose";
+      String replacementFontSize = !license.getReplacement().isEmpty() && license.getReplacement().length() < 5 ? "font-size: 300%;" : "";
+      String mismatchingFontSize = license.getMismatching().length() < 5 ? "font-size: 300%;" : "";
+      {
     stringBuffer.append(_325);
     stringBuffer.append(id);
     stringBuffer.append(_220);
@@ -667,16 +665,16 @@ public class RepositoryIndex
     }
     stringBuffer.append(_337);
     }
-      }
+    }
     stringBuffer.append(_338);
     }
-    {
-      Map<List<Certificate>, Map<String, IInstallableUnit>> allCertificates = report.getCertificates();
-      int idCount = 0;
-      Map<String, IInstallableUnit> unsigned = allCertificates.get(Collections.emptyList());
-      boolean isInitiallyExpanded = false;
-      String display = isInitiallyExpanded ? "block" : "none";
-      String displayButton = isInitiallyExpanded ? "inline" : "none";
+    Map<List<Certificate>, Map<String, IInstallableUnit>> allCertificates = report.getCertificates();
+  if (!allCertificates.isEmpty()) {
+    int idCount = 0;
+    Map<String, IInstallableUnit> unsigned = allCertificates.get(Collections.emptyList());
+    boolean isInitiallyExpanded = false;
+    String display = isInitiallyExpanded ? "block" : "none";
+    String displayButton = isInitiallyExpanded ? "inline" : "none";
     stringBuffer.append(_339);
     stringBuffer.append(report.getSignedImage(true));
     stringBuffer.append(_340);
@@ -688,12 +686,12 @@ public class RepositoryIndex
     stringBuffer.append(_7);
     }
     {
-        StringBuilder onClick = new StringBuilder();
-        for (int i = 0, size = allCertificates.size(); i < size; ++i) {
-          String id = "certificates" + ++idCount;
-          onClick.append("expand2('certificates_all_arrows', '").append(id).append("');");
-        }
-        idCount = 0;
+      StringBuilder onClick = new StringBuilder();
+      for (int i = 0, size = allCertificates.size(); i < size; ++i) {
+        String id = "certificates" + ++idCount;
+        onClick.append("expand2('certificates_all_arrows', '").append(id).append("');");
+      }
+      idCount = 0;
     stringBuffer.append(_341);
     stringBuffer.append(displayButton);
     stringBuffer.append(_42);
@@ -704,8 +702,8 @@ public class RepositoryIndex
     stringBuffer.append(display);
     stringBuffer.append(_40);
     for (Map.Entry<List<Certificate>, Map<String, IInstallableUnit>> entry : allCertificates.entrySet()) {
-        List<Certificate> certificates = entry.getKey();
-        String id = "certificates" + ++idCount;
+      List<Certificate> certificates = entry.getKey();
+      String id = "certificates" + ++idCount;
     stringBuffer.append(_343);
     if (certificates.isEmpty()) {
     stringBuffer.append(_344);
@@ -719,8 +717,8 @@ public class RepositoryIndex
     stringBuffer.append(_346);
     } else {
     int count = 0;
-          for (Certificate certificate : certificates) {
-            Map<String, String> components = report.getCertificateComponents(certificate);
+        for (Certificate certificate : certificates) {
+          Map<String, String> components = report.getCertificateComponents(certificate);
     stringBuffer.append(_347);
     stringBuffer.append(count++ + 2);
     stringBuffer.append(_241);
@@ -742,8 +740,8 @@ public class RepositoryIndex
     stringBuffer.append(_23);
     }
     for (Map.Entry<String, String> component : components.entrySet()) {
-              String key = component.getKey();
-              String value = component.getValue();
+            String key = component.getKey();
+            String value = component.getValue();
     stringBuffer.append(_352);
     stringBuffer.append(key);
     stringBuffer.append(_189);
@@ -752,12 +750,12 @@ public class RepositoryIndex
     }
     stringBuffer.append(_353);
     }
-        }
+      }
     stringBuffer.append(_354);
     stringBuffer.append(id);
     stringBuffer.append(_213);
     Map<String, IInstallableUnit> artifacts = entry.getValue();
-        for (Map.Entry<String, IInstallableUnit> artifact : artifacts.entrySet()) {
+      for (Map.Entry<String, IInstallableUnit> artifact : artifacts.entrySet()) {
     stringBuffer.append(_355);
     stringBuffer.append(NL_13);
     stringBuffer.append(artifact.getKey());
@@ -769,6 +767,7 @@ public class RepositoryIndex
     }
     stringBuffer.append(_358);
     Map<String, Set<IInstallableUnit>> featureProviders = report.getFeatureProviders();
+  if (!featureProviders.isEmpty()) {
     int nonEclipse = 0;
     for (String provider : featureProviders.keySet()) {
       if (!provider.toLowerCase().contains("eclipse"))
@@ -823,16 +822,17 @@ public class RepositoryIndex
     stringBuffer.append(_370);
     }
     stringBuffer.append(_338);
+    }
     List<IInstallableUnit> features = report.getFeatureIUs();
-    if (!features.isEmpty()) {
-      int brokenBranding = 0;
-      int noBranding = 0;
-      for (IInstallableUnit feature : features) {
-        if (report.hasBrokenBrandingImage(feature))
-          ++brokenBranding;
-        else if (!report.hasBrandingImage(feature))
-          ++noBranding;
-      }
+  if (!features.isEmpty()) {
+    int brokenBranding = 0;
+    int noBranding = 0;
+    for (IInstallableUnit feature : features) {
+      if (report.hasBrokenBrandingImage(feature))
+        ++brokenBranding;
+      else if (!report.hasBrandingImage(feature))
+        ++noBranding;
+    }
     stringBuffer.append(_371);
     stringBuffer.append(report.getFeatureImage());
     stringBuffer.append(_372);
@@ -850,7 +850,7 @@ public class RepositoryIndex
     }
     stringBuffer.append(_373);
     for (IInstallableUnit feature : features) {
-        String brandingImage = report.getBrandingImage(feature);
+      String brandingImage = report.getBrandingImage(feature);
     stringBuffer.append(_374);
     stringBuffer.append(brandingImage);
     stringBuffer.append(_212);
@@ -860,10 +860,10 @@ public class RepositoryIndex
     stringBuffer.append(report.getVersion(feature));
     stringBuffer.append(_68);
     Map<String, String> licenseReplacements = new HashMap<String, String>();
-        for (LicenseDetail license : report.getLicenses(feature)) {
-          String id = license.getUUID();
-          licenseReplacements.put(">" + id, "><button class='bb search-for-me' style='" + helper.getStyle(license) + "' onclick=\"clickOnButton('lic_" + id
-              + "');\">" + license.getVersion() + "</button>");
+      for (LicenseDetail license : report.getLicenses(feature)) {
+        String id = license.getUUID();
+        licenseReplacements.put(">" + id, "><button class='bb search-for-me' style='" + helper.getStyle(license) + "' onclick=\"clickOnButton('lic_" + id
+            + "');\">" + license.getVersion() + "</button>");
     stringBuffer.append(_376);
     stringBuffer.append(id);
     stringBuffer.append(_203);
@@ -882,23 +882,22 @@ public class RepositoryIndex
     }
     stringBuffer.append(_338);
     }
-    {
-      Collection<IInstallableUnit> products = report.getProducts();
-      if (!products.isEmpty()) {
-        boolean isInitiallyExpanded = false;
-        String display = isInitiallyExpanded ? "block" : "none";
-        String displayButton = isInitiallyExpanded ? "inline" : "none";
+    Collection<IInstallableUnit> products = report.getProducts();
+  if (!products.isEmpty()) {
+    boolean isInitiallyExpanded = false;
+    String display = isInitiallyExpanded ? "block" : "none";
+    String displayButton = isInitiallyExpanded ? "inline" : "none";
     stringBuffer.append(_378);
     stringBuffer.append(report.getProductImage());
     stringBuffer.append(_379);
     stringBuffer.append(products.size());
     stringBuffer.append(_68);
     {
-          StringBuilder onClick = new StringBuilder();
-          for (IInstallableUnit product : products) {
-            String productID = "_product_" + report.getIUID(product);
-            onClick.append("expand2('products_all_arrows', '").append(productID).append("');");
-          }
+      StringBuilder onClick = new StringBuilder();
+      for (IInstallableUnit product : products) {
+        String productID = "_product_" + report.getIUID(product);
+        onClick.append("expand2('products_all_arrows', '").append(productID).append("');");
+      }
     stringBuffer.append(_380);
     stringBuffer.append(displayButton);
     stringBuffer.append(_44);
@@ -909,9 +908,9 @@ public class RepositoryIndex
     stringBuffer.append(display);
     stringBuffer.append(_39);
     for (IInstallableUnit product : products) {
-          String productImage = report.getIUImage(product);
-          String productID = "_product_" + report.getIUID(product);
-          Set<IInstallableUnit> requiredIUs = report.getSortedByName(report.getResolvedRequirements(product));
+      String productImage = report.getIUImage(product);
+      String productID = "_product_" + report.getIUID(product);
+      Set<IInstallableUnit> requiredIUs = report.getSortedByName(report.getResolvedRequirements(product));
     stringBuffer.append(_382);
     if (!requiredIUs.isEmpty()) {
     stringBuffer.append(_348);
@@ -948,22 +947,21 @@ public class RepositoryIndex
     }
     stringBuffer.append(_338);
     }
-    }
-    if (!categories.isEmpty()) {
-      boolean isInitiallyExpanded = false;
-      String display = isInitiallyExpanded ? "block" : "none";
-      String displayButton = isInitiallyExpanded ? "inline" : "none";
+    Collection<IInstallableUnit> categories = report.getCategories();
+  boolean isInitiallyExpanded = false;
+  String display = isInitiallyExpanded ? "block" : "none";
+  String displayButton = isInitiallyExpanded ? "inline" : "none";
     stringBuffer.append(_387);
     stringBuffer.append(report.getCategoryImage());
     stringBuffer.append(_388);
     stringBuffer.append(categories.size());
     stringBuffer.append(_68);
     {
-        StringBuilder onClick = new StringBuilder();
-        for (IInstallableUnit category : categories) {
-          String categoryID = "_category_" + report.getIUID(category);
-          onClick.append("expand2('categories_all_arrows', '").append(categoryID).append("');");
-        }
+    StringBuilder onClick = new StringBuilder();
+    for (IInstallableUnit category : categories) {
+      String categoryID = "_category_" + report.getIUID(category);
+      onClick.append("expand2('categories_all_arrows', '").append(categoryID).append("');");
+    }
     stringBuffer.append(_389);
     stringBuffer.append(displayButton);
     stringBuffer.append(_41);
@@ -974,9 +972,9 @@ public class RepositoryIndex
     stringBuffer.append(display);
     stringBuffer.append(_39);
     for (IInstallableUnit category : categories) {
-        String categoryImage = report.getIUImage(category);
-        String categoryID = "_category_" + report.getIUID(category);
-        Set<IInstallableUnit> requiredIUs = report.getSortedByName(report.getResolvedRequirements(category));
+    String categoryImage = report.getIUImage(category);
+    String categoryID = "_category_" + report.getIUID(category);
+    Set<IInstallableUnit> requiredIUs = report.getSortedByName(report.getResolvedRequirements(category));
     stringBuffer.append(_382);
     if (!requiredIUs.isEmpty()) {
     stringBuffer.append(_348);
@@ -1009,20 +1007,19 @@ public class RepositoryIndex
     stringBuffer.append(_377);
     }
     stringBuffer.append(_338);
-    }
     Collection<IInstallableUnit> ius = report.getAllIUs();
-    if (!ius.isEmpty()) {
-      Collection<IInstallableUnit> pluginsWithMissingPackGZ = report.getPluginsWithMissingPackGZ();
-      Map<String, Set<Version>> iuVersions = report.getIUVersions();
-      boolean isSimple = report.isSimple();
-      int duplicateCount = 0;
-      if (isSimple) {
-        for (Map.Entry<String, Set<Version>> entry : iuVersions.entrySet()) {
-          if (entry.getValue().size() > 1 && !report.isDuplicationExpected(entry.getKey())) {
-            ++duplicateCount;
-          }
+  if (!ius.isEmpty()) {
+    Collection<IInstallableUnit> pluginsWithMissingPackGZ = report.getPluginsWithMissingPackGZ();
+    Map<String, Set<Version>> iuVersions = report.getIUVersions();
+    boolean isSimple = report.isSimple();
+    int duplicateCount = 0;
+    if (isSimple) {
+      for (Map.Entry<String, Set<Version>> entry : iuVersions.entrySet()) {
+        if (entry.getValue().size() > 1 && !report.isDuplicationExpected(entry.getKey())) {
+          ++duplicateCount;
         }
       }
+    }
     stringBuffer.append(_391);
     stringBuffer.append(report.getBundleImage());
     stringBuffer.append(_392);
@@ -1040,17 +1037,17 @@ public class RepositoryIndex
     }
     stringBuffer.append(_393);
     for (IInstallableUnit iu : ius) {
-        String iuID = iu.getId();
-        String id = report.getIUID(iu);
-        boolean duplicateVersions = isSimple && !report.isDuplicationExpected(iu.getId()) && iuVersions.get(iu.getId()).size() > 1;
-        String versionStyle = duplicateVersions ? " font-weight: bold;" : "";
-        StringBuilder classNames = new StringBuilder();
-        if (duplicateVersions) {
-          classNames.append(" duplicate");
-        }
-        if (pluginsWithMissingPackGZ.contains(iu)) {
-          classNames.append(" missing");
-        }
+      String iuID = iu.getId();
+      String id = report.getIUID(iu);
+      boolean duplicateVersions = isSimple && !report.isDuplicationExpected(iu.getId()) && iuVersions.get(iu.getId()).size() > 1;
+      String versionStyle = duplicateVersions ? " font-weight: bold;" : "";
+      StringBuilder classNames = new StringBuilder();
+      if (duplicateVersions) {
+        classNames.append(" duplicate");
+      }
+      if (pluginsWithMissingPackGZ.contains(iu)) {
+        classNames.append(" missing");
+      }
     stringBuffer.append(_394);
     stringBuffer.append(id);
     stringBuffer.append(_204);
@@ -1070,11 +1067,11 @@ public class RepositoryIndex
     stringBuffer.append(report.getVersion(iu));
     stringBuffer.append(_68);
     Map<String, String> licenseReplacements = new HashMap<String, String>();
-        if (report.isFeature(iu)) {
-          for (LicenseDetail license : report.getLicenses(iu)) {
-            String licenseID = license.getUUID();
-            licenseReplacements.put(">" + licenseID, "><button class='bb search-for-me' style='" + helper.getStyle(license)
-                + "' onclick=\"clickOnButton('lic_" + licenseID + "');\">" + license.getVersion() + "</button>");
+      if (report.isFeature(iu)) {
+        for (LicenseDetail license : report.getLicenses(iu)) {
+          String licenseID = license.getUUID();
+          licenseReplacements.put(">" + licenseID, "><button class='bb search-for-me' style='" + helper.getStyle(license) + "' onclick=\"clickOnButton('lic_"
+              + licenseID + "');\">" + license.getVersion() + "</button>");
     stringBuffer.append(_399);
     stringBuffer.append(licenseID);
     stringBuffer.append(_203);
@@ -1091,9 +1088,9 @@ public class RepositoryIndex
     }
     }
     Map<String, Boolean> artifacts = report.getIUArtifacts(iu);
-        for (Map.Entry<String, Boolean> entry : artifacts.entrySet()) {
-          String artifact = entry.getKey();
-          Boolean signed = entry.getValue();
+      for (Map.Entry<String, Boolean> entry : artifacts.entrySet()) {
+        String artifact = entry.getKey();
+        Boolean signed = entry.getValue();
     stringBuffer.append(_400);
     if (signed != null) {
     stringBuffer.append(_401);
@@ -1116,7 +1113,6 @@ public class RepositoryIndex
     stringBuffer.append(_407);
     }
     stringBuffer.append(_408);
-    }
     }
     stringBuffer.append(_409);
     return stringBuffer.toString();
