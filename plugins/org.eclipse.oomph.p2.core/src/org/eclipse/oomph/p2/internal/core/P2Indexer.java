@@ -111,11 +111,11 @@ public final class P2Indexer implements IApplication
       while (!arguments.isEmpty())
       {
         String arg = arguments.removeFirst();
-        if ("maxrepos".equalsIgnoreCase(arg))
+        if ("-maxrepos".equals(arg) || "-m".equals(arg))
         {
           maxRepos = Integer.parseInt(arguments.removeFirst());
         }
-        else if ("verbose".equalsIgnoreCase(arg))
+        else if ("-verbose".equals(arg) || "-v".equals(arg))
         {
           verbose = true;
         }
