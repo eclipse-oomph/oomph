@@ -201,6 +201,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private ExecutorService executor;
 
+  private boolean verbose;
+
   public Object start(IApplicationContext context) throws Exception
   {
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
@@ -231,6 +233,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         else if ("-branding".equals(option) || "-b".equals(option))
         {
           reportBranding = arguments[++i];
+        }
+        else if ("-verbose".equals(option) || "-v".equals(option))
+        {
+          verbose = true;
         }
         else
         {
@@ -271,6 +277,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     Map<String, String> allReports = new TreeMap<String, String>();
     for (URI uri : uris)
     {
+      if (verbose)
+      {
+        System.out.println("Computing report information for '" + uri + "'");
+      }
+
       String relativePath = toRelativePath(uri);
       File reportLocation = new File(outputLocation, relativePath);
       reportLocations.add(reportLocation);
@@ -281,6 +292,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
       Report report = generateReport(null, uri, outputLocation, uri, reportLocation, artifactCacheLocation, reportSource, reportBranding);
 
+      if (verbose)
+      {
+        System.out.println("Waiting for report information completion for '" + uri + "'");
+      }
+
       shutDownExecutor();
 
       emitReport(allReports, new HashSet<Report>(), report, reportLocation, repositoryIndex);
@@ -289,6 +305,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       {
         File reportPublishLocation = new File(publishLocation, relativePath);
         publish(reportLocation, reportPublishLocation);
+
+        if (verbose)
+        {
+          System.out.println("Publish report for '" + uri + "' to '" + reportPublishLocation);
+        }
       }
 
       images.clear();
@@ -439,6 +460,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private void generateIndex(IndexReport indexReport, RepositoryIndex repositoryIndex, String reportSource, String reportBranding) throws IOException
   {
+    if (verbose)
+    {
+      System.out.println("Generating report index for '" + indexReport.getFolder());
+    }
+
     String result = repositoryIndex.generate(indexReport);
     images.clear();
 
@@ -480,6 +506,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
   {
     if (visited.add(report))
     {
+      if (verbose)
+      {
+        System.out.println("Emmitting report for '" + report.getSiteURL() + "'");
+      }
+
       String result = repositoryIndexEmitter.generate(report);
       String relativeIndexURL = report.getRelativeIndexURL();
       if (outputLocation == null)
@@ -531,6 +562,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               return null;
             }
           }));
+        }
+
+        if (verbose)
+        {
+          System.out.println("Emmitting report IU details for '" + report.getSiteURL() + "'");
         }
 
         for (Future<Void> future : futures)
@@ -2341,6 +2377,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private IMetadataRepository loadMetadataRepository(IMetadataRepositoryManager manager, URI uri) throws URISyntaxException, ProvisionException
   {
+    if (verbose)
+    {
+      System.out.println("Loading metadata repository '" + uri + "'");
+    }
+
     java.net.URI location = new java.net.URI(uri.toString());
     IMetadataRepository metadataRepository = metadataRepositories.get(location);
     if (metadataRepository == null)
@@ -2357,6 +2398,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     if (artifactRepositories.isEmpty())
     {
       return null;
+    }
+
+    if (verbose)
+    {
+      System.out.println("Loading artifact repository '" + uri + "'");
     }
 
     java.net.URI location = new java.net.URI(uri.toString());
@@ -2379,7 +2425,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         String mirrorsURL = artifactRepository.getProperty(IRepository.PROP_MIRRORS_URL);
         if (mirrorsURL != null && mirrorsURL.contains("www.eclipse.org/downloads/download.php?"))
         {
-          artifactRepository.setProperty(IRepository.PROP_MIRRORS_URL, null);
+          try
+          {
+            artifactRepository.setProperty(IRepository.PROP_MIRRORS_URL, null);
+          }
+          catch (RuntimeException ex)
+          {
+            System.err.println("Could not disable mirrors for '" + artifactRepository.getLocation() + "'");
+          }
         }
       }
     }
