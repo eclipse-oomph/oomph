@@ -34,5 +34,18 @@
          </run>
       </application>
    </extension>
+   
+   <extension
+         id="P2Indexer"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="org.eclipse.oomph.p2.internal.core.P2Indexer">
+         </run>
+      </application>
+   </extension>
  
 </plugin>
