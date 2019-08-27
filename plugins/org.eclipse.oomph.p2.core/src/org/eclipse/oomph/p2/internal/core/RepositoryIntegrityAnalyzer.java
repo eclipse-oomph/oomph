@@ -151,7 +151,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private static final File DOWNLOAD_ECLIPSE_ORG_FOLDER = new File("/home/data/httpd/" + DOWNLOAD_ECLIPSE_ORG_AUTHORITY);
 
-  private static final boolean DOWNLOAD_ECLIPSE_ORG_FOLDER_EXISTS = DOWNLOAD_ECLIPSE_ORG_FOLDER.isDirectory();
+  private static final boolean DOWNLOAD_ECLIPSE_ORG_FOLDER_EXISTS = DOWNLOAD_ECLIPSE_ORG_FOLDER.exists();
 
   private static final String DOWNLOAD_ECLIPSE_ORG_FOLDER_URI = DOWNLOAD_ECLIPSE_ORG_FOLDER.toURI().toString();
 
@@ -324,7 +324,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     return null;
   }
 
-  private static java.net.URI toInternalRepositoryLocation(URI uri) throws URISyntaxException
+  private java.net.URI toInternalRepositoryLocation(URI uri) throws URISyntaxException
   {
     if (DOWNLOAD_ECLIPSE_ORG_AUTHORITY.equals(uri.authority()) && DOWNLOAD_ECLIPSE_ORG_FOLDER_EXISTS)
     {
@@ -334,7 +334,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         file = new File(file, segment);
       }
 
-      if (file.exists())
+      boolean exists = file.exists();
+      if (verbose)
+      {
+        System.out.println("Redirecting '" + uri + "' to '" + file + "' success=" + exists);
+      }
+
+      if (exists)
       {
         return file.toURI();
       }
@@ -344,7 +350,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     return location;
   }
 
-  private static URI toExternalRepositoryLocation(java.net.URI child)
+  private URI toExternalRepositoryLocation(java.net.URI child)
   {
     String childLocation = child.toString();
     String downloadEclipseOrgFolderLocation = DOWNLOAD_ECLIPSE_ORG_FOLDER_URI.toString();
