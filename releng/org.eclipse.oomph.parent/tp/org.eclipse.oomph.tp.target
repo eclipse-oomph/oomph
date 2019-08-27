@@ -17,7 +17,7 @@
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
       <repository location="http://download.eclipse.org/usssdk/updates/latest"/>
       <repository location="http://download.eclipse.org/egit/updates"/>
-      <repository location="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
+      <repository location="http://download.eclipse.org/tools/orbit/S-builds/S20190819183153/repository"/>
       <repository location="http://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
       <repository location="http://download.eclipse.org/mylyn/snapshots/3.25"/>
       <repository location="http://download.eclipse.org/technology/m2e/snapshots/1.9.0/latest"/>
