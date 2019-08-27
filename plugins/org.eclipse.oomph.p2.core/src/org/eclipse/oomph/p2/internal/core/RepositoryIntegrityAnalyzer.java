@@ -17,6 +17,7 @@ import org.eclipse.oomph.p2.internal.core.RepositoryIntegrityAnalyzer.Installabl
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.XMLUtil;
 import org.eclipse.oomph.util.ZIPUtil;
@@ -27,15 +28,23 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIConverter.ReadableInputStream;
+import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.FeatureMap;
+import org.eclipse.emf.ecore.util.FeatureMap.Entry;
+import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.xmi.XMLHelper;
 import org.eclipse.emf.ecore.xmi.XMLOptions;
+import org.eclipse.emf.ecore.xmi.XMLParserPool;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.XMLSave;
 import org.eclipse.emf.ecore.xmi.impl.XMLOptionsImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLSaveImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLString;
 import org.eclipse.emf.ecore.xml.type.AnyType;
+import org.eclipse.emf.ecore.xml.type.XMLTypeDocumentRoot;
 import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -49,6 +58,8 @@ import org.eclipse.equinox.internal.p2.metadata.RequiredCapability;
 import org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository;
 import org.eclipse.equinox.internal.p2.metadata.repository.io.MetadataWriter;
 import org.eclipse.equinox.internal.p2.metadata.repository.io.XMLConstants;
+import org.eclipse.equinox.internal.p2.persistence.CompositeRepositoryIO;
+import org.eclipse.equinox.internal.p2.persistence.CompositeRepositoryState;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
@@ -111,12 +122,12 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
@@ -139,6 +150,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
   private static final String DOWNLOAD_ECLIPSE_ORG_AUTHORITY = "download.eclipse.org";
 
   private static final File DOWNLOAD_ECLIPSE_ORG_FOLDER = new File("/home/data/httpd/" + DOWNLOAD_ECLIPSE_ORG_AUTHORITY);
+
+  private static final boolean DOWNLOAD_ECLIPSE_ORG_FOLDER_EXISTS = DOWNLOAD_ECLIPSE_ORG_FOLDER.isDirectory();
 
   private static final String DOWNLOAD_ECLIPSE_ORG_FOLDER_URI = DOWNLOAD_ECLIPSE_ORG_FOLDER.toURI().toString();
 
@@ -231,6 +244,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       }
     }
 
+    reportBranding = reportBranding.replaceFirst("https:", "http:");
+
     createFolders(outputLocation);
 
     CompositeMetadataRepository metadataRepository = CompositeMetadataRepository.createMemoryComposite(getAgent().getProvisioningAgent());
@@ -251,21 +266,24 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     File artifactCacheLocation = new File(outputLocation, "artifacts");
     artifactCacheLocation.mkdir();
 
+    RepositoryIndex repositoryIndex = RepositoryIndex.create("\n");
+    Set<File> reportLocations = new HashSet<File>();
+    Map<String, String> allReports = new TreeMap<String, String>();
     for (URI uri : uris)
     {
       String relativePath = toRelativePath(uri);
       File reportLocation = new File(outputLocation, relativePath);
+      reportLocations.add(reportLocation);
 
       // Clean it up before creating it.
       IOUtil.deleteBestEffort(reportLocation);
       createFolders(reportLocation);
 
-      Report report = generateReport(uri, uri, reportLocation, artifactCacheLocation, reportSource, reportBranding);
+      Report report = generateReport(null, uri, outputLocation, uri, reportLocation, artifactCacheLocation, reportSource, reportBranding);
 
       shutDownExecutor();
 
-      RepositoryIndex repositoryIndex = RepositoryIndex.create("\n");
-      emitReport(new HashSet<Report>(), report, reportLocation, repositoryIndex);
+      emitReport(allReports, new HashSet<Report>(), report, reportLocation, repositoryIndex);
 
       if (publishLocation != null)
       {
@@ -277,12 +295,17 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       reports.clear();
     }
 
+    reportLocations.add(artifactCacheLocation);
+
+    IndexReport indexReport = new IndexReport(null, reportSource, reportBranding, outputLocation, publishLocation, reportLocations, allReports);
+    generateIndex(indexReport, repositoryIndex, reportSource, reportBranding);
+
     return null;
   }
 
   private static java.net.URI toInternalRepositoryLocation(URI uri) throws URISyntaxException
   {
-    if (DOWNLOAD_ECLIPSE_ORG_AUTHORITY.equals(uri.authority()) && DOWNLOAD_ECLIPSE_ORG_FOLDER.exists())
+    if (DOWNLOAD_ECLIPSE_ORG_AUTHORITY.equals(uri.authority()) && DOWNLOAD_ECLIPSE_ORG_FOLDER_EXISTS)
     {
       File file = DOWNLOAD_ECLIPSE_ORG_FOLDER;
       for (String segment : uri.segments())
@@ -365,13 +388,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       }
     }
 
-    for (File file : outputLocation.listFiles())
-    {
-      if (file.isFile())
-      {
-        IOUtil.copyFile(file, new File(newPublishLocation, file.getName()));
-      }
-    }
+    IOUtil.copyTree(outputLocation, newPublishLocation);
 
     File oldPublishLocation = null;
     if (publishLocation.exists())
@@ -420,7 +437,46 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     }
   }
 
-  private void emitReport(Set<Report> visited, Report report, File outputLocation, RepositoryIndex repositoryIndexEmitter) throws IOException
+  private void generateIndex(IndexReport indexReport, RepositoryIndex repositoryIndex, String reportSource, String reportBranding) throws IOException
+  {
+    String result = repositoryIndex.generate(indexReport);
+    images.clear();
+
+    OutputStream out = null;
+    try
+    {
+      File outputLocation = indexReport.getFolder();
+      File index = new File(outputLocation, "index.html");
+      out = new FileOutputStream(index);
+      new PrintStream(out, false, "UTF-8").print(result);
+
+      File publishLocation = indexReport.getPublishLocation();
+      if (publishLocation != null)
+      {
+        IOUtil.copyFile(index, new File(publishLocation, "index.html"));
+        for (File file : outputLocation.listFiles())
+        {
+          String name = file.getName();
+          if (name.endsWith(".png"))
+          {
+            IOUtil.copyFile(file, new File(publishLocation, name));
+          }
+        }
+      }
+    }
+    finally
+    {
+      IOUtil.closeSilent(out);
+    }
+
+    for (IndexReport child : indexReport.getChildren())
+    {
+      generateIndex(child, repositoryIndex, reportSource, reportBranding);
+    }
+  }
+
+  private void emitReport(Map<String, String> allReports, Set<Report> visited, Report report, final File outputLocation,
+      final RepositoryIndex repositoryIndexEmitter) throws IOException, InterruptedException
   {
     if (visited.add(report))
     {
@@ -436,7 +492,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         OutputStream out = null;
         try
         {
-          out = new FileOutputStream(new File(outputLocation, relativeIndexURL));
+          File reportOutputLocation = new File(outputLocation, relativeIndexURL);
+          out = new FileOutputStream(reportOutputLocation);
+          allReports.put(report.getSiteURL(), reportOutputLocation.toString());
           new PrintStream(out, false, "UTF-8").print(result);
         }
         finally
@@ -445,9 +503,45 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
       }
 
+      List<IUReport> iuReports = report.getIUReports();
+      if (!iuReports.isEmpty())
+      {
+        URI iuReportFolder = URI.createURI(relativeIndexURL).trimFileExtension();
+        new File(outputLocation, iuReportFolder.toString()).mkdir();
+        ExecutorService executor = getExecutor();
+        List<Future<Void>> futures = new ArrayList<Future<Void>>();
+        for (final IUReport iuReport : iuReports)
+        {
+          futures.add(executor.submit(new Callable<Void>()
+          {
+            public Void call() throws Exception
+            {
+              String iuResult = repositoryIndexEmitter.generate(iuReport);
+              String relativeIUReportURL = iuReport.getRelativeReportURL();
+              OutputStream out = null;
+              try
+              {
+                out = new FileOutputStream(new File(outputLocation, relativeIUReportURL));
+                new PrintStream(out, false, "UTF-8").print(iuResult);
+              }
+              finally
+              {
+                IOUtil.closeSilent(out);
+              }
+              return null;
+            }
+          }));
+        }
+
+        for (Future<Void> future : futures)
+        {
+          get(future);
+        }
+      }
+
       for (Report childReport : report.getChildren())
       {
-        emitReport(visited, childReport, outputLocation, repositoryIndexEmitter);
+        emitReport(allReports, visited, childReport, outputLocation, repositoryIndexEmitter);
       }
     }
   }
@@ -502,8 +596,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     return result;
   }
 
-  public Report generateReport(final URI rootURI, final URI uri, final File outputLocation, final File artifactCacheFolder, final String reportSource,
-      final String reportBranding) throws Exception
+  public Report generateReport(final Report parentReport, final URI rootURI, final File rootOutputLocation, final URI uri, final File outputLocation,
+      final File artifactCacheFolder, final String reportSource, final String reportBranding) throws Exception
   {
     Report report = reports.get(uri);
     if (report == null)
@@ -511,15 +605,17 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       reports.put(uri, null);
 
       final IMetadataRepository metadataRepository = loadMetadataRepository(getMetadataRepositoryManager(), uri);
-      IArtifactRepository artifactRepository = null;
+      IArtifactRepository loadedArtifactRepository;
       try
       {
-        artifactRepository = loadArtifactRepository(getArtifactRepositoryManager(), uri);
+        loadedArtifactRepository = loadArtifactRepository(getArtifactRepositoryManager(), uri);
       }
       catch (ProvisionException exception)
       {
-        // Not all repositories are also artificts repositories.
+        loadedArtifactRepository = null;
       }
+
+      final IArtifactRepository artifactRepository = loadedArtifactRepository;
 
       final Map<IArtifactKey, Future<Map<IArtifactDescriptor, File>>> artifactCache = new LinkedHashMap<IArtifactKey, Future<Map<IArtifactDescriptor, File>>>();
       final Set<IInstallableUnit> allIUs = query(metadataRepository, QueryUtil.createIUAnyQuery());
@@ -622,10 +718,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
       final Map<List<String>, IRequirement> requiredCapabilities = new HashMap<List<String>, IRequirement>();
       Map<IRequirement, Future<Set<IInstallableUnit>>> futures = new HashMap<IRequirement, Future<Set<IInstallableUnit>>>();
+      Map<IRequirement, Set<IInstallableUnit>> requiringIUs = new HashMap<IRequirement, Set<IInstallableUnit>>();
       for (IInstallableUnit iu : allIUs)
       {
         for (final IRequirement requirement : iu.getRequirements())
         {
+          CollectionUtil.add(requiringIUs, requirement, iu);
+
           Future<Set<IInstallableUnit>> future = futures.get(requirement);
           if (future == null)
           {
@@ -650,10 +749,56 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
       }
 
+      final Map<List<String>, IProvidedCapability> allProvidedCapabilities = new HashMap<List<String>, IProvidedCapability>();
+
       final Map<IRequirement, Set<IInstallableUnit>> resolvedRequirements = new HashMap<IRequirement, Set<IInstallableUnit>>();
+      final Map<IProvidedCapability, Set<IInstallableUnit>> resolvedCapabilities = new HashMap<IProvidedCapability, Set<IInstallableUnit>>();
+      final Map<IProvidedCapability, Set<IRequirement>> capabilityResolutions = new HashMap<IProvidedCapability, Set<IRequirement>>();
+      final Map<IRequirement, Set<IProvidedCapability>> requirementResolutions = new HashMap<IRequirement, Set<IProvidedCapability>>();
       for (Map.Entry<IRequirement, Future<Set<IInstallableUnit>>> entry : futures.entrySet())
       {
-        resolvedRequirements.put(entry.getKey(), get(entry.getValue()));
+        IRequirement requirement = entry.getKey();
+        Set<IInstallableUnit> ius = get(entry.getValue());
+        resolvedRequirements.put(requirement, ius);
+
+        if (requirement instanceof IRequiredCapability)
+        {
+          IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
+          String requirementNamespace = requiredCapability.getNamespace();
+          String requirementName = requiredCapability.getName();
+          VersionRange range = requiredCapability.getRange();
+
+          for (IInstallableUnit iu : ius)
+          {
+            Collection<IProvidedCapability> providedCapabilities = iu.getProvidedCapabilities();
+            for (IProvidedCapability providedCapability : providedCapabilities)
+            {
+              String namespace = providedCapability.getNamespace();
+              String name = providedCapability.getName();
+              Version version = providedCapability.getVersion();
+
+              List<String> key = new ArrayList<String>();
+              key.add(namespace);
+              key.add(name);
+              key.add(version.toString());
+              allProvidedCapabilities.put(key, providedCapability);
+
+              if (ObjectUtil.equals(requirementNamespace, namespace) && ObjectUtil.equals(requirementName, name) && range.isIncluded(version))
+              {
+                CollectionUtil.add(capabilityResolutions, providedCapability, requirement);
+                CollectionUtil.add(requirementResolutions, requirement, providedCapability);
+                Set<IInstallableUnit> resolvedIUs = requiringIUs.get(requirement);
+                if (resolvedIUs != null)
+                {
+                  for (IInstallableUnit resolvedIU : resolvedIUs)
+                  {
+                    CollectionUtil.add(resolvedCapabilities, providedCapability, resolvedIU);
+                  }
+                }
+              }
+            }
+          }
+        }
       }
 
       final Map<IInstallableUnit, Set<File>> iuFiles = new TreeMap<IInstallableUnit, Set<File>>();
@@ -690,18 +835,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       }
 
       final List<Report> childReports = new ArrayList<Report>();
-      if (metadataRepository instanceof ICompositeRepository<?>)
-      {
-        ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)metadataRepository;
-        List<java.net.URI> children = compositeRepository.getChildren();
-        for (java.net.URI child : children)
-        {
-          Report childReport = generateReport(rootURI, toExternalRepositoryLocation(child), outputLocation, artifactCacheFolder, reportSource, reportBranding);
-          childReports.add(childReport);
-        }
-      }
 
-      report = new Report()
+      class MyReport extends Report
       {
         @SuppressWarnings("unused")
         public void getArtifacts()
@@ -717,14 +852,58 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               }
             }
           }
+        }
 
-          for (Entry<File, Set<IInstallableUnit>> entry : artifacts.entrySet())
+        @Override
+        public Map<String, String> getBreadcrumbs()
+        {
+          Map<String, String> result = new LinkedHashMap<String, String>();
+
+          String rootFolderName = rootOutputLocation.getName();
+          result.put(rootFolderName, null);
+
+          int segmentCount = uri.segmentCount();
+          URI relativeURI = URI.createURI(toRelativePath(uri));
+          int relativeSegmentCount = relativeURI.segmentCount();
+          int extraSegmentCount = relativeSegmentCount - segmentCount;
+
+          int depth = URI.createURI(toRelativePath(rootURI)).segmentCount();
+
+          for (int i = 0; i < relativeSegmentCount; ++i)
           {
-            if (entry.getValue().size() > 1)
+            String segment = relativeURI.segment(i);
+            URI href = null;
+            URI parentURI = uri.trimSegments(relativeSegmentCount - i - extraSegmentCount);
+            Report parentReport = reports.get(parentURI);
+            if (parentReport == null)
             {
-              System.err.println("###");
+              for (int j = i + extraSegmentCount; j < depth; ++j)
+              {
+                href = href == null ? URI.createURI("..") : href.appendSegment("..");
+              }
+              href = href == null ? URI.createURI("index.html") : href.appendSegment("index.html");
+            }
+            else if (parentReport != this)
+            {
+              for (int j = i + extraSegmentCount; j < depth; ++j)
+              {
+                href = href == null ? URI.createURI("..") : href.appendSegment("..");
+              }
+
+              String relativeIndexURL = parentReport.getRelativeIndexURL();
+              href = href == null ? URI.createURI(relativeIndexURL) : href.appendSegment(relativeIndexURL);
+              result.put(segment, href.toString());
+            }
+
+            result.put(segment, href == null ? null : href.toString());
+
+            if (i == 0)
+            {
+              result.put(rootFolderName, href == null ? "../index.html" : "../" + href);
             }
           }
+
+          return result;
         }
 
         @Override
@@ -748,7 +927,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public String getReportBrandingImage()
         {
-          return getImage(URI.createURI(reportBranding.replaceFirst("https:", "http:")), outputLocation);
+          return getImage(URI.createURI(reportBranding), outputLocation);
         }
 
         @Override
@@ -833,20 +1012,25 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           return iuIDVersions;
         }
 
+        private Set<IInstallableUnit> pluginsWithMissingPackGZ;
+
         @Override
         public Set<IInstallableUnit> getPluginsWithMissingPackGZ()
         {
-          Set<IInstallableUnit> result = new TreeSet<IInstallableUnit>();
-          for (IInstallableUnit iu : classContainingIUs)
+          if (pluginsWithMissingPackGZ == null)
           {
-            Set<File> files = iuFiles.get(iu);
-            if (files.size() != 2)
+            pluginsWithMissingPackGZ = new TreeSet<IInstallableUnit>();
+            for (IInstallableUnit iu : classContainingIUs)
             {
-              result.add(iu);
+              Set<File> files = iuFiles.get(iu);
+              if (files.size() != 2)
+              {
+                pluginsWithMissingPackGZ.add(iu);
+              }
             }
           }
 
-          return result;
+          return pluginsWithMissingPackGZ;
         }
 
         @Override
@@ -883,70 +1067,89 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
 
         @Override
+        public List<Certificate> getCertificates(IInstallableUnit iu)
+        {
+          for (Map.Entry<List<Certificate>, Map<String, IInstallableUnit>> entry : getCertificates().entrySet())
+          {
+            if (entry.getValue().values().contains(iu))
+            {
+              return entry.getKey();
+            }
+          }
+
+          return null;
+        }
+
+        private Map<List<Certificate>, Map<String, IInstallableUnit>> certificates;
+
+        @Override
         public Map<List<Certificate>, Map<String, IInstallableUnit>> getCertificates()
         {
-          Comparator<List<Certificate>> certificateComparator = new Comparator<List<Certificate>>()
+          if (certificates == null)
           {
-            public int compare(List<Certificate> o1, List<Certificate> o2)
+            Comparator<List<Certificate>> certificateComparator = new Comparator<List<Certificate>>()
             {
-              int size = o1.size();
-              int result = Integer.compare(size, o2.size());
-              if (result == 0 && size != 0)
+              public int compare(List<Certificate> o1, List<Certificate> o2)
               {
-                X509Certificate certificate1 = (X509Certificate)o1.get(0);
-                X509Certificate certificate2 = (X509Certificate)o2.get(0);
-                result = certificate1.getSubjectX500Principal().getName().compareTo(certificate2.getSubjectX500Principal().getName());
-              }
-
-              return result;
-            }
-          };
-
-          int prefixLength = artifactCacheFolder.toString().length() + 1;
-          Map<List<Certificate>, Map<String, IInstallableUnit>> result = new TreeMap<List<Certificate>, Map<String, IInstallableUnit>>(certificateComparator);
-          for (Map.Entry<IInstallableUnit, Set<File>> entry : iuFiles.entrySet())
-          {
-            IInstallableUnit iu = entry.getKey();
-            Set<File> files = entry.getValue();
-            for (File file : files)
-            {
-              String path = file.toString().substring(prefixLength).replace('\\', '/');
-              if (!path.startsWith("binary/"))
-              {
-                SignedContent signedContent = fileSignedContents.get(file);
-                if (signedContent.isSigned())
+                int size = o1.size();
+                int result = Integer.compare(size, o2.size());
+                if (result == 0 && size != 0)
                 {
-                  SignerInfo[] signerInfos = signedContent.getSignerInfos();
-                  for (SignerInfo signerInfo : signerInfos)
+                  X509Certificate certificate1 = (X509Certificate)o1.get(0);
+                  X509Certificate certificate2 = (X509Certificate)o2.get(0);
+                  result = certificate1.getSubjectX500Principal().getName().compareTo(certificate2.getSubjectX500Principal().getName());
+                }
+
+                return result;
+              }
+            };
+
+            int prefixLength = artifactCacheFolder.toString().length() + 1;
+            certificates = new TreeMap<List<Certificate>, Map<String, IInstallableUnit>>(certificateComparator);
+            for (Map.Entry<IInstallableUnit, Set<File>> entry : iuFiles.entrySet())
+            {
+              IInstallableUnit iu = entry.getKey();
+              Set<File> files = entry.getValue();
+              for (File file : files)
+              {
+                String path = file.toString().substring(prefixLength).replace('\\', '/');
+                if (!path.startsWith("binary/"))
+                {
+                  SignedContent signedContent = fileSignedContents.get(file);
+                  if (signedContent.isSigned())
                   {
-                    Certificate[] certificateChain = signerInfo.getCertificateChain();
-                    List<Certificate> certificates = Arrays.asList(certificateChain);
-                    Map<String, IInstallableUnit> artifacts = result.get(certificates);
+                    SignerInfo[] signerInfos = signedContent.getSignerInfos();
+                    for (SignerInfo signerInfo : signerInfos)
+                    {
+                      Certificate[] certificateChain = signerInfo.getCertificateChain();
+                      List<Certificate> certificateList = Arrays.asList(certificateChain);
+                      Map<String, IInstallableUnit> artifacts = certificates.get(certificateList);
+                      if (artifacts == null)
+                      {
+                        artifacts = new TreeMap<String, IInstallableUnit>();
+                        certificates.put(certificateList, artifacts);
+                      }
+
+                      artifacts.put(path, iu);
+                    }
+                  }
+                  else
+                  {
+                    Map<String, IInstallableUnit> artifacts = certificates.get(Collections.emptyList());
                     if (artifacts == null)
                     {
                       artifacts = new TreeMap<String, IInstallableUnit>();
-                      result.put(certificates, artifacts);
+                      certificates.put(Collections.<Certificate> emptyList(), artifacts);
                     }
 
                     artifacts.put(path, iu);
                   }
                 }
-                else
-                {
-                  Map<String, IInstallableUnit> artifacts = result.get(Collections.emptyList());
-                  if (artifacts == null)
-                  {
-                    artifacts = new TreeMap<String, IInstallableUnit>();
-                    result.put(Collections.<Certificate> emptyList(), artifacts);
-                  }
-
-                  artifacts.put(path, iu);
-                }
               }
             }
           }
 
-          return result;
+          return certificates;
         }
 
         @Override
@@ -971,8 +1174,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             }
           }
 
+          final Map<String, String> ids = new HashMap<String, String>();
           ValueHandler valueHandler = new InstallableUnitWriter.ValueHandler()
           {
+            private String uuid;
+
             private String namespace;
 
             private String name;
@@ -1006,6 +1212,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             }
 
             @Override
+            public void startElement(List<String> elementNames, String uuid)
+            {
+              this.uuid = uuid;
+            }
+
+            @Override
             public String handleAttributeValue(List<String> elementNames, String attributeName, String attributeValue)
             {
               String elementName = getCurrentElementName(elementNames);
@@ -1018,6 +1230,59 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                   {
                     return licenseReplacement;
                   }
+                }
+              }
+              else if (XMLConstants.PROVIDED_CAPABILITY_ELEMENT.equals(elementName))
+              {
+                if (XMLConstants.NAMESPACE_ATTRIBUTE.equals(attributeName))
+                {
+                  namespace = attributeValue;
+                }
+                else if (XMLConstants.NAME_ATTRIBUTE.equals(attributeName))
+                {
+                  name = attributeValue;
+                }
+                else if (XMLConstants.VERSION_ATTRIBUTE.equals(attributeName))
+                {
+                  List<String> key = new ArrayList<String>();
+                  key.add(namespace);
+                  key.add(name);
+                  key.add(attributeValue);
+                  IProvidedCapability providedCapability = allProvidedCapabilities.get(key);
+                  if (providedCapability != null)
+                  {
+                    ids.put(uuid, getProvidedCapabilityID(providedCapability));
+                  }
+
+                  Set<IInstallableUnit> matchingIUs = resolvedCapabilities.get(providedCapability);
+                  if (matchingIUs == null || matchingIUs.isEmpty())
+                  {
+                    return "<span class=\"unused-capability\">" + attributeValue + "</span>";
+                  }
+
+                  StringBuilder links = new StringBuilder();
+                  for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(matchingIUs))
+                  {
+                    links.append(" <a href=\"");
+                    links.append(getIUID(iu));
+                    links.append(".html");
+                    HashSet<IRequirement> requirements = new HashSet<IRequirement>(iu.getRequirements());
+                    requirements.retainAll(capabilityResolutions.get(providedCapability));
+                    if (!requirements.isEmpty())
+                    {
+                      links.append('#');
+                      links.append(getRequirementID(requirements.iterator().next()));
+                    }
+
+                    links.append('"');
+                    links.append(">\u27a6");
+                    links.append(iu.getId());
+                    links.append(" ");
+                    links.append(iu.getVersion());
+                    links.append("</a>");
+                  }
+
+                  return "<span class=\"used-capability\">" + attributeValue + links + "</span>";
                 }
               }
               else if (XMLConstants.REQUIREMENT_ELEMENT.equals(elementName))
@@ -1037,20 +1302,51 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                   key.add(name);
                   key.add(attributeValue);
                   IRequirement requirement = requiredCapabilities.get(key);
+                  if (requirement != null)
+                  {
+                    ids.put(uuid, getRequirementID(requirement));
+                  }
+
                   Set<IInstallableUnit> matchingIUs = resolvedRequirements.get(requirement);
                   if (matchingIUs == null || matchingIUs.isEmpty())
                   {
                     return "<span class=\"unresolved-requirement\">" + attributeValue + "</span>";
                   }
 
-                  StringBuilder links = new StringBuilder();
-                  for (IInstallableUnit iu : matchingIUs)
+                  String requirementName = "";
+                  if (requirement instanceof IRequiredCapability)
                   {
-                    links.append("<button class=\"iu-link\" onclick=\"navigateTo('_iu_").append(getIUID(iu)).append("');\">\u27a5");
-                    links.append(iu.getVersion());
-                    links.append("</button>");
+                    requirementName = ((IRequiredCapability)requirement).getName();
                   }
 
+                  StringBuilder links = new StringBuilder();
+                  for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(matchingIUs))
+                  {
+                    links.append(" <a href=\"");
+                    links.append(getIUID(iu));
+                    links.append(".html");
+                    HashSet<IProvidedCapability> providedCapabilities = new HashSet<IProvidedCapability>(iu.getProvidedCapabilities());
+                    providedCapabilities.retainAll(requirementResolutions.get(requirement));
+                    if (!providedCapabilities.isEmpty())
+                    {
+                      links.append('#');
+                      links.append(getProvidedCapabilityID(providedCapabilities.iterator().next()));
+                    }
+
+                    links.append('"');
+                    links.append(">\u27a5");
+                    String id = iu.getId();
+                    if (!requirementName.equals(id))
+                    {
+                      links.append(id);
+                      links.append(' ');
+                    }
+
+                    links.append(iu.getVersion());
+                    links.append("</a>");
+                  }
+
+                  ids.put(uuid, getRequirementID(requirement));
                   return "<span class=\"resolved-requirement\">" + attributeValue + links + "</span>";
                 }
               }
@@ -1068,13 +1364,32 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             }
           }
 
-          return StringUtil.explode(xml, "\n");
+          StringBuffer result = new StringBuffer();
+          Matcher matcher = Pattern.compile("id=\"([^\"]+)\"").matcher(xml);
+          while (matcher.find())
+          {
+            String id = matcher.group(1);
+            String replacement = ids.get(id);
+            if (replacement != null)
+            {
+              matcher.appendReplacement(result, Matcher.quoteReplacement("id=\"" + replacement + '"'));
+            }
+          }
+          matcher.appendTail(result);
+
+          return StringUtil.explode(result.toString(), "\n");
         }
 
         @Override
         public String getErrorImage()
         {
           return RepositoryIntegrityAnalyzer.this.getErrorImage(outputLocation);
+        }
+
+        @Override
+        public Report getParent()
+        {
+          return parentReport;
         }
 
         @Override
@@ -1107,6 +1422,79 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           return metadataRepository.getLocation().toString();
         }
 
+        private String getXML(CompositeRepositoryState state, String type)
+        {
+          ByteArrayOutputStream out = new ByteArrayOutputStream();
+          new CompositeRepositoryIO().write(state, out, type);
+          final String siteHost = URI.createURI(getSiteURL()).host();
+          ValueHandler valueHandler = new ValueHandler()
+          {
+            @Override
+            public String handleAttributeValue(List<String> elementNames, String attributeName, String attributeValue)
+            {
+              if ("location".equals(attributeName))
+              {
+                URI uri = URI.createURI(attributeValue);
+                String host = uri.host();
+                if (host != null && host.equals(siteHost))
+                {
+                  return "<span class=\"bad-absolute-location\">" + attributeValue + "</span>";
+                }
+              }
+
+              return super.handleAttributeValue(elementNames, attributeName, attributeValue);
+            }
+          };
+
+          InstallableUnitWriter.HTMLResource htmlResource = new InstallableUnitWriter.HTMLResource(valueHandler);
+          try
+          {
+            htmlResource.load(new ByteArrayInputStream(out.toByteArray()), null);
+            out.reset();
+            XMLTypeDocumentRoot documentRoot = (XMLTypeDocumentRoot)htmlResource.getContents().get(0);
+            FeatureMap mixed = documentRoot.getMixed();
+            for (Iterator<Entry> it = mixed.iterator(); it.hasNext();)
+            {
+              Entry entry = it.next();
+              if (FeatureMapUtil.isProcessingInstruction(entry))
+              {
+                it.remove();
+              }
+            }
+
+            htmlResource.save(out, null);
+            return new String(out.toByteArray(), "UTF-8");
+          }
+          catch (IOException ex)
+          {
+            return null;
+          }
+        }
+
+        @Override
+        public String getMetadataXML()
+        {
+          if (metadataRepository instanceof CompositeMetadataRepository)
+          {
+            CompositeMetadataRepository compositeMetadataRepository = (CompositeMetadataRepository)metadataRepository;
+            return getXML(compositeMetadataRepository.toState(), CompositeArtifactRepository.PI_REPOSITORY_TYPE);
+          }
+
+          return null;
+        }
+
+        @Override
+        public String getArtifactML()
+        {
+          if (artifactRepository instanceof CompositeArtifactRepository)
+          {
+            CompositeArtifactRepository compositeArtifactRepository = (CompositeArtifactRepository)artifactRepository;
+            return getXML(compositeArtifactRepository.toState(), CompositeArtifactRepository.PI_REPOSITORY_TYPE);
+          }
+
+          return null;
+        }
+
         @Override
         public Map<Report.LicenseDetail, Set<IInstallableUnit>> getLicenses()
         {
@@ -1131,7 +1519,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
           String repoIdentifier = uri.lastSegment();
 
-          return name + (narrow ? "<br style=\"line-height: 4ex;\"/>" : "") + "<span style=\"color: DarkOliveGreen;\">" + repoIdentifier + "</span>";
+          return name + (narrow ? "<br style=\"line-height: 4ex;\"/>" : " ") + "<span style=\"color: DarkOliveGreen;\">" + repoIdentifier + "</span>";
         }
 
         @Override
@@ -1188,7 +1576,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public List<LicenseDetail> getLicenses(IInstallableUnit iu)
         {
-          return RepositoryIntegrityAnalyzer.this.getLicenses(iu);
+          if ("true".equals(iu.getProperty(QueryUtil.PROP_TYPE_GROUP)))
+          {
+            return RepositoryIntegrityAnalyzer.this.getLicenses(iu);
+          }
+
+          return null;
         }
 
         @Override
@@ -1321,6 +1714,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
 
         @Override
+        public String getRepositoryImage()
+        {
+          return getImage(
+              URI.createURI("https://git.eclipse.org/c/equinox/rt.equinox.p2.git/plain/bundles/org.eclipse.equinox.p2.ui/icons/obj/metadata_repo_obj@2x.png"),
+              outputLocation);
+        }
+
+        @Override
         public String getProviderImage()
         {
           return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde/eclipse32.png"), outputLocation);
@@ -1435,7 +1836,115 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
           return result;
         }
-      };
+
+        @Override
+        public List<IUReport> getIUReports()
+        {
+          List<IUReport> result = new ArrayList<IUReport>();
+          for (final IInstallableUnit iu : allIUs)
+          {
+            class MyIUReport extends IUReport
+            {
+              @Override
+              public Report getReport()
+              {
+                return MyReport.this;
+              }
+
+              public String getNow()
+              {
+                return getReport().getNow();
+              }
+
+              @Override
+              public IInstallableUnit getIU()
+              {
+                return iu;
+              }
+
+              @Override
+              public String getDescription()
+              {
+                String description = iu.getProperty(IInstallableUnit.PROP_DESCRIPTION, null);
+                return description;
+              }
+
+              @Override
+              public String getProvider()
+              {
+                String provider = iu.getProperty(IInstallableUnit.PROP_PROVIDER, null);
+                return provider;
+              }
+
+              public String getReportBrandingImage()
+              {
+                return "../" + getReport().getReportBrandingImage();
+              }
+
+              public String getReportSource()
+              {
+                return getReport().getReportSource();
+              }
+
+              public String getTitle()
+              {
+                return iu.toString();
+              }
+
+              public String getTitle(boolean narrow)
+              {
+                String id = iu.getId();
+                Version version = iu.getVersion();
+                return narrow ? id + "<br/><span style=\"color: DarkOliveGreen;\">" + version + "</span>" : id + " " + version;
+              }
+
+              @Override
+              public String getRelativeReportURL()
+              {
+                return getRelativeIUReportURL(iu);
+              }
+
+              public Map<String, String> getBreadcrumbs()
+              {
+                Map<String, String> breadcrumbs = new LinkedHashMap<String, String>(getReport().getBreadcrumbs());
+                for (Map.Entry<String, String> entry : breadcrumbs.entrySet())
+                {
+                  String href = entry.getValue();
+                  entry.setValue(href == null ? "../" + getReport().getRelativeIndexURL() : "../" + href);
+                }
+
+                breadcrumbs.put(iu.toString(), null);
+                return breadcrumbs;
+              }
+
+              public Map<String, String> getNavigation()
+              {
+                Map<String, String> navigation = new LinkedHashMap<String, String>();
+                navigation.put("../" + getReport().getRelativeIndexURL(), getReport().getTitle(true));
+                return navigation;
+              }
+            }
+
+            result.add(new MyIUReport());
+          }
+
+          return result;
+        }
+      }
+
+      report = new MyReport();
+
+      if (metadataRepository instanceof ICompositeRepository<?>)
+      {
+        ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)metadataRepository;
+        List<java.net.URI> children = compositeRepository.getChildren();
+        for (java.net.URI child : children)
+        {
+          Report childReport = generateReport(report, rootURI, rootOutputLocation, toExternalRepositoryLocation(child), outputLocation, artifactCacheFolder,
+              reportSource, reportBranding);
+          childReports.add(childReport);
+        }
+      }
 
       reports.put(uri, report);
     }
@@ -1856,6 +2365,23 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     {
       artifactRepository = manager.loadRepository(location, null);
       artifactRepositories.put(location, artifactRepository);
+      if (artifactRepository instanceof ICompositeRepository<?>)
+      {
+        ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)artifactRepository;
+        for (java.net.URI child : compositeRepository.getChildren())
+        {
+          loadArtifactRepository(manager, URI.createURI(child.toString()));
+        }
+      }
+      else if (DOWNLOAD_ECLIPSE_ORG_FOLDER_EXISTS)
+      {
+        // Bypass the use of mirrors when we are on the build server.
+        String mirrorsURL = artifactRepository.getProperty(IRepository.PROP_MIRRORS_URL);
+        if (mirrorsURL != null && mirrorsURL.contains("www.eclipse.org/downloads/download.php?"))
+        {
+          artifactRepository.setProperty(IRepository.PROP_MIRRORS_URL, null);
+        }
+      }
     }
 
     return artifactRepository;
@@ -1946,11 +2472,42 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private static String getIUID(IInstallableUnit iu)
   {
-    String literal = iu.toString();
-    return literal.replace(' ', '_').replace('"', '_').replace('&', '_').replace('<', '_').replace('\'', '_').replace('>', ' ');
+    return getID(iu.toString());
   }
 
-  public static abstract class Report
+  private static String getRequirementID(IRequirement requirement)
+  {
+    return getID(requirement.toString());
+  }
+
+  private static String getProvidedCapabilityID(IProvidedCapability capability)
+  {
+    return getID(capability.toString());
+  }
+
+  private static String getID(String literal)
+  {
+    return literal.replace(' ', '_').replace('"', '_').replace('&', '_').replace('<', '_').replace('\'', '_').replace('>', ' ').replace('#', '_');
+  }
+
+  public interface Reporter
+  {
+    String getTitle();
+
+    Map<String, String> getBreadcrumbs();
+
+    Map<String, String> getNavigation();
+
+    String getTitle(boolean narrow);
+
+    String getReportBrandingImage();
+
+    String getReportSource();
+
+    String getNow();
+  }
+
+  public static abstract class Report implements Reporter
   {
     private static final URI NO_LICENSE_URI = URI.createURI("");
 
@@ -2236,10 +2793,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public abstract List<String> getFeatures(Iterable<IInstallableUnit> features);
 
-    public Map<String, String> getBreadcrumbs()
-    {
-      return Collections.emptyMap();
-    }
+    public abstract Map<String, String> getBreadcrumbs();
 
     public List<String> getXML(IInstallableUnit iu)
     {
@@ -2249,6 +2803,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public abstract List<String> getXML(IInstallableUnit iu, Map<String, String> replacements);
 
     public abstract String getErrorImage();
+
+    public abstract Report getParent();
 
     public abstract List<Report> getChildren();
 
@@ -2266,6 +2822,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public abstract String getLicenseImage();
 
+    public abstract String getRepositoryImage();
+
     public abstract String getProviderImage();
 
     public abstract String getFeatureImage();
@@ -2279,6 +2837,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public abstract Map<String, String> getCertificateComponents(Certificate certificate);
 
     public abstract Map<List<Certificate>, Map<String, IInstallableUnit>> getCertificates();
+
+    public abstract List<Certificate> getCertificates(IInstallableUnit iu);
 
     public abstract Map<String, Boolean> getIUArtifacts(IInstallableUnit iu);
 
@@ -2313,7 +2873,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public abstract List<Report.LicenseDetail> getLicenses(IInstallableUnit iu);
 
-    public String getName(IInstallableUnit iu)
+    public String getName(IInstallableUnit iu, boolean defaultToID)
     {
       String name = iu.getProperty(IInstallableUnit.PROP_NAME, null);
       if (name == null)
@@ -2394,6 +2954,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       return location;
     }
 
+    protected String getRelativeIUReportURL(IInstallableUnit iu)
+    {
+      URI indexURL = URI.createURI(getRelativeIndexURL());
+      return indexURL.trimFileExtension().appendSegment(getIUID(iu)).appendFileExtension("html").toString();
+    }
+
     public String getIUID(IInstallableUnit iu)
     {
       return RepositoryIntegrityAnalyzer.getIUID(iu);
@@ -2407,6 +2973,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public abstract Map<String, String> getNavigation();
 
     public abstract String getSiteURL();
+
+    public abstract String getMetadataXML();
+
+    public abstract String getArtifactML();
 
     public abstract String getTitle(boolean narrow);
 
@@ -2435,6 +3005,150 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       {
         IOUtil.closeSilent(in);
       }
+    }
+
+    public abstract List<IUReport> getIUReports();
+  }
+
+  public static abstract class IUReport implements Reporter
+  {
+    public abstract Report getReport();
+
+    public abstract String getRelativeReportURL();
+
+    public abstract IInstallableUnit getIU();
+
+    public abstract String getDescription();
+
+    public abstract String getProvider();
+  }
+
+  public class IndexReport implements Reporter
+  {
+    private final IndexReport parent;
+
+    private final String reportSource;
+
+    private final String reportBranding;
+
+    private final File folder;
+
+    private final Set<File> reportLocations;
+
+    private final Map<String, String> allReports;
+
+    private List<IndexReport> children;
+
+    private File publishLocation;
+
+    public IndexReport(IndexReport parent, String reportSource, String reportBranding, File folder, File publishLocation, Set<File> reportLocations,
+        Map<String, String> allReports)
+    {
+      this.parent = parent;
+      this.reportSource = reportSource;
+      this.reportBranding = reportBranding;
+      this.folder = folder;
+      this.publishLocation = publishLocation;
+      this.reportLocations = reportLocations;
+      this.allReports = allReports;
+    }
+
+    public String getNow()
+    {
+      return new SimpleDateFormat("yyyy'-'MM'-'dd' at 'HH':'mm ").format(System.currentTimeMillis());
+    }
+
+    public File getFolder()
+    {
+      return folder;
+    }
+
+    public File getPublishLocation()
+    {
+      return publishLocation;
+    }
+
+    public String getTitle()
+    {
+      return folder.getName();
+    }
+
+    public Map<String, String> getBreadcrumbs()
+    {
+      Map<String, String> result = parent == null ? new LinkedHashMap<String, String>() : parent.getBreadcrumbs();
+      for (Map.Entry<String, String> entry : result.entrySet())
+      {
+        String href = entry.getValue();
+        entry.setValue(href == null ? "../index.html" : "../" + href);
+      }
+
+      result.put(folder.getName(), null);
+      return result;
+    }
+
+    public Map<String, String> getNavigation()
+    {
+      Map<String, String> result = new LinkedHashMap<String, String>();
+      for (File file : folder.listFiles())
+      {
+        if (file.isDirectory() && (!reportLocations.contains(file) || parent != null))
+        {
+          String name = file.getName();
+          result.put(name + "/index.html", name);
+        }
+      }
+
+      return result;
+    }
+
+    public String getTitle(boolean narrow)
+    {
+      return getTitle();
+    }
+
+    public String getReportSource()
+    {
+      return reportSource;
+    }
+
+    public String getReportBrandingImage()
+    {
+      return getImage(URI.createURI(reportBranding), folder);
+    }
+
+    public List<IndexReport> getChildren()
+    {
+      if (children == null)
+      {
+        children = new ArrayList<IndexReport>();
+        for (File file : folder.listFiles())
+        {
+          if (file.isDirectory() && !reportLocations.contains(file))
+          {
+            File childPulishLocation = publishLocation == null ? null : new File(publishLocation, file.getName());
+            children.add(new IndexReport(this, reportSource, reportBranding, file, childPulishLocation, reportLocations, null));
+          }
+        }
+      }
+
+      return children;
+    }
+
+    public Map<String, String> getAllReports()
+    {
+      if (allReports != null)
+      {
+        Map<String, String> result = new TreeMap<String, String>();
+        java.net.URI baseURI = folder.toURI();
+        for (Map.Entry<String, String> entry : allReports.entrySet())
+        {
+          result.put(entry.getKey(), baseURI.relativize(new File(entry.getValue()).toURI()).toString());
+        }
+
+        return result;
+      }
+
+      return null;
     }
   }
 
@@ -2514,11 +3228,17 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       {
         return elementContent;
       }
+
+      public void startElement(List<String> elementNames, String uuid)
+      {
+      }
     }
 
     private static class HTMLResource extends XMLResourceImpl
     {
       private static final URI RESOURCE_URI = URI.createURI("iu.xml");
+
+      private static final XMLParserPool XML_PARSER_POOL = new XMLParserPoolImpl();
 
       private final ValueHandler valueHandler;
 
@@ -2530,11 +3250,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         setEncoding("UTF-8");
 
         Map<Object, Object> defaultLoadOptions = getDefaultLoadOptions();
-        defaultLoadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
-        defaultLoadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
+        BasicExtendedMetaData extendedMetaData = new BasicExtendedMetaData();
+        defaultLoadOptions.put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
+        getDefaultSaveOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
         defaultLoadOptions.put(XMLResource.OPTION_USE_LEXICAL_HANDLER, Boolean.TRUE);
         defaultLoadOptions.put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
         defaultLoadOptions.put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
+        defaultLoadOptions.put(XMLResource.OPTION_USE_PARSER_POOL, XML_PARSER_POOL);
         XMLOptions xmlOptions = new XMLOptionsImpl();
         xmlOptions.setProcessAnyXML(true);
         defaultLoadOptions.put(XMLResource.OPTION_XML_OPTIONS, xmlOptions);
@@ -2570,11 +3292,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
           private static final String LINE_ELEMENT_NAME = "span";
 
-          private static final String LINE_ELEMENT_START = "<" + LINE_ELEMENT_NAME + ">";
+          private static final String LINE_ELEMENT_START_PREFIX = "<" + LINE_ELEMENT_NAME;
 
           private static final String LINE_ELEMENT_END = "</" + LINE_ELEMENT_NAME + ">";
 
-          private static final String LINE_ELEMENT_SEPARATOR = LINE_ELEMENT_END + LINE_SEPARATOR + LINE_ELEMENT_START;
+          private static final String LINE_ELEMENT_SEPARATOR_PREFIX = LINE_ELEMENT_END + LINE_SEPARATOR + LINE_ELEMENT_START_PREFIX;
 
           private static final String ATTRIBUTE_QUOTE = "<span class='xml-token'>\"</span>";
 
@@ -2610,17 +3332,44 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
           private final ValueHandler valueHandler;
 
+          private String uuid;
+
           public HTMLString(ValueHandler valueHandler)
           {
             super(Integer.MAX_VALUE);
             this.valueHandler = valueHandler;
             setLineSeparator(LINE_SEPARATOR);
-            add(LINE_ELEMENT_START);
+            add(LINE_ELEMENT_START_PREFIX);
+            addLineID();
+          }
+
+          private void addLineID()
+          {
+            add(" id=\"");
+            uuid = EcoreUtil.generateUUID();
+            add(uuid);
+            add("\">");
           }
 
           private String replaceLineSeparator(String string)
           {
-            return string.replaceAll("\r?\n", LINE_ELEMENT_SEPARATOR);
+            Matcher matcher = Pattern.compile("\r?\n").matcher(string);
+            StringBuffer result = new StringBuffer();
+            if (matcher.find())
+            {
+              do
+              {
+                matcher.appendReplacement(result, LINE_ELEMENT_SEPARATOR_PREFIX);
+                result.append(" id=\"");
+                uuid = EcoreUtil.generateUUID();
+                result.append(uuid);
+                result.append("\">");
+              } while (matcher.find());
+              matcher.appendTail(result);
+              return result.toString();
+            }
+
+            return string;
           }
 
           private String surroundElementContent(String string)
@@ -2692,6 +3441,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               add(ELEMENT_START);
               add(ELEMENT_NAME_START);
               add(name);
+              valueHandler.startElement(elementNames, uuid);
               add(ELEMENT_NAME_END);
               lastElementIsStart = true;
             }
