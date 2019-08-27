@@ -276,6 +276,22 @@ span:target {
         }
       }
 
+      function expand_collapse_inline_block(id) {
+        var e = document.getElementById(id);
+        var f = document.getElementById(id+"_arrows");
+        if (e.style.display == 'none'){
+          e.style.display = 'inline-block';
+          if (f != null) {
+            f.innerHTML = '&#x25E2;';
+          }
+        } else {
+          e.style.display = 'none';
+          if (f !=null) {
+            f.innerHTML = '&#x25B7;';
+          }
+        }
+      }
+
     </script>
 
     <header role="banner" id="header-wrapper">

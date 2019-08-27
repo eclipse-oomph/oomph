@@ -483,8 +483,7 @@ public class GitIndex
     for (int i = 1; i < 500; ++i)
     {
       URL url = new URL("https://api.github.com/users/eclipse/repos?page=" + i);
-      InputStream inputStream = url.openStream();
-      List<String> lines = readLines(inputStream, "UTF-8");
+      List<String> lines = readLines(url, "UTF-8");
       int count = 0;
       for (String line : lines)
       {
@@ -505,8 +504,6 @@ public class GitIndex
       {
         break;
       }
-
-      inputStream.close();
     }
 
     for (Iterator<Map.Entry<String, String>> it = repos.entrySet().iterator(); it.hasNext();)
@@ -528,8 +525,7 @@ public class GitIndex
   public static void githubRepoIndex(Map<String, Map<String, Map<String, Set<String>>>> repositoryIndex, String repo, String path) throws Exception
   {
     URL url = new URL("https://github.com/" + repo + "/tree/master/" + path);
-    InputStream inputStream = url.openStream();
-    List<String> lines = readLines(inputStream, "UTF-8");
+    List<String> lines = readLines(url, "UTF-8");
     Pattern folderPattern = Pattern.compile("href=\"/" + repo + "/tree/master/([^\"]+)\"");
     Pattern filePattern = Pattern.compile("href=\"/" + repo + "/blob/master/([^\"]+)\"");
     for (String line : lines)
@@ -560,6 +556,27 @@ public class GitIndex
         }
       }
     }
+  }
+
+  private static List<String> readLines(URL url, String charsetName) throws Exception
+  {
+    IOException exception = null;
+    for (int i = 0; i < 5; ++i)
+    {
+      try
+      {
+        InputStream inputStream = url.openStream();
+        List<String> lines = readLines(inputStream, "UTF-8");
+        return lines;
+      }
+      catch (IOException ex)
+      {
+        exception = ex;
+        System.err.println(ex.getLocalizedMessage());
+        Thread.sleep(60000);
+      }
+    }
+    throw exception;
   }
 
   private static List<String> readLines(InputStream in, String charsetName) throws IOException

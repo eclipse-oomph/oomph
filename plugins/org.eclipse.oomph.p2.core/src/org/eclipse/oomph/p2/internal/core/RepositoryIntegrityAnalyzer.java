@@ -1303,6 +1303,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                   }
 
                   StringBuilder links = new StringBuilder();
+                  String id = "_" + EcoreUtil.generateUUID();
+                  links.append(" <button id=\"" + id
+                      + "_arrows\" style=\"font-size: 70%; bottom-margin: 1pt; \" class=\"orange bb\" onclick=\"expand_collapse_inline_block('" + id
+                      + "');\">&#x25B7;</button>");
+                  links.append("<span id=\"" + id + "\"style=\"display: none; margin-top: 0.2ex; vertical-align : top;\">");
                   for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(matchingIUs))
                   {
                     links.append(" <a href=\"");
@@ -1321,8 +1326,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                     links.append(iu.getId());
                     links.append(" ");
                     links.append(iu.getVersion());
-                    links.append("</a>");
+                    links.append("</a><br/>");
                   }
+
+                  links.append("</span>");
 
                   return "<span class=\"used-capability\">" + attributeValue + links + "</span>";
                 }
@@ -1362,6 +1369,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                   }
 
                   StringBuilder links = new StringBuilder();
+                  String id = "_" + EcoreUtil.generateUUID();
+                  links.append(" <button id=\"" + id
+                      + "_arrows\" style=\"font-size: 70%; bottom-marin: 1pt;\" class=\"orange bb\" onclick=\"expand_collapse_inline_block('" + id
+                      + "');\">&#x25B7;</button>");
+                  links.append("<span id=\"" + id + "\"style=\"display: none; margin-top: 0.2ex; vertical-align : top;\">");
                   for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(matchingIUs))
                   {
                     links.append(" <a href=\"");
@@ -1377,16 +1389,18 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
                     links.append('"');
                     links.append(">\u27a5");
-                    String id = iu.getId();
-                    if (!requirementName.equals(id))
+                    String iuID = iu.getId();
+                    if (!requirementName.equals(iuID))
                     {
-                      links.append(id);
+                      links.append(iuID);
                       links.append(' ');
                     }
 
                     links.append(iu.getVersion());
-                    links.append("</a>");
+                    links.append("</a><br/>");
                   }
+
+                  links.append("</span>");
 
                   ids.put(uuid, getRequirementID(requirement));
                   return "<span class=\"resolved-requirement\">" + attributeValue + links + "</span>";
