@@ -25,7 +25,7 @@
       <repository location="http://download.eclipse.org/nebula/snapshot"/>
       <repository location="http://download.eclipse.org/technology/swtbot/snapshots"/>
       <repository location="http://download.eclipse.org/webtools/repository/photon"/>
-      <repository location="http://download.eclipse.org/eclipse/updates/4.13-I-builds"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.12"/>
     </location>
   </locations>
 </target>
