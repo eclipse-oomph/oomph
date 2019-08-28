@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="48">
+<target name="Generated from Oomph" sequenceNumber="49">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
@@ -15,10 +15,16 @@
       <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.oauth" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
-      <repository location="file:/home/data/httpd/download.eclipse.org/usssdk/updates/release/latest"/>
-      <repository location="file:/home/data/httpd/download.eclipse.org/releases/2019-06"/>
-      <repository location="file:/home/data/httpd/download.eclipse.org/technology/swtbot/snapshots"/>
-      <repository location="file:/home/data/httpd/download.eclipse.org/tools/orbit/downloads/latest-S"/>
+      <repository location="http://download.eclipse.org/usssdk/updates/latest"/>
+      <repository location="http://download.eclipse.org/egit/updates"/>
+      <repository location="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
+      <repository location="http://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
+      <repository location="http://download.eclipse.org/mylyn/snapshots/3.24"/>
+      <repository location="http://download.eclipse.org/technology/m2e/snapshots/1.9.0/latest"/>
+      <repository location="http://download.eclipse.org/nebula/snapshot"/>
+      <repository location="http://download.eclipse.org/technology/swtbot/snapshots"/>
+      <repository location="http://download.eclipse.org/webtools/repository/photon"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.11/R-4.11-201903070500"/>
     </location>
   </locations>
 </target>
