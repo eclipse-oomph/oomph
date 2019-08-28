@@ -18,6 +18,7 @@
       <repository location="file:/home/data/httpd/download.eclipse.org/usssdk/updates/release/latest"/>
       <repository location="file:/home/data/httpd/download.eclipse.org/releases/2019-06"/>
       <repository location="file:/home/data/httpd/download.eclipse.org/technology/swtbot/snapshots"/>
+      <repository location="file:/home/data/httpd/orbit/downloads/latest-S"/>
     </location>
   </locations>
 </target>
