@@ -194,12 +194,6 @@ public final class ExternalProject extends ExternalContainer implements IProject
     return null;
   }
 
-  @Deprecated
-  public IPath getPluginWorkingLocation(org.eclipse.core.runtime.IPluginDescriptor plugin)
-  {
-    throw new UnsupportedOperationException();
-  }
-
   public IPath getWorkingLocation(String id)
   {
     // TODO
