@@ -15,9 +15,9 @@
       <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.oauth" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
-      <repository location="https://download.eclipse.org/usssdk/updates/release/latest"/>
-      <repository location="http://download.eclipse.org/releases/2019-06"/>
-      <repository location="http://download.eclipse.org/technology/swtbot/snapshots"/>
+      <repository location="file:/home/data/httpd/download.eclipse.org/usssdk/updates/release/latest"/>
+      <repository location="file:/home/data/httpd/download.eclipse.org/releases/2019-03"/>
+      <repository location="file:/home/data/httpd/download.eclipse.org/technology/swtbot/snapshots"/>
     </location>
   </locations>
 </target>
