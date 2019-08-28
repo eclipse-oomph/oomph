@@ -143,13 +143,6 @@ Eike Stepper - initial API and implementation
                   </requirement>
                 </extraRequirements>
               </dependency-resolution>
-              <filters>
-                <filter>
-                 <type>p2-installable-unit</type>
-                 <id>org.bouncycastle.bcprov</id>
-                 <removeAll/>
-                </filter>
-              </filters>
             </configuration>
           </plugin>
         <plugin>
