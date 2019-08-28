@@ -79,18 +79,11 @@ public final class P2Indexer implements IApplication
 
   private final long timeStamp = System.currentTimeMillis();
 
-  private final int refreshHours;
+  private int refreshHours = 24;
 
-  private final int maxRepos;
+  private int maxRepos = Integer.MAX_VALUE;
 
   private boolean verbose;
-
-  private P2Indexer(int refreshHours, int maxRepos, boolean verbose)
-  {
-    this.refreshHours = refreshHours;
-    this.maxRepos = maxRepos;
-    this.verbose = verbose;
-  }
 
   public Object start(IApplicationContext context) throws Exception
   {
@@ -101,12 +94,8 @@ public final class P2Indexer implements IApplication
     try
     {
       File scanFolder = new File(arguments.removeFirst());
-      int refreshHours = Integer.parseInt(arguments.removeFirst());
       URI baseURI = URI.createURI(arguments.removeFirst());
       File outputFolder = new File(arguments.removeFirst());
-
-      int maxRepos = Integer.MAX_VALUE;
-      boolean verbose = false;
 
       while (!arguments.isEmpty())
       {
@@ -121,9 +110,8 @@ public final class P2Indexer implements IApplication
         }
       }
 
-      P2Indexer indexer = new P2Indexer(refreshHours, maxRepos, verbose);
-      indexer.scanFolder(scanFolder, baseURI);
-      indexer.generateIndex(outputFolder);
+      scanFolder(scanFolder, baseURI);
+      generateIndex(outputFolder);
     }
     finally
     {
