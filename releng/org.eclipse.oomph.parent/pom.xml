@@ -116,7 +116,7 @@ Eike Stepper - initial API and implementation
               </artifact>
             </target>
             <!--executionEnvironmentDefault>JavaSE-${javaVersion}</executionEnvironmentDefault-->
-            <includePackedArtifacts>false</includePackedArtifacts>
+            <includePackedArtifacts>true</includePackedArtifacts>
               <environments>
                 <environment>
                   <os>win32</os>
