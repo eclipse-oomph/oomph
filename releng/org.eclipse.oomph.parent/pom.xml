@@ -108,15 +108,15 @@ Eike Stepper - initial API and implementation
             <artifactId>target-platform-configuration</artifactId>
             <version>${tycho-version}</version>
             <configuration>
-            <target>
-              <artifact>
-                <groupId>org.eclipse.oomph</groupId>
-                <artifactId>org.eclipse.oomph.tp</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-              </artifact>
-            </target>
-            <!--executionEnvironmentDefault>JavaSE-${javaVersion}</executionEnvironmentDefault-->
-            <includePackedArtifacts>true</includePackedArtifacts>
+              <target>
+                <artifact>
+                  <groupId>org.eclipse.oomph</groupId>
+                  <artifactId>org.eclipse.oomph.tp</artifactId>
+                  <version>1.0.0-SNAPSHOT</version>
+                </artifact>
+              </target>
+              <!--executionEnvironmentDefault>JavaSE-${javaVersion}</executionEnvironmentDefault-->
+              <includePackedArtifacts>true</includePackedArtifacts>
               <environments>
                 <environment>
                   <os>win32</os>
@@ -143,6 +143,13 @@ Eike Stepper - initial API and implementation
                   </requirement>
                 </extraRequirements>
               </dependency-resolution>
+              <filters>
+                <filter>
+                 <type>p2-installable-unit</type>
+                 <id>org.bouncycastle.bcprov</id>
+                 <removeAll/>
+                </filter>
+              </filters>
             </configuration>
           </plugin>
         <plugin>
