@@ -193,6 +193,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private final Map<java.net.URI, IArtifactRepository> artifactRepositories = new LinkedHashMap<java.net.URI, IArtifactRepository>();
 
+  private final Map<URI, byte[]> imageBytes = new HashMap<URI, byte[]>();
+
   private final Map<Object, String> images = new HashMap<Object, String>();
 
   private final Map<File, Future<List<String>>> fileIndices = new TreeMap<File, Future<List<String>>>();
@@ -732,7 +734,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           break;
         }
 
-        sortedLicenseIUs.put(biggestEntry.getKey(), biggestEntry.getValue());
+        TreeSet<IInstallableUnit> sortedLicenseIUValues = new TreeSet<IInstallableUnit>(NAME_VERSION_COMPARATOR);
+        sortedLicenseIUValues.addAll(biggestEntry.getValue());
+        sortedLicenseIUs.put(biggestEntry.getKey(), sortedLicenseIUValues);
       }
 
       final List<IInstallableUnit> featureIUs = new ArrayList<IInstallableUnit>();
@@ -1305,9 +1309,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                   StringBuilder links = new StringBuilder();
                   String id = "_" + EcoreUtil.generateUUID();
                   links.append(" <button id=\"" + id
-                      + "_arrows\" style=\"font-size: 70%; bottom-margin: 1pt; \" class=\"orange bb\" onclick=\"expand_collapse_inline_block('" + id
-                      + "');\">&#x25B7;</button>");
-                  links.append("<span id=\"" + id + "\"style=\"display: none; margin-top: 0.2ex; vertical-align : top;\">");
+                      + "_arrows\" style=\"font-size: 70%; bottom-margin: 1pt; \" class=\"orange bb xml-links_button\" onclick=\"expand_collapse_inline_block('"
+                      + id + "');\">&#x25B7;</button>");
+                  links.append("<span id=\"" + id + "\" class=\"xml-links\" style=\"display: none; margin-top: 0.2ex; vertical-align : top;\">");
                   for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(matchingIUs))
                   {
                     links.append(" <a href=\"");
@@ -1371,9 +1375,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                   StringBuilder links = new StringBuilder();
                   String id = "_" + EcoreUtil.generateUUID();
                   links.append(" <button id=\"" + id
-                      + "_arrows\" style=\"font-size: 70%; bottom-marin: 1pt;\" class=\"orange bb\" onclick=\"expand_collapse_inline_block('" + id
-                      + "');\">&#x25B7;</button>");
-                  links.append("<span id=\"" + id + "\"style=\"display: none; margin-top: 0.2ex; vertical-align : top;\">");
+                      + "_arrows\" style=\"font-size: 70%; bottom-marin: 1pt;\" class=\"orange bb xml-links_button\" onclick=\"expand_collapse_inline_block('"
+                      + id + "');\">&#x25B7;</button>");
+                  links.append("<span id=\"" + id + "\" class=\"xml-links\" style=\"display: none; margin-top: 0.2ex; vertical-align : top;\">");
                   for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(matchingIUs))
                   {
                     links.append(" <a href=\"");
@@ -2175,20 +2179,45 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   }
 
-  private String getImage(URI imageURI, File cache)
+  private byte[] getImageBytes(URI imageURI)
   {
-    String result = images.get(imageURI);
-    if (result == null)
+    byte[] bytes = imageBytes.get(imageURI);
+    if (bytes == null)
     {
       InputStream in = null;
-      OutputStream imageOut = null;
-      String key = null;
       try
       {
         in = URIConverter.INSTANCE.createInputStream(imageURI);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         IOUtil.copy(in, out);
-        byte[] imageBytes = out.toByteArray();
+        bytes = out.toByteArray();
+      }
+      catch (IOException ex)
+      {
+        System.err.println("###" + ex.getLocalizedMessage());
+        bytes = getImageBytes(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/error_st_obj@2x.png"));
+      }
+      finally
+      {
+        IOUtil.close(in);
+      }
+
+      imageBytes.put(imageURI, bytes);
+    }
+
+    return bytes;
+  }
+
+  private String getImage(URI imageURI, File cache)
+  {
+    String result = images.get(imageURI);
+    if (result == null)
+    {
+      String key = null;
+      OutputStream imageOut = null;
+      try
+      {
+        byte[] imageBytes = getImageBytes(imageURI);
         key = IOUtil.encodeFileName(XMLTypeFactory.eINSTANCE.convertBase64Binary(IOUtil.getSHA1(new ByteArrayInputStream(imageBytes))).replace('=', '_'));
         result = images.get(key);
         if (result == null)
@@ -2204,7 +2233,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       }
       catch (IOException ex)
       {
-        System.err.println("###" + ex.getLocalizedMessage());
         result = getErrorImage(cache);
         images.put(imageURI, result);
         if (key != null)
@@ -2218,7 +2246,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       }
       finally
       {
-        IOUtil.close(in);
         IOUtil.close(imageOut);
       }
     }

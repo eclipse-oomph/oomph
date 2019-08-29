@@ -160,6 +160,7 @@ span:target {
 </head>
 
   <body id="body_solstice">
+<%-[Script]-%>
     <script>
       function filterIU(className) {
         var ius = document.getElementsByClassName('iu-li');
@@ -292,6 +293,29 @@ span:target {
         }
       }
 
+      function expand_collapse_all(base) {
+        var e = document.getElementById(base);
+        var buttonTargets = document.getElementsByClassName(base + '_button');
+        var spanTargets = document.getElementsByClassName(base);
+        if (e.innerHTML == '\u25E2') {
+            e.innerHTML = '&#x25B7;';
+            for (var i = 0; i < buttonTargets.length; i++) {
+              buttonTargets.item(i).innerHTML = '&#x25B7;';
+            }
+            for (var i = 0; i < spanTargets.length; i++) {
+              spanTargets.item(i).style.display = 'none';
+            }
+        } else {
+            e.innerHTML = '&#x25E2;';
+            for (var i = 0; i < buttonTargets.length; i++) {
+              buttonTargets.item(i).innerHTML = '&#x25E2;';
+            }
+            for (var i = 0; i < spanTargets.length; i++) {
+              spanTargets.item(i).style.display = 'inline-block';
+            }
+        }
+      }
+
     </script>
 
     <header role="banner" id="header-wrapper">
@@ -325,7 +349,6 @@ span:target {
 <%}%>
             </ol>
           </div>
-          <div class="col-sm-8 margin-top-15"></div>
         </div>
       </div>
     </section>
@@ -497,7 +520,10 @@ span:target {
                <pre id="__<%=id%>" style="display:none; margin-left: 2em; background-color: <%=backgroundColor%>"><%=license.getMatchingPrefix()%><span style="color: red; text-decoration: line-through; <%=mismatchingFontSize%>"><%=license.getMismatching()%></span><span style="color: green; text-decoration: underline; <%=replacementFontSize%>"><%=license.getReplacement()%></span><%=license.getMatchingSuffix()%></pre>
     <%}%>
   <%}%>
-           <h3 style="font-weight: bold;">Content Metadata</h3>
+           <h3 style="font-weight: bold;">
+             Content Metadata
+             <button id="xml-links" class="orange bb" onclick="expand_collapse_all('xml-links');">&#x25B7;</button>
+           </h3>
            <div class="xml-iu" style="display:block;">
   <%for (String xml : report.getXML(iuReport.getIU(), Collections.<String, String> emptyMap())) {%>
 <!-----------><%=xml%>
@@ -511,7 +537,7 @@ span:target {
   <%List<Report> children = report.getChildren();
     if (!children.isEmpty()) {%>
            <p>
-    <%if (!report.isRoot()) {%>
+      <%if (!report.isRoot()) {%>
              This is a composite update site.
     <%}%>
              In addition to this composite report, reports are also generated for each of the composed children listed in the navigation bar to the left.
@@ -595,7 +621,7 @@ span:target {
                  <li style="margin-left: 1em;">
                    <button id="_f<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('_f<%=id%>');">&#x25B7;</button>
                    Features/Products
-                   <ul style="display:none; padding: 0; margin: 0; margin-left: 3em;" id="_f<%=id%>">
+                   <ul style="list-style-type: none; display:none; padding: 0; margin: 0; margin-left: 2em;" id="_f<%=id%>">
         <%for (IInstallableUnit iu : ius) {%>
                     <li class="font-smaller text-nowrap">
                       <a href="<%=report.getRelativeIUReportURL(iu)%>">
@@ -673,11 +699,11 @@ span:target {
              </div>
         <%}%>
       <%}%>
-             <ul class="font-smaller" style="display:none; margin-left: -2em;" id="<%=id%>">
+             <ul class="font-smaller" style="list-style-type: none; display:none; margin-left: -3em;" id="<%=id%>">
       <%Map<String, IInstallableUnit> artifacts = entry.getValue();
         for (Map.Entry<String, IInstallableUnit> artifact : artifacts.entrySet()) {%>
                <li>
-                 <a href="<%=report.getRelativeIUReportURL(artifact.getValue())%>"><%=artifact.getKey()%></a>
+                 <a href="<%=report.getRelativeIUReportURL(artifact.getValue())%>"><img class="fit-image" src="<%=report.getIUImage(artifact.getValue())%>"/> <%=artifact.getKey()%></a>
                </li>
       <%}%>
              </ul>
@@ -704,7 +730,7 @@ span:target {
            <span style="color: FireBrick; font-size: 60%;">(<%=nonEclipse%> Not Provided by Eclipse)</span>
     <%}%>
            </h3>
-           <ul id="feature_providers" style="display:none; margin-left: -1em; list-style-type: none;">
+           <ul id="feature_providers" style="display:none; margin-left: -2em; list-style-type: none;">
     <%int count = 0;
       for (Map.Entry<String, Set<IInstallableUnit>> provider : featureProviders.entrySet()) {
         String style = !provider.getKey().toLowerCase().contains("eclipse") ? " style=\"color: FireBrick;\"" : "";
@@ -717,7 +743,7 @@ span:target {
       <%}%>
                <span <%=style%>><%=provider.getKey()%></span>
                <span style="color: DarkCyan;"><%=features.size()%></span>
-               <ul id="<%=id%>" style="display:none; margin-left: -1em; list-style-type: none;">
+               <ul id="<%=id%>" style="display:none; margin-left: -2em; list-style-type: none;">
       <%for (IInstallableUnit feature : features) {
           String brandingImage = report.getBrandingImage(feature);%>
                  <li>
@@ -757,7 +783,7 @@ span:target {
            <span style="color: FireBrick; font-size: 60%;">(<%=noBranding%> No Branding Images)</span>
     <%}%>
            </h3>
-           <ul id="features" style="display: none;">
+           <ul id="features" style="display: none; list-style-type: none; margin-left: -2em;">
     <%for (IInstallableUnit feature : features) {
         String brandingImage = report.getBrandingImage(feature);%>
              <li style="font-size: 100%; white-space: nowrap;">
@@ -864,7 +890,7 @@ span:target {
                  <%=helper.htmlEscape(report.getName(category, true), true)%>
                </a>
       <%if (!requiredIUs.isEmpty()) {%>
-               <ul class="font-smaller" id="<%=categoryID%>" style="display: none;">
+               <ul class="font-smaller" id="<%=categoryID%>" style="list-style-type: none; display: none; margin-left: -1em;">
         <%for (IInstallableUnit requiredIU : requiredIUs) {%>
                  <li>
                    <a href="<%=report.getRelativeIUReportURL(requiredIU)%>">
@@ -895,7 +921,7 @@ span:target {
         }
       }%>
            <h3 style="font-weight: bold;">
-           <button id="ius_arrows" class="orange bb" onclick="expand_collapse('ius');expand_collapse('ius_details');">&#x25B7;</button>
+           <button id="ius_arrows" class="orange bb" onclick="expand_collapse('ius');">&#x25B7;</button>
            <img class="fit-image" src="<%=report.getBundleImage()%>"/>
            Installable Units
            <span style="color: DarkCyan;"><%=ius.size()%></span>
@@ -918,7 +944,7 @@ span:target {
       <%}%>
              </span>
     <%}%>
-           <ul style="margin-left: -1em; list-style-type: none; padding: 0; margin: 0;">
+             <ul style="list-style-type: none; padding: 0; margin-left: 1em;">
     <%for (IInstallableUnit iu : ius) {
         String iuID = iu.getId();
         String id = report.getIUID(iu);
@@ -931,47 +957,45 @@ span:target {
         if (pluginsWithMissingPackGZ.contains(iu)) {
           classNames.append(" missing");
         }%>
-             <li id="_iu_<%=id%>" class="iu-li<%=classNames%> font-smaller">
-              <button id="<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('<%=id%>');"><%-&#x25B7;-%>&bull;</button>
-              <a href="<%=report.getRelativeIUReportURL(iu)%>">
-                <img class="fit-image" src="<%=report.getIUImage(iu)%>"/>
-                <span style="font-size:100%;"><%=iuID%></span>
-                <span style="color: DarkOliveGreen;<%=versionStyle%>"><%=report.getVersion(iu)%></span>
-              </a>
+               <li id="_iu_<%=id%>" class="iu-li<%=classNames%> font-smaller">
+                 <a href="<%=report.getRelativeIUReportURL(iu)%>">
+                   <img class="fit-image" src="<%=report.getIUImage(iu)%>"/>
+                   <span style="font-size:100%;"><%=iuID%></span>
+                   <span style="color: DarkOliveGreen;<%=versionStyle%>"><%=report.getVersion(iu)%></span>
+                 </a>
       <%Map<String, String> licenseReplacements = new HashMap<String, String>();
         if (report.isFeature(iu)) {
           for (LicenseDetail license : report.getLicenses(iu)) {
             String licenseID = license.getUUID();
             licenseReplacements.put(">" + licenseID, "><button class='bb search-for-me' style='" + helper.getStyle(license)
                 + "' onclick=\"clickOnButton('lic_" + licenseID + "');\">" + license.getVersion() + "</button>");%>
-              <button id="lic_<%=licenseID%>" class="bb" style="<%=helper.getStyle(license)%>" onclick="clickOnToggleButton('licenses_arrows'); clickOnToggleButton('__<%=licenseID%>_arrows'); clickOnToggleButton('_<%=licenseID%>_arrows'); navigateTo('_<%=licenseID%>');"><%=license.getVersion()%></button>
+                 <button id="lic_<%=licenseID%>" class="bb" style="<%=helper.getStyle(license)%>" onclick="clickOnToggleButton('licenses_arrows'); clickOnToggleButton('__<%=licenseID%>_arrows'); clickOnToggleButton('_<%=licenseID%>_arrows'); navigateTo('_<%=licenseID%>');"><%=license.getVersion()%></button>
         <%}%>
       <%}%>
       <%Map<String, Boolean> artifacts = report.getIUArtifacts(iu);
         for (Map.Entry<String, Boolean> entry : artifacts.entrySet()) {
           String artifact = entry.getKey();
           Boolean signed = entry.getValue();%>
-             (
+                 (
         <%if (signed != null) {%>
-             <img class="fit-image" src="<%=report.getSignedImage(signed)%>"/>
+                   <img class="fit-image" src="<%=report.getSignedImage(signed)%>"/>
         <%}%>
-             <img class="fit-image" src="<%=report.getArtifactImage(artifact)%>"/>
-             <span style="color: DarkCyan;"><%=report.getArtifactSize(artifact)%></span>
-             )
+                   <img class="fit-image" src="<%=report.getArtifactImage(artifact)%>"/>
+                   <span style="color: DarkCyan;"><%=report.getArtifactSize(artifact)%></span>
+                 )
       <%}%>
       <%if (pluginsWithMissingPackGZ.contains(iu)) {%>
-             (
-             <img class="fit-image" src="<%=report.getErrorImage()%>"/>
-             <img class="fit-image" src="<%=report.getArtifactImage("*.jar.pack.gz")%>"/>
-             )
+                 (
+                   <img class="fit-image" src="<%=report.getErrorImage()%>"/>
+                   <img class="fit-image" src="<%=report.getArtifactImage("*.jar.pack.gz")%>"/>
+                 )
       <%}%>
-            </li>
+               </li>
     <%}%>
-           </ul>
+             </ul>
            </div>
   <%}%>
 <%}%>
-
         </div>
       </div>
      </div>
