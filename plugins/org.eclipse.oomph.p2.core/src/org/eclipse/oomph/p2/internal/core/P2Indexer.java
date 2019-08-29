@@ -549,7 +549,14 @@ public final class P2Indexer implements IApplication
             Matcher matcher = TIMESTAMP_PATTERN.matcher(line);
             if (matcher.find())
             {
-              timestamp = Long.parseLong(matcher.group(1));
+              try
+              {
+                timestamp = Long.parseLong(matcher.group(1));
+              }
+              catch (NumberFormatException ex)
+              {
+                System.err.println("Bad timestamp value '" + matcher.group(1) + "' for:" + metadataFile);
+              }
             }
           }
 
