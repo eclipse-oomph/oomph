@@ -789,7 +789,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       }
     };
 
-    searchField.getFilterControl().setToolTipText("Filter text may use * to match any characters or ? to match one character)");
+    searchField.getFilterControl().setToolTipText("Filter text may use * to match any characters or ? to match one character");
 
     searchField.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
