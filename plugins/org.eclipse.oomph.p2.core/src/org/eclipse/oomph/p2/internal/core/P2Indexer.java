@@ -94,6 +94,7 @@ public final class P2Indexer implements IApplication
     try
     {
       File scanFolder = new File(arguments.removeFirst());
+      refreshHours = Integer.parseInt(arguments.removeFirst());
       URI baseURI = URI.createURI(arguments.removeFirst());
       File outputFolder = new File(arguments.removeFirst());
 
