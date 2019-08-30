@@ -1025,7 +1025,7 @@ public final class RecorderManager
                 return;
               }
 
-              UIUtil.asyncExec(new Runnable()
+              UIUtil.timerExec(100, new Runnable()
               {
                 public void run()
                 {
