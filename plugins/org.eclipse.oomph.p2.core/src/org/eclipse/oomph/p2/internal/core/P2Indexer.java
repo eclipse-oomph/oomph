@@ -555,7 +555,7 @@ public final class P2Indexer implements IApplication
               }
               catch (NumberFormatException ex)
               {
-                System.err.println("Bad timestamp value '" + matcher.group(1) + "' for:" + metadataFile);
+                System.err.println("Bad timestamp value '" + matcher.group(1) + "' for: " + metadataFile);
               }
             }
           }
