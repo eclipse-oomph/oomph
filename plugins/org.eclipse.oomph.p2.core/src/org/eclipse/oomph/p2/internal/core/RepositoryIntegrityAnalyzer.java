@@ -742,7 +742,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       final List<IInstallableUnit> featureIUs = new ArrayList<IInstallableUnit>();
       for (IInstallableUnit featureIU : P2Util.asIterable(groupQuery))
       {
-        featureIUs.add(featureIU);
+        if (!"true".equals(featureIU.getProperty(MetadataFactory.InstallableUnitDescription.PROP_TYPE_PRODUCT)))
+        {
+          featureIUs.add(featureIU);
+        }
       }
 
       Collections.sort(featureIUs, NAME_VERSION_COMPARATOR);
