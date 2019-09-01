@@ -560,6 +560,18 @@ public final class P2Indexer implements IApplication
             }
           }
 
+          while (!line.trim().endsWith(">"))
+          {
+            String incompleteLine = line;
+            line = reader.readLine();
+            if (line == null)
+            {
+              break;
+            }
+
+            line = incompleteLine + " " + line;
+          }
+
           processsMetadata(indexer, line, verbose);
         }
       }
