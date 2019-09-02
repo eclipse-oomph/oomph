@@ -12,9 +12,9 @@ package org.eclipse.oomph.p2.internal.core;
 
 /*
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * http://www.eclipse.org/legal/epl-v20.html
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
@@ -33,6 +33,7 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -42,17 +43,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
@@ -65,7 +72,7 @@ public final class P2Indexer implements IApplication
 {
   private static final String CHARSET = "UTF-8";
 
-  private final Map<URI, Repository> repositories = new HashMap<URI, Repository>();
+  private final Map<URI, Repository> repositories = new ConcurrentHashMap<URI, P2Indexer.Repository>();
 
   /**
    * The map from repository URL to the list of capabilities in that repository.
@@ -76,6 +83,8 @@ public final class P2Indexer implements IApplication
    * The map from capability namespace to the set of capability names in that namespace.
    */
   private final Map<String, Set<String>> capabilityIndex = new HashMap<String, Set<String>>();
+
+  private final Deque<Future<?>> deque = new ConcurrentLinkedDeque<Future<?>>();
 
   private final long timeStamp = System.currentTimeMillis();
 
@@ -91,12 +100,13 @@ public final class P2Indexer implements IApplication
     String[] args = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
     LinkedList<String> arguments = new LinkedList<String>(Arrays.asList(args));
 
+    final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4);
     try
     {
-      File scanFolder = new File(arguments.removeFirst());
+      final File scanFolder = new File(arguments.removeFirst()).getCanonicalFile();
       refreshHours = Integer.parseInt(arguments.removeFirst());
-      URI baseURI = URI.createURI(arguments.removeFirst());
-      File outputFolder = new File(arguments.removeFirst());
+      final URI baseURI = URI.createURI(arguments.removeFirst());
+      File outputFolder = new File(arguments.removeFirst()).getCanonicalFile();
 
       while (!arguments.isEmpty())
       {
@@ -111,12 +121,26 @@ public final class P2Indexer implements IApplication
         }
       }
 
-      scanFolder(scanFolder, baseURI);
+      scanFolder(executor, scanFolder, baseURI);
+
+      for (Future<?> future = deque.pollFirst(); future != null; future = deque.pollFirst())
+      {
+        future.get();
+      }
+
+      generateRepositoryMetadata(executor);
+
+      for (Future<?> future = deque.pollFirst(); future != null; future = deque.pollFirst())
+      {
+        future.get();
+      }
+
       generateIndex(outputFolder);
     }
     finally
     {
       System.out.println("Took " + (System.currentTimeMillis() - start) / 1000 + " seconds.");
+      executor.shutdown();
     }
 
     return null;
@@ -126,30 +150,36 @@ public final class P2Indexer implements IApplication
   {
   }
 
-  private void scanFolder(File folder, URI uri)
+  private void scanFolder(final ExecutorService executor, final File folder, final URI uri)
   {
     if (repositories.size() >= maxRepos)
     {
       return;
     }
 
-    File metadataFile = getMetadataFile(folder);
-    if (metadataFile != null)
+    deque.addLast(executor.submit(new Runnable()
     {
-      if (verbose)
+      public void run()
       {
-        System.out.println("Found " + metadataFile);
-      }
+        File metadataFile = getMetadataFile(folder);
+        if (metadataFile != null)
+        {
+          if (verbose)
+          {
+            System.out.println("Found " + metadataFile);
+          }
 
-      if (metadataFile.getName().startsWith("composite"))
-      {
-        repositories.put(uri, new Repository.Composite(uri, metadataFile));
+          if (metadataFile.getName().startsWith("composite"))
+          {
+            repositories.put(uri, new Repository.Composite(uri, metadataFile));
+          }
+          else
+          {
+            repositories.put(uri, new Repository.Simple(uri, metadataFile));
+          }
+        }
       }
-      else
-      {
-        repositories.put(uri, new Repository.Simple(uri, metadataFile));
-      }
-    }
+    }));
 
     File[] children = folder.listFiles(new FileFilter()
     {
@@ -163,13 +193,19 @@ public final class P2Indexer implements IApplication
     {
       Arrays.sort(children);
 
-      for (File child : children)
+      for (final File child : children)
       {
         String name = child.getName();
-        String encodedName = URI.encodeSegment(name, false);
+        final String encodedName = URI.encodeSegment(name, false);
         if (name.equals(URI.decode(encodedName)))
         {
-          scanFolder(child, uri.appendSegment(encodedName));
+          deque.addLast(executor.submit(new Runnable()
+          {
+            public void run()
+            {
+              scanFolder(executor, child, uri.appendSegment(encodedName));
+            }
+          }));
         }
         else
         {
@@ -256,28 +292,53 @@ public final class P2Indexer implements IApplication
     return null;
   }
 
-  private void generateIndex(File outputFolder) throws Exception
+  private void generateRepositoryMetadata(ExecutorService executor)
   {
-    for (Iterator<Repository> it = repositories.values().iterator(); it.hasNext();)
+    for (final Map.Entry<URI, Repository> entry : repositories.entrySet())
     {
-      Repository repository = it.next();
-      if (verbose)
+      final Repository repository = entry.getValue();
+      deque.addLast(executor.submit(new Runnable()
       {
-        System.out.println("Processing " + repository.getMetadataFile());
-      }
+        public void run()
+        {
+          if (verbose)
+          {
+            System.out.println("Processing " + repository.getMetadataFile());
+          }
 
-      try
-      {
-        repository.processsMetadata(this, verbose);
-      }
-      catch (Exception ex)
-      {
-        it.remove();
-        System.err.println("Processing " + repository.getMetadataFile());
-        ex.printStackTrace();
-      }
+          try
+          {
+            repository.processsMetadata(P2Indexer.this, verbose);
+          }
+          catch (Exception ex)
+          {
+            repositories.remove(entry.getKey());
+            print("Processing " + repository.getMetadataFile(), ex);
+          }
+        }
+      }));
+    }
+  }
+
+  private void print(String message, Exception exception)
+  {
+    try
+    {
+      ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+      PrintStream out = new PrintStream(bytes);
+      out.println(message);
+      exception.printStackTrace(out);
+      System.err.write(bytes.toByteArray());
+    }
+    catch (Exception ex1)
+    {
+      //$FALL-THROUGH$
     }
 
+  }
+
+  private void generateIndex(File outputFolder) throws Exception
+  {
     int id = 0;
     for (Repository repository : repositories.values())
     {
@@ -420,8 +481,7 @@ public final class P2Indexer implements IApplication
       }
       catch (Exception ex)
       {
-        System.err.println("Capability " + name);
-        ex.printStackTrace();
+        print("Capability " + name, ex);
       }
     }
 
@@ -665,6 +725,8 @@ public final class P2Indexer implements IApplication
     {
       private static final Pattern CAPABILITY_PATTERN = pattern("<provided namespace='#' name='#' version='#'/>");
 
+      private static final Pattern CAPABILITY_PATTERN_ALT = pattern("<provided name='#' namespace='#' version='#'/>");
+
       private int capabilityCount;
 
       public Simple(URI uri, File metadataFile)
@@ -688,7 +750,14 @@ public final class P2Indexer implements IApplication
       protected void processsMetadata(P2Indexer indexer, String line, boolean verbose)
       {
         Matcher matcher = CAPABILITY_PATTERN.matcher(line);
-        if (matcher.find())
+        boolean found = matcher.find();
+        if (!found)
+        {
+          matcher = CAPABILITY_PATTERN_ALT.matcher(line);
+          found = matcher.find();
+        }
+
+        if (found)
         {
           String namespace = URI.encodeSegment(matcher.group(1), false);
           String name = URI.encodeSegment(matcher.group(2), false);
@@ -704,19 +773,22 @@ public final class P2Indexer implements IApplication
             return;
           }
 
-          CollectionUtil.add(indexer.capabilityIndex, namespace, name);
-
-          String version = matcher.group(3);
-
-          List<Capability> list = indexer.capabilities.get(qualifiedName);
-          if (list == null)
+          synchronized (indexer.capabilityIndex)
           {
-            list = new ArrayList<Capability>();
-            indexer.capabilities.put(qualifiedName, list);
-          }
+            CollectionUtil.add(indexer.capabilityIndex, namespace, name);
 
-          list.add(new Capability(this, version));
-          ++capabilityCount;
+            String version = matcher.group(3);
+
+            List<Capability> list = indexer.capabilities.get(qualifiedName);
+            if (list == null)
+            {
+              list = new ArrayList<Capability>();
+              indexer.capabilities.put(qualifiedName, list);
+            }
+
+            list.add(new Capability(this, version));
+            ++capabilityCount;
+          }
         }
       }
     }
