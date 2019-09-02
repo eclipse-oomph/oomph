@@ -749,18 +749,23 @@ public final class P2Indexer implements IApplication
       @Override
       protected void processsMetadata(P2Indexer indexer, String line, boolean verbose)
       {
+        int namespaceIndex = 1;
+        int nameIndex = 2;
+        int versionIndex = 3;
         Matcher matcher = CAPABILITY_PATTERN.matcher(line);
         boolean found = matcher.find();
         if (!found)
         {
           matcher = CAPABILITY_PATTERN_ALT.matcher(line);
+          nameIndex = 1;
+          namespaceIndex = 2;
           found = matcher.find();
         }
 
         if (found)
         {
-          String namespace = URI.encodeSegment(matcher.group(1), false);
-          String name = URI.encodeSegment(matcher.group(2), false);
+          String namespace = URI.encodeSegment(matcher.group(namespaceIndex), false);
+          String name = URI.encodeSegment(matcher.group(nameIndex), false);
           String qualifiedName = namespace + "/" + name;
 
           if (name.equals(".") || name.equals("..") || name.startsWith("file:"))
@@ -777,7 +782,7 @@ public final class P2Indexer implements IApplication
           {
             CollectionUtil.add(indexer.capabilityIndex, namespace, name);
 
-            String version = matcher.group(3);
+            String version = matcher.group(versionIndex);
 
             List<Capability> list = indexer.capabilities.get(qualifiedName);
             if (list == null)
