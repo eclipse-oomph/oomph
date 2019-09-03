@@ -1082,6 +1082,86 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           return pluginsWithMissingPackGZ;
         }
 
+        private Set<IInstallableUnit> unsignedIUs;
+
+        @Override
+        public Set<IInstallableUnit> getUnsignedIUs()
+        {
+          if (unsignedIUs == null)
+          {
+            unsignedIUs = new TreeSet<IInstallableUnit>();
+            for (IInstallableUnit iu : allIUs)
+            {
+              Map<String, Boolean> iuArtifacts = getIUArtifacts(iu);
+              if (iuArtifacts.containsValue(Boolean.FALSE))
+              {
+                unsignedIUs.add(iu);
+              }
+            }
+          }
+          return unsignedIUs;
+        }
+
+        private Set<IInstallableUnit> badProviderIUs;
+
+        @Override
+        public Set<IInstallableUnit> getBadProviderIUs()
+        {
+          if (badProviderIUs == null)
+          {
+            badProviderIUs = new TreeSet<IInstallableUnit>();
+            Map<String, Set<IInstallableUnit>> featureProviders = getFeatureProviders();
+            for (Map.Entry<String, Set<IInstallableUnit>> entry : featureProviders.entrySet())
+            {
+              String provider = entry.getKey();
+              if (provider == null || !provider.toLowerCase().contains("eclipse"))
+              {
+                badProviderIUs.addAll(entry.getValue());
+              }
+            }
+          }
+          return badProviderIUs;
+        }
+
+        private Set<IInstallableUnit> badLicenseIUs;
+
+        @Override
+        public Set<IInstallableUnit> getBadLicenseIUs()
+        {
+          if (badLicenseIUs == null)
+          {
+            badLicenseIUs = new TreeSet<IInstallableUnit>();
+            Map<LicenseDetail, Set<IInstallableUnit>> licenses = getLicenses();
+            for (Map.Entry<LicenseDetail, Set<IInstallableUnit>> entry : licenses.entrySet())
+            {
+              if (!entry.getKey().isSUA())
+              {
+                badLicenseIUs.addAll(entry.getValue());
+              }
+            }
+          }
+          return badLicenseIUs;
+        }
+
+        private Set<IInstallableUnit> brokenBrandingIUs;
+
+        @Override
+        public Set<IInstallableUnit> getBrokenBrandingIUs()
+        {
+          if (brokenBrandingIUs == null)
+          {
+            brokenBrandingIUs = new TreeSet<IInstallableUnit>();
+            for (IInstallableUnit iu : getFeatureIUs())
+            {
+              if (hasBrokenBrandingImage(iu))
+              {
+                brokenBrandingIUs.add(iu);
+              }
+            }
+          }
+          return brokenBrandingIUs;
+        }
+
         @Override
         public Map<String, Boolean> getIUArtifacts(IInstallableUnit iu)
         {
@@ -2950,6 +3030,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public abstract String getArtifactSize(String artifact);
 
     public abstract Map<String, Set<Version>> getIUVersions();
+
+    public abstract Set<IInstallableUnit> getUnsignedIUs();
+
+    public abstract Set<IInstallableUnit> getBadProviderIUs();
+
+    public abstract Set<IInstallableUnit> getBadLicenseIUs();
+
+    public abstract Set<IInstallableUnit> getBrokenBrandingIUs();
 
     public abstract Set<IInstallableUnit> getPluginsWithMissingPackGZ();
 

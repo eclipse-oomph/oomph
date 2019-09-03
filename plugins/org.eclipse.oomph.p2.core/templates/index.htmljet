@@ -162,7 +162,47 @@ span:target {
   <body id="body_solstice">
 <%-[Script]-%>
     <script>
+
+      function match(id) {
+        var filter = document.querySelector('input[name="filter"]:checked');
+        var currentFilter = 'iu-li';
+        if (filter != null && filter.value != 'all') {
+          currentFilter = filter.value;
+        }
+        var e = document.getElementById(id);
+        var message = document.getElementById(id + '-error');
+        var matchText = e.value;
+        var ius = document.getElementsByClassName('iu-li');
+        var targets = document.getElementsByClassName(currentFilter);
+        var targetsArray = [].slice.call(targets);
+        var count = 0;
+        for (var i = 0; i < ius.length; i++) {
+          var iu = ius[i];
+          var text = iu.textContent;
+          try {
+            if ((matchText == '' || text.match(matchText) != null) && targetsArray.includes(iu)) {
+              iu.style.display = 'block';
+              ++count;
+            } else {
+              iu.style.display = 'none';
+            }
+            message.innerHTML = "";
+          }
+          catch (err) {
+            var errMessage = err.message;
+            message.innerHTML = errMessage;
+            break;
+          }
+        }
+        if (count == 0 && message.innerHTML == '') {
+            message.innerHTML = 'No matches';
+        }
+      }
+
       function filterIU(className) {
+        var e = document.getElementById('subset');
+        var matchText = e.value;
+        var count = 0;
         var ius = document.getElementsByClassName('iu-li');
         var targets = document.getElementsByClassName(className);
         var targetsArray = [].slice.call(targets);
@@ -171,8 +211,24 @@ span:target {
           if (!targetsArray.includes(iu)) {
             iu.style.display = 'none';
           } else {
+            try
+            {
+              if (matchText != '' && iu.textContent.match(matchText) == null) {
+                iu.style.display = 'none';
+                continue;
+              }
+            }
+            catch (err) {
+            }
             iu.style.display = 'block';
+            ++count;
           }
+        }
+        var message = document.getElementById('subset-error');
+        if (count == 0) {
+            message.innerHTML = 'No matches';
+        } else {
+            message.innerHTML = '';
         }
       }
 
@@ -537,7 +593,7 @@ span:target {
   <%List<Report> children = report.getChildren();
     if (!children.isEmpty()) {%>
            <p>
-      <%if (!report.isRoot()) {%>
+    <%if (!report.isRoot()) {%>
              This is a composite update site.
     <%}%>
              In addition to this composite report, reports are also generated for each of the composed children listed in the navigation bar to the left.
@@ -910,6 +966,10 @@ span:target {
   <%Collection<IInstallableUnit> ius = report.getAllIUs();
     if (!ius.isEmpty()) {
       Collection<IInstallableUnit> pluginsWithMissingPackGZ = report.getPluginsWithMissingPackGZ();
+      Set<IInstallableUnit> unsignedIUs = report.getUnsignedIUs();
+      Set<IInstallableUnit> badProviderIUs = report.getBadProviderIUs();
+      Set<IInstallableUnit> badLicenseIUs = report.getBadLicenseIUs();
+      Set<IInstallableUnit> brokenBrandingIUs = report.getBrokenBrandingIUs();
       Map<String, Set<Version>> iuVersions = report.getIUVersions();
       boolean isSimple = report.isSimple();
       int duplicateCount = 0;
@@ -921,7 +981,7 @@ span:target {
         }
       }%>
            <h3 style="font-weight: bold;">
-           <button id="ius_arrows" class="orange bb" onclick="expand_collapse('ius');">&#x25B7;</button>
+           <button id="ius_arrows" class="orange bb" onclick="expand_collapse('ius'); match('subset');">&#x25B7;</button>
            <img class="fit-image" src="<%=report.getBundleImage()%>"/>
            Installable Units
            <span style="color: DarkCyan;"><%=ius.size()%></span>
@@ -933,9 +993,23 @@ span:target {
     <%}%>
            </h3>
            <div id="ius" style="display:none;">
-    <%if (duplicateCount > 0 || !pluginsWithMissingPackGZ.isEmpty()) {%>
+             <span style="margin-left: 1em;" class="nowrap">Filter Pattern: <input id="subset" type="text" oninput="match('subset');"> <span style="color: firebrick;" id="subset-error"></span></input></span><br/>
+    <%if (duplicateCount > 0 || !pluginsWithMissingPackGZ.isEmpty() || !unsignedIUs.isEmpty() || !badProviderIUs.isEmpty() || !badLicenseIUs.isEmpty()
+          || !brokenBrandingIUs.isEmpty()) {%>
              <span style="margin-left: 1em;">
                <input id="filter" type="radio" name="filter" value="all" class="filter" onclick="filterIU('iu-li');" checked="checked"> All </input>
+      <%if (!badLicenseIUs.isEmpty()) {%>
+               <input id="bad-license" type="radio" name="filter" value="bad-license" class="filter" onclick="filterIU('bad-license');"> Bad License </input>
+      <%}%>
+      <%if (!unsignedIUs.isEmpty()) {%>
+               <input id="unsigned" type="radio" name="filter" value="unsigned" class="filter" onclick="filterIU('unsigned');"> Unsigned </input>
+      <%}%>
+      <%if (!badProviderIUs.isEmpty()) {%>
+               <input id="bad-provider" type="radio" name="filter" value="bad-provider" class="filter" onclick="filterIU('bad-provider');"> Bad Provider </input>
+      <%}%>
+      <%if (!brokenBrandingIUs.isEmpty()) {%>
+               <input id="broken-branding" type="radio" name="filter" value="broken-branding" class="filter" onclick="filterIU('broken-branding');"> Broken Branding </input>
+      <%}%>
       <%if (duplicateCount > 0) {%>
                <input id="duplicates" type="radio" name="filter" value="duplicate" class="filter" onclick="filterIU('duplicate');"> Duplicates </input>
       <%}%>
@@ -956,6 +1030,18 @@ span:target {
         }
         if (pluginsWithMissingPackGZ.contains(iu)) {
           classNames.append(" missing");
+        }
+        if (unsignedIUs.contains(iu)) {
+          classNames.append(" unsigned");
+        }
+        if (badProviderIUs.contains(iu)) {
+          classNames.append(" bad-provider");
+        }
+        if (badLicenseIUs.contains(iu)) {
+          classNames.append(" bad-license");
+        }
+        if (brokenBrandingIUs.contains(iu)) {
+          classNames.append(" broken-branding");
         }%>
                <li id="_iu_<%=id%>" class="iu-li<%=classNames%> font-smaller">
                  <a href="<%=report.getRelativeIUReportURL(iu)%>">
@@ -990,9 +1076,15 @@ span:target {
                    <img class="fit-image" src="<%=report.getArtifactImage("*.jar.pack.gz")%>"/>
                  )
       <%}%>
+      <%String brandingImage = report.getBrandingImage(iu);
+        if (brandingImage != null) {%>
+                 [<img class="fit-image" src="<%=brandingImage%>"/>]
+      <%}%>
                </li>
     <%}%>
              </ul>
+           </div>
+           <div style="height: 40ex;">
            </div>
   <%}%>
 <%}%>
