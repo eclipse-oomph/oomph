@@ -25,6 +25,8 @@ public final class AnnotationConstants
 
   public static final String KEY_SITE_URI = "siteURI";
 
+  public static final String SHORTCUT = "shortcut";
+
   public static final String ANNOTATION_STATS_SENDING = "http://www.eclipse.org/oomph/setup/StatsSending";
 
   public static final String KEY_URI = "uri";

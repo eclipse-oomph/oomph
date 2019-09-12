@@ -1393,38 +1393,58 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       openInSystemExplorerButton.setToolTipText("Open the folder '" + getProductInstallFolder() + "' in the system explorer");
 
-      if (createStartMenuEntryButton != null || createDesktopShortcutButton != null)
+      boolean createMenuShortcut = createStartMenuEntryButton != null && createStartMenuEntryButton.isChecked();
+      boolean createDesktopShortcut = createDesktopShortcutButton != null && createDesktopShortcutButton.isChecked();
+      if (createMenuShortcut || createDesktopShortcut)
       {
         File executable = performer.getExecutableInfo().getExecutable();
 
-        // TODO The entire naming of the shortcuts should be revisited and made more flexible with BrandingInfo annotations.
-
-        ProductCatalog productCatalog = product.getProductCatalog();
-        String catalogName = "user.products".equals(productCatalog.getName()) ? "" : productCatalog.getLabel();
-        int firstDot = catalogName.indexOf('.');
-        if (firstDot != -1)
+        String shortCutName = null;
+        scope = selectedProductVersion;
+        while (scope != null)
         {
-          catalogName = catalogName.substring(0, firstDot);
+          Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+          if (annotation != null)
+          {
+            shortCutName = annotation.getDetails().get(AnnotationConstants.SHORTCUT);
+            if (shortCutName != null)
+            {
+              break;
+            }
+          }
+
+          scope = scope.getParentScope();
         }
 
-        String productName = product.getName();
-        if (productName.startsWith("epp.package."))
+        if (shortCutName == null)
         {
-          productName = productName.substring("epp.package.".length());
+          ProductCatalog productCatalog = product.getProductCatalog();
+          String catalogName = "user.products".equals(productCatalog.getName()) ? "" : productCatalog.getLabel();
+          int firstDot = catalogName.indexOf('.');
+          if (firstDot != -1)
+          {
+            catalogName = catalogName.substring(0, firstDot);
+          }
+
+          String productName = product.getName();
+          if (productName.startsWith("epp.package."))
+          {
+            productName = productName.substring("epp.package.".length());
+          }
+
+          productName = productName.replace('.', ' ');
+
+          String qualifiedProductName = productName + " " + selectedProductVersion.getName().replace('.', ' ');
+
+          shortCutName = StringUtil.capAll(StringUtil.isEmpty(catalogName) ? qualifiedProductName : catalogName + " " + qualifiedProductName);
         }
 
-        productName = productName.replace('.', ' ');
-
-        String qualifiedProductName = productName + " " + selectedProductVersion.getName().replace('.', ' ');
-
-        String shortCutName = StringUtil.capAll(StringUtil.isEmpty(catalogName) ? qualifiedProductName : catalogName + " " + qualifiedProductName);
-
-        if (createStartMenuEntryButton != null && createStartMenuEntryButton.isChecked())
+        if (createMenuShortcut)
         {
           KeepInstallerUtil.createShortCut("Programs", "Eclipse", executable.getAbsolutePath(), shortCutName);
         }
 
-        if (createDesktopShortcutButton != null && createDesktopShortcutButton.isChecked())
+        if (createDesktopShortcut)
         {
           KeepInstallerUtil.createShortCut("Desktop", null, executable.getAbsolutePath(), shortCutName);
         }

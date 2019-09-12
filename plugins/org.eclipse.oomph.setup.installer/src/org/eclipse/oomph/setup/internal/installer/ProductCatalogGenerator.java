@@ -1403,6 +1403,9 @@ public class ProductCatalogGenerator implements IApplication
       BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_SITE_URI, siteURI.toString());
     }
 
+    BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.SHORTCUT,
+        product.getLabel() + " - " + label.replaceAll(" \\(.+\\)", ""));
+
     log.append('\n');
   }
 
