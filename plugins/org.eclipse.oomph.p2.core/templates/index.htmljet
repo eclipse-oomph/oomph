@@ -480,7 +480,7 @@ span:target {
 <%}%>
             <br/><b>Reported: <%=reporter.getNow()%></b>
           </p>
-<%if (report != null) {%>
+<%if (report != null && !report.getSiteURL().startsWith("file:")) {%>
           <p style="text-align: center;">
             <button title="Copy to Clipboard" class="orange bb" style="font-size: 150%;" onclick="copyToClipboard('#p1')">&#x270e;</button>
             <span id="p1" style="font-size: 125%"><%=report.getSiteURL()%></span>

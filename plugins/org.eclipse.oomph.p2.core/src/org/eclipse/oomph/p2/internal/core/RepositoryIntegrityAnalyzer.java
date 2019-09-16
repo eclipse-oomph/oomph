@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
@@ -28,16 +29,17 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIConverter.ReadableInputStream;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.FeatureMap;
-import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.xmi.XMLHelper;
 import org.eclipse.emf.ecore.xmi.XMLOptions;
 import org.eclipse.emf.ecore.xmi.XMLParserPool;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.XMLSave;
+import org.eclipse.emf.ecore.xmi.impl.GenericXMLResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLOptionsImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
@@ -48,6 +50,7 @@ import org.eclipse.emf.ecore.xml.type.XMLTypeDocumentRoot;
 import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -205,6 +208,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private boolean verbose;
 
+  private boolean aggregator;
+
   public Object start(IApplicationContext context) throws Exception
   {
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
@@ -240,6 +245,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           verbose = true;
         }
+        else if ("-aggregator".equals(option) || "-a".equals(option))
+        {
+          aggregator = true;
+        }
         else
         {
           URI uri = URI.createURI(arguments[i]);
@@ -255,6 +264,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     reportBranding = reportBranding.replaceFirst("https:", "http:");
 
     createFolders(outputLocation);
+
+    if (aggregator)
+    {
+      uris.addAll(loadAggregator(outputLocation));
+    }
 
     CompositeMetadataRepository metadataRepository = CompositeMetadataRepository.createMemoryComposite(getAgent().getProvisioningAgent());
     metadataRepositories.put(metadataRepository.getLocation(), metadataRepository);
@@ -277,6 +291,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     RepositoryIndex repositoryIndex = RepositoryIndex.create("\n");
     Set<File> reportLocations = new HashSet<File>();
     Map<String, String> allReports = new TreeMap<String, String>();
+
+    Set<File> reportsWithErrors = new HashSet<File>();
+
     for (URI uri : uris)
     {
       if (verbose)
@@ -314,15 +331,182 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
       }
 
+      if (aggregator)
+      {
+        if (!report.getUnsignedIUs().isEmpty() || !report.getBadProviderIUs().isEmpty() || !report.getBadLicenseIUs().isEmpty()
+            || !report.getBrokenBrandingIUs().isEmpty())
+        {
+          reportsWithErrors.add(reportLocation);
+        }
+      }
+
       images.clear();
       reports.clear();
     }
 
     reportLocations.add(artifactCacheLocation);
+    if (aggregator)
+    {
+      reportLocations.add(new File(outputLocation, "aggrcons"));
+    }
 
-    IndexReport indexReport = new IndexReport(null, reportSource, reportBranding, outputLocation, publishLocation, reportLocations, allReports);
+    IndexReport indexReport = new IndexReport(null, reportSource, reportBranding, outputLocation, publishLocation, reportLocations, allReports,
+        reportsWithErrors);
     generateIndex(indexReport, repositoryIndex, reportSource, reportBranding);
 
+    return null;
+  }
+
+  private Set<URI> loadAggregator(File outputLocation) throws IOException, ProvisionException, OperationCanceledException, URISyntaxException
+  {
+    ResourceSetImpl resourceSet = new ResourceSetImpl();
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new GenericXMLResourceFactoryImpl());
+    URI aggregatorURI = URI.createURI("http://git.eclipse.org/c/simrel/org.eclipse.simrel.build.git/plain/simrel.aggr");
+    Resource aggregatorResource = resourceSet.getResource(aggregatorURI, true);
+    // aggregatorResource.save(System.out, null);
+
+    Set<URI> aggrcons = new LinkedHashSet<URI>();
+    for (Iterator<EObject> it = aggregatorResource.getAllContents(); it.hasNext();)
+    {
+      EObject eObject = it.next();
+      String href = get(eObject, "contributions", "href");
+      if (href != null)
+      {
+        URI uri = URI.createURI(href);
+        URI resolvedURI = uri.resolve(aggregatorURI);
+        aggrcons.add(resolvedURI);
+      }
+    }
+
+    Set<URI> composites = new LinkedHashSet<URI>();
+    for (URI aggrcon : aggrcons)
+    {
+      URI repository = null;
+      Resource aggrconResource = null;
+      try
+      {
+        aggrconResource = resourceSet.getResource(aggrcon, true);
+      }
+      catch (Exception ex)
+      {
+        aggrconResource = resourceSet.getResource(aggrcon, false);
+      }
+      aggrconResource.save(System.out, null);
+
+      Map<URI, Set<Requirement>> requirements = new LinkedHashMap<URI, Set<Requirement>>();
+      Set<String> contacts = new LinkedHashSet<String>();
+      for (Iterator<EObject> it = aggrconResource.getAllContents(); it.hasNext();)
+      {
+        EObject eObject = it.next();
+        String location = get(eObject, "repositories", "location");
+        if (location != null)
+        {
+          repository = URI.createURI(location.replaceAll("/$", "").replaceAll("^https:", "http:"));
+        }
+        else
+        {
+          for (String elementName : new String[] { "features", "bundles", "products" })
+          {
+            String iuID = get(eObject, elementName, "name");
+            if (iuID != null)
+            {
+              String versionRangeLiteral = get(eObject, elementName, "versionRange");
+              VersionRange versionRange = null;
+              try
+              {
+                versionRange = VersionRange.create(versionRangeLiteral);
+              }
+              catch (RuntimeException ex)
+              {
+                Pattern exactVersionPattern = Pattern.compile("\\[([^,]*)\\]");
+                Matcher matcher = exactVersionPattern.matcher(versionRangeLiteral);
+                if (matcher.matches())
+                {
+                  Version version = Version.parseVersion(matcher.group(1));
+                  versionRange = new VersionRange(version, true, version, true);
+                }
+                else
+                {
+                  throw ex;
+                }
+              }
+
+              Requirement requirement = P2Factory.eINSTANCE.createRequirement(iuID, versionRange);
+              CollectionUtil.add(requirements, repository, requirement);
+            }
+          }
+
+          String contact = get(eObject, "contacts", "href");
+          if (contact != null)
+          {
+            Pattern emailPattern = Pattern.compile("email='([^']+)'");
+            Matcher matcher = emailPattern.matcher(contact);
+            if (matcher.find())
+            {
+              contacts.add(matcher.group(1));
+            }
+          }
+        }
+      }
+
+      String compositeName = URI.encodeSegment(aggrcon.trimFragment().toString(), false);
+      compositeName = compositeName.replace(":", "%3A");
+      composites.add(createAggrconComposite(outputLocation, compositeName, requirements, contacts));
+    }
+
+    return composites;
+  }
+
+  private URI createAggrconComposite(File outputLocation, String aggrconName, Map<URI, Set<Requirement>> requirements, Set<String> contacts)
+      throws ProvisionException, OperationCanceledException, URISyntaxException
+  {
+    File compositeAggrconLocations = new File(outputLocation, "aggrcons");
+    compositeAggrconLocations.mkdirs();
+    File compositeAggrconLocation = new File(compositeAggrconLocations, aggrconName);
+    IOUtil.deleteBestEffort(compositeAggrconLocation);
+    Map<String, String> properties = new LinkedHashMap<String, String>();
+    for (Map.Entry<URI, Set<Requirement>> entry : requirements.entrySet())
+    {
+      URI uri = entry.getKey();
+      StringBuilder value = new StringBuilder();
+      for (Requirement requirement : entry.getValue())
+      {
+        if (value.length() != 0)
+        {
+          value.append(';');
+        }
+        value.append(requirement.toString());
+      }
+      properties.put(uri.toString(), value.toString());
+    }
+
+    properties.put("contacts", contacts.toString());
+
+    java.net.URI locationURI = compositeAggrconLocation.toURI();
+    String name = URI.createURI(URI.decode(aggrconName)).lastSegment();
+    getMetadataRepositoryManager().createRepository(locationURI, name, IMetadataRepositoryManager.TYPE_COMPOSITE_REPOSITORY, properties);
+    getArtifactRepositoryManager().createRepository(locationURI, name, IArtifactRepositoryManager.TYPE_COMPOSITE_REPOSITORY, properties);
+
+    return URI.createURI(locationURI.toString());
+  }
+
+  private String get(EObject eObject, String elementName, String attributeName)
+  {
+    if (eObject instanceof AnyType)
+    {
+      AnyType anyType = (AnyType)eObject;
+      if (elementName.equals(anyType.eContainmentFeature().getName()))
+      {
+        FeatureMap anyAttribute = anyType.getAnyAttribute();
+        for (FeatureMap.Entry entry : anyAttribute)
+        {
+          if (attributeName.equals(entry.getEStructuralFeature().getName()))
+          {
+            return entry.getValue().toString();
+          }
+        }
+      }
+    }
     return null;
   }
 
@@ -372,6 +556,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private static String toRelativePath(URI uri)
   {
+    if (isAggrconRepositoryURI(uri))
+    {
+      String lastSegment = uri.lastSegment();
+      String decode = URI.decode(URI.decode(lastSegment));
+      return URI.createURI(decode).lastSegment();
+    }
+
     StringBuilder result = new StringBuilder();
     String authority = uri.authority();
     if (!StringUtil.isEmpty(authority))
@@ -662,10 +853,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       final IArtifactRepository artifactRepository = loadedArtifactRepository;
 
       final Map<IArtifactKey, Future<Map<IArtifactDescriptor, File>>> artifactCache = new LinkedHashMap<IArtifactKey, Future<Map<IArtifactDescriptor, File>>>();
-      final Set<IInstallableUnit> allIUs = query(metadataRepository, QueryUtil.createIUAnyQuery());
+
+      final Set<IInstallableUnit> allIUs = getAllIUs(metadataRepository);
+
       if (artifactRepository != null)
       {
-        for (IInstallableUnit iu : allIUs)
+        for (IInstallableUnit iu : query(metadataRepository, QueryUtil.createIUAnyQuery()))
         {
           for (IArtifactKey artifactKey : iu.getArtifacts())
           {
@@ -674,7 +867,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
       }
 
-      final Set<IInstallableUnit> productIUs = query(metadataRepository, QueryUtil.createIUProductQuery());
+      final Set<IInstallableUnit> productIUs = new TreeSet<IInstallableUnit>();
+      for (IInstallableUnit iu : allIUs)
+      {
+        if ("true".equals(iu.getProperty(MetadataFactory.InstallableUnitDescription.PROP_TYPE_PRODUCT)))
+        {
+          productIUs.add(iu);
+        }
+      }
 
       final Map<Report.LicenseDetail, Set<IInstallableUnit>> licenseIUs = new LinkedHashMap<Report.LicenseDetail, Set<IInstallableUnit>>();
       for (ILicense sua : Report.SUAS)
@@ -685,24 +885,26 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       final Set<String> expectedDuplicates = new HashSet<String>();
       expectedDuplicates.add("a.jre.javase");
       expectedDuplicates.add("config.a.jre.javase");
-      IQueryResult<IInstallableUnit> groupQuery = metadataRepository.query(QueryUtil.createIUGroupQuery(), new NullProgressMonitor());
-      for (IInstallableUnit iu : P2Util.asIterable(groupQuery))
+      for (IInstallableUnit iu : allIUs)
       {
-        CollectionUtil.addAll(licenseIUs, getLicenses(iu), iu);
-
-        Set<String> ids = new HashSet<String>();
-        for (final IRequirement requirement : iu.getRequirements())
+        if ("true".equals(iu.getProperty(MetadataFactory.InstallableUnitDescription.PROP_TYPE_GROUP)))
         {
-          if (requirement instanceof IRequiredCapability)
+          CollectionUtil.addAll(licenseIUs, getLicenses(iu), iu);
+
+          Set<String> ids = new HashSet<String>();
+          for (final IRequirement requirement : iu.getRequirements())
           {
-            IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
-            String namespace = requiredCapability.getNamespace();
-            if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
+            if (requirement instanceof IRequiredCapability)
             {
-              String name = requiredCapability.getName();
-              if (!ids.add(name))
+              IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
+              String namespace = requiredCapability.getNamespace();
+              if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
               {
-                expectedDuplicates.add(name);
+                String name = requiredCapability.getName();
+                if (!ids.add(name))
+                {
+                  expectedDuplicates.add(name);
+                }
               }
             }
           }
@@ -740,9 +942,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       }
 
       final List<IInstallableUnit> featureIUs = new ArrayList<IInstallableUnit>();
-      for (IInstallableUnit featureIU : P2Util.asIterable(groupQuery))
+      for (IInstallableUnit featureIU : allIUs)
       {
-        if (!"true".equals(featureIU.getProperty(MetadataFactory.InstallableUnitDescription.PROP_TYPE_PRODUCT)))
+        if (featureIU.getId().endsWith(Requirement.FEATURE_SUFFIX))
         {
           featureIUs.add(featureIU);
         }
@@ -903,56 +1105,63 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           }
         }
 
+        private Map<String, String> breadcrumbs;
+
         @Override
         public Map<String, String> getBreadcrumbs()
         {
-          Map<String, String> result = new LinkedHashMap<String, String>();
-
-          String rootFolderName = rootOutputLocation.getName();
-          result.put(rootFolderName, null);
-
-          int segmentCount = uri.segmentCount();
-          URI relativeURI = URI.createURI(toRelativePath(uri));
-          int relativeSegmentCount = relativeURI.segmentCount();
-          int extraSegmentCount = relativeSegmentCount - segmentCount;
-
-          int depth = URI.createURI(toRelativePath(rootURI)).segmentCount();
-
-          for (int i = 0; i < relativeSegmentCount; ++i)
+          if (breadcrumbs == null)
           {
-            String segment = relativeURI.segment(i);
-            URI href = null;
-            URI parentURI = uri.trimSegments(relativeSegmentCount - i - extraSegmentCount);
-            Report parentReport = reports.get(parentURI);
-            if (parentReport == null)
+            Map<String, String> result = new LinkedHashMap<String, String>();
+
+            String rootFolderName = rootOutputLocation.getName();
+            result.put(rootFolderName, null);
+
+            int segmentCount = uri.segmentCount();
+            URI relativeURI = URI.createURI(toRelativePath(uri));
+            int relativeSegmentCount = relativeURI.segmentCount();
+            int extraSegmentCount = isAggrconRepositoryURI(uri) ? 1 : relativeSegmentCount - segmentCount;
+
+            int depth = URI.createURI(toRelativePath(rootURI)).segmentCount();
+
+            for (int i = 0; i < relativeSegmentCount; ++i)
             {
-              for (int j = i + extraSegmentCount; j < depth; ++j)
+              String segment = relativeURI.segment(i);
+              URI href = null;
+              URI parentURI = uri.trimSegments(relativeSegmentCount - i - extraSegmentCount);
+              Report parentReport = reports.get(parentURI);
+              if (parentReport == null)
               {
-                href = href == null ? URI.createURI("..") : href.appendSegment("..");
+                for (int j = i + extraSegmentCount; j < depth; ++j)
+                {
+                  href = href == null ? URI.createURI("..") : href.appendSegment("..");
+                }
+                href = href == null ? URI.createURI("index.html") : href.appendSegment("index.html");
               }
-              href = href == null ? URI.createURI("index.html") : href.appendSegment("index.html");
-            }
-            else if (parentReport != this)
-            {
-              for (int j = i + extraSegmentCount; j < depth; ++j)
+              else if (parentReport != this)
               {
-                href = href == null ? URI.createURI("..") : href.appendSegment("..");
+                for (int j = i + extraSegmentCount; j < depth; ++j)
+                {
+                  href = href == null ? URI.createURI("..") : href.appendSegment("..");
+                }
+
+                String relativeIndexURL = parentReport.getRelativeIndexURL();
+                href = href == null ? URI.createURI(relativeIndexURL) : href.appendSegment(relativeIndexURL);
+                result.put(segment, href.toString());
               }
 
-              String relativeIndexURL = parentReport.getRelativeIndexURL();
-              href = href == null ? URI.createURI(relativeIndexURL) : href.appendSegment(relativeIndexURL);
-              result.put(segment, href.toString());
+              result.put(segment, href == null ? null : href.toString());
+
+              if (i == 0)
+              {
+                result.put(rootFolderName, href == null ? "../index.html" : "../" + href);
+              }
             }
 
-            result.put(segment, href == null ? null : href.toString());
-
-            if (i == 0)
-            {
-              result.put(rootFolderName, href == null ? "../index.html" : "../" + href);
-            }
+            breadcrumbs = result;
           }
 
-          return result;
+          return breadcrumbs;
         }
 
         @Override
@@ -1245,7 +1454,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 if (!path.startsWith("binary/"))
                 {
                   SignedContent signedContent = fileSignedContents.get(file);
-                  if (signedContent.isSigned())
+                  if (signedContent != null && signedContent.isSigned())
                   {
                     SignerInfo[] signerInfos = signedContent.getSignerInfos();
                     for (SignerInfo signerInfo : signerInfos)
@@ -1596,9 +1805,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             out.reset();
             XMLTypeDocumentRoot documentRoot = (XMLTypeDocumentRoot)htmlResource.getContents().get(0);
             FeatureMap mixed = documentRoot.getMixed();
-            for (Iterator<Entry> it = mixed.iterator(); it.hasNext();)
+            for (Iterator<FeatureMap.Entry> it = mixed.iterator(); it.hasNext();)
             {
-              Entry entry = it.next();
+              FeatureMap.Entry entry = it.next();
               if (FeatureMapUtil.isProcessingInstruction(entry))
               {
                 it.remove();
@@ -1658,6 +1867,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           if (StringUtil.isEmpty(name))
           {
             name = "<span style=\"color: FireBrick;\">Unnamed Repository</span>";
+          }
+
+          if (aggregator)
+          {
+            return name;
           }
 
           String repoIdentifier = uri.lastSegment();
@@ -2063,7 +2277,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               public Map<String, String> getNavigation()
               {
                 Map<String, String> navigation = new LinkedHashMap<String, String>();
-                navigation.put("../" + getReport().getRelativeIndexURL(), getReport().getTitle(true));
+                if (!aggregator)
+                {
+                  navigation.put("../" + getReport().getRelativeIndexURL(), getReport().getTitle(true));
+                }
                 return navigation;
               }
             }
@@ -2095,6 +2312,77 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     return report;
   }
 
+  private Set<IInstallableUnit> getAllIUs(IMetadataRepository metadataRepository)
+  {
+    if (isAggrconRepository(metadataRepository))
+    {
+      Set<IInstallableUnit> allIUs = new TreeSet<IInstallableUnit>();
+      Map<String, String> properties = metadataRepository.getProperties();
+      for (Map.Entry<String, String> entry : properties.entrySet())
+      {
+        URI uri = URI.createURI(entry.getKey());
+        String scheme = uri.scheme();
+        if ("http".equals(scheme) || "https".equals(scheme))
+        {
+          List<String> requirements = StringUtil.explode(entry.getValue(), ";");
+          for (String requirement : requirements)
+          {
+            List<String> parts = StringUtil.explode(requirement, " ");
+            String id = parts.get(0);
+
+            IQuery<IInstallableUnit> iuQuery = parts.size() > 1 ? QueryUtil.createIUQuery(id, VersionRange.create(parts.get(1))) : QueryUtil.createIUQuery(id);
+            Set<IInstallableUnit> result = query(metadataRepository, QueryUtil.createCompoundQuery(iuQuery, QueryUtil.createLatestIUQuery(), true));
+            if (result.isEmpty())
+            {
+              System.err.println("### not found " + requirement + " in" + metadataRepository.getLocation());
+            }
+            else
+            {
+              IInstallableUnit iu = result.iterator().next();
+              collectChildren(metadataRepository, allIUs, iu);
+            }
+          }
+        }
+      }
+      return allIUs;
+    }
+
+    Set<IInstallableUnit> allIUs = query(metadataRepository, QueryUtil.createIUAnyQuery());
+    return allIUs;
+  }
+
+  private void collectChildren(IMetadataRepository metadataRepository, Set<IInstallableUnit> allIUs, IInstallableUnit iu)
+  {
+    if (allIUs.add(iu))
+    {
+      for (IRequirement requirement : iu.getRequirements())
+      {
+        if (requirement instanceof IRequiredCapability)
+        {
+          IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
+          if (IInstallableUnit.NAMESPACE_IU_ID.equals(requiredCapability.getNamespace()))
+          {
+            VersionRange range = requiredCapability.getRange();
+            Version minimum = range.getMinimum();
+            if (minimum.equals(range.getMaximum()))
+            {
+              Set<IInstallableUnit> result = query(metadataRepository, QueryUtil.createIUQuery(requiredCapability.getName(), minimum));
+              if (result.isEmpty())
+              {
+                System.err.println("### not found " + requirement + " in" + metadataRepository.getLocation());
+              }
+              else
+              {
+                IInstallableUnit requiredIU = result.iterator().next();
+                collectChildren(metadataRepository, allIUs, requiredIU);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   private Future<List<String>> getIndex(final File file)
   {
     String path = file.toString();
@@ -2107,18 +2395,25 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         public List<String> call() throws Exception
         {
           final List<String> result = new ArrayList<String>();
-          ZIPUtil.unzip(effectiveFile, new ZIPUtil.UnzipHandler()
+          try
           {
-            public void unzipFile(String name, InputStream zipStream) throws IOException
+            ZIPUtil.unzip(effectiveFile, new ZIPUtil.UnzipHandler()
             {
-              result.add(name);
-            }
+              public void unzipFile(String name, InputStream zipStream) throws IOException
+              {
+                result.add(name);
+              }
 
-            public void unzipDirectory(String name) throws IOException
-            {
-            }
-          });
+              public void unzipDirectory(String name) throws IOException
+              {
+              }
+            });
 
+          }
+          catch (Exception ex)
+          {
+            System.err.println("Error Processing:" + file + " " + ex.getMessage());
+          }
           return result;
         }
       });
@@ -2379,48 +2674,64 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               {
                 targetLocation.getParentFile().mkdirs();
                 {
-                  FileOutputStream out = null;
-                  try
+                  for (int i = 0; i < 3; ++i)
                   {
-                    out = new FileOutputStream(targetLocation);
-                    artifactRepository.getRawArtifact(artifactDescriptor, out, new NullProgressMonitor());
-
-                    if (relativeLocation.toString().startsWith("binary/"))
+                    FileOutputStream out = null;
+                    try
                     {
-                      ZIPUtil.unzip(targetLocation, new File(cache, "binary/unpacked/" + relativeLocation.toString().substring("binary/".length())));
+                      out = new FileOutputStream(targetLocation);
+                      artifactRepository.getRawArtifact(artifactDescriptor, out, new NullProgressMonitor());
+
+                      if (relativeLocation.toString().startsWith("binary/"))
+                      {
+                        ZIPUtil.unzip(targetLocation, new File(cache, "binary/unpacked/" + relativeLocation.toString().substring("binary/".length())));
+                      }
                     }
-                  }
-                  catch (Exception ex)
-                  {
-                    IOUtil.close(out);
-                    targetLocation.delete();
-                    throw ex;
-                  }
-                  finally
-                  {
-                    IOUtil.close(out);
+                    catch (Exception ex)
+                    {
+                      IOUtil.close(out);
+                      targetLocation.delete();
+                      throw ex;
+                    }
+                    finally
+                    {
+                      IOUtil.close(out);
+                    }
+
+                    if (targetLocation.length() != 0)
+                    {
+                      break;
+                    }
                   }
                 }
 
                 IProcessingStepDescriptor[] processingSteps = artifactDescriptor.getProcessingSteps();
                 if (processingSteps.length != 0)
                 {
-                  File targetProcessedLocation = new File(cache, relativeLocation.toString() + PROCESSED);
-                  FileOutputStream out = null;
-                  try
+                  for (int i = 0; i < 3; ++i)
                   {
-                    out = new FileOutputStream(targetProcessedLocation);
-                    artifactRepository.getArtifact(artifactDescriptor, out, new NullProgressMonitor());
-                  }
-                  catch (Exception ex)
-                  {
-                    IOUtil.close(out);
-                    targetLocation.delete();
-                    throw ex;
-                  }
-                  finally
-                  {
-                    IOUtil.close(out);
+                    File targetProcessedLocation = new File(cache, relativeLocation.toString() + PROCESSED);
+                    FileOutputStream out = null;
+                    try
+                    {
+                      out = new FileOutputStream(targetProcessedLocation);
+                      artifactRepository.getArtifact(artifactDescriptor, out, new NullProgressMonitor());
+                    }
+                    catch (Exception ex)
+                    {
+                      IOUtil.close(out);
+                      targetLocation.delete();
+                      throw ex;
+                    }
+                    finally
+                    {
+                      IOUtil.close(out);
+                    }
+
+                    if (targetProcessedLocation.length() != 0)
+                    {
+                      break;
+                    }
                   }
                 }
               }
@@ -2466,7 +2777,15 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               public SignedContent call() throws Exception
               {
                 File processedFile = new File(file.toString() + PROCESSED);
-                return verifierFactory.getSignedContent(processedFile.isFile() ? processedFile : file);
+                try
+                {
+                  return verifierFactory.getSignedContent(processedFile.isFile() ? processedFile : file);
+                }
+                catch (Exception ex)
+                {
+                  System.err.println("Error checking signing: " + processedFile + " " + ex.getMessage());
+                  return null;
+                }
               }
             });
 
@@ -2505,6 +2824,35 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     }
   }
 
+  private static boolean isAggrconRepositoryURI(URI uri)
+  {
+    return "file".equals(uri.scheme()) && "aggrcon".equals(uri.fileExtension());
+  }
+
+  private static boolean isAggrconRepository(IRepository<?> repository)
+  {
+    java.net.URI location = repository.getLocation();
+    return "file".equals(location.getScheme()) && location.toString().endsWith(".aggrcon") && repository instanceof ICompositeRepository<?>;
+  }
+
+  private void loadAggrconChildren(IRepository<?> repository) throws URISyntaxException
+  {
+    if (isAggrconRepository(repository))
+    {
+      ICompositeRepository<?> aggrconRepository = (ICompositeRepository<?>)repository;
+      Map<String, String> properties = aggrconRepository.getProperties();
+      for (Map.Entry<String, String> entry : properties.entrySet())
+      {
+        String key = entry.getKey();
+        if (key.startsWith("http:") || key.startsWith("https:"))
+        {
+          java.net.URI child = new java.net.URI(key);
+          aggrconRepository.addChild(child);
+        }
+      }
+    }
+  }
+
   private IMetadataRepository loadMetadataRepository(IMetadataRepositoryManager manager, URI uri) throws URISyntaxException, ProvisionException
   {
     if (verbose)
@@ -2517,6 +2865,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     if (metadataRepository == null)
     {
       metadataRepository = manager.loadRepository(location, null);
+      loadAggrconChildren(metadataRepository);
       metadataRepositories.put(location, metadataRepository);
     }
 
@@ -2525,11 +2874,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private IArtifactRepository loadArtifactRepository(IArtifactRepositoryManager manager, URI uri) throws URISyntaxException, ProvisionException
   {
-    if (artifactRepositories.isEmpty())
-    {
-      return null;
-    }
-
     if (verbose)
     {
       System.out.println("Loading artifact repository '" + uri + "'");
@@ -2540,6 +2884,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     if (artifactRepository == null)
     {
       artifactRepository = manager.loadRepository(location, null);
+      loadAggrconChildren(artifactRepository);
       artifactRepositories.put(location, artifactRepository);
       if (artifactRepository instanceof ICompositeRepository<?>)
       {
@@ -2670,7 +3015,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private static String getID(String literal)
   {
-    return literal.replace(' ', '_').replace('"', '_').replace('&', '_').replace('<', '_').replace('\'', '_').replace('>', ' ').replace('#', '_');
+    return literal.replace(' ', '_').replace('"', '_').replace('&', '_').replace('<', '_').replace('\'', '_').replace('>', ' ').replace('#', '_').replace('/',
+        '_');
   }
 
   public interface Reporter
@@ -3228,12 +3574,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     private final Map<String, String> allReports;
 
+    private final File publishLocation;
+
+    private final Set<File> reportsWithErrors;
+
     private List<IndexReport> children;
 
-    private File publishLocation;
-
     public IndexReport(IndexReport parent, String reportSource, String reportBranding, File folder, File publishLocation, Set<File> reportLocations,
-        Map<String, String> allReports)
+        Map<String, String> allReports, Set<File> reportsWithErrors)
     {
       this.parent = parent;
       this.reportSource = reportSource;
@@ -3242,6 +3590,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       this.publishLocation = publishLocation;
       this.reportLocations = reportLocations;
       this.allReports = allReports;
+      this.reportsWithErrors = reportsWithErrors;
     }
 
     public String getNow()
@@ -3282,10 +3631,17 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       Map<String, String> result = new LinkedHashMap<String, String>();
       for (File file : folder.listFiles())
       {
-        if (file.isDirectory() && (!reportLocations.contains(file) || parent != null))
+        if (file.isDirectory() && (!reportLocations.contains(file) || parent != null || aggregator && file.getName().endsWith(".aggrcon")))
         {
           String name = file.getName();
-          result.put(name + "/index.html", name);
+          String label = name;
+          if (reportsWithErrors.contains(file))
+          {
+            String errorImage = getErrorImage(getFolder());
+            label = "<img style=\"position: static;\" class=\"fit-image\" src=\"" + errorImage + "\"/> " + label;
+          }
+
+          result.put(name + "/index.html", label);
         }
       }
 
@@ -3317,7 +3673,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           if (file.isDirectory() && !reportLocations.contains(file))
           {
             File childPulishLocation = publishLocation == null ? null : new File(publishLocation, file.getName());
-            children.add(new IndexReport(this, reportSource, reportBranding, file, childPulishLocation, reportLocations, null));
+            children.add(new IndexReport(this, reportSource, reportBranding, file, childPulishLocation, reportLocations, null, reportsWithErrors));
           }
         }
       }
@@ -3333,7 +3689,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         java.net.URI baseURI = folder.toURI();
         for (Map.Entry<String, String> entry : allReports.entrySet())
         {
-          result.put(entry.getKey(), baseURI.relativize(new File(entry.getValue()).toURI()).toString());
+          String site = entry.getKey();
+          if (!site.startsWith("file:"))
+          {
+            result.put(site, baseURI.relativize(new File(entry.getValue()).toURI()).toString());
+          }
         }
 
         return result;

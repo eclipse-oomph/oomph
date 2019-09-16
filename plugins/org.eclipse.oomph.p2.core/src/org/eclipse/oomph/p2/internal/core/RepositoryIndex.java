@@ -694,7 +694,7 @@ public class RepositoryIndex
     stringBuffer.append(_393);
     stringBuffer.append(reporter.getNow());
     stringBuffer.append(_394);
-    if (report != null) {
+    if (report != null && !report.getSiteURL().startsWith("file:")) {
     stringBuffer.append(_395);
     stringBuffer.append(report.getSiteURL());
     stringBuffer.append(_396);
