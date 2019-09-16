@@ -14,12 +14,16 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.base.util.BaseResourceImpl;
+import org.eclipse.oomph.p2.Repository;
+import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.ProductVersion;
+import org.eclipse.oomph.setup.ProjectCatalog;
 import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.VariableChoice;
@@ -48,6 +52,7 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Internal;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
@@ -74,6 +79,8 @@ import org.eclipse.swt.widgets.Text;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -320,6 +327,7 @@ public class GenericSetupTemplate extends SetupTemplate
     Resource resource = getResource();
     ResourceSet resourceSet = resource.getResourceSet();
     setupModelElement = (ModelElement)resourceSet.getEObject(templateLocation, true);
+    update(setupModelElement);
 
     final Font normalFont = composite.getFont();
     final Font boldFont = ExtendedFontRegistry.INSTANCE.getFont(normalFont, IItemFontProvider.BOLD_FONT);
@@ -418,6 +426,192 @@ public class GenericSetupTemplate extends SetupTemplate
     }
 
     firstControl.setFocus();
+  }
+
+  private void update(ModelElement modelElement)
+  {
+    ResourceSet resourceSet = modelElement.eResource().getResourceSet();
+    ProjectCatalog eclipseProjectCatalog = null;
+    try
+    {
+      // First try to load the Eclipse Project catalog from the standard location.
+      URI eclipseProjectCatalogLogicalURI = SetupContext.INDEX_ROOT_URI.appendSegment("org.eclipse.projects.setup");
+      Resource eclipseProjectCatalogResource = resourceSet.getResource(eclipseProjectCatalogLogicalURI, true);
+      eclipseProjectCatalog = (ProjectCatalog)EcoreUtil.getObjectByType(eclipseProjectCatalogResource.getContents(), SetupPackage.Literals.PROJECT_CATALOG);
+    }
+    catch (Exception ex)
+    {
+      InputStream input = null;
+      try
+      {
+        // If that fails, i.e., the index has been replaced by a custom index, try to load directly from Git.
+        URI eclipseProjectCatalogPhysicalURI = URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.projects.setup");
+        input = URIConverter.INSTANCE.createInputStream(eclipseProjectCatalogPhysicalURI);
+        Resource eclipseProjectCatalogResource = resourceSet.createResource(eclipseProjectCatalogPhysicalURI);
+        eclipseProjectCatalogResource.unload();
+        eclipseProjectCatalogResource.load(input, resourceSet.getLoadOptions());
+        eclipseProjectCatalog = (ProjectCatalog)EcoreUtil.getObjectByType(eclipseProjectCatalogResource.getContents(), SetupPackage.Literals.PROJECT_CATALOG);
+      }
+      catch (IOException ex1)
+      {
+        //$FALL-THROUGH$
+      }
+      finally
+      {
+        IOUtil.closeSilent(input);
+      }
+    }
+
+    if (eclipseProjectCatalog != null)
+    {
+      // The list of choices in the eclipse target platform variable, provide the key information to dynamic update the templates.
+      VariableTask eclipseTargetPlatformVariable = getVariable(eclipseProjectCatalog, "eclipse.target.platform");
+      if (eclipseTargetPlatformVariable != null)
+      {
+        // Update the product template's product release train choices.
+        VariableTask productReleaseTrainVariable = getVariable(modelElement, "product.release.train");
+        if (productReleaseTrainVariable != null)
+        {
+          EList<VariableChoice> choices = productReleaseTrainVariable.getChoices();
+          choices.clear();
+          Collection<VariableChoice> eclipseTargetPlatformChoices = EcoreUtil.copyAll(eclipseTargetPlatformVariable.getChoices());
+          for (Iterator<VariableChoice> it = eclipseTargetPlatformChoices.iterator(); it.hasNext();)
+          {
+            VariableChoice variableChoice = it.next();
+            String value = variableChoice.getValue();
+
+            // Omit choices in which Oomph cannot be installed.
+            if ("None".equals(value) || "Galileo".equals(value) || "Helios".equals(value) || "Indigo".equals(value))
+            {
+              it.remove();
+            }
+          }
+
+          choices.addAll(eclipseTargetPlatformChoices);
+
+          // Make the default the latest version.
+          productReleaseTrainVariable.setValue(choices.get(0).getValue());
+        }
+      }
+
+      if (modelElement instanceof ProjectCatalog)
+      {
+        // Replace all the tasks that depend on the available release with the copies from the latest Eclipse Project catalog.
+        VariableTask targetPlatformVariable = getVariable(modelElement, "eclipse.target.platform");
+        if (targetPlatformVariable != null)
+        {
+          EcoreUtil.replace(targetPlatformVariable, EcoreUtil.copy(eclipseTargetPlatformVariable));
+        }
+
+        VariableTask apiBaselineTargetPlatformVariable = getVariable(modelElement, "eclipse.api.baseline.target.platform");
+        if (apiBaselineTargetPlatformVariable != null)
+        {
+          VariableTask eclipseApiBaselineTargetPlatformVariable = getVariable(eclipseProjectCatalog, "eclipse.api.baseline.target.platform");
+          if (eclipseApiBaselineTargetPlatformVariable != null)
+          {
+            EcoreUtil.replace(apiBaselineTargetPlatformVariable, EcoreUtil.copy(eclipseApiBaselineTargetPlatformVariable));
+          }
+        }
+        EObject projectCatalogModularTargletTask = getTargletTask(modelElement, "Modular Target");
+        if (projectCatalogModularTargletTask != null)
+        {
+          EObject eclipseProjectCatalogModularTargletTask = getTargletTask(eclipseProjectCatalog, "Modular Target");
+          if (eclipseProjectCatalogModularTargletTask != null)
+          {
+            EcoreUtil.replace(projectCatalogModularTargletTask, EcoreUtil.copy(eclipseProjectCatalogModularTargletTask));
+          }
+        }
+
+        EObject projectCatalogModularAPIBaselineTargletTask = getTargletTask(modelElement, "Modular API Baseline Target");
+        if (projectCatalogModularAPIBaselineTargletTask != null)
+        {
+          EObject eclipseProjectCatalogModularAPIBaselineTargletTask = getTargletTask(eclipseProjectCatalog, "Modular API Baseline Target");
+          if (eclipseProjectCatalogModularAPIBaselineTargletTask != null)
+          {
+            EcoreUtil.replace(projectCatalogModularAPIBaselineTargletTask, EcoreUtil.copy(eclipseProjectCatalogModularAPIBaselineTargletTask));
+          }
+        }
+      }
+      else
+      {
+        // Update the modular targlet task with the latest set of available releases.
+        EObject projectTargletTask = getTargletTask(modelElement, "Modular Target");
+        if (projectTargletTask != null)
+        {
+          EObject projectTarglet = (EObject)((List<?>)projectTargletTask.eGet(projectTargletTask.eClass().getEStructuralFeature("targlets"))).get(0);
+          @SuppressWarnings("unchecked")
+          List<RepositoryList> repositoryLists = (List<RepositoryList>)projectTarglet.eGet(projectTarglet.eClass().getEStructuralFeature("repositoryLists"));
+          RepositoryList repositoryList = repositoryLists.get(0);
+          repositoryLists.clear();
+
+          VariableTask targetPlatformVariable = getVariable(modelElement, "eclipse.target.platform");
+
+          for (VariableChoice variableChoice : eclipseTargetPlatformVariable.getChoices())
+          {
+            String trainName = variableChoice.getValue();
+            if (!"None".equals(trainName))
+            {
+              if (targetPlatformVariable != null)
+              {
+                // Ensure that the default choice is the latest one, and of course do that only once for the first/latest train name.
+                targetPlatformVariable.setDefaultValue(trainName);
+                targetPlatformVariable = null;
+              }
+
+              RepositoryList newRepositoryList = EcoreUtil.copy(repositoryList);
+              newRepositoryList.setName(trainName);
+
+              for (Repository repository : newRepositoryList.getRepositories())
+              {
+                if (repository.getURL().contains("download.eclipse.org/releases"))
+                {
+                  repository.setURL("http://download.eclipse.org/releases/" + trainName.toLowerCase());
+                }
+              }
+
+              repositoryLists.add(newRepositoryList);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private VariableTask getVariable(ModelElement modelElement, String variableName)
+  {
+    for (Iterator<EObject> it = modelElement.eAllContents(); it.hasNext();)
+    {
+      EObject eObject = it.next();
+      if (eObject instanceof VariableTask)
+      {
+        VariableTask variable = (VariableTask)eObject;
+        if (variableName.equals(variable.getName()))
+        {
+          return variable;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  private EObject getTargletTask(ModelElement modelElement, String targetName)
+  {
+    for (Iterator<EObject> it = modelElement.eAllContents(); it.hasNext();)
+    {
+      EObject eObject = it.next();
+      EClass eClass = eObject.eClass();
+      if ("TargletTask".equals(eClass.getName()))
+      {
+        EStructuralFeature targetNameFeature = eClass.getEStructuralFeature("targetName");
+        if (targetName.equals(eObject.eGet(targetNameFeature)))
+        {
+          return eObject;
+        }
+      }
+    }
+
+    return null;
   }
 
   private void modelChanged(final VariableTask triggerVariable)

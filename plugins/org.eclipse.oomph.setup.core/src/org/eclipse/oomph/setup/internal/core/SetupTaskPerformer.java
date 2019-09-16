@@ -1458,8 +1458,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       scopes.add(product);
 
       ProductCatalog productCatalog = product.getProductCatalog();
-      configurableItems.add(productCatalog);
-      scopes.add(0, productCatalog);
+      if (productCatalog != null)
+      {
+        configurableItems.add(productCatalog);
+        scopes.add(0, productCatalog);
+      }
 
       configurableItems.add(productVersion);
       scopes.add(productVersion);
