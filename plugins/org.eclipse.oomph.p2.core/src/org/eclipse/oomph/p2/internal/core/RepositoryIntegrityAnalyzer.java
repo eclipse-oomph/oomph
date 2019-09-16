@@ -2385,8 +2385,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private Future<List<String>> getIndex(final File file)
   {
-    String path = file.toString();
-    final File effectiveFile = path.endsWith(".pack.gz") ? new File(path.substring(0, path.length() - ".pack.gz".length())) : file;
+    final String path = file.toString();
+    final File effectiveFile = path.endsWith(".pack.gz") ? new File(path + PROCESSED) : file;
     Future<List<String>> future = fileIndices.get(effectiveFile);
     if (future == null)
     {
@@ -2412,7 +2412,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           }
           catch (Exception ex)
           {
-            System.err.println("Error Processing:" + file + " " + ex.getMessage());
+            System.err.println("Error Processing:" + effectiveFile + " " + ex.getMessage());
+            effectiveFile.delete();
+            file.delete();
           }
           return result;
         }
@@ -2660,7 +2662,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         public Map<IArtifactDescriptor, File> call() throws Exception
         {
           Map<IArtifactDescriptor, File> artifacts = new LinkedHashMap<IArtifactDescriptor, File>();
-          for (IArtifactDescriptor artifactDescriptor : artifactRepository.getArtifactDescriptors(artifactKey))
+          IArtifactDescriptor[] artifactDescriptors = artifactRepository.getArtifactDescriptors(artifactKey);
+          for (IArtifactDescriptor artifactDescriptor : artifactDescriptors)
           {
             IArtifactRepository repository = artifactDescriptor.getRepository();
             if (repository instanceof SimpleArtifactRepository)
@@ -2698,7 +2701,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                       IOUtil.close(out);
                     }
 
-                    if (targetLocation.length() != 0)
+                    if (targetLocation.length() != 0 && validZip(targetLocation))
                     {
                       break;
                     }
@@ -2720,7 +2723,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                     catch (Exception ex)
                     {
                       IOUtil.close(out);
-                      targetLocation.delete();
+                      targetProcessedLocation.delete();
                       throw ex;
                     }
                     finally
@@ -2728,7 +2731,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                       IOUtil.close(out);
                     }
 
-                    if (targetProcessedLocation.length() != 0)
+                    if (targetProcessedLocation.length() != 0 && validZip(targetProcessedLocation))
                     {
                       break;
                     }
@@ -2754,6 +2757,33 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     return result;
   }
 
+  private boolean validZip(File file)
+  {
+    if (file.getName().endsWith(".pack.gz"))
+    {
+      return true;
+    }
+
+    try
+    {
+      ZIPUtil.unzip(file, new ZIPUtil.UnzipHandler()
+      {
+        public void unzipFile(String name, InputStream zipStream) throws IOException
+        {
+        }
+
+        public void unzipDirectory(String name) throws IOException
+        {
+        }
+      });
+      return true;
+    }
+    catch (IORuntimeException ex)
+    {
+      return false;
+    }
+  }
+
   private Map<File, Future<SignedContent>> getSignedContent(IInstallableUnit iu, final Map<IArtifactKey, Future<Map<IArtifactDescriptor, File>>> artifactCache,
       Map<IInstallableUnit, Map<File, Future<SignedContent>>> signedContentCache)
   {
@@ -2777,13 +2807,16 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               public SignedContent call() throws Exception
               {
                 File processedFile = new File(file.toString() + PROCESSED);
+                File targetFile = processedFile.isFile() ? processedFile : file;
                 try
                 {
                   return verifierFactory.getSignedContent(processedFile.isFile() ? processedFile : file);
                 }
                 catch (Exception ex)
                 {
-                  System.err.println("Error checking signing: " + processedFile + " " + ex.getMessage());
+                  System.err.println("Error checking signing: " + targetFile + " " + ex.getMessage());
+                  processedFile.delete();
+                  targetFile.delete();
                   return null;
                 }
               }
