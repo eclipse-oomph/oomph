@@ -87,8 +87,8 @@
    </extension>
 
 
+   <!--
    <extension point="org.eclipse.ui.newWizards">
-      <!-- @generated Setup -->
       <category
             id="org.eclipse.emf.ecore.Wizard.category.ID"
             name="%_UI_Wizard_category"/>
@@ -102,6 +102,7 @@
          <selection class="org.eclipse.core.resources.IResource"/>
       </wizard>
    </extension>
+   -->
 
    <extension point="org.eclipse.ui.editors">
       <!-- @generated setup not -->
