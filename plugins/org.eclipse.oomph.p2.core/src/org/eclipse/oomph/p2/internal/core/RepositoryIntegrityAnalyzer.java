@@ -3662,7 +3662,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public Map<String, String> getNavigation()
     {
       Map<String, String> result = new LinkedHashMap<String, String>();
-      for (File file : folder.listFiles())
+      File[] files = folder.listFiles();
+      Arrays.sort(files);
+      for (File file : files)
       {
         if (file.isDirectory() && (!reportLocations.contains(file) || parent != null || aggregator && file.getName().endsWith(".aggrcon")))
         {
@@ -3701,7 +3703,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       if (children == null)
       {
         children = new ArrayList<IndexReport>();
-        for (File file : folder.listFiles())
+        File[] files = folder.listFiles();
+        Arrays.sort(files);
+        for (File file : files)
         {
           if (file.isDirectory() && !reportLocations.contains(file))
           {
