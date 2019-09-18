@@ -27,6 +27,7 @@ import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIConverter.ReadableInputStream;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -49,6 +50,7 @@ import org.eclipse.emf.ecore.xml.type.AnyType;
 import org.eclipse.emf.ecore.xml.type.XMLTypeDocumentRoot;
 import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
@@ -162,6 +164,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private static final String PROCESSED = ".processed";
 
+  private static final int DOWNLOAD_RETRY_COUNT = 3;
+
   private static final Comparator<IInstallableUnit> NAME_VERSION_COMPARATOR = new Comparator<IInstallableUnit>()
   {
     private final Comparator<String> comparator = CommonPlugin.INSTANCE.getComparator();
@@ -212,160 +216,171 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   public Object start(IApplicationContext context) throws Exception
   {
-    String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
-    Set<URI> uris = new LinkedHashSet<URI>();
-    File outputLocation = new File(".").getCanonicalFile();
-    File publishLocation = null;
-    String reportSource = "https://ci.eclipse.org/oomph/job/repository-analyzer/";
-    String reportBranding = "https://wiki.eclipse.org/images/d/dc/Oomph_Project_Logo.png";
-    if (arguments != null)
+    try
     {
-      for (int i = 0; i < arguments.length; ++i)
+      String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
+      Set<URI> uris = new LinkedHashSet<URI>();
+      File outputLocation = new File(".").getCanonicalFile();
+      File publishLocation = null;
+      String reportSource = "https://ci.eclipse.org/oomph/job/repository-analyzer/";
+      String reportBranding = "https://wiki.eclipse.org/images/d/dc/Oomph_Project_Logo.png";
+      if (arguments != null)
       {
-        String option = arguments[i];
-        if ("-output".equals(option) || "-o".equals(option))
+        for (int i = 0; i < arguments.length; ++i)
         {
-          File file = new File(arguments[++i]);
-          outputLocation = file.getCanonicalFile();
-        }
-        else if ("-publish".equals(option) || "-p".equals(option))
-        {
-          File file = new File(arguments[++i]);
-          publishLocation = file.getCanonicalFile();
-        }
-        else if ("-source".equals(option) || "-s".equals(option))
-        {
-          reportSource = arguments[++i];
-        }
-        else if ("-branding".equals(option) || "-b".equals(option))
-        {
-          reportBranding = arguments[++i];
-        }
-        else if ("-verbose".equals(option) || "-v".equals(option))
-        {
-          verbose = true;
-        }
-        else if ("-aggregator".equals(option) || "-a".equals(option))
-        {
-          aggregator = true;
-        }
-        else
-        {
-          URI uri = URI.createURI(arguments[i]);
-          if ("".equals(uri.lastSegment()))
+          String option = arguments[i];
+          if ("-output".equals(option) || "-o".equals(option))
           {
-            uri = uri.trimSegments(1);
+            File file = new File(arguments[++i]);
+            outputLocation = file.getCanonicalFile();
           }
-          uris.add(uri);
+          else if ("-publish".equals(option) || "-p".equals(option))
+          {
+            File file = new File(arguments[++i]);
+            publishLocation = file.getCanonicalFile();
+          }
+          else if ("-source".equals(option) || "-s".equals(option))
+          {
+            reportSource = arguments[++i];
+          }
+          else if ("-branding".equals(option) || "-b".equals(option))
+          {
+            reportBranding = arguments[++i];
+          }
+          else if ("-verbose".equals(option) || "-v".equals(option))
+          {
+            verbose = true;
+          }
+          else if ("-aggregator".equals(option) || "-a".equals(option))
+          {
+            aggregator = true;
+          }
+          else
+          {
+            URI uri = URI.createURI(arguments[i]);
+            if ("".equals(uri.lastSegment()))
+            {
+              uri = uri.trimSegments(1);
+            }
+            uris.add(uri);
+          }
         }
       }
-    }
 
-    reportBranding = reportBranding.replaceFirst("https:", "http:");
+      reportBranding = reportBranding.replaceFirst("https:", "http:");
 
-    createFolders(outputLocation);
-
-    if (aggregator)
-    {
-      uris.addAll(loadAggregator(outputLocation));
-    }
-
-    CompositeMetadataRepository metadataRepository = CompositeMetadataRepository.createMemoryComposite(getAgent().getProvisioningAgent());
-    metadataRepositories.put(metadataRepository.getLocation(), metadataRepository);
-    for (URI uri : uris)
-    {
-      metadataRepository.addChild(toInternalRepositoryLocation(uri));
-    }
-
-    CompositeArtifactRepository artifactRepository = CompositeArtifactRepository.createMemoryComposite(getAgent().getProvisioningAgent());
-    artifactRepositories.put(metadataRepository.getLocation(), artifactRepository);
-
-    for (URI uri : uris)
-    {
-      artifactRepository.addChild(toInternalRepositoryLocation(uri));
-    }
-
-    File artifactCacheLocation = new File(outputLocation, "artifacts");
-    artifactCacheLocation.mkdir();
-
-    RepositoryIndex repositoryIndex = RepositoryIndex.create("\n");
-    Set<File> reportLocations = new HashSet<File>();
-    Map<String, String> allReports = new TreeMap<String, String>();
-
-    Set<File> reportsWithErrors = new HashSet<File>();
-
-    for (URI uri : uris)
-    {
-      if (verbose)
-      {
-        System.out.println("Computing report information for '" + uri + "'");
-      }
-
-      String relativePath = toRelativePath(uri);
-      File reportLocation = new File(outputLocation, relativePath);
-      reportLocations.add(reportLocation);
-
-      // Clean it up before creating it.
-      IOUtil.deleteBestEffort(reportLocation);
-      createFolders(reportLocation);
-
-      Report report = generateReport(null, uri, outputLocation, uri, reportLocation, artifactCacheLocation, reportSource, reportBranding);
-
-      if (verbose)
-      {
-        System.out.println("Waiting for report information completion for '" + uri + "'");
-      }
-
-      shutDownExecutor();
-
-      emitReport(allReports, new HashSet<Report>(), report, reportLocation, repositoryIndex);
-
-      if (publishLocation != null)
-      {
-        File reportPublishLocation = new File(publishLocation, relativePath);
-        publish(reportLocation, reportPublishLocation);
-
-        if (verbose)
-        {
-          System.out.println("Publish report for '" + uri + "' to '" + reportPublishLocation);
-        }
-      }
+      createFolders(outputLocation);
 
       if (aggregator)
       {
-        if (!report.getUnsignedIUs().isEmpty() || !report.getBadProviderIUs().isEmpty() || !report.getBadLicenseIUs().isEmpty()
-            || !report.getBrokenBrandingIUs().isEmpty())
-        {
-          reportsWithErrors.add(reportLocation);
-        }
+        uris.addAll(loadAggregator(outputLocation));
       }
 
-      images.clear();
-      reports.clear();
-    }
+      CompositeMetadataRepository metadataRepository = CompositeMetadataRepository.createMemoryComposite(getAgent().getProvisioningAgent());
+      metadataRepositories.put(metadataRepository.getLocation(), metadataRepository);
+      for (URI uri : uris)
+      {
+        metadataRepository.addChild(toInternalRepositoryLocation(uri));
+      }
 
-    reportLocations.add(artifactCacheLocation);
-    if (aggregator)
+      CompositeArtifactRepository artifactRepository = CompositeArtifactRepository.createMemoryComposite(getAgent().getProvisioningAgent());
+      artifactRepositories.put(metadataRepository.getLocation(), artifactRepository);
+
+      for (URI uri : uris)
+      {
+        artifactRepository.addChild(toInternalRepositoryLocation(uri));
+      }
+
+      File artifactCacheLocation = new File(outputLocation, "artifacts");
+      artifactCacheLocation.mkdir();
+
+      RepositoryIndex repositoryIndex = RepositoryIndex.create("\n");
+      Set<File> reportLocations = new HashSet<File>();
+      Map<String, String> allReports = new TreeMap<String, String>();
+
+      Set<File> reportsWithErrors = new HashSet<File>();
+
+      Map<IArtifactKey, Future<Map<IArtifactDescriptor, File>>> artifactCache = new LinkedHashMap<IArtifactKey, Future<Map<IArtifactDescriptor, File>>>();
+
+      for (URI uri : uris)
+      {
+        if (verbose)
+        {
+          System.out.println("Computing report information for '" + uri + "'");
+        }
+
+        String relativePath = toRelativePath(uri);
+        File reportLocation = new File(outputLocation, relativePath);
+        reportLocations.add(reportLocation);
+
+        // Clean it up before creating it.
+        IOUtil.deleteBestEffort(reportLocation);
+        createFolders(reportLocation);
+
+        Report report = generateReport(null, uri, outputLocation, uri, reportLocation, artifactCache, artifactCacheLocation, reportSource, reportBranding);
+
+        if (verbose)
+        {
+          System.out.println("Waiting for report information completion for '" + uri + "'");
+        }
+
+        shutDownExecutor();
+
+        emitReport(allReports, new HashSet<Report>(), report, reportLocation, repositoryIndex);
+
+        if (publishLocation != null)
+        {
+          File reportPublishLocation = new File(publishLocation, relativePath);
+          publish(reportLocation, reportPublishLocation);
+
+          if (verbose)
+          {
+            System.out.println("Publish report for '" + uri + "' to '" + reportPublishLocation);
+          }
+        }
+
+        if (aggregator)
+        {
+          if (!report.getUnsignedIUs().isEmpty() || !report.getBadProviderIUs().isEmpty() || !report.getBadLicenseIUs().isEmpty()
+              || !report.getBrokenBrandingIUs().isEmpty())
+          {
+            reportsWithErrors.add(reportLocation);
+          }
+        }
+
+        images.clear();
+        reports.clear();
+      }
+
+      reportLocations.add(artifactCacheLocation);
+      if (aggregator)
+      {
+        reportLocations.add(new File(outputLocation, "aggrcons"));
+      }
+
+      IndexReport indexReport = new IndexReport(null, reportSource, reportBranding, outputLocation, publishLocation, reportLocations, allReports,
+          reportsWithErrors);
+      generateIndex(indexReport, repositoryIndex, reportSource, reportBranding);
+    }
+    finally
     {
-      reportLocations.add(new File(outputLocation, "aggrcons"));
+      shutDownExecutor();
     }
-
-    IndexReport indexReport = new IndexReport(null, reportSource, reportBranding, outputLocation, publishLocation, reportLocations, allReports,
-        reportsWithErrors);
-    generateIndex(indexReport, repositoryIndex, reportSource, reportBranding);
 
     return null;
   }
 
   private Set<URI> loadAggregator(File outputLocation) throws IOException, ProvisionException, OperationCanceledException, URISyntaxException
   {
-    ResourceSetImpl resourceSet = new ResourceSetImpl();
+    ResourceSet resourceSet = new ResourceSetImpl();
+    final URIConverter uriConverter = resourceSet.getURIConverter();
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new GenericXMLResourceFactoryImpl());
     URI aggregatorURI = URI.createURI("http://git.eclipse.org/c/simrel/org.eclipse.simrel.build.git/plain/simrel.aggr");
     Resource aggregatorResource = resourceSet.getResource(aggregatorURI, true);
     // aggregatorResource.save(System.out, null);
 
-    Set<URI> aggrcons = new LinkedHashSet<URI>();
+    Map<URI, Future<InputStream>> aggrcons = new LinkedHashMap<URI, Future<InputStream>>();
+    ExecutorService executor = getExecutor();
     for (Iterator<EObject> it = aggregatorResource.getAllContents(); it.hasNext();)
     {
       EObject eObject = it.next();
@@ -373,31 +388,56 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       if (href != null)
       {
         URI uri = URI.createURI(href);
-        URI resolvedURI = uri.resolve(aggregatorURI);
-        aggrcons.add(resolvedURI);
+        final URI resolvedURI = uri.resolve(aggregatorURI);
+        aggrcons.put(resolvedURI, executor.submit(new Callable<InputStream>()
+        {
+          public InputStream call() throws Exception
+          {
+            InputStream inputStream = null;
+            try
+            {
+              inputStream = uriConverter.createInputStream(resolvedURI);
+              ByteArrayOutputStream output = new ByteArrayOutputStream();
+              IOUtil.copy(inputStream, output);
+              output.close();
+              return new ByteArrayInputStream(output.toByteArray());
+            }
+            finally
+            {
+              IOUtil.closeSilent(inputStream);
+            }
+          }
+        }));
       }
     }
 
     Set<URI> composites = new LinkedHashSet<URI>();
-    for (URI aggrcon : aggrcons)
+    for (Map.Entry<URI, Future<InputStream>> entry : aggrcons.entrySet())
     {
+      URI aggrcon = entry.getKey();
       URI repository = null;
-      Resource aggrconResource = null;
+      Resource aggrconResource = resourceSet.createResource(aggrcon);
       try
       {
-        aggrconResource = resourceSet.getResource(aggrcon, true);
+        aggrconResource.load(entry.getValue().get(), null);
       }
       catch (Exception ex)
       {
-        aggrconResource = resourceSet.getResource(aggrcon, false);
       }
+
       aggrconResource.save(System.out, null);
 
       Map<URI, Set<Requirement>> requirements = new LinkedHashMap<URI, Set<Requirement>>();
       Set<String> contacts = new LinkedHashSet<String>();
+      String label = null;
       for (Iterator<EObject> it = aggrconResource.getAllContents(); it.hasNext();)
       {
         EObject eObject = it.next();
+        if (label == null)
+        {
+          label = get(eObject, "Contribution", "label");
+        }
+
         String location = get(eObject, "repositories", "location");
         if (location != null)
         {
@@ -451,14 +491,15 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
       String compositeName = URI.encodeSegment(aggrcon.trimFragment().toString(), false);
       compositeName = compositeName.replace(":", "%3A");
-      composites.add(createAggrconComposite(outputLocation, compositeName, requirements, contacts));
+      composites.add(createAggrconComposite(outputLocation, label, aggrcon.toString().replace("/plain/", "/tree/").replace("#/$", ""), compositeName,
+          requirements, contacts));
     }
 
     return composites;
   }
 
-  private URI createAggrconComposite(File outputLocation, String aggrconName, Map<URI, Set<Requirement>> requirements, Set<String> contacts)
-      throws ProvisionException, OperationCanceledException, URISyntaxException
+  private URI createAggrconComposite(File outputLocation, String label, String aggrconHref, String aggrconName, Map<URI, Set<Requirement>> requirements,
+      Set<String> contacts) throws ProvisionException, OperationCanceledException, URISyntaxException
   {
     File compositeAggrconLocations = new File(outputLocation, "aggrcons");
     compositeAggrconLocations.mkdirs();
@@ -475,17 +516,26 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           value.append(';');
         }
+
         value.append(requirement.toString());
       }
       properties.put(uri.toString(), value.toString());
     }
 
     properties.put("contacts", contacts.toString());
+    properties.put("aggrcon", aggrconHref);
 
     java.net.URI locationURI = compositeAggrconLocation.toURI();
-    String name = URI.createURI(URI.decode(aggrconName)).lastSegment();
-    getMetadataRepositoryManager().createRepository(locationURI, name, IMetadataRepositoryManager.TYPE_COMPOSITE_REPOSITORY, properties);
-    getArtifactRepositoryManager().createRepository(locationURI, name, IArtifactRepositoryManager.TYPE_COMPOSITE_REPOSITORY, properties);
+    getMetadataRepositoryManager().createRepository(locationURI, label, IMetadataRepositoryManager.TYPE_COMPOSITE_REPOSITORY, properties);
+
+    properties.remove("contacts");
+    properties.remove("aggrcon");
+    for (Map.Entry<String, String> entry : properties.entrySet())
+    {
+      entry.setValue("");
+    }
+
+    getArtifactRepositoryManager().createRepository(locationURI, label, IArtifactRepositoryManager.TYPE_COMPOSITE_REPOSITORY, properties);
 
     return URI.createURI(locationURI.toString());
   }
@@ -552,6 +602,21 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     }
 
     return uri;
+  }
+
+  private static File[] listSortedFiles(File folder)
+  {
+    File[] files = folder.listFiles();
+    final Comparator<String> comparator = CommonPlugin.INSTANCE.getComparator();
+    Arrays.sort(files, new Comparator<File>()
+    {
+      public int compare(File f1, File f2)
+      {
+        return comparator.compare(f1.getPath(), f2.getPath());
+      }
+    });
+
+    return files;
   }
 
   private static String toRelativePath(URI uri)
@@ -832,7 +897,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
   }
 
   public Report generateReport(final Report parentReport, final URI rootURI, final File rootOutputLocation, final URI uri, final File outputLocation,
-      final File artifactCacheFolder, final String reportSource, final String reportBranding) throws Exception
+      final Map<IArtifactKey, Future<Map<IArtifactDescriptor, File>>> artifactCache, final File artifactCacheFolder, final String reportSource,
+      final String reportBranding) throws Exception
   {
     Report report = reports.get(uri);
     if (report == null)
@@ -851,8 +917,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       }
 
       final IArtifactRepository artifactRepository = loadedArtifactRepository;
-
-      final Map<IArtifactKey, Future<Map<IArtifactDescriptor, File>>> artifactCache = new LinkedHashMap<IArtifactKey, Future<Map<IArtifactDescriptor, File>>>();
 
       final Set<IInstallableUnit> allIUs = getAllIUs(metadataRepository);
 
@@ -1388,6 +1452,27 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
 
         @Override
+        public String getRepositoryURL(String artifact)
+        {
+          for (Future<Map<IArtifactDescriptor, File>> future : artifactCache.values())
+          {
+            Map<IArtifactDescriptor, File> artifactFiles = get(future);
+            for (Map.Entry<IArtifactDescriptor, File> entry : artifactFiles.entrySet())
+            {
+              File file = entry.getValue();
+              String uriPath = file.toURI().toString();
+              if (uriPath.endsWith(artifact))
+              {
+                String location = entry.getKey().getRepository().getLocation().toString();
+                return location.replaceAll("/$", "");
+              }
+            }
+          }
+
+          throw new IllegalStateException();
+        }
+
+        @Override
         public Map<String, String> getCertificateComponents(Certificate certificate)
         {
           X509Certificate x509Certificate = (X509Certificate)certificate;
@@ -1790,11 +1875,16 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 String host = uri.host();
                 if (host != null && host.equals(siteHost))
                 {
-                  return "<span class=\"bad-absolute-location\">" + attributeValue + "</span>";
+                  return "<span class=\"bad-absolute-location\">" + toHref(attributeValue) + "</span>";
                 }
               }
 
-              return super.handleAttributeValue(elementNames, attributeName, attributeValue);
+              return super.handleAttributeValue(elementNames, toHref(attributeName), toHref(attributeValue));
+            }
+
+            private String toHref(String value)
+            {
+              return value.startsWith("http://") || value.startsWith("https://") ? "<a href=\"" + value + "\"/>" + value + "</a>" : value;
             }
           };
 
@@ -2300,8 +2390,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         List<java.net.URI> children = compositeRepository.getChildren();
         for (java.net.URI child : children)
         {
-          Report childReport = generateReport(report, rootURI, rootOutputLocation, toExternalRepositoryLocation(child), outputLocation, artifactCacheFolder,
-              reportSource, reportBranding);
+          Report childReport = generateReport(report, rootURI, rootOutputLocation, toExternalRepositoryLocation(child), outputLocation, artifactCache,
+              artifactCacheFolder, reportSource, reportBranding);
           childReports.add(childReport);
         }
       }
@@ -2395,27 +2485,17 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         public List<String> call() throws Exception
         {
           final List<String> result = new ArrayList<String>();
-          try
+          ZIPUtil.unzip(effectiveFile, new ZIPUtil.UnzipHandler()
           {
-            ZIPUtil.unzip(effectiveFile, new ZIPUtil.UnzipHandler()
+            public void unzipFile(String name, InputStream zipStream) throws IOException
             {
-              public void unzipFile(String name, InputStream zipStream) throws IOException
-              {
-                result.add(name);
-              }
+              result.add(name);
+            }
 
-              public void unzipDirectory(String name) throws IOException
-              {
-              }
-            });
-
-          }
-          catch (Exception ex)
-          {
-            System.err.println("Error Processing:" + effectiveFile + " " + ex.getMessage());
-            effectiveFile.delete();
-            file.delete();
-          }
+            public void unzipDirectory(String name) throws IOException
+            {
+            }
+          });
           return result;
         }
       });
@@ -2633,6 +2713,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     return result;
   }
 
+  private String getOKImage(File cache)
+  {
+    return getImage(URI.createURI("https://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/bundles/org.eclipse.ui/icons/full/obj16/activity@2x.png"),
+        cache);
+  }
+
   private String getErrorImage(File cache)
   {
     return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/error_st_obj@2x.png"), cache);
@@ -2676,62 +2762,103 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               if (!targetLocation.isFile())
               {
                 targetLocation.getParentFile().mkdirs();
-                {
-                  for (int i = 0; i < 3; ++i)
-                  {
-                    FileOutputStream out = null;
-                    try
-                    {
-                      out = new FileOutputStream(targetLocation);
-                      artifactRepository.getRawArtifact(artifactDescriptor, out, new NullProgressMonitor());
 
-                      if (relativeLocation.toString().startsWith("binary/"))
-                      {
-                        ZIPUtil.unzip(targetLocation, new File(cache, "binary/unpacked/" + relativeLocation.toString().substring("binary/".length())));
-                      }
-                    }
-                    catch (Exception ex)
+                String uuid = EcoreUtil.generateUUID();
+                File downloadLocation = new File(targetLocation.getPath() + "." + uuid);
+                for (int i = 1; i <= DOWNLOAD_RETRY_COUNT; ++i)
+                {
+                  FileOutputStream out = null;
+                  try
+                  {
+                    out = new FileOutputStream(downloadLocation);
+                    IStatus status = artifactRepository.getRawArtifact(artifactDescriptor, out, new NullProgressMonitor());
+                    if (!status.isOK())
                     {
-                      IOUtil.close(out);
-                      targetLocation.delete();
+                      throw new IOException("Failed to download: " + downloadLocation);
+                    }
+
+                    IOUtil.closeSilent(out);
+
+                    if (!downloadLocation.renameTo(targetLocation))
+                    {
+                      throw new IOException("Could not rename '" + downloadLocation + "' to '" + targetLocation + "'");
+                    }
+
+                    if (relativeLocation.toString().startsWith("binary/"))
+                    {
+                      ZIPUtil.unzip(targetLocation, new File(cache, "binary/unpacked/" + relativeLocation.toString().substring("binary/".length())));
+                    }
+                  }
+                  catch (Exception ex)
+                  {
+                    IOUtil.close(out);
+                    targetLocation.delete();
+                    downloadLocation.delete();
+                    if (i == DOWNLOAD_RETRY_COUNT)
+                    {
+                      System.err.println("Failed: " + targetLocation);
                       throw ex;
                     }
-                    finally
-                    {
-                      IOUtil.close(out);
-                    }
 
-                    if (targetLocation.length() != 0 && validZip(targetLocation))
-                    {
-                      break;
-                    }
+                    System.err.println("Retrying: " + targetLocation);
+                    continue;
+                  }
+                  finally
+                  {
+                    downloadLocation.delete();
+                    IOUtil.close(out);
+                  }
+
+                  if (validZip(targetLocation))
+                  {
+                    break;
                   }
                 }
 
                 IProcessingStepDescriptor[] processingSteps = artifactDescriptor.getProcessingSteps();
                 if (processingSteps.length != 0)
                 {
-                  for (int i = 0; i < 3; ++i)
+                  File targetProcessedLocation = new File(cache, relativeLocation.toString() + PROCESSED);
+                  File processedDownloadLocation = new File(targetProcessedLocation.getPath() + "." + uuid);
+                  for (int i = 1; i <= DOWNLOAD_RETRY_COUNT; ++i)
                   {
-                    File targetProcessedLocation = new File(cache, relativeLocation.toString() + PROCESSED);
                     FileOutputStream out = null;
                     try
                     {
-                      out = new FileOutputStream(targetProcessedLocation);
-                      artifactRepository.getArtifact(artifactDescriptor, out, new NullProgressMonitor());
+                      out = new FileOutputStream(processedDownloadLocation);
+                      IStatus status = artifactRepository.getArtifact(artifactDescriptor, out, new NullProgressMonitor());
+                      if (!status.isOK())
+                      {
+                        throw new IOException("Failed to download: " + processedDownloadLocation);
+                      }
+
+                      IOUtil.closeSilent(out);
+
+                      if (!processedDownloadLocation.renameTo(targetProcessedLocation))
+                      {
+                        throw new IOException("Could not rename '" + processedDownloadLocation + "' to '" + targetProcessedLocation + "'");
+                      }
                     }
                     catch (Exception ex)
                     {
                       IOUtil.close(out);
                       targetProcessedLocation.delete();
-                      throw ex;
+                      processedDownloadLocation.delete();
+                      if (i == DOWNLOAD_RETRY_COUNT)
+                      {
+                        System.err.println("Failed: " + targetProcessedLocation);
+                        throw ex;
+                      }
+
+                      System.err.println("Retrying: " + targetProcessedLocation);
+                      continue;
                     }
                     finally
                     {
                       IOUtil.close(out);
                     }
 
-                    if (targetProcessedLocation.length() != 0 && validZip(targetProcessedLocation))
+                    if (validZip(targetProcessedLocation))
                     {
                       break;
                     }
@@ -2759,6 +2886,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private boolean validZip(File file)
   {
+    if (file.length() == 0)
+    {
+      return false;
+    }
+
     if (file.getName().endsWith(".pack.gz"))
     {
       return true;
@@ -2766,7 +2898,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     try
     {
-      ZIPUtil.unzip(file, new ZIPUtil.UnzipHandler()
+      File copy = new File(file.getAbsolutePath() + ".copy");
+      IOUtil.copyFile(file, copy);
+      ZIPUtil.unzip(copy, new ZIPUtil.UnzipHandler()
       {
         public void unzipFile(String name, InputStream zipStream) throws IOException
         {
@@ -2776,6 +2910,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
         }
       });
+
       return true;
     }
     catch (IORuntimeException ex)
@@ -2808,17 +2943,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               {
                 File processedFile = new File(file.toString() + PROCESSED);
                 File targetFile = processedFile.isFile() ? processedFile : file;
-                try
-                {
-                  return verifierFactory.getSignedContent(processedFile.isFile() ? processedFile : file);
-                }
-                catch (Exception ex)
-                {
-                  System.err.println("Error checking signing: " + targetFile + " " + ex.getMessage());
-                  processedFile.delete();
-                  targetFile.delete();
-                  return null;
-                }
+                return verifierFactory.getSignedContent(targetFile);
               }
             });
 
@@ -2963,7 +3088,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     if (executor != null)
     {
       executor.shutdown();
-      executor.awaitTermination(30, TimeUnit.MINUTES);
+      executor.awaitTermination(10, TimeUnit.MINUTES);
       executor = null;
     }
   }
@@ -2977,6 +3102,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         File agentLocation = File.createTempFile("test-", "-agent");
         agentLocation.delete();
         agentLocation.mkdirs();
+        agentLocation.deleteOnExit();
 
         agent = new AgentImpl(null, agentLocation);
       }
@@ -3404,6 +3530,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public abstract Map<String, Boolean> getIUArtifacts(IInstallableUnit iu);
 
+    public abstract String getRepositoryURL(String artifact);
+
     public abstract String getArtifactImage(String artifact);
 
     public abstract String getArtifactSize(String artifact);
@@ -3662,9 +3790,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public Map<String, String> getNavigation()
     {
       Map<String, String> result = new LinkedHashMap<String, String>();
-      File[] files = folder.listFiles();
-      Arrays.sort(files);
-      for (File file : files)
+      for (File file : listSortedFiles(folder))
       {
         if (file.isDirectory() && (!reportLocations.contains(file) || parent != null || aggregator && file.getName().endsWith(".aggrcon")))
         {
@@ -3673,7 +3799,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           if (reportsWithErrors.contains(file))
           {
             String errorImage = getErrorImage(getFolder());
-            label = "<img style=\"position: static;\" class=\"fit-image\" src=\"" + errorImage + "\"/> " + label;
+            label = "<img style=\"position: static;\" class=\"fit-image\" src=\"" + errorImage + "\"/> " + label.replaceAll("\\.aggrcon$", "");
+          }
+          else if (name.endsWith(".aggrcon"))
+          {
+            String okImage = getOKImage(getFolder());
+            label = "<img style=\"position: static;\" class=\"fit-image\" src=\"" + okImage + "\"/> " + label.replaceAll("\\.aggrcon$", "");
           }
 
           result.put(name + "/index.html", label);
@@ -3703,9 +3834,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       if (children == null)
       {
         children = new ArrayList<IndexReport>();
-        File[] files = folder.listFiles();
-        Arrays.sort(files);
-        for (File file : files)
+        for (File file : listSortedFiles(folder))
         {
           if (file.isDirectory() && !reportLocations.contains(file))
           {

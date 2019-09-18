@@ -785,7 +785,7 @@ public class RepositoryIndex
     stringBuffer.append(_415);
     stringBuffer.append(report.getArtifactSize(artifact));
     stringBuffer.append(_416);
-    stringBuffer.append(report.getSiteURL() + '/' + artifact);
+    stringBuffer.append(report.getRepositoryURL(artifact) + '/' + artifact);
     stringBuffer.append(_243);
     stringBuffer.append(artifact);
     stringBuffer.append(_417);
