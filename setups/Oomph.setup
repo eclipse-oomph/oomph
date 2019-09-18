@@ -297,6 +297,27 @@
           </predicate>
         </sourceLocator>
         <repositoryList
+            name="2019-12">
+          <repository
+              url="http://download.eclipse.org/usssdk/updates/latest"/>
+          <repository
+              url="http://download.eclipse.org/egit/updates"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
+          <repository
+              url="http://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
+          <repository
+              url="http://download.eclipse.org/mylyn/snapshots/3.25"/>
+          <repository
+              url="http://download.eclipse.org/technology/m2e/snapshots/1.9.0/latest"/>
+          <repository
+              url="http://download.eclipse.org/nebula/snapshot"/>
+          <repository
+              url="http://download.eclipse.org/technology/swtbot/snapshots"/>
+          <repository
+              url="http://download.eclipse.org/webtools/repository/photon"/>
+        </repositoryList>
+        <repositoryList
             name="2019-09">
           <repository
               url="http://download.eclipse.org/usssdk/updates/latest"/>
