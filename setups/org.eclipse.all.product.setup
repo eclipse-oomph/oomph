@@ -28,6 +28,10 @@
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - Latest</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -74,18 +78,22 @@
     </setupTask>
   </version>
   <version name="latest.released"
-      label="Latest Release (2019-06)"
+      label="Latest Release (2019-09)"
       requiredJavaVersion="1.8">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2019-06/r</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - Latest Release</value>
       </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse Eierlegende Wollmilchsau (2019-06)">
+        label="Eclipse Eierlegende Wollmilchsau (2019-09)">
       <requirement
           name="Application Development Frameworks"/>
       <requirement
@@ -119,9 +127,9 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.12.0,5.0.0)"/>
+          versionRange="[4.13.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2019-06/201906191000">
+          url="http://download.eclipse.org/releases/2019-09">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -135,6 +143,10 @@
       <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - 2019-09</value>
       </detail>
     </annotation>
     <setupTask
@@ -190,6 +202,10 @@
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/2019-06/r</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - 2019-06</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -244,6 +260,10 @@
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/2019-03/r</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - 2019-03</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -295,6 +315,10 @@
       <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/2018-12/r</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - 2018-12</value>
       </detail>
     </annotation>
     <setupTask
@@ -348,6 +372,10 @@
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/2018-09/r</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - 2018-09</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -399,6 +427,10 @@
       <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/photon/r</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - Photon</value>
       </detail>
     </annotation>
     <setupTask
@@ -452,6 +484,10 @@
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - Oxygen</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -503,6 +539,10 @@
       <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/neon/3</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - Neon</value>
       </detail>
     </annotation>
     <setupTask
@@ -556,6 +596,10 @@
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/mars/2</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - Mars</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -606,6 +650,10 @@
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/luna/sr2</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - Luna</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -653,6 +701,10 @@
       <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - Kepler</value>
       </detail>
     </annotation>
     <setupTask
@@ -703,6 +755,10 @@
       <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/juno/sr2</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - Juno</value>
       </detail>
     </annotation>
     <setupTask

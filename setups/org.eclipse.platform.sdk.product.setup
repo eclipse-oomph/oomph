@@ -37,6 +37,10 @@
           key="siteURI">
         <value>https://download.eclipse.org/eclipse/downloads/</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - Latest</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -45,27 +49,31 @@
           name="org.eclipse.sdk.ide"
           versionRange="[4.13.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/eclipse/updates/4.13-I-builds"/>
+          url="http://download.eclipse.org/eclipse/updates/4.13/R-4.13-201909161045"/>
     </setupTask>
   </version>
   <version name="latest.released"
-      label="Latest Release (4.12 - 2019-06)"
+      label="Latest Release (4.13 - 2019-09)"
       requiredJavaVersion="1.8">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.12-201906051800/</value>
+        <value>https://download.eclipse.org/eclipse/downloads/</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - Latest Release</value>
       </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse SDK (4.12 - 2019-06)">
+        label="Eclipse SDK (4.13 - 2019-09)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.12.0,5.0.0)"/>
+          versionRange="[4.13.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/eclipse/updates/4.12/R-4.12-201906051800"/>
+          url="http://download.eclipse.org/eclipse/updates/4.13/R-4.13-201909161045"/>
     </setupTask>
   </version>
   <version name="4.13"
@@ -77,6 +85,10 @@
           key="siteURI">
         <value>https://download.eclipse.org/eclipse/downloads/</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.13 - 2019-09</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -85,7 +97,7 @@
           name="org.eclipse.sdk.ide"
           versionRange="[4.13.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/eclipse/updates/4.13-I-builds"/>
+          url="http://download.eclipse.org/eclipse/updates/4.13/R-4.13-201909161045"/>
     </setupTask>
   </version>
   <version name="4.12"
@@ -96,6 +108,10 @@
       <detail
           key="siteURI">
         <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.12-201906051800/</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.12 - 2019-06</value>
       </detail>
     </annotation>
     <setupTask
@@ -117,6 +133,10 @@
           key="siteURI">
         <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.11-201903070500/</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.11 - 2019-03</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -136,6 +156,10 @@
       <detail
           key="siteURI">
         <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.10-201812060815/</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.10 - 2018-12</value>
       </detail>
     </annotation>
     <setupTask
@@ -157,6 +181,10 @@
           key="siteURI">
         <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.9-201809060745/</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.9 - 2018-09</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -176,6 +204,10 @@
       <detail
           key="siteURI">
         <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.8-201806110500/</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.8 - Photon</value>
       </detail>
     </annotation>
     <setupTask
@@ -197,6 +229,10 @@
           key="siteURI">
         <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.7.3a-201803300640/</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.7 - Oxygen</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -216,6 +252,10 @@
       <detail
           key="siteURI">
         <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.6.3-201703010400/</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.6 - Neon</value>
       </detail>
     </annotation>
     <setupTask
@@ -237,6 +277,10 @@
           key="siteURI">
         <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.5.2-201602121500/</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.5 - Mars</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -257,6 +301,10 @@
           key="siteURI">
         <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.4.1-201409250400/</value>
       </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.4 - Luna</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
@@ -276,6 +324,10 @@
       <detail
           key="siteURI">
         <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.3.2-201402211700/</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.3 - Kepler</value>
       </detail>
     </annotation>
     <setupTask
@@ -298,6 +350,10 @@
       <detail
           key="siteURI">
         <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.2.2-201302041200/</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.2 - Juno</value>
       </detail>
     </annotation>
     <setupTask

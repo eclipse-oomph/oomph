@@ -50,6 +50,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-java-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - Latest</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -112,27 +116,31 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-java-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java Developers (2019-06)">
+          label="Eclipse IDE for Java Developers (2019-09)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -172,9 +180,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -189,6 +197,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-java-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -260,6 +272,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-java-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - 2019-06</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -329,6 +345,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-java-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - 2019-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -400,6 +420,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-java-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - 2018-12</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -469,6 +493,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-java-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -548,6 +576,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-java-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -624,6 +656,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-ide-java-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - Oxygen</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -698,6 +734,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-java-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - Neon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -768,6 +808,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-ide-java-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - Mars</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -803,6 +847,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-java-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - Luna</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -837,6 +885,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-java-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -874,6 +926,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-ide-java-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java Developers - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -922,6 +978,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-enterprise-java-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -1117,27 +1177,31 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-enterprise-java-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Enterprise Java Developers (2019-06)">
+          label="Eclipse IDE for Enterprise Java Developers (2019-09)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -1309,9 +1373,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1326,6 +1390,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-enterprise-java-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -1528,6 +1596,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-enterprise-java-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
@@ -1731,6 +1803,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-enterprise-java-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - 2019-03</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -1933,6 +2009,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-enterprise-java-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - 2018-12</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -2134,6 +2214,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-java-ee-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -2343,6 +2427,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-java-ee-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -2549,6 +2637,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-ide-java-ee-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - Oxygen</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -2703,6 +2795,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-java-ee-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - Neon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -2853,6 +2949,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-ide-java-ee-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - Mars</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -2891,6 +2991,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-java-ee-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - Luna</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -2928,6 +3032,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-java-ee-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -2968,6 +3076,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-ide-java-ee-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Enterprise Java Developers - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -3024,6 +3136,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-cc-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -3125,27 +3241,31 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-cc-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for C/C++ Developers (2019-06)">
+          label="Eclipse IDE for C/C++ Developers (2019-09)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.arduino.feature.group"/>
         <requirement
@@ -3180,6 +3300,10 @@
             name="org.eclipse.egit.feature.group"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
+        <requirement
+            name="org.eclipse.launchbar.feature.group"/>
+        <requirement
+            name="org.eclipse.launchbar.remote.feature.group"/>
         <requirement
             name="org.eclipse.linuxtools.cdt.libhover.devhelp.feature.feature.group"/>
         <requirement
@@ -3219,9 +3343,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -3236,6 +3360,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-cc-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -3344,6 +3472,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-cc-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
@@ -3449,6 +3581,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-cc-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - 2019-03</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -3552,6 +3688,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-cc-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - 2018-12</value>
         </detail>
       </annotation>
       <setupTask
@@ -3657,6 +3797,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-cc-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - 2018-09</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -3761,6 +3905,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-cc-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -3863,6 +4011,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-ide-cc-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - Oxygen</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -3951,6 +4103,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-cc-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - Neon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -4035,6 +4191,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-ide-cc-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - Mars</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -4067,6 +4227,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-cc-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - Luna</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -4098,6 +4262,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-cc-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -4132,6 +4300,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-ide-cc-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for C/C++ Developers - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -4177,6 +4349,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for JavaScript and Web Developers - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -4238,27 +4414,31 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for JavaScript and Web Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-06)">
+          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-09)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -4296,9 +4476,9 @@
         <requirement
             name="org.eclipse.wst.server_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4313,6 +4493,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for JavaScript and Web Developers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -4382,6 +4566,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for JavaScript and Web Developers - 2019-06</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -4449,6 +4637,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-javascript-and-web-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for JavaScript and Web Developers - 2019-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -4524,6 +4716,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-javascript-and-web-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for JavaScript and Web Developers - 2018-12</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -4597,6 +4793,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-javascript-and-web-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for JavaScript and Web Developers - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -4674,6 +4874,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-javascript-and-web-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for JavaScript and Web Developers - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -4748,6 +4952,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-ide-javascript-and-web-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for JavaScript and Web Developers - Oxygen</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -4821,6 +5029,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-javascript-and-web-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for JavaScript and Web Developers - Neon</value>
         </detail>
       </annotation>
       <setupTask
@@ -4909,6 +5121,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-php-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for PHP Developers - Latest</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -4969,27 +5185,31 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-php-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for PHP Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for PHP Developers (2019-06)">
+          label="Eclipse IDE for PHP Developers (2019-09)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -5027,9 +5247,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -5044,6 +5264,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-php-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for PHP Developers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -5113,6 +5337,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-php-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for PHP Developers - 2019-06</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -5180,6 +5408,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-php-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for PHP Developers - 2019-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -5249,6 +5481,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-php-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for PHP Developers - 2018-12</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -5316,6 +5552,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-php-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for PHP Developers - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -5387,6 +5627,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-php-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for PHP Developers - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -5454,6 +5698,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-php-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for PHP Developers - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -5523,6 +5771,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-php-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for PHP Developers - Neon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -5587,6 +5839,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-php-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for PHP Developers - Mars</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -5618,6 +5874,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-php-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for PHP Developers - Luna</value>
         </detail>
       </annotation>
       <setupTask
@@ -5654,6 +5914,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-eclipse-committers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Eclipse Committers - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -5747,31 +6011,33 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-eclipse-committers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Eclipse Committers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Eclipse Committers (2019-06)">
+          label="Eclipse IDE for Eclipse Committers (2019-09)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
-        <requirement
-            name="org.eclipse.cvs.feature.group"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -5837,13 +6103,11 @@
         <requirement
             name="org.eclipse.rcp.source.feature.group"/>
         <requirement
-            name="org.eclipse.wst.json_ui.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+            name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -5858,6 +6122,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-eclipse-committers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Eclipse Committers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -5958,6 +6226,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-eclipse-committers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Eclipse Committers - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
@@ -6063,6 +6335,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-eclipse-committers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Eclipse Committers - 2019-03</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -6167,6 +6443,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-eclipse-committers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Eclipse Committers - 2018-12</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -6270,6 +6550,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-eclipse-committers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Eclipse Committers - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -6383,6 +6667,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-eclipse-committers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Eclipse Committers - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -6492,6 +6780,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-ide-eclipse-committers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Eclipse Committers - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -6603,6 +6895,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-eclipse-committers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Eclipse Committers - Neon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -6713,6 +7009,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-ide-eclipse-committers-452</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Eclipse Committers - Mars</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -6767,6 +7067,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-java-and-dsl-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - Latest</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -6809,27 +7113,31 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse DSL Tools (2019-06)">
+          label="Eclipse DSL Tools (2019-09)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.18.0,4.0.0)"/>
@@ -6849,9 +7157,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6866,6 +7174,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -6917,6 +7229,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - 2019-06</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -6966,6 +7282,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - 2019-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -7017,6 +7337,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - 2018-12</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -7066,6 +7390,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -7117,6 +7445,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -7164,6 +7496,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -7213,6 +7549,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-java-and-dsl-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - Neon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -7259,6 +7599,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-ide-java-and-dsl-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - Mars</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -7297,6 +7641,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-java-and-dsl-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - Luna</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -7334,6 +7682,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -7374,6 +7726,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse DSL Tools - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -7426,6 +7782,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - Latest</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -7594,27 +7954,31 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Java and Report Developers (2019-06)">
+          label="Eclipse IDE for Java and Report Developers (2019-09)">
         <requirement
             name="epp.package.reporting"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.birt.chart.cshelp.feature.group"/>
         <requirement
@@ -7760,9 +8124,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7777,6 +8141,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -7953,6 +8321,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
@@ -8130,6 +8502,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-java-and-report-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - 2019-03</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -8306,6 +8682,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-java-and-report-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - 2018-12</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -8481,6 +8861,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-java-and-report-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -8660,6 +9044,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-java-and-report-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -8836,6 +9224,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - Oxygen</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -8961,6 +9353,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-java-and-report-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - Neon</value>
         </detail>
       </annotation>
       <setupTask
@@ -9088,6 +9484,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-ide-java-and-report-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - Mars</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -9126,6 +9526,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-java-and-report-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - Luna</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -9163,6 +9567,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-java-and-report-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -9203,6 +9611,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-ide-java-and-report-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Java and Report Developers - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -9254,6 +9666,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-modeling-tools</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -9343,27 +9759,31 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-modeling-tools</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse Modeling Tools (2019-06)">
+          label="Eclipse Modeling Tools (2019-09)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -9381,9 +9801,7 @@
         <requirement
             name="org.eclipse.emf.ecoretools.design.feature.group"/>
         <requirement
-            name="org.eclipse.emf.ecp.sdk.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.emfstore.sdk.feature.feature.group"/>
+            name="org.eclipse.emf.ecp.emfforms.sdk.feature.feature.group"/>
         <requirement
             name="org.eclipse.emf.parsley.sdk.feature.group"/>
         <requirement
@@ -9431,9 +9849,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9448,6 +9866,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-modeling-tools</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -9544,6 +9966,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-modeling-tools</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
@@ -9643,6 +10069,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-modeling-tools</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - 2019-03</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -9741,6 +10171,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-modeling-tools</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - 2018-12</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -9838,6 +10272,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-modeling-tools</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -9939,6 +10377,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-modeling-tools</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -10036,6 +10478,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-modeling-tools</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -10135,6 +10581,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-modeling-tools</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - Neon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -10233,6 +10683,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-modeling-tools</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - Mars</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -10271,6 +10725,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-modeling-tools</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - Luna</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -10308,6 +10766,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-modeling-tools</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -10348,6 +10810,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-modeling-tools</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Modeling Tools - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -10396,6 +10862,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-android-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Android Developers - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -10475,6 +10945,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-android-developers-includes-incubating-components</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Android Developers - Latest Release</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -10552,6 +11026,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-android-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Android Developers - Neon</value>
         </detail>
       </annotation>
       <setupTask
@@ -10642,6 +11120,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-rcp-and-rap-developers-includes-incubating-components</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - Latest</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -10718,27 +11200,31 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-rcp-and-rap-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for RCP and RAP Developers (2019-06)">
+          label="Eclipse for RCP and RAP Developers (2019-09)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.18.0,4.0.0)"/>
@@ -10780,6 +11266,8 @@
         <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <requirement
+            name="org.eclipse.passage.ldc.feature.feature.group"/>
+        <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
             name="org.eclipse.swtbot.eclipse.feature.group"/>
@@ -10790,9 +11278,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -10807,6 +11295,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-rcp-and-rap-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -10892,6 +11384,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - 2019-06</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -10973,6 +11469,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-rcp-and-rap-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - 2019-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -11056,6 +11556,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - 2018-12</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -11137,6 +11641,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-rcp-and-rap-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -11226,6 +11734,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -11311,6 +11823,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-rcp-and-rap-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -11398,6 +11914,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-rcp-and-rap-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - Neon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -11482,6 +12002,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-rcp-and-rap-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - Mars</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -11520,6 +12044,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-rcp-and-rap-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - Luna</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -11557,6 +12085,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-rcp-and-rap-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -11597,6 +12129,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-rcp-and-rap-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for RCP and RAP Developers - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -11649,6 +12185,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-testers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - Latest</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -11687,27 +12227,31 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-testers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Testers (2019-06)">
+          label="Eclipse for Testers (2019-09)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
@@ -11723,9 +12267,9 @@
         <requirement
             name="org.eclipse.mylyn_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11740,6 +12284,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-testers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -11786,6 +12334,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-testers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
@@ -11833,6 +12385,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-testers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - 2019-03</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -11878,6 +12434,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-testers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - 2018-12</value>
         </detail>
       </annotation>
       <setupTask
@@ -11925,6 +12485,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-testers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - 2018-09</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -11971,6 +12535,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-testers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -12014,6 +12582,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -12059,6 +12631,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-testers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - Neon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -12103,6 +12679,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-testers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - Mars</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -12135,6 +12715,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-testers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - Luna</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -12166,6 +12750,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-testers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -12200,6 +12788,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-testers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Testers - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -12245,6 +12837,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-scientific-computing</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -12330,27 +12926,31 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-scientific-computing</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Scientific Computing (2019-06)">
+          label="Eclipse for Scientific Computing (2019-09)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -12412,9 +13012,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12429,6 +13029,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-scientific-computing</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -12521,6 +13125,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-scientific-computing</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
@@ -12614,6 +13222,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-scientific-computing</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - 2019-03</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -12706,6 +13318,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-scientific-computing</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - 2018-12</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -12791,6 +13407,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-scientific-computing</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -12878,6 +13498,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-scientific-computing</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -12961,6 +13585,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -13046,6 +13674,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - Neon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -13130,6 +13762,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - Mars</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -13162,6 +13798,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - Luna</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -13193,6 +13833,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -13227,6 +13871,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/juno/sr2</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scientific Computing - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -13273,6 +13921,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Automotive Software Developers - Latest</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -13310,6 +13962,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Automotive Software Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
@@ -13349,6 +14005,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Automotive Software Developers - Mars</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -13387,6 +14047,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Automotive Software Developers - Luna</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -13424,6 +14088,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Automotive Software Developers - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -13464,6 +14132,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Automotive Software Developers - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -13515,6 +14187,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-scout-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -13576,27 +14252,31 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-scout-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Scout Developers (2019-06)">
+          label="Eclipse for Scout Developers (2019-09)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -13634,9 +14314,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13651,6 +14331,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-scout-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -13719,6 +14403,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-scout-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
@@ -13788,6 +14476,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-scout-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - 2019-03</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -13855,6 +14547,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-scout-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - 2018-12</value>
         </detail>
       </annotation>
       <setupTask
@@ -13924,6 +14620,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-scout-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - 2018-09</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -13992,6 +14692,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-scout-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -14057,6 +14761,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-scout-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -14124,6 +14832,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-scout-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - Neon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -14190,6 +14902,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-scout-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - Mars</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -14228,6 +14944,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-scout-developers</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - Luna</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -14265,6 +14985,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-scout-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -14305,6 +15029,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-scout-developers</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse for Scout Developers - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -14349,6 +15077,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Rust Developers - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -14396,27 +15128,31 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-rust-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Rust Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Rust Developers (2019-06)">
+          label="Eclipse IDE for Rust Developers (2019-09)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
         <requirement
@@ -14440,9 +15176,9 @@
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2019-06"/>
+            url="http://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14457,6 +15193,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/rc1/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Rust Developers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -14512,6 +15252,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Rust Developers - 2019-06</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -14565,6 +15309,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Rust Developers - 2019-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -14622,6 +15370,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Rust Developers - 2018-12</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -14677,6 +15429,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Rust Developers - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -14735,6 +15491,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse IDE for Rust Developers - Photon</value>
         </detail>
       </annotation>
       <setupTask
@@ -14796,6 +15556,10 @@
             key="siteURI">
           <value>https://download.eclipse.org/eclipse/downloads/</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - Latest</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -14818,29 +15582,33 @@
     </version>
     <version
         name="latest.released"
-        label="Latest Release (2019-06)"
+        label="Latest Release (2019-09)"
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.12-201906051800/</value>
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse Platform (2019-06)">
+          label="Eclipse Platform (2019-09)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.12.0,5.0.0)"/>
+            versionRange="[4.13.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2019-06/201906191000">
+            url="http://download.eclipse.org/releases/2019-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14855,6 +15623,10 @@
         <detail
             key="siteURI">
           <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -14886,6 +15658,10 @@
             key="siteURI">
           <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.12-201906051800/</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - 2019-06</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -14915,6 +15691,10 @@
         <detail
             key="siteURI">
           <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.11-201903070500/</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - 2019-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -14946,6 +15726,10 @@
             key="siteURI">
           <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.10-201812060815/</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - 2018-12</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -14975,6 +15759,10 @@
         <detail
             key="siteURI">
           <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.9-201809060745/</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -15006,6 +15794,10 @@
             key="siteURI">
           <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.8-201806110500/</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - Photon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -15035,6 +15827,10 @@
         <detail
             key="siteURI">
           <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.7.3a-201803300640/</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -15066,6 +15862,10 @@
             key="siteURI">
           <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.6.3-201703010400/</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - Neon</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -15095,6 +15895,10 @@
         <detail
             key="siteURI">
           <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.5.2-201602121500/</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - Mars</value>
         </detail>
       </annotation>
       <setupTask
@@ -15126,6 +15930,10 @@
             key="siteURI">
           <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.4.1-201409250400/</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - Luna</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -15155,6 +15963,10 @@
         <detail
             key="siteURI">
           <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.3.2-201402211700/</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -15187,6 +15999,10 @@
         <detail
             key="siteURI">
           <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.2.2-201302041200/</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Platform - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -15223,6 +16039,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-eclipse-committers-442</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Standard - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -15262,6 +16082,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-eclipse-committers-442</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Standard - Latest Release</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -15300,6 +16124,10 @@
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-eclipse-committers-442</value>
         </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Standard - Luna</value>
+        </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
@@ -15337,6 +16165,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-standard-432</value>
+        </detail>
+        <detail
+            key="shortcut">
+          <value>Eclipse Standard - Kepler</value>
         </detail>
       </annotation>
       <setupTask
