@@ -17,7 +17,7 @@
 <stringAttribute key="location" value="${workspace_loc}/../ws-product-catalog-generator"/>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog &#13;&#10;-outputLocation ${file_uri:${resource_loc:/setups/org.eclipse.products.setup}}&#13;&#10;-xstaging 2019-03 http://download.eclipse.org/technology/epp/packages/2019-03/M1 http://download.eclipse.org/releases/2019-03/201901181001&#13;&#10;-useComposite 2019-09&#13;&#10;-xlatestReleased"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog &#13;&#10;-outputLocation ${file_uri:${resource_loc:/setups/org.eclipse.products.setup}}&#13;&#10;-xstaging 2019-09 http://download.eclipse.org/technology/epp/packages/2019-09/RC2a http://download.eclipse.org/releases/2019-09/201909181001 http://download.eclipse.org/eclipse/updates/4.13/R-4.13-201909161045&#13;&#10;-useComposite 2019-12&#13;&#10;-xlatestReleased"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Declipse.p2.mirrors=false"/>
 <stringAttribute key="pde.version" value="3.3"/>
