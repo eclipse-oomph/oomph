@@ -84,8 +84,36 @@ for f in *.zip; do
     chmod a+x "Eclipse Installer.app/Contents/MacOS/eclipse-inst"
     echo "  Building eclipse-inst-mac$bitness.tar.gz"
     tar -czf $PRODUCTS/eclipse-inst-mac$bitness.tar.gz "Eclipse Installer.app"
+
     echo "  Building eclipse-inst-mac$bitness.dmg"
-    curl -o $PRODUCTS/eclipse-inst-mac$bitness.dmg --write-out '%{http_code}\n' -F sign=true -F source=@$PRODUCTS/eclipse-inst-mac$bitness.tar.gz http://build.eclipse.org:31338/dmg-packager
+
+    TIMESTAMP=$(date +%s%N)
+    UNNOTARIZED_DMG=$PRODUCTS/eclipse-inst-mac$bitness.$TIMESTAMP.dmg
+    curl -o $UNNOTARIZED_DMG --write-out '%{http_code}\n' -F sign=true -F source=@$PRODUCTS/eclipse-inst-mac$bitness.tar.gz http://build.eclipse.org:31338/dmg-packager
+    
+    echo "  Notarizing eclipse-inst-mac$bitness.$TIMESTAMP.dmg"
+    RESPONSE=$(curl -X POST -F file=@$UNNOTARIZED_DMG -F 'options={"primaryBundleId": "app-bundle", "staple": true};type=application/json' http://172.30.206.146:8383/macos-notarization-service/notarize)
+    UUID=$(echo $RESPONSE | grep -Po '"uuid"\s*:\s*"\K[^"]+')
+    STATUS=$(echo $RESPONSE | grep -Po '"status"\s*:\s*"\K[^"]+')
+    echo "  Progress: $RESPONSE"
+
+    while [[ $STATUS == 'IN_PROGRESS' ]]; do
+      sleep 1m
+      RESPONSE=$(curl -s http://172.30.206.146:8383/macos-notarization-service/$UUID/status)
+      STATUS=$(echo $RESPONSE | grep -Po '"status"\s*:\s*"\K[^"]+')
+      echo "  Progress: $RESPONSE"
+    done
+
+    if [[ $STATUS != 'COMPLETE' ]]; then
+      echo "Notarization failed: $RESPONSE"
+      exit 1
+    fi
+
+    mv eclipse-inst-mac$bitness.$TIMESTAMP.dmg eclipse-inst-mac$bitness-unnotarized.dmg
+
+    curl -JO http://172.30.206.146:8383/macos-notarization-service/$UUID/download
+    
+    mv eclipse-inst-mac$bitness.$TIMESTAMP.dmg eclipse-inst-mac$bitness.dmg
 
   elif [[ $f == *win32* ]]; then
     rm -f eclipsec.exe
