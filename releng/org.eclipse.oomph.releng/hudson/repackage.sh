@@ -109,11 +109,15 @@ for f in *.zip; do
       exit 1
     fi
 
-    mv eclipse-inst-mac$bitness.$TIMESTAMP.dmg eclipse-inst-mac$bitness-unnotarized.dmg
+    mv $UNNOTARIZED_DMG $UNNOTARIZED_DMG.unnotarized
 
+    echo "  Downloading stapled result"
+      
     curl -JO http://172.30.206.146:8383/macos-notarization-service/$UUID/download
     
-    mv eclipse-inst-mac$bitness.$TIMESTAMP.dmg eclipse-inst-mac$bitness.dmg
+    echo "  Moving stapled notarized result"
+
+    mv eclipse-inst-mac$bitness.$TIMESTAMP.dmg $PRODUCTS/eclipse-inst-mac$bitness.dmg
 
   elif [[ $f == *win32* ]]; then
     rm -f eclipsec.exe
