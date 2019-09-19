@@ -62,6 +62,7 @@ for f in *.zip; do
   if [[ $f == *macosx* ]]; then
     if [[ "$PACK_AND_SIGN" == true ]]; then
       echo "  Signing Eclipse Installer.app"
+      chmod -R a-st "Eclipse Installer.app"
       zip -r -q unsigned.zip "Eclipse Installer.app"
       rm -rf "Eclipse Installer.app"
       curl -o signed.zip -F file=@unsigned.zip -F entitlements=@$GIT/releng/org.eclipse.oomph.releng/hudson/installer.entitlements http://172.30.206.146:8282/macosx-signing-service/1.0.1-SNAPSHOT
