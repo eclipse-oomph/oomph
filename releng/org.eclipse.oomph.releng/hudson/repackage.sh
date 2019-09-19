@@ -64,7 +64,7 @@ for f in *.zip; do
       echo "  Signing Eclipse Installer.app"
       zip -r -q unsigned.zip "Eclipse Installer.app"
       rm -rf "Eclipse Installer.app"
-      curl -o signed.zip -F file=@unsigned.zip -F entitlements=@installer.entitlements http://172.30.206.146:8282/macosx-signing-service/1.0.1-SNAPSHOT
+      curl -o signed.zip -F file=@unsigned.zip -F entitlements=@$GIT/releng/org.eclipse.oomph.releng/hudson/installer.entitlements http://172.30.206.146:8282/macosx-signing-service/1.0.1-SNAPSHOT
       
       actualSize=$(wc -c signed.zip | cut -f 1 -d ' ')
       if [ $actualSize -lt 40000000 ]; then
