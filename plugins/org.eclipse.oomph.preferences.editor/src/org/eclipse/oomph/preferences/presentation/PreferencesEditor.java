@@ -106,6 +106,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
@@ -352,6 +353,8 @@ public class PreferencesEditor extends MultiPageEditorPart
    */
   protected EContentAdapter problemIndicationAdapter = new EContentAdapter()
   {
+    protected boolean dispatching;
+
     @Override
     public void notifyChanged(Notification notification)
     {
@@ -373,17 +376,7 @@ public class PreferencesEditor extends MultiPageEditorPart
             {
               resourceToDiagnosticMap.remove(resource);
             }
-
-            if (updateProblemIndication)
-            {
-              getSite().getShell().getDisplay().asyncExec(new Runnable()
-              {
-                public void run()
-                {
-                  updateProblemIndication();
-                }
-              });
-            }
+            dispatchUpdateProblemIndication();
             break;
           }
         }
@@ -391,6 +384,22 @@ public class PreferencesEditor extends MultiPageEditorPart
       else
       {
         super.notifyChanged(notification);
+      }
+    }
+
+    protected void dispatchUpdateProblemIndication()
+    {
+      if (updateProblemIndication && !dispatching)
+      {
+        dispatching = true;
+        getSite().getShell().getDisplay().asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            dispatching = false;
+            updateProblemIndication();
+          }
+        });
       }
     }
 
@@ -405,16 +414,7 @@ public class PreferencesEditor extends MultiPageEditorPart
     {
       basicUnsetTarget(target);
       resourceToDiagnosticMap.remove(target);
-      if (updateProblemIndication)
-      {
-        getSite().getShell().getDisplay().asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            updateProblemIndication();
-          }
-        });
-      }
+      dispatchUpdateProblemIndication();
     }
   };
 
@@ -578,9 +578,10 @@ public class PreferencesEditor extends MultiPageEditorPart
   {
     if (!changedResources.isEmpty() && (!isDirty() || handleDirtyConflict()))
     {
+      ResourceSet resourceSet = editingDomain.getResourceSet();
       if (isDirty())
       {
-        changedResources.addAll(editingDomain.getResourceSet().getResources());
+        changedResources.addAll(resourceSet.getResources());
       }
       editingDomain.getCommandStack().flush();
 
@@ -592,7 +593,7 @@ public class PreferencesEditor extends MultiPageEditorPart
           resource.unload();
           try
           {
-            resource.load(Collections.EMPTY_MAP);
+            resource.load(resourceSet.getLoadOptions());
           }
           catch (IOException exception)
           {
@@ -752,7 +753,7 @@ public class PreferencesEditor extends MultiPageEditorPart
             for (Iterator<PropertySheetPage> i = propertySheetPages.iterator(); i.hasNext();)
             {
               PropertySheetPage propertySheetPage = i.next();
-              if (propertySheetPage.getControl().isDisposed())
+              if (propertySheetPage.getControl() == null || propertySheetPage.getControl().isDisposed())
               {
                 i.remove();
               }
@@ -1151,6 +1152,7 @@ public class PreferencesEditor extends MultiPageEditorPart
       selectionViewer = new TreeViewer(tree);
       setCurrentViewer(selectionViewer);
 
+      selectionViewer.setUseHashlookup(true);
       selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
       selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory),
           new DiagnosticDecorator(editingDomain, selectionViewer, PreferencesEditorPlugin.getPlugin().getDialogSettings())));
@@ -1168,7 +1170,10 @@ public class PreferencesEditor extends MultiPageEditorPart
       {
         public void run()
         {
-          setActivePage(0);
+          if (!getContainer().isDisposed())
+          {
+            setActivePage(0);
+          }
         }
       });
     }
@@ -1215,9 +1220,9 @@ public class PreferencesEditor extends MultiPageEditorPart
       setPageText(0, "");
       if (getContainer() instanceof CTabFolder)
       {
-        ((CTabFolder)getContainer()).setTabHeight(1);
         Point point = getContainer().getSize();
-        getContainer().setSize(point.x, point.y + 6);
+        Rectangle clientArea = getContainer().getClientArea();
+        getContainer().setSize(point.x, 2 * point.y - clientArea.height - clientArea.y);
       }
     }
   }
@@ -1236,9 +1241,9 @@ public class PreferencesEditor extends MultiPageEditorPart
       setPageText(0, getString("_UI_SelectionPage_label"));
       if (getContainer() instanceof CTabFolder)
       {
-        ((CTabFolder)getContainer()).setTabHeight(SWT.DEFAULT);
         Point point = getContainer().getSize();
-        getContainer().setSize(point.x, point.y - 6);
+        Rectangle clientArea = getContainer().getClientArea();
+        getContainer().setSize(point.x, clientArea.height + clientArea.y);
       }
     }
   }
@@ -1267,19 +1272,19 @@ public class PreferencesEditor extends MultiPageEditorPart
    * @generated
    */
   @SuppressWarnings("all")
-  public Object getAdapterGen(Class key)
+  public <T> T getAdapterGen(Class<T> key)
   {
     if (key.equals(IContentOutlinePage.class))
     {
-      return showOutlineView() ? getContentOutlinePage() : null;
+      return showOutlineView() ? key.cast(getContentOutlinePage()) : null;
     }
     else if (key.equals(IPropertySheetPage.class))
     {
-      return getPropertySheetPage();
+      return key.cast(getPropertySheetPage());
     }
     else if (key.equals(IGotoMarker.class))
     {
-      return this;
+      return key.cast(this);
     }
     else
     {

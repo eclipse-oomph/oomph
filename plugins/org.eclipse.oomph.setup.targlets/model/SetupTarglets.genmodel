@@ -20,6 +20,8 @@
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//TargletTask/programArguments"/>
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//TargletTask/vMArguments"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference SetupTarglets.ecore#//TargletTask/implicitDependencies"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//TargletTask/targetName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//TargletTask/activateTarget"/>
     </genClasses>
     <genClasses ecoreClass="SetupTarglets.ecore#//ImplicitDependency">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//ImplicitDependency/iD"/>

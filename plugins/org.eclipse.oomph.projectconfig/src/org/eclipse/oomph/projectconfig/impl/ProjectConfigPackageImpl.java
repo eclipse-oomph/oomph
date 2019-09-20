@@ -138,14 +138,17 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
     }
 
     // Obtain or create and register package
-    ProjectConfigPackageImpl theProjectConfigPackage = (ProjectConfigPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ProjectConfigPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ProjectConfigPackageImpl());
+    Object registeredProjectConfigPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    ProjectConfigPackageImpl theProjectConfigPackage = registeredProjectConfigPackage instanceof ProjectConfigPackageImpl
+        ? (ProjectConfigPackageImpl)registeredProjectConfigPackage
+        : new ProjectConfigPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
     PredicatesPackage.eINSTANCE.eClass();
     PreferencesPackage.eINSTANCE.eClass();
+    BasePackage.eINSTANCE.eClass();
 
     // Create package meta-data objects
     theProjectConfigPackage.createPackageContents();

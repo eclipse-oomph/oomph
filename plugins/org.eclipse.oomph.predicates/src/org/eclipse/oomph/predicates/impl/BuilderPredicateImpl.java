@@ -217,7 +217,7 @@ public class BuilderPredicateImpl extends PredicateImpl implements BuilderPredic
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (builder: ");
     result.append(builder);
     result.append(')');

@@ -395,6 +395,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("null")
   @Override
   public boolean eIsSet(int featureID)
   {

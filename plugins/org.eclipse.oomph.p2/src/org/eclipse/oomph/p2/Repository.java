@@ -44,6 +44,7 @@ public interface Repository extends ModelElement
    * @see org.eclipse.oomph.p2.P2Package#getRepository_URL()
    * @model required="true"
    *        extendedMetaData="kind='attribute' name='url'"
+   *        annotation="http://www.eclipse.org/oomph/setup/Redirect"
    * @generated
    */
   String getURL();

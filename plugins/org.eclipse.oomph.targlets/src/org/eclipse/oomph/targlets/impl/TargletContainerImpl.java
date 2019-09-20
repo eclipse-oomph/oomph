@@ -239,7 +239,7 @@ public class TargletContainerImpl extends ModelElementImpl implements TargletCon
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (iD: ");
     result.append(iD);
     result.append(')');

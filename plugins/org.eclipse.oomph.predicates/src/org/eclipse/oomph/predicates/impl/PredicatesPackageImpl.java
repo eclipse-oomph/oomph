@@ -193,8 +193,10 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
     }
 
     // Obtain or create and register package
-    PredicatesPackageImpl thePredicatesPackage = (PredicatesPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof PredicatesPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new PredicatesPackageImpl());
+    Object registeredPredicatesPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    PredicatesPackageImpl thePredicatesPackage = registeredPredicatesPackage instanceof PredicatesPackageImpl
+        ? (PredicatesPackageImpl)registeredPredicatesPackage
+        : new PredicatesPackageImpl();
 
     isInited = true;
 

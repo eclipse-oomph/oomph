@@ -487,6 +487,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("null")
   @Override
   public boolean eIsSet(int featureID)
   {
@@ -523,7 +524,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (scheme: ");
     result.append(scheme);
     result.append(", platform: ");

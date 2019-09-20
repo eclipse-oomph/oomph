@@ -177,6 +177,7 @@ public class TargletActionBarContributor extends EditingDomainActionBarContribut
   @Override
   public void contributeToToolBar(IToolBarManager toolBarManager)
   {
+    super.contributeToToolBar(toolBarManager);
     toolBarManager.add(new Separator("targlet-settings"));
     toolBarManager.add(new Separator("targlet-additions"));
   }

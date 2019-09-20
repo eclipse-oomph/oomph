@@ -74,6 +74,7 @@ public interface TargletTask extends SetupTask
    * @return the value of the '<em>Targlet UR Is</em>' attribute list.
    * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask_TargletURIs()
    * @model extendedMetaData="name='targletURI'"
+   *        annotation="http://www.eclipse.org/oomph/setup/Redirect"
    * @generated
    */
   EList<String> getTargletURIs();

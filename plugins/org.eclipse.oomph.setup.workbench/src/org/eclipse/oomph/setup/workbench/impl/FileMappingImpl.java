@@ -295,7 +295,7 @@ public class FileMappingImpl extends ModelElementImpl implements FileMapping
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (filePattern: ");
     result.append(filePattern);
     result.append(", defaultEditorID: ");

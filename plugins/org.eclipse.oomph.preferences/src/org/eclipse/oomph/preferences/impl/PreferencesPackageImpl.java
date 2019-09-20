@@ -124,8 +124,10 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
     }
 
     // Obtain or create and register package
-    PreferencesPackageImpl thePreferencesPackage = (PreferencesPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof PreferencesPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new PreferencesPackageImpl());
+    Object registeredPreferencesPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    PreferencesPackageImpl thePreferencesPackage = registeredPreferencesPackage instanceof PreferencesPackageImpl
+        ? (PreferencesPackageImpl)registeredPreferencesPackage
+        : new PreferencesPackageImpl();
 
     isInited = true;
 

@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.pde.impl;
 
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.pde.APIBaselineFromTargetTask;
 import org.eclipse.oomph.setup.pde.APIBaselineTask;
@@ -106,12 +107,13 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
     }
 
     // Obtain or create and register package
-    PDEPackageImpl thePDEPackage = (PDEPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof PDEPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI)
-        : new PDEPackageImpl());
+    Object registeredPDEPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    PDEPackageImpl thePDEPackage = registeredPDEPackage instanceof PDEPackageImpl ? (PDEPackageImpl)registeredPDEPackage : new PDEPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
     SetupPackage.eINSTANCE.eClass();
 
     // Create package meta-data objects

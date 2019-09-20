@@ -711,6 +711,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("null")
   @Override
   public boolean eIsSet(int featureID)
   {
@@ -755,7 +756,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (targletURIs: ");
     result.append(targletURIs);
     result.append(", operatingSystem: ");

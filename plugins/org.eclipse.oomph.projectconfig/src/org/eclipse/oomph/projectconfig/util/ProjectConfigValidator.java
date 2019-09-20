@@ -520,8 +520,8 @@ public class ProjectConfigValidator extends EObjectValidator
             data.add(1, project);
             data.addAll(2, preferencesProfiles);
 
-            diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE,
-                0, "_UI_NonUniquePropertyApplication_diagnostic", new Object[] { getObjectLabel(property, context),
+            diagnostics.add(createDiagnostic(
+                Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_NonUniquePropertyApplication_diagnostic", new Object[] { getObjectLabel(property, context),
                     getObjectLabel(preferencesProfiles, context), getObjectLabel(project, context), getObjectLabel(otherProperties, context) },
                 data.toArray(), context));
           }

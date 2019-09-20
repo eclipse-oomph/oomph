@@ -42,6 +42,7 @@ public interface ProjectSetImportTask extends SetupTask
    * @see #setURL(String)
    * @see org.eclipse.oomph.setup.projectset.ProjectSetPackage#getProjectSetImportTask_URL()
    * @model required="true"
+   *        annotation="http://www.eclipse.org/oomph/setup/Redirect"
    * @generated
    */
   String getURL();

@@ -151,12 +151,14 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     }
 
     // Obtain or create and register package
-    ResourcesPackageImpl theResourcesPackage = (ResourcesPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ResourcesPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ResourcesPackageImpl());
+    Object registeredResourcesPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    ResourcesPackageImpl theResourcesPackage = registeredResourcesPackage instanceof ResourcesPackageImpl ? (ResourcesPackageImpl)registeredResourcesPackage
+        : new ResourcesPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
     PredicatesPackage.eINSTANCE.eClass();
 
     // Create package meta-data objects

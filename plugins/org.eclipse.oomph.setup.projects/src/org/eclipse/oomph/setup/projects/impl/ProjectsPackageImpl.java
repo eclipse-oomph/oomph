@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.projects.impl;
 
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.predicates.PredicatesPackage;
 import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.setup.SetupPackage;
@@ -101,12 +102,15 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     }
 
     // Obtain or create and register package
-    ProjectsPackageImpl theProjectsPackage = (ProjectsPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ProjectsPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ProjectsPackageImpl());
+    Object registeredProjectsPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    ProjectsPackageImpl theProjectsPackage = registeredProjectsPackage instanceof ProjectsPackageImpl ? (ProjectsPackageImpl)registeredProjectsPackage
+        : new ProjectsPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
+    PredicatesPackage.eINSTANCE.eClass();
     ResourcesPackage.eINSTANCE.eClass();
     SetupPackage.eINSTANCE.eClass();
 

@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.projectset.impl;
 
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.projectset.ProjectSetFactory;
 import org.eclipse.oomph.setup.projectset.ProjectSetImportTask;
@@ -82,12 +83,15 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
     }
 
     // Obtain or create and register package
-    ProjectSetPackageImpl theProjectSetPackage = (ProjectSetPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ProjectSetPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ProjectSetPackageImpl());
+    Object registeredProjectSetPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    ProjectSetPackageImpl theProjectSetPackage = registeredProjectSetPackage instanceof ProjectSetPackageImpl
+        ? (ProjectSetPackageImpl)registeredProjectSetPackage
+        : new ProjectSetPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
     SetupPackage.eINSTANCE.eClass();
 
     // Create package meta-data objects

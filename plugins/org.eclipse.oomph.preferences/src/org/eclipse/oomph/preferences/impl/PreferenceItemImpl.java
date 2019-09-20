@@ -250,6 +250,7 @@ public abstract class PreferenceItemImpl extends ModelElementImpl implements Pre
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("null")
   @Override
   public boolean eIsSet(int featureID)
   {
@@ -300,7 +301,7 @@ public abstract class PreferenceItemImpl extends ModelElementImpl implements Pre
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(')');

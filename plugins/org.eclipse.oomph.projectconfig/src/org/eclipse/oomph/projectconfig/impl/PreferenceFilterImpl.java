@@ -521,7 +521,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (inclusions: ");
     result.append(inclusions);
     result.append(", exclusions: ");

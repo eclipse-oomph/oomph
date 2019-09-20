@@ -522,6 +522,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("null")
   @Override
   public boolean eIsSet(int featureID)
   {

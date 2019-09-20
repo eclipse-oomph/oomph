@@ -199,7 +199,7 @@ public class NamePredicateImpl extends PredicateImpl implements NamePredicate
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (pattern: ");
     result.append(pattern);
     result.append(')');

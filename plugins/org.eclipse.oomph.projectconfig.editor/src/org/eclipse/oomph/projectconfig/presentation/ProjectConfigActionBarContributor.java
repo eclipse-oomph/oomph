@@ -326,6 +326,7 @@ public class ProjectConfigActionBarContributor extends EditingDomainActionBarCon
   @Override
   public void contributeToToolBar(IToolBarManager toolBarManager)
   {
+    super.contributeToToolBar(toolBarManager);
     toolBarManager.add(new Separator("projectconfig-settings"));
     toolBarManager.add(new Separator("projectconfig-additions"));
   }

@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.p2.impl;
 
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.p2.P2Package;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.p2.P2Task;
@@ -84,12 +85,14 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
     }
 
     // Obtain or create and register package
-    SetupP2PackageImpl theSetupP2Package = (SetupP2PackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof SetupP2PackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new SetupP2PackageImpl());
+    Object registeredSetupP2Package = EPackage.Registry.INSTANCE.get(eNS_URI);
+    SetupP2PackageImpl theSetupP2Package = registeredSetupP2Package instanceof SetupP2PackageImpl ? (SetupP2PackageImpl)registeredSetupP2Package
+        : new SetupP2PackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
     P2Package.eINSTANCE.eClass();
     SetupPackage.eINSTANCE.eClass();
 

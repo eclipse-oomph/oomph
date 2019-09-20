@@ -262,6 +262,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("null")
   @Override
   public boolean eIsSet(int featureID)
   {
@@ -290,7 +291,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (wS: ");
     result.append(wS);
     result.append(", oS: ");

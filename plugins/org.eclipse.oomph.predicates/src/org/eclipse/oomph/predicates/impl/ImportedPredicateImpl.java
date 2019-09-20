@@ -185,7 +185,7 @@ public class ImportedPredicateImpl extends PredicateImpl implements ImportedPred
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (accessible: ");
     result.append(accessible);
     result.append(')');

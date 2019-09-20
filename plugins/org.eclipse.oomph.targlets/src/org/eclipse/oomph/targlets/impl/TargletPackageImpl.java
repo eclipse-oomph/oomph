@@ -226,13 +226,16 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     }
 
     // Obtain or create and register package
-    TargletPackageImpl theTargletPackage = (TargletPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof TargletPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new TargletPackageImpl());
+    Object registeredTargletPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    TargletPackageImpl theTargletPackage = registeredTargletPackage instanceof TargletPackageImpl ? (TargletPackageImpl)registeredTargletPackage
+        : new TargletPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
     P2Package.eINSTANCE.eClass();
+    PredicatesPackage.eINSTANCE.eClass();
     ResourcesPackage.eINSTANCE.eClass();
 
     // Create package meta-data objects

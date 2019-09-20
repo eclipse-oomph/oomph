@@ -69,6 +69,7 @@ public interface PathVariableTask extends SetupTask
    * @see #setURI(String)
    * @see org.eclipse.oomph.setup.projects.ProjectsPackage#getPathVariableTask_URI()
    * @model extendedMetaData="kind='attribute' name='uri'"
+   *        annotation="http://www.eclipse.org/oomph/setup/Redirect"
    * @generated
    */
   String getURI();

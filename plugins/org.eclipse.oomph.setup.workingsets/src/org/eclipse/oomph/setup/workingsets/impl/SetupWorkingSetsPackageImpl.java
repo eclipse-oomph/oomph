@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.workingsets.impl;
 
+import org.eclipse.oomph.base.BasePackage;
+import org.eclipse.oomph.predicates.PredicatesPackage;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.workingsets.SetupWorkingSetsFactory;
 import org.eclipse.oomph.setup.workingsets.SetupWorkingSetsPackage;
@@ -84,12 +86,16 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
     }
 
     // Obtain or create and register package
-    SetupWorkingSetsPackageImpl theSetupWorkingSetsPackage = (SetupWorkingSetsPackageImpl)(EPackage.Registry.INSTANCE
-        .get(eNS_URI) instanceof SetupWorkingSetsPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new SetupWorkingSetsPackageImpl());
+    Object registeredSetupWorkingSetsPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    SetupWorkingSetsPackageImpl theSetupWorkingSetsPackage = registeredSetupWorkingSetsPackage instanceof SetupWorkingSetsPackageImpl
+        ? (SetupWorkingSetsPackageImpl)registeredSetupWorkingSetsPackage
+        : new SetupWorkingSetsPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
+    PredicatesPackage.eINSTANCE.eClass();
     SetupPackage.eINSTANCE.eClass();
     WorkingSetsPackage.eINSTANCE.eClass();
 

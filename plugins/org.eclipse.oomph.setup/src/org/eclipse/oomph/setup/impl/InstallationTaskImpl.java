@@ -220,6 +220,7 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("null")
   @Override
   public boolean eIsSet(int featureID)
   {

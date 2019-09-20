@@ -154,6 +154,7 @@ public class KeyBindingContextImpl extends ModelElementImpl implements KeyBindin
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("null")
   @Override
   public boolean eIsSet(int featureID)
   {
@@ -178,7 +179,7 @@ public class KeyBindingContextImpl extends ModelElementImpl implements KeyBindin
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (iD: ");
     result.append(iD);
     result.append(')');

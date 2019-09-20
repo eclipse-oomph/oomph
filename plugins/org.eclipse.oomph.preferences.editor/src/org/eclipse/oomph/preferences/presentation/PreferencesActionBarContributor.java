@@ -186,6 +186,7 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
    */
   public void contributeToToolBarGen(IToolBarManager toolBarManager)
   {
+    super.contributeToToolBar(toolBarManager);
     toolBarManager.add(new Separator("preferences-settings"));
     toolBarManager.add(new Separator("preferences-additions"));
   }

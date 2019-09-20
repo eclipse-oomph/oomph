@@ -326,7 +326,7 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (includeSourceBundles: ");
     result.append(includeSourceBundles);
     result.append(')');

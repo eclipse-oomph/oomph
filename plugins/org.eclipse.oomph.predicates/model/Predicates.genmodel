@@ -56,5 +56,8 @@
       <genFeatures createChild="false" propertyDescription="A regular expression used to match the contents of at least one of files filtered by the file pattern"
           ecoreFeature="ecore:EAttribute Predicates.ecore#//FilePredicate/contentPattern"/>
     </genClasses>
+    <genClasses ecoreClass="Predicates.ecore#//ImportedPredicate">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Predicates.ecore#//ImportedPredicate/accessible"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

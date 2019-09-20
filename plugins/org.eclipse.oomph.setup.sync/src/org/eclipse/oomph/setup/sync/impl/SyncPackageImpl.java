@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.sync.impl;
 
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.sync.RemoteData;
 import org.eclipse.oomph.setup.sync.SyncAction;
@@ -133,12 +134,13 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
     }
 
     // Obtain or create and register package
-    SyncPackageImpl theSyncPackage = (SyncPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof SyncPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new SyncPackageImpl());
+    Object registeredSyncPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    SyncPackageImpl theSyncPackage = registeredSyncPackage instanceof SyncPackageImpl ? (SyncPackageImpl)registeredSyncPackage : new SyncPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
     SetupPackage.eINSTANCE.eClass();
 
     // Create package meta-data objects

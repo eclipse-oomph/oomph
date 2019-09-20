@@ -182,6 +182,7 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("null")
   @Override
   public boolean eIsSet(int featureID)
   {
@@ -206,7 +207,7 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (targetName: ");
     result.append(targetName);
     result.append(')');

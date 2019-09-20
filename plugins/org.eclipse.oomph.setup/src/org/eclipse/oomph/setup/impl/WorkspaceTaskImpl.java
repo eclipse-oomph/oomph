@@ -156,6 +156,7 @@ public class WorkspaceTaskImpl extends SetupTaskImpl implements WorkspaceTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("null")
   @Override
   public boolean eIsSet(int featureID)
   {

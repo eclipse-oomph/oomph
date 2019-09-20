@@ -159,8 +159,8 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
     }
 
     // Obtain or create and register package
-    P2PackageImpl theP2Package = (P2PackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof P2PackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI)
-        : new P2PackageImpl());
+    Object registeredP2Package = EPackage.Registry.INSTANCE.get(eNS_URI);
+    P2PackageImpl theP2Package = registeredP2Package instanceof P2PackageImpl ? (P2PackageImpl)registeredP2Package : new P2PackageImpl();
 
     isInited = true;
 

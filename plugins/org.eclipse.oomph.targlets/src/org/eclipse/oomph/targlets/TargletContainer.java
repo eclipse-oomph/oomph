@@ -46,6 +46,7 @@ public interface TargletContainer extends ModelElement
    * @see org.eclipse.oomph.targlets.TargletPackage#getTargletContainer_ID()
    * @model id="true"
    *        extendedMetaData="kind='attribute' name='id'"
+   *        annotation="http://www.eclipse.org/oomph/setup/NoExpand"
    * @generated
    */
   String getID();

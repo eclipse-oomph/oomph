@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.launching.impl;
 
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.launching.LaunchTask;
 import org.eclipse.oomph.setup.launching.LaunchingFactory;
@@ -82,12 +83,14 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
     }
 
     // Obtain or create and register package
-    LaunchingPackageImpl theLaunchingPackage = (LaunchingPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof LaunchingPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new LaunchingPackageImpl());
+    Object registeredLaunchingPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    LaunchingPackageImpl theLaunchingPackage = registeredLaunchingPackage instanceof LaunchingPackageImpl ? (LaunchingPackageImpl)registeredLaunchingPackage
+        : new LaunchingPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
     SetupPackage.eINSTANCE.eClass();
 
     // Create package meta-data objects

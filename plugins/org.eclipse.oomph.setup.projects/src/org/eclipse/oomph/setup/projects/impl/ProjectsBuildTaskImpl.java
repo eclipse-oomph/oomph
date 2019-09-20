@@ -429,7 +429,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
       return super.toString();
     }
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (onlyNewProjects: ");
     result.append(onlyNewProjects);
     result.append(", refresh: ");

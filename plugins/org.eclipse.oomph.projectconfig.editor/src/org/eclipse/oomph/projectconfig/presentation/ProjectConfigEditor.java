@@ -112,6 +112,7 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
@@ -358,6 +359,8 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
    */
   protected EContentAdapter problemIndicationAdapter = new EContentAdapter()
   {
+    protected boolean dispatching;
+
     @Override
     public void notifyChanged(Notification notification)
     {
@@ -379,17 +382,7 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
             {
               resourceToDiagnosticMap.remove(resource);
             }
-
-            if (updateProblemIndication)
-            {
-              getSite().getShell().getDisplay().asyncExec(new Runnable()
-              {
-                public void run()
-                {
-                  updateProblemIndication();
-                }
-              });
-            }
+            dispatchUpdateProblemIndication();
             break;
           }
         }
@@ -397,6 +390,22 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
       else
       {
         super.notifyChanged(notification);
+      }
+    }
+
+    protected void dispatchUpdateProblemIndication()
+    {
+      if (updateProblemIndication && !dispatching)
+      {
+        dispatching = true;
+        getSite().getShell().getDisplay().asyncExec(new Runnable()
+        {
+          public void run()
+          {
+            dispatching = false;
+            updateProblemIndication();
+          }
+        });
       }
     }
 
@@ -411,16 +420,7 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
     {
       basicUnsetTarget(target);
       resourceToDiagnosticMap.remove(target);
-      if (updateProblemIndication)
-      {
-        getSite().getShell().getDisplay().asyncExec(new Runnable()
-        {
-          public void run()
-          {
-            updateProblemIndication();
-          }
-        });
-      }
+      dispatchUpdateProblemIndication();
     }
   };
 
@@ -1366,6 +1366,7 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
       selectionViewer = new TreeViewer(tree);
       setCurrentViewer(selectionViewer);
 
+      selectionViewer.setUseHashlookup(true);
       selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
       selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(adapterFactory),
           new DiagnosticDecorator(editingDomain, selectionViewer, ProjectConfigEditorPlugin.getPlugin().getDialogSettings())));
@@ -1383,7 +1384,10 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
       {
         public void run()
         {
-          setActivePage(0);
+          if (!getContainer().isDisposed())
+          {
+            setActivePage(0);
+          }
         }
       });
     }
@@ -1430,9 +1434,9 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
       setPageText(0, "");
       if (getContainer() instanceof CTabFolder)
       {
-        ((CTabFolder)getContainer()).setTabHeight(1);
         Point point = getContainer().getSize();
-        getContainer().setSize(point.x, point.y + 6);
+        Rectangle clientArea = getContainer().getClientArea();
+        getContainer().setSize(point.x, 2 * point.y - clientArea.height - clientArea.y);
       }
     }
   }
@@ -1451,9 +1455,9 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
       setPageText(0, getString("_UI_SelectionPage_label"));
       if (getContainer() instanceof CTabFolder)
       {
-        ((CTabFolder)getContainer()).setTabHeight(SWT.DEFAULT);
         Point point = getContainer().getSize();
-        getContainer().setSize(point.x, point.y - 6);
+        Rectangle clientArea = getContainer().getClientArea();
+        getContainer().setSize(point.x, clientArea.height + clientArea.y);
       }
     }
   }
@@ -1483,19 +1487,19 @@ public class ProjectConfigEditor extends MultiPageEditorPart implements IEditing
    */
   @SuppressWarnings("all")
   @Override
-  public Object getAdapter(Class key)
+  public <T> T getAdapter(Class<T> key)
   {
     if (key.equals(IContentOutlinePage.class))
     {
-      return showOutlineView() ? getContentOutlinePage() : null;
+      return showOutlineView() ? key.cast(getContentOutlinePage()) : null;
     }
     else if (key.equals(IPropertySheetPage.class))
     {
-      return getPropertySheetPage();
+      return key.cast(getPropertySheetPage());
     }
     else if (key.equals(IGotoMarker.class))
     {
-      return this;
+      return key.cast(this);
     }
     else
     {

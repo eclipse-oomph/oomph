@@ -97,6 +97,8 @@ public interface APIBaselineTask extends AbstractAPIBaselineTask
    * @see #setRemoteURI(String)
    * @see org.eclipse.oomph.setup.pde.PDEPackage#getAPIBaselineTask_RemoteURI()
    * @model required="true"
+   *        annotation="http://www.eclipse.org/oomph/setup/RemoteResource"
+   *        annotation="http://www.eclipse.org/oomph/setup/Redirect"
    * @generated
    */
   String getRemoteURI();

@@ -24,7 +24,8 @@
       <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncActionType/None"/>
       <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncActionType/SetLocal"/>
       <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncActionType/SetRemote"/>
-      <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncActionType/Remove"/>
+      <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncActionType/RemoveLocal"/>
+      <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncActionType/RemoveRemote"/>
       <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncActionType/Conflict"/>
       <genEnumLiterals ecoreEnumLiteral="SetupSync.ecore#//SyncActionType/Exclude"/>
     </genEnums>
@@ -42,6 +43,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//SyncDelta/type"/>
     </genClasses>
     <genClasses ecoreClass="SetupSync.ecore#//SyncAction">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//SyncAction/iD"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference SetupSync.ecore#//SyncAction/localDelta"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference SetupSync.ecore#//SyncAction/remoteDelta"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupSync.ecore#//SyncAction/computedType"/>

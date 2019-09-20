@@ -124,12 +124,14 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
     }
 
     // Obtain or create and register package
-    WorkbenchPackageImpl theWorkbenchPackage = (WorkbenchPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof WorkbenchPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new WorkbenchPackageImpl());
+    Object registeredWorkbenchPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    WorkbenchPackageImpl theWorkbenchPackage = registeredWorkbenchPackage instanceof WorkbenchPackageImpl ? (WorkbenchPackageImpl)registeredWorkbenchPackage
+        : new WorkbenchPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
     SetupPackage.eINSTANCE.eClass();
 
     // Create package meta-data objects

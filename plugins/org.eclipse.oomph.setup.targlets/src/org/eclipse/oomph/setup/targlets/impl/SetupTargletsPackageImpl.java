@@ -10,7 +10,10 @@
  */
 package org.eclipse.oomph.setup.targlets.impl;
 
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.p2.P2Package;
+import org.eclipse.oomph.predicates.PredicatesPackage;
+import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.targlets.ImplicitDependency;
 import org.eclipse.oomph.setup.targlets.SetupTargletsFactory;
@@ -93,12 +96,18 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
     }
 
     // Obtain or create and register package
-    SetupTargletsPackageImpl theSetupTargletsPackage = (SetupTargletsPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof SetupTargletsPackageImpl
-        ? EPackage.Registry.INSTANCE.get(eNS_URI) : new SetupTargletsPackageImpl());
+    Object registeredSetupTargletsPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    SetupTargletsPackageImpl theSetupTargletsPackage = registeredSetupTargletsPackage instanceof SetupTargletsPackageImpl
+        ? (SetupTargletsPackageImpl)registeredSetupTargletsPackage
+        : new SetupTargletsPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
+    BasePackage.eINSTANCE.eClass();
+    P2Package.eINSTANCE.eClass();
+    PredicatesPackage.eINSTANCE.eClass();
+    ResourcesPackage.eINSTANCE.eClass();
     SetupPackage.eINSTANCE.eClass();
     TargletPackage.eINSTANCE.eClass();
 
