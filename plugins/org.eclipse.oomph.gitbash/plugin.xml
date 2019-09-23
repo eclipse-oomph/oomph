@@ -51,6 +51,16 @@
                style="push"
                tooltip="Update copyrights with years from git log"/>
          <action
+               class="org.eclipse.oomph.gitbash.repository.FixCRLFAction"
+               enablesFor="1"
+               icon="icons/fix_crlf.gif"
+               id="org.eclipse.oomph.gitbash.FixCRLFAction"
+               label="Fix CRLF"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="Create LF-based copy of the repository and fix all CRLFs"/>
+         <action
                class="org.eclipse.oomph.gitbash.repository.GitCleanAction"
                enablesFor="1"
                icon="icons/gitbash.gif"
