@@ -111,6 +111,7 @@ public class FixCRLFAction extends AbstractAction<Repository>
         log("Configuring AutoCRL to false " + targetDirectory);
         StoredConfig config = targetRepository.getConfig();
         config.setEnum(ConfigConstants.CONFIG_CORE_SECTION, null, ConfigConstants.CONFIG_KEY_AUTOCRLF, AutoCRLF.FALSE);
+        config.save();
 
         log("Resetting to create the working tree " + targetDirectory);
         ResetCommand resetCommand = new ResetCommand(targetRepository);
