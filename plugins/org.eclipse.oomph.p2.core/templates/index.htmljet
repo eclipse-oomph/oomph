@@ -487,10 +487,17 @@ span:target {
           </p>
           <br/>
 <%}%>
-          <img style="float:right" src="<%=reporter.getReportBrandingImage()%>" alt=""/>
+          <a style="float:right; font-size: 200%;" href="<%=reporter.getHelpLink()%>" target="oomph_wiki"/>
+            <img src="<%=reporter.getReportBrandingImage()%>" alt=""/><img style="margin-top: -2ex;" class="fit-image" src="<%=reporter.getHelpImage()%>" alt=""/>
+          </a>
 <%-[Index]-%>
 <%if (indexReport != null) {%>
-           <p>This is a generated report folder index.</p>
+           <p>
+             This is a generated
+             <a href="https://wiki.eclipse.org/Oomph_Repository_Analyzer#Description" target="oomph_wiki">
+               <img class="fit-image" src="<%=reporter.getHelpImage()%>"/>
+               <%=reporter.getHelpText()%></a> report.
+           </p>
            <p>This report is produced by <a href="<%=reporter.getReportSource()%>" target="report_source"><%=reporter.getReportSource()%></a>.</p>
   <%Map<String, String> allReports = indexReport.getAllReports();
     if (allReports != null && !allReports.isEmpty()) {%>
@@ -503,7 +510,13 @@ span:target {
   <%}%>
 <%} else if (iuReport != null) {%>
 <%-[IU]-%>
-           <p>This report is produced by <a href="<%=reporter.getReportSource()%>" target="report_source"><%=reporter.getReportSource()%></a>.</p>
+           <p>
+             This
+             <a href="<%=reporter.getHelpLink()%>" target="oomph_wiki">
+               <img class="fit-image" src="<%=reporter.getHelpImage()%>"/>
+               <%=reporter.getHelpText()%></a>
+             report is produced by <a href="<%=report.getReportSource()%>" target="report_source"><%=report.getReportSource()%></a>.
+           </p>
   <%String provider = iuReport.getProvider();
     if (provider != null) {%>
            <h3 style="font-weight: bold;">Provider</h3>
@@ -586,14 +599,17 @@ span:target {
   <%}%>
            </div>
 <%} else {%>
-  <%if (report.isRoot()) {%>
-           <p>This is the generated report index.</p>
-  <%}%>
-           <p>This report is produced by <a href="<%=report.getReportSource()%>" target="report_source"><%=report.getReportSource()%></a>.</p>
+           <p>
+             This
+             <a href="<%=report.getHelpLink()%>" target="oomph_wiki">
+               <img class="fit-image" src="<%=reporter.getHelpImage()%>"/>
+               <%=report.getHelpText()%></a>
+             report is produced by <a href="<%=report.getReportSource()%>" target="report_source"><%=report.getReportSource()%></a>.
+           </p>
   <%List<Report> children = report.getChildren();
     if (!children.isEmpty()) {%>
            <p>
-    <%if (!report.isRoot()) {%>
+      <%if (!report.isRoot()) {%>
              This is a composite update site.
     <%}%>
              In addition to this composite report, reports are also generated for each of the composed children listed in the navigation bar to the left.

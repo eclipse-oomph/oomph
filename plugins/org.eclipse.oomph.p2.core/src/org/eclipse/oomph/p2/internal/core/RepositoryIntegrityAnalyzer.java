@@ -1823,6 +1823,23 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           return RepositoryIntegrityAnalyzer.this.getErrorImage(outputLocation);
         }
 
+        public String getHelpLink()
+        {
+          return isAggrconRepository(metadataRepository) ? "https://wiki.eclipse.org/Oomph_Repository_Analyzer#Simultaneous_Release"
+              : "https://wiki.eclipse.org/Oomph_Repository_Analyzer#Update_Site_Pages";
+        }
+
+        public String getHelpImage()
+        {
+          return getImage(URI.createURI("https://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/bundles/org.eclipse.jface/icons/full/help@2x.png"),
+              outputLocation);
+        }
+
+        public String getHelpText()
+        {
+          return isAggrconRepository(metadataRepository) ? "filtered aggrcon index" : "update site index";
+        }
+
         @Override
         public Report getParent()
         {
@@ -2328,6 +2345,21 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 return "../" + getReport().getReportBrandingImage();
               }
 
+              public String getHelpLink()
+              {
+                return "https://wiki.eclipse.org/Oomph_Repository_Analyzer#Installable_Unit_Pages";
+              }
+
+              public String getHelpImage()
+              {
+                return "../" + getReport().getHelpImage();
+              }
+
+              public String getHelpText()
+              {
+                return "installable unit index";
+              }
+
               public String getReportSource()
               {
                 return getReport().getReportSource();
@@ -2671,7 +2703,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
   private String getImage(URI imageURI, File cache)
   {
     String result = images.get(imageURI);
-    if (result == null)
+    if (result == null || !new File(cache, result).isFile())
     {
       String key = null;
       OutputStream imageOut = null;
@@ -2774,7 +2806,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                     IStatus status = artifactRepository.getRawArtifact(artifactDescriptor, out, new NullProgressMonitor());
                     if (!status.isOK())
                     {
-                      throw new IOException("Failed to download: " + downloadLocation);
+                      throw new IOException("Failed to download: '" + downloadLocation + "' because " + status.getMessage());
                     }
 
                     IOUtil.closeSilent(out);
@@ -2829,7 +2861,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                       IStatus status = artifactRepository.getArtifact(artifactDescriptor, out, new NullProgressMonitor());
                       if (!status.isOK())
                       {
-                        throw new IOException("Failed to download: " + processedDownloadLocation);
+                        throw new IOException("Failed to download: '" + processedDownloadLocation + "' because " + status.getMessage());
                       }
 
                       IOUtil.closeSilent(out);
@@ -3189,6 +3221,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     String getTitle(boolean narrow);
 
     String getReportBrandingImage();
+
+    String getHelpLink();
+
+    String getHelpImage();
+
+    String getHelpText();
 
     String getReportSource();
 
@@ -3752,6 +3790,23 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       this.reportLocations = reportLocations;
       this.allReports = allReports;
       this.reportsWithErrors = reportsWithErrors;
+    }
+
+    public String getHelpLink()
+    {
+      return parent == null && aggregator ? "https://wiki.eclipse.org/Oomph_Repository_Analyzer#Simultaneous_Release"
+          : "https://wiki.eclipse.org/Oomph_Repository_Analyzer#Description";
+    }
+
+    public String getHelpImage()
+    {
+      return getImage(URI.createURI("https://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/bundles/org.eclipse.jface/icons/full/help@2x.png"),
+          folder);
+    }
+
+    public String getHelpText()
+    {
+      return parent == null && aggregator ? "simrel aggregator" : "folder index";
     }
 
     public String getNow()
