@@ -119,11 +119,7 @@ public class SearchField extends Composite
       {
         if (e.keyCode == SWT.ESC)
         {
-          if (!"".equals(filterControl.getText()))
-          {
-            filterControl.setText("");
-            e.doit = false;
-          }
+          cancelPressed(e);
         }
       }
     });
@@ -135,8 +131,7 @@ public class SearchField extends Composite
       {
         if (e.keyCode == SWT.CR || e.keyCode == SWT.ARROW_DOWN)
         {
-          finishFilter();
-          e.doit = false;
+          finishPressed(e);
         }
       }
     });
@@ -175,9 +170,24 @@ public class SearchField extends Composite
     return getFilterControl().setFocus();
   }
 
+  protected void cancelPressed(TraverseEvent e)
+  {
+    Text filterControl = filteredTree.getFilterControl();
+    if (!"".equals(filterControl.getText()))
+    {
+      filterControl.setText("");
+      e.doit = false;
+    }
+  }
+
+  protected void finishPressed(KeyEvent e)
+  {
+    finishFilter();
+    e.doit = false;
+  }
+
   /**
    * Subclasses may override.
-   * @param e
    */
   protected void finishFilter()
   {

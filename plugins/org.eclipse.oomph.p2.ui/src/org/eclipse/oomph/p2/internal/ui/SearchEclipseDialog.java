@@ -180,6 +180,8 @@ public abstract class SearchEclipseDialog extends OomphDialog
 
   protected abstract void selectionChanged(IWorkbenchPart part, ISelection selection);
 
+  protected abstract Image getShellImage();
+
   @Override
   protected String getImagePath()
   {
@@ -213,7 +215,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
   @Override
   protected void createUI(Composite composite)
   {
-    getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("tool16/search_repository.png"));
+    getShell().setImage(getShellImage());
 
     SashForm sashForm = new SashForm(composite, SWT.SMOOTH | SWT.VERTICAL);
     sashForm.setLayout(new GridLayout());
@@ -1417,6 +1419,12 @@ public abstract class SearchEclipseDialog extends OomphDialog
     }
 
     @Override
+    protected Image getShellImage()
+    {
+      return P2UIPlugin.INSTANCE.getSWTImage("tool16/search_repository.png");
+    }
+
+    @Override
     protected String getShellText()
     {
       return TITLE;
@@ -1642,6 +1650,12 @@ public abstract class SearchEclipseDialog extends OomphDialog
       }
 
       setSelectedRequirement(requirement);
+    }
+
+    @Override
+    protected Image getShellImage()
+    {
+      return P2UIPlugin.INSTANCE.getSWTImage("tool16/search_requirement.png");
     }
 
     @Override

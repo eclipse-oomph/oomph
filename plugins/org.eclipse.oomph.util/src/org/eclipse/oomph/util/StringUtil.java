@@ -15,6 +15,8 @@ import org.eclipse.emf.common.util.URI;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Various static helper methods for dealing with strings.
@@ -28,6 +30,8 @@ public final class StringUtil
   public static final String NL = PropertiesUtil.getProperty("line.separator"); //$NON-NLS-1$
 
   public static String HORIZONTAL_ELLIPSIS = "\u2026";
+
+  private static final Pattern WILDCARD_FILTER_PATTERN = Pattern.compile("(\\\\.|[*?])");
 
   private StringUtil()
   {
@@ -627,5 +631,55 @@ public final class StringUtil
     }
 
     return str.substring(0, end);
+  }
+
+  public static Pattern globPattern(String filter)
+  {
+    StringBuffer pattern = new StringBuffer("(\\Q");
+    Matcher matcher = WILDCARD_FILTER_PATTERN.matcher(filter);
+    while (matcher.find())
+    {
+      String separator = matcher.group(1);
+      if (separator.length() == 2)
+      {
+        matcher.appendReplacement(pattern, "");
+        if ("\\E".equals(separator))
+        {
+          pattern.append("\\E\\\\E\\Q");
+        }
+        else if ("\\\\".equals(separator))
+        {
+          pattern.append("\\E\\\\\\Q");
+        }
+        else
+        {
+          pattern.append(separator.charAt(1));
+        }
+      }
+      else
+      {
+        char separatorChar = separator.charAt(0);
+        String tail;
+        switch (separatorChar)
+        {
+          case '*':
+            tail = ".*?";
+            break;
+          case '?':
+            tail = ".";
+            break;
+          default:
+            throw new IllegalStateException("Pattern " + WILDCARD_FILTER_PATTERN + " should match a single character");
+        }
+  
+        matcher.appendReplacement(pattern, "\\\\E)");
+        pattern.append(tail).append("(\\Q");
+      }
+    }
+  
+    matcher.appendTail(pattern);
+    pattern.append("\\E)");
+  
+    return Pattern.compile(pattern.toString(), Pattern.CASE_INSENSITIVE);
   }
 }

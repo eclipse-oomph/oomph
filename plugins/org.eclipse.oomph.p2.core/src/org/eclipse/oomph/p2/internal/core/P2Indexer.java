@@ -835,6 +835,18 @@ public final class P2Indexer implements IApplication
             {
               childURI = childURI.resolve(uri.hasTrailingPathSeparator() ? uri : uri.appendSegment(""));
             }
+            else
+            {
+              if ("download.eclipse.org".equals(childURI.authority()) && "https".equals(childURI.scheme()))
+              {
+                childURI = URI.createURI("http://download.eclipse.org/").appendSegments(childURI.segments());
+              }
+
+              if (!childURI.hasTrailingPathSeparator())
+              {
+                childURI = childURI.appendSegment("");
+              }
+            }
 
             Repository childRepository = indexer.repositories.get(childURI);
             if (childRepository != null)

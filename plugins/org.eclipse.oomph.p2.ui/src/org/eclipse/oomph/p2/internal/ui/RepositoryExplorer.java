@@ -25,6 +25,7 @@ import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.RepositoryProvider;
 import org.eclipse.oomph.p2.impl.RequirementImpl;
+import org.eclipse.oomph.p2.internal.core.P2Index;
 import org.eclipse.oomph.p2.internal.ui.RepositoryManager.RepositoryManagerListener;
 import org.eclipse.oomph.p2.provider.P2ItemProviderAdapterFactory;
 import org.eclipse.oomph.p2.provider.RepositoryListItemProvider;
@@ -190,8 +191,6 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private static final IDialogSettings SETTINGS = P2UIPlugin.INSTANCE.getDialogSettings(RepositoryExplorer.class.getSimpleName());
 
-  private static final Pattern WILDCARD_FILTER_PATTERN = Pattern.compile("(\\\\.|[*?])");
-
   static final int DND_OPERATIONS = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
 
   static final List<? extends OomphTransferDelegate> DND_DELEGATES = Collections.singletonList(new OomphTransferDelegate.TextTransferDelegate());
@@ -237,6 +236,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   private final VersionProvider versionProvider = new VersionProvider();
 
   private final CollapseAllAction collapseAllAction = new CollapseAllAction();
+
+  private final FindRepositoriesAction findRepositoriesAction = new FindRepositoriesAction();
 
   private final SearchRepositoriesAction searchRepositoriesAction = new SearchRepositoriesAction();
 
@@ -308,6 +309,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     searchRepositoriesAction.update();
     searchRequirementsAction.update();
+    findRepositoriesAction.update();
   }
 
   @Override
@@ -421,53 +423,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     }
     else
     {
-      StringBuffer pattern = new StringBuffer("(\\Q");
-      Matcher matcher = WILDCARD_FILTER_PATTERN.matcher(filter);
-      while (matcher.find())
-      {
-        String separator = matcher.group(1);
-        if (separator.length() == 2)
-        {
-          matcher.appendReplacement(pattern, "");
-          if ("\\E".equals(separator))
-          {
-            pattern.append("\\E\\\\E\\Q");
-          }
-          else if ("\\\\".equals(separator))
-          {
-            pattern.append("\\E\\\\\\Q");
-          }
-          else
-          {
-            pattern.append(separator.charAt(1));
-          }
-        }
-        else
-        {
-          char separatorChar = separator.charAt(0);
-          String tail;
-          switch (separatorChar)
-          {
-            case '*':
-              tail = ".*?";
-              break;
-            case '?':
-              tail = ".";
-              break;
-            default:
-              throw new IllegalStateException("Pattern " + WILDCARD_FILTER_PATTERN + " should match a single character");
-          }
-
-          matcher.appendReplacement(pattern, "\\\\E)");
-          pattern.append(tail).append("(\\Q");
-        }
-      }
-
-      matcher.appendTail(pattern);
-      pattern.append("\\E)");
-
       this.filter = filter;
-      filterPattern = Pattern.compile(pattern.toString(), Pattern.CASE_INSENSITIVE);
+      filterPattern = StringUtil.globPattern(filter);
     }
 
     analyzeJob.reschedule();
@@ -790,7 +747,6 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     };
 
     searchField.getFilterControl().setToolTipText("Filter text may use * to match any characters or ? to match one character");
-
     searchField.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
     selectorComposite = formToolkit.createComposite(container, SWT.NONE);
@@ -941,6 +897,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     toolbarManager.add(new Separator("search"));
     toolbarManager.add(searchRepositoriesAction);
     toolbarManager.add(searchRequirementsAction);
+    toolbarManager.add(findRepositoriesAction);
 
     toolbarManager.add(new Separator("end"));
   }
@@ -1666,6 +1623,60 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       else
       {
         SearchEclipseDialog.Requirements.closeFor(getSite().getWorkbenchWindow());
+      }
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private final class FindRepositoriesAction extends Action
+  {
+    public FindRepositoriesAction()
+    {
+      super("Find", Action.AS_CHECK_BOX);
+      setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("full/obj16/RepositoryList"));
+      setToolTipText("Find Eclipse repositories");
+    }
+
+    public void update()
+    {
+      setChecked(RepositoryFinderDialog.getFor(getSite().getWorkbenchWindow()) != null);
+    }
+
+    @Override
+    public void run()
+    {
+      if (isChecked())
+      {
+        final RepositoryFinderDialog repositoryFinderDialog = RepositoryFinderDialog.openFor(getSite().getWorkbenchWindow());
+        repositoryFinderDialog.getDockable().associate(this);
+        repositoryFinderDialog.getShell().addDisposeListener(new DisposeListener()
+        {
+          public void widgetDisposed(DisposeEvent e)
+          {
+            if (repositoryFinderDialog.getReturnCode() == Dialog.OK)
+            {
+              try
+              {
+                getViewSite().getWorkbenchWindow().getActivePage().showView(ID);
+                P2Index.Repository repository = repositoryFinderDialog.getSelectedRepository();
+                if (repository != null)
+                {
+                  activateAndLoadRepository(repository.getLocation().toString());
+                }
+              }
+              catch (PartInitException ex)
+              {
+                // This should never happen.
+              }
+            }
+          }
+        });
+      }
+      else
+      {
+        RepositoryFinderDialog.closeFor(getSite().getWorkbenchWindow());
       }
     }
   }
@@ -3019,8 +3030,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       int result = category1.compareTo(category2);
       if (result == 0)
       {
-        String label1 = label.toLowerCase();
-        String label2 = o.label.toLowerCase();
+        String label1 = StringUtil.safe(label).toLowerCase();
+        String label2 = StringUtil.safe(o.label).toLowerCase();
         result = COMPARATOR.compare(label1, label2);
       }
 
