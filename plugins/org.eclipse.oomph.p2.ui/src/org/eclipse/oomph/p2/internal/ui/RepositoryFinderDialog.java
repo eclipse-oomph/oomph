@@ -534,7 +534,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
           return P2UIPlugin.INSTANCE.getSWTImage("obj16/compositeRepository.png");
         }
 
-        return P2UIPlugin.INSTANCE.getSWTImage("obj16/Repository");
+        return P2UIPlugin.INSTANCE.getSWTImage("full/obj16/Repository");
       }
 
       return super.getImage(element);
