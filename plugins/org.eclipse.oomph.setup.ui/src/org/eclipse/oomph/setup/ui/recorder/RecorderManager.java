@@ -890,7 +890,7 @@ public final class RecorderManager
       String state = recorderEnabled ? "enabled" : "disabled";
       String verb = !recorderEnabled ? "enable" : "disable";
 
-      recordItem.setImage(SetupUIPlugin.INSTANCE.getSWTImage("recorder_" + state));
+      recordItem.setImage(SetupUIPlugin.INSTANCE.getSWTImage("recorder_" + state + ".png"));
       recordItem.setToolTipText("Oomph preference recorder " + state + " - Push to " + verb);
     }
   }
