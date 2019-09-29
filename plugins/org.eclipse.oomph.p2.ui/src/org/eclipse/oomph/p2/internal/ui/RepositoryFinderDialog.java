@@ -267,7 +267,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
       }
     });
 
-    final ColumnViewerInformationControlToolTipSupport toolTipSupport = new ColumnViewerInformationControlToolTipSupport(viewer, this);
+    new ColumnViewerInformationControlToolTipSupport(viewer, this);
 
     loadRepositories(parent.getDisplay());
 
