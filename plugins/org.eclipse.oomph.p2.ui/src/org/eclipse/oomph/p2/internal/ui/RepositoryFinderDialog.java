@@ -65,10 +65,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -100,8 +98,6 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
   private TableViewer viewer;
 
   private Repository[] repositories;
-
-  private Map<String, Repository> repositoriesByURL = new HashMap<String, Repository>();
 
   private List<Repository> filteredRepositories;
 
