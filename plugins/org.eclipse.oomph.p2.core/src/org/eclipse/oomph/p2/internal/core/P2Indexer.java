@@ -350,11 +350,8 @@ public final class P2Indexer implements IApplication
     writeRepositories(outputFolder);
     writeCapabilityIndex(outputFolder);
 
-    if (verbose)
-    {
-      System.out.println(repositories.size() + " repositories");
-      System.out.println(count + " capabilities");
-    }
+    System.out.println(repositories.size() + " repositories");
+    System.out.println(count + " capabilities");
   }
 
   private void writeCapabilityIndex(File outputFolder) throws FileNotFoundException, UnsupportedEncodingException, IOException
@@ -770,11 +767,7 @@ public final class P2Indexer implements IApplication
 
           if (name.equals(".") || name.equals("..") || name.startsWith("file:"))
           {
-            if (verbose)
-            {
-              System.err.println("Skipping " + qualifiedName);
-            }
-
+            System.err.println("Skipping " + qualifiedName);
             return;
           }
 
@@ -855,10 +848,7 @@ public final class P2Indexer implements IApplication
             }
             else
             {
-              if (verbose)
-              {
-                System.err.println("Child repository of " + getURI() + " not found: " + childURI);
-              }
+              System.err.println("Child repository of " + getURI() + " not found: " + childURI);
             }
           }
         }
