@@ -391,7 +391,9 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
     {
       builder.append("<li><font color=\"#ff0000\"><b>");
       builder.append(repository.getUnresolvedChildren());
-      builder.append("&nbsp;unresolved&nbsp;children!</b></font>");
+      builder.append("&nbsp;unresolved&nbsp;");
+      builder.append(repository.getUnresolvedChildren() == 1 ? "child" : "children");
+      builder.append("!</b></font>");
     }
 
     if (repository.isCompressed())
