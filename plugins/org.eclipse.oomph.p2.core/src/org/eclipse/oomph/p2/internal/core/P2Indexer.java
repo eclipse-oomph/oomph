@@ -790,7 +790,7 @@ public final class P2Indexer implements IApplication
 
           if (name.equals(".") || name.equals("..") || name.startsWith("file:"))
           {
-            // System.err.println("Skipping " + qualifiedName);
+            System.err.println("Skipping " + qualifiedName);
             return;
           }
 
