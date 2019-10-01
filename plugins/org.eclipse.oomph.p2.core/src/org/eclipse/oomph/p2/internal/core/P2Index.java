@@ -53,6 +53,8 @@ public interface P2Index
 
     public int getCapabilityCount();
 
+    public int getUnresolvedChildren();
+
     public Repository[] getChildren();
 
     public Repository[] getComposites();

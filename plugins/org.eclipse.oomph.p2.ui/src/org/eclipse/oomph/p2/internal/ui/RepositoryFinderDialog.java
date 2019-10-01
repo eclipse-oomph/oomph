@@ -375,15 +375,25 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
     builder.append(repository.isComposed() ? "Composite" : "Simple");
     builder.append("&nbsp;Repository&nbsp;<span style=\"white-space: nowrap;\">");
     builder.append(repository);
-    builder.append("</span></h3>");
-    builder.append("<ul><li><span style=\"white-space: nowrap;\">");
+    builder.append("</span></h3><ul>");
+
+    builder.append("<li><span style=\"white-space: nowrap;\">");
     builder.append(new Date(repository.getTimestamp()));
     builder.append("</span>&nbsp;(");
     builder.append(repository.getTimestamp());
     builder.append(")");
+
     builder.append("<li>");
     builder.append(repository.getCapabilityCount());
     builder.append(repository.getCapabilityCount() == 1 ? "&nbsp;capability" : "&nbsp;capabilities");
+
+    if (repository.getUnresolvedChildren() != 0)
+    {
+      builder.append("<li><font color=\"#ff0000\"><b>");
+      builder.append(repository.getUnresolvedChildren());
+      builder.append("&nbsp;unresolved&nbsp;children!</b></font>");
+    }
+
     if (repository.isCompressed())
     {
       builder.append("<li>Compressed");
@@ -521,6 +531,8 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
 
     private final Font boldFont = P2UIPlugin.getBoldFont(baseFont);
 
+    private final Color redColor = viewer.getControl().getDisplay().getSystemColor(SWT.COLOR_RED);
+
     private final Color grayColor = viewer.getControl().getDisplay().getSystemColor(SWT.COLOR_GRAY);
 
     @Override
@@ -561,6 +573,11 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
       if (element instanceof Repository)
       {
         Repository repository = (Repository)element;
+        if (repository.getUnresolvedChildren() != 0)
+        {
+          return redColor;
+        }
+
         if (repository.getCapabilityCount() == 0)
         {
           return grayColor;

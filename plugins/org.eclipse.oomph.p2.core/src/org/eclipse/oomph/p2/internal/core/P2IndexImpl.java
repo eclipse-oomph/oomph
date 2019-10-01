@@ -183,6 +183,23 @@ public class P2IndexImpl implements P2Index
           }
         }
 
+        try
+        {
+          int problematicRepositories = stream.readInt();
+          for (int i = 0; i < problematicRepositories; i++)
+          {
+            int id = stream.readInt();
+            int unresolvedChildren = stream.readInt();
+
+            RepositoryImpl repository = repositories.get(id);
+            repository.unresolvedChildren = unresolvedChildren;
+          }
+        }
+        catch (Exception ex)
+        {
+          P2CorePlugin.INSTANCE.log(ex, IStatus.WARNING);
+        }
+
         repositoriesArray = repositories.values().toArray(new Repository[repositories.size()]);
       }
       catch (Exception ex)
@@ -391,6 +408,8 @@ public class P2IndexImpl implements P2Index
 
     private int capabilityCount;
 
+    private int unresolvedChildren;
+
     private Repository[] children;
 
     private Repository[] composites;
@@ -463,6 +482,11 @@ public class P2IndexImpl implements P2Index
       }
 
       return capabilityCount;
+    }
+
+    public int getUnresolvedChildren()
+    {
+      return unresolvedChildren;
     }
 
     public Repository[] getChildren()

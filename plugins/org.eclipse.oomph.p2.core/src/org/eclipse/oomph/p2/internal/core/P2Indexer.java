@@ -90,6 +90,8 @@ public final class P2Indexer implements IApplication
 
   private int refreshHours = 24;
 
+  private URI baseURI;
+
   private int maxRepos = Integer.MAX_VALUE;
 
   private boolean verbose;
@@ -100,12 +102,13 @@ public final class P2Indexer implements IApplication
     String[] args = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
     LinkedList<String> arguments = new LinkedList<String>(Arrays.asList(args));
 
-    final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4);
+    ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4);
+
     try
     {
-      final File scanFolder = new File(arguments.removeFirst()).getCanonicalFile();
+      File scanFolder = new File(arguments.removeFirst()).getCanonicalFile();
       refreshHours = Integer.parseInt(arguments.removeFirst());
-      final URI baseURI = URI.createURI(arguments.removeFirst());
+      baseURI = URI.createURI(arguments.removeFirst());
       File outputFolder = new File(arguments.removeFirst()).getCanonicalFile();
 
       while (!arguments.isEmpty())
@@ -119,6 +122,11 @@ public final class P2Indexer implements IApplication
         {
           verbose = true;
         }
+      }
+
+      if (baseURI.hasTrailingPathSeparator())
+      {
+        baseURI = baseURI.trimSegments(1);
       }
 
       scanFolder(executor, scanFolder, baseURI);
@@ -410,9 +418,22 @@ public final class P2Indexer implements IApplication
       stream.writeInt(refreshHours);
       stream.writeInt(repositories.size());
 
+      List<Repository> problematicRepositories = new ArrayList<Repository>();
       for (Repository repository : repositories.values())
       {
         repository.write(this, stream);
+
+        if (repository.unresolvedChildren > 0)
+        {
+          problematicRepositories.add(repository);
+        }
+      }
+
+      stream.writeInt(problematicRepositories.size());
+      for (Repository repository : problematicRepositories)
+      {
+        stream.writeInt(repository.getID());
+        stream.writeInt(repository.unresolvedChildren);
       }
 
       stream.flush();
@@ -534,6 +555,8 @@ public final class P2Indexer implements IApplication
     protected int id;
 
     protected long timestamp = NO_TIMESTAMP;
+
+    protected int unresolvedChildren;
 
     public Repository(URI uri, File metadataFile)
     {
@@ -767,7 +790,7 @@ public final class P2Indexer implements IApplication
 
           if (name.equals(".") || name.equals("..") || name.startsWith("file:"))
           {
-            System.err.println("Skipping " + qualifiedName);
+            // System.err.println("Skipping " + qualifiedName);
             return;
           }
 
@@ -828,17 +851,9 @@ public final class P2Indexer implements IApplication
             {
               childURI = childURI.resolve(uri.hasTrailingPathSeparator() ? uri : uri.appendSegment(""));
             }
-            else
+            else if (!indexer.baseURI.scheme().equals(childURI.scheme()) && indexer.baseURI.authority().equals(childURI.authority()))
             {
-              if ("download.eclipse.org".equals(childURI.authority()) && "https".equals(childURI.scheme()))
-              {
-                childURI = URI.createURI("http://download.eclipse.org/").appendSegments(childURI.segments());
-              }
-
-              if (!childURI.hasTrailingPathSeparator())
-              {
-                childURI = childURI.appendSegment("");
-              }
+              childURI = indexer.baseURI.appendSegments(childURI.segments());
             }
 
             Repository childRepository = indexer.repositories.get(childURI);
@@ -846,8 +861,9 @@ public final class P2Indexer implements IApplication
             {
               childRepository.composites.add(this);
             }
-            else
+            else if (indexer.baseURI.scheme().equals(childURI.scheme()) && indexer.baseURI.authority().equals(childURI.authority()))
             {
+              ++unresolvedChildren;
               System.err.println("Child repository of " + getURI() + " not found: " + childURI);
             }
           }
