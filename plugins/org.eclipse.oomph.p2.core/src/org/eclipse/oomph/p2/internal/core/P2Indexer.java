@@ -623,7 +623,7 @@ public final class P2Indexer implements IApplication
             line = reader.readLine();
             if (line == null)
             {
-              break;
+              return;
             }
 
             line = incompleteLine + " " + line;
