@@ -82,18 +82,22 @@ public final class OwnershipMapper
         else
         {
           Path path = rootFolder.relativize(dir);
-          ExemptionRule exemptionRule = exemptionRules.get(path);
-          if (exemptionRule != null)
-          {
-            String project = exemptionRule.getProject();
-            if (project.equals(IGNORE))
-            {
-              return FileVisitResult.SKIP_SUBTREE;
-            }
 
-            mappings.put(dir, project);
-            System.out.println(path + "\t" + project);
-            return exemptionRule.isRecursive() ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE;
+          if (exemptionRules != null)
+          {
+            ExemptionRule exemptionRule = exemptionRules.get(path);
+            if (exemptionRule != null)
+            {
+              String project = exemptionRule.getProject();
+              if (project.equals(IGNORE))
+              {
+                return FileVisitResult.SKIP_SUBTREE;
+              }
+
+              mappings.put(dir, project);
+              System.out.println(path + "\t" + project);
+              return exemptionRule.isRecursive() ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE;
+            }
           }
 
           PosixFileAttributes attributes = Files.getFileAttributeView(dir, PosixFileAttributeView.class).readAttributes();
