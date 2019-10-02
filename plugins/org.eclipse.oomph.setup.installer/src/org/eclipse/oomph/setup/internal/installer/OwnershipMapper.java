@@ -26,8 +26,10 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributes;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,12 +47,18 @@ public final class OwnershipMapper
 
   private static final boolean REFRESH_FOLDERS = Boolean.getBoolean("refresh.folders");
 
-  private static Set<String> projects;
+  private static final String UNKNOWN = "UNKNOWN";
 
-  private static List<String> folders;
+  private static final Map<Path, String> MAPPINGS = new HashMap<Path, String>();
+
+  private static Path rootFolder;
+
+  private static Set<String> projects;
 
   public static void main(String[] args) throws Exception
   {
+    rootFolder = Paths.get(args[0]);
+
     File projectsFile = new File(PROJECTS_NAME);
     if (!projectsFile.exists() || REFRESH_PROJECTS)
     {
@@ -63,16 +71,69 @@ public final class OwnershipMapper
       projects = new HashSet<String>(lines);
     }
 
-    File foldersFile = new File(FOLDERS_NAME);
-    if (!foldersFile.exists() || REFRESH_FOLDERS)
+    Files.walkFileTree(rootFolder, new SimpleFileVisitor<Path>()
     {
-      folders = RootFolder.collectFolders(Paths.get(args[0]));
-      IOUtil.writeLines(foldersFile, "UTF-8", folders);
-    }
-    else
+      @Override
+      public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException
+      {
+        PosixFileAttributes attributes = Files.getFileAttributeView(dir, PosixFileAttributeView.class).readAttributes();
+        String user = attributes.owner().getName();
+        String group = attributes.group().getName();
+        String project = mapFolder(dir, user, group);
+
+        Path stop = rootFolder.getParent();
+        for (Path parent = dir.getParent(); parent != null && !parent.equals(stop); parent = parent.getParent())
+        {
+          String parentProject = MAPPINGS.get(parent);
+          if (parentProject != null)
+          {
+            if (!parentProject.equals(project))
+            {
+              MAPPINGS.put(dir, project);
+              System.out.println(dir + "\t" + project);
+            }
+
+            break;
+          }
+        }
+
+        return FileVisitResult.CONTINUE;
+      }
+    });
+  }
+
+  private static String mapFolder(Path dir, String user, String group)
+  {
+    if (projects.contains(group))
     {
-      folders = IOUtil.readLines(foldersFile, "UTF-8");
+      return group;
     }
+
+    if (user.startsWith("genie."))
+    {
+      String suffix = "." + user.substring("genie.".length());
+      List<String> ids = getProjects(suffix);
+      if (ids.size() == 1)
+      {
+        return ids.get(0);
+      }
+    }
+
+    return UNKNOWN;
+  }
+
+  private static List<String> getProjects(String suffix)
+  {
+    List<String> result = new ArrayList<String>();
+    for (String project : projects)
+    {
+      if (project.endsWith(suffix))
+      {
+        result.add(project);
+      }
+    }
+
+    return result;
   }
 
   /**
@@ -133,31 +194,4 @@ public final class OwnershipMapper
       return !content.contains(NEXT);
     }
   }
-
-  /**
-   * @author Eike Stepper
-   */
-  private static final class RootFolder
-  {
-    public static List<String> collectFolders(Path rootFolder) throws Exception
-    {
-      final List<String> folders = new ArrayList<String>();
-
-      Files.walkFileTree(rootFolder, new SimpleFileVisitor<Path>()
-      {
-        @Override
-        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException
-        {
-          PosixFileAttributes attributes = Files.getFileAttributeView(dir, PosixFileAttributeView.class).readAttributes();
-          String line = dir + "\t" + attributes.owner().getName() + "\t" + attributes.group().getName();
-          System.out.println(line);
-          folders.add(line);
-          return FileVisitResult.CONTINUE;
-        }
-      });
-
-      return folders;
-    }
-  }
-
 }
