@@ -41,11 +41,7 @@ public final class OwnershipMapper
 {
   private static final String PROJECTS_NAME = "projects.txt";
 
-  private static final String FOLDERS_NAME = "folders.txt";
-
   private static final boolean REFRESH_PROJECTS = Boolean.getBoolean("refresh.projects");
-
-  private static final boolean REFRESH_FOLDERS = Boolean.getBoolean("refresh.folders");
 
   private static final String UNKNOWN = "UNKNOWN";
 
@@ -81,23 +77,35 @@ public final class OwnershipMapper
         String group = attributes.group().getName();
         String project = mapFolder(dir, user, group);
 
-        Path stop = rootFolder.getParent();
-        for (Path parent = dir.getParent(); parent != null && !parent.equals(stop); parent = parent.getParent())
+        if (dir.equals(rootFolder))
         {
-          String parentProject = MAPPINGS.get(parent);
-          if (parentProject != null)
+          registerProject(dir, project);
+        }
+        else
+        {
+          Path stop = rootFolder.getParent();
+          for (Path parent = dir.getParent(); parent != null && !parent.equals(stop); parent = parent.getParent())
           {
-            if (!parentProject.equals(project))
+            String parentProject = MAPPINGS.get(parent);
+            if (parentProject != null)
             {
-              MAPPINGS.put(dir, project);
-              System.out.println(dir + "\t" + project);
-            }
+              if (!parentProject.equals(project))
+              {
+                registerProject(dir, project);
+              }
 
-            break;
+              break;
+            }
           }
         }
 
         return FileVisitResult.CONTINUE;
+      }
+
+      private void registerProject(Path dir, String project)
+      {
+        MAPPINGS.put(dir, project);
+        System.out.println(dir + "\t" + project);
       }
     });
   }
@@ -152,7 +160,10 @@ public final class OwnershipMapper
       Set<String> projects = new HashSet<String>();
       for (int page = 0;; ++page)
       {
-        InputStream stream = new URL(URL + "?page=" + page).openStream();
+        String url = URL + "?page=" + page;
+        System.out.println("Processing " + url);
+
+        InputStream stream = new URL(url).openStream();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         try
@@ -185,8 +196,6 @@ public final class OwnershipMapper
       while (matcher.find(start))
       {
         String project = matcher.group(1);
-        System.out.println(project);
-
         projects.add(project);
         start = matcher.end();
       }
