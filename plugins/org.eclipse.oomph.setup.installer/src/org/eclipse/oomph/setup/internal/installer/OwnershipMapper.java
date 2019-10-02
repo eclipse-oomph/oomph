@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,12 +54,13 @@ public final class OwnershipMapper
 
   private static final String UNKNOWN = "UNKNOWN";
 
+  private static final String IGNORE = "-";
+
   private static Path rootFolder;
 
   private static Set<String> projects;
 
-  @SuppressWarnings("unused")
-  private static Map<Path, String> exemptionRules = new HashMap<Path, String>();
+  private static Map<Path, ExemptionRule> exemptionRules;
 
   private static Map<Path, String> mappings = new HashMap<Path, String>();
 
@@ -79,13 +81,28 @@ public final class OwnershipMapper
         }
         else
         {
+          Path path = rootFolder.relativize(dir);
+          ExemptionRule exemptionRule = exemptionRules.get(path);
+          if (exemptionRule != null)
+          {
+            String project = exemptionRule.getProject();
+            if (project.equals(IGNORE))
+            {
+              return FileVisitResult.SKIP_SUBTREE;
+            }
+
+            mappings.put(dir, project);
+            System.out.println(path + "\t" + project);
+            return exemptionRule.isRecursive() ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE;
+          }
+
           PosixFileAttributes attributes = Files.getFileAttributeView(dir, PosixFileAttributeView.class).readAttributes();
           String user = attributes.owner().getName();
           String group = attributes.group().getName();
+
           String project = mapFolder(dir, user, group);
 
-          Path stop = rootFolder.getParent();
-          for (Path parent = dir.getParent(); parent != null && !parent.equals(stop); parent = parent.getParent())
+          for (Path parent = dir.getParent(), stop = rootFolder.getParent(); parent != null && !parent.equals(stop); parent = parent.getParent())
           {
             String parentProject = mappings.get(parent);
             if (parentProject != null)
@@ -97,10 +114,10 @@ public final class OwnershipMapper
 
                 if (unknown)
                 {
-                  project += "^t" + user + "^t" + group;
+                  project += "\t" + user + "\t" + group;
                 }
 
-                System.out.println(rootFolder.relativize(dir) + "\t" + project);
+                System.out.println(path + "\t" + project);
               }
 
               break;
@@ -112,23 +129,7 @@ public final class OwnershipMapper
       }
     });
 
-    Writer writer = new BufferedWriter(new FileWriter("mappings.txt"));
-    Path[] dirs = mappings.keySet().toArray(new Path[mappings.size()]);
-    Arrays.sort(dirs);
-
-    for (Path dir : dirs)
-    {
-      String project = mappings.get(dir);
-      if (!ROOT.equals(project) && !UNKNOWN.equals(project))
-      {
-        writer.write(dir.toString());
-        writer.write("\t");
-        writer.write(project);
-        writer.write("\n");
-      }
-    }
-
-    writer.close();
+    writeMappings();
   }
 
   private static void initProjects() throws Exception
@@ -150,9 +151,33 @@ public final class OwnershipMapper
   {
     if (EXEMPTION_RULES != null)
     {
-      // List<String> prefixes = IOUtil.readLines(new File("prefixes.txt"), "UTF-8");
-      // Collections.sort(prefixes, SEGMENT_COUNT_COMPARATOR);
+      exemptionRules = new LinkedHashMap<Path, ExemptionRule>();
 
+      for (String line : EXEMPTION_RULES.split("\n"))
+      {
+        if (!line.isEmpty())
+        {
+          int lastSpace = line.lastIndexOf(' ');
+          String path = line.substring(0, lastSpace);
+          String project = line.substring(lastSpace + 1);
+
+          Path dir;
+          boolean recursive;
+          if (path.endsWith("/"))
+          {
+            dir = Paths.get(path.substring(0, path.length() - 1));
+            recursive = true;
+          }
+          else
+          {
+            dir = Paths.get(path);
+            recursive = false;
+          }
+
+          ExemptionRule exemptionRule = new ExemptionRule(project, recursive);
+          exemptionRules.put(dir, exemptionRule);
+        }
+      }
     }
   }
 
@@ -188,6 +213,27 @@ public final class OwnershipMapper
     }
 
     return result;
+  }
+
+  private static void writeMappings() throws IOException
+  {
+    Writer writer = new BufferedWriter(new FileWriter("mappings.txt"));
+    Path[] dirs = mappings.keySet().toArray(new Path[mappings.size()]);
+    Arrays.sort(dirs);
+
+    for (Path dir : dirs)
+    {
+      String project = mappings.get(dir);
+      if (!ROOT.equals(project) && !UNKNOWN.equals(project))
+      {
+        writer.write(dir.toString());
+        writer.write("\t");
+        writer.write(project);
+        writer.write("\n");
+      }
+    }
+
+    writer.close();
   }
 
   /**
@@ -247,6 +293,32 @@ public final class OwnershipMapper
       }
 
       return !content.contains(NEXT);
+    }
+  }
+
+  /**
+   * @author Stepper
+   */
+  private static final class ExemptionRule
+  {
+    private final String project;
+
+    private final boolean recursive;
+
+    public ExemptionRule(String project, boolean recursive)
+    {
+      this.project = project;
+      this.recursive = recursive;
+    }
+
+    public String getProject()
+    {
+      return project;
+    }
+
+    public boolean isRecursive()
+    {
+      return recursive;
     }
   }
 }
