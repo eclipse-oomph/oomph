@@ -43,6 +43,8 @@ public final class OwnershipMapper
 
   private static final boolean REFRESH_PROJECTS = Boolean.getBoolean("refresh.projects");
 
+  private static final String ROOT = "ROOT";
+
   private static final String UNKNOWN = "UNKNOWN";
 
   private static final Map<Path, String> MAPPINGS = new HashMap<Path, String>();
@@ -72,17 +74,17 @@ public final class OwnershipMapper
       @Override
       public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException
       {
-        PosixFileAttributes attributes = Files.getFileAttributeView(dir, PosixFileAttributeView.class).readAttributes();
-        String user = attributes.owner().getName();
-        String group = attributes.group().getName();
-        String project = mapFolder(dir, user, group);
-
         if (dir.equals(rootFolder))
         {
-          registerProject(dir, project);
+          MAPPINGS.put(rootFolder, ROOT);
         }
         else
         {
+          PosixFileAttributes attributes = Files.getFileAttributeView(dir, PosixFileAttributeView.class).readAttributes();
+          String user = attributes.owner().getName();
+          String group = attributes.group().getName();
+          String project = mapFolder(dir, user, group);
+
           Path stop = rootFolder.getParent();
           for (Path parent = dir.getParent(); parent != null && !parent.equals(stop); parent = parent.getParent())
           {
@@ -91,7 +93,8 @@ public final class OwnershipMapper
             {
               if (!parentProject.equals(project))
               {
-                registerProject(dir, project);
+                MAPPINGS.put(dir, project);
+                System.out.println(rootFolder.relativize(dir) + "\t" + project);
               }
 
               break;
@@ -100,12 +103,6 @@ public final class OwnershipMapper
         }
 
         return FileVisitResult.CONTINUE;
-      }
-
-      private void registerProject(Path dir, String project)
-      {
-        MAPPINGS.put(dir, project);
-        System.out.println(dir + "\t" + project);
       }
     });
   }
