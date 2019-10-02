@@ -12,10 +12,13 @@ package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.util.IOUtil;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Writer;
 import java.net.URL;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -26,6 +29,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -43,31 +47,26 @@ public final class OwnershipMapper
 
   private static final boolean REFRESH_PROJECTS = Boolean.getBoolean("refresh.projects");
 
+  private static final String EXEMPTION_RULES = System.getProperty("exemption.rules");
+
   private static final String ROOT = "ROOT";
 
   private static final String UNKNOWN = "UNKNOWN";
-
-  private static final Map<Path, String> MAPPINGS = new HashMap<Path, String>();
 
   private static Path rootFolder;
 
   private static Set<String> projects;
 
+  @SuppressWarnings("unused")
+  private static Map<Path, String> exemptionRules = new HashMap<Path, String>();
+
+  private static Map<Path, String> mappings = new HashMap<Path, String>();
+
   public static void main(String[] args) throws Exception
   {
     rootFolder = Paths.get(args[0]);
-
-    File projectsFile = new File(PROJECTS_NAME);
-    if (!projectsFile.exists() || REFRESH_PROJECTS)
-    {
-      projects = PMI.getProjects();
-      IOUtil.writeLines(projectsFile, "UTF-8", new ArrayList<String>(projects));
-    }
-    else
-    {
-      List<String> lines = IOUtil.readLines(projectsFile, "UTF-8");
-      projects = new HashSet<String>(lines);
-    }
+    initProjects();
+    initExemptionRules();
 
     Files.walkFileTree(rootFolder, new SimpleFileVisitor<Path>()
     {
@@ -76,7 +75,7 @@ public final class OwnershipMapper
       {
         if (dir.equals(rootFolder))
         {
-          MAPPINGS.put(rootFolder, ROOT);
+          mappings.put(rootFolder, ROOT);
         }
         else
         {
@@ -88,12 +87,19 @@ public final class OwnershipMapper
           Path stop = rootFolder.getParent();
           for (Path parent = dir.getParent(); parent != null && !parent.equals(stop); parent = parent.getParent())
           {
-            String parentProject = MAPPINGS.get(parent);
+            String parentProject = mappings.get(parent);
             if (parentProject != null)
             {
-              if (!parentProject.equals(project))
+              boolean unknown = UNKNOWN.equals(project);
+              if (!parentProject.equals(project) && (ROOT.equals(parentProject) || !unknown))
               {
-                MAPPINGS.put(dir, project);
+                mappings.put(dir, project);
+
+                if (unknown)
+                {
+                  project += "^t" + user + "^t" + group;
+                }
+
                 System.out.println(rootFolder.relativize(dir) + "\t" + project);
               }
 
@@ -105,6 +111,49 @@ public final class OwnershipMapper
         return FileVisitResult.CONTINUE;
       }
     });
+
+    Writer writer = new BufferedWriter(new FileWriter("mappings.txt"));
+    Path[] dirs = mappings.keySet().toArray(new Path[mappings.size()]);
+    Arrays.sort(dirs);
+
+    for (Path dir : dirs)
+    {
+      String project = mappings.get(dir);
+      if (!ROOT.equals(project) && !UNKNOWN.equals(project))
+      {
+        writer.write(dir.toString());
+        writer.write("\t");
+        writer.write(project);
+        writer.write("\n");
+      }
+    }
+
+    writer.close();
+  }
+
+  private static void initProjects() throws Exception
+  {
+    File projectsFile = new File(PROJECTS_NAME);
+    if (!projectsFile.exists() || REFRESH_PROJECTS)
+    {
+      projects = PMI.getProjects();
+      IOUtil.writeLines(projectsFile, "UTF-8", new ArrayList<String>(projects));
+    }
+    else
+    {
+      List<String> lines = IOUtil.readLines(projectsFile, "UTF-8");
+      projects = new HashSet<String>(lines);
+    }
+  }
+
+  private static void initExemptionRules()
+  {
+    if (EXEMPTION_RULES != null)
+    {
+      // List<String> prefixes = IOUtil.readLines(new File("prefixes.txt"), "UTF-8");
+      // Collections.sort(prefixes, SEGMENT_COUNT_COMPARATOR);
+
+    }
   }
 
   private static String mapFolder(Path dir, String user, String group)
