@@ -54,7 +54,9 @@ import java.util.regex.Pattern;
  */
 public final class OwnershipMapper
 {
-  private static final boolean DEBUG = System.getProperty("os.name").toLowerCase().contains("windows");
+  private static final String FILE_SEPARATOR = System.getProperty("file.separator");
+
+  private static final boolean DEBUG = FILE_SEPARATOR.equals("\\");
 
   private static final PosixFileAttributes DEBUG_ATTRIBUTES = DEBUG ? new DebugFileAttributes() : null;
 
@@ -97,7 +99,7 @@ public final class OwnershipMapper
 
   private static Map<Path, String> mappings = Collections.synchronizedMap(new HashMap<Path, String>());
 
-  private static Map<Path, Long> timings = Collections.synchronizedMap(new HashMap<Path, Long>());
+  private static Writer stats;
 
   public static void main(String[] args) throws Exception
   {
@@ -112,6 +114,7 @@ public final class OwnershipMapper
     File[] topLevelFolders = rootFolder.toFile().listFiles(FOLDER_FILTER);
     if (topLevelFolders != null)
     {
+      stats = new BufferedWriter(new FileWriter("folders.txt"));
       long start = System.currentTimeMillis();
 
       ExecutorService threadPool = Executors.newFixedThreadPool(20, THREAD_FACTORY);
@@ -140,7 +143,10 @@ public final class OwnershipMapper
       }
 
       finished.await();
-      timings.put(rootFolder, System.currentTimeMillis() - start);
+
+      writeStats(rootFolder.relativize(rootFolder), start, IGNORE, IGNORE, ROOT);
+      stats.close();
+
       writeResults();
     }
   }
@@ -149,13 +155,16 @@ public final class OwnershipMapper
   {
     Path path = rootFolder.relativize(folder);
     long start = System.currentTimeMillis();
+    String user = IGNORE;
+    String group = IGNORE;
+    String project = UNKNOWN;
 
     try
     {
       ExemptionRule exemptionRule = exemptionRules.get(path);
       if (exemptionRule != null)
       {
-        String project = exemptionRule.getProject();
+        project = exemptionRule.getProject();
         if (project.equals(IGNORE))
         {
           return;
@@ -172,10 +181,10 @@ public final class OwnershipMapper
       else
       {
         PosixFileAttributes attributes = getAttributes(folder);
-        String user = attributes.owner().getName();
-        String group = attributes.group().getName();
+        user = attributes.owner().getName();
+        group = attributes.group().getName();
 
-        String project = mapFolder(folder, user, group);
+        project = mapFolder(folder, user, group);
 
         for (Path parent = folder.getParent(), stop = rootFolder.getParent(); parent != null && !parent.equals(stop); parent = parent.getParent())
         {
@@ -186,13 +195,7 @@ public final class OwnershipMapper
             if (!parentProject.equals(project) && (ROOT.equals(parentProject) || !unknown))
             {
               mappings.put(folder, project);
-
-              if (unknown)
-              {
-                project += "\t" + user + "\t" + group;
-              }
-
-              System.out.println(path + "\t" + project);
+              System.out.println(path + "\t" + project + (unknown ? "\t" + user + "\t" + group : ""));
             }
 
             break;
@@ -218,7 +221,7 @@ public final class OwnershipMapper
     }
     finally
     {
-      timings.put(folder, System.currentTimeMillis() - start);
+      writeStats(path, start, user, group, project);
     }
   }
 
@@ -266,6 +269,24 @@ public final class OwnershipMapper
     return Files.getFileAttributeView(folder, PosixFileAttributeView.class).readAttributes();
   }
 
+  private static void writeStats(Path path, long start, String user, String group, String project) throws IOException
+  {
+    synchronized (stats)
+    {
+      stats.write(path.toString());
+      stats.write(FILE_SEPARATOR);
+      stats.write("\t");
+      stats.write(user);
+      stats.write("\t");
+      stats.write(group);
+      stats.write("\t");
+      stats.write(project);
+      stats.write("\t");
+      stats.write(Long.toString(System.currentTimeMillis() - start));
+      stats.write("\n");
+    }
+  }
+
   private static void writeResults() throws IOException
   {
     Writer writer = new BufferedWriter(new FileWriter("mappings.txt"));
@@ -277,23 +298,15 @@ public final class OwnershipMapper
     Set<String> unmappedProjects = new HashSet<String>(projects);
     Path lastFolder = null;
 
-    System.out.println();
-    System.out.println("TIMINGS:");
-
     for (Path folder : folders)
     {
       String project = mappings.get(folder);
       Path relativeFolder = rootFolder.relativize(folder);
 
-      Long timing = timings.get(folder);
-      if (timing != null)
-      {
-        System.out.println(relativeFolder + " --> " + project + "\t" + timing);
-      }
-
       if (!ROOT.equals(project) && !UNKNOWN.equals(project))
       {
         writer.write(relativeFolder.toString());
+        writer.write(FILE_SEPARATOR);
         writer.write("\t");
         writer.write(project);
         writer.write("\n");
@@ -323,7 +336,8 @@ public final class OwnershipMapper
     for (Path exemption : exemptions)
     {
       writer.write(exemption.toString());
-      writer.write("/ ");
+      writer.write(FILE_SEPARATOR);
+      writer.write(" ");
       writer.write(mappings.get(rootFolder.resolve(exemption)));
       writer.write("\n");
     }
@@ -333,7 +347,7 @@ public final class OwnershipMapper
     if (!unmappedProjects.isEmpty())
     {
       System.out.println();
-      System.out.println("UNMAPPED PROJECTS:");
+      System.out.println("Unmapped Projects:");
 
       String[] array = unmappedProjects.toArray(new String[unmappedProjects.size()]);
       Arrays.sort(array);
@@ -382,20 +396,27 @@ public final class OwnershipMapper
     {
       for (String line : EXEMPTION_RULES.split("\n"))
       {
-        line = line.trim();
+        line = line.trim().replace('\t', ' ');
 
-        if (!line.isEmpty())
+        if (!line.isEmpty() && !line.startsWith("#"))
         {
-          int lastSpace = line.lastIndexOf(' ');
-          String path = line.substring(0, lastSpace);
-          String project = line.substring(lastSpace + 1);
+          if (line.equals("-"))
+          {
+            break;
+          }
+
+          int sep = line.lastIndexOf(' ');
+          String path = line.substring(0, sep);
+          String project = line.substring(sep + 1);
 
           Path folder;
           boolean recursive;
-          if (path.endsWith("/"))
+          if (path.endsWith(FILE_SEPARATOR))
           {
             folder = Paths.get(path.substring(0, path.length() - 1));
             recursive = true;
+
+            mappings.put(rootFolder.resolve(folder), project);
           }
           else
           {
@@ -416,7 +437,7 @@ public final class OwnershipMapper
   private static String getDebugExemptions()
   {
     return "   bin -\n" //
-        + "   cdo-master/ CDO\n"//
+        + "   cdo-master\\ CDO\n"//
         + "   oomph OOMPH";
   }
 
