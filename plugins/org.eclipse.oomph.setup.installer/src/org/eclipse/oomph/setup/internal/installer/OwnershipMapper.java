@@ -114,10 +114,12 @@ public final class OwnershipMapper
     File[] topLevelFolders = rootFolder.toFile().listFiles(FOLDER_FILTER);
     if (topLevelFolders != null)
     {
+      Arrays.sort(topLevelFolders);
+
       stats = new BufferedWriter(new FileWriter("folders.txt"));
       long start = System.currentTimeMillis();
 
-      ExecutorService threadPool = Executors.newFixedThreadPool(20, THREAD_FACTORY);
+      ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4, THREAD_FACTORY);
       final CountDownLatch finished = new CountDownLatch(topLevelFolders.length);
 
       for (final File topLevelFolder : topLevelFolders)
@@ -148,6 +150,7 @@ public final class OwnershipMapper
       stats.close();
 
       writeResults();
+      System.out.println();
     }
   }
 
