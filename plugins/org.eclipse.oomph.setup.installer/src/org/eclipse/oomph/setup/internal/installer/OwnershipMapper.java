@@ -274,6 +274,7 @@ public final class OwnershipMapper
     Arrays.sort(folders);
 
     List<Path> exemptions = new ArrayList<Path>();
+    Set<String> unmappedProjects = new HashSet<String>(projects);
     Path lastFolder = null;
 
     System.out.println();
@@ -307,6 +308,7 @@ public final class OwnershipMapper
         }
 
         lastFolder = relativeFolder;
+        unmappedProjects.remove(project);
       }
     }
 
@@ -327,6 +329,20 @@ public final class OwnershipMapper
     }
 
     writer.close();
+
+    if (!unmappedProjects.isEmpty())
+    {
+      System.out.println();
+      System.out.println("UNMAPPED PROJECTS:");
+
+      String[] array = unmappedProjects.toArray(new String[unmappedProjects.size()]);
+      Arrays.sort(array);
+
+      for (String unmappedProject : array)
+      {
+        System.out.println(unmappedProject);
+      }
+    }
   }
 
   private static void printStackTrace(Exception exception)
