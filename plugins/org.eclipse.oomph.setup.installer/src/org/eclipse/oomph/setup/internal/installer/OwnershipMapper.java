@@ -260,16 +260,39 @@ public final class OwnershipMapper
     Path[] folders = mappings.keySet().toArray(new Path[mappings.size()]);
     Arrays.sort(folders);
 
+    List<Path> exemptions = new ArrayList<Path>();
+    Path lastFolder = null;
+
     for (Path folder : folders)
     {
       String project = mappings.get(folder);
       if (!ROOT.equals(project) && !UNKNOWN.equals(project))
       {
-        writer.write(rootFolder.relativize(folder).toString());
+        folder = rootFolder.relativize(folder);
+
+        writer.write(folder.toString());
         writer.write("\t");
         writer.write(project);
         writer.write("\n");
+
+        if (lastFolder != null && !folder.startsWith(lastFolder))
+        {
+          exemptions.add(lastFolder);
+        }
+
+        lastFolder = folder;
       }
+    }
+
+    writer.close();
+    writer = new BufferedWriter(new FileWriter("exemptions.txt"));
+
+    for (Path exemption : exemptions)
+    {
+      writer.write(exemption.toString());
+      writer.write("/ ");
+      writer.write(mappings.get(rootFolder.resolve(exemption)));
+      writer.write("\n");
     }
 
     writer.close();
