@@ -97,6 +97,8 @@ public final class OwnershipMapper
 
   private static Map<Path, String> mappings = Collections.synchronizedMap(new HashMap<Path, String>());
 
+  private static Map<Path, Long> timings = Collections.synchronizedMap(new HashMap<Path, Long>());
+
   public static void main(String[] args) throws Exception
   {
     rootFolder = Paths.get(args[0]);
@@ -110,6 +112,8 @@ public final class OwnershipMapper
     File[] topLevelFolders = rootFolder.toFile().listFiles(FOLDER_FILTER);
     if (topLevelFolders != null)
     {
+      long start = System.currentTimeMillis();
+
       ExecutorService threadPool = Executors.newFixedThreadPool(20, THREAD_FACTORY);
       final CountDownLatch finished = new CountDownLatch(topLevelFolders.length);
 
@@ -136,76 +140,85 @@ public final class OwnershipMapper
       }
 
       finished.await();
-      writeMappings();
+      timings.put(rootFolder, System.currentTimeMillis() - start);
+      writeResults();
     }
   }
 
   private static void processFolder(Path folder) throws Exception
   {
     Path path = rootFolder.relativize(folder);
+    long start = System.currentTimeMillis();
 
-    ExemptionRule exemptionRule = exemptionRules.get(path);
-    if (exemptionRule != null)
+    try
     {
-      String project = exemptionRule.getProject();
-      if (project.equals(IGNORE))
+      ExemptionRule exemptionRule = exemptionRules.get(path);
+      if (exemptionRule != null)
       {
-        return;
-      }
-
-      mappings.put(folder, project);
-      System.out.println(path + "\t" + project);
-
-      if (exemptionRule.isRecursive())
-      {
-        return;
-      }
-    }
-    else
-    {
-      PosixFileAttributes attributes = getAttributes(folder);
-      String user = attributes.owner().getName();
-      String group = attributes.group().getName();
-
-      String project = mapFolder(folder, user, group);
-
-      for (Path parent = folder.getParent(), stop = rootFolder.getParent(); parent != null && !parent.equals(stop); parent = parent.getParent())
-      {
-        String parentProject = mappings.get(parent);
-        if (parentProject != null)
+        String project = exemptionRule.getProject();
+        if (project.equals(IGNORE))
         {
-          boolean unknown = UNKNOWN.equals(project);
-          if (!parentProject.equals(project) && (ROOT.equals(parentProject) || !unknown))
-          {
-            mappings.put(folder, project);
+          return;
+        }
 
-            if (unknown)
+        mappings.put(folder, project);
+        System.out.println(path + "\t" + project);
+
+        if (exemptionRule.isRecursive())
+        {
+          return;
+        }
+      }
+      else
+      {
+        PosixFileAttributes attributes = getAttributes(folder);
+        String user = attributes.owner().getName();
+        String group = attributes.group().getName();
+
+        String project = mapFolder(folder, user, group);
+
+        for (Path parent = folder.getParent(), stop = rootFolder.getParent(); parent != null && !parent.equals(stop); parent = parent.getParent())
+        {
+          String parentProject = mappings.get(parent);
+          if (parentProject != null)
+          {
+            boolean unknown = UNKNOWN.equals(project);
+            if (!parentProject.equals(project) && (ROOT.equals(parentProject) || !unknown))
             {
-              project += "\t" + user + "\t" + group;
+              mappings.put(folder, project);
+
+              if (unknown)
+              {
+                project += "\t" + user + "\t" + group;
+              }
+
+              System.out.println(path + "\t" + project);
             }
 
-            System.out.println(path + "\t" + project);
+            break;
           }
+        }
+      }
 
-          break;
+      File[] childFolders = folder.toFile().listFiles(FOLDER_FILTER);
+      if (childFolders != null)
+      {
+        for (File childFolder : childFolders)
+        {
+          try
+          {
+            processFolder(childFolder.toPath());
+          }
+          catch (Exception ex)
+          {
+            printStackTrace(ex);
+          }
         }
       }
     }
-
-    File[] childFolders = folder.toFile().listFiles(FOLDER_FILTER);
-    if (childFolders != null)
+    finally
     {
-      for (File childFolder : childFolders)
-      {
-        try
-        {
-          processFolder(childFolder.toPath());
-        }
-        catch (Exception ex)
-        {
-          printStackTrace(ex);
-        }
-      }
+      timings.put(folder, System.currentTimeMillis() - start);
     }
   }
 
@@ -253,7 +266,7 @@ public final class OwnershipMapper
     return Files.getFileAttributeView(folder, PosixFileAttributeView.class).readAttributes();
   }
 
-  private static void writeMappings() throws IOException
+  private static void writeResults() throws IOException
   {
     Writer writer = new BufferedWriter(new FileWriter("mappings.txt"));
 
@@ -263,24 +276,37 @@ public final class OwnershipMapper
     List<Path> exemptions = new ArrayList<Path>();
     Path lastFolder = null;
 
+    System.out.println();
+    System.out.println("TIMINGS:");
+
     for (Path folder : folders)
     {
       String project = mappings.get(folder);
+      Path relativeFolder = rootFolder.relativize(folder);
+
+      Long timing = timings.get(folder);
+      if (timing != null)
+      {
+        System.out.println(relativeFolder + " --> " + project + "\t" + timing);
+      }
+
       if (!ROOT.equals(project) && !UNKNOWN.equals(project))
       {
-        folder = rootFolder.relativize(folder);
-
-        writer.write(folder.toString());
+        writer.write(relativeFolder.toString());
         writer.write("\t");
         writer.write(project);
         writer.write("\n");
 
-        if (lastFolder != null && !folder.startsWith(lastFolder))
+        if (lastFolder != null && !relativeFolder.startsWith(lastFolder))
         {
-          exemptions.add(lastFolder);
+          ExemptionRule existingRule = exemptionRules.get(lastFolder);
+          if (existingRule == null || !existingRule.isRecursive())
+          {
+            exemptions.add(lastFolder);
+          }
         }
 
-        lastFolder = folder;
+        lastFolder = relativeFolder;
       }
     }
 
@@ -402,13 +428,13 @@ public final class OwnershipMapper
       {
         public String getName()
         {
-          int i = RANDOM.nextInt(40);
-          if (i >= 30)
+          int i = RANDOM.nextInt(4);
+          if (i == 3)
           {
             return "foo.bar"; // UNKNOWN
           }
 
-          return projects.toArray(new String[projects.size()])[i % 30];
+          return projects.toArray(new String[projects.size()])[i % 3];
         }
       };
     }
