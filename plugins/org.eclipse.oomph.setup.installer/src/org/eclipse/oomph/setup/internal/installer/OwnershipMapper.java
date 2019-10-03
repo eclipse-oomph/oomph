@@ -284,6 +284,11 @@ public final class OwnershipMapper
       }
     }
 
+    if (lastFolder != null)
+    {
+      exemptions.add(lastFolder);
+    }
+
     writer.close();
     writer = new BufferedWriter(new FileWriter("exemptions.txt"));
 
@@ -296,6 +301,21 @@ public final class OwnershipMapper
     }
 
     writer.close();
+  }
+
+  private static void printStackTrace(Exception exception)
+  {
+    try
+    {
+      ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+      PrintStream out = new PrintStream(bytes);
+      exception.printStackTrace(out);
+      System.err.write(bytes.toByteArray());
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$
+    }
   }
 
   private static void initProjects() throws Exception
@@ -346,27 +366,16 @@ public final class OwnershipMapper
           System.out.println(folder + " --> " + exemptionRule);
         }
       }
-    }
-  }
 
-  private static void printStackTrace(Exception exception)
-  {
-    try
-    {
-      ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-      PrintStream out = new PrintStream(bytes);
-      exception.printStackTrace(out);
-      System.err.write(bytes.toByteArray());
-    }
-    catch (Exception ex)
-    {
-      //$FALL-THROUGH$
+      System.out.println();
     }
   }
 
   private static String getDebugExemptions()
   {
-    return "   bin -";
+    return "   bin -\n" //
+        + "   cdo-master/ CDO\n"//
+        + "   oomph OOMPH";
   }
 
   /**
