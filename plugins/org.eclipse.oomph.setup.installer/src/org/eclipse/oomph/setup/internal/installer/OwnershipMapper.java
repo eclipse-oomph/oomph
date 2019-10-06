@@ -93,7 +93,7 @@ public final class OwnershipMapper
 
   private static Path rootFolder;
 
-  private static Set<String> projects;
+  private static Map<String, String> projects;
 
   private static Map<Path, ExemptionRule> exemptionRules = new LinkedHashMap<Path, ExemptionRule>();
 
@@ -230,7 +230,7 @@ public final class OwnershipMapper
 
   private static String mapFolder(Path folder, String user, String group)
   {
-    if (projects.contains(group))
+    if (projects.containsKey(group))
     {
       return group;
     }
@@ -251,7 +251,7 @@ public final class OwnershipMapper
   private static List<String> getProjects(String suffix)
   {
     List<String> result = new ArrayList<String>();
-    for (String project : projects)
+    for (String project : projects.keySet())
     {
       if (project.endsWith(suffix))
       {
@@ -298,7 +298,7 @@ public final class OwnershipMapper
     Arrays.sort(folders);
 
     List<Path> exemptions = new ArrayList<Path>();
-    Set<String> unmappedProjects = new HashSet<String>(projects);
+    Set<String> unmappedProjects = new HashSet<String>(projects.keySet());
     Path lastFolder = null;
 
     for (Path folder : folders)
@@ -383,13 +383,41 @@ public final class OwnershipMapper
     if (!projectsFile.exists() || REFRESH_PROJECTS)
     {
       projects = PMI.getProjects();
-      IOUtil.writeLines(projectsFile, "UTF-8", new ArrayList<String>(projects));
+
+      Writer writer = new BufferedWriter(new FileWriter(projectsFile));
+
+      List<String> ids = new ArrayList<String>(projects.keySet());
+      Collections.sort(ids);
+
+      for (String id : ids)
+      {
+        writer.write(id);
+        writer.write("\t");
+
+        String name = projects.get(id);
+        if (name != null)
+        {
+          writer.write(name);
+        }
+
+        writer.write("\n");
+      }
+
       System.out.println();
     }
     else
     {
+      projects = new HashMap<String, String>();
+
       List<String> lines = IOUtil.readLines(projectsFile, "UTF-8");
-      projects = new HashSet<String>(lines);
+      for (String line : lines)
+      {
+        int tab = line.indexOf('\t');
+        String id = line.substring(0, tab);
+        String name = line.substring(tab + 1);
+
+        projects.put(id, name);
+      }
     }
   }
 
@@ -474,7 +502,7 @@ public final class OwnershipMapper
             return "foo.bar"; // UNKNOWN
           }
 
-          return projects.toArray(new String[projects.size()])[i % 3];
+          return projects.keySet().toArray(new String[projects.size()])[i % 3];
         }
       };
     }
@@ -537,13 +565,13 @@ public final class OwnershipMapper
   {
     private static final String URL = "https://projects.eclipse.org/list-of-projects";
 
-    private static final Pattern PATTERN = Pattern.compile("<div[^>]+about=\"/projects/([^\"]+)\"[^>]+>");
+    private static final Pattern ID_PATTERN = Pattern.compile("<div[^>]+about=\"/projects/([^\"]+)\"[^>]+>");
 
     private static final String NEXT = "<li class=\"next\">";
 
-    public static Set<String> getProjects() throws Exception
+    public static Map<String, String> getProjects() throws Exception
     {
-      Set<String> projects = new HashSet<String>();
+      Map<String, String> projects = new HashMap<String, String>();
       for (int page = 0;; ++page)
       {
         String url = URL + "?page=" + page;
@@ -574,15 +602,24 @@ public final class OwnershipMapper
     /**
      * @return <code>true</code> if this is the last page.
      */
-    private static boolean processPage(String content, Set<String> projects)
+    private static boolean processPage(String content, Map<String, String> projects)
     {
-      Matcher matcher = PATTERN.matcher(content);
+      Matcher matcher = ID_PATTERN.matcher(content);
       int start = 0;
 
       while (matcher.find(start))
       {
         String project = matcher.group(1);
-        projects.add(project);
+        String name = "";
+
+        Pattern namePattern = Pattern.compile("<a href=\"/projects/" + project.replace(".", "\\.") + "\">([^<]+)</a>");
+        Matcher nameMatcher = namePattern.matcher(content);
+        if (nameMatcher.find())
+        {
+          name = nameMatcher.group(1);
+        }
+
+        projects.put(project, name);
         start = matcher.end();
       }
 
