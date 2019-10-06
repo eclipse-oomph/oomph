@@ -383,24 +383,30 @@ public final class OwnershipMapper
     if (!projectsFile.exists() || REFRESH_PROJECTS)
     {
       projects = PMI.getProjects();
-
-      Writer writer = new BufferedWriter(new FileWriter(projectsFile));
-
       List<String> ids = new ArrayList<String>(projects.keySet());
       Collections.sort(ids);
 
-      for (String id : ids)
+      Writer writer = new BufferedWriter(new FileWriter(projectsFile));
+
+      try
       {
-        writer.write(id);
-        writer.write("\t");
-
-        String name = projects.get(id);
-        if (name != null)
+        for (String id : ids)
         {
-          writer.write(name);
-        }
+          writer.write(id);
+          writer.write("\t");
 
-        writer.write("\n");
+          String name = projects.get(id);
+          if (name != null)
+          {
+            writer.write(name);
+          }
+
+          writer.write("\n");
+        }
+      }
+      finally
+      {
+        IOUtil.close(writer);
       }
 
       System.out.println();
@@ -609,14 +615,14 @@ public final class OwnershipMapper
 
       while (matcher.find(start))
       {
-        String project = matcher.group(1);
+        String project = matcher.group(1).trim();
         String name = "";
 
         Pattern namePattern = Pattern.compile("<a href=\"/projects/" + project.replace(".", "\\.") + "\">([^<]+)</a>");
         Matcher nameMatcher = namePattern.matcher(content);
         if (nameMatcher.find())
         {
-          name = nameMatcher.group(1);
+          name = nameMatcher.group(1).trim();
         }
 
         projects.put(project, name);
