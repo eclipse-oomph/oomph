@@ -32,7 +32,15 @@ import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectOutputStrea
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
-import java.io.BufferedReader;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
@@ -41,7 +49,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
@@ -53,17 +60,17 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -84,6 +91,12 @@ public final class P2Indexer implements IApplication
    */
   private final Map<String, Set<String>> capabilityIndex = new HashMap<String, Set<String>>();
 
+  private final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+
+  private final Queue<SAXParser> parserPool = new ConcurrentLinkedQueue<SAXParser>();
+
+  private final ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4);
+
   private final Deque<Future<?>> deque = new ConcurrentLinkedDeque<Future<?>>();
 
   private final long timeStamp = System.currentTimeMillis();
@@ -101,8 +114,6 @@ public final class P2Indexer implements IApplication
     long start = System.currentTimeMillis();
     String[] args = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
     LinkedList<String> arguments = new LinkedList<String>(Arrays.asList(args));
-
-    ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4);
 
     try
     {
@@ -129,14 +140,14 @@ public final class P2Indexer implements IApplication
         baseURI = baseURI.trimSegments(1);
       }
 
-      scanFolder(executor, scanFolder, baseURI);
+      scanFolder(scanFolder, baseURI);
 
       for (Future<?> future = deque.pollFirst(); future != null; future = deque.pollFirst())
       {
         future.get();
       }
 
-      generateRepositoryMetadata(executor);
+      generateRepositoryMetadata();
 
       for (Future<?> future = deque.pollFirst(); future != null; future = deque.pollFirst())
       {
@@ -148,7 +159,7 @@ public final class P2Indexer implements IApplication
     finally
     {
       System.out.println("Took " + (System.currentTimeMillis() - start) / 1000 + " seconds.");
-      executor.shutdown();
+      threadPool.shutdown();
     }
 
     return null;
@@ -158,14 +169,14 @@ public final class P2Indexer implements IApplication
   {
   }
 
-  private void scanFolder(final ExecutorService executor, final File folder, final URI uri)
+  private void scanFolder(final File folder, final URI uri)
   {
     if (repositories.size() >= maxRepos)
     {
       return;
     }
 
-    deque.addLast(executor.submit(new Runnable()
+    deque.addLast(threadPool.submit(new Runnable()
     {
       public void run()
       {
@@ -179,11 +190,11 @@ public final class P2Indexer implements IApplication
 
           if (metadataFile.getName().startsWith("composite"))
           {
-            repositories.put(uri, new Repository.Composite(uri, metadataFile));
+            repositories.put(uri, new Repository.Composite(P2Indexer.this, uri, metadataFile));
           }
           else
           {
-            repositories.put(uri, new Repository.Simple(uri, metadataFile));
+            repositories.put(uri, new Repository.Simple(P2Indexer.this, uri, metadataFile));
           }
         }
       }
@@ -207,13 +218,13 @@ public final class P2Indexer implements IApplication
         final String encodedName = URI.encodeSegment(name, false);
         if (name.equals(URI.decode(encodedName)))
         {
-          deque.addLast(executor.submit(new Runnable()
+          scheduleTask(new Runnable()
           {
             public void run()
             {
-              scanFolder(executor, child, uri.appendSegment(encodedName));
+              scanFolder(child, uri.appendSegment(encodedName));
             }
-          }));
+          });
         }
         else
         {
@@ -300,12 +311,12 @@ public final class P2Indexer implements IApplication
     return null;
   }
 
-  private void generateRepositoryMetadata(ExecutorService executor)
+  private void generateRepositoryMetadata()
   {
     for (final Map.Entry<URI, Repository> entry : repositories.entrySet())
     {
       final Repository repository = entry.getValue();
-      deque.addLast(executor.submit(new Runnable()
+      scheduleTask(new Runnable()
       {
         public void run()
         {
@@ -314,17 +325,27 @@ public final class P2Indexer implements IApplication
             System.out.println("Processing " + repository.getMetadataFile());
           }
 
+          SAXParser parser = null;
+
           try
           {
-            repository.processsMetadata(P2Indexer.this, verbose);
+            parser = acquireParser();
+            repository.processsMetadata(parser);
           }
           catch (Exception ex)
           {
             repositories.remove(entry.getKey());
             print("Processing " + repository.getMetadataFile(), ex);
           }
+          finally
+          {
+            if (parser != null)
+            {
+              releaseParser(parser);
+            }
+          }
         }
-      }));
+      });
     }
   }
 
@@ -342,7 +363,27 @@ public final class P2Indexer implements IApplication
     {
       //$FALL-THROUGH$
     }
+  }
 
+  private void scheduleTask(Runnable task)
+  {
+    deque.addLast(threadPool.submit(task));
+  }
+
+  private SAXParser acquireParser() throws ParserConfigurationException, SAXException
+  {
+    SAXParser parser = parserPool.poll();
+    if (parser == null)
+    {
+      parser = parserFactory.newSAXParser();
+    }
+
+    return parser;
+  }
+
+  private void releaseParser(SAXParser parser)
+  {
+    parserPool.add(parser);
   }
 
   private void generateIndex(File outputFolder) throws Exception
@@ -506,18 +547,6 @@ public final class P2Indexer implements IApplication
     return count;
   }
 
-  private static Pattern pattern(String pattern)
-  {
-    pattern = pattern.replaceAll(" ", "\\\\s+");
-    pattern = pattern.replaceAll("=", "\\\\s*=\\\\s*");
-    pattern = pattern.replaceAll("/>", "\\\\s*/>");
-    pattern = pattern.replaceAll("'", " ");
-    pattern = pattern.replaceAll("\"", " ");
-    pattern = pattern.replaceAll(" ", "['\"]");
-    pattern = pattern.replaceAll("#", "([^'\"]+)");
-    return Pattern.compile(pattern);
-  }
-
   /**
    * TODO Use {@link IOUtil#isValidFolder(File)}.
    */
@@ -536,21 +565,23 @@ public final class P2Indexer implements IApplication
   /**
    * @author Eike Stepper
    */
-  private static abstract class Repository
+  private static abstract class Repository extends DefaultHandler
   {
     private static final String XML_SUFFIX = ".xml";
 
     private static final String JAR_SUFFIX = ".jar";
 
-    private static final Pattern TIMESTAMP_PATTERN = pattern("<property name='p2.timestamp' value='#'/>");
-
     private static final long NO_TIMESTAMP = 0;
 
     protected final List<Composite> composites = new ArrayList<Composite>();
 
+    protected final P2Indexer indexer;
+
     protected final URI uri;
 
     protected final File metadataFile;
+
+    protected String elementPath;
 
     protected int id;
 
@@ -558,8 +589,9 @@ public final class P2Indexer implements IApplication
 
     protected int unresolvedChildren;
 
-    public Repository(URI uri, File metadataFile)
+    public Repository(P2Indexer indexer, URI uri, File metadataFile)
     {
+      this.indexer = indexer;
       this.uri = uri;
       this.metadataFile = metadataFile;
     }
@@ -596,15 +628,13 @@ public final class P2Indexer implements IApplication
       return 0;
     }
 
-    public void processsMetadata(P2Indexer indexer, boolean verbose) throws IOException
+    public void processsMetadata(SAXParser parser) throws IOException, SAXException
     {
       JarFile jarFile = null;
-      BufferedReader reader = null;
+      InputStream inputStream = null;
 
       try
       {
-        InputStream inputStream;
-
         if (isCompressed())
         {
           String name = metadataFile.getName();
@@ -619,45 +649,12 @@ public final class P2Indexer implements IApplication
           inputStream = new FileInputStream(metadataFile);
         }
 
-        reader = new BufferedReader(new InputStreamReader(inputStream, CHARSET));
-
-        String line;
-        while ((line = reader.readLine()) != null)
-        {
-          if (timestamp == NO_TIMESTAMP)
-          {
-            Matcher matcher = TIMESTAMP_PATTERN.matcher(line);
-            if (matcher.find())
-            {
-              try
-              {
-                timestamp = Long.parseLong(matcher.group(1));
-              }
-              catch (NumberFormatException ex)
-              {
-                System.err.println("Bad timestamp value '" + matcher.group(1) + "' for: " + metadataFile);
-              }
-            }
-          }
-
-          while (!line.trim().endsWith(">"))
-          {
-            String incompleteLine = line;
-            line = reader.readLine();
-            if (line == null)
-            {
-              return;
-            }
-
-            line = incompleteLine + " " + line;
-          }
-
-          processsMetadata(indexer, line, verbose);
-        }
+        inputStream = new BufferedInputStream(inputStream);
+        parser.parse(inputStream, this);
       }
       finally
       {
-        IOUtil.close(reader);
+        IOUtil.close(inputStream);
 
         if (jarFile != null)
         {
@@ -666,7 +663,68 @@ public final class P2Indexer implements IApplication
       }
     }
 
-    protected abstract void processsMetadata(P2Indexer indexer, String line, boolean verbose);
+    protected boolean startElement(String elementPath, Attributes attributes)
+    {
+      if ("repository>properties>property".equals(elementPath))
+      {
+        if (timestamp == NO_TIMESTAMP)
+        {
+          String name = attributes.getValue("name");
+          if ("p2.timestamp".equals(name))
+          {
+            String value = attributes.getValue("name");
+            if (value != null)
+            {
+              try
+              {
+                timestamp = Long.parseLong(value);
+              }
+              catch (NumberFormatException ex)
+              {
+                System.err.println("Bad timestamp value '" + value + "' for: " + metadataFile);
+              }
+            }
+            else
+            {
+              System.err.println("No timestamp value for: " + metadataFile);
+            }
+          }
+        }
+    
+        return true;
+      }
+    
+      return false;
+    }
+
+    @Override
+    public final void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
+    {
+      if (elementPath == null)
+      {
+        elementPath = qName;
+      }
+      else
+      {
+        elementPath += ">" + qName;
+      }
+
+      startElement(elementPath, attributes);
+    }
+
+    @Override
+    public final void endElement(String uri, String localName, String qName) throws SAXException
+    {
+      int pos = elementPath.lastIndexOf('>');
+      if (pos >= 0)
+      {
+        elementPath = elementPath.substring(0, pos);
+      }
+      else
+      {
+        elementPath = null;
+      }
+    }
 
     public void write(P2Indexer indexer, EObjectOutputStream stream) throws IOException
     {
@@ -743,15 +801,11 @@ public final class P2Indexer implements IApplication
      */
     private static final class Simple extends Repository
     {
-      private static final Pattern CAPABILITY_PATTERN = pattern("<provided namespace='#' name='#' version='#'/>");
-
-      private static final Pattern CAPABILITY_PATTERN_ALT = pattern("<provided name='#' namespace='#' version='#'/>");
-
       private int capabilityCount;
 
-      public Simple(URI uri, File metadataFile)
+      public Simple(P2Indexer indexer, URI uri, File metadataFile)
       {
-        super(uri, metadataFile);
+        super(indexer, uri, metadataFile);
       }
 
       @Override
@@ -767,42 +821,33 @@ public final class P2Indexer implements IApplication
       }
 
       @Override
-      protected void processsMetadata(P2Indexer indexer, String line, boolean verbose)
+      protected boolean startElement(String elementPath, Attributes attributes)
       {
-        int namespaceIndex = 1;
-        int nameIndex = 2;
-        int versionIndex = 3;
-        Matcher matcher = CAPABILITY_PATTERN.matcher(line);
-        boolean found = matcher.find();
-        if (!found)
+        if (super.startElement(elementPath, attributes))
         {
-          matcher = CAPABILITY_PATTERN_ALT.matcher(line);
-          nameIndex = 1;
-          namespaceIndex = 2;
-          found = matcher.find();
+          return true;
         }
 
-        if (found)
+        if ("repository>units>unit>provides>provided".equals(elementPath))
         {
-          String namespace = URI.encodeSegment(matcher.group(namespaceIndex), false);
-          String name = URI.encodeSegment(matcher.group(nameIndex), false);
-          String qualifiedName = namespace + "/" + name;
+          String namespace = attributes.getValue("namespace");
+          String name = attributes.getValue("name");
+          String version = attributes.getValue("version");
 
+          String qualifiedName = namespace + "/" + name;
           if (name.equals(".") || name.equals("..") || name.startsWith("file:"))
           {
-            if (verbose)
+            if (indexer.verbose)
             {
               System.err.println("Skipping " + qualifiedName);
             }
 
-            return;
+            return true;
           }
 
           synchronized (indexer.capabilityIndex)
           {
             CollectionUtil.add(indexer.capabilityIndex, namespace, name);
-
-            String version = matcher.group(versionIndex);
 
             List<Capability> list = indexer.capabilities.get(qualifiedName);
             if (list == null)
@@ -814,7 +859,11 @@ public final class P2Indexer implements IApplication
             list.add(new Capability(this, version));
             ++capabilityCount;
           }
+
+          return true;
         }
+
+        return false;
       }
     }
 
@@ -823,11 +872,9 @@ public final class P2Indexer implements IApplication
      */
     private static final class Composite extends Repository
     {
-      private static final Pattern CHILD_PATTERN = pattern("<child location='#'/>");
-
-      public Composite(URI uri, File metadataFile)
+      public Composite(P2Indexer indexer, URI uri, File metadataFile)
       {
-        super(uri, metadataFile);
+        super(indexer, uri, metadataFile);
       }
 
       @Override
@@ -837,12 +884,16 @@ public final class P2Indexer implements IApplication
       }
 
       @Override
-      protected void processsMetadata(P2Indexer indexer, String line, boolean verbose)
+      protected boolean startElement(String elementPath, Attributes attributes)
       {
-        Matcher matcher = CHILD_PATTERN.matcher(line);
-        if (matcher.find())
+        if (super.startElement(elementPath, attributes))
         {
-          String child = matcher.group(1);
+          return true;
+        }
+
+        if ("repository>children>child".equals(elementPath))
+        {
+          String child = attributes.getValue("location");
           if (!StringUtil.isEmpty(child))
           {
             URI childURI = URI.createURI(child);
@@ -872,6 +923,8 @@ public final class P2Indexer implements IApplication
             }
           }
         }
+
+        return false;
       }
     }
   }
@@ -900,6 +953,5 @@ public final class P2Indexer implements IApplication
     {
       return version;
     }
-
   }
 }
