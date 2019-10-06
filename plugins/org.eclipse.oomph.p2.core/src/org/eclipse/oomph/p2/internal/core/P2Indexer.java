@@ -79,7 +79,7 @@ public final class P2Indexer implements IApplication
 {
   private static final String CHARSET = "UTF-8";
 
-  private final Map<URI, Repository> repositories = new ConcurrentHashMap<URI, P2Indexer.Repository>();
+  private final Map<URI, Repository> repositories = new ConcurrentHashMap<URI, Repository>();
 
   /**
    * The map from repository URL to the list of capabilities in that repository.
@@ -462,7 +462,7 @@ public final class P2Indexer implements IApplication
       List<Repository> problematicRepositories = new ArrayList<Repository>();
       for (Repository repository : repositories.values())
       {
-        repository.write(this, stream);
+        repository.write(stream);
 
         if (repository.unresolvedChildren > 0)
         {
@@ -672,7 +672,7 @@ public final class P2Indexer implements IApplication
           String name = attributes.getValue("name");
           if ("p2.timestamp".equals(name))
           {
-            String value = attributes.getValue("name");
+            String value = attributes.getValue("value");
             if (value != null)
             {
               try
@@ -690,10 +690,10 @@ public final class P2Indexer implements IApplication
             }
           }
         }
-    
+
         return true;
       }
-    
+
       return false;
     }
 
@@ -726,7 +726,7 @@ public final class P2Indexer implements IApplication
       }
     }
 
-    public void write(P2Indexer indexer, EObjectOutputStream stream) throws IOException
+    public void write(EObjectOutputStream stream) throws IOException
     {
       stream.writeURI(uri);
       stream.writeBoolean(isComposed());
@@ -830,8 +830,8 @@ public final class P2Indexer implements IApplication
 
         if ("repository>units>unit>provides>provided".equals(elementPath))
         {
-          String namespace = attributes.getValue("namespace");
-          String name = attributes.getValue("name");
+          String namespace = URI.encodeSegment(attributes.getValue("namespace"), false);
+          String name = URI.encodeSegment(attributes.getValue("name"), false);
           String version = attributes.getValue("version");
 
           String qualifiedName = namespace + "/" + name;
