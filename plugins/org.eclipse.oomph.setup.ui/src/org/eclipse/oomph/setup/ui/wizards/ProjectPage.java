@@ -358,6 +358,8 @@ public class ProjectPage extends SetupWizardPage
       }
     };
 
+    getWizard().addConfigurationListener(configurationListener);
+
     final ToolItem catalogsButton = new ToolItem(filterToolBar, SWT.DROP_DOWN);
     catalogsButton.setToolTipText("Select Catalogs");
     catalogsButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("catalogs"));
@@ -992,7 +994,7 @@ public class ProjectPage extends SetupWizardPage
           return;
         }
 
-        ConfigurationProcessor configurationProcessor = new ConfigurationProcessor(getWizard())
+        ConfigurationProcessor configurationProcessor = new ConfigurationProcessor(setupWizard)
         {
           @Override
           protected boolean applyStreams(List<Stream> streams)
@@ -1033,11 +1035,6 @@ public class ProjectPage extends SetupWizardPage
 
             streamViewer.refresh();
             projectViewer.refresh();
-            if (isCurrentPage())
-            {
-              gotoNextPage();
-            }
-
             return true;
           }
 
@@ -1054,6 +1051,17 @@ public class ProjectPage extends SetupWizardPage
             }
 
             return true;
+          }
+
+          @Override
+          protected boolean applyWorkspace()
+          {
+            boolean result = super.applyWorkspace();
+            if (result && isCurrentPage())
+            {
+              gotoNextPage();
+            }
+            return result;
           }
         };
 
@@ -2502,6 +2510,11 @@ public class ProjectPage extends SetupWizardPage
       this.setupWizard = setupWizard;
       this.catalogManager = catalogManager;
       this.toolBar = toolBar;
+    }
+
+    public ToolBar getToolBar()
+    {
+      return toolBar;
     }
 
     @Override

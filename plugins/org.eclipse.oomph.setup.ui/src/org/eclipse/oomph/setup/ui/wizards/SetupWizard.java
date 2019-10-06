@@ -33,6 +33,7 @@ import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.IndexManager;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.p2.util.MarketPlaceListing;
 import org.eclipse.oomph.setup.p2.util.P2TaskUISevices;
 import org.eclipse.oomph.setup.ui.P2TaskUIServicesPrompter;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
@@ -327,7 +328,24 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       }
     }
 
-    appliedConfigurationResources.add(0, configurationResource);
+    // Keep the listings first so that if these are applied again, e.g., when switching modes, they are processed first.
+    if (MarketPlaceListing.isMarketPlaceListing(configurationResource.getURI()))
+    {
+      appliedConfigurationResources.add(0, configurationResource);
+    }
+    else
+    {
+      appliedConfigurationResources.add(configurationResource);
+    }
+  }
+
+  public void addConfigurationListener(ProjectPage.ConfigurationListener configurationListener)
+  {
+  }
+
+  public void removeAppliedConfigurationResource(Resource configurationResource)
+  {
+    appliedConfigurationResources.remove(configurationResource);
   }
 
   public Configuration getConfiguration()

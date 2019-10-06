@@ -25,12 +25,14 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -201,6 +203,29 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     });
     AccessUtil.setKey(simpleToolItem, "simple");
 
+    final ToolItem webLinksToolItem = createToolItem(toolBar, URISchemeUtil.isRegistered() ? "web_links_registered.png" : "web_links_unregistered.png",
+        SimpleInstallerDialog.WEB_LINKS_MENU_ITEM_DESCRIPTION);
+    webLinksToolItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        if (URISchemeUtil.manageRegistrations(getShell()) == URISchemeUtil.RegistrationConfirmation.KEEP_INSTALLER)
+        {
+          KeepInstallerDialog keepInstallerDialog = new KeepInstallerDialog(getShell(), true);
+          if (keepInstallerDialog.open() == Window.OK)
+          {
+            close();
+            return;
+          }
+        }
+
+        webLinksToolItem
+            .setImage(SetupInstallerPlugin.INSTANCE.getSWTImage(URISchemeUtil.isRegistered() ? "web_links_registered.png" : "web_links_unregistered.png"));
+      }
+    });
+    AccessUtil.setKey(simpleToolItem, "web-links");
+
     updateToolItem = createToolItem(toolBar, "install_update0", "Update");
     updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching0"));
     updateToolItem.addSelectionListener(new SelectionAdapter()
@@ -364,7 +389,12 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
 
   public int show()
   {
-    return open();
+    setBlockOnOpen(false);
+    open();
+
+    getInstaller().runEventLoop(getShell());
+
+    return getReturnCode();
   }
 
   public void showAbout()
@@ -376,6 +406,12 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
   {
     close();
     setReturnCode(RETURN_RESTART);
+  }
+
+  public void reset()
+  {
+    close();
+    setReturnCode(RETURN_ADVANCED);
   }
 
   /**
@@ -522,5 +558,13 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
         updateSearching = false;
       }
     }
+  }
+
+  @Override
+  protected Point getInitialSize()
+  {
+    Point initialSize = super.getInitialSize();
+    initialSize.x = initialSize.x * 11 / 10;
+    return initialSize;
   }
 }

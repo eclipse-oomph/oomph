@@ -24,6 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 
 import java.util.HashSet;
@@ -48,6 +49,8 @@ public class SimpleInstallerMenuButton extends Composite
   private final Set<SelectionListener> selectionListeners = new HashSet<SelectionListener>();
 
   private final Label notificationOverlay;
+
+  private boolean notificationVisible;
 
   private final FlatButton button;
 
@@ -74,21 +77,12 @@ public class SimpleInstallerMenuButton extends Composite
     notificationOverlay.addMouseListener(new MouseAdapter()
     {
       @Override
-      public void mouseDown(MouseEvent e)
+      public void mouseUp(MouseEvent e)
       {
         synchronized (selectionListeners)
         {
-          for (SelectionListener listener : selectionListeners)
-          {
-            try
-            {
-              listener.widgetSelected(null);
-            }
-            catch (Exception ex)
-            {
-              // Ignore.
-            }
-          }
+          button.setFocus();
+          button.notifyListeners(SWT.MouseUp, new Event());
         }
       }
     });
@@ -128,9 +122,28 @@ public class SimpleInstallerMenuButton extends Composite
     notificationOverlay.setEnabled(enabled);
   }
 
+  public void setExtensionVisible(boolean visible)
+  {
+    if (visible)
+    {
+      Image overlayImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/extension_notification_overlay.png");
+      notificationOverlay.setImage(overlayImage);
+      notificationOverlay.setToolTipText("Marketplace listings and configurations have been applied");
+      notificationOverlay.setVisible(true);
+    }
+    else
+    {
+      setNotificationVisible(notificationVisible);
+    }
+  }
+
   public void setNotificationVisible(boolean visible)
   {
+    Image overlayImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/notification_overlay.png");
+    notificationOverlay.setImage(overlayImage);
+    notificationOverlay.setToolTipText("Updates are available");
     notificationOverlay.setVisible(visible);
+    notificationVisible = visible;
   }
 
   public void addSelectionListener(SelectionListener listener)

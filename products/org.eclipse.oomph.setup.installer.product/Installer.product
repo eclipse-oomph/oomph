@@ -7,11 +7,13 @@
    </configIni>
 
    <launcherArgs>
-      <programArgs>--launcher.appendVmargs
+      <programArgs>--launcher.defaultAction
+openFile
+--launcher.appendVmargs
 --launcher.XXMaxPermSize
 256M
 -name
-Eclipse Installer
+Eclipse&#x00A0;Installer
 -data
 @noDefault
       </programArgs>

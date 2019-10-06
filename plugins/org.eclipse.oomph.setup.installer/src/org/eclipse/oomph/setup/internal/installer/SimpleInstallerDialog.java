@@ -31,8 +31,10 @@ import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.IndexManager;
 import org.eclipse.oomph.setup.internal.installer.SimpleInstallerMenu.InstallerMenuItem;
 import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.ControlRelocator;
+import org.eclipse.oomph.setup.p2.util.MarketPlaceListing;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.ConfigurationProcessor;
+import org.eclipse.oomph.setup.ui.wizards.ExtensionsDialog;
 import org.eclipse.oomph.setup.ui.wizards.MarketPlaceListingProcessor;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
@@ -56,6 +58,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.DisposeEvent;
@@ -92,6 +95,16 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private static final String APPLY_CONFIGURATION_MENU_ITEM_TEXT = "APPLY CONFIGURATION";
 
+  private static final String APPLY_CONFIGURATION_MENU_ITEM_DESCRIPTION = "Apply the configuration from the clipboard";
+
+  private static final String APPLY_MARKET_PLACE_LISTING_MENU_ITEM_TEXT = "APPLY MARKETPLACE LISTING" + StringUtil.HORIZONTAL_ELLIPSIS;
+
+  private static final String APPLY_MARKET_PLACE_LISTING_MENU_ITEM_DESCRIPTION = "Apply the marketplace listing from the clipboard";
+
+  private static final String EXTENSIONS_MENU_ITEM_TEXT = "EXTENSIONS" + StringUtil.HORIZONTAL_ELLIPSIS;
+
+  static final String EXTENSIONS_MENU_ITEM_DESCRIPTION = "Manage the applied marketplace listings and configurations";
+
   private static final String SWITCH_CATALOG_INDEX_MENU_ITEM_TEXT = "SWITCH CATALOG INDEX";
 
   private static final String BUNDLE_POOLS_MENU_ITEM_TEXT = "BUNDLE POOLS" + StringUtil.HORIZONTAL_ELLIPSIS;
@@ -99,6 +112,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   private static final String UPDATE_MENU_ITEM_TEXT = "UPDATE";
 
   private static final String ADVANCED_MENU_ITEM_TEXT = "ADVANCED MODE" + StringUtil.HORIZONTAL_ELLIPSIS;
+
+  private static final String WEB_LINKS_MENU_ITEM_TEXT = "WEB LINKS" + StringUtil.HORIZONTAL_ELLIPSIS;
+
+  static final String WEB_LINKS_MENU_ITEM_DESCRIPTION = "Register this installer to automatically launch for links in a web browser";
 
   private static final String MARKET_PLACE_MENU_ITEM_TEXT = "MARKETPLACE" + StringUtil.HORIZONTAL_ELLIPSIS;
 
@@ -163,6 +180,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   private SimpleMessageOverlay currentMessage;
 
   private ToggleSwitchButton bundlePoolSwitch;
+
+  private ToggleSwitchButton webLinksSwitch;
 
   private boolean showProductCatalogsItem;
 
@@ -367,15 +386,41 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         topPage.menuAboutToShow(installerMenu);
       }
 
+      InstallerMenuItem extensionsItem = installerMenu.findMenuItemByName(EXTENSIONS_MENU_ITEM_TEXT);
+      extensionsItem.setVisible(!installer.getAppliedConfigurationResources().isEmpty());
+
       InstallerMenuItem switchCatalogIndexItem = installerMenu.findMenuItemByName(SWITCH_CATALOG_INDEX_MENU_ITEM_TEXT);
       InstallerMenuItem catalogsMenuItem = installerMenu.findMenuItemByName(CATALOGS_MENU_ITEM_TEXT);
+      InstallerMenuItem marketPlaceItem = installerMenu.findMenuItemByName(MARKET_PLACE_MENU_ITEM_TEXT);
       InstallerMenuItem applyConfigurationMenuItem = installerMenu.findMenuItemByName(APPLY_CONFIGURATION_MENU_ITEM_TEXT);
+      if (applyConfigurationMenuItem == null)
+      {
+        applyConfigurationMenuItem = installerMenu.findMenuItemByName(APPLY_MARKET_PLACE_LISTING_MENU_ITEM_TEXT);
+      }
 
       if (topPage == productPage)
       {
         Collection<? extends Resource> configurationResources = installer.getUnappliedConfigurationResources();
         URI indexLocation = ProjectPage.ConfigurationListener.getIndexURI(configurationResources);
-        applyConfigurationMenuItem.setVisible(!configurationResources.isEmpty() && indexLocation == null);
+        boolean visible = !configurationResources.isEmpty() && indexLocation == null;
+        if (visible)
+        {
+          boolean isMarketPlaceListing = false;
+          for (Resource resource : configurationResources)
+          {
+            if (MarketPlaceListing.isMarketPlaceListing(resource.getURI()))
+            {
+              isMarketPlaceListing = true;
+              break;
+            }
+          }
+
+          applyConfigurationMenuItem.setText(isMarketPlaceListing ? APPLY_MARKET_PLACE_LISTING_MENU_ITEM_TEXT : APPLY_CONFIGURATION_MENU_ITEM_TEXT);
+          applyConfigurationMenuItem
+              .setToolTipText(isMarketPlaceListing ? APPLY_MARKET_PLACE_LISTING_MENU_ITEM_DESCRIPTION : APPLY_CONFIGURATION_MENU_ITEM_DESCRIPTION);
+        }
+
+        applyConfigurationMenuItem.setVisible(visible);
         boolean switchCatalogVisible = indexLocation != null && !catalogManager.isCurrentIndex(indexLocation);
         switchCatalogIndexItem.setVisible(switchCatalogVisible);
         if (switchCatalogVisible)
@@ -384,15 +429,25 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         }
 
         catalogsMenuItem.setVisible(showProductCatalogsItem);
+
+        if (marketPlaceItem != null)
+        {
+          marketPlaceItem.setVisible(true);
+        }
       }
       else
       {
         catalogsMenuItem.setVisible(false);
         applyConfigurationMenuItem.setVisible(false);
         switchCatalogIndexItem.setVisible(false);
+        if (marketPlaceItem != null)
+        {
+          marketPlaceItem.setVisible(false);
+        }
       }
     }
 
+    installerMenu.layout(true, true);
     installerMenu.setVisible(show);
   }
 
@@ -480,7 +535,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
     SimpleInstallerMenu.InstallerMenuItem applyConfigurationItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
     applyConfigurationItem.setText(APPLY_CONFIGURATION_MENU_ITEM_TEXT);
-    applyConfigurationItem.setToolTipText("Apply the configuration from the clipboard");
+    applyConfigurationItem.setToolTipText(APPLY_CONFIGURATION_MENU_ITEM_DESCRIPTION);
     applyConfigurationItem.setVisible(false);
     applyConfigurationItem.addSelectionListener(new SelectionAdapter()
     {
@@ -488,6 +543,33 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       public void widgetSelected(SelectionEvent e)
       {
         applyConfiguration();
+      }
+    });
+
+    SimpleInstallerMenu.InstallerMenuItem extensionsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+    extensionsItem.setDefaultImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/extension_circle.png"));
+    extensionsItem.setHoverImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/extension_circle_hover.png"));
+    extensionsItem.setText(EXTENSIONS_MENU_ITEM_TEXT);
+    extensionsItem.setToolTipText(EXTENSIONS_MENU_ITEM_DESCRIPTION);
+    extensionsItem.setVisible(false);
+    extensionsItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        Collection<? extends Resource> appliedConfigurationResources = installer.getAppliedConfigurationResources();
+        ExtensionsDialog extensionsDialog = new ExtensionsDialog(getShell(), appliedConfigurationResources);
+        if (extensionsDialog.open() == Window.OK)
+        {
+          Collection<? extends Resource> result = extensionsDialog.getResult();
+          for (Resource resource : appliedConfigurationResources)
+          {
+            if (!result.contains(resource))
+            {
+              installer.removeAppliedConfigurationResource(resource);
+            }
+          }
+        }
       }
     });
 
@@ -559,6 +641,63 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       });
     }
 
+    SimpleInstallerMenu.InstallerMenuItemWithToggle webLinksItem = new SimpleInstallerMenu.InstallerMenuItemWithToggle(menu);
+    webLinksItem.setText(WEB_LINKS_MENU_ITEM_TEXT);
+    webLinksItem.setToolTipText(WEB_LINKS_MENU_ITEM_DESCRIPTION);
+    webLinksItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        if (URISchemeUtil.manageRegistrations(getShell()) == URISchemeUtil.RegistrationConfirmation.KEEP_INSTALLER)
+        {
+          close();
+        }
+        else
+        {
+          webLinksSwitch.setSelected(URISchemeUtil.isRegistered());
+        }
+      }
+    });
+
+    webLinksSwitch = webLinksItem.getToggleSwitch();
+    webLinksSwitch.setSelected(URISchemeUtil.isRegistered());
+    webLinksSwitch.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        boolean enable = webLinksSwitch.isSelected();
+        if (enable)
+        {
+          switch (URISchemeUtil.confirmRegistration(getShell()))
+          {
+            case KEEP_INSTALLER:
+            {
+              showKeepInstaller(true);
+              break;
+            }
+            case OK:
+            {
+              URISchemeUtil.setRegistered(true);
+              break;
+            }
+            case DONE:
+            case CANCEL:
+            {
+              break;
+            }
+          }
+        }
+        else
+        {
+          URISchemeUtil.setRegistered(false);
+        }
+
+        webLinksSwitch.setSelected(URISchemeUtil.isRegistered());
+      }
+    });
+
     if (MARKETPLACE_MENU_ITEM_ENABLED)
     {
       SimpleInstallerMenu.InstallerMenuItem marketPlaceItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
@@ -599,6 +738,11 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     });
 
     return menu;
+  }
+
+  public void setExtensionsAvailable(boolean available)
+  {
+    menuButton.setExtensionVisible(available);
   }
 
   private void updateAvailable(boolean available)
@@ -683,6 +827,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   {
     String version = SelfUpdate.getProductVersion();
     new AboutDialog(getShell(), version).open();
+  }
+
+  @Override
+  protected void runEventLoop()
+  {
+    getInstaller().runEventLoop(getShell());
   }
 
   public void productSelected(Product product)
@@ -863,8 +1013,9 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     switchToPage(installationLogPage);
   }
 
-  public void showKeepInstaller()
+  public void showKeepInstaller(boolean startPermanentInstaller)
   {
+    keepInstallerPage.setStartPermanentInstaller(startPermanentInstaller);
     switchToPage(keepInstallerPage);
   }
 

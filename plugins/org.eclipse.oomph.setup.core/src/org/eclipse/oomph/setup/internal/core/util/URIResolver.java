@@ -14,11 +14,13 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIHandler;
 
 /**
- * An interface implements by {@link URIHandler uri handlers} that can resolve the URIs they handle.
+ * An interface typically implemented by {@link URIHandler uri handlers} that can resolve the URIs they handle.
  *
  * @author Ed Merks
  */
 public interface URIResolver
 {
+  public boolean canHandle(URI uri);
+
   public URI resolve(URI uri);
 }

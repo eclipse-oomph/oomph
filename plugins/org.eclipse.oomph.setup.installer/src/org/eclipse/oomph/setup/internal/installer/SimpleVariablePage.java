@@ -685,7 +685,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        dialog.showKeepInstaller();
+        dialog.showKeepInstaller(false);
       }
     });
     keepInstallerButton.setToolTipText(KeepInstallerUtil.KEEP_INSTALLER_DESCRIPTION);

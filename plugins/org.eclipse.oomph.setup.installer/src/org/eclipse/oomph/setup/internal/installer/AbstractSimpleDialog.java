@@ -149,6 +149,13 @@ public abstract class AbstractSimpleDialog extends Shell
 
     open();
 
+    runEventLoop();
+
+    return returnCode;
+  }
+
+  protected void runEventLoop()
+  {
     Display display = getDisplay();
     while (!isDisposed())
     {
@@ -157,8 +164,6 @@ public abstract class AbstractSimpleDialog extends Shell
         display.sleep();
       }
     }
-
-    return returnCode;
   }
 
   protected final int getReturnCode()

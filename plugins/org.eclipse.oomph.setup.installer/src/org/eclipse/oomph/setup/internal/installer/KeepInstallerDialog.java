@@ -53,7 +53,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
 
   public KeepInstallerDialog(Shell parentShell, boolean startPermanentInstaller)
   {
-    super(parentShell, PropertiesUtil.getProductName(), 560, 270, SetupInstallerPlugin.INSTANCE, false);
+    super(parentShell, PropertiesUtil.getProductName(), 610, 380, SetupInstallerPlugin.INSTANCE, false);
     this.startPermanentInstaller = startPermanentInstaller;
   }
 
@@ -225,7 +225,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       public void run()
       {
         File home = new File(PropertiesUtil.getUserHome());
-        String folderName = PropertiesUtil.getProductName().toLowerCase().replace(' ', '-');
+        String folderName = PropertiesUtil.getProductName().toLowerCase().replace('\u00A0', '-').replace(' ', '-');
         for (int i = 1; i < Integer.MAX_VALUE; i++)
         {
           File folder = new File(home, folderName + (i > 1 ? i : ""));

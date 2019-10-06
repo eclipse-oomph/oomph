@@ -215,7 +215,14 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
                 {
                   public void run()
                   {
-                    dialog.backSelected();
+                    if (startPermanentInstaller)
+                    {
+                      dialog.close();
+                    }
+                    else
+                    {
+                      dialog.backSelected();
+                    }
                   }
                 });
 
@@ -241,6 +248,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
   public void setStartPermanentInstaller(boolean startPermanentInstaller)
   {
     this.startPermanentInstaller = startPermanentInstaller;
+    applyButton.setText(startPermanentInstaller ? "APPLY AND LAUNCH" : "APPLY");
   }
 
   private SimpleCheckbox createCheckbox(Composite parent, String text)

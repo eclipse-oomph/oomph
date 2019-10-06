@@ -34,6 +34,7 @@ import org.eclipse.emf.edit.EMFEditPlugin;
 import org.eclipse.emf.edit.command.AbstractOverrideableCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.CopyCommand;
+import org.eclipse.emf.edit.command.DragAndDropCommand;
 import org.eclipse.emf.edit.command.DragAndDropFeedback;
 import org.eclipse.emf.edit.command.PasteFromClipboardCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -231,6 +232,19 @@ public class SetupTransferSupport
     }
 
     dropTargets.clear();
+  }
+
+  public void urisDropped(Collection<? extends URI> uris)
+  {
+    try
+    {
+      Command command = editingDomain.createCommand(DragAndDropCommand.class,
+          new CommandParameter(editingDomain.getResourceSet(), new DragAndDropCommand.Detail(0.5f, 0, 0), null, uris));
+      editingDomain.getCommandStack().execute(command);
+    }
+    catch (RuntimeException exception)
+    {
+    }
   }
 
   public Collection<? extends Resource> getResources()

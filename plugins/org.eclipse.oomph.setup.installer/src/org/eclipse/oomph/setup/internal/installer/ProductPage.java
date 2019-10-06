@@ -372,9 +372,9 @@ public class ProductPage extends SetupWizardPage
     javaLabel.setText("Java VM:");
 
     javaViewer = new ComboViewer(lowerComposite, SWT.READ_ONLY);
-    javaViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    javaViewer.setContentProvider(new ArrayContentProvider());
+    javaViewer.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     javaViewer.setLabelProvider(new LabelProvider());
+    javaViewer.setContentProvider(new ArrayContentProvider());
 
     javaViewer.setInput(Collections.singletonList(new JRE(new File(""), 0, 0, 0, 0, false, 0)));
 
@@ -613,6 +613,7 @@ public class ProductPage extends SetupWizardPage
     AccessUtil.setKey(collapseAllButton, "collapse");
 
     configurationListener = new ProjectPage.ConfigurationListener(getWizard(), catalogManager, filterToolBar);
+    getWizard().addConfigurationListener(configurationListener);
 
     final ToolItem catalogsButton = new ToolItem(filterToolBar, SWT.DROP_DOWN);
     catalogsButton.setToolTipText("Select Catalogs");

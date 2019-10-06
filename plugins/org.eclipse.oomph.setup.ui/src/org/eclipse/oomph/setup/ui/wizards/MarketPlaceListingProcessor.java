@@ -691,7 +691,7 @@ public class MarketPlaceListingProcessor
 
   protected void applyMarketPlaceListing(Set<Requirement> checkedRequirements)
   {
-    SetupContext setupContext = SetupContext.create(setupWizard.getResourceSet(), null);
+    SetupContext setupContext = SetupContext.create(setupWizard.getResourceSet(), setupWizard.getSetupContext().getInstallation().getProductVersion());
     Installation setupInstallation = setupContext.getInstallation();
 
     applySetupTasks(setupInstallation, checkedRequirements);

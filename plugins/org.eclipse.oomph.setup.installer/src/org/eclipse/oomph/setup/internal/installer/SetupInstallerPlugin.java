@@ -38,6 +38,7 @@ import org.eclipse.equinox.security.storage.provider.PasswordProvider;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.testing.ITestHarness;
 import org.eclipse.ui.testing.TestableObject;
@@ -126,6 +127,8 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
     public void start(BundleContext context) throws Exception
     {
       super.start(context);
+
+      Display.setAppName(PropertiesUtil.getProductName());
 
       adjustDefaultPasswordProvider();
 

@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.oomph.jreinfo.ui;singleton:=true
-Bundle-Version: 1.10.0.qualifier
+Bundle-Version: 1.11.0.qualifier
 Bundle-Localization: plugin
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
@@ -9,7 +9,7 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Activator: org.eclipse.oomph.jreinfo.ui.JREInfoUIPlugin$Implementation
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.5.0,4.0.0)",
- org.eclipse.oomph.ui;bundle-version="[1.10.0,2.0.0)",
- org.eclipse.oomph.jreinfo;bundle-version="[1.10.0,2.0.0)";visibility:=reexport
-Export-Package: org.eclipse.oomph.jreinfo.ui;version="1.10.0";x-internal:=true
+ org.eclipse.oomph.ui;bundle-version="[1.13.0,2.0.0)",
+ org.eclipse.oomph.jreinfo;bundle-version="[1.11.0,2.0.0)";visibility:=reexport
+Export-Package: org.eclipse.oomph.jreinfo.ui;version="1.11.0";x-internal:=true
 Automatic-Module-Name: org.eclipse.oomph.jreinfo.ui
