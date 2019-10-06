@@ -10,24 +10,16 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
-/*
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v2.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v20.html
- *
- * Contributors:
- *    Eike Stepper - initial API and implementation
- */
-
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectOutputStream;
+import org.eclipse.emf.ecore.resource.impl.URIMappingRegistryImpl;
 
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -41,12 +33,14 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -54,6 +48,9 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -109,6 +106,8 @@ public final class P2Indexer implements IApplication
 
   private boolean verbose;
 
+  private Reporter reporter;
+
   public Object start(IApplicationContext context) throws Exception
   {
     long start = System.currentTimeMillis();
@@ -140,6 +139,8 @@ public final class P2Indexer implements IApplication
         baseURI = baseURI.trimSegments(1);
       }
 
+      reporter = new Reporter(baseURI.toString());
+
       scanFolder(scanFolder, baseURI);
 
       for (Future<?> future = deque.pollFirst(); future != null; future = deque.pollFirst())
@@ -155,6 +156,7 @@ public final class P2Indexer implements IApplication
       }
 
       generateIndex(outputFolder);
+      reporter.writeReport(this, new File(outputFolder, "_report_"));
     }
     finally
     {
@@ -335,7 +337,7 @@ public final class P2Indexer implements IApplication
           catch (Exception ex)
           {
             repositories.remove(entry.getKey());
-            print("Processing " + repository.getMetadataFile(), ex);
+            error("Processing " + repository.getMetadataFile(), ex);
           }
           finally
           {
@@ -349,7 +351,7 @@ public final class P2Indexer implements IApplication
     }
   }
 
-  private void print(String message, Exception exception)
+  private void error(String message, Exception exception)
   {
     try
     {
@@ -540,7 +542,7 @@ public final class P2Indexer implements IApplication
       }
       catch (Exception ex)
       {
-        print("Capability " + name, ex);
+        error("Capability " + name, ex);
       }
     }
 
@@ -594,6 +596,8 @@ public final class P2Indexer implements IApplication
       this.indexer = indexer;
       this.uri = uri;
       this.metadataFile = metadataFile;
+
+      indexer.reporter.reportRepository(this);
     }
 
     public File getMetadataFile()
@@ -614,6 +618,16 @@ public final class P2Indexer implements IApplication
     public void setID(int id)
     {
       this.id = id;
+    }
+
+    public long getTimestamp()
+    {
+      return timestamp;
+    }
+
+    public List<Composite> getComposites()
+    {
+      return composites;
     }
 
     public abstract boolean isComposed();
@@ -681,12 +695,12 @@ public final class P2Indexer implements IApplication
               }
               catch (NumberFormatException ex)
               {
-                System.err.println("Bad timestamp value '" + value + "' for: " + metadataFile);
+                indexer.reporter.reportError(this, "Bad timestamp value '" + value + "'");
               }
             }
             else
             {
-              System.err.println("No timestamp value for: " + metadataFile);
+              indexer.reporter.reportError(this, "No timestamp value");
             }
           }
         }
@@ -919,7 +933,7 @@ public final class P2Indexer implements IApplication
             else if (indexer.baseURI.scheme().equals(childURI.scheme()) && indexer.baseURI.authority().equals(childURI.authority()))
             {
               ++unresolvedChildren;
-              System.err.println("Child repository of " + getURI() + " not found: " + childURI);
+              indexer.reporter.reportError(this, "Child repository " + childURI + " not found");
             }
           }
         }
@@ -952,6 +966,414 @@ public final class P2Indexer implements IApplication
     public String getVersion()
     {
       return version;
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private static final class Reporter
+  {
+    private final ProjectRegistry projectRegistry;
+
+    private final ProjectMapper projectMapper;
+
+    private final Map<Repository, Project> projects = new HashMap<Repository, Project>();
+
+    public Reporter(String baseURI)
+    {
+      projectRegistry = new ProjectRegistry();
+      projectMapper = new ProjectMapper(baseURI.toString());
+    }
+
+    public void reportRepository(Repository repository)
+    {
+      String projectID = projectMapper.getProjectID(repository.getURI());
+      if (projectID != null)
+      {
+        String projectName = projectRegistry.getProjectName(projectID);
+        Project project = new Project(projectID, projectName);
+
+        projects.put(repository, project);
+        project.addRepository(repository);
+      }
+    }
+
+    public void reportError(Repository repository, String message)
+    {
+      message = repository.getURI() + " --> " + message;
+
+      Project project = projects.get(repository);
+      if (project != null)
+      {
+        project.addError(repository, message);
+        message += " (" + project.getID() + ")";
+      }
+
+      System.err.println(message);
+    }
+
+    public void writeReport(P2Indexer indexer, File folder) throws IOException
+    {
+      Map<Repository, Set<Repository>> childrenMap = new HashMap<Repository, Set<Repository>>();
+      Map<Repository, Pair<Project, Integer>> ids = new HashMap<Repository, Pair<Project, Integer>>();
+      int nextID = 0;
+
+      for (Repository repository : indexer.repositories.values())
+      {
+        Project project = projects.get(repository);
+        ids.put(repository, Pair.create(project, ++nextID));
+
+        for (Repository.Composite composite : repository.getComposites())
+        {
+          CollectionUtil.add(childrenMap, composite, repository);
+        }
+      }
+
+      for (Project project : projects.values())
+      {
+        project.writeReport(folder, childrenMap, ids);
+      }
+    }
+
+    /**
+     * @author Eike Stepper
+     */
+    private static final class ProjectRegistry
+    {
+      private static final String PROJECTS_TXT = System.getProperty("projects.txt",
+          "/home/data/httpd/download.eclipse.org/oomph/archive/projects/projects.txt");
+
+      private final Map<String, String> names = new HashMap<String, String>();
+
+      public ProjectRegistry()
+      {
+        File file = new File(PROJECTS_TXT);
+        if (file.exists())
+        {
+          for (String line : IOUtil.readLines(file, "UTF-8"))
+          {
+            int tab = line.indexOf('\t');
+            String id = line.substring(0, tab);
+            String name = line.substring(tab + 1);
+
+            names.put(id, name);
+          }
+        }
+        else
+        {
+          System.out.println(ProjectRegistry.class.getSimpleName() + ": " + PROJECTS_TXT + " not found.");
+        }
+      }
+
+      public String getProjectName(String id)
+      {
+        return names.get(id);
+      }
+    }
+
+    /**
+     * @author Eike Stepper
+     */
+    private static final class ProjectMapper
+    {
+      private static final String MAPPINGS_TXT = System.getProperty("mappings.txt",
+          "/home/data/httpd/download.eclipse.org/oomph/archive/projects/mappings.txt");
+
+      private final URIMappingRegistryImpl registry = new URIMappingRegistryImpl();
+
+      private final String baseURI;
+
+      public ProjectMapper(String baseURI)
+      {
+        this.baseURI = baseURI;
+
+        File file = new File(MAPPINGS_TXT);
+        if (file.exists())
+        {
+          for (String line : IOUtil.readLines(file, "UTF-8"))
+          {
+            int tab = line.indexOf('\t');
+            String path = line.substring(0, tab);
+            String project = line.substring(tab + 1);
+
+            registry.put(createURI(path), URI.createURI("project://" + project + "/"));
+          }
+        }
+        else
+        {
+          System.out.println(ProjectMapper.class.getSimpleName() + ": " + MAPPINGS_TXT + " not found.");
+        }
+      }
+
+      public String getProjectID(URI uri)
+      {
+        URI projectURI = registry.getURI(uri);
+        if (projectURI != null && "project".equals(projectURI.scheme()))
+        {
+          return projectURI.authority();
+        }
+
+        return null;
+      }
+
+      private URI createURI(String path)
+      {
+        if (!path.endsWith("/"))
+        {
+          path += "/";
+        }
+
+        return URI.createURI(baseURI + "/" + path);
+      }
+    }
+
+    /**
+     * @author Eike Stepper
+     */
+    private static final class Project
+    {
+      private final String id;
+
+      private final String name;
+
+      private final Map<Repository, List<String>> repositories = new HashMap<Repository, List<String>>();
+
+      public Project(String id, String name)
+      {
+        this.id = id;
+        this.name = name;
+      }
+
+      public String getID()
+      {
+        return id;
+      }
+
+      public void addRepository(Repository repository)
+      {
+        repositories.put(repository, new ArrayList<String>());
+      }
+
+      public void addError(Repository repository, String message)
+      {
+        List<String> errors = repositories.get(repository);
+        if (errors == null)
+        {
+          errors = new ArrayList<String>();
+          repositories.put(repository, errors);
+        }
+
+        errors.add(message);
+      }
+
+      public void writeReport(File folder, Map<Repository, Set<Repository>> childrenMap, Map<Repository, Pair<Project, Integer>> ids)
+      {
+        BufferedWriter writer = null;
+
+        try
+        {
+          List<Map.Entry<Repository, List<String>>> entries = new ArrayList<Map.Entry<Repository, List<String>>>(repositories.entrySet());
+          Collections.sort(entries, new Comparator<Map.Entry<Repository, List<String>>>()
+          {
+            public int compare(Map.Entry<Repository, List<String>> o1, Map.Entry<Repository, List<String>> o2)
+            {
+              return o1.getKey().getURI().toString().compareTo(o2.getKey().getURI().toString());
+            }
+          });
+
+          int simpleRepos = 0;
+          int compositeRepos = 0;
+          int erroneousRepos = 0;
+          int totalErrors = 0;
+          for (Map.Entry<Repository, List<String>> entry : entries)
+          {
+            Repository repository = entry.getKey();
+            List<String> errors = entry.getValue();
+            if (repository.isComposed())
+            {
+              ++compositeRepos;
+            }
+            else
+            {
+              ++simpleRepos;
+            }
+
+            if (!errors.isEmpty())
+            {
+              ++erroneousRepos;
+              totalErrors += errors.size();
+            }
+          }
+
+          folder.mkdirs();
+
+          writer = new BufferedWriter(new FileWriter(new File(folder, getFileName())));
+          writer.write("<html>\n");
+          writer.write("<head>\n");
+          writer.write("</head>\n");
+          writer.write("<body>\n");
+          writer.write("<h1><a href=\"https://projects.eclipse.org/projects/" + id + "\">" + (name != null && name.length() != 0 ? name : id) + "</a></h1>\n");
+          writer.write("<hr>\n");
+
+          writer.write("<table border=\"0\">\n");
+          writer.write("<tr><td>Simple repositories:</td><td align=\"right\">" + simpleRepos + "</td><td></td></tr>\n");
+          writer.write("<tr><td>Composite repositories:</td><td align=\"right\">" + compositeRepos + "</td><td></td></tr>\n");
+          writer.write("<tr><td>Total repositories:</td><td align=\"right\">" + (simpleRepos + compositeRepos) + "</td><td></td></tr>\n");
+
+          if (totalErrors > 0)
+          {
+            writer.write("<tr><td><font color=\"#ff0000\"><b>Erroneous repositories:</b></font></td><td align=\"right\"><font color=\"#ff0000\"><b>"
+                + erroneousRepos + "</b></font></td><td>" + (erroneousRepos > 0 ? "&nbsp;<a href=\"#err0\">First error</a>" : "") + "</td></tr>\n");
+            writer.write("<tr><td><font color=\"#ff0000\"><b>Total errors:</b></font></td><td align=\"right\"><font color=\"#ff0000\"><b>" + totalErrors
+                + "</b></font></td><td></td></tr>\n");
+          }
+
+          writer.write("</table>\n");
+
+          int erroneousRepo = 0;
+          for (Map.Entry<Repository, List<String>> entry : entries)
+          {
+            Repository repository = entry.getKey();
+            List<String> errors = entry.getValue();
+
+            int id = ids.get(repository).getElement2();
+            writer.write("<h2><a name=\"repo" + id + "\">" + (errors.isEmpty() ? "" : "<a name=\"err" + erroneousRepo + "\">")
+                + (repository.isComposed() ? "Composite" : "Simple") + " Repository <a href=\"" + repository.getURI() + "\">" + repository.getURI()
+                + "</a></h2>\n");
+
+            writer.write("<ul>");
+
+            writer.write("<li><span style=\"white-space: nowrap;\">");
+            writer.write(new Date(repository.getTimestamp()).toString());
+            writer.write("</span>&nbsp;(");
+            writer.write(String.valueOf(repository.getTimestamp()));
+            writer.write(")");
+
+            writer.write("<li>");
+            int capabilityCount = getCapabilityCount(repository, childrenMap);
+            writer.write(String.valueOf(capabilityCount));
+            writer.write(capabilityCount == 1 ? "&nbsp;capability" : "&nbsp;capabilities");
+
+            if (!errors.isEmpty())
+            {
+              writer.write("<li><font color=\"#ff0000\"><b>");
+              writer.write(String.valueOf(errors.size()));
+              writer.write("&nbsp;");
+              writer.write(errors.size() == 1 ? "error" : "errors");
+              writer.write("</b></font>");
+            }
+
+            if (repository.isCompressed())
+            {
+              writer.write("<li>Compressed");
+            }
+
+            writer.write("</ul>");
+            writer.write("<div style=\"margin-left: 24px;\">");
+
+            if (!errors.isEmpty())
+            {
+              writer.write("<h3>Errors</h3>\n");
+              writer.write("<ul>\n");
+
+              for (String error : errors)
+              {
+                writer.write("<li><font color=\"#ff0000\"><b>" + error.replace("\n", "<br>") + "</b></font>\n");
+              }
+
+              if (++erroneousRepo < erroneousRepos)
+              {
+                writer.write("<li><a href=\"#err" + erroneousRepo + "\">Next error</a>\n");
+              }
+
+              writer.write("</ul>\n");
+              writer.write("</div>");
+            }
+
+            Set<Repository> children = childrenMap.get(repository);
+            if (children != null && !children.isEmpty())
+            {
+              writer.write("<h3>Children</h3>\n");
+              writer.write("<ul>\n");
+
+              for (Repository child : children)
+              {
+                writer.write("<li>");
+                writeRepositoryLink(writer, child, ids);
+                writer.write("\n");
+              }
+
+              writer.write("</ul>\n");
+            }
+
+            List<Repository.Composite> composites = repository.getComposites();
+            if (composites != null && !composites.isEmpty())
+            {
+              writer.write("<h3>Composites</h3>\n");
+              writer.write("<ul>\n");
+
+              for (Repository.Composite composite : composites)
+              {
+                writer.write("<li>");
+                writeRepositoryLink(writer, composite, ids);
+                writer.write("\n");
+              }
+
+              writer.write("</ul>\n");
+            }
+
+            writer.write("</div>");
+          }
+
+          writer.write("</body>\n");
+          writer.write("</html>\n");
+        }
+        catch (Exception ex)
+        {
+          ex.printStackTrace();
+        }
+        finally
+        {
+          IOUtil.close(writer);
+        }
+      }
+
+      private void writeRepositoryLink(BufferedWriter writer, Repository repository, Map<Repository, Pair<Project, Integer>> ids) throws IOException
+      {
+        Pair<Project, Integer> pair = ids.get(repository);
+        Project project = pair.getElement1();
+        int id = pair.getElement2();
+
+        String href = project != null ? project.getFileName() + "#repo" + id : repository.getURI().toString();
+        writer.write("<a href=\"" + href + "\">" + repository.getURI() + "</a>");
+      }
+
+      private String getFileName()
+      {
+        return id + ".html";
+      }
+
+      private int getCapabilityCount(Repository repository, Map<Repository, Set<Repository>> childrenMap)
+      {
+        if (repository instanceof Repository.Composite)
+        {
+          int sum = 0;
+
+          Set<Repository> children = childrenMap.get(repository);
+          if (children != null && !children.isEmpty())
+          {
+            for (Repository child : children)
+            {
+              sum += getCapabilityCount(child, childrenMap);
+            }
+          }
+
+          return sum;
+        }
+
+        return repository.getCapabilityCount();
+      }
     }
   }
 }
