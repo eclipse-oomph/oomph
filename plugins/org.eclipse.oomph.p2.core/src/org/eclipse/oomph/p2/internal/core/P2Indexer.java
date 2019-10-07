@@ -133,14 +133,17 @@ public final class P2Indexer implements IApplication
         {
           verbose = true;
         }
+        else if ("-report".equals(arg) || "-r".equals(arg))
+        {
+          File reportFolder = new File(arguments.removeFirst());
+          reporter = new Reporter(baseURI.toString(), reportFolder);
+        }
       }
 
       if (baseURI.hasTrailingPathSeparator())
       {
         baseURI = baseURI.trimSegments(1);
       }
-
-      reporter = new Reporter(baseURI.toString());
 
       scanFolder(scanFolder, baseURI);
 
@@ -157,7 +160,11 @@ public final class P2Indexer implements IApplication
       }
 
       generateIndex(outputFolder);
-      reporter.writeReport(this, new File(outputFolder, "_report_"));
+
+      if (reporter != null)
+      {
+        reporter.writeReport(this);
+      }
     }
     finally
     {
@@ -598,7 +605,10 @@ public final class P2Indexer implements IApplication
       this.uri = uri;
       this.metadataFile = metadataFile;
 
-      indexer.reporter.reportRepository(this);
+      if (indexer.reporter != null)
+      {
+        indexer.reporter.reportRepository(this);
+      }
     }
 
     public File getMetadataFile()
@@ -696,12 +706,24 @@ public final class P2Indexer implements IApplication
               }
               catch (NumberFormatException ex)
               {
-                indexer.reporter.reportError(this, "Bad timestamp value '" + value + "'");
+                String message = "Bad timestamp value '" + value + "'";
+                if (indexer.reporter != null)
+                {
+                  message = indexer.reporter.reportError(this, message);
+                }
+
+                System.err.println(uri + " --> " + message);
               }
             }
             else
             {
-              indexer.reporter.reportError(this, "No timestamp value");
+              String message = "No timestamp value";
+              if (indexer.reporter != null)
+              {
+                message = indexer.reporter.reportError(this, message);
+              }
+
+              System.err.println(uri + " --> " + message);
             }
           }
         }
@@ -934,7 +956,14 @@ public final class P2Indexer implements IApplication
             else if (indexer.baseURI.scheme().equals(childURI.scheme()) && indexer.baseURI.authority().equals(childURI.authority()))
             {
               ++unresolvedChildren;
-              indexer.reporter.reportError(this, "Child repository " + childURI + " not found");
+
+              String message = "Child repository " + childURI + " not found";
+              if (indexer.reporter != null)
+              {
+                message = indexer.reporter.reportError(this, message);
+              }
+
+              System.err.println(uri + " --> " + message);
             }
           }
         }
@@ -975,6 +1004,8 @@ public final class P2Indexer implements IApplication
    */
   private static final class Reporter
   {
+    private final File reportFolder;
+
     private final ProjectRegistry projectRegistry;
 
     private final ProjectMapper projectMapper;
@@ -983,8 +1014,9 @@ public final class P2Indexer implements IApplication
 
     private final Map<Repository, Project> projectsByRepository = new HashMap<Repository, Project>();
 
-    public Reporter(String baseURI)
+    public Reporter(String baseURI, File reportFolder)
     {
+      this.reportFolder = reportFolder;
       projectRegistry = new ProjectRegistry();
       projectMapper = new ProjectMapper(baseURI.toString());
     }
@@ -1007,7 +1039,7 @@ public final class P2Indexer implements IApplication
       }
     }
 
-    public synchronized void reportError(Repository repository, String message)
+    public synchronized String reportError(Repository repository, String message)
     {
       Project project = projectsByRepository.get(repository);
       if (project != null)
@@ -1016,11 +1048,10 @@ public final class P2Indexer implements IApplication
         message += " (" + project.getID() + ")";
       }
 
-      message = repository.getURI() + " --> " + message;
-      System.err.println(message);
+      return message;
     }
 
-    public void writeReport(P2Indexer indexer, File folder) throws IOException
+    public void writeReport(P2Indexer indexer) throws IOException
     {
       Map<Repository, Set<Repository>> childrenMap = new HashMap<Repository, Set<Repository>>();
       Map<Repository, Pair<Project, Integer>> ids = new HashMap<Repository, Pair<Project, Integer>>();
@@ -1042,7 +1073,7 @@ public final class P2Indexer implements IApplication
       {
         public int compare(Project o1, Project o2)
         {
-          return o1.getName().compareTo(o2.getName());
+          return o1.getLabel().compareTo(o2.getLabel());
         }
       });
 
@@ -1050,7 +1081,7 @@ public final class P2Indexer implements IApplication
 
       try
       {
-        writer = new BufferedWriter(new FileWriter(new File(folder, "index.html")));
+        writer = new BufferedWriter(new FileWriter(new File(reportFolder, "index.html")));
         writer.write("<html>\n");
         writer.write("<head>\n");
         writer.write("</head>\n");
@@ -1066,15 +1097,14 @@ public final class P2Indexer implements IApplication
 
       for (Project project : projects)
       {
-        if (project.writeReport(folder, childrenMap, ids) && writer != null)
+        if (project.writeReport(reportFolder, childrenMap, ids) && writer != null)
         {
-          String label = project.getName() != null && project.getName().length() != 0 ? project.getName() : project.getID();
           int errors = project.getErroneousRepos();
           String suffix = errors > 0
               ? "<font color=\"#ff0000\"><b>&nbsp;(" + errors + "&nbsp;erroneous&nbsp;" + (errors == 1 ? "repository" : "repositories") + ")</b></font>"
               : "";
 
-          writer.write("<li><a href=\"" + project.getID() + ".html\">" + label + "</a>" + suffix + "\n");
+          writer.write("<li><a href=\"" + project.getID() + ".html\">" + project.getLabel() + "</a>" + suffix + "\n");
         }
       }
 
@@ -1203,9 +1233,9 @@ public final class P2Indexer implements IApplication
         return id;
       }
 
-      public String getName()
+      public String getLabel()
       {
-        return name;
+        return name != null && name.length() != 0 ? name : id;
       }
 
       public int getErroneousRepos()
@@ -1437,14 +1467,6 @@ public final class P2Indexer implements IApplication
         }
 
         return repository.getCapabilityCount();
-      }
-
-      /**
-       * @author Stepper
-       */
-      public enum ReportType
-      {
-        NONE, ERROR_FREE, WITH_ERRORS;
       }
     }
   }

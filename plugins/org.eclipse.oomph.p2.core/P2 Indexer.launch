@@ -27,7 +27,7 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-consoleLog&#13;&#10;-noSplash&#13;&#10;C:\Users\Stepper\Desktop\indexing&#13;&#10;24&#13;&#10;http://download.eclipse.org&#13;&#10;${system_property:java.io.tmpdir}index&#13;&#10;-verboseX"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-consoleLog&#13;&#10;-noSplash&#13;&#10;C:\Users\Stepper\Desktop\indexing&#13;&#10;24&#13;&#10;http://download.eclipse.org&#13;&#10;${system_property:java.io.tmpdir}index&#13;&#10;-verboseX&#13;&#10;-report C:\Users\Stepper\AppData\Local\Temp\index\_report_"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx6g&#13;&#10;-Dfile.encoding=UTF-8&#13;&#10;-Dorg.eclipse.emf.ecore.plugin.EcorePlugin.doNotLoadResourcesPlugin=true&#13;&#10;-Dsun.zip.disableMemoryMapping=true&#13;&#10;-Dprojects.txt=C:\Users\Stepper\Desktop\projects.txt&#13;&#10;-Dmappings.txt=C:\Users\Stepper\Desktop\mappings.txt"/>
 <stringAttribute key="pde.version" value="3.3"/>
