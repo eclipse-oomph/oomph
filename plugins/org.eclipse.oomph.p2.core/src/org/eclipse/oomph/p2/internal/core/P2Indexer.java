@@ -46,6 +46,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -978,7 +979,9 @@ public final class P2Indexer implements IApplication
 
     private final ProjectMapper projectMapper;
 
-    private final Map<Repository, Project> projects = new HashMap<Repository, Project>();
+    private final Map<String, Project> projectsByID = new HashMap<String, Project>();
+
+    private final Map<Repository, Project> projectsByRepository = new HashMap<Repository, Project>();
 
     public Reporter(String baseURI)
     {
@@ -986,30 +989,34 @@ public final class P2Indexer implements IApplication
       projectMapper = new ProjectMapper(baseURI.toString());
     }
 
-    public void reportRepository(Repository repository)
+    public synchronized void reportRepository(Repository repository)
     {
       String projectID = projectMapper.getProjectID(repository.getURI());
       if (projectID != null)
       {
-        String projectName = projectRegistry.getProjectName(projectID);
-        Project project = new Project(projectID, projectName);
+        Project project = projectsByID.get(projectID);
+        if (project == null)
+        {
+          String projectName = projectRegistry.getProjectName(projectID);
+          project = new Project(projectID, projectName);
+          projectsByID.put(projectID, project);
+        }
 
-        projects.put(repository, project);
+        projectsByRepository.put(repository, project);
         project.addRepository(repository);
       }
     }
 
-    public void reportError(Repository repository, String message)
+    public synchronized void reportError(Repository repository, String message)
     {
-      message = repository.getURI() + " --> " + message;
-
-      Project project = projects.get(repository);
+      Project project = projectsByRepository.get(repository);
       if (project != null)
       {
         project.addError(repository, message);
         message += " (" + project.getID() + ")";
       }
 
+      message = repository.getURI() + " --> " + message;
       System.err.println(message);
     }
 
@@ -1021,7 +1028,7 @@ public final class P2Indexer implements IApplication
 
       for (Repository repository : indexer.repositories.values())
       {
-        Project project = projects.get(repository);
+        Project project = projectsByRepository.get(repository);
         ids.put(repository, Pair.create(project, ++nextID));
 
         for (Repository.Composite composite : repository.getComposites())
@@ -1030,9 +1037,53 @@ public final class P2Indexer implements IApplication
         }
       }
 
-      for (Project project : projects.values())
+      List<Project> projects = new ArrayList<Project>(projectsByID.values());
+      Collections.sort(projects, new Comparator<Project>()
       {
-        project.writeReport(folder, childrenMap, ids);
+        public int compare(Project o1, Project o2)
+        {
+          return o1.getName().compareTo(o2.getName());
+        }
+      });
+
+      Writer writer = null;
+
+      try
+      {
+        writer = new BufferedWriter(new FileWriter(new File(folder, "index.html")));
+        writer.write("<html>\n");
+        writer.write("<head>\n");
+        writer.write("</head>\n");
+        writer.write("<body>\n");
+        writer.write("<h1>Project Repositories Report</h1>\n");
+        writer.write("<hr>\n");
+        writer.write("<ul>\n");
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+      }
+
+      for (Project project : projects)
+      {
+        if (project.writeReport(folder, childrenMap, ids) && writer != null)
+        {
+          String label = project.getName() != null && project.getName().length() != 0 ? project.getName() : project.getID();
+          int errors = project.getErroneousRepos();
+          String suffix = errors > 0
+              ? "<font color=\"#ff0000\"><b>&nbsp;(" + errors + "&nbsp;erroneous&nbsp;" + (errors == 1 ? "repository" : "repositories") + ")</b></font>"
+              : "";
+
+          writer.write("<li><a href=\"" + project.getID() + ".html\">" + label + "</a>" + suffix + "\n");
+        }
+      }
+
+      if (writer != null)
+      {
+        writer.write("</ul>\n");
+        writer.write("</body>\n");
+        writer.write("</html>\n");
+        IOUtil.close(writer);
       }
     }
 
@@ -1137,7 +1188,9 @@ public final class P2Indexer implements IApplication
 
       private final String name;
 
-      private final Map<Repository, List<String>> repositories = new HashMap<Repository, List<String>>();
+      private final Map<Repository, List<String>> repositories = Collections.synchronizedMap(new HashMap<Repository, List<String>>());
+
+      private int erroneousRepos;
 
       public Project(String id, String name)
       {
@@ -1150,6 +1203,16 @@ public final class P2Indexer implements IApplication
         return id;
       }
 
+      public String getName()
+      {
+        return name;
+      }
+
+      public int getErroneousRepos()
+      {
+        return erroneousRepos;
+      }
+
       public void addRepository(Repository repository)
       {
         repositories.put(repository, new ArrayList<String>());
@@ -1158,17 +1221,16 @@ public final class P2Indexer implements IApplication
       public void addError(Repository repository, String message)
       {
         List<String> errors = repositories.get(repository);
-        if (errors == null)
-        {
-          errors = new ArrayList<String>();
-          repositories.put(repository, errors);
-        }
-
         errors.add(message);
       }
 
-      public void writeReport(File folder, Map<Repository, Set<Repository>> childrenMap, Map<Repository, Pair<Project, Integer>> ids)
+      public boolean writeReport(File folder, Map<Repository, Set<Repository>> childrenMap, Map<Repository, Pair<Project, Integer>> ids)
       {
+        if (repositories.isEmpty())
+        {
+          return false;
+        }
+
         BufferedWriter writer = null;
 
         try
@@ -1184,8 +1246,8 @@ public final class P2Indexer implements IApplication
 
           int simpleRepos = 0;
           int compositeRepos = 0;
-          int erroneousRepos = 0;
           int totalErrors = 0;
+          erroneousRepos = 0;
           for (Map.Entry<Repository, List<String>> entry : entries)
           {
             Repository repository = entry.getKey();
@@ -1337,6 +1399,8 @@ public final class P2Indexer implements IApplication
         {
           IOUtil.close(writer);
         }
+
+        return true;
       }
 
       private void writeRepositoryLink(BufferedWriter writer, Repository repository, Map<Repository, Pair<Project, Integer>> ids) throws IOException
@@ -1373,6 +1437,14 @@ public final class P2Indexer implements IApplication
         }
 
         return repository.getCapabilityCount();
+      }
+
+      /**
+       * @author Stepper
+       */
+      public enum ReportType
+      {
+        NONE, ERROR_FREE, WITH_ERRORS;
       }
     }
   }
