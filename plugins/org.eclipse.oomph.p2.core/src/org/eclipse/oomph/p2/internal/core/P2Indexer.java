@@ -64,6 +64,7 @@ import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -159,15 +160,20 @@ public final class P2Indexer implements IApplication
         future.get();
       }
 
+      System.out.println();
+      System.out.println("Generating index to " + outputFolder);
       generateIndex(outputFolder);
 
       if (reporter != null)
       {
+        System.out.println();
+        System.out.println("Writing report to " + reporter.getReportFolder());
         reporter.writeReport(this);
       }
     }
     finally
     {
+      System.out.println();
       System.out.println("Took " + (System.currentTimeMillis() - start) / 1000 + " seconds.");
       threadPool.shutdown();
     }
@@ -323,9 +329,8 @@ public final class P2Indexer implements IApplication
 
   private void generateRepositoryMetadata()
   {
-    for (final Map.Entry<URI, Repository> entry : repositories.entrySet())
+    for (final Repository repository : repositories.values())
     {
-      final Repository repository = entry.getValue();
       scheduleTask(new Runnable()
       {
         public void run()
@@ -344,8 +349,13 @@ public final class P2Indexer implements IApplication
           }
           catch (Exception ex)
           {
-            repositories.remove(entry.getKey());
-            error("Processing " + repository.getMetadataFile(), ex);
+            String message = getStackTrace(ex);
+            if (reporter != null)
+            {
+              reporter.reportError(repository, message);
+            }
+
+            System.err.println(repository.getURI() + " --> " + message);
           }
           finally
           {
@@ -356,22 +366,6 @@ public final class P2Indexer implements IApplication
           }
         }
       });
-    }
-  }
-
-  private void error(String message, Exception exception)
-  {
-    try
-    {
-      ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-      PrintStream out = new PrintStream(bytes);
-      out.println(message);
-      exception.printStackTrace(out);
-      System.err.write(bytes.toByteArray());
-    }
-    catch (Exception ex1)
-    {
-      //$FALL-THROUGH$
     }
   }
 
@@ -495,66 +489,86 @@ public final class P2Indexer implements IApplication
     }
   }
 
-  private int writeCapabilities(File outputFolder)
+  private int writeCapabilities(final File outputFolder) throws InterruptedException
   {
-    int count = 0;
-    for (Map.Entry<String, List<Capability>> entry : capabilities.entrySet())
+    int count = capabilities.size();
+    final CountDownLatch finished = new CountDownLatch(count);
+
+    for (final Map.Entry<String, List<Capability>> entry : capabilities.entrySet())
     {
       ++count;
-      String name = entry.getKey();
-      if (verbose)
+      threadPool.submit(new Runnable()
       {
-        System.out.println("Capability " + name);
-      }
-
-      Map<Repository, Set<String>> versions = new HashMap<Repository, Set<String>>();
-      for (Capability capability : entry.getValue())
-      {
-        Repository repository = capability.getRepository();
-        if (repositories.containsKey(repository.getURI()))
+        public void run()
         {
-          Set<String> set = versions.get(repository);
-          if (set == null)
+          try
           {
-            set = new HashSet<String>();
-            versions.put(repository, set);
+            writeCapability(outputFolder, entry.getKey(), entry.getValue());
           }
-
-          set.add(capability.getVersion());
+          finally
+          {
+            finished.countDown();
+          }
         }
-      }
+      });
+    }
 
-      List<String> lines = new ArrayList<String>();
-      lines.add(Long.toString(timeStamp));
+    finished.await();
+    return count;
+  }
 
-      for (Map.Entry<Repository, Set<String>> versionEntry : versions.entrySet())
+  private void writeCapability(File outputFolder, String name, List<Capability> capabilities)
+  {
+    if (verbose)
+    {
+      System.out.println("Capability " + name);
+    }
+
+    Map<Repository, Set<String>> versions = new HashMap<Repository, Set<String>>();
+    for (Capability capability : capabilities)
+    {
+      Repository repository = capability.getRepository();
+      if (repositories.containsKey(repository.getURI()))
       {
-        Repository repository = versionEntry.getKey();
-        StringBuilder builder = new StringBuilder();
-        builder.append(repository.getID());
-
-        for (String version : versionEntry.getValue())
+        Set<String> set = versions.get(repository);
+        if (set == null)
         {
-          builder.append(",");
-          builder.append(version);
+          set = new HashSet<String>();
+          versions.put(repository, set);
         }
 
-        lines.add(builder.toString());
-      }
-
-      try
-      {
-        File file = new File(outputFolder, name);
-        file.getParentFile().mkdirs();
-        IOUtil.writeLines(file, CHARSET, lines);
-      }
-      catch (Exception ex)
-      {
-        error("Capability " + name, ex);
+        set.add(capability.getVersion());
       }
     }
 
-    return count;
+    List<String> lines = new ArrayList<String>();
+    lines.add(Long.toString(timeStamp));
+
+    for (Map.Entry<Repository, Set<String>> versionEntry : versions.entrySet())
+    {
+      Repository repository = versionEntry.getKey();
+      StringBuilder builder = new StringBuilder();
+      builder.append(repository.getID());
+
+      for (String version : versionEntry.getValue())
+      {
+        builder.append(",");
+        builder.append(version);
+      }
+
+      lines.add(builder.toString());
+    }
+
+    try
+    {
+      File file = new File(outputFolder, name);
+      file.getParentFile().mkdirs();
+      IOUtil.writeLines(file, CHARSET, lines);
+    }
+    catch (Exception ex)
+    {
+      System.err.println("Capability " + name + " --> " + getStackTrace(ex));
+    }
   }
 
   /**
@@ -569,6 +583,21 @@ public final class P2Indexer implements IApplication
     catch (IOException ex)
     {
       return false;
+    }
+  }
+
+  private static String getStackTrace(Exception exception)
+  {
+    try
+    {
+      ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+      PrintStream out = new PrintStream(bytes);
+      exception.printStackTrace(out);
+      return bytes.toString();
+    }
+    catch (Exception ex)
+    {
+      return ex.getMessage();
     }
   }
 
@@ -1021,6 +1050,11 @@ public final class P2Indexer implements IApplication
       projectMapper = new ProjectMapper(baseURI.toString());
     }
 
+    public File getReportFolder()
+    {
+      return reportFolder;
+    }
+
     public synchronized void reportRepository(Repository repository)
     {
       String projectID = projectMapper.getProjectID(repository.getURI());
@@ -1331,7 +1365,10 @@ public final class P2Indexer implements IApplication
             Repository repository = entry.getKey();
             List<String> errors = entry.getValue();
 
-            int id = ids.get(repository).getElement2();
+            Pair<Project, Integer> pair = ids.get(repository);
+            Integer idWrapper = pair.getElement2();
+            int id = idWrapper;
+
             writer.write("<h2><a name=\"repo" + id + "\">" + (errors.isEmpty() ? "" : "<a name=\"err" + erroneousRepo + "\">")
                 + (repository.isComposed() ? "Composite" : "Simple") + " Repository <a href=\"" + repository.getURI() + "\">" + repository.getURI()
                 + "</a></h2>\n");
