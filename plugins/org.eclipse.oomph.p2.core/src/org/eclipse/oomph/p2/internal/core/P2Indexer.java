@@ -1081,6 +1081,8 @@ public final class P2Indexer implements IApplication
 
       try
       {
+        reportFolder.mkdirs();
+
         writer = new BufferedWriter(new FileWriter(new File(reportFolder, "index.html")));
         writer.write("<html>\n");
         writer.write("<head>\n");
