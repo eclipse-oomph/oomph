@@ -1107,9 +1107,25 @@ public final class P2Indexer implements IApplication
       {
         public int compare(Project o1, Project o2)
         {
-          return o1.getLabel().compareTo(o2.getLabel());
+          return o1.getLabel().toLowerCase().compareTo(o2.getLabel().toLowerCase());
         }
       });
+
+      int projectRepos = 0;
+      int erroneousProjects = 0;
+      int erroneousRepos = 0;
+      for (Project project : projects)
+      {
+        projectRepos += project.getTotalRepos();
+
+        int erroneousProjectRepos = project.getErroneousRepos();
+        erroneousRepos += erroneousProjectRepos;
+
+        if (erroneousProjectRepos > 0)
+        {
+          ++erroneousProjects;
+        }
+      }
 
       Writer writer = null;
 
@@ -1122,7 +1138,20 @@ public final class P2Indexer implements IApplication
         writer.write("<head>\n");
         writer.write("</head>\n");
         writer.write("<body>\n");
-        writer.write("<h1>Project Repositories Report</h1>\n");
+        writer.write("<h1>Project Repository Reports</h1>\n");
+        writer.write("Projects with repositories: " + projects.size()
+            + "&nbsp;<a href=\"mailto:stepper@esc-net.de?cc=ed.merks@gmail.com&amp;subject=My%20project%20is%20missing\">Report missing project</a><br>\n");
+        if (erroneousProjects > 0)
+        {
+          writer.write("<font color=\"#ff0000\"><b>Projects with erroneous repositories: " + erroneousProjects + "</b></font><br>\n");
+        }
+
+        writer.write("Total repositories: " + projectRepos + "<br>\n");
+        if (erroneousRepos > 0)
+        {
+          writer.write("<font color=\"#ff0000\"><b>Erroneous repositories: " + erroneousRepos + "</b></font><br>\n");
+        }
+
         writer.write("<hr>\n");
         writer.write("<ul>\n");
       }
@@ -1256,8 +1285,6 @@ public final class P2Indexer implements IApplication
 
       private final Map<Repository, List<String>> repositories = Collections.synchronizedMap(new HashMap<Repository, List<String>>());
 
-      private int erroneousRepos;
-
       public Project(String id, String name)
       {
         this.id = id;
@@ -1274,9 +1301,48 @@ public final class P2Indexer implements IApplication
         return name != null && name.length() != 0 ? name : id;
       }
 
+      public int getTotalRepos()
+      {
+        return repositories.size();
+      }
+
+      public int getComposedRepos()
+      {
+        int result = 0;
+        for (Repository repository : repositories.keySet())
+        {
+          if (repository.isComposed())
+          {
+            ++result;
+          }
+        }
+
+        return result;
+      }
+
       public int getErroneousRepos()
       {
-        return erroneousRepos;
+        int result = 0;
+        for (List<String> errors : repositories.values())
+        {
+          if (!errors.isEmpty())
+          {
+            ++result;
+          }
+        }
+
+        return result;
+      }
+
+      public int getTotalErrors()
+      {
+        int result = 0;
+        for (List<String> errors : repositories.values())
+        {
+          result += errors.size();
+        }
+
+        return result;
       }
 
       public void addRepository(Repository repository)
@@ -1310,29 +1376,11 @@ public final class P2Indexer implements IApplication
             }
           });
 
-          int simpleRepos = 0;
-          int compositeRepos = 0;
-          int totalErrors = 0;
-          erroneousRepos = 0;
-          for (Map.Entry<Repository, List<String>> entry : entries)
-          {
-            Repository repository = entry.getKey();
-            List<String> errors = entry.getValue();
-            if (repository.isComposed())
-            {
-              ++compositeRepos;
-            }
-            else
-            {
-              ++simpleRepos;
-            }
-
-            if (!errors.isEmpty())
-            {
-              ++erroneousRepos;
-              totalErrors += errors.size();
-            }
-          }
+          int totalRepos = getTotalRepos();
+          int compositeRepos = getComposedRepos();
+          int simpleRepos = totalRepos - compositeRepos;
+          int erroneousRepos = getErroneousRepos();
+          int totalErrors = getTotalErrors();
 
           folder.mkdirs();
 
