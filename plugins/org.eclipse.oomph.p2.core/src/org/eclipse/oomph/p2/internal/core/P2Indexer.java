@@ -106,6 +106,8 @@ public final class P2Indexer implements IApplication
 
   private int maxRepos = Integer.MAX_VALUE;
 
+  private boolean checkTimeStamps;
+
   private boolean verbose;
 
   private Reporter reporter;
@@ -126,15 +128,19 @@ public final class P2Indexer implements IApplication
       while (!arguments.isEmpty())
       {
         String arg = arguments.removeFirst();
-        if ("-maxrepos".equals(arg) || "-m".equals(arg))
+        if ("-maxRepos".equalsIgnoreCase(arg) || "-m".equals(arg))
         {
           maxRepos = Integer.parseInt(arguments.removeFirst());
         }
-        else if ("-verbose".equals(arg) || "-v".equals(arg))
+        else if ("-verbose".equalsIgnoreCase(arg) || "-v".equals(arg))
         {
           verbose = true;
         }
-        else if ("-report".equals(arg) || "-r".equals(arg))
+        else if ("-checkTimeStamps".equalsIgnoreCase(arg))
+        {
+          checkTimeStamps = true;
+        }
+        else if ("-report".equalsIgnoreCase(arg) || "-r".equals(arg))
         {
           File reportFolder = new File(arguments.removeFirst());
           reporter = new Reporter(baseURI.toString(), reportFolder);
@@ -160,21 +166,27 @@ public final class P2Indexer implements IApplication
         future.get();
       }
 
+      long end = System.currentTimeMillis();
+
+      System.out.println("Analysis finished after " + (end - start) / 1000 + " seconds.");
       System.out.println();
       System.out.println("Generating index to " + outputFolder);
       generateIndex(outputFolder);
+      System.out.println("Finished after " + (System.currentTimeMillis() - end) / 1000 + " seconds.");
 
       if (reporter != null)
       {
         System.out.println();
         System.out.println("Writing report to " + reporter.getReportFolder());
-        reporter.writeReport(this);
+        reporter.writeReport(this, start, end - start);
       }
     }
     finally
     {
       System.out.println();
-      System.out.println("Took " + (System.currentTimeMillis() - start) / 1000 + " seconds.");
+      System.out.println("Overall duration: " + (System.currentTimeMillis() - start) / 1000 + " seconds.");
+      System.out.println();
+
       threadPool.shutdown();
     }
 
@@ -620,11 +632,11 @@ public final class P2Indexer implements IApplication
 
     protected final File metadataFile;
 
+    protected final long timestamp;
+
     protected String elementPath;
 
     protected int id;
-
-    protected long timestamp = NO_TIMESTAMP;
 
     protected int unresolvedChildren;
 
@@ -633,6 +645,7 @@ public final class P2Indexer implements IApplication
       this.indexer = indexer;
       this.uri = uri;
       this.metadataFile = metadataFile;
+      timestamp = metadataFile.lastModified();
 
       if (indexer.reporter != null)
       {
@@ -724,7 +737,7 @@ public final class P2Indexer implements IApplication
 
     protected boolean startElement(String elementPath, Attributes attributes)
     {
-      if ("repository>properties>property".equals(elementPath))
+      if (indexer.checkTimeStamps && "repository>properties>property".equals(elementPath))
       {
         if (timestamp == NO_TIMESTAMP)
         {
@@ -736,7 +749,7 @@ public final class P2Indexer implements IApplication
             {
               try
               {
-                timestamp = Long.parseLong(value);
+                Long.parseLong(value);
               }
               catch (NumberFormatException ex)
               {
@@ -1112,7 +1125,7 @@ public final class P2Indexer implements IApplication
       return message;
     }
 
-    public void writeReport(P2Indexer indexer) throws IOException
+    public void writeReport(P2Indexer indexer, long start, long duration) throws IOException
     {
       Map<Repository, Set<Repository>> childrenMap = new HashMap<Repository, Set<Repository>>();
       Map<Repository, Pair<Project, Integer>> ids = new HashMap<Repository, Pair<Project, Integer>>();
@@ -1170,6 +1183,7 @@ public final class P2Indexer implements IApplication
         writer.write("</head>\n");
         writer.write("<body>\n");
         writer.write("<h1>Project Repository Reports</h1>\n");
+        writer.write("<p class=\"meta\">Generated " + new Date(start) + ", took " + duration / 1000 + " seconds.</p>\n");
 
         writer.write("<table border=\"0\">\n");
         writer.write("<tr><td>Projects with repositories:</td><td align=\"right\">" + projects.size()
@@ -1266,6 +1280,13 @@ public final class P2Indexer implements IApplication
         writer.write(".error {\n");
         writer.write("  color: red;\n");
         writer.write("  font-weight: bold;\n");
+        writer.write("}\n");
+        writer.write("\n");
+        writer.write(".meta {\n");
+        writer.write("  color: gray;\n");
+        writer.write("  font-size: 0.75em;\n");
+        writer.write("  margin-top: -12px;\n");
+        writer.write("  margin-bottom: 12px;\n");
         writer.write("}\n");
         writer.write("\n");
         writer.write("a:link {\n");
