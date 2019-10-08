@@ -1246,13 +1246,17 @@ public final class P2Indexer implements IApplication
         writer.write("  font-family: 'Roboto', sans-serif;\n");
         writer.write("}\n");
         writer.write("\n");
+        writer.write("h4 {\n");
+        writer.write("  margin-left: 24px;\n");
+        writer.write("}\n");
+        writer.write("\n");
         writer.write(".button {\n");
-        writer.write("  border: 1px solid Gray;\n");
+        writer.write("  border: 1px solid gray;\n");
         writer.write("  border-radius: 3px;\n");
-        writer.write("  box-shadow: 1px 1px 1px DarkGray;\n");
+        writer.write("  box-shadow: 1px 1px 1px darkgray;\n");
         writer.write("  padding: 0.25ex 0.25em;\n");
-        writer.write("  background-color: LightGray;\n");
-        writer.write("  color: Black;\n");
+        writer.write("  background-color: lightgray;\n");
+        writer.write("  color: black;\n");
         writer.write("  font-weight: bold;\n");
         writer.write("  text-align: center;\n");
         writer.write("  text-decoration: none;\n");
@@ -1260,7 +1264,7 @@ public final class P2Indexer implements IApplication
         writer.write("}\n");
         writer.write("\n");
         writer.write(".error {\n");
-        writer.write("  color: Red;\n");
+        writer.write("  color: red;\n");
         writer.write("  font-weight: bold;\n");
         writer.write("}\n");
         writer.write("\n");
@@ -1567,7 +1571,6 @@ public final class P2Indexer implements IApplication
             }
 
             writer.write("</ul>\n");
-            writer.write("<div style=\"margin-left:24px;\">\n");
 
             if (!errors.isEmpty())
             {
@@ -1618,8 +1621,6 @@ public final class P2Indexer implements IApplication
 
               writer.write("</ul>\n");
             }
-
-            writer.write("</div>\n\n");
           }
 
           writer.write("</body>\n");
