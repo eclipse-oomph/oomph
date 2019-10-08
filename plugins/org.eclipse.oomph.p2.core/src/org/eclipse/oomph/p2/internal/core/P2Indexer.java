@@ -677,6 +677,11 @@ public final class P2Indexer implements IApplication
       return metadataFile.getName().endsWith(JAR_SUFFIX);
     }
 
+    public int getIUCount()
+    {
+      return 0;
+    }
+
     public int getCapabilityCount()
     {
       return 0;
@@ -867,6 +872,8 @@ public final class P2Indexer implements IApplication
      */
     private static final class Simple extends Repository
     {
+      private int iuCount;
+
       private int capabilityCount;
 
       public Simple(P2Indexer indexer, URI uri, File metadataFile)
@@ -878,6 +885,12 @@ public final class P2Indexer implements IApplication
       public boolean isComposed()
       {
         return false;
+      }
+
+      @Override
+      public int getIUCount()
+      {
+        return iuCount;
       }
 
       @Override
@@ -894,7 +907,11 @@ public final class P2Indexer implements IApplication
           return true;
         }
 
-        if ("repository>units>unit>provides>provided".equals(elementPath))
+        if ("repository>units>unit".equals(elementPath))
+        {
+          ++iuCount;
+        }
+        else if ("repository>units>unit>provides>provided".equals(elementPath))
         {
           String namespace = URI.encodeSegment(attributes.getValue("namespace"), false);
           String name = URI.encodeSegment(attributes.getValue("name"), false);
@@ -1043,6 +1060,8 @@ public final class P2Indexer implements IApplication
 
     private final Map<Repository, Project> projectsByRepository = new HashMap<Repository, Project>();
 
+    private final Project unassigned = new Project("_unassigned", "Unassigned Repositories");
+
     public Reporter(String baseURI, File reportFolder)
     {
       this.reportFolder = reportFolder;
@@ -1071,6 +1090,10 @@ public final class P2Indexer implements IApplication
         projectsByRepository.put(repository, project);
         project.addRepository(repository);
       }
+      else
+      {
+        unassigned.addRepository(repository);
+      }
     }
 
     public synchronized String reportError(Repository repository, String message)
@@ -1080,6 +1103,10 @@ public final class P2Indexer implements IApplication
       {
         project.addError(repository, message);
         message += " (" + project.getID() + ")";
+      }
+      else
+      {
+        unassigned.addError(repository, message);
       }
 
       return message;
@@ -1114,12 +1141,14 @@ public final class P2Indexer implements IApplication
       int projectRepos = 0;
       int erroneousProjects = 0;
       int erroneousRepos = 0;
+      int totalErrors = 0;
       for (Project project : projects)
       {
         projectRepos += project.getTotalRepos();
 
         int erroneousProjectRepos = project.getErroneousRepos();
         erroneousRepos += erroneousProjectRepos;
+        totalErrors += project.getTotalErrors();
 
         if (erroneousProjectRepos > 0)
         {
@@ -1132,26 +1161,45 @@ public final class P2Indexer implements IApplication
       try
       {
         reportFolder.mkdirs();
+        writeCSS();
 
         writer = new BufferedWriter(new FileWriter(new File(reportFolder, "index.html")));
         writer.write("<html>\n");
         writer.write("<head>\n");
+        writer.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"report.css\">\n");
         writer.write("</head>\n");
         writer.write("<body>\n");
         writer.write("<h1>Project Repository Reports</h1>\n");
-        writer.write("Projects with repositories: " + projects.size()
-            + "&nbsp;<a href=\"mailto:stepper@esc-net.de?cc=ed.merks@gmail.com&amp;subject=My%20project%20is%20missing\">Report missing project</a><br>\n");
+
+        writer.write("<table border=\"0\">\n");
+        writer.write("<tr><td>Projects with repositories:</td><td align=\"right\">" + projects.size()
+            + "</td><td rowspan=\"2\">&nbsp;&nbsp;&nbsp;<a class=\"button\" href=\"mailto:stepper@esc-net.de?cc=ed.merks@gmail.com&amp;subject=My%20project%20is%20missing\">Report missing project</a></td></tr>\n");
+
         if (erroneousProjects > 0)
         {
-          writer.write("<font color=\"#ff0000\"><b>Projects with erroneous repositories: " + erroneousProjects + "</b></font><br>\n");
+          writer.write("<tr><td class=\"error\">Projects with erroneous repositories:</td><td class=\"error\" align=\"right\">" + erroneousProjects
+              + "</td><td></td></tr>\n");
         }
 
-        writer.write("Total repositories: " + projectRepos + "<br>\n");
+        if (unassigned.getTotalRepos() > 0)
+        {
+          writer.write("<tr><td><a href=\"" + unassigned.getFileName() + "\">Unassigned repositories</a>:</td><td align=\"right\">" + unassigned.getTotalRepos()
+              + "</td><td></td></tr>\n");
+        }
+
+        writer.write("<tr><td>Total repositories:</td><td align=\"right\">" + projectRepos + "</td><td></td></tr>\n");
+
         if (erroneousRepos > 0)
         {
-          writer.write("<font color=\"#ff0000\"><b>Erroneous repositories: " + erroneousRepos + "</b></font><br>\n");
+          writer.write("<tr><td class=\"error\">Erroneous repositories:</td><td class=\"error\" align=\"right\">" + erroneousRepos + "</td><td></td></tr>\n");
         }
 
+        if (totalErrors > 0)
+        {
+          writer.write("<tr><td class=\"error\">Total errors:</td><td class=\"error\" align=\"right\">" + totalErrors + "</td><td></td></tr>\n");
+        }
+
+        writer.write("</table>\n");
         writer.write("<hr>\n");
         writer.write("<ul>\n");
       }
@@ -1160,13 +1208,15 @@ public final class P2Indexer implements IApplication
         ex.printStackTrace();
       }
 
+      unassigned.writeReport(reportFolder, childrenMap, ids);
+
       for (Project project : projects)
       {
         if (project.writeReport(reportFolder, childrenMap, ids) && writer != null)
         {
           int errors = project.getErroneousRepos();
           String suffix = errors > 0
-              ? "<font color=\"#ff0000\"><b>&nbsp;(" + errors + "&nbsp;erroneous&nbsp;" + (errors == 1 ? "repository" : "repositories") + ")</b></font>"
+              ? "<span class=\"error\">&nbsp;&nbsp;&nbsp;" + errors + "&nbsp;erroneous&nbsp;" + (errors == 1 ? "repository" : "repositories") + "</span>"
               : "";
 
           writer.write("<li><a href=\"" + project.getID() + ".html\">" + project.getLabel() + "</a>" + suffix + "\n");
@@ -1178,6 +1228,60 @@ public final class P2Indexer implements IApplication
         writer.write("</ul>\n");
         writer.write("</body>\n");
         writer.write("</html>\n");
+        IOUtil.close(writer);
+      }
+    }
+
+    private void writeCSS() throws IOException
+    {
+      Writer writer = null;
+
+      try
+      {
+        writer = new BufferedWriter(new FileWriter(new File(reportFolder, "report.css")));
+
+        writer.write("@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');\n");
+        writer.write("\n");
+        writer.write("body {\n");
+        writer.write("  font-family: 'Roboto', sans-serif;\n");
+        writer.write("}\n");
+        writer.write("\n");
+        writer.write(".button {\n");
+        writer.write("  border: 1px solid Gray;\n");
+        writer.write("  border-radius: 3px;\n");
+        writer.write("  box-shadow: 1px 1px 1px DarkGray;\n");
+        writer.write("  padding: 0.25ex 0.25em;\n");
+        writer.write("  background-color: LightGray;\n");
+        writer.write("  color: Black;\n");
+        writer.write("  font-weight: bold;\n");
+        writer.write("  text-align: center;\n");
+        writer.write("  text-decoration: none;\n");
+        writer.write("  display: inline-block;\n");
+        writer.write("}\n");
+        writer.write("\n");
+        writer.write(".error {\n");
+        writer.write("  color: Red;\n");
+        writer.write("  font-weight: bold;\n");
+        writer.write("}\n");
+        writer.write("\n");
+        writer.write("a:link {\n");
+        writer.write("  text-decoration: none;\n");
+        writer.write("}\n");
+        writer.write("\n");
+        writer.write("a:visited {\n");
+        writer.write("  text-decoration: none;\n");
+        writer.write("}\n");
+        writer.write("\n");
+        writer.write("a:hover {\n");
+        writer.write("  text-decoration: underline;\n");
+        writer.write("}\n");
+        writer.write("\n");
+        writer.write("a:active {\n");
+        writer.write("  text-decoration: underline;\n");
+        writer.write("}\n");
+      }
+      finally
+      {
         IOUtil.close(writer);
       }
     }
@@ -1301,6 +1405,11 @@ public final class P2Indexer implements IApplication
         return name != null && name.length() != 0 ? name : id;
       }
 
+      public String getFileName()
+      {
+        return id + ".html";
+      }
+
       public int getTotalRepos()
       {
         return repositories.size();
@@ -1387,10 +1496,10 @@ public final class P2Indexer implements IApplication
           writer = new BufferedWriter(new FileWriter(new File(folder, getFileName())));
           writer.write("<html>\n");
           writer.write("<head>\n");
+          writer.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"report.css\">\n");
           writer.write("</head>\n");
           writer.write("<body>\n");
           writer.write("<h1><a href=\"https://projects.eclipse.org/projects/" + id + "\">" + (name != null && name.length() != 0 ? name : id) + "</a></h1>\n");
-          writer.write("<hr>\n");
 
           writer.write("<table border=\"0\">\n");
           writer.write("<tr><td>Simple repositories:</td><td align=\"right\">" + simpleRepos + "</td><td></td></tr>\n");
@@ -1399,13 +1508,13 @@ public final class P2Indexer implements IApplication
 
           if (totalErrors > 0)
           {
-            writer.write("<tr><td><font color=\"#ff0000\"><b>Erroneous repositories:</b></font></td><td align=\"right\"><font color=\"#ff0000\"><b>"
-                + erroneousRepos + "</b></font></td><td>" + (erroneousRepos > 0 ? "&nbsp;<a href=\"#err0\">First error</a>" : "") + "</td></tr>\n");
-            writer.write("<tr><td><font color=\"#ff0000\"><b>Total errors:</b></font></td><td align=\"right\"><font color=\"#ff0000\"><b>" + totalErrors
-                + "</b></font></td><td></td></tr>\n");
+            writer.write("<tr><td class=\"error\">Erroneous repositories:</td><td class=\"error\" align=\"right\">" + erroneousRepos + "</td><td rowspan=\"2\">"
+                + (erroneousRepos > 0 ? "&nbsp;<a class=\"button\" href=\"#err0\">Goto first error</a>" : "") + "</td></tr>\n");
+            writer.write("<tr><td class=\"error\">Total errors:</td><td class=\"error\" align=\"right\">" + totalErrors + "</td><td></td></tr>\n");
           }
 
           writer.write("</table>\n");
+          writer.write("<hr>\n");
 
           int erroneousRepo = 0;
           for (Map.Entry<Repository, List<String>> entry : entries)
@@ -1417,63 +1526,71 @@ public final class P2Indexer implements IApplication
             Integer idWrapper = pair.getElement2();
             int id = idWrapper;
 
-            writer.write("<h2><a name=\"repo" + id + "\">" + (errors.isEmpty() ? "" : "<a name=\"err" + erroneousRepo + "\">")
+            writer.write("<h3><a name=\"repo" + id + "\">" + (errors.isEmpty() ? "" : "<a name=\"err" + erroneousRepo + "\">")
                 + (repository.isComposed() ? "Composite" : "Simple") + " Repository <a href=\"" + repository.getURI() + "\">" + repository.getURI()
-                + "</a></h2>\n");
+                + "</a></h3>\n");
 
-            writer.write("<ul>");
+            writer.write("<ul>\n");
 
-            writer.write("<li><span style=\"white-space: nowrap;\">");
+            writer.write("<li><span style=\"white-space:nowrap;\">");
             writer.write(new Date(repository.getTimestamp()).toString());
             writer.write("</span>&nbsp;(");
             writer.write(String.valueOf(repository.getTimestamp()));
-            writer.write(")");
+            writer.write(")\n");
+
+            if (repository.isCompressed())
+            {
+              writer.write("<li>Compressed\n");
+            }
+
+            writer.write("<li>");
+            int iuCount = getIUCount(repository, childrenMap);
+            writer.write(String.valueOf(iuCount));
+            writer.write("&nbsp;installable&nbsp;");
+            writer.write(iuCount == 1 ? "unit" : "units");
+            writer.write("\n");
 
             writer.write("<li>");
             int capabilityCount = getCapabilityCount(repository, childrenMap);
             writer.write(String.valueOf(capabilityCount));
-            writer.write(capabilityCount == 1 ? "&nbsp;capability" : "&nbsp;capabilities");
+            writer.write("&nbsp;");
+            writer.write(capabilityCount == 1 ? "capability" : "capabilities");
+            writer.write("\n");
 
             if (!errors.isEmpty())
             {
-              writer.write("<li><font color=\"#ff0000\"><b>");
+              writer.write("<li class=\"error\">");
               writer.write(String.valueOf(errors.size()));
               writer.write("&nbsp;");
               writer.write(errors.size() == 1 ? "error" : "errors");
-              writer.write("</b></font>");
+              writer.write("\n");
             }
 
-            if (repository.isCompressed())
-            {
-              writer.write("<li>Compressed");
-            }
-
-            writer.write("</ul>");
-            writer.write("<div style=\"margin-left: 24px;\">");
+            writer.write("</ul>\n");
+            writer.write("<div style=\"margin-left:24px;\">\n");
 
             if (!errors.isEmpty())
             {
-              writer.write("<h3>Errors</h3>\n");
+              writer.write("<h4>Errors</h4>\n");
               writer.write("<ul>\n");
 
               for (String error : errors)
               {
-                writer.write("<li><font color=\"#ff0000\"><b>" + error.replace("\n", "<br>") + "</b></font>\n");
+                writer.write("<li class=\"error\">" + error.replace("\n", "<br>") + "\n");
               }
 
               if (++erroneousRepo < erroneousRepos)
               {
-                writer.write("<li><a href=\"#err" + erroneousRepo + "\">Next error</a>\n");
+                writer.write("<li><a class=\"button\" href=\"#err" + erroneousRepo + "\">Goto next error</a>\n");
               }
 
               writer.write("</ul>\n");
-              writer.write("</div>");
             }
 
             Set<Repository> children = childrenMap.get(repository);
             if (children != null && !children.isEmpty())
             {
-              writer.write("<h3>Children</h3>\n");
+              writer.write("<h4>Children</h4>\n");
               writer.write("<ul>\n");
 
               for (Repository child : children)
@@ -1489,7 +1606,7 @@ public final class P2Indexer implements IApplication
             List<Repository.Composite> composites = repository.getComposites();
             if (composites != null && !composites.isEmpty())
             {
-              writer.write("<h3>Composites</h3>\n");
+              writer.write("<h4>Composites</h4>\n");
               writer.write("<ul>\n");
 
               for (Repository.Composite composite : composites)
@@ -1502,7 +1619,7 @@ public final class P2Indexer implements IApplication
               writer.write("</ul>\n");
             }
 
-            writer.write("</div>");
+            writer.write("</div>\n\n");
           }
 
           writer.write("</body>\n");
@@ -1526,13 +1643,29 @@ public final class P2Indexer implements IApplication
         Project project = pair.getElement1();
         int id = pair.getElement2();
 
-        String href = project != null ? project.getFileName() + "#repo" + id : repository.getURI().toString();
+        String href = project != null ? (project == this ? "" : project.getFileName()) + "#repo" + id : repository.getURI().toString();
         writer.write("<a href=\"" + href + "\">" + repository.getURI() + "</a>");
       }
 
-      private String getFileName()
+      private int getIUCount(Repository repository, Map<Repository, Set<Repository>> childrenMap)
       {
-        return id + ".html";
+        if (repository instanceof Repository.Composite)
+        {
+          int sum = 0;
+
+          Set<Repository> children = childrenMap.get(repository);
+          if (children != null && !children.isEmpty())
+          {
+            for (Repository child : children)
+            {
+              sum += getIUCount(child, childrenMap);
+            }
+          }
+
+          return sum;
+        }
+
+        return repository.getIUCount();
       }
 
       private int getCapabilityCount(Repository repository, Map<Repository, Set<Repository>> childrenMap)
