@@ -15,6 +15,7 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
+import org.eclipse.oomph.util.ThreadPool;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl;
@@ -52,7 +53,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -62,12 +62,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -94,9 +89,7 @@ public final class P2Indexer implements IApplication
 
   private final Queue<SAXParser> parserPool = new ConcurrentLinkedQueue<SAXParser>();
 
-  private final ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4);
-
-  private final Deque<Future<?>> deque = new ConcurrentLinkedDeque<Future<?>>();
+  private final ThreadPool threadPool = new ThreadPool();
 
   private final long timeStamp = System.currentTimeMillis();
 
@@ -152,19 +145,13 @@ public final class P2Indexer implements IApplication
         baseURI = baseURI.trimSegments(1);
       }
 
+      System.out.println();
+      System.out.println("Starting analysis: " + new Date(start));
       scanFolder(scanFolder, baseURI);
-
-      for (Future<?> future = deque.pollFirst(); future != null; future = deque.pollFirst())
-      {
-        future.get();
-      }
+      threadPool.awaitFinished();
 
       generateRepositoryMetadata();
-
-      for (Future<?> future = deque.pollFirst(); future != null; future = deque.pollFirst())
-      {
-        future.get();
-      }
+      threadPool.awaitFinished();
 
       long end = System.currentTimeMillis();
 
@@ -204,7 +191,7 @@ public final class P2Indexer implements IApplication
       return;
     }
 
-    deque.addLast(threadPool.submit(new Runnable()
+    threadPool.submit(new Runnable()
     {
       public void run()
       {
@@ -226,7 +213,7 @@ public final class P2Indexer implements IApplication
           }
         }
       }
-    }));
+    });
 
     File[] children = folder.listFiles(new FileFilter()
     {
@@ -246,7 +233,7 @@ public final class P2Indexer implements IApplication
         final String encodedName = URI.encodeSegment(name, false);
         if (name.equals(URI.decode(encodedName)))
         {
-          scheduleTask(new Runnable()
+          threadPool.submit(new Runnable()
           {
             public void run()
             {
@@ -343,7 +330,7 @@ public final class P2Indexer implements IApplication
   {
     for (final Repository repository : repositories.values())
     {
-      scheduleTask(new Runnable()
+      threadPool.submit(new Runnable()
       {
         public void run()
         {
@@ -358,6 +345,16 @@ public final class P2Indexer implements IApplication
           {
             parser = acquireParser();
             repository.processsMetadata(parser);
+          }
+          catch (FileNotFoundException ex)
+          {
+            URI uri = repository.getURI();
+            repositories.remove(uri);
+
+            if (verbose)
+            {
+              System.out.println(uri + " --> Metadata file has been deleted");
+            }
           }
           catch (Exception ex)
           {
@@ -379,11 +376,6 @@ public final class P2Indexer implements IApplication
         }
       });
     }
-  }
-
-  private void scheduleTask(Runnable task)
-  {
-    deque.addLast(threadPool.submit(task));
   }
 
   private SAXParser acquireParser() throws ParserConfigurationException, SAXException
@@ -503,30 +495,19 @@ public final class P2Indexer implements IApplication
 
   private int writeCapabilities(final File outputFolder) throws InterruptedException
   {
-    int count = capabilities.size();
-    final CountDownLatch finished = new CountDownLatch(count);
-
     for (final Map.Entry<String, List<Capability>> entry : capabilities.entrySet())
     {
-      ++count;
       threadPool.submit(new Runnable()
       {
         public void run()
         {
-          try
-          {
-            writeCapability(outputFolder, entry.getKey(), entry.getValue());
-          }
-          finally
-          {
-            finished.countDown();
-          }
+          writeCapability(outputFolder, entry.getKey(), entry.getValue());
         }
       });
     }
 
-    finished.await();
-    return count;
+    threadPool.awaitFinished();
+    return capabilities.size();
   }
 
   private void writeCapability(File outputFolder, String name, List<Capability> capabilities)
