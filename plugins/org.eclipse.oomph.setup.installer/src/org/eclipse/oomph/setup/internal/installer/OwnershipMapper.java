@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.ThreadPool;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -42,10 +43,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,16 +63,6 @@ public final class OwnershipMapper
     {
       Path path = pathname.toPath();
       return !Files.isSymbolicLink(path) && Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS) && Files.isReadable(path);
-    }
-  };
-
-  private static final ThreadFactory THREAD_FACTORY = new ThreadFactory()
-  {
-    public Thread newThread(Runnable r)
-    {
-      Thread thread = new Thread(r);
-      thread.setDaemon(true);
-      return thread;
     }
   };
 
@@ -118,9 +105,7 @@ public final class OwnershipMapper
 
       stats = new BufferedWriter(new FileWriter("folders.txt"));
       long start = System.currentTimeMillis();
-
-      ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4, THREAD_FACTORY);
-      final CountDownLatch finished = new CountDownLatch(topLevelFolders.length);
+      ThreadPool threadPool = new ThreadPool();
 
       for (final File topLevelFolder : topLevelFolders)
       {
@@ -136,15 +121,11 @@ public final class OwnershipMapper
             {
               printStackTrace(ex);
             }
-            finally
-            {
-              finished.countDown();
-            }
           }
         });
       }
 
-      finished.await();
+      threadPool.awaitFinished();
 
       writeStats(rootFolder.relativize(rootFolder), start, IGNORE, IGNORE, ROOT);
       stats.close();
