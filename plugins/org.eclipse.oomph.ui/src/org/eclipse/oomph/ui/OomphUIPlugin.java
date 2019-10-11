@@ -28,6 +28,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 /**
@@ -48,7 +49,7 @@ public abstract class OomphUIPlugin extends OomphPlugin
 
   public final IWorkbench getWorkbench()
   {
-    return getEclipsePlugin().getWorkbench();
+    return PlatformUI.getWorkbench();
   }
 
   public final IPreferenceStore getPreferenceStore()
