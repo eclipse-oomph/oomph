@@ -151,44 +151,6 @@
       <description>PDE Core</description>
     </setupTask>
     <setupTask
-        xsi:type="setup:TextModifyTask"
-        excludedTriggers="BOOTSTRAP"
-        url="${git.clone.pde.ui.location|uri}/ui/org.eclipse.pde.core/.settings/org.eclipse.jdt.core.prefs"
-        encoding="UTF-8">
-      <modification
-          pattern="org\.eclipse\.jdt\.core\.compiler\.problem\.forbiddenReference=(error)">
-        <substitution>warning</substitution>
-      </modification>
-    </setupTask>
-    <setupTask
-        xsi:type="setup:TextModifyTask"
-        excludedTriggers="BOOTSTRAP"
-        url="${git.clone.pde.ui.location|uri}/ui/org.eclipse.pde.core/.project"
-        encoding="UTF-8">
-      <modification
-          pattern="&lt;triggers>()full,incremental,&lt;/triggers>">
-        <substitution>auto,</substitution>
-      </modification>
-    </setupTask>
-    <setupTask
-        xsi:type="setup:TextModifyTask"
-        excludedTriggers="BOOTSTRAP"
-        url="${git.clone.pde.ui.location|uri}/ui/org.eclipse.pde.core/.externalToolBuilders/org.eclipse.pde.core localbuild.xml [Builder].launch"
-        encoding="UTF-8">
-      <modification
-          pattern="&lt;stringAttribute key=&quot;org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS&quot; value=&quot;full,incremental,()&quot;/>">
-        <substitution>auto,</substitution>
-      </modification>
-      <modification
-          pattern="&lt;stringAttribute key=&quot;org.eclipse.ant.ui.ATTR_ANT_AFTER_CLEAN_TARGETS&quot; value=&quot;workspaceBinaries,&quot;/>([\n\r]+)&lt;stringAttribute key=&quot;org.eclipse.ant.ui.ATTR_ANT_MANUAL_TARGETS&quot; value=&quot;workspaceBinaries,&quot;/>">
-        <substitution>\1&lt;stringAttribute key=&quot;org.eclipse.ant.ui.ATTR_ANT_AUTO_TARGETS&quot; value=&quot;workspaceBinaries,&quot;/>\1</substitution>
-      </modification>
-      <modification
-          pattern="&lt;booleanAttribute key=&quot;org.eclipse.ant.ui.DEFAULT_VM_INSTALL&quot; value=&quot;false&quot;/>([\n\r]+)&lt;booleanAttribute key=&quot;org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND&quot; value=&quot;false&quot;/>">
-        <substitution>\1&lt;stringAttribute key=&quot;org.eclipse.debug.core.ATTR_REFRESH_SCOPE&quot; value=&quot;$${working_set:&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;resources&amp;gt;&amp;#13;&amp;#10;&amp;lt;item path=&amp;quot;/org.eclipse.pde.core/ant_tasks&amp;quot; type=&amp;quot;2&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&amp;lt;/resources&amp;gt;}&quot;/>\1</substitution>
-      </modification>
-    </setupTask>
-    <setupTask
         xsi:type="setup.targlets:TargletTask">
       <targlet
           name="PDE UI"
@@ -210,7 +172,7 @@
               project="org.eclipse.pde"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@projects[name='ui']/@setupTasks.5/@workingSets.1 //@projects[name='ui']/@setupTasks.5/@workingSets.2"/>
+              excludedWorkingSet="//@projects[name='ui']/@setupTasks.2/@workingSets.1 //@projects[name='ui']/@setupTasks.2/@workingSets.2"/>
         </predicate>
       </workingSet>
       <workingSet
@@ -225,7 +187,7 @@
               pattern=".*\.api\..*"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@projects[name='ui']/@setupTasks.5/@workingSets.2"/>
+              excludedWorkingSet="//@projects[name='ui']/@setupTasks.2/@workingSets.2"/>
         </predicate>
       </workingSet>
       <workingSet
@@ -274,30 +236,6 @@
             value="true"/>
       </configSections>
       <description>PDE Core</description>
-    </setupTask>
-    <setupTask
-        xsi:type="setup:TextModifyTask"
-        excludedTriggers="BOOTSTRAP"
-        url="${git.clone.pde.build.location|uri}/org.eclipse.pde.build/.project"
-        encoding="UTF-8">
-      <modification
-          pattern="&lt;triggers>()full,incremental,&lt;/triggers>">
-        <substitution>auto,</substitution>
-      </modification>
-    </setupTask>
-    <setupTask
-        xsi:type="setup:TextModifyTask"
-        excludedTriggers="BOOTSTRAP"
-        url="${git.clone.pde.build.location|uri}/org.eclipse.pde.build/.externalToolBuilders/org.eclipse.pde.build localbuild.xml [Builder].launch"
-        encoding="UTF-8">
-      <modification
-          pattern="&lt;stringAttribute key=&quot;org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS&quot; value=&quot;full,incremental,()&quot;/>">
-        <substitution>auto,</substitution>
-      </modification>
-      <modification
-          pattern="&lt;stringAttribute key=&quot;org.eclipse.ant.ui.ATTR_ANT_AFTER_CLEAN_TARGETS&quot; value=&quot;workspaceBinaries,&quot;/>([\n\r]+)&lt;stringAttribute key=&quot;org.eclipse.ant.ui.ATTR_ANT_MANUAL_TARGETS&quot; value=&quot;workspaceBinaries,&quot;/>">
-        <substitution>\1&lt;stringAttribute key=&quot;org.eclipse.ant.ui.ATTR_ANT_AUTO_TARGETS&quot; value=&quot;workspaceBinaries,&quot;/>\1</substitution>
-      </modification>
     </setupTask>
     <setupTask
         xsi:type="setup.targlets:TargletTask">
