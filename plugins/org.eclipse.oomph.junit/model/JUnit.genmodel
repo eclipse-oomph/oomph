@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.oomph.junit/src" editDirectory=""
+    editorDirectory="" modelPluginID="org.eclipse.oomph.junit" modelName="JUnit" editPluginClass=""
+    editorPluginClass="" rootExtendsInterface="" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    suppressInterfaces="true" codeFormatting="true" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="5.0" copyrightFields="false" editPluginID="org.eclipse.oomph.junit.edit"
+    editorPluginID="org.eclipse.oomph.junit.edit" importOrganizing="true" cleanup="true">
+  <foreignModel>JUnit.ecore</foreignModel>
+  <genPackages prefix="JUnit" basePackage="org.eclipse.oomph" resource="XML" disposableProviderFactory="true"
+      contentTypeIdentifier="org.eclipse.oomph.junit" fileExtensions="xml" ecorePackage="JUnit.ecore#/">
+    <genDataTypes ecoreDataType="JUnit.ecore#//ISO8601DateTime"/>
+    <genDataTypes ecoreDataType="JUnit.ecore#//NameType"/>
+    <genDataTypes ecoreDataType="JUnit.ecore#//Time"/>
+    <genClasses ecoreClass="JUnit.ecore#//JUnitDocumentRoot">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//JUnitDocumentRoot/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference JUnit.ecore#//JUnitDocumentRoot/xMLNSPrefixMap"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference JUnit.ecore#//JUnitDocumentRoot/xSISchemaLocation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JUnit.ecore#//JUnitDocumentRoot/testSuite"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JUnit.ecore#//JUnitDocumentRoot/testSuites"/>
+    </genClasses>
+    <genClasses ecoreClass="JUnit.ecore#//TestSuitesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JUnit.ecore#//TestSuitesType/testSuites"/>
+    </genClasses>
+    <genClasses ecoreClass="JUnit.ecore#//TestSuite">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JUnit.ecore#//TestSuite/properties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JUnit.ecore#//TestSuite/testCases"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestSuite/systemOut"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestSuite/systemErr"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestSuite/errors"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestSuite/failures"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestSuite/hostName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestSuite/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestSuite/tests"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestSuite/time"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestSuite/timestamp"/>
+    </genClasses>
+    <genClasses ecoreClass="JUnit.ecore#//TestSuiteType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestSuiteType/iD"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestSuiteType/packageName"/>
+    </genClasses>
+    <genClasses ecoreClass="JUnit.ecore#//TestCaseType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JUnit.ecore#//TestCaseType/error"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JUnit.ecore#//TestCaseType/failure"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestCaseType/className"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestCaseType/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//TestCaseType/time"/>
+    </genClasses>
+    <genClasses ecoreClass="JUnit.ecore#//ProblemType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//ProblemType/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//ProblemType/message"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//ProblemType/type"/>
+    </genClasses>
+    <genClasses ecoreClass="JUnit.ecore#//PropertiesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JUnit.ecore#//PropertiesType/property"/>
+    </genClasses>
+    <genClasses ecoreClass="JUnit.ecore#//PropertyType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//PropertyType/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JUnit.ecore#//PropertyType/value"/>
+    </genClasses>
+  </genPackages>
+  <codeStyle>UnnecessaryDeprecatedMethod</codeStyle>
+</genmodel:GenModel>

@@ -621,6 +621,9 @@
         <predicate
             xsi:type="predicates:NamePredicate"
             pattern="org\.eclipse\.oomph\.tests.*"/>
+        <predicate
+            xsi:type="predicates:NamePredicate"
+            pattern="org\.eclipse\.oomph\.junit"/>
       </workingSet>
       <workingSet
           name="Oomph Tools">

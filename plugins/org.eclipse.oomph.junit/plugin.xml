@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) Ed Merks (Berlin, Germany) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v2.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v20.html
+
+  Contributors:
+    Ed Merks - initial API and implementation
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated JUnit -->
+      <package
+            uri="http://www.eclipse.org/oomph/junit/1.0"
+            class="org.eclipse.oomph.junit.JUnitPackage"
+            genModel="model/JUnit.genmodel"/>
+   </extension>
+
+
+   <extension point="org.eclipse.emf.ecore.content_parser">
+      <!-- @generated JUnit -->
+      <parser
+            contentTypeIdentifier="org.eclipse.oomph.junit"
+            class="org.eclipse.oomph.junit.util.JUnitResourceFactoryImpl"/>
+   </extension>
+
+   <extension point="org.eclipse.core.contenttype.contentTypes">
+      <!-- @generated JUnit NOT -->
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            file-extensions="xml"
+            id="org.eclipse.oomph.junit"
+            name="%_UI_JUnit_content_type"
+            priority="normal">
+         <describer class="org.eclipse.emf.ecore.xmi.impl.RootXMLContentHandlerImpl$Describer">
+            <parameter
+                  name="elementNames"
+                  value="testsuites testsuite">
+            </parameter>
+         </describer>
+      </content-type>
+   </extension>
+
+</plugin>

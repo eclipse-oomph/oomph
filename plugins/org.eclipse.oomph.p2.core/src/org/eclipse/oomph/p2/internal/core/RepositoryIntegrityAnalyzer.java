@@ -10,6 +10,11 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
+import org.eclipse.oomph.junit.JUnitFactory;
+import org.eclipse.oomph.junit.JUnitPackage;
+import org.eclipse.oomph.junit.ProblemType;
+import org.eclipse.oomph.junit.TestCaseType;
+import org.eclipse.oomph.junit.TestSuite;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
@@ -24,6 +29,7 @@ import org.eclipse.oomph.util.XMLUtil;
 import org.eclipse.oomph.util.ZIPUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -32,6 +38,7 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIConverter.ReadableInputStream;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
+import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
@@ -222,6 +229,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       Set<URI> uris = new LinkedHashSet<URI>();
       File outputLocation = new File(".").getCanonicalFile();
       File publishLocation = null;
+      File testsLocation = null;
+
       String reportSource = "https://ci.eclipse.org/oomph/job/repository-analyzer/";
       String reportBranding = "https://wiki.eclipse.org/images/d/dc/Oomph_Project_Logo.png";
       if (arguments != null)
@@ -254,6 +263,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           else if ("-aggregator".equals(option) || "-a".equals(option))
           {
             aggregator = true;
+          }
+          else if ("-test".equals(option) || "-t".equals(option))
+          {
+            File file = new File(arguments[++i]);
+            testsLocation = file.getCanonicalFile();
           }
           else
           {
@@ -300,6 +314,15 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
       Set<File> reportsWithErrors = new HashSet<File>();
 
+      if (testsLocation != null)
+      {
+        testsLocation.mkdirs();
+        for (File file : testsLocation.listFiles())
+        {
+          IOUtil.deleteBestEffort(file);
+        }
+      }
+
       Map<IArtifactKey, Future<Map<IArtifactDescriptor, File>>> artifactCache = new LinkedHashMap<IArtifactKey, Future<Map<IArtifactDescriptor, File>>>();
 
       for (URI uri : uris)
@@ -326,7 +349,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
         shutDownExecutor();
 
-        emitReport(allReports, new HashSet<Report>(), report, reportLocation, repositoryIndex);
+        emitReport(allReports, new HashSet<Report>(), report, reportLocation, testsLocation, repositoryIndex);
 
         if (publishLocation != null)
         {
@@ -662,6 +685,81 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     return result.toString();
   }
 
+  private static String toTestPackageName(URI uri)
+  {
+    if (isAggrconRepositoryURI(uri))
+    {
+      return toTestPackageName(URI.createURI(uri.lastSegment()));
+    }
+
+    StringBuilder result = new StringBuilder();
+    for (String segment : uri.segments())
+    {
+      if (!StringUtil.isEmpty(segment))
+      {
+        if (result.length() != 0)
+        {
+          result.append(".");
+        }
+
+        StringBuilder packageName = new StringBuilder();
+        for (char ch : segment.toCharArray())
+        {
+          if (packageName.length() == 0)
+          {
+            if (!Character.isJavaIdentifierStart(ch))
+            {
+              packageName.append('_');
+            }
+          }
+
+          if (Character.isJavaIdentifierPart(ch))
+          {
+            packageName.append(ch);
+          }
+          else
+          {
+            packageName.append('_');
+          }
+        }
+
+        result.append(packageName);
+      }
+    }
+
+    return result.toString();
+  }
+
+  private static TestSuite createTestSuite(File testsLocation, String fileName, String qualifiedClassName)
+  {
+    URI uri = URI.createFileURI(new File(testsLocation, fileName).toString());
+    Resource resource = Resource.Factory.Registry.INSTANCE.getFactory(uri, JUnitPackage.eCONTENT_TYPE).createResource(uri);
+    TestSuite testSuite = JUnitFactory.eINSTANCE.createTestSuite();
+    testSuite.setName(qualifiedClassName);
+    testSuite.setProperties(JUnitFactory.eINSTANCE.createPropertiesType());
+    testSuite.setTimestamp(System.currentTimeMillis());
+    resource.getContents().add(testSuite);
+    return testSuite;
+  }
+
+  private static TestCaseType createTestCase(TestSuite testSuite, String name)
+  {
+    TestCaseType testCase = JUnitFactory.eINSTANCE.createTestCaseType();
+    testCase.setClassName(testSuite.getName());
+    testCase.setName(name);
+    testSuite.getTestCases().add(testCase);
+    return testCase;
+  }
+
+  private static void addFailure(TestCaseType testCase, String message, String value)
+  {
+    ProblemType problemType = JUnitFactory.eINSTANCE.createProblemType();
+    problemType.setMessage(message);
+    problemType.setType(RepositoryIntegrityAnalyzer.class.getName());
+    problemType.setValue(message + "\n" + value);
+    testCase.setFailure(problemType);
+  }
+
   private static void publish(File outputLocation, File publishLocation) throws IOException
   {
     File newPublishLocation = new File(publishLocation.toString() + ".new");
@@ -765,7 +863,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     }
   }
 
-  private void emitReport(Map<String, String> allReports, Set<Report> visited, Report report, final File outputLocation,
+  private void emitReport(Map<String, String> allReports, Set<Report> visited, Report report, final File outputLocation, File testsLocation,
       final RepositoryIndex repositoryIndexEmitter) throws IOException, InterruptedException
   {
     if (visited.add(report))
@@ -796,6 +894,173 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           IOUtil.closeSilent(out);
         }
+      }
+
+      if (testsLocation != null)
+      {
+        URI siteURI = URI.createURI(report.getSiteURL());
+        String testPackageName = toTestPackageName(siteURI);
+
+        System.err.println("###" + testsLocation);
+        System.err.println("###>" + testPackageName);
+        boolean simple = report.isSimple();
+        TestSuite testSuite;
+        if (simple || isAggrconRepositoryURI(siteURI))
+        {
+          String qualifiedClassName = testPackageName + (simple ? ".Simple" : ".AggrCon");
+          testSuite = createTestSuite(testsLocation, "TEST-" + qualifiedClassName + ".xml", qualifiedClassName);
+
+          Set<IInstallableUnit> allIUs = report.getAllIUs();
+          Set<IInstallableUnit> badLicenseIUs = report.getBadLicenseIUs();
+          Set<IInstallableUnit> badProviderIUs = report.getBadProviderIUs();
+          Map<String, Set<IInstallableUnit>> featureProviders = report.getFeatureProviders();
+          Set<IInstallableUnit> brokenBrandingIUs = report.getBrokenBrandingIUs();
+          Map<List<Certificate>, Map<String, IInstallableUnit>> certificates = report.getCertificates();
+          Map<String, IInstallableUnit> unsigned = certificates.get(Collections.emptyList());
+          Collection<IInstallableUnit> pluginsWithMissingPackGZ = report.getPluginsWithMissingPackGZ();
+          Set<IInstallableUnit> classContainingIUs = report.getClassContainingIUs();
+          for (IInstallableUnit iu : allIUs)
+          {
+            if (iu.getId().endsWith(".feature.group"))
+            {
+              {
+                long start = System.currentTimeMillis();
+                TestCaseType testCase = createTestCase(testSuite, "validLicense_" + iu);
+                if (badLicenseIUs.contains(iu))
+                {
+                  addFailure(testCase, "The feature IU '" + iu + "' does not have a valid license", siteURI.toString());
+                }
+                long end = System.currentTimeMillis();
+                testCase.setTime((end - start) / 1000.0);
+              }
+
+              {
+                long start = System.currentTimeMillis();
+                TestCaseType testCase = createTestCase(testSuite, "validProvider_" + iu);
+                if (badProviderIUs.contains(iu))
+                {
+                  StringBuilder message = new StringBuilder();
+                  for (Map.Entry<String, Set<IInstallableUnit>> entry : featureProviders.entrySet())
+                  {
+                    if (entry.getValue().contains(iu))
+                    {
+                      message.append(entry.getKey()).append('\n');
+                      break;
+                    }
+                  }
+
+                  message.append(siteURI);
+
+                  addFailure(testCase, "The feature IU '" + iu + "' does not valid provider", message.toString());
+                }
+                long end = System.currentTimeMillis();
+                testCase.setTime((end - start) / 1000.0);
+              }
+
+              {
+                long start = System.currentTimeMillis();
+                TestCaseType testCase = createTestCase(testSuite, "validBranding_" + iu);
+                if (brokenBrandingIUs.contains(iu))
+                {
+                  addFailure(testCase, "The feature IU '" + iu + "' has a broken branding image", siteURI.toString());
+                }
+                long end = System.currentTimeMillis();
+                testCase.setTime((end - start) / 1000.0);
+              }
+            }
+
+            {
+              long start = System.currentTimeMillis();
+              Map<String, Boolean> iuArtifacts = report.getIUArtifacts(iu);
+              if (!iuArtifacts.isEmpty())
+              {
+                TestCaseType testCase = createTestCase(testSuite, "validSignedArtifacts_" + iu);
+                if (unsigned != null && unsigned.containsValue(iu))
+                {
+                  StringBuilder message = new StringBuilder();
+                  for (String artifact : iuArtifacts.keySet())
+                  {
+                    if (message.length() != 0)
+                    {
+                      message.append('\n');
+                    }
+
+                    message.append(siteURI).append('/').append(artifact);
+                  }
+
+                  addFailure(testCase, "The IU '" + iu + "' has unsigned artifacts", message.toString());
+                }
+
+                long end = System.currentTimeMillis();
+                testCase.setTime((end - start) / 1000.0);
+              }
+            }
+
+            if (classContainingIUs.contains(iu))
+            {
+              long start = System.currentTimeMillis();
+              TestCaseType testCase = createTestCase(testSuite, "validCorrespondingPackGZ_" + iu);
+
+              if (pluginsWithMissingPackGZ.contains(iu))
+              {
+                Map<String, Boolean> iuArtifacts = report.getIUArtifacts(iu);
+                StringBuilder message = new StringBuilder();
+                for (String artifact : iuArtifacts.keySet())
+                {
+                  if (message.length() != 0)
+                  {
+                    message.append('\n');
+                  }
+
+                  message.append(siteURI).append('/').append(artifact);
+                }
+
+                addFailure(testCase, "The plugin IU '" + iu + "' has no corresponding .pack.gz artifact", message.toString());
+              }
+
+              long end = System.currentTimeMillis();
+              testCase.setTime((end - start) / 1000.0);
+            }
+          }
+        }
+        else
+        {
+          String qualifiedClassName = testPackageName + ".Composite";
+          testSuite = createTestSuite(testsLocation, "TEST-" + qualifiedClassName + ".xml", qualifiedClassName);
+
+          {
+            long start = System.currentTimeMillis();
+            TestCaseType testCase = createTestCase(testSuite, "validMetadataLocations");
+            String metadataXML = report.getMetadataXML();
+            if (metadataXML != null && metadataXML.contains("bad-absolute-location"))
+            {
+              addFailure(testCase, "The composite content XML contains an absolute URI referencing the same host", siteURI.toString());
+            }
+            long end = System.currentTimeMillis();
+            testCase.setTime((end - start) / 1000.0);
+          }
+
+          {
+            long start = System.currentTimeMillis();
+            TestCaseType testCase = createTestCase(testSuite, "validArtifactLocations");
+            String artifactXML = report.getArtifactML();
+            if (artifactXML != null && artifactXML.contains("bad-absolute-location"))
+            {
+              addFailure(testCase, "The composite artifact XML contains an absolute URI referencing the same host", siteURI.toString());
+            }
+            long end = System.currentTimeMillis();
+            testCase.setTime((end - start) / 1000.0);
+          }
+        }
+
+        testSuite.summarize();
+        Diagnostic diagnostic = Diagnostician.INSTANCE.validate(testSuite);
+        if (diagnostic.getSeverity() != Diagnostic.OK)
+        {
+          System.err.println("###");
+        }
+
+        testSuite.eResource().save(null);
       }
 
       List<IUReport> iuReports = report.getIUReports();
@@ -841,9 +1106,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
       for (Report childReport : report.getChildren())
       {
-        emitReport(allReports, visited, childReport, outputLocation, repositoryIndexEmitter);
+        emitReport(allReports, visited, childReport, outputLocation, testsLocation, repositoryIndexEmitter);
       }
     }
+
   }
 
   public void stop()
@@ -1332,6 +1598,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         public Map<String, Set<Version>> getIUVersions()
         {
           return iuIDVersions;
+        }
+
+        @Override
+        public Set<IInstallableUnit> getClassContainingIUs()
+        {
+          return classContainingIUs;
         }
 
         private Set<IInstallableUnit> pluginsWithMissingPackGZ;
@@ -3583,6 +3855,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public abstract Set<IInstallableUnit> getBadLicenseIUs();
 
     public abstract Set<IInstallableUnit> getBrokenBrandingIUs();
+
+    public abstract Set<IInstallableUnit> getClassContainingIUs();
 
     public abstract Set<IInstallableUnit> getPluginsWithMissingPackGZ();
 

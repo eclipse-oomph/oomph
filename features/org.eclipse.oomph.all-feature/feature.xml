@@ -112,6 +112,13 @@
          unpack="false"/>
 
    <plugin
+         id="org.eclipse.oomph.junit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="org.eclipse.oomph.predicates"
          download-size="0"
          install-size="0"
