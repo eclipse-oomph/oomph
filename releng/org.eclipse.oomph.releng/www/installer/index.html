@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="eclipse, Oomph, eclipseinstaller"/>
+  <link rel="shortcut icon" href="https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/favicon.ico"/>
+
+  <title>Auto-launch Eclipse Installer</title>
+  <link rel="stylesheet" href="https://www.eclipse.org/eclipse.org-common/themes/solstice/public/stylesheets/eclipse-ide.min.css?v1.7"/>
+
+  <meta name="description" content="The Eclipse Foundation - home to a global community, the Eclipse IDE, Jakarta EE and over 350 open source projects, including runtimes, tools and frameworks."/>
+
+  <script src='https://code.jquery.com/jquery-1.9.0.min.js' type='text/javascript'></script>
+
+  <link href="//fonts.googleapis.com/css?family=Libre+Franklin:400,700,300,600,100" rel="stylesheet" type="text/css"/>
+
+  <style>
+    .button, .button:visited, .button:hover, .button:active, .button:link {
+      margin-left: 2em;
+      margin-top: 1ex;
+      margin-bottom: 1ex;
+      border-radius: 5px;
+      font-weight: bold;
+      border: 1px solid Chocolate;
+      background-color: DarkOrange;
+      color: white;
+      padding: 0.25ex 0.25em;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .thumb {
+      width : 25em;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .thumb:hover {
+      opacity: 0.7;
+    }
+
+    .section-header {
+      margin-bottom: 1.5ex;
+    }
+
+    .bb {
+      background-color: white;
+      border: none;
+      padding: 0px 0px;
+    }
+
+    .bb:focus {
+      outline: none;
+    }
+
+    .help {
+      position: relative;
+      bottom: 1.2ex;
+      margin-left: -0.10ex;
+      margin-right: 0.10ex;
+      width: 2.0ex;
+      cursor: pointer;
+    }
+
+    .help:hover {
+      animation: rotation 1.5s infinite linear;
+	}
+
+    @keyframes rotation {
+      from {
+        transform: rotate(0deg);
+        transform-origin: center center;
+      }
+      to {
+        transform: rotate(359deg);
+        transform-origin: center center;
+      }
+    }
+
+    .help-link {
+      cursor: pointer;
+      transition: font-weight 2s;
+    }
+
+    .help-link:hover {
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-color: orange;
+    }
+
+    .modal-popup {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      padding-top: 100px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0,0,0);
+      background-color: rgba(0,0,0,0.7);
+    }
+
+    .modal-popup-content {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 900px;
+    }
+
+    #modal-popup-caption {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 900px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 150%;
+      color: white;
+      padding: 10px 0;
+      height: 150px;
+    }
+
+    .modal-popup-content, #modal-popup-caption {
+      animation-name: zoom;
+      animation-duration: 0.6s;
+    }
+
+    @keyframes zoom {
+      from {transform:scale(0)}
+      to {transform:scale(1)}
+    }
+
+    .modal-popup-close {
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .modal-popup-close:hover, .modal-popup-close:focus {
+      color: #bbb;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    @media only screen and (max-width: 900px) {
+      modal-content {
+        width: 100%;
+      }
+    }
+
+    [tooltip]:after {
+      content: attr(tooltip);
+      position: absolute;
+      opacity: 0;
+      display: none;
+      white-space: pre-line;
+      font-weight: normal;
+      transition: all 0.15s ease;
+      padding: 10px;
+      color: #333;
+      border-radius: 10px;
+      box-shadow: 2px 2px 1px silver;
+      max-height: 0px;
+    }
+
+    [tooltip]:hover:after {
+      content: attr(tooltip);
+      opacity: 1;
+      display: inline-block;
+      background: Moccasin;
+      margin-top: -4ex;
+      margin-left: 1ex;
+      z-index: 99;
+      max-height: 100%;
+    }
+  </style>
+
+  <script>
+    var eclipse_org_common = {
+      "settings": {
+        "cookies_class": {
+          "name": "eclipse_settings",
+          "enabled": 1
+        }
+      }
+    }
+
+    function getParameter(search, name) {
+      try {
+        // This is not available on IE 11.
+        var urlParameters = new URLSearchParams(search);
+        return urlParameters.get(name);
+      }
+      catch (e) {
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(search);
+        if (results == null) {
+          return null;
+        }
+        else {
+          return decodeURI(results[1]) || 0;
+        }
+     }
+   }
+
+    window.onload = function () {
+      var scheme = getParameter(window.location.search, 'scheme');
+      if (scheme == null) {
+        scheme = 'eclipse+installer';
+      } else {
+        scheme = scheme.replace(/ /g, '+');
+      }
+      updateScheme('scheme', scheme);
+
+      var url = getParameter(window.location.search, 'url');
+      if (url == null) {
+        url = '';
+        var elements = document.getElementsByClassName('url-required');
+        for (var i = 0; i < elements.length; i++) {
+          var element = elements[i];
+          element.style.display = 'none';
+        }
+        updateHref('link-launch', scheme + ':' + url, 'Click to launch the installer');
+      } else {
+        updateHref('link-drag-and-drop', url, 'Drag and drop the following link on the installer\'s title area:\n' + url);
+        updateHref('link-copy-and-apply', url, 'Click to copy the following link to the system clipboard and apply it to the installer:\n' + url);
+        updateHref('link-launch', scheme + ':' + url, 'Click to launch the installer for the following link:\n' + url);
+      }
+
+      var os = getOS();
+      if (os == 'win') {
+        hide('installer-mac'); hide('installer-linux');
+      } else if (os == 'mac') {
+        hide('installer-win'); hide('installer-linux');
+      } else if (os == 'linux') {
+        hide('installer-win'); hide('installer-mac');
+      }
+    }
+
+    function updateHref(id, url, tooltip) {
+       var e = document.getElementById(id);
+       e.href = url;
+       e.setAttribute('tooltip', tooltip.replace(/\//g, '/\u200B'));
+    }
+
+    function hide(id) {
+       document.getElementById(id).style.display = 'none';
+    }
+
+    function updateScheme(id, scheme) {
+       var e = document.getElementById(id);
+       e.innerHTML = scheme;
+    }
+
+    function getOS() {
+      var os='unknown';
+      var appVersion = navigator.appVersion;
+      if (appVersion.indexOf('Win') !=-1) os = 'win';
+      else if (appVersion.indexOf('Mac') !=-1) os = 'mac';
+      else if (appVersion.indexOf('X11') !=-1 || appVersion.indexOf('Linux') !=-1) os = 'linux';
+      return os;
+    }
+
+    function expand_collapse(id) {
+      var e = document.getElementById(id);
+      var f = document.getElementById(id + '_arrow');
+      if (e.style.display == 'none'){
+        e.style.display = 'block';
+        f.innerHTML = '&#x25E2;';
+      } else {
+        e.style.display = 'none';
+        f.innerHTML = '&#x25B7;';
+      }
+    }
+
+    function copyToClipboard(id) {
+      var $temp = $('<input>');
+      $('body').append($temp);
+      var e = document.getElementById(id);
+      var link = e.href;
+      $temp.val(link).select();
+      document.execCommand('copy');
+      $temp.remove();
+    }
+
+    function popup(id) {
+      var popup = document.getElementById('popup');
+      popup.style.display = 'block';
+
+      // Get the source image and insert its "src" as the  popup image's "src".
+      var sourceImage = document.getElementById(id);
+      var targetImage = document.getElementById('modal-popup-image');
+      targetImage.src = sourceImage.src;
+
+      // Use the source image's "alt" text as a caption.
+      var captionText = document.getElementById('modal-popup-caption');
+      captionText.innerHTML = sourceImage.alt;
+
+      // When the user clicks on close button, close the popup.
+      var closeButton = document.getElementsByClassName('modal-popup-close')[0];
+      closeButton.onclick = function() {
+        popup.style.display = 'none';
+      }
+    }
+  </script>
+</head>
+
+<body id="body_solstice">
+  <header class="header-wrapper" id="header-wrapper">
+    <div class="clearfix toolbar-container-wrapper">
+      <div class="container">
+        <div class="text-right toolbar-row row hidden-print">
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row" id="header-row">
+        <div class="col-sm-5 col-md-4" id="header-left">
+          <div class="wrapper-logo-default">
+            <a href="https://www.eclipse.org/">
+              <img class="logo-eclipse-default hidden-xs" alt="Eclipse.org logo" width="160" src="https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-ide/eclipse_logo_white.svg"/>
+            </a>
+          </div>
+        </div>
+        <div class="col-sm-19 col-md-20 margin-top-10" id="main-menu-wrapper">
+          <div class="float-right hidden-xs" id="btn-call-for-action"><a href="https://www.eclipse.org/donate/" class="btn btn-huge btn-info"><i class="fa fa-star"></i> Donate</a></div>
+          <div class="navbar yamm float-sm-right" id="main-menu">
+            <div class="navbar-collapse collapse" id="navbar-main-menu">
+              <ul class="nav navbar-nav">
+                <li><a href="https://www.eclipse.org/membership/" target="_self">Members</a></li>
+                <li><a href="https://www.eclipse.org/org/workinggroups/" target="_self">Working Groups</a></li>
+                <li><a href="https://www.eclipse.org/projects/" target="_self">Projects</a></li>
+                <li class="dropdown visible-xs"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Community <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="https://marketplace.eclipse.org">Marketplace</a></li>
+                    <li><a href="https://events.eclipse.org">Events</a></li>
+                    <li><a href="https://www.planeteclipse.org/">Planet Eclipse</a></li>
+                    <li><a href="https://www.eclipse.org/community/eclipse_newsletter/">Newsletter</a></li>
+                    <li><a href="https://www.youtube.com/user/EclipseFdn">Videos</a></li>
+                    <li><a href="https://blogs.eclipse.org">Blogs</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown visible-xs"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Participate <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="https://bugs.eclipse.org/bugs/">Report a Bug</a></li>
+                    <li><a href="https://www.eclipse.org/forums/">Forums</a></li>
+                    <li><a href="https://www.eclipse.org/mail/">Mailing Lists</a></li>
+                    <li><a href="https://wiki.eclipse.org/">Wiki</a></li>
+                    <li><a href="https://wiki.eclipse.org/IRC">IRC</a></li>
+                    <li><a href="https://www.eclipse.org/org/research/">Research</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown visible-xs"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Eclipse IDE <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="https://www.eclipse.org/downloads">Download</a></li>
+                    <li><a href="https://www.eclipse.org/eclipseide">Learn More</a></li>
+                    <li><a href="https://help.eclipse.org">Documentation</a></li>
+                    <li><a href="https://www.eclipse.org/getting_started">Getting Started / Support</a></li>
+                    <li><a href="https://www.eclipse.org/contribute/">How to Contribute</a></li>
+                    <li><a href="https://www.eclipse.org/ide/">IDE and Tools</a></li>
+                    <li><a href="https://www.eclipse.org/forums/index.php/f/89/">Newcomer Forum</a></li>
+                  </ul>
+                </li>
+
+                <!-- More -->
+                <li class="dropdown eclipse-more hidden-xs">
+                  <a data-toggle="dropdown" class="dropdown-toggle" role="button">More<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <!-- Content container to add padding -->
+                      <div class="yamm-content">
+                        <div class="row">
+                          <ul class="col-sm-8 list-unstyled">
+                            <li>
+                              <p><strong>Community</strong></p>
+                            </li>
+                            <li><a href="https://marketplace.eclipse.org">Marketplace</a></li>
+                            <li><a href="https://events.eclipse.org">Events</a></li>
+                            <li><a href="https://www.planeteclipse.org/">Planet Eclipse</a></li>
+                            <li><a href="https://www.eclipse.org/community/eclipse_newsletter/">Newsletter</a></li>
+                            <li><a href="https://www.youtube.com/user/EclipseFdn">Videos</a></li>
+                            <li><a href="https://blogs.eclipse.org">Blogs</a></li>
+                          </ul>
+                          <ul class="col-sm-8 list-unstyled">
+                            <li>
+                              <p><strong>Participate</strong></p>
+                            </li>
+                            <li><a href="https://bugs.eclipse.org/bugs/">Report a Bug</a></li>
+                            <li><a href="https://www.eclipse.org/forums/">Forums</a></li>
+                            <li><a href="https://www.eclipse.org/mail/">Mailing Lists</a></li>
+                            <li><a href="https://wiki.eclipse.org/">Wiki</a></li>
+                            <li><a href="https://wiki.eclipse.org/IRC">IRC</a></li>
+                            <li><a href="https://www.eclipse.org/org/research/">Research</a></li>
+                          </ul>
+                          <ul class="col-sm-8 list-unstyled">
+                            <li>
+                              <p><strong>Eclipse IDE</strong></p>
+                            </li>
+                            <li><a href="https://www.eclipse.org/downloads">Download</a></li>
+                            <li><a href="https://www.eclipse.org/eclipseide">Learn More</a></li>
+                            <li><a href="https://help.eclipse.org">Documentation</a></li>
+                            <li><a href="https://www.eclipse.org/getting_started">Getting Started / Support</a></li>
+                            <li><a href="https://www.eclipse.org/contribute/">How to Contribute</a></li>
+                            <li><a href="https://www.eclipse.org/ide/">IDE and Tools</a></li>
+                            <li><a href="https://www.eclipse.org/forums/index.php/f/89/">Newcomer Forum</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+                <li class="dropdown eclipse-more main-menu-search">
+                  <a data-toggle="dropdown" class="dropdown-toggle" role="button"><i class="fa fa-search"></i> <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <!-- Content container to add padding -->
+                      <div class="yamm-content">
+                        <div class="row">
+                          <div class="col-sm-24">
+                            <p>Search</p>
+                            <div class="row">
+                              <div class="col-md-24">
+                                <div id="custom-search-form" class="reset-box-sizing">
+                                  <script>
+                                    (function() {
+                                      var cx = '011805775785170369411:p3ec0igo0qq';
+                                      var gcse = document.createElement('script');
+                                      gcse.type = 'text/javascript';
+                                      gcse.async = true;
+                                      gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+                                      var s = document.getElementsByTagName('script')[0];
+                                      s.parentNode.insertBefore(gcse, s);
+                                    })();
+                                  </script>
+                                  <gcse:searchbox-only gname="main" resultsUrl="https://www.eclipse.org/home/search.php"></gcse:searchbox-only>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-main-menu">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <div class="wrapper-logo-mobile">
+                <a class="navbar-brand visible-xs" href="https://www.eclipse.org/">
+                 <img class="logo-eclipse-default-mobile img-responsive" alt="Eclipse.org logo" width="160" src="https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-ide/eclipse_logo_white.svg"/>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="default-breadcrumbs hidden-print breadcrumbs-default-margin" id="breadcrumb">
+    <div class="container">
+      <h3 class="sr-only">Breadcrumbs</h3>
+      <div class="row">
+        <div class="col-sm-24">
+          <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="https://www.eclipse.org/oomph/">Oomph</a></li>
+            <li><a href="https://wiki.eclipse.org/Eclipse_Installer">Eclipse Installer</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <div class="novaContent container legacy-page" id="novaContent">
+      <div class="row">
+        <div class="col-md-18">
+          <div id="maincontent">
+            <div id="midcolumn">
+              <div class="homeitem3col">
+<a href="https://wiki.eclipse.org/Oomph" style="float: right;" target="oomph_wiki"><img style="width: 16ex; height: 16ex; padding-left: 2ex;" src="oomph256.png"/></a>
+                <h1><img src="EclipseInstaller.png"/></h1>
+                <h3 class="section-header">
+                  <button id="auto-launch-installer_arrow" class="orange bb" onclick="expand_collapse('auto-launch-installer');">&#x25E2;</button>
+                  Install Using Auto Launch
+                </h3>
+                <p id="auto-launch-installer">
+The <span class="help-link" onclick="expand_collapse('install-installer');">Eclipse Installer<img class="help" src="Help.png"/></span>can be launched automatically when clicking a link on a web page.
+<br/>
+<br/>
+To use this convenience, the installer must be <span class="help-link" onclick="expand_collapse('register-installer');">registered<img class="help" src="Help.png"/></span>to handle links with scheme <b><tt class="orange" id="scheme">eclipse+installer</tt></b>.
+<br/>
+<br/>
+<span>
+Click the following link button to launch the registered installer and install what you've previously selected:
+<br/>
+<br/>
+<a id="link-launch" class="button" href="">Launch...</a>
+</span>
+                </p>
+                <hr class="url-required clearer"/>
+
+                <h3 class="url-required section-header">
+                  <button id="drag-and-drop-installer_arrow" class="orange bb" onclick="expand_collapse('drag-and-drop-installer');">&#x25B7;</button>
+                  Install Using Drag and Drop
+                </h3>
+                <p id="drag-and-drop-installer" style="display: none;">
+If you don't wish to register the Eclipse Installer,
+you can drag the following link button and drop it onto installer's title area in either simple or advanced mode:
+<br/>
+<br/>
+<a id="link-drag-and-drop" class="button" href="">Drag Link</a>
+<br/>
+<br/>
+Alternatively, you can
+<span class="help-link" onclick="expand_collapse('copy-and-apply-installer');">copy and apply<img class="help" src="Help.png"/></span>the link.
+                <hr class="clearer"/>
+</p>
+
+                <h3 class="url-required section-header">
+                  <button id="copy-and-apply-installer_arrow" class="orange bb" onclick="expand_collapse('copy-and-apply-installer');">&#x25B7;</button>
+                  Install Using Copy and Apply
+                </h3>
+                <p id="copy-and-apply-installer" class="url-required" style="display: none;">
+If you don't wish to register the Eclipse Installer,
+you can click the following link button to copy it to the system clipboard:
+<br/>
+<br/>
+<button id="link-copy-and-apply" class="button" onclick="copyToClipboard('link-drag-and-drop');">Copy Link</button>
+<br/>
+<br/>
+Then you can apply it to the installer follows in simple mode:
+<br/>
+<br/>
+<img id="simple-copy-and-apply" class="thumb" onclick="popup('simple-copy-and-apply');" src="SimpleApplyConfiguration.png" alt="Apply Link to Eclipse Installer in Simple Mode"/>
+<br/>
+<br/>
+Or as follows in advanced mode:
+<br/>
+<br/>
+<img id="advanced-copy-and-apply" class="thumb" onclick="popup('advanced-copy-and-apply');" src="AdvancedApplyConfiguration.png" alt="Apply Link to Eclipse Installer in Advanced Mode"/>
+</p>
+                <hr class="url-required clearer"/>
+
+                <h3 class="section-header">
+                  <button id="install-installer_arrow" class="orange bb" onclick="expand_collapse('install-installer');">&#x25B7;</button>
+                  Download the Eclipse Installer
+                </h3>
+                <p id="install-installer" style="display: none;">
+If you haven't already installed the Eclipse Installer, you can download it from the following link:
+<br/>
+<br/>
+<a id="installer-win" class="button" href="http://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-win64.exe" tooltip="Click to download" target="oomph_mirror">Windows 64 Bit</a>
+<a id="installer-mac" class="button" href="http://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-mac64.dmg" tooltip="Click to download" target="oomph_mirror"> Mac OS 64 Bit</a>
+<a id="installer-linux" class="button" href="http://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-linux64.tar.gz" tooltip="Click to download" target="oomph_mirror">Linux 64 Bit</a>
+</p>
+                <hr class="clearer"/>
+
+                <h3 class="section-header">
+                  <button id="register-installer_arrow" class="orange bb" onclick="expand_collapse('register-installer');">&#x25B7;</button>
+                  Register the Eclipse Installer
+                </h3>
+                <p id="register-installer" style="display: none;">
+If you haven't already registered the installer, you can do so via the <em>WEB LINKS</em> menu button in simple mode:
+<br/>
+<br/>
+<img id="simple" class="thumb" onclick="popup('simple');" src="EnableWebLinksSimple.png" alt="Register the Eclipse Installer in Simple Mode"/>
+<br/>
+<br/>
+Or via the <em>Web Links</em> tool button in advanced mode:
+<br/>
+<br/>
+<img id="advanced" class="thumb" onclick="popup('advanced');" src="EnableWebLinksAdvanced.png" alt="Register the Eclipse Installer in Advanced Mode"/>
+</p>
+                <hr class="clearer"/>
+
+                <div id="popup" class="modal-popup">
+                  <span class="modal-popup-close">&times;</span>
+                  <img class="modal-popup-content" id="modal-popup-image">
+                  <div id="modal-popup-caption"></div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-6">
+          <!-- nav -->
+          <aside class="main-sidebar-default-margin" id="main-sidebar">
+            <ul id="leftnav" class="ul-left-nav fa-ul hidden-print">
+              <li class="separator">
+                <a class="separator" href="https://wiki.eclipse.org/Oomph" target="oomph_wiki">Documentation</a>
+              </li>
+              <li>
+                <i class="fa fa-caret-right fa-fw"/></i>
+                <a href="https://wiki.eclipse.org/Eclipse_Oomph_FAQ" target="oomph_wiki">FAQ</a>
+              </li>
+              <li>
+                <i class="fa fa-caret-right fa-fw"></i>
+                <a href="https://wiki.eclipse.org/Eclipse_Platform_SDK_Provisioning" target="oomph_wiki">Sample Use Case</a>
+              </li>
+              <li>
+                <i class="fa fa-caret-right fa-fw"></i>
+                <a href="https://wiki.eclipse.org/Eclipse_Oomph_Authoring#Automation_and_Specialization_with_Configurations" target="oomph_wiki">Customized Usage</a>
+              </li>
+              <li class="separator">
+                <a class="separator">Downloads</a>
+              </li>
+              <li>
+                <i class="fa fa-caret-right fa-fw"></i>
+                <a href="https://wiki.eclipse.org/Eclipse_Installer" target="oomph_wiki">Eclipse Installer</a>
+              </li>
+              <li>
+                <i class="fa fa-caret-right fa-fw"></i>
+                <a href="https://wiki.eclipse.org/Oomph#Update_Sites" target="oomph_wiki">Update Sites</a>
+              </li>
+              <li class="separator">Community</li>
+              <li>
+                <i class="fa fa-caret-right fa-fw"></i>
+                <a href="https://www.eclipse.org/forums/index.php/f/287/" target="oomph_forum">Ask a Question</a>
+              </li>
+              <li>
+                <i class="fa fa-caret-right fa-fw"></i>
+                <a href="https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Oomph" target="oomph_bugzilla">Report a Problem</a>
+              </li>
+              <li>
+                <i class="fa fa-caret-right fa-fw"></i>
+                <a href="https://ci.eclipse.org/oomph/" target="oomph_ci">Contribute</a>
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://www.eclipse.org/eclipse.org-common/themes/solstice/public/javascript/main.min.js?var=1.3"></script>
+
+</body>
+
+</html>
