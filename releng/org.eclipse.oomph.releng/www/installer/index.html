@@ -357,16 +357,16 @@
               var imageDetail = imageDetails[i];
               if (imageDetail.getAttribute('key') == 'imageURI') {
                 if (imageDetail.children.length = 1) {
-	              imageURI = imageDetail.children[0].textContent;
+                  imageURI = imageDetail.children[0].textContent;
                   if (imageURI != null) {
-	                break;
+                    break;
                   }
                 }
               }
             }
 
             var title= xmlDoc.documentElement.getAttribute('label');
-            var body = xmlBody[0].textContent;
+            var body = xmlBody[xmlBody.length - 1].textContent;
             updateMarketplace(imageURI, title, body);
           }
         }

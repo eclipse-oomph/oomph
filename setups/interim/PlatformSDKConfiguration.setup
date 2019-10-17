@@ -4,7 +4,14 @@
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
-    label="Platform SDK">
+    label="Eclipse Platform SDK">
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+    <detail
+        key="imageURI">
+      <value>https://www.eclipse.org/downloads/images/committers.png</value>
+    </detail>
+  </annotation>
   <installation
       name="platform.sdk.installation"
       label="Platform SDK Installation">
@@ -120,5 +127,19 @@
         href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='releng.aggregator']/@streams[name='master']"/>
     <description>The Platform SDK workspace provides all the source code of the Eclipse Platform SDK.</description>
   </workspace>
-  <description>The Platform SDK configuration provides a full development environment for all projects that are part of the Platform SDK.</description>
+  <description>
+    &lt;p>
+    The Platform SDK configuration provisions a dedicated development environment for the complete set of projects that comprise the &lt;a href=&quot;&quot;>Eclipse Platform's SDK&lt;/a>
+    i.e., the source projects used produce the &lt;a href=&quot;https://download.eclipse.org/eclipse/downloads/&quot;>downloads&lt;/a> of the Eclipse Platform Project. 
+    &lt;/p>
+    &lt;p>
+    The installation is based on the latest succesfull integration build of the Platform,
+    the workspace consistents of projects from over two dozen Git clones organized into workings sets,
+    the PDE target platform, like the installation, is also based on the latest integation build,
+    and the API baseline is based on the most recent release.
+    &lt;p>
+    &lt;/p>
+    Please &lt;a href=&quot;&quot;>read the instructions&lt;/a> for more details.
+    &lt;/p>
+  </description>
 </setup:Configuration>
