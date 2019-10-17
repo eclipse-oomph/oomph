@@ -67,7 +67,7 @@
 
     .help:hover {
       animation: rotation 1.5s infinite linear;
-	}
+    }
 
     @keyframes rotation {
       from {
@@ -197,9 +197,10 @@
     }
 
     #marketplace-small-image {
-      height: 3ex;
-      width: 3ex;
-	}
+      height: 2ex;
+      vertical-align: baseline;
+      margin-bottom: -0.1ex;
+    }
   </style>
 
   <script>
@@ -266,6 +267,8 @@
         var marketplaceContentMatch = url.match(/https?:\/\/marketplace\.eclipse\.org\/content\/[^\/?#]*/);
         if (marketplaceContentMatch != null) {
           loadMarketplaceBranding(url);
+        } else {
+          loadSetup(url);
         }
       }
     }
@@ -336,38 +339,84 @@
       }
     }
 
-    function loadMarketplaceBranding(url) {
+      // var requestURL = '/setups/installer/fetch.php?url=' + url.replace("https:", "http:");
+    function loadSetup(url) {
       var request = new XMLHttpRequest();
-      request.open('GET', '/setups/installer/fetch.php?url=' + url + '/api/p', true);
+      var requestURL = '/setups/installer/fetch.php?url=' + url.replace("https:", "http:");
+      request.open('GET', requestURL, true);
       request.onreadystatechange = function () {
         if (request.readyState === 4 && request.status === 200 && request.responseText != null && request.responseText.length > 100) {
-          console.log(request.responseText);
           var parser = new DOMParser();
           var xmlDoc = parser.parseFromString(request.responseText,"text/xml");
-          var xmlNode = xmlDoc.getElementsByTagName('node');
-          var xmlBody = xmlDoc.getElementsByTagName('body');
-          var xmlImage = xmlDoc.getElementsByTagName("image");
-          if (xmlNode.length == 1 && xmlBody.length == 1) {
-            if (xmlImage.length == 1) {
-              var sectionImage = document.getElementById('marketplace-image');
-              sectionImage.src = xmlImage[0].textContent;
+          var xmlBody = xmlDoc.getElementsByTagName('description');
+          if (xmlBody.length > 0) {
 
-              var smallImage = document.getElementById('marketplace-small-image');
-              smallImage.src = xmlImage[0].textContent;
+            var imageURI = null;
+            var imageDetails = xmlDoc.getElementsByTagName("detail");
+            for (var i = 0; i < imageDetails.length; i++) {
+              var imageDetail = imageDetails[i];
+              if (imageDetail.getAttribute('key') == 'imageURI') {
+                if (imageDetail.children.length = 1) {
+	              imageURI = imageDetail.children[0].textContent;
+                  if (imageURI != null) {
+	                break;
+                  }
+                }
+              }
             }
 
-            var section = document.getElementById('marketplace-insertion-section');
-            section.style.display = 'block';
-
-            var sectionHeader = document.getElementById('marketplace-title-span');
-            sectionHeader.innerText = xmlNode[0].getAttribute('name');
-
-            var body = document.getElementById('marketplace-body');
-            body.innerHTML = xmlBody[0].textContent;
+            var title= xmlDoc.documentElement.getAttribute('label');
+            var body = xmlBody[0].textContent;
+            updateMarketplace(imageURI, title, body);
           }
         }
       };
       request.send();
+    }
+
+    function loadMarketplaceBranding(url) {
+      var request = new XMLHttpRequest();
+      var requestURL = '/setups/installer/fetch.php?url=' + url.replace("https:", "http:") + '/api/p';
+      request.open('GET', requestURL, true);
+      request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200 && request.responseText != null && request.responseText.length > 100) {
+          var parser = new DOMParser();
+          var xmlDoc = parser.parseFromString(request.responseText,"text/xml");
+          var xmlNode = xmlDoc.getElementsByTagName('node');
+          var xmlBody = xmlDoc.getElementsByTagName('body');
+          if (xmlNode.length == 1 && xmlBody.length == 1) {
+            var imageURI = null;
+            var xmlImage = xmlDoc.getElementsByTagName("image");
+            if (xmlImage.length == 1) {
+              imageURI = xmlImage[0].textContent;
+            }
+
+            var title = xmlNode[0].getAttribute('name');
+            var body= xmlBody[0].textContent;
+            updateMarketplace(imageURI, title, body);
+          }
+        }
+      };
+      request.send();
+    }
+
+    function updateMarketplace(imageURI, title, body) {
+      if (imageURI != null) {
+        var sectionImage = document.getElementById('marketplace-image');
+        sectionImage.src = imageURI;
+
+        var smallImage = document.getElementById('marketplace-small-image');
+        smallImage.src = imageURI;
+      }
+
+      var section = document.getElementById('marketplace-insertion-section');
+      section.style.display = 'block';
+
+      var sectionHeader = document.getElementById('marketplace-title-span');
+      sectionHeader.innerText = title;
+
+      var htmlBody = document.getElementById('marketplace-body');
+      htmlBody.innerHTML = body;
     }
   </script>
 </head>
@@ -559,7 +608,8 @@
 <div id="marketplace-insertion-section">
   <h3 id="marketplace-title" class="section-header">
     <button id="marketplace-section_arrow" class="orange bb" onclick="expand_collapse('marketplace-section');">&#x25B7;</button>
-    <img id="marketplace-small-image" src=""/>
+    Install
+    <img id="marketplace-small-image" src="Configuration.png"/>
     <span id="marketplace-title-span"></span>
   </h3>
   <div id="marketplace-section" style="display: none;">

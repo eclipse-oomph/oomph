@@ -32,6 +32,7 @@ import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CertificateInfo;
 import org.eclipse.oomph.setup.CertificatePolicy;
+import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.Macro;
 import org.eclipse.oomph.setup.Parameter;
 import org.eclipse.oomph.setup.Scope;
@@ -1411,19 +1412,23 @@ public final class SetupCoreUtil
 
     if (scope != null)
     {
-      Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-      if (annotation == null)
+      imageURI = internalGetBrandingImageURI(scope);
+      if (imageURI == null)
       {
-        return getBrandingImageURI(scope.getParentScope());
+        Scope parentScope = scope.getParentScope();
+        if (parentScope == null)
+        {
+          EObject eContainer = scope.eContainer();
+          if (eContainer instanceof Configuration)
+          {
+            imageURI = internalGetBrandingImageURI((ModelElement)eContainer);
+          }
+        }
+        else
+        {
+          imageURI = getBrandingImageURI(parentScope);
+        }
       }
-
-      String detail = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
-      if (detail == null)
-      {
-        return getBrandingImageURI(scope.getParentScope());
-      }
-
-      imageURI = URI.createURI(detail);
     }
 
     if (imageURI == null)
@@ -1432,5 +1437,20 @@ public final class SetupCoreUtil
     }
 
     return imageURI;
+  }
+
+  private static URI internalGetBrandingImageURI(ModelElement modelElement)
+  {
+    Annotation annotation = modelElement.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+    if (annotation != null)
+    {
+      String detail = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
+      if (detail != null)
+      {
+        return URI.createURI(detail);
+      }
+    }
+
+    return null;
   }
 }
