@@ -183,6 +183,10 @@
       max-height: 100%;
     }
 
+    #marketplace-title-span {
+      font-size: 120%;
+    }
+
     #marketplace-insertion-section {
       display: none;
     }
@@ -197,6 +201,7 @@
     }
 
     #marketplace-small-image {
+      font-size: 120%;
       height: 2ex;
       vertical-align: baseline;
       margin-bottom: -0.1ex;
@@ -297,12 +302,15 @@
       return os;
     }
 
-    function expand_collapse(id) {
+    function expand_collapse(id, navigate) {
       var e = document.getElementById(id);
       var f = document.getElementById(id + '_arrow');
       if (e.style.display == 'none'){
         e.style.display = 'block';
         f.innerHTML = '&#x25E2;';
+        if (navigate) {
+          e.previousElementSibling.scrollIntoView();
+        }
       } else {
         e.style.display = 'none';
         f.innerHTML = '&#x25B7;';
@@ -605,8 +613,8 @@
           <div id="maincontent">
             <div id="midcolumn">
               <div class="homeitem3col">
-<a href="https://wiki.eclipse.org/Oomph" style="float: right;" target="oomph_wiki"><img id="brand-image" style="width: 12ex; height: 12ex; margin-left: 2ex;" src="oomph256.png"/></a>
-                <h1><img src="EclipseInstaller.png"/></h1>
+<a href="https://wiki.eclipse.org/Oomph" style="float: right;" target="oomph_wiki"><img id="brand-image" style="width: 8ex; height: 8ex; margin-left: 2ex;" src="oomph256.png"/></a>
+                <img style="max-width: 12em;" src="EclipseInstaller.png"/>
 
 <div id="marketplace-insertion-section">
   <h3 id="marketplace-title" class="section-header">
@@ -614,6 +622,7 @@
     Install
     <img id="marketplace-small-image" src="Configuration.png"/>
     <span id="marketplace-title-span"></span>
+    <span class="help-link" onclick="expand_collapse('marketplace-section');"><img class="help" src="Help.png"/></span>
   </h3>
   <div id="marketplace-section" style="display: none;">
     <img id="marketplace-image" src=""/>
@@ -628,10 +637,10 @@
                   Install Using Auto Launch
                 </h3>
                 <p id="auto-launch-installer">
-The <span class="help-link" onclick="expand_collapse('install-installer');">Eclipse Installer<img class="help" src="Help.png"/></span>can be launched automatically when clicking a link on a web page.
+The <span class="help-link" onclick="expand_collapse('install-installer', true);">Eclipse Installer<img class="help" src="Help.png"/></span>can be launched automatically when clicking a link on a web page.
 <br/>
 <br/>
-To use this convenience, the installer must be <span class="help-link" onclick="expand_collapse('register-installer');">registered<img class="help" src="Help.png"/></span>to handle links with scheme <b><tt class="orange" id="scheme">eclipse+installer</tt></b>.
+To use this convenience, the installer must be <span class="help-link" onclick="expand_collapse('register-installer', true);">registered<img class="help" src="Help.png"/></span>to handle links with scheme <b><tt class="orange" id="scheme">eclipse+installer</tt></b>.
 <br/>
 <br/>
 <span>
@@ -656,7 +665,7 @@ you can drag the following link button and drop it onto installer's title area i
 <br/>
 <br/>
 Alternatively, you can
-<span class="help-link" onclick="expand_collapse('copy-and-apply-installer');">copy and apply<img class="help" src="Help.png"/></span>the link.
+<span class="help-link" onclick="expand_collapse('copy-and-apply-installer', true);">copy and apply<img class="help" src="Help.png"/></span>the link.
                 <hr class="clearer"/>
 </p>
 
