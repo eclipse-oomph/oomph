@@ -130,7 +130,7 @@
   <description>
     &lt;p>
     The Platform SDK configuration provisions a dedicated development environment for the complete set of projects that comprise the &lt;a href=&quot;&quot;>Eclipse Platform's SDK&lt;/a>
-    i.e., the source projects used produce the &lt;a href=&quot;https://download.eclipse.org/eclipse/downloads/&quot;>downloads&lt;/a> of the Eclipse Platform Project. 
+    i.e., the source projects used to produce the &lt;a href=&quot;https://download.eclipse.org/eclipse/downloads/&quot;>downloads&lt;/a> of the Eclipse Platform Project. 
     &lt;/p>
     &lt;p>
     The installation is based on the latest succesfull integration build of the Platform,
