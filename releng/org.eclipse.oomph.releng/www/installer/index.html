@@ -243,6 +243,8 @@
       } else if (os == 'linux') {
         hide('installer-win'); hide('installer-mac');
       }
+
+      loadBranding();
     }
 
     function updateHref(id, url, tooltip) {
@@ -309,6 +311,26 @@
       closeButton.onclick = function() {
         popup.style.display = 'none';
       }
+    }
+
+    function loadBranding() {
+      var request = new XMLHttpRequest();
+      request.open('GET', '/setups/installer/fetch.php?url=http://marketplace.eclipse.org/content/viplugin/api/p', true);
+      request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200) {
+          console.log(request.responseText);
+          var parser = new DOMParser();
+          var xmlDoc = parser.parseFromString(request.responseText,"text/xml");
+          var node = xmlDoc.getElementsByTagName("node");
+          var image = xmlDoc.getElementsByTagName("image");
+          if (image.length == 1) {
+            console.log(image[0].textContent);
+            var e = document.getElementById('brand-image');
+            e.src = image[0].textContent;
+          }
+        }
+      };
+      request.send();
     }
   </script>
 </head>
@@ -494,7 +516,7 @@
           <div id="maincontent">
             <div id="midcolumn">
               <div class="homeitem3col">
-<a href="https://wiki.eclipse.org/Oomph" style="float: right;" target="oomph_wiki"><img style="width: 16ex; height: 16ex; margin-left: 2ex;" src="oomph256.png"/></a>
+<a href="https://wiki.eclipse.org/Oomph" style="float: right;" target="oomph_wiki"><img id="brand-image" style="width: 16ex; height: 16ex; margin-left: 2ex;" src="oomph256.png"/></a>
                 <h1><img src="EclipseInstaller.png"/></h1>
                 <h3 class="section-header">
                   <button id="auto-launch-installer_arrow" class="orange bb" onclick="expand_collapse('auto-launch-installer');">&#x25E2;</button>
