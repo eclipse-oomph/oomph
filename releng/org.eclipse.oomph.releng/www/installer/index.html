@@ -367,7 +367,7 @@
 
             var title= xmlDoc.documentElement.getAttribute('label');
             var body = xmlBody[xmlBody.length - 1].textContent;
-            updateMarketplace(imageURI, title, body);
+            updateMarketplace(imageURI, title, body, ' and provision the <b>' + title + '</b>');
           }
         }
       };
@@ -393,14 +393,14 @@
 
             var title = xmlNode[0].getAttribute('name');
             var body= xmlBody[0].textContent;
-            updateMarketplace(imageURI, title, body);
+            updateMarketplace(imageURI, title, body, ' and create an installation that includes <b>' + title + '</b>');
           }
         }
       };
       request.send();
     }
 
-    function updateMarketplace(imageURI, title, body) {
+    function updateMarketplace(imageURI, title, body, instruction) {
       if (imageURI != null) {
         var sectionImage = document.getElementById('marketplace-image');
         sectionImage.src = imageURI;
@@ -417,6 +417,9 @@
 
       var htmlBody = document.getElementById('marketplace-body');
       htmlBody.innerHTML = body;
+
+      var instructionHTML = document.getElementById('marketplace-instruction');
+      instructionHTML.innerHTML = instruction;
     }
   </script>
 </head>
@@ -632,7 +635,7 @@ To use this convenience, the installer must be <span class="help-link" onclick="
 <br/>
 <br/>
 <span>
-Click the following link button to launch the registered installer and install what you've previously selected:
+Click the following link button to launch the registered installer<span id="marketplace-instruction"></span>:
 <br/>
 <br/>
 <a id="link-launch" class="button" href="">Launch...</a>
