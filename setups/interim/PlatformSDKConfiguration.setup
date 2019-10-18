@@ -129,17 +129,17 @@
   </workspace>
   <description>
     &lt;p>
-    The Platform SDK configuration provisions a dedicated development environment for the complete set of projects that comprise the &lt;a href=&quot;&quot;>Eclipse Platform's SDK&lt;/a>
+    The Platform SDK configuration provisions a dedicated development environment for the complete set of projects that comprise the &lt;a href=&quot;https://www.eclipse.org/eclipse/&quot;>Eclipse Platform's SDK&lt;/a>,
     i.e., the source projects used to produce the &lt;a href=&quot;https://download.eclipse.org/eclipse/downloads/&quot;>downloads&lt;/a> of the Eclipse Platform Project. 
     &lt;/p>
     &lt;p>
-    The installation is based on the latest succesfull integration build of the Platform,
+    The installation is based on the latest succesfull integration build of the Eclipse Platform SDK,
     the workspace consistents of projects from over two dozen Git clones organized into workings sets,
     the PDE target platform, like the installation, is also based on the latest integation build,
     and the API baseline is based on the most recent release.
     &lt;p>
     &lt;/p>
-    Please &lt;a href=&quot;&quot;>read the instructions&lt;/a> for more details.
+    Please &lt;a href=&quot;https://wiki.eclipse.org/Eclipse_Platform_SDK_Provisioning&quot;>read the tutorial instructions&lt;/a> for more details.
     &lt;/p>
   </description>
 </setup:Configuration>
