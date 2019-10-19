@@ -21,7 +21,6 @@
       margin-left: 2em;
       margin-top: 1ex;
       margin-bottom: 1ex;
-      border-radius: 5px;
       font-weight: bold;
       border: 1px solid Chocolate;
       background-color: DarkOrange;
@@ -31,6 +30,11 @@
       text-decoration: none;
       display: inline-block;
     }
+
+    .button:hover {
+      transition: background-color 0.5s ease;
+      background-color: rgb(218, 122,8);
+	}
 
     .thumb {
       width : 25em;
@@ -44,6 +48,8 @@
 
     .section-header {
       margin-bottom: 1.5ex;
+      text-indent: -1em;
+      margin-left: 1em;
     }
 
     .bb {
@@ -56,12 +62,17 @@
       outline: none;
     }
 
+    .bb:hover {
+      transition: color 0.5s ease;
+      color: rgb(218, 122,8);
+	}
+
     .help {
       position: relative;
       bottom: 1.2ex;
       margin-left: -0.10ex;
       margin-right: 0.10ex;
-      width: 2.0ex;
+      width: 1.6ex;
       cursor: pointer;
     }
 
@@ -157,7 +168,7 @@
       }
     }
 
-    [tooltip]:after {
+    [tooltip]::after {
       content: attr(tooltip);
       position: absolute;
       opacity: 0;
@@ -172,7 +183,7 @@
       max-height: 0px;
     }
 
-    [tooltip]:hover:after {
+    [tooltip]:hover::after {
       content: attr(tooltip);
       opacity: 1;
       display: inline-block;
@@ -611,18 +622,19 @@
       <div class="row">
         <div class="col-md-18">
           <div id="maincontent">
-            <div id="midcolumn">
+            <div id="midcolumn" style="padding: 0;">
               <div class="homeitem3col">
-<a href="https://wiki.eclipse.org/Oomph" style="float: right;" target="oomph_wiki"><img id="brand-image" style="width: 8ex; height: 8ex; margin-left: 2ex;" src="oomph256.png"/></a>
+                <div style="text-align: right; margin-top: -1.5ex; margin-bottom: -3ex; margin-right: -1.5em;">
+                <a href="https://wiki.eclipse.org/Oomph" target="oomph_wiki"><img id="brand-image" style="width: 3ex; height: 3ex;" src="oomph256.png"/></a>
                 <img style="max-width: 12em;" src="EclipseInstaller.png"/>
+                </div>
 
 <div id="marketplace-insertion-section">
   <h3 id="marketplace-title" class="section-header">
     <button id="marketplace-section_arrow" class="orange bb" onclick="expand_collapse('marketplace-section');">&#x25B7;</button>
-    Install
     <img id="marketplace-small-image" src="Configuration.png"/>
     <span id="marketplace-title-span"></span>
-    <span class="help-link" onclick="expand_collapse('marketplace-section');"><img class="help" src="Help.png"/></span>
+    <span class="help-link" onclick="expand_collapse('marketplace-section');"><img class="help" style="font-size: 80%;" src="Help.png"/></span>
   </h3>
   <div id="marketplace-section" style="display: none;">
     <img id="marketplace-image" src=""/>
@@ -637,7 +649,7 @@
                   Install Using Auto Launch
                 </h3>
                 <p id="auto-launch-installer">
-The <span class="help-link" onclick="expand_collapse('install-installer', true);">Eclipse Installer<img class="help" src="Help.png"/></span>can be launched automatically when clicking a link on a web page.
+The <span class="help-link" style="font-family: Arial, Helvetica, sans-serif;"onclick="expand_collapse('install-installer', true);"><span style="color: #2c2255;">eclipse</span> <span class="orange">installer</span><img class="help" src="Help.png"/></span>can be launched automatically when clicking a link on a web page.
 <br/>
 <br/>
 To use this convenience, the installer must be <span class="help-link" onclick="expand_collapse('register-installer', true);">registered<img class="help" src="Help.png"/></span>to handle links with scheme <b><tt class="orange" id="scheme">eclipse+installer</tt></b>.
