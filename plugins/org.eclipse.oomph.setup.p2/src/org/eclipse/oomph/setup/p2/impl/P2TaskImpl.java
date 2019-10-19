@@ -21,6 +21,7 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
+import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.p2.internal.core.CachingRepositoryManager;
 import org.eclipse.oomph.setup.AnnotationConstants;
@@ -58,6 +59,7 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.equinox.internal.p2.metadata.repository.MetadataRepositoryManager;
 import org.eclipse.equinox.internal.provisional.p2.core.eventbus.IProvisioningEventBus;
 import org.eclipse.equinox.internal.provisional.p2.core.eventbus.ProvisioningListener;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
@@ -65,14 +67,17 @@ import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
+import org.eclipse.equinox.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
+import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import java.io.File;
@@ -716,6 +721,51 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       }
 
       @Override
+      public ProvisioningContext createProvisioningContext(ProfileTransaction transaction, IProfileChangeRequest profileChangeRequest) throws CoreException
+      {
+        if (context.get(Resolution.class) != null)
+        {
+          final IProvisioningAgent provisioningAgent = transaction.getProfile().getAgent().getProvisioningAgent();
+          return new ProvisioningContext(provisioningAgent)
+          {
+            private URI[] metadataRepositories;
+
+            @Override
+            public IQueryable<IInstallableUnit> getMetadata(IProgressMonitor monitor)
+            {
+              IMetadataRepositoryManager repositoryManager = provisioningAgent.getService(IMetadataRepositoryManager.class);
+              Set<IMetadataRepository> loadedRepositories = new LinkedHashSet<IMetadataRepository>();
+              if (metadataRepositories != null && repositoryManager instanceof MetadataRepositoryManager)
+              {
+                MetadataRepositoryManager metadataRepositoryManager = (MetadataRepositoryManager)repositoryManager;
+                for (URI uri : metadataRepositories)
+                {
+                  IMetadataRepository repository = metadataRepositoryManager.getRepository(uri);
+                  loadedRepositories.add(repository);
+                }
+
+                if (!loadedRepositories.contains(null))
+                {
+                  return QueryUtil.compoundQueryable(loadedRepositories);
+                }
+              }
+
+              return super.getMetadata(monitor);
+            }
+
+            @Override
+            public void setMetadataRepositories(URI... metadataRepositories)
+            {
+              this.metadataRepositories = metadataRepositories;
+              super.setMetadataRepositories(metadataRepositories);
+            }
+          };
+        }
+
+        return super.createProvisioningContext(transaction, profileChangeRequest);
+      }
+
+      @Override
       public Confirmer getUnsignedContentConfirmer()
       {
         return (Confirmer)context.get(Certificate.class);
@@ -755,21 +805,29 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         provisioningAgent.registerService(CacheUsageConfirmer.SERVICE_NAME, cacheUsageConfirmer);
       }
 
-      boolean profileChanged = transaction.commit(commitContext, context.getProgressMonitor(true));
-      if (context.getTrigger() != Trigger.BOOTSTRAP)
+      if (context.get(Resolution.class) != null)
       {
-        if (profileChanged)
-        {
-          context.setRestartNeeded("New software has been installed.");
-        }
-        else
-        {
-          context.log("No software updates are available");
-        }
+        Resolution resolution = transaction.resolve(commitContext, context.getProgressMonitor(true));
+        context.put(Resolution.class, resolution);
       }
       else
       {
-        context.put(Profile.class, profile);
+        boolean profileChanged = transaction.commit(commitContext, context.getProgressMonitor(true));
+        if (context.getTrigger() != Trigger.BOOTSTRAP)
+        {
+          if (profileChanged)
+          {
+            context.setRestartNeeded("New software has been installed.");
+          }
+          else
+          {
+            context.log("No software updates are available");
+          }
+        }
+        else
+        {
+          context.put(Profile.class, profile);
+        }
       }
     }
     finally

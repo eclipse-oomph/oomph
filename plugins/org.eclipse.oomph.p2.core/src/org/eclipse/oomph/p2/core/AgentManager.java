@@ -31,6 +31,8 @@ public interface AgentManager
 
   public static final String BUNDLE_POOL_LOCATION_NONE = "@none";
 
+  public static final String PROP_FLUSH = "oomph.p2.flush";
+
   public Agent getCurrentAgent();
 
   public File getDefaultAgentLocation();

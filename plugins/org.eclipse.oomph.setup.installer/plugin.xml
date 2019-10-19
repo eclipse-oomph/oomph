@@ -39,6 +39,19 @@
       </application>
    </extension>
 
+   <extension
+         id="MarketplaceCatalogGenerator"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="org.eclipse.oomph.setup.internal.installer.MarketplaceCatalogGenerator">
+         </run>
+      </application>
+   </extension>
+
    <extension id="product" point="org.eclipse.core.runtime.products">
       <product
           name="%product.name"

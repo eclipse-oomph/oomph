@@ -15,6 +15,7 @@ import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
+import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.p2.core.DelegatingUIServices;
@@ -766,7 +767,12 @@ public class ProfileTransactionImpl implements ProfileTransaction
       throws CoreException
   {
     Agent agent = profile.getAgent();
-    agent.flushRepositoryCaches();
+
+    boolean removeRepositories = !"false".equals(PropertiesUtil.getProperty(AgentManager.PROP_FLUSH));
+    if (removeRepositories)
+    {
+      agent.flushRepositoryCaches();
+    }
 
     final IMetadataRepositoryManager metadataRepositoryManager = agent.getMetadataRepositoryManager();
     Set<String> knownRepositories = P2Util.getKnownRepositories(metadataRepositoryManager);
@@ -783,7 +789,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
         String url = repository.getURL();
         final URI uri = new URI(url);
 
-        if (!knownRepositories.contains(url))
+        if (removeRepositories && !knownRepositories.contains(url))
         {
           cleanup.add(new Runnable()
           {

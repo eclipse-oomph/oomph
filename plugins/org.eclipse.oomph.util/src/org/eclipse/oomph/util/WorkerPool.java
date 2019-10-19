@@ -59,7 +59,7 @@ public abstract class WorkerPool<P extends WorkerPool<P, K, W>, K, W extends Wor
   /**
    * The maximum number of simultaneously performer workers.
    */
-  private final int maxWorker = 10;
+  private final int maxWorker;
 
   /**
    * The map of the worker key to the worker associated with that key.
@@ -102,6 +102,12 @@ public abstract class WorkerPool<P extends WorkerPool<P, K, W>, K, W extends Wor
    */
   protected WorkerPool()
   {
+    this(Runtime.getRuntime().availableProcessors() * 2);
+  }
+
+  protected WorkerPool(int maxWorker)
+  {
+    this.maxWorker = maxWorker;
   }
 
   /**

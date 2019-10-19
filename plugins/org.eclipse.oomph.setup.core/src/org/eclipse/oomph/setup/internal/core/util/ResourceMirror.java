@@ -40,7 +40,7 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public abstract class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirror.LoadJob>
+public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirror.LoadJob>
 {
   private ResourceSet resourceSet;
 
@@ -55,6 +55,12 @@ public abstract class ResourceMirror extends WorkerPool<ResourceMirror, URI, Res
 
   public ResourceMirror(ResourceSet resourceSet)
   {
+    this(resourceSet, Runtime.getRuntime().availableProcessors() * 2);
+  }
+
+  public ResourceMirror(ResourceSet resourceSet, int maxWorker)
+  {
+    super(maxWorker);
     this.resourceSet = resourceSet;
     resourceLocator = new DelegatingResourceLocator((ResourceSetImpl)resourceSet);
   }
@@ -76,7 +82,8 @@ public abstract class ResourceMirror extends WorkerPool<ResourceMirror, URI, Res
   {
     Map<Object, Object> loadOptions = resourceSet.getLoadOptions();
     final String taskName = loadOptions.get(ECFURIHandlerImpl.OPTION_CACHE_HANDLING) == ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING
-        ? "Loading from local cache " : "Loading from internet ";
+        ? "Loading from local cache "
+        : "Loading from internet ";
     XMLResource.ResourceHandler resourceHandler = new BasicResourceHandler()
     {
       private int counter;
@@ -310,7 +317,12 @@ public abstract class ResourceMirror extends WorkerPool<ResourceMirror, URI, Res
   {
     public WithProductImages(ResourceSet resourceSet)
     {
-      super(resourceSet);
+      this(resourceSet, Runtime.getRuntime().availableProcessors() * 2);
+    }
+
+    public WithProductImages(ResourceSet resourceSet, int maxWorker)
+    {
+      super(resourceSet, maxWorker);
 
       BytesResourceFactoryImpl bytesResourceFactory = new BytesResourceFactoryImpl();
       Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
