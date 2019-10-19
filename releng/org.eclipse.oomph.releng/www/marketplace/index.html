@@ -7,7 +7,7 @@
   <meta name="keywords" content="eclipse, Oomph, eclipseinstaller"/>
   <link rel="shortcut icon" href="https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/favicon.ico"/>
 
-  <title>Auto-launch Eclipse Installer</title>
+  <title>Eclipse Marketplace Listing</title>
   <link rel="stylesheet" href="https://www.eclipse.org/eclipse.org-common/themes/solstice/public/stylesheets/eclipse-ide.min.css?v1.7"/>
 
   <meta name="description" content="The Eclipse Foundation - home to a global community, the Eclipse IDE, Jakarta EE and over 350 open source projects, including runtimes, tools and frameworks."/>
@@ -194,25 +194,27 @@
       max-height: 100%;
     }
 
-    #marketplace-title-span {
-      font-size: 120%;
+    #marketplace-title-span, .marketplace-title-span {
+      font-size: 100%;
     }
 
-    #marketplace-insertion-section {
+    #marketplace-insertion-section, .marketplace-insertion-section {
       display: none;
     }
 
-    #marketplace-section {
-     overflow: hidden;
+    #marketplace-section, .marketplace-section {
+      overflow: hidden;
+      margin-left: 2em;
     }
 
-    #marketplace-image {
+    #marketplace-image, .marketplace-image {
       float: left;
       margin-right: 2ex;
+      margin-bottom: 2ex;
     }
 
-    #marketplace-small-image {
-      font-size: 120%;
+    #marketplace-small-image, .marketplace-small-image {
+      font-size: 100%;
       height: 2ex;
       vertical-align: baseline;
       margin-bottom: -0.1ex;
@@ -279,7 +281,10 @@
         hide('installer-win'); hide('installer-mac');
       }
 
-      if (url != null) {
+      var style = getParameter(window.location.search, 'style');
+      loadMarketplaceListings(style);
+
+      if (false && url != null) {
         var marketplaceContentMatch = url.match(/https?:\/\/marketplace\.eclipse\.org\/content\/[^\/?#]*/);
         if (marketplaceContentMatch != null) {
           loadMarketplaceBranding(url);
@@ -291,17 +296,24 @@
 
     function updateHref(id, url, tooltip) {
        var e = document.getElementById(id);
-       e.href = url;
-       e.setAttribute('tooltip', tooltip.replace(/\//g, '/\u200B'));
+       if (e != null) {
+         e.href = url;
+         e.setAttribute('tooltip', tooltip.replace(/\//g, '/\u200B'));
+      }
     }
 
     function hide(id) {
-       document.getElementById(id).style.display = 'none';
+       var e = document.getElementById(id);
+       if (e != null) {
+         document.getElementById(id).style.display = 'none';
+       }
     }
 
     function updateScheme(id, scheme) {
        var e = document.getElementById(id);
-       e.innerHTML = scheme;
+       if (e != null) {
+         e.innerHTML = scheme;
+      }
     }
 
     function getOS() {
@@ -358,87 +370,132 @@
       }
     }
 
-      // var requestURL = '/setups/installer/fetch.php?url=' + url.replace("https:", "http:");
-    function loadSetup(url) {
+    function popupMessage(image, text) {
+      var popup = document.getElementById('popup');
+      popup.style.display = 'block';
+
+      var targetImage = document.getElementById('modal-popup-image');
+      targetImage.style.display = 'none';
+      targetImage.src = image;
+
+      var captionText = document.getElementById('modal-popup-caption');
+      captionText.innerHTML = text;
+      captionText.style.textAlign = 'left';
+      captionText.style.fontSize = '80%';
+      captionText.style.whiteSpace = 'pre';
+
+      // When the user clicks on close button, close the popup.
+      var closeButton = document.getElementsByClassName('modal-popup-close')[0];
+      closeButton.onclick = function() {
+        popup.style.display = 'none';
+      }
+    }
+
+    function loadMarketplaceListings(style) {
       var request = new XMLHttpRequest();
-      var requestURL = '/setups/installer/fetch.php?url=' + url.replace("https:", "http:");
+      var requestURL = '../marketplace-listings/marketplace.eclipse.org.setup';
       request.open('GET', requestURL, true);
       request.onreadystatechange = function () {
         if (request.readyState === 4 && request.status === 200 && request.responseText != null && request.responseText.length > 100) {
           var parser = new DOMParser();
           var xmlDoc = parser.parseFromString(request.responseText,"text/xml");
-          var xmlBody = xmlDoc.getElementsByTagName('description');
-          if (xmlBody.length > 0) {
-
-            var imageURI = null;
-            var imageDetails = xmlDoc.getElementsByTagName("detail");
-            for (var i = 0; i < imageDetails.length; i++) {
-              var imageDetail = imageDetails[i];
-              if (imageDetail.getAttribute('key') == 'imageURI') {
-                if (imageDetail.children.length = 1) {
-                  imageURI = imageDetail.children[0].textContent;
-                  if (imageURI != null) {
-                    break;
-                  }
-                }
-              }
-            }
-
-            var title= xmlDoc.documentElement.getAttribute('label');
-            var body = xmlBody[xmlBody.length - 1].textContent;
-            updateMarketplace(imageURI, title, body, ' and provision the <b>' + title + '</b>');
-          }
+          createMarketplaceListings(xmlDoc, style);
         }
       };
       request.send();
     }
 
-    function loadMarketplaceBranding(url) {
-      var request = new XMLHttpRequest();
-      var requestURL = '/setups/installer/fetch.php?url=' + url.replace("https:", "http:") + '/api/p';
-      request.open('GET', requestURL, true);
-      request.onreadystatechange = function () {
-        if (request.readyState === 4 && request.status === 200 && request.responseText != null && request.responseText.length > 100) {
-          var parser = new DOMParser();
-          var xmlDoc = parser.parseFromString(request.responseText,"text/xml");
-          var xmlNode = xmlDoc.getElementsByTagName('node');
-          var xmlBody = xmlDoc.getElementsByTagName('body');
-          if (xmlNode.length == 1 && xmlBody.length == 1) {
-            var imageURI = null;
-            var xmlImage = xmlDoc.getElementsByTagName("image");
-            if (xmlImage.length == 1) {
-              imageURI = xmlImage[0].textContent;
-            }
-
-            var title = xmlNode[0].getAttribute('name');
-            var body= xmlBody[0].textContent;
-            updateMarketplace(imageURI, title, body, ' and create an installation that includes <b>' + title + '</b>');
-          }
-        }
-      };
-      request.send();
+    function createMarketplaceListings(xmlDoc, style) {
+      var projects = xmlDoc.getElementsByTagName('project') ;
+      for (var i = 0; i < projects.length; ++i) {
+        createMarketplaceListing(projects[i], style);
+      }
     }
 
-    function updateMarketplace(imageURI, title, body, instruction) {
+    function createMarketplaceListing(project, style) {
+     var imageURI = null;
+      var xmlImageDetail = project.querySelector("detail[key='imageURI']");
+      if (xmlImageDetail != null) {
+        imageURI = xmlImageDetail.querySelector('value').textContent;
+      }
+
+      var title = project.getAttribute('label');
+      var body= project.querySelector('description').textContent;
+
+      var repository = project.querySelector('repository');
+      var mainUpdateURL = null;
+      var mainUpdateURLProblem = null;
+      if (repository != null && repository.parentNode.parentNode == project) {
+         mainUpdateURL = repository.getAttribute('url');
+         var detailMessage = repository.querySelector("detail[key='message']")
+         if (detailMessage != null) {
+           mainUpdateURLProblem = detailMessage.querySelector('value').textContent;
+         }
+      }
+
+      if (style == 'all' || style == 'error' && mainUpdateURLProblem != null || style == null && mainUpdateURLProblem == null) {
+        var sectionTemplate = document.getElementById('marketplace-insertion-section');
+        var section = sectionTemplate.cloneNode(true);
+        var prefix = '_' + project.getAttribute('name') + '_';
+        var allIDs = section.querySelectorAll("*[id]");
+        for (var i = 0; i < allIDs.length; ++i) {
+          var element = allIDs[i];
+          var id = element.getAttribute('id');
+          element.setAttribute('id', prefix + id);
+        }
+  
+        var id = section.getAttribute('id');
+        section.setAttribute('id', prefix + section.getAttribute('id'));
+  
+        sectionTemplate.parentNode.insertBefore(section, sectionTemplate);
+        updateMarketplace(prefix, imageURI, title, body, ' and create an installation that includes <b>' + title + '</b>', mainUpdateURL, mainUpdateURLProblem);
+      }
+    }
+
+    function updateMarketplace(prefix, imageURI, title, body, instruction, mainUpdateURL, mainUpdateURLProblem) {
       if (imageURI != null) {
-        var sectionImage = document.getElementById('marketplace-image');
+        var sectionImage = document.getElementById(prefix + 'marketplace-image');
         sectionImage.src = imageURI;
 
-        var smallImage = document.getElementById('marketplace-small-image');
+        var smallImage = document.getElementById(prefix + 'marketplace-small-image');
         smallImage.src = imageURI;
       }
 
-      var section = document.getElementById('marketplace-insertion-section');
+      var button = document.getElementById(prefix + 'marketplace-section_arrow');
+      button.onclick = function() { expand_collapse(prefix + 'marketplace-section'); 
+      };
+
+      var section = document.getElementById(prefix + 'marketplace-insertion-section');
       section.style.display = 'block';
 
-      var sectionHeader = document.getElementById('marketplace-title-span');
+      var sectionHeader = document.getElementById(prefix + 'marketplace-title-span');
       sectionHeader.innerText = title;
 
-      var htmlBody = document.getElementById('marketplace-body');
+      var htmlBody = document.getElementById(prefix + 'marketplace-body');
       htmlBody.innerHTML = body;
 
-      var instructionHTML = document.getElementById('marketplace-instruction');
-      instructionHTML.innerHTML = instruction;
+      var instructionHTML = document.getElementById(prefix +'marketplace-instruction');
+      if (instruction.html != null) {
+        instructionHTML.innerHTML = instruction;
+      }
+
+      if (mainUpdateURL != null) {
+        var anchorHTML = document.getElementById(prefix +'marketkplace-main-url');
+        anchorHTML.href = mainUpdateURL;
+        anchorHTML.innerText = mainUpdateURL;
+        if (mainUpdateURLProblem != null) {
+          var problemHTML = document.getElementById(prefix +'marketkplace-main-url-problem');
+          problemHTML.style.display = 'inline-block';
+          problemHTML.parentElement.onclick = function() {
+            popupMessage('Error.png', mainUpdateURLProblem);
+          }
+        }
+      }
+
+      if (mainUpdateURLProblem != null) {
+          var statusHTML = document.getElementById(prefix +'marketplace-status-image');
+          statusHTML.style.display = 'inline-block';
+      }
     }
   </script>
 </head>
@@ -610,7 +667,7 @@
           <ol class="breadcrumb">
             <li><a href="/">Home</a></li>
             <li><a href="https://www.eclipse.org/oomph/">Oomph</a></li>
-            <li><a href="https://wiki.eclipse.org/Eclipse_Installer">Eclipse Installer</a></li>
+            <li><a href="https://wiki.eclipse.org/Oomph">Marketplace</a></li>
           </ol>
         </div>
       </div>
@@ -625,122 +682,49 @@
             <div id="midcolumn" style="padding: 0;">
               <div class="homeitem3col">
                 <div style="text-align: right; margin-top: -1.5ex; margin-bottom: -3ex; margin-right: -1.5em;">
-                <a href="https://wiki.eclipse.org/Oomph" target="oomph_wiki"><img id="brand-image" style="width: 3ex; height: 3ex;" src="oomph256.png"/></a>
-                <img style="max-width: 12em;" src="EclipseInstaller.png"/>
+                  <a href="https://wiki.eclipse.org/Oomph" target="oomph_wiki"><img id="brand-image" style="width: 4ex; height: 4ex;" src="../installer/oomph256.png"/></a>
                 </div>
 
-<div id="marketplace-insertion-section">
-  <h3 id="marketplace-title" class="section-header">
-    <button id="marketplace-section_arrow" class="orange bb" onclick="expand_collapse('marketplace-section');">&#x25B7;</button>
-    <img id="marketplace-small-image" src="Configuration.png"/>
-    <span id="marketplace-title-span"></span>
-    <span class="help-link" onclick="expand_collapse('marketplace-section');"><img class="help" style="font-size: 80%;" src="Help.png"/></span>
+
+                <h3 class="section-header">
+                  <button id="auto-launch-installer_arrow" class="orange bb" onclick="expand_collapse('auto-launch-installer');">&#x25E2;</button>
+    <img  style="height: 2.5ex;" src="https://marketplace.eclipse.org/sites/default/files/styles/ds_medium/public/mpc-logo-marketplace.png?itok=F0Yk3YlX"/>
+                  <span style=" font-variant: small-caps;">Marketplace.Eclipse.org listings</span>
+                </h3>
+                <p id="auto-launch-installer">
+The Eclipse Marketplace provides a large number of listings that can be installed into an existing IDE 
+or can added to the 
+<a class="help-link" style="font-family: Arial, Helvetica, sans-serif;" href="https://www.eclipse.org/setups/installer/?url=https://marketplace.eclipse.org/content/eclipse-marketplace-client" target="eclipse_installer"><span style="color: #2c2255;">eclipse</span> <span class="orange">installer</span></a>
+while creating a new installation.
+                </p>
+                <hr class="url-required clearer"/>
+
+<div id="marketplace-insertion-section" class="marketplace-insertion-section">
+  <h3 id="marketplace-title" class="section-header marketplace-title">
+    <button id="marketplace-section_arrow" class="orange bb marketplace-section_arrow" onclick="expand_collapse('marketplace-section');">&#x25B7;</button>
+    <img id="marketplace-small-image" class="marketplace-small-image" src="Configuration.png"/>
+    <span id="marketplace-title-span" class="marketplace-title-span"></span>
+    <img id="marketplace-status-image" style="display: none;" class="marketplace-small-image" src="Error.png"/>
   </h3>
-  <div id="marketplace-section" style="display: none;">
-    <img id="marketplace-image" src=""/>
-    <div id="marketplace-body">
+  <div id="marketplace-section" class="marketplace-section" style="display: none;">
+    <div style=" overflow: hidden;">
+      <img id="marketplace-image" class="marketplace-image" src=""/>
+      <div id="marketplace-body" class="marketplace-body"></div>
+    </div>
+    <div>
+     <span>
+       <img class="marketplace-small-image" src="Repository.png"/>
+       <a href="" id="marketkplace-main-url" class="marketplace-main-url" target="marketplace_site"></a>
+       <button class="bb" onclick=""><img id="marketkplace-main-url-problem" style="display: none;" class="marketplace-small-image" src="Error.png"/></button>
+     </span>
     </div>
   </div>
   <hr class="url-required clearer"/>
 </div>
 
-                <h3 class="section-header">
-                  <button id="auto-launch-installer_arrow" class="orange bb" onclick="expand_collapse('auto-launch-installer');">&#x25E2;</button>
-                  Install Using Auto Launch
-                </h3>
-                <p id="auto-launch-installer">
-The <span class="help-link" style="font-family: Arial, Helvetica, sans-serif;" onclick="expand_collapse('install-installer', true);"><span style="color: #2c2255;">eclipse</span> <span class="orange">installer</span><img class="help" src="Help.png"/></span>can be launched automatically when clicking a link on a web page.
-<br/>
-<br/>
-To use this convenience, the installer must be <span class="help-link" onclick="expand_collapse('register-installer', true);">registered<img class="help" src="Help.png"/></span>to handle links with scheme <b><tt class="orange" id="scheme">eclipse+installer</tt></b>.
-<br/>
-<br/>
-<span>
-Click the following link button to launch the registered installer<span id="marketplace-instruction"></span>:
-<br/>
-<br/>
-<a id="link-launch" class="button" href="">Launch...</a>
-</span>
-                </p>
-                <hr class="url-required clearer"/>
-
-                <h3 class="url-required section-header">
-                  <button id="drag-and-drop-installer_arrow" class="orange bb" onclick="expand_collapse('drag-and-drop-installer');">&#x25B7;</button>
-                  Install Using Drag and Drop
-                </h3>
-                <p id="drag-and-drop-installer" style="display: none;">
-If you don't wish to register the Eclipse Installer,
-you can drag the following link button and drop it onto installer's title area in either simple or advanced mode:
-<br/>
-<br/>
-<a id="link-drag-and-drop" class="button" href="">Drag Link</a>
-<br/>
-<br/>
-Alternatively, you can
-<span class="help-link" onclick="expand_collapse('copy-and-apply-installer', true);">copy and apply<img class="help" src="Help.png"/></span>the link.
-                <hr class="clearer"/>
-</p>
-
-                <h3 class="url-required section-header">
-                  <button id="copy-and-apply-installer_arrow" class="orange bb" onclick="expand_collapse('copy-and-apply-installer');">&#x25B7;</button>
-                  Install Using Copy and Apply
-                </h3>
-                <p id="copy-and-apply-installer" class="url-required" style="display: none;">
-If you don't wish to register the Eclipse Installer,
-you can click the following link button to copy it to the system clipboard:
-<br/>
-<br/>
-<button id="link-copy-and-apply" class="button" onclick="copyToClipboard('link-drag-and-drop');">Copy Link</button>
-<br/>
-<br/>
-Then you can apply it to the installer follows in simple mode:
-<br/>
-<br/>
-<img id="simple-copy-and-apply" class="thumb" onclick="popup('simple-copy-and-apply');" src="SimpleApplyConfiguration.png" alt="Apply Link to Eclipse Installer in Simple Mode"/>
-<br/>
-<br/>
-Or as follows in advanced mode:
-<br/>
-<br/>
-<img id="advanced-copy-and-apply" class="thumb" onclick="popup('advanced-copy-and-apply');" src="AdvancedApplyConfiguration.png" alt="Apply Link to Eclipse Installer in Advanced Mode"/>
-</p>
-                <hr class="url-required clearer"/>
-
-                <h3 class="section-header">
-                  <button id="install-installer_arrow" class="orange bb" onclick="expand_collapse('install-installer');">&#x25B7;</button>
-                  Download the Eclipse Installer
-                </h3>
-                <p id="install-installer" style="display: none;">
-If you haven't already installed the Eclipse Installer, you can download it from the following link:
-<br/>
-<br/>
-<a id="installer-win" class="button" href="http://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-win64.exe" tooltip="Click to download" target="oomph_mirror">Windows 64 Bit</a>
-<a id="installer-mac" class="button" href="http://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-mac64.dmg" tooltip="Click to download" target="oomph_mirror"> Mac OS 64 Bit</a>
-<a id="installer-linux" class="button" href="http://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-linux64.tar.gz" tooltip="Click to download" target="oomph_mirror">Linux 64 Bit</a>
-</p>
-                <hr class="clearer"/>
-
-                <h3 class="section-header">
-                  <button id="register-installer_arrow" class="orange bb" onclick="expand_collapse('register-installer');">&#x25B7;</button>
-                  Register the Eclipse Installer
-                </h3>
-                <p id="register-installer" style="display: none;">
-If you haven't already registered the installer, you can do so via the <em>WEB LINKS</em> menu button in simple mode:
-<br/>
-<br/>
-<img id="simple" class="thumb" onclick="popup('simple');" src="EnableWebLinksSimple.png" alt="Register the Eclipse Installer in Simple Mode"/>
-<br/>
-<br/>
-Or via the <em>Web Links</em> tool button in advanced mode:
-<br/>
-<br/>
-<img id="advanced" class="thumb" onclick="popup('advanced');" src="EnableWebLinksAdvanced.png" alt="Register the Eclipse Installer in Advanced Mode"/>
-</p>
-                <hr class="clearer"/>
-
                 <div id="popup" class="modal-popup">
                   <span class="modal-popup-close">&times;</span>
-                  <img class="modal-popup-content" id="modal-popup-image">
+                  <img class="modal-popup-content" id="modal-popup-image"/>
                   <div id="modal-popup-caption"></div>
                 </div>
 
