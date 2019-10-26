@@ -4,7 +4,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="keywords" content="eclipse, Oomph, eclipseinstaller"/>
+  <meta name="keywords" content="eclipse, Oomph, eclipse installer, eclipse marketplace"/>
   <link rel="shortcut icon" href="https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/favicon.ico"/>
 
   <title>Eclipse Marketplace Listing</title>
@@ -18,7 +18,7 @@
 
   <style>
     .button, .button:visited, .button:hover, .button:active, .button:link {
-      margin-left: 2em;
+      margin-left: 0em;
       margin-top: 1ex;
       margin-bottom: 1ex;
       font-weight: bold;
@@ -34,7 +34,7 @@
     .button:hover {
       transition: background-color 0.5s ease;
       background-color: rgb(218, 122,8);
-	}
+    }
 
     .thumb {
       width : 25em;
@@ -65,7 +65,7 @@
     .bb:hover {
       transition: color 0.5s ease;
       color: rgb(218, 122,8);
-	}
+    }
 
     .help {
       position: relative;
@@ -113,7 +113,7 @@
       height: 100%;
       overflow: auto;
       background-color: rgb(0,0,0);
-      background-color: rgba(0,0,0,0.7);
+      background-color: rgba(0,0,0,0.8);
     }
 
     .modal-popup-content {
@@ -127,12 +127,11 @@
       margin: auto;
       display: block;
       width: 80%;
-      max-width: 900px;
-      text-align: center;
-      font-weight: bold;
+      max-width: 90%;
+      text-align: left;
       font-size: 150%;
       color: white;
-      padding: 10px 0;
+      padding: 0 0;
       height: 150px;
     }
 
@@ -196,6 +195,7 @@
 
     #marketplace-title-span, .marketplace-title-span {
       font-size: 100%;
+      cursor: pointer;
     }
 
     #marketplace-insertion-section, .marketplace-insertion-section {
@@ -218,6 +218,20 @@
       height: 2ex;
       vertical-align: baseline;
       margin-bottom: -0.1ex;
+    }
+
+    .loader {
+      border: 0.5ex solid #f3f3f3; 
+      border-top: 0.5ex solid #3498db; 
+      border-radius: 50%;
+      width: 3ex;
+      height: 3ex;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 
@@ -258,19 +272,6 @@
       updateScheme('scheme', scheme);
 
       var url = getParameter(window.location.search, 'url');
-      if (url == null) {
-        url = '';
-        var elements = document.getElementsByClassName('url-required');
-        for (var i = 0; i < elements.length; i++) {
-          var element = elements[i];
-          element.style.display = 'none';
-        }
-        updateHref('link-launch', scheme + ':' + url, 'Click to launch the installer');
-      } else {
-        updateHref('link-drag-and-drop', url, 'Drag and drop the following link on the installer\'s title area:\n' + url);
-        updateHref('link-copy-and-apply', url, 'Click to copy the following link to the system clipboard and apply it to the installer:\n' + url);
-        updateHref('link-launch', scheme + ':' + url, 'Click to launch the installer for the following link:\n' + url);
-      }
 
       var os = getOS();
       if (os == 'win') {
@@ -282,16 +283,10 @@
       }
 
       var style = getParameter(window.location.search, 'style');
-      loadMarketplaceListings(style);
-
-      if (false && url != null) {
-        var marketplaceContentMatch = url.match(/https?:\/\/marketplace\.eclipse\.org\/content\/[^\/?#]*/);
-        if (marketplaceContentMatch != null) {
-          loadMarketplaceBranding(url);
-        } else {
-          loadSetup(url);
-        }
+      if (url != null) {
+        style='all';
       }
+      loadMarketplaceListings(style, url);
     }
 
     function updateHref(id, url, tooltip) {
@@ -391,29 +386,83 @@
       }
     }
 
-    function loadMarketplaceListings(style) {
+    function loadMarketplaceListings(style, url) {
       var request = new XMLHttpRequest();
       var requestURL = '../marketplace-listings/marketplace.eclipse.org.setup';
       request.open('GET', requestURL, true);
       request.onreadystatechange = function () {
         if (request.readyState === 4 && request.status === 200 && request.responseText != null && request.responseText.length > 100) {
+
+         var progressTextHTML = document.getElementById('progress-text');
+         progressTextHTML.innerText = 'Analyzing the the catalog';
+
           var parser = new DOMParser();
           var xmlDoc = parser.parseFromString(request.responseText,"text/xml");
-          createMarketplaceListings(xmlDoc, style);
+          createMarketplaceListings(xmlDoc, style, url);
         }
       };
       request.send();
     }
 
-    function createMarketplaceListings(xmlDoc, style) {
+    function createMarketplaceListings(xmlDoc, style, url) {
       var projects = xmlDoc.getElementsByTagName('project') ;
+
+      var progressTextHTML = document.getElementById('progress-text');
+      progressTextHTML.innerText = 'Processing ' + projects.length + ' lists.';
+
+      var count = 0;
+      var warningCount = 0;
+      var errorCount = 0;
       for (var i = 0; i < projects.length; ++i) {
-        createMarketplaceListing(projects[i], style);
+        var result = createMarketplaceListing(projects[i], style, url);
+        if (result != null) {
+          ++count;
+          if (result[0] == 'Error.png') {
+            ++errorCount;
+          } else if (result[0] == 'Warning.png') {
+            ++warningCount;
+          }
+        }
+      } 
+
+      var progressHTML = document.getElementById('progress');
+      progressHTML.style.display = 'none'; 
+
+      var summarySection = document.getElementById('summary');
+      summarySection.style.display = 'block';
+      var summaryCount = document.getElementById('summary-count');
+      if (style == null) {
+        summaryCount.innerText = count - errorCount + ' usable ';
+      } else {
+        summaryCount.innerText = count;
+      }
+
+      if (style != null) {
+        var summaryError = document.getElementById('summary-error');
+        summaryError.style.display = 'inline-block';
+        var summaryErrorCount = document.getElementById('summary-error-count');
+        summaryErrorCount.innerText = errorCount + warningCount;
       }
     }
 
-    function createMarketplaceListing(project, style) {
-     var imageURI = null;
+    function createMarketplaceListing(project, style, url) {
+      var siteURI = null;
+      var siteDetail = project.querySelector("detail[key='siteURI']");
+      if (siteDetail != null) {
+        siteURI = siteDetail.querySelector('value').textContent;
+      }
+
+      var marketplaceID = null;
+      var marketplaceIDDetail = project.querySelector("detail[key='marketplaceID']");
+      if (marketplaceIDDetail != null) {
+        marketplaceID = marketplaceIDDetail.querySelector('value').textContent;
+      }
+
+      if (url != null && url != siteURI && url != decodeURI(siteURI)) {
+        return null;
+      }
+
+      var imageURI = null;
       var xmlImageDetail = project.querySelector("detail[key='imageURI']");
       if (xmlImageDetail != null) {
         imageURI = xmlImageDetail.querySelector('value').textContent;
@@ -422,21 +471,124 @@
       var title = project.getAttribute('label');
       var body= project.querySelector('description').textContent;
 
-      var repository = project.querySelector('repository');
       var mainUpdateURL = null;
+      var mainIUs = new Map();
       var mainUpdateURLProblem = null;
-      if (repository != null && repository.parentNode.parentNode == project) {
-         mainUpdateURL = repository.getAttribute('url');
-         var detailMessage = repository.querySelector("detail[key='message']")
-         if (detailMessage != null) {
-           mainUpdateURLProblem = detailMessage.querySelector('value').textContent;
-         }
+      var bogusIUs = false;
+      var failedResolutions = false;
+      var streamDetails = new Map();
+      var problem = [null, null];
+
+      var p2Task = project.querySelector(':scope > setupTask');
+      if (p2Task != null) {
+        var repository = p2Task.querySelector('repository');
+        if (repository != null) {
+          mainUpdateURL = repository.getAttribute('url');
+          var detailMessage = repository.querySelector("detail[key='message']")
+          if (detailMessage != null) {
+            mainUpdateURLProblem = detailMessage.querySelector('value').textContent;
+            problem[0] = 'Error.png';
+            problem[1] = mainUpdateURLProblem;
+          }
+        }
+
+        var requirements = p2Task.querySelectorAll('requirement');
+        for (var i = 0; i < requirements.length; ++i) {
+          var requirement = requirements[i];
+          var requirementID = requirement.getAttribute("name");
+          var requirementName = requirement.querySelector("detail[key='name']");
+          if (requirementName != null) {
+            var name = requirementName.querySelector('value').textContent;
+            mainIUs.set(requirementID, name);
+            if (name == 'BogusIU') {
+              bogusIUs = true;
+              if (problem[0] == null) {
+                problem[0] = 'Error.png';
+                problem[1] = "The installable unit with id '" + requirementID + "' cannot be resolved in the repository";
+              }
+            }
+          }
+        }
       }
 
-      if (style == 'all' || style == 'error' && mainUpdateURLProblem != null || style == null && mainUpdateURLProblem == null) {
+      if (mainUpdateURLProblem == null) {
+        var streams = project.querySelectorAll('stream');
+        for (var i = 0; i < streams.length; ++i) {
+          var success = false;
+          const stream = streams[i];
+          const data = [ null, null, null, null, null ];
+          const exception = stream.querySelector("detail[key='exception']");
+          if (exception == null) {
+            success = true;
+          } else {
+            const reject = stream.querySelector("detail[key='reject']");
+            data[0] = exception.querySelector('value').textContent;
+            if (reject == null) {
+              failedResolutions = true;
+              if (problem[0] == null) {
+                problem[0] = 'Error.png';
+                problem[1] = data[0];
+              }
+            } else { 
+              data[1] = 'reject';
+            }
+          }
+
+          streamDetails.set(stream.getAttribute('name'), data);
+
+          var streamP2Task = stream.querySelector('setupTask');
+          if (streamP2Task != null) {
+            var streamRepository = streamP2Task.querySelector('repository');
+            var streamUpdateURL = null;
+            var streamUpdateURLProblem = null;
+            if (streamRepository != null) {
+              streamUpdateURL = streamRepository.getAttribute('url');
+              var streamDetailMessage = streamRepository.querySelector("detail[key='message']")
+              if (streamDetailMessage != null) {
+                success = false;
+                streamUpdateURLProblem = streamDetailMessage.querySelector('value').textContent;
+                if (problem[0] == null) {
+                  problem[0] = 'Error.png';
+                  problem[1] = streamUpdateURLProblem;
+                }
+              }
+            }
+
+            var streamIUs = new Map();
+            var streamRequirements = streamP2Task.querySelectorAll('requirement');
+            for (var j = 0; j < streamRequirements.length; ++j) {
+              var streamRequirement = streamRequirements[j];
+              var streamRequirementID = streamRequirement.getAttribute("name");
+              var streamRequirementName = streamRequirement.querySelector("detail[key='name']");
+              if (streamRequirementName != null) {
+                var name = streamRequirementName.querySelector('value').textContent;
+                streamIUs.set(streamRequirementID, name);
+                if (name == 'BogusIU') {
+                  bogusIUs = true;
+                  if (problem[0] == null) {
+                    problem[0] = 'Error.png';
+                    problem[1] = "The installable unit with id '" + streamRequirementID + "' cannot be resolved in the repository";
+                  }
+                }
+              }
+            }
+
+            data[2] = streamUpdateURL;
+            data[3] = streamUpdateURLProblem;
+            data[4] = streamIUs;
+          }
+
+          if (success && problem[0] != null) {
+            problem[0] = "Warning.png";
+          }
+        }
+      }
+
+      var prefix = '_' + project.getAttribute('name') + '_';
+
+      if (style == 'all' || style == 'error' && problem[0] != null || style == null && problem[0] != 'Error.png') {
         var sectionTemplate = document.getElementById('marketplace-insertion-section');
         var section = sectionTemplate.cloneNode(true);
-        var prefix = '_' + project.getAttribute('name') + '_';
         var allIDs = section.querySelectorAll("*[id]");
         for (var i = 0; i < allIDs.length; ++i) {
           var element = allIDs[i];
@@ -448,41 +600,43 @@
         section.setAttribute('id', prefix + section.getAttribute('id'));
   
         sectionTemplate.parentNode.insertBefore(section, sectionTemplate);
-        updateMarketplace(prefix, imageURI, title, body, ' and create an installation that includes <b>' + title + '</b>', mainUpdateURL, mainUpdateURLProblem);
+        updateMarketplace(prefix, imageURI, siteURI, marketplaceID, title, body, ' and create an installation that includes <b>' + title + '</b>', mainUpdateURL, mainUpdateURLProblem, mainIUs, streamDetails);
       }
+
+      if (problem[0] != null) {
+        var statusHTML = document.getElementById(prefix +'marketplace-status-image');
+        if (statusHTML != null) {
+          statusHTML.src = problem[0];
+          statusHTML.style.display = 'inline-block';
+          statusHTML.onclick = function() {
+            popupMessage('Error.png', problem[1]);
+          }
+        }
+      }
+
+      return problem;
     }
 
-    function updateMarketplace(prefix, imageURI, title, body, instruction, mainUpdateURL, mainUpdateURLProblem) {
+    function updateMarketplace(prefix, imageURI, siteURI, marketplaceID, title, body, instruction, mainUpdateURL, mainUpdateURLProblem, mainIUs, streamDetails) {
+	
+var init = function() {
       if (imageURI != null) {
         var sectionImage = document.getElementById(prefix + 'marketplace-image');
         sectionImage.src = imageURI;
-
-        var smallImage = document.getElementById(prefix + 'marketplace-small-image');
-        smallImage.src = imageURI;
+        sectionImage.parentElement.href = siteURI;
       }
-
-      var button = document.getElementById(prefix + 'marketplace-section_arrow');
-      button.onclick = function() { expand_collapse(prefix + 'marketplace-section'); 
-      };
-
-      var section = document.getElementById(prefix + 'marketplace-insertion-section');
-      section.style.display = 'block';
-
-      var sectionHeader = document.getElementById(prefix + 'marketplace-title-span');
-      sectionHeader.innerText = title;
 
       var htmlBody = document.getElementById(prefix + 'marketplace-body');
       htmlBody.innerHTML = body;
 
-      var instructionHTML = document.getElementById(prefix +'marketplace-instruction');
-      if (instruction.html != null) {
-        instructionHTML.innerHTML = instruction;
-      }
-
       if (mainUpdateURL != null) {
+        var repositoryHTML = document.getElementById(prefix +'marketplace-main-repository');
+        repositoryHTML.style.display = 'block';
+
         var anchorHTML = document.getElementById(prefix +'marketkplace-main-url');
         anchorHTML.href = mainUpdateURL;
         anchorHTML.innerText = mainUpdateURL;
+
         if (mainUpdateURLProblem != null) {
           var problemHTML = document.getElementById(prefix +'marketkplace-main-url-problem');
           problemHTML.style.display = 'inline-block';
@@ -492,10 +646,175 @@
         }
       }
 
-      if (mainUpdateURLProblem != null) {
-          var statusHTML = document.getElementById(prefix +'marketplace-status-image');
-          statusHTML.style.display = 'inline-block';
+      var launchInstaller = document.getElementById(prefix + 'link-installer-launch');
+      launchInstaller.href = 'eclipse+installer:' + siteURI;
+
+      var launchInstallerHelp = document.getElementById(prefix + 'link-installer-launch-help');
+      launchInstallerHelp.href = '../installer/?show=true&url=' + siteURI;
+
+      var launchMPC = document.getElementById(prefix + 'link-mpc-launch');
+      launchMPC.href = 'eclipse+mpc://marketplace.eclipse.org/marketplace-client-intro?mpc_install=' + marketplaceID;
+
+      if (mainIUs.length != 0) {
+        var mainIUHTMLPrototype = document.getElementById(prefix +'marketplace-main-iu');
+        var mainIUNameHTMLPrototype = document.getElementById(prefix +'marketplace-main-iu-name');
+        var mainIUHTMLProblemPrototype = document.getElementById(prefix +'marketkplace-main-iu-problem');
+
+        for (var [key, value] of mainIUs) {
+          if (value == "BogusIU") {
+            mainIUNameHTMLPrototype.innerText = key;
+            mainIUHTMLProblemPrototype.style.display = 'inline-block';
+          } else {
+            mainIUNameHTMLPrototype.innerText = value;
+            mainIUHTMLProblemPrototype.style.display = 'none';
+          }
+
+          var mainIUHTML = mainIUHTMLPrototype.cloneNode(true);
+          if (value == 'BogusIU') {
+            var popup = function() {
+              popupMessage('Error.png', "The installable unit with id '" + key + "' cannot be resolved in the repository:\n  " + mainUpdateURL);
+            };
+
+            mainIUHTML.querySelector('button').onclick = popup;
+          }
+
+          mainIUHTMLPrototype.parentElement.insertBefore(mainIUHTML, mainIUHTMLPrototype);
+
+          if (mainUpdateURL != null) {
+            mainIUHTML.style.marginLeft = '1em';
+          }
+        }
+
+        mainIUHTMLPrototype.style.display = 'none';
       }
+
+      var streamPrototype = document.getElementById(prefix +'marketplace-stream');
+      if (streamDetails.length != 0) {
+        for (var [key, value] of streamDetails) {
+
+          var streamHTML = streamPrototype.cloneNode(true);
+          var streamName= streamHTML.querySelector("*[templateID='marketplace-stream-name']");
+          var streamProblem = streamHTML.querySelector("*[templateID='marketkplace-stream-problem']");
+          var streamAnchorHTML = streamHTML.querySelector("*[templateID='marketkplace-stream-url']");
+          var streamProblemHTML = streamHTML.querySelector("*[templateID='marketkplace-stream-url-problem']");
+
+          streamName.innerText = key;
+
+          const exception = value[0];
+          const reject = value[1];
+          const streamURL = value[2];
+          const streamURLProblem = value[3];
+          const streamIUs = value[4];
+
+          var popup = function () {
+            if (exception != null) {
+              popupMessage('Error.png', exception);
+            } else {
+              popupMessage('Error.png', streamURLProblem);
+            }
+          };
+
+          if (exception == null && streamURLProblem == null) {
+            streamProblem.src= 'OK.png';
+          } else {
+	// todo
+            streamProblem.parentElement.onclick = popup;
+            streamProblem.parentElement.style.display = 'inline-block';
+
+            if (reject == 'reject') {
+              streamProblem.src= 'Reject.png';
+            } else {
+              streamProblem.src= 'Error.png';
+            }
+          }
+
+          if (streamURL != null) {
+            streamAnchorHTML.href = streamURL;
+            streamAnchorHTML.innerText = streamURL;
+            streamAnchorHTML.parentElement.style.marginLeft = '1em';
+            streamAnchorHTML.parentElement.style.display = 'block';
+          } else {
+            streamAnchorHTML.parentElement.style.display = 'none';
+          }
+
+          var streamIUHTMLPrototype = streamHTML.querySelector("*[templateID='marketplace-stream-iu']");
+          if (streamIUs != null) {
+            for (var [key, value] of streamIUs) {
+              var streamIUHTML = streamIUHTMLPrototype.cloneNode(true);
+              var streamIUNameHTML = streamIUHTML.querySelector("*[templateID='marketplace-stream-iu-name']");
+              var streamIUHTMLProblem = streamIUHTML.querySelector("*[templateID='marketkplace-stream-iu-problem']");
+  
+              if (value == "BogusIU") {
+                streamIUNameHTML.innerText = key;
+                streamIUHTMLProblem.style.display = 'inline-block';
+              } else {
+                streamIUNameHTML.innerText = value;
+                streamIUHTMLProblem.style.display = 'none';
+              }
+    
+              streamIUHTML.style.display = 'block';
+              if (value == 'BogusIU') {
+	            const badIU = key;
+                var popup = function() {
+    // todo
+                  popupMessage('Error.png', "The installable unit with id '" + badIU + "' cannot be resolved in the repository:\n  " + streamURL);
+                };
+    
+  // todo
+                streamIUHTML.querySelector('button').onclick = popup;
+              }
+  
+              streamIUHTMLPrototype.parentElement.insertBefore(streamIUHTML, streamIUHTMLPrototype);
+    
+              if (streamURL != null) {
+                streamIUHTML.style.marginLeft = '2em';
+              } else {
+                streamIUHTML.style.marginLeft = '1em';
+              }
+            }
+          }
+
+          streamIUHTMLPrototype.style.display = 'none';
+
+          var problemButton = streamHTML.querySelector('button');
+          if (exception == null && streamURLProblem == null) {
+            // problemButton.style.display = 'none';
+          } else {
+            problemButton.style.display = 'inline-block';
+            problemButton.onclick = popup;
+          }
+
+          streamPrototype.parentElement.insertBefore(streamHTML, streamPrototype);
+        }
+      }
+
+      streamPrototype.style.display = 'none';
+};
+
+      const expandCollapse = function() {
+        if (init != null) {
+           init();
+           init = null;
+        }
+        expand_collapse(prefix + 'marketplace-section'); 
+      }
+
+      if (imageURI != null) {
+        var smallImage = document.getElementById(prefix + 'marketplace-small-image');
+        smallImage.src = imageURI;
+      }
+
+      var button = document.getElementById(prefix + 'marketplace-section_arrow');
+      button.onclick = expandCollapse;
+
+      button = document.getElementById(prefix + 'marketplace-title-span');
+      button.onclick = expandCollapse;
+
+      var section = document.getElementById(prefix + 'marketplace-insertion-section');
+      section.style.display = 'block';
+
+      var sectionHeader = document.getElementById(prefix + 'marketplace-title-span');
+      sectionHeader.innerText = title;
     }
   </script>
 </head>
@@ -687,37 +1006,96 @@
 
 
                 <h3 class="section-header">
-                  <button id="auto-launch-installer_arrow" class="orange bb" onclick="expand_collapse('auto-launch-installer');">&#x25E2;</button>
-    <img  style="height: 2.5ex;" src="https://marketplace.eclipse.org/sites/default/files/styles/ds_medium/public/mpc-logo-marketplace.png?itok=F0Yk3YlX"/>
+                  <button id="mpc_arrow" class="orange bb" onclick="expand_collapse('mpc');">&#x25E2;</button>
+                  <img  style="height: 2.5ex;" src="https://marketplace.eclipse.org/sites/default/files/styles/ds_medium/public/mpc-logo-marketplace.png?itok=F0Yk3YlX"/>
                   <span style=" font-variant: small-caps;">Marketplace.Eclipse.org listings</span>
                 </h3>
-                <p id="auto-launch-installer">
-The Eclipse Marketplace provides a large number of listings that can be installed into an existing IDE 
+<div class="toggle-target" id="mpc">
+                <p>
+The 
+<a class="help-link" style="font-family: Arial, Helvetica, sans-serif;" href="https://marketplace.eclipse.org/" target="eclipse_marketplace"><span style="color: #2c2255;">eclipse market</span><span class="orange">place</span></a>
+provides a large number of listings that can be installed into an existing
+<a class="help-link" style="font-family: Arial, Helvetica, sans-serif; white-space: nowrap;" href="https://www.eclipse.org/downloads/packages/" target="eclipse_downloads"><span style="color: #2c2255;">eclipse</span> <span class="orange">IDE</span></a>
 or can added to the 
-<a class="help-link" style="font-family: Arial, Helvetica, sans-serif;" href="https://www.eclipse.org/setups/installer/?url=https://marketplace.eclipse.org/content/eclipse-marketplace-client" target="eclipse_installer"><span style="color: #2c2255;">eclipse</span> <span class="orange">installer</span></a>
+<a class="help-link" style="font-family: Arial, Helvetica, sans-serif; white-space: nowrap;" href="https://www.eclipse.org/setups/installer/?url=https://marketplace.eclipse.org/content/eclipse-marketplace-client" target="eclipse_installer"><span style="color: #2c2255;">eclipse</span> <span class="orange">installer</span></a>
 while creating a new installation.
                 </p>
-                <hr class="url-required clearer"/>
+<p id="summary" style="display: none;">
+There are a total of <span id="summary-count">1000+</span> listings<span id="summary-error" style="display: none;">, <span id="summary-error-count">many</span> of which contain errors or warnings</span>.
+<p>
+</div>
+                <hr class="clearer"/>
+
+<div id="progress">
+<p id="progress-text">
+The catalog is being loaded.
+</p>
+ <div class="loader"></div> 
+  <hr class="clearer"/>
+</div>
 
 <div id="marketplace-insertion-section" class="marketplace-insertion-section">
   <h3 id="marketplace-title" class="section-header marketplace-title">
     <button id="marketplace-section_arrow" class="orange bb marketplace-section_arrow" onclick="expand_collapse('marketplace-section');">&#x25B7;</button>
     <img id="marketplace-small-image" class="marketplace-small-image" src="Configuration.png"/>
-    <span id="marketplace-title-span" class="marketplace-title-span"></span>
-    <img id="marketplace-status-image" style="display: none;" class="marketplace-small-image" src="Error.png"/>
+    <href id="marketplace-title-span" class="marketplace-title-span bb" onclick="expand_collapse('marketplace-section');"></href>
+    <button class="bb"><img id="marketplace-status-image" style="display: none;" class="marketplace-small-image" src="Error.png"/></button>
   </h3>
   <div id="marketplace-section" class="marketplace-section" style="display: none;">
+
     <div style=" overflow: hidden;">
-      <img id="marketplace-image" class="marketplace-image" src=""/>
+      <a href="" target="marketplace_listing"><img id="marketplace-image" class="marketplace-image" src=""/></a>
       <div id="marketplace-body" class="marketplace-body"></div>
     </div>
-    <div>
-     <span>
-       <img class="marketplace-small-image" src="Repository.png"/>
-       <a href="" id="marketkplace-main-url" class="marketplace-main-url" target="marketplace_site"></a>
-       <button class="bb" onclick=""><img id="marketkplace-main-url-problem" style="display: none;" class="marketplace-small-image" src="Error.png"/></button>
-     </span>
+
+    <div style="padding-bottom: 2ex;">
+      <span id="marketplace-launch" style="font-family: Arial, Helvetica, sans-serif;">
+        <a id="link-installer-launch" class="button" href="eclipse+installer:"><span style="color: #2c2255;">eclipse</span>+installer</a>
+        <a id="link-installer-launch-help" class="help-link" href="../installer/" target="eclipse_installer"><img class="help" src="../installer/Help.png"/></a>
+        <a id="link-mpc-launch" class="button" href="eclipse+mpc:" style="margin-left: 1em;"><span style="color: #2c2255;">eclipse</span>+mpc</a>
+      </span>
     </div>
+
+    <div>
+      <div id="marketplace-main-repository" style="display: none;">
+        <img class="marketplace-small-image" src="Repository.png"/>
+        <a href="" id="marketkplace-main-url" class="marketplace-main-url" target="marketplace_site"></a>
+        <button class="bb" onclick=""><img id="marketkplace-main-url-problem" style="display: none;" class="marketplace-small-image" src="Error.png"/></button>
+      </div>
+    </div>
+
+    <div>
+      <div id="marketplace-main-iu" style="display: block;">
+        <img class="marketplace-small-image" src="Feature.png"/>
+        <span id="marketplace-main-iu-name" class="marketplace-main-iu-name"></span>
+        <button class="bb" onclick=""><img id="marketkplace-main-iu-problem" style="display: inline-block;" class="marketplace-small-image" src="Error.png"></button>
+      </div>
+    </div>
+
+    <div>
+      <div id="marketplace-stream" templateID="marketplace-stream" style="display: block;">
+        <img class="marketplace-small-image" src="Version.png"/>
+        <span templateID="marketplace-stream-name" class="marketplace-stream-name"></span>
+        <button class="bb" onclick=""><img templateID="marketkplace-stream-problem" style="display: inline-block;" class="marketplace-small-image" src="Error.png"></button>
+
+        <div>
+          <div templateID="marketplace-stream-repository" style="display: block;">
+            <img class="marketplace-small-image" src="Repository.png"/>
+            <a href="" templateID="marketkplace-stream-url" class="marketplace-stream-url" target="marketplace_site"></a>
+            <button class="bb" onclick=""><img templateID="marketkplace-stream-url-problem" style="display: none;" class="marketplace-small-image" src="Error.png"/></button>
+          </div>
+        </div>
+
+        <div>
+          <div templateID="marketplace-stream-iu" style="display: block;">
+            <img class="marketplace-small-image" src="Feature.png"/>
+            <span templateID="marketplace-stream-iu-name" class="marketplace-stream-iu-name"></span>
+            <button class="bb" onclick=""><img templateID="marketkplace-stream-iu-problem" style="display: inline-block;" class="marketplace-small-image" src="Error.png"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
   <hr class="url-required clearer"/>
 </div>

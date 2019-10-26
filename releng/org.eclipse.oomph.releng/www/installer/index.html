@@ -286,6 +286,9 @@
         } else {
           loadSetup(url);
         }
+        if (getParameter(window.location.search, 'show') == 'true') {
+          expand_collapse('marketplace-section');
+        }
       }
     }
 
@@ -670,10 +673,22 @@ Click the following link button to launch the registered installer<span id="mark
                 </h3>
                 <p id="drag-and-drop-installer" style="display: none;">
 If you don't wish to register the Eclipse Installer,
-you can drag the following link button and drop it onto installer's title area in either simple or advanced mode:
+you can drag the following link button and drop it onto installer's title area:
 <br/>
 <br/>
 <a id="link-drag-and-drop" class="button" href="">Drag Link</a>
+<br/>
+<br/>
+Here in simple mode:
+<br/>
+<br/>
+<img id="simple-drag-and-drop" class="thumb" onclick="popup('simple-drag-and-drop');" src="SimpleDropConfiguration.png" alt="Drop Link on Eclipse Installer Title Area in Simple Mode"/>
+<br/>
+<br/>
+Or here in advanced mode:
+<br/>
+<br/>
+<img id="advanced-drag-and-drop" class="thumb" onclick="popup('advanced-drag-and-drop');" src="AdvancedDropConfiguration.png" alt="Drop Link on Eclipse Installer Title Area in Advanced Mode"/>
 <br/>
 <br/>
 Alternatively, you can
@@ -693,7 +708,7 @@ you can click the following link button to copy it to the system clipboard:
 <button id="link-copy-and-apply" class="button" onclick="copyToClipboard('link-drag-and-drop');">Copy Link</button>
 <br/>
 <br/>
-Then you can apply it to the installer follows in simple mode:
+Then you can apply it to the installer as follows in simple mode:
 <br/>
 <br/>
 <img id="simple-copy-and-apply" class="thumb" onclick="popup('simple-copy-and-apply');" src="SimpleApplyConfiguration.png" alt="Apply Link to Eclipse Installer in Simple Mode"/>
