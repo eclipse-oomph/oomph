@@ -55,6 +55,7 @@ import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
 import org.eclipse.oomph.util.WorkerPool;
 
+import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
@@ -115,6 +116,16 @@ import java.util.concurrent.TimeUnit;
  */
 public class MarketplaceCatalogGenerator implements IApplication
 {
+  private static final String PROCESSING_ANNOTATION_SOURCE = "Processing";
+
+  private static final String CATEGORIES_ANNOTATION_SOURCE = "http://www.eclipse.org/oomph/setup/Categories";
+
+  private static final String TAGS_ANNOTATION_SOURCE = "http://www.eclipse.org/oomph/setup/Tags";
+
+  private static final String UNSELECTED_ANNOTATION_SOURCE = "Unselected";
+
+  private static final String SELECTED_ANNOTATION_SOURCE = "Selected";
+
   private File outputLocation;
 
   private URI outputLocationURI;
@@ -129,6 +140,7 @@ public class MarketplaceCatalogGenerator implements IApplication
   public Object start(IApplicationContext context) throws Exception
   {
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
+    Map<String, URI> nodeURIs = new LinkedHashMap<String, URI>();
     outputLocation = File.createTempFile("marketplace", "-report");
     boolean skip = false;
     if (arguments != null)
@@ -143,6 +155,10 @@ public class MarketplaceCatalogGenerator implements IApplication
         else if ("-skip".equals(option) || "-s".equals(option))
         {
           skip = true;
+        }
+        if ("-listing".equals(option) || "-l".equals(option))
+        {
+          nodeURIs.put("", URI.createURI(arguments[++i]));
         }
       }
     }
@@ -172,10 +188,15 @@ public class MarketplaceCatalogGenerator implements IApplication
 
       if (!skip)
       {
-        startNew(context);
+        perform(nodeURIs);
       }
 
-      generateReport();
+      if (Boolean.FALSE)
+      {
+        generateReport();
+      }
+
+      generateMinimizedResult();
 
       return null;
     }
@@ -195,41 +216,46 @@ public class MarketplaceCatalogGenerator implements IApplication
     return outputLocationURI.appendSegment("resolved.setup");
   }
 
-  public Object startNew(IApplicationContext context) throws Exception
+  private URI getResolvedMinimizedResourceURI()
+  {
+    return outputLocationURI.appendSegment("resolved-minimized.setup");
+  }
+
+  public void perform(Map<String, URI> nodeURIs) throws Exception
   {
     boolean normalizeP2Tasks = true;
 
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new GenericXMLResourceFactoryImpl());
 
-    long startCategories = System.currentTimeMillis();
-
-    Set<URI> uris = new LinkedHashSet<URI>();
+    long startListings = System.currentTimeMillis();
+    if (nodeURIs.isEmpty())
     {
-      URI baseSearchURI = URI.createURI("https://marketplace.eclipse.org/api/p/search/apachesolr_search/%20");
-      Resource resource = resourceSet.getResource(baseSearchURI, true);
-      EObject documentRoot = resource.getContents().get(0);
-      EObject marketplace = documentRoot.eContents().get(0);
-      for (EObject search : marketplace.eContents())
+      long startCategories = System.currentTimeMillis();
+
+      Set<URI> uris = new LinkedHashSet<URI>();
       {
-        int count = Integer.parseInt((String)get(search, "count"));
-        System.err.println("###" + count);
-        for (int i = 0; i * 10 < count; ++i)
+        URI baseSearchURI = URI.createURI("https://marketplace.eclipse.org/api/p/search/apachesolr_search/%20");
+        Resource resource = resourceSet.getResource(baseSearchURI, true);
+        EObject documentRoot = resource.getContents().get(0);
+        EObject marketplace = documentRoot.eContents().get(0);
+        for (EObject search : marketplace.eContents())
         {
-          URI listingURI = baseSearchURI.appendQuery("page_num=" + i);
-          uris.add(listingURI);
+          int count = Integer.parseInt((String)get(search, "count"));
+          System.err.println("Listing count: " + count);
+          for (int i = 0; i * 10 < count; ++i)
+          {
+            URI listingURI = baseSearchURI.appendQuery("page_num=" + i);
+            uris.add(listingURI);
+          }
         }
+
+        ResourceMirror resourceMirror = new ResourceMirror(resourceSet, 50);
+        resourceMirror.perform(uris);
+        resourceMirror.dispose();
       }
 
-      ResourceMirror resourceMirror = new ResourceMirror(resourceSet, 50);
-      resourceMirror.perform(uris);
-      resourceMirror.dispose();
-    }
+      System.out.println("Gathering " + uris.size() + " categories: " + (startListings - startCategories) / 1000);
 
-    long startListings = System.currentTimeMillis();
-    System.out.println("Gathering " + uris.size() + " categories: " + (startListings - startCategories) / 1000);
-
-    Map<String, URI> nodeURIs = new LinkedHashMap<String, URI>();
-    {
       for (URI listingURI : uris)
       {
         Resource listingResource = resourceSet.getResource(listingURI, true);
@@ -403,7 +429,7 @@ public class MarketplaceCatalogGenerator implements IApplication
             {
               String projectCategoryName = get(nodeCategory, "name");
               String projectCategoryURL = get(nodeCategory, "url");
-              BaseUtil.setAnnotation(project, "http://www.eclipse.org/oomph/setup/Categories", projectCategoryName, projectCategoryURL);
+              BaseUtil.setAnnotation(project, CATEGORIES_ANNOTATION_SOURCE, projectCategoryName, projectCategoryURL);
             }
 
             List<AnyType> nodeTags = get(node, "tags", "tag");
@@ -411,7 +437,7 @@ public class MarketplaceCatalogGenerator implements IApplication
             {
               String projectCategoryName = get(nodeTag, "name");
               String projectCategoryURL = get(nodeTag, "url");
-              BaseUtil.setAnnotation(project, "http://www.eclipse.org/oomph/setup/Tags", projectCategoryName, projectCategoryURL);
+              BaseUtil.setAnnotation(project, TAGS_ANNOTATION_SOURCE, projectCategoryName, projectCategoryURL);
             }
 
             projects.put(id, project);
@@ -482,10 +508,14 @@ public class MarketplaceCatalogGenerator implements IApplication
                 }
               }
 
-              String selected = get(iu, "selected");
-              if (selected != null)
+              if (Boolean.FALSE)
               {
-                requirement.getAnnotations().add(BaseFactory.eINSTANCE.createAnnotation("FALSE".equals(selected) ? "Unselected" : "Selected"));
+                String selected = get(iu, "selected");
+                if (selected != null)
+                {
+                  requirement.getAnnotations()
+                      .add(BaseFactory.eINSTANCE.createAnnotation("FALSE".equals(selected) ? UNSELECTED_ANNOTATION_SOURCE : SELECTED_ANNOTATION_SOURCE));
+                }
               }
             }
 
@@ -702,14 +732,60 @@ public class MarketplaceCatalogGenerator implements IApplication
     test();
     long finishTesting = System.currentTimeMillis();
     System.out.println("Testing : " + (finishTesting - startTesting) / 1000);
-
-    return null;
   }
 
   private void generateReport() throws Exception
   {
     Resource resource = resourceSet.getResource(getResolvedResourceURI(), true);
     generateReport(resource);
+  }
+
+  private void generateMinimizedResult()
+  {
+    Resource resource = resourceSet.getResource(getResolvedResourceURI(), true);
+
+    Set<EObject> objectsToDelete = new HashSet<EObject>();
+    for (Iterator<EObject> it = resource.getAllContents(); it.hasNext();)
+    {
+      EObject eObject = it.next();
+      if (eObject instanceof Annotation)
+      {
+        Annotation annotation = (Annotation)eObject;
+        String source = annotation.getSource();
+        if (TAGS_ANNOTATION_SOURCE.equals(source) || CATEGORIES_ANNOTATION_SOURCE.equals(source) || UNSELECTED_ANNOTATION_SOURCE.equals(source)
+            || SELECTED_ANNOTATION_SOURCE.equals(source) || PROCESSING_ANNOTATION_SOURCE.equals(source))
+        {
+          objectsToDelete.add(annotation);
+        }
+        else if (AnnotationConstants.ANNOTATION_BRANDING_INFO.equals(source) && annotation.eContainer() instanceof Stream)
+        {
+          objectsToDelete.add(annotation);
+        }
+      }
+      else if (eObject instanceof BasicEMap.Entry<?, ?>)
+      {
+        if ("marketplace".equals(((BasicEMap.Entry<?, ?>)eObject).getKey()))
+        {
+          objectsToDelete.add(eObject);
+        }
+      }
+    }
+
+    for (EObject eObject : objectsToDelete)
+    {
+      EcoreUtil.remove(eObject);
+    }
+
+    resource.setURI(getResolvedMinimizedResourceURI());
+
+    try
+    {
+      resource.save(Collections.singletonMap(XMLResource.OPTION_LINE_WIDTH, Integer.MAX_VALUE));
+    }
+    catch (IOException ex)
+    {
+      throw new IORuntimeException(ex);
+    }
   }
 
   @SuppressWarnings("unused")
@@ -766,13 +842,13 @@ public class MarketplaceCatalogGenerator implements IApplication
         {
           for (Stream stream : project.getStreams())
           {
-            String state = BaseUtil.getAnnotation(stream, "Processing", "state");
+            String state = BaseUtil.getAnnotation(stream, PROCESSING_ANNOTATION_SOURCE, "state");
             if ("done".equals(state) || "ignored".equals(state))
             {
               continue;
             }
 
-            BaseUtil.setAnnotation(stream, "Processing", "state", "started");
+            BaseUtil.setAnnotation(stream, PROCESSING_ANNOTATION_SOURCE, "state", "started");
 
             Workspace workspace = SetupContext.createWorkspace();
             EList<Stream> workspaceStreams = workspace.getStreams();
@@ -781,7 +857,7 @@ public class MarketplaceCatalogGenerator implements IApplication
             ProductVersion productVersion = productVersions.get(stream.getName());
             if (productVersion == null)
             {
-              BaseUtil.setAnnotation(stream, "Processing", "state", "ignored");
+              BaseUtil.setAnnotation(stream, PROCESSING_ANNOTATION_SOURCE, "state", "ignored");
               continue;
             }
 
@@ -910,7 +986,7 @@ public class MarketplaceCatalogGenerator implements IApplication
               // ex.printStackTrace();
             }
 
-            BaseUtil.setAnnotation(stream, "Processing", "state", "done");
+            BaseUtil.setAnnotation(stream, PROCESSING_ANNOTATION_SOURCE, "state", "done");
           }
         }
       });
