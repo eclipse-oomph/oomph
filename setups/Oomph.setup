@@ -189,7 +189,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="2018-12"
+      defaultValue="${eclipse.target.platform.latest}"
       storageURI="scope://Workspace"
       label="Target Platform">
     <description>Choose the compatibility level of the target platform</description>
