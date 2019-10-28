@@ -96,17 +96,25 @@ public class SimpleInstallerMenu extends Shell implements Listener
   @Override
   public void setVisible(boolean visible)
   {
-    if (visible)
+    setRedraw(false);
+    try
     {
-      adjustPosition();
+      super.setVisible(visible);
+
+      if (visible)
+      {
+        adjustPosition();
+      }
+
+      if (visible)
+      {
+        setFocus();
+        forceFocus();
+      }
     }
-
-    super.setVisible(visible);
-
-    if (visible)
+    finally
     {
-      setFocus();
-      forceFocus();
+      setRedraw(true);
     }
   }
 
