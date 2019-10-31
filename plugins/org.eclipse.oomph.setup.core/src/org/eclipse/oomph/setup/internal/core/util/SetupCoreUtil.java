@@ -147,6 +147,10 @@ public final class SetupCoreUtil
 
   private static final boolean SKIP_STATS = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_STATS_SKIP);
 
+  private static final URI HTTP_GIT_ECLIPSE_ORG = URI.createURI("http://git.eclipse.org/");
+
+  private static final URI HTTPS_GIT_ECLIPSE_ORG = URI.createURI("https://git.eclipse.org/");
+
   private static volatile Map<URI, URI> archiveRedirections;
 
   private static volatile String archiveExpectedETag;
@@ -640,9 +644,27 @@ public final class SetupCoreUtil
               }
             }
 
-            uriMap.put(sourceURI, targetURI);
+            handlePut(uriMap, sourceURI, targetURI);
           }
         }
+      }
+    }
+  }
+
+  private static void handlePut(Map<URI, URI> redirections, URI source, URI target)
+  {
+    redirections.put(source, target);
+    URI httpGitEclipseOrgRelativeURI = source.deresolve(HTTP_GIT_ECLIPSE_ORG);
+    if (httpGitEclipseOrgRelativeURI != source)
+    {
+      redirections.put(httpGitEclipseOrgRelativeURI.resolve(HTTPS_GIT_ECLIPSE_ORG), target);
+    }
+    else
+    {
+      URI httpsGitEclipseOrgRelativeURI = source.deresolve(HTTPS_GIT_ECLIPSE_ORG);
+      if (httpsGitEclipseOrgRelativeURI != source)
+      {
+        redirections.put(httpGitEclipseOrgRelativeURI.resolve(HTTP_GIT_ECLIPSE_ORG), target);
       }
     }
   }
@@ -661,7 +683,7 @@ public final class SetupCoreUtil
         @Override
         protected void handle(EMap<String, String> details, URI uri, URI archiveEntry)
         {
-          redirections.put(uri, archiveEntry);
+          handlePut(redirections, uri, archiveEntry);
         }
       };
 
