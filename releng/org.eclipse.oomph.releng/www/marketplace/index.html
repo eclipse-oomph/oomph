@@ -285,8 +285,14 @@
       var style = getParameter(window.location.search, 'style');
       if (url != null) {
         style='all';
+        var marketplaceContentMatch = url.match(/https?:\/\/marketplace\.eclipse\.org\/content\/([^\/?#]*)/);
+        if (marketplaceContentMatch != null) {
+          var id = marketplaceContentMatch[1];
+          loadSingleMarketplaceListings(style, url, id);
+        }
+      } else {
+        loadMarketplaceListings(style, url);
       }
-      loadMarketplaceListings(style, url);
     }
 
     function updateHref(id, url, tooltip) {
@@ -386,6 +392,24 @@
       }
     }
 
+    function loadSingleMarketplaceListings(style, url, id) {
+      var request = new XMLHttpRequest();
+      var fetchURL = "fetch.php?id=" + id;
+      request.open('GET', fetchURL, true);
+      request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200 && request.responseText != null && request.responseText.length > 100) {
+
+         var progressTextHTML = document.getElementById('progress-text');
+         progressTextHTML.innerText = 'Analyzing the the catalog';
+
+          var parser = new DOMParser();
+          var xmlDoc = parser.parseFromString(request.responseText, "text/xml");
+          createMarketplaceListings(xmlDoc, style, url);
+        }
+      };
+      request.send();
+    }
+
     function loadMarketplaceListings(style, url) {
       var request = new XMLHttpRequest();
       var requestURL = '../marketplace-listings/marketplace.eclipse.org.setup';
@@ -397,7 +421,7 @@
          progressTextHTML.innerText = 'Analyzing the the catalog';
 
           var parser = new DOMParser();
-          var xmlDoc = parser.parseFromString(request.responseText,"text/xml");
+          var xmlDoc = parser.parseFromString(request.responseText, "text/xml");
           createMarketplaceListings(xmlDoc, style, url);
         }
       };
@@ -601,6 +625,11 @@
   
         sectionTemplate.parentNode.insertBefore(section, sectionTemplate);
         updateMarketplace(prefix, imageURI, siteURI, marketplaceID, title, body, ' and create an installation that includes <b>' + title + '</b>', mainUpdateURL, mainUpdateURLProblem, mainIUs, streamDetails);
+
+        if (url != null) {
+          var button = document.getElementById(prefix + 'marketplace-section_arrow');
+          button.onclick();
+        }
       }
 
       if (problem[0] != null) {
