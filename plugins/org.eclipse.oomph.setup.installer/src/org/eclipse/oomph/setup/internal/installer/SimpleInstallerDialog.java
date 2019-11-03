@@ -119,6 +119,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private static final String MARKET_PLACE_MENU_ITEM_TEXT = "MARKETPLACE" + StringUtil.HORIZONTAL_ELLIPSIS;
 
+  private static final String ASK_A_QUESTION_MENU_ITEM_TEXT = "ASK A QUESTION" + StringUtil.HORIZONTAL_ELLIPSIS;
+
+  private static final String REPORT_A_PROBLEM_MENU_ITEM_TEXT = "REPORT A PROBLEM" + StringUtil.HORIZONTAL_ELLIPSIS;
+
   private static final String ABOUT_MENU_ITEM_TEXT = "ABOUT";
 
   private static final String EXIT_MENU_ITEM_TEXT = "EXIT";
@@ -132,6 +136,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       || !AgentManager.BUNDLE_POOL_LOCATION_NONE.equalsIgnoreCase(PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION));
 
   private static final boolean MARKETPLACE_MENU_ITEM_ENABLED = !"false".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_MARKETPLACE));
+
+  private static final String HOST = PropertiesUtil.getProperty("oomph.setup.installer.host", "https://www.eclipse.org/setups/installer");
+
+  private static final String PROBLEM_REPORT_URL = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_PROBLEM_REPORT, HOST + "/problem/");
+
+  private static final String FORUM_URL = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_FORUM, HOST + "/question/");
 
   private static Font defaultFont;
 
@@ -709,6 +719,36 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         public void widgetSelected(SelectionEvent e)
         {
           OS.INSTANCE.openSystemBrowser("https://marketplace.eclipse.org");
+        }
+      });
+    }
+
+    if (!StringUtil.isEmpty(FORUM_URL))
+    {
+      SimpleInstallerMenu.InstallerMenuItem askAQuestionItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+      askAQuestionItem.setText(ASK_A_QUESTION_MENU_ITEM_TEXT);
+      askAQuestionItem.setToolTipText("Ask a question about the installer");
+      askAQuestionItem.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          OS.INSTANCE.openSystemBrowser(FORUM_URL + "?version=" + URI.encodeQuery(SelfUpdate.getProductVersion(), false));
+        }
+      });
+    }
+
+    if (!StringUtil.isEmpty(PROBLEM_REPORT_URL))
+    {
+      SimpleInstallerMenu.InstallerMenuItem reportAProblemItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+      reportAProblemItem.setText(REPORT_A_PROBLEM_MENU_ITEM_TEXT);
+      reportAProblemItem.setToolTipText("Report a problem with the installer");
+      reportAProblemItem.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          OS.INSTANCE.openSystemBrowser(PROBLEM_REPORT_URL + "?version=" + URI.encodeQuery(SelfUpdate.getProductVersion(), false));
         }
       });
     }
