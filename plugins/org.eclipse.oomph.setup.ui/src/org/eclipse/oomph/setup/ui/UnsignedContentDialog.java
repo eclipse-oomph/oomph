@@ -119,11 +119,6 @@ public class UnsignedContentDialog extends AbstractConfirmDialog
       {
         return Confirmer.ACCEPT;
       }
-
-      if (userPolicy == UnsignedPolicy.DECLINE)
-      {
-        return Confirmer.DECLINE;
-      }
     }
 
     return new AbstractDialogConfirmer()

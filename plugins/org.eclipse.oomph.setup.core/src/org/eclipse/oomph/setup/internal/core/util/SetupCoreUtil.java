@@ -867,11 +867,6 @@ public final class SetupCoreUtil
         return CertificateConfirmer.ACCEPT;
       }
 
-      if (userPolicy == CertificatePolicy.DECLINE)
-      {
-        return CertificateConfirmer.DECLINE;
-      }
-
       return new CertificateConfirmer()
       {
         @Override
