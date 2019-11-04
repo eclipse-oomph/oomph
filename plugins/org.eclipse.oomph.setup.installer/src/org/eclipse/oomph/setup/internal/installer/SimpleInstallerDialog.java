@@ -197,7 +197,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   public SimpleInstallerDialog(Display display, Installer installer, boolean restarted)
   {
-    super(display, OS.INSTANCE.isMac() ? SWT.TOOL : SWT.NO_TRIM, getDefaultSize(display).x, getDefaultSize(display).y);
+    super(display, SWT.NO_TRIM, getDefaultSize(display).x, getDefaultSize(display).y);
     setMinimumSize(385, 75);
     this.installer = installer;
     this.restarted = restarted;
