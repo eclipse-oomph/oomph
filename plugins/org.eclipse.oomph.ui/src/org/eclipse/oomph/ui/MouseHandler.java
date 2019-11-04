@@ -68,7 +68,11 @@ public abstract class MouseHandler
     {
       if (e.button == 1)
       {
-        start = new Point(e.x, e.y);
+        if (e.widget instanceof Control)
+        {
+          Control control = (Control)e.widget;
+          start = getStart(control, e.x, e.y);
+        }
       }
     }
 
@@ -115,6 +119,11 @@ public abstract class MouseHandler
   {
     Class<? extends Control> c = control.getClass();
     return c == Composite.class || c == StackComposite.class || control instanceof Shell || c == Label.class || c == Link.class;
+  }
+
+  protected Point getStart(Control control, int x, int y)
+  {
+    return new Point(x, y);
   }
 
   protected void beforeStart(Control control, int x, int y)

@@ -27,6 +27,7 @@ import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -144,6 +145,44 @@ public abstract class AbstractSimpleDialog extends Shell
       protected boolean shouldHookControl(Control control)
       {
         return super.shouldHookControl(control) || control instanceof SimpleInstallerPage;
+      }
+
+      protected Point getMainPoint(Control control, int x, int y)
+      {
+        if (control != AbstractSimpleDialog.this)
+        {
+          Point mainPoint = AbstractSimpleDialog.this.toControl(control.toDisplay(x, y));
+          return mainPoint;
+        }
+
+        return new Point(x, y);
+      }
+
+      @Override
+      protected Point getStart(Control control, int x, int y)
+      {
+        return getMainPoint(control, x, y);
+      }
+
+      @Override
+      protected void beforeStart(Control control, int x, int y)
+      {
+        Point mainPoint = getMainPoint(control, x, y);
+        super.beforeStart(AbstractSimpleDialog.this, mainPoint.x, mainPoint.y);
+      }
+
+      @Override
+      protected void afterStart(Control control, Point start, int x, int y)
+      {
+        Point mainPoint = getMainPoint(control, x, y);
+        super.afterStart(AbstractSimpleDialog.this, start, mainPoint.x, mainPoint.y);
+      }
+
+      @Override
+      protected void afterEnd(Control control, Point start, int x, int y)
+      {
+        Point mainPoint = getMainPoint(control, x, y);
+        super.afterEnd(AbstractSimpleDialog.this, start, mainPoint.x, mainPoint.y);
       }
     };
 
