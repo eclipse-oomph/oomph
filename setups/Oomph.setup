@@ -307,15 +307,15 @@
           <repository
               url="http://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
           <repository
-              url="http://download.eclipse.org/mylyn/snapshots/3.25"/>
+              url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
           <repository
-              url="http://download.eclipse.org/technology/m2e/snapshots/1.9.0/latest"/>
+              url="http://download.eclipse.org/technology/m2e/snapshots"/>
           <repository
               url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
               url="http://download.eclipse.org/technology/swtbot/snapshots"/>
           <repository
-              url="http://download.eclipse.org/webtools/repository/photon"/>
+              url="http://download.eclipse.org/webtools/repository/latest"/>
         </repositoryList>
         <repositoryList
             name="2019-09">
@@ -746,7 +746,7 @@
     </setupTask>
     <setupTask
         xsi:type="mylyn:MylynBuildsTask"
-        serverURL="https://hudson.eclipse.org/oomph"
+        serverURL="https://ci.eclipse.org/oomph"
         userID="${bugzilla.id}"
         password="${eclipse.user.password}">
       <buildPlan
