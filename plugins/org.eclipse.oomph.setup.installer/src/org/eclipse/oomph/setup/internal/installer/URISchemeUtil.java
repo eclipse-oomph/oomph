@@ -123,7 +123,7 @@ public final class URISchemeUtil
   public static String getSelfLauncher()
   {
     String eclipseLauncher = OPERATING_SYSTEM_REGISTRATION.getEclipseLauncher();
-    return StringUtil.isEmpty(eclipseLauncher) ? "" : eclipseLauncher;
+    return StringUtil.isEmpty(eclipseLauncher) || eclipseLauncher.startsWith("file:") ? "" : eclipseLauncher;
   }
 
   /**
