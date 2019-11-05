@@ -165,7 +165,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private static final String TEXT_README = "show readme file";
 
-  private static final String TEXT_SYSTEM_EXPLOROR = "open in system explorer";
+  private static final String TEXT_SYSTEM_EXPLORER = "open in system explorer";
 
   private static final String TEXT_KEEP = "keep installer";
 
@@ -668,13 +668,17 @@ public class SimpleVariablePage extends SimpleInstallerPage
     });
     showReadmeButton.setToolTipText("Show the readme file of the installed product");
 
-    openInSystemExplorerButton = createButton(afterInstallComposite, TEXT_SYSTEM_EXPLOROR, null, null);
+    openInSystemExplorerButton = createButton(afterInstallComposite, TEXT_SYSTEM_EXPLORER, null, null);
     openInSystemExplorerButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
       {
         String launchLocation = getProductInstallFolder().toURI().toString();
+        if (OS.INSTANCE.isMac())
+        {
+          launchLocation = launchLocation.replaceAll("/[^/]+.app/$", "/");
+        }
         OS.INSTANCE.openSystemBrowser(launchLocation);
       }
     });
@@ -1013,6 +1017,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
     String productFolderName = SetupTaskPerformer.getProductFolderName(selectedProductVersion, OS.INSTANCE);
     String relativeProductFolderName = OS.INSTANCE.getRelativeProductFolder(productFolderName);
     File result = new File(getEffectiveInstallFolder(), relativeProductFolderName);
+    if (OS.INSTANCE.isMac())
+    {
+      return result.getParentFile().getParentFile();
+    }
+
     return result;
   }
 
