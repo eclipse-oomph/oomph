@@ -158,8 +158,6 @@ public class SelfUpdate
           {
             public void run()
             {
-              callback.information(false, "Updates were installed. Press OK to restart.");
-
               if (successRunnable != null)
               {
                 successRunnable.run();
