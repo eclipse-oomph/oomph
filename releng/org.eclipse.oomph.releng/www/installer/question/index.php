@@ -115,7 +115,7 @@ $html = <<<EOHTML
     </p>
     Use the $eclipse_installer's <span style="font-variant: small-caps;">Bundle Pools...</span> menu item to manage where this pool is physically located on disk; this location can become large.
     The <span style="font-variant: small-caps;">Bundle Pool Management</span> dialog supports garbage collecting of unused artifacts,
-    i.e., if you delete an installation, the artifact it uses can potentially be removed from disk.
+    i.e., if you delete an installation, the artifacts it uses can potentially be removed from disk.
     In addition, if some artifact becomes corrupted, or if a corrupted artifact is downloaded from some mirror site, this dialog can be used to detect the damage and to repair it.
     </p>
 
