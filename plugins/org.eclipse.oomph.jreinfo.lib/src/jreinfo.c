@@ -94,7 +94,7 @@ findJavaHome (JRE* jres)
     if (findJRE (jres, javaHome) == NULL)
     {
       JRE* jre = malloc (sizeof(JRE));
-      jre->javaHome = javaHome;
+      jre->javaHome = _tcsdup (javaHome);
       jre->jdk = 0;
       jre->next = jres;
       jres = jre;
@@ -108,6 +108,7 @@ JRE*
 findAllJREs ()
 {
   JRE* jres = NULL;
+  jres = findJavaHome (jres);
   jres = findJREs (jres, _T("Software\\Wow6432Node\\JavaSoft\\Java Development Kit"), 1);
   jres = findJREs (jres, _T("Software\\Wow6432Node\\JavaSoft\\JDK"), 1);
   jres = findJREs (jres, _T("Software\\Wow6432Node\\JavaSoft\\Java Runtime Environment"), 0);
@@ -116,6 +117,5 @@ findAllJREs ()
   jres = findJREs (jres, _T("Software\\JavaSoft\\JDK"), 1);
   jres = findJREs (jres, _T("Software\\JavaSoft\\Java Runtime Environment"), 0);
   jres = findJREs (jres, _T("Software\\JavaSoft\\JRE"), 0);
-  jres = findJavaHome (jres);
   return jres;
 }

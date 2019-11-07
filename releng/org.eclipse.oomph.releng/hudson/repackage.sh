@@ -142,11 +142,13 @@ for f in *.zip; do
     extractor=eclipse-inst-win$bitness.exe
     marker=$GIT/plugins/org.eclipse.oomph.extractor/marker.txt
 
-    cp -a /opt/public/tools/oomph/extractor-$bitness.exe extractor.exe
-    zip -9 -qq $PRODUCTS/$f extractor.exe
+    cp -a $GIT/plugins/org.eclipse.oomph.extractor/extractor-$bitness.exe extractor.exe
+#    cp -a /opt/public/tools/oomph/extractor-$bitness.exe extractor.exe
+#    zip -9 -qq $PRODUCTS/$f extractor.exe
 
     echo "  Creating $extractor"
-    cat /opt/public/tools/oomph/extractor-$bitness.exe \
+#    cat /opt/public/tools/oomph/extractor-$bitness.exe 
+    cat extractor.exe \
       $marker \
       $GIT/plugins/org.eclipse.oomph.extractor.lib/target/org.eclipse.oomph.extractor.lib-*-SNAPSHOT.jar \
       $marker \
