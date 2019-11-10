@@ -609,7 +609,7 @@ public abstract class OomphPlugin extends EMFPlugin
 
   public static String getBuildID(Bundle bundle)
   {
-    URL url = bundle.getResource("about.mappings");
+    URL url = bundle.getEntry("about.mappings");
     if (url != null)
     {
       InputStream source = null;
