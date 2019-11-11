@@ -17,7 +17,7 @@ import java.util.Properties;
 /**
  * @author Eike Stepper
  */
-public final class PropertiesUpdater extends IO
+public final class PropertiesUpdater
 {
   public static void main(String[] args) throws Exception
   {
@@ -36,7 +36,7 @@ public final class PropertiesUpdater extends IO
     }
     finally
     {
-      close(targetInputStream);
+      targetInputStream.close();
     }
 
     FileOutputStream targetOutputStream = new FileOutputStream(target);
@@ -48,7 +48,7 @@ public final class PropertiesUpdater extends IO
     }
     finally
     {
-      close(targetOutputStream);
+      targetOutputStream.close();
     }
   }
 }
