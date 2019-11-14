@@ -2,8 +2,8 @@
 // This PHP script reduces the project catalog report to a single project matching the id query parameter.
 
 header('Content-type: application/xml');
-// ini_set('display_errors', 'On');
-// error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 'On');
+error_reporting(E_ALL | E_STRICT);
 
 // Parse the report.
 $xmlDoc = new DOMDocument();
