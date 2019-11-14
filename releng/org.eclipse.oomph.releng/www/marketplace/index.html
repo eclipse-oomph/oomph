@@ -272,6 +272,7 @@
       updateScheme('scheme', scheme);
 
       var url = getParameter(window.location.search, 'url');
+      var nodeID = getParameter(window.location.search, 'id');
 
       var os = getOS();
       if (os == 'win') {
@@ -283,12 +284,15 @@
       }
 
       var style = getParameter(window.location.search, 'style');
-      if (url != null) {
+      if (nodeID != null) {
+        style='all';
+        loadSingleMarketplaceListings(style, url, null, nodeID);
+      } else if (url != null) {
         style='all';
         var marketplaceContentMatch = url.match(/https?:\/\/marketplace\.eclipse\.org\/content\/([^\/?#]*)/);
         if (marketplaceContentMatch != null) {
           var id = marketplaceContentMatch[1];
-          loadSingleMarketplaceListings(style, url, id);
+          loadSingleMarketplaceListings(style, url, id, nodeID);
         }
       } else {
         loadMarketplaceListings(style, url);
@@ -392,9 +396,9 @@
       }
     }
 
-    function loadSingleMarketplaceListings(style, url, id) {
+    function loadSingleMarketplaceListings(style, url, id, nodeID) {
       var request = new XMLHttpRequest();
-      var fetchURL = "fetch.php?id=" + id;
+      var fetchURL = "fetch.php?id=" + (id != null ? id : nodeID);
       request.open('GET', fetchURL, true);
       request.onreadystatechange = function () {
         if (request.readyState === 4 && request.status === 200 && request.responseText != null && request.responseText.length > 100) {

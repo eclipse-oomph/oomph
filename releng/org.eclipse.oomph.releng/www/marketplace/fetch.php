@@ -22,8 +22,21 @@ if ($result === FALSE) {
     if ($child->nodeType == XML_ELEMENT_NODE) {
       $name = $child->getAttribute("name");
       $decodedName = urldecode($name);
-      // If the project element name doesn't match, remove it and the following text node from the document.
-      if ($id != $decodedName) {
+
+      // Also look for the marketplaceID for this listing.
+      $annotations = $child->getElementsByTagName("annotation");
+      $details = $annotations[0]->getElementsByTagName("detail");
+      $nodeID = null;
+      foreach ($details as $detail) {
+        if ($detail->getAttribute("key") == "marketplaceID") {
+          $value = $detail->getElementsByTagName("value")[0];
+          $nodeID = $detail->getElementsByTagName("value")[0]->nodeValue;
+          break;
+        }
+      }
+
+      // If the project name doesn't match and the its marketplaceID doesn't match, remove it and the following text node from the document.
+      if ($id != $decodedName && $id != $nodeID) {
         $target = $child;
         $child = $child->nextSibling;
         $root->removeChild($target);
