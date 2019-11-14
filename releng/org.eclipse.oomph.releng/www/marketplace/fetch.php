@@ -2,8 +2,8 @@
 // This PHP script reduces the project catalog report to a single project matching the id query parameter.
 
 header('Content-type: application/xml');
-ini_set('display_errors', 'On');
-error_reporting(E_ALL | E_STRICT);
+// ini_set('display_errors', 'On');
+// error_reporting(E_ALL | E_STRICT);
 
 // Parse the report.
 $xmlDoc = new DOMDocument();
@@ -25,12 +25,12 @@ if ($result === FALSE) {
 
       // Also look for the marketplaceID for this listing.
       $annotations = $child->getElementsByTagName("annotation");
-      $details = $annotations[0]->getElementsByTagName("detail");
+      $details = $annotations->item(0)->getElementsByTagName("detail");
       $nodeID = null;
       foreach ($details as $detail) {
         if ($detail->getAttribute("key") == "marketplaceID") {
-          $value = $detail->getElementsByTagName("value")[0];
-          $nodeID = $detail->getElementsByTagName("value")[0]->nodeValue;
+          $value = $detail->getElementsByTagName("value")->item(0);
+          $nodeID = $detail->getElementsByTagName("value")->item(0)->nodeValue;
           break;
         }
       }
