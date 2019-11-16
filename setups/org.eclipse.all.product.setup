@@ -199,6 +199,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="status">
+        <value>current</value>
+      </detail>
+      <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/2019-09/r</value>
       </detail>
@@ -256,6 +260,10 @@
       requiredJavaVersion="1.8">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="status">
+        <value>outdated</value>
+      </detail>
       <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/2019-06/r</value>
@@ -315,6 +323,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="status">
+        <value>outdated</value>
+      </detail>
+      <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/2019-03/r</value>
       </detail>
@@ -370,6 +382,10 @@
       requiredJavaVersion="1.8">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="status">
+        <value>outdated</value>
+      </detail>
       <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/2018-12/r</value>
@@ -427,6 +443,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="status">
+        <value>outdated</value>
+      </detail>
+      <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/2018-09/r</value>
       </detail>
@@ -482,6 +502,10 @@
       requiredJavaVersion="1.8">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="status">
+        <value>outdated</value>
+      </detail>
       <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/photon/r</value>
@@ -539,6 +563,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="status">
+        <value>outdated</value>
+      </detail>
+      <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a</value>
       </detail>
@@ -594,6 +622,10 @@
       requiredJavaVersion="1.8">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="status">
+        <value>outdated</value>
+      </detail>
       <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/neon/3</value>
@@ -651,6 +683,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="status">
+        <value>outdated</value>
+      </detail>
+      <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/mars/2</value>
       </detail>
@@ -705,6 +741,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="status">
+        <value>outdated</value>
+      </detail>
+      <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/luna/sr2</value>
       </detail>
@@ -756,6 +796,10 @@
       requiredJavaVersion="1.6">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="status">
+        <value>outdated</value>
+      </detail>
       <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2</value>
@@ -810,6 +854,10 @@
       requiredJavaVersion="1.5">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="status">
+        <value>outdated</value>
+      </detail>
       <detail
           key="siteURI">
         <value>https://www.eclipse.org/downloads/packages/release/juno/sr2</value>

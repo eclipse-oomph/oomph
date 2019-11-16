@@ -354,6 +354,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     enablePool(SHOW_BUNDLE_POOL_UI && PREF_POOL_ENABLED.get(true));
 
     updateAvailable(false);
+
+    titleComposite.layout(true);
   }
 
   private void indexLoaded(Index index)

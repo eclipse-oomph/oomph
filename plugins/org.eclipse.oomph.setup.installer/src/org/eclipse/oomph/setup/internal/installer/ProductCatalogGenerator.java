@@ -129,8 +129,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final List<String> PRODUCT_IDS = Arrays
       .asList(new String[] { "epp.package.java", "epp.package.jee", "epp.package.cpp", "epp.package.javascript", "epp.package.php", "epp.package.committers",
-          "epp.package.dsl", "epp.package.reporting", "epp.package.modeling", "epp.package.android", "epp.package.rcp", "epp.package.testing",
-          "epp.package.parallel", "epp.package.automotive", "epp.package.scout", "epp.package.rust", "org.eclipse.platform.ide", "org.eclipse.sdk.ide" });
+          "epp.package.dsl", "epp.package.reporting", "epp.package.modeling", "epp.package.rcp", "epp.package.testing", "epp.package.parallel",
+          "epp.package.scout", "epp.package.rust", "org.eclipse.platform.ide", "org.eclipse.sdk.ide", "epp.package.android", "epp.package.automotive" });
 
   private static final String ALL_PRODUCT_ID = "all";
 
@@ -179,65 +179,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private final String[] TRAINS = getTrains();
 
-  private final String LATEST_TRAIN = TRAINS[TRAINS.length - 1];
-
   public Object start(IApplicationContext context) throws Exception
   {
-    // if (true)
-    // {
-    // String completeLocation = "http://download.eclipse.org/releases/mars/201506241002";
-    //
-    // Product product = SetupFactory.eINSTANCE.createProduct();
-    // product.setName("org.eclipse.complete");
-    // product.setLabel("Eclipse IDE Complete");
-    //
-    // ProductVersion productVersion = SetupFactory.eINSTANCE.createProductVersion();
-    // productVersion.setName("mars");
-    // productVersion.setLabel("Mars");
-    // product.getVersions().add(productVersion);
-    //
-    // P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
-    // p2Task.setLabel("Complete");
-    // productVersion.getSetupTasks().add(p2Task);
-    //
-    // Repository completeRepository = P2Factory.eINSTANCE.createRepository();
-    // completeRepository.setURL(completeLocation);
-    // p2Task.getRepositories().add(completeRepository);
-    //
-    // IMetadataRepositoryManager manager = getMetadataRepositoryManager();
-    // IMetadataRepository repository = manager.loadRepository(new URI(completeLocation), null);
-    //
-    // Set<IInstallableUnit> ius = RootAnalyzer.getRootUnits(repository, null);
-    // List<IInstallableUnit> rootUnits = new ArrayList<IInstallableUnit>(ius);
-    // Collections.sort(rootUnits, new Comparator<IInstallableUnit>()
-    // {
-    // public int compare(IInstallableUnit iu1, IInstallableUnit iu2)
-    // {
-    // return iu1.getId().compareTo(iu2.getId());
-    // }
-    // });
-    //
-    // for (IInstallableUnit rootUnit : rootUnits)
-    // {
-    // Requirement requirement = P2Factory.eINSTANCE.createRequirement();
-    // requirement.setName(rootUnit.getId());
-    // requirement.setMatchExpression(rootUnit.getFilter());
-    // p2Task.getRequirements().add(requirement);
-    // }
-    //
-    // System.out.println();
-    // System.out.println();
-    //
-    // Resource resource = new BaseResourceFactoryImpl().createResource(URI.createURI("org.eclipse.complete.setup"));
-    // resource.getContents().add(product);
-    // resource.save(System.out, null);
-    //
-    // return null;
-    // }
-
-    // luna
-    // -staging mars staging-epp staging-train
-
     System.out.println("user.home=" + System.getProperty("user.home"));
 
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
@@ -367,6 +310,12 @@ public class ProductCatalogGenerator implements IApplication
   {
     String[] trains = getTrains();
     return trains[trains.length - 1];
+  }
+
+  private String getMostRecentReleasedTrain()
+  {
+    String[] trains = getTrains();
+    return trains[trains.length - (isLatestReleased() ? 1 : 2)];
   }
 
   private String[] getRootIUs()
@@ -582,7 +531,8 @@ public class ProductCatalogGenerator implements IApplication
     Version latestVersion = latestTrainAndVersion.getVersion();
     Map<String, Set<IInstallableUnit>> latestTrainsIUs = latestTrainAndVersion.getIUs();
 
-    boolean latestUnreleased = latestTrain == LATEST_TRAIN && !isLatestReleased();
+    boolean discontinued = latestTrain != getMostRecentTrain() && latestTrain != getMostRecentReleasedTrain();
+    boolean latestUnreleased = latestTrain == getMostRecentTrain() && !isLatestReleased();
 
     StringBuilder log = new StringBuilder();
     log.append(label).append(" (").append(id).append(')').append('\n');
@@ -590,7 +540,7 @@ public class ProductCatalogGenerator implements IApplication
     Product product = SetupFactory.eINSTANCE.createProduct();
     product.setName(id);
     product.setLabel(label);
-    attachBrandingInfos(log, product);
+    attachBrandingInfos(log, product, discontinued);
     products.put(id, product);
 
     if (ALL_PRODUCT_ID.equals(id) || ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(id))
@@ -1224,6 +1174,18 @@ public class ProductCatalogGenerator implements IApplication
     productVersion.setLabel(label);
     product.getVersions().add(productVersion);
 
+    if (train == getMostRecentReleasedTrain() && !name.contains("latest"))
+    {
+      BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_STATUS,
+          AnnotationConstants.VALUE_STATUS_CURRENT);
+    }
+    else if (train != getMostRecentTrain() && train != getMostRecentReleasedTrain()
+        && BaseUtil.getAnnotation(product, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_STATUS) == null)
+    {
+      BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_STATUS,
+          AnnotationConstants.VALUE_STATUS_OUTDATED);
+    }
+
     String productName = product.getName();
     VersionRange versionRange = createVersionRange(version, versionSegment);
 
@@ -1613,9 +1575,15 @@ public class ProductCatalogGenerator implements IApplication
     return Character.toString(Character.toUpperCase(train.charAt(0))) + train.substring(1);
   }
 
-  private void attachBrandingInfos(final StringBuilder log, final Product product)
+  private void attachBrandingInfos(final StringBuilder log, final Product product, boolean discontinued)
   {
     String name = product.getName();
+
+    if (discontinued)
+    {
+      getBrandingInfos(product).put(AnnotationConstants.KEY_STATUS, AnnotationConstants.VALUE_STATUS_DISCONTINUED);
+    }
+
     if (name.equals("org.eclipse.platform.ide"))
     {
       product.setDescription("This package contains the absolute minimal IDE, suitable only as a base for installing other tools.");

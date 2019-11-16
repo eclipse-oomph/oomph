@@ -61,7 +61,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
     final ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.HORIZONTAL);
 
     final ToolItem toolItem = new ToolItem(toolBar, SWT.CHECK);
-    toolItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("progress0"));
+    toolItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("progress0.png"));
     toolItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -100,7 +100,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
     }
 
     // Create an animator to indicate the a setup is being performed, and to provide feedback once it's done.
-    final ButtonAnimator buttonAnimator = new ButtonAnimator(SetupEditorPlugin.INSTANCE, toolItem, "progress", 7, true)
+    final ButtonAnimator buttonAnimator = new ButtonAnimator(SetupEditorPlugin.INSTANCE, toolItem, "progress.png", 7, true)
     {
       private boolean done;
 
@@ -154,29 +154,29 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
               {
                 case IStatus.OK:
                 {
-                  statusImage = "progress_success";
+                  statusImage = "progress_success.png";
                   delayedDispose(shell);
                   break;
                 }
                 case IStatus.WARNING:
                 {
-                  statusImage = "progress_warning";
+                  statusImage = "progress_warning.png";
                   break;
                 }
                 case IStatus.ERROR:
                 {
-                  statusImage = "progress_error";
+                  statusImage = "progress_error.png";
                   break;
                 }
                 case IStatus.CANCEL:
                 {
-                  statusImage = "progress_cancel";
+                  statusImage = "progress_cancel.png";
                   delayedDispose(shell);
                   break;
                 }
                 default:
                 {
-                  statusImage = "progress";
+                  statusImage = "progress.png";
                   break;
                 }
               }
@@ -188,7 +188,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
 
               for (int i = 0; i < images.length; ++i)
               {
-                images[i] = SetupEditorPlugin.INSTANCE.getSWTImage(i >= 4 ? statusImage : "progress");
+                images[i] = SetupEditorPlugin.INSTANCE.getSWTImage(i >= 4 ? statusImage : "progress.png");
               }
 
               done = true;

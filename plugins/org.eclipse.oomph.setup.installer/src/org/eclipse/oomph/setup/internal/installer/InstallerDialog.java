@@ -167,7 +167,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
   @Override
   protected void createToolItemsForToolBar(ToolBar toolBar)
   {
-    ToolItem networkProxySettingsToolItem = createToolItem(toolBar, "install_prefs_proxy", "Network proxy settings");
+    ToolItem networkProxySettingsToolItem = createToolItem(toolBar, "install_prefs_proxy.png", "Network proxy settings");
     networkProxySettingsToolItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -179,7 +179,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     });
     AccessUtil.setKey(networkProxySettingsToolItem, "proxy");
 
-    ToolItem sshSettingsToolItem = createToolItem(toolBar, "install_prefs_ssh2", "SSH2 settings");
+    ToolItem sshSettingsToolItem = createToolItem(toolBar, "install_prefs_ssh2.png", "SSH2 settings");
     sshSettingsToolItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -191,7 +191,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     });
     AccessUtil.setKey(sshSettingsToolItem, "ssh");
 
-    ToolItem simpleToolItem = createToolItem(toolBar, "simple", "Switch to simple mode");
+    ToolItem simpleToolItem = createToolItem(toolBar, "simple.png", "Switch to simple mode");
     simpleToolItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -226,8 +226,8 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     });
     AccessUtil.setKey(simpleToolItem, "web-links");
 
-    updateToolItem = createToolItem(toolBar, "install_update0", "Update");
-    updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching0"));
+    updateToolItem = createToolItem(toolBar, "install_update0.png", "Update");
+    updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching0.png"));
     updateToolItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -323,7 +323,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
           if (updateSearching)
           {
             updateToolItem.setToolTipText("Checking for updates...");
-            updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching" + icon + ""));
+            updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching" + icon + ".png"));
             updateToolItem.setEnabled(false);
           }
           else if (updateError != null)
@@ -331,19 +331,19 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
             StringBuilder builder = new StringBuilder();
             formatStatus(builder, "", updateError);
             updateToolItem.setToolTipText(builder.toString());
-            updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_error"));
+            updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_error.png"));
             updateToolItem.setEnabled(true);
           }
           else if (updateResolution != null)
           {
             updateToolItem.setToolTipText("Install available updates");
-            updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update" + icon + ""));
+            updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update" + icon + ".png"));
             updateToolItem.setEnabled(true);
           }
           else
           {
             updateToolItem.setToolTipText("No updates available");
-            updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update_disabled"));
+            updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update_disabled.png"));
             updateToolItem.setEnabled(false);
           }
         }

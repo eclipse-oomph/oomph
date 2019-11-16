@@ -283,7 +283,7 @@
                label="Setup">
             <command
                   commandId="org.eclipse.oomph.setup.editor.performDropdown"
-                  icon="icons/update.gif"
+                  icon="icons/update.png"
                   id="org.eclipse.oomph.setup.perform.menu"
                   style="pulldown"
                   tooltip="Perform Setup Tasks...">
@@ -369,13 +369,13 @@
             locationURI="menu:org.eclipse.oomph.setup.perform.menu">
          <command
                commandId="org.eclipse.oomph.setup.editor.perform"
-               icon="icons/update.gif"
+               icon="icons/update.png"
                label="Perform Setup Tasks..."
                style="push">
          </command>
          <command
                commandId="org.eclipse.oomph.setup.editor.perform.startup"
-               icon="icons/update.gif"
+               icon="icons/update.png"
                label="Perform Setup Tasks (Startup)..."
                style="push">
             <visibleWhen
@@ -434,7 +434,7 @@
             locationURI="menu:help?before=org.eclipse.equinox.p2.ui.sdk.update">
          <command
                commandId="org.eclipse.oomph.setup.editor.perform"
-               icon="icons/update_gear.gif"
+               icon="icons/update_gear.png"
                label="Perform Setup Tasks..."
                style="push">
          </command>

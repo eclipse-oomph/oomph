@@ -25,6 +25,14 @@ public final class AnnotationConstants
 
   public static final String KEY_SITE_URI = "siteURI";
 
+  public static final String KEY_STATUS = "status";
+
+  public static final String VALUE_STATUS_OUTDATED = "outdated";
+
+  public static final String VALUE_STATUS_CURRENT = "current";
+
+  public static final String VALUE_STATUS_DISCONTINUED = "discontinued";
+
   public static final String SHORTCUT = "shortcut";
 
   public static final String ANNOTATION_STATS_SENDING = "http://www.eclipse.org/oomph/setup/StatsSending";

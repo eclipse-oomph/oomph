@@ -381,7 +381,7 @@ public class HelpSupport
   {
     public HelpAnimator(ToolItem helpButton)
     {
-      super(UIPlugin.INSTANCE, helpButton, "help", 10);
+      super(UIPlugin.INSTANCE, helpButton, "help.png", 10);
     }
 
     @Override

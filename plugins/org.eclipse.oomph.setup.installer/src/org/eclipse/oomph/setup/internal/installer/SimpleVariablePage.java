@@ -847,12 +847,23 @@ public class SimpleVariablePage extends SimpleInstallerPage
   {
     ProductVersion defaultProductVersion = ProductPage.getDefaultProductVersion(installer.getCatalogManager(), product);
     List<ProductVersion> validProductVersions = ProductPage.getValidProductVersions(product, PRODUCT_VERSION_FILTER);
-    for (ProductVersion productVersion : validProductVersions)
+    if (defaultProductVersion != null && AnnotationConstants.VALUE_STATUS_OUTDATED
+        .equals(BaseUtil.getAnnotation(defaultProductVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_STATUS)))
     {
-      if (defaultProductVersion == null || !validProductVersions.contains(defaultProductVersion))
+      for (ProductVersion productVersion : validProductVersions)
       {
-        defaultProductVersion = productVersion;
+        if (AnnotationConstants.VALUE_STATUS_CURRENT
+            .equals(BaseUtil.getAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_STATUS)))
+        {
+          defaultProductVersion = productVersion;
+          break;
+        }
       }
+    }
+
+    if ((defaultProductVersion == null || !validProductVersions.contains(defaultProductVersion)) && !validProductVersions.isEmpty())
+    {
+      defaultProductVersion = validProductVersions.get(0);
     }
 
     if (defaultProductVersion != null)

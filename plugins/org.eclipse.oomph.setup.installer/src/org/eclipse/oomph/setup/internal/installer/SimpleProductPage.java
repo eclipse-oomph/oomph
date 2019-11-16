@@ -11,6 +11,8 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.base.util.BaseUtil;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
@@ -42,11 +44,13 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
@@ -633,6 +637,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
     private static final Color COLOR_TITLE = UIUtil.getEclipseThemeColor();
 
+    private static final Color COLOR_TITLE_DISCONTINUED = UIUtil.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
+
     private static final Color COLOR_DESCRIPTION = SetupInstallerPlugin.getColor(85, 85, 85);
 
     private static final Color COLOR_SELECTION = SetupInstallerPlugin.getColor(174, 187, 221);
@@ -725,9 +731,22 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       this.product = product;
       if (product != null)
       {
-        Image image = SetupWizard.getBrandingImage(product);
-        logo.setImage(image);
         title.setText(product.getLabel());
+
+        Image image = SetupWizard.getBrandingImage(product);
+        if (AnnotationConstants.VALUE_STATUS_DISCONTINUED
+            .equals(BaseUtil.getAnnotation(product, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_STATUS)))
+        {
+          title.setForeground(COLOR_TITLE_DISCONTINUED);
+          description.setForeground(COLOR_TITLE_DISCONTINUED);
+
+          logo.setImage(ExtendedImageRegistry.INSTANCE.getImage(ImageDescriptor.createWithFlags(ImageDescriptor.createFromImage(image), SWT.IMAGE_DISABLE)));
+          logo.setDecoratorImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/discontinued.png"));
+        }
+        else
+        {
+          logo.setImage(image);
+        }
 
         GC gc = new GC(description);
 
@@ -834,20 +853,15 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
      */
     public static final class Logo extends Composite implements PaintListener
     {
-      private static final int HEIGHT = 64;
-
       private Image image;
 
-      private int imageX;
-
-      private int imageY;
+      private Image decoratorImage;
 
       public Logo(Composite parent)
       {
         super(parent, SWT.DOUBLE_BUFFERED);
 
         addPaintListener(this);
-        setSize(HEIGHT, HEIGHT);
       }
 
       public Image getImage()
@@ -858,10 +872,16 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       public void setImage(Image image)
       {
         this.image = image;
+      }
 
-        ImageData imageData = image.getImageData();
-        imageX = (HEIGHT - imageData.width) / 2;
-        imageY = (HEIGHT - imageData.height) / 2;
+      public Image getDecoratorImage()
+      {
+        return decoratorImage;
+      }
+
+      public void setDecoratorImage(Image decoratorImage)
+      {
+        this.decoratorImage = decoratorImage;
       }
 
       public void paintControl(PaintEvent e)
@@ -879,7 +899,23 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
         if (image != null)
         {
-          gc.drawImage(image, imageX, imageY);
+          ImageData imageData = image.getImageData();
+          int destWidth = rect.width * 2 / 3;
+          int destHeight = rect.height * 2 / 3;
+          int imageX = (rect.width - destWidth + 1) / 2;
+          int imageY = (rect.height - destHeight + 1) / 2;
+          gc.drawImage(image, 0, 0, imageData.width, imageData.height, imageX, imageY, destWidth, destHeight);
+        }
+
+        if (decoratorImage != null)
+        {
+          ImageData imageData = decoratorImage.getImageData();
+          int destWidth = rect.width * 9 / 32;
+          int destHeight = rect.height * 9 / 32;
+          int imageX = rect.width - destWidth - 0;
+          int imageY = destHeight + 2;
+          imageY = 0;
+          gc.drawImage(decoratorImage, 0, 0, imageData.width, imageData.height, imageX, imageY, destWidth, destHeight);
         }
 
         gc.setBackground(oldBackground);

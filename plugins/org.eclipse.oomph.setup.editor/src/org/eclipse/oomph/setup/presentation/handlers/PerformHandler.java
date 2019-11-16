@@ -26,7 +26,7 @@ public class PerformHandler extends AbstractDropdownItemHandler
 
   public PerformHandler()
   {
-    super("update", "Perform Setup Tasks...");
+    super("update.png", "Perform Setup Tasks...");
     manual = true;
   }
 
