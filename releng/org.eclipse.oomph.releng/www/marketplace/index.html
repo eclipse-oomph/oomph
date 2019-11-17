@@ -429,6 +429,10 @@
           var parser = new DOMParser();
           var xmlDoc = parser.parseFromString(request.responseText, "text/xml");
           createMarketplaceListings(xmlDoc, style, url);
+          if (url != null) {
+            var expandButton = document.getElementsByClassName('marketplace-section_arrow')[0];
+            expandButton.onclick();
+          }
         }
       };
       request.send();
@@ -631,11 +635,6 @@
   
         sectionTemplate.parentNode.insertBefore(section, sectionTemplate);
         updateMarketplace(prefix, imageURI, siteURI, marketplaceID, title, body, ' and create an installation that includes <b>' + title + '</b>', mainUpdateURL, mainUpdateURLProblem, mainIUs, streamDetails);
-
-        if (url != null) {
-          var button = document.getElementById(prefix + 'marketplace-section_arrow');
-          button.onclick();
-        }
       }
 
       if (problem[0] != null) {
