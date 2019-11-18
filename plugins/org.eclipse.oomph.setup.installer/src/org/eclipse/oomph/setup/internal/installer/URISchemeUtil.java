@@ -47,6 +47,8 @@ public final class URISchemeUtil
 
   private static final String MARKETPLACE_SCHEME = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_URI_SCHEME + "mpc", "?");
 
+  private static final String FAKE_ECLIPSE_HOME = PropertiesUtil.getProperty("oomph.setup.installer.uri.scheme.eclipse.home", null);
+
   private static final Collection<IScheme> SCHEMES;
 
   static
@@ -122,8 +124,31 @@ public final class URISchemeUtil
    */
   public static String getSelfLauncher()
   {
+    Runnable restore = setEclipseHome(FAKE_ECLIPSE_HOME);
     String eclipseLauncher = OPERATING_SYSTEM_REGISTRATION.getEclipseLauncher();
+    if (restore != null)
+    {
+      restore.run();
+    }
     return StringUtil.isEmpty(eclipseLauncher) || eclipseLauncher.startsWith("file:") ? "" : eclipseLauncher;
+  }
+
+  private static Runnable setEclipseHome(String eclipseHome)
+  {
+    if (!StringUtil.isEmpty(eclipseHome))
+    {
+      final String originalHomeLocation = System.getProperty("eclipse.home.location");
+      System.setProperty("eclipse.home.location", eclipseHome);
+      return new Runnable()
+      {
+        public void run()
+        {
+          System.setProperty("eclipse.home.location", originalHomeLocation);
+        }
+      };
+    }
+
+    return null;
   }
 
   /**
@@ -212,10 +237,39 @@ public final class URISchemeUtil
           {
             try
             {
-              OPERATING_SYSTEM_REGISTRATION.handleSchemes(Collections.<IScheme> emptyList(), Collections.singleton(scheme));
+              if (OS.INSTANCE.isMac())
+              {
+                // The Mac implementation refuses unregister a conflicting registration so force it.
+                Runnable restore = setEclipseHome(existingLauncher);
+                try
+                {
+                  OPERATING_SYSTEM_REGISTRATION.handleSchemes(Collections.<IScheme> emptyList(), Collections.singleton(scheme));
+                }
+                catch (Exception ex)
+                {
+                  SetupInstallerPlugin.INSTANCE.log(ex);
+                }
+                finally
+                {
+                  if (restore != null)
+                  {
+                    restore.run();
+                  }
+                }
+              }
+              else
+              {
+                OPERATING_SYSTEM_REGISTRATION.handleSchemes(Collections.<IScheme> emptyList(), Collections.singleton(scheme));
+              }
+
               if (!StringUtil.isEmpty(newLauncher))
               {
+                Runnable restore = setEclipseHome(FAKE_ECLIPSE_HOME);
                 OPERATING_SYSTEM_REGISTRATION.handleSchemes(Collections.singleton(scheme), Collections.<IScheme> emptyList());
+                if (restore != null)
+                {
+                  restore.run();
+                }
               }
             }
             catch (Exception ex)
