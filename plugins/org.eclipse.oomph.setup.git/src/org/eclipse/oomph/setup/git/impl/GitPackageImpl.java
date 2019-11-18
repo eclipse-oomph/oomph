@@ -534,6 +534,8 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
         "${installation.location/git/}${@id.remoteURI|gitRepository}", "label", "Located in a folder named \'git/<repo>\' within the installation folder" });
     addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value",
         "${workspace.location/.git/}${@id.remoteURI|gitRepository}", "label", "Located in a folder named \'.git/<repo>\' within the workspace folder" });
+    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${git.container.root/}${@id.remoteURI|gitRepository}",
+        "label", "Located in a folder named \'<repo>\' within the root Git-container folder " });
     addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice",
         new String[] { "value", "${git.container.root/}${@id.remoteURI|gitRepository}-${@id.checkoutBranch}", "label",
             "Located in a folder named \'<repo>-<branch>\' within the root Git-container folder " });
