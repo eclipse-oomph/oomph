@@ -61,6 +61,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.internal.p2.artifact.repository.CompositeArtifactRepository;
@@ -1745,6 +1746,36 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
 
         @Override
+        public List<String> getArtifactStatus(String artifact)
+        {
+          for (Future<Map<IArtifactDescriptor, File>> future : artifactCache.values())
+          {
+            Map<IArtifactDescriptor, File> artifactFiles = get(future);
+            for (Map.Entry<IArtifactDescriptor, File> entry : artifactFiles.entrySet())
+            {
+              File file = entry.getValue();
+              String uriPath = file.toURI().toString();
+              if (uriPath.endsWith(artifact))
+              {
+                URI statusFile = URI.createURI(uriPath + ".processed.fail");
+                if (URIConverter.INSTANCE.exists(statusFile, Collections.emptyMap()))
+                {
+                  try
+                  {
+                    return IOUtil.readLines(URIConverter.INSTANCE.createInputStream(statusFile), null);
+                  }
+                  catch (IOException ex)
+                  {
+                  }
+                }
+              }
+            }
+          }
+
+          return Collections.emptyList();
+        }
+
+        @Override
         public Map<String, String> getCertificateComponents(Certificate certificate)
         {
           X509Certificate x509Certificate = (X509Certificate)certificate;
@@ -3127,10 +3158,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                   for (int i = 1; i <= DOWNLOAD_RETRY_COUNT; ++i)
                   {
                     FileOutputStream out = null;
+                    IStatus status = Status.CANCEL_STATUS;
                     try
                     {
                       out = new FileOutputStream(processedDownloadLocation);
-                      IStatus status = artifactRepository.getArtifact(artifactDescriptor, out, new NullProgressMonitor());
+                      status = artifactRepository.getArtifact(artifactDescriptor, out, new NullProgressMonitor());
                       if (!status.isOK())
                       {
                         throw new IOException("Failed to download: '" + processedDownloadLocation + "' because " + status.getMessage());
@@ -3150,8 +3182,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                       processedDownloadLocation.delete();
                       if (i == DOWNLOAD_RETRY_COUNT)
                       {
+                        new FileOutputStream(targetProcessedLocation).close();
+                        OutputStream failure = new FileOutputStream(new File(targetProcessedLocation + ".fail"));
+                        PrintStream printStream = new PrintStream(failure);
+                        printStream.print(status);
+                        printStream.close();
                         System.err.println("Failed: " + targetProcessedLocation);
-                        throw ex;
+                        break;
                       }
 
                       System.err.println("Retrying: " + targetProcessedLocation);
@@ -3246,7 +3283,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               public SignedContent call() throws Exception
               {
                 File processedFile = new File(file.toString() + PROCESSED);
-                File targetFile = processedFile.isFile() ? processedFile : file;
+                File targetFile = processedFile.isFile() && processedFile.length() != 0 ? processedFile : file;
+                if (targetFile.toString().endsWith(".pack.gz"))
+                {
+                  return null;
+                }
+
                 return verifierFactory.getSignedContent(targetFile);
               }
             });
@@ -3354,22 +3396,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         for (java.net.URI child : compositeRepository.getChildren())
         {
           loadArtifactRepository(manager, URI.createURI(child.toString()));
-        }
-      }
-      else if (DOWNLOAD_ECLIPSE_ORG_FOLDER_EXISTS)
-      {
-        // Bypass the use of mirrors when we are on the build server.
-        String mirrorsURL = artifactRepository.getProperty(IRepository.PROP_MIRRORS_URL);
-        if (mirrorsURL != null && mirrorsURL.contains("www.eclipse.org/downloads/download.php?"))
-        {
-          try
-          {
-            artifactRepository.setProperty(IRepository.PROP_MIRRORS_URL, null);
-          }
-          catch (RuntimeException ex)
-          {
-            System.err.println("Could not disable mirrors for '" + artifactRepository.getLocation() + "'");
-          }
         }
       }
     }
@@ -3841,6 +3867,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public abstract Map<String, Boolean> getIUArtifacts(IInstallableUnit iu);
 
     public abstract String getRepositoryURL(String artifact);
+
+    public abstract List<String> getArtifactStatus(String artifact);
 
     public abstract String getArtifactImage(String artifact);
 

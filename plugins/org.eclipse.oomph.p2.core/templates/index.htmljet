@@ -564,6 +564,10 @@ span:target {
              <img class="fit-image" src="../<%=report.getArtifactImage(artifact)%>"/>
              <span style="color: DarkCyan;"><%=report.getArtifactSize(artifact)%></span>
              <a href="<%=report.getRepositoryURL(artifact) + '/' + artifact%>"><%=artifact%></a>
+      <%for (String status : report.getArtifactStatus(artifact)) {%>
+             <br/>
+             <span style="color: FireBrick; font-size: 90%;"><%=status%></span>
+      <%}%>
            </p>
     <%}%>
     <%if (pluginsWithMissingPackGZ.contains(iuReport.getIU())) {%>
