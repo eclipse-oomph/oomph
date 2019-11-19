@@ -184,7 +184,7 @@ public class MarketplaceCatalogGenerator implements IApplication
 
     try
     {
-      resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_ONLY);
+      resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
 
       if (!skip)
       {
