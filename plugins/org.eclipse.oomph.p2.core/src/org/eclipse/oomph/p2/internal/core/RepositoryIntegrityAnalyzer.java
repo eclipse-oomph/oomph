@@ -1768,6 +1768,18 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                   {
                   }
                 }
+
+                statusFile = URI.createURI(uriPath + ".fail");
+                if (URIConverter.INSTANCE.exists(statusFile, Collections.emptyMap()))
+                {
+                  try
+                  {
+                    return IOUtil.readLines(URIConverter.INSTANCE.createInputStream(statusFile), null);
+                  }
+                  catch (IOException ex)
+                  {
+                  }
+                }
               }
             }
           }
@@ -3100,13 +3112,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
                 String uuid = EcoreUtil.generateUUID();
                 File downloadLocation = new File(targetLocation.getPath() + "." + uuid);
+                IStatus status = Status.CANCEL_STATUS;
                 for (int i = 1; i <= DOWNLOAD_RETRY_COUNT; ++i)
                 {
                   FileOutputStream out = null;
                   try
                   {
                     out = new FileOutputStream(downloadLocation);
-                    IStatus status = artifactRepository.getRawArtifact(artifactDescriptor, out, new NullProgressMonitor());
+                    status = artifactRepository.getRawArtifact(artifactDescriptor, out, new NullProgressMonitor());
                     if (!status.isOK())
                     {
                       throw new IOException("Failed to download: '" + downloadLocation + "' because " + status.getMessage());
@@ -3131,8 +3144,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                     downloadLocation.delete();
                     if (i == DOWNLOAD_RETRY_COUNT)
                     {
+                      new FileOutputStream(targetLocation).close();
+                      OutputStream failure = new FileOutputStream(new File(targetLocation + ".fail"));
+                      PrintStream printStream = new PrintStream(failure);
+                      printStream.print(status);
+                      printStream.close();
                       System.err.println("Failed: " + targetLocation);
-                      throw ex;
+                      break;
                     }
 
                     System.err.println("Retrying: " + targetLocation);
@@ -3158,7 +3176,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                   for (int i = 1; i <= DOWNLOAD_RETRY_COUNT; ++i)
                   {
                     FileOutputStream out = null;
-                    IStatus status = Status.CANCEL_STATUS;
+                    status = Status.CANCEL_STATUS;
                     try
                     {
                       out = new FileOutputStream(processedDownloadLocation);
@@ -3284,7 +3302,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               {
                 File processedFile = new File(file.toString() + PROCESSED);
                 File targetFile = processedFile.isFile() && processedFile.length() != 0 ? processedFile : file;
-                if (targetFile.toString().endsWith(".pack.gz"))
+                if (targetFile.toString().endsWith(".pack.gz") || targetFile.length() == 0)
                 {
                   return null;
                 }
