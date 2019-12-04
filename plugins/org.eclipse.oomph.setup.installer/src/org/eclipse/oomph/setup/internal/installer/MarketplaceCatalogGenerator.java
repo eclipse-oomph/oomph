@@ -49,6 +49,7 @@ import org.eclipse.oomph.setup.p2.SetupP2Factory;
 import org.eclipse.oomph.setup.p2.SetupP2Package;
 import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.util.IORuntimeException;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -82,6 +83,7 @@ import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.equinox.p2.query.IQuery;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
@@ -96,6 +98,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -204,6 +207,11 @@ public class MarketplaceCatalogGenerator implements IApplication
     {
       Job.getJobManager().join(org.eclipse.equinox.internal.p2.engine.ProfilePreferences.PROFILE_SAVE_JOB_FAMILY, new NullProgressMonitor());
     }
+  }
+
+  private URI getJREURI()
+  {
+    return outputLocationURI.appendSegment("jre");
   }
 
   private URI getTargetResourceURI()
@@ -374,6 +382,20 @@ public class MarketplaceCatalogGenerator implements IApplication
       repositoryLoader.dispose();
     }
 
+    @SuppressWarnings("unchecked")
+    List<IQuery<IInstallableUnit>> jreQuery = Arrays.asList(QueryUtil.createIUQuery("a.jre.javase"), QueryUtil.createLatestIUQuery());
+    IQueryResult<IInstallableUnit> jreResult = manager.query(QueryUtil.createCompoundQuery(jreQuery, true), new NullProgressMonitor());
+    IInstallableUnit jreIU = jreResult.iterator().next();
+    System.out.println("JRE IU + " + jreIU);
+
+    URI jrep2uri = getJREURI();
+    IOUtil.deleteBestEffort(new File(jrep2uri.toFileString()));
+    java.net.URI jreLocation = new java.net.URI(jrep2uri.toString());
+    manager.removeRepository(jreLocation);
+    IMetadataRepository jreRepository = manager.createRepository(jreLocation, "jre", IMetadataRepositoryManager.TYPE_SIMPLE_REPOSITORY,
+        Collections.<String, String> emptyMap());
+    jreRepository.addInstallableUnits(Collections.singleton(jreIU));
+
     System.out.println("Processing + " + nodeQueryURIs.size() + " listings");
     Map<String, Project> projects = new LinkedHashMap<String, Project>();
     {
@@ -468,6 +490,8 @@ public class MarketplaceCatalogGenerator implements IApplication
             P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
             Repository updateRepository = P2Factory.eINSTANCE.createRepository(updateURL);
             p2Task.getRepositories().add(updateRepository);
+
+            p2Task.getRepositories().add(P2Factory.eINSTANCE.createRepository(getJREURI().toString()));
 
             EList<Requirement> requirements = p2Task.getRequirements();
             List<AnyType> ius = get(node, "ius", "iu");
