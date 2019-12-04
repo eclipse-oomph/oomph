@@ -309,6 +309,15 @@
           <repository
               url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
           <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops2/R20190602212107/repository">
+            <annotation>
+              <detail
+                  key="justification">
+                <value>This is here because the Mylyn repository is currently inconsistent providing and older version of lucence but requiring a newer one, yet one that isn't in the latest release or orbit either.</value>
+              </detail>
+            </annotation>
+          </repository>
+          <repository
               url="http://download.eclipse.org/technology/m2e/snapshots"/>
           <repository
               url="http://download.eclipse.org/nebula/snapshot"/>
