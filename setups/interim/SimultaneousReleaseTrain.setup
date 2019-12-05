@@ -13,6 +13,33 @@
     xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/mylyn/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Mylyn.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/projects/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore"
     name="simrel"
     label="Simultaneous Release Train">
+  <annotation
+      source="ConfigurationReference">
+    <reference
+        href="SimultaneousReleaseTrainConfiguration.setup#/"/>
+  </annotation>
+  <setupTask
+      xsi:type="setup:CompoundTask"
+      name="User Preferences">
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.core.resources">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.core.resources/refresh.enabled"
+          value="true"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.egit.ui">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.egit.ui/commit_dialog_signed_off_by"
+          value="true">
+        <description>Insert Signed-off-by Footer</description>
+      </setupTask>
+    </setupTask>
+  </setupTask>
   <setupTask
       xsi:type="setup.p2:P2Task"
       label="${scope.project.label}">
@@ -41,7 +68,7 @@
     <requirement
         name="org.eclipse.egit.mylyn.feature.group"/>
     <repository
-        url="http://download.eclipse.org/cbi/updates/aggregator/ide/4.6/"/>
+        url="http://download.eclipse.org/cbi/updates/aggregator/ide/4.13"/>
     <repository
         url="http://download.eclipse.org/egit/updates-stable-nightly"/>
     <repository
@@ -134,19 +161,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="simrel.train.name"
-        value="oxygen"/>
-  </stream>
-  <stream name="Neon_maintenance">
-    <setupTask
-        xsi:type="setup:VariableTask"
-        name="simrel.train.name"
-        value="neon"/>
-  </stream>
-  <stream name="Mars_maintenance">
-    <setupTask
-        xsi:type="setup:VariableTask"
-        name="simrel.train.name"
-        value="mars"/>
+        value="${eclipse.target.platform.latest}"/>
   </stream>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"

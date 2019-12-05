@@ -56,16 +56,16 @@
         xsi:type="setup:VariableTask"
         name="bugzilla.id"
         defaultValue="anonymous"
-        label="Eclipse user ID for Bugzilla/Hudson"
-        documentation="The Eclipse user ID for Bugzilla/Hudson.  Leave empty if you don't have an account or don't plan to submit bugs.">
-      <description>The email associated with the Eclipse Bugzilla/Hudson account</description>
+        label="Eclipse user ID for Bugzilla/Jenkins/Jiro"
+        documentation="The Eclipse user ID for Bugzilla/Jenkins/Jiro.  Leave empty if you don't have an account or don't plan to submit bugs.">
+      <description>The email associated with the Eclipse Bugzilla/Jenkins/Jiro account</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         type="PASSWORD"
         name="eclipse.user.password"
-        label="Eclipse password for Bugzilla/Hudson"
-        documentation="The Eclipse password for Bugzilla/Hudson.  Leave empty if you don't have an account or don't plan to submit bugs.">
+        label="Eclipse password for Bugzilla/Jenkins/Jiro"
+        documentation="The Eclipse password for Bugzilla/Jenkins/Jiro.  Leave empty if you don't have an account or don't plan to submit bugs.">
       <annotation
           source="http://www.eclipse.org/oomph/setup/PasswordVerification">
         <detail

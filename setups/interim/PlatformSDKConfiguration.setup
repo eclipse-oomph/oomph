@@ -133,9 +133,9 @@
     i.e., the source projects used to produce the &lt;a href=&quot;https://download.eclipse.org/eclipse/downloads/&quot;>downloads&lt;/a> of the Eclipse Platform Project. 
     &lt;/p>
     &lt;p>
-    The installation is based on the latest succesfull integration build of the Eclipse Platform SDK,
-    the workspace consistents of projects from over two dozen Git clones organized into workings sets,
-    the PDE target platform, like the installation, is also based on the latest integation build,
+    The installation is based on the latest successful integration build of the Eclipse Platform SDK,
+    the workspace consists of projects from over two dozen Git clones organized into workings sets,
+    the PDE target platform, like the installation, is also based on the latest integration build,
     and the API baseline is based on the most recent release.
     &lt;p>
     &lt;/p>
