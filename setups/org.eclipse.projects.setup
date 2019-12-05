@@ -57,7 +57,7 @@
         name="bugzilla.id"
         defaultValue="anonymous"
         label="Eclipse user ID for Bugzilla/Jenkins/Jiro"
-        documentation="The Eclipse user ID for Bugzilla/Jenkins/Jiro.  Leave empty if you don't have an account or don't plan to submit bugs.">
+        documentation="The Eclipse user email for Bugzilla/Jenkins/Jiro.  Leave empty if you don't have an account or don't plan to submit bugs.">
       <description>The email associated with the Eclipse Bugzilla/Jenkins/Jiro account</description>
     </setupTask>
     <setupTask
