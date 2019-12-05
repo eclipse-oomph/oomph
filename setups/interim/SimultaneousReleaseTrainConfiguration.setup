@@ -42,22 +42,6 @@
             value="SimRel"/>
       </setupTask>
     </setupTask>
-    <setupTask
-        xsi:type="setup:VariableTask"
-        name="git.clone.remoteURI"
-        defaultValue="ssh://${git.user.id|username}@git.eclipse.org:29418/simrel/org.eclipse.simrel.build"
-        label="SimRel Git Repository">
-      <choice
-          value="ssh://${git.user.id|username}@git.eclipse.org:29418/simrel/org.eclipse.simrel.build"
-          label="SSH (read/write, Gerrit)"/>
-      <choice
-          value="https://${git.user.id|username}@git.eclipse.org/r/simrel/org.eclipse.simrel.build"
-          label="HTTPS (read/write, Gerrit)"/>
-      <choice
-          value="https://git.eclipse.org/r/simrel/org.eclipse.simrel.build"
-          label="HTTPS (read-only, anonymous, Gerrit)"/>
-      <description>Choose from the available Gerrit remote URIs</description>
-    </setupTask>
     <stream
         href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='simrel']/@streams[name='master']"/>
     <description>The Simultaneous Release Train workspace provides access to the clone in which contributions are maintained.</description>
