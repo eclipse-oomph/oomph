@@ -97,6 +97,12 @@
         <value>remoteURI</value>
       </detail>
     </annotation>
+    <configSections
+        name="gerrit">
+      <properties
+          key="createchangeid"
+          value="true"/>
+    </configSections>
     <description>${scope.project.label}</description>
   </setupTask>
   <setupTask
