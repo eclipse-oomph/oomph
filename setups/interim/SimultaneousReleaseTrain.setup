@@ -149,26 +149,7 @@
           value="project:simrel/org.eclipse.simrel.build status:open branch:${git.clone.checkoutBranch}"/>
     </query>
   </setupTask>
-  <setupTask
-      xsi:type="mylyn:MylynBuildsTask"
-      serverURL="https://hudson.eclipse.org/simrel"
-      userID="${bugzilla.id}"
-      password="${eclipse.user.password}">
-    <buildPlan
-        name="simrel.${simrel.train.name}.runaggregator.BUILD"/>
-    <buildPlan
-        name="simrel.${simrel.train.name}.runaggregator.CLEAN_BUILD"/>
-    <buildPlan
-        name="simrel.${simrel.train.name}.runaggregator.VALIDATE"/>
-    <buildPlan
-        name="simrel.${simrel.train.name}.runaggregator.VALIDATE.gerrit"/>
-  </setupTask>
-  <stream name="master">
-    <setupTask
-        xsi:type="setup:VariableTask"
-        name="simrel.train.name"
-        value="${eclipse.target.platform.latest}"/>
-  </stream>
+  <stream name="master"/>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
