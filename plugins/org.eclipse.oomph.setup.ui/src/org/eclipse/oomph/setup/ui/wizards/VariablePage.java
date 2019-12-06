@@ -876,6 +876,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   {
     private final Set<VariableTask> variables = new LinkedHashSet<VariableTask>();
 
+    private final List<String> choiceLabels = new ArrayList<String>();
+
     private PropertyField field;
 
     private String initialValue;
@@ -884,11 +886,29 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     public FieldHolder(VariableTask variable)
     {
+      init(variable);
+      variables.add(variable);
+    }
+
+    protected void init(VariableTask variable)
+    {
       field = PropertyField.createField(variable);
       field.fill(composite);
       field.addValueListener(this);
       field.getControl().addFocusListener(focusListener);
-      variables.add(variable);
+      choiceLabels.addAll(getChoiceLabels(variable));
+    }
+
+    protected List<String> getChoiceLabels(VariableTask variable)
+    {
+      List<String> result = new ArrayList<String>();
+      for (VariableChoice choice : variable.getChoices())
+      {
+        String label = choice.getLabel();
+        result.add(label);
+      }
+
+      return result;
     }
 
     public boolean isDisposed()
@@ -975,6 +995,19 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     {
       if (variables.add(variable))
       {
+        if (variables.size() == 1 && !isDirty() && !choiceLabels.equals(getChoiceLabels(variable)))
+        {
+          // This is special case handling for dealing with the list of choices changing dynamically.
+          // That generally never happens, but it specifically designed to happen for eclipse.git.authentication.style.
+          // This affects the order of the remoteURI choices.
+          // We want that first choice to be the default choice, and when the style is changed, for the order change to update all the variables.
+          dispose();
+          initialValue = null;
+          choiceLabels.clear();
+          init(variable);
+          variable.setValue(variable.getChoices().get(0).getValue());
+        }
+
         String value = field.getValue();
         if (!"".equals(value))
         {

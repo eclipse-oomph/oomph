@@ -86,7 +86,7 @@
         source="http://www.eclipse.org/oomph/setup/InducedChoices">
       <detail
           key="inherit">
-        <value>eclipse.gerrit.readWriteSSH.remoteURIs</value>
+        <value>eclipse.gerrit.remoteURIs</value>
       </detail>
       <detail
           key="label">
@@ -149,6 +149,10 @@
           value="project:simrel/org.eclipse.simrel.build status:open branch:${git.clone.checkoutBranch}"/>
     </query>
   </setupTask>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      name="eclipse.git.authentication.style"
+      value="ssh"/>
   <stream name="master"/>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
