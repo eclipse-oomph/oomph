@@ -18,6 +18,7 @@ import org.eclipse.oomph.p2.internal.core.P2Index.Repository;
 import org.eclipse.oomph.ui.DockableDialog;
 import org.eclipse.oomph.ui.SearchField;
 import org.eclipse.oomph.ui.SearchField.FilterHandler;
+import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
@@ -56,7 +57,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -265,7 +265,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
 
     new ColumnViewerInformationControlToolTipSupport(viewer, this);
 
-    loadRepositories(parent.getDisplay());
+    loadRepositories();
 
     return composite;
   }
@@ -332,7 +332,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
     // Do nothing.
   }
 
-  private void loadRepositories(final Display display)
+  private void loadRepositories()
   {
     new Job("Loading repositories")
     {
@@ -347,7 +347,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
 
         Arrays.sort(repositories);
 
-        display.asyncExec(new Runnable()
+        UIUtil.asyncExec(statsLabel, new Runnable()
         {
           public void run()
           {
