@@ -681,6 +681,27 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return getLocation().getAbsolutePath();
   }
 
+  private File getSplashArtifactFile(IProfile profile, BundlePool bundlePool, String id)
+  {
+    // Determine which IU resolves for bundle-id...
+    for (IInstallableUnit installableUnit : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(id), null)))
+    {
+      // Look at all that IU's artifacts.
+      for (IArtifactKey artifactKey : installableUnit.getArtifacts())
+      {
+        // If the file slash.bmp exists in that artifact jar or folder...
+        File artifactFile = bundlePool.getFileArtifactRepository().getArtifactFile(artifactKey);
+        if (artifactFile.isDirectory() ? new File(artifactFile, "splash.bmp").exists()
+            : URIConverter.INSTANCE.exists(URI.createURI("archive:" + URI.createFileURI(artifactFile.getAbsolutePath() + "!/splash.bmp")), null))
+        {
+          return artifactFile;
+        }
+      }
+    }
+
+    return null;
+  }
+
   private void adjustInstallation(IProfile profile)
   {
     // This property should always be in a well-formed profile.
@@ -714,7 +735,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
             try
             {
-              adjustLauncherIni(profile, installFolder, true);
+              adjustLauncherIni(profile, bundlePool, installFolder, true);
             }
             catch (Exception ex)
             {
@@ -743,7 +764,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
           {
             try
             {
-              adjustLauncherIni(profile, installFolder, false);
+              adjustLauncherIni(profile, bundlePool, installFolder, false);
             }
             catch (Exception ex)
             {
@@ -772,26 +793,15 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createURI(splashPath);
       if ("platform".equals(uri.scheme()) && uri.segmentCount() >= 2 && "base".equals(uri.segment(0)))
       {
-        // Determine which IU resolves for bundle-id...
-        LOOP: for (IInstallableUnit installableUnit : P2Util.asIterable(profile.query(QueryUtil.createIUQuery(uri.lastSegment()), null)))
+        File splashArtifactFile = getSplashArtifactFile(profile, bundlePool, uri.lastSegment());
+        if (splashArtifactFile != null)
         {
-          // Look at all that IU's artifacts.
-          for (IArtifactKey artifactKey : installableUnit.getArtifacts())
-          {
-            // If the file slash.bmp exists in that artifact jar or folder...
-            File artifactFile = bundlePool.getFileArtifactRepository().getArtifactFile(artifactKey);
-            if (artifactFile.isDirectory() ? new File(artifactFile, "splash.bmp").exists()
-                : URIConverter.INSTANCE.exists(URI.createURI("archive:" + URI.createFileURI(artifactFile.getAbsolutePath() + "!/splash.bmp")), null))
-            {
-              // Replace the value with the absolute URI of the artifact in the shared bundle pool.
-              // The launcher and p2 have a bad habit of using URL.getPath which does not decode encoded character, e.g., %20 is not decode to the space
-              // character.
-              // So better we not produce an encoded URI.
-              configProperties.put("osgi.splashPath", createFileURI(artifactFile));
-              changed = true;
-              break LOOP;
-            }
-          }
+          // Replace the value with the absolute URI of the artifact in the shared bundle pool.
+          // The launcher and p2 have a bad habit of using URL.getPath which does not decode encoded character, e.g., %20 is not decode to the space
+          // character.
+          // So better we not produce an encoded URI.
+          configProperties.put("osgi.splashPath", createFileURI(splashArtifactFile));
+          changed = true;
         }
       }
     }
@@ -826,7 +836,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     }
   }
 
-  private void adjustLauncherIni(IProfile profile, File installFolder, boolean sharedPool)
+  private void adjustLauncherIni(IProfile profile, BundlePool bundlePool, File installFolder, boolean sharedPool)
   {
     // We need to modify the eclipse.ini.
     // For generality we'll check the launcher name property to compute the name of the launcher ini.
@@ -914,6 +924,28 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
               // Replace the value with this absolute path, preserving the existing line feed convention.
               nl = key.substring(trimmedKey.length());
               value = absoluteBundleLocation.toFileString() + nl;
+            }
+          }
+        }
+        else if ("-showsplash".equals(trimmedKey))
+        {
+          String name = new File(value.trim()).getName();
+          for (int index = name.indexOf('_');; index = name.indexOf(index + 1, '_'))
+          {
+            String id = index == -1 ? name : name.substring(0, index);
+            File splashArtifactFile = getSplashArtifactFile(profile, bundlePool, id);
+            if (splashArtifactFile != null)
+            {
+              // Remember the line feed convention used for this section.
+              nl = key.substring(trimmedKey.length());
+
+              value = splashArtifactFile.getPath() + nl;
+              break;
+            }
+
+            if (index == -1)
+            {
+              break;
             }
           }
         }
