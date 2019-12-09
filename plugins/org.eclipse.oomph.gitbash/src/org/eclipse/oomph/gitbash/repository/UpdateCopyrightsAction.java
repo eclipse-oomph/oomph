@@ -23,8 +23,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -45,7 +45,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -109,6 +108,8 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
 
   private int rewriteCount;
 
+  private File stateFile;
+
   public UpdateCopyrightsAction()
   {
     super(Repository.class);
@@ -122,25 +123,55 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
   @Override
   protected void run(final Shell shell, final Repository repository) throws Exception
   {
-    IRunnableWithProgress runnable = new IRunnableWithProgress()
+    new Job(getTitle())
     {
-      public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+      @Override
+      protected IStatus run(IProgressMonitor monitor)
       {
+        BufferedWriter stateWriter = null;
+
         try
         {
           git = new Git(repository);
           workTree = repository.getWorkTree();
           workTreeLength = workTree.getAbsolutePath().length() + 1;
+          stateFile = new File(workTree, ".legalchecks.state");
 
           initProperties();
 
+          Set<File> finishedFiles = initState();
+          final Boolean[] skipFinishedFiles = { false };
+          if (finishedFiles != null && !finishedFiles.isEmpty())
+          {
+            final String message = finishedFiles.size() + " files have been previously processed.\nDo you want to skip these files?";
+            shell.getDisplay().syncExec(new Runnable()
+            {
+              public void run()
+              {
+                skipFinishedFiles[0] = MessageDialog.openQuestion(shell, getTitle(), message);
+              }
+            });
+          }
+
+          if (!skipFinishedFiles[0])
+          {
+            stateFile.delete();
+            finishedFiles = null;
+          }
+
+          stateWriter = new BufferedWriter(new FileWriter(stateFile, true));
+
           final Map<File, Boolean> files = new TreeMap<File, Boolean>();
-          collectFiles(files, workTree);
+          collectFiles(files, finishedFiles, workTree, monitor);
 
           monitor.beginTask(getTitle(), files.size());
 
           final long start = System.currentTimeMillis();
-          checkFiles(files, start, monitor);
+          checkFiles(files, stateWriter, start, monitor);
+
+          close(stateWriter);
+          stateWriter = null;
+          stateFile.delete();
 
           shell.getDisplay().syncExec(new Runnable()
           {
@@ -163,21 +194,24 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
         }
         catch (Exception ex)
         {
-          throw new InvocationTargetException(ex);
+          Activator.log(ex);
         }
         finally
         {
+          close(stateWriter);
+
           missingCopyrights.clear();
           rewriteCount = 0;
           workTreeLength = 0;
           workTree = null;
           git = null;
+
           monitor.done();
         }
-      }
-    };
 
-    WORKBENCH.getProgressService().run(true, true, runnable);
+        return Status.OK_STATUS;
+      }
+    }.schedule();
   }
 
   private void initProperties()
@@ -221,6 +255,39 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
     copyrightPattern = Pattern.compile(property);
   }
 
+  private Set<File> initState()
+  {
+    stateFile = new File(workTree, ".legalchecks.state");
+    if (stateFile.isFile())
+    {
+      BufferedReader reader = null;
+
+      try
+      {
+        reader = new BufferedReader(new FileReader(stateFile));
+
+        Set<File> finishedFiles = new HashSet<File>();
+        String line;
+        while ((line = reader.readLine()) != null)
+        {
+          finishedFiles.add(new File(line));
+        }
+
+        return finishedFiles;
+      }
+      catch (IOException ex)
+      {
+        Activator.log(ex);
+      }
+      finally
+      {
+        close(reader);
+      }
+    }
+
+    return null;
+  }
+
   private String[] getStrings(Properties properties, String key, String[] defaultValue)
   {
     String property = properties.getProperty(key);
@@ -256,10 +323,15 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
     return result;
   }
 
-  private void collectFiles(Map<File, Boolean> files, File folder) throws Exception
+  private void collectFiles(Map<File, Boolean> files, Set<File> finishedFiles, File folder, IProgressMonitor monitor) throws Exception
   {
     for (File file : folder.listFiles())
     {
+      if (monitor.isCanceled())
+      {
+        throw new OperationCanceledException();
+      }
+
       String path = getWorkTreeRelativePath(file);
       if (!hasString(path, ignoredPaths))
       {
@@ -276,10 +348,15 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
             continue;
           }
 
-          collectFiles(files, file);
+          collectFiles(files, finishedFiles, file, monitor);
         }
         else
         {
+          if (finishedFiles != null && finishedFiles.contains(file))
+          {
+            continue;
+          }
+
           if (name.endsWith(".class"))
           {
             continue;
@@ -299,7 +376,7 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
     }
   }
 
-  private void checkFiles(Map<File, Boolean> files, long start, IProgressMonitor monitor) throws Exception
+  private void checkFiles(Map<File, Boolean> files, BufferedWriter stateWriter, long start, IProgressMonitor monitor) throws Exception
   {
     int i = 0;
     int totalFiles = files.size();
@@ -316,6 +393,9 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
 
       checkFile(file, required);
       monitor.worked(1);
+
+      stateWriter.write(file.toString());
+      stateWriter.write(NL);
 
       double millis = System.currentTimeMillis() - start;
       double millisPerFile = millis / ++i;
