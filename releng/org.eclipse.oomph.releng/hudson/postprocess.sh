@@ -83,7 +83,11 @@ elif [[ $file == *.exe ]]; then
   bash $script $file $args
   zip -r -9 -qq --symlinks $file.zip *
 
-  cat $concatdir/extractor.exe \
+  # Don't use the already signed extractor.exe but rather the one directly from git.
+  # Otherwise signing will fail.
+  curl -O https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.extractor/extractor-64.exe
+
+  cat extractor-64.exe \
     $concatdir/marker.txt \
     $concatdir/libdata.jar \
     $concatdir/marker.txt \
