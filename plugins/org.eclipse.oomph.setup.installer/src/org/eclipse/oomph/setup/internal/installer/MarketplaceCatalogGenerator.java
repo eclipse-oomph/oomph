@@ -520,6 +520,12 @@ public class MarketplaceCatalogGenerator implements IApplication
               }
 
               Requirement requirement = P2Factory.eINSTANCE.createRequirement(iuID);
+              Version iuVersion = getVersion(updateURL, iuID);
+              if (iuVersion != null)
+              {
+                requirement.setVersionRange(new VersionRange(iuVersion, true, iuVersion, true));
+              }
+
               requirements.add(requirement);
 
               if (!bogusRepos.containsKey(updateURL))
@@ -1315,6 +1321,50 @@ public class MarketplaceCatalogGenerator implements IApplication
   private final Map<String, IMetadataRepository> repos = Collections.synchronizedMap(new HashMap<String, IMetadataRepository>());
 
   private final Map<String, Exception> bogusRepos = new HashMap<String, Exception>();
+
+  private Version getVersion(String url, String id)
+  {
+    try
+    {
+      IMetadataRepository repository = repos.get(url);
+      if (repository == null && !bogusRepos.containsKey(url))
+      {
+        repository = manager.loadRepository(new java.net.URI(url), null);
+        handleComposite(repository, id);
+        repos.put(url, repository);
+        System.err.println("loaded: " + url);
+      }
+
+      if (repository != null)
+      {
+        IQueryResult<IInstallableUnit> result = repository.query(QueryUtil.createLatestQuery(QueryUtil.createIUQuery(id)), null);
+        for (IInstallableUnit iu : result)
+        {
+          return iu.getVersion();
+        }
+      }
+    }
+    catch (Exception ex)
+    {
+      if (ex instanceof ProvisionException && ((ProvisionException)ex).getStatus().getException() instanceof SSLHandshakeException && url.startsWith("http:"))
+      {
+        System.err.println("retry without https: " + url);
+        String httpsURL = "https:" + url.substring("http:".length());
+        Version version = getVersion(httpsURL, id);
+        if (!bogusRepos.containsKey(httpsURL))
+        {
+          repos.put(url, repos.get(httpsURL));
+          return version;
+        }
+      }
+
+      System.err.println("failed: " + url);
+      repos.put(url, null);
+      bogusRepos.put(url, ex);
+    }
+
+    return null;
+  }
 
   private String getName(String url, String id)
   {
