@@ -83,7 +83,7 @@ elif [[ $file == *.exe ]]; then
   bash $script $file $args
   zip -r -9 -qq --symlinks $file.zip *
 
-  cat extractor.exe \
+  cat $concatdir/extractor.exe \
     $concatdir/marker.txt \
     $concatdir/libdata.jar \
     $concatdir/marker.txt \
