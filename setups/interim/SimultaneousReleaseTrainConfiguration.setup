@@ -42,6 +42,12 @@
             value="SimRel"/>
       </setupTask>
     </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="git.user.id"
+        label="Eclipse Git/Gerrit user ID">
+      <description>The user ID of the Eclipse Git/Gerrit account</description>
+    </setupTask>
     <stream
         href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='simrel']/@streams[name='master']"/>
     <description>The Simultaneous Release Train workspace provides access to the clone in which contributions are maintained.</description>
@@ -54,6 +60,10 @@
     &lt;p>
     The installation is based the latest committers package and includes the tools for working with the aggregation resources.
     The workspace includes the org.eclipse.simrel.build project from the &lt;a href=&quot;https://git.eclipse.org/c/simrel/org.eclipse.simrel.build.git&quot; target=&quot;simrel_git&quot;>SimRel Git clone&lt;/a>.
+    &lt;/p>
+    &lt;p>
+    The default Git repository URI uses ssh so you must &lt;a href=&quot;https://wiki.eclipse.org/Gerrit#SSH_Keys>specify your user ID for which you've registered your SSH keys&lt;/a> to use this choice.
+    To exploit the Mylyn Bugzilla integration, you should enter the email address of your Eclipse account and enter your password, wich you can authenticate to ensure you've entered it correctly.
     &lt;/p>
   </description>
 </setup:Configuration>
