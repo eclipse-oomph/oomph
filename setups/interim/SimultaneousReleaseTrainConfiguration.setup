@@ -62,8 +62,9 @@
     The workspace includes the org.eclipse.simrel.build project from the &lt;a href=&quot;https://git.eclipse.org/c/simrel/org.eclipse.simrel.build.git&quot; target=&quot;simrel_git&quot;>SimRel Git clone&lt;/a>.
     &lt;/p>
     &lt;p>
-    The default Git repository URI uses ssh so you must &lt;a href=&quot;https://wiki.eclipse.org/Gerrit#SSH_Keys>specify your user ID for which you've registered your SSH keys&lt;/a> to use this choice.
-    To exploit the Mylyn Bugzilla integration, you should enter the email address of your Eclipse account and enter your password, wich you can authenticate to ensure you've entered it correctly.
+    The default Git repository URI uses ssh so you must &lt;a href=&quot;https://wiki.eclipse.org/Gerrit#SSH_Keys&quot; target=&quot;simrel_wiki&quot;>specify your user ID for which you've registered your SSH keys&lt;/a> to use this choice.
+    To exploit the Mylyn Bugzilla integration, you should enter the email address of your Eclipse account and enter your password for that account. 
+    You can use the Authenticate... button to ensure you've entered it correctly.
     &lt;/p>
   </description>
 </setup:Configuration>
