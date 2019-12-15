@@ -81,6 +81,8 @@ import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.IInstallableUnitPatch;
+import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.query.IQuery;
@@ -229,6 +231,7 @@ public class MarketplaceCatalogGenerator implements IApplication
     return outputLocationURI.appendSegment("resolved-minimized.setup");
   }
 
+  @SuppressWarnings("restriction")
   public void perform(Map<String, URI> nodeURIs) throws Exception
   {
     boolean normalizeP2Tasks = true;
@@ -520,13 +523,33 @@ public class MarketplaceCatalogGenerator implements IApplication
               }
 
               Requirement requirement = P2Factory.eINSTANCE.createRequirement(iuID);
-              Version iuVersion = getVersion(updateURL, iuID);
-              if (iuVersion != null)
+              VersionRange iuVersionRange = getVersionRange(updateURL, iuID);
+              if (iuVersionRange != null)
               {
-                requirement.setVersionRange(new VersionRange(iuVersion, true, iuVersion, true));
+                requirement.setVersionRange(iuVersionRange);
               }
 
               requirements.add(requirement);
+
+              Set<IInstallableUnit> specificIUs = getIUs(updateURL, iuID);
+              for (IInstallableUnit specificIU : specificIUs)
+              {
+                if (specificIU instanceof IInstallableUnitPatch)
+                {
+                  IInstallableUnitPatch iuPatch = (IInstallableUnitPatch)specificIU;
+                  IRequirement lifeCycle = iuPatch.getLifeCycle();
+                  if (lifeCycle instanceof org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)
+                  {
+                    org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)lifeCycle;
+                    String patchedNamespace = requiredCapability.getNamespace();
+                    String patchedName = requiredCapability.getName();
+                    Requirement patchRequirement = P2Factory.eINSTANCE.createRequirement(patchedName);
+                    patchRequirement.setNamespace(patchedNamespace);
+                    requirements.add(patchRequirement);
+                    break;
+                  }
+                }
+              }
 
               if (!bogusRepos.containsKey(updateURL))
               {
@@ -1322,8 +1345,9 @@ public class MarketplaceCatalogGenerator implements IApplication
 
   private final Map<String, Exception> bogusRepos = new HashMap<String, Exception>();
 
-  private Version getVersion(String url, String id)
+  private Set<IInstallableUnit> getIUs(String url, String id)
   {
+    Set<IInstallableUnit> result = new TreeSet<IInstallableUnit>();
     try
     {
       IMetadataRepository repository = repos.get(url);
@@ -1337,10 +1361,10 @@ public class MarketplaceCatalogGenerator implements IApplication
 
       if (repository != null)
       {
-        IQueryResult<IInstallableUnit> result = repository.query(QueryUtil.createLatestQuery(QueryUtil.createIUQuery(id)), null);
-        for (IInstallableUnit iu : result)
+        IQueryResult<IInstallableUnit> ius = repository.query(QueryUtil.createIUQuery(id), null);
+        for (IInstallableUnit iu : ius)
         {
-          return iu.getVersion();
+          result.add(iu);
         }
       }
     }
@@ -1350,17 +1374,43 @@ public class MarketplaceCatalogGenerator implements IApplication
       {
         System.err.println("retry without https: " + url);
         String httpsURL = "https:" + url.substring("http:".length());
-        Version version = getVersion(httpsURL, id);
+        Set<IInstallableUnit> ius = getIUs(httpsURL, id);
         if (!bogusRepos.containsKey(httpsURL))
         {
           repos.put(url, repos.get(httpsURL));
-          return version;
+          return ius;
         }
       }
 
       System.err.println("failed: " + url);
       repos.put(url, null);
       bogusRepos.put(url, ex);
+    }
+
+    return result;
+  }
+
+  private VersionRange getVersionRange(String url, String id)
+  {
+    Version minVersion = null;
+    Version maxVersion = null;
+    Set<IInstallableUnit> result = getIUs(url, id);
+    for (IInstallableUnit iu : result)
+    {
+      Version version = iu.getVersion();
+      if (minVersion == null || version.compareTo(minVersion) < 0)
+      {
+        minVersion = version;
+      }
+      if (maxVersion == null || version.compareTo(maxVersion) > 0)
+      {
+        maxVersion = version;
+      }
+    }
+
+    if (minVersion != null)
+    {
+      return new VersionRange(minVersion, true, maxVersion, true);
     }
 
     return null;
@@ -1368,43 +1418,10 @@ public class MarketplaceCatalogGenerator implements IApplication
 
   private String getName(String url, String id)
   {
-    try
+    Set<IInstallableUnit> result = getIUs(url, id);
+    for (IInstallableUnit iu : result)
     {
-      IMetadataRepository repository = repos.get(url);
-      if (repository == null && !bogusRepos.containsKey(url))
-      {
-        repository = manager.loadRepository(new java.net.URI(url), null);
-        handleComposite(repository, id);
-        repos.put(url, repository);
-        System.err.println("loaded: " + url);
-      }
-
-      if (repository != null)
-      {
-        IQueryResult<IInstallableUnit> result = repository.query(QueryUtil.createLatestQuery(QueryUtil.createIUQuery(id)), null);
-        for (IInstallableUnit iu : result)
-        {
-          return P2Util.getName(iu);
-        }
-      }
-    }
-    catch (Exception ex)
-    {
-      if (ex instanceof ProvisionException && ((ProvisionException)ex).getStatus().getException() instanceof SSLHandshakeException && url.startsWith("http:"))
-      {
-        System.err.println("retry without https: " + url);
-        String httpsURL = "https:" + url.substring("http:".length());
-        String name = getName(httpsURL, id);
-        if (!bogusRepos.containsKey(httpsURL))
-        {
-          repos.put(url, repos.get(httpsURL));
-          return name;
-        }
-      }
-
-      System.err.println("failed: " + url);
-      repos.put(url, null);
-      bogusRepos.put(url, ex);
+      return P2Util.getName(iu);
     }
 
     return null;
