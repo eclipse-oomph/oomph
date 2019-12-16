@@ -39,8 +39,6 @@
       <requirement
           name="Application Development Frameworks"/>
       <requirement
-          name="Business Intelligence, Reporting and Charting"/>
-      <requirement
           name="Cloud Tools"/>
       <requirement
           name="Collaboration"/>
@@ -154,8 +152,6 @@
         label="Eclipse Eierlegende Wollmilchsau (2019-12)">
       <requirement
           name="Application Development Frameworks"/>
-      <requirement
-          name="Business Intelligence, Reporting and Charting"/>
       <requirement
           name="Cloud Tools"/>
       <requirement

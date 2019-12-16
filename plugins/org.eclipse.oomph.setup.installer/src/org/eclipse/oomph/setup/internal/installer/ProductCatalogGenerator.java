@@ -129,8 +129,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final List<String> PRODUCT_IDS = Arrays
       .asList(new String[] { "epp.package.java", "epp.package.jee", "epp.package.cpp", "epp.package.javascript", "epp.package.php", "epp.package.committers",
-          "epp.package.dsl", "epp.package.reporting", "epp.package.modeling", "epp.package.rcp", "epp.package.testing", "epp.package.parallel",
-          "epp.package.scout", "epp.package.rust", "org.eclipse.platform.ide", "org.eclipse.sdk.ide", "epp.package.android", "epp.package.automotive" });
+          "epp.package.dsl", "epp.package.modeling", "epp.package.rcp", "epp.package.testing", "epp.package.parallel", "epp.package.scout", "epp.package.rust",
+          "org.eclipse.platform.ide", "org.eclipse.sdk.ide", "epp.package.reporting", "epp.package.android", "epp.package.automotive" });
 
   private static final String ALL_PRODUCT_ID = "all";
 
