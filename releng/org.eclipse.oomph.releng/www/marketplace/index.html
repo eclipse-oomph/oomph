@@ -547,6 +547,7 @@
 
       if (mainUpdateURLProblem == null) {
         var streams = project.querySelectorAll('stream');
+        var successes = 0;
         for (var i = 0; i < streams.length; ++i) {
           var success = false;
           const stream = streams[i];
@@ -612,7 +613,11 @@
             data[4] = streamIUs;
           }
 
-          if (success && problem[0] != null) {
+          if (success) {
+            ++successes;
+          }
+
+          if (successes > 0 && problem[0] != null) {
             problem[0] = "Warning.png";
           }
         }
