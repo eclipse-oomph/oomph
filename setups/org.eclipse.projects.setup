@@ -441,14 +441,14 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.p2"
-        value="http://download.eclipse.org/eclipse/updates/4.14-I-builds"
-        label="Eclipse Latest I-Build p2 Repository - 4.14">
+        value="http://download.eclipse.org/eclipse/updates/4.15-I-builds"
+        label="Eclipse Latest I-Build p2 Repository - 4.15">
       <description>The update site of the latest Eclipse project's builds, typically an I-Build for the next release</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.release.p2"
-        value="http://download.eclipse.org/eclipse/updates/4.13/R-4.13-201909161045"
+        value="http://download.eclipse.org/eclipse/updates/4.14/R-4.14-201912100610"
         label="Eclipse Latest Release p2 Repository - 4.13">
       <description>The update site of the latest released Eclipse project's builds, always an R-Build for the most recent release</description>
     </setupTask>
@@ -460,6 +460,9 @@
         label="Target Platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <choice
+          value="2020-03"
+          label="Eclipse 2020-03 - 4.15"/>
       <choice
           value="2019-12"
           label="Eclipse 2019-12 - 4.14"/>
@@ -516,7 +519,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest"
-        value="2019-12"
+        value="2020-03"
         storageURI="scope://Workspace"
         label="Target Platform Latest">
       <annotation
@@ -526,7 +529,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest.released"
-        value="2019-09"
+        value="2019-12"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -541,6 +544,9 @@
         label="API Baseline Target Platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <choice
+          value="2019-12"
+          label="Eclipse 2019-12 - 4.14"/>
       <choice
           value="2019-09"
           label="Eclipse 2019-09 - 4.13"/>
@@ -594,7 +600,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.api.baseline.target.platform.latest.released"
-        value="2019-09"
+        value="2019-12"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -658,9 +664,14 @@
       <repositoryList
           name="None"/>
       <repositoryList
+          name="2020-03">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.15-I-builds"/>
+      </repositoryList>
+      <repositoryList
           name="2019-12">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.14-I-builds"/>
+            url="http://download.eclipse.org/eclipse/updates/4.14/R-4.14-201912100610"/>
       </repositoryList>
       <repositoryList
           name="2019-09">
@@ -751,9 +762,14 @@
       <repositoryList
           name="None"/>
       <repositoryList
+          name="2020-03">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.15-I-builds"/>
+      </repositoryList>
+      <repositoryList
           name="2019-12">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.14-I-builds"/>
+            url="http://download.eclipse.org/eclipse/updates/4.14/R-4.14-201912100610"/>
       </repositoryList>
       <repositoryList
           name="2019-09">
