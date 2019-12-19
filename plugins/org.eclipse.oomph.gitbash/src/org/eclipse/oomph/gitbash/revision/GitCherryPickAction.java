@@ -12,6 +12,8 @@ package org.eclipse.oomph.gitbash.revision;
 
 import org.eclipse.oomph.gitbash.GitBash;
 
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.swt.widgets.Shell;
 
 import java.io.File;
@@ -22,8 +24,9 @@ import java.io.File;
 public class GitCherryPickAction extends AbstractRevisionAction
 {
   @Override
-  protected void run(Shell shell, File workTree, String revision) throws Exception
+  protected void run(Shell shell, Repository repository, File workTree, RevObject revision) throws Exception
   {
-    GitBash.executeCommand(shell, workTree, "git cherry-pick -n " + revision);
+    String id = revision.getId().name();
+    GitBash.executeCommand(shell, workTree, "git cherry-pick -n " + id);
   }
 }

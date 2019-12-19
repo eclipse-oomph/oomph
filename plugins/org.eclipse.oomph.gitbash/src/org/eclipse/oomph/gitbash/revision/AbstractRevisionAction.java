@@ -41,15 +41,14 @@ public abstract class AbstractRevisionAction extends AbstractAction<RevObject>
     if (repository != null)
     {
       File workTree = repository.getWorkTree();
-      String id = revision.getId().name();
-      run(shell, workTree, id);
+      run(shell, repository, workTree, revision);
     }
   }
 
-  protected abstract void run(Shell shell, File workTree, String revision) throws Exception;
+  protected abstract void run(Shell shell, Repository repository, File workTree, RevObject revision) throws Exception;
 
   @SuppressWarnings({ "restriction", "rawtypes" })
-  private Repository getRepository()
+  protected Repository getRepository()
   {
     Object input = getInput();
     if (input == null)

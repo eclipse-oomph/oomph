@@ -31,17 +31,7 @@
                tooltip="List all files ever committed"/>
                -->
          <action
-               class="org.eclipse.oomph.gitbash.repository.CheckCopyrightsAction"
-               enablesFor="1"
-               icon="icons/Copyrights.gif"
-               id="org.eclipse.oomph.gitbash.CheckCopyrightsAction"
-               label="Check Copyrights"
-               menubarPath="additions"
-               state="true"
-               style="push"
-               tooltip="Search for files with missing copyrights"/>
-         <action
-               class="org.eclipse.oomph.gitbash.repository.UpdateCopyrightsAction"
+               class="org.eclipse.oomph.gitbash.repository.UpdateRepositoryCopyrightsAction"
                enablesFor="1"
                icon="icons/Copyrights.gif"
                id="org.eclipse.oomph.gitbash.UpdateCopyrightsAction"
@@ -154,6 +144,21 @@
                state="true"
                style="push"
                tooltip="Execute git cherry-pick -n"/>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.eclipse.oomph.gitbash.contribution2a"
+            objectClass="org.eclipse.jgit.revwalk.RevCommit">
+         <action
+               class="org.eclipse.oomph.gitbash.revision.UpdateCommitCopyrightsAction"
+               enablesFor="1"
+               icon="icons/gitbash.gif"
+               id="org.eclipse.oomph.gitbash.UpdateCommitCopyrightsAction"
+               label="Update Copyrights"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="Update copyrights with years from git log"/>
       </objectContribution>
       <objectContribution
             adaptable="false"

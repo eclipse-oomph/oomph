@@ -8,10 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  */
-package org.eclipse.oomph.gitbash.repository;
-
-import org.eclipse.oomph.gitbash.AbstractAction;
-import org.eclipse.oomph.gitbash.Activator;
+package org.eclipse.oomph.gitbash;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
@@ -62,7 +59,7 @@ import java.util.regex.Pattern;
 /**
  * @author Eike Stepper
  */
-public class UpdateCopyrightsAction extends AbstractAction<Repository>
+public class UpdateCopyrightsHelper
 {
   private static final String[] DEFAULT_IGNORED_MESSAGE_VERBS = { "update", "adjust", "fix" };
 
@@ -110,18 +107,11 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
 
   private File stateFile;
 
-  public UpdateCopyrightsAction()
+  public UpdateCopyrightsHelper()
   {
-    super(Repository.class);
   }
 
-  protected boolean isCheckOnly()
-  {
-    return false;
-  }
-
-  @Override
-  protected void run(final Shell shell, final Repository repository) throws Exception
+  public void run(final Shell shell, final Repository repository, final List<File> inputFiles) throws Exception
   {
     new Job(getTitle())
     {
@@ -138,31 +128,38 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
           stateFile = new File(workTree, ".legalchecks.state");
 
           initProperties();
-
-          Set<File> finishedFiles = initState();
-          final Boolean[] skipFinishedFiles = { false };
-          if (finishedFiles != null && !finishedFiles.isEmpty())
-          {
-            final String message = finishedFiles.size() + " files have been previously processed.\nDo you want to skip these files?";
-            shell.getDisplay().syncExec(new Runnable()
-            {
-              public void run()
-              {
-                skipFinishedFiles[0] = MessageDialog.openQuestion(shell, getTitle(), message);
-              }
-            });
-          }
-
-          if (!skipFinishedFiles[0])
-          {
-            stateFile.delete();
-            finishedFiles = null;
-          }
-
-          stateWriter = new BufferedWriter(new FileWriter(stateFile, true));
-
           final Map<File, Boolean> files = new TreeMap<File, Boolean>();
-          collectFiles(files, finishedFiles, workTree, monitor);
+
+          if (inputFiles == null)
+          {
+            Set<File> finishedFiles = initState();
+
+            final Boolean[] skipFinishedFiles = { false };
+            if (finishedFiles != null && !finishedFiles.isEmpty())
+            {
+              final String message = finishedFiles.size() + " files have been previously processed.\nDo you want to skip these files?";
+              shell.getDisplay().syncExec(new Runnable()
+              {
+                public void run()
+                {
+                  skipFinishedFiles[0] = MessageDialog.openQuestion(shell, getTitle(), message);
+                }
+              });
+            }
+
+            if (!skipFinishedFiles[0])
+            {
+              stateFile.delete();
+              finishedFiles = null;
+            }
+
+            stateWriter = new BufferedWriter(new FileWriter(stateFile, true));
+            collectFiles(files, finishedFiles, workTree, monitor);
+          }
+          else
+          {
+            collectFiles(files, inputFiles, monitor);
+          }
 
           monitor.beginTask(getTitle(), files.size());
 
@@ -362,18 +359,57 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
             continue;
           }
 
-          boolean required = matches(file, checkFiles);
-          if (required)
+          Boolean required = isRequired(file);
+          if (required != null)
           {
-            files.put(file, true);
-          }
-          else if (!isCheckOnly() && matches(file, updateFiles))
-          {
-            files.put(file, false);
+            files.put(file, required);
           }
         }
       }
     }
+  }
+
+  private void collectFiles(Map<File, Boolean> files, List<File> inputFiles, IProgressMonitor monitor) throws Exception
+  {
+    for (File file : inputFiles)
+    {
+      if (monitor.isCanceled())
+      {
+        throw new OperationCanceledException();
+      }
+
+      String path = getWorkTreeRelativePath(file);
+      if (!hasString(path, ignoredPaths))
+      {
+        String name = file.getName();
+        if (name.endsWith(".class"))
+        {
+          continue;
+        }
+
+        Boolean required = isRequired(file);
+        if (required != null)
+        {
+          files.put(file, required);
+        }
+      }
+    }
+  }
+
+  private Boolean isRequired(File file)
+  {
+    boolean required = matches(file, checkFiles);
+    if (required)
+    {
+      return Boolean.TRUE;
+    }
+
+    if (matches(file, updateFiles))
+    {
+      return Boolean.FALSE;
+    }
+
+    return null;
   }
 
   private void checkFiles(Map<File, Boolean> files, BufferedWriter stateWriter, long start, IProgressMonitor monitor) throws Exception
@@ -394,8 +430,11 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
       checkFile(file, required);
       monitor.worked(1);
 
-      stateWriter.write(file.toString());
-      stateWriter.write(NL);
+      if (stateWriter != null)
+      {
+        stateWriter.write(file.toString());
+        stateWriter.write(NL);
+      }
 
       double millis = System.currentTimeMillis() - start;
       double millisPerFile = millis / ++i;
@@ -429,10 +468,6 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
         if (matcher.matches())
         {
           copyrightFound = true;
-          if (isCheckOnly())
-          {
-            break;
-          }
 
           String dates = matcher.group(2);
           if (dates.endsWith(CURRENT_YEAR_STRING))
@@ -594,7 +629,7 @@ public class UpdateCopyrightsAction extends AbstractAction<Repository>
 
   private String getTitle()
   {
-    return (isCheckOnly() ? "Check" : "Update") + " Copyrights";
+    return "Update Copyrights";
   }
 
   private String getWorkTreeRelativePath(File file)
