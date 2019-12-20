@@ -1094,7 +1094,6 @@ public class TestSuite extends MinimalEObjectImpl.Container
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("null")
   @Override
   public boolean eIsSet(int featureID)
   {

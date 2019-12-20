@@ -949,7 +949,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       }
     }
 
-    @SuppressWarnings("restriction")
     private static void applyCookieStore(final IFileTransferConnectStartEvent connectStartEvent)
     {
       IIncomingFileTransfer fileTransfer = ObjectUtil.adapt(connectStartEvent, IIncomingFileTransfer.class);
@@ -1106,7 +1105,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     /**
      * @author Ed Merks
      */
-    @SuppressWarnings("restriction")
     private static class DelegatingCookieStore implements CookieStore
     {
       private final CookieStore delegate = new CookieManager().getCookieStore();
