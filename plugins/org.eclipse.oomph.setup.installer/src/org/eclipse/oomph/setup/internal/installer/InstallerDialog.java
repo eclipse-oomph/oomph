@@ -37,7 +37,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
@@ -310,10 +309,9 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
 
   private void setUpdateIcon(final int icon)
   {
-    Display display = updateToolItem.getDisplay();
-    if (!display.isDisposed())
+    if (!updateToolItem.isDisposed())
     {
-      display.asyncExec(new Runnable()
+      updateToolItem.getDisplay().asyncExec(new Runnable()
       {
         public void run()
         {
