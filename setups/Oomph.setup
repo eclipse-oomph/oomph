@@ -129,11 +129,11 @@
         name="org.eclipse.jdt.launching">
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
+          key="/instance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_COMPILER_COMPLIANCE_DOES_NOT_MATCH_JRE"
           value="ignore"/>
       <setupTask
           xsi:type="setup:PreferenceTask"
-          key="/instance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_COMPILER_COMPLIANCE_DOES_NOT_MATCH_JRE"
+          key="/instance/org.eclipse.jdt.launching/org.eclipse.jdt.launching.PREF_STRICTLY_COMPATIBLE_JRE_NOT_AVAILABLE"
           value="ignore"/>
     </setupTask>
     <setupTask
@@ -143,6 +143,14 @@
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.mylyn.team.ui/org.eclipse.mylyn.team.commit.template"
           value="[$${task.key}] $${task.description}&#xD;&#xA;&#xD;&#xA;$${task.url}"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.pde">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.pde/compilers.p.exec-env-too-low"
+          value="2"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
