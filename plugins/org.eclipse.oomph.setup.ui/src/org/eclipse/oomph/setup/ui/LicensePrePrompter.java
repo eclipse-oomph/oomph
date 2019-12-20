@@ -42,8 +42,10 @@ public class LicensePrePrompter extends AbstractSetupDialog
 
   private static final String DEFAULT_LICENSE_NAME = "Eclipse Foundation Software User Agreement";
 
-  private static final Set<String> IMPLIED_LICENSE_UUIDS = Collections
-      .unmodifiableSet(new HashSet<String>(Arrays.asList("6a3d083ad2bd7d3a80ee293235f8c5b1", "abc76a6cc9d06e4684ff61ed74a972c")));
+  private static final Set<String> IMPLIED_LICENSE_UUIDS = Collections.unmodifiableSet(
+      new HashSet<String>(Arrays.asList("6a3d083ad2bd7d3a80ee293235f8c5b1", "abc76a6cc9d06e4684ff61ed74a972c", "8d3137b6d090b6860d1b977a88ceb334",
+          "d77cfd8b73fc71776727fcbb2605709", "6a3d083ad2bd7d3a80ee293235f8c5b1", "be4a7d94b4e1903e628a3001859739a8", "318bcab4617b336391ac7ab40514ccc3",
+          "aa1a84ed6378c1cdba13a100c225aa57", "425529a69afe7129289ce9a30b4d2b6c", "84f0b7f0a433c033764dd28540d6d199", "4450aa10f21d146d6a6a80f84275f5b2")));
 
   private final String license;
 
@@ -62,7 +64,7 @@ public class LicensePrePrompter extends AbstractSetupDialog
   protected String getDefaultMessage()
   {
     return "Applicable licenses will be discovered and prompted later in the installation process.\n"
-        + "Avoid such interruptions by accepting the most common license now.";
+        + "Avoid such interruptions by accepting the licenses that govern Eclipse content now.";
   }
 
   @Override
