@@ -29,14 +29,10 @@
       value="3g"
       vm="true"/>
   <version name="latest"
-      label="Latest (4.14 - 2019-12)"
+      label="Latest (4.15 - 2020-03)"
       requiredJavaVersion="1.8">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="siteURI">
-        <value>https://download.eclipse.org/eclipse/downloads/</value>
-      </detail>
       <detail
           key="shortcut">
         <value>Eclipse SDK - Latest</value>
@@ -44,12 +40,12 @@
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse SDK (4.14 - 2019-12)">
+        label="Eclipse SDK (4.15 - 2020-03)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.14.0,5.0.0)"/>
+          versionRange="[4.15.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/eclipse/updates/4.14/R-4.14-201912100610"/>
+          url="http://download.eclipse.org/eclipse/updates/4.15-I-builds"/>
     </setupTask>
   </version>
   <version name="latest.released"
@@ -74,6 +70,26 @@
           versionRange="[4.14.0,5.0.0)"/>
       <repository
           url="http://download.eclipse.org/eclipse/updates/4.14/R-4.14-201912100610"/>
+    </setupTask>
+  </version>
+  <version name="4.15"
+      label="4.15 - 2020-03"
+      requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.15 - 2020-03</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.15 - 2020-03)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.15.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/eclipse/updates/4.15-I-builds"/>
     </setupTask>
   </version>
   <version name="4.14"

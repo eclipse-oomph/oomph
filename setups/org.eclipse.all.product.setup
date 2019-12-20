@@ -20,14 +20,10 @@
       value="5g"
       vm="true"/>
   <version name="latest"
-      label="Latest (2019-12)"
+      label="Latest (2020-03)"
       requiredJavaVersion="1.8">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2019-12/rc1</value>
-      </detail>
       <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - Latest</value>
@@ -35,7 +31,7 @@
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse Eierlegende Wollmilchsau (2019-12)">
+        label="Eclipse Eierlegende Wollmilchsau (2020-03)">
       <requirement
           name="Application Development Frameworks"/>
       <requirement
@@ -69,7 +65,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.14.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2019-12">
+          url="http://download.eclipse.org/releases/2020-03">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -82,7 +78,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2019-12/rc1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2019-12/r</value>
       </detail>
       <detail
           key="shortcut">
@@ -125,7 +121,59 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.14.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2019-12">
+          url="http://download.eclipse.org/releases/2019-12/201912181000">
+        <annotation
+            source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+      </repository>
+    </setupTask>
+  </version>
+  <version name="2020-03"
+      label="2020-03"
+      requiredJavaVersion="1.8">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - 2020-03</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Eierlegende Wollmilchsau (2020-03)">
+      <requirement
+          name="Application Development Frameworks"/>
+      <requirement
+          name="Cloud Tools"/>
+      <requirement
+          name="Collaboration"/>
+      <requirement
+          name="Database Development"/>
+      <requirement
+          name="General Purpose Tools"/>
+      <requirement
+          name="License Management"/>
+      <requirement
+          name="Linux Tools"
+          filter="(osgi.os=linux)"/>
+      <requirement
+          name="Mobile and Device Development"/>
+      <requirement
+          name="Modeling"/>
+      <requirement
+          name="Performance, Profiling and Tracing Tools"/>
+      <requirement
+          name="Programming Languages"/>
+      <requirement
+          name="SOA Development"/>
+      <requirement
+          name="Testing"/>
+      <requirement
+          name="Web, XML, Java EE and OSGi Enterprise Development"/>
+      <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.14.0,5.0.0)"/>
+      <repository
+          url="http://download.eclipse.org/releases/2020-03">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -142,7 +190,7 @@
       </detail>
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2019-12/rc1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2019-12/r</value>
       </detail>
       <detail
           key="shortcut">
@@ -185,7 +233,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.14.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2019-12">
+          url="http://download.eclipse.org/releases/2019-12/201912181000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
