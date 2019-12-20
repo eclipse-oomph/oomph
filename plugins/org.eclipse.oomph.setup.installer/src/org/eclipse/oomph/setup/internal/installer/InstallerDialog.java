@@ -37,6 +37,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
@@ -309,66 +310,70 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
 
   private void setUpdateIcon(final int icon)
   {
-    updateToolItem.getDisplay().asyncExec(new Runnable()
+    Display display = updateToolItem.getDisplay();
+    if (!display.isDisposed())
     {
-      public void run()
+      display.asyncExec(new Runnable()
       {
-        if (updateToolItem == null || updateToolItem.isDisposed())
+        public void run()
         {
-          return;
+          if (updateToolItem == null || updateToolItem.isDisposed())
+          {
+            return;
+          }
+
+          try
+          {
+            if (updateSearching)
+            {
+              updateToolItem.setToolTipText("Checking for updates...");
+              updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching" + icon + ".png"));
+              updateToolItem.setEnabled(false);
+            }
+            else if (updateError != null)
+            {
+              StringBuilder builder = new StringBuilder();
+              formatStatus(builder, "", updateError);
+              updateToolItem.setToolTipText(builder.toString());
+              updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_error.png"));
+              updateToolItem.setEnabled(true);
+            }
+            else if (updateResolution != null)
+            {
+              updateToolItem.setToolTipText("Install available updates");
+              updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update" + icon + ".png"));
+              updateToolItem.setEnabled(true);
+            }
+            else
+            {
+              updateToolItem.setToolTipText("No updates available");
+              updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update_disabled.png"));
+              updateToolItem.setEnabled(false);
+            }
+          }
+          catch (Exception ex)
+          {
+            // Ignore
+          }
         }
 
-        try
+        private void formatStatus(StringBuilder builder, String indent, IStatus status)
         {
-          if (updateSearching)
+          if (builder.length() != 0)
           {
-            updateToolItem.setToolTipText("Checking for updates...");
-            updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching" + icon + ".png"));
-            updateToolItem.setEnabled(false);
+            builder.append('\n');
           }
-          else if (updateError != null)
-          {
-            StringBuilder builder = new StringBuilder();
-            formatStatus(builder, "", updateError);
-            updateToolItem.setToolTipText(builder.toString());
-            updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_error.png"));
-            updateToolItem.setEnabled(true);
-          }
-          else if (updateResolution != null)
-          {
-            updateToolItem.setToolTipText("Install available updates");
-            updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update" + icon + ".png"));
-            updateToolItem.setEnabled(true);
-          }
-          else
-          {
-            updateToolItem.setToolTipText("No updates available");
-            updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update_disabled.png"));
-            updateToolItem.setEnabled(false);
-          }
-        }
-        catch (Exception ex)
-        {
-          // Ignore
-        }
-      }
 
-      private void formatStatus(StringBuilder builder, String indent, IStatus status)
-      {
-        if (builder.length() != 0)
-        {
-          builder.append('\n');
-        }
+          builder.append(indent);
+          builder.append(status.getMessage());
 
-        builder.append(indent);
-        builder.append(status.getMessage());
-
-        for (IStatus child : status.getChildren())
-        {
-          formatStatus(builder, indent + "   ", child);
+          for (IStatus child : status.getChildren())
+          {
+            formatStatus(builder, indent + "   ", child);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   private void setProductVersionLink(Composite parent)

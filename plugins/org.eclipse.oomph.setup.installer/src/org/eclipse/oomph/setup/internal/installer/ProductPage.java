@@ -948,8 +948,11 @@ public class ProductPage extends SetupWizardPage
   private void updateSetupContext()
   {
     ProductVersion productVersion = getSelectedProductVersion();
-    selectionMemento.setProductVersion(EcoreUtil.getURI(productVersion));
-    getWizard().setSetupContext(SetupContext.create(getResourceSet(), productVersion));
+    if (productVersion != null)
+    {
+      selectionMemento.setProductVersion(EcoreUtil.getURI(productVersion));
+      getWizard().setSetupContext(SetupContext.create(getResourceSet(), productVersion));
+    }
   }
 
   public boolean refreshJREs()
