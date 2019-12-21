@@ -1291,8 +1291,14 @@ public class AgentAnalyzerComposite extends Composite
     public void updateElement(int index)
     {
       Object[] elements = getElements(input);
-      Object element = index < elements.length ? elements[index] : null;
-      tableViewer.replace(element, index);
+      if (index < elements.length)
+      {
+        tableViewer.replace(elements[index], index);
+      }
+      else
+      {
+        tableViewer.clear(index);
+      }
     }
 
     public void refresh()
