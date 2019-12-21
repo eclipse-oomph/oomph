@@ -828,6 +828,13 @@ public class AgentAnalyzerComposite extends Composite
     {
       Object[] elements = artifactContentProvider.getElements(currentBundlePool);
       changed |= updateButton(selectAllArtifactsButton, "Select All", elements.length, "");
+
+      changed |= updateButton(repairAllArtifactsButton, "Repair", currentBundlePool.getDamagedArtifactsCount(), " Damaged Artifacts");
+
+      if (currentBundlePool.isAnalyzingDamage() && repairAllArtifactsButton.isEnabled())
+      {
+        repairAllArtifactsButton.setEnabled(false);
+      }
     }
 
     AnalyzedArtifact[] artifacts = getSelectedArtifacts();
