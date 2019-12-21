@@ -12,11 +12,14 @@ package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.setup.Trigger;
+import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.OomphWizardDialog;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -69,5 +72,30 @@ public class SetupWizardDialog extends OomphWizardDialog
       SetupWizardPage setupWizardPage = (SetupWizardPage)currentPage;
       setupWizardPage.handleInactivity(display, inactive);
     }
+  }
+
+  @Override
+  protected IDialogSettings getDialogBoundsSettings()
+  {
+    return SetupUIPlugin.INSTANCE.getDialogSettings(getWizard().getClass().getName());
+  }
+
+  @Override
+  protected int getDialogBoundsStrategy()
+  {
+    return DIALOG_PERSISTSIZE;
+  }
+
+  protected Point basicGetInitialSize()
+  {
+    return getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+  }
+
+  @Override
+  protected Point getInitialSize()
+  {
+    Point computedSize = basicGetInitialSize();
+    Point initialSize = super.getInitialSize();
+    return new Point(Math.max(computedSize.x, initialSize.x), Math.max(computedSize.y, initialSize.y));
   }
 }

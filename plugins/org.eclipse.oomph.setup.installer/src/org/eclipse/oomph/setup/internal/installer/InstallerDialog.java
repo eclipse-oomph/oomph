@@ -571,18 +571,10 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
   }
 
   @Override
-  protected int getDialogBoundsStrategy()
+  protected Point basicGetInitialSize()
   {
-    return DIALOG_PERSISTSIZE;
-  }
-
-  @Override
-  protected Point getInitialSize()
-  {
-    Point computedSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+    Point computedSize = super.basicGetInitialSize();
     computedSize.x = computedSize.x * 21 / 20;
-
-    Point initialSize = super.getInitialSize();
-    return new Point(Math.max(computedSize.x, initialSize.x), Math.max(computedSize.y, initialSize.y));
+    return computedSize;
   }
 }
