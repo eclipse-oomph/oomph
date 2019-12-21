@@ -56,6 +56,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.window.Window;
@@ -256,6 +257,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         new StatusDialog(getShell(), "Configuration Problems", null, status, Diagnostic.ERROR).open();
       }
     }
+  }
+
+  @Override
+  protected IDialogSettings getDialogSizeSettings()
+  {
+    return SetupInstallerPlugin.INSTANCE.getDialogSettings("SimpleInstaller");
   }
 
   @Override

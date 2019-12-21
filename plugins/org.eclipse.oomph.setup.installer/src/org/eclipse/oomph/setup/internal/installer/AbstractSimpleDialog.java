@@ -20,6 +20,7 @@ import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -64,15 +65,16 @@ public abstract class AbstractSimpleDialog extends Shell
     verticalLayout.marginHeight = 1;
     verticalLayout.verticalSpacing = 0;
 
+    Point dialogSize = getDialogSize(display, width, height);
     setLayout(verticalLayout);
-    setSize(width, height);
+    setSize(dialogSize);
     setImages(Window.getDefaultImages());
     setText(PropertiesUtil.getProductName());
 
     setBackground(SetupInstallerPlugin.getColor(207, 207, 207));
 
     Rectangle bounds = display.getPrimaryMonitor().getBounds();
-    setLocation(bounds.x + (bounds.width - width) / 2, bounds.y + (bounds.height - height) / 2);
+    setLocation(bounds.x + (bounds.width - dialogSize.x) / 2, bounds.y + (bounds.height - dialogSize.y) / 2);
 
     addTraverseListener(new TraverseListener()
     {
@@ -219,6 +221,14 @@ public abstract class AbstractSimpleDialog extends Shell
 
   protected void exitSelected()
   {
+    IDialogSettings dialogSizeSettings = getDialogSizeSettings();
+    if (dialogSizeSettings != null)
+    {
+      Point size = getShell().getSize();
+      dialogSizeSettings.put("width", size.x);
+      dialogSizeSettings.put("height", size.y);
+    }
+
     dispose();
   }
 
@@ -226,5 +236,31 @@ public abstract class AbstractSimpleDialog extends Shell
   protected void checkSubclass()
   {
     // Do nothing.
+  }
+
+  protected Point getDialogSize(Display display, int width, int height)
+  {
+    IDialogSettings dialogSizeSettings = getDialogSizeSettings();
+    if (dialogSizeSettings != null)
+    {
+      try
+      {
+        Rectangle monitorBounds = display.getPrimaryMonitor().getBounds();
+        int savedWidth = dialogSizeSettings.getInt("width");
+        int savedHeigth = dialogSizeSettings.getInt("height");
+        return new Point(Math.min(monitorBounds.width, Math.max(width, savedWidth)), Math.min(monitorBounds.height, Math.max(height, savedHeigth)));
+      }
+      catch (NumberFormatException ex)
+      {
+        //$FALL-THROUGH$
+      }
+    }
+
+    return new Point(width, height);
+  }
+
+  protected IDialogSettings getDialogSizeSettings()
+  {
+    return null;
   }
 }

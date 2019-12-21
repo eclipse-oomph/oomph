@@ -23,6 +23,7 @@ import org.eclipse.oomph.util.ExceptionHandler;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.window.Window;
@@ -564,10 +565,24 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
   }
 
   @Override
+  protected IDialogSettings getDialogBoundsSettings()
+  {
+    return SetupInstallerPlugin.INSTANCE.getDialogSettings("AdvancedInstaller");
+  }
+
+  @Override
+  protected int getDialogBoundsStrategy()
+  {
+    return DIALOG_PERSISTSIZE;
+  }
+
+  @Override
   protected Point getInitialSize()
   {
+    Point computedSize = getShell().computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+    computedSize.x = computedSize.x * 21 / 20;
+
     Point initialSize = super.getInitialSize();
-    initialSize.x = initialSize.x * 11 / 10;
-    return initialSize;
+    return new Point(Math.max(computedSize.x, initialSize.x), Math.max(computedSize.y, initialSize.y));
   }
 }
