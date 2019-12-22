@@ -92,6 +92,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -118,6 +119,8 @@ public class SynchronizerDialog extends AbstractSetupDialog
   private static final int H_INDENT = 2 * SPACE;
 
   private static final int V_INDENT = 1;
+
+  private static String POLICY_HELP_MESSAGE = " Click the policy header to toggle all policies.";
 
   private final PaintHandler paintHandler = new PaintHandler();
 
@@ -236,27 +239,27 @@ public class SynchronizerDialog extends AbstractSetupDialog
       case RECORD:
         if (recorderTarget instanceof User)
         {
-          return "Select what to record for reuse across all workspaces.";
+          return "Select what to record for reuse across all workspaces." + POLICY_HELP_MESSAGE;
         }
 
         if (recorderTarget instanceof Installation)
         {
-          return "Select what to record for reuse across all workspaces of the current installation.";
+          return "Select what to record for reuse across all workspaces of the current installation." + POLICY_HELP_MESSAGE;
         }
 
         if (recorderTarget instanceof Workspace)
         {
-          return "Select what to record for the use of just this workspace.";
+          return "Select what to record for the use of just this workspace." + POLICY_HELP_MESSAGE;
         }
 
-        return "Select what to record into " + recorderTargetText + ".";
+        return "Select what to record into " + recorderTargetText + "." + POLICY_HELP_MESSAGE;
 
       case SYNC:
-        return "Select what to synchronize with " + getServiceLabel() + " for reuse across all machines.";
+        return "Select what to synchronize with " + getServiceLabel() + " for reuse across all machines." + POLICY_HELP_MESSAGE;
 
       case RECORD_AND_SYNC:
         return "Select what to record for reuse across all workspaces on this machine and what to synchronize with " + getServiceLabel()
-            + " for reuse across all your other machines.";
+            + " for reuse across all your other machines." + POLICY_HELP_MESSAGE;
 
       default:
         return null;
@@ -1505,11 +1508,109 @@ public class SynchronizerDialog extends AbstractSetupDialog
 
     private final Image targetImageDisabled;
 
-    public ColumnManager(SynchronizerDialog dialog, Image targetImage)
+    public ColumnManager(final SynchronizerDialog dialog, TreeColumn targetColumn, Image targetImage)
     {
       this.dialog = dialog;
       this.targetImage = targetImage;
       targetImageDisabled = new Image(targetImage.getDevice(), targetImage, SWT.IMAGE_DISABLE);
+
+      targetColumn.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent event)
+        {
+          if (dialog.treePopulated)
+          {
+            handleToggleAllChoices();
+          }
+        }
+      });
+    }
+
+    protected void handleToggleAllChoices()
+    {
+      TreeItem[] items = dialog.tree.getItems();
+      Map<Choice[], Choice> minimumnChoice = new HashMap<Choice[], Choice>();
+      Set<TaskItem> taskItems = new LinkedHashSet<TaskItem>();
+      visit(minimumnChoice, taskItems, items);
+      boolean hasConflictChoice = false;
+      for (Entry<Choice[], Choice> entry : minimumnChoice.entrySet())
+      {
+        Choice[] choices = entry.getKey();
+        int index = indexOf(choices, entry.getValue());
+        Choice nextChoice = index + 1 == choices.length ? choices[0] : choices[index + 1];
+        if (nextChoice instanceof Choice.SyncConflict)
+        {
+          nextChoice = choices[1];
+        }
+
+        if (nextChoice instanceof Choice.SyncLocal || nextChoice instanceof Choice.SyncRemote)
+        {
+          hasConflictChoice = true;
+        }
+
+        entry.setValue(nextChoice);
+      }
+
+      // If the next choice is a conflict choice, make sure the non-conflict next choice is to record.
+      if (hasConflictChoice)
+      {
+        for (Entry<Choice[], Choice> entry : minimumnChoice.entrySet())
+        {
+          Choice choice = entry.getValue();
+          if (!(choice instanceof Choice.SyncLocal || choice instanceof Choice.SyncRemote))
+          {
+            entry.setValue(entry.getKey()[0]);
+          }
+        }
+      }
+
+      for (TaskItem taskItem : taskItems)
+      {
+        Choice choice = minimumnChoice.get(getChoices(taskItem));
+        setChoice(taskItem, choice);
+      }
+
+      dialog.tree.redraw();
+    }
+
+    private void visit(Map<Choice[], Choice> minimumnChoice, Set<TaskItem> taskItems, TreeItem[] items)
+    {
+      for (TreeItem item : items)
+      {
+        if (item instanceof TaskItem)
+        {
+          TaskItem taskItem = (TaskItem)item;
+          if (!isChoiceDisabled(taskItem))
+          {
+            taskItems.add(taskItem);
+
+            Choice[] choices = getChoices(taskItem);
+            Choice choice = getChoice(taskItem);
+            Choice currentMinimumChoice = minimumnChoice.get(choices);
+            if (currentMinimumChoice == null || indexOf(choices, choice) < indexOf(choices, currentMinimumChoice))
+            {
+              minimumnChoice.put(choices, choice);
+              currentMinimumChoice = choice;
+            }
+          }
+        }
+
+        visit(minimumnChoice, taskItems, item.getItems());
+      }
+    }
+
+    private static int indexOf(Choice[] choices, Choice choice)
+    {
+      for (int i = 0; i < choices.length; i++)
+      {
+        if (choices[i] == choice)
+        {
+          return i;
+        }
+      }
+
+      return -1;
     }
 
     public SynchronizerDialog getDialog()
@@ -1594,6 +1695,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
       }
 
       menu = new Menu(tree);
+      Choice currentChoice = getChoice(taskItem);
       for (final Choice choice : getChoices(taskItem))
       {
         if (choice instanceof Choice.SyncConflict)
@@ -1601,7 +1703,8 @@ public class SynchronizerDialog extends AbstractSetupDialog
           continue;
         }
 
-        MenuItem menuItem = new MenuItem(menu, SWT.PUSH);
+        MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
+        menuItem.setSelection(choice == currentChoice);
         menuItem.setImage(choice.getImage());
         menuItem.setText(choice.getText());
         menuItem.addSelectionListener(new SelectionAdapter()
@@ -1648,7 +1751,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
 
     public LocalColumnManager(SynchronizerDialog dialog)
     {
-      super(dialog, dialog.recorderTargetImage);
+      super(dialog, dialog.localColumn, dialog.recorderTargetImage);
 
       choices[0] = new Choice.RecordAlways(dialog.recorderTargetText);
       choices[1] = new Choice.RecordNever(dialog.recorderTargetText);
@@ -1734,7 +1837,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
 
     public RemoteColumnManager(SynchronizerDialog dialog, String serviceLabel)
     {
-      super(dialog, TARGET_IMAGE);
+      super(dialog, dialog.remoteColumn, TARGET_IMAGE);
 
       normalChoices[0] = new Choice.SyncAlways(serviceLabel);
       normalChoices[1] = new Choice.SyncNever(serviceLabel);
@@ -1745,6 +1848,13 @@ public class SynchronizerDialog extends AbstractSetupDialog
       conflictChoices[2] = new Choice.SyncRemote(serviceLabel);
       conflictChoices[3] = new Choice.SyncNever(serviceLabel);
       conflictChoices[4] = new Choice.SyncSkip();
+    }
+
+    @Override
+    protected void handleToggleAllChoices()
+    {
+      super.handleToggleAllChoices();
+      getDialog().adjustSyncActions(null);
     }
 
     @Override
