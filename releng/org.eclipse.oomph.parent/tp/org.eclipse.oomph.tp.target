@@ -25,7 +25,7 @@
       <repository location="http://download.eclipse.org/nebula/snapshot"/>
       <repository location="http://download.eclipse.org/technology/swtbot/snapshots"/>
       <repository location="http://download.eclipse.org/webtools/repository/latest"/>
-      <repository location="http://download.eclipse.org/eclipse/updates/4.15-I-builds"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.14/R-4.14-201912100610"/>
     </location>
   </locations>
 </target>
