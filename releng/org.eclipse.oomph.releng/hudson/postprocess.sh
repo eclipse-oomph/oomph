@@ -49,7 +49,9 @@ if [[ $file == *.tar.gz ]]; then
   bash $script $file $args
 
   if [[ $file == *mac64* ]]; then
+    echo "  Signing Eclipse Installer.app"
     rm -rf "Eclipse Installer.app/Contents/_CodeSignature"
+    chmod -R a-st "Eclipse Installer.app"
     zip -r -q unsigned.zip "Eclipse Installer.app"
     rm -rf "Eclipse Installer.app"
     curl -O https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/releng/org.eclipse.oomph.releng/hudson/installer.entitlements
