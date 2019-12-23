@@ -53,7 +53,7 @@ if [[ $file == *.tar.gz ]]; then
     zip -r -q unsigned.zip "Eclipse Installer.app"
     rm -rf "Eclipse Installer.app"
     curl -O https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/releng/org.eclipse.oomph.releng/hudson/installer.entitlements
-    curl -o signed.zip -F file=@unsigned.zip -F entitlements=installer.entitlements http://172.30.206.146:8282/macosx-signing-service/1.0.1-SNAPSHOT
+    curl -o signed.zip -F file=@unsigned.zip -F entitlements=@installer.entitlements http://172.30.206.146:8282/macosx-signing-service/1.0.1-SNAPSHOT
     unzip -qq signed.zip
     rm -f unsigned.zip signed.zip
     chmod -R a-st "Eclipse Installer.app"
