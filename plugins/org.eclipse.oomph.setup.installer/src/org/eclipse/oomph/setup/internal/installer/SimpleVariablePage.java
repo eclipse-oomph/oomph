@@ -74,9 +74,11 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -1513,6 +1515,21 @@ public class SimpleVariablePage extends SimpleInstallerPage
         }
       };
     }
+    else
+    {
+      action = new SimpleMessageOverlay.RunnableWithLabel()
+      {
+        public void run()
+        {
+          openInstallerLog();
+        }
+
+        public String getLabel()
+        {
+          return "Show Installer log.";
+        }
+      };
+    }
 
     dialog.showMessage(errorMessage, Type.ERROR, false, action);
 
@@ -1756,6 +1773,18 @@ public class SimpleVariablePage extends SimpleInstallerPage
     }
 
     return null;
+  }
+
+  private File getInstallerLogFile()
+  {
+    IPath logFileLocation = Platform.getLogFileLocation();
+    return new File(logFileLocation.toOSString());
+  }
+
+  private void openInstallerLog()
+  {
+    File installerLogFile = getInstallerLogFile();
+    dialog.showInstallationLog(installerLogFile);
   }
 
   private File getLogFile()
