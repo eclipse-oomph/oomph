@@ -285,7 +285,7 @@ public final class PropertiesUtil
     }
   }
 
-  public static Map<String, String> loadProperties(File file)
+  public static <T extends Map<String, String>> T loadProperties(File file, final T properties)
   {
     InputStream stream = null;
 
@@ -294,7 +294,6 @@ public final class PropertiesUtil
       // Buffering is done inside java.lang.Properties.
       stream = new FileInputStream(file);
 
-      final Map<String, String> properties = new LinkedHashMap<String, String>();
       Properties converter = new Properties()
       {
         private static final long serialVersionUID = 1L;
@@ -317,6 +316,11 @@ public final class PropertiesUtil
     {
       IOUtil.closeSilent(stream);
     }
+  }
+
+  public static Map<String, String> loadProperties(File file)
+  {
+    return loadProperties(file, new LinkedHashMap<String, String>());
   }
 
   public static Map<String, String> getProperties(File file)
