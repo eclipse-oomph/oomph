@@ -38,7 +38,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="eclipse.target.platform"
-      defaultValue="Neon"
+      defaultValue="${eclipse.target.platform.latest}"
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup.p2:P2Task">
@@ -76,7 +76,7 @@
           locateNestedProjects="true"/>
       <repositoryList>
         <repository
-            url="https://download.eclipse.org/staging/2019-09"/>
+            url="https://download.eclipse.org/staging/${eclipse.target.platform}"/>
       </repositoryList>
     </targlet>
   </setupTask>
