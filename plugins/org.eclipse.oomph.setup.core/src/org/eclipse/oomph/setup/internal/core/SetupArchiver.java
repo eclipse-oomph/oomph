@@ -27,6 +27,9 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.FeatureMap;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xml.type.AnyType;
 
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
@@ -290,8 +293,9 @@ public class SetupArchiver implements IApplication
     if (lastModified != 0)
     {
       options.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
-      // options.put(Resource.OPTION_LINE_DELIMITER, "\n");
     }
+
+    options.put(Resource.OPTION_LINE_DELIMITER, "\n");
 
     // Remove any folder redirections that might be in place for the location of the setups folder and folders under that.
     for (Iterator<URI> it = uriMap.keySet().iterator(); it.hasNext();)
@@ -348,6 +352,10 @@ public class SetupArchiver implements IApplication
             System.err.println("FAILED to load " + normalizedURI);
             printDiagnostics(resource.getErrors());
             hasFailures = true;
+          }
+          else if (hasUnrecongizedXMLContent(resource))
+          {
+            System.err.println("FAILED to load properly because of unrecognized XML content " + normalizedURI);
           }
           else
           {
@@ -421,7 +429,7 @@ public class SetupArchiver implements IApplication
       }
       else if (isDamaged(temp))
       {
-        System.err.println("The resulting archive is damaged so the old one will be retained. Deleting " + file);
+        System.err.println("The resulting archive is damaged so the old one will be retained. Deleting " + temp);
         temp.delete();
       }
       else
@@ -518,6 +526,24 @@ public class SetupArchiver implements IApplication
         catch (IOException ex)
         {
           throw new IORuntimeException(ex);
+        }
+      }
+    }
+
+    return false;
+  }
+
+  private boolean hasUnrecongizedXMLContent(Resource resource)
+  {
+    if (resource instanceof XMLResource)
+    {
+      Map<EObject, AnyType> eObjectToExtensionMap = ((XMLResource)resource).getEObjectToExtensionMap();
+      for (AnyType anyType : eObjectToExtensionMap.values())
+      {
+        FeatureMap any = anyType.getAny();
+        if (!any.isEmpty())
+        {
+          return true;
         }
       }
     }
