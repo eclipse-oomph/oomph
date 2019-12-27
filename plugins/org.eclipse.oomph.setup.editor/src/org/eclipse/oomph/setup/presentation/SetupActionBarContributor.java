@@ -51,6 +51,7 @@ import org.eclipse.oomph.workingsets.WorkingSetsPackage;
 import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor;
 import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor.ShowPreviewAction;
 
+import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
@@ -63,6 +64,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xml.type.AnyType;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -142,6 +145,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
@@ -279,6 +283,8 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   private final ShowInformationBrowserAction showInformationBrowserAction = new ShowInformationBrowserAction();
 
   protected final WorkingSetsActionBarContributor.ShowPreviewAction showPreviewAction = new ShowPreviewAction("Show Working Sets Preview");
+
+  protected final DeleteUnrecognizedContentAction deleteUnrecognizedContentAction = new DeleteUnrecognizedContentAction();
 
   private int lastSubMenuID;
 
@@ -505,6 +511,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     importPreferencesAction.setActiveWorkbenchPart(part);
     showPreviewAction.setActiveWorkbenchPart(part);
     showInformationBrowserAction.setActiveWorkbenchPart(part);
+    deleteUnrecognizedContentAction.setActiveWorkbenchPart(part);
 
     // Switch to the new selection provider.
     //
@@ -591,6 +598,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     // recordPreferencesAction.selectionChanged(event);
     openInSetupEditorAction.selectionChanged(event);
     openInTextEditorAction.selectionChanged(event);
+    deleteUnrecognizedContentAction.selectionChanged(event);
     // testInstallAction.selectionChanged(event);
   }
 
@@ -1202,6 +1210,11 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
         SetupEditorPlugin.INSTANCE.getImageDescriptor("create_sibling"), "CreateSibling");
     populateManager(submenuManager, createSiblingActions, null);
     menuManager.insertBefore("edit", submenuManager);
+
+    if (deleteUnrecognizedContentAction.isApplicable())
+    {
+      menuManager.insertBefore("edit", deleteUnrecognizedContentAction);
+    }
 
     menuManager.insertBefore("ui-actions", openInSetupEditorAction);
     menuManager.insertBefore("ui-actions", openInTextEditorAction);
@@ -2015,6 +2028,94 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       }
 
       setEnabled(uri != null);
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static class DeleteUnrecognizedContentAction extends Action
+  {
+    private XMLResource resource;
+
+    private SetupEditor setupEditor;
+
+    public DeleteUnrecognizedContentAction()
+    {
+      setText("Delete Unrecognized Content");
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("remove_unrecognized_content"));
+    }
+
+    @Override
+    public void run()
+    {
+      EditingDomain editingDomain = setupEditor.getEditingDomain();
+      AbstractCommand command = new AbstractCommand(getText())
+      {
+        private Map<EObject, AnyType> eObjectToExtensionMap;
+
+        @Override
+        protected boolean prepare()
+        {
+          eObjectToExtensionMap = new LinkedHashMap<EObject, AnyType>(resource.getEObjectToExtensionMap());
+          return true;
+        }
+
+        public void execute()
+        {
+          resource.getEObjectToExtensionMap().clear();
+        }
+
+        @Override
+        public void undo()
+        {
+          resource.getEObjectToExtensionMap().putAll(eObjectToExtensionMap);
+        }
+
+        public void redo()
+        {
+          execute();
+        }
+      };
+
+      editingDomain.getCommandStack().execute(command);
+    }
+
+    public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
+    {
+      if (workbenchPart instanceof SetupEditor)
+      {
+        setupEditor = (SetupEditor)workbenchPart;
+        setEnabled(true);
+      }
+      else
+      {
+        setEnabled(false);
+        setupEditor = null;
+      }
+    }
+
+    public boolean isApplicable()
+    {
+      return resource != null;
+    }
+
+    public final void selectionChanged(SelectionChangedEvent event)
+    {
+      resource = null;
+
+      IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+      if (selection.size() == 1)
+      {
+        Object element = selection.getFirstElement();
+        if (element instanceof XMLResource)
+        {
+          resource = (XMLResource)element;
+
+        }
+      }
+
+      setEnabled(resource != null && !resource.getEObjectToExtensionMap().isEmpty());
     }
   }
 
