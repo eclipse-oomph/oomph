@@ -31,22 +31,19 @@
         xsi:type="setup:VariableTask"
         name="github.user.id"
         defaultValue="anonymous"
-        label="Github user ID"
-        documentation="The Eclipse user ID for Git/Gerrit commits.  Use 'anonymous' if you have no Eclipse user ID.">
+        label="Github user ID">
       <description>The user ID of the Github account</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="github.author.name"
-        label="Github author name"
-        documentation="The Eclipse author name for Git/Gerrit commits.  Use 'Anonymous' if you're not a registered Eclipse Git author or don't plan to commit to Git.">
+        label="Github author name">
       <description>The author name used for Github commits</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="github.author.email"
-        label="Github author email"
-        documentation="The Eclipse author email for Git/Gerrit commits.  Use 'anonymous@example.com' if you're not a registered Eclipse Git author or don't plan to commit to Git.">
+        label="Github author email">
       <description>The email address associated with Github commits</description>
     </setupTask>
     <setupTask

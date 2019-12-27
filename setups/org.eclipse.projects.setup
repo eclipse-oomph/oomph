@@ -34,38 +34,33 @@
         xsi:type="setup:VariableTask"
         name="git.user.id"
         defaultValue="anonymous"
-        label="Eclipse Git/Gerrit user ID"
-        documentation="The Eclipse user ID for Git/Gerrit commits.  Use 'anonymous' if you have no Eclipse user ID.">
+        label="Eclipse Git/Gerrit user ID">
       <description>The user ID of the Eclipse Git/Gerrit account</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="git.author.name"
-        label="Eclipse author name for Git/Gerrit"
-        documentation="The Eclipse author name for Git/Gerrit commits.  Use 'Anonymous' if you're not a registered Eclipse Git author or don't plan to commit to Git.">
+        label="Eclipse author name for Git/Gerrit">
       <description>The author name used for Git/Gerrit commits</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="git.author.email"
-        label="Eclipse author email for Git/Gerrit"
-        documentation="The Eclipse author email for Git/Gerrit commits.  Use 'anonymous@example.com' if you're not a registered Eclipse Git author or don't plan to commit to Git.">
+        label="Eclipse author email for Git/Gerrit">
       <description>The email address associated with Git/Gerrit commits</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="bugzilla.id"
         defaultValue="anonymous"
-        label="Eclipse user email for Bugzilla/Jenkins/Jiro"
-        documentation="The Eclipse user email for Bugzilla/Jenkins/Jiro.  Leave empty if you don't have an account or don't plan to submit bugs.">
+        label="Eclipse user email for Bugzilla/Jenkins/Jiro">
       <description>The email associated with the Eclipse Bugzilla/Jenkins/Jiro account</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         type="PASSWORD"
         name="eclipse.user.password"
-        label="Eclipse password for Bugzilla/Jenkins/Jiro"
-        documentation="The Eclipse password for Bugzilla/Jenkins/Jiro.  Leave empty if you don't have an account or don't plan to submit bugs.">
+        label="Eclipse password for Bugzilla/Jenkins/Jiro">
       <annotation
           source="http://www.eclipse.org/oomph/setup/PasswordVerification">
         <detail
@@ -852,8 +847,7 @@
       xsi:type="pde:APIBaselineFromTargetTask"
       predecessor="api.baseline.targlet"
       name="Modular API Baseline"
-      targetName="Modular API Baseline Target"
-      version="0.0.0">
+      targetName="Modular API Baseline Target">
     <description>An API baseline based on the target platform named 'Modular API Baseline Target'</description>
   </setupTask>
   <project href="user:/org.eclipse.projects.setup?name='user.project',label='&lt;User>',description='A container project for local user projects that are virtual members of the Eclipse.org project catalog'#/"/>

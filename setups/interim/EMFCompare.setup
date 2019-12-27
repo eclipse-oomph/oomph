@@ -136,8 +136,7 @@
   <setupTask
       xsi:type="git:GitCloneTask"
       id="git.clone.emfcompare"
-      remoteURI="emfcompare/org.eclipse.emf.compare"
-      userID="">
+      remoteURI="emfcompare/org.eclipse.emf.compare">
     <annotation
         source="http://www.eclipse.org/oomph/setup/InducedChoices">
       <detail
