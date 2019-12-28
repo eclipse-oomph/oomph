@@ -230,9 +230,20 @@ public final class JREManager
   {
     File defaultsFile = getDefaultsFile();
     Map<String, String> properties = PropertiesUtil.getProperties(defaultsFile);
-    properties.put(getDefaultsKey(bitness, javaVersion), javaHome);
-    properties.put(getDefaultsKey(bitness, null), javaHome);
-    PropertiesUtil.saveProperties(defaultsFile, properties, true);
+    String oldVersionSpecificJavaHome = properties.put(getDefaultsKey(bitness, javaVersion), javaHome);
+    String oldJavaHome = properties.put(getDefaultsKey(bitness, null), javaHome);
+    if (!javaHome.equals(oldVersionSpecificJavaHome) || !javaHome.equals(oldJavaHome))
+    {
+      try
+      {
+        PropertiesUtil.saveProperties(defaultsFile, properties, true);
+      }
+      catch (Exception ex)
+      {
+        // Log and exception because failing to save defaults isn't catastrophic.
+        JREInfoPlugin.INSTANCE.log(ex);
+      }
+    }
   }
 
   public Map<File, JRE> getJREs()

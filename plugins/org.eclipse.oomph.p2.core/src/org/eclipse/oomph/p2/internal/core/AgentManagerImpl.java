@@ -352,9 +352,14 @@ public class AgentManagerImpl implements AgentManager
   public void setDefaultBundlePool(String client, BundlePool bundlePool)
   {
     Properties defaults = loadDefaults();
-    defaults.put(client, bundlePool.getLocation().getAbsolutePath());
-    defaults.put(client + AGENT_SUFFIX, bundlePool.getAgent().getLocation().getAbsolutePath());
-    saveDefaults(defaults);
+    String bundlePoolLocation = bundlePool.getLocation().getAbsolutePath();
+    Object oldBundlePoolLocation = defaults.put(client, bundlePoolLocation);
+    String agentLocation = bundlePool.getAgent().getLocation().getAbsolutePath();
+    Object oldAgentLocation = defaults.put(client + AGENT_SUFFIX, agentLocation);
+    if (!bundlePoolLocation.equals(oldBundlePoolLocation) || !agentLocation.equals(oldAgentLocation))
+    {
+      saveDefaults(defaults);
+    }
   }
 
   private BundlePool restoreBundlePool(String client, Properties defaults)
@@ -442,7 +447,8 @@ public class AgentManagerImpl implements AgentManager
     }
     catch (IOException ex)
     {
-      throw new P2Exception(ex);
+      // Only log an exception because failing to save the defaults is not catastrophic.
+      P2CorePlugin.INSTANCE.log(ex);
     }
     finally
     {
