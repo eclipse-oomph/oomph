@@ -48,16 +48,14 @@ public final class PropertiesUtil
   {
   }
 
-  public static void setProperty(Map<String, String> properties, String key, Object value)
+  public static String setProperty(Map<String, String> properties, String key, Object value)
   {
     if (value == null)
     {
-      properties.remove(key);
+      return properties.remove(key);
     }
-    else
-    {
-      properties.put(key, String.valueOf(value));
-    }
+
+    return properties.put(key, String.valueOf(value));
   }
 
   public static Boolean getBoolean(String key)
