@@ -1443,7 +1443,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           throw new IOException("Simulated network problem");
         }
 
-        // Setup the basic context for subsquent processing.
+        // Setup the basic context for subsequent processing.
         CacheHandling cacheHandling = getCacheHandling(options);
         URIConverter uriConverter = getURIConverter(options);
         URI cacheURI = getCacheFile(uri);
@@ -1889,6 +1889,19 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       return transferListener;
     }
 
+    private void putRequestHeader(Map<Object, Object> requestOptions, String option, String value)
+    {
+      @SuppressWarnings("unchecked")
+      Map<String, String> requestHeaders = (Map<String, String>)requestOptions.get(IRetrieveFileTransferOptions.REQUEST_HEADERS);
+      if (requestHeaders == null)
+      {
+        requestHeaders = new HashMap<String, String>();
+        requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, requestHeaders);
+      }
+
+      requestHeaders.put(option, value);
+    }
+
     @Override
     protected void sendConnectionRequest(FileTransferID fileTransferID, String host) throws ECFException
     {
@@ -1900,9 +1913,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
       if (!StringUtil.isEmpty(USER_AGENT) && host != null && host.endsWith(".eclipse.org"))
       {
-        Map<String, String> requestHeaders = new HashMap<String, String>();
-        requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, requestHeaders);
-        requestHeaders.put("User-Agent", USER_AGENT);
+        putRequestHeader(requestOptions, "User-Agent", USER_AGENT);
       }
 
       if (forceAuthorization != null)
@@ -1915,11 +1926,21 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, requestHeaders);
         }
 
-        requestHeaders.put("Authorization", forceAuthorization.getAuthorization());
+        putRequestHeader(requestOptions, "Authorization", forceAuthorization.getAuthorization());
 
         if (TRACE)
         {
           System.out.println(tracePrefix + " forcing basic authentication: " + forceAuthorization);
+        }
+      }
+
+      if (transferListener.expectedETag != null && getCacheHandling(options) != CacheHandling.CACHE_IGNORE)
+      {
+        putRequestHeader(requestOptions, "If-None-Match", transferListener.expectedETag);
+
+        if (TRACE)
+        {
+          System.out.println(tracePrefix + " using If-None-Match : " + transferListener.expectedETag);
         }
       }
 
