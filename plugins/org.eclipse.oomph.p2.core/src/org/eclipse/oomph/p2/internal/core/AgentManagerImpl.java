@@ -306,10 +306,19 @@ public class AgentManagerImpl implements AgentManager
   public BundlePool getDefaultBundlePool(String client) throws P2Exception
   {
     Properties defaults = loadDefaults();
-    BundlePool bundlePool = restoreBundlePool(client, defaults);
-    if (bundlePool != null)
+    BundlePool bundlePool = null;
+    try
     {
-      return bundlePool;
+      bundlePool = restoreBundlePool(client, defaults);
+      if (bundlePool != null)
+      {
+        return bundlePool;
+      }
+    }
+    catch (Exception ex)
+    {
+      // If loaded defaults can't be used to create the bundle pool and the agent, compute a new default.
+      P2CorePlugin.INSTANCE.log(ex);
     }
 
     for (Object otherClient : defaults.keySet())
@@ -319,10 +328,18 @@ public class AgentManagerImpl implements AgentManager
       // Skip agent locations.
       if (clientId != null && !clientId.equals(client) && !clientId.endsWith(AGENT_SUFFIX))
       {
-        bundlePool = restoreBundlePool(clientId, defaults);
-        if (bundlePool != null)
+        try
         {
-          return bundlePool;
+          bundlePool = restoreBundlePool(clientId, defaults);
+          if (bundlePool != null)
+          {
+            return bundlePool;
+          }
+        }
+        catch (Exception ex)
+        {
+          // If loaded defaults can't be used to create the bundle pool and the agent, compute a new default.
+          P2CorePlugin.INSTANCE.log(ex);
         }
       }
     }
