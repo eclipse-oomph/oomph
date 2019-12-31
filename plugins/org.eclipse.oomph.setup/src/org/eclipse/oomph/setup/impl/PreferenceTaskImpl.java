@@ -1501,7 +1501,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     public void apply(SetupTaskContext context)
     {
       PreferenceProperty profiles = getProfilesPreferenceProperty();
-      Pattern pattern = Pattern.compile("(?s)(<profile[^\n]*name=\"" + newValue.substring(1) + "\".*?</profile>)");
+      Pattern pattern = Pattern.compile("(?s)(<profile[^\n]*name=\"" + Pattern.quote(newValue.substring(1)) + "\".*?</profile>)");
       String value = profiles.get(null);
       if (value != null)
       {
