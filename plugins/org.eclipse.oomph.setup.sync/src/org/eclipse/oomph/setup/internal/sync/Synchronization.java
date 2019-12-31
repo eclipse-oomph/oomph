@@ -397,13 +397,30 @@ public class Synchronization
 
   private Map<String, SetupTask> collectTasks(SetupTaskContainer taskContainer)
   {
+    // Visit all tasks to collect all IDs first to ensure that we don't create a duplicate ID while collecting tasks.
+    EList<SetupTask> setupTasks = taskContainer.getSetupTasks();
+    collectIDs(setupTasks);
+
     Map<String, SetupTask> tasks = new HashMap<String, SetupTask>();
-    if (collectTasks(taskContainer.getSetupTasks(), tasks))
+    if (collectTasks(setupTasks, tasks))
     {
       new ChangedAdapter(taskContainer);
     }
 
     return tasks;
+  }
+
+  private void collectIDs(EList<SetupTask> tasks)
+  {
+    for (SetupTask task : tasks)
+    {
+      rememberID(task);
+      if (task instanceof CompoundTask)
+      {
+        CompoundTask compoundTask = (CompoundTask)task;
+        collectIDs(compoundTask.getSetupTasks());
+      }
+    }
   }
 
   private boolean collectTasks(EList<SetupTask> tasks, Map<String, SetupTask> result)
