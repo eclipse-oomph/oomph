@@ -88,6 +88,11 @@ public final class AgentAnalyzer
     Collection<Profile> allProfiles = agent.getAllProfiles();
     monitor.beginTask("Loading profiles...", allProfiles.size());
 
+    IFileArtifactRepository downloadCacheRepository = agent.getDownloadCacheRepository();
+    File downloadCacheRepositoryLocation = new File(downloadCacheRepository.getLocation());
+    AnalyzedBundlePool downloadCacheBundlePool = new AnalyzedBundlePool(this, downloadCacheRepositoryLocation, true);
+    bundlePools.put(downloadCacheRepositoryLocation, downloadCacheBundlePool);
+
     try
     {
       for (Profile p2Profile : allProfiles)
@@ -107,11 +112,12 @@ public final class AgentAnalyzer
               AnalyzedBundlePool bundlePool = bundlePools.get(location);
               if (bundlePool == null)
               {
-                bundlePool = new AnalyzedBundlePool(this, location);
+                bundlePool = new AnalyzedBundlePool(this, location, false);
                 bundlePools.put(location, bundlePool);
               }
 
               bundlePool.addProfile(p2Profile, installFolder);
+              downloadCacheBundlePool.addProfile(p2Profile, installFolder);
             }
           }
         }
@@ -279,6 +285,8 @@ public final class AgentAnalyzer
 
     private final File location;
 
+    private final boolean downloadCache;
+
     private final Set<URI> repositoryURIs = new LinkedHashSet<URI>();
 
     private final List<AnalyzedProfile> profiles = new ArrayList<AnalyzedProfile>();
@@ -303,10 +311,16 @@ public final class AgentAnalyzer
 
     private boolean analyzingDamage = true;
 
-    public AnalyzedBundlePool(AgentAnalyzer analyzer, File location)
+    public AnalyzedBundlePool(AgentAnalyzer analyzer, File location, boolean downloadCache)
     {
       this.analyzer = analyzer;
       this.location = location;
+      this.downloadCache = downloadCache;
+    }
+
+    public boolean isDownloadCache()
+    {
+      return downloadCache;
     }
 
     public boolean isAnalyzing()
@@ -467,7 +481,12 @@ public final class AgentAnalyzer
 
     public int compareTo(AnalyzedBundlePool o)
     {
-      return location.getAbsolutePath().compareTo(o.getLocation().getAbsolutePath());
+      if (o.isDownloadCache() == isDownloadCache())
+      {
+        return location.getAbsolutePath().compareTo(o.getLocation().getAbsolutePath());
+      }
+
+      return isDownloadCache() ? 1 : -1;
     }
 
     @Override

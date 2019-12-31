@@ -771,7 +771,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     boolean removeRepositories = !"false".equals(PropertiesUtil.getProperty(AgentManager.PROP_FLUSH));
     if (removeRepositories)
     {
-      agent.flushRepositoryCaches();
+      agent.flushCachedRepositories();
     }
 
     final IMetadataRepositoryManager metadataRepositoryManager = agent.getMetadataRepositoryManager();

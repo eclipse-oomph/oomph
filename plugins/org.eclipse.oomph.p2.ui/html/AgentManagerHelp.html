@@ -1,0 +1,49 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+<title>Bundle Pool Management</title>
+
+<link rel="stylesheet" href="book.css">
+
+<noscript></noscript>
+<script type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Bundle Pool Management";
+    }
+}
+</script>
+</head>
+<body bgcolor="white" onload="windowTitle();">
+
+<h1>Bundle Pool Management</h1>
+
+<p>
+Eclipse's provisioning technology, p2, manages each Eclipse installation using a so-called <i>agent</i>.
+The agent maintains and manages one or more <i>bundle pools</i>, which contains the artifacts (plug-ins and features) used by the installation,
+as well as one or more <i>profiles</i>, which specify precisely which artifacts are currently in use by that installation.
+Creating an initial installation, installing new software into the installation, or updating the installation with the latest software work via the agent.
+The agent can be co-located with the installation or can be managed by a shared agent.
+By default, Oomph will use a shared agent which has the advantage that multiple installations can share artifacts, dramatically reducing disk space.
+</p>
+
+<p>
+In this dialog you can manage the disk locations of your shared agents as well as the disk locations of each of the agent's bundle pools.
+The pools can get large over time and can accumulate so called <i>garbage</i>, 
+e.g., if you delete an installation, its profile will become unused,
+or if you update an installation, some of the older artifact may become unused.
+This dialog allows you to perform garbage collection, i.e., allows you to cleanup the shared agent.
+You can also do a more detailed analysis of the agent to detect damaged artifacts and to repair them.
+In addition, p2 caches repository metadata to speed up peformance;
+this dialog allows the agent's repository metadata cache to be cleared.
+</p>
+
+<p>
+This dialog can even be used to show all the profiles of the installations managed by each agent
+and can be used to inspect the details of each profile.
+</p>
+
+</body>
+</html>

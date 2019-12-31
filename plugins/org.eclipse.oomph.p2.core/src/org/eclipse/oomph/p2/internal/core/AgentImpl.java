@@ -28,6 +28,8 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.equinox.internal.p2.engine.BeginOperationEvent;
 import org.eclipse.equinox.internal.p2.engine.CommitOperationEvent;
 import org.eclipse.equinox.internal.p2.engine.RollbackOperationEvent;
@@ -39,6 +41,7 @@ import org.eclipse.equinox.internal.p2.update.Configuration;
 import org.eclipse.equinox.internal.p2.update.Site;
 import org.eclipse.equinox.internal.provisional.p2.core.eventbus.IProvisioningEventBus;
 import org.eclipse.equinox.internal.provisional.p2.core.eventbus.SynchronousProvisioningListener;
+import org.eclipse.equinox.p2.core.IAgentLocation;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 import org.eclipse.equinox.p2.core.ProvisionException;
@@ -51,6 +54,7 @@ import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.planner.IPlanner;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
+import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import org.osgi.framework.BundleContext;
@@ -59,11 +63,13 @@ import org.osgi.framework.ServiceReference;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EventObject;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -658,7 +664,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return planner;
   }
 
-  public void flushRepositoryCaches()
+  public void flushCachedRepositories()
   {
     IMetadataRepositoryManager metadataRepositoryManager = getMetadataRepositoryManager();
     if (metadataRepositoryManager instanceof CachingRepositoryManager.Metadata)
@@ -672,6 +678,51 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     {
       CachingRepositoryManager.Artifact manager = (CachingRepositoryManager.Artifact)artifactRepositoryManager;
       manager.flushCache();
+    }
+  }
+
+  public IFileArtifactRepository getDownloadCacheRepository()
+  {
+    try
+    {
+      return org.eclipse.equinox.internal.p2.touchpoint.natives.Util.getDownloadCacheRepo(getProvisioningAgent());
+    }
+    catch (ProvisionException ex)
+    {
+      throw new P2Exception(ex);
+    }
+  }
+
+  public void clearRepositoryCaches(IProgressMonitor monitor)
+  {
+    Set<File> cacheFiles = new LinkedHashSet<File>();
+
+    IAgentLocation location = (IAgentLocation)getProvisioningAgent().getService(IAgentLocation.SERVICE_NAME);
+    File p2Cache = URIUtil.toFile(location.getDataArea(org.eclipse.equinox.internal.p2.repository.Activator.ID + "/cache/"));
+    File[] p2CacheFiles = p2Cache.listFiles();
+    if (p2CacheFiles != null)
+    {
+      cacheFiles.addAll(Arrays.asList(p2CacheFiles));
+    }
+
+    File oomphP2Cache = new File(P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.getUserHome())), "cache");
+    File[] oomphP2CacheFiles = oomphP2Cache.listFiles();
+    if (oomphP2CacheFiles != null)
+    {
+      cacheFiles.addAll(Arrays.asList(oomphP2CacheFiles));
+    }
+
+    SubMonitor subMonitor = SubMonitor.convert(monitor, "Deleting Repository Cache Resources", cacheFiles.size());
+    for (File cacheFile : cacheFiles)
+    {
+      if (subMonitor.isCanceled())
+      {
+        break;
+      }
+
+      subMonitor.subTask("Deleting " + cacheFile);
+      IOUtil.deleteBestEffort(cacheFile, false);
+      subMonitor.worked(1);
     }
   }
 

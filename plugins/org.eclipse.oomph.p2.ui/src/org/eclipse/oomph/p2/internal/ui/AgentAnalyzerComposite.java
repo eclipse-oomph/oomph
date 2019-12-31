@@ -22,6 +22,9 @@ import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.SubMonitor;
 
+import org.eclipse.emf.edit.provider.IItemFontProvider;
+import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -32,6 +35,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -54,12 +58,14 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ScrollBar;
@@ -223,7 +229,7 @@ public class AgentAnalyzerComposite extends Composite
 
     bundlePoolContentProvider = new BundlePoolContentProvider();
     bundlePoolViewer.setContentProvider(bundlePoolContentProvider);
-    bundlePoolViewer.setLabelProvider(new TableLabelProvider(getDisplay()));
+    bundlePoolViewer.setLabelProvider(new TableLabelProvider(bundlePoolViewer.getTable()));
     bundlePoolViewer.addSelectionChangedListener(new SelectionChangedListener()
     {
       @Override
@@ -338,7 +344,7 @@ public class AgentAnalyzerComposite extends Composite
 
     profileContentProvider = new ProfileContentProvider();
     profileViewer.setContentProvider(profileContentProvider);
-    profileViewer.setLabelProvider(new TableLabelProvider(getDisplay()));
+    profileViewer.setLabelProvider(new TableLabelProvider(profileViewer.getTable()));
     profileViewer.addSelectionChangedListener(new SelectionChangedListener()
     {
       @Override
@@ -468,7 +474,7 @@ public class AgentAnalyzerComposite extends Composite
 
     artifactContentProvider = new ArtifactContentProvider();
     artifactViewer.setContentProvider(artifactContentProvider);
-    artifactViewer.setLabelProvider(new TableLabelProvider(getDisplay()));
+    artifactViewer.setLabelProvider(new TableLabelProvider(artifactViewer.getTable()));
     artifactViewer.addSelectionChangedListener(new SelectionChangedListener()
     {
       @Override
@@ -1074,21 +1080,24 @@ public class AgentAnalyzerComposite extends Composite
   /**
    * @author Eike Stepper
    */
-  public static final class TableLabelProvider extends LabelProvider implements ITableLabelProvider, IColorProvider
+  public static final class TableLabelProvider extends LabelProvider implements ITableLabelProvider, IColorProvider, ITableFontProvider
   {
+    private final Control control;
+
     private final Color gray;
 
-    private boolean singleColumn;
+    private final boolean singleColumn;
 
-    public TableLabelProvider(Display display, boolean singleColumn)
+    public TableLabelProvider(Control control, boolean singleColumn)
     {
+      this.control = control;
       this.singleColumn = singleColumn;
-      gray = display.getSystemColor(SWT.COLOR_DARK_GRAY);
+      gray = control.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
     }
 
-    public TableLabelProvider(Display display)
+    public TableLabelProvider(Control control)
     {
-      this(display, false);
+      this(control, false);
     }
 
     public String getColumnText(Object element, int columnIndex)
@@ -1196,6 +1205,16 @@ public class AgentAnalyzerComposite extends Composite
         {
           return getPluginImage("repository");
         }
+      }
+
+      return null;
+    }
+
+    public Font getFont(Object element, int columnIndex)
+    {
+      if (columnIndex == 0 && element instanceof AnalyzedBundlePool && ((AnalyzedBundlePool)element).isDownloadCache())
+      {
+        return ExtendedFontRegistry.INSTANCE.getFont(control.getFont(), IItemFontProvider.ITALIC_FONT);
       }
 
       return null;

@@ -24,7 +24,7 @@ public class AgentManagerDialog extends OomphDialog
 {
   public static final String TITLE = "Bundle Pool Management";
 
-  public static final String MESSAGE = "Manage your p2 agents and bundle pools";
+  public static final String MESSAGE = "Select the bundle pool to be used for provisioning";
 
   private Object selectedElement;
 
@@ -32,7 +32,7 @@ public class AgentManagerDialog extends OomphDialog
 
   public AgentManagerDialog(Shell parentShell)
   {
-    super(parentShell, TITLE, 700, 500, P2UIPlugin.INSTANCE, false);
+    super(parentShell, TITLE, 700, 650, P2UIPlugin.INSTANCE, true);
     setShellStyle(SWT.TITLE | SWT.MAX | SWT.RESIZE | SWT.BORDER | SWT.APPLICATION_MODAL);
   }
 
@@ -72,6 +72,12 @@ public class AgentManagerDialog extends OomphDialog
   protected String getImagePath()
   {
     return "wizban/AgentManager.png";
+  }
+
+  @Override
+  public String getHelpPath()
+  {
+    return P2UIPlugin.INSTANCE.getSymbolicName() + "/html/AgentManagerHelp.html";
   }
 
   @Override

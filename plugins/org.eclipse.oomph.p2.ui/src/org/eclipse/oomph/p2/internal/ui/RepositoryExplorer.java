@@ -1763,7 +1763,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       installableUnits = null;
 
       Agent agent = P2Util.getAgentManager().getCurrentAgent();
-      agent.flushRepositoryCaches();
+      agent.flushCachedRepositories();
 
       IMetadataRepositoryManager repositoryManager = agent.getMetadataRepositoryManager();
       List<URI> originalKnownRepositories = Arrays.asList(repositoryManager.getKnownRepositories(IRepositoryManager.REPOSITORIES_ALL));

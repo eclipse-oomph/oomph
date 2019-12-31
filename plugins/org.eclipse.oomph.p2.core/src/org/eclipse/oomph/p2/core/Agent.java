@@ -16,6 +16,7 @@ import org.eclipse.equinox.p2.engine.IEngine;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.planner.IPlanner;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
+import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
 import java.io.File;
@@ -57,5 +58,9 @@ public interface Agent extends AgentManagerElement, ProfileContainer
 
   public IPlanner getPlanner();
 
-  public void flushRepositoryCaches();
+  public void flushCachedRepositories();
+
+  public IFileArtifactRepository getDownloadCacheRepository();
+
+  public void clearRepositoryCaches(IProgressMonitor monitor);
 }

@@ -115,7 +115,7 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
     TableViewer artifactViewer = new TableViewer(artifactComposite, SWT.BORDER | SWT.FULL_SELECTION);
     artifactViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
     artifactViewer.setComparator(new ViewerComparator());
-    artifactViewer.setLabelProvider(new AgentAnalyzerComposite.TableLabelProvider(parent.getDisplay(), true));
+    artifactViewer.setLabelProvider(new AgentAnalyzerComposite.TableLabelProvider(artifactViewer.getTable(), true));
     artifactViewer.setContentProvider(new ArrayContentProvider());
     artifactViewer.setInput(artifacts);
 
@@ -151,7 +151,7 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
     repositoryViewer = CheckboxTableViewer.newCheckList(repositoryComposite, SWT.BORDER | SWT.FULL_SELECTION);
     repositoryViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
     repositoryViewer.setComparator(new ViewerComparator());
-    repositoryViewer.setLabelProvider(new AgentAnalyzerComposite.TableLabelProvider(parent.getDisplay()));
+    repositoryViewer.setLabelProvider(new AgentAnalyzerComposite.TableLabelProvider(artifactViewer.getTable()));
     repositoryViewer.setContentProvider(new ArrayContentProvider());
     repositoryViewer.setInput(repositories);
     repositoryViewer.addCheckStateListener(this);
