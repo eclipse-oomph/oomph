@@ -32,12 +32,15 @@ import org.eclipse.oomph.util.SubMonitor;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.provider.IItemFontProvider;
+import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -56,11 +59,13 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
 
@@ -90,6 +95,8 @@ public class AgentManagerComposite extends Composite
 
   private TreeViewer treeViewer;
 
+  private BundlePool selectedPool;
+
   private Object selectedElement;
 
   private Button clearButton;
@@ -99,6 +106,8 @@ public class AgentManagerComposite extends Composite
   private Button newAgentButton;
 
   private Button newPoolButton;
+
+  private Button selectPoolButton;
 
   private Button deleteButton;
 
@@ -110,17 +119,39 @@ public class AgentManagerComposite extends Composite
 
   private Button profileDetailsButton;
 
-  public AgentManagerComposite(Composite parent, int style, final Object selection)
+  public AgentManagerComposite(Composite parent, int style)
+  {
+    this(parent, style, false, null);
+  }
+
+  public AgentManagerComposite(Composite parent, int style, final BundlePool selection)
+  {
+    this(parent, style, true, selection);
+  }
+
+  private AgentManagerComposite(Composite parent, int style, boolean poolSelection, final BundlePool selection)
   {
     super(parent, style);
     UIUtil.setTransparentBackgroundColor(this);
     setLayout(UIUtil.createGridLayout(2));
+    selectedPool = selection;
 
     final P2ContentProvider contentProvider = new P2ContentProvider();
 
     treeViewer = new TreeViewer(this, SWT.BORDER);
     treeViewer.setContentProvider(contentProvider);
-    treeViewer.setLabelProvider(new P2LabelProvider());
+    treeViewer.setLabelProvider(new P2LabelProvider(poolSelection ? new IFontProvider()
+    {
+      public Font getFont(Object element)
+      {
+        if (element == selectedPool)
+        {
+          return ExtendedFontRegistry.INSTANCE.getFont(treeViewer.getTree().getFont(), IItemFontProvider.BOLD_FONT);
+        }
+
+        return null;
+      }
+    } : null));
     treeViewer.setComparator(new P2ViewerSorter());
     treeViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
@@ -141,6 +172,10 @@ public class AgentManagerComposite extends Composite
         if (selectedElement instanceof Profile)
         {
           showProfileDetails();
+        }
+        else if (selectPoolButton != null && selectPoolButton.isEnabled())
+        {
+          selectPoolButton.notifyListeners(SWT.Selection, new Event());
         }
         else
         {
@@ -175,7 +210,7 @@ public class AgentManagerComposite extends Composite
     newAgentButton = new Button(buttonComposite, SWT.NONE);
     newAgentButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
     newAgentButton.setText("New Agent...");
-    newAgentButton.setToolTipText("Create a new agent in a new file system folder.");
+    newAgentButton.setToolTipText("Create a new agent in a new file system folder");
     newAgentButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -194,7 +229,7 @@ public class AgentManagerComposite extends Composite
     clearButton = new Button(buttonComposite, SWT.NONE);
     clearButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
     clearButton.setText("Clear Cache...");
-    clearButton.setToolTipText("Clear the selected agent's caches of all p2 repository metadata.");
+    clearButton.setToolTipText("Clear the selected agent's caches of all p2 repository metadata");
     clearButton.setEnabled(false);
     clearButton.addSelectionListener(new SelectionAdapter()
     {
@@ -229,7 +264,7 @@ public class AgentManagerComposite extends Composite
     cleanupButton = new Button(buttonComposite, SWT.NONE);
     cleanupButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
     cleanupButton.setText("Cleanup Agent...");
-    cleanupButton.setToolTipText("Garbage collect the selected agent's unused profiles and unused artifacts.");
+    cleanupButton.setToolTipText("Garbage collect the selected agent's unused profiles and unused artifacts");
     cleanupButton.setEnabled(false);
     cleanupButton.addSelectionListener(new SelectionAdapter()
     {
@@ -248,7 +283,7 @@ public class AgentManagerComposite extends Composite
     analyzeButton = new Button(buttonComposite, SWT.NONE);
     analyzeButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
     analyzeButton.setText("Analyze Agent...");
-    analyzeButton.setToolTipText("Analyze the selected agent for damaged and unused profiles as well as for damanaged and unused artifacts.");
+    analyzeButton.setToolTipText("Analyze the selected agent for damaged and unused profiles as well as for damanaged and unused artifacts");
     analyzeButton.setEnabled(false);
     analyzeButton.addSelectionListener(new SelectionAdapter()
     {
@@ -267,7 +302,7 @@ public class AgentManagerComposite extends Composite
     newPoolButton = new Button(buttonComposite, SWT.NONE);
     newPoolButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
     newPoolButton.setText("New Bundle Pool...");
-    newPoolButton.setToolTipText("Create a new bundle pool for the selected agent.");
+    newPoolButton.setToolTipText("Create a new bundle pool for the selected agent");
     newPoolButton.setEnabled(false);
     newPoolButton.addSelectionListener(new SelectionAdapter()
     {
@@ -284,10 +319,29 @@ public class AgentManagerComposite extends Composite
       }
     });
 
+    if (poolSelection)
+    {
+      selectPoolButton = new Button(buttonComposite, SWT.NONE);
+      selectPoolButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+      selectPoolButton.setText("Set Current Bundle Pool");
+      selectPoolButton.setToolTipText("Choose the current bundle pool to be used for provisioning");
+      selectPoolButton.setEnabled(false);
+      selectPoolButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          selectedPool = (BundlePool)((IStructuredSelection)treeViewer.getSelection()).getFirstElement();
+          elementChanged(selectedPool);
+          treeViewer.refresh();
+        }
+      });
+    }
+
     deleteButton = new Button(buttonComposite, SWT.NONE);
     deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
     deleteButton.setText("Delete...");
-    deleteButton.setToolTipText("Delete the unused selected unused agent, bundle pool, or profile.");
+    deleteButton.setToolTipText("Delete the selected unused agent, bundle pool, or profile");
     deleteButton.setEnabled(false);
     deleteButton.addSelectionListener(new SelectionAdapter()
     {
@@ -301,7 +355,7 @@ public class AgentManagerComposite extends Composite
     refreshButton = new Button(buttonComposite, SWT.NONE);
     refreshButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
     refreshButton.setText("Refresh");
-    refreshButton.setToolTipText("Refresh the tree view.");
+    refreshButton.setToolTipText("Refresh the tree view");
     refreshButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -336,7 +390,7 @@ public class AgentManagerComposite extends Composite
     showProfilesButton = new Button(buttonComposite, SWT.CHECK);
     showProfilesButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
     showProfilesButton.setText("Show Profiles");
-    showProfilesButton.setToolTipText("Display the selected agent's profiles for each bundle pool in the tree view.");
+    showProfilesButton.setToolTipText("Display the selected agent's profiles for each bundle pool in the tree view");
     showProfilesButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -362,7 +416,7 @@ public class AgentManagerComposite extends Composite
     profileDetailsButton = new Button(buttonComposite, SWT.NONE);
     profileDetailsButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
     profileDetailsButton.setText("Details...");
-    profileDetailsButton.setToolTipText("View the selected profile's details.");
+    profileDetailsButton.setToolTipText("View the selected profile's details");
     profileDetailsButton.setVisible(false);
     profileDetailsButton.addSelectionListener(new SelectionAdapter()
     {
@@ -398,10 +452,13 @@ public class AgentManagerComposite extends Composite
 
         if (selection == null)
         {
-          Collection<Agent> agents = agentManager.getAgents();
-          if (!agents.isEmpty())
+          if (treeViewer.getTree().isEnabled())
           {
-            treeViewer.setSelection(new StructuredSelection(agents.iterator().next()));
+            Collection<Agent> agents = agentManager.getAgents();
+            if (!agents.isEmpty())
+            {
+              treeViewer.setSelection(new StructuredSelection(agents.iterator().next()));
+            }
           }
         }
         else
@@ -418,9 +475,9 @@ public class AgentManagerComposite extends Composite
     return treeViewer.getTree().setFocus();
   }
 
-  public Object getSelectedElement()
+  public BundlePool getSelectedBundlePool()
   {
-    return selectedElement;
+    return selectedPool;
   }
 
   @Override
@@ -431,6 +488,15 @@ public class AgentManagerComposite extends Composite
     refreshButton.setEnabled(enabled);
     newAgentButton.setEnabled(enabled);
     showProfilesButton.setEnabled(enabled);
+
+    if (enabled)
+    {
+      selectedElement = ((IStructuredSelection)treeViewer.getSelection()).getFirstElement();
+    }
+    else
+    {
+      selectedElement = null;
+    }
 
     elementChanged(selectedElement);
 
@@ -636,6 +702,11 @@ public class AgentManagerComposite extends Composite
   {
     newPoolButton.setEnabled(element instanceof Agent);
     deleteButton.setEnabled(element instanceof AgentManagerElement && !((AgentManagerElement)element).isUsed());
+
+    if (selectPoolButton != null)
+    {
+      selectPoolButton.setEnabled(element instanceof BundlePool);
+    }
 
     Agent agent = getAgent(element);
     cleanupButton.setEnabled(agent != null);

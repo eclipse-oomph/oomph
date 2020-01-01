@@ -16,7 +16,6 @@ import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.FlatButton;
 import org.eclipse.oomph.internal.ui.ImageHoverButton;
 import org.eclipse.oomph.internal.ui.ToggleSwitchButton;
-import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
@@ -129,12 +128,6 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   private static final String EXIT_MENU_ITEM_TEXT = "EXIT";
 
   private static final Preference PREF_POOL_ENABLED = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("poolEnabled");
-
-  /**
-   * Adds the p2 bundle pool buttons to the UI if the bundle pool location isn't specified or isn't specified to be '@none'.
-   */
-  private static final boolean SHOW_BUNDLE_POOL_UI = PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION) == null
-      || !AgentManager.BUNDLE_POOL_LOCATION_NONE.equalsIgnoreCase(PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION));
 
   private static final boolean MARKETPLACE_MENU_ITEM_ENABLED = !"false".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_MARKETPLACE));
 
@@ -845,20 +838,20 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         Button button = getButton(IDialogConstants.OK_ID);
         if (button != null)
         {
-          button.setEnabled(element instanceof BundlePool);
+          button.setEnabled(getSelectedBundlePool() != null || !enabled[0]);
         }
       }
     };
 
     if (pool != null)
     {
-      dialog.setSelectedElement(pool);
+      dialog.setSelectedPool(pool);
     }
 
     if (dialog.open() == AgentManagerDialog.OK)
     {
       enablePool(enabled[0]);
-      pool = (BundlePool)dialog.getSelectedElement();
+      pool = dialog.getSelectedBundlePool();
     }
   }
 

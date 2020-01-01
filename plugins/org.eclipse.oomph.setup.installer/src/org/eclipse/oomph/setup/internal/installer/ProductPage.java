@@ -160,12 +160,6 @@ public class ProductPage extends SetupWizardPage
 {
   public static final String PAGE_NAME = "ProductPage";
 
-  /**
-   * Adds the p2 bundle pool buttons to the UI if the bundle pool location isn't specified or isn't specified to be '@none'.
-   */
-  private static final boolean SHOW_BUNDLE_POOL_UI = PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION) == null
-      || !AgentManager.BUNDLE_POOL_LOCATION_NONE.equalsIgnoreCase(PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION));
-
   private static final Product NO_PRODUCT = createNoProduct();
 
   private static final Pattern RELEASE_LABEL_PATTERN = Pattern.compile(".*\\(([^)]*)\\)[^)]*");
@@ -422,7 +416,7 @@ public class ProductPage extends SetupWizardPage
       }
     };
 
-    if (SHOW_BUNDLE_POOL_UI)
+    if (InstallerUI.SHOW_BUNDLE_POOL_UI)
     {
       DialogSettingsPersistence useBundlePool = new DialogSettingsPersistence(getDialogSettings(), "useBundlePool");
       poolButton = PersistentButton.create(lowerComposite, SWT.CHECK | SWT.RIGHT, true, useBundlePool);
@@ -1226,7 +1220,7 @@ public class ProductPage extends SetupWizardPage
         Button button = getButton(IDialogConstants.OK_ID);
         if (button != null)
         {
-          button.setEnabled(element instanceof BundlePool);
+          button.setEnabled(getSelectedBundlePool() != null);
         }
       }
     };
@@ -1235,7 +1229,7 @@ public class ProductPage extends SetupWizardPage
     BundlePool pool = (BundlePool)selection.getFirstElement();
     if (pool != null)
     {
-      dialog.setSelectedElement(pool);
+      dialog.setSelectedPool(pool);
     }
 
     int result = dialog.open();
@@ -1243,8 +1237,12 @@ public class ProductPage extends SetupWizardPage
 
     if (result == AgentManagerDialog.OK)
     {
-      pool = (BundlePool)dialog.getSelectedElement();
+      pool = dialog.getSelectedBundlePool();
       poolComboViewer.setSelection(pool == null ? StructuredSelection.EMPTY : new StructuredSelection(pool));
+      if (pool != null)
+      {
+        poolButton.setSelection(true);
+      }
     }
   }
 

@@ -29,6 +29,6 @@ public class AgentManagerPreferencePage extends AbstractPreferencePage
   @Override
   protected Control doCreateContents(Composite parent)
   {
-    return new AgentManagerComposite(parent, SWT.NONE, null);
+    return new AgentManagerComposite(parent, SWT.NONE);
   }
 }

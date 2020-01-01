@@ -22,9 +22,11 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -35,16 +37,23 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
-public final class P2LabelProvider extends LabelProvider implements IColorProvider
+public final class P2LabelProvider extends LabelProvider implements IColorProvider, IFontProvider
 {
   private static final String EXTENSION_POINT_ID = P2UIPlugin.INSTANCE.getSymbolicName() + ".profileTypes";
 
   private static final Map<String, Image> profileImages = new HashMap<String, Image>();
 
+  private IFontProvider fontProvider;
+
   private boolean absolutePools;
 
   public P2LabelProvider()
   {
+  }
+
+  public P2LabelProvider(IFontProvider fontProvider)
+  {
+    this.fontProvider = fontProvider;
   }
 
   public boolean isAbsolutePools()
@@ -122,6 +131,11 @@ public final class P2LabelProvider extends LabelProvider implements IColorProvid
   public Color getBackground(Object element)
   {
     return null;
+  }
+
+  public Font getFont(Object element)
+  {
+    return fontProvider == null ? null : fontProvider.getFont(element);
   }
 
   private static Image loadProfileImage(String profileType)

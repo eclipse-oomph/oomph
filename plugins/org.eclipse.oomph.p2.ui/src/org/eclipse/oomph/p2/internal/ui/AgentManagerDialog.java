@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.ui;
 
+import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.ui.OomphDialog;
 
 import org.eclipse.swt.SWT;
@@ -24,31 +25,31 @@ public class AgentManagerDialog extends OomphDialog
 {
   public static final String TITLE = "Bundle Pool Management";
 
-  public static final String MESSAGE = "Select the bundle pool to be used for provisioning";
+  public static final String MESSAGE = "Double-click the bundle pool to be used for provisioning";
 
-  private Object selectedElement;
+  private BundlePool selectedPool;
 
   private AgentManagerComposite composite;
 
   public AgentManagerDialog(Shell parentShell)
   {
-    super(parentShell, TITLE, 700, 650, P2UIPlugin.INSTANCE, true);
+    super(parentShell, TITLE, 700, 600, P2UIPlugin.INSTANCE, true);
     setShellStyle(SWT.TITLE | SWT.MAX | SWT.RESIZE | SWT.BORDER | SWT.APPLICATION_MODAL);
   }
 
-  public Object getSelectedElement()
+  public BundlePool getSelectedBundlePool()
   {
     if (composite == null)
     {
-      return selectedElement;
+      return selectedPool;
     }
 
-    return composite.getSelectedElement();
+    return composite.getSelectedBundlePool();
   }
 
-  public void setSelectedElement(Object selectedElement)
+  public void setSelectedPool(BundlePool selectedElement)
   {
-    this.selectedElement = selectedElement;
+    selectedPool = selectedElement;
   }
 
   public final AgentManagerComposite getComposite()
@@ -91,7 +92,7 @@ public class AgentManagerDialog extends OomphDialog
   {
     getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("obj16/bundlePool"));
 
-    composite = new AgentManagerComposite(parent, SWT.NONE, selectedElement)
+    composite = new AgentManagerComposite(parent, SWT.NONE, selectedPool)
     {
       @Override
       protected void elementChanged(Object element)
