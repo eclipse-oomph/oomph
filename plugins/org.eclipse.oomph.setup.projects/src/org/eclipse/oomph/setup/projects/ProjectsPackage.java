@@ -307,13 +307,22 @@ public interface ProjectsPackage extends EPackage
   int PROJECTS_IMPORT_TASK__FILTER = SetupPackage.SETUP_TASK__FILTER;
 
   /**
+   * The feature id for the '<em><b>Force</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECTS_IMPORT_TASK__FORCE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Source Locators</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PROJECTS_IMPORT_TASK__SOURCE_LOCATORS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+  int PROJECTS_IMPORT_TASK__SOURCE_LOCATORS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
    * The number of structural features of the '<em>Import Task</em>' class.
@@ -322,7 +331,7 @@ public interface ProjectsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PROJECTS_IMPORT_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+  int PROJECTS_IMPORT_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -479,6 +488,17 @@ public interface ProjectsPackage extends EPackage
   EClass getProjectsImportTask();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.projects.ProjectsImportTask#isForce <em>Force</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Force</em>'.
+   * @see org.eclipse.oomph.setup.projects.ProjectsImportTask#isForce()
+   * @see #getProjectsImportTask()
+   * @generated
+   */
+  EAttribute getProjectsImportTask_Force();
+
+  /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.projects.ProjectsImportTask#getSourceLocators <em>Source Locators</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -618,6 +638,14 @@ public interface ProjectsPackage extends EPackage
      * @generated
      */
     EClass PROJECTS_IMPORT_TASK = eINSTANCE.getProjectsImportTask();
+
+    /**
+     * The meta object literal for the '<em><b>Force</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PROJECTS_IMPORT_TASK__FORCE = eINSTANCE.getProjectsImportTask_Force();
 
     /**
      * The meta object literal for the '<em><b>Source Locators</b></em>' containment reference list feature.

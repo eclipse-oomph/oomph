@@ -28,11 +28,13 @@ import org.eclipse.oomph.util.MonitorUtil;
 import org.eclipse.oomph.util.PropertyFile;
 import org.eclipse.oomph.util.SubMonitor;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectOutputStream;
@@ -69,6 +71,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.projects.impl.ProjectsImportTaskImpl#isForce <em>Force</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.projects.impl.ProjectsImportTaskImpl#getSourceLocators <em>Source Locators</em>}</li>
  * </ul>
  *
@@ -76,6 +79,26 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImportTask
 {
+  /**
+   * The default value of the '{@link #isForce() <em>Force</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isForce()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean FORCE_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isForce() <em>Force</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isForce()
+   * @generated
+   * @ordered
+   */
+  protected boolean force = FORCE_EDEFAULT;
+
   private static final PropertyFile HISTORY = new PropertyFile(ProjectsPlugin.INSTANCE.getStateLocation().append("import-history.properties").toFile());
 
   private static final IWorkspaceRoot ROOT = EcorePlugin.getWorkspaceRoot();
@@ -109,6 +132,31 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
   protected EClass eStaticClass()
   {
     return ProjectsPackage.Literals.PROJECTS_IMPORT_TASK;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isForce()
+  {
+    return force;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setForce(boolean newForce)
+  {
+    boolean oldForce = force;
+    force = newForce;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, ProjectsPackage.PROJECTS_IMPORT_TASK__FORCE, oldForce, force));
+    }
   }
 
   /**
@@ -151,6 +199,8 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
   {
     switch (featureID)
     {
+      case ProjectsPackage.PROJECTS_IMPORT_TASK__FORCE:
+        return isForce();
       case ProjectsPackage.PROJECTS_IMPORT_TASK__SOURCE_LOCATORS:
         return getSourceLocators();
     }
@@ -168,6 +218,9 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
   {
     switch (featureID)
     {
+      case ProjectsPackage.PROJECTS_IMPORT_TASK__FORCE:
+        setForce((Boolean)newValue);
+        return;
       case ProjectsPackage.PROJECTS_IMPORT_TASK__SOURCE_LOCATORS:
         getSourceLocators().clear();
         getSourceLocators().addAll((Collection<? extends SourceLocator>)newValue);
@@ -186,6 +239,9 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
   {
     switch (featureID)
     {
+      case ProjectsPackage.PROJECTS_IMPORT_TASK__FORCE:
+        setForce(FORCE_EDEFAULT);
+        return;
       case ProjectsPackage.PROJECTS_IMPORT_TASK__SOURCE_LOCATORS:
         getSourceLocators().clear();
         return;
@@ -203,10 +259,32 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
   {
     switch (featureID)
     {
+      case ProjectsPackage.PROJECTS_IMPORT_TASK__FORCE:
+        return force != FORCE_EDEFAULT;
       case ProjectsPackage.PROJECTS_IMPORT_TASK__SOURCE_LOCATORS:
         return sourceLocators != null && !sourceLocators.isEmpty();
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy())
+    {
+      return super.toString();
+    }
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (force: ");
+    result.append(force);
+    result.append(')');
+    return result.toString();
   }
 
   @Override
@@ -217,7 +295,7 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    if (context.getTrigger() == Trigger.MANUAL)
+    if (isForce() || context.getTrigger() == Trigger.MANUAL)
     {
       return true;
     }

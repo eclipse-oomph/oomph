@@ -19,7 +19,9 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import java.util.Collection;
@@ -57,8 +59,22 @@ public class ProjectsImportTaskItemProvider extends SetupTaskItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addForcePropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Force feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addForcePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_ProjectsImportTask_force_feature"), getString("_UI_ProjectsImportTask_force_description"),
+        ProjectsPackage.Literals.PROJECTS_IMPORT_TASK__FORCE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -143,6 +159,9 @@ public class ProjectsImportTaskItemProvider extends SetupTaskItemProvider
 
     switch (notification.getFeatureID(ProjectsImportTask.class))
     {
+      case ProjectsPackage.PROJECTS_IMPORT_TASK__FORCE:
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+        return;
       case ProjectsPackage.PROJECTS_IMPORT_TASK__SOURCE_LOCATORS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;

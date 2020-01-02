@@ -14,6 +14,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//PathVariableTask/uRI"/>
     </genClasses>
     <genClasses ecoreClass="Projects.ecore#//ProjectsImportTask" labelFeature="../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup/SetupTask/description">
+      <genFeatures createChild="false" propertyDescription="Force the task to perform on startup trigger even if the task has previously performed"
+          ecoreFeature="ecore:EAttribute Projects.ecore#//ProjectsImportTask/force"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Projects.ecore#//ProjectsImportTask/sourceLocators"/>
     </genClasses>
     <genClasses ecoreClass="Projects.ecore#//ProjectsBuildTask" labelFeature="../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup/SetupTask/description">

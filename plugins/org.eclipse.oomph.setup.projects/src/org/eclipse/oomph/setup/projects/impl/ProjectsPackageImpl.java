@@ -143,9 +143,19 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getProjectsImportTask_Force()
+  {
+    return (EAttribute)projectsImportTaskEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getProjectsImportTask_SourceLocators()
   {
-    return (EReference)projectsImportTaskEClass.getEStructuralFeatures().get(0);
+    return (EReference)projectsImportTaskEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -276,6 +286,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     createEAttribute(pathVariableTaskEClass, PATH_VARIABLE_TASK__URI);
 
     projectsImportTaskEClass = createEClass(PROJECTS_IMPORT_TASK);
+    createEAttribute(projectsImportTaskEClass, PROJECTS_IMPORT_TASK__FORCE);
     createEReference(projectsImportTaskEClass, PROJECTS_IMPORT_TASK__SOURCE_LOCATORS);
 
     projectsBuildTaskEClass = createEClass(PROJECTS_BUILD_TASK);
@@ -335,6 +346,8 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(projectsImportTaskEClass, ProjectsImportTask.class, "ProjectsImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getProjectsImportTask_Force(), ecorePackage.getEBoolean(), "force", null, 0, 1, ProjectsImportTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getProjectsImportTask_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 1, -1,
         ProjectsImportTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
