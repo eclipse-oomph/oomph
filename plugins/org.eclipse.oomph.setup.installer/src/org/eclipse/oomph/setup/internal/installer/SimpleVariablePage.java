@@ -344,7 +344,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     });
 
-    if (JREManager.BITNESS_CHANGEABLE)
+    if (InstallerUI.BITNESS_CHOOSE && JREManager.BITNESS_CHANGEABLE)
     {
       bitness32Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_enabled.png"),
           SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_selected.png"));
@@ -988,7 +988,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     setVisible(bitness64Button, versionVisible);
     setVisible(bitness64Spacer, versionVisible);
 
-    if (JREManager.BITNESS_CHANGEABLE)
+    if (InstallerUI.BITNESS_CHOOSE && JREManager.BITNESS_CHANGEABLE)
     {
       int bitness = javaController.getBitness();
       bitness32Button.setEnabled(enabled);

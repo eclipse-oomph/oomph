@@ -325,7 +325,7 @@ public class ProductPage extends SetupWizardPage
 
       new Label(lowerComposite, SWT.NONE);
     }
-    else if (JREManager.BITNESS_CHANGEABLE)
+    else if (InstallerUI.BITNESS_CHOOSE && JREManager.BITNESS_CHANGEABLE)
     {
       bitness32Button = new ToolButton(lowerComposite, SWT.RADIO, SetupUIPlugin.INSTANCE.getSWTImage("32bit.png"), true);
       bitness32Button.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
@@ -1047,7 +1047,7 @@ public class ProductPage extends SetupWizardPage
     versionLabel.setEnabled(productSelected);
     versionComboViewer.getControl().setEnabled(productSelected);
 
-    if (JREManager.BITNESS_CHANGEABLE && !OS_CHOOSE)
+    if (InstallerUI.BITNESS_CHOOSE && JREManager.BITNESS_CHANGEABLE && !OS_CHOOSE)
     {
       bitness32Button.setEnabled(productSelected);
       bitness64Button.setEnabled(productSelected);
