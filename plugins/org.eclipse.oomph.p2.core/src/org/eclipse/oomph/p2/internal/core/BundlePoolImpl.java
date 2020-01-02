@@ -167,6 +167,17 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
     return null;
   }
 
+  public Profile getProfile(File installFolder)
+  {
+    Profile profile = agent.getProfile(installFolder);
+    if (profile != null && profile.getBundlePool() == this)
+    {
+      return profile;
+    }
+
+    return null;
+  }
+
   public ProfileCreator addProfile(String id, String type)
   {
     return new ProfileCreatorImpl(this, id, type)

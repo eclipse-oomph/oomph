@@ -25,15 +25,15 @@ Eclipse's provisioning technology, p2, manages each Eclipse installation using a
 The agent maintains and manages one or more <i>bundle pools</i>, which contains the artifacts (plug-ins and features) used by the installation,
 as well as one or more <i>profiles</i>, which specify precisely which artifacts are currently in use by that installation.
 Creating an initial installation, installing new software into the installation, or updating the installation with the latest software work via the agent.
-The agent can be co-located with the installation or can be managed by a shared agent.
-By default, Oomph will use a shared agent which has the advantage that multiple installations can share artifacts, dramatically reducing disk space.
+An agent can be co-located with a single installation or an agent can be a <i>shared agent</i> that manages multiple installations.
+By default, Oomph will use a shared agent which has the advantage that multiple installations share artifacts, dramatically reducing disk space.
 </p>
 
 <p>
 In this dialog you can manage the disk locations of your shared agents as well as the disk locations of each of the agent's bundle pools.
 The pools can get large over time and can accumulate so called <i>garbage</i>, 
 e.g., if you delete an installation, its profile will become unused,
-or if you update an installation, some of the older artifact may become unused.
+or if you update an installation, some of the older artifacts may become unused.
 This dialog allows you to perform garbage collection, i.e., allows you to cleanup the shared agent.
 You can also do a more detailed analysis of the agent to detect damaged artifacts and to repair them.
 In addition, p2 caches repository metadata to speed up peformance;

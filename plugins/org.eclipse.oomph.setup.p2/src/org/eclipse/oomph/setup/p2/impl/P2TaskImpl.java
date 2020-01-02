@@ -670,8 +670,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
   public void perform(final SetupTaskContext context) throws Exception
   {
-    File eclipseDir = context.getProductLocation();
-
     boolean offline = context.isOffline();
     context.log("Offline = " + offline);
 
@@ -682,7 +680,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     EList<Repository> repositories = getRepositories();
 
     context.log("Resolving " + requirements.size() + (requirements.size() == 1 ? " requirement" : " requirements") + " from " + repositories.size()
-        + (repositories.size() == 1 ? " repository" : " repositories") + " to " + eclipseDir.getAbsolutePath());
+        + (repositories.size() == 1 ? " repository" : " repositories") + " to " + context.getProductLocation());
 
     for (Requirement requirement : requirements)
     {
@@ -694,9 +692,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       context.log("Repository " + repository);
     }
 
-    String profileID = IOUtil.encodeFileName(eclipseDir.toString());
-
-    Profile profile = getProfile(context, profileID);
+    Profile profile = getProfile(context);
     ProfileTransaction transaction = profile.change();
 
     ProfileDefinition profileDefinition = transaction.getProfileDefinition();
@@ -850,7 +846,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
   }
 
-  private Profile getProfile(final SetupTaskContext context, String profileID) throws Exception
+  private Profile getProfile(final SetupTaskContext context) throws Exception
   {
     Profile profile;
     if (context.getTrigger() == Trigger.BOOTSTRAP)
@@ -859,6 +855,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
       String bundlePoolLocation = (String)context.get(AgentManager.PROP_BUNDLE_POOL_LOCATION);
       boolean sharedPool;
+      File productLocation = context.getProductLocation();
       if (bundlePoolLocation != null && !AgentManager.BUNDLE_POOL_LOCATION_NONE.equalsIgnoreCase(bundlePoolLocation))
       {
         sharedPool = true;
@@ -871,19 +868,37 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       else
       {
         sharedPool = false;
-        File agentLocation = new File(context.getProductLocation(), "p2");
+        File agentLocation = new File(productLocation, "p2");
         Agent agent = P2Util.createAgent(agentLocation);
         bundlePool = agent.addBundlePool(agentLocation.getParentFile());
       }
 
       IProvisioningAgent currentAgent = P2Util.getCurrentProvisioningAgent();
-      bundlePool.getAgent().getProvisioningAgent().registerService(IProvisioningAgent.INSTALLER_AGENT, currentAgent);
+      Agent agent = bundlePool.getAgent();
+      agent.getProvisioningAgent().registerService(IProvisioningAgent.INSTALLER_AGENT, currentAgent);
 
-      profile = bundlePool.getProfile(profileID);
+      profile = agent.getProfile(productLocation);
       if (profile != null && context.put(FIRST_CALL_DETECTION_KEY, Boolean.TRUE) == null)
       {
         profile.delete(true);
         profile = null;
+      }
+
+      String profileID;
+      if (profile == null)
+      {
+        String baseProfileID = IOUtil.encodeFileName(productLocation.toString());
+        profileID = baseProfileID;
+        profile = agent.getProfile(profileID);
+        for (int i = 1; profile != null; ++i)
+        {
+          profileID = baseProfileID + "_" + i;
+          profile = agent.getProfile(profileID);
+        }
+      }
+      else
+      {
+        profileID = profile.getProfileId();
       }
 
       if (profile == null)
@@ -892,7 +907,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
         ProfileCreator profileCreator = bundlePool.addProfile(profileID, Profile.TYPE_INSTALLATION);
         profileCreator.setInstallFeatures(true);
-        profileCreator.setInstallFolder(context.getProductLocation());
+        profileCreator.setInstallFolder(productLocation);
         profileCreator.addOS(os.getOsgiOS());
         profileCreator.addWS(os.getOsgiWS());
         profileCreator.addArch(os.getOsgiArch());

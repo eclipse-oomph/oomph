@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.core;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Set;
 
@@ -23,6 +24,8 @@ public interface ProfileContainer
   public Collection<Profile> getProfiles();
 
   public Profile getProfile(String id);
+
+  public Profile getProfile(File installFolder);
 
   public ProfileCreator addProfile(String id, String type);
 }

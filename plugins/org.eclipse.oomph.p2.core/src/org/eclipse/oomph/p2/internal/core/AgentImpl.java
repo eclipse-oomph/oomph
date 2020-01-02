@@ -414,6 +414,50 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return profile;
   }
 
+  public Profile getProfile(File installFolder)
+  {
+    Profile profile = getProfileFromProfileMap(installFolder);
+    if (profile == null)
+    {
+      if (provisioningAgent == null)
+      {
+        // Trigger creation of the LazyProfileRegistry and, hence, refreshing of the profileMap
+        getProvisioningAgent();
+
+        // Then try again
+        profile = getProfileFromProfileMap(installFolder);
+      }
+    }
+    else
+    {
+      if (!profile.isValid())
+      {
+        String id = profile.getProfileId();
+        profileMap.removeElement(id);
+        getProfileRegistry().removeProfile(id);
+        profile = null;
+      }
+    }
+
+    return profile;
+  }
+
+  private Profile getProfileFromProfileMap(File installFolder)
+  {
+    File canonicalLocation = IOUtil.getCanonicalFile(installFolder);
+    Collection<Profile> profiles = profileMap.getElements();
+    for (Profile profile : profiles)
+    {
+      File profileLocation = IOUtil.getCanonicalFile(profile.getInstallFolder());
+      if (canonicalLocation.equals(profileLocation))
+      {
+        return profile;
+      }
+    }
+
+    return null;
+  }
+
   public ProfileCreator addProfile(String id, String type)
   {
     return new ProfileCreatorImpl(this, id, type)

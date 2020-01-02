@@ -1401,7 +1401,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       if (setupTask instanceof InstallationTask)
       {
-        return new File(((InstallationTask)setupTask).getLocation());
+        return IOUtil.getCanonicalFile(new File(((InstallationTask)setupTask).getLocation()));
       }
     }
 
@@ -1414,7 +1414,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       if (setupTask instanceof WorkspaceTask)
       {
-        return new File(((WorkspaceTask)setupTask).getLocation());
+        return IOUtil.getCanonicalFile(new File(((WorkspaceTask)setupTask).getLocation()));
       }
     }
 
@@ -1429,7 +1429,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           IPath location = root.getLocation();
           if (location != null)
           {
-            return location.toFile();
+            return IOUtil.getCanonicalFile(location.toFile());
           }
         }
       }
@@ -4973,9 +4973,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       String relativeExecutableFolder = os.getRelativeExecutableFolder();
       String executableName = os.getExecutableName(performer.getLauncherName());
 
-      File eclipseLocation = new File(performer.getInstallationLocation(), relativeProductFolder);
-      File executableFolder = new File(eclipseLocation, relativeExecutableFolder);
-      File executable = new File(executableFolder, executableName);
+      File eclipseLocation = IOUtil.getCanonicalFile(new File(performer.getInstallationLocation(), relativeProductFolder));
+      File executableFolder = IOUtil.getCanonicalFile(new File(eclipseLocation, relativeExecutableFolder));
+      File executable = IOUtil.getCanonicalFile(new File(executableFolder, executableName));
 
       needsConsole = computeNeedsConsole(performer);
       if (needsConsole && os.isWin())
