@@ -986,7 +986,7 @@ public class GenericSetupTemplate extends SetupTemplate
     if (variables.containsKey("project.name"))
     {
       String fileLocation = expandString("${setup.location}", null);
-      if (fileLocation != null)
+      if (fileLocation != null && !fileLocation.equals("${setup.location}"))
       {
         Path path = new Path(fileLocation);
         if (path.segmentCount() > 0)
