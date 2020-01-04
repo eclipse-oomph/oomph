@@ -661,6 +661,8 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
           IStatus validationStatus = type.validateInstallLocation(installLocation);
           if (!validationStatus.isOK())
           {
+            context.log("The location '" + location + "' is not valid");
+            context.log("Go back to the Variables page, be sure to select 'Show all variables', and change the location to a valid one");
             throw new CoreException(validationStatus);
           }
 
