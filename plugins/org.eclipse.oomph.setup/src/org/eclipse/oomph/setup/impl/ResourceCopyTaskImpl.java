@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
 
 /**
  * <!-- begin-user-doc -->
@@ -44,6 +45,8 @@ import java.io.OutputStream;
  */
 public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyTask
 {
+  public static final String OPTION_ZIP_CACHE = "OPTION_ZIP_CACHE";
+
   /**
    * The default value of the '{@link #isForce() <em>Force</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -384,7 +387,7 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
 
     try
     {
-      input = uriConverter.createInputStream(sourceURI);
+      input = uriConverter.createInputStream(sourceURI, Collections.singletonMap(OPTION_ZIP_CACHE, Boolean.FALSE));
       output = uriConverter.createOutputStream(targetURI, null);
       IOUtil.copy(input, output);
     }

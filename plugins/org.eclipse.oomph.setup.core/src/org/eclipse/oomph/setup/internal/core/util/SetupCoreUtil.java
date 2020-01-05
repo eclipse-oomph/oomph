@@ -38,6 +38,7 @@ import org.eclipse.oomph.setup.Parameter;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.impl.ResourceCopyTaskImpl;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.AuthorizationHandler;
@@ -494,7 +495,7 @@ public final class SetupCoreUtil
           @Override
           public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
           {
-            if (!"zip".equals(uri.fileExtension()))
+            if (!"zip".equals(uri.fileExtension()) || Boolean.FALSE.equals(options.get(ResourceCopyTaskImpl.OPTION_ZIP_CACHE)))
             {
               return super.createInputStream(uri, options);
             }
@@ -538,6 +539,11 @@ public final class SetupCoreUtil
           @Override
           public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
           {
+            if (Boolean.FALSE.equals(options.get(ResourceCopyTaskImpl.OPTION_ZIP_CACHE)))
+            {
+              return super.createInputStream(uri, options);
+            }
+
             // Look for a cached version first.
             WeakReference<byte[]> bytesReference = ZIPS.get(uri);
             if (bytesReference != null)
