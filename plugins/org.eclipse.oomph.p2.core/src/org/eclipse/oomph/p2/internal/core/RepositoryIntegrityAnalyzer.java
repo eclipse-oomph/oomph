@@ -436,7 +436,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     }
 
     Set<URI> composites = new LinkedHashSet<URI>();
-    for (Map.Entry<URI, Future<InputStream>> entry : aggrcons.entrySet())
+    LOOP: for (Map.Entry<URI, Future<InputStream>> entry : aggrcons.entrySet())
     {
       URI aggrcon = entry.getKey();
       URI repository = null;
@@ -460,6 +460,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         if (label == null)
         {
           label = get(eObject, "Contribution", "label");
+          if ("false".equals(get(eObject, "Contribution", "enabled")))
+          {
+            System.out.println("Disabled");
+            continue LOOP;
+          }
         }
 
         String location = get(eObject, "repositories", "location");
