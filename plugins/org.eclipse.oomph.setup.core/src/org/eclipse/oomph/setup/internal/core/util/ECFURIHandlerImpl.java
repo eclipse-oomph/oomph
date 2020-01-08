@@ -401,7 +401,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
   public static URI getCacheFile(URI uri)
   {
-    return CACHE_FOLDER.appendSegment(IOUtil.encodeFileName(uri.toString()));
+    return CACHE_FOLDER.appendSegment(
+        IOUtil.encodeFileName((SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI.equals(uri) ? ACTUAL_INDEX_SETUP_ARCHIVE_LOCATION_URI : uri).toString()));
   }
 
   public static String getETag(URIConverter uriConverter, URI file)
