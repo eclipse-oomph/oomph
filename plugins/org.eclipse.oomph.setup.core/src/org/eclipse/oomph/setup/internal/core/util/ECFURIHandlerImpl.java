@@ -2330,7 +2330,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       for (int i = 0, length = expression.length(); i < length; ++i)
       {
         char character = expression.charAt(i);
-        if (quote && character != '\'' && (character != '%' || i + 2 > length || expression.charAt(i + 1) != '2' || expression.charAt(i + 2) != '7'))
+        if (quote && character != '\'' && (character != '%' || i + 2 > length || expression.charAt(i + 1) != '2' || expression.charAt(i + 2) != '7')
+            && (character != '%' || i + 2 > length || expression.charAt(i + 1) != '2' || expression.charAt(i + 2) != '3'))
         {
           result.append(character);
         }
@@ -2365,6 +2366,13 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                   i += 2;
                   quote = !quote;
                 }
+                break;
+              }
+
+              if (i + 2 < length && expression.charAt(i + 1) == '2' && expression.charAt(i + 2) == '3')
+              {
+                result.append("#");
+                i += 2;
                 break;
               }
 
@@ -2895,6 +2903,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
     private static final Pattern ACTION_ATTRIBUTE_PATTERN = getAttributePattern("action");
 
+    private static final Pattern ID_ATTRIBUTE_PATTERN = getAttributePattern("id");
+
     private static final Pattern NAME_ATTRIBUTE_PATTERN = getAttributePattern("name");
 
     private static final Pattern TYPE_ATTRIBUTE_PATTERN = getAttributePattern("type");
@@ -3051,14 +3061,23 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           System.out.println(tracePrefix + " finding form contents");
         }
 
+        String formID = formURI.fragment();
+
         // Look for the form.
         for (Matcher formMatcher = FORM_PATTERN.matcher(contents); formMatcher.find();)
         {
           parameterValues.clear();
           parameterTypes.clear();
 
+          String formElement = formMatcher.group(1);
+          String id = getAttributeValue(ID_ATTRIBUTE_PATTERN, formElement);
+          if (formID != null && !formID.equals(id))
+          {
+            continue;
+          }
+
           // The form must have an action attribute.
-          String action = getAttributeValue(ACTION_ATTRIBUTE_PATTERN, formMatcher.group(1));
+          String action = getAttributeValue(ACTION_ATTRIBUTE_PATTERN, formElement);
           if (action != null)
           {
             // This is the URI to which we must post the form data.
