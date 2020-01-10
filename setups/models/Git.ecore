@@ -64,7 +64,7 @@
         <details key="name" value="git.container.root"/>
         <details key="type" value="FOLDER"/>
         <details key="label" value="Root Git-container folder"/>
-        <details key="defaultValue" value="${user.home}"/>
+        <details key="defaultValue" value="${user.home/git}"/>
         <details key="description" value="The root Git-container folder where all the Git clones are located"/>
         <details key="storageURI" value="scope://"/>
       </eAnnotations>
