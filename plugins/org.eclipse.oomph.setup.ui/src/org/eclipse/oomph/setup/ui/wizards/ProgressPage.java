@@ -557,6 +557,7 @@ public class ProgressPage extends SetupWizardPage
           // When the workbench isn't running org.eclipse.ui.internal.progress.new JobChangeAdapter()'s done(IJobChangeEvent) method one cleanup.
           JobChangeAdapter jobChangeListener = PlatformUI.isWorkbenchRunning() ? null : new JobChangeAdapter()
           {
+            @SuppressWarnings("deprecation")
             @Override
             public void done(IJobChangeEvent event)
             {
