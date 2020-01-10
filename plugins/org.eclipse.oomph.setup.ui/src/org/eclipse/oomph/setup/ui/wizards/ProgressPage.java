@@ -531,6 +531,8 @@ public class ProgressPage extends SetupWizardPage
             User user = SetupContext.createUserOnly(resourceSet).getUser();
             user.getAcceptedLicenses().addAll(licenses);
             BaseUtil.saveEObject(user);
+
+            performerUser.getAcceptedLicenses().addAll(licenses);
           }
         }
       }
