@@ -1040,7 +1040,7 @@ public class ProgressPage extends SetupWizardPage
       shouldSave = true;
     }
 
-    shouldSave = user.getAcceptedCertificates().addAll(performerUser.getAcceptedCertificates());
+    shouldSave = user.getAcceptedCertificates().addAll(performerUser.getAcceptedCertificates()) || shouldSave;
     CertificatePolicy userCertificatePolicy = user.getCertificatePolicy();
     CertificatePolicy performerUserCertificatePolicy = performerUser.getCertificatePolicy();
     if (userCertificatePolicy != performerUserCertificatePolicy)
