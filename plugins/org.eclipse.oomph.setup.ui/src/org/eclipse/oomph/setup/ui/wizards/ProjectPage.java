@@ -295,11 +295,18 @@ public class ProjectPage extends SetupWizardPage
         List<Stream> streamsToRemove = new ArrayList<Stream>();
 
         List<Project> parents = new UniqueEList<Project>();
+        Set<Resource> containingResources = new HashSet<Resource>();
         for (Project project : userProjects)
         {
           Project parentProject = project.getParentProject();
           parentProject.getProjects().remove(project);
           parents.add(parentProject);
+
+          Resource resource = ((InternalEObject)project).eDirectResource();
+          if (resource != null && resource.getURI().isFile())
+          {
+            containingResources.add(resource);
+          }
 
           if (workspace != null)
           {
@@ -327,6 +334,11 @@ public class ProjectPage extends SetupWizardPage
         }
 
         projectViewer.setSelection(new StructuredSelection(parents));
+
+        for (Resource resource : containingResources)
+        {
+          resource.unload();
+        }
       }
     };
     removeProjectButton.addSelectionListener(removeProjectSelectionAdapter);
