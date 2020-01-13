@@ -1626,7 +1626,7 @@ public class ProductCatalogGenerator implements IApplication
       InputStream in = null;
 
       String branch = i == trains.length ? "master" : trains[i].toUpperCase();
-      String url = "http://git.eclipse.org/c/epp/org.eclipse.epp.packages.git/plain/packages/org.eclipse.epp.package." + name + ".feature/epp.website.xml"
+      String url = "https://git.eclipse.org/c/epp/org.eclipse.epp.packages.git/plain/packages/org.eclipse.epp.package." + name + ".feature/epp.website.xml"
           + "?h=" + branch;
       try
       {
