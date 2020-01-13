@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
 <setAttribute key="additional_plugins">
-<setEntry value="org.eclipse.core.net:1.3.600.v20190619-1613:default:true:default:default"/>
+<setEntry value="org.eclipse.core.net:1.3.700.v20191122-2107:default:true:default:default"/>
 <setEntry value="org.eclipse.osgi.services:3.8.0.v20190206-2147:default:true:default:default"/>
 </setAttribute>
 <booleanAttribute key="append.args" value="true"/>
