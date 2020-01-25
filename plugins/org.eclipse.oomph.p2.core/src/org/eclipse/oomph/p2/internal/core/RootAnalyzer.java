@@ -100,18 +100,21 @@ public final class RootAnalyzer
       currentlyVisitingIUs.add(iu);
       for (IRequirement requirement : iu.getRequirements())
       {
-        for (IInstallableUnit requiredIU : P2Util.asIterable(queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null)))
+        if (!isTypeRequirement(requirement))
         {
-          P2CorePlugin.checkCancelation(monitor);
-
-          if (!currentlyVisitingIUs.contains(requiredIU))
+          for (IInstallableUnit requiredIU : P2Util.asIterable(queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null)))
           {
-            if (!onlyIfRedundant || isExactRequirement(requirement))
-            {
-              rootIUs.remove(requiredIU);
-            }
+            P2CorePlugin.checkCancelation(monitor);
 
-            removeImplicitUnits(requiredIU, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor, onlyIfRedundant);
+            if (!currentlyVisitingIUs.contains(requiredIU))
+            {
+              if (!onlyIfRedundant || isExactRequirement(requirement))
+              {
+                rootIUs.remove(requiredIU);
+              }
+
+              removeImplicitUnits(requiredIU, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor, onlyIfRedundant);
+            }
           }
         }
       }
@@ -128,6 +131,19 @@ public final class RootAnalyzer
       org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
       VersionRange range = requiredCapability.getRange();
       return range.getMinimum().equals(range.getMaximum());
+    }
+
+    return false;
+  }
+
+  @SuppressWarnings("restriction")
+  private static boolean isTypeRequirement(IRequirement requirement)
+  {
+    if (P2Util.isSimpleRequiredCapability(requirement))
+    {
+      org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
+      String namespace = requiredCapability.getNamespace();
+      return "org.eclipse.equinox.p2.eclipse.type".equals(namespace);
     }
 
     return false;
