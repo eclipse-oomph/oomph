@@ -100,7 +100,7 @@ public final class RootAnalyzer
       currentlyVisitingIUs.add(iu);
       for (IRequirement requirement : iu.getRequirements())
       {
-        if (!isTypeRequirement(requirement))
+        if (!isTypeRequirement(requirement) && !isJavaPackageRequirment(requirement))
         {
           for (IInstallableUnit requiredIU : P2Util.asIterable(queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null)))
           {
@@ -144,6 +144,19 @@ public final class RootAnalyzer
       org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
       String namespace = requiredCapability.getNamespace();
       return "org.eclipse.equinox.p2.eclipse.type".equals(namespace);
+    }
+
+    return false;
+  }
+
+  @SuppressWarnings("restriction")
+  private static boolean isJavaPackageRequirment(IRequirement requirement)
+  {
+    if (P2Util.isSimpleRequiredCapability(requirement))
+    {
+      org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
+      String namespace = requiredCapability.getNamespace();
+      return "java.package".equals(namespace);
     }
 
     return false;
