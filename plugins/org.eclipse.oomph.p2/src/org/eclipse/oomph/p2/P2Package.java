@@ -118,13 +118,22 @@ public interface P2Package extends EPackage
   int PROFILE_DEFINITION__INCLUDE_SOURCE_BUNDLES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
+   * The feature id for the '<em><b>Profile Properties</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROFILE_DEFINITION__PROFILE_PROPERTIES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
+
+  /**
    * The number of structural features of the '<em>Profile Definition</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PROFILE_DEFINITION_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
+  int PROFILE_DEFINITION_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -584,6 +593,17 @@ public interface P2Package extends EPackage
   EAttribute getProfileDefinition_IncludeSourceBundles();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.ProfileDefinition#getProfileProperties <em>Profile Properties</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Profile Properties</em>'.
+   * @see org.eclipse.oomph.p2.ProfileDefinition#getProfileProperties()
+   * @see #getProfileDefinition()
+   * @generated
+   */
+  EAttribute getProfileDefinition_ProfileProperties();
+
+  /**
    * Returns the meta object for the '{@link org.eclipse.oomph.p2.ProfileDefinition#setRequirements(org.eclipse.emf.common.util.EList) <em>Set Requirements</em>}' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -927,6 +947,14 @@ public interface P2Package extends EPackage
      * @generated
      */
     EAttribute PROFILE_DEFINITION__INCLUDE_SOURCE_BUNDLES = eINSTANCE.getProfileDefinition_IncludeSourceBundles();
+
+    /**
+     * The meta object literal for the '<em><b>Profile Properties</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PROFILE_DEFINITION__PROFILE_PROPERTIES = eINSTANCE.getProfileDefinition_ProfileProperties();
 
     /**
      * The meta object literal for the '<em><b>Set Requirements</b></em>' operation.

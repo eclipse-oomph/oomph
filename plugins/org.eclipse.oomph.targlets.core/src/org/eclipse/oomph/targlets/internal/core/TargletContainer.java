@@ -437,6 +437,26 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return true;
   }
 
+  public String getProfileProperties()
+  {
+    StringBuilder result = new StringBuilder();
+    for (Targlet targlet : targlets)
+    {
+      String profileProperties = targlet.getProfileProperties();
+      if (!StringUtil.isEmpty(profileProperties))
+      {
+        if (result.length() != 0)
+        {
+          result.append(',');
+        }
+
+        result.append(profileProperties);
+      }
+    }
+
+    return result.toString();
+  }
+
   public String getEnvironmentProperties()
   {
     StringBuilder builder = new StringBuilder();
@@ -867,6 +887,9 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
       EList<Repository> repositories = profileDefinition.getRepositories();
       repositories.clear();
+
+      String profileProperties = getProfileProperties();
+      profileDefinition.setProfileProperties(StringUtil.isEmpty(profileProperties) ? null : profileProperties);
 
       WorkspaceIUAnalyzer workspaceIUAnalyzer = analyzeWorkspaceIUs(rootRequirements, repositories, progress);
 

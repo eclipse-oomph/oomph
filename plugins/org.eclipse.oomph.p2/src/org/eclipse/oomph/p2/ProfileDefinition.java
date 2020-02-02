@@ -26,6 +26,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.p2.ProfileDefinition#getRequirements <em>Requirements</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.ProfileDefinition#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.ProfileDefinition#isIncludeSourceBundles <em>Include Source Bundles</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.ProfileDefinition#getProfileProperties <em>Profile Properties</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.p2.P2Package#getProfileDefinition()
@@ -93,6 +94,28 @@ public interface ProfileDefinition extends ModelElement
    * @generated
    */
   void setIncludeSourceBundles(boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Profile Properties</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Profile Properties</em>' attribute.
+   * @see #setProfileProperties(String)
+   * @see org.eclipse.oomph.p2.P2Package#getProfileDefinition_ProfileProperties()
+   * @model
+   * @generated
+   */
+  String getProfileProperties();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.p2.ProfileDefinition#getProfileProperties <em>Profile Properties</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Profile Properties</em>' attribute.
+   * @see #getProfileProperties()
+   * @generated
+   */
+  void setProfileProperties(String value);
 
   /**
    * <!-- begin-user-doc -->

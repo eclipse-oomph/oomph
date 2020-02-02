@@ -31,6 +31,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference P2.ecore#//ProfileDefinition/requirements"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference P2.ecore#//ProfileDefinition/repositories"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//ProfileDefinition/includeSourceBundles"/>
+      <genFeatures createChild="false" propertyDescription="A comma-separated list of key=value pairs representing profile properties"
+          ecoreFeature="ecore:EAttribute P2.ecore#//ProfileDefinition/profileProperties"/>
       <genOperations ecoreOperation="P2.ecore#//ProfileDefinition/setRequirements">
         <genParameters ecoreParameter="P2.ecore#//ProfileDefinition/setRequirements/requirements"/>
       </genOperations>

@@ -226,6 +226,16 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getProfileDefinition_ProfileProperties()
+  {
+    return (EAttribute)profileDefinitionEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EOperation getProfileDefinition__SetRequirements__EList()
   {
     return profileDefinitionEClass.getEOperations().get(0);
@@ -528,6 +538,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
     createEReference(profileDefinitionEClass, PROFILE_DEFINITION__REQUIREMENTS);
     createEReference(profileDefinitionEClass, PROFILE_DEFINITION__REPOSITORIES);
     createEAttribute(profileDefinitionEClass, PROFILE_DEFINITION__INCLUDE_SOURCE_BUNDLES);
+    createEAttribute(profileDefinitionEClass, PROFILE_DEFINITION__PROFILE_PROPERTIES);
     createEOperation(profileDefinitionEClass, PROFILE_DEFINITION___SET_REQUIREMENTS__ELIST);
     createEOperation(profileDefinitionEClass, PROFILE_DEFINITION___SET_REPOSITORIES__ELIST);
 
@@ -614,6 +625,8 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getProfileDefinition_IncludeSourceBundles(), ecorePackage.getEBoolean(), "includeSourceBundles", null, 0, 1, ProfileDefinition.class,
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getProfileDefinition_ProfileProperties(), ecorePackage.getEString(), "profileProperties", null, 0, 1, ProfileDefinition.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     EOperation op = initEOperation(getProfileDefinition__SetRequirements__EList(), null, "setRequirements", 0, 1, IS_UNIQUE, IS_ORDERED);
     addEParameter(op, getRequirement(), "requirements", 0, -1, IS_UNIQUE, IS_ORDERED);

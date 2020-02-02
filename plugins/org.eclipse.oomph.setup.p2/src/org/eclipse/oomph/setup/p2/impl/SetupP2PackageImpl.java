@@ -175,6 +175,16 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getP2Task_ProfileProperties()
+  {
+    return (EAttribute)p2TaskEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public SetupP2Factory getSetupP2Factory()
   {
     return (SetupP2Factory)getEFactoryInstance();
@@ -209,6 +219,7 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
     createEReference(p2TaskEClass, P2_TASK__REPOSITORIES);
     createEAttribute(p2TaskEClass, P2_TASK__LICENSE_CONFIRMATION_DISABLED);
     createEAttribute(p2TaskEClass, P2_TASK__MERGE_DISABLED);
+    createEAttribute(p2TaskEClass, P2_TASK__PROFILE_PROPERTIES);
   }
 
   /**
@@ -261,6 +272,8 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getP2Task_MergeDisabled(), ecorePackage.getEBoolean(), "mergeDisabled", null, 0, 1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getP2Task_ProfileProperties(), ecorePackage.getEString(), "profileProperties", null, 0, 1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

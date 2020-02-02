@@ -73,6 +73,7 @@ public class TargletItemProvider extends ModelElementItemProvider
       addIncludeAllPlatformsPropertyDescriptor(object);
       addIncludeAllRequirementsPropertyDescriptor(object);
       addIncludeBinaryEquivalentsPropertyDescriptor(object);
+      addProfilePropertiesPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -157,6 +158,19 @@ public class TargletItemProvider extends ModelElementItemProvider
         getString("_UI_Targlet_includeBinaryEquivalents_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_Targlet_includeBinaryEquivalents_feature", "_UI_Targlet_type"),
         TargletPackage.Literals.TARGLET__INCLUDE_BINARY_EQUIVALENTS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Profile Properties feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addProfilePropertiesPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Targlet_profileProperties_feature"), getString("_UI_Targlet_profileProperties_description"),
+        TargletPackage.Literals.TARGLET__PROFILE_PROPERTIES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   @Override
@@ -303,6 +317,7 @@ public class TargletItemProvider extends ModelElementItemProvider
       case TargletPackage.TARGLET__INCLUDE_ALL_PLATFORMS:
       case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
       case TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS:
+      case TargletPackage.TARGLET__PROFILE_PROPERTIES:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
       case TargletPackage.TARGLET__REQUIREMENTS:

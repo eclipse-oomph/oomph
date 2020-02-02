@@ -111,6 +111,7 @@ import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -933,7 +934,9 @@ public class ProfileTransactionImpl implements ProfileTransaction
       request.setProfileProperty(Profile.PROP_PROFILE_DEFINITION, ProfileImpl.definitionToXML(profileDefinition));
     }
 
-    compare(cleanProfileProperties, profileProperties, new CompareHandler<String>()
+    Map<String, String> mergedProfileProperties = new LinkedHashMap<String, String>(profileProperties);
+    mergedProfileProperties.putAll(P2Util.toProfilePropertiesMap(profileDefinition.getProfileProperties()));
+    compare(cleanProfileProperties, mergedProfileProperties, new CompareHandler<String>()
     {
       public void handleAddition(String key, String value)
       {

@@ -76,6 +76,7 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
       addLabelPropertyDescriptor(object);
       addLicenseConfirmationDisabledPropertyDescriptor(object);
       addMergeDisabledPropertyDescriptor(object);
+      addProfilePropertiesPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -118,6 +119,19 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_P2Task_mergeDisabled_feature"), getString("_UI_PropertyDescriptor_description", "_UI_P2Task_mergeDisabled_feature", "_UI_P2Task_type"),
         SetupP2Package.Literals.P2_TASK__MERGE_DISABLED, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Profile Properties feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addProfilePropertiesPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_P2Task_profileProperties_feature"), getString("_UI_P2Task_profileProperties_description"),
+        SetupP2Package.Literals.P2_TASK__PROFILE_PROPERTIES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -212,6 +226,7 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
       case SetupP2Package.P2_TASK__LABEL:
       case SetupP2Package.P2_TASK__LICENSE_CONFIRMATION_DISABLED:
       case SetupP2Package.P2_TASK__MERGE_DISABLED:
+      case SetupP2Package.P2_TASK__PROFILE_PROPERTIES:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
       case SetupP2Package.P2_TASK__REQUIREMENTS:

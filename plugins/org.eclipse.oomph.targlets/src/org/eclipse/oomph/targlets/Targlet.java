@@ -40,6 +40,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeAllRequirements <em>Include All Requirements</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getDropinLocations <em>Dropin Locations</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeBinaryEquivalents <em>Include Binary Equivalents</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.Targlet#getProfileProperties <em>Profile Properties</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet()
@@ -168,6 +169,28 @@ public interface Targlet extends ModelElement
    * @generated
    */
   void setIncludeBinaryEquivalents(boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Profile Properties</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Profile Properties</em>' attribute.
+   * @see #setProfileProperties(String)
+   * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_ProfileProperties()
+   * @model
+   * @generated
+   */
+  String getProfileProperties();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.targlets.Targlet#getProfileProperties <em>Profile Properties</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Profile Properties</em>' attribute.
+   * @see #getProfileProperties()
+   * @generated
+   */
+  void setProfileProperties(String value);
 
   /**
    * Returns the value of the '<em><b>Repository Lists</b></em>' containment reference list.

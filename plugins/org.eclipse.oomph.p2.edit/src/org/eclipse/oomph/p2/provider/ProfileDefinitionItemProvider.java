@@ -59,6 +59,7 @@ public class ProfileDefinitionItemProvider extends ModelElementItemProvider
       super.getPropertyDescriptors(object);
 
       addIncludeSourceBundlesPropertyDescriptor(object);
+      addProfilePropertiesPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -75,6 +76,19 @@ public class ProfileDefinitionItemProvider extends ModelElementItemProvider
         getString("_UI_ProfileDefinition_includeSourceBundles_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_ProfileDefinition_includeSourceBundles_feature", "_UI_ProfileDefinition_type"),
         P2Package.Literals.PROFILE_DEFINITION__INCLUDE_SOURCE_BUNDLES, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Profile Properties feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addProfilePropertiesPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_ProfileDefinition_profileProperties_feature"), getString("_UI_ProfileDefinition_profileProperties_description"),
+        P2Package.Literals.PROFILE_DEFINITION__PROFILE_PROPERTIES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -162,6 +176,7 @@ public class ProfileDefinitionItemProvider extends ModelElementItemProvider
     switch (notification.getFeatureID(ProfileDefinition.class))
     {
       case P2Package.PROFILE_DEFINITION__INCLUDE_SOURCE_BUNDLES:
+      case P2Package.PROFILE_DEFINITION__PROFILE_PROPERTIES:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
       case P2Package.PROFILE_DEFINITION__REQUIREMENTS:

@@ -1028,7 +1028,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     boolean offline = context.isOffline();
     context.log("Offline = " + offline);
 
-    boolean mirrors = context.isMirrors();
+    final boolean mirrors = context.isMirrors();
     context.log("Mirrors = " + mirrors);
 
     TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Object>()
@@ -1113,50 +1113,6 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
             }
           }
 
-          boolean includeAllPlatforms = targletContainer.isIncludeAllPlatforms();
-          context.log("Include All Platforms = " + includeAllPlatforms);
-          if (includeAllPlatforms)
-          {
-            for (Targlet targlet : targletContainer.getTarglets())
-            {
-              if (targlet.isIncludeAllPlatforms())
-              {
-                context.log("-> " + targlet.getName());
-              }
-            }
-          }
-
-          boolean includeAllRequirements = targletContainer.isIncludeAllRequirements();
-          context.log("Include All Requirements = " + includeAllRequirements);
-          if (!includeAllRequirements)
-          {
-            for (Targlet targlet : targletContainer.getTarglets())
-            {
-              if (!targlet.isIncludeAllRequirements())
-              {
-                context.log("-> " + targlet.getName());
-              }
-            }
-          }
-
-          boolean includeBinaryEquivalents = targletContainer.isIncludeBinaryEquivalents();
-          context.log("Include Binary Equivalents = " + includeBinaryEquivalents);
-          if (!includeBinaryEquivalents)
-          {
-            for (Targlet targlet : targletContainer.getTarglets())
-            {
-              if (!targlet.isIncludeBinaryEquivalents())
-              {
-                context.log("-> " + targlet.getName());
-              }
-            }
-          }
-
-          boolean includeSources = targletContainer.isIncludeSources();
-          context.log("Include Sources = " + includeSources);
-
-          boolean mirrors = context.isMirrors();
-
           CacheUsageConfirmer cacheUsageConfirmer = (CacheUsageConfirmer)context.get(CacheUsageConfirmer.class);
           CacheUsageConfirmer oldCacheUsageConfirmer = TargletsCorePlugin.INSTANCE.getCacheUsageConfirmer();
 
@@ -1165,6 +1121,55 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
             TargletsCorePlugin.INSTANCE.setCacheUsageConfirmer(cacheUsageConfirmer);
 
             targletContainer.setTarglets(targlets);
+
+            boolean includeAllPlatforms = targletContainer.isIncludeAllPlatforms();
+            context.log("Include All Platforms = " + includeAllPlatforms);
+            if (includeAllPlatforms)
+            {
+              for (Targlet targlet : targletContainer.getTarglets())
+              {
+                if (targlet.isIncludeAllPlatforms())
+                {
+                  context.log("-> " + targlet.getName());
+                }
+              }
+            }
+
+            boolean includeAllRequirements = targletContainer.isIncludeAllRequirements();
+            context.log("Include All Requirements = " + includeAllRequirements);
+            if (!includeAllRequirements)
+            {
+              for (Targlet targlet : targletContainer.getTarglets())
+              {
+                if (!targlet.isIncludeAllRequirements())
+                {
+                  context.log("-> " + targlet.getName());
+                }
+              }
+            }
+
+            boolean includeBinaryEquivalents = targletContainer.isIncludeBinaryEquivalents();
+            context.log("Include Binary Equivalents = " + includeBinaryEquivalents);
+            if (!includeBinaryEquivalents)
+            {
+              for (Targlet targlet : targletContainer.getTarglets())
+              {
+                if (!targlet.isIncludeBinaryEquivalents())
+                {
+                  context.log("-> " + targlet.getName());
+                }
+              }
+            }
+
+            boolean includeSources = targletContainer.isIncludeSources();
+            context.log("Include Sources = " + includeSources);
+
+            String profileProperties = targletContainer.getProfileProperties();
+            if (!StringUtil.isEmpty(profileProperties))
+            {
+              context.log("Profile Properties = " + profileProperties);
+            }
+
             targletContainer.forceUpdate(activateTarget, mirrors, MonitorUtil.create(monitor, 90));
 
             try

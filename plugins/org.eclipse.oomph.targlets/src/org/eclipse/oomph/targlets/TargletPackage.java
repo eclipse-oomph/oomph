@@ -272,13 +272,22 @@ public interface TargletPackage extends EPackage
   int TARGLET__INCLUDE_BINARY_EQUIVALENTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 12;
 
   /**
+   * The feature id for the '<em><b>Profile Properties</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET__PROFILE_PROPERTIES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 13;
+
+  /**
    * The number of structural features of the '<em>Targlet</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGLET_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 13;
+  int TARGLET_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 14;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -1206,6 +1215,17 @@ public interface TargletPackage extends EPackage
   EAttribute getTarglet_IncludeBinaryEquivalents();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.targlets.Targlet#getProfileProperties <em>Profile Properties</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Profile Properties</em>'.
+   * @see org.eclipse.oomph.targlets.Targlet#getProfileProperties()
+   * @see #getTarglet()
+   * @generated
+   */
+  EAttribute getTarglet_ProfileProperties();
+
+  /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.targlets.Targlet#getRepositoryLists <em>Repository Lists</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1616,6 +1636,14 @@ public interface TargletPackage extends EPackage
      * @generated
      */
     EAttribute TARGLET__INCLUDE_BINARY_EQUIVALENTS = eINSTANCE.getTarglet_IncludeBinaryEquivalents();
+
+    /**
+     * The meta object literal for the '<em><b>Profile Properties</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET__PROFILE_PROPERTIES = eINSTANCE.getTarglet_ProfileProperties();
 
     /**
      * The meta object literal for the '<em><b>Repository Lists</b></em>' containment reference list feature.

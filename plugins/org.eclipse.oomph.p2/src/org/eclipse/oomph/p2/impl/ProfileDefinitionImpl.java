@@ -40,6 +40,7 @@ import java.util.Collection;
  *   <li>{@link org.eclipse.oomph.p2.impl.ProfileDefinitionImpl#getRequirements <em>Requirements</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.ProfileDefinitionImpl#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.ProfileDefinitionImpl#isIncludeSourceBundles <em>Include Source Bundles</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.impl.ProfileDefinitionImpl#getProfileProperties <em>Profile Properties</em>}</li>
  * </ul>
  *
  * @generated
@@ -85,6 +86,26 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
    * @ordered
    */
   protected boolean includeSourceBundles = INCLUDE_SOURCE_BUNDLES_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getProfileProperties() <em>Profile Properties</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProfileProperties()
+   * @generated
+   * @ordered
+   */
+  protected static final String PROFILE_PROPERTIES_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getProfileProperties() <em>Profile Properties</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProfileProperties()
+   * @generated
+   * @ordered
+   */
+  protected String profileProperties = PROFILE_PROPERTIES_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -164,6 +185,31 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getProfileProperties()
+  {
+    return profileProperties;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setProfileProperties(String newProfileProperties)
+  {
+    String oldProfileProperties = profileProperties;
+    profileProperties = newProfileProperties;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, P2Package.PROFILE_DEFINITION__PROFILE_PROPERTIES, oldProfileProperties, profileProperties));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
    * @generated NOT
    */
   public void setRequirements(EList<Requirement> requirements)
@@ -219,6 +265,8 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
         return getRepositories();
       case P2Package.PROFILE_DEFINITION__INCLUDE_SOURCE_BUNDLES:
         return isIncludeSourceBundles();
+      case P2Package.PROFILE_DEFINITION__PROFILE_PROPERTIES:
+        return getProfileProperties();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -245,6 +293,9 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
       case P2Package.PROFILE_DEFINITION__INCLUDE_SOURCE_BUNDLES:
         setIncludeSourceBundles((Boolean)newValue);
         return;
+      case P2Package.PROFILE_DEFINITION__PROFILE_PROPERTIES:
+        setProfileProperties((String)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -268,6 +319,9 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
       case P2Package.PROFILE_DEFINITION__INCLUDE_SOURCE_BUNDLES:
         setIncludeSourceBundles(INCLUDE_SOURCE_BUNDLES_EDEFAULT);
         return;
+      case P2Package.PROFILE_DEFINITION__PROFILE_PROPERTIES:
+        setProfileProperties(PROFILE_PROPERTIES_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -288,6 +342,8 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
         return repositories != null && !repositories.isEmpty();
       case P2Package.PROFILE_DEFINITION__INCLUDE_SOURCE_BUNDLES:
         return includeSourceBundles != INCLUDE_SOURCE_BUNDLES_EDEFAULT;
+      case P2Package.PROFILE_DEFINITION__PROFILE_PROPERTIES:
+        return PROFILE_PROPERTIES_EDEFAULT == null ? profileProperties != null : !PROFILE_PROPERTIES_EDEFAULT.equals(profileProperties);
     }
     return super.eIsSet(featureID);
   }
@@ -329,6 +385,8 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
     StringBuilder result = new StringBuilder(super.toString());
     result.append(" (includeSourceBundles: ");
     result.append(includeSourceBundles);
+    result.append(", profileProperties: ");
+    result.append(profileProperties);
     result.append(')');
     return result.toString();
   }

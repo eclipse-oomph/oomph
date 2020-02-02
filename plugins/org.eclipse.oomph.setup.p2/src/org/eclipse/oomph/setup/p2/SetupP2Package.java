@@ -213,13 +213,22 @@ public interface SetupP2Package extends EPackage
   int P2_TASK__MERGE_DISABLED = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
 
   /**
+   * The feature id for the '<em><b>Profile Properties</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int P2_TASK__PROFILE_PROPERTIES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
+
+  /**
    * The number of structural features of the '<em>P2 Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int P2_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
+  int P2_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.p2.P2Task <em>P2 Task</em>}'.
@@ -285,6 +294,17 @@ public interface SetupP2Package extends EPackage
    * @generated
    */
   EAttribute getP2Task_MergeDisabled();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.p2.P2Task#getProfileProperties <em>Profile Properties</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Profile Properties</em>'.
+   * @see org.eclipse.oomph.setup.p2.P2Task#getProfileProperties()
+   * @see #getP2Task()
+   * @generated
+   */
+  EAttribute getP2Task_ProfileProperties();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -358,6 +378,14 @@ public interface SetupP2Package extends EPackage
      * @generated
      */
     EAttribute P2_TASK__MERGE_DISABLED = eINSTANCE.getP2Task_MergeDisabled();
+
+    /**
+     * The meta object literal for the '<em><b>Profile Properties</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute P2_TASK__PROFILE_PROPERTIES = eINSTANCE.getP2Task_ProfileProperties();
 
   }
 

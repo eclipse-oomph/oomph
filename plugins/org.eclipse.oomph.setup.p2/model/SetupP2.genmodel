@@ -16,6 +16,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference SetupP2.ecore#//P2Task/repositories"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupP2.ecore#//P2Task/licenseConfirmationDisabled"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupP2.ecore#//P2Task/mergeDisabled"/>
+      <genFeatures createChild="false" propertyDescription="A comma-separated list of key=value pairs representing profile properties"
+          ecoreFeature="ecore:EAttribute SetupP2.ecore#//P2Task/profileProperties"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

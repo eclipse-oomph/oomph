@@ -53,6 +53,7 @@ import java.util.Collection;
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeAllRequirements <em>Include All Requirements</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getDropinLocations <em>Dropin Locations</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeBinaryEquivalents <em>Include Binary Equivalents</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getProfileProperties <em>Profile Properties</em>}</li>
  * </ul>
  *
  * @generated
@@ -230,6 +231,26 @@ public class TargletImpl extends ModelElementImpl implements Targlet
   protected boolean includeBinaryEquivalents = INCLUDE_BINARY_EQUIVALENTS_EDEFAULT;
 
   /**
+   * The default value of the '{@link #getProfileProperties() <em>Profile Properties</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProfileProperties()
+   * @generated
+   * @ordered
+   */
+  protected static final String PROFILE_PROPERTIES_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getProfileProperties() <em>Profile Properties</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProfileProperties()
+   * @generated
+   * @ordered
+   */
+  protected String profileProperties = PROFILE_PROPERTIES_EDEFAULT;
+
+  /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -354,6 +375,31 @@ public class TargletImpl extends ModelElementImpl implements Targlet
     {
       eNotify(new ENotificationImpl(this, Notification.SET, TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS, oldIncludeBinaryEquivalents,
           includeBinaryEquivalents));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getProfileProperties()
+  {
+    return profileProperties;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setProfileProperties(String newProfileProperties)
+  {
+    String oldProfileProperties = profileProperties;
+    profileProperties = newProfileProperties;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, TargletPackage.TARGLET__PROFILE_PROPERTIES, oldProfileProperties, profileProperties));
     }
   }
 
@@ -579,6 +625,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return getDropinLocations();
       case TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS:
         return isIncludeBinaryEquivalents();
+      case TargletPackage.TARGLET__PROFILE_PROPERTIES:
+        return getProfileProperties();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -632,6 +680,9 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       case TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS:
         setIncludeBinaryEquivalents((Boolean)newValue);
         return;
+      case TargletPackage.TARGLET__PROFILE_PROPERTIES:
+        setProfileProperties((String)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -679,6 +730,9 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       case TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS:
         setIncludeBinaryEquivalents(INCLUDE_BINARY_EQUIVALENTS_EDEFAULT);
         return;
+      case TargletPackage.TARGLET__PROFILE_PROPERTIES:
+        setProfileProperties(PROFILE_PROPERTIES_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -720,6 +774,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return dropinLocations != null && !dropinLocations.isEmpty();
       case TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS:
         return includeBinaryEquivalents != INCLUDE_BINARY_EQUIVALENTS_EDEFAULT;
+      case TargletPackage.TARGLET__PROFILE_PROPERTIES:
+        return PROFILE_PROPERTIES_EDEFAULT == null ? profileProperties != null : !PROFILE_PROPERTIES_EDEFAULT.equals(profileProperties);
     }
     return super.eIsSet(featureID);
   }
@@ -750,6 +806,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
     result.append(includeAllRequirements);
     result.append(", includeBinaryEquivalents: ");
     result.append(includeBinaryEquivalents);
+    result.append(", profileProperties: ");
+    result.append(profileProperties);
     result.append(')');
     return result.toString();
   }

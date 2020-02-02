@@ -39,6 +39,7 @@ import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -108,6 +109,7 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#isLicenseConfirmationDisabled <em>License Confirmation Disabled</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#isMergeDisabled <em>Merge Disabled</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.p2.impl.P2TaskImpl#getProfileProperties <em>Profile Properties</em>}</li>
  * </ul>
  *
  * @generated
@@ -200,6 +202,26 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * @ordered
    */
   protected boolean mergeDisabled = MERGE_DISABLED_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getProfileProperties() <em>Profile Properties</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProfileProperties()
+   * @generated
+   * @ordered
+   */
+  protected static final String PROFILE_PROPERTIES_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getProfileProperties() <em>Profile Properties</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getProfileProperties()
+   * @generated
+   * @ordered
+   */
+  protected String profileProperties = PROFILE_PROPERTIES_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -331,6 +353,31 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getProfileProperties()
+  {
+    return profileProperties;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setProfileProperties(String newProfileProperties)
+  {
+    String oldProfileProperties = profileProperties;
+    profileProperties = newProfileProperties;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupP2Package.P2_TASK__PROFILE_PROPERTIES, oldProfileProperties, profileProperties));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -364,6 +411,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         return isLicenseConfirmationDisabled();
       case SetupP2Package.P2_TASK__MERGE_DISABLED:
         return isMergeDisabled();
+      case SetupP2Package.P2_TASK__PROFILE_PROPERTIES:
+        return getProfileProperties();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -396,6 +445,9 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       case SetupP2Package.P2_TASK__MERGE_DISABLED:
         setMergeDisabled((Boolean)newValue);
         return;
+      case SetupP2Package.P2_TASK__PROFILE_PROPERTIES:
+        setProfileProperties((String)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -425,6 +477,9 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       case SetupP2Package.P2_TASK__MERGE_DISABLED:
         setMergeDisabled(MERGE_DISABLED_EDEFAULT);
         return;
+      case SetupP2Package.P2_TASK__PROFILE_PROPERTIES:
+        setProfileProperties(PROFILE_PROPERTIES_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -449,6 +504,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         return licenseConfirmationDisabled != LICENSE_CONFIRMATION_DISABLED_EDEFAULT;
       case SetupP2Package.P2_TASK__MERGE_DISABLED:
         return mergeDisabled != MERGE_DISABLED_EDEFAULT;
+      case SetupP2Package.P2_TASK__PROFILE_PROPERTIES:
+        return PROFILE_PROPERTIES_EDEFAULT == null ? profileProperties != null : !PROFILE_PROPERTIES_EDEFAULT.equals(profileProperties);
     }
     return super.eIsSet(featureID);
   }
@@ -473,6 +530,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     result.append(licenseConfirmationDisabled);
     result.append(", mergeDisabled: ");
     result.append(mergeDisabled);
+    result.append(", profileProperties: ");
+    result.append(profileProperties);
     result.append(')');
     return result.toString();
   }
@@ -502,6 +561,20 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     P2Task overriddenP2Task = (P2Task)overriddenSetupTask;
     getRequirements().addAll(overriddenP2Task.getRequirements());
     getRepositories().addAll(overriddenP2Task.getRepositories());
+
+    String overriddenProfileProperties = overriddenP2Task.getProfileProperties();
+    if (!StringUtil.isEmpty(overriddenProfileProperties))
+    {
+      String profileProperties = getProfileProperties();
+      if (StringUtil.isEmpty(profileProperties))
+      {
+        setProfileProperties(overriddenProfileProperties);
+      }
+      else
+      {
+        setProfileProperties(profileProperties + "," + overriddenProfileProperties);
+      }
+    }
 
     String overriddenLabel = overriddenP2Task.getLabel();
     if (!StringUtil.isEmpty(overriddenLabel))
@@ -639,6 +712,18 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       return true;
     }
 
+    Map<String, String> currentProfileProperties = getProfileProperties(agent);
+    Map<String, String> profilePropertiesMap = P2Util.toProfilePropertiesMap(getProfileProperties());
+    for (Map.Entry<String, String> entry : profilePropertiesMap.entrySet())
+    {
+      String key = entry.getKey();
+      String value = entry.getValue();
+      if (!ObjectUtil.equals(currentProfileProperties.get(key), value))
+      {
+        return true;
+      }
+    }
+
     Set<IInstallableUnit> installedUnits = getInstalledUnits(agent);
     Set<Requirement> unsatisifiedRequirements = new LinkedHashSet<Requirement>();
     for (Requirement requirement : getRequirements())
@@ -676,6 +761,12 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     boolean mirrors = context.isMirrors();
     context.log("Mirrors = " + mirrors);
 
+    String profileProperties = getProfileProperties();
+    if (!StringUtil.isEmpty(profileProperties))
+    {
+      context.log("Profile Properties = " + profileProperties);
+    }
+
     EList<Requirement> requirements = getRequirements();
     EList<Repository> repositories = getRepositories();
 
@@ -698,6 +789,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     ProfileDefinition profileDefinition = transaction.getProfileDefinition();
     profileDefinition.setRequirements(requirements);
     profileDefinition.setRepositories(repositories);
+    profileDefinition.setProfileProperties(getProfileProperties());
 
     ProfileTransaction.CommitContext commitContext = new ProfileTransaction.CommitContext()
     {
@@ -1062,6 +1154,18 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
 
     return result;
+  }
+
+  private static Map<String, String> getProfileProperties(Agent agent)
+  {
+    IProfileRegistry profileRegistry = agent.getProfileRegistry();
+    IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
+    if (profile != null)
+    {
+      return profile.getProperties();
+    }
+
+    return Collections.emptyMap();
   }
 
   public static void saveConfigIni(File file, Map<String, String> properties, Class<?> caller)

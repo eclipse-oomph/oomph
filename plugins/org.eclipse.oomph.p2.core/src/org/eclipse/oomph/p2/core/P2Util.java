@@ -38,6 +38,8 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -160,6 +162,51 @@ public final class P2Util
     }
 
     return name;
+  }
+
+  public static Map<String, String> toProfilePropertiesMap(String profileProperties)
+  {
+    Map<String, String> result = new LinkedHashMap<String, String>();
+    if (!StringUtil.isEmpty(profileProperties))
+    {
+      String[] properties = profileProperties.split(",");
+      for (String property : properties)
+      {
+        int index = property.indexOf('=');
+        if (index == -1)
+        {
+          result.put(property, null);
+        }
+        else
+        {
+          result.put(property.substring(0, index), property.substring(index + 1));
+        }
+      }
+    }
+
+    return result;
+  }
+
+  public static String toProfilePropertiesString(Map<String, String> profileProperties)
+  {
+    StringBuilder result = new StringBuilder();
+    for (Map.Entry<String, String> entry : profileProperties.entrySet())
+    {
+      if (result.length() != 0)
+      {
+        result.append(",");
+      }
+
+      String key = entry.getKey();
+      result.append(key);
+      String value = entry.getValue();
+      if (value != null)
+      {
+        result.append(' ').append(value);
+      }
+    }
+
+    return result.toString();
   }
 
   @SuppressWarnings("unused")

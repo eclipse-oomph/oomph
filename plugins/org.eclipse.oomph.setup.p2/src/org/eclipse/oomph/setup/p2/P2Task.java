@@ -30,6 +30,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.p2.P2Task#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.P2Task#isLicenseConfirmationDisabled <em>License Confirmation Disabled</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.p2.P2Task#isMergeDisabled <em>Merge Disabled</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.p2.P2Task#getProfileProperties <em>Profile Properties</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.p2.SetupP2Package#getP2Task()
@@ -151,5 +152,27 @@ public interface P2Task extends SetupTask
    * @generated
    */
   void setMergeDisabled(boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Profile Properties</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Profile Properties</em>' attribute.
+   * @see #setProfileProperties(String)
+   * @see org.eclipse.oomph.setup.p2.SetupP2Package#getP2Task_ProfileProperties()
+   * @model
+   * @generated
+   */
+  String getProfileProperties();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.p2.P2Task#getProfileProperties <em>Profile Properties</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Profile Properties</em>' attribute.
+   * @see #getProfileProperties()
+   * @generated
+   */
+  void setProfileProperties(String value);
 
 } // InstallTask

@@ -31,6 +31,8 @@
           ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeAllRequirements"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/dropinLocations"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeBinaryEquivalents"/>
+      <genFeatures createChild="false" propertyDescription="A comma-separated list of key=value pairs representing profile properties"
+          ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/profileProperties"/>
     </genClasses>
     <genClasses ecoreClass="Targlets.ecore#//ComponentExtension">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//ComponentExtension/requirements"/>
