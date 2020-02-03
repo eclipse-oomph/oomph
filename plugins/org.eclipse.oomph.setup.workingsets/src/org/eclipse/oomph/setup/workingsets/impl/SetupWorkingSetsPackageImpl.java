@@ -225,6 +225,7 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getWorkingSetTask_WorkingSets(), theWorkingSetsPackage.getWorkingSet(), null, "workingSets", null, 0, -1, WorkingSetTask.class,
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    getWorkingSetTask_WorkingSets().getEKeys().add(theWorkingSetsPackage.getWorkingSet_Name());
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore");

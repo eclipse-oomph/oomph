@@ -370,6 +370,56 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
     }
 
     @Override
+    public String getIDREF(EObject obj)
+    {
+      if (resource != null)
+      {
+        String id = EcoreUtil.getID(obj);
+        if (id != null)
+        {
+          return id;
+        }
+
+        // Walk up the containers.
+        InternalEObject internalEObject = (InternalEObject)obj;
+        EObject basisObject = null;
+        for (InternalEObject container = (InternalEObject)internalEObject.eContainer(); container != null; container = (InternalEObject)container.eContainer())
+        {
+          Internal eDirectResource = container.eDirectResource();
+          if (eDirectResource == resource)
+          {
+            break;
+          }
+
+          id = EcoreUtil.getID(container);
+          if (id != null && container instanceof ModelElement)
+          {
+            basisObject = container;
+            break;
+          }
+
+          internalEObject = container;
+        }
+
+        if (basisObject != null)
+        {
+          StringBuilder fragment = new StringBuilder();
+          fragment.append("//'");
+          encode(fragment, id);
+          fragment.append('\'');
+
+          String fragmentPath = EcoreUtil.getRelativeURIFragmentPath(basisObject, obj);
+          fragment.append('/');
+          fragment.append(fragmentPath);
+
+          return fragment.toString();
+        }
+      }
+
+      return super.getIDREF(obj);
+    }
+
+    @Override
     public URI deresolve(URI uri)
     {
       return super.deresolve(BaseUtil.resolveBogusURI(uri));
