@@ -16,15 +16,24 @@ import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager.Impact;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.nebula.jface.tablecomboviewer.TableComboViewer;
 import org.eclipse.nebula.widgets.tablecombo.TableCombo;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -38,6 +47,13 @@ import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.ui.StorageConfigurationComposite;
+
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -142,6 +158,8 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
     private StorageConfigurationComposite storageConfigurationComposite;
 
     private Button syncButton;
+
+    private Button viewButton;
 
     private Button deleteButton;
 
@@ -260,6 +278,131 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
                 }
               }
             });
+          }
+        });
+
+        viewButton = new Button(main, SWT.PUSH);
+        viewButton.setText("View Remote Storage...");
+        viewButton.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
+        viewButton.addSelectionListener(new SelectionAdapter()
+        {
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+            try
+            {
+              dialog.run(true, false, new IRunnableWithProgress()
+              {
+                public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
+                {
+                  try
+                  {
+                    File file = File.createTempFile("preference-synchornization-remote", ".xml");
+                    if (SynchronizerManager.INSTANCE.getRemoteDataProvider().retrieve(file))
+                    {
+                    }
+
+                    final String data = IOUtil.readUTF8(file);
+
+                    UIUtil.asyncExec(new Runnable()
+                    {
+                      public void run()
+                      {
+                        final Point size = getShell().getSize();
+                        Dialog dialog = new Dialog(getShell())
+                        {
+                          @Override
+                          protected void configureShell(Shell newShell)
+                          {
+                            super.configureShell(newShell);
+                            newShell.setText("Remote Synchronization Storage");
+                          }
+
+                          @Override
+                          protected boolean isResizable()
+                          {
+                            return true;
+                          }
+
+                          @Override
+                          protected void createButtonsForButtonBar(Composite parent)
+                          {
+                            createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CLOSE_LABEL, true);
+                          }
+
+                          @Override
+                          protected Control createDialogArea(Composite parent)
+                          {
+                            Composite composite = (Composite)super.createDialogArea(parent);
+                            StyledText text = new StyledText(composite, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL | SWT.READ_ONLY | SWT.BORDER);
+                            text.setForeground(composite.getForeground());
+                            text.setBackground(composite.getBackground());
+                            GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+                            gridData.widthHint = size.x * 3 / 4;
+                            gridData.heightHint = size.y * 3 / 4;
+                            text.setLayoutData(gridData);
+                            text.setText(data);
+
+                            try
+                            {
+                              Pattern xmlPattern = Pattern.compile("<\\??/?[^>]+\\??/?>", Pattern.DOTALL);
+                              Pattern attributePattern = Pattern.compile("\\s+([^=\">]+)=\"([^\"]*)\"", Pattern.DOTALL);
+                              int index = 0;
+                              List<StyleRange> styleRanges = new ArrayList<StyleRange>();
+                              for (Matcher xmlMatcher = xmlPattern.matcher(data), attributeMatcher = attributePattern.matcher(data); index != -1
+                                  && xmlMatcher.find(index);)
+                              {
+                                int xmlEnd = xmlMatcher.end();
+                                if (data.charAt(xmlMatcher.start() + 1) != '?')
+                                {
+                                  while (attributeMatcher.find(index) && attributeMatcher.end() < xmlEnd)
+                                  {
+                                    String attributeName = attributeMatcher.group(1);
+                                    boolean metaAttribute = attributeName.contains(":");
+                                    if (!metaAttribute || attributeName.equals("xsi:type"))
+                                    {
+                                      StyleRange styleRange = new StyleRange();
+                                      styleRange.start = attributeMatcher.start(2);
+                                      styleRange.length = attributeMatcher.end(2) - styleRange.start;
+                                      styleRange.fontStyle = metaAttribute ? SWT.ITALIC | SWT.BOLD : SWT.BOLD;
+                                      styleRanges.add(styleRange);
+                                    }
+
+                                    index = attributeMatcher.end();
+                                  }
+                                }
+
+                                index = data.indexOf('<', xmlEnd);
+                              }
+
+                              text.setStyleRanges(styleRanges.toArray(new StyleRange[styleRanges.size()]));
+                            }
+                            catch (RuntimeException ex)
+                            {
+                              // Ignore styling problems.
+                            }
+
+                            return composite;
+                          }
+                        };
+
+                        dialog.setBlockOnOpen(false);
+                        dialog.open();
+                      }
+                    });
+                  }
+                  catch (Exception ex)
+                  {
+                    SetupUIPlugin.INSTANCE.log(ex);
+                  }
+                }
+              });
+            }
+            catch (Exception ex)
+            {
+              SetupUIPlugin.INSTANCE.log(ex);
+            }
           }
         });
 
@@ -396,6 +539,11 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
       if (syncButton != null)
       {
         syncButton.setEnabled(enabled);
+      }
+
+      if (viewButton != null)
+      {
+        viewButton.setEnabled(enabled);
       }
 
       if (deleteButton != null)
