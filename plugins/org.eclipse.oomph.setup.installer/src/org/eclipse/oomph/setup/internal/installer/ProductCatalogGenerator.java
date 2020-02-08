@@ -198,7 +198,7 @@ public class ProductCatalogGenerator implements IApplication
           stagingTrain = arguments[++i];
           stagingEPPLocation = URI.createURI(arguments[++i]);
           stagingTrainLocation = URI.createURI(arguments[++i]);
-          if (i < arguments.length && !arguments[i].startsWith("-"))
+          if (i + 1 < arguments.length && !arguments[i + 1].startsWith("-"))
           {
             stagingEclipePlatformLocation = URI.createURI(arguments[++i]);
           }

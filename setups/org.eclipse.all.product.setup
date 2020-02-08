@@ -25,6 +25,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2</value>
+      </detail>
+      <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - Latest</value>
       </detail>
@@ -132,6 +136,10 @@
       requiredJavaVersion="1.8">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2</value>
+      </detail>
       <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - 2020-03</value>

@@ -47,6 +47,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-java-developers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Java Developers - Latest</value>
         </detail>
@@ -190,6 +194,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-java-developers</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse IDE for Java Developers - 2020-03</value>
@@ -1168,6 +1176,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-enterprise-java-developers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Enterprise Java Developers - Latest</value>
         </detail>
@@ -1577,6 +1589,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-enterprise-java-developers</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse IDE for Enterprise Java Developers - 2020-03</value>
@@ -3766,6 +3782,7 @@
     <description>
       Tools for Java developers creating Enterprise Java and Web applications, including a Java IDE, tools for Enterprise Java, JPA, JSF, Mylyn, Maven, Git and more.&lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?classification=WebTools&quot;>here&lt;/a> to file a bug against Eclipse Web Tools Platform.&lt;br/>
+      Click &lt;a href=&quot;https://github.com/eclipse/wildwebdeveloper/issues/new&quot;>here&lt;/a> to report an issue against Eclipse Wild Web Developer.&lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=M2E-WTP&quot;>here&lt;/a> to file a bug against Maven integration for web projects.
     </description>
@@ -3785,6 +3802,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-cc-developers</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse IDE for C/C++ Developers - Latest</value>
@@ -4005,6 +4026,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-cc-developers</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse IDE for C/C++ Developers - 2020-03</value>
@@ -5267,6 +5292,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for JavaScript and Web Developers - Latest</value>
         </detail>
@@ -5406,6 +5435,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse IDE for JavaScript and Web Developers - 2020-03</value>
@@ -6210,6 +6243,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-php-developers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for PHP Developers - Latest</value>
         </detail>
@@ -6349,6 +6386,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-php-developers</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse IDE for PHP Developers - 2020-03</value>
@@ -7184,6 +7225,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-eclipse-committers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Eclipse Committers - Latest</value>
         </detail>
@@ -7387,6 +7432,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-eclipse-committers</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse IDE for Eclipse Committers - 2020-03</value>
@@ -8576,6 +8625,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse DSL Tools - Latest</value>
         </detail>
@@ -8679,6 +8732,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse DSL Tools - 2020-03</value>
@@ -9443,6 +9500,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-modeling-tools</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Modeling Tools - Latest</value>
         </detail>
@@ -9638,6 +9699,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-modeling-tools</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse Modeling Tools - 2020-03</value>
@@ -10890,6 +10955,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-rcp-and-rap-developers-includes-incubating-components</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse for RCP and RAP Developers - Latest</value>
         </detail>
@@ -11061,6 +11130,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-rcp-and-rap-developers-includes-incubating-components</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse for RCP and RAP Developers - 2020-03</value>
@@ -12175,6 +12248,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-testers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse for Testers - Latest</value>
         </detail>
@@ -12270,6 +12347,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-testers</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse for Testers - 2020-03</value>
@@ -12972,6 +13053,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-scientific-computing</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse for Scientific Computing - Latest</value>
         </detail>
@@ -13034,8 +13119,6 @@
             name="org.eclipse.ptp.feature.group"/>
         <requirement
             name="org.eclipse.ptp.fortran.feature.group"/>
-        <requirement
-            name="org.eclipse.ptp.pldt.upc.feature.group"/>
         <requirement
             name="org.eclipse.ptp.rdt.sync.feature.group"/>
         <requirement
@@ -13160,6 +13243,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-scientific-computing</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse for Scientific Computing - 2020-03</value>
         </detail>
@@ -13222,8 +13309,6 @@
             name="org.eclipse.ptp.feature.group"/>
         <requirement
             name="org.eclipse.ptp.fortran.feature.group"/>
-        <requirement
-            name="org.eclipse.ptp.pldt.upc.feature.group"/>
         <requirement
             name="org.eclipse.ptp.rdt.sync.feature.group"/>
         <requirement
@@ -14291,6 +14376,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-scout-developers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse for Scout Developers - Latest</value>
         </detail>
@@ -14434,6 +14523,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-scout-developers</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse for Scout Developers - 2020-03</value>
@@ -15377,6 +15470,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Rust Developers - Latest</value>
         </detail>
@@ -15488,6 +15585,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2020-03/m2/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse IDE for Rust Developers - 2020-03</value>
@@ -15991,6 +16092,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Platform - Latest</value>
         </detail>
@@ -16054,6 +16159,10 @@
         requiredJavaVersion="1.8">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse Platform - 2020-03</value>
