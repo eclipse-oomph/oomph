@@ -81,6 +81,7 @@ import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.internal.p2.metadata.ResolvedInstallableUnit;
 import org.eclipse.equinox.internal.p2.metadata.expression.LDAPFilter;
+import org.eclipse.equinox.internal.p2.touchpoint.natives.NativeTouchpoint;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IPhaseSet;
 import org.eclipse.equinox.p2.engine.IProfile;
@@ -1749,14 +1750,25 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         protected java.util.List<ProvisioningAction> getActions(InstallableUnitOperand currentOperand)
         {
           // If a product IU is provisioned, it pulls in tooling fragments that try to work with the non-existing artifacts of our workspace-based IUs.
-          // So we'd remove them for the purpose of this phase.
+          // Also for p2.inf touchpoints such as chmod, we cannot resolve the artifact location, and don't want do that because it would modify the source.
+          // So we remove them for the purpose of this phase.
           IInstallableUnit first = currentOperand.first();
           if (first != null)
           {
             if ("true".equals(first.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)) && first instanceof ResolvedInstallableUnit)
             {
-              return super.getActions(new InstallableUnitOperand(
-                  new ResolvedInstallableUnit((IInstallableUnit)((ResolvedInstallableUnit)first).getMember(ResolvedInstallableUnit.MEMBER_ORIGINAL)), null));
+              List<ProvisioningAction> actions = new ArrayList<ProvisioningAction>(super.getActions(new InstallableUnitOperand(
+                  new ResolvedInstallableUnit((IInstallableUnit)((ResolvedInstallableUnit)first).getMember(ResolvedInstallableUnit.MEMBER_ORIGINAL)), null)));
+              for (Iterator<ProvisioningAction> it = actions.iterator(); it.hasNext();)
+              {
+                ProvisioningAction provisioningAction = it.next();
+                if (provisioningAction.getTouchpoint() instanceof NativeTouchpoint)
+                {
+                  it.remove();
+                }
+              }
+
+              return actions;
             }
           }
 
@@ -1769,14 +1781,25 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         protected java.util.List<ProvisioningAction> getActions(InstallableUnitOperand currentOperand)
         {
           // If a product IU is provisioned, it pulls in tooling fragments that try to work with the non-existing artifacts of our workspace-based IUs.
-          // So we'd remove them for the purpose of this phase.
+          // Also for p2.inf touchpoints such as chmod, we cannot resolve the artifact location, and don't want do that because it would modify the source.
+          // So we remove them for the purpose of this phase.
           IInstallableUnit second = currentOperand.second();
           if (second != null)
           {
             if ("true".equals(second.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)) && second instanceof ResolvedInstallableUnit)
             {
-              return super.getActions(new InstallableUnitOperand(null,
-                  new ResolvedInstallableUnit((IInstallableUnit)((ResolvedInstallableUnit)second).getMember(ResolvedInstallableUnit.MEMBER_ORIGINAL))));
+              List<ProvisioningAction> actions = new ArrayList<ProvisioningAction>(super.getActions(new InstallableUnitOperand(null,
+                  new ResolvedInstallableUnit((IInstallableUnit)((ResolvedInstallableUnit)second).getMember(ResolvedInstallableUnit.MEMBER_ORIGINAL)))));
+              for (Iterator<ProvisioningAction> it = actions.iterator(); it.hasNext();)
+              {
+                ProvisioningAction provisioningAction = it.next();
+                if (provisioningAction.getTouchpoint() instanceof NativeTouchpoint)
+                {
+                  it.remove();
+                }
+              }
+
+              return actions;
             }
           }
 
