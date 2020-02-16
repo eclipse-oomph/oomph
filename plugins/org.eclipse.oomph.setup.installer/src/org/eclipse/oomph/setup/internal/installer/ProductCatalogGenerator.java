@@ -1830,7 +1830,7 @@ public class ProductCatalogGenerator implements IApplication
       URL releasePackagesURL = new URL(releasePackages.toString());
       inputStream = releasePackagesURL.openStream();
       List<String> lines = IOUtil.readLines(inputStream, "UTF-8");
-      Pattern pattern = Pattern.compile("<a href=\"([^\"]+)\"[^>]*>(4\\.[^<]+)</a>");
+      Pattern pattern = Pattern.compile("<a href=\"([^\"]+)\"[^>]*>(4\\.[0-9.]+)[^<]*</a>");
       for (String line : lines)
       {
         Matcher matcher = pattern.matcher(line);

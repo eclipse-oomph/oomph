@@ -16093,7 +16093,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://download.eclipse.org/eclipse/downloads/</value>
+          <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.15M1-202001100905/</value>
         </detail>
         <detail
             key="shortcut">
@@ -16127,7 +16127,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.14-201912100610/</value>
+          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.14-201912100610/</value>
         </detail>
         <detail
             key="shortcut">
@@ -16161,7 +16161,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://download.eclipse.org/eclipse/downloads/</value>
+          <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.15M1-202001100905/</value>
         </detail>
         <detail
             key="shortcut">
@@ -16199,7 +16199,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.14-201912100610/</value>
+          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.14-201912100610/</value>
         </detail>
         <detail
             key="shortcut">
