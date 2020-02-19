@@ -707,8 +707,19 @@ public class StringFilterRegistry
       }
     });
 
-    registerFilter("base64", new ParameterizedStringFilter()
+    registerFilter(new DocumentedParameterizedStringFilter()
     {
+      public String getName()
+      {
+        return "base64";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Encodes the String value to its base64 representation.";
+      }
+
       public String filter(String value)
       {
         return filter(value, null);
@@ -761,6 +772,24 @@ public class StringFilterRegistry
       }
     });
 
+    registerFilter(new DocumentedStringFilter()
+    {
+      public String getName()
+      {
+        return "patternQuote";
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "Quotes regular-expression constructs in the String value such that the result can be used as a literal string in patterns.";
+      }
+
+      public String filter(String value)
+      {
+        return Pattern.quote(value);
+      }
+    });
   }
 
   public static void main(String[] args) throws UnsupportedEncodingException
@@ -783,10 +812,10 @@ public class StringFilterRegistry
       String description;
 
       StringFilter filter = entry.getValue();
-      if (filter instanceof DocumentedStringFilter)
+      if (filter instanceof StringFilterDocumentation)
       {
-        name = ((DocumentedStringFilter)filter).getName();
-        description = ((DocumentedStringFilter)filter).getDescription();
+        name = ((StringFilterDocumentation)filter).getName();
+        description = ((StringFilterDocumentation)filter).getDescription();
 
         boolean deprecated = !name.toLowerCase().equals(entry.getKey().toLowerCase());
         if (deprecated)
@@ -874,17 +903,17 @@ public class StringFilterRegistry
     filters.put(filterName.toLowerCase(), filter);
   }
 
-  private void registerFilter(DocumentedStringFilter filter)
+  private void registerFilter(StringFilterDocumentation filter)
   {
     String name = filter.getName().toLowerCase();
-    filters.put(name, filter);
+    filters.put(name, (StringFilter)filter);
 
     String[] deprecations = filter.getDeprecations();
     if (deprecations != null)
     {
       for (String deprecatedName : deprecations)
       {
-        filters.put(deprecatedName.toLowerCase(), filter);
+        filters.put(deprecatedName.toLowerCase(), (StringFilter)filter);
       }
     }
   }
@@ -893,6 +922,22 @@ public class StringFilterRegistry
    * @author Eike Stepper
    */
   public static abstract class DocumentedStringFilter implements StringFilter, StringFilterDocumentation
+  {
+    public String getDescription()
+    {
+      return null;
+    }
+
+    public String[] getDeprecations()
+    {
+      return null;
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static abstract class DocumentedParameterizedStringFilter implements ParameterizedStringFilter, StringFilterDocumentation
   {
     public String getDescription()
     {
