@@ -212,7 +212,7 @@
               pattern=".*/eclipse\.platform/ant/.*"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@projects[name='platform']/@setupTasks.2/@workingSets.2"/>
+              excludedWorkingSet="//@projects[name='platform']/@setupTasks.2/@workingSets[name='Platform%20Ant%20Tests']"/>
         </predicate>
       </workingSet>
       <workingSet
@@ -295,7 +295,7 @@
               project="org.eclipse.debug.core"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@projects[name='debug']/@setupTasks.2/@workingSets.1 //@projects[name='debug']/@setupTasks.2/@workingSets.2"/>
+              excludedWorkingSet="//@projects[name='debug']/@setupTasks.2/@workingSets[name='Platform%20Debug%20Tests'] //@projects[name='debug']/@setupTasks.2/@workingSets[name='Platform%20Debug%20Examples']"/>
         </predicate>
       </workingSet>
       <workingSet
@@ -502,6 +502,59 @@
         label="Master"/>
     <description>The Platform documentation</description>
   </project>
+  <project name="news"
+      label="News">
+    <setupTask
+        xsi:type="git:GitCloneTask"
+        id="git.clone.platform.news"
+        remoteURI="www.eclipse.org/eclipse/news.git">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Platform News Git or Gerrit Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+      <configSections
+          name="gerrit">
+        <properties
+            key="createchangeid"
+            value="true"/>
+      </configSections>
+      <description>Platform News</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.targlets:TargletTask">
+      <targlet
+          name="Platform News">
+        <requirement
+            name="*"/>
+        <sourceLocator
+            rootFolder="${git.clone.platform.news.location}"/>
+      </targlet>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.workingsets:WorkingSetTask">
+      <workingSet
+          name="Platform News">
+        <predicate
+            xsi:type="predicates:NamePredicate"
+            pattern="platform news"/>
+      </workingSet>
+    </setupTask>
+    <stream
+        name="master"
+        label="Master"/>
+    <description>The Platform news</description>
+  </project>
   <project name="releng"
       label="Releng">
     <setupTask
@@ -562,7 +615,7 @@
               project="org.eclipse.rcp"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@projects[name='releng']/@setupTasks.2/@workingSets.1"/>
+              excludedWorkingSet="//@projects[name='releng']/@setupTasks.2/@workingSets[name='Platform%20Releng%20Tests']"/>
         </predicate>
       </workingSet>
       <workingSet

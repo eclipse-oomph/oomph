@@ -110,6 +110,8 @@
     <stream
         href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='documentation']/@streams[name='master']"/>
     <stream
+        href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='news']/@streams[name='master']"/>
+    <stream
         href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='resources']/@streams[name='master']"/>
     <stream
         href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='platform']/@projects[name='runtime']/@streams[name='master']"/>
