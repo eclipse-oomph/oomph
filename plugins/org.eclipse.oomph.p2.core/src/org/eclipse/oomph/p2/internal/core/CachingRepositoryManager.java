@@ -60,6 +60,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -958,33 +959,59 @@ public class CachingRepositoryManager<T>
             }
           }
 
+          Set<String> locations = new HashSet<String>();
+          List<MirrorActivity> mirrorActivitiesList = new ArrayList<MirrorActivity>();
+
           // Use only the first two thirds of the list.
           int limit = (mirrors.length + 2) / 3;
-          if (limit == 0 && repositoryURI != null)
+          for (int i = 0; i < limit; i++)
           {
-            // Even if there are no mirrors treat it as a single mirror so that activities and performance can always be monitored.
+            // Convert the mirror info to our mirror activity representation.
+            MirrorInfo mirrorInfo = mirrors[i];
+            String locationString = getLocationString(mirrorInfo);
+            // Don't add duplicates.
+            if (locationString != null && locations.add(locationString))
+            {
+              try
+              {
+                URI uri = new URI(locationString);
+                if (uri.getScheme() == null)
+                {
+                  // Ignore non-absolute URIs.
+                  continue;
+                }
+              }
+              catch (URISyntaxException ex)
+              {
+                // Ignore invalid URIs.
+                continue;
+              }
+
+              MirrorActivity mirrorActivity = new MirrorActivity(locationString);
+              mirrorActivitiesList.add(mirrorActivity);
+            }
+          }
+
+          // Add this repository's URI as the last choice, just in case all the mirrors are bad.
+          if (repositoryURI != null)
+          {
             String locationString = repositoryURI.toString();
             if (!locationString.endsWith("/"))
             {
               locationString += Character.toString('/');
             }
 
-            mirrorActivities = new MirrorActivity[] { new MirrorActivity(locationString) };
-          }
-          else
-          {
-            mirrorActivities = new MirrorActivity[limit];
-            for (int i = 0; i < limit; i++)
+            // Only add it if it's not a duplicate.
+            if (locations.add(locationString))
             {
-              // Convert the mirror info to our mirror activity representation.
-              MirrorInfo mirrorInfo = mirrors[i];
-              String locationString = getLocationString(mirrorInfo);
               MirrorActivity mirrorActivity = new MirrorActivity(locationString);
-              mirrorActivities[i] = mirrorActivity;
+              mirrorActivitiesList.add(mirrorActivity);
             }
           }
 
-          // Do ourselves as a listener.
+          mirrorActivities = mirrorActivitiesList.toArray(new MirrorActivity[mirrorActivitiesList.size()]);
+
+          // Add ourselves as a listener.
           if (eventBus != null)
           {
             eventBus.addListener(this);
