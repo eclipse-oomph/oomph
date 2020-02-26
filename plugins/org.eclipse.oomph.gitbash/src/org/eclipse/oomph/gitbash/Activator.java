@@ -89,7 +89,6 @@ public class Activator extends AbstractUIPlugin
     return plugin;
   }
 
-  @SuppressWarnings("deprecation")
   public static ImageDescriptor getImageDescriptor(String path)
   {
     return imageDescriptorFromPlugin(PLUGIN_ID, path);

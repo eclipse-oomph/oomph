@@ -55,7 +55,6 @@ public class Activator extends AbstractUIPlugin
 
   private void registerImage(String key)
   {
-    @SuppressWarnings("deprecation")
     Image image = imageDescriptorFromPlugin(PLUGIN_ID, key).createImage();
     getImageRegistry().put(key, image);
   }

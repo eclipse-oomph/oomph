@@ -33,7 +33,6 @@ public abstract class AbstractDropdownItemHandler extends AbstractHandler implem
     this.text = text;
   }
 
-  @SuppressWarnings("deprecation")
   public ImageDescriptor getImageDescriptor()
   {
     return AbstractUIPlugin.imageDescriptorFromPlugin(SetupEditorPlugin.PLUGIN_ID, imageKey);

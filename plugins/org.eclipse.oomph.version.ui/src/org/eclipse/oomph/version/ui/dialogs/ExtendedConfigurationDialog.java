@@ -105,7 +105,6 @@ public class ExtendedConfigurationDialog extends TitleAreaDialog
     setTitle(BUILDER_CONFIGURATION);
     setMessage("Select a release specification file and check additional settings.");
 
-    @SuppressWarnings("deprecation")
     ImageDescriptor imageDescriptor = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/Project.gif");
     projectImage = imageDescriptor.createImage();
 
