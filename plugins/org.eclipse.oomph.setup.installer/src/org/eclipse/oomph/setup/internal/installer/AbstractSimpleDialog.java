@@ -89,7 +89,7 @@ public abstract class AbstractSimpleDialog extends Shell
       }
     });
 
-    GridLayout titleLayout = UIUtil.createGridLayout(2);
+    GridLayout titleLayout = UIUtil.createGridLayout(getTitleColumnCount());
     titleLayout.horizontalSpacing = 0;
     titleLayout.verticalSpacing = 0;
     titleLayout.marginLeft = 20;
@@ -218,6 +218,11 @@ public abstract class AbstractSimpleDialog extends Shell
   }
 
   protected abstract void createUI(Composite titleComposite);
+
+  protected int getTitleColumnCount()
+  {
+    return 2;
+  }
 
   protected void exitSelected()
   {

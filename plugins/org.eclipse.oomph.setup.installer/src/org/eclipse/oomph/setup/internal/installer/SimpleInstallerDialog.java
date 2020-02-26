@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.FlatButton;
@@ -20,10 +21,12 @@ import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.p2.internal.ui.AgentManagerDialog;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
@@ -43,6 +46,7 @@ import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ExceptionHandler;
 import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -65,16 +69,19 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 
 import java.beans.PropertyChangeEvent;
@@ -175,6 +182,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private SimpleInstallerMenuButton menuButton;
 
+  private NotifictionButton notificationButton;
+
   private boolean poolEnabled;
 
   private BundlePool pool;
@@ -259,8 +268,25 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   }
 
   @Override
+  protected int getTitleColumnCount()
+  {
+    return super.getTitleColumnCount() + 1;
+  }
+
+  @Override
   protected void createUI(Composite titleComposite)
   {
+    Composite notificationContainer = new Composite(titleComposite, SWT.NONE);
+    GridLayout notificationContainerLayout = UIUtil.createGridLayout(1);
+    notificationContainerLayout.marginRight = 15;
+
+    notificationContainer.setLayout(notificationContainerLayout);
+    notificationContainer.setLayoutData(GridDataFactory.swtDefaults().grab(false, true).align(SWT.CENTER, SWT.BEGINNING).create());
+
+    notificationButton = new NotifictionButton(notificationContainer);
+    notificationButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.BEGINNING).create());
+    notificationButton.setVisible(false);
+
     Composite exitMenuButtonContainer = new Composite(titleComposite, SWT.NONE);
     exitMenuButtonContainer.setLayout(UIUtil.createGridLayout(1));
     exitMenuButtonContainer.setLayoutData(GridDataFactory.swtDefaults().grab(false, true).align(SWT.CENTER, SWT.FILL).create());
@@ -381,6 +407,47 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     showProductCatalogsItem = count > 1
         || StringUtil.isEmpty(SimpleInstallerPage.PRODUCT_CATALOG_FILTER.pattern()) && StringUtil.isEmpty(SimpleInstallerPage.PRODUCT_FILTER.pattern())
             && StringUtil.isEmpty(SimpleInstallerPage.PRODUCT_VERSION_FILTER.pattern()) && new IndexManager().getIndexNames(false).size() > 1;
+
+    // Initialize notification button with the default.
+    setBrandingNotificationScope(null);
+  }
+
+  public void setBrandingNotificationScope(Scope scope)
+  {
+    if (scope == null)
+    {
+      notificationButton.setURI(null, false);
+
+      // If there is no scope, iterate over the catalog defaults.
+      @SuppressWarnings("unchecked")
+      List<ProductCatalog> productCatalogs = (List<ProductCatalog>)catalogManager.getCatalogs(true);
+      if (productCatalogs != null)
+      {
+        for (ProductCatalog productCatalog : productCatalogs)
+        {
+          if (SimpleProductPage.isIncluded(productCatalog))
+          {
+            if (notificationButton.getURI() == null)
+            {
+              setBrandingNotificationScope(productCatalog);
+            }
+          }
+        }
+      }
+    }
+    else
+    {
+      String notificationLabel = null;
+      URI notificationURI = getBrandingNotificationURI(scope);
+      if (notificationURI != null)
+      {
+        notificationURI = URI.createURI(notificationURI.toString().replace("${installer.version}", URI.encodeQuery(SelfUpdate.getProductVersion(), true)));
+        notificationLabel = getBrandingNotificationLabel(scope);
+
+        notificationButton.setURI(notificationURI, isBrandingNotificationAnimated(scope));
+        notificationButton.setToolTipText((notificationLabel == null ? "Like..." : notificationLabel) + " " + notificationURI);
+      }
+    }
   }
 
   private void toggleMenu()
@@ -893,6 +960,11 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     if (oldPage != null)
     {
       oldPage.aboutToHide();
+
+      if (newPage instanceof SimpleProductPage)
+      {
+        setBrandingNotificationScope(null);
+      }
     }
 
     stackLayout.topControl = newPage;
@@ -1069,6 +1141,83 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     super.dispose();
   }
 
+  private static URI getBrandingNotificationURI(Scope scope)
+  {
+    if (scope != null)
+    {
+      Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+      if (annotation != null)
+      {
+        String detail = annotation.getDetails().get(AnnotationConstants.KEY_NOTIFICATION_URI);
+        if (detail != null)
+        {
+          return URI.createURI(detail);
+        }
+      }
+
+      return getBrandingNotificationURI(scope.getParentScope());
+    }
+
+    return null;
+  }
+
+  private static String getBrandingNotificationLabel(Scope scope)
+  {
+    if (scope != null)
+    {
+      Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+      if (annotation != null)
+      {
+        String detail = annotation.getDetails().get(AnnotationConstants.KEY_NOTIFICATION_LABEL);
+        if (detail != null)
+        {
+          return detail;
+        }
+      }
+
+      return getBrandingNotificationLabel(scope.getParentScope());
+    }
+
+    return null;
+  }
+
+  private static boolean isBrandingNotificationAnimated(Scope scope)
+  {
+    if (scope != null)
+    {
+      Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+      if (annotation != null)
+      {
+        String detail = annotation.getDetails().get(AnnotationConstants.KEY_NOTIFICATION_ANIMATED);
+        return "true".equals(detail);
+      }
+
+      return isBrandingNotificationAnimated(scope.getParentScope());
+    }
+
+    return false;
+  }
+
+  static URI getBrandingSiteURI(Scope scope)
+  {
+    if (scope != null)
+    {
+      Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+      if (annotation != null)
+      {
+        String detail = annotation.getDetails().get(AnnotationConstants.KEY_SITE_URI);
+        if (detail != null)
+        {
+          return URI.createURI(detail);
+        }
+      }
+
+      return getBrandingSiteURI(scope.getParentScope());
+    }
+
+    return null;
+  }
+
   public static Font getFont(int relativeHeight, String style)
   {
     String height = relativeHeight == 0 ? "" : relativeHeight > 0 ? "+" + relativeHeight : Integer.toString(relativeHeight);
@@ -1199,6 +1348,201 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     catch (Exception ex)
     {
       throw new IOExceptionWithCause(ex);
+    }
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  private static class NotifictionButton extends FlatButton
+  {
+    static final Color COLOR_INSTALL_UNANIMATED = SetupInstallerPlugin.getColor(210, 210, 210);
+
+    /**
+     * The roundness of the button.
+     */
+    private static final int CORNER_WIDTH = 10;
+
+    /**
+     * The offset when the button is almost completely hidden.
+     */
+    private static final int MAX_OFFSET = 16;
+
+    /**
+     * Matches the size of the exit button;  assumes a 16x16 image.
+     */
+    private static final Point TOTAL_SIZE = new Point(46, 20);
+
+    /**
+     * The offset to center the image, assumed to be 16x16.
+     */
+    private static final int IMAGE_OFFSET = (TOTAL_SIZE.x - 16) / 2;
+
+    /**
+     * The current offset that determines how much of the button is showing.
+     */
+    private int offset = MAX_OFFSET;
+
+    /**
+     * Whether the button should be animated.
+     */
+    private boolean animated;
+
+    /**
+     * The timer executed runnable for animating this button.
+     */
+    private Runnable animator;
+
+    /**
+     * The URI to open.
+     */
+    private URI uri;
+
+    /**
+     * The direction in which the button animates.
+     */
+    private int direction = -1;
+
+    public NotifictionButton(Composite parent)
+    {
+      super(parent, SWT.PUSH);
+
+      setShowButtonDownState(false);
+      setCornerWidth(CORNER_WIDTH);
+      setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/white_star.png"));
+      setBackground(COLOR_INSTALL_UNANIMATED);
+      setToolTipText("Like...");
+      setVisible(false);
+      addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          OS.INSTANCE.openSystemBrowser(uri.toString());
+          setURI(uri, false);
+        }
+      });
+    }
+
+    public URI getURI()
+    {
+      return uri;
+    }
+
+    public void setURI(URI uri, boolean animated)
+    {
+      if (!ObjectUtil.equals(uri, this.uri))
+      {
+        this.uri = uri;
+        if (uri == null)
+        {
+          animator = null;
+        }
+        this.animated = animated;
+        offset = animated ? MAX_OFFSET : 0;
+        setVisible(uri != null);
+        setBackground(animated ? SimpleInstallLaunchButton.COLOR_INSTALL : COLOR_INSTALL_UNANIMATED);
+        redraw();
+      }
+    }
+
+    @Override
+    protected void onHover()
+    {
+      if (isHover())
+      {
+        animator = null;
+        offset = 0;
+        setBackground(SimpleInstallLaunchButton.COLOR_INSTALL);
+      }
+      else
+      {
+        setBackground(animated ? SimpleInstallLaunchButton.COLOR_INSTALL : COLOR_INSTALL_UNANIMATED);
+        offset = animated ? MAX_OFFSET : 0;
+      }
+    }
+
+    @Override
+    protected void onFocusIn(Event event)
+    {
+      animator = null;
+      offset = 0;
+      setBackground(SimpleInstallLaunchButton.COLOR_INSTALL);
+    }
+
+    @Override
+    protected void onFocusOut(Event event)
+    {
+      setBackground(animated ? SimpleInstallLaunchButton.COLOR_INSTALL : COLOR_INSTALL_UNANIMATED);
+      offset = animated ? MAX_OFFSET : 0;
+      redraw();
+    }
+
+    @Override
+    protected Point getTotalSize()
+    {
+      return TOTAL_SIZE;
+    }
+
+    private int getEffectiveOffset()
+    {
+      return isHover() || isFocusControl() ? direction == 1 ? 0 : -CORNER_WIDTH : direction == 1 ? offset * direction : offset * direction - CORNER_WIDTH;
+    }
+
+    @Override
+    protected void drawFocusState(GC gc, int x, int y, int width, int height)
+    {
+      super.drawFocusState(gc, x, y + getEffectiveOffset(), width, height + CORNER_WIDTH);
+    }
+
+    @Override
+    public void drawBackground(GC gc, int x, int y, int width, int height, int offsetX, int offsetY)
+    {
+      if (animated && animator == null)
+      {
+        animator = new Animator();
+        UIUtil.timerExec(1000, animator);
+      }
+
+      super.drawBackground(gc, x, y + getEffectiveOffset(), width, height + CORNER_WIDTH, offsetX, offsetY);
+    }
+
+    @Override
+    protected void drawImage(GC gc, int x, int y)
+    {
+      int effectiveOffset = getEffectiveOffset();
+      if (effectiveOffset != MAX_OFFSET)
+      {
+        gc.drawImage(getImage(), x + IMAGE_OFFSET, y + effectiveOffset + (direction == 0 ? 0 : CORNER_WIDTH - 1));
+      }
+    }
+
+    /**
+     * @author Ed Merks
+     */
+    private class Animator implements Runnable
+    {
+      public void run()
+      {
+        if (animator == this && !isDisposed())
+        {
+          redraw();
+          offset -= 1;
+          if (offset == -1)
+          {
+            offset = MAX_OFFSET;
+            UIUtil.timerExec(500, animator);
+          }
+          else if (offset == 0)
+          {
+            UIUtil.timerExec(2000, animator);
+          }
+          else
+          {
+            UIUtil.timerExec(100, animator);
+          }
+        }
+      }
     }
   }
 

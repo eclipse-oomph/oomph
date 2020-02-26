@@ -39,6 +39,12 @@ public final class AnnotationConstants
 
   public static final String KEY_URI = "uri";
 
+  public static final String KEY_NOTIFICATION_LABEL = "notificationLabel";
+
+  public static final String KEY_NOTIFICATION_URI = "notificationURI";
+
+  public static final String KEY_NOTIFICATION_ANIMATED = "notificationAnimated";
+
   public static final String ANNOTATION_USER_PREFERENCES = "http://www.eclipse.org/oomph/setup/UserPreferences";
 
   public static final String ANNOTATION_INHERITED_CHOICES = "http://www.eclipse.org/oomph/setup/InheritedChoices";

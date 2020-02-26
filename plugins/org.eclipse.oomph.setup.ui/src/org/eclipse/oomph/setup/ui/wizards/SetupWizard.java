@@ -1374,7 +1374,10 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     protected void finishedWaiting()
     {
       Shell shell = wizard.getShell();
-      shell.setCursor(null);
+      if (shell != null && shell.isDisposed())
+      {
+        shell.setCursor(null);
+      }
     }
 
     private void logErrors(Resource resource)

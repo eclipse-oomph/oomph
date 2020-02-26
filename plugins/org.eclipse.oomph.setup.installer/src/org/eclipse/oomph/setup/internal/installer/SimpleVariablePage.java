@@ -876,6 +876,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   public void setProductVersion(ProductVersion productVersion)
   {
+    dialog.setBrandingNotificationScope(productVersion);
     product = productVersion.getProduct();
 
     if (detailBrowser != null)

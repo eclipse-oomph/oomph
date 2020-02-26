@@ -235,7 +235,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
   public void aboutToHide()
   {
     super.aboutToHide();
-    productList.reset(false); // TODO Use JavaScript, so that the browser doesn't scroll to top!
+    productList.reset(false);
     setFocus();
 
     installer.getTransferSupport().removeControls();

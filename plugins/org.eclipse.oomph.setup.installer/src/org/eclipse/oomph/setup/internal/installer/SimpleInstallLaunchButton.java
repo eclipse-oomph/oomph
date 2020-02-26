@@ -29,9 +29,9 @@ import org.eclipse.swt.widgets.Composite;
  */
 public class SimpleInstallLaunchButton extends ImageHoverButton
 {
-  private static final Color COLOR_FOREGROUND_DEFAULT = AbstractSimpleDialog.COLOR_WHITE;
+  static final Color COLOR_INSTALL = SetupInstallerPlugin.getColor(250, 148, 0);
 
-  private static final Color COLOR_INSTALL = SetupInstallerPlugin.getColor(250, 148, 0);
+  private static final Color COLOR_FOREGROUND_DEFAULT = AbstractSimpleDialog.COLOR_WHITE;
 
   private static final Color COLOR_INSTALLING = SetupInstallerPlugin.getColor(50, 196, 0);
 
