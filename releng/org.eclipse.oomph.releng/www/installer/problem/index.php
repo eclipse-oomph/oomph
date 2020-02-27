@@ -65,6 +65,7 @@ $question = htmlEntities("../question/$version_parameter");
  $Nav->addCustomNav("Get an Eclipse Account", "https://accounts.eclipse.org/user/register", "_blank", 1);
  $Nav->addCustomNav("Ask a Question", $question, "_self", 1);
  $Nav->addCustomNav("Report a Problem", $bugzilla, "_blank", 1);
+ $Nav->addCustomNav("<span class='fa fa-star'></span> Like", "../notification/$version_parameter", "_self", 1);
  $Nav->addNavSeparator("Download", "");
  $Nav->addCustomNav("Eclipse Installers", "https://wiki.eclipse.org/Eclipse_Installer", "_blank", 1);
  $Nav->addCustomNav("Eclipse Packages", "https://www.eclipse.org/downloads/packages/", "_blank", 1);
@@ -83,14 +84,14 @@ $html = <<<EOHTML
     <p>
     Before <a href="$bugzilla">reporting a problem</a>,
     please consider <a href="$question">asking a question</a> instead.
-    Of course it's a good idea to read the <a href="https://www.eclipse.org/downloads/packages/installer">general instructions</a> for how to use the $eclipse_installer before doing either.
+    Of course it's a good idea to read the <a href="https://www.eclipse.org/downloads/packages/installer" target="oomph_instructions">general instructions</a> for how to use the $eclipse_installer before doing either.
     </p>
     <p>
     Keep in mind that we cannot fix the network. 
     Networks and servers can and do fail and this is beyound our control.
     </p>
     <p>
-    You will need an <b><a href="https://accounts.eclipse.org/user/register" target="_blank">Eclipse Account</a></b> to report problems via <a href="$bugzilla">Bugzilla</a>.
+    You will need an <b><a href="https://accounts.eclipse.org/user/register" target="_blank">Eclipse Account</a></b> to report problems via <a href="$bugzilla" target="_blank">Bugzilla</a>.
     </p>
     
     <p>
