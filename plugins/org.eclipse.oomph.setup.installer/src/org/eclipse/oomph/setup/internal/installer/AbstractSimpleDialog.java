@@ -30,6 +30,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -102,7 +103,7 @@ public abstract class AbstractSimpleDialog extends Shell
     titleComposite.setBackground(AbstractSimpleDialog.COLOR_LIGHTEST_GRAY);
 
     Label titleImageLabel = new Label(titleComposite, SWT.NONE);
-    titleImageLabel.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).indent(SWT.DEFAULT, 26).align(SWT.BEGINNING, SWT.BEGINNING).create());
+    titleImageLabel.setLayoutData(createTitleImageGridData());
 
     Image titleImage = null;
     IProduct product = Platform.getProduct();
@@ -222,6 +223,11 @@ public abstract class AbstractSimpleDialog extends Shell
   protected int getTitleColumnCount()
   {
     return 2;
+  }
+
+  protected GridData createTitleImageGridData()
+  {
+    return GridDataFactory.swtDefaults().grab(true, true).indent(SWT.DEFAULT, 26).align(SWT.BEGINNING, SWT.BEGINNING).create();
   }
 
   protected void exitSelected()

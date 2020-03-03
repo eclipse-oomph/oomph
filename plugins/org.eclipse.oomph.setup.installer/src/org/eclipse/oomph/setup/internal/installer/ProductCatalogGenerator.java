@@ -29,6 +29,7 @@ import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.VariableTask;
@@ -122,6 +123,9 @@ public class ProductCatalogGenerator implements IApplication
   private static final URI PACKAGES_URI = URI.createURI("https://www.eclipse.org/downloads/packages/release/");
 
   private static final URI ECLIPSE_PROJECT_URI = URI.createURI("http://download.eclipse.org/eclipse/updates");
+
+  private static final URI ECLIPSE_BRANDING_NOTIFICATION_URI = URI
+      .createURI("https://www.eclipse.org/setups/installer/notification/?version=${installer.version}&scope=${scope}");
 
   private static final String ICON_DEFAULT = ICON_URL_PREFIX + "committers.png";
 
@@ -341,9 +345,8 @@ public class ProductCatalogGenerator implements IApplication
       productCatalog.setLabel("Eclipse.org");
       productCatalog.setDescription("The catalog of products available as <a href='https://www.eclipse.org/downloads/'>packaged downloads</a> at Eclipse.org.");
 
-      Annotation brandingInfo = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-      brandingInfo.getDetails().put(AnnotationConstants.KEY_README_PATH, "readme/readme_eclipse.html");
-      productCatalog.getAnnotations().add(brandingInfo);
+      EMap<String, String> brandingInfos = getBrandingInfos(productCatalog);
+      brandingInfos.put(AnnotationConstants.KEY_README_PATH, "readme/readme_eclipse.html");
 
       Annotation statsSending = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_STATS_SENDING);
       statsSending.getDetails().put(AnnotationConstants.KEY_URI, SetupCoreUtil.STATS_URI);
@@ -433,6 +436,7 @@ public class ProductCatalogGenerator implements IApplication
       }
       // addIntegrationVersions(productCatalog);
       postProcess(productCatalog);
+      addBrandingNotificationAnnotations(productCatalog);
 
       Resource resource = new BaseResourceFactoryImpl().createResource(outputLocation == null ? URI.createURI("org.eclipse.products.setup") : outputLocation);
       resource.getContents().add(productCatalog);
@@ -1115,6 +1119,46 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
+  private void addBrandingNotificationAnnotations(ProductCatalog productCatalog)
+  {
+    EMap<String, String> productCatalogBrandingInfos = getBrandingInfos(productCatalog);
+    productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_URI, ECLIPSE_BRANDING_NOTIFICATION_URI.toString());
+    productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_LABEL, "DONATE");
+    productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_TOOLTIP, "Donate to the Eclipse Community");
+    productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_ANIMATION_STYLE, "ONCE");
+    // productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_COLOR, "color://rgb/172/5/209");
+    // brandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_SCOPE, productCatalog.getLabel());
+
+    for (Product product : productCatalog.getProducts())
+    {
+      String productName = product.getName();
+      boolean foreignCatalog = ALL_PRODUCT_ID.equals(productName) || ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName);
+      EMap<String, String> productBrandingInfos = getBrandingInfos(product);
+      if (foreignCatalog)
+      {
+        // A copy of the annotations on the catalog because these end up in another catalog.
+        productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_URI, ECLIPSE_BRANDING_NOTIFICATION_URI.toString());
+        productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_LABEL, "DONATE");
+        productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_ANIMATION_STYLE, "ONCE");
+        // productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_COLOR, "color://rgb/12/184/198");
+        // brandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_SCOPE, product.getLabel());
+      }
+
+      // productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_COLOR, "color://rgb/12/184/198");
+      productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_TOOLTIP, "Donate to the Eclipse Community for the " + product.getLabel());
+
+      if (Boolean.FALSE)
+      {
+        for (ProductVersion productVersion : product.getVersions())
+        {
+          EMap<String, String> productVersionBrandingInfos = getBrandingInfos(productVersion);
+          productVersionBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_COLOR, "color://rgb/12/184/198");
+          productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_SCOPE, product.getLabel() + " - " + productVersion.getLabel());
+        }
+      }
+    }
+  }
+
   private void gatherReleaseIUs(Map<String, Set<IInstallableUnit>> releaseIUs, IInstallableUnit iu, IMetadataRepository releaseMetaDataRepository,
       IMetadataRepository eppMetaDataRepository)
   {
@@ -1710,13 +1754,13 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
-  private EMap<String, String> getBrandingInfos(Product product)
+  private EMap<String, String> getBrandingInfos(Scope scope)
   {
-    Annotation annotation = product.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+    Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
     if (annotation == null)
     {
       annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-      product.getAnnotations().add(annotation);
+      scope.getAnnotations().add(annotation);
     }
 
     return annotation.getDetails();

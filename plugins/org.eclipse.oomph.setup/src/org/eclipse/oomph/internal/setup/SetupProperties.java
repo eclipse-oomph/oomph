@@ -67,6 +67,8 @@ public class SetupProperties
 
   public static final String PROP_SETUP_INSTALLER_FORUM = "oomph.setup.installer.forum";
 
+  public static final String PROP_SETUP_INSTALLER_CONTRIBUTE = "oomph.setup.installer.contribute";
+
   public static final String PROP_SETUP_INSTALLER_URI_SCHEME = "oomph.setup.installer.uri.scheme.";
 
   public static final String PROP_SETUP_PRODUCT_CATALOG_FILTER = "oomph.setup.product.catalog.filter";

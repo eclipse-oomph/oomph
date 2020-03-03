@@ -41,9 +41,17 @@ public final class AnnotationConstants
 
   public static final String KEY_NOTIFICATION_LABEL = "notificationLabel";
 
+  public static final String KEY_NOTIFICATION_TOOLTIP = "notificationTooltip";
+
+  public static final String KEY_NOTIFICATION_PRIORITY = "notificationPriority";
+
   public static final String KEY_NOTIFICATION_URI = "notificationURI";
 
-  public static final String KEY_NOTIFICATION_ANIMATED = "notificationAnimated";
+  public static final String KEY_NOTIFICATION_ANIMATION_STYLE = "notificationAnimationStyle";
+
+  public static final String KEY_NOTIFICATION_COLOR = "notificationColor";
+
+  public static final String KEY_NOTIFICATION_SCOPE = "notificationScope";
 
   public static final String ANNOTATION_USER_PREFERENCES = "http://www.eclipse.org/oomph/setup/UserPreferences";
 

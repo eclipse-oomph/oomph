@@ -18,7 +18,7 @@
 <stringAttribute key="location" value="${workspace_loc}/../ws-product-catalog-generator"/>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog &#13;&#10;-outputLocation ${file_uri:${resource_loc:/setups/org.eclipse.products.setup}}&#13;&#10;-xstaging 2020-03  http://download.eclipse.org/technology/epp/packages/2020-03/M1 http://download.eclipse.org/releases/2020-03/202002071000&#13;&#10;-useComposite 2020-03&#13;&#10;-xlatestReleased"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog &#13;&#10;-outputLocation ${file_uri:${resource_loc:/setups/org.eclipse.products.setup}}&#13;&#10;-xstaging 2020-03  http://download.eclipse.org/technology/epp/packages/2020-03/M3 http://download.eclipse.org/releases/2020-03/202002281000&#13;&#10;-useComposite 2020-03&#13;&#10;-xlatestReleased"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Declipse.p2.mirrors=false"/>
 <stringAttribute key="pde.version" value="3.3"/>
@@ -26,6 +26,8 @@
 <setAttribute key="selected_target_bundles">
 <setEntry value="com.ibm.icu@default:default"/>
 <setEntry value="com.jcraft.jsch@default:default"/>
+<setEntry value="com.sun.jna.platform@default:default"/>
+<setEntry value="com.sun.jna@default:default"/>
 <setEntry value="javax.annotation@default:default"/>
 <setEntry value="javax.inject@default:default"/>
 <setEntry value="javax.xml@default:default"/>
@@ -33,13 +35,14 @@
 <setEntry value="org.apache.batik.css@default:default"/>
 <setEntry value="org.apache.batik.i18n@default:default"/>
 <setEntry value="org.apache.batik.util@default:default"/>
-<setEntry value="org.apache.commons.codec@default:default"/>
+<setEntry value="org.apache.commons.codec*1.13.0.v20200108-0001@default:default"/>
 <setEntry value="org.apache.commons.io@default:default"/>
 <setEntry value="org.apache.commons.jxpath@default:default"/>
 <setEntry value="org.apache.commons.logging@default:default"/>
 <setEntry value="org.apache.felix.scr@1:true"/>
-<setEntry value="org.apache.httpcomponents.httpclient@default:default"/>
-<setEntry value="org.apache.httpcomponents.httpcore@default:default"/>
+<setEntry value="org.apache.httpcomponents.httpclient*4.5.10.v20200114-1512@default:default"/>
+<setEntry value="org.apache.httpcomponents.httpclient.win@default:default"/>
+<setEntry value="org.apache.httpcomponents.httpcore*4.4.12.v20200108-1212@default:default"/>
 <setEntry value="org.apache.xmlgraphics@default:default"/>
 <setEntry value="org.eclipse.ant.core@default:default"/>
 <setEntry value="org.eclipse.compare.core@default:default"/>
@@ -85,6 +88,8 @@
 <setEntry value="org.eclipse.e4.ui.workbench@default:default"/>
 <setEntry value="org.eclipse.ecf.filetransfer@default:default"/>
 <setEntry value="org.eclipse.ecf.identity@default:default"/>
+<setEntry value="org.eclipse.ecf.provider.filetransfer.httpclient45.win32@default:default"/>
+<setEntry value="org.eclipse.ecf.provider.filetransfer.httpclient45@default:default"/>
 <setEntry value="org.eclipse.ecf.provider.filetransfer.ssl@default:false"/>
 <setEntry value="org.eclipse.ecf.provider.filetransfer@default:default"/>
 <setEntry value="org.eclipse.ecf.ssl@default:false"/>

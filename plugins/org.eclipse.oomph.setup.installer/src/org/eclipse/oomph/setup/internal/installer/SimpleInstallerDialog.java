@@ -45,6 +45,7 @@ import org.eclipse.oomph.ui.StatusDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ExceptionHandler;
 import org.eclipse.oomph.util.IOExceptionWithCause;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.OomphPlugin.BundleFile;
@@ -55,6 +56,7 @@ import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.edit.ui.provider.ExtendedColorRegistry;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -88,10 +90,13 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Eike Stepper
@@ -130,6 +135,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   private static final String REPORT_A_PROBLEM_MENU_ITEM_TEXT = "REPORT A PROBLEM" + StringUtil.HORIZONTAL_ELLIPSIS;
 
+  private static final String CONTRIBUTE_MENU_ITEM_TEXT = "\u2605 CONTRIBUTE" + StringUtil.HORIZONTAL_ELLIPSIS;
+
   private static final String ABOUT_MENU_ITEM_TEXT = "ABOUT";
 
   private static final String EXIT_MENU_ITEM_TEXT = "EXIT";
@@ -143,6 +150,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   private static final String PROBLEM_REPORT_URL = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_PROBLEM_REPORT, HOST + "/problem/");
 
   private static final String FORUM_URL = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_FORUM, HOST + "/question/");
+
+  private static final String CONTRIBUTE_URL = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_CONTRIBUTE, HOST + "/notification/");
+
+  private static final File FILE_BRANDING_NOTIFICTION_URIS = new File(SetupInstallerPlugin.INSTANCE.getUserLocation().toFile(), "brandingNotificationURIs.txt");
 
   private static Font defaultFont;
 
@@ -274,16 +285,38 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   }
 
   @Override
+  protected GridData createTitleImageGridData()
+  {
+    GridData gridData = super.createTitleImageGridData();
+    gridData.grabExcessHorizontalSpace = false;
+    return gridData;
+  }
+
+  @Override
   protected void createUI(Composite titleComposite)
   {
     Composite notificationContainer = new Composite(titleComposite, SWT.NONE);
     GridLayout notificationContainerLayout = UIUtil.createGridLayout(1);
-    notificationContainerLayout.marginRight = 15;
-
+    notificationContainerLayout.marginRight = 20;
     notificationContainer.setLayout(notificationContainerLayout);
-    notificationContainer.setLayoutData(GridDataFactory.swtDefaults().grab(false, true).align(SWT.CENTER, SWT.BEGINNING).create());
+    notificationContainer.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).align(SWT.CENTER, SWT.BEGINNING).create());
 
-    notificationButton = new NotifictionButton(notificationContainer);
+    notificationButton = new NotifictionButton(notificationContainer)
+    {
+      @Override
+      protected void handleWidgetSelected()
+      {
+        super.handleWidgetSelected();
+        handleBrandingNotificationURIOpen(getURI());
+      }
+
+      @Override
+      protected boolean hasOpenedBrandingNotificationURI(URI uri)
+      {
+        return SimpleInstallerDialog.this.hasOpenedBrandingNotificationURI(uri);
+      }
+    };
+
     notificationButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.BEGINNING).create());
     notificationButton.setVisible(false);
 
@@ -409,45 +442,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
             && StringUtil.isEmpty(SimpleInstallerPage.PRODUCT_VERSION_FILTER.pattern()) && new IndexManager().getIndexNames(false).size() > 1;
 
     // Initialize notification button with the default.
-    setBrandingNotificationScope(null);
+    notificationButton.setBrandingNotificationScope(productCatalogs);
   }
 
   public void setBrandingNotificationScope(Scope scope)
   {
-    if (scope == null)
-    {
-      notificationButton.setURI(null, false);
-
-      // If there is no scope, iterate over the catalog defaults.
-      @SuppressWarnings("unchecked")
-      List<ProductCatalog> productCatalogs = (List<ProductCatalog>)catalogManager.getCatalogs(true);
-      if (productCatalogs != null)
-      {
-        for (ProductCatalog productCatalog : productCatalogs)
-        {
-          if (SimpleProductPage.isIncluded(productCatalog))
-          {
-            if (notificationButton.getURI() == null)
-            {
-              setBrandingNotificationScope(productCatalog);
-            }
-          }
-        }
-      }
-    }
-    else
-    {
-      String notificationLabel = null;
-      URI notificationURI = getBrandingNotificationURI(scope);
-      if (notificationURI != null)
-      {
-        notificationURI = URI.createURI(notificationURI.toString().replace("${installer.version}", URI.encodeQuery(SelfUpdate.getProductVersion(), true)));
-        notificationLabel = getBrandingNotificationLabel(scope);
-
-        notificationButton.setURI(notificationURI, isBrandingNotificationAnimated(scope));
-        notificationButton.setToolTipText((notificationLabel == null ? "Like..." : notificationLabel) + " " + notificationURI);
-      }
-    }
+    notificationButton.setBrandingNotificationScope(scope);
   }
 
   private void toggleMenu()
@@ -822,6 +822,21 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       });
     }
 
+    if (!StringUtil.isEmpty(CONTRIBUTE_URL))
+    {
+      SimpleInstallerMenu.InstallerMenuItem reportAProblemItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+      reportAProblemItem.setText(CONTRIBUTE_MENU_ITEM_TEXT);
+      reportAProblemItem.setToolTipText("Contribute to Eclipse");
+      reportAProblemItem.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          OS.INSTANCE.openSystemBrowser(CONTRIBUTE_URL + "?version=" + URI.encodeQuery(SelfUpdate.getProductVersion(), false));
+        }
+      });
+    }
+
     SimpleInstallerMenu.InstallerMenuItem aboutItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
     aboutItem.setText(ABOUT_MENU_ITEM_TEXT);
     aboutItem.setToolTipText("Show information about this installer");
@@ -963,7 +978,9 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
       if (newPage instanceof SimpleProductPage)
       {
-        setBrandingNotificationScope(null);
+        @SuppressWarnings("unchecked")
+        List<ProductCatalog> productCatalogs = (List<ProductCatalog>)catalogManager.getCatalogs(true);
+        notificationButton.setBrandingNotificationScope(productCatalogs);
       }
     }
 
@@ -1141,58 +1158,45 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     super.dispose();
   }
 
-  private static URI getBrandingNotificationURI(Scope scope)
+  protected void handleBrandingNotificationURIOpen(URI uri)
   {
-    if (scope != null)
+    Set<String> brandingNotificationURIs = new LinkedHashSet<String>();
+    try
     {
-      Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-      if (annotation != null)
+      if (FILE_BRANDING_NOTIFICTION_URIS.isFile())
       {
-        String detail = annotation.getDetails().get(AnnotationConstants.KEY_NOTIFICATION_URI);
-        if (detail != null)
-        {
-          return URI.createURI(detail);
-        }
+        brandingNotificationURIs.addAll(IOUtil.readLines(FILE_BRANDING_NOTIFICTION_URIS, "UTF-8"));
       }
-
-      return getBrandingNotificationURI(scope.getParentScope());
+    }
+    catch (RuntimeException ex)
+    {
+      // Ignore.
     }
 
-    return null;
-  }
+    brandingNotificationURIs.add(uri.toString());
 
-  private static String getBrandingNotificationLabel(Scope scope)
-  {
-    if (scope != null)
+    try
     {
-      Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-      if (annotation != null)
-      {
-        String detail = annotation.getDetails().get(AnnotationConstants.KEY_NOTIFICATION_LABEL);
-        if (detail != null)
-        {
-          return detail;
-        }
-      }
-
-      return getBrandingNotificationLabel(scope.getParentScope());
+      IOUtil.writeLines(FILE_BRANDING_NOTIFICTION_URIS, "UTF-8", new ArrayList<String>(brandingNotificationURIs));
     }
-
-    return null;
+    catch (RuntimeException ex)
+    {
+      // Ignore.
+    }
   }
 
-  private static boolean isBrandingNotificationAnimated(Scope scope)
+  protected boolean hasOpenedBrandingNotificationURI(URI uri)
   {
-    if (scope != null)
+    try
     {
-      Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
-      if (annotation != null)
+      if (FILE_BRANDING_NOTIFICTION_URIS.isFile())
       {
-        String detail = annotation.getDetails().get(AnnotationConstants.KEY_NOTIFICATION_ANIMATED);
-        return "true".equals(detail);
+        return IOUtil.readLines(FILE_BRANDING_NOTIFICTION_URIS, "UTF-8").contains(uri.toString());
       }
-
-      return isBrandingNotificationAnimated(scope.getParentScope());
+    }
+    catch (RuntimeException ex)
+    {
+      // Ignore.
     }
 
     return false;
@@ -1356,7 +1360,15 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
    */
   private static class NotifictionButton extends FlatButton
   {
-    static final Color COLOR_INSTALL_UNANIMATED = SetupInstallerPlugin.getColor(210, 210, 210);
+    /**
+     * The color of the button if it's animated, hovered, for focused.
+     */
+    private static final Color COLOR_INTENSE = SimpleInstallLaunchButton.COLOR_INSTALL;
+
+    /**
+     * The color of the button if it's not animated.
+     */
+    private static final Color COLOR_SUBTLE = SetupInstallerPlugin.getColor(210, 210, 210);
 
     /**
      * The roundness of the button.
@@ -1366,17 +1378,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     /**
      * The offset when the button is almost completely hidden.
      */
-    private static final int MAX_OFFSET = 16;
-
-    /**
-     * Matches the size of the exit button;  assumes a 16x16 image.
-     */
-    private static final Point TOTAL_SIZE = new Point(46, 20);
-
-    /**
-     * The offset to center the image, assumed to be 16x16.
-     */
-    private static final int IMAGE_OFFSET = (TOTAL_SIZE.x - 16) / 2;
+    private static final int MAX_OFFSET = 22;
 
     /**
      * The current offset that determines how much of the button is showing.
@@ -1386,7 +1388,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     /**
      * Whether the button should be animated.
      */
-    private boolean animated;
+    private AnimationStyle animationStyle;
 
     /**
      * The timer executed runnable for animating this button.
@@ -1403,25 +1405,38 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
      */
     private int direction = -1;
 
+    private Color buttonColor = COLOR_INTENSE;
+
+    private String scopeLabel;
+
     public NotifictionButton(Composite parent)
     {
       super(parent, SWT.PUSH);
 
       setShowButtonDownState(false);
       setCornerWidth(CORNER_WIDTH);
+      setAlignment(SWT.CENTER);
       setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/white_star.png"));
-      setBackground(COLOR_INSTALL_UNANIMATED);
-      setToolTipText("Like...");
+      setForeground(COLOR_WHITE);
+      setBackground(COLOR_SUBTLE);
+      setFont(SimpleInstallerDialog.getFont(1, "bold"));
       setVisible(false);
       addSelectionListener(new SelectionAdapter()
       {
         @Override
         public void widgetSelected(SelectionEvent e)
         {
-          OS.INSTANCE.openSystemBrowser(uri.toString());
-          setURI(uri, false);
+          handleWidgetSelected();
         }
       });
+    }
+
+    protected void handleWidgetSelected()
+    {
+      String resolvedURI = uri.toString().replace("${installer.version}", URI.encodeQuery(SelfUpdate.getProductVersion(), true)).replace("${scope}",
+          URI.encodeQuery(StringUtil.safe(scopeLabel), false));
+      OS.INSTANCE.openSystemBrowser(resolvedURI);
+      update(getURI(), getText(), getToolTipText(), AnimationStyle.NONE, buttonColor, scopeLabel);
     }
 
     public URI getURI()
@@ -1429,20 +1444,24 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       return uri;
     }
 
-    public void setURI(URI uri, boolean animated)
+    public void update(URI uri, String text, String tooltip, AnimationStyle animationStyle, Color color, String scopeLabel)
     {
-      if (!ObjectUtil.equals(uri, this.uri))
+      this.scopeLabel = scopeLabel;
+      if (!ObjectUtil.equals(uri, this.uri) || this.animationStyle != animationStyle || !ObjectUtil.equals(text, getText())
+          || !ObjectUtil.equals(tooltip, getToolTipText()) || !ObjectUtil.equals(color, buttonColor))
       {
         this.uri = uri;
-        if (uri == null)
-        {
-          animator = null;
-        }
-        this.animated = animated;
-        offset = animated ? MAX_OFFSET : 0;
+        animator = null;
+        this.animationStyle = animationStyle;
+        buttonColor = color;
+        offset = animationStyle != AnimationStyle.NONE ? MAX_OFFSET : 0;
         setVisible(uri != null);
-        setBackground(animated ? SimpleInstallLaunchButton.COLOR_INSTALL : COLOR_INSTALL_UNANIMATED);
-        redraw();
+        setBackground(animationStyle != AnimationStyle.NONE ? buttonColor : COLOR_SUBTLE);
+
+        setText(text);
+        setToolTipText(tooltip);
+
+        getParent().getParent().layout(true);
       }
     }
 
@@ -1453,12 +1472,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       {
         animator = null;
         offset = 0;
-        setBackground(SimpleInstallLaunchButton.COLOR_INSTALL);
+        setBackground(buttonColor);
       }
       else
       {
-        setBackground(animated ? SimpleInstallLaunchButton.COLOR_INSTALL : COLOR_INSTALL_UNANIMATED);
-        offset = animated ? MAX_OFFSET : 0;
+        setBackground(animationStyle != AnimationStyle.NONE ? buttonColor : COLOR_SUBTLE);
+        offset = animationStyle == AnimationStyle.REPEAT ? MAX_OFFSET : 0;
       }
     }
 
@@ -1467,21 +1486,24 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       animator = null;
       offset = 0;
-      setBackground(SimpleInstallLaunchButton.COLOR_INSTALL);
+      setBackground(buttonColor);
     }
 
     @Override
     protected void onFocusOut(Event event)
     {
-      setBackground(animated ? SimpleInstallLaunchButton.COLOR_INSTALL : COLOR_INSTALL_UNANIMATED);
-      offset = animated ? MAX_OFFSET : 0;
+      setBackground(animationStyle != AnimationStyle.NONE ? buttonColor : COLOR_SUBTLE);
+      offset = animationStyle == AnimationStyle.REPEAT ? MAX_OFFSET : 0;
       redraw();
     }
 
     @Override
     protected Point getTotalSize()
     {
-      return TOTAL_SIZE;
+      Point totalSize = super.getTotalSize();
+      totalSize.x += 20;
+      totalSize.y += 8;
+      return totalSize;
     }
 
     private int getEffectiveOffset()
@@ -1498,7 +1520,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     @Override
     public void drawBackground(GC gc, int x, int y, int width, int height, int offsetX, int offsetY)
     {
-      if (animated && animator == null)
+      if (animationStyle != AnimationStyle.NONE && animator == null)
       {
         animator = new Animator();
         UIUtil.timerExec(1000, animator);
@@ -1508,13 +1530,252 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     }
 
     @Override
+    protected void drawText(GC gc, int x, int y)
+    {
+      int effectiveOffset = getEffectiveOffset();
+      if (effectiveOffset != MAX_OFFSET)
+      {
+        super.drawText(gc, x + 10, y + effectiveOffset + (direction == 0 ? 0 : CORNER_WIDTH - 1));
+      }
+    }
+
+    @Override
     protected void drawImage(GC gc, int x, int y)
     {
       int effectiveOffset = getEffectiveOffset();
       if (effectiveOffset != MAX_OFFSET)
       {
-        gc.drawImage(getImage(), x + IMAGE_OFFSET, y + effectiveOffset + (direction == 0 ? 0 : CORNER_WIDTH - 1));
+        super.drawImage(gc, x + 10, y + effectiveOffset + (direction == 0 ? 0 : CORNER_WIDTH - 1));
       }
+    }
+
+    protected boolean hasOpenedBrandingNotificationURI(URI uri)
+    {
+      return false;
+    }
+
+    public void setBrandingNotificationScope(List<ProductCatalog> productCatalogs)
+    {
+      if (productCatalogs != null)
+      {
+        int targetPriority = Integer.MAX_VALUE;
+        ProductCatalog targetProductCatalog = null;
+        for (ProductCatalog productCatalog : productCatalogs)
+        {
+          if (SimpleProductPage.isIncluded(productCatalog))
+          {
+            int priority = getBrandingNotificationPriority(productCatalog);
+            if (priority < targetPriority || targetProductCatalog == null && getBrandingNotificationURI(productCatalog) != null)
+            {
+              targetPriority = priority;
+              targetProductCatalog = productCatalog;
+            }
+          }
+        }
+
+        if (targetProductCatalog != null)
+        {
+          setBrandingNotificationScope(targetProductCatalog);
+        }
+      }
+    }
+
+    public void setBrandingNotificationScope(Scope scope)
+    {
+      URI notificationURI = getBrandingNotificationURI(scope);
+      String notificationLabel = getBrandingNotificationLabel(scope);
+      String notificationTooltip = getBrandingNotificationTooltip(scope);
+      String brandingNotificationScopeLabel = getBrandingNotificationScopeLabel(scope);
+      if (brandingNotificationScopeLabel == null)
+      {
+        brandingNotificationScopeLabel = getImplicitBrandingNotificationLabel(scope);
+      }
+
+      update(notificationURI, notificationLabel, notificationTooltip,
+          hasOpenedBrandingNotificationURI(notificationURI) ? NotifictionButton.AnimationStyle.NONE : getBrandingNotificationAnimationStyle(scope),
+          getBrandingNotificationColor(scope), brandingNotificationScopeLabel);
+    }
+
+    private static int getBrandingNotificationPriority(Scope scope)
+    {
+      if (scope != null)
+      {
+        Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+        if (annotation != null)
+        {
+          String detail = annotation.getDetails().get(AnnotationConstants.KEY_NOTIFICATION_PRIORITY);
+          if (detail != null)
+          {
+            try
+            {
+              return Integer.parseInt(detail);
+            }
+            catch (RuntimeException ex)
+            {
+            }
+          }
+        }
+      }
+
+      return Integer.MAX_VALUE;
+    }
+
+    private static URI getBrandingNotificationURI(Scope scope)
+    {
+      if (scope != null)
+      {
+        Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+        if (annotation != null)
+        {
+          String detail = annotation.getDetails().get(AnnotationConstants.KEY_NOTIFICATION_URI);
+          if (detail != null)
+          {
+            return URI.createURI(detail);
+          }
+        }
+
+        return getBrandingNotificationURI(scope.getParentScope());
+      }
+
+      return null;
+    }
+
+    private static String getBrandingNotificationLabel(Scope scope)
+    {
+      if (scope != null)
+      {
+        Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+        if (annotation != null)
+        {
+          String detail = annotation.getDetails().get(AnnotationConstants.KEY_NOTIFICATION_LABEL);
+          if (detail != null)
+          {
+            return detail;
+          }
+        }
+
+        return getBrandingNotificationLabel(scope.getParentScope());
+      }
+
+      return null;
+    }
+
+    private static String getImplicitBrandingNotificationLabel(Scope scope)
+    {
+      if (scope != null)
+      {
+        String label = scope.getLabel();
+        if (label != null)
+        {
+          Scope parentScope = scope.getParentScope();
+          if (parentScope instanceof Product)
+          {
+            String projectLabel = parentScope.getLabel();
+            if (projectLabel != null)
+            {
+              return projectLabel + "-" + label;
+            }
+          }
+
+          return label;
+        }
+      }
+
+      return null;
+    }
+
+    private static String getBrandingNotificationScopeLabel(Scope scope)
+    {
+      if (scope != null)
+      {
+        Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+        if (annotation != null)
+        {
+          String detail = annotation.getDetails().get(AnnotationConstants.KEY_NOTIFICATION_SCOPE);
+          if (detail != null)
+          {
+            return detail;
+          }
+        }
+
+        return getBrandingNotificationScopeLabel(scope.getParentScope());
+      }
+
+      return null;
+    }
+
+    private static Color getBrandingNotificationColor(Scope scope)
+    {
+      if (scope != null)
+      {
+        Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+        if (annotation != null)
+        {
+          String detail = annotation.getDetails().get(AnnotationConstants.KEY_NOTIFICATION_COLOR);
+          if (detail != null)
+          {
+            try
+            {
+              return ExtendedColorRegistry.INSTANCE.getColor(COLOR_WHITE, COLOR_DEFAULT_FOCUS_FOREGROUND, URI.createURI(detail));
+            }
+            catch (RuntimeException ex)
+            {
+              //$FALL-THROUGH$
+            }
+          }
+        }
+
+        return getBrandingNotificationColor(scope.getParentScope());
+      }
+
+      return COLOR_INTENSE;
+    }
+
+    private static String getBrandingNotificationTooltip(Scope scope)
+    {
+      if (scope != null)
+      {
+        Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+        if (annotation != null)
+        {
+          String detail = annotation.getDetails().get(AnnotationConstants.KEY_NOTIFICATION_TOOLTIP);
+          if (detail != null)
+          {
+            return detail;
+          }
+        }
+
+        return getBrandingNotificationTooltip(scope.getParentScope());
+      }
+
+      return null;
+    }
+
+    private static AnimationStyle getBrandingNotificationAnimationStyle(Scope scope)
+    {
+      if (scope != null)
+      {
+        Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+        if (annotation != null)
+        {
+          String detail = annotation.getDetails().get(AnnotationConstants.KEY_NOTIFICATION_ANIMATION_STYLE);
+          if (detail != null)
+          {
+            try
+            {
+              return AnimationStyle.valueOf(detail);
+            }
+            catch (RuntimeException ex)
+            {
+              //$FALL-THROUGH$
+            }
+          }
+        }
+
+        return getBrandingNotificationAnimationStyle(scope.getParentScope());
+      }
+
+      return AnimationStyle.NONE;
     }
 
     /**
@@ -1530,12 +1791,22 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
           offset -= 1;
           if (offset == -1)
           {
-            offset = MAX_OFFSET;
-            UIUtil.timerExec(500, animator);
+            if (animationStyle == AnimationStyle.REPEAT)
+            {
+              offset = MAX_OFFSET;
+              UIUtil.timerExec(500, animator);
+            }
+            else
+            {
+              offset = 0;
+            }
           }
           else if (offset == 0)
           {
-            UIUtil.timerExec(2000, animator);
+            if (animationStyle == AnimationStyle.REPEAT)
+            {
+              UIUtil.timerExec(2000, animator);
+            }
           }
           else
           {
@@ -1544,6 +1815,15 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         }
       }
     }
+
+    /**
+     * @author Ed Merks
+     */
+    private enum AnimationStyle
+    {
+      NONE, ONCE, REPEAT
+    }
+
   }
 
   /**
