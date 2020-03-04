@@ -19,6 +19,7 @@ Eclipse Installer
       </programArgs>
       <vmArgs>-Xms256M
 -Xmx1024M
+-Doomph.p2.repoository.retry=2
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread
 -Dorg.eclipse.swt.internal.carbon.smallFonts

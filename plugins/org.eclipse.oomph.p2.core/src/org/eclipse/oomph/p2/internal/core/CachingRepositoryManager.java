@@ -112,6 +112,10 @@ public class CachingRepositoryManager<T>
 
   private static final String PROP_BETTER_MIRROR_SELECTION = "oomph.p2.mirror";
 
+  private static final String PROP_REPOSITORY_RETRY = "oomph.p2.repoository.retry";
+
+  private static final int MAX_RETRY = PropertiesUtil.getProperty(PROP_REPOSITORY_RETRY, 0);
+
   private static boolean betterMirrorSelection;
 
   private final AbstractRepositoryManager<T> delegate;
@@ -190,31 +194,34 @@ public class CachingRepositoryManager<T>
 
         try
         {
-          for (int i = 0; i < suffixes.length; i++)
+          LOOP: for (int retry = 0; retry <= MAX_RETRY; ++retry)
           {
-            if (sub.isCanceled())
+            for (int i = 0; i < suffixes.length; i++)
             {
-              throw new OperationCanceledException();
-            }
-
-            try
-            {
-              result = loadRepository(location, suffixes[i], type, flags, sub.newChild(100));
-            }
-            catch (ProvisionException e)
-            {
-              if (!(e.getStatus().getException() instanceof FileNotFoundException))
+              if (sub.isCanceled())
               {
-                failure = e;
-                break;
+                throw new OperationCanceledException();
               }
-            }
 
-            if (result != null)
-            {
-              addRepository(result, false, suffixes[i]);
-              cacheIndexFile(location, suffixes[i]);
-              break;
+              try
+              {
+                result = loadRepository(location, suffixes[i], type, flags, sub.newChild(100));
+              }
+              catch (ProvisionException e)
+              {
+                if (!(e.getStatus().getException() instanceof FileNotFoundException))
+                {
+                  failure = e;
+                  break;
+                }
+              }
+
+              if (result != null)
+              {
+                addRepository(result, false, suffixes[i]);
+                cacheIndexFile(location, suffixes[i]);
+                break LOOP;
+              }
             }
           }
         }
