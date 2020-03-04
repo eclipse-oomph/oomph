@@ -1462,6 +1462,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         setToolTipText(tooltip);
 
         getParent().getParent().layout(true);
+
+        redraw();
       }
     }
 
