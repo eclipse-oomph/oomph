@@ -112,7 +112,7 @@ public class CachingRepositoryManager<T>
 
   private static final String PROP_BETTER_MIRROR_SELECTION = "oomph.p2.mirror";
 
-  private static final String PROP_REPOSITORY_RETRY = "oomph.p2.repoository.retry";
+  private static final String PROP_REPOSITORY_RETRY = "oomph.p2.repository.retry";
 
   private static final int MAX_RETRY = PropertiesUtil.getProperty(PROP_REPOSITORY_RETRY, 0);
 
