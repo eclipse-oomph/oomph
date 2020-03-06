@@ -297,9 +297,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   {
     Composite notificationContainer = new Composite(titleComposite, SWT.NONE);
     GridLayout notificationContainerLayout = UIUtil.createGridLayout(1);
+    // notificationContainerLayout.marginLeft = 20;
     notificationContainerLayout.marginRight = 20;
     notificationContainer.setLayout(notificationContainerLayout);
-    notificationContainer.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).align(SWT.CENTER, SWT.BEGINNING).create());
+    notificationContainer.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).align(SWT.END, SWT.BEGINNING).create());
 
     notificationButton = new NotifictionButton(notificationContainer)
     {
@@ -1407,6 +1408,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
     private Color buttonColor = COLOR_INTENSE;
 
+    private boolean highlight;
+
     private String scopeLabel;
 
     public NotifictionButton(Composite parent)
@@ -1416,7 +1419,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       setShowButtonDownState(false);
       setCornerWidth(CORNER_WIDTH);
       setAlignment(SWT.CENTER);
-      setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/white_star.png"));
+      setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_white.png"));
       setForeground(COLOR_WHITE);
       setBackground(COLOR_SUBTLE);
       setFont(SimpleInstallerDialog.getFont(1, "bold"));
@@ -1436,7 +1439,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       String resolvedURI = uri.toString().replace("${installer.version}", URI.encodeQuery(SelfUpdate.getProductVersion(), true)).replace("${scope}",
           URI.encodeQuery(StringUtil.safe(scopeLabel), false));
       OS.INSTANCE.openSystemBrowser(resolvedURI);
-      update(getURI(), getText(), getToolTipText(), AnimationStyle.NONE, buttonColor, scopeLabel);
+      update(getURI(), getText(), getToolTipText(), AnimationStyle.NONE, false, buttonColor, scopeLabel);
     }
 
     public URI getURI()
@@ -1444,19 +1447,20 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       return uri;
     }
 
-    public void update(URI uri, String text, String tooltip, AnimationStyle animationStyle, Color color, String scopeLabel)
+    public void update(URI uri, String text, String tooltip, AnimationStyle animationStyle, boolean highlight, Color color, String scopeLabel)
     {
       this.scopeLabel = scopeLabel;
       if (!ObjectUtil.equals(uri, this.uri) || this.animationStyle != animationStyle || !ObjectUtil.equals(text, getText())
-          || !ObjectUtil.equals(tooltip, getToolTipText()) || !ObjectUtil.equals(color, buttonColor))
+          || !ObjectUtil.equals(tooltip, getToolTipText()) || !ObjectUtil.equals(color, buttonColor) || this.highlight != highlight)
       {
         this.uri = uri;
+        this.highlight = highlight;
         animator = null;
         this.animationStyle = animationStyle;
         buttonColor = color;
         offset = animationStyle != AnimationStyle.NONE ? MAX_OFFSET : 0;
         setVisible(uri != null);
-        setBackground(animationStyle != AnimationStyle.NONE ? buttonColor : COLOR_SUBTLE);
+        setBackground(highlight ? buttonColor : COLOR_SUBTLE);
 
         setText(text);
         setToolTipText(tooltip);
@@ -1475,10 +1479,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         animator = null;
         offset = 0;
         setBackground(buttonColor);
+        setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_black.png"));
       }
       else
       {
-        setBackground(animationStyle != AnimationStyle.NONE ? buttonColor : COLOR_SUBTLE);
+        setBackground(highlight ? buttonColor : COLOR_SUBTLE);
+        setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_white.png"));
         offset = animationStyle == AnimationStyle.REPEAT ? MAX_OFFSET : 0;
       }
     }
@@ -1489,12 +1495,14 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       animator = null;
       offset = 0;
       setBackground(buttonColor);
+      setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_black.png"));
     }
 
     @Override
     protected void onFocusOut(Event event)
     {
-      setBackground(animationStyle != AnimationStyle.NONE ? buttonColor : COLOR_SUBTLE);
+      setBackground(highlight ? buttonColor : COLOR_SUBTLE);
+      setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_white.png"));
       offset = animationStyle == AnimationStyle.REPEAT ? MAX_OFFSET : 0;
       redraw();
     }
@@ -1593,9 +1601,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         brandingNotificationScopeLabel = getImplicitBrandingNotificationLabel(scope);
       }
 
-      update(notificationURI, notificationLabel, notificationTooltip,
-          hasOpenedBrandingNotificationURI(notificationURI) ? NotifictionButton.AnimationStyle.NONE : getBrandingNotificationAnimationStyle(scope),
-          getBrandingNotificationColor(scope), brandingNotificationScopeLabel);
+      update(notificationURI, notificationLabel, notificationTooltip, getBrandingNotificationAnimationStyle(scope),
+          !hasOpenedBrandingNotificationURI(notificationURI), getBrandingNotificationColor(scope), brandingNotificationScopeLabel);
     }
 
     private static int getBrandingNotificationPriority(Scope scope)
