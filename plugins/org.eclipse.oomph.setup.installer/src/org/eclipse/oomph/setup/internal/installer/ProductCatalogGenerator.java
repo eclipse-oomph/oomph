@@ -249,7 +249,7 @@ public class ProductCatalogGenerator implements IApplication
     ICONS.put("scout", ICON_URL_PREFIX + "scout.jpg");
     ICONS.put("testing", ICON_URL_PREFIX + "testing.png");
     ICONS.put("mobile", ICON_URL_PREFIX + "mobile.jpg");
-    ICONS.put("rust", ICON_URL_PREFIX + "committers.png");
+    ICONS.put("rust", ICON_URL_PREFIX + "corrosion.png");
 
     generate();
     return null;
