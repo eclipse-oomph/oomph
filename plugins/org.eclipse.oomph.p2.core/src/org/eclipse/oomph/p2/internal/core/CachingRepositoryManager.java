@@ -196,6 +196,12 @@ public class CachingRepositoryManager<T>
         {
           LOOP: for (int retry = 0; retry <= MAX_RETRY; ++retry)
           {
+            if (retry > 0)
+            {
+              log(IStatus.WARNING, "Loading '" + location + "' failed. retry=" + retry, failure);
+            }
+
+            failure = null;
             for (int i = 0; i < suffixes.length; i++)
             {
               if (sub.isCanceled())
@@ -463,6 +469,11 @@ public class CachingRepositoryManager<T>
   public static void setBetterMirrorSelection(boolean betterMirrorSelection)
   {
     CachingRepositoryManager.betterMirrorSelection = betterMirrorSelection;
+  }
+
+  private static void log(int severity, String message, Throwable exception)
+  {
+    LogHelper.log(new Status(severity, Activator.ID, message, exception));
   }
 
   /**
@@ -794,7 +805,7 @@ public class CachingRepositoryManager<T>
         }
         catch (URISyntaxException e)
         {
-          log("Unable to make location " + inputLocation + " relative to mirror " + location, e);
+          CachingRepositoryManager.log(IStatus.ERROR, "Unable to make location " + inputLocation + " relative to mirror " + location, e);
         }
 
         // If all else fails, we must use the original URI.
@@ -1034,11 +1045,6 @@ public class CachingRepositoryManager<T>
       private static String getLocationString(MirrorInfo mirrorInfo)
       {
         return ReflectUtil.getValue("locationString", mirrorInfo);
-      }
-
-      private static void log(String message, Throwable exception)
-      {
-        LogHelper.log(new Status(IStatus.ERROR, Activator.ID, message, exception));
       }
 
       /**
