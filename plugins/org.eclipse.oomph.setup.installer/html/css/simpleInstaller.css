@@ -1,54 +1,54 @@
 html, body, div, span, img {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: 0;
-	font-size: 100%;
-	vertical-align: baseline;
-	background: transparent;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
 }
 
 body {
-	line-height: 1;
-	overflow-x: hidden;
+    line-height: 1;
+    overflow-x: hidden;
 }
 
 a {
-	margin: 0;
-	padding: 0;
-	font-size: 100%;
-	vertical-align: baseline;
-	background: transparent;
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
 }
 
 .productContainer {
-	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	height: 62px;
-	padding: 18px 14px;
-	border-bottom: 3px solid #eee;
-	overflow: hidden;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    height: 62px;
+    padding: 18px 14px;
+    border-bottom: 3px solid #eee;
+    overflow: hidden;
 }
 
 .productContainer:last-child {
-	border-bottom: 0;
+    border-bottom: 0;
 }
 
 .largeProduct:hover {
-	background-color: transparent !important;
+    background-color: transparent !important;
 }
 
 .largeProduct div.product {
-	height: auto !important;
+    height: auto !important;
 }
 
 .largeProduct div.productDescription {
-	height: 140px;
-	overflow-x: hidden;
-	overflow-y: auto;
+    height: 140px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .productLink {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .noSelect {
@@ -61,45 +61,47 @@ a {
 }
 
 .productContainer:hover {
-	background-color: #aebbdd;
+    background-color: #aebbdd;
 }
 
 .iconContainer {
-	display: table-cell;
+    display: table-cell;
 }
 
-.icon {	
-	width: 64px;
-	height: 64px;
-	position: relative;
-	background-color: #eeeeee;
-	border-radius: 32px;
+.icon {    
+    width: 64px;
+    height: 64px;
+    position: relative;
+    background-color: #eeeeee;
+    border-radius: 32px;
+    text-align: center;
+    line-height: 64px;
 }
 
 .icon img {
-	display: block;
-	margin-left: auto;
-  	margin-right: auto;
-  	padding-top: 11px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3px;
+    vertical-align: middle;
 }
 
 .product {
-	display: table-cell;
-	vertical-align: top;
-	height: 56px;
-	padding: 6px 0 2px 16px;
-	overflow: visible;
+    display: table-cell;
+    vertical-align: top;
+    height: 56px;
+    padding: 6px 0 2px 16px;
+    overflow: visible;
 }
 
 .productTitle {
-	font-size: 16px;
-	color: #3d3364;
-	font-weight: bold;
-	margin-bottom: 10px;
+    font-size: 16px;
+    color: #3d3364;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .productDescription {
-	font-size: 13px;
-	color: #555555;
-	line-height: 15px;
+    font-size: 13px;
+    color: #555555;
+    line-height: 15px;
 }
