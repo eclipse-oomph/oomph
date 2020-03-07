@@ -1601,8 +1601,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         brandingNotificationScopeLabel = getImplicitBrandingNotificationLabel(scope);
       }
 
-      update(notificationURI, notificationLabel, notificationTooltip, getBrandingNotificationAnimationStyle(scope),
-          !hasOpenedBrandingNotificationURI(notificationURI), getBrandingNotificationColor(scope), brandingNotificationScopeLabel);
+      boolean hasOpenedBrandingNotificationURI = hasOpenedBrandingNotificationURI(notificationURI);
+      update(notificationURI, notificationLabel, notificationTooltip,
+          hasOpenedBrandingNotificationURI ? AnimationStyle.NONE : getBrandingNotificationAnimationStyle(scope), !hasOpenedBrandingNotificationURI,
+          getBrandingNotificationColor(scope), brandingNotificationScopeLabel);
     }
 
     private static int getBrandingNotificationPriority(Scope scope)
