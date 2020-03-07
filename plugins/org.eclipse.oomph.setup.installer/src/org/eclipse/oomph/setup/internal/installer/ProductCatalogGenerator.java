@@ -159,6 +159,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private boolean stagingUseComposite;
 
+  private boolean brandingNotification;
+
   private List<String> compositeTrains = new ArrayList<String>();
 
   private URI stagingEPPLocation;
@@ -228,6 +230,10 @@ public class ProductCatalogGenerator implements IApplication
           {
             stagingUseComposite = true;
           }
+        }
+        else if ("-brandingNotification".equals(option))
+        {
+          brandingNotification = true;
         }
       }
     }
@@ -436,7 +442,11 @@ public class ProductCatalogGenerator implements IApplication
       }
       // addIntegrationVersions(productCatalog);
       postProcess(productCatalog);
-      addBrandingNotificationAnnotations(productCatalog);
+
+      if (brandingNotification)
+      {
+        addBrandingNotificationAnnotations(productCatalog);
+      }
 
       Resource resource = new BaseResourceFactoryImpl().createResource(outputLocation == null ? URI.createURI("org.eclipse.products.setup") : outputLocation);
       resource.getContents().add(productCatalog);
