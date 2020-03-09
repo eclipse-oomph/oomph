@@ -1140,7 +1140,7 @@ public class ProductPage extends SetupWizardPage
     {
       URI incubationURI = ImageURIRegistry.INSTANCE
           .getImageURI(ExtendedImageRegistry.INSTANCE.getImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/eclipse_incubation.png")));
-      result.append("&nbsp;<img title='Contains incubating components' src='");
+      result.append("&nbsp;<img title='Contains incubating components' style='height: 2ex;' src='");
       result.append(incubationURI);
       result.append("' align='absmiddle'></img>");
     }
