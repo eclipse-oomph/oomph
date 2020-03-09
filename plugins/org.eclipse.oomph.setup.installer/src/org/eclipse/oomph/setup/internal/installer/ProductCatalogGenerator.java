@@ -169,6 +169,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private URI stagingEclipePlatformLocation;
 
+  private URI eppSiteURI;
+
   private final Map<String, Map<URI, Map<String, URI>>> sites = new LinkedHashMap<String, Map<URI, Map<String, URI>>>();
 
   private final IMetadataRepositoryManager manager = getMetadataRepositoryManager();
@@ -234,6 +236,10 @@ public class ProductCatalogGenerator implements IApplication
         else if ("-brandingNotification".equals(option))
         {
           brandingNotification = true;
+        }
+        else if ("-siteURI".equals(option))
+        {
+          eppSiteURI = URI.createURI(arguments[++i]);
         }
       }
     }
@@ -1688,12 +1694,12 @@ public class ProductCatalogGenerator implements IApplication
       addImageURI(product, staticIconURL);
     }
 
-    String[] trains = getTrains();
+    final String[] trains = getTrains();
     for (int i = trains.length; i >= 0; --i)
     {
       InputStream in = null;
 
-      String branch = i == trains.length ? "master" : trains[i].toUpperCase();
+      final String branch = i == trains.length ? "master" : trains[i].toUpperCase();
       String url = "https://git.eclipse.org/c/epp/org.eclipse.epp.packages.git/plain/packages/org.eclipse.epp.package." + name + ".feature/epp.website.xml"
           + "?h=" + branch;
       try
@@ -1726,6 +1732,39 @@ public class ProductCatalogGenerator implements IApplication
               String packageName = element.getAttribute("packageName");
               if (packageName != null)
               {
+                // If we are generating for a site that does not yet exist and are on the master branch.
+                if (eppSiteURI != null && "master".equals(branch))
+                {
+                  // Compute the site URL from the package name.
+                  URI siteURI = URI
+                      .createURI(eppSiteURI + "/" + packageName.replaceAll("[\\W&&[^ ]]", "").replace(" for ", " ").replaceAll(" +", "-").toLowerCase());
+                  String key = getKey(packageName);
+                  String train = trains[trains.length - 1];
+                  synchronized (sites)
+                  {
+                    Map<URI, Map<String, URI>> releaseLocations = sites.get(train);
+                    if (releaseLocations == null)
+                    {
+                      // Nothing yet for this train, so create it.
+                      releaseLocations = new LinkedHashMap<URI, Map<String, URI>>();
+                      sites.put(train, releaseLocations);
+                    }
+
+                    Map<String, URI> map = releaseLocations.get(eppSiteURI);
+                    if (map == null)
+                    {
+                      // Clear any existing map and create a new one for this EPP site.
+                      releaseLocations.clear();
+                      map = new LinkedHashMap<String, URI>();
+                      releaseLocations.put(eppSiteURI, map);
+                      map.put(key, siteURI);
+                    }
+
+                    // Replace the site for this key.
+                    map.put(key, siteURI);
+                  }
+                }
+
                 setProductLabel(product, packageName);
               }
             }
