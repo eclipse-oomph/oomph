@@ -444,7 +444,7 @@
         xsi:type="setup:VariableTask"
         name="eclipse.latest.release.p2"
         value="http://download.eclipse.org/eclipse/updates/4.14/R-4.14-201912100610"
-        label="Eclipse Latest Release p2 Repository - 4.13">
+        label="Eclipse Latest Release p2 Repository - 4.14">
       <description>The update site of the latest released Eclipse project's builds, always an R-Build for the most recent release</description>
     </setupTask>
     <setupTask
