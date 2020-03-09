@@ -39,6 +39,7 @@ import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -49,6 +50,7 @@ import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
@@ -65,6 +67,8 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Font;
@@ -79,6 +83,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.ToolBar;
@@ -361,7 +366,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     return string.toLowerCase().contains(filter);
   }
 
-  public static String renderProduct(Product product, boolean large)
+  public static String renderProduct(Product product, ProductVersion productVersion, boolean large)
   {
     String imageURI = SetupWizard.getLocalBrandingImageURI(product);
 
@@ -399,6 +404,29 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
       String productLink = "product://" + product.getProductCatalog().getName() + "/" + product.getName();
       productHtml = productHtml.replace("%PRODUCT_LINK%", productLink);
+    }
+    else
+    {
+      URI brandingSiteURI = SetupWizard.getBrandingSiteURI(productVersion == null ? product : productVersion);
+      if (brandingSiteURI != null)
+      {
+        productHtml = productHtml.replace("%PRODUCT_BRANDING_SITE_DISPLAY_STYLE%", "inline-block");
+        productHtml = productHtml.replace("%PRODUCT_BRANDING_SITE_SRC%", brandingSiteURI.toString());
+      }
+      else
+      {
+        productHtml = productHtml.replace("%PRODUCT_BRANDING_SITE_DISPLAY_STYLE%", "none");
+      }
+
+      URI incubationURI = ImageURIRegistry.INSTANCE
+          .getImageURI(ExtendedImageRegistry.INSTANCE.getImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/eclipse_incubation.png")));
+
+      productHtml = productHtml.replace("%PRODUCT_INCUBATATING_DISPLAY_STYLE%",
+          productVersion != null
+              && "true".equals(BaseUtil.getAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING))
+                  ? "inline"
+                  : "none");
+      productHtml = productHtml.replace("%PRODUCT_INCUBATATING_SRC%", incubationURI.toString());
     }
 
     productHtml = productHtml.replace("%PRODUCT_ICON_SRC%", imageURI);
@@ -477,7 +505,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         StringBuilder productsBuilder = new StringBuilder();
         for (Product product : products)
         {
-          productsBuilder.append(renderProduct(product, false));
+          productsBuilder.append(renderProduct(product, null, false));
         }
 
         String productPageHTML = SimpleInstallerDialog.getProductTemplate();
@@ -655,6 +683,12 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
     private Label title;
 
+    private Label titleImage;
+
+    private Link detailsLink;
+
+    private String detailsLocation;
+
     private Label description;
 
     private int contentHeight;
@@ -665,7 +699,8 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       this.list = list;
 
       GridLayout gridLayout = new GridLayout(2, false);
-      gridLayout.marginWidth = BORDER;
+      gridLayout.marginWidth = 0;
+      gridLayout.marginLeft = BORDER;
       gridLayout.marginHeight = BORDER;
       gridLayout.horizontalSpacing = BORDER;
       gridLayout.verticalSpacing = VERTICAL_SPACE;
@@ -678,11 +713,36 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       logo.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 2));
       listenToMouse(logo);
 
-      title = new Label(this, SWT.NONE);
+      Composite titleComposite = new Composite(this, SWT.NONE);
+      titleComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+      titleComposite.setLayout(GridLayoutFactory.fillDefaults().numColumns(3).create());
+
+      title = new Label(titleComposite, SWT.NONE);
       title.setForeground(COLOR_TITLE);
       title.setFont(FONT_TITLE);
-      title.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+      title.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false));
       listenToMouse(title);
+
+      titleImage = new Label(titleComposite, SWT.NONE);
+      titleImage.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/eclipse_incubation.png"));
+      titleImage.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
+      titleImage.setToolTipText("Contains incubating components");
+      listenToMouse(titleImage);
+
+      detailsLink = new Link(titleComposite, SWT.NONE);
+      GridData detailsLinkGridData = new GridData(SWT.END, SWT.CENTER, false, false);
+      detailsLink.setLayoutData(detailsLinkGridData);
+      detailsLink.setText("<a>details</a>");
+      detailsLink.setToolTipText("Opens a more detailed description, including package contents, in the system browser");
+      detailsLink.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          OS.INSTANCE.openSystemBrowser(detailsLocation);
+        }
+      });
+      detailsLink.setVisible(false);
 
       description = new Label(this, SWT.WRAP);
       description.setForeground(COLOR_DESCRIPTION);
@@ -726,12 +786,25 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       return product;
     }
 
+    public void setProductVersion(ProductVersion productVersion)
+    {
+      update(productVersion == null ? null : productVersion.getProduct(), productVersion);
+    }
+
     public void setProduct(Product product)
+    {
+      update(product, null);
+    }
+
+    protected void update(Product product, ProductVersion productVersion)
     {
       this.product = product;
       if (product != null)
       {
         title.setText(product.getLabel());
+        titleImage.setVisible(productVersion != null
+            && "true".equals(BaseUtil.getAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING)));
+        title.getParent().layout();
 
         Image image = SetupWizard.getBrandingImage(product);
         if (AnnotationConstants.VALUE_STATUS_DISCONTINUED
@@ -746,6 +819,18 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         else
         {
           logo.setImage(image);
+        }
+
+        URI brandingSiteURI = productVersion == null ? null : SetupWizard.getBrandingSiteURI(productVersion);
+        if (brandingSiteURI == null)
+        {
+          detailsLink.setVisible(false);
+          detailsLocation = null;
+        }
+        else
+        {
+          detailsLink.setVisible(true);
+          detailsLocation = brandingSiteURI.toString();
         }
 
         GC gc = new GC(description);

@@ -25,6 +25,7 @@ import org.eclipse.oomph.p2.internal.ui.AgentManagerDialog;
 import org.eclipse.oomph.p2.internal.ui.P2ContentProvider;
 import org.eclipse.oomph.p2.internal.ui.P2LabelProvider;
 import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CatalogSelection;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
@@ -68,6 +69,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.ui.dialogs.ResourceDialog;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
@@ -89,6 +91,7 @@ import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
+import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -1041,7 +1044,10 @@ public class ProductPage extends SetupWizardPage
         }
       }
 
-      descriptionViewer.update(SetupWizard.getBrandingImage(product), label, plain, brandingSiteURI == null ? null : brandingSiteURI.toString());
+      descriptionViewer.update(SetupWizard.getBrandingImage(product), label,
+          productVersion != null
+              && "true".equals(BaseUtil.getAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING)),
+          plain, brandingSiteURI == null ? null : brandingSiteURI.toString());
     }
 
     versionLabel.setEnabled(productSelected);
@@ -1128,6 +1134,15 @@ public class ProductPage extends SetupWizardPage
     {
       result.append(" &ndash; ");
       result.append(DiagnosticDecorator.escapeContent(versionLabel));
+    }
+
+    if ("true".equals(BaseUtil.getAnnotation(scope, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING)))
+    {
+      URI incubationURI = ImageURIRegistry.INSTANCE
+          .getImageURI(ExtendedImageRegistry.INSTANCE.getImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/eclipse_incubation.png")));
+      result.append("&nbsp;<img title='Contains incubating components' src='");
+      result.append(incubationURI);
+      result.append("' align='absmiddle'></img>");
     }
 
     if (brandingSiteURI != null)
@@ -1473,6 +1488,8 @@ public class ProductPage extends SetupWizardPage
 
     private ControlAdapter resizeListener;
 
+    private CLabel descriptionLabelImage;
+
     public DescriptionViewer(Composite container, Font font)
     {
       Color foreground = container.getForeground();
@@ -1500,7 +1517,7 @@ public class ProductPage extends SetupWizardPage
       scrolledComposite.setContent(descriptionComposite);
 
       Composite labelComposite = new Composite(descriptionComposite, SWT.NONE);
-      GridLayout labelCompositeLayout = new GridLayout(2, false);
+      GridLayout labelCompositeLayout = new GridLayout(3, false);
       labelCompositeLayout.marginHeight = 0;
       labelCompositeLayout.marginWidth = 0;
       labelCompositeLayout.marginRight = 12;
@@ -1510,10 +1527,18 @@ public class ProductPage extends SetupWizardPage
       labelComposite.setBackground(background);
 
       descriptionLabel = new CLabel(labelComposite, SWT.NONE);
-      descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+      descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
       descriptionLabel.setForeground(foreground);
       descriptionLabel.setBackground(background);
       descriptionLabel.setFont(SetupUIPlugin.getFont(font, URI.createURI("font:///+2/bold")));
+
+      descriptionLabelImage = new CLabel(labelComposite, SWT.NONE);
+      descriptionLabelImage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+      descriptionLabelImage.setForeground(foreground);
+      descriptionLabelImage.setBackground(background);
+      descriptionLabelImage.setFont(SetupUIPlugin.getFont(font, URI.createURI("font:///+2/bold")));
+      descriptionLabelImage.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/eclipse_incubation.png"));
+      descriptionLabelImage.setToolTipText("Contains incubating components");
 
       detailsLink = new Link(labelComposite, SWT.NONE);
       detailsLink.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
@@ -1539,10 +1564,11 @@ public class ProductPage extends SetupWizardPage
       descriptionText.setBackground(background);
     }
 
-    public void update(Image image, String title, String body, String details)
+    public void update(Image image, String title, boolean incubating, String body, String details)
     {
       descriptionLabel.setImage(image);
       descriptionLabel.setText(title);
+      descriptionLabelImage.setVisible(incubating);
       descriptionText.setText(body);
       if (details == null)
       {
@@ -1554,6 +1580,8 @@ public class ProductPage extends SetupWizardPage
         detailsLink.setVisible(true);
         detailsLocation = details;
       }
+
+      descriptionLabel.getParent().layout(true);
 
       resizeListener.controlResized(null);
     }

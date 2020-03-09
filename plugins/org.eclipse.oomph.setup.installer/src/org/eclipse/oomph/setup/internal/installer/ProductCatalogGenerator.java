@@ -535,7 +535,7 @@ public class ProductCatalogGenerator implements IApplication
   private void generateProduct(String id)
   {
     String label = labels.get(id);
-    String p2TaskLabel = label;
+    String p2TaskLabel = stripIncubating(label);
 
     List<TrainAndVersion> list = trainsAndVersions.get(id);
     int size = list.size();
@@ -554,7 +554,7 @@ public class ProductCatalogGenerator implements IApplication
 
     Product product = SetupFactory.eINSTANCE.createProduct();
     product.setName(id);
-    product.setLabel(label);
+    setProductLabel(product, label);
     attachBrandingInfos(log, product, discontinued);
     products.put(id, product);
 
@@ -1418,6 +1418,10 @@ public class ProductCatalogGenerator implements IApplication
     if (siteURI != null)
     {
       BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_SITE_URI, siteURI.toString());
+      if (isIncubating(siteURI))
+      {
+        BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING, "true");
+      }
     }
 
     BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.SHORTCUT,
@@ -1630,6 +1634,16 @@ public class ProductCatalogGenerator implements IApplication
     return Character.toString(Character.toUpperCase(train.charAt(0))) + train.substring(1);
   }
 
+  private void setProductLabel(Product product, String label)
+  {
+    product.setLabel(stripIncubating(label));
+  }
+
+  private String stripIncubating(String label)
+  {
+    return label.replaceFirst("(?i) \\(includes Incubating components\\)", "");
+  }
+
   private void attachBrandingInfos(final StringBuilder log, final Product product, boolean discontinued)
   {
     String name = product.getName();
@@ -1704,6 +1718,15 @@ public class ProductCatalogGenerator implements IApplication
               {
                 addImageURI(product, iconurl);
                 log.append(iconurl).append('\n');
+              }
+            }
+
+            if (!"epp.package.standard".equals(product.getName()))
+            {
+              String packageName = element.getAttribute("packageName");
+              if (packageName != null)
+              {
+                setProductLabel(product, packageName);
               }
             }
 
@@ -1822,6 +1845,11 @@ public class ProductCatalogGenerator implements IApplication
     getPlatformPackageBrandingSites(URI.createURI("http://archive.eclipse.org/eclipse/downloads/"));
 
     packageLocationLoader.perform(locations);
+  }
+
+  private boolean isIncubating(URI siteURI)
+  {
+    return Pattern.compile("incubat", Pattern.CASE_INSENSITIVE).matcher(siteURI.toString()).find();
   }
 
   private void getGeneralPackageBrandingSites(URI releasePackages)

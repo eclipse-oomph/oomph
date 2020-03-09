@@ -47,6 +47,25 @@ a {
     overflow-y: auto;
 }
 
+.largeProduct div.productContainer {
+    width: 100%;
+}
+
+.largeProduct div.product {
+    width: 100%;
+}
+
+.largeProduct body {
+    width: 100%;
+}
+
+.details {
+    float: right; 
+    padding-top: 2px; 
+    padding-right: 0px; 
+    font-size:75%
+}
+
 .productLink {
     cursor: pointer;
 }
@@ -91,6 +110,7 @@ a {
     height: 56px;
     padding: 6px 0 2px 16px;
     overflow: visible;
+    width: 100%;
 }
 
 .productTitle {

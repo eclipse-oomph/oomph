@@ -27,6 +27,8 @@ public final class AnnotationConstants
 
   public static final String KEY_STATUS = "status";
 
+  public static final String KEY_INCUBATING = "incubating";
+
   public static final String VALUE_STATUS_OUTDATED = "outdated";
 
   public static final String VALUE_STATUS_CURRENT = "current";

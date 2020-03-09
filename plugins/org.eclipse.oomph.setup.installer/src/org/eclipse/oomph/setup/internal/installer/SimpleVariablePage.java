@@ -288,11 +288,16 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     Composite detailArea = new Composite(container, SWT.NONE);
     detailArea.setLayoutData(browserLayoutData);
-    detailArea.setLayout(new FillLayout());
+    GridLayout detailAreaLayout = new GridLayout(1, false);
+    detailAreaLayout.marginHeight = 0;
+    detailAreaLayout.marginWidth = 0;
+    detailAreaLayout.marginRight = 30;
+    detailArea.setLayout(detailAreaLayout);
 
     if (UIUtil.isBrowserAvailable())
     {
       detailBrowser = new Browser(detailArea, SWT.NO_SCROLL);
+      detailBrowser.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
       detailBrowser.addLocationListener(new LocationAdapter()
       {
         @Override
@@ -311,6 +316,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       detailBrowser = null;
       detailComposite = new ProductComposite(detailArea, null, null);
+      detailComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
     }
 
     Composite variablesComposite = new Composite(container, SWT.NONE);
@@ -821,6 +827,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       selectedProductVersion = productVersion;
 
+      updateDetails(productVersion.getProduct(), productVersion);
+
       dialog.setBrandingNotificationScope(productVersion);
 
       String requiredJavaVersion = productVersion.getRequiredJavaVersion();
@@ -881,18 +889,6 @@ public class SimpleVariablePage extends SimpleInstallerPage
     dialog.setBrandingNotificationScope(productVersion);
     product = productVersion.getProduct();
 
-    if (detailBrowser != null)
-    {
-      String html = SimpleInstallerDialog.getPageTemplate();
-      html = html.replace("%CONTENT%", SimpleProductPage.renderProduct(product, true));
-
-      detailBrowser.setText(html, true);
-    }
-    else
-    {
-      detailComposite.setProduct(product);
-    }
-
     productVersions.clear();
     versionCombo.removeAll();
 
@@ -937,6 +933,22 @@ public class SimpleVariablePage extends SimpleInstallerPage
         setEnabled(true);
       }
     });
+  }
+
+  private void updateDetails(Product product, ProductVersion productVersion)
+  {
+    if (detailBrowser != null)
+    {
+      String html = SimpleInstallerDialog.getPageTemplate();
+      html = html.replace("%CONTENT%", SimpleProductPage.renderProduct(product, productVersion, true));
+
+      detailBrowser.setText(html, true);
+    }
+    else
+    {
+      detailComposite.setProductVersion(productVersion);
+    }
+
   }
 
   private void setVisible(Control control, boolean visible)
