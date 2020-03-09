@@ -284,7 +284,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     // Row 1
     GridData browserLayoutData = GridDataFactory.fillDefaults().indent(0, 13).grab(true, false).create();
     Point defaultSize = SimpleInstallerDialog.getDefaultSize(container);
-    browserLayoutData.heightHint = defaultSize.y * (powerShell != null ? 20 : 34) / 100;
+    browserLayoutData.heightHint = defaultSize.y * (powerShell != null ? 24 : 34) / 100;
 
     Composite detailArea = new Composite(container, SWT.NONE);
     detailArea.setLayoutData(browserLayoutData);

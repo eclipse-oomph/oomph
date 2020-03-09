@@ -23,7 +23,7 @@ a {
 
 .productContainer {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    height: 62px;
+    height: 80px;
     padding: 18px 14px;
     border-bottom: 3px solid #eee;
     overflow: hidden;
@@ -95,6 +95,11 @@ a {
     border-radius: 32px;
     text-align: center;
     line-height: 64px;
+}
+
+.incubating {
+    max-height: 2ex;
+    vertical-align: text-bottom;
 }
 
 .icon img {
