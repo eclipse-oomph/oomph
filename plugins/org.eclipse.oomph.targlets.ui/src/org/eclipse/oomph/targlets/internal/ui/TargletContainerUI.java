@@ -247,15 +247,12 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
                   Map<P2Index.Repository, Set<Version>> composedResult = P2Index.INSTANCE.generateCapabilitiesFromComposedRepositories(simpleResult);
                   collectRepositories(composedResult, range, repositories);
 
-                  if (!repositories.isEmpty())
+                  missingIUInfo = new StatusWrapper("Found " + repositories.size() + " " + "repositories that satisfy " + missingIU.getNamespace() + "/"
+                      + missingIU.getName() + " " + missingIU.getRange());
+                  for (P2Index.Repository repository : repositories)
                   {
-                    missingIUInfo = new StatusWrapper("Found " + repositories.size() + " " + "repositories that satisfy " + missingIU.getNamespace() + "/"
-                        + missingIU.getName() + " " + missingIU.getRange());
-                    for (P2Index.Repository repository : repositories)
-                    {
-                      missingIUInfo.addChild(new StatusWrapper(
-                          repository.getLocation() + "  (" + (repository.isComposed() ? "composed" : "simple") + ": " + repository.getCapabilityCount() + ")"));
-                    }
+                    missingIUInfo.addChild(new StatusWrapper(
+                        repository.getLocation() + "  (" + (repository.isComposed() ? "composed" : "simple") + ": " + repository.getCapabilityCount() + ")"));
                   }
                 }
 
