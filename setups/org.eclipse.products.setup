@@ -3764,11 +3764,11 @@
       </setupTask>
     </version>
     <description>
-      Tools for Java developers creating Enterprise Java and Web applications, including a Java IDE, tools for Enterprise Java, JPA, JSF, Mylyn, Maven, Git and more.&lt;br/>
+      Tools for developers creating Java Enterprise and Web applications, including a Java IDE, tools for Web Services, JPA and Data Tools, JSF, Mylyn, Maven and Gradle, Git, and more.&lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?classification=WebTools&quot;>here&lt;/a> to file a bug against Eclipse Web Tools Platform.&lt;br/>
-      Click &lt;a href=&quot;https://github.com/eclipse/wildwebdeveloper/issues/new&quot;>here&lt;/a> to report an issue against Eclipse Wild Web Developer.&lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br/>
-      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=M2E-WTP&quot;>here&lt;/a> to file a bug against Maven integration for web projects.
+      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=M2E-WTP&quot;>here&lt;/a> to file a bug against Maven integration for web projects.&lt;br/>
+      Click &lt;a href=&quot;https://github.com/eclipse/wildwebdeveloper/issues/new&quot;>here&lt;/a> to report an issue against Eclipse Wild Web Developer (incubating).&lt;br/>
     </description>
   </product>
   <product name="epp.package.cpp"
@@ -5261,7 +5261,7 @@
     <description>An IDE for C/C++ developers with Mylyn integration.</description>
   </product>
   <product name="epp.package.javascript"
-      label="Eclipse IDE for JavaScript and Web Developers (includes incubating components)">
+      label="Eclipse IDE for Web and JavaScript Developers">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
@@ -5280,13 +5280,17 @@
           <value>https://www.eclipse.org/downloads/packages/release/2020-03/rc1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
-          <value>Eclipse IDE for JavaScript and Web Developers - Latest</value>
+          <value>Eclipse IDE for Web and JavaScript Developers - Latest</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2020-03)">
+          label="Eclipse IDE for JavaScript and Web Developers (2020-03)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.15.0,5.0.0)"/>
@@ -5352,13 +5356,17 @@
           <value>https://www.eclipse.org/downloads/packages/release/2019-12/r/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
-          <value>Eclipse IDE for JavaScript and Web Developers - Latest Release</value>
+          <value>Eclipse IDE for Web and JavaScript Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-12)">
+          label="Eclipse IDE for JavaScript and Web Developers (2019-12)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.14.0,5.0.0)"/>
@@ -5424,13 +5432,17 @@
           <value>https://www.eclipse.org/downloads/packages/release/2020-03/rc1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
-          <value>Eclipse IDE for JavaScript and Web Developers - 2020-03</value>
+          <value>Eclipse IDE for Web and JavaScript Developers - 2020-03</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2020-03)">
+          label="Eclipse IDE for JavaScript and Web Developers (2020-03)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.15.0,5.0.0)"/>
@@ -5500,13 +5512,17 @@
           <value>https://www.eclipse.org/downloads/packages/release/2019-12/r/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
-          <value>Eclipse IDE for JavaScript and Web Developers - 2019-12</value>
+          <value>Eclipse IDE for Web and JavaScript Developers - 2019-12</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-12)">
+          label="Eclipse IDE for JavaScript and Web Developers (2019-12)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.14.0,5.0.0)"/>
@@ -5576,13 +5592,17 @@
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/r/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
-          <value>Eclipse IDE for JavaScript and Web Developers - 2019-09</value>
+          <value>Eclipse IDE for Web and JavaScript Developers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-09)">
+          label="Eclipse IDE for JavaScript and Web Developers (2019-09)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.13.0,5.0.0)"/>
@@ -5652,13 +5672,17 @@
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
-          <value>Eclipse IDE for JavaScript and Web Developers - 2019-06</value>
+          <value>Eclipse IDE for Web and JavaScript Developers - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-06)">
+          label="Eclipse IDE for JavaScript and Web Developers (2019-06)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.12.0,5.0.0)"/>
@@ -5729,12 +5753,12 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse IDE for JavaScript and Web Developers - 2019-03</value>
+          <value>Eclipse IDE for Web and JavaScript Developers - 2019-03</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2019-03)">
+          label="Eclipse IDE for JavaScript and Web Developers (2019-03)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.11.0,5.0.0)"/>
@@ -5811,12 +5835,12 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse IDE for JavaScript and Web Developers - 2018-12</value>
+          <value>Eclipse IDE for Web and JavaScript Developers - 2018-12</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2018-12)">
+          label="Eclipse IDE for JavaScript and Web Developers (2018-12)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.10.0,5.0.0)"/>
@@ -5893,12 +5917,12 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse IDE for JavaScript and Web Developers - 2018-09</value>
+          <value>Eclipse IDE for Web and JavaScript Developers - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (2018-09)">
+          label="Eclipse IDE for JavaScript and Web Developers (2018-09)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.9.0,5.0.0)"/>
@@ -5977,12 +6001,12 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse IDE for JavaScript and Web Developers - Photon</value>
+          <value>Eclipse IDE for Web and JavaScript Developers - Photon</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (Photon)">
+          label="Eclipse IDE for JavaScript and Web Developers (Photon)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.8.0,5.0.0)"/>
@@ -6059,12 +6083,12 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse IDE for JavaScript and Web Developers - Oxygen</value>
+          <value>Eclipse IDE for Web and JavaScript Developers - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (Oxygen)">
+          label="Eclipse IDE for JavaScript and Web Developers (Oxygen)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.7.0,5.0.0)"/>
@@ -6141,12 +6165,12 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse IDE for JavaScript and Web Developers - Neon</value>
+          <value>Eclipse IDE for Web and JavaScript Developers - Neon</value>
         </detail>
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (includes incubating components) (Neon)">
+          label="Eclipse IDE for JavaScript and Web Developers (Neon)">
         <requirement
             name="epp.package.javascript"
             versionRange="[4.6.0,5.0.0)"/>
@@ -8594,7 +8618,7 @@
     </description>
   </product>
   <product name="epp.package.dsl"
-      label="Eclipse DSL Tools">
+      label="Eclipse IDE for Java and DSL Developers">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
@@ -8614,7 +8638,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - Latest</value>
+          <value>Eclipse IDE for Java and DSL Developers - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -8668,7 +8692,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - Latest Release</value>
+          <value>Eclipse IDE for Java and DSL Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
@@ -8722,7 +8746,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - 2020-03</value>
+          <value>Eclipse IDE for Java and DSL Developers - 2020-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -8780,7 +8804,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - 2019-12</value>
+          <value>Eclipse IDE for Java and DSL Developers - 2019-12</value>
         </detail>
       </annotation>
       <setupTask
@@ -8838,7 +8862,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - 2019-09</value>
+          <value>Eclipse IDE for Java and DSL Developers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -8896,7 +8920,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - 2019-06</value>
+          <value>Eclipse IDE for Java and DSL Developers - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
@@ -8954,7 +8978,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - 2019-03</value>
+          <value>Eclipse IDE for Java and DSL Developers - 2019-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -9012,7 +9036,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - 2018-12</value>
+          <value>Eclipse IDE for Java and DSL Developers - 2018-12</value>
         </detail>
       </annotation>
       <setupTask
@@ -9070,7 +9094,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - 2018-09</value>
+          <value>Eclipse IDE for Java and DSL Developers - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -9128,7 +9152,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - Photon</value>
+          <value>Eclipse IDE for Java and DSL Developers - Photon</value>
         </detail>
       </annotation>
       <setupTask
@@ -9184,7 +9208,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - Oxygen</value>
+          <value>Eclipse IDE for Java and DSL Developers - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -9240,7 +9264,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - Neon</value>
+          <value>Eclipse IDE for Java and DSL Developers - Neon</value>
         </detail>
       </annotation>
       <setupTask
@@ -9294,7 +9318,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - Mars</value>
+          <value>Eclipse IDE for Java and DSL Developers - Mars</value>
         </detail>
       </annotation>
       <setupTask
@@ -9340,7 +9364,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - Luna</value>
+          <value>Eclipse IDE for Java and DSL Developers - Luna</value>
         </detail>
       </annotation>
       <setupTask
@@ -9386,7 +9410,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - Kepler</value>
+          <value>Eclipse IDE for Java and DSL Developers - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -9434,7 +9458,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse DSL Tools - Juno</value>
+          <value>Eclipse IDE for Java and DSL Developers - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -10924,7 +10948,7 @@
     </description>
   </product>
   <product name="epp.package.rcp"
-      label="Eclipse for RCP and RAP Developers">
+      label="Eclipse IDE for RCP and RAP Developers">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
@@ -10943,8 +10967,12 @@
           <value>https://www.eclipse.org/downloads/packages/release/2020-03/rc1/eclipse-ide-rcp-and-rap-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - Latest</value>
+          <value>Eclipse IDE for RCP and RAP Developers - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -10974,31 +11002,13 @@
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
-            name="org.eclipse.egit.mylyn.feature.group"/>
+            name="org.eclipse.egit.gitflow.feature.feature.group"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
             name="org.eclipse.m2e.feature.feature.group"/>
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.gerrit.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.pde_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <requirement
             name="org.eclipse.passage.ldc.feature.feature.group"/>
         <requirement
@@ -11031,8 +11041,12 @@
           <value>https://www.eclipse.org/downloads/packages/release/2019-12/r/eclipse-ide-rcp-and-rap-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - Latest Release</value>
+          <value>Eclipse IDE for RCP and RAP Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
@@ -11119,8 +11133,12 @@
           <value>https://www.eclipse.org/downloads/packages/release/2020-03/rc1/eclipse-ide-rcp-and-rap-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - 2020-03</value>
+          <value>Eclipse IDE for RCP and RAP Developers - 2020-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -11150,31 +11168,13 @@
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
-            name="org.eclipse.egit.mylyn.feature.group"/>
+            name="org.eclipse.egit.gitflow.feature.feature.group"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
             name="org.eclipse.m2e.feature.feature.group"/>
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.gerrit.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.pde_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <requirement
             name="org.eclipse.passage.ldc.feature.feature.group"/>
         <requirement
@@ -11211,8 +11211,12 @@
           <value>https://www.eclipse.org/downloads/packages/release/2019-12/r/eclipse-ide-rcp-and-rap-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - 2019-12</value>
+          <value>Eclipse IDE for RCP and RAP Developers - 2019-12</value>
         </detail>
       </annotation>
       <setupTask
@@ -11303,8 +11307,12 @@
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/r/eclipse-ide-rcp-and-rap-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - 2019-09</value>
+          <value>Eclipse IDE for RCP and RAP Developers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -11396,7 +11404,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - 2019-06</value>
+          <value>Eclipse IDE for RCP and RAP Developers - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
@@ -11486,7 +11494,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - 2019-03</value>
+          <value>Eclipse IDE for RCP and RAP Developers - 2019-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -11576,7 +11584,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - 2018-12</value>
+          <value>Eclipse IDE for RCP and RAP Developers - 2018-12</value>
         </detail>
       </annotation>
       <setupTask
@@ -11666,7 +11674,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - 2018-09</value>
+          <value>Eclipse IDE for RCP and RAP Developers - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -11762,7 +11770,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - Photon</value>
+          <value>Eclipse IDE for RCP and RAP Developers - Photon</value>
         </detail>
       </annotation>
       <setupTask
@@ -11856,7 +11864,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - Oxygen</value>
+          <value>Eclipse IDE for RCP and RAP Developers - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -11950,7 +11958,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - Neon</value>
+          <value>Eclipse IDE for RCP and RAP Developers - Neon</value>
         </detail>
       </annotation>
       <setupTask
@@ -12042,7 +12050,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - Mars</value>
+          <value>Eclipse IDE for RCP and RAP Developers - Mars</value>
         </detail>
       </annotation>
       <setupTask
@@ -12088,7 +12096,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - Luna</value>
+          <value>Eclipse IDE for RCP and RAP Developers - Luna</value>
         </detail>
       </annotation>
       <setupTask
@@ -12134,7 +12142,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - Kepler</value>
+          <value>Eclipse IDE for RCP and RAP Developers - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -12182,7 +12190,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for RCP and RAP Developers - Juno</value>
+          <value>Eclipse IDE for RCP and RAP Developers - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -12214,10 +12222,10 @@
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.21"/>
       </setupTask>
     </version>
-    <description>A complete set of tools for developers who want to create Eclipse plug-ins, Rich Client Applications or Remote Application Platform (RCP+RAP), plus Maven and Gradle tooling, and an XML editor. It contains the EGit tooling for accessing Git version control systems. The Eclipse Passage (Incubation) helps to enable license management for your Eclipse-based products</description>
+    <description>A complete set of tools for developers who want to create Eclipse plug-ins, Rich Client Applications or Remote Application Platform (RCP+RAP), plus Maven and Gradle tooling, and an XML editor. It contains the EGit tooling for accessing Git version control systems, and Eclipse Passage which helps with license management for Eclipse-based products.</description>
   </product>
   <product name="epp.package.testing"
-      label="Eclipse for Testers">
+      label="Eclipse IDE for Testers">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
@@ -12237,7 +12245,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - Latest</value>
+          <value>Eclipse IDE for Testers - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -12287,7 +12295,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - Latest Release</value>
+          <value>Eclipse IDE for Testers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
@@ -12337,7 +12345,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - 2020-03</value>
+          <value>Eclipse IDE for Testers - 2020-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -12391,7 +12399,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - 2019-12</value>
+          <value>Eclipse IDE for Testers - 2019-12</value>
         </detail>
       </annotation>
       <setupTask
@@ -12445,7 +12453,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - 2019-09</value>
+          <value>Eclipse IDE for Testers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -12499,7 +12507,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - 2019-06</value>
+          <value>Eclipse IDE for Testers - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
@@ -12553,7 +12561,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - 2019-03</value>
+          <value>Eclipse IDE for Testers - 2019-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -12607,7 +12615,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - 2018-12</value>
+          <value>Eclipse IDE for Testers - 2018-12</value>
         </detail>
       </annotation>
       <setupTask
@@ -12661,7 +12669,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - 2018-09</value>
+          <value>Eclipse IDE for Testers - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -12715,7 +12723,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - Photon</value>
+          <value>Eclipse IDE for Testers - Photon</value>
         </detail>
       </annotation>
       <setupTask
@@ -12767,7 +12775,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - Oxygen</value>
+          <value>Eclipse IDE for Testers - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -12819,7 +12827,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - Neon</value>
+          <value>Eclipse IDE for Testers - Neon</value>
         </detail>
       </annotation>
       <setupTask
@@ -12871,7 +12879,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - Mars</value>
+          <value>Eclipse IDE for Testers - Mars</value>
         </detail>
       </annotation>
       <setupTask
@@ -12911,7 +12919,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - Luna</value>
+          <value>Eclipse IDE for Testers - Luna</value>
         </detail>
       </annotation>
       <setupTask
@@ -12951,7 +12959,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - Kepler</value>
+          <value>Eclipse IDE for Testers - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -12993,7 +13001,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Testers - Juno</value>
+          <value>Eclipse IDE for Testers - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -13022,7 +13030,7 @@
     <description>This package contains Eclipse features that support the software development quality assurance process, such as Jubula and Mylyn.</description>
   </product>
   <product name="epp.package.parallel"
-      label="Eclipse for Scientific Computing">
+      label="Eclipse IDE for Scientific Computing">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
@@ -13042,7 +13050,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - Latest</value>
+          <value>Eclipse IDE for Scientific Computing - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -13136,7 +13144,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - Latest Release</value>
+          <value>Eclipse IDE for Scientific Computing - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
@@ -13232,7 +13240,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - 2020-03</value>
+          <value>Eclipse IDE for Scientific Computing - 2020-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -13330,7 +13338,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - 2019-12</value>
+          <value>Eclipse IDE for Scientific Computing - 2019-12</value>
         </detail>
       </annotation>
       <setupTask
@@ -13430,7 +13438,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - 2019-09</value>
+          <value>Eclipse IDE for Scientific Computing - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -13530,7 +13538,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - 2019-06</value>
+          <value>Eclipse IDE for Scientific Computing - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
@@ -13630,7 +13638,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - 2019-03</value>
+          <value>Eclipse IDE for Scientific Computing - 2019-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -13730,7 +13738,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - 2018-12</value>
+          <value>Eclipse IDE for Scientific Computing - 2018-12</value>
         </detail>
       </annotation>
       <setupTask
@@ -13824,7 +13832,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - 2018-09</value>
+          <value>Eclipse IDE for Scientific Computing - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -13918,7 +13926,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - Photon</value>
+          <value>Eclipse IDE for Scientific Computing - Photon</value>
         </detail>
       </annotation>
       <setupTask
@@ -14010,7 +14018,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - Oxygen</value>
+          <value>Eclipse IDE for Scientific Computing - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -14102,7 +14110,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - Neon</value>
+          <value>Eclipse IDE for Scientific Computing - Neon</value>
         </detail>
       </annotation>
       <setupTask
@@ -14194,7 +14202,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - Mars</value>
+          <value>Eclipse IDE for Scientific Computing - Mars</value>
         </detail>
       </annotation>
       <setupTask
@@ -14234,7 +14242,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - Luna</value>
+          <value>Eclipse IDE for Scientific Computing - Luna</value>
         </detail>
       </annotation>
       <setupTask
@@ -14274,7 +14282,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - Kepler</value>
+          <value>Eclipse IDE for Scientific Computing - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -14316,7 +14324,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scientific Computing - Juno</value>
+          <value>Eclipse IDE for Scientific Computing - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -14345,7 +14353,7 @@
     <description>Tools for C, C++, Fortran, and UPC, including MPI, OpenMP, OpenACC, a parallel debugger, and remotely building, running and monitoring applications.</description>
   </product>
   <product name="epp.package.scout"
-      label="Eclipse for Scout Developers">
+      label="Eclipse IDE for Scout Developers">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
@@ -14365,7 +14373,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - Latest</value>
+          <value>Eclipse IDE for Scout Developers - Latest</value>
         </detail>
       </annotation>
       <setupTask
@@ -14439,7 +14447,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - Latest Release</value>
+          <value>Eclipse IDE for Scout Developers - Latest Release</value>
         </detail>
       </annotation>
       <setupTask
@@ -14513,7 +14521,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - 2020-03</value>
+          <value>Eclipse IDE for Scout Developers - 2020-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -14591,7 +14599,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - 2019-12</value>
+          <value>Eclipse IDE for Scout Developers - 2019-12</value>
         </detail>
       </annotation>
       <setupTask
@@ -14669,7 +14677,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - 2019-09</value>
+          <value>Eclipse IDE for Scout Developers - 2019-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -14745,7 +14753,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - 2019-06</value>
+          <value>Eclipse IDE for Scout Developers - 2019-06</value>
         </detail>
       </annotation>
       <setupTask
@@ -14821,7 +14829,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - 2019-03</value>
+          <value>Eclipse IDE for Scout Developers - 2019-03</value>
         </detail>
       </annotation>
       <setupTask
@@ -14897,7 +14905,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - 2018-12</value>
+          <value>Eclipse IDE for Scout Developers - 2018-12</value>
         </detail>
       </annotation>
       <setupTask
@@ -14973,7 +14981,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - 2018-09</value>
+          <value>Eclipse IDE for Scout Developers - 2018-09</value>
         </detail>
       </annotation>
       <setupTask
@@ -15049,7 +15057,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - Photon</value>
+          <value>Eclipse IDE for Scout Developers - Photon</value>
         </detail>
       </annotation>
       <setupTask
@@ -15123,7 +15131,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - Oxygen</value>
+          <value>Eclipse IDE for Scout Developers - Oxygen</value>
         </detail>
       </annotation>
       <setupTask
@@ -15197,7 +15205,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - Neon</value>
+          <value>Eclipse IDE for Scout Developers - Neon</value>
         </detail>
       </annotation>
       <setupTask
@@ -15271,7 +15279,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - Mars</value>
+          <value>Eclipse IDE for Scout Developers - Mars</value>
         </detail>
       </annotation>
       <setupTask
@@ -15317,7 +15325,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - Luna</value>
+          <value>Eclipse IDE for Scout Developers - Luna</value>
         </detail>
       </annotation>
       <setupTask
@@ -15363,7 +15371,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - Kepler</value>
+          <value>Eclipse IDE for Scout Developers - Kepler</value>
         </detail>
       </annotation>
       <setupTask
@@ -15411,7 +15419,7 @@
         </detail>
         <detail
             key="shortcut">
-          <value>Eclipse for Scout Developers - Juno</value>
+          <value>Eclipse IDE for Scout Developers - Juno</value>
         </detail>
       </annotation>
       <setupTask
@@ -15463,6 +15471,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2020-03/rc1/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="incubating">
+          <value>true</value>
         </detail>
         <detail
             key="shortcut">
@@ -15523,6 +15535,10 @@
           <value>https://www.eclipse.org/downloads/packages/release/2019-12/r/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Rust Developers - Latest Release</value>
         </detail>
@@ -15579,6 +15595,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2020-03/rc1/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="incubating">
+          <value>true</value>
         </detail>
         <detail
             key="shortcut">
@@ -15643,6 +15663,10 @@
           <value>https://www.eclipse.org/downloads/packages/release/2019-12/r/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Rust Developers - 2019-12</value>
         </detail>
@@ -15703,6 +15727,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-09/r/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="incubating">
+          <value>true</value>
         </detail>
         <detail
             key="shortcut">
@@ -15767,6 +15795,10 @@
           <value>https://www.eclipse.org/downloads/packages/release/2019-06/r/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Rust Developers - 2019-06</value>
         </detail>
@@ -15827,6 +15859,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2019-03/r/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="incubating">
+          <value>true</value>
         </detail>
         <detail
             key="shortcut">
@@ -15893,6 +15929,10 @@
           <value>https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Rust Developers - 2018-12</value>
         </detail>
@@ -15955,6 +15995,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/2018-09/r/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="incubating">
+          <value>true</value>
         </detail>
         <detail
             key="shortcut">
@@ -16021,6 +16065,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-rust-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="incubating">
+          <value>true</value>
         </detail>
         <detail
             key="shortcut">
@@ -18587,6 +18635,10 @@
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-android-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse for Android Developers - Latest</value>
         </detail>
@@ -18669,6 +18721,10 @@
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-android-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse for Android Developers - Latest Release</value>
         </detail>
@@ -18749,6 +18805,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-android-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="incubating">
+          <value>true</value>
         </detail>
         <detail
             key="shortcut">
@@ -18974,6 +19034,10 @@
           <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
         </detail>
         <detail
+            key="incubating">
+          <value>true</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Automotive Software Developers - Luna</value>
         </detail>
@@ -19014,6 +19078,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="incubating">
+          <value>true</value>
         </detail>
         <detail
             key="shortcut">
@@ -19058,6 +19126,10 @@
         <detail
             key="siteURI">
           <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="incubating">
+          <value>true</value>
         </detail>
         <detail
             key="shortcut">
