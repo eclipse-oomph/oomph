@@ -886,7 +886,7 @@
   <project href="Oomph.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/packagedrone/master/setups/org.eclipse.packagedrone.oomph/PackageDrone.setup#/"/>
   <project href="http://git.eclipse.org/c/papyrus/org.eclipse.papyrus.git/plain/releng/org.eclipse.papyrus.oomph/setups/papyrus.setup#/"/>
-  <project href="https://raw.githubusercontent.com/eclipse/passage/master/releng/org.eclipse.passage.releng/passage.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-passage/passage/master/releng/org.eclipse.passage.releng/passage.setup#/"/>
   <project href="interim/PDE.setup#/"/>
   <project href="interim/Platform.setup#/"/>
   <project href="http://git.eclipse.org/c/mmt/org.eclipse.qvtd.git/plain/releng/org.eclipse.qvtd.oomph/setups/qvtd.setup#/"/>
