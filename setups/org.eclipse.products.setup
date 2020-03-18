@@ -128,7 +128,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -202,7 +202,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -280,7 +280,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1395,7 +1395,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1599,7 +1599,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1807,7 +1807,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -3932,7 +3932,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4048,7 +4048,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4168,7 +4168,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -5401,7 +5401,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -5477,7 +5477,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -5557,7 +5557,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6380,7 +6380,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6452,7 +6452,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6528,7 +6528,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7405,7 +7405,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7509,7 +7509,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7617,7 +7617,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8763,7 +8763,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8817,7 +8817,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8875,7 +8875,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9692,7 +9692,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9792,7 +9792,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9896,7 +9896,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11125,7 +11125,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11195,7 +11195,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11269,7 +11269,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12360,7 +12360,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12410,7 +12410,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12464,7 +12464,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13217,7 +13217,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13311,7 +13311,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13409,7 +13409,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14526,7 +14526,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14600,7 +14600,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14678,7 +14678,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -15623,7 +15623,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -15685,7 +15685,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -15751,7 +15751,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16268,7 +16268,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.15.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16302,7 +16302,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.15.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16340,7 +16340,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.15.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-03">
+            url="http://download.eclipse.org/releases/2020-03/202003181000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
