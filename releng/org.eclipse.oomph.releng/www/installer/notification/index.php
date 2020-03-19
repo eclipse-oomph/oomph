@@ -189,6 +189,9 @@ $html = <<<EOHTML
             <li>
             <a href="https://www.eclipse.org/setups/installer/?url=https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/interim/PlatformSDKConfiguration.setup&show=true" target="_blank">Contribute to the Eclipse Platform</a>.
             </li>
+            <li>
+            <a href="https://www.eclipse.org/setups/installer/?url=https://git.eclipse.org/c/emf/org.eclipse.emf.git/plain/releng/org.eclipse.emf.releng/EMFDevelopmentEnvironmentConfiguration.setup&show=true&show=true" target="_blank">Contribute to the Eclipse Modeling Framework</a>.
+            </li>
           </ul>
           </li>
         </ul>
