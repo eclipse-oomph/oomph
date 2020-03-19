@@ -135,6 +135,11 @@ $html = <<<EOHTML
 EOHTML;
 
     # Generate the web page
+    ob_start();
     $App->generatePage($theme, $Menu, $Nav, $pageAuthor, $pageKeywords, $pageTitle, $html, $Breadcrumb);
+    $contents = ob_get_contents();
+    ob_end_clean();
+    $contents = preg_replace('/(<a href="https:\/\/www.eclipse.org\/donate\/)(" class="btn btn-huge) btn-info("><i class="fa fa-star">)/', "\\1ide/?scope=Eclipse%20Installer\\2 btn-primary\\3", $contents);
+    echo "$contents";
 
 ?>

@@ -111,16 +111,18 @@ $html = <<<EOHTML
 
     <hr>
     <h3>What Can I Do to Support the Eclipse Community?</h3>
-    <a href="https://www.eclipse.org/donate/" target="_blank">
+    <a href="https://www.eclipse.org/donate/ide/?scope=Eclipse%20Installer" target="_blank">
     <img style="animation-name: wiggle; animation-duration: 3s; animation-iteration-count: infinite; animation-delay: 2s; animation-direction: alternate;" src="../FriendsOfEclipse.png"/>
     </a>
+    &nbsp;&nbsp;
+    <a href="https://www.eclipse.org/donate/ide/?scope=Eclipse%20Installer" target="_blank" class="btn btn-huge btn-primary" style="animation-name: wiggle; animation-duration: 3s; animation-iteration-count: infinite; animation-delay: 2s; animation-direction: alternate;"><i class="fa fa-star"></i> Donate</a>
 
     <hr>
     <h4><b>Invest Your Money</b></h4>
     <ul>
       <li>
       If you love Eclipse as much as we do, 
-      join the elite club and become a <a href="https://www.eclipse.org/donate/donorlist.php?start=0#all" target="_blank">Friend of Eclipse</a> by <a href="https://www.eclipse.org/donate/" target="_blank">donating</a> a token of your appreciation.
+      join the elite club and become a <a href="https://www.eclipse.org/donate/donorlist.php?start=0#all" target="_blank">Friend of Eclipse</a> by <a href="https://www.eclipse.org/donate/ide/?scope=Eclipse%20Installer" target="_blank">donating</a> a token of your appreciation.
       </li>
       <li>
       If you work for a company, encourge your employeer to become an <a href="https://www.eclipse.org/membership/" target="_blank">Eclipse Member</a>.
@@ -204,6 +206,11 @@ $html = <<<EOHTML
 EOHTML;
 
     # Generate the web page
+    ob_start();
     $App->generatePage($theme, $Menu, $Nav, $pageAuthor, $pageKeywords, $pageTitle, $html, $Breadcrumb);
+    $contents = ob_get_contents();
+    ob_end_clean();
+    $contents = preg_replace('/(<a href="https:\/\/www.eclipse.org\/donate\/)(" class="btn btn-huge) btn-info("><i class="fa fa-star">)/', "\\1ide/?scope=Eclipse%20Installer\\2 btn-primary\\3", $contents);
+    echo "$contents";;
 
 ?>
