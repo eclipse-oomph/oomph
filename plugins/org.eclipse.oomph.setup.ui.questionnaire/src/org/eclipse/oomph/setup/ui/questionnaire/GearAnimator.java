@@ -361,13 +361,15 @@ public class GearAnimator extends Animator
       summaryShown = true;
     }
 
-    Image tmpPageBuffer = oldPageBuffer;
+    oldPageBuffer.dispose();
     oldPageBuffer = pageBuffer;
-    pageBuffer = tmpPageBuffer;
 
-    GC tmpPageGC = oldPageGC;
+    oldPageGC.dispose();
     oldPageGC = pageGC;
-    pageGC = tmpPageGC;
+
+    pageBuffer = new Image(getDisplay(), PAGE_WIDTH, PAGE_HEIGHT);
+    pageGC = new GC(pageBuffer);
+    pageGC.setAdvanced(true);
 
     pageBufferUpdated = false;
 
