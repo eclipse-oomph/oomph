@@ -1279,6 +1279,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       OPTIONS = resourceSet.getLoadOptions();
       OPTIONS.put(OPTION_CACHE_HANDLING, CacheHandling.CACHE_WITH_ETAG_CHECKING);
       URI_CONVERTER = resourceSet.getURIConverter();
+      clearExpectedETags();
     }
 
     private Set<? extends URI> uris;
