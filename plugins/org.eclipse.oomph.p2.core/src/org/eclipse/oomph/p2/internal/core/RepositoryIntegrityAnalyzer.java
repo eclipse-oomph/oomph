@@ -470,7 +470,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         String location = get(eObject, "repositories", "location");
         if (location != null)
         {
-          repository = URI.createURI(location.replaceAll("/$", "").replaceAll("^https:", "http:"));
+          String normalizedLocation = location.replaceAll("/$", "");
+          repository = URI
+              .createURI(normalizedLocation.contains("//repo.eclipse.org") ? normalizedLocation : normalizedLocation.replaceAll("^https:", "http:"));
         }
         else
         {
