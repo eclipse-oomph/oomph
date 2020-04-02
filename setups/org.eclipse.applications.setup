@@ -20,6 +20,7 @@
   <product href="org.eclipse.platform.sdk.product.setup#/"/>
   <product href="http://git.eclipse.org/c/cdo/cdo.git/plain/plugins/org.eclipse.emf.cdo.server.product/CDOServer.setup#/"/>
   <product href="http://git.eclipse.org/c/cdo/cdo.git/plain/plugins/org.eclipse.emf.cdo.explorer.ui/CDOExplorer.setup#/"/>
+  <product href="https://git.eclipse.org/c/epsilon/org.eclipse.epsilon.git/plain/releng/org.eclipse.epsilon.releng/epsilonUse.setup#/"/>
   <product href="interim/products/PapyrusWithCDO.setup#/"/>
   <description>The catalog of applications provided by projects at Eclipse.org.</description>
 </setup:ProductCatalog>
