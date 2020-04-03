@@ -472,7 +472,7 @@ public class StringFilterRegistry
       @Override
       public String getDescription()
       {
-        return "Extracts the path segments from a URI.";
+        return "Converts all \\ characters of a String value, typically a file system path, to /.";
       }
 
       public String filter(String value)
