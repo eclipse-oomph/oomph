@@ -163,20 +163,23 @@ public class P2TaskUIServicesPrompter extends P2TaskUISevices
       EList<Object> inputChildren = input.getChildren();
       for (Requirement requirement : unsatisifiedRequirements)
       {
-        String id = requirement.getName();
-        ItemProvider requirementItem = new ItemProvider(labelProvider.getText(requirement), labelProvider.getImage(requirement));
-        EList<Object> requirementChildren = requirementItem.getChildren();
-        inputChildren.add(requirementItem);
-
-        for (IInstallableUnit iu : availableIUs)
+        if (IInstallableUnit.NAMESPACE_IU_ID.equals(requirement.getNamespace()))
         {
-          if (id.equals(iu.getId()))
+          String id = requirement.getName();
+          ItemProvider requirementItem = new ItemProvider(labelProvider.getText(requirement), labelProvider.getImage(requirement));
+          EList<Object> requirementChildren = requirementItem.getChildren();
+          inputChildren.add(requirementItem);
+
+          for (IInstallableUnit iu : availableIUs)
           {
-            Requirement fakeIU = P2Factory.eINSTANCE.createRequirement(id);
-            Version version = iu.getVersion();
-            String label = labelProvider.getText(fakeIU) + " " + version;
-            ItemProvider iuItem = new ItemProvider(label, labelProvider.getImage(fakeIU));
-            requirementChildren.add(iuItem);
+            if (id.equals(iu.getId()))
+            {
+              Requirement fakeIU = P2Factory.eINSTANCE.createRequirement(id);
+              Version version = iu.getVersion();
+              String label = labelProvider.getText(fakeIU) + " " + version;
+              ItemProvider iuItem = new ItemProvider(label, labelProvider.getImage(fakeIU));
+              requirementChildren.add(iuItem);
+            }
           }
         }
       }

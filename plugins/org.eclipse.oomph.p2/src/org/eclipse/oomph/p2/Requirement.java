@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
@@ -36,6 +37,9 @@ import java.util.Comparator;
  *   <li>{@link org.eclipse.oomph.p2.Requirement#isGreedy <em>Greedy</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getFilter <em>Filter</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.Requirement#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.Requirement#getMin <em>Min</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.Requirement#getMax <em>Max</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.Requirement#getDescription <em>Description</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.p2.P2Package#getRequirement()
@@ -172,7 +176,7 @@ public interface Requirement extends ModelElement
    * @return the value of the '<em>Optional</em>' attribute.
    * @see #setOptional(boolean)
    * @see org.eclipse.oomph.p2.P2Package#getRequirement_Optional()
-   * @model
+   * @model volatile="true"
    * @generated
    */
   boolean isOptional();
@@ -231,6 +235,74 @@ public interface Requirement extends ModelElement
   RequirementType getType();
 
   /**
+   * Returns the value of the '<em><b>Min</b></em>' attribute.
+   * The default value is <code>"1"</code>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Min</em>' attribute.
+   * @see #setMin(int)
+   * @see org.eclipse.oomph.p2.P2Package#getRequirement_Min()
+   * @model default="1"
+   * @generated
+   */
+  int getMin();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.p2.Requirement#getMin <em>Min</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Min</em>' attribute.
+   * @see #getMin()
+   * @generated
+   */
+  void setMin(int value);
+
+  /**
+   * Returns the value of the '<em><b>Max</b></em>' attribute.
+   * The default value is <code>"1"</code>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Max</em>' attribute.
+   * @see #setMax(int)
+   * @see org.eclipse.oomph.p2.P2Package#getRequirement_Max()
+   * @model default="1"
+   * @generated
+   */
+  int getMax();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.p2.Requirement#getMax <em>Max</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Max</em>' attribute.
+   * @see #getMax()
+   * @generated
+   */
+  void setMax(int value);
+
+  /**
+   * Returns the value of the '<em><b>Description</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Description</em>' attribute.
+   * @see #setDescription(String)
+   * @see org.eclipse.oomph.p2.P2Package#getRequirement_Description()
+   * @model
+   * @generated
+   */
+  String getDescription();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.p2.Requirement#getDescription <em>Description</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Description</em>' attribute.
+   * @see #getDescription()
+   * @generated
+   */
+  void setDescription(String value);
+
+  /**
    * Returns the value of the '<em><b>Greedy</b></em>' attribute.
    * The default value is <code>"true"</code>.
    * <!-- begin-user-doc -->
@@ -268,5 +340,7 @@ public interface Requirement extends ModelElement
    * @generated
    */
   void setVersionRange(Version version, VersionSegment segment);
+
+  IRequirement toIRequirement();
 
 } // Requirement

@@ -16,8 +16,12 @@ import org.eclipse.oomph.p2.P2Package;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.RequirementType;
 import org.eclipse.oomph.p2.VersionSegment;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -80,6 +84,9 @@ public class RequirementItemProvider extends ModelElementItemProvider
       addGreedyPropertyDescriptor(object);
       addFilterPropertyDescriptor(object);
       addTypePropertyDescriptor(object);
+      addMinPropertyDescriptor(object);
+      addMaxPropertyDescriptor(object);
+      addDescriptionPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -129,14 +136,34 @@ public class RequirementItemProvider extends ModelElementItemProvider
    * This adds a property descriptor for the Optional feature.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   protected void addOptionalPropertyDescriptor(Object object)
   {
-    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+    itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
         getString("_UI_Requirement_optional_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_Requirement_optional_feature", "_UI_Requirement_type"), P2Package.Literals.REQUIREMENT__OPTIONAL,
-        true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+        true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null)
+    {
+      @Override
+      public boolean isPropertySet(Object object)
+      {
+        Requirement requirement = (Requirement)object;
+        return requirement.getMin() != 1;
+      }
+
+      @Override
+      public void resetPropertyValue(Object object)
+      {
+        setPropertyValue(object, Boolean.FALSE);
+      }
+
+      @Override
+      public void setPropertyValue(Object object, Object value)
+      {
+        getPropertyDescriptor(object, P2Package.Literals.REQUIREMENT__MIN).setPropertyValue(object, (Boolean)value ? 0 : 1);
+      }
+    });
   }
 
   /**
@@ -235,6 +262,138 @@ public class RequirementItemProvider extends ModelElementItemProvider
         return RequirementType.VALUES;
       }
     });
+  }
+
+  /**
+   * This adds a property descriptor for the Min feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  protected void addMinPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Requirement_min_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_min_feature", "_UI_Requirement_type"),
+        P2Package.Literals.REQUIREMENT__MIN, true, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null)
+    {
+      @Override
+      public String[] getFilterFlags(Object object)
+      {
+        Requirement requirement = (Requirement)object;
+        int min = requirement.getMin();
+        if (min < 0 || min > 1)
+        {
+          return null;
+        }
+
+        // Otherwise, treat it as an expert feature.
+        return PropertiesUtil.EXPERT_FILTER;
+      }
+
+      @Override
+      public void setPropertyValue(Object object, Object value)
+      {
+        Requirement requirement = (Requirement)object;
+        EditingDomain editingDomain = getEditingDomain(object);
+        Integer max = requirement.getMax();
+        Integer newMin = (Integer)value;
+        Integer newMax = newMin.compareTo(max) > 0 ? newMin : null;
+        if (editingDomain == null)
+        {
+          requirement.eSet(feature, value);
+          if (newMax != null)
+          {
+            requirement.eSet(P2Package.Literals.REQUIREMENT__MAX, newMax);
+          }
+        }
+        else
+        {
+          CommandStack commandStack = editingDomain.getCommandStack();
+          CompoundCommand subcommands = new CompoundCommand(0);
+          Command setCommand = SetCommand.create(editingDomain, getCommandOwner(requirement), feature, value);
+          subcommands.append(setCommand);
+          if (newMax != null)
+          {
+            subcommands.append(SetCommand.create(editingDomain, getCommandOwner(requirement), P2Package.Literals.REQUIREMENT__MAX, newMax));
+          }
+
+          commandStack.execute(subcommands.unwrap());
+        }
+      }
+    });
+  }
+
+  /**
+   * This adds a property descriptor for the Max feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  protected void addMaxPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Requirement_max_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_max_feature", "_UI_Requirement_type"),
+        P2Package.Literals.REQUIREMENT__MAX, true, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null)
+    {
+      @Override
+      public String[] getFilterFlags(Object object)
+      {
+        Requirement requirement = (Requirement)object;
+        int max = requirement.getMax();
+        if (max != 1)
+        {
+          return null;
+        }
+
+        // Otherwise, treat it as an expert feature.
+        return PropertiesUtil.EXPERT_FILTER;
+      }
+
+      @Override
+      public void setPropertyValue(Object object, Object value)
+      {
+        Requirement requirement = (Requirement)object;
+        EditingDomain editingDomain = getEditingDomain(object);
+        Integer min = requirement.getMin();
+        Integer newMax = (Integer)value;
+        Integer newMin = newMax.compareTo(min) < 0 ? newMax : null;
+        if (editingDomain == null)
+        {
+          requirement.eSet(feature, value);
+          if (newMin != null)
+          {
+            requirement.eSet(P2Package.Literals.REQUIREMENT__MIN, newMin);
+          }
+        }
+        else
+        {
+          CommandStack commandStack = editingDomain.getCommandStack();
+          CompoundCommand subcommands = new CompoundCommand(0);
+          Command setCommand = SetCommand.create(editingDomain, getCommandOwner(requirement), feature, value);
+          subcommands.append(setCommand);
+          if (newMin != null)
+          {
+            subcommands.append(SetCommand.create(editingDomain, getCommandOwner(requirement), P2Package.Literals.REQUIREMENT__MIN, value));
+          }
+
+          commandStack.execute(subcommands.unwrap());
+        }
+      }
+    });
+  }
+
+  /**
+   * This adds a property descriptor for the Description feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addDescriptionPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Requirement_description_feature"),
+        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_description_feature", "_UI_Requirement_type"),
+        P2Package.Literals.REQUIREMENT__DESCRIPTION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -357,7 +516,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
     }
 
     Object result = overlayImage(object, getResourceLocator().getImage(key));
-    return getImage(result, requirement.isOptional(), requirement.isGreedy());
+    return getImage(result, requirement.getMin(), requirement.isGreedy(), requirement.getMax());
   }
 
   /**
@@ -435,6 +594,9 @@ public class RequirementItemProvider extends ModelElementItemProvider
       case P2Package.REQUIREMENT__GREEDY:
       case P2Package.REQUIREMENT__FILTER:
       case P2Package.REQUIREMENT__TYPE:
+      case P2Package.REQUIREMENT__MIN:
+      case P2Package.REQUIREMENT__MAX:
+      case P2Package.REQUIREMENT__DESCRIPTION:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }
@@ -457,6 +619,27 @@ public class RequirementItemProvider extends ModelElementItemProvider
   public static Object getImage(Object baseImage, boolean optional, boolean greedy)
   {
     if (optional)
+    {
+      List<Object> images = new ArrayList<Object>(2);
+      images.add(baseImage);
+      images.add(P2EditPlugin.INSTANCE.getImage(greedy ? "full/ovr16/greedy" : "full/ovr16/optional"));
+      return new DecoratedImage(images);
+    }
+
+    return baseImage;
+  }
+
+  public static Object getImage(Object baseImage, int min, boolean greedy, int max)
+  {
+    if (max == 0)
+    {
+      List<Object> images = new ArrayList<Object>(2);
+      images.add(baseImage);
+      images.add(P2EditPlugin.INSTANCE.getImage("full/ovr16/excluded"));
+      return new DecoratedImage(images);
+    }
+
+    if (min == 0)
     {
       List<Object> images = new ArrayList<Object>(2);
       images.add(baseImage);

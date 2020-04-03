@@ -336,13 +336,40 @@ public interface P2Package extends EPackage
   int REQUIREMENT__TYPE = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 7;
 
   /**
+   * The feature id for the '<em><b>Min</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REQUIREMENT__MIN = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 8;
+
+  /**
+   * The feature id for the '<em><b>Max</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REQUIREMENT__MAX = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 9;
+
+  /**
+   * The feature id for the '<em><b>Description</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REQUIREMENT__DESCRIPTION = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 10;
+
+  /**
    * The number of structural features of the '<em>Requirement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REQUIREMENT_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 8;
+  int REQUIREMENT_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 11;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -754,6 +781,39 @@ public interface P2Package extends EPackage
   EAttribute getRequirement_Type();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement#getMin <em>Min</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Min</em>'.
+   * @see org.eclipse.oomph.p2.Requirement#getMin()
+   * @see #getRequirement()
+   * @generated
+   */
+  EAttribute getRequirement_Min();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement#getMax <em>Max</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Max</em>'.
+   * @see org.eclipse.oomph.p2.Requirement#getMax()
+   * @see #getRequirement()
+   * @generated
+   */
+  EAttribute getRequirement_Max();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement#getDescription <em>Description</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Description</em>'.
+   * @see org.eclipse.oomph.p2.Requirement#getDescription()
+   * @see #getRequirement()
+   * @generated
+   */
+  EAttribute getRequirement_Description();
+
+  /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.p2.Requirement#isGreedy <em>Greedy</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1071,6 +1131,30 @@ public interface P2Package extends EPackage
      * @generated
      */
     EAttribute REQUIREMENT__TYPE = eINSTANCE.getRequirement_Type();
+
+    /**
+     * The meta object literal for the '<em><b>Min</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute REQUIREMENT__MIN = eINSTANCE.getRequirement_Min();
+
+    /**
+     * The meta object literal for the '<em><b>Max</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute REQUIREMENT__MAX = eINSTANCE.getRequirement_Max();
+
+    /**
+     * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute REQUIREMENT__DESCRIPTION = eINSTANCE.getRequirement_Description();
 
     /**
      * The meta object literal for the '<em><b>Greedy</b></em>' attribute feature.

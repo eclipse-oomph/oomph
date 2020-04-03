@@ -54,6 +54,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/greedy"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/filter"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/min"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/max"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute P2.ecore#//Requirement/description"/>
       <genOperations ecoreOperation="P2.ecore#//Requirement/setVersionRange">
         <genParameters ecoreParameter="P2.ecore#//Requirement/setVersionRange/version"/>
         <genParameters ecoreParameter="P2.ecore#//Requirement/setVersionRange/segment"/>

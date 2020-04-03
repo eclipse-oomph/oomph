@@ -894,22 +894,15 @@ public class ProfileTransactionImpl implements ProfileTransaction
     {
       P2CorePlugin.checkCancelation(monitor);
 
-      String namespace = requirement.getNamespace();
-      String name = requirement.getName();
-      VersionRange versionRange = requirement.getVersionRange();
-      IMatchExpression<IInstallableUnit> filter = requirement.getMatchExpression();
-      boolean optional = requirement.isOptional();
-      boolean greedy = requirement.isGreedy();
-
-      IRequirement rootRequirement = name == null || !name.startsWith("(")
-          ? MetadataFactory.createRequirement(namespace, name, versionRange, filter, optional ? 0 : 1, 1, !optional || greedy)
-          : MetadataFactory.createRequirement(namespace, name, filter, optional ? 0 : 1, 1, !optional || greedy);
+      IRequirement rootRequirement = requirement.toIRequirement();
       rootRequirements.add(rootRequirement);
 
       // If this is a requirement for an IU...
+      String namespace = requirement.getNamespace();
       if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
       {
         // If the clean profile has a requirement for this same singleton IU.
+        String name = requirement.getName();
         IRequirement singletonRootRequirement = singletonRootRequirements.get(name);
         if (singletonRootRequirement != null)
         {

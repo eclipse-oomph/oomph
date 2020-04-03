@@ -71,7 +71,6 @@ import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.ILicense;
-import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
@@ -655,19 +654,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
   }
 
-  private boolean isInstalled(Set<IInstallableUnit> installedUnits, String id, VersionRange versionRange)
-  {
-    for (IInstallableUnit installedUnit : installedUnits)
-    {
-      if (id.equals(installedUnit.getId()) && versionRange.isIncluded(installedUnit.getVersion()))
-      {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     if (SKIP)
@@ -724,20 +710,13 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       }
     }
 
-    Set<IInstallableUnit> installedUnits = getInstalledUnits(agent);
     Set<Requirement> unsatisifiedRequirements = new LinkedHashSet<Requirement>();
     for (Requirement requirement : getRequirements())
     {
       if (context.matchesFilterContext(requirement.getFilter()) && !requirement.isOptional())
       {
-        String id = requirement.getName();
-        VersionRange versionRange = requirement.getVersionRange();
-        if (versionRange == null)
-        {
-          versionRange = VersionRange.emptyRange;
-        }
-
-        if (!isInstalled(installedUnits, id, versionRange))
+        IQueryResult<IInstallableUnit> result = profile.query(QueryUtil.createQuery(requirement.toIRequirement().getMatches()), null);
+        if (result.isEmpty())
         {
           unsatisifiedRequirements.add(requirement);
         }
@@ -747,7 +726,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     P2TaskUISevices p2TaskUISevices = (P2TaskUISevices)context.get(P2TaskUISevices.class);
     if (trigger == Trigger.STARTUP && !unsatisifiedRequirements.isEmpty() && p2TaskUISevices != null)
     {
-      return p2TaskUISevices.handleUnsatisfiedRequirements(unsatisifiedRequirements, installedUnits);
+      return p2TaskUISevices.handleUnsatisfiedRequirements(unsatisifiedRequirements, getInstalledUnits(agent));
     }
 
     return !unsatisifiedRequirements.isEmpty();
@@ -1138,12 +1117,17 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
   }
 
+  private static IProfile getProfile(Agent agent)
+  {
+    IProfileRegistry profileRegistry = agent.getProfileRegistry();
+    IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
+    return profile;
+  }
+
   private static Set<IInstallableUnit> getInstalledUnits(Agent agent)
   {
     Set<IInstallableUnit> result = new HashSet<IInstallableUnit>();
-
-    IProfileRegistry profileRegistry = agent.getProfileRegistry();
-    IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
+    IProfile profile = getProfile(agent);
     if (profile != null)
     {
       IQueryResult<IInstallableUnit> queryResult = profile.query(QueryUtil.createIUAnyQuery(), null);
@@ -1158,8 +1142,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
   private static Map<String, String> getProfileProperties(Agent agent)
   {
-    IProfileRegistry profileRegistry = agent.getProfileRegistry();
-    IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
+    IProfile profile = getProfile(agent);
     if (profile != null)
     {
       return profile.getProperties();

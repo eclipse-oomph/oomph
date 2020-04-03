@@ -27,6 +27,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.IRequirement;
+import org.eclipse.equinox.p2.metadata.MetadataFactory;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
@@ -49,6 +51,9 @@ import java.lang.reflect.InvocationTargetException;
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#isGreedy <em>Greedy</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getFilter <em>Filter</em>}</li>
  *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getMin <em>Min</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getMax <em>Max</em>}</li>
+ *   <li>{@link org.eclipse.oomph.p2.impl.RequirementImpl#getDescription <em>Description</em>}</li>
  * </ul>
  *
  * @generated
@@ -139,16 +144,6 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
   protected static final boolean OPTIONAL_EDEFAULT = false;
 
   /**
-   * The cached value of the '{@link #isOptional() <em>Optional</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isOptional()
-   * @generated
-   * @ordered
-   */
-  protected boolean optional = OPTIONAL_EDEFAULT;
-
-  /**
    * The default value of the '{@link #isGreedy() <em>Greedy</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -197,6 +192,66 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * @ordered
    */
   protected static final RequirementType TYPE_EDEFAULT = RequirementType.NONE;
+
+  /**
+   * The default value of the '{@link #getMin() <em>Min</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMin()
+   * @generated
+   * @ordered
+   */
+  protected static final int MIN_EDEFAULT = 1;
+
+  /**
+   * The cached value of the '{@link #getMin() <em>Min</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMin()
+   * @generated
+   * @ordered
+   */
+  protected int min = MIN_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getMax() <em>Max</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMax()
+   * @generated
+   * @ordered
+   */
+  protected static final int MAX_EDEFAULT = 1;
+
+  /**
+   * The cached value of the '{@link #getMax() <em>Max</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMax()
+   * @generated
+   * @ordered
+   */
+  protected int max = MAX_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDescription()
+   * @generated
+   * @ordered
+   */
+  protected static final String DESCRIPTION_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDescription()
+   * @generated
+   * @ordered
+   */
+  protected String description = DESCRIPTION_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -324,29 +379,40 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
     setVersionRange(P2Factory.eINSTANCE.createVersionRange(version, segment));
   }
 
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public boolean isOptional()
+  public IRequirement toIRequirement()
   {
-    return optional;
+    String namespace = getNamespace();
+    String name = getName();
+    VersionRange versionRange = getVersionRange();
+    IMatchExpression<IInstallableUnit> filter = getMatchExpression();
+    int min = getMin();
+    boolean greedy = isGreedy();
+    int max = getMax();
+    String description = null;
+    IRequirement requirement = name == null || !name.startsWith("(")
+        ? MetadataFactory.createRequirement(namespace, name, versionRange, filter, min, max, greedy, description)
+        : MetadataFactory.createRequirement(namespace, name, filter, min, max, greedy, description);
+    return requirement;
   }
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
+   */
+  public boolean isOptional()
+  {
+    return min <= 0;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
    */
   public void setOptional(boolean newOptional)
   {
-    boolean oldOptional = optional;
-    optional = newOptional;
-    if (eNotificationRequired())
-    {
-      eNotify(new ENotificationImpl(this, Notification.SET, P2Package.REQUIREMENT__OPTIONAL, oldOptional, optional));
-    }
+    setMin(newOptional ? 0 : 1);
   }
 
   /**
@@ -415,6 +481,84 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  public int getMin()
+  {
+    return min;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public void setMin(int newMin)
+  {
+    boolean oldOptional = isOptional();
+    int oldMin = min;
+    min = newMin;
+    boolean newOptional = isOptional();
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, P2Package.REQUIREMENT__MIN, oldMin, min));
+      eNotify(new ENotificationImpl(this, Notification.SET, P2Package.REQUIREMENT__OPTIONAL, oldOptional, newOptional));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public int getMax()
+  {
+    return max;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setMax(int newMax)
+  {
+    int oldMax = max;
+    max = newMax;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, P2Package.REQUIREMENT__MAX, oldMax, max));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getDescription()
+  {
+    return description;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setDescription(String newDescription)
+  {
+    String oldDescription = description;
+    description = newDescription;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, P2Package.REQUIREMENT__DESCRIPTION, oldDescription, description));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public boolean isGreedy()
   {
     return greedy;
@@ -473,6 +617,12 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
         return getFilter();
       case P2Package.REQUIREMENT__TYPE:
         return getType();
+      case P2Package.REQUIREMENT__MIN:
+        return getMin();
+      case P2Package.REQUIREMENT__MAX:
+        return getMax();
+      case P2Package.REQUIREMENT__DESCRIPTION:
+        return getDescription();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -507,6 +657,15 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
         return;
       case P2Package.REQUIREMENT__FILTER:
         setFilter((String)newValue);
+        return;
+      case P2Package.REQUIREMENT__MIN:
+        setMin((Integer)newValue);
+        return;
+      case P2Package.REQUIREMENT__MAX:
+        setMax((Integer)newValue);
+        return;
+      case P2Package.REQUIREMENT__DESCRIPTION:
+        setDescription((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -543,8 +702,31 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
       case P2Package.REQUIREMENT__FILTER:
         setFilter(FILTER_EDEFAULT);
         return;
+      case P2Package.REQUIREMENT__MIN:
+        setMin(MIN_EDEFAULT);
+        return;
+      case P2Package.REQUIREMENT__MAX:
+        setMax(MAX_EDEFAULT);
+        return;
+      case P2Package.REQUIREMENT__DESCRIPTION:
+        setDescription(DESCRIPTION_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
+  }
+
+  @Override
+  public boolean eIsSet(int featureID)
+  {
+    switch (featureID)
+    {
+      case P2Package.REQUIREMENT__OPTIONAL:
+        return min == 0;
+      case P2Package.REQUIREMENT__MIN:
+        return min != 0 && min != 1;
+      default:
+        return eIsSetGen(featureID);
+    }
   }
 
   /**
@@ -553,8 +735,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * @generated
    */
   @SuppressWarnings("null")
-  @Override
-  public boolean eIsSet(int featureID)
+  private boolean eIsSetGen(int featureID)
   {
     switch (featureID)
     {
@@ -567,13 +748,19 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
       case P2Package.REQUIREMENT__VERSION_RANGE:
         return VERSION_RANGE_EDEFAULT == null ? versionRange != null : !VERSION_RANGE_EDEFAULT.equals(versionRange);
       case P2Package.REQUIREMENT__OPTIONAL:
-        return optional != OPTIONAL_EDEFAULT;
+        return isOptional() != OPTIONAL_EDEFAULT;
       case P2Package.REQUIREMENT__GREEDY:
         return greedy != GREEDY_EDEFAULT;
       case P2Package.REQUIREMENT__FILTER:
         return FILTER_EDEFAULT == null ? filter != null : !FILTER_EDEFAULT.equals(filter);
       case P2Package.REQUIREMENT__TYPE:
         return getType() != TYPE_EDEFAULT;
+      case P2Package.REQUIREMENT__MIN:
+        return min != MIN_EDEFAULT;
+      case P2Package.REQUIREMENT__MAX:
+        return max != MAX_EDEFAULT;
+      case P2Package.REQUIREMENT__DESCRIPTION:
+        return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
     }
     return super.eIsSet(featureID);
   }
@@ -642,6 +829,8 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
     }
 
     StringBuffer result = new StringBuffer();
+    result.append(namespace);
+    result.append(':');
     result.append(name);
 
     if (versionRange != null && !versionRange.equals(VersionRange.emptyRange))
@@ -650,9 +839,29 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
       result.append(versionRange);
     }
 
-    if (optional)
+    if (min != 1)
     {
-      result.append(" (optional)");
+      result.append(" (min=" + min + ")");
+    }
+
+    if (max != 1)
+    {
+      result.append(" (max=" + max + ")");
+    }
+
+    if (greedy && min == 0)
+    {
+      result.append(" (greedy)");
+    }
+
+    if (filter != null)
+    {
+      result.append(" (filter=" + filter + ")");
+    }
+
+    if (description != null)
+    {
+      result.append(" (description=" + description + ")");
     }
 
     return result.toString();
