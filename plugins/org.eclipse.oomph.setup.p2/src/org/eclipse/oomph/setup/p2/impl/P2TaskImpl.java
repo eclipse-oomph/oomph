@@ -715,7 +715,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     {
       if (context.matchesFilterContext(requirement.getFilter()) && !requirement.isOptional())
       {
-        IQueryResult<IInstallableUnit> result = profile.query(QueryUtil.createQuery(requirement.toIRequirement().getMatches()), null);
+        IQueryResult<IInstallableUnit> result = profile.query(QueryUtil.createMatchQuery(requirement.toIRequirement().getMatches()), null);
         if (result.isEmpty())
         {
           unsatisifiedRequirements.add(requirement);
