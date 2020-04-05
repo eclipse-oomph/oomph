@@ -548,8 +548,15 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           value.append(';');
         }
 
-        value.append(requirement.toString());
+        value.append(requirement.getName());
+        VersionRange versionRange = requirement.getVersionRange();
+        if (versionRange != null && !versionRange.equals(VersionRange.emptyRange))
+        {
+          value.append(' ');
+          value.append(versionRange);
+        }
       }
+
       properties.put(uri.toString(), value.toString());
     }
 
