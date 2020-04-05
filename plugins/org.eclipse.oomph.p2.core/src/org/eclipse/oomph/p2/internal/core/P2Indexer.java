@@ -982,6 +982,12 @@ public final class P2Indexer implements IApplication
             if (childURI.isRelative())
             {
               childURI = childURI.resolve(uri.hasTrailingPathSeparator() ? uri : uri.appendSegment(""));
+
+              // If the child is ".." the resolve will return a URI with a trailing separator.
+              if (childURI.hasTrailingPathSeparator())
+              {
+                childURI = childURI.trimSegments(1);
+              }
             }
             else if (!indexer.baseURI.scheme().equals(childURI.scheme()) && indexer.baseURI.authority().equals(childURI.authority()))
             {
