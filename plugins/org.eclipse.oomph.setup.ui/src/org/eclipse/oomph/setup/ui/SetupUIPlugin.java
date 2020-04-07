@@ -305,7 +305,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       Object codeTemplateContextRegistry = ReflectUtil.invokeMethod("getCodeTemplateContextRegistry", javaUIPlugin);
 
       for (@SuppressWarnings("all")
-      Iterator<TemplateContextType> it = ReflectUtil.invokeMethod("contentTypes", codeTemplateContextRegistry); it.hasNext();)
+      Iterator<TemplateContextType> it = ReflectUtil.invokeMethod("contextTypes", codeTemplateContextRegistry); it.hasNext();)
       {
         TemplateContextType templateContextType = it.next();
         for (@SuppressWarnings("all")
