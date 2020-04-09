@@ -575,6 +575,11 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
         path = path.substring(1);
       }
 
+      while (path.endsWith("/"))
+      {
+        path = path.substring(0, path.length() - 1);
+      }
+
       excludedURIs.add(URI.createURI(path));
     }
 
