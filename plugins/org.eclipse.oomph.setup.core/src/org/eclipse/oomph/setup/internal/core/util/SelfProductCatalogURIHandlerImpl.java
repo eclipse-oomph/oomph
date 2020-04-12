@@ -153,7 +153,17 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
         IProduct product = Platform.getProduct();
         if (product != null)
         {
-          String name = product.getName();
+          String name = product.getProperty("aboutText");
+          if (name != null && name.startsWith("Eclipse"))
+          {
+            name = name.replaceAll("[\n\r]+.*", "");
+          }
+
+          if (StringUtil.isEmpty(name))
+          {
+            name = product.getName();
+          }
+
           if (!StringUtil.isEmpty(name))
           {
             selfProduct.setLabel(name);

@@ -174,6 +174,20 @@
             id="org.eclipse.oomph.setup.editor.refreshCache"
             name="Refresh Remote Cache">
       </command>
+      <command
+            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.DonateHandler"
+            description="%_UI_Donate_description"
+            id="org.eclipse.oomph.setup.donate"
+            name="%_UI_Donate_label">
+      </command>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="org.eclipse.oomph.setup.donate"
+            icon="icons/heart.png">
+      </image>
    </extension>
 
    <extension
@@ -473,6 +487,20 @@
                icon="icons/Log.gif"
                label="Open Setup Log"
                style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:help?after=about">
+         <command
+               commandId="org.eclipse.oomph.setup.donate"
+               style="push">
+            <visibleWhen>
+               <test
+                     forcePluginActivation="true"
+                     property="org.eclipse.oomph.setup.ui.donating">
+               </test>
+            </visibleWhen>
          </command>
       </menuContribution>
    </extension>

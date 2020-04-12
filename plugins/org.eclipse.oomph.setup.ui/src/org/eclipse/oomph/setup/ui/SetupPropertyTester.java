@@ -42,6 +42,8 @@ public class SetupPropertyTester extends PropertyTester
 
   public static final String SHOW_PROGRESS_IN_WIZARD = "showProgressInWizard";
 
+  public static final String DONATING = "donating";
+
   private static final Preferences PREFERENCES = SetupUIPlugin.INSTANCE.getInstancePreferences();
 
   private static boolean starting;
@@ -53,6 +55,8 @@ public class SetupPropertyTester extends PropertyTester
   private static Shell handlingShell;
 
   private static boolean started;
+
+  private static String donating;
 
   static
   {
@@ -106,6 +110,11 @@ public class SetupPropertyTester extends PropertyTester
     if (SHOW_TOOL_BAR_CONTRIBUTIONS.equals(property))
     {
       return testShowToolBarContributions(receiver, args, expectedValue);
+    }
+
+    if (DONATING.equals(property))
+    {
+      return testDonating(receiver, args, expectedValue);
     }
 
     return false;
@@ -165,6 +174,16 @@ public class SetupPropertyTester extends PropertyTester
 
     boolean value = PREFERENCES.getBoolean(SHOW_TOOL_BAR_CONTRIBUTIONS, false);
     return expectedValue.equals(value);
+  }
+
+  private boolean testDonating(Object receiver, Object[] args, Object expectedValue)
+  {
+    if (expectedValue == null)
+    {
+      expectedValue = Boolean.TRUE;
+    }
+
+    return expectedValue.equals(donating != null);
   }
 
   public static void setStarting(boolean starting)
@@ -234,6 +253,17 @@ public class SetupPropertyTester extends PropertyTester
     }
 
     UIPropertyTester.requestEvaluation(PREFIX + HANDLING, false);
+  }
+
+  public static String getDonating()
+  {
+    return donating;
+  }
+
+  public static void setDonating(String donating)
+  {
+    SetupPropertyTester.donating = donating;
+    UIPropertyTester.requestEvaluation(PREFIX + DONATING, false);
   }
 
   public static boolean isShowProgressInWizard()

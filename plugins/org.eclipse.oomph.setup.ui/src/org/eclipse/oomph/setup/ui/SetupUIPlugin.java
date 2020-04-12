@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.ui;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
+import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.OomphPreferencePage;
@@ -24,6 +25,11 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
+import org.eclipse.oomph.setup.AnnotationConstants;
+import org.eclipse.oomph.setup.Index;
+import org.eclipse.oomph.setup.Product;
+import org.eclipse.oomph.setup.ProductCatalog;
+import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
@@ -67,6 +73,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import org.eclipse.core.commands.Command;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -75,6 +82,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.dynamichelpers.IExtensionTracker;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.text.templates.SimpleTemplateVariableResolver;
@@ -85,6 +93,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.handlers.IHandlerService;
 
 import org.osgi.framework.BundleContext;
 
@@ -93,6 +103,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -274,6 +285,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
                       resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
                       mirror(resourceSet, monitor, 10);
                       SetupContext.setSelf(SetupContext.createSelf(resourceSet));
+                      handleNotificationURI(resourceSet);
 
                       return Status.OK_STATUS;
                     }
@@ -291,6 +303,117 @@ public final class SetupUIPlugin extends OomphUIPlugin
         }
       });
     }
+  }
+
+  private static void handleNotificationURI(ResourceSet resourceSet)
+  {
+    EObject selfProductVersion = resourceSet
+        .getEObject(URI.createURI("catalog:/self-product-catalog.setup#//@products[name='product']/@versions[name='version']"), false);
+    if (selfProductVersion instanceof ProductVersion)
+    {
+      ProductVersion productVersion = (ProductVersion)selfProductVersion;
+      Product product = productVersion.getProduct();
+      if (product != null)
+      {
+        ProductCatalog productCatalog = product.getProductCatalog();
+        if (productCatalog != null)
+        {
+          Index index = productCatalog.getIndex();
+          if (index != null)
+          {
+            String notificationURI = BaseUtil.getAnnotation(index, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_NOTIFICATION_URI);
+            if (notificationURI != null)
+            {
+              String productLabel = product.getLabel();
+              String productVersionLabel = productVersion.getLabel();
+              if (productLabel != null && productLabel.startsWith("Eclipse") && productVersionLabel != null)
+              {
+                handleNotificationURI(notificationURI, productLabel, productVersionLabel);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private static void handleNotificationURI(String notificationURI, String scope, String version)
+  {
+    if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.dontate", "true")))
+    {
+      try
+      {
+        Version versionValue = Version.create(version);
+        if (versionValue.compareTo(Version.create("4.16")) >= 0)
+        {
+          String resolvedURI = notificationURI.toString().replace("${scope.version}", URI.encodeQuery(StringUtil.safe(version), false)).replace("${scope}",
+              URI.encodeQuery(StringUtil.safe(scope), false).replace("+", "%2B"));
+          SetupPropertyTester.setDonating(resolvedURI);
+          if (rememberNotificationURI(notificationURI))
+          {
+            UIUtil.asyncExec(new Runnable()
+            {
+              public void run()
+              {
+                ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
+                IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
+                Command donateCommand = commandService.getCommand("org.eclipse.oomph.setup.donate");
+                if (donateCommand != null)
+                {
+                  if (donateCommand.isEnabled())
+                  {
+                    try
+                    {
+                      donateCommand.executeWithChecks(handlerService.createExecutionEvent(donateCommand, null));
+                    }
+                    catch (Exception ex)
+                    {
+                      INSTANCE.log(ex, IStatus.WARNING);
+                    }
+                  }
+                }
+              }
+            });
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        INSTANCE.log(ex, IStatus.WARNING);
+      }
+    }
+  }
+
+  private static boolean rememberNotificationURI(String notificationURI)
+  {
+    File file = new File(SetupContext.GLOBAL_SETUPS_LOCATION_URI.toFileString(), "brandingNotificationURIs.txt");
+    Set<String> brandingNotificationURIs = new LinkedHashSet<String>();
+    try
+    {
+      if (file.isFile())
+      {
+        brandingNotificationURIs.addAll(IOUtil.readLines(file, "UTF-8"));
+      }
+    }
+    catch (RuntimeException ex)
+    {
+      // Ignore.
+    }
+
+    boolean added = brandingNotificationURIs.add(notificationURI);
+    if (added)
+    {
+      try
+      {
+        IOUtil.writeLines(file, "UTF-8", new ArrayList<String>(brandingNotificationURIs));
+      }
+      catch (RuntimeException ex)
+      {
+        // Ignore.
+      }
+    }
+
+    return added;
   }
 
   private static void initJDTTemplateVariables()
@@ -664,6 +787,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     finally
     {
       SetupContext.setSelf(SetupContext.createSelf(resourceSet));
+      handleNotificationURI(resourceSet);
     }
 
     monitor.worked(1);
