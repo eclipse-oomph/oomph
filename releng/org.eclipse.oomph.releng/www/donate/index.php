@@ -35,6 +35,7 @@ $style = <<<EOSTYLE
 }
 
 .toggle {
+  display: none;
 }
 
 .toggle-label {
