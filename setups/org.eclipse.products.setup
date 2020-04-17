@@ -68,7 +68,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -80,13 +80,13 @@
           label="Eclipse IDE for Java Developers (2020-06)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -216,7 +216,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -228,13 +228,13 @@
           label="Eclipse IDE for Java Developers (2020-06)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -1279,7 +1279,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-enterprise-java-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-enterprise-java-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -1295,13 +1295,13 @@
           label="Eclipse IDE for Enterprise Java Developers (2020-06)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -1687,7 +1687,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-enterprise-java-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-enterprise-java-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -1703,13 +1703,13 @@
           label="Eclipse IDE for Enterprise Java Developers (2020-06)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -4108,7 +4108,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-cc-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-cc-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -4124,13 +4124,13 @@
           label="Eclipse IDE for C/C++ Developers (2020-06)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.arduino.feature.group"/>
         <requirement
@@ -4340,7 +4340,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-cc-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-cc-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -4356,13 +4356,13 @@
           label="Eclipse IDE for C/C++ Developers (2020-06)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.arduino.feature.group"/>
         <requirement
@@ -5733,7 +5733,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -5749,13 +5749,13 @@
           label="Eclipse IDE for JavaScript and Web Developers (2020-06)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -5885,7 +5885,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -5901,13 +5901,13 @@
           label="Eclipse IDE for JavaScript and Web Developers (2020-06)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -6792,7 +6792,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6804,13 +6804,13 @@
           label="Eclipse IDE for PHP Developers (2020-06)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -6936,7 +6936,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6948,13 +6948,13 @@
           label="Eclipse IDE for PHP Developers (2020-06)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -7857,7 +7857,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -7869,13 +7869,13 @@
           label="Eclipse IDE for Eclipse Committers (2020-06)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -8065,7 +8065,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -8077,13 +8077,13 @@
           label="Eclipse IDE for Eclipse Committers (2020-06)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -9369,7 +9369,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9381,13 +9381,13 @@
           label="Eclipse DSL Tools (2020-06)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.18.0,4.0.0)"/>
@@ -9477,7 +9477,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9489,13 +9489,13 @@
           label="Eclipse DSL Tools (2020-06)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.18.0,4.0.0)"/>
@@ -10306,7 +10306,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -10318,13 +10318,13 @@
           label="Eclipse Modeling Tools (2020-06)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -10343,10 +10343,6 @@
             name="org.eclipse.emf.ecoretools.design.feature.group"/>
         <requirement
             name="org.eclipse.emf.ecp.emfforms.sdk.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.parsley.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.parsley.sdk.source.feature.group"/>
         <requirement
             name="org.eclipse.emf.query.sdk.feature.group"/>
         <requirement
@@ -10506,7 +10502,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -10518,13 +10514,13 @@
           label="Eclipse Modeling Tools (2020-06)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -10543,10 +10539,6 @@
             name="org.eclipse.emf.ecoretools.design.feature.group"/>
         <requirement
             name="org.eclipse.emf.ecp.emfforms.sdk.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.parsley.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.parsley.sdk.source.feature.group"/>
         <requirement
             name="org.eclipse.emf.query.sdk.feature.group"/>
         <requirement
@@ -11869,7 +11861,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -11881,13 +11873,13 @@
           label="Eclipse for RCP and RAP Developers (2020-06)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.18.0,4.0.0)"/>
@@ -12009,7 +12001,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -12021,13 +12013,13 @@
           label="Eclipse for RCP and RAP Developers (2020-06)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.18.0,4.0.0)"/>
@@ -13194,7 +13186,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -13206,13 +13198,13 @@
           label="Eclipse for Testers (2020-06)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
@@ -13294,7 +13286,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -13306,13 +13298,13 @@
           label="Eclipse for Testers (2020-06)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
@@ -14057,7 +14049,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -14069,13 +14061,13 @@
           label="Eclipse for Scientific Computing (2020-06)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -14245,7 +14237,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -14257,13 +14249,13 @@
           label="Eclipse for Scientific Computing (2020-06)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -15480,7 +15472,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15492,13 +15484,13 @@
           label="Eclipse for Scout Developers (2020-06)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -15628,7 +15620,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15640,13 +15632,13 @@
           label="Eclipse for Scout Developers (2020-06)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -16663,7 +16655,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-rust-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -16679,13 +16671,13 @@
           label="Eclipse IDE for Rust Developers (2020-06)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
         <requirement
@@ -16787,7 +16779,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-03/r/eclipse-ide-rust-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -16803,13 +16795,13 @@
           label="Eclipse IDE for Rust Developers (2020-06)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
         <requirement
@@ -17397,6 +17389,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Platform - Latest</value>
         </detail>
@@ -17406,13 +17402,13 @@
           label="Eclipse Platform (2020-06)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/2020-06">
           <annotation
@@ -17461,6 +17457,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Platform - 2020-06</value>
         </detail>
@@ -17470,13 +17470,13 @@
           label="Eclipse Platform (2020-06)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.15.0,5.0.0)"/>
+            versionRange="[4.16.0,5.0.0)"/>
         <repository
             url="http://download.eclipse.org/releases/2020-06">
           <annotation
