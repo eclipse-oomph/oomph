@@ -1005,7 +1005,11 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
           initialValue = null;
           choiceLabels.clear();
           init(variable);
-          variable.setValue(variable.getChoices().get(0).getValue());
+          EList<VariableChoice> choices = variable.getChoices();
+          if (!choices.isEmpty())
+          {
+            variable.setValue(choices.get(0).getValue());
+          }
         }
 
         String value = field.getValue();

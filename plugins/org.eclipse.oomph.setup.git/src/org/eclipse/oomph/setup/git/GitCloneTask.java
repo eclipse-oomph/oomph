@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getLocation <em>Location</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getLocationQualifier <em>Location Qualifier</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getRemoteName <em>Remote Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getRemoteURI <em>Remote URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getPushURI <em>Push URI</em>}</li>
@@ -68,6 +69,29 @@ public interface GitCloneTask extends SetupTask
    * @generated
    */
   void setLocation(String value);
+
+  /**
+   * Returns the value of the '<em><b>Location Qualifier</b></em>' attribute.
+   * The default value is <code>" "</code>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Location Qualifier</em>' attribute.
+   * @see #setLocationQualifier(String)
+   * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask_LocationQualifier()
+   * @model default=" "
+   * @generated
+   */
+  String getLocationQualifier();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.git.GitCloneTask#getLocationQualifier <em>Location Qualifier</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Location Qualifier</em>' attribute.
+   * @see #getLocationQualifier()
+   * @generated
+   */
+  void setLocationQualifier(String value);
 
   /**
    * Returns the value of the '<em><b>Remote Name</b></em>' attribute.

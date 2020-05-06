@@ -11,6 +11,10 @@
       childCreationExtenders="true" ecorePackage="Git.ecore#/" publicationLocation="/setups/models/Git.ecore">
     <genClasses ecoreClass="Git.ecore#//GitCloneTask">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/location"/>
+      <genFeatures createChild="false" propertyDescription="The qualifier used in the computed location to help ensure that the Git repository's folder name is unique"
+          ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/locationQualifier">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert.conditional</propertyFilterFlags>
+      </genFeatures>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/remoteName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/remoteURI"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/pushURI"/>

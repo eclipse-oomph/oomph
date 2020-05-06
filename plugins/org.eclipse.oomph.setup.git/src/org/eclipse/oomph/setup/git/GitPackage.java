@@ -181,13 +181,22 @@ public interface GitPackage extends EPackage
   int GIT_CLONE_TASK__LOCATION = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Location Qualifier</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CLONE_TASK__LOCATION_QUALIFIER = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+
+  /**
    * The feature id for the '<em><b>Remote Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int GIT_CLONE_TASK__REMOTE_NAME = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+  int GIT_CLONE_TASK__REMOTE_NAME = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Remote URI</b></em>' attribute.
@@ -196,7 +205,7 @@ public interface GitPackage extends EPackage
    * @generated
    * @ordered
    */
-  int GIT_CLONE_TASK__REMOTE_URI = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+  int GIT_CLONE_TASK__REMOTE_URI = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Push URI</b></em>' attribute.
@@ -205,7 +214,7 @@ public interface GitPackage extends EPackage
    * @generated
    * @ordered
    */
-  int GIT_CLONE_TASK__PUSH_URI = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
+  int GIT_CLONE_TASK__PUSH_URI = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Checkout Branch</b></em>' attribute.
@@ -214,7 +223,7 @@ public interface GitPackage extends EPackage
    * @generated
    * @ordered
    */
-  int GIT_CLONE_TASK__CHECKOUT_BRANCH = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
+  int GIT_CLONE_TASK__CHECKOUT_BRANCH = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Recursive</b></em>' attribute.
@@ -223,7 +232,7 @@ public interface GitPackage extends EPackage
    * @generated
    * @ordered
    */
-  int GIT_CLONE_TASK__RECURSIVE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
+  int GIT_CLONE_TASK__RECURSIVE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Config Sections</b></em>' containment reference list.
@@ -232,7 +241,7 @@ public interface GitPackage extends EPackage
    * @generated
    * @ordered
    */
-  int GIT_CLONE_TASK__CONFIG_SECTIONS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
+  int GIT_CLONE_TASK__CONFIG_SECTIONS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 7;
 
   /**
    * The feature id for the '<em><b>Restrict To Checkout Branch</b></em>' attribute.
@@ -241,7 +250,7 @@ public interface GitPackage extends EPackage
    * @generated
    * @ordered
    */
-  int GIT_CLONE_TASK__RESTRICT_TO_CHECKOUT_BRANCH = SetupPackage.SETUP_TASK_FEATURE_COUNT + 7;
+  int GIT_CLONE_TASK__RESTRICT_TO_CHECKOUT_BRANCH = SetupPackage.SETUP_TASK_FEATURE_COUNT + 8;
 
   /**
    * The number of structural features of the '<em>Clone Task</em>' class.
@@ -250,7 +259,7 @@ public interface GitPackage extends EPackage
    * @generated
    * @ordered
    */
-  int GIT_CLONE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 8;
+  int GIT_CLONE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 9;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.git.impl.ConfigSubsectionImpl <em>Config Subsection</em>}' class.
@@ -392,6 +401,17 @@ public interface GitPackage extends EPackage
    * @generated
    */
   EAttribute getGitCloneTask_Location();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.git.GitCloneTask#getLocationQualifier <em>Location Qualifier</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Location Qualifier</em>'.
+   * @see org.eclipse.oomph.setup.git.GitCloneTask#getLocationQualifier()
+   * @see #getGitCloneTask()
+   * @generated
+   */
+  EAttribute getGitCloneTask_LocationQualifier();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.git.GitCloneTask#getRemoteName <em>Remote Name</em>}'.
@@ -596,6 +616,14 @@ public interface GitPackage extends EPackage
      * @generated
      */
     EAttribute GIT_CLONE_TASK__LOCATION = eINSTANCE.getGitCloneTask_Location();
+
+    /**
+     * The meta object literal for the '<em><b>Location Qualifier</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute GIT_CLONE_TASK__LOCATION_QUALIFIER = eINSTANCE.getGitCloneTask_LocationQualifier();
 
     /**
      * The meta object literal for the '<em><b>Remote Name</b></em>' attribute feature.

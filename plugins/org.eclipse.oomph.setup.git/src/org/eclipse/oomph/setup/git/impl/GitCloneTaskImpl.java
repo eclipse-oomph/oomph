@@ -88,6 +88,7 @@ import java.util.Set;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl#getLocation <em>Location</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl#getLocationQualifier <em>Location Qualifier</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl#getRemoteName <em>Remote Name</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl#getRemoteURI <em>Remote URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl#getPushURI <em>Push URI</em>}</li>
@@ -120,6 +121,26 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * @ordered
    */
   protected String location = LOCATION_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getLocationQualifier() <em>Location Qualifier</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLocationQualifier()
+   * @generated
+   * @ordered
+   */
+  protected static final String LOCATION_QUALIFIER_EDEFAULT = " ";
+
+  /**
+   * The cached value of the '{@link #getLocationQualifier() <em>Location Qualifier</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLocationQualifier()
+   * @generated
+   * @ordered
+   */
+  protected String locationQualifier = LOCATION_QUALIFIER_EDEFAULT;
 
   /**
    * The default value of the '{@link #getRemoteName() <em>Remote Name</em>}' attribute.
@@ -316,6 +337,31 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getLocationQualifier()
+  {
+    return locationQualifier;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setLocationQualifier(String newLocationQualifier)
+  {
+    String oldLocationQualifier = locationQualifier;
+    locationQualifier = newLocationQualifier;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, GitPackage.GIT_CLONE_TASK__LOCATION_QUALIFIER, oldLocationQualifier, locationQualifier));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getRemoteName()
   {
     return remoteName;
@@ -504,6 +550,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     {
       case GitPackage.GIT_CLONE_TASK__LOCATION:
         return getLocation();
+      case GitPackage.GIT_CLONE_TASK__LOCATION_QUALIFIER:
+        return getLocationQualifier();
       case GitPackage.GIT_CLONE_TASK__REMOTE_NAME:
         return getRemoteName();
       case GitPackage.GIT_CLONE_TASK__REMOTE_URI:
@@ -535,6 +583,9 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     {
       case GitPackage.GIT_CLONE_TASK__LOCATION:
         setLocation((String)newValue);
+        return;
+      case GitPackage.GIT_CLONE_TASK__LOCATION_QUALIFIER:
+        setLocationQualifier((String)newValue);
         return;
       case GitPackage.GIT_CLONE_TASK__REMOTE_NAME:
         setRemoteName((String)newValue);
@@ -575,6 +626,9 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       case GitPackage.GIT_CLONE_TASK__LOCATION:
         setLocation(LOCATION_EDEFAULT);
         return;
+      case GitPackage.GIT_CLONE_TASK__LOCATION_QUALIFIER:
+        setLocationQualifier(LOCATION_QUALIFIER_EDEFAULT);
+        return;
       case GitPackage.GIT_CLONE_TASK__REMOTE_NAME:
         setRemoteName(REMOTE_NAME_EDEFAULT);
         return;
@@ -613,6 +667,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     {
       case GitPackage.GIT_CLONE_TASK__LOCATION:
         return LOCATION_EDEFAULT == null ? location != null : !LOCATION_EDEFAULT.equals(location);
+      case GitPackage.GIT_CLONE_TASK__LOCATION_QUALIFIER:
+        return LOCATION_QUALIFIER_EDEFAULT == null ? locationQualifier != null : !LOCATION_QUALIFIER_EDEFAULT.equals(locationQualifier);
       case GitPackage.GIT_CLONE_TASK__REMOTE_NAME:
         return REMOTE_NAME_EDEFAULT == null ? remoteName != null : !REMOTE_NAME_EDEFAULT.equals(remoteName);
       case GitPackage.GIT_CLONE_TASK__REMOTE_URI:
@@ -647,6 +703,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     StringBuilder result = new StringBuilder(super.toString());
     result.append(" (location: ");
     result.append(location);
+    result.append(", locationQualifier: ");
+    result.append(locationQualifier);
     result.append(", remoteName: ");
     result.append(remoteName);
     result.append(", remoteURI: ");
@@ -679,9 +737,10 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   public void overrideFor(SetupTask overriddenSetupTask)
   {
     super.overrideFor(overriddenSetupTask);
+
     // Just ignore the overrides for the same location as long as the checkout branch is identical
     GitCloneTask gitCloneTask = (GitCloneTask)overriddenSetupTask;
-    if (!ObjectUtil.equals(gitCloneTask.getCheckoutBranch(), getCheckoutBranch()))
+    if (!ObjectUtil.equals(gitCloneTask.getRemoteURI(), getRemoteURI()) || !ObjectUtil.equals(gitCloneTask.getCheckoutBranch(), getCheckoutBranch()))
     {
       Annotation errorAnnotation = BaseFactory.eINSTANCE.createErrorAnnotation("Multiple different Git clones cannot be at the same location");
       getAnnotations().add(errorAnnotation);

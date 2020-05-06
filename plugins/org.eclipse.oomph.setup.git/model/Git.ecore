@@ -29,23 +29,23 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="">
       <eAnnotations source="http://www.eclipse.org/oomph/setup/Variable">
         <eAnnotations source="Choice">
-          <details key="value" value="${installation.location/git/}${@id.remoteURI|gitRepository}"/>
+          <details key="value" value="${installation.location/git/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository}"/>
           <details key="label" value="Located in a folder named 'git/&lt;repo>' within the installation folder"/>
         </eAnnotations>
         <eAnnotations source="Choice">
-          <details key="value" value="${workspace.location/.git/}${@id.remoteURI|gitRepository}"/>
+          <details key="value" value="${workspace.location/.git/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository}"/>
           <details key="label" value="Located in a folder named '.git/&lt;repo>' within the workspace folder"/>
         </eAnnotations>
         <eAnnotations source="Choice">
-          <details key="value" value="${git.container.root/}${@id.remoteURI|gitRepository}"/>
+          <details key="value" value="${git.container.root/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository}"/>
           <details key="label" value="Located in a folder named '&lt;repo>' within the root Git-container folder "/>
         </eAnnotations>
         <eAnnotations source="Choice">
-          <details key="value" value="${git.container.root/}${@id.remoteURI|gitRepository}-${@id.checkoutBranch}"/>
+          <details key="value" value="${git.container.root/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository}-${@id.checkoutBranch}"/>
           <details key="label" value="Located in a folder named '&lt;repo>-&lt;branch>' within the root Git-container folder "/>
         </eAnnotations>
         <eAnnotations source="Choice">
-          <details key="value" value="${git.container.root/}${@id.remoteURI|gitRepository/}${@id.checkoutBranch}"/>
+          <details key="value" value="${git.container.root/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository/}${@id.checkoutBranch}"/>
           <details key="label" value="Located in a folder named '&lt;repo>/&lt;branch>' within the root Git-container folder "/>
         </eAnnotations>
         <eAnnotations source="Choice">
@@ -69,6 +69,8 @@
         <details key="storageURI" value="scope://"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="locationQualifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=" "/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteName" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="origin"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteURI" lowerBound="1"

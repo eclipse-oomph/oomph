@@ -15,10 +15,13 @@ import org.eclipse.oomph.setup.git.GitFactory;
 import org.eclipse.oomph.setup.git.GitPackage;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -60,6 +63,7 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
       super.getPropertyDescriptors(object);
 
       addLocationPropertyDescriptor(object);
+      addLocationQualifierPropertyDescriptor(object);
       addRemoteNamePropertyDescriptor(object);
       addRemoteURIPropertyDescriptor(object);
       addPushURIPropertyDescriptor(object);
@@ -82,6 +86,20 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
         getString("_UI_GitCloneTask_location_feature"),
         getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_location_feature", "_UI_GitCloneTask_type"),
         GitPackage.Literals.GIT_CLONE_TASK__LOCATION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Location Qualifier feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addLocationQualifierPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_GitCloneTask_locationQualifier_feature"), getString("_UI_GitCloneTask_locationQualifier_description"),
+        GitPackage.Literals.GIT_CLONE_TASK__LOCATION_QUALIFIER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
+        new String[] { "org.eclipse.ui.views.properties.expert.conditional" }));
   }
 
   /**
@@ -258,6 +276,7 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
     switch (notification.getFeatureID(GitCloneTask.class))
     {
       case GitPackage.GIT_CLONE_TASK__LOCATION:
+      case GitPackage.GIT_CLONE_TASK__LOCATION_QUALIFIER:
       case GitPackage.GIT_CLONE_TASK__REMOTE_NAME:
       case GitPackage.GIT_CLONE_TASK__REMOTE_URI:
       case GitPackage.GIT_CLONE_TASK__PUSH_URI:
@@ -286,6 +305,19 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
     newChildDescriptors.add(createChildParameter(GitPackage.Literals.GIT_CLONE_TASK__CONFIG_SECTIONS, GitFactory.eINSTANCE.createConfigSection()));
+  }
+
+  @Override
+  protected Command createSetCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Object value)
+  {
+    if (feature == GitPackage.Literals.GIT_CLONE_TASK__LOCATION_QUALIFIER && ("".equals(value) || value == null))
+    {
+      // Ensure that the property is never set to null or the empty string.
+      // That could cause prompting for the induced variable's value.
+      return super.createSetCommand(domain, owner, feature, " ");
+    }
+
+    return super.createSetCommand(domain, owner, feature, value);
   }
 
   /**
