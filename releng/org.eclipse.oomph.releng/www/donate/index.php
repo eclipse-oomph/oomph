@@ -93,11 +93,11 @@ EOSTYLE;
 $App->AddExtraHtmlHeader($style);
 
 # Begin: page-specific settings.  Change these.
-$pageTitle      = "Dontate";
+$pageTitle      = "Donate";
 $pageKeywords   = "Eclipse IDE";
 $pageAuthor     = "Ed Merks";
 
-$eclipse_installer = '<span style="color: #2c2255; font-family: Arial, Helvetica, sans-serif;">eclipse</span> <span class="orange">installer</span>';
+$eclipse_installer = '<span style="font-family: Arial, Helvetica, sans-serif;"><span style="color: #2c2255;">eclipse</span> <span class="orange">installer</span></span>';
 $toggle_expand = '<span style="font-size: 125%;" class="orange toggle-state-on">&#x25E2;</span>';
 $toggle_collapse = '<span style="font-size: 125%;" class="orange toggle-state-off">&#x25B7;</span>';
 $read_more = '<span style="font-size: 50%;" class="orange toggle-state-off">&nbsp;&nbsp;read more...</span>';
@@ -140,61 +140,61 @@ $Nav->addNavSeparator("Invest Your Time", "");
 $Nav->addCustomNav("Get an Account", "https://accounts.eclipse.org/user/register", "_blank", 1);
 $Nav->addCustomNav("Sign the Contributor Agreement", "https://accounts.eclipse.org/user/eca", "_blank", 1);
 $Nav->addCustomNav("Configure Your Gerrit Account", "https://wiki.eclipse.org/Gerrit#User_Account", "_blank", 1);
-$Nav->addCustomNav("Learn Bugzilla", "http://wiki.eclipse.org/Bug_Reporting_FAQ", "_blank", 1);
+$Nav->addCustomNav("Learn Bugzilla", "https://wiki.eclipse.org/Bug_Reporting_FAQ", "_blank", 1);
 $Nav->addCustomNav("Contribute to the Platform", "https://www.eclipse.org/setups/installer/?url=https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/interim/PlatformSDKConfiguration.setup&show=true", "_blank", 1);
 
-$branding_image = "http://www.eclipse.org/downloads/images/committers.png";
+$branding_image = "https://www.eclipse.org/downloads/images/committers.png";
 if ($scope == "Eclipse IDE for C/C++ Developers")
 {
-  $branding_image = "http://www.eclipse.org/downloads/images/cdt.png";
+  $branding_image = "https://www.eclipse.org/downloads/images/cdt.png";
 } 
 else if ($scope == "Eclipse IDE for Java Developers")
 {
-  $branding_image = "http://www.eclipse.org/downloads/images/java.png";
+  $branding_image = "https://www.eclipse.org/downloads/images/java.png";
 }
 else if ($scope == "Eclipse IDE for Enterprise Java Developers")
 {
-  $branding_image = "http://www.eclipse.org/downloads/images/javaee.png";
+  $branding_image = "https://www.eclipse.org/downloads/images/javaee.png";
 }
 else if ($scope == "Eclipse IDE for Web and JavaScript Developers")
 {
-  $branding_image = "http://www.eclipse.org/downloads/images/javascript.png";
+  $branding_image = "https://www.eclipse.org/downloads/images/javascript.png";
 }
 else if ($scope == "Eclipse IDE for PHP Developers")
 {
-  $branding_image = "http://www.eclipse.org/downloads/images/php.png";
+  $branding_image = "https://www.eclipse.org/downloads/images/php.png";
 }
 else if ($scope == "Eclipse IDE for Java and DSL Developers")
 {
-  $branding_image = "http://www.eclipse.org/downloads/images/dsl-package_42.png";
+  $branding_image = "https://www.eclipse.org/downloads/images/dsl-package_42.png";
 }
 else if ($scope == "Eclipse Modeling Tools")
 {
-  $branding_image = "http://www.eclipse.org/downloads/images/modeling.png";
+  $branding_image = "https://www.eclipse.org/downloads/images/modeling.png";
 }
 else if ($scope == "Eclipse IDE for RCP and RAP Developers")
 {
-  $branding_image = "http://www.eclipse.org/downloads/images/rcp.png";
+  $branding_image = "https://www.eclipse.org/downloads/images/rcp.png";
 }
 else if ($scope == "Eclipse IDE for Testers")
 {
-  $branding_image = "http://www.eclipse.org/downloads/images/testing.png";
+  $branding_image = "https://www.eclipse.org/downloads/images/testing.png";
 }
 else if ($scope == "Eclipse IDE for Testers")
 {
-  $branding_image = "http://www.eclipse.org/downloads/images/testing.png";
+  $branding_image = "https://www.eclipse.org/downloads/images/testing.png";
 }
 else if ($scope == "Eclipse IDE for Scientific Computing")
 {
-  $branding_image = "http://www.eclipse.org/downloads/images/parallel.png";
+  $branding_image = "https://www.eclipse.org/downloads/images/parallel.png";
 }
 else if ($scope == "Eclipse IDE for Scout Developers")
 {
-  $branding_image = "http://www.eclipse.org/downloads/images/scout.jpg";
+  $branding_image = "https://www.eclipse.org/downloads/images/scout.jpg";
 }
 else if ($scope == "Eclipse IDE for Rust Developers")
 {
-  $branding_image = "http://www.eclipse.org/downloads/images/corrosion.png";
+  $branding_image = "https://www.eclipse.org/downloads/images/corrosion.png";
 }
 
 $animation_style = "animation-name: wiggle; animation-duration: 3s; animation-iteration-count: infinite; animation-delay: 2s; animation-direction: alternate;";
@@ -285,8 +285,8 @@ $html = <<<EOHTML
         </li>
         <li>
         If you're not familiar with Bugzilla,
-        learn <a href="http://wiki.eclipse.org/Bug_Reporting_FAQ" target="_blank">how to use Bugzilla</a>
-        and learn how Buzilla fits into the <a href="http://wiki.eclipse.org/Development_Resources/HOWTO/Bugzilla_Use" target="_blank">development process</a>.
+        learn <a href="https://wiki.eclipse.org/Bug_Reporting_FAQ" target="_blank">how to use Bugzilla</a>
+        and learn how Buzilla fits into the <a href="https://wiki.eclipse.org/Development_Resources/HOWTO/Bugzilla_Use" target="_blank">development process</a>.
         </li>
         <li>
         If you don't have a particular problem or enhancment in mind,
