@@ -24,6 +24,7 @@ import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
@@ -995,7 +996,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     {
       if (variables.add(variable))
       {
-        if (variables.size() == 1 && !isDirty() && !variable.getChoices().isEmpty() && !choiceLabels.equals(getChoiceLabels(variable)))
+        if (variables.size() == 1 && !isDirty() && variable.getType() != VariableType.JRE && !variable.getChoices().isEmpty()
+            && !choiceLabels.equals(getChoiceLabels(variable)))
         {
           // This is special case handling for dealing with the list of choices changing dynamically.
           // That generally never happens, but it specifically designed to happen for eclipse.git.authentication.style.
