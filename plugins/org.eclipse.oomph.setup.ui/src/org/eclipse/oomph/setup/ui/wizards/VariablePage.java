@@ -996,8 +996,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     {
       if (variables.add(variable))
       {
-        if (variables.size() == 1 && !isDirty() && variable.getType() != VariableType.JRE && !variable.getChoices().isEmpty()
-            && !choiceLabels.equals(getChoiceLabels(variable)))
+        if (variables.size() == 1 && !isDirty() && !variable.getChoices().isEmpty() && !choiceLabels.equals(getChoiceLabels(variable)))
         {
           // This is special case handling for dealing with the list of choices changing dynamically.
           // That generally never happens, but it specifically designed to happen for eclipse.git.authentication.style.
@@ -1007,7 +1006,10 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
           initialValue = null;
           choiceLabels.clear();
           init(variable);
-          variable.setValue(variable.getChoices().get(0).getValue());
+          if (variable.getType() != VariableType.JRE)
+          {
+            variable.setValue(variable.getChoices().get(0).getValue());
+          }
         }
 
         String value = field.getValue();
