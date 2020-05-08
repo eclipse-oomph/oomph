@@ -68,7 +68,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -94,8 +94,6 @@
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
-            name="org.eclipse.egit.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
             name="org.eclipse.jdt.feature.group"/>
@@ -104,27 +102,15 @@
         <requirement
             name="org.eclipse.m2e.feature.feature.group"/>
         <requirement
+            name="org.eclipse.m2e.lemminx.feature.feature.group"/>
+        <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
-        <requirement
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
-            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+            name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
@@ -216,7 +202,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -242,8 +228,6 @@
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
-            name="org.eclipse.egit.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
             name="org.eclipse.jdt.feature.group"/>
@@ -252,27 +236,15 @@
         <requirement
             name="org.eclipse.m2e.feature.feature.group"/>
         <requirement
+            name="org.eclipse.m2e.lemminx.feature.feature.group"/>
+        <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
-        <requirement
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
-            name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+            name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
@@ -1256,7 +1228,7 @@
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.21"/>
       </setupTask>
     </version>
-    <description>The essential tools for any Java developer, including a Java IDE, a Git client, XML Editor, Mylyn, Maven and Gradle integration</description>
+    <description>The essential tools for any Java developer, including a Java IDE, a Git client, XML Editor, Maven and Gradle integration</description>
   </product>
   <product name="epp.package.jee"
       label="Eclipse IDE for Enterprise Java Developers">
@@ -1279,7 +1251,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-enterprise-java-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-enterprise-java-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -1430,6 +1402,8 @@
             name="org.eclipse.jst.ws.jaxws.feature.feature.group"/>
         <requirement
             name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.lemminx.feature.feature.group"/>
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
@@ -1687,7 +1661,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-enterprise-java-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-enterprise-java-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -1838,6 +1812,8 @@
             name="org.eclipse.jst.ws.jaxws.feature.feature.group"/>
         <requirement
             name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.lemminx.feature.feature.group"/>
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
@@ -4108,7 +4084,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-cc-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-cc-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -4156,8 +4132,6 @@
         <requirement
             name="org.eclipse.cdt.meson.feature.group"/>
         <requirement
-            name="org.eclipse.cdt.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.cdt.qt.feature.group"/>
         <requirement
             name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
@@ -4184,17 +4158,7 @@
         <requirement
             name="org.eclipse.linuxtools.valgrind.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.team_feature.feature.group"/>
-        <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.connector.cdtserial.feature.feature.group"/>
         <requirement
@@ -4340,7 +4304,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-cc-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-cc-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -4388,8 +4352,6 @@
         <requirement
             name="org.eclipse.cdt.meson.feature.group"/>
         <requirement
-            name="org.eclipse.cdt.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.cdt.qt.feature.group"/>
         <requirement
             name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
@@ -4416,17 +4378,7 @@
         <requirement
             name="org.eclipse.linuxtools.valgrind.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.team_feature.feature.group"/>
-        <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.connector.cdtserial.feature.feature.group"/>
         <requirement
@@ -5710,7 +5662,7 @@
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.21"/>
       </setupTask>
     </version>
-    <description>An IDE for C/C++ developers with Mylyn integration.</description>
+    <description>An IDE for C/C++ developers.</description>
   </product>
   <product name="epp.package.javascript"
       label="Eclipse IDE for Web and JavaScript Developers">
@@ -5733,7 +5685,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -5761,8 +5713,6 @@
         <requirement
             name="org.eclipse.egit.gitflow.feature.feature.group"/>
         <requirement
-            name="org.eclipse.egit.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
             name="org.eclipse.epp.package.common.feature.feature.group"/>
@@ -5771,15 +5721,7 @@
         <requirement
             name="org.eclipse.help.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.rse.feature.group"/>
         <requirement
@@ -5885,7 +5827,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-web-and-javascript-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -5913,8 +5855,6 @@
         <requirement
             name="org.eclipse.egit.gitflow.feature.feature.group"/>
         <requirement
-            name="org.eclipse.egit.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
             name="org.eclipse.epp.package.common.feature.feature.group"/>
@@ -5923,15 +5863,7 @@
         <requirement
             name="org.eclipse.help.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.rse.feature.group"/>
         <requirement
@@ -6769,7 +6701,7 @@
         </repository>
       </setupTask>
     </version>
-    <description>The essential tools for any JavaScript developer, including JavaScript, TypeScript, HTML, CSS, XML, Yaml, Markdown... languages support; Kubernetes, Angular and React frameworks support;  Node.js debugger; Git client; Mylyn task management; integrated terminal and remote filesystem explorer; Web and application server management.</description>
+    <description>The essential tools for any JavaScript developer, including JavaScript, TypeScript, HTML, CSS, XML, Yaml, Markdown... languages support; Kubernetes, Angular and React frameworks support;  Node.js debugger; Git client; integrated terminal and remote filesystem explorer; Web and application server management.</description>
   </product>
   <product name="epp.package.php"
       label="Eclipse IDE for PHP Developers">
@@ -6792,7 +6724,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6844,7 +6776,7 @@
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
-            name="org.eclipse.wst.jsdt.feature.feature.group"/>
+            name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
@@ -6936,7 +6868,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6988,7 +6920,7 @@
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
-            name="org.eclipse.wst.jsdt.feature.feature.group"/>
+            name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
@@ -7857,7 +7789,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -7898,6 +7830,8 @@
             name="org.eclipse.jgit.http.apache.feature.group"/>
         <requirement
             name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.lemminx.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
         <requirement
@@ -8065,7 +7999,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -8106,6 +8040,8 @@
             name="org.eclipse.jgit.http.apache.feature.group"/>
         <requirement
             name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.lemminx.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
         <requirement
@@ -9369,7 +9305,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9477,7 +9413,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -10306,7 +10242,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -10360,19 +10296,7 @@
         <requirement
             name="org.eclipse.jdt.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.pde_feature.feature.group"/>
-        <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.ocl.all.sdk.feature.group"/>
         <requirement
@@ -10502,7 +10426,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -10556,19 +10480,7 @@
         <requirement
             name="org.eclipse.jdt.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.pde_feature.feature.group"/>
-        <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.ocl.all.sdk.feature.group"/>
         <requirement
@@ -11861,7 +11773,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -11900,6 +11812,8 @@
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
             name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.lemminx.feature.feature.group"/>
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
@@ -12001,7 +11915,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -12040,6 +11954,8 @@
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
             name="org.eclipse.m2e.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.m2e.lemminx.feature.feature.group"/>
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
@@ -13186,7 +13102,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -13210,15 +13126,7 @@
         <requirement
             name="org.eclipse.jubula.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
@@ -13286,7 +13194,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -13310,15 +13218,7 @@
         <requirement
             name="org.eclipse.jubula.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
@@ -14026,7 +13926,7 @@
             url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.21"/>
       </setupTask>
     </version>
-    <description>This package contains Eclipse features that support the software development quality assurance process, such as Jubula and Mylyn.</description>
+    <description>This package contains Eclipse features that support the software development quality assurance process, such as Jubula.</description>
   </product>
   <product name="epp.package.parallel"
       label="Eclipse IDE for Scientific Computing">
@@ -14049,7 +13949,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -14087,8 +13987,6 @@
         <requirement
             name="org.eclipse.cdt.launch.remote.feature.group"/>
         <requirement
-            name="org.eclipse.cdt.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
@@ -14097,17 +13995,7 @@
         <requirement
             name="org.eclipse.jgit.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.team_feature.feature.group"/>
-        <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.ptp.debug.sdm.feature.group"/>
         <requirement
@@ -14237,7 +14125,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -14275,8 +14163,6 @@
         <requirement
             name="org.eclipse.cdt.launch.remote.feature.group"/>
         <requirement
-            name="org.eclipse.cdt.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
@@ -14285,17 +14171,7 @@
         <requirement
             name="org.eclipse.jgit.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.team_feature.feature.group"/>
-        <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.ptp.debug.sdm.feature.group"/>
         <requirement
@@ -15472,7 +15348,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15494,8 +15370,6 @@
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
-            name="org.eclipse.egit.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
             name="org.eclipse.help.source.feature.group"/>
@@ -15510,19 +15384,9 @@
         <requirement
             name="org.eclipse.m2e.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.m2e.lemminx.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.scout.sdk-feature.feature.group"/>
         <requirement
@@ -15620,7 +15484,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15642,8 +15506,6 @@
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
-            name="org.eclipse.egit.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
             name="org.eclipse.help.source.feature.group"/>
@@ -15658,19 +15520,9 @@
         <requirement
             name="org.eclipse.m2e.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.m2e.lemminx.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.scout.sdk-feature.feature.group"/>
         <requirement
@@ -16655,7 +16507,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-rust-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -16685,19 +16537,9 @@
         <requirement
             name="org.eclipse.egit.gitflow.feature.feature.group"/>
         <requirement
-            name="org.eclipse.egit.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <repository
@@ -16779,7 +16621,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m1/eclipse-ide-rust-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/m2/eclipse-ide-rust-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -16809,19 +16651,9 @@
         <requirement
             name="org.eclipse.egit.gitflow.feature.feature.group"/>
         <requirement
-            name="org.eclipse.egit.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.context_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
-        <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn_feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <repository
@@ -17371,7 +17203,7 @@
         </repository>
       </setupTask>
     </version>
-    <description>The essential tools for any Rust developer, including Rust language support, Git client, command-line integration, Mylyn and editors.</description>
+    <description>The essential tools for any Rust developer, including Rust language support, Git client, command-line integration, and editors.</description>
   </product>
   <product name="org.eclipse.platform.ide"
       label="Eclipse Platform">
