@@ -144,10 +144,12 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
       }
 
       Feature feature = features[0];
-      createAdviceFileAdvice(feature, info);
 
       String version = feature.getVersion();
       feature.setVersion(VersionGenerator.replaceQualifier(version, qualifierReplacement));
+
+      createAdviceFileAdvice(feature, info);
+
       feature.setEnvironment("", "", "", "");
 
       List<IInstallableUnit> childIUs = Collections.emptyList();
