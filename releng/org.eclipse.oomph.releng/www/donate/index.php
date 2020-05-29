@@ -102,13 +102,13 @@ $toggle_expand = '<span style="font-size: 125%;" class="orange toggle-state-on">
 $toggle_collapse = '<span style="font-size: 125%;" class="orange toggle-state-off">&#x25B7;</span>';
 $read_more = '<span style="font-size: 50%;" class="orange toggle-state-off">&nbsp;&nbsp;read more...</span>';
 
-$scope = $_GET["scope"];
+$scope = htmlentities($_GET["scope"]);
 if (!$scope)
 {
   $scope = "Eclipse IDE";
 }
 
-$version = $_GET["version"];
+$version = htmlentities($_GET["version"]);
 $version_label = "";
 $version_parameter = "";
 if (!$version)
@@ -122,7 +122,7 @@ else
 }
 
 $donate_parameter = "?scope=" . urlencode($scope);
-$campaign = $_GET["campaign"];
+$campaign = htmlentities($_GET["campaign"]);
 if ($campaign)
 {
   $donate_parameter .= htmlentities("&campaign=") . urlencode($campaign);
