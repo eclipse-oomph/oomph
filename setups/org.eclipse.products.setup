@@ -4059,7 +4059,7 @@
       Tools for developers creating Java Enterprise and Web applications, including a Java IDE, tools for Web Services, JPA and Data Tools, JSF, Mylyn, Maven and Gradle, Git, and more.&lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?classification=WebTools&quot;>here&lt;/a> to file a bug against Eclipse Web Tools Platform.&lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br/>
-      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=M2E-WTP&quot;>here&lt;/a> to file a bug against Maven integration for web projects.&lt;br/>
+      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=M3E-WTP&quot;>here&lt;/a> to file a bug against Maven integration for web projects.&lt;br/>
       Click &lt;a href=&quot;https://github.com/eclipse/wildwebdeveloper/issues/new&quot;>here&lt;/a> to report an issue against Eclipse Wild Web Developer (incubating).&lt;br/>
     </description>
   </product>
@@ -7770,7 +7770,13 @@
         </repository>
       </setupTask>
     </version>
-    <description>The essential tools for any PHP developer, including PHP language support, Git client, Mylyn and editors for JavaScript, HTML, CSS and XML.</description>
+    <description>
+      The essential tools for any PHP developer, including PHP language support, Git client, Mylyn and editors for JavaScript, TypeScript, HTML, CSS and XML.&lt;br />
+      Click &lt;a href=&quot;https://github.com/eclipse/pdt/issues/new/choose&quot;>here&lt;/a> to report an issue against Eclipse PHP Development Tools.&lt;br />
+      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?classification=WebTools&quot;>here&lt;/a> to file a bug against Eclipse Web Tools Platform.&lt;br />
+      Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br />
+      Click &lt;a href=&quot;https://github.com/eclipse/wildwebdeveloper/issues/new&quot;>here&lt;/a> to report an issue against Eclipse Wild Web Developer (incubating).
+    </description>
   </product>
   <product name="epp.package.committers"
       label="Eclipse IDE for Eclipse Committers">
@@ -10280,6 +10286,10 @@
         <requirement
             name="org.eclipse.emf.ecp.emfforms.sdk.feature.feature.group"/>
         <requirement
+            name="org.eclipse.emf.parsley.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.parsley.sdk.source.feature.group"/>
+        <requirement
             name="org.eclipse.emf.query.sdk.feature.group"/>
         <requirement
             name="org.eclipse.emf.sdk.feature.group"/>
@@ -10463,6 +10473,10 @@
             name="org.eclipse.emf.ecoretools.design.feature.group"/>
         <requirement
             name="org.eclipse.emf.ecp.emfforms.sdk.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.parsley.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.parsley.sdk.source.feature.group"/>
         <requirement
             name="org.eclipse.emf.query.sdk.feature.group"/>
         <requirement

@@ -4,6 +4,13 @@
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
     name="Eclipse">
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+    <detail
+        key="notificationURI">
+      <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;version=${scope.version}&amp;campaign=2020-06</value>
+    </detail>
+  </annotation>
   <discoverablePackage
       href="models/Git.ecore#/"/>
   <discoverablePackage
