@@ -42,12 +42,12 @@ public class DonateHandler extends AbstractHandler
     {
       String donating = SetupPropertyTester.getDonating();
       int style = IWorkbenchBrowserSupport.AS_EDITOR;
-      if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.dontate.navigation", "false")))
+      if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.donate.navigation", "false")))
       {
         style |= IWorkbenchBrowserSupport.NAVIGATION_BAR;
       }
 
-      if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.dontate.location", "false")))
+      if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.donate.location", "false")))
       {
         style |= IWorkbenchBrowserSupport.LOCATION_BAR;
       }
