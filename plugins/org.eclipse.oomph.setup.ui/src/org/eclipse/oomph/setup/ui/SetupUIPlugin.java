@@ -339,7 +339,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static void handleNotificationURI(String notificationURI, String scope, String version)
   {
-    if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.dontate", "true")))
+    if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.donate", "true")))
     {
       try
       {
