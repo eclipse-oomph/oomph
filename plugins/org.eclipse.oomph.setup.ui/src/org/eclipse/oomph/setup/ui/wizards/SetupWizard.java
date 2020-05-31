@@ -43,6 +43,7 @@ import org.eclipse.oomph.setup.ui.wizards.SetupWizardPage.WizardFinisher;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.util.EList;
@@ -1677,6 +1678,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       if (openInBackground)
       {
         SetupWizardDialog dialog = new SetupWizardDialog(parentShell, this);
+        if ("true".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_SHOW_INITIAL_PROGRESS)))
+        {
+          dialog.setBlockOnOpen(false);
+          return dialog.open();
+        }
+
         return dialog.openInBackground();
       }
 

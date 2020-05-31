@@ -696,7 +696,10 @@ public class ProgressPage extends SetupWizardPage
                   shell.setData(PROGRESS_STATUS, null);
                   if (trigger != Trigger.BOOTSTRAP)
                   {
-                    if (trigger == Trigger.STARTUP || !SetupPropertyTester.isShowProgressInWizard())
+                    if (trigger == Trigger.STARTUP
+                        ? !"true".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_SHOW_INITIAL_PROGRESS))
+                            && !SetupPropertyTester.isShowProgressInWizard()
+                        : !SetupPropertyTester.isShowProgressInWizard())
                     {
                       shell.setVisible(false);
                     }
@@ -1091,6 +1094,10 @@ public class ProgressPage extends SetupWizardPage
 
       command.add("-vmargs");
       command.add("-Duser.dir=" + info.getEclipseLocation());
+      if (ws != null)
+      {
+        command.add("-D" + SetupProperties.PROP_SETUP_SHOW_INITIAL_PROGRESS + "=true");
+      }
 
       try
       {

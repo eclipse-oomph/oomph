@@ -96,6 +96,11 @@ public class SetupProperties
    */
   public static final String PROP_SETUP_LAUNCH_AUTOMATICALLY = "oomph.setup.launch.automatically";
 
+  /**
+   * Set to true when the launcher launches the product and there are workspace tasks to perform so that the perform dialog is shown automatically when that product starts performing.
+   */
+  public static final String PROP_SETUP_SHOW_INITIAL_PROGRESS = "oomph.setup.show.initial.progress";
+
   private SetupProperties()
   {
   }
