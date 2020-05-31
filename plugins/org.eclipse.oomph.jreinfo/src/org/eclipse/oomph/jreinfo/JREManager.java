@@ -253,9 +253,9 @@ public final class JREManager
 
   public synchronized JRE getSystemJRE()
   {
-    if (OS.INSTANCE.isWin())
+    if (systemJavaHome == null)
     {
-      if (systemJavaHome == null)
+      if (OS.INSTANCE.isWin())
       {
         // The native launcher augments the system PATH.
         // It optionally prefixes the PATH with folder entries based on the JVM it has decided to use.
@@ -304,11 +304,27 @@ public final class JREManager
           }
         }
       }
-
-      if (!StringUtil.isEmpty(systemJavaHome))
+      else if (OS.INSTANCE.isLinux())
       {
-        return getJREs().get(new File(systemJavaHome));
+        try
+        {
+          File javaExecuable = new File("/usr/bin/java").getCanonicalFile();
+          JREData jreData = InfoManager.testJRE(javaExecuable.toString());
+          if (jreData != null)
+          {
+            systemJavaHome = jreData.getJavaHome();
+          }
+        }
+        catch (IOException ex)
+        {
+          //$FALL-THROUGH$
+        }
       }
+    }
+
+    if (!StringUtil.isEmpty(systemJavaHome))
+    {
+      return getJREs().get(new File(systemJavaHome));
     }
 
     return null;
