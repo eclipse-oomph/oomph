@@ -789,16 +789,28 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     Resource selectionResource = getCatalogManager().getSelection().eResource();
     excludedResources.add(selectionResource);
 
+    Set<URI> excludedResourceURIs = new LinkedHashSet<URI>();
+
     Installation installation = setupContext.getInstallation();
     if (installation != null)
     {
-      excludedResources.add(installation.eResource());
+      Resource resource = installation.eResource();
+      excludedResources.add(resource);
+      if (SetupContext.INSTALLATION_SETUP_URI.equals(resource.getURI()))
+      {
+        excludedResourceURIs.add(SetupContext.INSTALLATION_SETUP_URI);
+      }
     }
 
     Workspace workspace = setupContext.getWorkspace();
     if (workspace != null)
     {
-      excludedResources.add(workspace.eResource());
+      Resource resource = workspace.eResource();
+      excludedResources.add(resource);
+      if (SetupContext.WORKSPACE_SETUP_URI.equals(resource.getURI()))
+      {
+        excludedResourceURIs.add(SetupContext.WORKSPACE_SETUP_URI);
+      }
     }
 
     User user = setupContext.getUser();
@@ -854,7 +866,13 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
       resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
       resourceSet.getPackageRegistry().clear();
-      loadIndex(false, SetupContext.INDEX_SETUP_URI, SetupContext.USER_SETUP_URI);
+
+      Set<URI> uris = new LinkedHashSet<URI>();
+      uris.add(SetupContext.INDEX_SETUP_URI);
+      uris.add(SetupContext.USER_SETUP_URI);
+      uris.addAll(excludedResourceURIs);
+
+      loadIndex(false, uris.toArray(new URI[uris.size()]));
     }
     else
     {
