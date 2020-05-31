@@ -43,6 +43,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.egit.core.EclipseGitProgressTransformer;
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.CloneCommand;
@@ -285,6 +288,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   private Object repositoryUtil;
 
   private boolean bypassCloning;
+
+  private int timeout;
 
   /**
    * <!-- begin-user-doc -->
@@ -764,8 +769,14 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     Set<String> repositories = null;
 
     // Force start egit to make the clone appears in the repositories view and so projects are connected by the egit team provider.
+    // Also use this as an opportunity to initialize the timeout based on EGit preferences
     try
     {
+      // Maybe the preference will be moved to the core...
+      IEclipsePreferences egitCorePreferences = InstanceScope.INSTANCE.getNode("org.eclipse.egit.core");
+      IEclipsePreferences egitCoreDefaultPreferences = DefaultScope.INSTANCE.getNode("org.eclipse.egit.core");
+      timeout = egitCorePreferences.getInt("core_remote_connection_timeout", egitCoreDefaultPreferences.getInt("core_remote_connection_timeout", 0));
+
       Class<?> egitUIActivatorClass = CommonPlugin.loadClass("org.eclipse.egit.ui", "org.eclipse.egit.ui.Activator");
       Object egitUIActivator = ReflectUtil.invokeMethod("getDefault", egitUIActivatorClass);
       repositoryUtil = ReflectUtil.invokeMethod("getRepositoryUtil", egitUIActivator);
@@ -773,6 +784,13 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       @SuppressWarnings("unchecked")
       List<String> configuredRepositories = (List<String>)ReflectUtil.invokeMethod("getConfiguredRepositories", repositoryUtil);
       repositories = new HashSet<String>(configuredRepositories);
+
+      if (timeout == 0)
+      {
+        Object egitUIPreferenceStore = ReflectUtil.invokeMethod("getPreferenceStore", egitUIActivator);
+        timeout = ReflectUtil.invokeMethod(ReflectUtil.getMethod(egitUIPreferenceStore, "getInt", String.class), egitUIPreferenceStore,
+            "remote_connection_timeout");
+      }
     }
     catch (Throwable ex)
     {
@@ -863,7 +881,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         {
           if (cachedGit == null)
           {
-            cachedGit = cloneRepository(context, workDir, checkoutBranch, isRestrictToCheckoutBranch(), remoteName, remoteURI, isRecursive(),
+            cachedGit = cloneRepository(context, workDir, checkoutBranch, isRestrictToCheckoutBranch(), remoteName, remoteURI, isRecursive(), timeout,
                 MonitorUtil.create(monitor, 50));
             cachedRepository = cachedGit.getRepository();
 
@@ -1007,7 +1025,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   }
 
   private static Git cloneRepository(SetupTaskContext context, File workDir, String checkoutBranch, boolean restrictToCheckoutBranch, String remoteName,
-      String remoteURI, boolean recursive, IProgressMonitor monitor) throws Exception
+      String remoteURI, boolean recursive, int timeout, IProgressMonitor monitor) throws Exception
   {
     context.log("Cloning Git repo " + remoteURI + " to " + workDir);
 
@@ -1023,7 +1041,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     }
 
     command.setDirectory(workDir);
-    command.setTimeout(60);
+    command.setTimeout(timeout <= 0 ? 60 : timeout);
     command.setProgressMonitor(new EclipseGitProgressTransformer(monitor));
     return command.call();
   }
