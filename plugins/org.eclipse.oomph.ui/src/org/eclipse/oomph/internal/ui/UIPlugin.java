@@ -101,6 +101,8 @@ public final class UIPlugin extends OomphUIPlugin
     {
       super.start(context);
 
+      new Screenshot();
+
       UtilPlugin.setToggleStateAccessor(new UtilPlugin.ToggleStateAccessor()
       {
         public boolean isEnabled(String id)
