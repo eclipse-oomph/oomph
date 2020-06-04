@@ -56,7 +56,22 @@ import java.util.Map;
  */
 class Screenshot
 {
-  private static final Display DISPLAY = Display.getDefault();
+  private static final Display DISPLAY;
+
+  static
+  {
+    Display display = null;
+    try
+    {
+      display = Display.getDefault();
+    }
+    catch (Throwable throwable)
+    {
+      //$FALL-THROUGH$
+    }
+
+    DISPLAY = display;
+  }
 
   private static final File LOCATION;
 
@@ -78,7 +93,7 @@ class Screenshot
 
   Screenshot()
   {
-    if (LOCATION != null)
+    if (DISPLAY != null && LOCATION != null)
     {
       DISPLAY.asyncExec(new Runnable()
       {
