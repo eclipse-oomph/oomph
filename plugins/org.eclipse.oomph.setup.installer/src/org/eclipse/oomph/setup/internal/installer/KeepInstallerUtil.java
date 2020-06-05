@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2016 Eike Stepper (Loehne, Germany) and others.
+ * Copyright (c) 2015, 2020 Eike Stepper (Loehne, Germany) and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -8,6 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  *    Yatta Solutions - [466264] Enhance UX in simple installer
+ *    Christoph Laeubrich - [494735] - Eclipse Installer does not create .desktop file for the menu
  */
 package org.eclipse.oomph.setup.internal.installer;
 
@@ -33,7 +34,7 @@ public final class KeepInstallerUtil
 
   private static final Preference PREF_KEPT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("kept");
 
-  private static String powerShell;
+  private static DesktopSupport desktopSupport;
 
   private KeepInstallerUtil()
   {
@@ -48,28 +49,11 @@ public final class KeepInstallerUtil
   {
     try
     {
-      String powerShell = KeepInstallerUtil.getPowerShell();
-      if (powerShell != null)
+      DesktopSupport desktopSupport = KeepInstallerUtil.getDesktopSupport();
+      if (desktopSupport != null)
       {
-        if (groupName != null)
-        {
-          Runtime.getRuntime().exec(new String[] { powerShell, "-command",
-              "& { " + "$folderPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) '" + groupName + "';" + //
-                  "[system.io.directory]::CreateDirectory($folderPath); " + //
-                  "$linkPath = Join-Path $folderPath '" + shortcutName + ".lnk'; $targetPath = '" + target
-                  + "'; $link = (New-Object -ComObject WScript.Shell).CreateShortcut( $linkpath ); $link.TargetPath = $targetPath; $link.Save()}" });
-
-        }
-        else
-        {
-          Runtime.getRuntime()
-              .exec(new String[] { powerShell, "-command",
-                  "& {$linkPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) '" + shortcutName + ".lnk'; $targetPath = '" + target
-                      + "'; $link = (New-Object -ComObject WScript.Shell).CreateShortcut( $linkpath ); $link.TargetPath = $targetPath; $link.Save()}" });
-
-        }
+        desktopSupport.createShortCut(specialFolder, groupName, target, shortcutName);
       }
-      // [system.io.directory]::CreateDirectory("C:\test")
     }
     catch (IOException ex)
     {
@@ -81,11 +65,10 @@ public final class KeepInstallerUtil
   {
     try
     {
-      String powerShell = KeepInstallerUtil.getPowerShell();
-      if (powerShell != null)
+      DesktopSupport desktopSupport = KeepInstallerUtil.getDesktopSupport();
+      if (desktopSupport != null)
       {
-        Runtime.getRuntime().exec(new String[] { powerShell, "-command",
-            "& { (new-object -c shell.application).namespace('" + location + "').parsename('" + launcherName + "').invokeverb('taskbarpin') }" });
+        desktopSupport.pinToTaskBar(location, launcherName);
       }
     }
     catch (IOException ex)
@@ -110,38 +93,41 @@ public final class KeepInstallerUtil
     return false;
   }
 
-  public static String getPowerShell()
+  public static DesktopSupport getDesktopSupport()
   {
-    if (powerShell == null)
+    if (desktopSupport == null)
     {
       try
       {
-        String systemRoot = System.getenv("SystemRoot");
-        if (systemRoot != null)
+        if (OS.INSTANCE.isWin())
         {
-          File system32 = new File(systemRoot, "system32");
-          if (system32.isDirectory())
+          String systemRoot = System.getenv("SystemRoot");
+          if (systemRoot != null)
           {
-            File powerShellFolder = new File(system32, "WindowsPowerShell");
-            if (powerShellFolder.isDirectory())
+            File system32 = new File(systemRoot, "system32");
+            if (system32.isDirectory())
             {
-              File[] versions = powerShellFolder.listFiles();
-              if (versions != null)
+              File powerShellFolder = new File(system32, "WindowsPowerShell");
+              if (powerShellFolder.isDirectory())
               {
-                for (File version : versions)
+                File[] versions = powerShellFolder.listFiles();
+                if (versions != null)
                 {
-                  try
+                  for (File version : versions)
                   {
-                    File executable = new File(version, "powershell.exe");
-                    if (executable.isFile())
+                    try
                     {
-                      powerShell = executable.getAbsolutePath();
-                      break;
+                      File executable = new File(version, "powershell.exe");
+                      if (executable.isFile())
+                      {
+                        desktopSupport = new WindowsPowerShell(executable.getAbsolutePath());
+                        break;
+                      }
                     }
-                  }
-                  catch (Exception ex)
-                  {
-                    //$FALL-THROUGH$
+                    catch (Exception ex)
+                    {
+                      //$FALL-THROUGH$
+                    }
                   }
                 }
               }
@@ -155,7 +141,7 @@ public final class KeepInstallerUtil
       }
     }
 
-    return powerShell;
+    return desktopSupport;
   }
 
   public static void keepInstaller(String targetLocation, boolean startPermanentInstaller, String launcher, boolean startMenu, boolean desktop,

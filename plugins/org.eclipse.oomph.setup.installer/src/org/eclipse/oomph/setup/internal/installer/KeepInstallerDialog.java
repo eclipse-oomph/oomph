@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2016 Eike Stepper (Loehne, Germany) and others.
+ * Copyright (c) 2015, 2020 Eike Stepper (Loehne, Germany) and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -8,6 +8,7 @@
  * Contributors:
  *    Eike Stepper - initial API and implementation
  *    Yatta Solutions - [466264] Enhance UX in simple installer
+ *    Christoph Laeubrich - [494735] - Eclipse Installer does not create .desktop file for the menu
  */
 package org.eclipse.oomph.setup.internal.installer;
 
@@ -158,7 +159,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       }
     });
 
-    if (KeepInstallerUtil.getPowerShell() != null)
+    if (KeepInstallerUtil.getDesktopSupport() != null)
     {
       new Label(parent, SWT.NONE);
       startMenuButton = new Button(parent, SWT.CHECK);
