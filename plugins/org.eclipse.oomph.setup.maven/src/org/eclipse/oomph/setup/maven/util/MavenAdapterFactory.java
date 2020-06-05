@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.maven.MavenImportTask;
 import org.eclipse.oomph.setup.maven.MavenPackage;
+import org.eclipse.oomph.setup.maven.MavenUpdateTask;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
@@ -89,6 +90,12 @@ public class MavenAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
+    public Adapter caseMavenUpdateTask(MavenUpdateTask object)
+    {
+      return createMavenUpdateTaskAdapter();
+    }
+
+    @Override
     public Adapter caseModelElement(ModelElement object)
     {
       return createModelElementAdapter();
@@ -132,6 +139,21 @@ public class MavenAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createMavenImportTaskAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.maven.MavenUpdateTask <em>Update Task</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.maven.MavenUpdateTask
+   * @generated
+   */
+  public Adapter createMavenUpdateTaskAdapter()
   {
     return null;
   }

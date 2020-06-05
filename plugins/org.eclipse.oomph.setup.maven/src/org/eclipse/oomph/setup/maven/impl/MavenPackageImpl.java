@@ -17,6 +17,7 @@ import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.maven.MavenFactory;
 import org.eclipse.oomph.setup.maven.MavenImportTask;
 import org.eclipse.oomph.setup.maven.MavenPackage;
+import org.eclipse.oomph.setup.maven.MavenUpdateTask;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -38,6 +39,13 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * @generated
    */
   private EClass mavenImportTaskEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass mavenUpdateTaskEClass = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -156,6 +164,46 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getMavenUpdateTask()
+  {
+    return mavenUpdateTaskEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getMavenUpdateTask_ProjectNamePatterns()
+  {
+    return (EAttribute)mavenUpdateTaskEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getMavenUpdateTask_Offline()
+  {
+    return (EAttribute)mavenUpdateTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getMavenUpdateTask_UpdateSnapshots()
+  {
+    return (EAttribute)mavenUpdateTaskEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public MavenFactory getMavenFactory()
   {
     return (MavenFactory)getEFactoryInstance();
@@ -188,6 +236,11 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
     createEReference(mavenImportTaskEClass, MAVEN_IMPORT_TASK__SOURCE_LOCATORS);
     createEAttribute(mavenImportTaskEClass, MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE);
     createEAttribute(mavenImportTaskEClass, MAVEN_IMPORT_TASK__PROFILES);
+
+    mavenUpdateTaskEClass = createEClass(MAVEN_UPDATE_TASK);
+    createEAttribute(mavenUpdateTaskEClass, MAVEN_UPDATE_TASK__PROJECT_NAME_PATTERNS);
+    createEAttribute(mavenUpdateTaskEClass, MAVEN_UPDATE_TASK__OFFLINE);
+    createEAttribute(mavenUpdateTaskEClass, MAVEN_UPDATE_TASK__UPDATE_SNAPSHOTS);
   }
 
   /**
@@ -227,6 +280,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
 
     // Add supertypes to classes
     mavenImportTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
+    mavenUpdateTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
 
     // Initialize classes and features; add operations and parameters
     initEClass(mavenImportTaskEClass, MavenImportTask.class, "MavenImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -236,6 +290,14 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMavenImportTask_Profiles(), ecorePackage.getEString(), "profiles", null, 0, -1, MavenImportTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(mavenUpdateTaskEClass, MavenUpdateTask.class, "MavenUpdateTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getMavenUpdateTask_ProjectNamePatterns(), ecorePackage.getEString(), "projectNamePatterns", null, 0, -1, MavenUpdateTask.class,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getMavenUpdateTask_Offline(), ecorePackage.getEBoolean(), "offline", null, 0, 1, MavenUpdateTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getMavenUpdateTask_UpdateSnapshots(), ecorePackage.getEBoolean(), "updateSnapshots", null, 0, 1, MavenUpdateTask.class, !IS_TRANSIENT,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore");
@@ -305,6 +367,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
   {
     String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
     addAnnotation(mavenImportTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    addAnnotation(mavenUpdateTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
   }
 
   /**
@@ -318,6 +381,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
     addAnnotation(getMavenImportTask_SourceLocators(), source, new String[] { "name", "sourceLocator" });
     addAnnotation(getMavenImportTask_Profiles(), source, new String[] { "kind", "element", "name", "profile" });
+    addAnnotation(getMavenUpdateTask_ProjectNamePatterns(), source, new String[] { "kind", "element", "name", "projectNamePattern" });
   }
 
 } // MavenPackageImpl

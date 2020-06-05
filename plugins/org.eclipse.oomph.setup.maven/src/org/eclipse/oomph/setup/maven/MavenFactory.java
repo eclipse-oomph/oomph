@@ -40,6 +40,15 @@ public interface MavenFactory extends EFactory
   MavenImportTask createMavenImportTask();
 
   /**
+   * Returns a new object of class '<em>Update Task</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Update Task</em>'.
+   * @generated
+   */
+  MavenUpdateTask createMavenUpdateTask();
+
+  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

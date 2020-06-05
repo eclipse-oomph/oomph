@@ -119,6 +119,31 @@ public class MavenItemProviderAdapterFactory extends MavenAdapterFactory impleme
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.maven.MavenUpdateTask} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected MavenUpdateTaskItemProvider mavenUpdateTaskItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.maven.MavenUpdateTask}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createMavenUpdateTaskAdapter()
+  {
+    if (mavenUpdateTaskItemProvider == null)
+    {
+      mavenUpdateTaskItemProvider = new MavenUpdateTaskItemProvider(this);
+    }
+
+    return mavenUpdateTaskItemProvider;
+  }
+
+  /**
    * This returns the root adapter factory that contains this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -233,6 +258,10 @@ public class MavenItemProviderAdapterFactory extends MavenAdapterFactory impleme
     {
       mavenImportTaskItemProvider.dispose();
     }
+    if (mavenUpdateTaskItemProvider != null)
+    {
+      mavenUpdateTaskItemProvider.dispose();
+    }
   }
 
   /**
@@ -288,6 +317,8 @@ public class MavenItemProviderAdapterFactory extends MavenAdapterFactory impleme
       public Object caseAnnotation(Annotation object)
       {
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, MavenFactory.eINSTANCE.createMavenImportTask()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, MavenFactory.eINSTANCE.createMavenUpdateTask()));
 
         return null;
       }
@@ -380,6 +411,8 @@ public class MavenItemProviderAdapterFactory extends MavenAdapterFactory impleme
       public Object caseSetupTaskContainer(SetupTaskContainer object)
       {
         newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, MavenFactory.eINSTANCE.createMavenImportTask()));
+
+        newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, MavenFactory.eINSTANCE.createMavenUpdateTask()));
 
         return null;
       }

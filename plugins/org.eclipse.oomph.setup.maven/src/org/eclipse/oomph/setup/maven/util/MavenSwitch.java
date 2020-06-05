@@ -14,6 +14,7 @@ import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.maven.MavenImportTask;
 import org.eclipse.oomph.setup.maven.MavenPackage;
+import org.eclipse.oomph.setup.maven.MavenUpdateTask;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -100,6 +101,24 @@ public class MavenSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case MavenPackage.MAVEN_UPDATE_TASK:
+      {
+        MavenUpdateTask mavenUpdateTask = (MavenUpdateTask)theEObject;
+        T result = caseMavenUpdateTask(mavenUpdateTask);
+        if (result == null)
+        {
+          result = caseSetupTask(mavenUpdateTask);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(mavenUpdateTask);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       default:
         return defaultCase(theEObject);
     }
@@ -117,6 +136,22 @@ public class MavenSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseMavenImportTask(MavenImportTask object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Update Task</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Update Task</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseMavenUpdateTask(MavenUpdateTask object)
   {
     return null;
   }

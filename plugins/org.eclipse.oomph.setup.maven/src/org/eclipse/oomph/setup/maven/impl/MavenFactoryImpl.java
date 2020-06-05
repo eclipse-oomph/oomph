@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.maven.impl;
 import org.eclipse.oomph.setup.maven.MavenFactory;
 import org.eclipse.oomph.setup.maven.MavenImportTask;
 import org.eclipse.oomph.setup.maven.MavenPackage;
+import org.eclipse.oomph.setup.maven.MavenUpdateTask;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -74,6 +75,8 @@ public class MavenFactoryImpl extends EFactoryImpl implements MavenFactory
     {
       case MavenPackage.MAVEN_IMPORT_TASK:
         return createMavenImportTask();
+      case MavenPackage.MAVEN_UPDATE_TASK:
+        return createMavenUpdateTask();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -88,6 +91,17 @@ public class MavenFactoryImpl extends EFactoryImpl implements MavenFactory
   {
     MavenImportTaskImpl mavenImportTask = new MavenImportTaskImpl();
     return mavenImportTask;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public MavenUpdateTask createMavenUpdateTask()
+  {
+    MavenUpdateTaskImpl mavenUpdateTask = new MavenUpdateTaskImpl();
+    return mavenUpdateTask;
   }
 
   /**

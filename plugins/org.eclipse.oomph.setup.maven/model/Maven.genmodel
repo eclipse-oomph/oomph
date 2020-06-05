@@ -14,5 +14,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Maven.ecore#//MavenImportTask/projectNameTemplate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Maven.ecore#//MavenImportTask/profiles"/>
     </genClasses>
+    <genClasses ecoreClass="Maven.ecore#//MavenUpdateTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Maven.ecore#//MavenUpdateTask/projectNamePatterns"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Maven.ecore#//MavenUpdateTask/offline"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Maven.ecore#//MavenUpdateTask/updateSnapshots"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>
