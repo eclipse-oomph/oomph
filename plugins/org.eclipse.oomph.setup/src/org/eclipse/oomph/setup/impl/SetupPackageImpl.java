@@ -2666,7 +2666,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     initEClass(resourceCreationTaskEClass, ResourceCreationTask.class, "ResourceCreationTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getResourceCreationTask_Force(), ecorePackage.getEBoolean(), "force", null, 0, 1, ResourceCreationTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getResourceCreationTask_Content(), ecorePackage.getEString(), "content", null, 1, 1, ResourceCreationTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getResourceCreationTask_Content(), theBasePackage.getText(), "content", null, 1, 1, ResourceCreationTask.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getResourceCreationTask_TargetURL(), ecorePackage.getEString(), "targetURL", null, 1, 1, ResourceCreationTask.class, !IS_TRANSIENT,
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2867,6 +2867,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addAnnotation(getWorkspace_Streams(), source, new String[] { "name", "stream" });
     addAnnotation(getConfiguration_Description(), source, new String[] { "kind", "element" });
     addAnnotation(getVariableTask_Choices(), source, new String[] { "name", "choice" });
+    addAnnotation(getResourceCreationTask_Content(), source, new String[] { "kind", "element" });
     addAnnotation(getTextModifyTask_URL(), source, new String[] { "kind", "attribute", "name", "url" });
     addAnnotation(getTextModifyTask_Modifications(), source, new String[] { "name", "modification" });
     addAnnotation(getTextModification_Substitutions(), source, new String[] { "kind", "element", "name", "substitution" });

@@ -68,7 +68,8 @@ public interface ResourceCreationTask extends SetupTask
    * @return the value of the '<em>Content</em>' attribute.
    * @see #setContent(String)
    * @see org.eclipse.oomph.setup.SetupPackage#getResourceCreationTask_Content()
-   * @model required="true"
+   * @model dataType="org.eclipse.oomph.base.Text" required="true"
+   *        extendedMetaData="kind='element'"
    * @generated
    */
   String getContent();
