@@ -65,6 +65,7 @@ import org.eclipse.jgit.lib.CoreConfig.AutoCRLF;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
+import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.RemoteConfig;
 import org.eclipse.jgit.transport.URIish;
@@ -832,7 +833,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       String remoteName = getRemoteName();
       String remoteURI = getRemoteURI();
       String pushURI = getPushURI();
-      configureRepository(context, repository, checkoutBranch, isRestrictToCheckoutBranch(), remoteName, remoteURI, pushURI, getConfigSections());
+      configureRepository(context, repository, checkoutBranch, isRestrictToCheckoutBranch(), remoteName, remoteURI, pushURI, getConfigSections(),
+          getGerritPatterns(context));
 
       hasCheckout = findRef(repository, Constants.R_HEADS + checkoutBranch) != null;
       if (!hasCheckout)
@@ -871,6 +873,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       String checkoutBranch = getCheckoutBranch();
       String remoteName = getRemoteName();
       String remoteURI = getRemoteURI();
+      Set<String> gerritPatterns = getGerritPatterns(context);
 
       IProgressMonitor monitor = context.getProgressMonitor(true);
       monitor.beginTask("", (cachedGit == null ? 51 : 0) + (!hasCheckout ? 3 : 0) + (isRecursive() ? 20 : 0));
@@ -888,7 +891,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
             if (!URI.createURI(remoteURI).isFile())
             {
               String pushURI = getPushURI();
-              configureRepository(context, cachedRepository, checkoutBranch, isRestrictToCheckoutBranch(), remoteName, remoteURI, pushURI, getConfigSections());
+              configureRepository(context, cachedRepository, checkoutBranch, isRestrictToCheckoutBranch(), remoteName, remoteURI, pushURI, getConfigSections(),
+                  gerritPatterns);
             }
 
             monitor.worked(1);
@@ -925,7 +929,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
           if (isRecursive())
           {
-            addSubmodules(context, cachedGit, MonitorUtil.create(monitor, 20));
+            addSubmodules(context, cachedGit, checkoutBranch, remoteName, gerritPatterns, MonitorUtil.create(monitor, 20));
           }
         }
 
@@ -1047,7 +1051,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   }
 
   private static void configureRepository(SetupTaskContext context, Repository repository, String checkoutBranch, boolean restrictToCheckoutBranch,
-      String remoteName, String remoteURI, String pushURI, List<? extends ConfigSection> configSections) throws Exception, IOException
+      String remoteName, String remoteURI, String pushURI, List<? extends ConfigSection> configSections, Set<String> gerritPatterns)
+      throws Exception, IOException
   {
     StoredConfig config = repository.getConfig();
 
@@ -1115,22 +1120,6 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       changed |= configureLineEndingConversion(context, config);
     }
 
-    Set<String> gerritPatterns = new HashSet<String>();
-    for (Object key : context.keySet())
-    {
-      if (key instanceof String)
-      {
-        if (key.toString().endsWith(".gerrit.uri.pattern"))
-        {
-          Object value = context.get(key);
-          if (value instanceof String)
-          {
-            gerritPatterns.add(value.toString());
-          }
-        }
-      }
-    }
-
     if (!gerritPatterns.isEmpty())
     {
       URI uri = URI.createURI(remoteURI);
@@ -1156,6 +1145,26 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     {
       changed |= setSingleFetchRefSpec(context, config, checkoutBranch, remoteName);
     }
+  }
+
+  private static Set<String> getGerritPatterns(SetupTaskContext context)
+  {
+    Set<String> gerritPatterns = new HashSet<String>();
+    for (Object key : context.keySet())
+    {
+      if (key instanceof String)
+      {
+        if (key.toString().endsWith(".gerrit.uri.pattern"))
+        {
+          Object value = context.get(key);
+          if (value instanceof String)
+          {
+            gerritPatterns.add(value.toString());
+          }
+        }
+      }
+    }
+    return gerritPatterns;
   }
 
   /**
@@ -1361,7 +1370,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     command.call();
   }
 
-  private static void addSubmodules(SetupTaskContext context, Git git, IProgressMonitor monitor) throws Exception
+  private static void addSubmodules(SetupTaskContext context, Git git, String checkoutBranch, String remoteName, Set<String> gerritPatterns,
+      IProgressMonitor monitor) throws Exception
   {
     context.log("Adding submodules");
 
@@ -1370,6 +1380,45 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     SubmoduleUpdateCommand updateCommand = git.submoduleUpdate();
     updateCommand.setProgressMonitor(new EclipseGitProgressTransformer(monitor));
     updateCommand.call();
+    if (!gerritPatterns.isEmpty())
+    {
+      submoduleConfigureGerrit(context, git, checkoutBranch, remoteName, gerritPatterns, monitor);
+    }
+  }
+
+  private static void submoduleConfigureGerrit(SetupTaskContext context, Git git, String checkoutBranch, String remoteName, Set<String> gerritPatterns,
+      IProgressMonitor monitor) throws Exception
+  {
+    Repository repo = git.getRepository();
+    SubmoduleWalk generator = null;
+    try
+    {
+      generator = SubmoduleWalk.forIndex(repo);
+      while (generator.next())
+      {
+        String subRemoteURI = generator.getRemoteUrl();
+        for (String gerritPattern : gerritPatterns)
+        {
+          if (subRemoteURI.matches(gerritPattern))
+          {
+            context.log("Configure Submodule " + generator.getModuleName());
+            Repository subRepo = generator.getRepository();
+            StoredConfig subConfig = subRepo.getConfig();
+            addGerritPullRefSpec(context, subConfig, remoteName);
+            addGerritPushRefSpec(context, subConfig, checkoutBranch, remoteName);
+            subConfig.save();
+            break;
+          }
+        }
+      }
+    }
+    finally
+    {
+      if (generator != null)
+      {
+        generator.close();
+      }
+    }
   }
 
   private static void resetHard(SetupTaskContext context, Git git) throws Exception
