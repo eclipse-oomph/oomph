@@ -27,7 +27,10 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.jobs.IJobManager;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -229,19 +232,20 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
     return true;
   }
 
+  @SuppressWarnings("restriction")
   public void perform(final SetupTaskContext context) throws Exception
   {
     String launcher = getLauncher();
     ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-    ILaunchConfiguration targetLaunchConfiguration = null;
-    for (ILaunchConfiguration launchConfiguration : launchManager.getLaunchConfigurations())
+    ILaunchConfiguration targetLaunchConfiguration = getLaunchConfiguration(launcher, launchManager);
+
+    if (targetLaunchConfiguration == null)
     {
-      String name = launchConfiguration.getName();
-      if (name.equals(launcher))
-      {
-        targetLaunchConfiguration = launchConfiguration;
-        break;
-      }
+      context.log("The launcher was not found; waiting until workspace refresh job is finished.");
+      IJobManager jobManager = Job.getJobManager();
+      jobManager.join(org.eclipse.core.internal.events.NotificationManager.class, context.getProgressMonitor(true));
+      context.log("The workspace refresh job is finished; looking for launcher again");
+      targetLaunchConfiguration = getLaunchConfiguration(launcher, launchManager);
     }
 
     if (targetLaunchConfiguration == null)
@@ -325,5 +329,19 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
     {
       launchPromptForErrorPreference.set(oldValue);
     }
+  }
+
+  private static ILaunchConfiguration getLaunchConfiguration(String launcher, ILaunchManager launchManager) throws CoreException
+  {
+    for (ILaunchConfiguration launchConfiguration : launchManager.getLaunchConfigurations())
+    {
+      String name = launchConfiguration.getName();
+      if (name.equals(launcher))
+      {
+        return launchConfiguration;
+      }
+    }
+
+    return null;
   }
 } // LaunchTaskImpl
