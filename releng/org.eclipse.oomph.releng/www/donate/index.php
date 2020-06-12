@@ -109,7 +109,7 @@ if (!$scope)
 }
 else
 {
-  $scope = preg_replace('/%2B/', '+', $file);
+  $scope = preg_replace('/%2B/', '+', $scope);
 }
 
 $version = htmlentities($_GET["version"]);
