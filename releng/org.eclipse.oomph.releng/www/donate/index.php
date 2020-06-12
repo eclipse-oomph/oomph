@@ -107,6 +107,10 @@ if (!$scope)
 {
   $scope = "Eclipse IDE";
 }
+else
+{
+  $scope = preg_replace('/%2B/', '+', $file);
+}
 
 $version = htmlentities($_GET["version"]);
 $version_label = "";
