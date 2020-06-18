@@ -53,10 +53,6 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
-          key="siteURI">
-        <value>https://download.eclipse.org/eclipse/downloads/</value>
-      </detail>
-      <detail
           key="shortcut">
         <value>Eclipse SDK - Latest</value>
       </detail>
@@ -78,7 +74,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.16RC2-202006040540/</value>
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.16-202006040540/</value>
       </detail>
       <detail
           key="shortcut">
@@ -100,10 +96,6 @@
       requiredJavaVersion="1.8">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="siteURI">
-        <value>https://download.eclipse.org/eclipse/downloads/</value>
-      </detail>
       <detail
           key="shortcut">
         <value>Eclipse SDK - 4.17 - 2020-09</value>
@@ -130,7 +122,7 @@
       </detail>
       <detail
           key="siteURI">
-        <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.16RC2-202006040540/</value>
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.16-202006040540/</value>
       </detail>
       <detail
           key="shortcut">
@@ -158,7 +150,7 @@
       </detail>
       <detail
           key="siteURI">
-        <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.15-202003050155/</value>
+        <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.15-202003050155/</value>
       </detail>
       <detail
           key="shortcut">

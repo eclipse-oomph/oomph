@@ -67,10 +67,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-java-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Java Developers - Latest</value>
         </detail>
@@ -114,7 +110,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -128,7 +124,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -187,10 +183,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-java-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Java Developers - 2020-09</value>
         </detail>
@@ -234,7 +226,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -252,7 +244,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -1300,10 +1292,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-enterprise-java-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Enterprise Java Developers - Latest</value>
         </detail>
@@ -1487,7 +1475,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1501,7 +1489,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-enterprise-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -1700,10 +1688,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-enterprise-java-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Enterprise Java Developers - 2020-09</value>
         </detail>
@@ -1887,7 +1871,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1905,7 +1889,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-enterprise-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -4324,10 +4308,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-cc-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for C/C++ Developers - Latest</value>
         </detail>
@@ -4411,7 +4391,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4425,7 +4405,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -4524,10 +4504,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-cc-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for C/C++ Developers - 2020-09</value>
         </detail>
@@ -4611,7 +4587,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4629,7 +4605,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6005,10 +5981,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-web-and-javascript-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Web and JavaScript Developers - Latest</value>
         </detail>
@@ -6054,7 +6026,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6068,7 +6040,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-web-and-javascript-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6129,10 +6101,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-web-and-javascript-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Web and JavaScript Developers - 2020-09</value>
         </detail>
@@ -6178,7 +6146,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6196,7 +6164,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-web-and-javascript-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -7088,10 +7056,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-php-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for PHP Developers - Latest</value>
         </detail>
@@ -7147,7 +7111,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7161,7 +7125,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -7232,10 +7196,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-php-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for PHP Developers - 2020-09</value>
         </detail>
@@ -7291,7 +7251,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7309,7 +7269,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -8235,10 +8195,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-eclipse-committers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Eclipse Committers - Latest</value>
         </detail>
@@ -8328,7 +8284,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8342,7 +8298,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -8447,10 +8403,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-eclipse-committers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Eclipse Committers - 2020-09</value>
         </detail>
@@ -8540,7 +8492,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8558,7 +8510,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9863,10 +9815,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-java-and-dsl-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Java and DSL Developers - Latest</value>
         </detail>
@@ -9904,7 +9852,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9918,7 +9866,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9971,10 +9919,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-java-and-dsl-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Java and DSL Developers - 2020-09</value>
         </detail>
@@ -10012,7 +9956,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -10030,7 +9974,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -10858,10 +10802,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-modeling-tools</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse Modeling Tools - Latest</value>
         </detail>
@@ -10933,7 +10873,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -10947,7 +10887,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -11034,10 +10974,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-modeling-tools</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse Modeling Tools - 2020-09</value>
         </detail>
@@ -11109,7 +11045,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11127,7 +11063,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -12477,10 +12413,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-rcp-and-rap-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for RCP and RAP Developers - Latest</value>
         </detail>
@@ -12536,7 +12468,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12550,7 +12482,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -12621,10 +12553,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-rcp-and-rap-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for RCP and RAP Developers - 2020-09</value>
         </detail>
@@ -12680,7 +12608,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12698,7 +12626,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -13884,10 +13812,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-testers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Testers - Latest</value>
         </detail>
@@ -13913,7 +13837,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13927,7 +13851,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -13968,10 +13892,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-testers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Testers - 2020-09</value>
         </detail>
@@ -13997,7 +13917,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14015,7 +13935,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14769,10 +14689,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-scientific-computing</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Scientific Computing - Latest</value>
         </detail>
@@ -14838,7 +14754,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14852,7 +14768,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -14933,10 +14849,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-scientific-computing</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Scientific Computing - 2020-09</value>
         </detail>
@@ -15002,7 +14914,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -15020,7 +14932,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -16242,10 +16154,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-scout-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Scout Developers - Latest</value>
         </detail>
@@ -16291,7 +16199,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16305,7 +16213,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -16366,10 +16274,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-scout-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Scout Developers - 2020-09</value>
         </detail>
@@ -16415,7 +16319,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16433,7 +16337,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -17455,10 +17359,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-rust-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Rust Developers - Latest</value>
         </detail>
@@ -17490,7 +17390,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17504,7 +17404,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-rust-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -17551,10 +17451,6 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-rust-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Rust Developers - 2020-09</value>
         </detail>
@@ -17586,7 +17482,7 @@
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17604,7 +17500,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-06/r/eclipse-ide-rust-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -18217,7 +18113,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.16.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18231,7 +18127,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.16RC2-202006040540/</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.16-202006040540/</value>
         </detail>
         <detail
             key="shortcut">
@@ -18281,7 +18177,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.16.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-06">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18299,7 +18195,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.16RC2-202006040540/</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.16-202006040540/</value>
         </detail>
         <detail
             key="shortcut">
@@ -18337,7 +18233,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.15-202003050155/</value>
+          <value>http://archive.eclipse.org/eclipse/downloads/drops4/R-4.15-202003050155/</value>
         </detail>
         <detail
             key="shortcut">
