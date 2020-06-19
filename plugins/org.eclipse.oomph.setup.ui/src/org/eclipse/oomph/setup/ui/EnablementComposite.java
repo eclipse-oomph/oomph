@@ -389,8 +389,14 @@ public class EnablementComposite extends Composite
 
   private void enableButtons(boolean enabled)
   {
-    offlineButton.setEnabled(enabled);
-    mirrorsButton.setEnabled(enabled);
+    if (offlineButton != null)
+    {
+      offlineButton.setEnabled(enabled);
+    }
+    if (mirrorsButton != null)
+    {
+      mirrorsButton.setEnabled(enabled);
+    }
   }
 
   public static Map<EClass, EList<SetupTask>> getEnablementTasks(EList<SetupTask> tasks)
