@@ -49,6 +49,7 @@ import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -124,7 +125,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final URI ECLIPSE_PROJECT_URI = URI.createURI("http://download.eclipse.org/eclipse/updates");
 
-  private static final URI ECLIPSE_BRANDING_NOTIFICATION_URI = URI.createURI("https://www.eclipse.org/donate/ide/?scope=${scope}&campaign=2020-06");
+  private static final URI ECLIPSE_BRANDING_NOTIFICATION_URI = URI.createURI("https://www.eclipse.org/setups/donate/?scope=${scope}&campaign=2020-06");
 
   private static final String ICON_DEFAULT = ICON_URL_PREFIX + "committers.png";
 
@@ -186,9 +187,13 @@ public class ProductCatalogGenerator implements IApplication
 
   private final String[] TRAINS = getTrains();
 
+  private URIConverter uriConverter;
+
   public Object start(IApplicationContext context) throws Exception
   {
     System.out.println("user.home=" + System.getProperty("user.home"));
+
+    uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
 
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
     if (arguments != null)
@@ -273,7 +278,7 @@ public class ProductCatalogGenerator implements IApplication
   private String[] getTrains()
   {
     return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06", "2019-09", "2019-12",
-        "2020-03", "2020-06" };
+        "2020-03", "2020-06", "2020-09" };
   }
 
   private URI getEclipsePlatformSite(String train)
@@ -632,7 +637,7 @@ public class ProductCatalogGenerator implements IApplication
       StringBuilder log = new StringBuilder();
 
       URI originalEPPURI = URI.createURI(PACKAGES + "/" + train);
-      URI eppURI = originalEPPURI;
+      URI eppURI = uriConverter.normalize(originalEPPURI);
       log.append(eppURI);
       boolean isStaging = train.equals(stagingTrain);
       if (isStaging)
@@ -1007,7 +1012,7 @@ public class ProductCatalogGenerator implements IApplication
   private IMetadataRepository loadLatestRepository(IMetadataRepositoryManager manager, URI eppURI, URI releaseURI, boolean loadLatestChild)
       throws URISyntaxException, ProvisionException
   {
-    IMetadataRepository releaseMetaDataRepository = manager.loadRepository(new java.net.URI(releaseURI.toString()), null);
+    IMetadataRepository releaseMetaDataRepository = manager.loadRepository(new java.net.URI(uriConverter.normalize(releaseURI).toString()), null);
     IMetadataRepository result = releaseMetaDataRepository;
     if (loadLatestChild && releaseMetaDataRepository instanceof ICompositeRepository<?>)
     {
@@ -1140,7 +1145,7 @@ public class ProductCatalogGenerator implements IApplication
     productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_URI, ECLIPSE_BRANDING_NOTIFICATION_URI.toString());
     productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_LABEL, "DONATE");
     productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_TOOLTIP, "Donate to the Eclipse Community");
-    productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_ANIMATION_STYLE, "NONE");
+    productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_ANIMATION_STYLE, "REPEAT");
     // productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_COLOR, "color://rgb/172/5/209");
     // brandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_SCOPE, productCatalog.getLabel());
 
@@ -1154,7 +1159,7 @@ public class ProductCatalogGenerator implements IApplication
         // A copy of the annotations on the catalog because these end up in another catalog.
         productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_URI, ECLIPSE_BRANDING_NOTIFICATION_URI.toString());
         productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_LABEL, "DONATE");
-        productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_ANIMATION_STYLE, "NONE");
+        productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_ANIMATION_STYLE, "REPEAT");
         // productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_COLOR, "color://rgb/12/184/198");
         // brandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_SCOPE, product.getLabel());
       }
@@ -1275,7 +1280,9 @@ public class ProductCatalogGenerator implements IApplication
         }
       }
 
-      packageRepository.setURL(eppURI.toString());
+      // We only have URI mappings for a train that does not yet exist, so redirect it to the current released on.
+      URI actualEPPURI = uriConverter.getURIMap().values().contains(eppURI) ? URI.createURI(PACKAGES + "/" + getMostRecentReleasedTrain()) : eppURI;
+      packageRepository.setURL(actualEPPURI.toString());
     }
 
     Repository releaseRepository = P2Factory.eINSTANCE.createRepository();
