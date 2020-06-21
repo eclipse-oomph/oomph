@@ -218,10 +218,11 @@
       &lt;launchHistory>
       &lt;launchGroup id=&quot;org.eclipse.debug.ui.launchGroup.debug&quot;>
       &lt;mruHistory>
+      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup/Setup (Installer Dialog Online).launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
+      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup/Setup (Installer Dialog).launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup.installer.tests/InstallerTests.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup.sync.tests/SynchronizerTests.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup.sync.tests/Oomph Sync Test Server.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
-      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup/Setup (Installer Dialog).launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup/Setup (IDE).launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup.installer/ProductCatalogGenerator.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.ui/IDE.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
@@ -243,10 +244,11 @@
       &lt;/launchGroup>
       &lt;launchGroup id=&quot;org.eclipse.eclemma.ui.launchGroup.coverage&quot;>
       &lt;mruHistory>
+      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup/Setup (Installer Dialog Online).launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
+      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup/Setup (Installer Dialog).launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup.installer.tests/InstallerTests.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup.sync.tests/SynchronizerTests.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup.sync.tests/Oomph Sync Test Server.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
-      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup/Setup (Installer Dialog).launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup/Setup (IDE).launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup.installer/ProductCatalogGenerator.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.ui/IDE.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
@@ -254,15 +256,23 @@
       &lt;favorites/>
       &lt;/launchGroup>
       &lt;launchGroup id=&quot;org.eclipse.ui.externaltools.launchGroup&quot;>
-      &lt;mruHistory/>
-      &lt;favorites/>
+      &lt;mruHistory>
+      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.releng/Build Windows 64bit.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
+      &lt;/mruHistory>
+      &lt;favorites>
+      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.releng/Build Windows 64bit.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
+      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.releng/Build Linux 64bit.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
+      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.releng/Build Mac 64bit.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
+      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.releng/Build Clean.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
+      &lt;/favorites>
       &lt;/launchGroup>
       &lt;launchGroup id=&quot;org.eclipse.debug.ui.launchGroup.run&quot;>
       &lt;mruHistory>
+      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup/Setup (Installer Dialog Online).launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
+      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup/Setup (Installer Dialog).launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup.installer.tests/InstallerTests.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup.sync.tests/SynchronizerTests.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup.sync.tests/Oomph Sync Test Server.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
-      &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup/Setup (Installer Dialog).launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup/Setup (IDE).launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.setup.installer/ProductCatalogGenerator.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
       &lt;launch memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;launchConfiguration local=&amp;quot;false&amp;quot; path=&amp;quot;/org.eclipse.oomph.ui/IDE.launch&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&quot;/>
@@ -313,6 +323,36 @@
         filePattern="*.launch"
         defaultEditorID="org.eclipse.ui.genericeditor.GenericEditor"/>
     <description>Bindings for JET templates</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:StringSubstitutionTask"
+      name="maven.build.java.home"
+      value="${jre.location-1.8}">
+    <description>The location used to specify JAVA_HOME in the External Tools Configurations.</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      filter="(osgi.os=win32)"
+      type="FILE"
+      name="maven.build.command"
+      defaultValue="mvn.cmd"
+      label="Maven Command">
+    <description>The absolute path location of the mvn command that will execute mvn on your operating system; it is used in the External Tools Configurations. You may leave the default if you don't intend to do Maven builds.</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      filter="(!(osgi.os=win32))"
+      type="FILE"
+      name="maven.build.command"
+      defaultValue="mvn"
+      label="Maven Command">
+    <description>The absolute path location of the mvn command that will execute mvn on your operating system; it is used in the External Tools Configurations. You may leave the default if you don't intend to do Maven builds.</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:StringSubstitutionTask"
+      name="maven.build.command"
+      value="${maven.build.command}">
+    <description>The location of the mvn command that will execute mvn on your operating system; it is used in the External Tools Configurations.</description>
   </setupTask>
   <stream name="master"
       label="Master">
