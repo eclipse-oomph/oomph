@@ -8,6 +8,7 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.userstorage.tests.util.USSServer"/>
+<stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="org.eclipse.oomph.setup.sync.tests"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.oomph.setup.sync.tests"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.eclipse.userstorage.tests.server.debug=true"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.eclipse.userstorage.tests.server.debug=true&#13;&#10;-Duser.home=${system_property:user.home}"/>
 </launchConfiguration>

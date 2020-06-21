@@ -6,11 +6,12 @@
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
 </listAttribute>
+<stringAttribute key="org.eclipse.debug.ui.ATTR_CONSOLE_ENCODING" value="UTF-8"/>
 <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value=""/>
 <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
 <stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
 <stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit4"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.oomph.setup.sync.tests.SynchronizerTests"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.oomph.setup.sync.tests"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Doomph.setup.sync.debug=true&#13;&#10;-Dorg.eclipse.userstorage.credentialsProvider=org.eclipse.userstorage.tests.util.FixedCredentialsProvider&#13;&#10;-Dorg.eclipse.userstorage.session.debug=true&#13;&#10;-Dorg.eclipse.userstorage.tests.server.debug=false&#13;&#10;-Dorg.eclipse.oomph.setup.sync.gzip.skip=false"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Doomph.setup.sync.debug=true&#13;&#10;-Dorg.eclipse.userstorage.credentialsProvider=org.eclipse.userstorage.tests.util.FixedCredentialsProvider&#13;&#10;-Dorg.eclipse.userstorage.session.debug=true&#13;&#10;-Dorg.eclipse.userstorage.tests.server.debug=false&#13;&#10;-Dorg.eclipse.oomph.setup.sync.gzip.skip=false&#13;&#10;-Duser.home=${system_property:user.home}"/>
 </launchConfiguration>
