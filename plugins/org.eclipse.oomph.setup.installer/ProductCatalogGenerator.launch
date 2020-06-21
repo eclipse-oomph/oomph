@@ -16,11 +16,16 @@
 <setAttribute key="deselected_workspace_bundles"/>
 <booleanAttribute key="includeOptional" value="false"/>
 <stringAttribute key="location" value="${workspace_loc}/../ws-product-catalog-generator"/>
+<stringAttribute key="org.eclipse.debug.ui.ATTR_CONSOLE_ENCODING" value="UTF-8"/>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+</listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog &#13;&#10;-outputLocation ${file_uri:${resource_loc:/setups/org.eclipse.products.setup}}&#13;&#10;-xstaging 2020-03  http://download.eclipse.org/technology/epp/packages/2020-03 http://download.eclipse.org/releases/2020-03/202003181000 http://download.eclipse.org/eclipse/updates/4.15/R-4.15-202003050155&#13;&#10;-useComposite 2020-06&#13;&#10;-xlatestReleased&#13;&#10;-brandingNotification&#13;&#10;-siteURI https://www.eclipse.org/downloads/packages/release/2020-03/r"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog &#13;&#10;-outputLocation ${file_uri:${resource_loc:/setups/org.eclipse.products.setup}}&#13;&#10;-xstaging 2020-09  http://download.eclipse.org/technology/epp/packages/2020-09 http://download.eclipse.org/releases/2020-09/...  http://download.eclipse.org/eclipse/updates/4.17/...&#13;&#10;-useComposite 2020-09&#13;&#10;-xlatestReleased&#13;&#10;-brandingNotification&#13;&#10;-siteURI https://www.eclipse.org/downloads/packages/release/2020-06/r"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Declipse.p2.mirrors=false&#13;&#10;-Dxorg.eclipse.ecf.provider.filetransfer.excludeContributors=org.eclipse.ecf.provider.filetransfer.httpclient45&#13;&#10;-Doomph.p2.repository.retry=2&#13;&#10;-Dxorg.eclipse.ecf.core.util.traceAll=true&#13;&#10;-Dxorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog&#13;&#10;-Dxorg.apache.commons.logging.simplelog.showdatetime=true&#13;&#10;-Dxorg.apache.commons.logging.simplelog.log.org.apache.http=DEBUG&#13;&#10;-Dxorg.apache.commons.logging.simplelog.log.org.apache.http.wire=ERROR&#13;&#10;-Dxuser.home=D:/temp-user-home"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Declipse.p2.mirrors=false&#13;&#10;-Dxorg.eclipse.ecf.provider.filetransfer.excludeContributors=org.eclipse.ecf.provider.filetransfer.httpclient45&#13;&#10;-Doomph.p2.repository.retry=2&#13;&#10;-Dxorg.eclipse.ecf.core.util.traceAll=true&#13;&#10;-Dxorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog&#13;&#10;-Dxorg.apache.commons.logging.simplelog.showdatetime=true&#13;&#10;-Dxorg.apache.commons.logging.simplelog.log.org.apache.http=DEBUG&#13;&#10;-Dxorg.apache.commons.logging.simplelog.log.org.apache.http.wire=ERROR&#13;&#10;-Duser.home=${system_property:user.home}"/>
 <stringAttribute key="pde.version" value="3.3"/>
 <stringAttribute key="product" value="org.eclipse.sdk.ide"/>
 <setAttribute key="selected_target_bundles">
@@ -35,14 +40,14 @@
 <setEntry value="org.apache.batik.css@default:default"/>
 <setEntry value="org.apache.batik.i18n@default:default"/>
 <setEntry value="org.apache.batik.util@default:default"/>
-<setEntry value="org.apache.commons.codec*1.13.0.v20200108-0001@default:default"/>
+<setEntry value="org.apache.commons.codec@default:default"/>
 <setEntry value="org.apache.commons.io@default:default"/>
 <setEntry value="org.apache.commons.jxpath@default:default"/>
 <setEntry value="org.apache.commons.logging@default:default"/>
 <setEntry value="org.apache.felix.scr@1:true"/>
-<setEntry value="org.apache.httpcomponents.httpclient*4.5.10.v20200114-1512@default:default"/>
 <setEntry value="org.apache.httpcomponents.httpclient.win@default:default"/>
-<setEntry value="org.apache.httpcomponents.httpcore*4.4.12.v20200108-1212@default:default"/>
+<setEntry value="org.apache.httpcomponents.httpclient@default:default"/>
+<setEntry value="org.apache.httpcomponents.httpcore@default:default"/>
 <setEntry value="org.apache.xmlgraphics@default:default"/>
 <setEntry value="org.eclipse.ant.core@default:default"/>
 <setEntry value="org.eclipse.compare.core@default:default"/>
@@ -142,6 +147,7 @@
 <setEntry value="org.eclipse.jdt.debug@default:default"/>
 <setEntry value="org.eclipse.jdt.launching@default:default"/>
 <setEntry value="org.eclipse.jface.databinding@default:default"/>
+<setEntry value="org.eclipse.jface.notifications@default:default"/>
 <setEntry value="org.eclipse.jface.text@default:default"/>
 <setEntry value="org.eclipse.jface@default:default"/>
 <setEntry value="org.eclipse.jsch.core@default:default"/>
