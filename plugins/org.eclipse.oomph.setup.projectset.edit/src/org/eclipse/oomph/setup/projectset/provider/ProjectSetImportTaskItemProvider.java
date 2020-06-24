@@ -72,8 +72,8 @@ public class ProjectSetImportTaskItemProvider extends SetupTaskItemProvider
   protected void addURLPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ProjectSetImportTask_uRL_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ProjectSetImportTask_uRL_feature", "_UI_ProjectSetImportTask_type"),
+        getString("_UI_ProjectSetImportTask_uRL_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ProjectSetImportTask_uRL_feature", "_UI_ProjectSetImportTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectSetPackage.Literals.PROJECT_SET_IMPORT_TASK__URL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -86,7 +86,7 @@ public class ProjectSetImportTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ProjectSetImportTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ProjectSetImportTask")); //$NON-NLS-1$
   }
 
   /**
@@ -113,7 +113,7 @@ public class ProjectSetImportTaskItemProvider extends SetupTaskItemProvider
     String url = projectSetImportTask.getURL();
     if (StringUtil.isEmpty(url))
     {
-      return getString("_UI_ProjectSetImportTask_type");
+      return getString("_UI_ProjectSetImportTask_type"); //$NON-NLS-1$
     }
 
     return url;

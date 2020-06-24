@@ -117,10 +117,9 @@ public class TransportTests extends AbstractP2Test
 
       if (p2Index)
       {
-        IOUtil.writeUTF8(new File(folder, "p2.index"),
-            "version=1\n" //
-                + "metadata.repository.factory.order=compositeContent.xml,\\!\n" //
-                + "artifact.repository.factory.order=compositeArtifacts.xml,\\!\n");
+        IOUtil.writeUTF8(new File(folder, "p2.index"), "version=1\n" //
+            + "metadata.repository.factory.order=compositeContent.xml,\\!\n" //
+            + "artifact.repository.factory.order=compositeArtifacts.xml,\\!\n");
       }
     }
     else
@@ -129,10 +128,9 @@ public class TransportTests extends AbstractP2Test
 
       if (p2Index)
       {
-        IOUtil.writeUTF8(new File(folder, "p2.index"),
-            "version=1\n" //
-                + "metadata.repository.factory.order=content.xml,\\!\n" //
-                + "artifact.repository.factory.order=artifacts.xml,\\!\n");
+        IOUtil.writeUTF8(new File(folder, "p2.index"), "version=1\n" //
+            + "metadata.repository.factory.order=content.xml,\\!\n" //
+            + "artifact.repository.factory.order=artifacts.xml,\\!\n");
       }
     }
 

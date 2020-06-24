@@ -71,8 +71,8 @@ public class TextModificationItemProvider extends ModelElementItemProvider
   protected void addPatternPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TextModification_pattern_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_TextModification_pattern_feature", "_UI_TextModification_type"),
+        getString("_UI_TextModification_pattern_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_TextModification_pattern_feature", "_UI_TextModification_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.TEXT_MODIFICATION__PATTERN, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -85,8 +85,8 @@ public class TextModificationItemProvider extends ModelElementItemProvider
   protected void addSubstitutionsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TextModification_substitutions_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_TextModification_substitutions_feature", "_UI_TextModification_type"),
+        getString("_UI_TextModification_substitutions_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_TextModification_substitutions_feature", "_UI_TextModification_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.TEXT_MODIFICATION__SUBSTITUTIONS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -99,7 +99,7 @@ public class TextModificationItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/TextModification"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/TextModification")); //$NON-NLS-1$
   }
 
   /**
@@ -123,7 +123,8 @@ public class TextModificationItemProvider extends ModelElementItemProvider
   public String getText(Object object)
   {
     String label = ((TextModification)object).getPattern();
-    return label == null || label.length() == 0 ? getString("_UI_TextModification_type") : getString("_UI_TextModification_type") + " " + label;
+    return label == null || label.length() == 0 ? getString("_UI_TextModification_type") : //$NON-NLS-1$
+        getString("_UI_TextModification_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

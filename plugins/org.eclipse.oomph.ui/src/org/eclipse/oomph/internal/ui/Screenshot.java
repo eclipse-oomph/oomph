@@ -78,7 +78,7 @@ class Screenshot
   static
   {
     File folderLocation = null;
-    String location = PropertiesUtil.getProperty("org.eclipse.oomph.ui.screenshot");
+    String location = PropertiesUtil.getProperty("org.eclipse.oomph.ui.screenshot"); //$NON-NLS-1$
     if (location != null)
     {
       File file = new File(location);
@@ -161,7 +161,7 @@ class Screenshot
    */
   private static final class DisplayKeyDownListener implements Listener
   {
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss"); //$NON-NLS-1$
 
     private final DisplayMenuListener displayMenuListener;
 
@@ -184,7 +184,7 @@ class Screenshot
       {
         if (now - lastControl < 500)
         {
-          UIPlugin.INSTANCE.log("immediate-capture", IStatus.INFO);
+          UIPlugin.INSTANCE.log("immediate-capture", IStatus.INFO); //$NON-NLS-1$
           new Capture(new File(LOCATION, DATE_FORMAT.format(new Date(System.currentTimeMillis()))), displayMenuListener.menus, displayMouseUpListener.toolBar)
               .capture();
           displayMouseUpListener.toolBar = null;
@@ -198,12 +198,12 @@ class Screenshot
       {
         if (now - lastShift < 500)
         {
-          UIPlugin.INSTANCE.log("delay-capture", IStatus.INFO);
+          UIPlugin.INSTANCE.log("delay-capture", IStatus.INFO); //$NON-NLS-1$
           DISPLAY.timerExec(5000, new Runnable()
           {
             public void run()
             {
-              UIPlugin.INSTANCE.log("capturing-now", IStatus.INFO);
+              UIPlugin.INSTANCE.log("capturing-now", IStatus.INFO); //$NON-NLS-1$
               new Capture(new File(LOCATION, DATE_FORMAT.format(new Date(System.currentTimeMillis()))), displayMenuListener.menus,
                   displayMouseUpListener.toolBar).capture();
               displayMouseUpListener.toolBar = null;
@@ -250,7 +250,7 @@ class Screenshot
       if (focusControl != null)
       {
         Control effectiveControl = toolBar == null ? focusControl : toolBar;
-        capture(0, "FocusControl", effectiveControl);
+        capture(0, "FocusControl", effectiveControl); //$NON-NLS-1$
         captureMenus(effectiveControl);
       }
     }
@@ -264,7 +264,7 @@ class Screenshot
         for (Menu menu : menus)
         {
           Decorations parent = menu.getParent();
-          Rectangle bounds = ReflectUtil.invokeMethod("getBounds", menu);
+          Rectangle bounds = ReflectUtil.invokeMethod("getBounds", menu); //$NON-NLS-1$
 
           // Expand to include the border.
           --bounds.x;
@@ -272,7 +272,7 @@ class Screenshot
           bounds.width += 2;
           bounds.height += 2;
 
-          captureDrawable(parent, bounds, "Menu" + toString(++count) + ".png");
+          captureDrawable(parent, bounds, "Menu" + toString(++count) + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
           allBounds.add(bounds);
         }
 
@@ -281,11 +281,11 @@ class Screenshot
         if (menuBar != null)
         {
           Decorations parent = menuBar.getParent();
-          Rectangle bounds = ReflectUtil.invokeMethod("getBounds", menuBar);
-          captureDrawable(parent, bounds, "MenuBar.png");
+          Rectangle bounds = ReflectUtil.invokeMethod("getBounds", menuBar); //$NON-NLS-1$
+          captureDrawable(parent, bounds, "MenuBar.png"); //$NON-NLS-1$
           for (MenuItem menuItem : menuBar.getItems())
           {
-            Rectangle menuItemBounds = ReflectUtil.invokeMethod("getBounds", menuItem);
+            Rectangle menuItemBounds = ReflectUtil.invokeMethod("getBounds", menuItem); //$NON-NLS-1$
             Geometry.moveRectangle(menuItemBounds, new Point(bounds.x, bounds.y));
             itemBounds.add(menuItemBounds);
           }
@@ -293,7 +293,7 @@ class Screenshot
 
         if (!allBounds.isEmpty())
         {
-          captureDrawable(DISPLAY, allBounds, "Menu" + toString(++count) + ".png");
+          captureDrawable(DISPLAY, allBounds, "Menu" + toString(++count) + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
 
           for (Rectangle itemBound : itemBounds)
           {
@@ -302,7 +302,7 @@ class Screenshot
             if (copy.intersects(allBounds.get(0)))
             {
               allBounds.add(0, itemBound);
-              captureDrawable(DISPLAY, allBounds, "Menu" + toString(++count) + ".png");
+              captureDrawable(DISPLAY, allBounds, "Menu" + toString(++count) + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
               break;
             }
           }
@@ -316,10 +316,10 @@ class Screenshot
       Point preferredSize = control.computeSize(SWT.DEFAULT, SWT.DEFAULT);
       if (preferredSize.x < size.x && preferredSize.y < size.y)
       {
-        captureDrawable(control, new Rectangle(0, 0, preferredSize.x, preferredSize.y), fileName + toString(++count) + ".png");
+        captureDrawable(control, new Rectangle(0, 0, preferredSize.x, preferredSize.y), fileName + toString(++count) + ".png"); //$NON-NLS-1$
       }
 
-      captureDrawable(control, new Rectangle(0, 0, size.x, size.y), fileName + toString(++count) + ".png");
+      captureDrawable(control, new Rectangle(0, 0, size.x, size.y), fileName + toString(++count) + ".png"); //$NON-NLS-1$
 
       if (control instanceof ToolBar)
       {
@@ -328,7 +328,7 @@ class Screenshot
         for (ToolItem toolItem : toolBar.getItems())
         {
           Rectangle bounds = toolItem.getBounds();
-          captureDrawable(toolBar, bounds, "ToolItem" + toString(++toolItemCount) + ".png");
+          captureDrawable(toolBar, bounds, "ToolItem" + toString(++toolItemCount) + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
           Point displayPoint = toolBar.toDisplay(bounds.x, bounds.y);
           bounds.x = displayPoint.x;
           bounds.y = displayPoint.y;
@@ -361,7 +361,7 @@ class Screenshot
           bounds.height += 32;
         }
 
-        captureDrawable(composite, bounds, "Parent" + toString(count) + ".png");
+        captureDrawable(composite, bounds, "Parent" + toString(count) + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
 
         // Also take a shot with the borders.
         if (parent != null)
@@ -374,7 +374,7 @@ class Screenshot
           bounds.width += 32;
           bounds.height += 32;
 
-          captureDrawable(composite, bounds, "Parent" + toString(count) + ".png");
+          captureDrawable(composite, bounds, "Parent" + toString(count) + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
 
           if (parent.getData() instanceof IWorkbenchWindow)
           {
@@ -385,12 +385,12 @@ class Screenshot
               IWorkbenchPartReference activePartReference = activePage.getActivePartReference();
               if (activePartReference != null)
               {
-                Object part = get(activePartReference, "part", Object.class);
-                Composite activePartComposite = get(part, "widget", Composite.class);
+                Object part = get(activePartReference, "part", Object.class); //$NON-NLS-1$
+                Composite activePartComposite = get(part, "widget", Composite.class); //$NON-NLS-1$
                 Control control = findControl(activePartComposite, targetPoint);
                 if (control != activePartComposite)
                 {
-                  capture(count, "Parent", activePartComposite);
+                  capture(count, "Parent", activePartComposite); //$NON-NLS-1$
                 }
                 else
                 {
@@ -404,7 +404,7 @@ class Screenshot
       }
       else
       {
-        captureDrawable(composite, new Rectangle(0, 0, size.x, size.y), "Parent" + toString(count) + ".png");
+        captureDrawable(composite, new Rectangle(0, 0, size.x, size.y), "Parent" + toString(count) + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
       // Don't capture parents that cover exactly the same area.
@@ -549,7 +549,7 @@ class Screenshot
     {
       try
       {
-        Caret caret = invoke(drawable, "getCaret", Caret.class);
+        Caret caret = invoke(drawable, "getCaret", Caret.class); //$NON-NLS-1$
         if (caret != null && caret.getVisible())
         {
           GC imageGC = new GC(image);
@@ -627,7 +627,7 @@ class Screenshot
         throw new RuntimeException(exception);
       }
 
-      throw new RuntimeException("No such field");
+      throw new RuntimeException("No such field"); //$NON-NLS-1$
     }
 
     private String toString(int count)
@@ -635,7 +635,7 @@ class Screenshot
       String result = Integer.toString(count);
       while (result.length() < 2)
       {
-        result = "0" + result;
+        result = "0" + result; //$NON-NLS-1$
       }
 
       return result;
@@ -660,14 +660,14 @@ class Screenshot
           if (cursor == DISPLAY.getSystemCursor(SWT.CURSOR_IBEAM))
           {
             mouseCursor = new MouseCursor();
-            mouseCursor.image = getCursorImage("IBeam");
+            mouseCursor.image = getCursorImage("IBeam"); //$NON-NLS-1$
             Rectangle bounds = mouseCursor.image.getBounds();
             mouseCursor.hotspot = new Point(1, (bounds.height - 1) / 2);
           }
           else
           {
             mouseCursor = new MouseCursor();
-            mouseCursor.image = getCursorImage("Default");
+            mouseCursor.image = getCursorImage("Default"); //$NON-NLS-1$
             mouseCursor.hotspot = new Point(0, 0);
           }
         }
@@ -681,7 +681,7 @@ class Screenshot
 
       private static Image getCursorImage(String type)
       {
-        return UIPlugin.INSTANCE.getSWTImage(type.toLowerCase() + "-cursor.png");
+        return UIPlugin.INSTANCE.getSWTImage(type.toLowerCase() + "-cursor.png"); //$NON-NLS-1$
       }
     }
   }

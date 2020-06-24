@@ -89,6 +89,7 @@ import org.eclipse.jface.text.templates.SimpleTemplateVariableResolver;
 import org.eclipse.jface.text.templates.TemplateContext;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.TemplateVariableResolver;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -116,29 +117,29 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   public static final String PLUGIN_ID = INSTANCE.getSymbolicName();
 
-  public static final String PREF_HEADLESS = "headless.startup";
+  public static final String PREF_HEADLESS = "headless.startup"; //$NON-NLS-1$
 
-  public static final String PREF_SKIP_STARTUP_TASKS = "skip.startup.tasks";
+  public static final String PREF_SKIP_STARTUP_TASKS = "skip.startup.tasks"; //$NON-NLS-1$
 
-  public static final String PREF_P2_STARTUP_TASKS = "p2.startup.tasks";
+  public static final String PREF_P2_STARTUP_TASKS = "p2.startup.tasks"; //$NON-NLS-1$
 
-  public static final String PREF_ENABLE_PREFERENCE_RECORDER = "enable.preference.recorder";
+  public static final String PREF_ENABLE_PREFERENCE_RECORDER = "enable.preference.recorder"; //$NON-NLS-1$
 
-  public static final String PREF_PREFERENCE_RECORDER_TARGET = "preference.recorder.target";
+  public static final String PREF_PREFERENCE_RECORDER_TARGET = "preference.recorder.target"; //$NON-NLS-1$
 
-  public static final String PREF_INITIALIZED_PREFERENCE_PAGES = "initialized.preference.pages";
+  public static final String PREF_INITIALIZED_PREFERENCE_PAGES = "initialized.preference.pages"; //$NON-NLS-1$
 
-  public static final String PREF_IGNORED_PREFERENCE_PAGES = "ingored.preference.pages";
+  public static final String PREF_IGNORED_PREFERENCE_PAGES = "ingored.preference.pages"; //$NON-NLS-1$
 
   public static final boolean QUESTIONNAIRE_SKIP = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_QUESTIONNAIRE_SKIP);
 
-  private static final String RESTARTING_FILE_NAME = "restarting";
+  private static final String RESTARTING_FILE_NAME = "restarting"; //$NON-NLS-1$
 
-  private static final String ANNOTATION_SOURCE_INITIAL = "initial";
+  private static final String ANNOTATION_SOURCE_INITIAL = "initial"; //$NON-NLS-1$
 
-  private static final String ANNOTATION_DETAILS_KEY_OFFLINE = "offline";
+  private static final String ANNOTATION_DETAILS_KEY_OFFLINE = "offline"; //$NON-NLS-1$
 
-  private static final String ANNOTATION_DETAILS_KEY_MIRRORS = "mirrors";
+  private static final String ANNOTATION_DETAILS_KEY_MIRRORS = "mirrors"; //$NON-NLS-1$
 
   private static final boolean SETUP_SKIP = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_SKIP);
 
@@ -163,7 +164,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     annotation.getDetails().put(ANNOTATION_DETAILS_KEY_OFFLINE, Boolean.toString(offline));
     annotation.getDetails().put(ANNOTATION_DETAILS_KEY_MIRRORS, Boolean.toString(mirrors));
 
-    File file = new File(ws, ".metadata/.plugins/" + SetupUIPlugin.INSTANCE.getSymbolicName() + "/" + RESTARTING_FILE_NAME);
+    File file = new File(ws, ".metadata/.plugins/" + SetupUIPlugin.INSTANCE.getSymbolicName() + "/" + RESTARTING_FILE_NAME); //$NON-NLS-1$ //$NON-NLS-2$
     saveRestartFile(file, annotation);
   }
 
@@ -235,12 +236,13 @@ public final class SetupUIPlugin extends OomphUIPlugin
               if (!synchronizerAvailable || !SynchronizerManager.ENABLED)
               {
                 PreferenceManager preferenceManager = workbench.getPreferenceManager();
-                preferenceManager.remove("/" + OomphPreferencePage.ID + "/" + SetupPreferencePage.ID + "/" + SynchronizerPreferencePage.ID);
+                preferenceManager.remove("/" + OomphPreferencePage.ID + "/" + SetupPreferencePage.ID + "/" + SynchronizerPreferencePage.ID); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
               }
 
               if (SetupTaskPerformer.REMOTE_DEBUG)
               {
-                MessageDialog.openInformation(UIUtil.getShell(), "Remote Debug Pause", "The setup tasks are paused to allow you to attach a remote debugger");
+                MessageDialog.openInformation(UIUtil.getShell(), Messages.SetupUIPlugin_remoteDebugPauseDialog_title,
+                    Messages.SetupUIPlugin_remoteDebugPauseDialog_message);
               }
 
               if (Platform.OS_MACOSX.equals(Platform.getOS()))
@@ -253,7 +255,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
               if (!SETUP_SKIP && (!isSkipStartupTasks() || getRestartingFile().exists()))
               {
-                new Job("Setup check")
+                new Job(Messages.SetupUIPlugin_setupCheckJob_name)
                 {
                   @Override
                   protected IStatus run(IProgressMonitor monitor)
@@ -272,14 +274,14 @@ public final class SetupUIPlugin extends OomphUIPlugin
               }
               else
               {
-                Job mirrorJob = new Job("Initialize Setup Models")
+                Job mirrorJob = new Job(Messages.SetupUIPlugin_initSetupModelsJob_name)
                 {
                   @Override
                   protected IStatus run(IProgressMonitor monitor)
                   {
                     try
                     {
-                      monitor.beginTask("Loading resources", 10);
+                      monitor.beginTask(Messages.SetupUIPlugin_initSetupModelsJob_taskName, 10);
 
                       ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
                       resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
@@ -308,7 +310,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
   private static void handleNotificationURI(ResourceSet resourceSet)
   {
     EObject selfProductVersion = resourceSet
-        .getEObject(URI.createURI("catalog:/self-product-catalog.setup#//@products[name='product']/@versions[name='version']"), false);
+        .getEObject(URI.createURI("catalog:/self-product-catalog.setup#//@products[name='product']/@versions[name='version']"), false); //$NON-NLS-1$
     if (selfProductVersion instanceof ProductVersion)
     {
       ProductVersion productVersion = (ProductVersion)selfProductVersion;
@@ -326,7 +328,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
             {
               String productLabel = product.getLabel();
               String productVersionLabel = productVersion.getLabel();
-              if (productLabel != null && productLabel.startsWith("Eclipse") && productVersionLabel != null)
+              if (productLabel != null && productLabel.startsWith("Eclipse") && productVersionLabel != null) //$NON-NLS-1$
               {
                 handleNotificationURI(notificationURI, productLabel, productVersionLabel);
               }
@@ -339,15 +341,15 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static void handleNotificationURI(String notificationURI, String scope, String version)
   {
-    if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.donate", "true")))
+    if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.donate", "true"))) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
     {
       try
       {
         Version versionValue = Version.create(version);
-        if (versionValue.compareTo(Version.create("4.16")) >= 0)
+        if (versionValue.compareTo(Version.create("4.16")) >= 0) //$NON-NLS-1$
         {
-          String resolvedURI = notificationURI.toString().replace("${scope.version}", URI.encodeQuery(StringUtil.safe(version), false)).replace("${scope}",
-              URI.encodeQuery(StringUtil.safe(scope), false).replace("+", "%2B"));
+          String resolvedURI = notificationURI.toString().replace("${scope.version}", URI.encodeQuery(StringUtil.safe(version), false)).replace("${scope}", //$NON-NLS-1$ //$NON-NLS-2$
+              URI.encodeQuery(StringUtil.safe(scope), false).replace("+", "%2B")); //$NON-NLS-1$ //$NON-NLS-2$
           SetupPropertyTester.setDonating(resolvedURI);
           if (rememberNotificationURI(notificationURI))
           {
@@ -357,7 +359,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
               {
                 ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
                 IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
-                Command donateCommand = commandService.getCommand("org.eclipse.oomph.setup.donate");
+                Command donateCommand = commandService.getCommand("org.eclipse.oomph.setup.donate"); //$NON-NLS-1$
                 if (donateCommand != null)
                 {
                   if (donateCommand.isEnabled())
@@ -386,13 +388,13 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static boolean rememberNotificationURI(String notificationURI)
   {
-    File file = new File(SetupContext.GLOBAL_SETUPS_LOCATION_URI.toFileString(), "brandingNotificationURIs.txt");
+    File file = new File(SetupContext.GLOBAL_SETUPS_LOCATION_URI.toFileString(), "brandingNotificationURIs.txt"); //$NON-NLS-1$
     Set<String> brandingNotificationURIs = new LinkedHashSet<String>();
     try
     {
       if (file.isFile())
       {
-        brandingNotificationURIs.addAll(IOUtil.readLines(file, "UTF-8"));
+        brandingNotificationURIs.addAll(IOUtil.readLines(file, "UTF-8")); //$NON-NLS-1$
       }
     }
     catch (RuntimeException ex)
@@ -405,7 +407,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     {
       try
       {
-        IOUtil.writeLines(file, "UTF-8", new ArrayList<String>(brandingNotificationURIs));
+        IOUtil.writeLines(file, "UTF-8", new ArrayList<String>(brandingNotificationURIs)); //$NON-NLS-1$
       }
       catch (RuntimeException ex)
       {
@@ -422,10 +424,10 @@ public final class SetupUIPlugin extends OomphUIPlugin
     // not simply to the System.getProperty("user.name") which is the account name and generally not appropriate as the author name.
     try
     {
-      boolean hasJDTUserName = !StringUtil.isEmpty(System.getProperty("jdt.user.name"));
-      Class<?> javaUIPluginClass = CommonPlugin.loadClass("org.eclipse.jdt.ui", "org.eclipse.jdt.internal.ui.JavaPlugin");
-      Object javaUIPlugin = ReflectUtil.invokeMethod("getDefault", javaUIPluginClass);
-      Object codeTemplateContextRegistry = ReflectUtil.invokeMethod("getCodeTemplateContextRegistry", javaUIPlugin);
+      boolean hasJDTUserName = !StringUtil.isEmpty(System.getProperty("jdt.user.name")); //$NON-NLS-1$
+      Class<?> javaUIPluginClass = CommonPlugin.loadClass("org.eclipse.jdt.ui", "org.eclipse.jdt.internal.ui.JavaPlugin"); //$NON-NLS-1$ //$NON-NLS-2$
+      Object javaUIPlugin = ReflectUtil.invokeMethod("getDefault", javaUIPluginClass); //$NON-NLS-1$
+      Object codeTemplateContextRegistry = ReflectUtil.invokeMethod("getCodeTemplateContextRegistry", javaUIPlugin); //$NON-NLS-1$
 
       for (@SuppressWarnings("all")
       Iterator<TemplateContextType> it = ReflectUtil.invokeMethod("contextTypes", codeTemplateContextRegistry); it.hasNext();)
@@ -435,7 +437,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
         Iterator<TemplateVariableResolver> it2 = templateContextType.resolvers(); it2.hasNext();)
         {
           TemplateVariableResolver templateVariableResolver = it2.next();
-          if ("user".equals(templateVariableResolver.getType()))
+          if ("user".equals(templateVariableResolver.getType())) //$NON-NLS-1$
           {
             if (hasJDTUserName)
             {
@@ -444,26 +446,25 @@ public final class SetupUIPlugin extends OomphUIPlugin
                 @Override
                 protected String resolve(TemplateContext context)
                 {
-                  return PropertiesUtil.getProperty("jdt.user.name", PropertiesUtil.getProperty("user.name"));
+                  return PropertiesUtil.getProperty("jdt.user.name", PropertiesUtil.getProperty("user.name")); //$NON-NLS-1$ //$NON-NLS-2$
                 }
               });
             }
 
-            templateContextType
-                .addResolver(new SimpleTemplateVariableResolver("location", "The user location as specified by the system property 'jdt.user.location'")
+            templateContextType.addResolver(new SimpleTemplateVariableResolver("location", Messages.SetupUIPlugin_locationVariableResolver_description) //$NON-NLS-1$
+            {
+              @Override
+              protected String resolve(TemplateContext context)
+              {
+                String result = PropertiesUtil.getProperty("jdt.user.location", ""); //$NON-NLS-1$ //$NON-NLS-2$
+                if (!StringUtil.isEmpty(result) && !result.startsWith(" ")) //$NON-NLS-1$
                 {
-                  @Override
-                  protected String resolve(TemplateContext context)
-                  {
-                    String result = PropertiesUtil.getProperty("jdt.user.location", "");
-                    if (!StringUtil.isEmpty(result) && !result.startsWith(" "))
-                    {
-                      result = " " + result;
-                    }
+                  result = " " + result; //$NON-NLS-1$
+                }
 
-                    return result;
-                  }
-                });
+                return result;
+              }
+            });
 
             break;
           }
@@ -555,7 +556,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
               String installFolderLocation = currentProfile.getProperty(IProfile.PROP_INSTALL_FOLDER);
               if (installFolderLocation != null && !bundlePoolLocation.equals(new File(installFolderLocation)))
               {
-                File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features");
+                File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features"); //$NON-NLS-1$
                 eclipseExtensionFeaturesFolder.mkdirs();
               }
             }
@@ -572,7 +573,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
         if (!bundlePoolLocation.equals(new File(installFolderLocation)))
         {
-          File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features");
+          File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features"); //$NON-NLS-1$
           eclipseExtensionFeaturesFolder.mkdirs();
         }
       }
@@ -582,7 +583,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       SetupUIPlugin.INSTANCE.log(throwable, IStatus.WARNING);
     }
 
-    monitor.beginTask("", 105);
+    monitor.beginTask("", 105); //$NON-NLS-1$
     Trigger trigger = Trigger.STARTUP;
     boolean restarting = false;
     Set<URI> neededRestartTasks = new HashSet<URI>();
@@ -592,7 +593,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       File restartingFile = getRestartingFile();
       if (restartingFile.exists())
       {
-        monitor.setTaskName("Loading restart tasks " + restartingFile);
+        monitor.setTaskName(NLS.bind(Messages.SetupUIPlugin_loadRestartTasks_taskName, restartingFile));
         Resource resource = SetupCoreUtil.createResourceSet().getResource(URI.createFileURI(restartingFile.toString()), true);
 
         Annotation annotation = (Annotation)EcoreUtil.getObjectByType(resource.getContents(), BasePackage.Literals.ANNOTATION);
@@ -600,14 +601,14 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
         if (ANNOTATION_SOURCE_INITIAL.equals(annotation.getSource()))
         {
-          if ("true".equals(annotation.getDetails().get(ANNOTATION_DETAILS_KEY_OFFLINE)))
+          if ("true".equals(annotation.getDetails().get(ANNOTATION_DETAILS_KEY_OFFLINE))) //$NON-NLS-1$
           {
-            System.setProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP, "true");
+            System.setProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP, "true"); //$NON-NLS-1$
           }
 
-          if ("true".equals(annotation.getDetails().get(ANNOTATION_DETAILS_KEY_MIRRORS)))
+          if ("true".equals(annotation.getDetails().get(ANNOTATION_DETAILS_KEY_MIRRORS)))//$NON-NLS-1$
           {
-            System.setProperty(SetupProperties.PROP_SETUP_MIRRORS_STARTUP, "true");
+            System.setProperty(SetupProperties.PROP_SETUP_MIRRORS_STARTUP, "true"); //$NON-NLS-1$
           }
         }
         else
@@ -655,7 +656,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       }
     }
 
-    monitor.setTaskName("Creating a setup task performer");
+    monitor.setTaskName(Messages.SetupUIPlugin_createPerformerTask_name);
 
     try
     {
@@ -734,7 +735,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
             {
               if (variable.getType() == VariableType.PASSWORD)
               {
-                variable.setValue(PreferencesUtil.encrypt(" "));
+                variable.setValue(PreferencesUtil.encrypt(" ")); //$NON-NLS-1$
               }
               else
               {
@@ -794,7 +795,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
     if (performer != null)
     {
-      monitor.setTaskName("Initializing the setup task performer");
+      monitor.setTaskName(Messages.SetupUIPlugin_initPerformerTask_name);
 
       try
       {
@@ -833,7 +834,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     }
 
     monitor.worked(1);
-    monitor.setTaskName("Launching the setup wizard");
+    monitor.setTaskName(Messages.SetupUIPlugin_launchSetupWizardTask_name);
 
     final SetupTaskPerformer finalPerfomer = performer;
     UIUtil.asyncExec(new Runnable()

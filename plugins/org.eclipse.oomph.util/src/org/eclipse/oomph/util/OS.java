@@ -16,6 +16,7 @@ import org.eclipse.emf.common.CommonPlugin;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.Closeable;
 import java.io.File;
@@ -112,7 +113,7 @@ public abstract class OS
 
   protected String getEncoding()
   {
-    return "ISO-8859-1";
+    return "ISO-8859-1"; //$NON-NLS-1$
   }
 
   protected abstract String[] getOpenCommands();
@@ -137,9 +138,9 @@ public abstract class OS
     try
     {
       // java.awt.Desktop was introduced with Java 1.6!
-      Class<?> desktopClass = CommonPlugin.loadClass(UtilPlugin.INSTANCE.getSymbolicName(), "java.awt.Desktop");
-      Method getDesktopMethod = ReflectUtil.getMethod(desktopClass, "getDesktop");
-      Method browseMethod = ReflectUtil.getMethod(desktopClass, "browse", URI.class);
+      Class<?> desktopClass = CommonPlugin.loadClass(UtilPlugin.INSTANCE.getSymbolicName(), "java.awt.Desktop"); //$NON-NLS-1$
+      Method getDesktopMethod = ReflectUtil.getMethod(desktopClass, "getDesktop"); //$NON-NLS-1$
+      Method browseMethod = ReflectUtil.getMethod(desktopClass, "browse", URI.class); //$NON-NLS-1$
 
       Object desktop = getDesktopMethod.invoke(null);
       browseMethod.invoke(desktop, new URI(url));
@@ -183,7 +184,7 @@ public abstract class OS
     try
     {
       Map<String, String> environment = processBuilder.environment();
-      environment.remove("SWT_GTK3");
+      environment.remove("SWT_GTK3"); //$NON-NLS-1$
     }
     catch (UnsupportedOperationException ex)
     {
@@ -219,7 +220,7 @@ public abstract class OS
   {
     if (StringUtil.isEmpty(folderName))
     {
-      return "eclipse";
+      return "eclipse"; //$NON-NLS-1$
     }
 
     return folderName;
@@ -236,7 +237,7 @@ public abstract class OS
   {
     try
     {
-      String launcher = PropertiesUtil.getProperty("eclipse.launcher");
+      String launcher = PropertiesUtil.getProperty("eclipse.launcher"); //$NON-NLS-1$
       if (launcher != null)
       {
         File launcherFile = new File(launcher);
@@ -251,7 +252,7 @@ public abstract class OS
               File parentFolder = result.getParentFile();
               if (parentFolder != null)
               {
-                File consoleLauncher = new File(parentFolder, "eclipsec.exe");
+                File consoleLauncher = new File(parentFolder, "eclipsec.exe"); //$NON-NLS-1$
                 if (consoleLauncher.isFile())
                 {
                   return consoleLauncher.getPath();
@@ -319,7 +320,7 @@ public abstract class OS
       return new Linux(ws, arch);
     }
 
-    throw new IllegalStateException("Operating system not supported: " + os);
+    throw new IllegalStateException(NLS.bind(Messages.OS_OS_NotSupported_exception, os));
   }
 
   private static List<OS> createAll()
@@ -338,7 +339,7 @@ public abstract class OS
   @Override
   public String toString()
   {
-    return getOsgiOS() + " " + getOsgiWS() + " " + getOsgiArch();
+    return getOsgiOS() + " " + getOsgiWS() + " " + getOsgiArch(); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**
@@ -371,25 +372,25 @@ public abstract class OS
     @Override
     public String getRelativeExecutableFolder()
     {
-      return "";
+      return ""; //$NON-NLS-1$
     }
 
     @Override
     public String getExecutableName(String launcherName)
     {
-      return super.getExecutableName(launcherName) + ".exe";
+      return super.getExecutableName(launcherName) + ".exe"; //$NON-NLS-1$
     }
 
     @Override
     public String getGitPrefix()
     {
-      return "C:\\Program Files (x86)\\Git";
+      return "C:\\Program Files (x86)\\Git"; //$NON-NLS-1$
     }
 
     @Override
     public String getJREsRoot()
     {
-      return "C:\\Program Files (x86)\\Java";
+      return "C:\\Program Files (x86)\\Java"; //$NON-NLS-1$
     }
 
     @Override
@@ -409,9 +410,9 @@ public abstract class OS
       if (terminal)
       {
         List<String> terminalCommand = new ArrayList<String>();
-        terminalCommand.add("cmd");
-        terminalCommand.add("/C");
-        terminalCommand.add("start");
+        terminalCommand.add("cmd"); //$NON-NLS-1$
+        terminalCommand.add("/C"); //$NON-NLS-1$
+        terminalCommand.add("start"); //$NON-NLS-1$
         terminalCommand.addAll(command);
         command = terminalCommand;
       }
@@ -441,7 +442,7 @@ public abstract class OS
     @Override
     public String getJREsRoot()
     {
-      return "C:\\Program Files\\Java";
+      return "C:\\Program Files\\Java"; //$NON-NLS-1$
     }
 
     @Override
@@ -461,7 +462,7 @@ public abstract class OS
    */
   private static final class Mac extends OS
   {
-    private static final String[] OPEN_COMMANDS = { "open" };
+    private static final String[] OPEN_COMMANDS = { "open" }; //$NON-NLS-1$
 
     public Mac(String osgiWS, String osgiArch)
     {
@@ -479,32 +480,32 @@ public abstract class OS
     {
       if (StringUtil.isEmpty(folderName))
       {
-        folderName = "Eclipse.app";
+        folderName = "Eclipse.app"; //$NON-NLS-1$
       }
-      else if (!folderName.endsWith(".app"))
+      else if (!folderName.endsWith(".app")) //$NON-NLS-1$
       {
-        folderName += ".app";
+        folderName += ".app"; //$NON-NLS-1$
       }
 
-      return folderName + "/Contents/Eclipse";
+      return folderName + "/Contents/Eclipse"; //$NON-NLS-1$
     }
 
     @Override
     public String getRelativeExecutableFolder()
     {
-      return "../MacOS";
+      return "../MacOS"; //$NON-NLS-1$
     }
 
     @Override
     public String getGitPrefix()
     {
-      return "/";
+      return "/"; //$NON-NLS-1$
     }
 
     @Override
     public String getJREsRoot()
     {
-      return "/";
+      return "/"; //$NON-NLS-1$
     }
 
     @Override
@@ -524,7 +525,7 @@ public abstract class OS
     {
       if (terminal)
       {
-        File commandFile = File.createTempFile("cmd-", "");
+        File commandFile = File.createTempFile("cmd-", ""); //$NON-NLS-1$ //$NON-NLS-2$
         commandFile.deleteOnExit();
 
         String commandPath = commandFile.toString();
@@ -532,8 +533,8 @@ public abstract class OS
         IOUtil.writeUTF8(commandFile, commandLine);
 
         List<String> chmodCommand = new ArrayList<String>();
-        chmodCommand.add("chmod");
-        chmodCommand.add("a+x");
+        chmodCommand.add("chmod"); //$NON-NLS-1$
+        chmodCommand.add("a+x"); //$NON-NLS-1$
         chmodCommand.add(commandPath);
 
         ProcessBuilder chmodProcessBuilder = new ProcessBuilder(chmodCommand);
@@ -541,9 +542,9 @@ public abstract class OS
         chmodProcess.waitFor();
 
         List<String> terminalCommand = new ArrayList<String>();
-        terminalCommand.add("open");
-        terminalCommand.add("-b");
-        terminalCommand.add("com.apple.terminal");
+        terminalCommand.add("open"); //$NON-NLS-1$
+        terminalCommand.add("-b"); //$NON-NLS-1$
+        terminalCommand.add("com.apple.terminal"); //$NON-NLS-1$
         terminalCommand.add(commandPath);
         command = terminalCommand;
       }
@@ -563,9 +564,9 @@ public abstract class OS
    */
   private static final class Linux extends OS
   {
-    private static final String[] OPEN_COMMANDS = { "kde-open", "gnome-open", "xdg-open", "sensible-browser" };
+    private static final String[] OPEN_COMMANDS = { "kde-open", "gnome-open", "xdg-open", "sensible-browser" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
-    private static final String[] TERMINAL_COMMANDS = { "gnome-terminal", "xterm" };
+    private static final String[] TERMINAL_COMMANDS = { "gnome-terminal", "xterm" }; //$NON-NLS-1$ //$NON-NLS-2$
 
     public Linux(String osgiWS, String osgiArch)
     {
@@ -581,19 +582,19 @@ public abstract class OS
     @Override
     public String getRelativeExecutableFolder()
     {
-      return "";
+      return ""; //$NON-NLS-1$
     }
 
     @Override
     public String getGitPrefix()
     {
-      return "";
+      return ""; //$NON-NLS-1$
     }
 
     @Override
     public String getJREsRoot()
     {
-      return "";
+      return ""; //$NON-NLS-1$
     }
 
     @Override
@@ -631,7 +632,7 @@ public abstract class OS
           {
             List<String> terminalCommand = new ArrayList<String>();
             terminalCommand.add(xterm);
-            terminalCommand.add("-e");
+            terminalCommand.add("-e"); //$NON-NLS-1$
             terminalCommand.add(commandLine);
             return super.execute(terminalCommand, true);
           }
@@ -641,7 +642,7 @@ public abstract class OS
           }
         }
 
-        throw new IOException("Could not start any terminal: " + TERMINAL_COMMANDS);
+        throw new IOException(NLS.bind(Messages.OS_CannotStartTerminal_exception, new Object[] { TERMINAL_COMMANDS }));
       }
 
       return super.execute(command, false);

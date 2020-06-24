@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+@SuppressWarnings("nls")
 public class FixCRLFAction extends AbstractAction<Repository>
 {
   private Dialog dialog;

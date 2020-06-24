@@ -235,9 +235,9 @@ public class RedirectionTaskImpl extends SetupTaskImpl implements RedirectionTas
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (sourceURL: ");
+    result.append(" (sourceURL: "); //$NON-NLS-1$
     result.append(sourceURL);
-    result.append(", targetURL: ");
+    result.append(", targetURL: "); //$NON-NLS-1$
     result.append(targetURL);
     result.append(')');
     return result.toString();
@@ -262,7 +262,7 @@ public class RedirectionTaskImpl extends SetupTaskImpl implements RedirectionTas
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    throw new UnsupportedOperationException("Redirection task can't be executed");
+    throw new UnsupportedOperationException(Messages.RedirectionTaskImpl_NoExecutable_exception);
   }
 
 } // RedirectionTaskImpl

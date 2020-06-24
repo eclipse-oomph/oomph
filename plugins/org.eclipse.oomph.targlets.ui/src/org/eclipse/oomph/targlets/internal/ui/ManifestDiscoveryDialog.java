@@ -74,19 +74,19 @@ public class ManifestDiscoveryDialog extends FilteredItemsSelectionDialog
     this.namespace = namespace;
     this.targletContainers = targletContainers;
 
-    if ("org.eclipse.update.feature".equals(namespace))
+    if ("org.eclipse.update.feature".equals(namespace)) //$NON-NLS-1$
     {
-      setTitle("Feature Discovery");
+      setTitle(Messages.ManifestDiscoveryDialog_title_featureDiscovery);
       setMessage(PDEUIMessages.FeatureBlock_SelectFeatures);
     }
-    else if ("java.package".equals(namespace))
+    else if ("java.package".equals(namespace)) //$NON-NLS-1$
     {
-      setTitle("Package Discovery");
+      setTitle(Messages.ManifestDiscoveryDialog_title_packageDiscovery);
       setMessage(PDEUIMessages.ImportPackageSection_exported);
     }
     else
     {
-      setTitle("Plug-in Discovery");
+      setTitle(Messages.ManifestDiscoveryDialog_title_pluginDiscovery);
       setMessage(PDEUIMessages.PluginSelectionDialog_message);
     }
 
@@ -198,7 +198,7 @@ public class ManifestDiscoveryDialog extends FilteredItemsSelectionDialog
 
       for (IInstallableUnit iu : P2Util.asIterable(compoundQueryable.query(QueryUtil.createLatestIUQuery(), progress.newChild(1))))
       {
-        if (!iu.getId().endsWith(".source"))
+        if (!iu.getId().endsWith(".source")) //$NON-NLS-1$
         {
           for (IProvidedCapability capability : iu.getProvidedCapabilities())
           {
@@ -297,11 +297,11 @@ public class ManifestDiscoveryDialog extends FilteredItemsSelectionDialog
    */
   private static final class ManifestDiscoveryLabelProvider extends LabelProvider
   {
-    private static final Image FEATURE_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactFeature");
+    private static final Image FEATURE_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactFeature"); //$NON-NLS-1$
 
-    private static final Image PLUGIN_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactPlugin");
+    private static final Image PLUGIN_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactPlugin"); //$NON-NLS-1$
 
-    private static final Image PACKAGE_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("full/obj16/Requirement_Package");
+    private static final Image PACKAGE_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("full/obj16/Requirement_Package"); //$NON-NLS-1$
 
     private final String namespace;
 
@@ -313,17 +313,17 @@ public class ManifestDiscoveryDialog extends FilteredItemsSelectionDialog
     @Override
     public Image getImage(Object element)
     {
-      if ("osgi.bundle".equals(namespace))
+      if ("osgi.bundle".equals(namespace)) //$NON-NLS-1$
       {
         return PLUGIN_IMAGE;
       }
 
-      if ("org.eclipse.update.feature".equals(namespace))
+      if ("org.eclipse.update.feature".equals(namespace)) //$NON-NLS-1$
       {
         return FEATURE_IMAGE;
       }
 
-      if ("java.package".equals(namespace))
+      if ("java.package".equals(namespace)) //$NON-NLS-1$
       {
         return PACKAGE_IMAGE;
       }
@@ -342,7 +342,7 @@ public class ManifestDiscoveryDialog extends FilteredItemsSelectionDialog
         Version version = requirement.getVersionRange().getMinimum();
         if (version != null && !version.equals(Version.emptyVersion))
         {
-          text += " (" + version + ")";
+          text += " (" + version + ")"; //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         return text;

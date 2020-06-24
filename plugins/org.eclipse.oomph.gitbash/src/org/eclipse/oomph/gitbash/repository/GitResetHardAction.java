@@ -24,6 +24,6 @@ public class GitResetHardAction extends AbstractRepositoryAction
   @Override
   protected void run(Shell shell, File workTree) throws Exception
   {
-    GitBash.executeCommand(shell, workTree, "git reset --hard");
+    GitBash.executeCommand(shell, workTree, "git reset --hard"); //$NON-NLS-1$
   }
 }

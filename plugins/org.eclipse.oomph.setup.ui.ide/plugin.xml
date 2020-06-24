@@ -17,18 +17,18 @@
          point="org.eclipse.ui.newWizards">
       <category
             id="org.eclipse.oomph"
-            name="Oomph">
+            name="%_UI_OomphWizard_category">
       </category>
       <wizard
             category="org.eclipse.oomph"
             class="org.eclipse.oomph.setup.ui.internal.ide.SetupTaskWizard"
             icon="icons/extension_project.gif"
             id="org.eclipse.oomph.setup.ui.ide.ModelExtensionWizard"
-            name="Setup Task Extension"
+            name="%modelExtensionWizard.name"
             project="true">
       </wizard>
    </extension>
-   
+
    <extension
          point="org.eclipse.debug.ui.stringVariablePresentations">
       <variablePresentation

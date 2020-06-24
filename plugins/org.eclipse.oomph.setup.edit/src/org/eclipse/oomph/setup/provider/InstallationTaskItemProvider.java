@@ -70,8 +70,8 @@ public class InstallationTaskItemProvider extends SetupTaskItemProvider
   protected void addLocationPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_InstallationTask_location_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_InstallationTask_location_feature", "_UI_InstallationTask_type"),
+        getString("_UI_InstallationTask_location_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_InstallationTask_location_feature", "_UI_InstallationTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.INSTALLATION_TASK__LOCATION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -84,8 +84,8 @@ public class InstallationTaskItemProvider extends SetupTaskItemProvider
   protected void addRelativeProductFolderPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_InstallationTask_relativeProductFolder_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_InstallationTask_relativeProductFolder_feature", "_UI_InstallationTask_type"),
+        getString("_UI_InstallationTask_relativeProductFolder_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_InstallationTask_relativeProductFolder_feature", "_UI_InstallationTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.INSTALLATION_TASK__RELATIVE_PRODUCT_FOLDER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -98,7 +98,7 @@ public class InstallationTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/InstallationTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/InstallationTask")); //$NON-NLS-1$
   }
 
   /**
@@ -122,7 +122,8 @@ public class InstallationTaskItemProvider extends SetupTaskItemProvider
   public String getText(Object object)
   {
     String label = ((InstallationTask)object).getLocation();
-    return label == null || label.length() == 0 ? getString("_UI_InstallationTask_type") : getString("_UI_InstallationTask_type") + " " + label;
+    return label == null || label.length() == 0 ? getString("_UI_InstallationTask_type") : //$NON-NLS-1$
+        getString("_UI_InstallationTask_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

@@ -17,16 +17,16 @@ import org.eclipse.userstorage.oauth.OAuthParameters;
  */
 public final class OAuthConstants extends OAuthParameters
 {
-  private static final String CLIENT_ID = "4e890e9b113d2470e7a206ef59414cb38a98fbfaaf79760fe8374e96";
+  private static final String CLIENT_ID = "4e890e9b113d2470e7a206ef59414cb38a98fbfaaf79760fe8374e96"; //$NON-NLS-1$
 
-  private static final String CLIENT_SECRET = "870a5352c5046346e43d9c19601b74eca332ea62537d80df84d0f28f";
+  private static final String CLIENT_SECRET = "870a5352c5046346e43d9c19601b74eca332ea62537d80df84d0f28f"; //$NON-NLS-1$
 
-  private static final String CLIENT_KEY = "0c49048fc87fdf2e1207e5edeaa39cc63b233ba346341fb05ad976";
+  private static final String CLIENT_KEY = "0c49048fc87fdf2e1207e5edeaa39cc63b233ba346341fb05ad976"; //$NON-NLS-1$
 
   @Override
   protected String getServiceName()
   {
-    return "oomph";
+    return "oomph"; //$NON-NLS-1$
   }
 
   @Override
@@ -50,7 +50,7 @@ public final class OAuthConstants extends OAuthParameters
   @Override
   protected String getDefaultExpectedCallback()
   {
-    return "http://localhost";
+    return "http://localhost"; //$NON-NLS-1$
   }
 
 }

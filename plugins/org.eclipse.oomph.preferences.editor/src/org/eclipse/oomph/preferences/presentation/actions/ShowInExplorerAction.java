@@ -56,7 +56,7 @@ public class ShowInExplorerAction extends ActionDelegate
     IWorkbenchPage page = workbenchWindow.getActivePage();
     try
     {
-      IViewPart packageExplorerView = page.showView("org.eclipse.jdt.ui.PackageExplorer");
+      IViewPart packageExplorerView = page.showView("org.eclipse.jdt.ui.PackageExplorer"); //$NON-NLS-1$
       IShowInTarget showInTarget = ObjectUtil.adapt(packageExplorerView, IShowInTarget.class);
       showInTarget.show(new ShowInContext(null, targetSelection));
     }
@@ -93,10 +93,10 @@ public class ShowInExplorerAction extends ActionDelegate
           else
           {
             PreferenceNode parent = preferenceNode.getParent();
-            if (parent != null && "project".equals(parent.getName()))
+            if (parent != null && "project".equals(parent.getName())) //$NON-NLS-1$
             {
               PreferenceNode grandParent = parent.getParent();
-              if (grandParent != null && "".equals(grandParent.getName()))
+              if (grandParent != null && "".equals(grandParent.getName())) //$NON-NLS-1$
               {
                 IProject project = WORKSPACE_ROOT.getProject(preferenceNode.getName());
                 if (project.isAccessible())

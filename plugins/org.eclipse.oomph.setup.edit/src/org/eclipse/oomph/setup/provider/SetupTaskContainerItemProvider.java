@@ -134,7 +134,7 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_SetupTaskContainer_type");
+    return getString("_UI_SetupTaskContainer_type"); //$NON-NLS-1$
   }
 
   /**
@@ -312,6 +312,7 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
     return commandParameter;
   }
 
+  @SuppressWarnings("nls")
   private static String getID(String label)
   {
     if (StringUtil.isEmpty(label))
@@ -351,7 +352,7 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
       {
         if (Character.isDigit(id.charAt(id.length() - 1)))
         {
-          uniqueID = id + "_" + ++count;
+          uniqueID = id + "_" + ++count; //$NON-NLS-1$
         }
         else
         {
@@ -373,7 +374,7 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
         if (parameter.getDefaultValue() == null)
         {
           String parameterName = parameter.getName();
-          argument.setValue(parameterName + "_value");
+          argument.setValue(parameterName + "_value"); //$NON-NLS-1$
         }
 
         arguments.add(argument);

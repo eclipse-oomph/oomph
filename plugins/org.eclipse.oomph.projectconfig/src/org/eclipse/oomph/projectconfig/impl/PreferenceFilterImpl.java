@@ -70,7 +70,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * @ordered
    */
   protected static final Pattern INCLUSIONS_EDEFAULT = (Pattern)ProjectConfigFactory.eINSTANCE.createFromString(ProjectConfigPackage.eINSTANCE.getPattern(),
-      ".*");
+      ".*"); //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getInclusions() <em>Inclusions</em>}' attribute.
@@ -91,7 +91,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * @ordered
    */
   protected static final Pattern EXCLUSIONS_EDEFAULT = (Pattern)ProjectConfigFactory.eINSTANCE.createFromString(ProjectConfigPackage.eINSTANCE.getPattern(),
-      "");
+      ""); //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getExclusions() <em>Exclusions</em>}' attribute.
@@ -209,7 +209,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
     {
       if (EcoreUtil.isAncestor(this, newPreferenceProfile))
       {
-        throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+        throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
       }
       NotificationChain msgs = null;
       if (eInternalContainer() != null)
@@ -522,9 +522,9 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (inclusions: ");
+    result.append(" (inclusions: "); //$NON-NLS-1$
     result.append(inclusions);
-    result.append(", exclusions: ");
+    result.append(", exclusions: "); //$NON-NLS-1$
     result.append(exclusions);
     result.append(')');
     return result.toString();

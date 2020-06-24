@@ -24,6 +24,6 @@ public class GitStatusAction extends AbstractRepositoryAction
   @Override
   protected void run(Shell shell, File workTree) throws Exception
   {
-    GitBash.executeCommand(shell, workTree, "git status");
+    GitBash.executeCommand(shell, workTree, "git status"); //$NON-NLS-1$
   }
 }

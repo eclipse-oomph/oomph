@@ -28,7 +28,7 @@ public class RemoveNatureAction extends AbstractAction<Boolean>
 {
   public RemoveNatureAction()
   {
-    super("Remove Version Management");
+    super(Messages.RemoveNatureAction_title);
   }
 
   @Override

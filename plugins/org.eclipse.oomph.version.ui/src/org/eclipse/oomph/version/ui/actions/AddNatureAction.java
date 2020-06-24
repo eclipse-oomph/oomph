@@ -51,11 +51,11 @@ import java.util.Set;
  */
 public class AddNatureAction extends AbstractAction<IVersionBuilderArguments>
 {
-  private static final String SRC_INCLUDES = "src.includes";
+  private static final String SRC_INCLUDES = "src.includes"; //$NON-NLS-1$
 
   public AddNatureAction()
   {
-    super("Add Version Management");
+    super(Messages.AddNatureAction_jobName);
   }
 
   @Override
@@ -171,7 +171,7 @@ public class AddNatureAction extends AbstractAction<IVersionBuilderArguments>
     {
       try
       {
-        if (project.hasNature("org.eclipse.jdt.core.javanature"))
+        if (project.hasNature("org.eclipse.jdt.core.javanature")) //$NON-NLS-1$
         {
           candidate = project;
           break;
@@ -199,7 +199,7 @@ public class AddNatureAction extends AbstractAction<IVersionBuilderArguments>
     VersionBuilderArguments arguments = new VersionBuilderArguments();
     if (candidate != null)
     {
-      arguments.setReleasePath("/" + candidate.getName() + "/release.xml");
+      arguments.setReleasePath("/" + candidate.getName() + "/release.xml"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     ConfigurationDialog dialog = new ConfigurationDialog(shell, arguments);
@@ -233,7 +233,7 @@ public class AddNatureAction extends AbstractAction<IVersionBuilderArguments>
                   value.addAll(Arrays.asList(tokens));
                 }
 
-                String releasePath = file.getProjectRelativePath().makeRelative().removeFileExtension().addFileExtension("*").toString();
+                String releasePath = file.getProjectRelativePath().makeRelative().removeFileExtension().addFileExtension("*").toString(); //$NON-NLS-1$
                 if (!value.contains(releasePath))
                 {
                   entry.addToken(releasePath);

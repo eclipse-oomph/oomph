@@ -68,8 +68,8 @@ public abstract class AbstractConfirmDialog extends AbstractSetupDialog
 
   protected void doCreateButtons(Composite parent)
   {
-    createButton(parent, IDialogConstants.OK_ID, "Accept", false);
-    createButton(parent, IDialogConstants.CANCEL_ID, "Decline", true);
+    createButton(parent, IDialogConstants.OK_ID, Messages.AbstractConfirmDialog_accept, false);
+    createButton(parent, IDialogConstants.CANCEL_ID, Messages.AbstractConfirmDialog_decline, true);
   }
 
   protected String getRememberButtonToolTip()

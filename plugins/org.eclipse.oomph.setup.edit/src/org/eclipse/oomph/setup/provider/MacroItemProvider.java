@@ -113,7 +113,7 @@ public class MacroItemProvider extends ScopeItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Macro"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Macro")); //$NON-NLS-1$
   }
 
   /**
@@ -134,6 +134,7 @@ public class MacroItemProvider extends ScopeItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     String label = ((Macro)object).getLabel();

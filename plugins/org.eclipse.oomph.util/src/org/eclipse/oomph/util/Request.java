@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public final class Request extends HashMap<String, String>
 {
-  private static final URI DEFAULT_URI = URI.createURI("about:");
+  private static final URI DEFAULT_URI = URI.createURI("about:"); //$NON-NLS-1$
 
   private static final long serialVersionUID = 1L;
 
@@ -52,14 +52,14 @@ public final class Request extends HashMap<String, String>
     {
       if (builder.length() != 0)
       {
-        builder.append("&");
+        builder.append("&"); //$NON-NLS-1$
       }
 
       builder.append(entry.getKey());
       String value = entry.getValue();
       if (value != null)
       {
-        builder.append("=");
+        builder.append("="); //$NON-NLS-1$
         builder.append(URI.encodeQuery(value, false));
       }
     }
@@ -79,7 +79,7 @@ public final class Request extends HashMap<String, String>
     String query = uri.query();
     if (query != null)
     {
-      String[] parameters = query.split("&");
+      String[] parameters = query.split("&"); //$NON-NLS-1$
       for (String parameter : parameters)
       {
         int pos = parameter.indexOf('=');

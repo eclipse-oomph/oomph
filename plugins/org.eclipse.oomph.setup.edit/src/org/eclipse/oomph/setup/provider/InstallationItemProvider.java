@@ -42,7 +42,7 @@ import java.util.List;
  */
 public class InstallationItemProvider extends ScopeItemProvider
 {
-  private static final String EXPECTED_SUFFIX = "/configuration/org.eclipse.oomph.setup/installation.setup";
+  private static final String EXPECTED_SUFFIX = "/configuration/org.eclipse.oomph.setup/installation.setup"; //$NON-NLS-1$
 
   /**
    * This constructs an instance from a factory and a notifier.
@@ -82,8 +82,8 @@ public class InstallationItemProvider extends ScopeItemProvider
   protected void addProductVersionPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Installation_productVersion_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Installation_productVersion_feature", "_UI_Installation_type"),
+        getString("_UI_Installation_productVersion_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Installation_productVersion_feature", "_UI_Installation_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.INSTALLATION__PRODUCT_VERSION, true, false, true, null, null, null));
   }
 
@@ -165,7 +165,7 @@ public class InstallationItemProvider extends ScopeItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Installation"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Installation")); //$NON-NLS-1$
   }
 
   /**
@@ -186,6 +186,7 @@ public class InstallationItemProvider extends ScopeItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     Installation installation = (Installation)object;

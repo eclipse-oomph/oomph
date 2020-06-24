@@ -12,7 +12,7 @@
 -->
 
 <plugin>
-   <extension-point id="profileTypes" name="Profile Types" schema="schema/profileTypes.exsd"/>
+   <extension-point id="profileTypes" name="%extPoint.profileTypes" schema="schema/profileTypes.exsd"/>
 
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -20,7 +20,7 @@
             category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             id="org.eclipse.oomph.p2.ui.AgentManagerPreferencePage"
             class="org.eclipse.oomph.p2.internal.ui.AgentManagerPreferencePage"
-            name="Bundle Pools">
+            name="%preferencePage.bundlePools.name">
       </page>
    </extension>
 
@@ -43,30 +43,30 @@
             class="org.eclipse.oomph.p2.internal.ui.RepositoryExplorer"
             icon="icons/obj16/repository.gif"
             id="org.eclipse.oomph.p2.ui.RepositoryExplorer"
-            name="Repository Explorer">
+            name="%view.repositoryExplorer.name">
       </view>
    </extension>
 
    <extension
          point="org.eclipse.ui.commands">
       <category
-            name="Oomph"
+            name="%oomph"
             id="org.eclipse.oomph">
       </category>
       <command
             categoryId="org.eclipse.oomph"
             id="org.eclipse.oomph.p2.ui.ExploreRepository"
-            name="Explore Repository">
+            name="%command.exploreRepository.name">
       </command>
       <command
             categoryId="org.eclipse.oomph"
             id="org.eclipse.oomph.p2.ui.SearchRequirements"
-            name="Search Requirements">
+            name="%command.searchRequirements.name">
       </command>
       <command
             categoryId="org.eclipse.oomph"
             id="org.eclipse.oomph.p2.ui.SearchRepositories"
-            name="Search Repositories">
+            name="%command.searchRepositories.name">
       </command>
    </extension>
 
@@ -129,7 +129,7 @@
          <command
                commandId="org.eclipse.oomph.p2.ui.ExploreRepository"
                icon="icons/obj16/repository.gif"
-               label="Explore"
+               label="%menu.exploreRepository.label"
                style="push">
             <visibleWhen
                   checkEnabled="true">
@@ -142,7 +142,7 @@
          <command
                commandId="org.eclipse.oomph.p2.ui.SearchRequirements"
                icon="icons/tool16/search_requirement.png"
-               label="Discover Eclipse Requirements..."
+               label="%menu.searchRequirements.label"
                style="push">
             <visibleWhen
                   checkEnabled="true">
@@ -155,7 +155,7 @@
          <command
                commandId="org.eclipse.oomph.p2.ui.SearchRepositories"
                icon="icons/tool16/search_repository.png"
-               label="Discover Eclipse Repositories..."
+               label="%menu.searchRepositories.label"
                style="push">
             <visibleWhen
                   checkEnabled="true">
@@ -169,7 +169,7 @@
                 icon="icons/offline.gif"
                 id="org.eclipse.oomph.p2.ui.RepositoryExplorer.offline"
                 style="toggle"
-                tooltip="Offline Mode">
+                tooltip="%menu.offlineMode.label">
           </command>
       </menuContribution>
    </extension>

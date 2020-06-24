@@ -60,8 +60,8 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
     Method expandMacroTaskMethod = null;
     try
     {
-      Class<?> setupTaskPerformer = CommonPlugin.loadClass("org.eclipse.oomph.setup.core", "org.eclipse.oomph.setup.internal.core.SetupTaskPerformer");
-      expandMacroTaskMethod = setupTaskPerformer.getMethod("expand", MacroTask.class);
+      Class<?> setupTaskPerformer = CommonPlugin.loadClass("org.eclipse.oomph.setup.core", "org.eclipse.oomph.setup.internal.core.SetupTaskPerformer"); //$NON-NLS-1$ //$NON-NLS-2$
+      expandMacroTaskMethod = setupTaskPerformer.getMethod("expand", MacroTask.class); //$NON-NLS-1$
     }
     catch (Exception ex)
     {
@@ -109,7 +109,8 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
   protected void addMacroPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MacroTask_macro_feature"), getString("_UI_PropertyDescriptor_description", "_UI_MacroTask_macro_feature", "_UI_MacroTask_type"),
+        getString("_UI_MacroTask_macro_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MacroTask_macro_feature", "_UI_MacroTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.MACRO_TASK__MACRO, true, false, true, null, null, null));
   }
 
@@ -167,7 +168,8 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
     {
       List<Object> extendedChildren = new ArrayList<Object>(children);
       String name = expandedMacroTask.getName();
-      expandedMacroTask.setName(StringUtil.isEmpty(name) ? "Preview" : name + " - Preview");
+      expandedMacroTask
+          .setName(StringUtil.isEmpty(name) ? getString("_UI_MacroPreview_label") : getString("_UI_MacroPrefixedPreview_label", new Object[] { name })); //$NON-NLS-1$ //$NON-NLS-2$
 
       extendedChildren.add(new PreviewDelegatingWrapper(expandedMacroTask, object, adapterFactory));
       children = extendedChildren;
@@ -210,8 +212,8 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
           Object image = super.getImage(object);
           List<Object> images = new ArrayList<Object>(2);
           images.add(image);
-          images.add(SetupEditPlugin.INSTANCE.getImage("MacroOverlay.png"));
-          images.add(SetupEditPlugin.INSTANCE.getImage("LinkOverlay"));
+          images.add(SetupEditPlugin.INSTANCE.getImage("MacroOverlay.png")); //$NON-NLS-1$
+          images.add(SetupEditPlugin.INSTANCE.getImage("LinkOverlay")); //$NON-NLS-1$
           return new ComposedImage(images);
         }
 
@@ -261,7 +263,7 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
    */
   private Object getImageGen(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/MacroTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/MacroTask")); //$NON-NLS-1$
   }
 
   @Override
@@ -277,12 +279,12 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
     images.add(image);
     if (isRecursive)
     {
-      images.add(SetupEditPlugin.INSTANCE.getImage("DeletedOverlay"));
+      images.add(SetupEditPlugin.INSTANCE.getImage("DeletedOverlay")); //$NON-NLS-1$
     }
 
     if (isMacro)
     {
-      images.add(SetupEditPlugin.INSTANCE.getImage("MacroOverlay.png"));
+      images.add(SetupEditPlugin.INSTANCE.getImage("MacroOverlay.png")); //$NON-NLS-1$
     }
 
     return images.size() == 1 ? image : new ComposedImage(images);
@@ -306,6 +308,7 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     MacroTask macroTask = (MacroTask)object;
@@ -387,7 +390,7 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
           String defaultValue = parameter.getDefaultValue();
           if (defaultValue == null)
           {
-            argument.setValue("" + parameter.getName() + "_value");
+            argument.setValue("" + parameter.getName() + "_value"); //$NON-NLS-1$ //$NON-NLS-2$
           }
           newChildDescriptors.add(createChildParameter(SetupPackage.Literals.MACRO_TASK__ARGUMENTS, argument));
         }
@@ -408,7 +411,7 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
         String name = parameter.getName();
         if (!StringUtil.isEmpty(name))
         {
-          return result += " for " + name;
+          return result += getString("_UI_MacroArgumentSuffix_label", new Object[] { name }); //$NON-NLS-1$
         }
       }
     }
@@ -418,7 +421,7 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
 
   private static class RecursionSafeDelegatingWrapper extends DelegatingWrapperItemProvider
   {
-    private static final URI FOREGROUND_COLOR = URI.createURI("color://rgb/138/110/85");
+    private static final URI FOREGROUND_COLOR = URI.createURI("color://rgb/138/110/85"); //$NON-NLS-1$
 
     @SuppressWarnings("deprecation")
     public RecursionSafeDelegatingWrapper(Object value, Object owner, AdapterFactory adapterFactory)
@@ -524,7 +527,7 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
 
   private static class PreviewDelegatingWrapper extends DelegatingWrapperItemProvider
   {
-    private static final URI FOREGROUND_COLOR = URI.createURI("color://rgb/85/113/138");
+    private static final URI FOREGROUND_COLOR = URI.createURI("color://rgb/85/113/138"); //$NON-NLS-1$
 
     @SuppressWarnings("deprecation")
     public PreviewDelegatingWrapper(Object value, Object owner, AdapterFactory adapterFactory)
@@ -550,7 +553,7 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
       Object image = super.getImage(object);
       List<Object> images = new ArrayList<Object>(2);
       images.add(image);
-      images.add(SetupEditPlugin.INSTANCE.getImage("PreviewOverlay.png"));
+      images.add(SetupEditPlugin.INSTANCE.getImage("PreviewOverlay.png")); //$NON-NLS-1$
       return new ComposedImage(images);
     }
 

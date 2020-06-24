@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
 @SuppressWarnings("restriction")
 public class BranchDecorator implements ILabelDecorator
 {
-  private static final String DEFAULT_PATH = "refs/heads/";
+  private static final String DEFAULT_PATH = "refs/heads/"; //$NON-NLS-1$
 
   private static final Method FORMAT_METHOD = getFormatMethod();
 
@@ -68,7 +68,7 @@ public class BranchDecorator implements ILabelDecorator
           String decoration = getDecoration(node);
           if (decoration != null)
           {
-            return text + " [" + decoration + "]";
+            return text + " [" + decoration + "]"; //$NON-NLS-1$ //$NON-NLS-2$
           }
         }
       }
@@ -116,15 +116,15 @@ public class BranchDecorator implements ILabelDecorator
         branch = branch.substring(DEFAULT_PATH.length());
       }
 
-      String prefix = ".".equals(remote) ? "" : remote + "/";
-      String result = (rebaseFlag ? "REBASE" : "MERGE") + ": " + prefix + branch;
+      String prefix = ".".equals(remote) ? "" : remote + "/"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      String result = (rebaseFlag ? "REBASE" : "MERGE") + ": " + prefix + branch; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
       try
       {
         BranchTrackingStatus trackingStatus = BranchTrackingStatus.of(repository, branchName);
         if (trackingStatus != null && (trackingStatus.getAheadCount() != 0 || trackingStatus.getBehindCount() != 0))
         {
-          result += " " + formatBranchTrackingStatus(trackingStatus);
+          result += " " + formatBranchTrackingStatus(trackingStatus); //$NON-NLS-1$
         }
       }
       catch (Throwable t)
@@ -150,7 +150,7 @@ public class BranchDecorator implements ILabelDecorator
 
     try
     {
-      c = Class.forName("org.eclipse.egit.ui.internal.GitLabels"); // EGit 3.6++
+      c = Class.forName("org.eclipse.egit.ui.internal.GitLabels"); // EGit 3.6++ //$NON-NLS-1$
     }
     catch (Throwable t)
     {
@@ -161,7 +161,7 @@ public class BranchDecorator implements ILabelDecorator
     {
       try
       {
-        c = Class.forName("org.eclipse.egit.ui.internal.GitLabelProvider"); // EGit 3.5--
+        c = Class.forName("org.eclipse.egit.ui.internal.GitLabelProvider"); // EGit 3.5-- //$NON-NLS-1$
       }
       catch (Throwable t)
       {
@@ -171,7 +171,7 @@ public class BranchDecorator implements ILabelDecorator
 
     try
     {
-      return c.getDeclaredMethod("formatBranchTrackingStatus", c, BranchTrackingStatus.class);
+      return c.getDeclaredMethod("formatBranchTrackingStatus", c, BranchTrackingStatus.class); //$NON-NLS-1$
     }
     catch (Throwable t)
     {

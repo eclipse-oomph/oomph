@@ -71,7 +71,8 @@ public class RepositoryItemProvider extends ModelElementItemProvider
   protected void addURLPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Repository_uRL_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Repository_uRL_feature", "_UI_Repository_type"),
+        getString("_UI_Repository_uRL_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Repository_uRL_feature", "_UI_Repository_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         P2Package.Literals.REPOSITORY__URL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -84,7 +85,8 @@ public class RepositoryItemProvider extends ModelElementItemProvider
   protected void addTypePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Repository_type_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Repository_type_feature", "_UI_Repository_type"),
+        getString("_UI_Repository_type_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Repository_type_feature", "_UI_Repository_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         P2Package.Literals.REPOSITORY__TYPE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -97,7 +99,7 @@ public class RepositoryItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Repository"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Repository")); //$NON-NLS-1$
   }
 
   /**
@@ -121,7 +123,7 @@ public class RepositoryItemProvider extends ModelElementItemProvider
   public String getText(Object object)
   {
     String label = ((Repository)object).getURL();
-    return label == null || label.length() == 0 ? getString("_UI_Repository_type") : label;
+    return label == null || label.length() == 0 ? getString("_UI_Repository_type") : label; //$NON-NLS-1$
   }
 
   /**

@@ -45,6 +45,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.browser.LocationListener;
@@ -81,7 +82,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
     @Override
     public String toString()
     {
-      return "Loading...";
+      return Messages.RepositoryFinderDialog_stringRepresentation;
     }
   };
 
@@ -116,14 +117,14 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
   @Override
   protected IDialogSettings getDialogBoundsSettings()
   {
-    return P2UIPlugin.INSTANCE.getDialogSettings("RepositoryFinder");
+    return P2UIPlugin.INSTANCE.getDialogSettings("RepositoryFinder"); //$NON-NLS-1$
   }
 
   @Override
   protected Control createContents(Composite parent)
   {
-    getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("full/obj16/RepositoryList"));
-    getShell().setText("Eclipse Repository Finder");
+    getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("full/obj16/RepositoryList")); //$NON-NLS-1$
+    getShell().setText(Messages.RepositoryFinderDialog_title);
 
     Composite composite = new Composite(parent, SWT.NONE);
     FillLayout layout = new FillLayout();
@@ -143,7 +144,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
 
     Label filterLabel = new Label(content, SWT.NONE);
     filterLabel.setLayoutData(GridDataFactory.fillDefaults().indent(LayoutConstants.getSpacing().x, 0).align(SWT.BEGINNING, SWT.CENTER).create());
-    filterLabel.setText("Filter:");
+    filterLabel.setText(Messages.RepositoryFinderDialog_filterLabel_text);
 
     searchField = new SearchField(content, this)
     {
@@ -178,13 +179,13 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
     };
 
     searchField.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
-    searchField.getFilterControl().setToolTipText("Filter text may use * to match any characters or ? to match one character");
+    searchField.getFilterControl().setToolTipText(Messages.RepositoryFinderDialog_searchField_tooltip);
     searchField.setFocus();
-    searchField.setInitialText("");
+    searchField.setInitialText(""); //$NON-NLS-1$
 
     statsLabel = new Label(content, SWT.NONE);
     statsLabel.setLayoutData(GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).create());
-    statsLabel.setText("000000000 repositories"); // Make label big enough.
+    statsLabel.setText(NLS.bind(Messages.RepositoryFinderDialog_statsLabel_repositories, "000000000")); // Make label big enough. //$NON-NLS-1$
     statsLabel.setVisible(false); // Don't render until proper text is set.
 
     Composite viewerComposite = new Composite(content, SWT.NONE);
@@ -298,7 +299,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
 
       filteredRepositories = list;
       setStats(filteredRepositories.size());
-      statsLabel.setText(filteredRepositories.size() + " repositories");
+      statsLabel.setText(NLS.bind(Messages.RepositoryFinderDialog_statsLabel_repositories, filteredRepositories.size()));
       viewer.setItemCount(filteredRepositories.size());
     }
 
@@ -334,7 +335,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
 
   private void loadRepositories()
   {
-    new Job("Loading repositories")
+    new Job(Messages.RepositoryFinderDialog_loadRepositoriesJob_name)
     {
       @Override
       protected IStatus run(IProgressMonitor monitor)
@@ -365,78 +366,85 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
 
   private void setStats(int repositories)
   {
-    statsLabel.setText(repositories + " repositories");
+    statsLabel.setText(NLS.bind(Messages.RepositoryFinderDialog_statsLabel_repositories, repositories));
     statsLabel.setVisible(true);
   }
 
   private void appendToolTipText(Repository repository, StringBuilder builder)
   {
-    builder.append("<h3>");
-    builder.append(repository.isComposed() ? "Composite" : "Simple");
-    builder.append("&nbsp;Repository&nbsp;<span style=\"white-space: nowrap;\">");
+    builder.append("<h3>"); //$NON-NLS-1$
+    builder.append(repository.isComposed() ? Messages.RepositoryFinderDialog_tooltip_composite : Messages.RepositoryFinderDialog_tooltip_simple);
+    builder.append("&nbsp;" + Messages.RepositoryFinderDialog_tooltip_repository + "&nbsp;<span style=\"white-space: nowrap;\">"); //$NON-NLS-1$ //$NON-NLS-2$
     builder.append(repository);
-    builder.append("</span></h3><ul>");
+    builder.append("</span></h3><ul>"); //$NON-NLS-1$
 
-    builder.append("<li><span style=\"white-space: nowrap;\">");
+    builder.append("<li><span style=\"white-space: nowrap;\">"); //$NON-NLS-1$
     builder.append(new Date(repository.getTimestamp()));
-    builder.append("</span>&nbsp;(");
+    builder.append("</span>&nbsp;("); //$NON-NLS-1$
     builder.append(repository.getTimestamp());
-    builder.append(")");
+    builder.append(")"); //$NON-NLS-1$
 
-    builder.append("<li>");
+    builder.append("<li>"); //$NON-NLS-1$
     builder.append(repository.getCapabilityCount());
-    builder.append(repository.getCapabilityCount() == 1 ? "&nbsp;capability" : "&nbsp;capabilities");
+    builder.append("&nbsp;" //$NON-NLS-1$
+        + (repository.getCapabilityCount() == 1 ? Messages.RepositoryFinderDialog_tooltip_capability : Messages.RepositoryFinderDialog_tooltip_capabilities));
 
     if (repository.getUnresolvedChildren() != 0)
     {
-      builder.append("<li><font color=\"#ff0000\"><b>");
+      builder.append("<li><font color=\"#ff0000\"><b>"); //$NON-NLS-1$
       builder.append(repository.getUnresolvedChildren());
-      builder.append("&nbsp;unresolved&nbsp;");
-      builder.append(repository.getUnresolvedChildren() == 1 ? "child" : "children");
-      builder.append("!</b></font>");
+      builder.append("&nbsp;"); //$NON-NLS-1$
+      builder.append(repository.getUnresolvedChildren() == 1 ? Messages.RepositoryFinderDialog_tooltip_unresolvedChild
+          : Messages.RepositoryFinderDialog_tooltip_unresolvedChildren);
+      builder.append("!</b></font>"); //$NON-NLS-1$
     }
 
     if (repository.isCompressed())
     {
-      builder.append("<li>Compressed");
+      builder.append("<li>"); //$NON-NLS-1$
+      builder.append(Messages.RepositoryFinderDialog_tooltip_compressed);
     }
 
-    builder.append("</ul>");
+    builder.append("</ul>"); //$NON-NLS-1$
 
     Repository[] children = repository.getChildren();
     if (children != null && children.length != 0)
     {
-      builder.append("<h3>Children</h3>");
-      builder.append("<ul>");
+      builder.append("<h3>"); //$NON-NLS-1$
+      builder.append(Messages.RepositoryFinderDialog_tooltip_children);
+      builder.append("<h3>"); //$NON-NLS-1$
+      builder.append("<ul>"); //$NON-NLS-1$
 
       for (Repository child : children)
       {
-        builder.append("<li><a href=\"");
+        builder.append("<li><a href=\""); //$NON-NLS-1$
         builder.append(child);
-        builder.append("\"><span style=\"white-space: nowrap;\">");
+        builder.append("\"><span style=\"white-space: nowrap;\">"); //$NON-NLS-1$
         builder.append(child);
-        builder.append("</span></a>");
+        builder.append("</span></a>"); //$NON-NLS-1$
       }
 
-      builder.append("</ul>");
+      builder.append("</ul>"); //$NON-NLS-1$
     }
 
     Repository[] composites = repository.getComposites();
     if (composites != null && composites.length != 0)
     {
-      builder.append("<h3>Composites</h3>");
-      builder.append("<ul>");
+      builder.append("<h3>"); //$NON-NLS-1$
+      builder.append(Messages.RepositoryFinderDialog_tooltip_composites);
+      builder.append("<h3>"); //$NON-NLS-1$
+      builder.append("<ul>"); //$NON-NLS-1$
 
       for (Repository composite : composites)
       {
-        builder.append("<li><a href=\"");
+        builder.append("<li><a href=\""); //$NON-NLS-1$
         builder.append(composite);
-        builder.append("\"><span style=\"white-space: nowrap;\">");
+        builder.append("\"><span style=\"white-space: nowrap;\">"); //$NON-NLS-1$
         builder.append(composite);
-        builder.append("</span></a>");
+        builder.append("</span></a>"); //$NON-NLS-1$
       }
 
-      builder.append("</ul>");
+      builder.append("</ul>"); //$NON-NLS-1$
     }
   }
 
@@ -545,10 +553,10 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
         Repository repository = (Repository)element;
         if (repository.isComposed())
         {
-          return P2UIPlugin.INSTANCE.getSWTImage("obj16/compositeRepository.png");
+          return P2UIPlugin.INSTANCE.getSWTImage("obj16/compositeRepository.png"); //$NON-NLS-1$
         }
 
-        return P2UIPlugin.INSTANCE.getSWTImage("full/obj16/Repository");
+        return P2UIPlugin.INSTANCE.getSWTImage("full/obj16/Repository"); //$NON-NLS-1$
       }
 
       return super.getImage(element);
@@ -614,7 +622,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
 
     public ExplorerAction(String url)
     {
-      super("Explore", P2UIPlugin.INSTANCE.getImageDescriptor("full/obj16/Repository"));
+      super(Messages.RepositoryFinderDialog_exploreAction_text, P2UIPlugin.INSTANCE.getImageDescriptor("full/obj16/Repository")); //$NON-NLS-1$
       this.url = url;
     }
 

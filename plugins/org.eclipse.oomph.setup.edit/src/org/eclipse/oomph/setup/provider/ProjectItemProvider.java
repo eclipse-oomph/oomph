@@ -73,8 +73,8 @@ public class ProjectItemProvider extends ScopeItemProvider
   protected void addLogicalProjectContainerPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new HierarchicalPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Project_logicalProjectContainer_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Project_logicalProjectContainer_feature", "_UI_Project_type"),
+        getString("_UI_Project_logicalProjectContainer_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Project_logicalProjectContainer_feature", "_UI_Project_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.PROJECT__LOGICAL_PROJECT_CONTAINER, true, false, true, null, null, null)
     {
       @Override
@@ -143,7 +143,7 @@ public class ProjectItemProvider extends ScopeItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Project"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Project")); //$NON-NLS-1$
   }
 
   /**
@@ -164,6 +164,7 @@ public class ProjectItemProvider extends ScopeItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     String label = getLabel(object);

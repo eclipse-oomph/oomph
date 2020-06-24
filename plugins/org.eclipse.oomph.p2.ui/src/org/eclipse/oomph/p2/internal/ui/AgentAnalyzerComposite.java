@@ -44,6 +44,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ControlAdapter;
@@ -90,13 +91,13 @@ public class AgentAnalyzerComposite extends Composite
 {
   private static final int TABLE_STYLE = SWT.BORDER | SWT.FULL_SELECTION | SWT.VIRTUAL | SWT.NO_SCROLL | SWT.V_SCROLL;
 
-  private static final String SHOW_ALL = "Show All";
+  private static final String SHOW_ALL = Messages.AgentAnalyzerComposite_showAll;
 
-  private static final String SHOW_UNUSED = "Unused";
+  private static final String SHOW_UNUSED = Messages.AgentAnalyzerComposite_showUnused;
 
-  private static final String SHOW_DAMAGED = "Damaged";
+  private static final String SHOW_DAMAGED = Messages.AgentAnalyzerComposite_showDamaged;
 
-  private static final String SHOW_BY_ARTIFACT = "By Artifact";
+  private static final String SHOW_BY_ARTIFACT = Messages.AgentAnalyzerComposite_showByArtifact;
 
   private final Set<ISelectionProvider> changingSelection = new HashSet<ISelectionProvider>();
 
@@ -198,32 +199,32 @@ public class AgentAnalyzerComposite extends Composite
     bundlePoolTable.setLayoutData(bundlePoolData);
 
     TableColumn bundlePoolColumn = new TableViewerColumn(bundlePoolViewer, SWT.NONE).getColumn();
-    bundlePoolColumn.setText("Bundle Pool");
+    bundlePoolColumn.setText(Messages.AgentAnalyzerComposite_bundlePool_bundlePool);
     bundlePoolColumn.setWidth(305);
     bundlePoolColumn.setResizable(false);
 
     TableColumn profilesColumn = new TableViewerColumn(bundlePoolViewer, SWT.NONE).getColumn();
-    profilesColumn.setText("Profiles");
+    profilesColumn.setText(Messages.AgentAnalyzerComposite_bundlePool_profiles);
     profilesColumn.setAlignment(SWT.RIGHT);
     profilesColumn.setWidth(55);
 
     TableColumn unusedProfilesColumn = new TableViewerColumn(bundlePoolViewer, SWT.NONE).getColumn();
-    unusedProfilesColumn.setText("Unused Profiles");
+    unusedProfilesColumn.setText(Messages.AgentAnalyzerComposite_bundlePool_unusedProfiles);
     unusedProfilesColumn.setAlignment(SWT.RIGHT);
     unusedProfilesColumn.setWidth(97);
 
     TableColumn artifactsColumn = new TableViewerColumn(bundlePoolViewer, SWT.NONE).getColumn();
-    artifactsColumn.setText("Artifacts");
+    artifactsColumn.setText(Messages.AgentAnalyzerComposite_bundlePool_artifacts);
     artifactsColumn.setAlignment(SWT.RIGHT);
     artifactsColumn.setWidth(63);
 
     TableColumn unusedArtifactsColumn = new TableViewerColumn(bundlePoolViewer, SWT.NONE).getColumn();
-    unusedArtifactsColumn.setText("Unused Artifacts");
+    unusedArtifactsColumn.setText(Messages.AgentAnalyzerComposite_bundlePool_unusedArtifacts);
     unusedArtifactsColumn.setAlignment(SWT.RIGHT);
     unusedArtifactsColumn.setWidth(105);
 
     TableColumn damagedArtifactsColumn = new TableViewerColumn(bundlePoolViewer, SWT.NONE).getColumn();
-    damagedArtifactsColumn.setText("Damaged Artifacts");
+    damagedArtifactsColumn.setText(Messages.AgentAnalyzerComposite_bundlePool_damangedArtifacts);
     damagedArtifactsColumn.setAlignment(SWT.RIGHT);
     damagedArtifactsColumn.setWidth(125);
 
@@ -257,7 +258,7 @@ public class AgentAnalyzerComposite extends Composite
     new Label(bundlePoolButtonBar, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     deleteUnusedProfilesButton = new Button(bundlePoolButtonBar, SWT.NONE);
-    deleteUnusedProfilesButton.setText("Delete Unused Profiles");
+    deleteUnusedProfilesButton.setText(Messages.AgentAnalyzerComposite_bundlePool_deleteUnusedProfiles);
     deleteUnusedProfilesButton.setEnabled(false);
     deleteUnusedProfilesButton.addSelectionListener(new SelectionAdapter()
     {
@@ -271,7 +272,7 @@ public class AgentAnalyzerComposite extends Composite
     });
 
     deleteUnusedArtifactsButton = new Button(bundlePoolButtonBar, SWT.NONE);
-    deleteUnusedArtifactsButton.setText("Delete Unused Artifacts");
+    deleteUnusedArtifactsButton.setText(Messages.AgentAnalyzerComposite_bundlePool_deleteUnusedArtifacts);
     deleteUnusedArtifactsButton.setEnabled(false);
     deleteUnusedArtifactsButton.addSelectionListener(new SelectionAdapter()
     {
@@ -285,7 +286,7 @@ public class AgentAnalyzerComposite extends Composite
     });
 
     repairAllArtifactsButton = new Button(bundlePoolButtonBar, SWT.NONE);
-    repairAllArtifactsButton.setText("Repair Damaged Artifacts");
+    repairAllArtifactsButton.setText(Messages.AgentAnalyzerComposite_bundlePool_repairDamagedArtifacts);
     repairAllArtifactsButton.setEnabled(false);
     repairAllArtifactsButton.addSelectionListener(new SelectionAdapter()
     {
@@ -318,27 +319,27 @@ public class AgentAnalyzerComposite extends Composite
     new SelectAllAdapter(profileViewer);
 
     TableColumn profileColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
-    profileColumn.setText("Profile");
+    profileColumn.setText(Messages.AgentAnalyzerComposite_profile_profile);
     profileColumn.setWidth(447);
     profileColumn.setResizable(false);
 
     TableColumn artifactsColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
-    artifactsColumn.setText("Artifacts");
+    artifactsColumn.setText(Messages.AgentAnalyzerComposite_profile_artifacts);
     artifactsColumn.setAlignment(SWT.RIGHT);
     artifactsColumn.setWidth(62);
 
     TableColumn damagedArtifactsColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
-    damagedArtifactsColumn.setText("Damaged Artifacts");
+    damagedArtifactsColumn.setText(Messages.AgentAnalyzerComposite_profile_damagedArtifacts);
     damagedArtifactsColumn.setAlignment(SWT.RIGHT);
     damagedArtifactsColumn.setWidth(120);
 
     TableColumn rootsColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
-    rootsColumn.setText("Roots");
+    rootsColumn.setText(Messages.AgentAnalyzerComposite_profile_roots);
     rootsColumn.setAlignment(SWT.RIGHT);
     rootsColumn.setWidth(50);
 
     TableColumn repositoriesColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
-    repositoriesColumn.setText("Repositories");
+    repositoriesColumn.setText(Messages.AgentAnalyzerComposite_profile_repositories);
     repositoriesColumn.setAlignment(SWT.RIGHT);
     repositoriesColumn.setWidth(82);
 
@@ -401,7 +402,7 @@ public class AgentAnalyzerComposite extends Composite
     });
 
     selectAllProfilesButton = new Button(profileButtonBar, SWT.NONE);
-    selectAllProfilesButton.setText("Select All");
+    selectAllProfilesButton.setText(Messages.AgentAnalyzerComposite_profile_selectAll);
     selectAllProfilesButton.setEnabled(false);
     selectAllProfilesButton.addSelectionListener(new SelectionAdapter()
     {
@@ -415,7 +416,7 @@ public class AgentAnalyzerComposite extends Composite
     new Label(profileButtonBar, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     deleteProfilesButton = new Button(profileButtonBar, SWT.NONE);
-    deleteProfilesButton.setText("Delete Selected...");
+    deleteProfilesButton.setText(Messages.AgentAnalyzerComposite_profile_deleteSelected);
     deleteProfilesButton.setEnabled(false);
     deleteProfilesButton.addSelectionListener(new SelectionAdapter()
     {
@@ -428,7 +429,7 @@ public class AgentAnalyzerComposite extends Composite
     });
 
     showDetailsButton = new Button(profileButtonBar, SWT.NONE);
-    showDetailsButton.setText("Details...");
+    showDetailsButton.setText(Messages.AgentAnalyzerComposite_profile_details);
     showDetailsButton.setEnabled(false);
     showDetailsButton.addSelectionListener(new SelectionAdapter()
     {
@@ -459,16 +460,16 @@ public class AgentAnalyzerComposite extends Composite
     new SelectAllAdapter(artifactViewer);
 
     TableColumn artifactColumn = new TableViewerColumn(artifactViewer, SWT.NONE).getColumn();
-    artifactColumn.setText("Artifact");
+    artifactColumn.setText(Messages.AgentAnalyzerComposite_artifact_artifact);
     artifactColumn.setWidth(365);
     artifactColumn.setResizable(false);
 
     TableColumn versionVersion = new TableViewerColumn(artifactViewer, SWT.NONE).getColumn();
-    versionVersion.setText("Version");
+    versionVersion.setText(Messages.AgentAnalyzerComposite_artifact_version);
     versionVersion.setWidth(205);
 
     TableColumn profilesColumn = new TableViewerColumn(artifactViewer, SWT.NONE).getColumn();
-    profilesColumn.setText("Profiles");
+    profilesColumn.setText(Messages.AgentAnalyzerComposite_artifact_profiles);
     profilesColumn.setAlignment(SWT.RIGHT);
     profilesColumn.setWidth(56);
 
@@ -533,7 +534,7 @@ public class AgentAnalyzerComposite extends Composite
     });
 
     selectAllArtifactsButton = new Button(artifactButtonBar, SWT.NONE);
-    selectAllArtifactsButton.setText("Select All");
+    selectAllArtifactsButton.setText(Messages.AgentAnalyzerComposite_artifact_selectAll);
     selectAllArtifactsButton.setEnabled(false);
     selectAllArtifactsButton.addSelectionListener(new SelectionAdapter()
     {
@@ -547,7 +548,7 @@ public class AgentAnalyzerComposite extends Composite
     new Label(artifactButtonBar, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     deleteArtifactsButton = new Button(artifactButtonBar, SWT.NONE);
-    deleteArtifactsButton.setText("Delete Selected...");
+    deleteArtifactsButton.setText(Messages.AgentAnalyzerComposite_artifact_deleteSelected);
     deleteArtifactsButton.setEnabled(false);
     deleteArtifactsButton.addSelectionListener(new SelectionAdapter()
     {
@@ -560,7 +561,7 @@ public class AgentAnalyzerComposite extends Composite
     });
 
     repairArtifactsButton = new Button(artifactButtonBar, SWT.NONE);
-    repairArtifactsButton.setText("Repair Selected");
+    repairArtifactsButton.setText(Messages.AgentAnalyzerComposite_artifact_repairSelected);
     repairArtifactsButton.setEnabled(false);
     repairArtifactsButton.addSelectionListener(new SelectionAdapter()
     {
@@ -732,15 +733,18 @@ public class AgentAnalyzerComposite extends Composite
     return artifacts.toArray(new AnalyzedArtifact[artifacts.size()]);
   }
 
-  private boolean updateButton(Button button, String text, int count, String suffix)
+  private boolean updateButton(Button button, int count, String zeroCountText, String nonZeroCountText)
   {
     button.setEnabled(count != 0);
-    if (count != 0)
+    String text;
+    if (count == 0)
     {
-      text += " " + count;
+      text = zeroCountText;
     }
-
-    text += suffix;
+    else
+    {
+      text = NLS.bind(nonZeroCountText, count);
+    }
 
     if (!button.getText().equals(text))
     {
@@ -757,19 +761,22 @@ public class AgentAnalyzerComposite extends Composite
 
     if (currentBundlePool != null)
     {
-      changed |= updateButton(deleteUnusedProfilesButton, "Delete", currentBundlePool.getUnusedProfilesCount(), " Unused Profiles...");
+      changed |= updateButton(deleteUnusedProfilesButton, currentBundlePool.getUnusedProfilesCount(),
+          Messages.AgentAnalyzerComposite_bundlePool_deleteUnusedProfiles, Messages.AgentAnalyzerComposite_bundlePool_deleteUnusedProfiles_withCount);
       if (initializingAnalyzer && deleteUnusedProfilesButton.isEnabled())
       {
         deleteUnusedProfilesButton.setEnabled(false);
       }
 
-      changed |= updateButton(deleteUnusedArtifactsButton, "Delete", currentBundlePool.getUnusedArtifactsCount(), " Unused Artifacts...");
+      changed |= updateButton(deleteUnusedArtifactsButton, currentBundlePool.getUnusedArtifactsCount(),
+          Messages.AgentAnalyzerComposite_bundlePool_deleteUnusedArtifacts, Messages.AgentAnalyzerComposite_bundlePool_deleteUnusedArtifacts_withCount);
       if (initializingAnalyzer && deleteUnusedArtifactsButton.isEnabled())
       {
         deleteUnusedArtifactsButton.setEnabled(false);
       }
 
-      changed |= updateButton(repairAllArtifactsButton, "Repair", currentBundlePool.getDamagedArtifactsCount(), " Damaged Artifacts");
+      changed |= updateButton(repairAllArtifactsButton, currentBundlePool.getDamagedArtifactsCount(), Messages.AgentAnalyzerComposite_bundlePool_repairDamagedArtifacts,
+          Messages.AgentAnalyzerComposite_bundlePool_repairDamagedArtifacts_withCount);
 
       if (currentBundlePool.isAnalyzingDamage() && repairAllArtifactsButton.isEnabled())
       {
@@ -792,13 +799,15 @@ public class AgentAnalyzerComposite extends Composite
     if (currentBundlePool != null)
     {
       Object[] elements = profileContentProvider.getElements(currentBundlePool);
-      changed |= updateButton(selectAllProfilesButton, "Select All", elements.length, "");
+      changed |= updateButton(selectAllProfilesButton, elements.length, Messages.AgentAnalyzerComposite_profile_selectAll,
+          Messages.AgentAnalyzerComposite_profile_selectAll_withCount);
     }
 
     AnalyzedProfile[] profiles = getSelectedProfiles();
     int count = profiles.length;
 
-    changed |= updateButton(deleteProfilesButton, "Delete", count, " Selected...");
+    changed |= updateButton(deleteProfilesButton, count, Messages.AgentAnalyzerComposite_profile_deleteSelected,
+        Messages.AgentAnalyzerComposite_profile_deleteSelected_withCount);
 
     showDetailsButton.setEnabled(count == 1);
 
@@ -833,9 +842,11 @@ public class AgentAnalyzerComposite extends Composite
     if (currentBundlePool != null)
     {
       Object[] elements = artifactContentProvider.getElements(currentBundlePool);
-      changed |= updateButton(selectAllArtifactsButton, "Select All", elements.length, "");
+      changed |= updateButton(selectAllArtifactsButton, elements.length, Messages.AgentAnalyzerComposite_artifact_selectAll,
+          Messages.AgentAnalyzerComposite_artifact_selectAll_withCount);
 
-      changed |= updateButton(repairAllArtifactsButton, "Repair", currentBundlePool.getDamagedArtifactsCount(), " Damaged Artifacts");
+      changed |= updateButton(repairAllArtifactsButton, currentBundlePool.getDamagedArtifactsCount(), Messages.AgentAnalyzerComposite_bundlePool_repairDamagedArtifacts,
+          Messages.AgentAnalyzerComposite_bundlePool_repairDamagedArtifacts_withCount);
 
       if (currentBundlePool.isAnalyzingDamage() && repairAllArtifactsButton.isEnabled())
       {
@@ -846,8 +857,10 @@ public class AgentAnalyzerComposite extends Composite
     AnalyzedArtifact[] artifacts = getSelectedArtifacts();
     int count = artifacts.length;
 
-    changed |= updateButton(repairArtifactsButton, "Repair", count, " Selected");
-    changed |= updateButton(deleteArtifactsButton, "Delete", count, " Selected...");
+    changed |= updateButton(repairArtifactsButton, count, Messages.AgentAnalyzerComposite_artifact_repairSelected,
+        Messages.AgentAnalyzerComposite_artifact_repairSelected_withCount);
+    changed |= updateButton(deleteArtifactsButton, count, Messages.AgentAnalyzerComposite_artifact_deleteSelected,
+        Messages.AgentAnalyzerComposite_artifact_deleteSelected_withCount);
 
     if (changed)
     {
@@ -860,7 +873,8 @@ public class AgentAnalyzerComposite extends Composite
   private void deleteProfiles(final AnalyzedProfile[] profiles)
   {
     int len = profiles.length;
-    String message = "Do you really want to delete " + len + " profile" + (len == 1 ? "" : "s") + "?";
+    String message = len == 1 ? Messages.AgentAnalyzerComposite_profile_doYouWantToDeleteProfile
+        : NLS.bind(Messages.AgentAnalyzerComposite_profile_doYouWantToDeleteProfile, len);
 
     if (MessageDialog.openQuestion(getShell(), AgentAnalyzerDialog.TITLE, message))
     {
@@ -870,7 +884,7 @@ public class AgentAnalyzerComposite extends Composite
         {
           public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
-            SubMonitor progress = SubMonitor.convert(monitor, "Deleting profiles", profiles.length).detectCancelation();
+            SubMonitor progress = SubMonitor.convert(monitor, Messages.AgentAnalyzerComposite_profile_deletingProfiles, profiles.length).detectCancelation();
 
             for (AnalyzedProfile profile : profiles)
             {
@@ -908,10 +922,9 @@ public class AgentAnalyzerComposite extends Composite
   private void deleteArtifacts(final AnalyzedArtifact[] artifacts)
   {
     int len = artifacts.length;
-    String message = "Do you really want to delete " + len + " artifact" + (len == 1 ? "" : "s") + "?\n\n"
-        + "Note 1: Unused artifacts can always safely be deleted. " + "They will be deleted physically from your disk and logically from your bundle pool.\n\n"
-        + "Note 2: Artifacts used in your profiles will be deleted only physically from your disk. "
-        + "Repairing them is possible if they are still available for download from a p2 repository.";
+    String message = (len == 1 ? Messages.AgentAnalyzerComposite_artifact_doYouWantToDeleteArtifact
+        : NLS.bind(Messages.AgentAnalyzerComposite_artifact_doYouWantToDeleteArtifacts, len)) + "\n\n" //$NON-NLS-1$
+        + Messages.AgentAnalyzerComposite_artifact_deleteArtifacts_note1 + "\n\n" + Messages.AgentAnalyzerComposite_artifact_deleteArtifacts_note2; //$NON-NLS-1$
 
     if (MessageDialog.openQuestion(getShell(), AgentAnalyzerDialog.TITLE, message))
     {
@@ -922,7 +935,7 @@ public class AgentAnalyzerComposite extends Composite
         {
           public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
-            SubMonitor progress = SubMonitor.convert(monitor, "Deleting artifacts...", artifacts.length).detectCancelation();
+            SubMonitor progress = SubMonitor.convert(monitor, Messages.AgentAnalyzerComposite_artifact_deletingArtifacts, artifacts.length).detectCancelation();
 
             for (AnalyzedArtifact artifact : artifacts)
             {
@@ -1119,7 +1132,7 @@ public class AgentAnalyzerComposite extends Composite
             return Integer.toString(bundlePool.getUnusedArtifactsCount());
           case 5:
             int percent = bundlePool.getDamagedArtifactsPercent();
-            return Integer.toString(bundlePool.getDamagedArtifactsCount()) + (percent == 100 ? "" : " (" + percent + "%)");
+            return Integer.toString(bundlePool.getDamagedArtifactsCount()) + (percent == 100 ? "" : " (" + percent + "%)"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
       }
       else if (element instanceof AnalyzedProfile)
@@ -1147,7 +1160,7 @@ public class AgentAnalyzerComposite extends Composite
           case 0:
             if (singleColumn)
             {
-              return artifact.getID() + " " + artifact.getVersion();
+              return artifact.getID() + " " + artifact.getVersion(); //$NON-NLS-1$
             }
 
             return artifact.getID();
@@ -1168,10 +1181,10 @@ public class AgentAnalyzerComposite extends Composite
         if (element instanceof AnalyzedBundlePool)
         {
           AnalyzedBundlePool bundlePool = (AnalyzedBundlePool)element;
-          String key = "bundlePool";
+          String key = "bundlePool"; //$NON-NLS-1$
           if (bundlePool.getDamagedArtifactsCount() != 0)
           {
-            key += "Damaged";
+            key += "Damaged"; //$NON-NLS-1$
           }
 
           return getPluginImage(key);
@@ -1180,10 +1193,10 @@ public class AgentAnalyzerComposite extends Composite
         if (element instanceof AnalyzedArtifact)
         {
           AnalyzedArtifact artifact = (AnalyzedArtifact)element;
-          String key = "artifact" + artifact.getType();
+          String key = "artifact" + artifact.getType(); //$NON-NLS-1$
           if (artifact.isDamaged())
           {
-            key += "Damaged";
+            key += "Damaged"; //$NON-NLS-1$
           }
 
           return getPluginImage(key);
@@ -1192,10 +1205,10 @@ public class AgentAnalyzerComposite extends Composite
         if (element instanceof AnalyzedProfile)
         {
           AnalyzedProfile profile = (AnalyzedProfile)element;
-          String key = "profile" + profile.getType();
+          String key = "profile" + profile.getType(); //$NON-NLS-1$
           if (profile.isDamaged())
           {
-            key += "Damaged";
+            key += "Damaged"; //$NON-NLS-1$
           }
 
           return getPluginImage(key);
@@ -1203,7 +1216,7 @@ public class AgentAnalyzerComposite extends Composite
 
         if (element instanceof URI)
         {
-          return getPluginImage("repository");
+          return getPluginImage("repository"); //$NON-NLS-1$
         }
       }
 
@@ -1252,7 +1265,7 @@ public class AgentAnalyzerComposite extends Composite
 
     private static Image getPluginImage(String key)
     {
-      return P2UIPlugin.INSTANCE.getSWTImage("obj16/" + key + "");
+      return P2UIPlugin.INSTANCE.getSWTImage("obj16/" + key + ""); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

@@ -633,8 +633,8 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
   {
     if (updateProblemIndication)
     {
-      BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK, "org.eclipse.oomph.workingsets.editor", 0, null,
-          new Object[] { editingDomain.getResourceSet() });
+      BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK, "org.eclipse.oomph.workingsets.editor", //$NON-NLS-1$
+          0, null, new Object[] { editingDomain.getResourceSet() });
       for (Diagnostic childDiagnostic : resourceToDiagnosticMap.values())
       {
         if (childDiagnostic.getSeverity() != Diagnostic.OK)
@@ -696,7 +696,8 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    */
   protected boolean handleDirtyConflict()
   {
-    return MessageDialog.openQuestion(getSite().getShell(), getString("_UI_FileConflict_label"), getString("_WARN_FileConflict"));
+    return MessageDialog.openQuestion(getSite().getShell(), getString("_UI_FileConflict_label"), //$NON-NLS-1$
+        getString("_WARN_FileConflict")); //$NON-NLS-1$
   }
 
   /**
@@ -952,8 +953,8 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    */
   protected void createContextMenuFor(StructuredViewer viewer)
   {
-    MenuManager contextMenu = new MenuManager("#PopUp");
-    contextMenu.add(new Separator("additions"));
+    MenuManager contextMenu = new MenuManager("#PopUp"); //$NON-NLS-1$
+    contextMenu.add(new Separator("additions")); //$NON-NLS-1$
     contextMenu.setRemoveAllWhenShown(true);
     contextMenu.addMenuListener(this);
     Menu menu = contextMenu.createContextMenu(viewer.getControl());
@@ -1027,7 +1028,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
         {
           try
           {
-            getEditorSite().getPage().showView("org.eclipse.ui.views.PropertySheet");
+            getEditorSite().getPage().showView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
           }
           catch (PartInitException exception)
           {
@@ -1087,14 +1088,16 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
     boolean hasErrors = !resource.getErrors().isEmpty();
     if (hasErrors || !resource.getWarnings().isEmpty())
     {
-      BasicDiagnostic basicDiagnostic = new BasicDiagnostic(hasErrors ? Diagnostic.ERROR : Diagnostic.WARNING, "org.eclipse.oomph.workingsets.editor", 0,
-          getString("_UI_CreateModelError_message", resource.getURI()), new Object[] { exception == null ? (Object)resource : exception });
+      BasicDiagnostic basicDiagnostic = new BasicDiagnostic(hasErrors ? Diagnostic.ERROR : Diagnostic.WARNING, "org.eclipse.oomph.workingsets.editor", //$NON-NLS-1$
+          0, getString("_UI_CreateModelError_message", resource.getURI()), //$NON-NLS-1$
+          new Object[] { exception == null ? (Object)resource : exception });
       basicDiagnostic.merge(EcoreUtil.computeDiagnostic(resource, true));
       return basicDiagnostic;
     }
     else if (exception != null)
     {
-      return new BasicDiagnostic(Diagnostic.ERROR, "org.eclipse.oomph.workingsets.editor", 0, getString("_UI_CreateModelError_message", resource.getURI()),
+      return new BasicDiagnostic(Diagnostic.ERROR, "org.eclipse.oomph.workingsets.editor", //$NON-NLS-1$
+          0, getString("_UI_CreateModelError_message", resource.getURI()), //$NON-NLS-1$
           new Object[] { exception });
     }
     else
@@ -1148,7 +1151,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
 
       createContextMenuFor(selectionViewer);
       int pageIndex = addPage(tree);
-      setPageText(pageIndex, getString("_UI_SelectionPage_label"));
+      setPageText(pageIndex, getString("_UI_SelectionPage_label")); //$NON-NLS-1$
 
       getSite().getShell().getDisplay().asyncExec(new Runnable()
       {
@@ -1201,7 +1204,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
   {
     if (getPageCount() <= 1)
     {
-      setPageText(0, "");
+      setPageText(0, ""); //$NON-NLS-1$
       if (getContainer() instanceof CTabFolder)
       {
         Point point = getContainer().getSize();
@@ -1222,7 +1225,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
   {
     if (getPageCount() > 1)
     {
-      setPageText(0, getString("_UI_SelectionPage_label"));
+      setPageText(0, getString("_UI_SelectionPage_label")); //$NON-NLS-1$
       if (getContainer() instanceof CTabFolder)
       {
         Point point = getContainer().getSize();
@@ -1689,25 +1692,25 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
         {
           case 0:
           {
-            statusLineManager.setMessage(getString("_UI_NoObjectSelected"));
+            statusLineManager.setMessage(getString("_UI_NoObjectSelected")); //$NON-NLS-1$
             break;
           }
           case 1:
           {
             String text = new AdapterFactoryItemDelegator(adapterFactory).getText(collection.iterator().next());
-            statusLineManager.setMessage(getString("_UI_SingleObjectSelected", text));
+            statusLineManager.setMessage(getString("_UI_SingleObjectSelected", text)); //$NON-NLS-1$
             break;
           }
           default:
           {
-            statusLineManager.setMessage(getString("_UI_MultiObjectSelected", Integer.toString(collection.size())));
+            statusLineManager.setMessage(getString("_UI_MultiObjectSelected", Integer.toString(collection.size()))); //$NON-NLS-1$
             break;
           }
         }
       }
       else
       {
-        statusLineManager.setMessage("");
+        statusLineManager.setMessage(""); //$NON-NLS-1$
       }
     }
   }

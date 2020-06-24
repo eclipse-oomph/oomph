@@ -23,7 +23,7 @@ public class Dumper
   public static final Dumper ASCII = new Dumper();
 
   public static final Dumper UTF8 = new Dumper('\u2500', '\u2534', '\u252c', '\u253c', '\u2518', '\u2510', '\u2524', '\u2502', '\u251c', '\u2514', '\u250c',
-      "\n", " ");
+      "\n", " "); //$NON-NLS-1$ //$NON-NLS-2$
 
   public final char borderLeftRight;
 
@@ -68,8 +68,8 @@ public class Dumper
     this.borderUpRight = borderUpRight;
     this.borderDownRight = borderDownRight;
 
-    this.newLine = newLine == null ? "" : newLine;
-    this.padding = padding == null ? "" : padding;
+    this.newLine = newLine == null ? "" : newLine; //$NON-NLS-1$
+    this.padding = padding == null ? "" : padding; //$NON-NLS-1$
 
     StringBuilder builder = new StringBuilder();
     for (int i = 0; i < this.padding.length(); i++)
@@ -82,7 +82,7 @@ public class Dumper
 
   public Dumper()
   {
-    this('-', '+', '+', '+', '+', '+', '+', '|', '+', '+', '+', "\n", " ");
+    this('-', '+', '+', '+', '+', '+', '+', '|', '+', '+', '+', "\n", " "); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   public String dump(RectangularRange range, int... rowSeparators)

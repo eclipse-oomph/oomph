@@ -22,11 +22,42 @@ import java.util.regex.Pattern;
  */
 public abstract class StringExpander
 {
-  public static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(([\\|/][^{}|/]*)*)}|\\$)");
+  public static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(([\\|/][^{}|/]*)*)}|\\$)"); //$NON-NLS-1$
 
-  static final String[] CONTROL_CHARACTER_REPLACEMENTS = { "${0x0}", "${0x1}", "${0x2}", "${0x3}", "${0x4}", "${0x5}", "${0x6}", "${0x7}", "${0x8}", "${0x9}",
-      "${0xA}", "${0xB}", "${0xC}", "${0xD}", "${0xE}", "${0xF}", "${0x10}", "${0x11}", "${0x12}", "${0x13}", "${0x14}", "${0x15}", "${0x16}", "${0x17}",
-      "${0x18}", "${0x19}", "${0x1A}", "${0x1B}", "${0x1C}", "${0x1D}", "${0x1E}", "${0x1F}" };
+  static final String[] CONTROL_CHARACTER_REPLACEMENTS = { //
+      "${0x0}", //$NON-NLS-1$
+      "${0x1}", //$NON-NLS-1$
+      "${0x2}", //$NON-NLS-1$
+      "${0x3}", //$NON-NLS-1$
+      "${0x4}", //$NON-NLS-1$
+      "${0x5}", //$NON-NLS-1$
+      "${0x6}", //$NON-NLS-1$
+      "${0x7}", //$NON-NLS-1$
+      "${0x8}", //$NON-NLS-1$
+      "${0x9}", //$NON-NLS-1$
+      "${0xA}", //$NON-NLS-1$
+      "${0xB}", //$NON-NLS-1$
+      "${0xC}", //$NON-NLS-1$
+      "${0xD}", //$NON-NLS-1$
+      "${0xE}", //$NON-NLS-1$
+      "${0xF}", //$NON-NLS-1$
+      "${0x10}", //$NON-NLS-1$
+      "${0x11}", //$NON-NLS-1$
+      "${0x12}", //$NON-NLS-1$
+      "${0x13}", //$NON-NLS-1$
+      "${0x14}", //$NON-NLS-1$
+      "${0x15}", //$NON-NLS-1$
+      "${0x16}", //$NON-NLS-1$
+      "${0x17}", //$NON-NLS-1$
+      "${0x18}", //$NON-NLS-1$
+      "${0x19}", //$NON-NLS-1$
+      "${0x1A}", //$NON-NLS-1$
+      "${0x1B}", //$NON-NLS-1$
+      "${0x1C}", //$NON-NLS-1$
+      "${0x1D}", //$NON-NLS-1$
+      "${0x1E}", //$NON-NLS-1$
+      "${0x1F}" //$NON-NLS-1$
+  };
 
   protected static final Map<String, String> CONTROL_CHARACTER_VALUES = new HashMap<String, String>();
 
@@ -84,7 +115,7 @@ public abstract class StringExpander
     {
       result.append(string.substring(previous, matcher.start()));
       String key = matcher.group(1);
-      if ("$".equals(key))
+      if ("$".equals(key)) //$NON-NLS-1$
       {
         result.append('$');
       }
@@ -147,7 +178,7 @@ public abstract class StringExpander
               }
               else
               {
-                if (!value.endsWith("/") && !value.endsWith("\\"))
+                if (!value.endsWith("/") && !value.endsWith("\\")) //$NON-NLS-1$ //$NON-NLS-2$
                 {
                   value += getFileSeparator();
                 }

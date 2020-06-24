@@ -39,11 +39,11 @@ import org.eclipse.emf.common.util.URI;
  */
 public interface VariableTask extends SetupTask
 {
-  URI DEFAULT_STORAGE_URI = URI.createURI("scope://");
+  URI DEFAULT_STORAGE_URI = URI.createURI("scope://"); //$NON-NLS-1$
 
-  URI WORKSPACE_STORAGE_URI = URI.createURI("scope://Workspace");
+  URI WORKSPACE_STORAGE_URI = URI.createURI("scope://Workspace"); //$NON-NLS-1$
 
-  URI INSTALLATION_STORAGE_URI = URI.createURI("scope://Installation");
+  URI INSTALLATION_STORAGE_URI = URI.createURI("scope://Installation"); //$NON-NLS-1$
 
   /**
    * Returns the value of the '<em><b>Type</b></em>' attribute.

@@ -72,9 +72,9 @@ import java.util.Set;
  */
 public class IndexManagerDialog extends AbstractSetupDialog
 {
-  public static final String TITLE = "Catalog Index Manager";
+  public static final String TITLE = Messages.IndexManagerDialog_title;
 
-  public static final String DESCRIPTION = "Rename or remove indices in the selected scope. To rename, double click or press F2";
+  public static final String DESCRIPTION = Messages.IndexManagerDialog_description;
 
   private static final int REMOVE_ID = IDialogConstants.CLIENT_ID + 1;
 
@@ -96,7 +96,7 @@ public class IndexManagerDialog extends AbstractSetupDialog
 
   public IndexManagerDialog(Shell parentShell)
   {
-    super(parentShell, "Catalog Indices", 750, 300, SetupUIPlugin.INSTANCE, true);
+    super(parentShell, Messages.IndexManagerDialog_dialogTitle, 750, 300, SetupUIPlugin.INSTANCE, true);
     indexChoices = indexManager.getIndexLabels(true);
 
     originalIndexChoices = new LinkedHashMap<URI, String>(indexChoices);
@@ -105,7 +105,7 @@ public class IndexManagerDialog extends AbstractSetupDialog
       originalIndexLocation = originalIndexChoices.keySet().iterator().next();
     }
 
-    new Job("Availablity Checker")
+    new Job(Messages.IndexManagerDialog_availabilityCheckerJob_name)
     {
       @Override
       protected IStatus run(IProgressMonitor monitor)
@@ -133,7 +133,7 @@ public class IndexManagerDialog extends AbstractSetupDialog
   @Override
   protected String getDefaultMessage()
   {
-    return DESCRIPTION + ".";
+    return DESCRIPTION + "."; //$NON-NLS-1$
   }
 
   @Override
@@ -188,7 +188,7 @@ public class IndexManagerDialog extends AbstractSetupDialog
 
       public Image getImage(Object element)
       {
-        return SetupUIPlugin.INSTANCE.getSWTImage("full/obj16/Index");
+        return SetupUIPlugin.INSTANCE.getSWTImage("full/obj16/Index"); //$NON-NLS-1$
       }
 
       @Override
@@ -199,19 +199,24 @@ public class IndexManagerDialog extends AbstractSetupDialog
 
         StringBuilder result = new StringBuilder();
 
-        String nameLine = "<divs style='white-space:nowrap;'><b>name</b>:&nbsp;" + indexNames.get(indexLocation) + "</div>\n";
+        String nameLine = "<divs style='white-space:nowrap;'><b>" + Messages.IndexManagerDialog_tooltip_name + "</b>:&nbsp;" + indexNames.get(indexLocation) //$NON-NLS-1$//$NON-NLS-2$
+            + "</div>\n"; //$NON-NLS-1$
         result.append(nameLine);
 
-        String locationLine = "<div style='white-space:nowrap;'><b>location</b>:&nbsp;" + indexLocation + "</div>\n";
+        String locationLine = "<div style='white-space:nowrap;'><b>" + Messages.IndexManagerDialog_tooltip_location + "</b>:&nbsp;" + indexLocation //$NON-NLS-1$ //$NON-NLS-2$
+            + "</div>\n"; //$NON-NLS-1$
         result.append(locationLine);
 
-        String availabilityLine = "<div style='white-space:nowrap;'><b>availability</b>:&nbsp;"
-            + (indexAvailability == null ? "Unknown" : indexAvailability.get(indexLocation) ? "Available" : "Unavailable") + "</div><br/><br/>\n";
+        String availabilityLine = "<div style='white-space:nowrap;'><b>" + Messages.IndexManagerDialog_tooltip_availability + "</b>:&nbsp;" //$NON-NLS-1$ //$NON-NLS-2$
+            + (indexAvailability == null ? Messages.IndexManagerDialog_tooltip_availability_unknown
+                : indexAvailability.get(indexLocation) ? Messages.IndexManagerDialog_tooltip_availability_available
+                    : Messages.IndexManagerDialog_tooltip_availability_unavailable)
+            + "</div><br/><br/>\n"; //$NON-NLS-1$
         result.append(availabilityLine);
 
         try
         {
-          AbstractHoverInformationControlManager hoverInformationControlManager = ReflectUtil.getValue("hoverInformationControlManager",
+          AbstractHoverInformationControlManager hoverInformationControlManager = ReflectUtil.getValue("hoverInformationControlManager", //$NON-NLS-1$
               columnViewerInformationControlToolTipSupport);
           int max = Math.max(nameLine.length(), locationLine.length());
           hoverInformationControlManager.setSizeConstraints(max, 6, false, false);
@@ -248,7 +253,7 @@ public class IndexManagerDialog extends AbstractSetupDialog
           cell.setFont(normalFont);
         }
 
-        cell.setText(getText(element) + "  ");
+        cell.setText(getText(element) + "  "); //$NON-NLS-1$
       }
     }
 
@@ -270,7 +275,7 @@ public class IndexManagerDialog extends AbstractSetupDialog
 
     TextCellEditor textCellEditor = new TextCellEditor(indexViewer.getTable(), SWT.BORDER);
     indexViewer.setCellEditors(new CellEditor[] { textCellEditor });
-    indexViewer.setColumnProperties(new String[] { "label" });
+    indexViewer.setColumnProperties(new String[] { "label" }); //$NON-NLS-1$
 
     ColumnViewerEditorActivationStrategy editorActivationStrategy = new ColumnViewerEditorActivationStrategy(indexViewer)
     {
@@ -317,10 +322,11 @@ public class IndexManagerDialog extends AbstractSetupDialog
   @Override
   protected void createControlsForButtonBar(Composite parent)
   {
-    createLabel(parent, "  Scope:");
+    createLabel(parent, "  " + Messages.IndexManagerDialog_scopeLabel); //$NON-NLS-1$
 
     final Combo indexCombo = createCombo(parent);
-    String[] items = new String[] { "Local Indices", "Local and Global Indices", "Global Indices" };
+    String[] items = new String[] { Messages.IndexManagerDialog_indexCombo_local, Messages.IndexManagerDialog_indexCombo_localAndGlobal,
+        Messages.IndexManagerDialog_indexCombo_global };
     indexCombo.setItems(items);
     indexCombo.select(0);
 
@@ -385,7 +391,7 @@ public class IndexManagerDialog extends AbstractSetupDialog
   @Override
   protected void createButtonsForButtonBar(Composite parent)
   {
-    removeButton = createButton(parent, REMOVE_ID, "Remove", false);
+    removeButton = createButton(parent, REMOVE_ID, Messages.IndexManagerDialog_removeButton_text, false);
     removeButton.setEnabled(false);
     super.createButtonsForButtonBar(parent);
 
@@ -452,7 +458,7 @@ public class IndexManagerDialog extends AbstractSetupDialog
   @Override
   public String getHelpPath()
   {
-    return SetupUIPlugin.INSTANCE.getSymbolicName() + "/html/IndexManagementHelp.html";
+    return SetupUIPlugin.INSTANCE.getSymbolicName() + "/html/IndexManagementHelp.html"; //$NON-NLS-1$
   }
 
   @Override

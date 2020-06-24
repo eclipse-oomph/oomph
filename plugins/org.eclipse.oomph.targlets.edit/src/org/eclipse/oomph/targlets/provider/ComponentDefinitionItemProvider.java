@@ -72,8 +72,8 @@ public class ComponentDefinitionItemProvider extends ComponentExtensionItemProvi
   protected void addIDPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ComponentDefinition_iD_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ComponentDefinition_iD_feature", "_UI_ComponentDefinition_type"),
+        getString("_UI_ComponentDefinition_iD_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ComponentDefinition_iD_feature", "_UI_ComponentDefinition_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         TargletPackage.Literals.COMPONENT_DEFINITION__ID, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -86,8 +86,8 @@ public class ComponentDefinitionItemProvider extends ComponentExtensionItemProvi
   protected void addVersionPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ComponentDefinition_version_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ComponentDefinition_version_feature", "_UI_ComponentDefinition_type"),
+        getString("_UI_ComponentDefinition_version_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ComponentDefinition_version_feature", "_UI_ComponentDefinition_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         TargletPackage.Literals.COMPONENT_DEFINITION__VERSION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -100,7 +100,7 @@ public class ComponentDefinitionItemProvider extends ComponentExtensionItemProvi
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ComponentDefinition"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ComponentDefinition")); //$NON-NLS-1$
   }
 
   /**
@@ -126,8 +126,8 @@ public class ComponentDefinitionItemProvider extends ComponentExtensionItemProvi
     ComponentDefinition componentDefinition = (ComponentDefinition)object;
     String label = componentDefinition.getID();
     Version version = componentDefinition.getVersion();
-    return (label == null || label.length() == 0 ? getString("_UI_ComponentDefinition_type") : label)
-        + (version == null || Version.emptyVersion.equals(version) ? "" : " " + version.toString());
+    return (label == null || label.length() == 0 ? getString("_UI_ComponentDefinition_type") : label) //$NON-NLS-1$
+        + (version == null || Version.emptyVersion.equals(version) ? "" : " " + version.toString()); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

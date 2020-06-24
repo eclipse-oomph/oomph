@@ -21,6 +21,7 @@ import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.osgi.util.NLS;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -44,7 +45,7 @@ import java.util.Set;
  */
 public class AgentManagerImpl implements AgentManager
 {
-  private static final String AGENT_SUFFIX = ":agent";
+  private static final String AGENT_SUFFIX = ":agent"; //$NON-NLS-1$
 
   public static AgentManager instance;
 
@@ -65,11 +66,11 @@ public class AgentManagerImpl implements AgentManager
 
   public AgentManagerImpl(final File userHome)
   {
-    defaultAgentLocation = new File(userHome, ".p2");
+    defaultAgentLocation = new File(userHome, ".p2"); //$NON-NLS-1$
 
     File folder = P2CorePlugin.getUserStateFolder(userHome);
-    File infoFile = new File(folder, "agents.info");
-    defaultsFile = new File(folder, "defaults.info");
+    File infoFile = new File(folder, "agents.info"); //$NON-NLS-1$
+    defaultsFile = new File(folder, "defaults.info"); //$NON-NLS-1$
 
     agentMap = new PersistentMap<Agent>(infoFile)
     {
@@ -95,9 +96,9 @@ public class AgentManagerImpl implements AgentManager
       protected void initializeFirstTime()
       {
         initializeFirstTime(defaultAgentLocation);
-        initializeFirstTime(new File(userHome, "p2"));
-        initializeFirstTime(new File(userHome, ".eclipse"));
-        initializeFirstTime(new File(userHome, "eclipse"));
+        initializeFirstTime(new File(userHome, "p2")); //$NON-NLS-1$
+        initializeFirstTime(new File(userHome, ".eclipse")); //$NON-NLS-1$
+        initializeFirstTime(new File(userHome, "eclipse")); //$NON-NLS-1$
 
         if (getElements().isEmpty())
         {
@@ -167,7 +168,7 @@ public class AgentManagerImpl implements AgentManager
       ServiceReference<?> reference = context.getServiceReference(IProvisioningAgent.class);
       if (reference == null)
       {
-        throw new P2Exception("Current provisioning agent could not be loaded");
+        throw new P2Exception(Messages.AgentManagerImpl_AgentNotLoaded_exception);
       }
 
       try
@@ -230,7 +231,7 @@ public class AgentManagerImpl implements AgentManager
 
   public void refreshAgents(IProgressMonitor monitor)
   {
-    monitor.beginTask("Refreshing agents...", 1 + 20);
+    monitor.beginTask(Messages.AgentManagerImpl_RefreshingAgents_task, 1 + 20);
 
     try
     {
@@ -248,14 +249,14 @@ public class AgentManagerImpl implements AgentManager
 
   private void refreshAgents(Collection<Agent> agents, IProgressMonitor monitor)
   {
-    monitor.beginTask("", 21 * agents.size());
+    monitor.beginTask("", 21 * agents.size()); //$NON-NLS-1$
 
     try
     {
       for (Agent agent : agents)
       {
         P2CorePlugin.checkCancelation(monitor);
-        monitor.subTask("Refreshing " + agent.getLocation());
+        monitor.subTask(NLS.bind(Messages.AgentManagerImpl_Refreshing_task, agent.getLocation()));
 
         agent.refreshBundlePools(MonitorUtil.create(monitor, 1));
         agent.refreshProfiles(MonitorUtil.create(monitor, 20));
@@ -460,7 +461,7 @@ public class AgentManagerImpl implements AgentManager
     try
     {
       stream = new FileOutputStream(defaultsFile);
-      defaults.store(stream, "P2 clients store their default bundle pool locations here");
+      defaults.store(stream, Messages.AgentManagerImpl_Client_message);
     }
     catch (IOException ex)
     {

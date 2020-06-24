@@ -450,6 +450,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -479,60 +480,60 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     mavenProjectFactoryEClass.getESuperTypes().add(getXMLProjectFactory());
 
     // Initialize classes, features, and operations; add parameters
-    initEClass(sourceLocatorEClass, SourceLocator.class, "SourceLocator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getSourceLocator_RootFolder(), ecorePackage.getEString(), "rootFolder", null, 1, 1, SourceLocator.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(sourceLocatorEClass, SourceLocator.class, "SourceLocator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getSourceLocator_RootFolder(), ecorePackage.getEString(), "rootFolder", null, 1, 1, SourceLocator.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSourceLocator_ExcludedPaths(), ecorePackage.getEString(), "excludedPaths", null, 0, -1, SourceLocator.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getSourceLocator_ExcludedPaths(), ecorePackage.getEString(), "excludedPaths", null, 0, -1, SourceLocator.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSourceLocator_ProjectFactories(), getProjectFactory(), null, "projectFactories", null, 0, -1, SourceLocator.class, !IS_TRANSIENT,
+    initEReference(getSourceLocator_ProjectFactories(), getProjectFactory(), null, "projectFactories", null, 0, -1, SourceLocator.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSourceLocator_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, SourceLocator.class, !IS_TRANSIENT,
+    initEReference(getSourceLocator_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, SourceLocator.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSourceLocator_LocateNestedProjects(), ecorePackage.getEBoolean(), "locateNestedProjects", null, 0, 1, SourceLocator.class, !IS_TRANSIENT,
+    initEAttribute(getSourceLocator_LocateNestedProjects(), ecorePackage.getEBoolean(), "locateNestedProjects", null, 0, 1, SourceLocator.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    EOperation op = initEOperation(getSourceLocator__Matches__IProject(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
+    EOperation op = initEOperation(getSourceLocator__Matches__IProject(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    op = initEOperation(getSourceLocator__LoadProject__EList_BackendContainer_IProgressMonitor(), thePredicatesPackage.getProject(), "loadProject", 0, 1,
+    op = initEOperation(getSourceLocator__LoadProject__EList_BackendContainer_IProgressMonitor(), thePredicatesPackage.getProject(), "loadProject", 0, 1, //$NON-NLS-1$
         IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getProjectFactory(), "defaultProjectFactories", 0, -1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getBackendContainer(), "backendContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getProgressMonitor(), "monitor", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getProjectFactory(), "defaultProjectFactories", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getBackendContainer(), "backendContainer", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getProgressMonitor(), "monitor", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    op = initEOperation(getSourceLocator__HandleProjects__EList_ProjectHandler_MultiStatus_IProgressMonitor(), null, "handleProjects", 0, 1, IS_UNIQUE,
+    op = initEOperation(getSourceLocator__HandleProjects__EList_ProjectHandler_MultiStatus_IProgressMonitor(), null, "handleProjects", 0, 1, IS_UNIQUE, //$NON-NLS-1$
         IS_ORDERED);
-    addEParameter(op, getProjectFactory(), "defaultProjectFactories", 0, -1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getProjectHandler(), "projectHandler", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getMultiStatus(), "status", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getProgressMonitor(), "monitor", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getProjectFactory(), "defaultProjectFactories", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getProjectHandler(), "projectHandler", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getMultiStatus(), "status", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getProgressMonitor(), "monitor", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(projectFactoryEClass, ProjectFactory.class, "ProjectFactory", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getProjectFactory_ExcludedPaths(), ecorePackage.getEString(), "excludedPaths", null, 0, -1, ProjectFactory.class, !IS_TRANSIENT,
+    initEClass(projectFactoryEClass, ProjectFactory.class, "ProjectFactory", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getProjectFactory_ExcludedPaths(), ecorePackage.getEString(), "excludedPaths", null, 0, -1, ProjectFactory.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     op = initEOperation(getProjectFactory__CreateProject__BackendContainer_BackendContainer_IProgressMonitor(), thePredicatesPackage.getProject(),
-        "createProject", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getBackendContainer(), "rootContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getBackendContainer(), "backendContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getProgressMonitor(), "monitor", 0, 1, IS_UNIQUE, IS_ORDERED);
+        "createProject", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getBackendContainer(), "rootContainer", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getBackendContainer(), "backendContainer", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getProgressMonitor(), "monitor", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    op = initEOperation(getProjectFactory__IsExcludedPath__BackendContainer_BackendContainer(), ecorePackage.getEBoolean(), "isExcludedPath", 0, 1, IS_UNIQUE,
+    op = initEOperation(getProjectFactory__IsExcludedPath__BackendContainer_BackendContainer(), ecorePackage.getEBoolean(), "isExcludedPath", 0, 1, IS_UNIQUE, //$NON-NLS-1$
         IS_ORDERED);
-    addEParameter(op, getBackendContainer(), "rootContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getBackendContainer(), "backendContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, getBackendContainer(), "rootContainer", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getBackendContainer(), "backendContainer", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(xmlProjectFactoryEClass, XMLProjectFactory.class, "XMLProjectFactory", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(xmlProjectFactoryEClass, XMLProjectFactory.class, "XMLProjectFactory", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    initEClass(eclipseProjectFactoryEClass, EclipseProjectFactory.class, "EclipseProjectFactory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(eclipseProjectFactoryEClass, EclipseProjectFactory.class, "EclipseProjectFactory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    initEClass(mavenProjectFactoryEClass, MavenProjectFactory.class, "MavenProjectFactory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(mavenProjectFactoryEClass, MavenProjectFactory.class, "MavenProjectFactory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
     // Initialize data types
-    initEDataType(projectHandlerEDataType, ProjectHandler.class, "ProjectHandler", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(backendContainerEDataType, BackendContainer.class, "BackendContainer", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(multiStatusEDataType, MultiStatus.class, "MultiStatus", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(progressMonitorEDataType, IProgressMonitor.class, "ProgressMonitor", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(projectHandlerEDataType, ProjectHandler.class, "ProjectHandler", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(backendContainerEDataType, BackendContainer.class, "BackendContainer", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(multiStatusEDataType, MultiStatus.class, "MultiStatus", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(progressMonitorEDataType, IProgressMonitor.class, "ProgressMonitor", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore");
@@ -554,8 +555,9 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -566,9 +568,10 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.resources.edit/icons/full/obj16" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source,
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.resources.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -579,11 +582,15 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getSourceLocator_ExcludedPaths(), source, new String[] { "name", "excludedPath" });
-    addAnnotation(getSourceLocator_ProjectFactories(), source, new String[] { "name", "projectFactory" });
-    addAnnotation(getSourceLocator_Predicates(), source, new String[] { "name", "predicate" });
-    addAnnotation(getProjectFactory_ExcludedPaths(), source, new String[] { "name", "excludedPath" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getSourceLocator_ExcludedPaths(), source, new String[] { "name", "excludedPath" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getSourceLocator_ProjectFactories(), source, new String[] { "name", "projectFactory" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getSourceLocator_Predicates(), source, new String[] { "name", "predicate" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProjectFactory_ExcludedPaths(), source, new String[] { "name", "excludedPath" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
 } // ResourcesPackageImpl

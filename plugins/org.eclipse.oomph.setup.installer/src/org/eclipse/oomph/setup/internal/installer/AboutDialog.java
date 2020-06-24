@@ -32,6 +32,7 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
@@ -63,7 +64,7 @@ public final class AboutDialog extends AbstractSetupDialog
 {
   private static final int ECLIPSE_VERSION_COLUMN_INDEX = 1;
 
-  private static final String SHOW_ALL_PLUGINS = "SHOW_ALL_PLUGINS";
+  private static final String SHOW_ALL_PLUGINS = "SHOW_ALL_PLUGINS"; //$NON-NLS-1$
 
   private static final int DND_OPERATIONS = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK;
 
@@ -109,7 +110,7 @@ public final class AboutDialog extends AbstractSetupDialog
 
   public AboutDialog(Shell parentShell, String theVersion)
   {
-    super(parentShell, "About " + parentShell.getText(), 700, 500, SetupInstallerPlugin.INSTANCE, false);
+    super(parentShell, NLS.bind(Messages.AboutDialog_title, parentShell.getText()), 700, 500, SetupInstallerPlugin.INSTANCE, false);
     version = theVersion;
     showAllPlugins = dialogSettings.getBoolean(SHOW_ALL_PLUGINS);
   }
@@ -117,7 +118,7 @@ public final class AboutDialog extends AbstractSetupDialog
   @Override
   protected String getDefaultMessage()
   {
-    return "Installer version: " + version + "\n" + SetupUtil.INSTALLER_UPDATE_URL;
+    return NLS.bind(Messages.AboutDialog_InstallerVersion_message, version, SetupUtil.INSTALLER_UPDATE_URL);
   }
 
   @Override
@@ -130,12 +131,12 @@ public final class AboutDialog extends AbstractSetupDialog
     table.addControlListener(columnResizer);
 
     idColumn = new TableColumn(table, SWT.NONE);
-    idColumn.setText("Plugin");
+    idColumn.setText(Messages.AboutDialog_PluginColumn_label);
     idColumn.setResizable(false);
     idColumn.setMoveable(false);
 
     versionColumn = new TableColumn(table, SWT.NONE);
-    versionColumn.setText("Version");
+    versionColumn.setText(Messages.AboutDialog_VersionColumn_label);
     versionColumn.setResizable(false);
     versionColumn.setMoveable(false);
 
@@ -195,7 +196,7 @@ public final class AboutDialog extends AbstractSetupDialog
               String buildID = OomphPlugin.getBuildID(bundle);
               if (buildID != null)
               {
-                version += " Build " + buildID;
+                version += NLS.bind(Messages.AboutDialog_Build_label, buildID);
                 break;
               }
             }
@@ -240,7 +241,7 @@ public final class AboutDialog extends AbstractSetupDialog
       {
         for (IProvidedCapability capability : iu.getProvidedCapabilities())
         {
-          if ("osgi.bundle".equals(capability.getNamespace()))
+          if ("osgi.bundle".equals(capability.getNamespace())) //$NON-NLS-1$
           {
             plugins.add(iu);
             break;
@@ -255,7 +256,7 @@ public final class AboutDialog extends AbstractSetupDialog
   @Override
   protected void createButtonsForButtonBar(Composite parent)
   {
-    final Button showAllPluginsButton = createCheckbox(parent, "Show all plugins");
+    final Button showAllPluginsButton = createCheckbox(parent, Messages.AboutDialog_ShowAllPlugins_label);
     showAllPluginsButton.setSelection(showAllPlugins);
     showAllPluginsButton.addSelectionListener(new SelectionAdapter()
     {
@@ -270,7 +271,7 @@ public final class AboutDialog extends AbstractSetupDialog
       }
     });
 
-    createButton(parent, IDialogConstants.OK_ID, "Close", true);
+    createButton(parent, IDialogConstants.OK_ID, IDialogConstants.CLOSE_LABEL, true);
   }
 
   @Override

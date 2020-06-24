@@ -79,8 +79,8 @@ public class ConfigSubsectionItemProvider extends ItemProviderAdapter
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ConfigSubsection_name_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ConfigSubsection_name_feature", "_UI_ConfigSubsection_type"),
+        getString("_UI_ConfigSubsection_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ConfigSubsection_name_feature", "_UI_ConfigSubsection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         GitPackage.Literals.CONFIG_SUBSECTION__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -137,7 +137,7 @@ public class ConfigSubsectionItemProvider extends ItemProviderAdapter
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ConfigSubsection"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ConfigSubsection")); //$NON-NLS-1$
   }
 
   /**
@@ -161,7 +161,7 @@ public class ConfigSubsectionItemProvider extends ItemProviderAdapter
   public String getText(Object object)
   {
     String label = ((ConfigSubsection)object).getName();
-    return label == null ? "" : label;
+    return label == null ? "" : label; //$NON-NLS-1$
   }
 
   /**

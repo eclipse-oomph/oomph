@@ -72,8 +72,8 @@ public class CommandParameterItemProvider extends ModelElementItemProvider
   protected void addIDPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_CommandParameter_iD_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_CommandParameter_iD_feature", "_UI_CommandParameter_type"),
+        getString("_UI_CommandParameter_iD_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_CommandParameter_iD_feature", "_UI_CommandParameter_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         WorkbenchPackage.Literals.COMMAND_PARAMETER__ID, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -86,8 +86,8 @@ public class CommandParameterItemProvider extends ModelElementItemProvider
   protected void addValuePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_CommandParameter_value_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_CommandParameter_value_feature", "_UI_CommandParameter_type"),
+        getString("_UI_CommandParameter_value_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_CommandParameter_value_feature", "_UI_CommandParameter_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         WorkbenchPackage.Literals.COMMAND_PARAMETER__VALUE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -100,7 +100,7 @@ public class CommandParameterItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/CommandParameter"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/CommandParameter")); //$NON-NLS-1$
   }
 
   /**
@@ -124,7 +124,7 @@ public class CommandParameterItemProvider extends ModelElementItemProvider
   public String getText(Object object)
   {
     CommandParameter commandParameter = (CommandParameter)object;
-    return "" + commandParameter.getID() + " = " + commandParameter.getValue();
+    return "" + commandParameter.getID() + " = " + commandParameter.getValue(); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

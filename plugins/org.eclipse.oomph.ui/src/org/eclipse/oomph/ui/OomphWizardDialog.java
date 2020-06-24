@@ -113,7 +113,7 @@ public class OomphWizardDialog extends WizardDialog implements HelpProvider
     if (helpSupport != null)
     {
       ToolItem helpButton = toolBar.getItems()[0];
-      AccessUtil.setKey(helpButton, "help");
+      AccessUtil.setKey(helpButton, "help"); //$NON-NLS-1$
       helpSupport.hook(helpButton);
     }
 

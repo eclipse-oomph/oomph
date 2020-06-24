@@ -29,11 +29,9 @@ import java.util.Iterator;
  */
 public class ConfigureBuilderAction extends AbstractAction<IVersionBuilderArguments>
 {
-  private static final String TITLE = "Configure Version Management";
-
   public ConfigureBuilderAction()
   {
-    super(TITLE);
+    super(Messages.ConfigureBuilderAction_title);
   }
 
   @Override
@@ -59,8 +57,7 @@ public class ConfigureBuilderAction extends AbstractAction<IVersionBuilderArgume
               {
                 if (!arguments.equals(commandArguments))
                 {
-                  if (!MessageDialog.openQuestion(shell, TITLE,
-                      "The selected projects have different configurations. The configuration you specify will be applied to all selected projects.\n\nWould you like to proceed?"))
+                  if (!MessageDialog.openQuestion(shell, Messages.ConfigureBuilderAction_title, Messages.ConfigureBuilderAction_applyConfigMessage))
                   {
                     return null;
                   }

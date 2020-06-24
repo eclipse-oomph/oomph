@@ -87,7 +87,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
       case PreferencesPackage.PROPERTY:
         return createProperty();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -108,7 +108,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
       case PreferencesPackage.PREFERENCE_NODE_NAME:
         return createPreferenceNodeNameFromString(eDataType, initialValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -129,7 +129,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
       case PreferencesPackage.PREFERENCE_NODE_NAME:
         return convertPreferenceNodeNameToString(eDataType, instanceValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -175,9 +175,40 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
     return createEscapedString(initialValue);
   }
 
-  private static final String[] ESCAPES = { "\\000", "\\001", "\\002", "\\003", "\\004", "\\005", "\\006", "\\007", "\\010", "\t", "\n", "\\013", "\\014", "\r",
-      "\\016", "\\017", "\\020", "\\021", "\\022", "\\023", "\\024", "\\025", "\\026", "\\027", "\\030", "\\031", "\\032", "\\033", "\\034", "\\035", "\\036",
-      "\\037" };
+  private static final String[] ESCAPES = { //
+      "\\000", //$NON-NLS-1$
+      "\\001", //$NON-NLS-1$
+      "\\002", //$NON-NLS-1$
+      "\\003", //$NON-NLS-1$
+      "\\004", //$NON-NLS-1$
+      "\\005", //$NON-NLS-1$
+      "\\006", //$NON-NLS-1$
+      "\\007", //$NON-NLS-1$
+      "\\010", //$NON-NLS-1$
+      "\t", //$NON-NLS-1$
+      "\n", //$NON-NLS-1$
+      "\\013", //$NON-NLS-1$
+      "\\014", //$NON-NLS-1$
+      "\r", //$NON-NLS-1$
+      "\\016", //$NON-NLS-1$
+      "\\017", //$NON-NLS-1$
+      "\\020", //$NON-NLS-1$
+      "\\021", //$NON-NLS-1$
+      "\\022", //$NON-NLS-1$
+      "\\023", //$NON-NLS-1$
+      "\\024", //$NON-NLS-1$
+      "\\025", //$NON-NLS-1$
+      "\\026", //$NON-NLS-1$
+      "\\027", //$NON-NLS-1$
+      "\\030", //$NON-NLS-1$
+      "\\031", //$NON-NLS-1$
+      "\\032", //$NON-NLS-1$
+      "\\033", //$NON-NLS-1$
+      "\\034", //$NON-NLS-1$
+      "\\035", //$NON-NLS-1$
+      "\\036", //$NON-NLS-1$
+      "\\037" //$NON-NLS-1$
+  };
 
   /**
    * <!-- begin-user-doc -->
@@ -201,11 +232,11 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
       }
       else if (c == '\\')
       {
-        result.append("\\\\");
+        result.append("\\\\"); //$NON-NLS-1$
       }
       else if (c == '\177')
       {
-        result.append("\\177");
+        result.append("\\177"); //$NON-NLS-1$
       }
       else
       {
@@ -241,15 +272,15 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
     URI result = PREFERENCE_URIS.get(literal);
     if (result == null)
     {
-      String[] segments = literal.split("/");
+      String[] segments = literal.split("/"); //$NON-NLS-1$
       int length = segments.length;
       if (length == 0)
       {
-        result = URI.createHierarchicalURI(null, "", null, null, null);
+        result = URI.createHierarchicalURI(null, "", null, null, null); //$NON-NLS-1$
       }
       else
       {
-        result = URI.createURI("");
+        result = URI.createURI(""); //$NON-NLS-1$
         StringBuilder property = null;
         boolean startProperty = false;
         int start = -1;
@@ -275,7 +306,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
             {
               if (i != length - 1)
               {
-                result = URI.createHierarchicalURI(null, "", null, null, null);
+                result = URI.createHierarchicalURI(null, "", null, null, null); //$NON-NLS-1$
               }
 
               start = 1;
@@ -345,7 +376,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
       }
 
       String decodedSegment = URI.decode(segment);
-      if (decodedSegment.contains("/"))
+      if (decodedSegment.contains("/")) //$NON-NLS-1$
       {
         result.append('/');
       }

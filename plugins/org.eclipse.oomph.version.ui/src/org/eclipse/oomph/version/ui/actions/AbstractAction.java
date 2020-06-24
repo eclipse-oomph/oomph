@@ -87,7 +87,7 @@ public abstract class AbstractAction<ARGS> implements IObjectActionDelegate
     catch (Exception ex)
     {
       Activator.log(ex);
-      MessageDialog.openError(shell, "Version Management", "An error occured. Consult the error log for details.");
+      MessageDialog.openError(shell, Messages.AbstractAction_error_title, Messages.AbstractAction_error_message);
     }
   }
 

@@ -49,7 +49,7 @@ public class JUnitPackage extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final String eNAME = "junit";
+  public static final String eNAME = "junit"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -57,7 +57,7 @@ public class JUnitPackage extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final String eNS_URI = "http://www.eclipse.org/oomph/junit/1.0";
+  public static final String eNS_URI = "http://www.eclipse.org/oomph/junit/1.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -65,7 +65,7 @@ public class JUnitPackage extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final String eNS_PREFIX = "junit";
+  public static final String eNS_PREFIX = "junit"; //$NON-NLS-1$
 
   /**
    * The package content type ID.
@@ -73,7 +73,7 @@ public class JUnitPackage extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final String eCONTENT_TYPE = "org.eclipse.oomph.junit";
+  public static final String eCONTENT_TYPE = "org.eclipse.oomph.junit"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.
@@ -1478,86 +1478,86 @@ public class JUnitPackage extends EPackageImpl
     testSuiteTypeEClass.getESuperTypes().add(getTestSuite());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(jUnitDocumentRootEClass, JUnitDocumentRoot.class, "JUnitDocumentRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getJUnitDocumentRoot_Mixed(), ecorePackage.getEFeatureMapEntry(), "mixed", null, 0, -1, null, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(jUnitDocumentRootEClass, JUnitDocumentRoot.class, "JUnitDocumentRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getJUnitDocumentRoot_Mixed(), ecorePackage.getEFeatureMapEntry(), "mixed", null, 0, -1, null, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getJUnitDocumentRoot_XMLNSPrefixMap(), ecorePackage.getEStringToStringMapEntry(), null, "xMLNSPrefixMap", null, 0, -1, null, IS_TRANSIENT,
+    initEReference(getJUnitDocumentRoot_XMLNSPrefixMap(), ecorePackage.getEStringToStringMapEntry(), null, "xMLNSPrefixMap", null, 0, -1, null, IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getJUnitDocumentRoot_XSISchemaLocation(), ecorePackage.getEStringToStringMapEntry(), null, "xSISchemaLocation", null, 0, -1, null,
+    initEReference(getJUnitDocumentRoot_XSISchemaLocation(), ecorePackage.getEStringToStringMapEntry(), null, "xSISchemaLocation", null, 0, -1, null, //$NON-NLS-1$
         IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getJUnitDocumentRoot_TestSuite(), getTestSuite(), null, "testSuite", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getJUnitDocumentRoot_TestSuite(), getTestSuite(), null, "testSuite", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEReference(getJUnitDocumentRoot_TestSuites(), getTestSuitesType(), null, "testSuites", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getJUnitDocumentRoot_TestSuites(), getTestSuitesType(), null, "testSuites", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
-    initEClass(testSuitesTypeEClass, TestSuitesType.class, "TestSuitesType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getTestSuitesType_TestSuites(), getTestSuiteType(), null, "testSuites", null, 0, -1, TestSuitesType.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(testSuitesTypeEClass, TestSuitesType.class, "TestSuitesType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getTestSuitesType_TestSuites(), getTestSuiteType(), null, "testSuites", null, 0, -1, TestSuitesType.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(testSuiteEClass, TestSuite.class, "TestSuite", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getTestSuite_Properties(), getPropertiesType(), null, "properties", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTestSuite_TestCases(), getTestCaseType(), null, "testCases", null, 0, -1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTestSuite_SystemOut(), ecorePackage.getEString(), "systemOut", null, 0, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(testSuiteEClass, TestSuite.class, "TestSuite", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getTestSuite_Properties(), getPropertiesType(), null, "properties", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTestSuite_TestCases(), getTestCaseType(), null, "testCases", null, 0, -1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTestSuite_SystemOut(), ecorePackage.getEString(), "systemOut", null, 0, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTestSuite_SystemErr(), ecorePackage.getEString(), "systemErr", null, 0, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getTestSuite_SystemErr(), ecorePackage.getEString(), "systemErr", null, 0, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTestSuite_Errors(), theXMLTypePackage.getInt(), "errors", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getTestSuite_Errors(), theXMLTypePackage.getInt(), "errors", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTestSuite_Failures(), theXMLTypePackage.getInt(), "failures", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getTestSuite_Failures(), theXMLTypePackage.getInt(), "failures", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTestSuite_HostName(), getNameType(), "hostName", null, 0, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEAttribute(getTestSuite_HostName(), getNameType(), "hostName", null, 0, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTestSuite_Name(), getNameType(), "name", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTestSuite_Name(), getNameType(), "name", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
-        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTestSuite_Tests(), theXMLTypePackage.getInt(), "tests", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getTestSuite_Tests(), theXMLTypePackage.getInt(), "tests", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTestSuite_Time(), getTime(), "time", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+    initEAttribute(getTestSuite_Time(), getTime(), "time", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, //$NON-NLS-1$
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTestSuite_Timestamp(), getISO8601DateTime(), "timestamp", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getTestSuite_Timestamp(), getISO8601DateTime(), "timestamp", null, 1, 1, TestSuite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(testSuiteTypeEClass, TestSuiteType.class, "TestSuiteType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getTestSuiteType_ID(), theXMLTypePackage.getInt(), "iD", null, 1, 1, TestSuiteType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(testSuiteTypeEClass, TestSuiteType.class, "TestSuiteType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getTestSuiteType_ID(), theXMLTypePackage.getInt(), "iD", null, 1, 1, TestSuiteType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTestSuiteType_PackageName(), theXMLTypePackage.getToken(), "packageName", null, 1, 1, TestSuiteType.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getTestSuiteType_PackageName(), theXMLTypePackage.getToken(), "packageName", null, 1, 1, TestSuiteType.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(testCaseTypeEClass, TestCaseType.class, "TestCaseType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getTestCaseType_Error(), getProblemType(), null, "error", null, 0, 1, TestCaseType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(testCaseTypeEClass, TestCaseType.class, "TestCaseType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getTestCaseType_Error(), getProblemType(), null, "error", null, 0, 1, TestCaseType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTestCaseType_Failure(), getProblemType(), null, "failure", null, 0, 1, TestCaseType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTestCaseType_ClassName(), theXMLTypePackage.getToken(), "className", null, 1, 1, TestCaseType.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getTestCaseType_Failure(), getProblemType(), null, "failure", null, 0, 1, TestCaseType.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTestCaseType_ClassName(), theXMLTypePackage.getToken(), "className", null, 1, 1, TestCaseType.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTestCaseType_Name(), theXMLTypePackage.getToken(), "name", null, 1, 1, TestCaseType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getTestCaseType_Name(), theXMLTypePackage.getToken(), "name", null, 1, 1, TestCaseType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTestCaseType_Time(), getTime(), "time", null, 1, 1, TestCaseType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEAttribute(getTestCaseType_Time(), getTime(), "time", null, 1, 1, TestCaseType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(problemTypeEClass, ProblemType.class, "ProblemType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getProblemType_Value(), ecorePackage.getEString(), "value", null, 0, 1, ProblemType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(problemTypeEClass, ProblemType.class, "ProblemType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getProblemType_Value(), ecorePackage.getEString(), "value", null, 0, 1, ProblemType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProblemType_Message(), theXMLTypePackage.getString(), "message", null, 0, 1, ProblemType.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getProblemType_Message(), theXMLTypePackage.getString(), "message", null, 0, 1, ProblemType.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProblemType_Type(), theXMLTypePackage.getString(), "type", null, 1, 1, ProblemType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getProblemType_Type(), theXMLTypePackage.getString(), "type", null, 1, 1, ProblemType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(propertiesTypeEClass, PropertiesType.class, "PropertiesType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getPropertiesType_Property(), getPropertyType(), null, "property", null, 0, -1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(propertiesTypeEClass, PropertiesType.class, "PropertiesType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getPropertiesType_Property(), getPropertyType(), null, "property", null, 0, -1, PropertiesType.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(propertyTypeEClass, PropertyType.class, "PropertyType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getPropertyType_Name(), getNameType(), "name", null, 1, 1, PropertyType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
-        !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPropertyType_Value(), theXMLTypePackage.getString(), "value", null, 1, 1, PropertyType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(propertyTypeEClass, PropertyType.class, "PropertyType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getPropertyType_Name(), getNameType(), "name", null, 1, 1, PropertyType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPropertyType_Value(), theXMLTypePackage.getString(), "value", null, 1, 1, PropertyType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize data types
-    initEDataType(iso8601DateTimeEDataType, long.class, "ISO8601DateTime", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(nameTypeEDataType, String.class, "NameType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(timeEDataType, double.class, "Time", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(iso8601DateTimeEDataType, long.class, "ISO8601DateTime", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(nameTypeEDataType, String.class, "NameType", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(timeEDataType, double.class, "Time", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
     // Create resource
     createResource(eNS_URI);
@@ -1579,48 +1579,153 @@ public class JUnitPackage extends EPackageImpl
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(this, source, new String[] { "qualified", "false" });
-    addAnnotation(jUnitDocumentRootEClass, source, new String[] { "name", "", "kind", "mixed" });
-    addAnnotation(getJUnitDocumentRoot_Mixed(), source, new String[] { "kind", "elementWildcard", "name", ":mixed" });
-    addAnnotation(getJUnitDocumentRoot_XMLNSPrefixMap(), source, new String[] { "kind", "attribute", "name", "xmlns:prefix" });
-    addAnnotation(getJUnitDocumentRoot_XSISchemaLocation(), source, new String[] { "kind", "attribute", "name", "xsi:schemaLocation" });
-    addAnnotation(getJUnitDocumentRoot_TestSuite(), source, new String[] { "kind", "element", "name", "testsuite", "namespace", "##targetNamespace" });
-    addAnnotation(getJUnitDocumentRoot_TestSuites(), source, new String[] { "kind", "element", "name", "testsuites", "namespace", "##targetNamespace" });
-    addAnnotation(testSuitesTypeEClass, source, new String[] { "name", "testsuites_._type", "kind", "elementOnly" });
-    addAnnotation(getTestSuitesType_TestSuites(), source, new String[] { "kind", "element", "name", "testsuite", "namespace", "##targetNamespace" });
-    addAnnotation(testSuiteEClass, source, new String[] { "name", "testsuite", "kind", "elementOnly" });
-    addAnnotation(getTestSuite_Properties(), source, new String[] { "kind", "element", "name", "properties", "namespace", "##targetNamespace" });
-    addAnnotation(getTestSuite_TestCases(), source, new String[] { "kind", "element", "name", "testcase", "namespace", "##targetNamespace" });
-    addAnnotation(getTestSuite_SystemOut(), source, new String[] { "kind", "element", "name", "system-out", "namespace", "##targetNamespace" });
-    addAnnotation(getTestSuite_SystemErr(), source, new String[] { "kind", "element", "name", "system-err", "namespace", "##targetNamespace" });
-    addAnnotation(getTestSuite_Errors(), source, new String[] { "kind", "attribute", "name", "errors", "namespace", "##targetNamespace" });
-    addAnnotation(getTestSuite_Failures(), source, new String[] { "kind", "attribute", "name", "failures", "namespace", "##targetNamespace" });
-    addAnnotation(getTestSuite_HostName(), source, new String[] { "kind", "attribute", "name", "hostname", "namespace", "##targetNamespace" });
-    addAnnotation(getTestSuite_Name(), source, new String[] { "kind", "attribute", "name", "name", "namespace", "##targetNamespace" });
-    addAnnotation(getTestSuite_Tests(), source, new String[] { "kind", "attribute", "name", "tests", "namespace", "##targetNamespace" });
-    addAnnotation(getTestSuite_Time(), source, new String[] { "kind", "attribute", "name", "time", "namespace", "##targetNamespace" });
-    addAnnotation(getTestSuite_Timestamp(), source, new String[] { "kind", "attribute", "name", "timestamp", "namespace", "##targetNamespace" });
-    addAnnotation(testSuiteTypeEClass, source, new String[] { "name", "testsuite_._type", "kind", "elementOnly" });
-    addAnnotation(getTestSuiteType_ID(), source, new String[] { "kind", "attribute", "name", "id", "namespace", "##targetNamespace" });
-    addAnnotation(getTestSuiteType_PackageName(), source, new String[] { "kind", "attribute", "name", "package", "namespace", "##targetNamespace" });
-    addAnnotation(testCaseTypeEClass, source, new String[] { "name", "testcase_._type", "kind", "elementOnly" });
-    addAnnotation(getTestCaseType_Error(), source, new String[] { "kind", "element", "name", "error", "namespace", "##targetNamespace" });
-    addAnnotation(getTestCaseType_Failure(), source, new String[] { "kind", "element", "name", "failure", "namespace", "##targetNamespace" });
-    addAnnotation(getTestCaseType_ClassName(), source, new String[] { "kind", "attribute", "name", "classname", "namespace", "##targetNamespace" });
-    addAnnotation(getTestCaseType_Name(), source, new String[] { "kind", "attribute", "name", "name", "namespace", "##targetNamespace" });
-    addAnnotation(getTestCaseType_Time(), source, new String[] { "kind", "attribute", "name", "time", "namespace", "##targetNamespace" });
-    addAnnotation(problemTypeEClass, source, new String[] { "name", "problem_._type", "kind", "simple" });
-    addAnnotation(getProblemType_Value(), source, new String[] { "name", ":0", "kind", "simple" });
-    addAnnotation(getProblemType_Message(), source, new String[] { "kind", "attribute", "name", "message", "namespace", "##targetNamespace" });
-    addAnnotation(getProblemType_Type(), source, new String[] { "kind", "attribute", "name", "type", "namespace", "##targetNamespace" });
-    addAnnotation(propertiesTypeEClass, source, new String[] { "name", "properties_._type", "kind", "elementOnly" });
-    addAnnotation(getPropertiesType_Property(), source, new String[] { "kind", "element", "name", "property", "namespace", "##targetNamespace" });
-    addAnnotation(propertyTypeEClass, source, new String[] { "name", "property_._type", "kind", "empty" });
-    addAnnotation(getPropertyType_Name(), source, new String[] { "kind", "attribute", "name", "name", "namespace", "##targetNamespace" });
-    addAnnotation(getPropertyType_Value(), source, new String[] { "kind", "attribute", "name", "value", "namespace", "##targetNamespace" });
-    addAnnotation(nameTypeEDataType, source,
-        new String[] { "name", "name_._type", "baseType", "http://www.eclipse.org/emf/2003/XMLType#token", "minLength", "1" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "qualified", "false" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jUnitDocumentRootEClass, source, new String[] { "name", "", //$NON-NLS-1$ //$NON-NLS-2$
+        "kind", "mixed" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getJUnitDocumentRoot_Mixed(), source, new String[] { "kind", "elementWildcard", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", ":mixed" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getJUnitDocumentRoot_XMLNSPrefixMap(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "xmlns:prefix" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getJUnitDocumentRoot_XSISchemaLocation(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "xsi:schemaLocation" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getJUnitDocumentRoot_TestSuite(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "testsuite", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getJUnitDocumentRoot_TestSuites(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "testsuites", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(testSuitesTypeEClass, source, new String[] { "name", "testsuites_._type", //$NON-NLS-1$ //$NON-NLS-2$
+        "kind", "elementOnly" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuitesType_TestSuites(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "testsuite", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(testSuiteEClass, source, new String[] { "name", "testsuite", //$NON-NLS-1$ //$NON-NLS-2$
+        "kind", "elementOnly" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuite_Properties(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "properties", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuite_TestCases(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "testcase", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuite_SystemOut(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "system-out", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuite_SystemErr(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "system-err", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuite_Errors(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "errors", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuite_Failures(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "failures", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuite_HostName(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "hostname", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuite_Name(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "name", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuite_Tests(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "tests", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuite_Time(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "time", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuite_Timestamp(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "timestamp", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(testSuiteTypeEClass, source, new String[] { "name", "testsuite_._type", //$NON-NLS-1$ //$NON-NLS-2$
+        "kind", "elementOnly" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuiteType_ID(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "id", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestSuiteType_PackageName(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "package", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(testCaseTypeEClass, source, new String[] { "name", "testcase_._type", //$NON-NLS-1$ //$NON-NLS-2$
+        "kind", "elementOnly" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestCaseType_Error(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "error", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestCaseType_Failure(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "failure", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestCaseType_ClassName(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "classname", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestCaseType_Name(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "name", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTestCaseType_Time(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "time", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(problemTypeEClass, source, new String[] { "name", "problem_._type", //$NON-NLS-1$ //$NON-NLS-2$
+        "kind", "simple" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProblemType_Value(), source, new String[] { "name", ":0", //$NON-NLS-1$ //$NON-NLS-2$
+        "kind", "simple" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProblemType_Message(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "message", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProblemType_Type(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "type", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(propertiesTypeEClass, source, new String[] { "name", "properties_._type", //$NON-NLS-1$ //$NON-NLS-2$
+        "kind", "elementOnly" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getPropertiesType_Property(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "property", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(propertyTypeEClass, source, new String[] { "name", "property_._type", //$NON-NLS-1$ //$NON-NLS-2$
+        "kind", "empty" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getPropertyType_Name(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "name", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getPropertyType_Value(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "value", //$NON-NLS-1$ //$NON-NLS-2$
+        "namespace", "##targetNamespace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(nameTypeEDataType, source, new String[] { "name", "name_._type", //$NON-NLS-1$ //$NON-NLS-2$
+        "baseType", "http://www.eclipse.org/emf/2003/XMLType#token", //$NON-NLS-1$ //$NON-NLS-2$
+        "minLength", "1" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -1631,8 +1736,9 @@ public class JUnitPackage extends EPackageImpl
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "conversionDelegates", "http:///org/eclipse/emf/ecore/util/DateConversionDelegate" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "conversionDelegates", "http:///org/eclipse/emf/ecore/util/DateConversionDelegate" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -1643,8 +1749,9 @@ public class JUnitPackage extends EPackageImpl
    */
   protected void createDateConversionDelegateAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/DateConversionDelegate";
-    addAnnotation(iso8601DateTimeEDataType, source, new String[] { "format", "//SimpleDateFormat/yyyy-MM-dd\'T\'HH:mm:ss" });
+    String source = "http:///org/eclipse/emf/ecore/util/DateConversionDelegate"; //$NON-NLS-1$
+    addAnnotation(iso8601DateTimeEDataType, source, new String[] { "format", "//SimpleDateFormat/yyyy-MM-dd\'T\'HH:mm:ss" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**

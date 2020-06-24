@@ -27,7 +27,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class AgentAnalyzerDialog extends OomphDialog
 {
-  public static final String TITLE = "Bundle Pool Analysis";
+  public static final String TITLE = Messages.AgentAnalyzerDialog_title;
 
   private final Agent agent;
 
@@ -48,19 +48,19 @@ public class AgentAnalyzerDialog extends OomphDialog
   @Override
   protected String getDefaultMessage()
   {
-    return "Analyze your bundle pools, collect garbage and repair damaged artifacts.";
+    return Messages.AgentAnalyzerDialog_defaultMessage;
   }
 
   @Override
   protected String getImagePath()
   {
-    return "wizban/AgentAnalyzer.png";
+    return "wizban/AgentAnalyzer.png"; //$NON-NLS-1$
   }
 
   @Override
   protected void createUI(Composite parent)
   {
-    getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("obj16/bundlePool"));
+    getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("obj16/bundlePool")); //$NON-NLS-1$
 
     try
     {

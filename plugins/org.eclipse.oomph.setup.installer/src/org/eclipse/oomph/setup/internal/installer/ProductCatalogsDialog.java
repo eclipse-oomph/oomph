@@ -58,9 +58,9 @@ import java.util.Map;
  */
 public class ProductCatalogsDialog extends AbstractSetupDialog
 {
-  public static final String TITLE = "Product Catalogs";
+  public static final String TITLE = Messages.ProductCatalogsDialog_title;
 
-  public static final String DESCRIPTION = "Select the product catalogs to use";
+  public static final String DESCRIPTION = Messages.ProductCatalogsDialog_description;
 
   private static final int APPLY_ID = IDialogConstants.CLIENT_ID + 1;
 
@@ -104,7 +104,7 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
   @Override
   protected String getDefaultMessage()
   {
-    return DESCRIPTION + ".";
+    return DESCRIPTION + "."; //$NON-NLS-1$
   }
 
   @Override
@@ -128,13 +128,13 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
       {
         if (!(inputElement instanceof CatalogManager))
         {
-          throw new IllegalArgumentException("input must be a CatalogManager");
+          throw new IllegalArgumentException(Messages.ProductCatalogsDialog_BadInput_exception);
         }
 
         List<Scope> scopes = new ArrayList<Scope>();
         for (Scope scope : catalogManager.getCatalogs(true))
         {
-          if (!scope.eIsProxy() && !"redirectable".equals(scope.getName()))
+          if (!scope.eIsProxy() && !"redirectable".equals(scope.getName())) //$NON-NLS-1$
           {
             scopes.add(scope);
           }
@@ -215,10 +215,10 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
   @Override
   protected void createControlsForButtonBar(Composite parent)
   {
-    createLabel(parent, "Catalog Index:");
+    createLabel(parent, Messages.ProductCatalogsDialog_CatalogIndex_label);
 
     boolean indexUnmanaged = !indexChoices.containsKey(originalIndex);
-    setMessage(DESCRIPTION + " or switch to a different index.");
+    setMessage(DESCRIPTION + Messages.ProductCatalogsDialog_SwitchIndex_suffix_message);
 
     final Combo indexCombo = createCombo(parent);
 
@@ -297,8 +297,8 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
   private void addManagementValues(Collection<String> values)
   {
     // There are em dashes, which will form a line, rather than -- which has gaps.
-    values.add("\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014");
-    values.add("Manage Indices...");
+    values.add("\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014"); //$NON-NLS-1$
+    values.add(Messages.ProductCatalogsDialog_ManageIndices_label);
   }
 
   protected void updateEnablement()
@@ -307,22 +307,22 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
     boolean catalogSelectionChanged = !checkedElements.equals(originalSelectedCatalogs);
     boolean applyEnabled = catalogSelectionChanged || indexSelection != null;
     applyButton.setEnabled(applyEnabled);
-    applyButton.setText("Apply");
+    applyButton.setText(Messages.ProductCatalogsDialog_Apply_label);
 
     if (originalIndex == null)
     {
       if (catalogSelectionChanged)
       {
-        setMessage(DESCRIPTION + " or apply the current selection.");
+        setMessage(DESCRIPTION + Messages.ProductCatalogsDialog_ApplySelection_suffix_message);
       }
       else
       {
-        setMessage(DESCRIPTION + ".");
+        setMessage(DESCRIPTION + "."); //$NON-NLS-1$
       }
     }
     else if (indexSelection != null)
     {
-      setMessage("Apply the new index selection to display its catalogs.", IMessageProvider.WARNING);
+      setMessage(Messages.ProductCatalogsDialog_ApplyNewIndex_message, IMessageProvider.WARNING);
       catalogViewer.getControl().setEnabled(false);
     }
     else
@@ -330,15 +330,15 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
       catalogViewer.getControl().setEnabled(true);
       if (catalogSelectionChanged)
       {
-        setMessage(DESCRIPTION + " or apply the current selection.");
+        setMessage(DESCRIPTION + Messages.ProductCatalogsDialog_ApplySelection_suffix_message);
       }
       else if (indexChoices.size() > 1 || !indexChoices.containsKey(originalIndex))
       {
-        setMessage(DESCRIPTION + " or switch to a different catalog index.");
+        setMessage(DESCRIPTION + Messages.ProductCatalogsDialog_SwitchCatalogIndex_suffix_message);
       }
       else
       {
-        setMessage(DESCRIPTION + ".");
+        setMessage(DESCRIPTION + "."); //$NON-NLS-1$
       }
     }
   }
@@ -346,7 +346,7 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
   @Override
   protected void createButtonsForButtonBar(Composite parent)
   {
-    applyButton = createButton(parent, APPLY_ID, "Apply", false);
+    applyButton = createButton(parent, APPLY_ID, Messages.ProductCatalogsDialog_Apply_label, false);
     applyButton.setEnabled(false);
     super.createButtonsForButtonBar(parent);
 
@@ -368,13 +368,13 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
 
         Runnable buttonAnimator = new Runnable()
         {
-          private String[] label = new String[] { ". Apply .", ".. Apply ..", "... Apply ..." };
+          private String[] label = new String[] { Messages.ProductCatalogsDialog_Apply1_label, Messages.ProductCatalogsDialog_Apply2_label, Messages.ProductCatalogsDialog_Apply3_label };
 
           private int counter;
 
           public void run()
           {
-            if (counter == 0 || !applyButton.isDisposed() && !"Apply".equals(applyButton.getText()))
+            if (counter == 0 || !applyButton.isDisposed() && !Messages.ProductCatalogsDialog_Apply_label.equals(applyButton.getText()))
             {
               applyButton.setText(label[counter++ % 3]);
               UIUtil.timerExec(500, this);

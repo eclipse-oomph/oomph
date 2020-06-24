@@ -64,7 +64,7 @@ public class FeatureGeneratorItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/FeatureGenerator"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/FeatureGenerator")); //$NON-NLS-1$
   }
 
   /**
@@ -87,7 +87,7 @@ public class FeatureGeneratorItemProvider extends ModelElementItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_FeatureGenerator_type");
+    return getString("_UI_FeatureGenerator_type"); //$NON-NLS-1$
   }
 
   /**

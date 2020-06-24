@@ -53,7 +53,7 @@ public class JUnitValidator extends EObjectValidator
    * @see org.eclipse.emf.common.util.Diagnostic#getCode()
    * @generated
    */
-  public static final String DIAGNOSTIC_SOURCE = "org.eclipse.oomph.junit";
+  public static final String DIAGNOSTIC_SOURCE = "org.eclipse.oomph.junit"; //$NON-NLS-1$
 
   /**
    * A constant with a fixed name that can be used as the base value for additional hand written constants.

@@ -65,6 +65,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -103,9 +104,9 @@ import java.util.regex.Pattern;
  */
 public class GenericSetupTemplate extends SetupTemplate
 {
-  private static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(\\|([^{}/]+))?([^{}]*)}|\\$)");
+  private static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$(\\{([^${}|/]+)(\\|([^{}/]+))?([^{}]*)}|\\$)"); //$NON-NLS-1$
 
-  private static final Pattern GIT_REPOSITORY_URL_PATTERN = Pattern.compile("\\s*url\\s*=\\s*([^ ]+)");
+  private static final Pattern GIT_REPOSITORY_URL_PATTERN = Pattern.compile("\\s*url\\s*=\\s*([^ ]+)"); //$NON-NLS-1$
 
   private final URI templateLocation;
 
@@ -155,29 +156,29 @@ public class GenericSetupTemplate extends SetupTemplate
     {
       if (StringUtil.isEmpty(field.getValue()))
       {
-        return "";
+        return ""; //$NON-NLS-1$
       }
     }
 
-    String location = expandString("${setup.location}", null);
+    String location = expandString("${setup.location}", null); //$NON-NLS-1$
     Path path = new Path(location);
     String[] segments = path.segments();
 
     if (segments.length == 0 || path.getDevice() != null)
     {
-      return "The location '" + location + "' specified by the folder path is not a valid project path";
+      return NLS.bind(Messages.GenericSetupTemplate_message_locationIsNotValidProjectPath, location);
     }
 
     String projectName = segments[0];
     if (!path.isValidSegment(projectName))
     {
-      return "The project '" + projectName + "' specified by the folder path is not a valid project name";
+      return NLS.bind(Messages.GenericSetupTemplate_message_projectNameIsNotValid, projectName);
     }
 
     IProject project = EcorePlugin.getWorkspaceRoot().getProject(projectName);
     if (!project.isAccessible())
     {
-      return "The project '" + projectName + "' specified by the folder path is not accessible";
+      return NLS.bind(Messages.GenericSetupTemplate_message_projectIsNotAccessible, projectName);
     }
 
     IContainer container = project;
@@ -186,34 +187,34 @@ public class GenericSetupTemplate extends SetupTemplate
       String folderName = segments[i];
       if (!path.isValidSegment(folderName))
       {
-        return "The folder segment '" + folderName + "' specified by the folder path is not a valid folder name";
+        return NLS.bind(Messages.GenericSetupTemplate_message_folderNameIsNotValid, folderName);
       }
 
       IFile file = container.getFile(new Path(folderName));
       if (file.exists())
       {
-        return "A file exists at '" + file.getFullPath() + "' specified by the folder path";
+        return NLS.bind(Messages.GenericSetupTemplate_message_fileExistsAt, file.getFullPath());
       }
 
       container = container.getFolder(new Path(folderName));
     }
 
-    String filename = expandString("${setup.filename}", null);
+    String filename = expandString("${setup.filename}", null); //$NON-NLS-1$
     filename = expandString(filename, null);
     if (!path.isValidSegment(filename))
     {
-      return "The filename '" + filename + "' is not a valid filename";
+      return NLS.bind(Messages.GenericSetupTemplate_message_fileNameIsNotValid, filename);
     }
 
-    if (!filename.endsWith(".setup"))
+    if (!filename.endsWith(".setup")) //$NON-NLS-1$
     {
-      return "The filename '" + filename + "' must use the file extension '.setup'";
+      return NLS.bind(Messages.GenericSetupTemplate_message_fileNameMissingSetupExtension, filename);
     }
 
     IFile file = container.getFile(new Path(filename));
     if (file.exists())
     {
-      return "The file '" + file.getFullPath() + "' already exists";
+      return NLS.bind(Messages.GenericSetupTemplate_message_fileAlreadyExists, file.getFullPath());
     }
 
     return null;
@@ -249,7 +250,7 @@ public class GenericSetupTemplate extends SetupTemplate
             if (focusVariable != null)
             {
               String name = focusVariable.getName();
-              if ("setup.location".equals(name) || "setup.filename".equals(name))
+              if ("setup.location".equals(name) || "setup.filename".equals(name)) //$NON-NLS-1$ //$NON-NLS-2$
               {
                 return ExtendedFontRegistry.INSTANCE.getFont(font, IItemFontProvider.BOLD_FONT);
               }
@@ -307,7 +308,7 @@ public class GenericSetupTemplate extends SetupTemplate
       if (focusUsages.isEmpty())
       {
         String name = variable.getName();
-        if ("setup.location".equals(name) || "setup.filename".equals(name))
+        if ("setup.location".equals(name) || "setup.filename".equals(name)) //$NON-NLS-1$ //$NON-NLS-2$
         {
           previewer.setSelection(new StructuredSelection(getResource()), true);
         }
@@ -332,7 +333,7 @@ public class GenericSetupTemplate extends SetupTemplate
     final Font normalFont = composite.getFont();
     final Font boldFont = ExtendedFontRegistry.INSTANCE.getFont(normalFont, IItemFontProvider.BOLD_FONT);
 
-    CompoundTask compoundTask = (CompoundTask)setupModelElement.eResource().getEObject("template.variables");
+    CompoundTask compoundTask = (CompoundTask)setupModelElement.eResource().getEObject("template.variables"); //$NON-NLS-1$
     Control firstControl = null;
     VariableTask firstVariable = null;
     String defaultLocation = getContainer().getDefaultLocation();
@@ -385,7 +386,7 @@ public class GenericSetupTemplate extends SetupTemplate
       variables.put(variable.getName(), variable);
       fields.put(variable, field);
 
-      if ("setup.location".equals(variable.getName()))
+      if ("setup.location".equals(variable.getName())) //$NON-NLS-1$
       {
         field.setValue(defaultLocation);
       }
@@ -435,7 +436,7 @@ public class GenericSetupTemplate extends SetupTemplate
     try
     {
       // First try to load the Eclipse Project catalog from the standard location.
-      URI eclipseProjectCatalogLogicalURI = SetupContext.INDEX_ROOT_URI.appendSegment("org.eclipse.projects.setup");
+      URI eclipseProjectCatalogLogicalURI = SetupContext.INDEX_ROOT_URI.appendSegment("org.eclipse.projects.setup"); //$NON-NLS-1$
       Resource eclipseProjectCatalogResource = resourceSet.getResource(eclipseProjectCatalogLogicalURI, true);
       eclipseProjectCatalog = (ProjectCatalog)EcoreUtil.getObjectByType(eclipseProjectCatalogResource.getContents(), SetupPackage.Literals.PROJECT_CATALOG);
     }
@@ -445,7 +446,7 @@ public class GenericSetupTemplate extends SetupTemplate
       try
       {
         // If that fails, i.e., the index has been replaced by a custom index, try to load directly from Git.
-        URI eclipseProjectCatalogPhysicalURI = URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.projects.setup");
+        URI eclipseProjectCatalogPhysicalURI = URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.projects.setup"); //$NON-NLS-1$
         input = URIConverter.INSTANCE.createInputStream(eclipseProjectCatalogPhysicalURI);
         Resource eclipseProjectCatalogResource = resourceSet.createResource(eclipseProjectCatalogPhysicalURI);
         eclipseProjectCatalogResource.unload();
@@ -465,11 +466,11 @@ public class GenericSetupTemplate extends SetupTemplate
     if (eclipseProjectCatalog != null)
     {
       // The list of choices in the eclipse target platform variable, provide the key information to dynamic update the templates.
-      VariableTask eclipseTargetPlatformVariable = getVariable(eclipseProjectCatalog, "eclipse.target.platform");
+      VariableTask eclipseTargetPlatformVariable = getVariable(eclipseProjectCatalog, "eclipse.target.platform"); //$NON-NLS-1$
       if (eclipseTargetPlatformVariable != null)
       {
         // Update the product template's product release train choices.
-        VariableTask productReleaseTrainVariable = getVariable(modelElement, "product.release.train");
+        VariableTask productReleaseTrainVariable = getVariable(modelElement, "product.release.train"); //$NON-NLS-1$
         if (productReleaseTrainVariable != null)
         {
           EList<VariableChoice> choices = productReleaseTrainVariable.getChoices();
@@ -481,7 +482,7 @@ public class GenericSetupTemplate extends SetupTemplate
             String value = variableChoice.getValue();
 
             // Omit choices in which Oomph cannot be installed.
-            if ("None".equals(value) || "Galileo".equals(value) || "Helios".equals(value) || "Indigo".equals(value))
+            if ("None".equals(value) || "Galileo".equals(value) || "Helios".equals(value) || "Indigo".equals(value)) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
             {
               it.remove();
             }
@@ -497,35 +498,35 @@ public class GenericSetupTemplate extends SetupTemplate
       if (modelElement instanceof ProjectCatalog)
       {
         // Replace all the tasks that depend on the available release with the copies from the latest Eclipse Project catalog.
-        VariableTask targetPlatformVariable = getVariable(modelElement, "eclipse.target.platform");
+        VariableTask targetPlatformVariable = getVariable(modelElement, "eclipse.target.platform"); //$NON-NLS-1$
         if (targetPlatformVariable != null)
         {
           EcoreUtil.replace(targetPlatformVariable, EcoreUtil.copy(eclipseTargetPlatformVariable));
         }
 
-        VariableTask apiBaselineTargetPlatformVariable = getVariable(modelElement, "eclipse.api.baseline.target.platform");
+        VariableTask apiBaselineTargetPlatformVariable = getVariable(modelElement, "eclipse.api.baseline.target.platform"); //$NON-NLS-1$
         if (apiBaselineTargetPlatformVariable != null)
         {
-          VariableTask eclipseApiBaselineTargetPlatformVariable = getVariable(eclipseProjectCatalog, "eclipse.api.baseline.target.platform");
+          VariableTask eclipseApiBaselineTargetPlatformVariable = getVariable(eclipseProjectCatalog, "eclipse.api.baseline.target.platform"); //$NON-NLS-1$
           if (eclipseApiBaselineTargetPlatformVariable != null)
           {
             EcoreUtil.replace(apiBaselineTargetPlatformVariable, EcoreUtil.copy(eclipseApiBaselineTargetPlatformVariable));
           }
         }
-        EObject projectCatalogModularTargletTask = getTargletTask(modelElement, "Modular Target");
+        EObject projectCatalogModularTargletTask = getTargletTask(modelElement, "Modular Target"); //$NON-NLS-1$
         if (projectCatalogModularTargletTask != null)
         {
-          EObject eclipseProjectCatalogModularTargletTask = getTargletTask(eclipseProjectCatalog, "Modular Target");
+          EObject eclipseProjectCatalogModularTargletTask = getTargletTask(eclipseProjectCatalog, "Modular Target"); //$NON-NLS-1$
           if (eclipseProjectCatalogModularTargletTask != null)
           {
             EcoreUtil.replace(projectCatalogModularTargletTask, EcoreUtil.copy(eclipseProjectCatalogModularTargletTask));
           }
         }
 
-        EObject projectCatalogModularAPIBaselineTargletTask = getTargletTask(modelElement, "Modular API Baseline Target");
+        EObject projectCatalogModularAPIBaselineTargletTask = getTargletTask(modelElement, "Modular API Baseline Target"); //$NON-NLS-1$
         if (projectCatalogModularAPIBaselineTargletTask != null)
         {
-          EObject eclipseProjectCatalogModularAPIBaselineTargletTask = getTargletTask(eclipseProjectCatalog, "Modular API Baseline Target");
+          EObject eclipseProjectCatalogModularAPIBaselineTargletTask = getTargletTask(eclipseProjectCatalog, "Modular API Baseline Target"); //$NON-NLS-1$
           if (eclipseProjectCatalogModularAPIBaselineTargletTask != null)
           {
             EcoreUtil.replace(projectCatalogModularAPIBaselineTargletTask, EcoreUtil.copy(eclipseProjectCatalogModularAPIBaselineTargletTask));
@@ -535,21 +536,21 @@ public class GenericSetupTemplate extends SetupTemplate
       else
       {
         // Update the modular targlet task with the latest set of available releases.
-        EObject projectTargletTask = getTargletTask(modelElement, "Modular Target");
+        EObject projectTargletTask = getTargletTask(modelElement, "Modular Target"); //$NON-NLS-1$
         if (projectTargletTask != null)
         {
-          EObject projectTarglet = (EObject)((List<?>)projectTargletTask.eGet(projectTargletTask.eClass().getEStructuralFeature("targlets"))).get(0);
+          EObject projectTarglet = (EObject)((List<?>)projectTargletTask.eGet(projectTargletTask.eClass().getEStructuralFeature("targlets"))).get(0); //$NON-NLS-1$
           @SuppressWarnings("unchecked")
-          List<RepositoryList> repositoryLists = (List<RepositoryList>)projectTarglet.eGet(projectTarglet.eClass().getEStructuralFeature("repositoryLists"));
+          List<RepositoryList> repositoryLists = (List<RepositoryList>)projectTarglet.eGet(projectTarglet.eClass().getEStructuralFeature("repositoryLists")); //$NON-NLS-1$
           RepositoryList repositoryList = repositoryLists.get(0);
           repositoryLists.clear();
 
-          VariableTask targetPlatformVariable = getVariable(modelElement, "eclipse.target.platform");
+          VariableTask targetPlatformVariable = getVariable(modelElement, "eclipse.target.platform"); //$NON-NLS-1$
 
           for (VariableChoice variableChoice : eclipseTargetPlatformVariable.getChoices())
           {
             String trainName = variableChoice.getValue();
-            if (!"None".equals(trainName))
+            if (!"None".equals(trainName)) //$NON-NLS-1$
             {
               if (targetPlatformVariable != null)
               {
@@ -563,9 +564,9 @@ public class GenericSetupTemplate extends SetupTemplate
 
               for (Repository repository : newRepositoryList.getRepositories())
               {
-                if (repository.getURL().contains("download.eclipse.org/releases"))
+                if (repository.getURL().contains("download.eclipse.org/releases")) //$NON-NLS-1$
                 {
-                  repository.setURL("http://download.eclipse.org/releases/" + trainName.toLowerCase());
+                  repository.setURL("http://download.eclipse.org/releases/" + trainName.toLowerCase()); //$NON-NLS-1$
                 }
               }
 
@@ -601,9 +602,9 @@ public class GenericSetupTemplate extends SetupTemplate
     {
       EObject eObject = it.next();
       EClass eClass = eObject.eClass();
-      if ("TargletTask".equals(eClass.getName()))
+      if ("TargletTask".equals(eClass.getName())) //$NON-NLS-1$
       {
-        EStructuralFeature targetNameFeature = eClass.getEStructuralFeature("targetName");
+        EStructuralFeature targetNameFeature = eClass.getEStructuralFeature("targetName"); //$NON-NLS-1$
         if (targetName.equals(eObject.eGet(targetNameFeature)))
         {
           return eObject;
@@ -693,7 +694,7 @@ public class GenericSetupTemplate extends SetupTemplate
       else if (eObject instanceof CompoundTask)
       {
         CompoundTask compoundTask = (CompoundTask)eObject;
-        if ("template.variables".equals(compoundTask.getID()))
+        if ("template.variables".equals(compoundTask.getID())) //$NON-NLS-1$
         {
           EObject eContainer = compoundTask.eContainer();
           eObjectsToDelete.add(eContainer instanceof Scope ? compoundTask : eContainer);
@@ -812,9 +813,9 @@ public class GenericSetupTemplate extends SetupTemplate
       contents.set(0, setup);
     }
 
-    String location = expandString("${setup.location}", null);
-    String fileName = expandString("${setup.filename}", null);
-    resource.setURI(URI.createURI("platform:/resource" + new Path(location).makeAbsolute() + "/" + fileName));
+    String location = expandString("${setup.location}", null); //$NON-NLS-1$
+    String fileName = expandString("${setup.filename}", null); //$NON-NLS-1$
+    resource.setURI(URI.createURI("platform:/resource" + new Path(location).makeAbsolute() + "/" + fileName)); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   private String expandString(String string, Set<VariableTask> usedVariables)
@@ -830,7 +831,7 @@ public class GenericSetupTemplate extends SetupTemplate
     {
       result.append(string.substring(previous, matcher.start()));
       String key = matcher.group(1);
-      if ("$".equals(key))
+      if ("$".equals(key)) //$NON-NLS-1$
       {
         result.append('$');
       }
@@ -861,7 +862,7 @@ public class GenericSetupTemplate extends SetupTemplate
             String filters = matcher.group(4);
             if (filters != null)
             {
-              for (String filterName : filters.split("\\|"))
+              for (String filterName : filters.split("\\|")) //$NON-NLS-1$
               {
                 value = filter(variable, value, filterName);
               }
@@ -882,7 +883,7 @@ public class GenericSetupTemplate extends SetupTemplate
 
   private String filter(VariableTask variable, String value, String filterName)
   {
-    if (filterName.equals("label"))
+    if (filterName.equals("label")) //$NON-NLS-1$
     {
       for (VariableChoice choice : variable.getChoices())
       {
@@ -893,49 +894,49 @@ public class GenericSetupTemplate extends SetupTemplate
       }
     }
 
-    if (filterName.equals("firstSegment"))
+    if (filterName.equals("firstSegment")) //$NON-NLS-1$
     {
       URI uri = URI.createURI(value);
-      return uri.segmentCount() > 0 ? uri.segment(0) : "";
+      return uri.segmentCount() > 0 ? uri.segment(0) : ""; //$NON-NLS-1$
     }
 
-    if (filterName.equals("not"))
+    if (filterName.equals("not")) //$NON-NLS-1$
     {
-      return "false".equals(value) ? "true" : "false";
+      return "false".equals(value) ? "true" : "false"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
-    if (filterName.equals("description"))
+    if (filterName.equals("description")) //$NON-NLS-1$
     {
-      return value.startsWith("...") ? StringUtil.NL + "Before enabling this task, replace '...' with the repository path of this setup's containing project."
-          : "";
+      return value.startsWith("...") ? StringUtil.NL + Messages.GenericSetupTemplate_beforeEnablingTaskReplacePlaceholderWithRepoPath //$NON-NLS-1$
+          : ""; //$NON-NLS-1$
     }
 
-    if (filterName.equals("requiredJavaVersion"))
+    if (filterName.equals("requiredJavaVersion")) //$NON-NLS-1$
     {
-      if ("Juno".equals(value))
+      if ("Juno".equals(value)) //$NON-NLS-1$
       {
-        return "1.5";
+        return "1.5"; //$NON-NLS-1$
       }
 
-      if ("Kepler".equals(value) || "Luna".equals(value))
+      if ("Kepler".equals(value) || "Luna".equals(value)) //$NON-NLS-1$ //$NON-NLS-2$
       {
-        return "1.6";
+        return "1.6"; //$NON-NLS-1$
       }
 
-      if ("Mars".equals(value))
+      if ("Mars".equals(value)) //$NON-NLS-1$
       {
-        return "1.7";
+        return "1.7"; //$NON-NLS-1$
       }
 
-      return "1.8";
+      return "1.8"; //$NON-NLS-1$
     }
 
-    if (filterName.equals("isClonePath"))
+    if (filterName.equals("isClonePath")) //$NON-NLS-1$
     {
-      return filter(variable, value, "clonePath").startsWith("...") ? "false" : "true";
+      return filter(variable, value, "clonePath").startsWith("...") ? "false" : "true"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
     }
 
-    if (filterName.equals("clonePath"))
+    if (filterName.equals("clonePath")) //$NON-NLS-1$
     {
       try
       {
@@ -950,7 +951,7 @@ public class GenericSetupTemplate extends SetupTemplate
             {
               public boolean accept(File pathname)
               {
-                return ".git".equals(pathname.getName());
+                return ".git".equals(pathname.getName()); //$NON-NLS-1$
               }
             });
 
@@ -967,7 +968,7 @@ public class GenericSetupTemplate extends SetupTemplate
             path.insert(0, file.getName());
           }
 
-          return ".../" + location.segment(0);
+          return ".../" + location.segment(0); //$NON-NLS-1$
         }
       }
       catch (Exception ex)
@@ -975,7 +976,7 @@ public class GenericSetupTemplate extends SetupTemplate
         // Ignore.
       }
 
-      return "...";
+      return "..."; //$NON-NLS-1$
     }
 
     return StringFilterRegistry.INSTANCE.filter(value, filterName);
@@ -983,10 +984,10 @@ public class GenericSetupTemplate extends SetupTemplate
 
   private void computeTemplateDefaults(boolean initial)
   {
-    if (variables.containsKey("project.name"))
+    if (variables.containsKey("project.name")) //$NON-NLS-1$
     {
-      String fileLocation = expandString("${setup.location}", null);
-      if (fileLocation != null && !fileLocation.equals("${setup.location}"))
+      String fileLocation = expandString("${setup.location}", null); //$NON-NLS-1$
+      if (fileLocation != null && !fileLocation.equals("${setup.location}")) //$NON-NLS-1$
       {
         Path path = new Path(fileLocation);
         if (path.segmentCount() > 0)
@@ -1003,13 +1004,13 @@ public class GenericSetupTemplate extends SetupTemplate
                 {
                   public boolean accept(File pathname)
                   {
-                    return ".git".equals(pathname.getName());
+                    return ".git".equals(pathname.getName()); //$NON-NLS-1$
                   }
                 });
 
                 if (gitFile.length == 1)
                 {
-                  List<String> lines = IOUtil.readLines(new File(gitFile[0], "config"), "UTF-8");
+                  List<String> lines = IOUtil.readLines(new File(gitFile[0], "config"), "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
                   for (String line : lines)
                   {
                     Matcher matcher = GIT_REPOSITORY_URL_PATTERN.matcher(line);
@@ -1021,35 +1022,35 @@ public class GenericSetupTemplate extends SetupTemplate
                           : URI.createURI(repositoryURI.opaquePart()).segmentsList();
                       String firstSegment = segments.get(0);
                       String lastSegment = segments.get(segments.size() - 1);
-                      List<String> qualifiedName = StringUtil.explode(lastSegment, ".-");
+                      List<String> qualifiedName = StringUtil.explode(lastSegment, ".-"); //$NON-NLS-1$
                       String projectRemoteURIs = null;
-                      if ("git.eclipse.org".equals(host))
+                      if ("git.eclipse.org".equals(host)) //$NON-NLS-1$
                       {
-                        if ("r".equals(firstSegment) || "gitroot".equals(firstSegment))
+                        if ("r".equals(firstSegment) || "gitroot".equals(firstSegment)) //$NON-NLS-1$ //$NON-NLS-2$
                         {
                           segments.remove(0);
                         }
 
-                        if ("r".equals(firstSegment) || repositoryURI.port() != null)
+                        if ("r".equals(firstSegment) || repositoryURI.port() != null) //$NON-NLS-1$
                         {
-                          projectRemoteURIs = "eclipse.git.gerrit.remoteURIs";
+                          projectRemoteURIs = "eclipse.git.gerrit.remoteURIs"; //$NON-NLS-1$
                         }
 
-                        if ("org".equals(qualifiedName.get(0)))
+                        if ("org".equals(qualifiedName.get(0))) //$NON-NLS-1$
                         {
                           qualifiedName.remove(0);
                         }
 
-                        if ("eclipse".equals(qualifiedName.get(0)))
+                        if ("eclipse".equals(qualifiedName.get(0))) //$NON-NLS-1$
                         {
                           qualifiedName.remove(0);
                         }
                       }
-                      else if ("github.com".equals(host))
+                      else if ("github.com".equals(host)) //$NON-NLS-1$
                       {
-                        if ("eclipse".equals(firstSegment))
+                        if ("eclipse".equals(firstSegment)) //$NON-NLS-1$
                         {
-                          projectRemoteURIs = "github.remoteURIs";
+                          projectRemoteURIs = "github.remoteURIs"; //$NON-NLS-1$
                         }
                       }
 
@@ -1063,12 +1064,12 @@ public class GenericSetupTemplate extends SetupTemplate
 
                       String projectLabel = StringUtil.implode(qualifiedName, ' ');
 
-                      applyVariableValue("project.label", projectLabel);
-                      applyVariableValue("project.name", projectName);
-                      applyVariableValue("project.git.path", StringUtil.implode(segments, '/'));
+                      applyVariableValue("project.label", projectLabel); //$NON-NLS-1$
+                      applyVariableValue("project.name", projectName); //$NON-NLS-1$
+                      applyVariableValue("project.git.path", StringUtil.implode(segments, '/')); //$NON-NLS-1$
                       if (projectRemoteURIs != null)
                       {
-                        applyVariableValue("project.remote.uris", projectRemoteURIs);
+                        applyVariableValue("project.remote.uris", projectRemoteURIs); //$NON-NLS-1$
                       }
 
                       return;
@@ -1084,12 +1085,12 @@ public class GenericSetupTemplate extends SetupTemplate
           }
 
           String firstSegment = path.segment(0);
-          List<String> qualifiedName = StringUtil.explode(firstSegment, ".-_ ");
+          List<String> qualifiedName = StringUtil.explode(firstSegment, ".-_ "); //$NON-NLS-1$
           if (!qualifiedName.isEmpty())
           {
             ArrayList<String> domainPrefixes = new ArrayList<String>(Arrays.asList(Locale.getISOCountries()));
-            domainPrefixes.add("COM");
-            domainPrefixes.add("ORG");
+            domainPrefixes.add("COM"); //$NON-NLS-1$
+            domainPrefixes.add("ORG"); //$NON-NLS-1$
             if (domainPrefixes.contains(qualifiedName.get(0).toUpperCase()))
             {
               qualifiedName.remove(0);
@@ -1102,19 +1103,19 @@ public class GenericSetupTemplate extends SetupTemplate
             String nameSegment = qualifiedName.get(0);
             String projectName = nameSegment.toLowerCase();
             String projectLabel = nameSegment.length() <= 4 ? nameSegment.toUpperCase() : StringUtil.cap(nameSegment);
-            applyVariableValue("project.label", projectLabel);
-            applyVariableValue("project.name", projectName);
+            applyVariableValue("project.label", projectLabel); //$NON-NLS-1$
+            applyVariableValue("project.name", projectName); //$NON-NLS-1$
             return;
           }
         }
       }
 
-      restoreDefaultValue("project.label");
-      restoreDefaultValue("project.name");
-      restoreDefaultValue("project.git.path");
-      restoreDefaultValue("project.remote.uris");
+      restoreDefaultValue("project.label"); //$NON-NLS-1$
+      restoreDefaultValue("project.name"); //$NON-NLS-1$
+      restoreDefaultValue("project.git.path"); //$NON-NLS-1$
+      restoreDefaultValue("project.remote.uris"); //$NON-NLS-1$
     }
-    else if (initial && templateLocation.lastSegment().contains("Copy") && setupModelElement instanceof Configuration)
+    else if (initial && templateLocation.lastSegment().contains("Copy") && setupModelElement instanceof Configuration) //$NON-NLS-1$
     {
       Configuration configuration = (Configuration)setupModelElement;
       SetupContext setupContext = SetupContext.create(setupModelElement.eResource().getResourceSet());
@@ -1129,14 +1130,14 @@ public class GenericSetupTemplate extends SetupTemplate
           if (productVersion != null)
           {
             Resource eResource = productVersion.eResource();
-            if (eResource != null && !"catalog".equals(eResource.getURI().scheme()))
+            if (eResource != null && !"catalog".equals(eResource.getURI().scheme())) //$NON-NLS-1$
             {
               installation.setProductVersion(productVersion);
             }
           }
 
           copyContents(installation, actualInstallation);
-          computeDefaultAttributes(installation, actualInstallation, "installation.");
+          computeDefaultAttributes(installation, actualInstallation, "installation."); //$NON-NLS-1$
         }
       }
 
@@ -1149,7 +1150,7 @@ public class GenericSetupTemplate extends SetupTemplate
           EList<Stream> streams = actualWorkspace.getStreams();
           workspace.getStreams().addAll(streams);
           copyContents(workspace, actualWorkspace);
-          computeDefaultAttributes(workspace, actualWorkspace, "workspace.");
+          computeDefaultAttributes(workspace, actualWorkspace, "workspace."); //$NON-NLS-1$
         }
       }
     }
@@ -1184,21 +1185,21 @@ public class GenericSetupTemplate extends SetupTemplate
   private void computeDefaultAttributes(Scope target, Scope source, String variablePrefix)
   {
     String name = source.getName();
-    if (!StringUtil.isEmpty(name) && name != null && !(name + ".").equals(variablePrefix))
+    if (!StringUtil.isEmpty(name) && name != null && !(name + ".").equals(variablePrefix)) //$NON-NLS-1$
     {
-      applyVariableValue(variablePrefix + "name", name);
+      applyVariableValue(variablePrefix + "name", name); //$NON-NLS-1$
     }
 
     String label = source.getLabel();
     if (!StringUtil.isEmpty(label))
     {
-      applyVariableValue(variablePrefix + "label", label);
+      applyVariableValue(variablePrefix + "label", label); //$NON-NLS-1$
     }
 
     String description = source.getDescription();
     if (!StringUtil.isEmpty(description))
     {
-      applyVariableValue(variablePrefix + "description", description);
+      applyVariableValue(variablePrefix + "description", description); //$NON-NLS-1$
     }
   }
 

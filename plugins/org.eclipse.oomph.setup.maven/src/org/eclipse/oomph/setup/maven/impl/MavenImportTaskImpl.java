@@ -304,9 +304,9 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (projectNameTemplate: ");
+    result.append(" (projectNameTemplate: "); //$NON-NLS-1$
     result.append(projectNameTemplate);
-    result.append(", profiles: ");
+    result.append(", profiles: "); //$NON-NLS-1$
     result.append(profiles);
     result.append(')');
     return result.toString();
@@ -352,7 +352,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     int size = sourceLocators.size();
 
     IProgressMonitor monitor = context.getProgressMonitor(true);
-    monitor.beginTask("", 2 * size);
+    monitor.beginTask("", 2 * size); //$NON-NLS-1$
 
     try
     {
@@ -401,7 +401,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
   private void processMavenProject(SourceLocator sourceLocator, Set<MavenProjectInfo> projectInfos, LocalProjectScanner projectScanner,
       IProgressMonitor monitor) throws InterruptedException
   {
-    monitor.beginTask("", 2);
+    monitor.beginTask("", 2); //$NON-NLS-1$
 
     try
     {
@@ -418,7 +418,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
 
   private void processMavenProject(SourceLocator sourceLocator, Set<MavenProjectInfo> projectInfos, List<MavenProjectInfo> projects, IProgressMonitor monitor)
   {
-    monitor.beginTask("", projects.size());
+    monitor.beginTask("", projects.size()); //$NON-NLS-1$
 
     try
     {
@@ -436,7 +436,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
   private static void processMavenProject(SourceLocator sourceLocator, Set<MavenProjectInfo> projectInfos, MavenProjectInfo projectInfo,
       IProgressMonitor monitor)
   {
-    monitor.beginTask("", 6);
+    monitor.beginTask("", 6); //$NON-NLS-1$
 
     try
     {
@@ -471,7 +471,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
   private static void processMavenProject(SourceLocator sourceLocator, Set<MavenProjectInfo> projectInfos, Collection<MavenProjectInfo> projects,
       IProgressMonitor monitor)
   {
-    monitor.beginTask("", projects.size());
+    monitor.beginTask("", projects.size()); //$NON-NLS-1$
 
     try
     {

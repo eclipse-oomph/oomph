@@ -39,6 +39,7 @@ import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
 import org.eclipse.debug.core.model.IStreamsProxy;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * <!-- begin-user-doc -->
@@ -55,7 +56,7 @@ import org.eclipse.debug.core.model.IStreamsProxy;
  */
 public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
 {
-  private static final PropertyFile HISTORY = new PropertyFile(LaunchingPlugin.INSTANCE.getStateLocation().append("launch-history.properties").toFile());
+  private static final PropertyFile HISTORY = new PropertyFile(LaunchingPlugin.INSTANCE.getStateLocation().append("launch-history.properties").toFile()); //$NON-NLS-1$
 
   /**
    * The default value of the '{@link #getLauncher() <em>Launcher</em>}' attribute.
@@ -203,7 +204,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (launcher: ");
+    result.append(" (launcher: "); //$NON-NLS-1$
     result.append(launcher);
     result.append(')');
     return result.toString();
@@ -241,10 +242,10 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
 
     if (targetLaunchConfiguration == null)
     {
-      context.log("The launcher was not found; waiting until workspace refresh job is finished.");
+      context.log(Messages.LaunchTaskImpl_LauncherNotFoundWaiting_message);
       IJobManager jobManager = Job.getJobManager();
       jobManager.join(org.eclipse.core.internal.events.NotificationManager.class, context.getProgressMonitor(true));
-      context.log("The workspace refresh job is finished; looking for launcher again");
+      context.log(Messages.LaunchTaskImpl_RefreshFinished_message);
       targetLaunchConfiguration = getLaunchConfiguration(launcher, launchManager);
     }
 
@@ -263,15 +264,15 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
 
     if (targetLaunchConfiguration == null)
     {
-      throw new Exception("No launcher found for " + launcher);
+      throw new Exception(NLS.bind(Messages.LaunchTaskImpl_LauncherNotFound_exception, launcher));
     }
 
     PreferenceProperty launchPromptForErrorPreference = new PreferencesUtil.PreferenceProperty(
-        "/instance/org.eclipse.debug.ui/org.eclipse.debug.ui.cancel_launch_with_compile_errors");
+        "/instance/org.eclipse.debug.ui/org.eclipse.debug.ui.cancel_launch_with_compile_errors"); //$NON-NLS-1$
     String oldValue = launchPromptForErrorPreference.get(null);
     try
     {
-      launchPromptForErrorPreference.set("always");
+      launchPromptForErrorPreference.set("always"); //$NON-NLS-1$
 
       ILaunch launch = targetLaunchConfiguration.launch(ILaunchManager.RUN_MODE, null);
       IProcess[] processes = launch.getProcesses();
@@ -319,7 +320,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
 
           if (launch.isTerminated())
           {
-            HISTORY.setProperty(launcher, processes.length > 0 ? Integer.toString(processes[0].getExitValue()) : "-1");
+            HISTORY.setProperty(launcher, processes.length > 0 ? Integer.toString(processes[0].getExitValue()) : "-1"); //$NON-NLS-1$
             return;
           }
         }

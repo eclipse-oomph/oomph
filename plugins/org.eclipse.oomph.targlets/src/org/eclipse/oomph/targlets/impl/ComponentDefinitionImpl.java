@@ -65,7 +65,7 @@ public class ComponentDefinitionImpl extends ComponentExtensionImpl implements C
    * @generated
    * @ordered
    */
-  protected static final Version VERSION_EDEFAULT = (Version)P2Factory.eINSTANCE.createFromString(P2Package.eINSTANCE.getVersion(), "1.0.0");
+  protected static final Version VERSION_EDEFAULT = (Version)P2Factory.eINSTANCE.createFromString(P2Package.eINSTANCE.getVersion(), "1.0.0"); //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
@@ -238,9 +238,9 @@ public class ComponentDefinitionImpl extends ComponentExtensionImpl implements C
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (iD: ");
+    result.append(" (iD: "); //$NON-NLS-1$
     result.append(iD);
-    result.append(", version: ");
+    result.append(", version: "); //$NON-NLS-1$
     result.append(version);
     result.append(')');
     return result.toString();

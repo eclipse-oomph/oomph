@@ -69,11 +69,11 @@ public final class SetupEditorSupport
    */
   public static final Object FAMILY_MODEL_LOAD = new Object();
 
-  public static final String EDITOR_ID = "org.eclipse.oomph.setup.presentation.SetupEditorID";
+  public static final String EDITOR_ID = "org.eclipse.oomph.setup.presentation.SetupEditorID"; //$NON-NLS-1$
 
-  public static final String TEXT_EDITOR_ID = "org.eclipse.ui.DefaultTextEditor";
+  public static final String TEXT_EDITOR_ID = "org.eclipse.ui.DefaultTextEditor"; //$NON-NLS-1$
 
-  public static final String PREF_TEXT_EDITOR_ID = "preferred.text.editor";
+  public static final String PREF_TEXT_EDITOR_ID = "preferred.text.editor"; //$NON-NLS-1$
 
   public static IEditorPart getEditor(final IWorkbenchPage page, final URI uri, boolean force, LoadHandler... loadHandlers)
   {
@@ -133,7 +133,7 @@ public final class SetupEditorSupport
         if (!handlers.isEmpty())
         {
           final IEditorPart finalEditor = editor;
-          Job job = new Job("Loading Setup Editor")
+          Job job = new Job(Messages.SetupEditorSupport_loadJob_name)
           {
             @Override
             protected IStatus run(IProgressMonitor monitor)
@@ -451,7 +451,7 @@ public final class SetupEditorSupport
   {
     try
     {
-      return ReflectUtil.invokeMethod(EditUIUtil.class.getMethod("getURI", IEditorInput.class, URIConverter.class), null, editorInput, uriConverter);
+      return ReflectUtil.invokeMethod(EditUIUtil.class.getMethod("getURI", IEditorInput.class, URIConverter.class), null, editorInput, uriConverter); //$NON-NLS-1$
     }
     catch (NoSuchMethodException ex)
     {

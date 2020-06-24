@@ -38,9 +38,9 @@ import java.util.List;
  */
 public class PreferenceTaskItemProvider extends SetupTaskItemProvider
 {
-  private static final String INSTANCE_SCOPE = "/instance/";
+  private static final String INSTANCE_SCOPE = "/instance/"; //$NON-NLS-1$
 
-  private static final String CONFIGURATION_SCOPE = "/configuration/";
+  private static final String CONFIGURATION_SCOPE = "/configuration/"; //$NON-NLS-1$
 
   private boolean shortenLabelText;
 
@@ -93,8 +93,8 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
   protected void addKeyPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceTask_key_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceTask_key_feature", "_UI_PreferenceTask_type"),
+        getString("_UI_PreferenceTask_key_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceTask_key_feature", "_UI_PreferenceTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.PREFERENCE_TASK__KEY, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -107,8 +107,8 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
   protected void addValuePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceTask_value_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceTask_value_feature", "_UI_PreferenceTask_type"),
+        getString("_UI_PreferenceTask_value_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceTask_value_feature", "_UI_PreferenceTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.PREFERENCE_TASK__VALUE, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -121,7 +121,7 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    String imageKey = "full/obj16/PreferenceTask";
+    String imageKey = "full/obj16/PreferenceTask"; //$NON-NLS-1$
 
     PreferenceTask preferenceTask = (PreferenceTask)object;
     String key = preferenceTask.getKey();
@@ -130,7 +130,7 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
       String scope = getScope(key);
       if (scope == CONFIGURATION_SCOPE)
       {
-        imageKey += "Configuration";
+        imageKey += "Configuration"; //$NON-NLS-1$
       }
     }
 
@@ -165,7 +165,7 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
     {
       if (StringUtil.isEmpty(value))
       {
-        return getString("_UI_PreferenceTask_type");
+        return getString("_UI_PreferenceTask_type"); //$NON-NLS-1$
       }
     }
     else if (shortenLabelText)
@@ -176,8 +176,8 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
         String parentLabel = getParentLabel(preferenceTask);
         if (parentLabel != null)
         {
-          String prefix = scope + parentLabel + "/";
-          String prefixLong = prefix + parentLabel + ".";
+          String prefix = scope + parentLabel + "/"; //$NON-NLS-1$
+          String prefixLong = prefix + parentLabel + "."; //$NON-NLS-1$
 
           if (key.startsWith(prefixLong))
           {
@@ -196,7 +196,7 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
 
     if (value != null)
     {
-      builder.append(" = ");
+      builder.append(" = "); //$NON-NLS-1$
       builder.append(crop(value));
     }
 

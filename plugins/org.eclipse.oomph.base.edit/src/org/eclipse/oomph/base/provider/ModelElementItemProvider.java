@@ -189,7 +189,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_ModelElement_type");
+    return getString("_UI_ModelElement_type"); //$NON-NLS-1$
   }
 
   /**
@@ -582,7 +582,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
         {
           if (result.length() != 0)
           {
-            result.append(", ");
+            result.append(", "); //$NON-NLS-1$
           }
 
           result.append(getText(child));
@@ -598,12 +598,12 @@ public class ModelElementItemProvider extends ItemProviderAdapter
       {
         if (builder.length() == index)
         {
-          builder.insert(index, " (");
+          builder.insert(index, " ("); //$NON-NLS-1$
           index += 2;
         }
         else
         {
-          builder.insert(index, " - ");
+          builder.insert(index, " - "); //$NON-NLS-1$
         }
 
         String text = getQualifierText(object);
@@ -614,7 +614,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
 
       if (builder.length() != index)
       {
-        builder.append(")");
+        builder.append(")"); //$NON-NLS-1$
       }
 
       return builder.toString();
@@ -988,12 +988,12 @@ public class ModelElementItemProvider extends ItemProviderAdapter
 
     public String getDescription(Object object)
     {
-      return "The model class of this object";
+      return BaseEditPlugin.INSTANCE.getString("_UI_ModelClass_description"); //$NON-NLS-1$
     }
 
     public String getDisplayName(Object object)
     {
-      return "Model Class";
+      return BaseEditPlugin.INSTANCE.getString("_UI_ModelClass_feature"); //$NON-NLS-1$
     }
 
     public String[] getFilterFlags(Object object)
@@ -1018,7 +1018,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
 
     public Object getFeature(Object object)
     {
-      return "eClass";
+      return "eClass"; //$NON-NLS-1$
     }
 
     public boolean isMany(Object object)

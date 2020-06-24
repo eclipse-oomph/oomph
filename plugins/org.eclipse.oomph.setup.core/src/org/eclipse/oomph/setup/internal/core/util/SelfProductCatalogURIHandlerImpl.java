@@ -49,6 +49,7 @@ import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
+import org.eclipse.osgi.util.NLS;
 
 import org.osgi.framework.Bundle;
 
@@ -67,18 +68,18 @@ import java.util.Set;
  */
 public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
 {
-  public static final String SELF_PRODUCT_CATALOG_NAME = "self";
+  public static final String SELF_PRODUCT_CATALOG_NAME = "self"; //$NON-NLS-1$
 
-  private static final URI SELF_PRODUCT_CATALOG_URI = URI.createURI("catalog:/self-product-catalog.setup");
+  private static final URI SELF_PRODUCT_CATALOG_URI = URI.createURI("catalog:/self-product-catalog.setup"); //$NON-NLS-1$
 
-  private static final String UNKNOWN_VERSION = "0.0.0";
+  private static final String UNKNOWN_VERSION = "0.0.0"; //$NON-NLS-1$
 
   private static final Date NOW = new Date();
 
   @Override
   public boolean canHandle(URI uri)
   {
-    return "catalog".equals(uri.scheme());
+    return "catalog".equals(uri.scheme()); //$NON-NLS-1$
   }
 
   @Override
@@ -115,7 +116,7 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
     }
     else
     {
-      throw new IOException("No product catalog for " + uri);
+      throw new IOException(NLS.bind(Messages.SelfProductCatalogURIHandlerImpl_NoProductCatalog_exception, uri));
     }
   }
 
@@ -123,29 +124,29 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
   {
     ProductCatalog productCatalog = SetupFactory.eINSTANCE.createProductCatalog();
     productCatalog.setName(SELF_PRODUCT_CATALOG_NAME);
-    productCatalog.setLabel("<Self Products>");
-    productCatalog.setDescription("The product catalog for the self product and the empty product");
+    productCatalog.setLabel(Messages.SelfProductCatalogURIHandlerImpl_SelfProductsCatalog_label);
+    productCatalog.setDescription(Messages.SelfProductCatalogURIHandlerImpl_SelfProductCatalog_description);
 
     InstallationTask installationTask = SetupFactory.eINSTANCE.createInstallationTask();
-    installationTask.setID("installation");
+    installationTask.setID("installation"); //$NON-NLS-1$
     productCatalog.getSetupTasks().add(installationTask);
 
     {
       Product selfProduct = SetupFactory.eINSTANCE.createProduct();
-      selfProduct.setName("product");
-      selfProduct.setLabel("Self");
-      selfProduct.setDescription("The self product");
+      selfProduct.setName("product"); //$NON-NLS-1$
+      selfProduct.setLabel(Messages.SelfProductCatalogURIHandlerImpl_SefProduct_label);
+      selfProduct.setDescription(Messages.SelfProductCatalogURIHandlerImpl_SelfProduct_description);
       productCatalog.getProducts().add(selfProduct);
 
       VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
-      variable.setName("installation.location");
+      variable.setName("installation.location"); //$NON-NLS-1$
       variable.setValue(SetupContext.PRODUCT_ROOT_LOCATION.toFileString());
       selfProduct.getSetupTasks().add(variable);
 
       ProductVersion selfProductVersion = SetupFactory.eINSTANCE.createProductVersion();
-      selfProductVersion.setName("version");
+      selfProductVersion.setName("version"); //$NON-NLS-1$
       selfProductVersion.setLabel(UNKNOWN_VERSION);
-      selfProductVersion.setDescription("The self product version");
+      selfProductVersion.setDescription(Messages.SelfProductCatalogURIHandlerImpl_SelfProductVersion_descripition);
       selfProduct.getVersions().add(selfProductVersion);
 
       try
@@ -153,10 +154,10 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
         IProduct product = Platform.getProduct();
         if (product != null)
         {
-          String name = product.getProperty("aboutText");
-          if (name != null && name.startsWith("Eclipse"))
+          String name = product.getProperty("aboutText"); //$NON-NLS-1$
+          if (name != null && name.startsWith("Eclipse")) //$NON-NLS-1$
           {
-            name = name.replaceAll("[\n\r]+.*", "");
+            name = name.replaceAll("[\n\r]+.*", ""); //$NON-NLS-1$ //$NON-NLS-2$
           }
 
           if (StringUtil.isEmpty(name))
@@ -184,7 +185,7 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
       Annotation annotation = BaseFactory.eINSTANCE.createAnnotation();
       annotation.setSource(AnnotationConstants.ANNOTATION_BRANDING_INFO);
 
-      String folderName = SetupContext.PRODUCT_LOCATION.segmentCount() == 0 ? ""
+      String folderName = SetupContext.PRODUCT_LOCATION.segmentCount() == 0 ? "" //$NON-NLS-1$
           : URI.decode(SetupContext.PRODUCT_LOCATION.segment(SetupContext.PRODUCT_ROOT_LOCATION.segmentCount()));
       annotation.getDetails().put(AnnotationConstants.KEY_FOLDER_NAME, folderName);
       selfProductVersion.getAnnotations().add(annotation);
@@ -204,7 +205,7 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
           IQueryResult<IInstallableUnit> query = profile.query(QueryUtil.createIUAnyQuery(), null);
           for (IInstallableUnit iu : P2Util.asIterable(query))
           {
-            if ("true".equals(profile.getInstallableUnitProperty(iu, IProfile.PROP_PROFILE_ROOT_IU)))
+            if ("true".equals(profile.getInstallableUnitProperty(iu, IProfile.PROP_PROFILE_ROOT_IU))) //$NON-NLS-1$
             {
               Requirement requirement = P2Factory.eINSTANCE.createRequirement();
 
@@ -245,15 +246,15 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
 
     {
       Product emptyProduct = SetupFactory.eINSTANCE.createProduct();
-      emptyProduct.setName("empty.product");
-      emptyProduct.setLabel("Empty");
-      emptyProduct.setDescription("The empty product");
+      emptyProduct.setName("empty.product"); //$NON-NLS-1$
+      emptyProduct.setLabel(Messages.SelfProductCatalogURIHandlerImpl_EmptyProduct_label);
+      emptyProduct.setDescription(Messages.SelfProductCatalogURIHandlerImpl_EmptyProduct_description);
       productCatalog.getProducts().add(emptyProduct);
 
       ProductVersion emptyProductVersion = SetupFactory.eINSTANCE.createProductVersion();
-      emptyProductVersion.setName("version");
+      emptyProductVersion.setName("version"); //$NON-NLS-1$
       emptyProductVersion.setLabel(UNKNOWN_VERSION);
-      emptyProductVersion.setDescription("The empty product version");
+      emptyProductVersion.setDescription(Messages.SelfProductCatalogURIHandlerImpl_EmptyProductVersion_description);
       emptyProduct.getVersions().add(emptyProductVersion);
     }
 
@@ -263,13 +264,13 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
   @Override
   public OutputStream createOutputStream(URI uri, Map<?, ?> options) throws IOException
   {
-    throw new IOException("Can't write to " + uri);
+    throw new IOException(NLS.bind(Messages.SelfProductCatalogURIHandlerImpl_CannotWrite_exception, uri));
   }
 
   @Override
   public void delete(URI uri, Map<?, ?> options) throws IOException
   {
-    throw new IOException("Can't delete " + uri);
+    throw new IOException(NLS.bind(Messages.SelfProductCatalogURIHandlerImpl_CannotDelete_exception, uri));
   }
 
   @Override
@@ -323,6 +324,6 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
   @Override
   public void setAttributes(URI uri, Map<String, ?> attributes, Map<?, ?> options) throws IOException
   {
-    throw new IOException("Can't set attributes for " + uri);
+    throw new IOException(NLS.bind(Messages.SelfProductCatalogURIHandlerImpl_CannotSetAttributes_exception, uri));
   }
 }

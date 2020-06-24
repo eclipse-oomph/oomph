@@ -80,7 +80,8 @@ public class ArgumentItemProvider extends ModelElementItemProvider
   protected void addParameterPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Argument_parameter_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Argument_parameter_feature", "_UI_Argument_type"),
+        getString("_UI_Argument_parameter_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Argument_parameter_feature", "_UI_Argument_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.ARGUMENT__PARAMETER, true, false, true, null, null, null));
   }
 
@@ -100,6 +101,7 @@ public class ArgumentItemProvider extends ModelElementItemProvider
           return new HierarchicalItemLabelProvider(itemDelegator)
           {
             @Override
+            @SuppressWarnings("nls")
             public String getText(Object object)
             {
               String text = super.getText(object);
@@ -175,7 +177,8 @@ public class ArgumentItemProvider extends ModelElementItemProvider
   protected void addValuePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Argument_value_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Argument_value_feature", "_UI_Argument_type"),
+        getString("_UI_Argument_value_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Argument_value_feature", "_UI_Argument_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.ARGUMENT__VALUE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -188,7 +191,7 @@ public class ArgumentItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Argument"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Argument")); //$NON-NLS-1$
   }
 
   /**
@@ -209,6 +212,7 @@ public class ArgumentItemProvider extends ModelElementItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     Argument argument = (Argument)object;

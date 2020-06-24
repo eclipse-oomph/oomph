@@ -64,7 +64,7 @@ public class OpenEditorAction extends ActionDelegate
     }
     catch (Exception exception)
     {
-      MessageDialog.openError(workbenchWindow.getShell(), "Open Editor", exception.getMessage());
+      MessageDialog.openError(workbenchWindow.getShell(), Messages.OpenEditorAction_OpenEditor_title, exception.getMessage());
     }
   }
 

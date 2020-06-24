@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.service.datalocation.Location;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -54,13 +55,13 @@ public final class JREManager
 
   public static final boolean BITNESS_CHANGEABLE = BITNESS == 64 && OS.INSTANCE.is32BitAvailable();
 
-  public static final String JAVA_EXECUTABLE = OS_TYPE == OSType.Win ? "java.exe" : "java";
+  public static final String JAVA_EXECUTABLE = OS_TYPE == OSType.Win ? "java.exe" : "java"; //$NON-NLS-1$ //$NON-NLS-2$
 
-  public static final String JAVA_COMPILER = OS_TYPE == OSType.Win ? "javac.exe" : "javac";
+  public static final String JAVA_COMPILER = OS_TYPE == OSType.Win ? "javac.exe" : "javac"; //$NON-NLS-1$ //$NON-NLS-2$
 
   public static final JREManager INSTANCE = new JREManager();
 
-  private static final String PROP_DEFAULT_JRE = "oomph.default.jres";
+  private static final String PROP_DEFAULT_JRE = "oomph.default.jres"; //$NON-NLS-1$
 
   private final List<String> javaHomes = new ArrayList<String>();
 
@@ -121,12 +122,12 @@ public final class JREManager
     try
     {
       int children = childFolders == null ? 0 : childFolders.length;
-      monitor.beginTask(root ? "Searching for VMs in " + path + "..." : "", 1 + children);
+      monitor.beginTask(root ? NLS.bind(Messages.JREManager_Seraching_task, path) : "", 1 + children); //$NON-NLS-1$
       monitor.subTask(path);
 
       if (!javaHomes.contains(path) && !extraJavaHomes.contains(path))
       {
-        File executable = new File(folder, "bin/" + JAVA_EXECUTABLE);
+        File executable = new File(folder, "bin/" + JAVA_EXECUTABLE); //$NON-NLS-1$
         if (executable.isFile())
         {
           File canonicalFolder = folder.getCanonicalFile();
@@ -261,10 +262,10 @@ public final class JREManager
         // It optionally prefixes the PATH with folder entries based on the JVM it has decided to use.
         // These entries always use '/' instead of '\' so we can recognize the entries added by the native launcher.
         List<String> folders = new ArrayList<String>();
-        String path = System.getenv("PATH");
+        String path = System.getenv("PATH"); //$NON-NLS-1$
         for (String folder : path.split(File.pathSeparator))
         {
-          systemJavaHome = "";
+          systemJavaHome = ""; //$NON-NLS-1$
 
           if (!StringUtil.isEmpty(folder))
           {
@@ -277,7 +278,7 @@ public final class JREManager
               // This tests if we are in debug mode.
               // In that case, the JRE for the selected JRE of the launcher is at the front of the list, but it uses proper '\'
               // So we ignore everything before the native launcher added entries.
-              boolean isDebug = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().indexOf("jdwp") >= 0;
+              boolean isDebug = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().indexOf("jdwp") >= 0; //$NON-NLS-1$
               if (isDebug)
               {
                 folders.clear();
@@ -308,7 +309,7 @@ public final class JREManager
       {
         try
         {
-          File javaExecuable = new File("/usr/bin/java").getCanonicalFile();
+          File javaExecuable = new File("/usr/bin/java").getCanonicalFile(); //$NON-NLS-1$
           JREData jreData = InfoManager.testJRE(javaExecuable.toString());
           if (jreData != null)
           {
@@ -383,7 +384,7 @@ public final class JREManager
     {
       try
       {
-        return IOUtil.readLines(getCacheFile(), "UTF-8");
+        return IOUtil.readLines(getCacheFile(), "UTF-8"); //$NON-NLS-1$
       }
       catch (Exception ex)
       {
@@ -398,7 +399,7 @@ public final class JREManager
   {
     try
     {
-      IOUtil.writeLines(getCacheFile(), "UTF-8", paths);
+      IOUtil.writeLines(getCacheFile(), "UTF-8", paths); //$NON-NLS-1$
     }
     catch (Exception ex)
     {
@@ -408,24 +409,24 @@ public final class JREManager
 
   private static File getCacheFile()
   {
-    return new File(JREInfoPlugin.INSTANCE.getUserLocation().append("extra.txt").toOSString());
+    return new File(JREInfoPlugin.INSTANCE.getUserLocation().append("extra.txt").toOSString()); //$NON-NLS-1$
   }
 
   private static File getDefaultsFile()
   {
-    return new File(JREInfoPlugin.INSTANCE.getUserLocation().append("defaults.properties").toOSString());
+    return new File(JREInfoPlugin.INSTANCE.getUserLocation().append("defaults.properties").toOSString()); //$NON-NLS-1$
   }
 
   private static String getDefaultsKey(int bitness, String javaVersion)
   {
-    return Integer.toString(bitness) + "/" + sanitizeKey(javaVersion);
+    return Integer.toString(bitness) + "/" + sanitizeKey(javaVersion); //$NON-NLS-1$
   }
 
   private static String sanitizeKey(String javaVersion)
   {
     if (javaVersion == null)
     {
-      return "*";
+      return "*"; //$NON-NLS-1$
     }
 
     return javaVersion.replace(' ', '_').replace('/', '_').replace('\\', '_').replace('=', '_');
@@ -450,7 +451,8 @@ public final class JREManager
       }
       catch (IOException ex)
       {
-        JREInfoPlugin.INSTANCE.log(new Status(IStatus.WARNING, JREInfoPlugin.INSTANCE.getSymbolicName(), "Problem processing:" + javaHome, ex));
+        JREInfoPlugin.INSTANCE.log(
+            new Status(IStatus.WARNING, JREInfoPlugin.INSTANCE.getSymbolicName(), NLS.bind(Messages.JREManager_Problem_message, javaHome), ex));
       }
     }
 
@@ -477,7 +479,7 @@ public final class JREManager
 
       if (Platform.OS_WIN32.equals(os))
       {
-        System.loadLibrary("jreinfo.dll");
+        System.loadLibrary("jreinfo.dll"); //$NON-NLS-1$
         return OSType.Win;
       }
 
@@ -518,7 +520,7 @@ public final class JREManager
     try
     {
       String productID = PropertiesUtil.getProductID();
-      if ("org.eclipse.oomph.setup.installer.product".equals(productID))
+      if ("org.eclipse.oomph.setup.installer.product".equals(productID)) //$NON-NLS-1$
       {
         Location location = Platform.getInstallLocation();
         if (location != null)
@@ -528,7 +530,7 @@ public final class JREManager
           {
             if (!result.hasTrailingPathSeparator())
             {
-              result = result.appendSegment("");
+              result = result.appendSegment(""); //$NON-NLS-1$
             }
             return result.toFileString();
           }

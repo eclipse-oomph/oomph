@@ -149,7 +149,7 @@ public class FlatButton extends Canvas implements Listener, PaintListener
         break;
 
       default:
-        throw new IllegalArgumentException("Alignment must be one of SWT.LEFT, SWT.CENTER, SWT.RIGHT");
+        throw new IllegalArgumentException("Alignment must be one of SWT.LEFT, SWT.CENTER, SWT.RIGHT"); //$NON-NLS-1$
     }
 
     if (this.alignment != alignment)

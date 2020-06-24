@@ -28,61 +28,61 @@ import java.util.regex.Pattern;
  */
 public final class Markers
 {
-  public static final String MARKER_TYPE = "org.eclipse.oomph.version.VersionProblem";
+  public static final String MARKER_TYPE = "org.eclipse.oomph.version.VersionProblem"; //$NON-NLS-1$
 
-  public static final String PROBLEM_TYPE = "problemType";
+  public static final String PROBLEM_TYPE = "problemType"; //$NON-NLS-1$
 
-  public static final String DEVIATION_INFO = "deviation";
+  public static final String DEVIATION_INFO = "deviation"; //$NON-NLS-1$
 
-  public static final String RELEASE_PATH_PROBLEM = "release.path";
+  public static final String RELEASE_PATH_PROBLEM = "release.path"; //$NON-NLS-1$
 
-  public static final String MALFORMED_VERSION_PROBLEM = "malformed.version";
+  public static final String MALFORMED_VERSION_PROBLEM = "malformed.version"; //$NON-NLS-1$
 
-  public static final String SCHEMA_BUILDER_PROBLEM = "schema.builder";
+  public static final String SCHEMA_BUILDER_PROBLEM = "schema.builder"; //$NON-NLS-1$
 
-  public static final String FEATURE_NATURE_PROBLEM = "feature.nature";
+  public static final String FEATURE_NATURE_PROBLEM = "feature.nature"; //$NON-NLS-1$
 
-  public static final String VERSION_NATURE_PROBLEM = "version.nature";
+  public static final String VERSION_NATURE_PROBLEM = "version.nature"; //$NON-NLS-1$
 
-  public static final String DEBUG_OPTION_PROBLEM = "debug.option";
+  public static final String DEBUG_OPTION_PROBLEM = "debug.option"; //$NON-NLS-1$
 
-  public static final String AUTOMATIC_MODULE_NAME_PROBLEM = "automatic.module.name";
+  public static final String AUTOMATIC_MODULE_NAME_PROBLEM = "automatic.module.name"; //$NON-NLS-1$
 
-  public static final String DEPENDENCY_RANGE_PROBLEM = "dependency.range";
+  public static final String DEPENDENCY_RANGE_PROBLEM = "dependency.range"; //$NON-NLS-1$
 
-  public static final String LOWER_BOUND_VERSION_PROBLEM = "lower.bound.version";
+  public static final String LOWER_BOUND_VERSION_PROBLEM = "lower.bound.version"; //$NON-NLS-1$
 
-  public static final String EXPORT_VERSION_PROBLEM = "export.version";
+  public static final String EXPORT_VERSION_PROBLEM = "export.version"; //$NON-NLS-1$
 
-  public static final String UNREFERENCED_ELEMENT_PROBLEM = "unreferenced.element";
+  public static final String UNREFERENCED_ELEMENT_PROBLEM = "unreferenced.element"; //$NON-NLS-1$
 
-  public static final String FEATURE_CLOSURE_PROBLEM = "feature.closure";
+  public static final String FEATURE_CLOSURE_PROBLEM = "feature.closure"; //$NON-NLS-1$
 
-  public static final String MAVEN_POM_PROBLEM = "maven.pom";
+  public static final String MAVEN_POM_PROBLEM = "maven.pom"; //$NON-NLS-1$
 
-  public static final String COMPONENT_VERSION_PROBLEM = "component.version";
+  public static final String COMPONENT_VERSION_PROBLEM = "component.version"; //$NON-NLS-1$
 
-  public static final String VALIDATOR_CLASS_PROBLEM = "validator.class";
+  public static final String VALIDATOR_CLASS_PROBLEM = "validator.class"; //$NON-NLS-1$
 
-  public static final String RESOURCE_ATTRIBUTE = "<resource>";
+  public static final String RESOURCE_ATTRIBUTE = "<resource>"; //$NON-NLS-1$
 
-  public static final String QUICK_FIX_PATTERN = "quickFixPattern";
+  public static final String QUICK_FIX_PATTERN = "quickFixPattern"; //$NON-NLS-1$
 
-  public static final String QUICK_FIX_REPLACEMENT = "quickFixReplacement";
+  public static final String QUICK_FIX_REPLACEMENT = "quickFixReplacement"; //$NON-NLS-1$
 
-  public static final String QUICK_FIX_ALTERNATIVE_REPLACEMENT = "quickFixAlternativeReplacement";
+  public static final String QUICK_FIX_ALTERNATIVE_REPLACEMENT = "quickFixAlternativeReplacement"; //$NON-NLS-1$
 
-  public static final String QUICK_FIX_NATURE = "quickFixNature";
+  public static final String QUICK_FIX_NATURE = "quickFixNature"; //$NON-NLS-1$
 
-  public static final String QUICK_FIX_PROJECT = "quickFixProject";
+  public static final String QUICK_FIX_PROJECT = "quickFixProject"; //$NON-NLS-1$
 
-  public static final String QUICK_FIX_REFERENCE = "quickFixReference";
+  public static final String QUICK_FIX_REFERENCE = "quickFixReference"; //$NON-NLS-1$
 
-  public static final String QUICK_FIX_CONFIGURE_OPTION = "quickFixConfigureOption";
+  public static final String QUICK_FIX_CONFIGURE_OPTION = "quickFixConfigureOption"; //$NON-NLS-1$
 
-  public static final String QUICK_FIX_CONFIGURE_VALUE = "quickFixConfigureValue";
+  public static final String QUICK_FIX_CONFIGURE_VALUE = "quickFixConfigureValue"; //$NON-NLS-1$
 
-  private static final Pattern NL_PATTERN = Pattern.compile("([\\n][\\r]?|[\\r][\\n]?)", Pattern.MULTILINE);
+  private static final Pattern NL_PATTERN = Pattern.compile("([\\n][\\r]?|[\\r][\\n]?)", Pattern.MULTILINE); //$NON-NLS-1$
 
   private Markers()
   {
@@ -133,7 +133,7 @@ public final class Markers
     String attribute = getAttribute(marker, QUICK_FIX_CONFIGURE_VALUE);
     if (attribute == null)
     {
-      attribute = "true";
+      attribute = "true"; //$NON-NLS-1$
     }
 
     return attribute;

@@ -25,12 +25,12 @@ public final class Coordinate implements Comparable<Coordinate>
   {
     if (col < 0)
     {
-      throw new IllegalArgumentException("Column is negative");
+      throw new IllegalArgumentException(Messages.Coordinate_NegativeColumn_exception);
     }
 
     if (row < 0)
     {
-      throw new IllegalArgumentException("Row is negative");
+      throw new IllegalArgumentException(Messages.Coordinate_NegativeRow_exception);
     }
 
     this.col = col;
@@ -88,6 +88,6 @@ public final class Coordinate implements Comparable<Coordinate>
   @Override
   public String toString()
   {
-    return "[" + col + "," + row + "]";
+    return "[" + col + "," + row + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 }

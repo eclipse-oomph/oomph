@@ -103,7 +103,7 @@ public class WorkingSetGroupItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/WorkingSetGroup"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/WorkingSetGroup")); //$NON-NLS-1$
   }
 
   /**
@@ -126,7 +126,7 @@ public class WorkingSetGroupItemProvider extends ModelElementItemProvider
   @Override
   public String getText(Object object)
   {
-    return "Working Sets";
+    return getString("_UI_WorkingSetGroup_workingSets_feature"); //$NON-NLS-1$
   }
 
   /**

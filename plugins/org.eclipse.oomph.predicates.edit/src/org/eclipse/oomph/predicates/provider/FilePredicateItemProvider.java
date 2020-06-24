@@ -20,6 +20,8 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.eclipse.osgi.util.NLS;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -70,7 +72,8 @@ public class FilePredicateItemProvider extends PredicateItemProvider
   protected void addFilePatternPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_FilePredicate_filePattern_feature"), getString("_UI_FilePredicate_filePattern_description"),
+        getString("_UI_FilePredicate_filePattern_feature"), //$NON-NLS-1$
+        getString("_UI_FilePredicate_filePattern_description"), //$NON-NLS-1$
         PredicatesPackage.Literals.FILE_PREDICATE__FILE_PATTERN, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -83,7 +86,8 @@ public class FilePredicateItemProvider extends PredicateItemProvider
   protected void addContentPatternPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_FilePredicate_contentPattern_feature"), getString("_UI_FilePredicate_contentPattern_description"),
+        getString("_UI_FilePredicate_contentPattern_feature"), //$NON-NLS-1$
+        getString("_UI_FilePredicate_contentPattern_description"), //$NON-NLS-1$
         PredicatesPackage.Literals.FILE_PREDICATE__CONTENT_PATTERN, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -96,7 +100,7 @@ public class FilePredicateItemProvider extends PredicateItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/FilePredicate"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/FilePredicate")); //$NON-NLS-1$
   }
 
   /**
@@ -123,15 +127,15 @@ public class FilePredicateItemProvider extends PredicateItemProvider
     String label = filePredicate.getFilePattern();
     if (label == null || label.length() == 0)
     {
-      return getString("_UI_FilePredicate_type");
+      return getString("_UI_FilePredicate_type"); //$NON-NLS-1$
     }
 
-    label = "File at " + label;
+    label = NLS.bind(Messages.FilePredicateItemProvider_FileAt_label, label);
 
     String contentPattern = filePredicate.getContentPattern();
     if (contentPattern != null)
     {
-      label += " with content like " + contentPattern;
+      label += " " + NLS.bind(Messages.FilePredicateItemProvider_ContentLike_label, contentPattern); //$NON-NLS-1$
     }
 
     return label;

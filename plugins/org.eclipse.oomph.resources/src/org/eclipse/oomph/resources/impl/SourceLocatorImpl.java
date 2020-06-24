@@ -41,6 +41,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.osgi.util.NLS;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -270,7 +271,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
     BackendContainer rootContainer = SourceLocatorImpl.getRootContainer(this);
     if (rootContainer == null)
     {
-      monitor.setTaskName("Skipping root folder '" + getRootFolder() + "' because it doesn't exist");
+      monitor.setTaskName(NLS.bind(Messages.SourceLocatorImpl_Skipping_task, getRootFolder()));
       return null;
     }
 
@@ -452,11 +453,11 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (rootFolder: ");
+    result.append(" (rootFolder: "); //$NON-NLS-1$
     result.append(rootFolder);
-    result.append(", excludedPaths: ");
+    result.append(", excludedPaths: "); //$NON-NLS-1$
     result.append(excludedPaths);
-    result.append(", locateNestedProjects: ");
+    result.append(", locateNestedProjects: "); //$NON-NLS-1$
     result.append(locateNestedProjects);
     result.append(')');
     return result.toString();
@@ -465,7 +466,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
   public static void addStatus(MultiStatus status, OomphPlugin plugin, String file, Object object)
   {
     IStatus childStatus = plugin.getStatus(object);
-    String message = childStatus.getMessage() + " (while processing " + file + ")";
+    String message = NLS.bind(Messages.SourceLocatorImpl_IssueWhileProcessing_message, childStatus.getMessage(), file);
 
     MultiStatus multiStatus = new MultiStatus(childStatus.getPlugin(), childStatus.getCode(), message, childStatus.getException());
     multiStatus.addAll(childStatus);
@@ -523,11 +524,11 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
       final MultiStatus status, final IProgressMonitor monitor)
   {
     String rootFolder = sourceLocator.getRootFolder();
-    if ("platform:/resource/".equals(rootFolder))
+    if ("platform:/resource/".equals(rootFolder)) //$NON-NLS-1$
     {
       for (IProject project : EcorePlugin.getWorkspaceRoot().getProjects())
       {
-        if (project.isAccessible() && !"External Plug-in Libraries".equals(project.getName()))
+        if (project.isAccessible() && !"External Plug-in Libraries".equals(project.getName())) //$NON-NLS-1$
         {
           URI uri = CommonPlugin.resolve(URI.createPlatformResourceURI(project.getFullPath().toString(), true));
           if (uri.isFile())
@@ -540,7 +541,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
         }
       }
     }
-    else if (rootFolder != null && rootFolder.startsWith("platform:/resource/"))
+    else if (rootFolder != null && rootFolder.startsWith("platform:/resource/")) //$NON-NLS-1$
     {
       URI uri = CommonPlugin.resolve(URI.createURI(rootFolder));
       if (uri.isFile())
@@ -563,19 +564,19 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
     final BackendContainer rootContainer = SourceLocatorImpl.getRootContainer(sourceLocator);
     if (rootContainer == null)
     {
-      monitor.setTaskName("Skipping root folder '" + sourceLocator.getRootFolder() + "' because it doesn't exist");
+      monitor.setTaskName(NLS.bind(Messages.SourceLocatorImpl_Skipping_task, sourceLocator.getRootFolder()));
       return;
     }
 
     final Set<URI> excludedURIs = new HashSet<URI>();
     for (String path : sourceLocator.getExcludedPaths())
     {
-      while (path.startsWith("/"))
+      while (path.startsWith("/")) //$NON-NLS-1$
       {
         path = path.substring(1);
       }
 
-      while (path.endsWith("/"))
+      while (path.endsWith("/")) //$NON-NLS-1$
       {
         path = path.substring(0, path.length() - 1);
       }

@@ -157,7 +157,7 @@ import java.util.regex.Pattern;
 /**
  * @author Ed Merks
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings({ "restriction", "nls" })
 public class RepositoryIntegrityAnalyzer implements IApplication
 {
   private static final String DOWNLOAD_ECLIPSE_ORG_AUTHORITY = "download.eclipse.org";

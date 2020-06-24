@@ -69,7 +69,7 @@ public final class IOUtil
 
   private static final ObjectOutputStream DEV_NULL = createDevNull();
 
-  private static final String IMAGE_DATA_PREFIX = "imagedata:";
+  private static final String IMAGE_DATA_PREFIX = "imagedata:"; //$NON-NLS-1$
 
   private IOUtil()
   {
@@ -144,7 +144,7 @@ public final class IOUtil
 
   public static File getFromPath(String command)
   {
-    String path = System.getenv().get("PATH");
+    String path = System.getenv().get("PATH"); //$NON-NLS-1$
 
     StringTokenizer tokenizer = new StringTokenizer(path, File.pathSeparator);
     while (tokenizer.hasMoreTokens())
@@ -260,7 +260,7 @@ public final class IOUtil
 
     try
     {
-      final MessageDigest digest = MessageDigest.getInstance("SHA-1");
+      final MessageDigest digest = MessageDigest.getInstance("SHA-1"); //$NON-NLS-1$
       stream = new FilterInputStream(contents)
       {
         @Override
@@ -339,11 +339,11 @@ public final class IOUtil
       try
       {
         byte[] bytes = getSHA1(result);
-        digest = "-" + HexUtil.bytesToHex(bytes) + "-";
+        digest = "-" + HexUtil.bytesToHex(bytes) + "-"; //$NON-NLS-1$ //$NON-NLS-2$
       }
       catch (Exception ex)
       {
-        digest = "---" + result.hashCode() + "---";
+        digest = "---" + result.hashCode() + "---"; //$NON-NLS-1$ //$NON-NLS-2$
       }
 
       int half = (MAX_FILE_NAME_LENGTH - digest.length() >> 1) - 1;
@@ -403,7 +403,7 @@ public final class IOUtil
           String extension = data.substring(lastDot);
           data = data.substring(0, lastDot);
 
-          File iconFile = new File(PropertiesUtil.getProperty("java.io.tmpdir"), "icon-" + HexUtil.bytesToHex(digest) + extension);
+          File iconFile = new File(PropertiesUtil.getProperty("java.io.tmpdir"), "icon-" + HexUtil.bytesToHex(digest) + extension); //$NON-NLS-1$ //$NON-NLS-2$
           if (!iconFile.exists())
           {
             ByteArrayInputStream bais = new ByteArrayInputStream(HexUtil.hexToBytes(data));
@@ -554,7 +554,7 @@ public final class IOUtil
   {
     try
     {
-      File folder = File.createTempFile(prefix, "");
+      File folder = File.createTempFile(prefix, ""); //$NON-NLS-1$
       deleteBestEffort(folder, deleteOnExit);
       mkdirs(folder);
       return folder;
@@ -840,14 +840,14 @@ public final class IOUtil
       close(inputStream);
     }
 
-    return new String(outputStream.toByteArray(), "UTF-8");
+    return new String(outputStream.toByteArray(), "UTF-8"); //$NON-NLS-1$
   }
 
   public static void writeUTF8(File file, String contents) throws Exception
   {
     mkdirs(file.getParentFile());
 
-    InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"));
+    InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8")); //$NON-NLS-1$
     OutputStream outputStream = new FileOutputStream(file);
 
     try
@@ -1112,7 +1112,7 @@ public final class IOUtil
 
       try
       {
-        canWriteMethod = CommonPlugin.loadClass("org.eclipse.osgi", "org.eclipse.osgi.storage.StorageUtil").getMethod("canWrite", File.class);
+        canWriteMethod = CommonPlugin.loadClass("org.eclipse.osgi", "org.eclipse.osgi.storage.StorageUtil").getMethod("canWrite", File.class); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       }
       catch (ClassNotFoundException ex)
       {
@@ -1142,7 +1142,7 @@ public final class IOUtil
 
       try
       {
-        fileTest = File.createTempFile("test", ".dll", folder);
+        fileTest = File.createTempFile("test", ".dll", folder); //$NON-NLS-1$ //$NON-NLS-2$
       }
       catch (IOException e)
       {

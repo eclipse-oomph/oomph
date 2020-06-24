@@ -30,9 +30,9 @@ import java.util.List;
  */
 public final class KeepInstallerUtil
 {
-  public static final String KEEP_INSTALLER_DESCRIPTION = "Copy the installer to a permanent disk location to remember your settings and to support self updates and web links";
+  public static final String KEEP_INSTALLER_DESCRIPTION = Messages.KeepInstallerUtil_Keep_message;
 
-  private static final Preference PREF_KEPT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("kept");
+  private static final Preference PREF_KEPT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("kept"); //$NON-NLS-1$
 
   private static DesktopSupport desktopSupport;
 
@@ -101,13 +101,13 @@ public final class KeepInstallerUtil
       {
         if (OS.INSTANCE.isWin())
         {
-          String systemRoot = System.getenv("SystemRoot");
+          String systemRoot = System.getenv("SystemRoot"); //$NON-NLS-1$
           if (systemRoot != null)
           {
-            File system32 = new File(systemRoot, "system32");
+            File system32 = new File(systemRoot, "system32"); //$NON-NLS-1$
             if (system32.isDirectory())
             {
-              File powerShellFolder = new File(system32, "WindowsPowerShell");
+              File powerShellFolder = new File(system32, "WindowsPowerShell"); //$NON-NLS-1$
               if (powerShellFolder.isDirectory())
               {
                 File[] versions = powerShellFolder.listFiles();
@@ -117,7 +117,7 @@ public final class KeepInstallerUtil
                   {
                     try
                     {
-                      File executable = new File(version, "powershell.exe");
+                      File executable = new File(version, "powershell.exe"); //$NON-NLS-1$
                       if (executable.isFile())
                       {
                         desktopSupport = new WindowsPowerShell(executable.getAbsolutePath());
@@ -177,12 +177,12 @@ public final class KeepInstallerUtil
 
     if (startMenu)
     {
-      createShortCut("Programs", permanentLauncher);
+      createShortCut("Programs", permanentLauncher); //$NON-NLS-1$
     }
 
     if (desktop)
     {
-      createShortCut("Desktop", permanentLauncher);
+      createShortCut("Desktop", permanentLauncher); //$NON-NLS-1$
     }
 
     if (quickLaunch)

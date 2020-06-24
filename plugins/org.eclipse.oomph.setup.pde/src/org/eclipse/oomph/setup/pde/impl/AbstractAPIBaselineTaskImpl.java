@@ -235,9 +235,9 @@ public abstract class AbstractAPIBaselineTaskImpl extends SetupTaskImpl implemen
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (name: ");
+    result.append(" (name: "); //$NON-NLS-1$
     result.append(name);
-    result.append(", activate: ");
+    result.append(", activate: "); //$NON-NLS-1$
     result.append(activate);
     result.append(')');
     return result.toString();

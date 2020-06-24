@@ -45,7 +45,7 @@ public interface GitPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNAME = "git";
+  String eNAME = "git"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -53,7 +53,7 @@ public interface GitPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/oomph/setup/git/1.0";
+  String eNS_URI = "http://www.eclipse.org/oomph/setup/git/1.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -61,7 +61,7 @@ public interface GitPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "git";
+  String eNS_PREFIX = "git"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.

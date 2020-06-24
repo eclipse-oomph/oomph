@@ -70,8 +70,8 @@ public class ProjectFactoryItemProvider extends ModelElementItemProvider
   protected void addExcludedPathsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ProjectFactory_excludedPaths_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ProjectFactory_excludedPaths_feature", "_UI_ProjectFactory_type"),
+        getString("_UI_ProjectFactory_excludedPaths_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ProjectFactory_excludedPaths_feature", "_UI_ProjectFactory_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ResourcesPackage.Literals.PROJECT_FACTORY__EXCLUDED_PATHS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -95,7 +95,7 @@ public class ProjectFactoryItemProvider extends ModelElementItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_ProjectFactory_type");
+    return getString("_UI_ProjectFactory_type"); //$NON-NLS-1$
   }
 
   /**

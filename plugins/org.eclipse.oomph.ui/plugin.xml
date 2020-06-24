@@ -13,20 +13,20 @@
 
 <plugin>
 
-   <extension-point id="deferredEarlyStart" name="Deferred Early Start" schema="schema/deferredEarlyStart.exsd"/>
+   <extension-point id="deferredEarlyStart" name="%extPoint.deferredEarlyStart" schema="schema/deferredEarlyStart.exsd"/>
 
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
             class="org.eclipse.oomph.internal.ui.OomphPreferencePage"
             id="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
-            name="Oomph">
+            name="%oomph">
       </page>
       <page
             category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             class="org.eclipse.oomph.internal.ui.RemoteResourcesPreferencePage"
             id="org.eclipse.oomph.ui.preferences.RemoteResourcesPreferencePage"
-            name="Remote Resources">
+            name="%remoteResourcesPreferencePage.name">
       </page>
    </extension>
 
@@ -34,7 +34,7 @@
          point="org.eclipse.ui.importWizards">
       <category
             id="org.eclipse.oomph.importWizards"
-            name="Oomph">
+            name="%oomph">
       </category>
    </extension>
 
@@ -42,7 +42,7 @@
          point="org.eclipse.ui.exportWizards">
       <category
             id="org.eclipse.oomph.exportWizards"
-            name="Oomph">
+            name="%oomph">
       </category>
    </extension>
 
@@ -50,7 +50,7 @@
          point="org.eclipse.ui.views">
       <category
             id="org.eclipse.oomph.views"
-            name="Oomph">
+            name="%oomph">
       </category>
    </extension>
 
@@ -58,12 +58,12 @@
          point="org.eclipse.ui.commands">
       <category
             id="org.eclipse.oomph.commands"
-            name="Oomph">
+            name="%oomph">
       </category>
       <command
             categoryId="org.eclipse.oomph.commands"
             id="org.eclipse.oomph.ui.ToggleOfflineMode"
-            name="Toggle Offline Mode">
+            name="%command.toggleOfflineMode.name">
          <state
                class="org.eclipse.ui.handlers.RegistryToggleState:false"
                id="org.eclipse.ui.commands.toggleState">
@@ -85,13 +85,13 @@
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
                id="org.eclipse.oomph.ui.toolbars.offline"
-               label="Offline Control">
+               label="%offlineControl.label">
             <command
                   commandId="org.eclipse.oomph.ui.ToggleOfflineMode"
                   icon="icons/offline.gif"
                   id="org.eclipse.oomph.ui.toolbars.offline.toggle"
                   style="toggle"
-                  tooltip="Offline">
+                  tooltip="%command.toggleOfflineMode.tooltip">
                <visibleWhen>
                   <test
                         forcePluginActivation="true"

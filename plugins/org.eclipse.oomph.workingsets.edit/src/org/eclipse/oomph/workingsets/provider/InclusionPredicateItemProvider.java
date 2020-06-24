@@ -78,7 +78,7 @@ public class InclusionPredicateItemProvider extends PredicateItemProvider
   protected void addIncludedWorkingSetsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_InclusionPredicate_includedWorkingSets_feature"), getString("_UI_InclusionPredicate_includedWorkingSets_description"),
+        getString("_UI_InclusionPredicate_includedWorkingSets_feature"), getString("_UI_InclusionPredicate_includedWorkingSets_description"), //$NON-NLS-1$ //$NON-NLS-2$
         WorkingSetsPackage.Literals.INCLUSION_PREDICATE__INCLUDED_WORKING_SETS, true, false, true, null, null, null)
     {
       @Override
@@ -111,7 +111,7 @@ public class InclusionPredicateItemProvider extends PredicateItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/InclusionPredicate"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/InclusionPredicate")); //$NON-NLS-1$
   }
 
   /**
@@ -140,7 +140,7 @@ public class InclusionPredicateItemProvider extends PredicateItemProvider
     {
       if (result.length() != 0)
       {
-        result.append(", ");
+        result.append(", "); //$NON-NLS-1$
       }
       result.append(workingSet.getName());
     }

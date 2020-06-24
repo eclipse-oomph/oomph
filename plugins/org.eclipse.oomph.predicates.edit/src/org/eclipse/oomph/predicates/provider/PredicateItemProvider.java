@@ -86,7 +86,7 @@ public class PredicateItemProvider extends ModelElementItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_Predicate_type");
+    return getString("_UI_Predicate_type"); //$NON-NLS-1$
   }
 
   /**

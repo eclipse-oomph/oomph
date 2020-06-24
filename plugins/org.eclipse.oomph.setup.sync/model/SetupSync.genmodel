@@ -3,7 +3,7 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.oomph.setup.sync/src" creationIcons="false"
     editDirectory="" editorDirectory="" modelPluginID="org.eclipse.oomph.setup.sync"
     modelName="SetupSync" modelPluginClass="org.eclipse.oomph.setup.internal.sync.SetupSyncPlugin"
-    updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    updateClasspath="false" nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
     copyrightFields="false" optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"
     decoration="Live" cleanup="true">

@@ -128,7 +128,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
       case TargletPackage.DROPIN_LOCATION:
         return createDropinLocation();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -143,7 +143,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
     switch (eDataType.getClassifierID())
     {
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -158,7 +158,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
     switch (eDataType.getClassifierID())
     {
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

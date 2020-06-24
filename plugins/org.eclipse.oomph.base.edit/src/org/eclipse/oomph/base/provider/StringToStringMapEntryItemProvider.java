@@ -79,8 +79,8 @@ public class StringToStringMapEntryItemProvider extends ItemProviderAdapter
   protected void addKeyPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_StringToStringMapEntry_key_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_StringToStringMapEntry_key_feature", "_UI_StringToStringMapEntry_type"),
+        getString("_UI_StringToStringMapEntry_key_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_StringToStringMapEntry_key_feature", "_UI_StringToStringMapEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY__KEY, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -93,8 +93,8 @@ public class StringToStringMapEntryItemProvider extends ItemProviderAdapter
   protected void addValuePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_StringToStringMapEntry_value_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_StringToStringMapEntry_value_feature", "_UI_StringToStringMapEntry_type"),
+        getString("_UI_StringToStringMapEntry_value_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_StringToStringMapEntry_value_feature", "_UI_StringToStringMapEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY__VALUE, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -118,7 +118,7 @@ public class StringToStringMapEntryItemProvider extends ItemProviderAdapter
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/StringToStringMapEntry"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/StringToStringMapEntry")); //$NON-NLS-1$
   }
 
   /**
@@ -142,9 +142,9 @@ public class StringToStringMapEntryItemProvider extends ItemProviderAdapter
   public String getText(Object object)
   {
     Map.Entry<?, ?> stringToStringMapEntry = (Map.Entry<?, ?>)object;
-    String key = "" + stringToStringMapEntry.getKey();
-    String value = crop("" + stringToStringMapEntry.getValue());
-    return key + " -> " + value;
+    String key = "" + stringToStringMapEntry.getKey(); //$NON-NLS-1$
+    String value = crop("" + stringToStringMapEntry.getValue()); //$NON-NLS-1$
+    return key + " -> " + value; //$NON-NLS-1$
   }
 
   /**

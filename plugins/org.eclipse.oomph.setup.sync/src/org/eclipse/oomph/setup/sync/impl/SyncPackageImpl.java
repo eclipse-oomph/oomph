@@ -455,51 +455,51 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
     remoteDataEClass.getESuperTypes().add(theSetupPackage.getSetupTaskContainer());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(remoteDataEClass, RemoteData.class, "RemoteData", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getRemoteData_Policies(), getStringToSyncPolicyMapEntry(), null, "policies", null, 0, -1, RemoteData.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(remoteDataEClass, RemoteData.class, "RemoteData", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getRemoteData_Policies(), getStringToSyncPolicyMapEntry(), null, "policies", null, 0, -1, RemoteData.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(stringToSyncPolicyMapEntryEClass, Map.Entry.class, "StringToSyncPolicyMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getStringToSyncPolicyMapEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(stringToSyncPolicyMapEntryEClass, Map.Entry.class, "StringToSyncPolicyMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getStringToSyncPolicyMapEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getStringToSyncPolicyMapEntry_Value(), getSyncPolicy(), "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getStringToSyncPolicyMapEntry_Value(), getSyncPolicy(), "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(syncDeltaEClass, SyncDelta.class, "SyncDelta", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getSyncDelta_ID(), ecorePackage.getEString(), "iD", null, 1, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEClass(syncDeltaEClass, SyncDelta.class, "SyncDelta", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getSyncDelta_ID(), ecorePackage.getEString(), "iD", null, 1, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSyncDelta_OldTask(), theSetupPackage.getSetupTask(), null, "oldTask", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getSyncDelta_OldTask(), theSetupPackage.getSetupTask(), null, "oldTask", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSyncDelta_NewTask(), theSetupPackage.getSetupTask(), null, "newTask", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getSyncDelta_NewTask(), theSetupPackage.getSetupTask(), null, "newTask", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSyncDelta_Type(), getSyncDeltaType(), "type", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEAttribute(getSyncDelta_Type(), getSyncDeltaType(), "type", null, 0, 1, SyncDelta.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(syncActionEClass, SyncAction.class, "SyncAction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getSyncAction_ID(), ecorePackage.getEString(), "iD", null, 0, 1, SyncAction.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEClass(syncActionEClass, SyncAction.class, "SyncAction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getSyncAction_ID(), ecorePackage.getEString(), "iD", null, 0, 1, SyncAction.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEReference(getSyncAction_LocalDelta(), getSyncDelta(), null, "localDelta", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getSyncAction_LocalDelta(), getSyncDelta(), null, "localDelta", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSyncAction_RemoteDelta(), getSyncDelta(), null, "remoteDelta", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getSyncAction_RemoteDelta(), getSyncDelta(), null, "remoteDelta", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSyncAction_ComputedType(), getSyncActionType(), "computedType", null, 1, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getSyncAction_ComputedType(), getSyncActionType(), "computedType", null, 1, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSyncAction_ResolvedType(), getSyncActionType(), "resolvedType", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getSyncAction_ResolvedType(), getSyncActionType(), "resolvedType", null, 0, 1, SyncAction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSyncAction_EffectiveType(), getSyncActionType(), "effectiveType", "None", 1, 1, SyncAction.class, !IS_TRANSIENT, IS_VOLATILE,
+    initEAttribute(getSyncAction_EffectiveType(), getSyncActionType(), "effectiveType", "None", 1, 1, SyncAction.class, !IS_TRANSIENT, IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
     // Initialize enums and add enum literals
-    initEEnum(syncPolicyEEnum, SyncPolicy.class, "SyncPolicy");
+    initEEnum(syncPolicyEEnum, SyncPolicy.class, "SyncPolicy"); //$NON-NLS-1$
     addEEnumLiteral(syncPolicyEEnum, SyncPolicy.INCLUDE);
     addEEnumLiteral(syncPolicyEEnum, SyncPolicy.EXCLUDE);
 
-    initEEnum(syncDeltaTypeEEnum, SyncDeltaType.class, "SyncDeltaType");
+    initEEnum(syncDeltaTypeEEnum, SyncDeltaType.class, "SyncDeltaType"); //$NON-NLS-1$
     addEEnumLiteral(syncDeltaTypeEEnum, SyncDeltaType.UNCHANGED);
     addEEnumLiteral(syncDeltaTypeEEnum, SyncDeltaType.CHANGED);
     addEEnumLiteral(syncDeltaTypeEEnum, SyncDeltaType.REMOVED);
 
-    initEEnum(syncActionTypeEEnum, SyncActionType.class, "SyncActionType");
+    initEEnum(syncActionTypeEEnum, SyncActionType.class, "SyncActionType"); //$NON-NLS-1$
     addEEnumLiteral(syncActionTypeEEnum, SyncActionType.NONE);
     addEEnumLiteral(syncActionTypeEEnum, SyncActionType.SET_LOCAL);
     addEEnumLiteral(syncActionTypeEEnum, SyncActionType.SET_REMOTE);
@@ -524,10 +524,15 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getRemoteData_Policies(), source, new String[] { "name", "policy" });
-    addAnnotation(getSyncDelta_ID(), source, new String[] { "kind", "attribute", "name", "id" });
-    addAnnotation(getSyncAction_ID(), source, new String[] { "kind", "attribute", "name", "id" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getRemoteData_Policies(), source, new String[] { "name", "policy" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getSyncDelta_ID(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "id" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getSyncAction_ID(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "id" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
 } // SyncPackageImpl

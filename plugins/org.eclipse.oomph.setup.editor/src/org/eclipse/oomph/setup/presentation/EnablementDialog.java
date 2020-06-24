@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -57,8 +58,6 @@ import java.util.Set;
  */
 public class EnablementDialog extends AbstractSetupDialog
 {
-  private static final String TITLE = "Oomph Extension Installation";
-
   private final EClass eClass;
 
   private final String typeText;
@@ -71,7 +70,7 @@ public class EnablementDialog extends AbstractSetupDialog
 
   public EnablementDialog(Shell parentShell, EClass eClass, String typeText, EList<SetupTask> enablementTasks, String defaultImageKey)
   {
-    super(parentShell, TITLE, 650, 400, SetupEditorPlugin.INSTANCE, false);
+    super(parentShell, Messages.EnablementDialog_title, 650, 400, SetupEditorPlugin.INSTANCE, false);
     this.eClass = eClass;
     this.typeText = typeText;
     this.enablementTasks = enablementTasks;
@@ -90,13 +89,13 @@ public class EnablementDialog extends AbstractSetupDialog
   @Override
   protected String getShellText()
   {
-    return TITLE;
+    return Messages.EnablementDialog_title;
   }
 
   @Override
   protected String getDefaultMessage()
   {
-    return "Review the extension details and press Install to proceed with the installation.";
+    return Messages.EnablementDialog_defaultMessage;
   }
 
   @Override
@@ -122,7 +121,7 @@ public class EnablementDialog extends AbstractSetupDialog
 
     Label extensionTextLabel = new Label(mainComposite, SWT.NONE);
     extensionTextLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false));
-    extensionTextLabel.setText("Install " + typeText + " extension:");
+    extensionTextLabel.setText(NLS.bind(Messages.EnablementDialog_extensionTextLabel, typeText));
 
     final TreeViewer treeViewer = new TreeViewer(mainComposite, SWT.BORDER);
     treeViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
@@ -136,7 +135,7 @@ public class EnablementDialog extends AbstractSetupDialog
       {
         treeViewer.expandAll();
 
-        Job iconLoader = new Job("IconLoader")
+        Job iconLoader = new Job(Messages.EnablementDialog_iconLoaderJob_name)
         {
           @Override
           protected IStatus run(IProgressMonitor monitor)
@@ -168,7 +167,7 @@ public class EnablementDialog extends AbstractSetupDialog
   @Override
   protected void createButtonsForButtonBar(Composite parent)
   {
-    createButton(parent, IDialogConstants.OK_ID, "Install", true);
+    createButton(parent, IDialogConstants.OK_ID, Messages.EnablementDialog_installButton_label, true);
     createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
   }
 
@@ -194,20 +193,20 @@ public class EnablementDialog extends AbstractSetupDialog
           Repository repository = repositories.get(0);
           String url = repository.getURL();
 
-          if (url.startsWith("${") && i + 1 < size)
+          if (url.startsWith("${") && i + 1 < size) //$NON-NLS-1$
           {
             SetupTask nextTask = enablementTasks.get(i + 1);
             if (nextTask instanceof VariableTask)
             {
               VariableTask variableTask = (VariableTask)nextTask;
-              if (url.equals("${" + variableTask.getName() + "}"))
+              if (url.equals("${" + variableTask.getName() + "}")) //$NON-NLS-1$ //$NON-NLS-2$
               {
                 url = variableTask.getValue();
               }
             }
           }
 
-          if (url.equals("${" + SetupProperties.PROP_UPDATE_URL + "}"))
+          if (url.equals("${" + SetupProperties.PROP_UPDATE_URL + "}")) //$NON-NLS-1$ //$NON-NLS-2$
           {
             url = SetupCorePlugin.UPDATE_URL;
           }
@@ -222,7 +221,7 @@ public class EnablementDialog extends AbstractSetupDialog
 
     ItemProvider input = new ItemProvider(adapterFactory);
     EList<Object> children = input.getChildren();
-    Image repositoryImage = SetupEditorPlugin.INSTANCE.getSWTImage("full/obj16/Repository");
+    Image repositoryImage = SetupEditorPlugin.INSTANCE.getSWTImage("full/obj16/Repository"); //$NON-NLS-1$
 
     for (String url : urls)
     {

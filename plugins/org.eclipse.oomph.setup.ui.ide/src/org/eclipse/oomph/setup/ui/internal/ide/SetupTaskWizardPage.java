@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -83,10 +84,10 @@ public class SetupTaskWizardPage extends WizardPage
 
   public SetupTaskWizardPage()
   {
-    super("wizardPage");
-    setTitle("Setup Task");
-    setDescription("This wizard creates a new setup model extension.");
-    setImageDescriptor(SetupUIIDEPlugin.INSTANCE.getImageDescriptor("extension_wiz.png"));
+    super("wizardPage"); //$NON-NLS-1$
+    setTitle(Messages.SetupTaskWizardPage_title);
+    setDescription(Messages.SetupTaskWizardPage_description);
+    setImageDescriptor(SetupUIIDEPlugin.INSTANCE.getImageDescriptor("extension_wiz.png")); //$NON-NLS-1$
   }
 
   public void createControl(Composite parent)
@@ -98,16 +99,15 @@ public class SetupTaskWizardPage extends WizardPage
     layout.verticalSpacing = 9;
 
     Label projectNameLabel = new Label(container, SWT.NULL);
-    projectNameLabel.setText("Project Name:");
+    projectNameLabel.setText(Messages.SetupTaskWizardPage_projectName_text);
     projectNameLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
     projectNameText = new Text(container, SWT.BORDER | SWT.SINGLE);
     projectNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-    projectNameText.setToolTipText("The name of the plugin project to contain the extension model.\n"
-        + "Additional projects will be created for the edit support plugin and the extension feature.");
+    projectNameText.setToolTipText(Messages.SetupTaskWizardPage_projectName_tooltip);
 
     Label containerLocationLabel = new Label(container, SWT.NONE);
-    containerLocationLabel.setText("Container Location:");
+    containerLocationLabel.setText(Messages.SetupTaskWizardPage_containerLocation_text);
     containerLocationLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
     Composite containerLocationComposite = new Composite(container, SWT.NONE);
@@ -119,8 +119,8 @@ public class SetupTaskWizardPage extends WizardPage
     containerLocationComposite.setLayout(containerLocationLayout);
 
     containerLocationDefaultButton = new Button(containerLocationComposite, SWT.CHECK);
-    containerLocationDefaultButton.setText("Default");
-    containerLocationDefaultButton.setToolTipText("Whether the new projects will be created under the workspace location or not.");
+    containerLocationDefaultButton.setText(Messages.SetupTaskWizardPage_containerLocationButton_text);
+    containerLocationDefaultButton.setToolTipText(Messages.SetupTaskWizardPage_containerLocationButton_tooltip);
     containerLocationDefaultButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -132,11 +132,10 @@ public class SetupTaskWizardPage extends WizardPage
 
     containerLocationText = new Text(containerLocationComposite, SWT.BORDER);
     containerLocationText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    containerLocationText
-        .setToolTipText("The physical disk location under which the new projects will be created.\n" + "The default is the workspace location.");
+    containerLocationText.setToolTipText(Messages.SetupTaskWizardPage_containerLocation_tooltip);
 
     containerLocationBrowseButton = new Button(containerLocationComposite, SWT.NONE);
-    containerLocationBrowseButton.setText("Browse...");
+    containerLocationBrowseButton.setText(Messages.SetupTaskWizardPage_containerLocationBrowseButton_text);
     containerLocationBrowseButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -144,8 +143,8 @@ public class SetupTaskWizardPage extends WizardPage
       {
         String filter = containerLocationText.getText();
         DirectoryDialog dialog = new DirectoryDialog(getShell());
-        dialog.setText("Root Folder");
-        dialog.setMessage("Pick a root folder in which to locate the new plug-in projects...");
+        dialog.setText(Messages.SetupTaskWizardPage_containerLocationBrowseDialog_text);
+        dialog.setMessage(Messages.SetupTaskWizardPage_containerLocationBrowseDialog_message);
         dialog.setFilterPath(filter);
 
         String directory = dialog.open();
@@ -157,32 +156,32 @@ public class SetupTaskWizardPage extends WizardPage
     });
 
     Label qualifiedPackageNameLabel = new Label(container, SWT.NULL);
-    qualifiedPackageNameLabel.setText("Package Name:");
+    qualifiedPackageNameLabel.setText(Messages.SetupTaskWizardPage_packageName_text);
     qualifiedPackageNameLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
     qualifiedPackageNameText = new Text(container, SWT.BORDER | SWT.SINGLE);
     qualifiedPackageNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-    qualifiedPackageNameText.setToolTipText("The Java package name in which the model interfaces will be generated.");
+    qualifiedPackageNameText.setToolTipText(Messages.SetupTaskWizardPage_packageName_tooltip);
 
     Label modelNameLabel = new Label(container, SWT.NONE);
     modelNameLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
-    modelNameLabel.setText("Model Name:");
+    modelNameLabel.setText(Messages.SetupTaskWizardPage_modelName_text);
 
     modelNameText = new Text(container, SWT.BORDER);
     modelNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    modelNameText.setToolTipText("The name of the model to be created. Java class name conventions apply.");
+    modelNameText.setToolTipText(Messages.SetupTaskWizardPage_modelName_tooltip);
 
     Label taskNameLabel = new Label(container, SWT.NONE);
     taskNameLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
-    taskNameLabel.setText("Task Name:");
+    taskNameLabel.setText(Messages.SetupTaskWizardPage_taskName_text);
 
     taskNameText = new Text(container, SWT.BORDER);
     taskNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    taskNameText.setToolTipText("The name of the setup task class to be created. Java class name conventions apply.");
+    taskNameText.setToolTipText(Messages.SetupTaskWizardPage_taskName_tooltip);
 
     Label validTriggersLabel = new Label(container, SWT.NONE);
     validTriggersLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
-    validTriggersLabel.setText("Valid Triggers:");
+    validTriggersLabel.setText(Messages.SetupTaskWizardPage_validTriggers_text);
 
     Composite validTriggersComposite = new Composite(container, SWT.NONE);
     validTriggersComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -193,19 +192,19 @@ public class SetupTaskWizardPage extends WizardPage
     validTriggersComposite.setLayout(validTriggersLayout);
 
     bootstrapButton = new Button(validTriggersComposite, SWT.CHECK);
-    bootstrapButton.setText("Bootstrap");
-    bootstrapButton.setToolTipText("Whether the new setup task can perform on boostrap trigger.");
+    bootstrapButton.setText(Messages.SetupTaskWizardPage_bootstrapButton_text);
+    bootstrapButton.setToolTipText(Messages.SetupTaskWizardPage_bootstrapButton_tooltip);
 
     startupButton = new Button(validTriggersComposite, SWT.CHECK);
-    startupButton.setText("Startup");
-    startupButton.setToolTipText("Whether the new setup task can perform on startup trigger.");
+    startupButton.setText(Messages.SetupTaskWizardPage_startupButton_text);
+    startupButton.setToolTipText(Messages.SetupTaskWizardPage_startupButton_tooltip);
 
     manualButton = new Button(validTriggersComposite, SWT.CHECK);
-    manualButton.setText("Manual");
-    manualButton.setToolTipText("Whether the new setup task can perform on manual trigger.");
+    manualButton.setText(Messages.SetupTaskWizardPage_manualButton_text);
+    manualButton.setToolTipText(Messages.SetupTaskWizardPage_manualButton_tooltip);
 
     Label priorityLabel = new Label(container, SWT.NONE);
-    priorityLabel.setText("Priority:");
+    priorityLabel.setText(Messages.SetupTaskWizardPage_priority_text);
     priorityLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
     Composite priorityComposite = new Composite(container, SWT.NONE);
@@ -217,8 +216,8 @@ public class SetupTaskWizardPage extends WizardPage
     priorityComposite.setLayout(priorityLayout);
 
     priorityDefaultButton = new Button(priorityComposite, SWT.CHECK);
-    priorityDefaultButton.setText("Default");
-    priorityDefaultButton.setToolTipText("Whether the new setup task performs at default priority or not.");
+    priorityDefaultButton.setText(Messages.SetupTaskWizardPage_priorityDefaultButton_text);
+    priorityDefaultButton.setToolTipText(Messages.SetupTaskWizardPage_priorityDefaultButton_tooltip);
     priorityDefaultButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -232,41 +231,39 @@ public class SetupTaskWizardPage extends WizardPage
     GridData priorityTextGridData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
     priorityTextGridData.widthHint = 64;
     priorityText.setLayoutData(priorityTextGridData);
-    priorityText.setToolTipText("The priority at which the new setup task will perform.\n" + "Lower values mean 'perform earlier'.");
+    priorityText.setToolTipText(Messages.SetupTaskWizardPage_priority_tooltip);
 
     Label namespaceURILabel = new Label(container, SWT.NONE);
-    namespaceURILabel.setText("Namespace URI:");
+    namespaceURILabel.setText(Messages.SetupTaskWizardPage_namespaceUri_text);
     namespaceURILabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
     namespaceURIText = new Text(container, SWT.BORDER);
     namespaceURIText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    namespaceURIText.setToolTipText("The namespace URI of the model package to be created.\n" + "This value uniquely identifies the new extension model.");
+    namespaceURIText.setToolTipText(Messages.SetupTaskWizardPage_namespaceUri_tooltip);
 
     Label schemaLocationLabel = new Label(container, SWT.NONE);
-    schemaLocationLabel.setText("Schema Location:");
+    schemaLocationLabel.setText(Messages.SetupTaskWizardPage_schemaLocation_text);
     schemaLocationLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
     schemaLocationText = new Text(container, SWT.BORDER);
     schemaLocationText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    schemaLocationText
-        .setToolTipText("The public URL of the model schema to be created.\n" + "At runtime this URL must be accessible to the Oomph setup engine.\n"
-            + "The EMF generator will create this public schema at the local 'Publication Location'.");
+    schemaLocationText.setToolTipText(Messages.SetupTaskWizardPage_schemaLocation_tooltip);
 
     Label publicationLocationLabel = new Label(container, SWT.NONE);
-    publicationLocationLabel.setText("Publication Location:");
+    publicationLocationLabel.setText(Messages.SetupTaskWizardPage_publicationLocation_text);
     publicationLocationLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
     publicationLocationText = new Text(container, SWT.BORDER);
     publicationLocationText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    publicationLocationText.setToolTipText("A workspace-relative path where the EMF generator will create the public schema.");
+    publicationLocationText.setToolTipText(Messages.SetupTaskWizardPage_publicationLocation_tooltip);
 
     Label enablementURLLabel = new Label(container, SWT.NONE);
-    enablementURLLabel.setText("Enablement URL:");
+    enablementURLLabel.setText(Messages.SetupTaskWizardPage_enablementUrl_text);
     enablementURLLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
     enablementURLText = new Text(container, SWT.BORDER);
     enablementURLText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    enablementURLText.setToolTipText("The URL of the p2 repository that will contain the binary plugins and the feature of the new setup model extension.");
+    enablementURLText.setToolTipText(Messages.SetupTaskWizardPage_enablementUrl_tooltip);
 
     initialize();
 
@@ -301,7 +298,7 @@ public class SetupTaskWizardPage extends WizardPage
     String qualifiedPackageName = qualifiedPackageNameText.getText();
     String modelName = modelNameText.getText();
     String taskName = taskNameText.getText();
-    String formattedTaskName = CodeGenUtil.format(taskName, ' ', " ", false, false);
+    String formattedTaskName = CodeGenUtil.format(taskName, ' ', " ", false, false); //$NON-NLS-1$
     String priority = priorityText.getText();
     String namespaceURI = namespaceURIText.getText();
     String schemaLocation = schemaLocationText.getText();
@@ -309,29 +306,29 @@ public class SetupTaskWizardPage extends WizardPage
     String enablementURL = enablementURLText.getText();
 
     final Map<String, String> variables = new HashMap<String, String>();
-    variables.put("@ProjectName@", projectName);
-    variables.put("@ProjectURI@", getProjectURI(projectName));
-    variables.put("@ContainerLocation@", containerLocation);
-    variables.put("@QualifiedPackageName@", qualifiedPackageName);
-    variables.put("@PackageName@", getPackageName(qualifiedPackageName));
-    variables.put("@PackagePath@", qualifiedPackageName.replace('.', '/'));
-    variables.put("@BasePackage@", getBasePackage(qualifiedPackageName));
-    variables.put("@ModelName@", modelName);
-    variables.put("@TaskName@", taskName);
-    variables.put("@taskName@", StringUtil.uncap(taskName));
-    variables.put("@Task Name@", formattedTaskName);
-    variables.put("@TASKNAME@", taskName.toUpperCase());
-    variables.put("@TASK_NAME@", formattedTaskName.toUpperCase().replace(' ', '_'));
-    variables.put("@taskname@", taskName.toLowerCase());
-    variables.put("@task_name@", formattedTaskName.toLowerCase().replace(' ', '_'));
-    variables.put("@task.name@", formattedTaskName.toLowerCase().replace(' ', '.'));
-    variables.put("@ValidTriggers@", getValidTriggers());
-    variables.put("@Priority@", Integer.parseInt(priority) == SetupTask.PRIORITY_DEFAULT ? "PRIORITY_DEFAULT" : priority);
-    variables.put("@NamespaceURI@", namespaceURI);
-    variables.put("@SchemaLocation@", schemaLocation);
-    variables.put("@EnablementURL@", enablementURL);
-    variables.put("@PublicationLocation@", publicationLocation);
-    variables.put("@ProviderName@", getProviderName(qualifiedPackageName));
+    variables.put("@ProjectName@", projectName); //$NON-NLS-1$
+    variables.put("@ProjectURI@", getProjectURI(projectName)); //$NON-NLS-1$
+    variables.put("@ContainerLocation@", containerLocation); //$NON-NLS-1$
+    variables.put("@QualifiedPackageName@", qualifiedPackageName); //$NON-NLS-1$
+    variables.put("@PackageName@", getPackageName(qualifiedPackageName)); //$NON-NLS-1$
+    variables.put("@PackagePath@", qualifiedPackageName.replace('.', '/')); //$NON-NLS-1$
+    variables.put("@BasePackage@", getBasePackage(qualifiedPackageName)); //$NON-NLS-1$
+    variables.put("@ModelName@", modelName); //$NON-NLS-1$
+    variables.put("@TaskName@", taskName); //$NON-NLS-1$
+    variables.put("@taskName@", StringUtil.uncap(taskName)); //$NON-NLS-1$
+    variables.put("@Task Name@", formattedTaskName); //$NON-NLS-1$
+    variables.put("@TASKNAME@", taskName.toUpperCase()); //$NON-NLS-1$
+    variables.put("@TASK_NAME@", formattedTaskName.toUpperCase().replace(' ', '_')); //$NON-NLS-1$
+    variables.put("@taskname@", taskName.toLowerCase()); //$NON-NLS-1$
+    variables.put("@task_name@", formattedTaskName.toLowerCase().replace(' ', '_')); //$NON-NLS-1$
+    variables.put("@task.name@", formattedTaskName.toLowerCase().replace(' ', '.')); //$NON-NLS-1$
+    variables.put("@ValidTriggers@", getValidTriggers()); //$NON-NLS-1$
+    variables.put("@Priority@", Integer.parseInt(priority) == SetupTask.PRIORITY_DEFAULT ? "PRIORITY_DEFAULT" : priority); //$NON-NLS-1$ //$NON-NLS-2$
+    variables.put("@NamespaceURI@", namespaceURI); //$NON-NLS-1$
+    variables.put("@SchemaLocation@", schemaLocation); //$NON-NLS-1$
+    variables.put("@EnablementURL@", enablementURL); //$NON-NLS-1$
+    variables.put("@PublicationLocation@", publicationLocation); //$NON-NLS-1$
+    variables.put("@ProviderName@", getProviderName(qualifiedPackageName)); //$NON-NLS-1$
     return variables;
   }
 
@@ -405,16 +402,16 @@ public class SetupTaskWizardPage extends WizardPage
 
     String uri = getProjectURI(value);
 
-    String namespaceURISuffix = "/1.0";
+    String namespaceURISuffix = "/1.0"; //$NON-NLS-1$
     if (lastValue == null || namespaceURIText.getText().equals(getProjectURI(lastValue) + namespaceURISuffix))
     {
       namespaceURIText.setText(uri + namespaceURISuffix);
     }
 
     if (lastValue == null
-        || schemaLocationText.getText().equals(getProjectURI(lastValue) + "/schemas/" + getModelName(getQualifiedPackageName(lastValue)) + "-1.0.ecore"))
+        || schemaLocationText.getText().equals(getProjectURI(lastValue) + "/schemas/" + getModelName(getQualifiedPackageName(lastValue)) + "-1.0.ecore")) //$NON-NLS-1$ //$NON-NLS-2$
     {
-      schemaLocationText.setText(uri + "/schemas/" + getModelName(getQualifiedPackageName(value)) + "-1.0.ecore");
+      schemaLocationText.setText(uri + "/schemas/" + getModelName(getQualifiedPackageName(value)) + "-1.0.ecore"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     if (lastValue == null || publicationLocationText.getText().equals(getPublicationLocation(lastValue)))
@@ -422,10 +419,10 @@ public class SetupTaskWizardPage extends WizardPage
       publicationLocationText.setText(getPublicationLocation(value));
     }
 
-    String enablementURLSuffix = "/updates";
-    if (lastValue == null || enablementURLText.getText().equals(getProjectURI(lastValue, "download") + enablementURLSuffix))
+    String enablementURLSuffix = "/updates"; //$NON-NLS-1$
+    if (lastValue == null || enablementURLText.getText().equals(getProjectURI(lastValue, "download") + enablementURLSuffix)) //$NON-NLS-1$
     {
-      enablementURLText.setText(getProjectURI(value, "download") + enablementURLSuffix);
+      enablementURLText.setText(getProjectURI(value, "download") + enablementURLSuffix); //$NON-NLS-1$
     }
 
     lastValue = value;
@@ -444,9 +441,9 @@ public class SetupTaskWizardPage extends WizardPage
     {
       String message = projectNameStatus.getMessage();
       message = StringUtil.uncap(message);
-      message = message.replace("resource name", "name");
-      message = message.replace("folder name", "name");
-      message = message.replace("name", "project name");
+      message = message.replace("resource name", "name"); //$NON-NLS-1$ //$NON-NLS-2$
+      message = message.replace("folder name", "name"); //$NON-NLS-1$ //$NON-NLS-2$
+      message = message.replace("name", Messages.SetupTaskWizardPage_status_projectName); //$NON-NLS-1$
       message = StringUtil.cap(message);
       updateStatus(message);
       return;
@@ -455,14 +452,14 @@ public class SetupTaskWizardPage extends WizardPage
     IProject project = root.getProject(projectName);
     if (project.exists())
     {
-      updateStatus("Project '" + projectName + "' exists already.");
+      updateStatus(NLS.bind(Messages.SetupTaskWizardPage_status_projectExists, projectName));
       return;
     }
 
     String containerLocation = containerLocationText.getText();
     if (containerLocation.length() == 0)
     {
-      updateStatus("Container location is empty.");
+      updateStatus(Messages.SetupTaskWizardPage_status_containerLocationEmpty);
       return;
     }
 
@@ -471,7 +468,7 @@ public class SetupTaskWizardPage extends WizardPage
     {
       if (projectLocation.exists())
       {
-        updateStatus("Project location '" + projectLocation + "' exists already.");
+        updateStatus(NLS.bind(Messages.SetupTaskWizardPage_status_projectLocationExists, projectLocation));
         return;
       }
     }
@@ -479,45 +476,45 @@ public class SetupTaskWizardPage extends WizardPage
     String qualifiedPackageName = qualifiedPackageNameText.getText();
     if (qualifiedPackageName.length() == 0)
     {
-      updateStatus("Package name is empty.");
+      updateStatus(Messages.SetupTaskWizardPage_status_packageNameEmpty);
       return;
     }
 
     if (!JavaConventions.validatePackageName(qualifiedPackageName, JavaCore.VERSION_1_5, JavaCore.VERSION_1_5).isOK())
     {
-      updateStatus("Package name '" + qualifiedPackageName + "' is not valid in Java.");
+      updateStatus(NLS.bind(Messages.SetupTaskWizardPage_status_packageNameNotValid, qualifiedPackageName));
       return;
     }
 
     String modelName = modelNameText.getText();
     if (modelName.length() == 0)
     {
-      updateStatus("Model name is empty.");
+      updateStatus(Messages.SetupTaskWizardPage_status_modelNameEmpty);
       return;
     }
 
-    if (!JavaConventions.validateClassFileName(modelName + "Package.class", JavaCore.VERSION_1_5, JavaCore.VERSION_1_5).isOK())
+    if (!JavaConventions.validateClassFileName(modelName + "Package.class", JavaCore.VERSION_1_5, JavaCore.VERSION_1_5).isOK()) //$NON-NLS-1$
     {
-      updateStatus("Model name '" + modelName + "' is not valid in Java.");
+      updateStatus(NLS.bind(Messages.SetupTaskWizardPage_status_modelNameNotValid, modelName));
       return;
     }
 
     String taskName = taskNameText.getText();
     if (taskName.length() == 0)
     {
-      updateStatus("Task name is empty.");
+      updateStatus(Messages.SetupTaskWizardPage_status_taskNameEmpty);
       return;
     }
 
-    if (!JavaConventions.validateClassFileName(taskName + ".class", JavaCore.VERSION_1_5, JavaCore.VERSION_1_5).isOK())
+    if (!JavaConventions.validateClassFileName(taskName + ".class", JavaCore.VERSION_1_5, JavaCore.VERSION_1_5).isOK()) //$NON-NLS-1$
     {
-      updateStatus("Task name '" + taskName + "' is not valid in Java.");
+      updateStatus(NLS.bind(Messages.SetupTaskWizardPage_status_taskNameNotValid, taskName));
       return;
     }
 
-    if (taskName.endsWith("Task"))
+    if (taskName.endsWith("Task")) //$NON-NLS-1$
     {
-      updateStatus("Task name should not end with 'Task'.");
+      updateStatus(Messages.SetupTaskWizardPage_status_taskShouldEndWithTask);
       return;
     }
 
@@ -528,14 +525,14 @@ public class SetupTaskWizardPage extends WizardPage
     }
     catch (Exception ex)
     {
-      updateStatus("Priority is not a valid integer number.");
+      updateStatus(Messages.SetupTaskWizardPage_status_priorityNotValid);
       return;
     }
 
     String namespaceURI = namespaceURIText.getText();
     if (namespaceURI.length() == 0)
     {
-      updateStatus("Namespace URI is empty.");
+      updateStatus(Messages.SetupTaskWizardPage_status_namespaceUriEmpty);
       return;
     }
 
@@ -545,7 +542,7 @@ public class SetupTaskWizardPage extends WizardPage
     }
     catch (Exception ex)
     {
-      updateStatus("Namespace URI is not valid.");
+      updateStatus(Messages.SetupTaskWizardPage_status_namespaceUriNotValid);
       return;
     }
 
@@ -568,13 +565,13 @@ public class SetupTaskWizardPage extends WizardPage
 
     if (startupButton.getSelection())
     {
-      builder.append(builder.length() == 0 ? "" : " ");
+      builder.append(builder.length() == 0 ? "" : " "); //$NON-NLS-1$ //$NON-NLS-2$
       builder.append(Trigger.STARTUP);
     }
 
     if (manualButton.getSelection())
     {
-      builder.append(builder.length() == 0 ? "" : " ");
+      builder.append(builder.length() == 0 ? "" : " "); //$NON-NLS-1$ //$NON-NLS-2$
       builder.append(Trigger.MANUAL);
     }
 
@@ -583,10 +580,10 @@ public class SetupTaskWizardPage extends WizardPage
 
   private static String getProviderName(String projectName)
   {
-    String[] segments = projectName.split("\\.");
+    String[] segments = projectName.split("\\."); //$NON-NLS-1$
     if (segments.length >= 2)
     {
-      return StringUtil.cap(segments[1]) + "." + segments[0];
+      return StringUtil.cap(segments[1]) + "." + segments[0]; //$NON-NLS-1$
     }
 
     return StringUtil.cap(projectName.replace('.', ' '));
@@ -594,24 +591,24 @@ public class SetupTaskWizardPage extends WizardPage
 
   private static String getProjectURI(String projectName)
   {
-    return getProjectURI(projectName, "www");
+    return getProjectURI(projectName, "www"); //$NON-NLS-1$
   }
 
   private static String getProjectURI(String projectName, String host)
   {
-    String[] segments = projectName.split("\\.");
+    String[] segments = projectName.split("\\."); //$NON-NLS-1$
     if (segments.length >= 2)
     {
-      String uri = "http://" + host + "." + segments[1] + "." + segments[0];
+      String uri = "http://" + host + '.' + segments[1] + '.' + segments[0]; //$NON-NLS-1$
       for (int i = 2; i < segments.length; i++)
       {
-        uri += "/" + segments[i];
+        uri += "/" + segments[i]; //$NON-NLS-1$
       }
 
       return uri;
     }
 
-    return "http://" + host + ".example.org/" + projectName.replace('.', '/');
+    return "http://" + host + ".example.org/" + projectName.replace('.', '/'); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   private static String getPackageName(String qualifiedPackageName)
@@ -633,7 +630,7 @@ public class SetupTaskWizardPage extends WizardPage
       return qualifiedPackageName.substring(0, lastDot);
     }
 
-    return "";
+    return ""; //$NON-NLS-1$
   }
 
   private static String getModelName(String qualifiedPackageName)
@@ -654,12 +651,12 @@ public class SetupTaskWizardPage extends WizardPage
 
   private static String getTaskName(String projectName)
   {
-    String[] segments = projectName.split("\\.");
+    String[] segments = projectName.split("\\."); //$NON-NLS-1$
     return StringUtil.cap(segments[segments.length - 1]);
   }
 
   private static String getPublicationLocation(String projectName)
   {
-    return "/" + projectName + "/model/" + getModelName(getQualifiedPackageName(projectName)) + "-1.0.ecore";
+    return '/' + projectName + "/model/" + getModelName(getQualifiedPackageName(projectName)) + "-1.0.ecore"; //$NON-NLS-1$ //$NON-NLS-2$
   }
 }

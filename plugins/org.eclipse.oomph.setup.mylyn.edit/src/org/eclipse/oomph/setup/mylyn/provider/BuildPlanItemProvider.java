@@ -71,7 +71,8 @@ public class BuildPlanItemProvider extends ModelElementItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_BuildPlan_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_BuildPlan_name_feature", "_UI_BuildPlan_type"),
+        getString("_UI_BuildPlan_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_BuildPlan_name_feature", "_UI_BuildPlan_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MylynPackage.Literals.BUILD_PLAN__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -84,7 +85,7 @@ public class BuildPlanItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/BuildPlan"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/BuildPlan")); //$NON-NLS-1$
   }
 
   /**
@@ -108,7 +109,8 @@ public class BuildPlanItemProvider extends ModelElementItemProvider
   public String getText(Object object)
   {
     String label = ((BuildPlan)object).getName();
-    return label == null || label.length() == 0 ? getString("_UI_BuildPlan_type") : getString("_UI_BuildPlan_type") + " " + label;
+    return label == null || label.length() == 0 ? getString("_UI_BuildPlan_type") : //$NON-NLS-1$
+        getString("_UI_BuildPlan_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

@@ -916,7 +916,7 @@ public class SubMonitor implements IProgressMonitorWithBlocking
 
     private static ProbingMode getDefault()
     {
-      String mode = System.getProperty("submonitor.probing");
+      String mode = System.getProperty("submonitor.probing"); //$NON-NLS-1$
       if (FULL.toString().equalsIgnoreCase(mode))
       {
         return FULL;

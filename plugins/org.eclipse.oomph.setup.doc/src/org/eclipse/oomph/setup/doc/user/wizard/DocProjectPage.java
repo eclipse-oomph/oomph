@@ -42,6 +42,7 @@ import java.util.Map;
  *
  * @number 500
  */
+@SuppressWarnings("nls")
 public abstract class DocProjectPage
 {
   /**

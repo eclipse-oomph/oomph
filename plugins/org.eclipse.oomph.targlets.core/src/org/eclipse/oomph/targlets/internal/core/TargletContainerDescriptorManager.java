@@ -59,7 +59,7 @@ public final class TargletContainerDescriptorManager
 {
   public static final String WORKSPACE_LOCATION = ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString();
 
-  private static final String STATE_PATH = ".metadata/.plugins/" + TargletsCorePlugin.INSTANCE.getSymbolicName();
+  private static final String STATE_PATH = ".metadata/.plugins/" + TargletsCorePlugin.INSTANCE.getSymbolicName(); //$NON-NLS-1$
 
   private static final String WORKSPACE_STATE_RELATIVE_PATH = STATE_PATH + "/descriptors.bin"; //$NON-NLS-1$
 

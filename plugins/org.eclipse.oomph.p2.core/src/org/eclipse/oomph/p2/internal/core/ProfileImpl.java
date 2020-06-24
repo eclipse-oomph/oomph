@@ -46,6 +46,7 @@ import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
+import org.eclipse.osgi.util.NLS;
 
 import org.xml.sax.InputSource;
 
@@ -76,7 +77,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
 
     try
     {
-      method = ReflectUtil.getMethod(SimpleProfileRegistry.class, "internalGetProfile", String.class);
+      method = ReflectUtil.getMethod(SimpleProfileRegistry.class, "internalGetProfile", String.class); //$NON-NLS-1$
     }
     catch (Throwable ex)
     {
@@ -153,7 +154,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
   @Override
   public String getElementType()
   {
-    return "profile";
+    return "profile"; //$NON-NLS-1$
   }
 
   public AgentManager getAgentManager()
@@ -178,7 +179,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
 
   public boolean isSelfHosting()
   {
-    return "SelfHostingProfile".equals(id);
+    return "SelfHostingProfile".equals(id); //$NON-NLS-1$
   }
 
   public String getType()
@@ -190,7 +191,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
   {
     File engineLocation = new File(agent.getLocation(), AgentImpl.ENGINE_PATH);
     File registryLocation = new File(engineLocation, SimpleProfileRegistry.DEFAULT_STORAGE_DIR);
-    return new File(registryLocation, id + ".profile");
+    return new File(registryLocation, id + ".profile"); //$NON-NLS-1$
   }
 
   public File getInstallFolder()
@@ -217,9 +218,9 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
   {
     List<String> tokens = new ArrayList<String>();
     tokens.add(type);
-    tokens.add(bundlePool != null ? bundlePool.getLocation().getAbsolutePath() : "");
-    tokens.add(installFolder != null ? installFolder.getAbsolutePath() : "");
-    tokens.add(referencer != null ? referencer.getAbsolutePath() : "");
+    tokens.add(bundlePool != null ? bundlePool.getLocation().getAbsolutePath() : ""); //$NON-NLS-1$
+    tokens.add(installFolder != null ? installFolder.getAbsolutePath() : ""); //$NON-NLS-1$
+    tokens.add(referencer != null ? referencer.getAbsolutePath() : ""); //$NON-NLS-1$
     return StringUtil.implode(tokens, '|');
   }
 
@@ -286,7 +287,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
     IProfile profile = profileRegistry.getProfile(id);
     if (profile == null)
     {
-      throw new P2Exception("Profile does not exist: " + id);
+      throw new P2Exception(NLS.bind(Messages.ProfileImpl_ProfileNotExists_exception, id));
     }
 
     return profile;
@@ -334,12 +335,12 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
   public boolean isUsed()
   {
     File referencer = this.referencer;
-    if (referencer == null && "Targlet".equals(type))
+    if (referencer == null && "Targlet".equals(type)) //$NON-NLS-1$
     {
-      String workspace = getProperty("targlet.container.workspace");
+      String workspace = getProperty("targlet.container.workspace"); //$NON-NLS-1$
       if (workspace != null)
       {
-        referencer = new File(workspace, ".metadata/.plugins/org.eclipse.oomph.targlets.core/profiles.txt");
+        referencer = new File(workspace, ".metadata/.plugins/org.eclipse.oomph.targlets.core/profiles.txt"); //$NON-NLS-1$
       }
     }
 
@@ -460,7 +461,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
     IQueryResult<IInstallableUnit> query = profile.query(QueryUtil.createIUAnyQuery(), null);
     for (IInstallableUnit iu : P2Util.asIterable(query))
     {
-      if ("true".equals(profile.getInstallableUnitProperty(iu, Profile.PROP_PROFILE_ROOT_IU)))
+      if ("true".equals(profile.getInstallableUnitProperty(iu, Profile.PROP_PROFILE_ROOT_IU))) //$NON-NLS-1$
       {
         VersionSegment iuCompatibility = null;
 

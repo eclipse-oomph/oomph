@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.xmi.impl.BasicResourceHandler;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -82,8 +83,8 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
   {
     Map<Object, Object> loadOptions = resourceSet.getLoadOptions();
     final String taskName = loadOptions.get(ECFURIHandlerImpl.OPTION_CACHE_HANDLING) == ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING
-        ? "Loading from local cache "
-        : "Loading from internet ";
+        ? Messages.ResourceMirror_LoadingLocalCache_task
+        : Messages.ResourceMirror_LoadingInternet_task;
     XMLResource.ResourceHandler resourceHandler = new BasicResourceHandler()
     {
       private int counter;
@@ -108,8 +109,8 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
           total = counter;
         }
 
-        monitor.setTaskName(taskName + counter + " of " + total);
-        monitor.subTask("Loading " + resource.getURI());
+        monitor.setTaskName(NLS.bind(Messages.ResourceMirror_LoadingXofY_task, new Object[] { taskName, counter, total }));
+        monitor.subTask(NLS.bind(Messages.ResourceMirror_Loading_task, resource.getURI()));
         monitor.worked(1);
       }
     };
@@ -194,7 +195,7 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
     @Override
     public Resource getResource(URI uri, boolean loadOnDemand)
     {
-      if (loadOnDemand && "setup".equals(uri.fileExtension()))
+      if (loadOnDemand && "setup".equals(uri.fileExtension())) //$NON-NLS-1$
       {
         return null;
       }
@@ -216,7 +217,7 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
   {
     private LoadJob(ResourceMirror resourceMirror, URI uri, int id, boolean secondary)
     {
-      super("Load " + uri, resourceMirror, uri, id, secondary);
+      super(NLS.bind(Messages.ResourceMirror_Load_job, uri), resourceMirror, uri, id, secondary);
     }
 
     @Override
@@ -326,10 +327,10 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
 
       BytesResourceFactoryImpl bytesResourceFactory = new BytesResourceFactoryImpl();
       Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
-      extensionToFactoryMap.put("gif", bytesResourceFactory);
-      extensionToFactoryMap.put("png", bytesResourceFactory);
-      extensionToFactoryMap.put("jpeg", bytesResourceFactory);
-      extensionToFactoryMap.put("jpg", bytesResourceFactory);
+      extensionToFactoryMap.put("gif", bytesResourceFactory); //$NON-NLS-1$
+      extensionToFactoryMap.put("png", bytesResourceFactory); //$NON-NLS-1$
+      extensionToFactoryMap.put("jpeg", bytesResourceFactory); //$NON-NLS-1$
+      extensionToFactoryMap.put("jpg", bytesResourceFactory); //$NON-NLS-1$
     }
 
     @Override

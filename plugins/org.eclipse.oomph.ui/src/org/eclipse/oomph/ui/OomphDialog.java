@@ -56,11 +56,11 @@ import java.util.Date;
  */
 public abstract class OomphDialog extends TitleAreaDialog implements HelpProvider
 {
-  private static final PropertyFile HISTORY = new PropertyFile(UIPlugin.INSTANCE.getUserLocation().append("dialog-help-shown.properties").toFile());
+  private static final PropertyFile HISTORY = new PropertyFile(UIPlugin.INSTANCE.getUserLocation().append("dialog-help-shown.properties").toFile()); //$NON-NLS-1$
 
-  private static final String SETTING_DIALOG_WIDTH = "dialogWidth";
+  private static final String SETTING_DIALOG_WIDTH = "dialogWidth"; //$NON-NLS-1$
 
-  private static final String SETTING_DIALOG_HEIGHT = "dialogHeight";
+  private static final String SETTING_DIALOG_HEIGHT = "dialogHeight"; //$NON-NLS-1$
 
   private String title;
 
@@ -252,7 +252,7 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
 
   protected void createControlsForButtonBar(Composite parent)
   {
-    throw new UnsupportedOperationException("At least one control must be added when createButtonBarWithControls is called.");
+    throw new UnsupportedOperationException("At least one control must be added when createButtonBarWithControls is called."); //$NON-NLS-1$
   }
 
   public CCombo createCCombo(Composite parent)
@@ -459,7 +459,7 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
             {
               try
               {
-                Method method = ReflectUtil.getMethod(TrayDialog.class, "helpPressed");
+                Method method = ReflectUtil.getMethod(TrayDialog.class, "helpPressed"); //$NON-NLS-1$
                 ReflectUtil.invokeMethod(method, dialog);
               }
               catch (Throwable ex)
@@ -483,9 +483,9 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
 
   public static void hookTray(final TrayDialog dialog) throws IllegalStateException, UnsupportedOperationException
   {
-    final Control trayControl = getFieldValue(dialog, "trayControl");
-    final Label rightSeparator = getFieldValue(dialog, "rightSeparator");
-    final Sash sash = getFieldValue(dialog, "sash");
+    final Control trayControl = getFieldValue(dialog, "trayControl"); //$NON-NLS-1$
+    final Label rightSeparator = getFieldValue(dialog, "rightSeparator"); //$NON-NLS-1$
+    final Sash sash = getFieldValue(dialog, "sash"); //$NON-NLS-1$
     if (trayControl == null || rightSeparator == null || sash == null)
     {
       return;
@@ -515,13 +515,13 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
   {
     try
     {
-      Field titleImageLargestField = ReflectUtil.getField(TitleAreaDialog.class, "titleImageLargest");
+      Field titleImageLargestField = ReflectUtil.getField(TitleAreaDialog.class, "titleImageLargest"); //$NON-NLS-1$
       boolean titleImageLargest = (Boolean)ReflectUtil.getValue(titleImageLargestField, dialog);
 
-      Field workAreaField = ReflectUtil.getField(TitleAreaDialog.class, "workArea");
+      Field workAreaField = ReflectUtil.getField(TitleAreaDialog.class, "workArea"); //$NON-NLS-1$
       Composite workArea = (Composite)ReflectUtil.getValue(workAreaField, dialog);
 
-      Field titleImageLabelField = ReflectUtil.getField(TitleAreaDialog.class, "titleImageLabel");
+      Field titleImageLabelField = ReflectUtil.getField(TitleAreaDialog.class, "titleImageLabel"); //$NON-NLS-1$
       Label titleImageLabel = (Label)ReflectUtil.getValue(titleImageLabelField, dialog);
 
       FormData layoutData = (FormData)titleImageLabel.getLayoutData();
@@ -551,7 +551,7 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
   {
     try
     {
-      final Text messageLabel = ReflectUtil.getValue("messageLabel", dialog);
+      final Text messageLabel = ReflectUtil.getValue("messageLabel", dialog); //$NON-NLS-1$
       final Display display = messageLabel.getDisplay();
 
       final Color[] colors = new Color[8];

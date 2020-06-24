@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public class PreferencesRecorder extends EContentAdapter
 {
-  private static final String INSTANCE_SCOPE = "instance";
+  private static final String INSTANCE_SCOPE = "instance"; //$NON-NLS-1$
 
   private final Map<Property, URI> paths = new HashMap<Property, URI>();
 

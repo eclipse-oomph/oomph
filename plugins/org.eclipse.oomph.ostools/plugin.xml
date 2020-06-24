@@ -39,12 +39,12 @@
       <command
             defaultHandler="org.eclipse.oomph.ostools.ExplorerHandler"
             id="org.eclipse.oomph.ostools.commands.Explorer"
-            name="System Explorer">
+            name="%explorer.command.name">
       </command>
       <command
             defaultHandler="org.eclipse.oomph.ostools.PromptHandler"
             id="org.eclipse.oomph.ostools.commands.Prompt"
-            name="Command Prompt">
+            name="%prompt.command.name">
       </command>
    </extension>
 
@@ -56,9 +56,9 @@
          <command
                commandId="org.eclipse.oomph.ostools.commands.Explorer"
                icon="icons/explorer.gif"
-               label="System Explorer"
+               label="%explorer.menu.label"
                style="push"
-               tooltip="Open System Explorer">
+               tooltip="%explorer.menu.tooltip">
             <visibleWhen
                   checkEnabled="false">
                <with
@@ -77,9 +77,9 @@
          <command
                commandId="org.eclipse.oomph.ostools.commands.Prompt"
                icon="icons/prompt.gif"
-               label="Command Prompt"
+               label="%prompt.menu.label"
                style="push"
-               tooltip="Open Command Prompt">
+               tooltip="%prompt.menu.tooltip">
             <visibleWhen
                   checkEnabled="false">
                <with

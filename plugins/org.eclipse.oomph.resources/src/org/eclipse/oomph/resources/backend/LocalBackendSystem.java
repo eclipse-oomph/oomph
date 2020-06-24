@@ -173,7 +173,7 @@ public final class LocalBackendSystem extends BackendSystem
       String string = name;
       if (type != Type.FILE)
       {
-        string += "/";
+        string += "/"; //$NON-NLS-1$
       }
 
       return string;

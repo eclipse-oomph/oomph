@@ -88,7 +88,7 @@ public class AllPreferencesPreferencePage extends AbstractPreferencePage
     gridLayout.numColumns += 1;
 
     Button editButton = new Button(parent, SWT.PUSH);
-    editButton.setText("Edit...");
+    editButton.setText(Messages.AllPreferencesPreferencePage_Edit_label);
 
     Dialog.applyDialogFont(editButton);
     int widthHint = convertHorizontalDLUsToPixels(IDialogConstants.BUTTON_WIDTH);
@@ -107,7 +107,7 @@ public class AllPreferencesPreferencePage extends AbstractPreferencePage
 
         try
         {
-          Method method = container.getClass().getMethod("close");
+          Method method = container.getClass().getMethod("close"); //$NON-NLS-1$
           method.invoke(container);
         }
         catch (Throwable ex)
@@ -131,10 +131,10 @@ public class AllPreferencesPreferencePage extends AbstractPreferencePage
       {
         try
         {
-          IEditorInput editorInput = new URIEditorInput(PreferencesUtil.ROOT_PREFERENCE_NODE_URI.trimSegments(1).appendSegment("All.preferences"),
-              "All Preferences");
+          IEditorInput editorInput = new URIEditorInput(PreferencesUtil.ROOT_PREFERENCE_NODE_URI.trimSegments(1).appendSegment("All.preferences"), //$NON-NLS-1$
+              Messages.AllPreferencesPreferencePage_AllPreferences_title);
           IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-          activePage.openEditor(editorInput, "org.eclipse.oomph.preferences.presentation.PreferencesEditorID");
+          activePage.openEditor(editorInput, "org.eclipse.oomph.preferences.presentation.PreferencesEditorID"); //$NON-NLS-1$
           activePage.showView(IPageLayout.ID_PROP_SHEET);
         }
         catch (Exception ex)

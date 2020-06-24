@@ -50,6 +50,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -99,7 +100,7 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
    */
   protected boolean force = FORCE_EDEFAULT;
 
-  private static final PropertyFile HISTORY = new PropertyFile(ProjectsPlugin.INSTANCE.getStateLocation().append("import-history.properties").toFile());
+  private static final PropertyFile HISTORY = new PropertyFile(ProjectsPlugin.INSTANCE.getStateLocation().append("import-history.properties").toFile()); //$NON-NLS-1$
 
   private static final IWorkspaceRoot ROOT = EcorePlugin.getWorkspaceRoot();
 
@@ -281,7 +282,7 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (force: ");
+    result.append(" (force: "); //$NON-NLS-1$
     result.append(force);
     result.append(')');
     return result.toString();
@@ -323,21 +324,22 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
   public void perform(SetupTaskContext context) throws Exception
   {
     Map<BackendContainer, IProject> backendContainers = new HashMap<BackendContainer, IProject>();
-    MultiStatus status = new MultiStatus(ProjectsPlugin.INSTANCE.getSymbolicName(), 0, "Projects Import Analysis", null);
+    MultiStatus status = new MultiStatus(ProjectsPlugin.INSTANCE.getSymbolicName(), 0, Messages.ProjectsImportTaskImpl_Analysis_message, null);
 
     EList<SourceLocator> sourceLocators = getSourceLocators();
     int size = sourceLocators.size();
 
     IProgressMonitor monitor = context.getProgressMonitor(true);
-    monitor.beginTask("", 2 * size);
+    monitor.beginTask("", 2 * size); //$NON-NLS-1$
 
     try
     {
       for (SourceLocator sourceLocator : sourceLocators)
       {
         String rootFolder = sourceLocator.getRootFolder();
-        context.log("Importing projects from " + rootFolder);
-        MultiStatus childStatus = new MultiStatus(ProjectsPlugin.INSTANCE.getSymbolicName(), 0, "Projects Import Analysis of '" + rootFolder + "'", null);
+        context.log(NLS.bind(Messages.ProjectsImportTaskImpl_Importing_message, rootFolder));
+        MultiStatus childStatus = new MultiStatus(ProjectsPlugin.INSTANCE.getSymbolicName(), 0,
+            NLS.bind(Messages.ProjectsImportTaskImpl_AnalysisOf_message, rootFolder), null);
 
         try
         {
@@ -358,7 +360,7 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
             Set<IProject> projects = projectMap.keySet();
             if (projects.isEmpty())
             {
-              context.log("No projects were found");
+              context.log(Messages.ProjectsImportTaskImpl_NoProjectsFound_message);
             }
 
             setProjects(sourceLocator, projects.toArray(new IProject[projectMap.size()]));

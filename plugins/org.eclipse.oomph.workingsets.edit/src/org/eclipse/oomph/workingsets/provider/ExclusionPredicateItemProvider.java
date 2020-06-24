@@ -135,7 +135,7 @@ public class ExclusionPredicateItemProvider extends PredicateItemProvider
   protected void addExcludedWorkingSetsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ExclusionPredicate_excludedWorkingSets_feature"), getString("_UI_ExclusionPredicate_excludedWorkingSets_description"),
+        getString("_UI_ExclusionPredicate_excludedWorkingSets_feature"), getString("_UI_ExclusionPredicate_excludedWorkingSets_description"), //$NON-NLS-1$ //$NON-NLS-2$
         WorkingSetsPackage.Literals.EXCLUSION_PREDICATE__EXCLUDED_WORKING_SETS, true, false, true, null, null, null)
     {
       @Override
@@ -168,7 +168,7 @@ public class ExclusionPredicateItemProvider extends PredicateItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ExclusionPredicate"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ExclusionPredicate")); //$NON-NLS-1$
   }
 
   /**
@@ -197,7 +197,7 @@ public class ExclusionPredicateItemProvider extends PredicateItemProvider
     {
       if (result.length() != 0)
       {
-        result.append(", ");
+        result.append(", "); //$NON-NLS-1$
       }
       result.append(workingSet.getName());
     }

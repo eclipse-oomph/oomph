@@ -79,7 +79,7 @@ public class ProductGeneratorImpl extends ModelElementImpl implements ProductGen
     {
       public boolean apply(IFile file)
       {
-        return "product".equals(file.getFileExtension());
+        return "product".equals(file.getFileExtension()); //$NON-NLS-1$
       }
     };
 
@@ -99,10 +99,10 @@ public class ProductGeneratorImpl extends ModelElementImpl implements ProductGen
         }
         else
         {
-          addRequirements(componentDefinition, productDescriptor.getBundles(false), "");
+          addRequirements(componentDefinition, productDescriptor.getBundles(false), ""); //$NON-NLS-1$
         }
 
-        addRequirements(componentDefinition, productDescriptor.getFragments(), "");
+        addRequirements(componentDefinition, productDescriptor.getFragments(), ""); //$NON-NLS-1$
 
         IInstallableUnit iu = ComponentDefGeneratorImpl.generateIU(componentDefinition, qualifierReplacement);
         result.add(iu);

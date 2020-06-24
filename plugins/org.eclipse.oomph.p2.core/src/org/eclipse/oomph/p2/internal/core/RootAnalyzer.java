@@ -42,17 +42,17 @@ public final class RootAnalyzer
       P2CorePlugin.checkCancelation(monitor);
 
       String id = iu.getId();
-      if (id.endsWith(".source") || id.endsWith(".source.feature.group"))
+      if (id.endsWith(".source") || id.endsWith(".source.feature.group")) //$NON-NLS-1$ //$NON-NLS-2$
       {
         continue;
       }
 
-      if ("true".equalsIgnoreCase(iu.getProperty("org.eclipse.equinox.p2.type.category")))
+      if ("true".equalsIgnoreCase(iu.getProperty("org.eclipse.equinox.p2.type.category"))) //$NON-NLS-1$ //$NON-NLS-2$
       {
         continue;
       }
 
-      if ("true".equalsIgnoreCase(iu.getProperty("org.eclipse.equinox.p2.type.product")))
+      if ("true".equalsIgnoreCase(iu.getProperty("org.eclipse.equinox.p2.type.product"))) //$NON-NLS-1$ //$NON-NLS-2$
       {
         continue;
       }
@@ -143,7 +143,7 @@ public final class RootAnalyzer
     {
       org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
       String namespace = requiredCapability.getNamespace();
-      return "org.eclipse.equinox.p2.eclipse.type".equals(namespace);
+      return "org.eclipse.equinox.p2.eclipse.type".equals(namespace); //$NON-NLS-1$
     }
 
     return false;
@@ -156,7 +156,7 @@ public final class RootAnalyzer
     {
       org.eclipse.equinox.internal.p2.metadata.IRequiredCapability requiredCapability = (org.eclipse.equinox.internal.p2.metadata.IRequiredCapability)requirement;
       String namespace = requiredCapability.getNamespace();
-      return "java.package".equals(namespace);
+      return "java.package".equals(namespace); //$NON-NLS-1$
     }
 
     return false;

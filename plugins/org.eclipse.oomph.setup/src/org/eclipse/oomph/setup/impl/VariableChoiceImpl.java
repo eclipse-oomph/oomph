@@ -235,9 +235,9 @@ public class VariableChoiceImpl extends ModelElementImpl implements VariableChoi
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (value: ");
+    result.append(" (value: "); //$NON-NLS-1$
     result.append(value);
-    result.append(", label: ");
+    result.append(", label: "); //$NON-NLS-1$
     result.append(label);
     result.append(')');
     return result.toString();

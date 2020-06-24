@@ -44,9 +44,9 @@ import java.util.Set;
  */
 public class URISchemeDialog extends AbstractSetupDialog
 {
-  public static final String TITLE = "Web Links Activation";
+  public static final String TITLE = Messages.URISchemeDialog_title;
 
-  public static final String DESCRIPTION = "Select the schemes to activate";
+  public static final String DESCRIPTION = Messages.URISchemeDialog_description;
 
   private static final int APPLY_ID = IDialogConstants.CLIENT_ID + 1;
 
@@ -74,10 +74,10 @@ public class URISchemeDialog extends AbstractSetupDialog
   {
     if (!URISchemeUtil.getConflictingRegistrations().isEmpty())
     {
-      return DESCRIPTION + ". Each bold entry will replace another application's registration.";
+      return DESCRIPTION + Messages.URISchemeDialog_BoldEntry_message;
     }
 
-    return DESCRIPTION + ".";
+    return DESCRIPTION + "."; //$NON-NLS-1$
   }
 
   @Override
@@ -112,7 +112,7 @@ public class URISchemeDialog extends AbstractSetupDialog
     });
 
     TableViewerColumn schemeColumn = new TableViewerColumn(registrationViewer, SWT.NONE);
-    schemeColumn.getColumn().setText("Scheme");
+    schemeColumn.getColumn().setText(Messages.URISchemeDialog_Scheme_label);
     tableLayout.setColumnData(schemeColumn.getColumn(), new ColumnWeightData(30, true));
     schemeColumn.setLabelProvider(new ColumnLabelProvider()
     {
@@ -124,7 +124,7 @@ public class URISchemeDialog extends AbstractSetupDialog
     });
 
     TableViewerColumn launcherColumn = new TableViewerColumn(registrationViewer, SWT.NONE);
-    launcherColumn.getColumn().setText("Application");
+    launcherColumn.getColumn().setText(Messages.URISchemeDialog_Application_label);
     tableLayout.setColumnData(launcherColumn.getColumn(), new ColumnWeightData(70, true));
     launcherColumn.setLabelProvider(new ColumnLabelProvider()
     {
@@ -174,7 +174,7 @@ public class URISchemeDialog extends AbstractSetupDialog
     boolean selectionChanged = !checkedElements.equals(getCurrentSelfRegistrations().entrySet());
     boolean applyEnabled = selectionChanged;
     applyButton.setEnabled(applyEnabled);
-    applyButton.setText("Apply");
+    applyButton.setText(Messages.URISchemeDialog_Apply_label);
 
     Map<String, String> currentRegistrations = URISchemeUtil.getRegistrations();
     String selfLauncher = URISchemeUtil.getSelfLauncher();
@@ -196,7 +196,7 @@ public class URISchemeDialog extends AbstractSetupDialog
   @Override
   protected void createButtonsForButtonBar(Composite parent)
   {
-    applyButton = createButton(parent, APPLY_ID, "Apply", false);
+    applyButton = createButton(parent, APPLY_ID, Messages.URISchemeDialog_Apply_label, false);
     applyButton.setEnabled(false);
     super.createButtonsForButtonBar(parent);
 
@@ -215,7 +215,7 @@ public class URISchemeDialog extends AbstractSetupDialog
       {
         if (!checkedElements.contains(entry) && entry.getValue().equals(selfLauncher))
         {
-          entry.setValue("");
+          entry.setValue(""); //$NON-NLS-1$
         }
       }
 

@@ -118,13 +118,13 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
       if (provider == null)
       {
         URI locationURI = project.getLocationURI();
-        if (locationURI != null && "file".equals(locationURI.getScheme()))
+        if (locationURI != null && "file".equals(locationURI.getScheme())) //$NON-NLS-1$
         {
           org.eclipse.emf.common.util.URI emfURI = org.eclipse.emf.common.util.URI.createURI(locationURI.toString());
           for (File parent = new File(emfURI.toFileString()).getParentFile(); parent != null && parent.isDirectory(); parent = parent.getParentFile())
           {
-            File gitFolder = new File(parent, ".git");
-            if (new File(gitFolder, "index").exists())
+            File gitFolder = new File(parent, ".git"); //$NON-NLS-1$
+            if (new File(gitFolder, "index").exists()) //$NON-NLS-1$
             {
               return gitFolder.toString();
             }
@@ -153,13 +153,13 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
         {
           // http://fossies.org/linux/privat/subclipse-1.6.18.tar.gz:a/subclipse-1.6.18/org.tigris.subversion.subclipse.core/src/org/tigris/subversion/subclipse/core/SVNTeamProvider.java
           Class<? extends RepositoryProvider> providerClass = provider.getClass();
-          Method getSVNWorkspaceRootMethod = providerClass.getMethod("getSVNWorkspaceRoot");
+          Method getSVNWorkspaceRootMethod = providerClass.getMethod("getSVNWorkspaceRoot"); //$NON-NLS-1$
           Object svnWorkspaceRoot = getSVNWorkspaceRootMethod.invoke(provider);
           Class<? extends Object> workspaceRootClass = svnWorkspaceRoot.getClass();
-          Method getRepositoryMethod = workspaceRootClass.getMethod("getRepository");
+          Method getRepositoryMethod = workspaceRootClass.getMethod("getRepository"); //$NON-NLS-1$
           Object repositoryLocation = getRepositoryMethod.invoke(svnWorkspaceRoot);
           Class<? extends Object> repositoryLocationClass = repositoryLocation.getClass();
-          Method getLocationMethod = repositoryLocationClass.getMethod("getLocation");
+          Method getLocationMethod = repositoryLocationClass.getMethod("getLocation"); //$NON-NLS-1$
           Object location = getLocationMethod.invoke(repositoryLocation);
           return location == null ? null : location.toString();
         }
@@ -172,10 +172,10 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
         {
           // http://dev.eclipse.org/svnroot/technology/org.eclipse.subversive/trunk/org.eclipse.team.svn.core/src/org/eclipse/team/svn/core/SVNTeamProvider.java
           Class<? extends RepositoryProvider> providerClass = provider.getClass();
-          Method getRepositoryLocationMethod = providerClass.getMethod("getRepositoryLocation");
+          Method getRepositoryLocationMethod = providerClass.getMethod("getRepositoryLocation"); //$NON-NLS-1$
           Object repositoryLocation = getRepositoryLocationMethod.invoke(provider);
           Class<? extends Object> repositoryLocationClass = repositoryLocation.getClass();
-          Method getRepositoryRootUrlMethod = repositoryLocationClass.getMethod("getRepositoryRootUrl");
+          Method getRepositoryRootUrlMethod = repositoryLocationClass.getMethod("getRepositoryRootUrl"); //$NON-NLS-1$
           Object respositoryRootURL = getRepositoryRootUrlMethod.invoke(repositoryLocation);
           return respositoryRootURL == null ? null : respositoryRootURL.toString();
         }
@@ -184,7 +184,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
           // Ignore
         }
 
-        return "Unknown repo";
+        return "Unknown repo"; //$NON-NLS-1$
       }
     }
 
@@ -284,7 +284,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (project: ");
+    result.append(" (project: "); //$NON-NLS-1$
     result.append(project);
     result.append(')');
     return result.toString();

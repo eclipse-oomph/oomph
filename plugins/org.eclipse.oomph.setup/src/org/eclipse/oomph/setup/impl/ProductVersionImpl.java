@@ -130,7 +130,7 @@ public class ProductVersionImpl extends ScopeImpl implements ProductVersion
     {
       if (EcoreUtil.isAncestor(this, newProduct))
       {
-        throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+        throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
       }
       NotificationChain msgs = null;
       if (eInternalContainer() != null)
@@ -324,7 +324,7 @@ public class ProductVersionImpl extends ScopeImpl implements ProductVersion
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (requiredJavaVersion: ");
+    result.append(" (requiredJavaVersion: "); //$NON-NLS-1$
     result.append(requiredJavaVersion);
     result.append(')');
     return result.toString();

@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,7 +36,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -51,9 +51,9 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
   public static final String PROP_TARGLET_CONTAINER_DIGEST = "targlet.container.digest"; //$NON-NLS-1$
 
   @SuppressWarnings("restriction")
-  private static final IPath INSTALL_FOLDERS = org.eclipse.pde.internal.core.PDECore.getDefault().getStateLocation().append(".install_folders");
+  private static final IPath INSTALL_FOLDERS = org.eclipse.pde.internal.core.PDECore.getDefault().getStateLocation().append(".install_folders"); //$NON-NLS-1$
 
-  private static final File DEFAULT_INSTALL_FOLDER = INSTALL_FOLDERS.append("default").toFile();
+  private static final File DEFAULT_INSTALL_FOLDER = INSTALL_FOLDERS.append("default").toFile(); //$NON-NLS-1$
 
   private static long lastStamp;
 
@@ -267,14 +267,14 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
   @Override
   public String toString()
   {
-    return MessageFormat.format("TargletContainerDescriptor[id={0}, workingDigest={1}]", id, workingDigest);
+    return NLS.bind("TargletContainerDescriptor[id={0}, workingDigest={1}]", id, workingDigest); //$NON-NLS-1$
   }
 
   Profile startUpdateTransaction(String environmentProperties, String nlProperty, String digest, IProgressMonitor monitor) throws CoreException
   {
     if (transactionProfile != null)
     {
-      throw new ProvisionException("An update transaction is already ongoing");
+      throw new ProvisionException(Messages.TargletContainerDescriptor_ConflictingTransaction_exception);
     }
 
     transactionProfile = getOrCreateProfile(id, poolLocation, environmentProperties, nlProperty, digest, monitor);
@@ -286,7 +286,7 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
   {
     if (transactionProfile == null)
     {
-      throw new ProvisionException("No update transaction is ongoing");
+      throw new ProvisionException(Messages.TargletContainerDescriptor_NoTransaction_exception);
     }
 
     if (restoreBundlePoolTimestamps != null)
@@ -392,7 +392,7 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
 
   private static String getProfileID(String suffix)
   {
-    return IOUtil.encodeFileName(TargletContainerDescriptorManager.WORKSPACE_LOCATION + "-" + suffix);
+    return IOUtil.encodeFileName(TargletContainerDescriptorManager.WORKSPACE_LOCATION + "-" + suffix); //$NON-NLS-1$
   }
 
   private static void saveDescriptors(IProgressMonitor monitor) throws CoreException

@@ -31,18 +31,18 @@ import java.util.regex.Matcher;
  */
 public final class SetupUtil
 {
-  private static final String DEFAULT_INSTALLER_UPDATE_URL = "http://download.eclipse.org/oomph/products/repository";
+  private static final String DEFAULT_INSTALLER_UPDATE_URL = "http://download.eclipse.org/oomph/products/repository"; //$NON-NLS-1$
 
-  private static final String RESOLVING_TARGET_PLATFORM_DEFINITIONS = "oomph.setup.resolving.target.platform.definitions";
+  private static final String RESOLVING_TARGET_PLATFORM_DEFINITIONS = "oomph.setup.resolving.target.platform.definitions"; //$NON-NLS-1$
 
   private static final Map<EClass, Set<Trigger>> TRIGGERS = Collections.synchronizedMap(new HashMap<EClass, Set<Trigger>>());
 
   public static final String INSTALLER_UPDATE_URL = PropertiesUtil.getProperty(SetupProperties.PROP_INSTALLER_UPDATE_URL, DEFAULT_INSTALLER_UPDATE_URL)
       .replace('\\', '/');
 
-  public static final boolean INSTALLER_APPLICATION = "org.eclipse.oomph.setup.installer.application".equals(PropertiesUtil.getApplicationID());
+  public static final boolean INSTALLER_APPLICATION = "org.eclipse.oomph.setup.installer.application".equals(PropertiesUtil.getApplicationID()); //$NON-NLS-1$
 
-  public static final boolean SETUP_ARCHIVER_APPLICATION = "org.eclipse.oomph.setup.core.SetupArchiver".equals(PropertiesUtil.getApplicationID());
+  public static final boolean SETUP_ARCHIVER_APPLICATION = "org.eclipse.oomph.setup.core.SetupArchiver".equals(PropertiesUtil.getApplicationID()); //$NON-NLS-1$
 
   private SetupUtil()
   {
@@ -61,13 +61,13 @@ public final class SetupUtil
     while (matcher.find())
     {
       String group1 = matcher.group(1);
-      if ("$".equals(group1))
+      if ("$".equals(group1)) //$NON-NLS-1$
       {
-        matcher.appendReplacement(result, "\\$\\$\\$\\$");
+        matcher.appendReplacement(result, "\\$\\$\\$\\$"); //$NON-NLS-1$
       }
       else
       {
-        matcher.appendReplacement(result, "\\$$0");
+        matcher.appendReplacement(result, "\\$$0"); //$NON-NLS-1$
       }
     }
 
@@ -108,7 +108,7 @@ public final class SetupUtil
       String triggers = EcoreUtil.getAnnotation(eClass, EAnnotationConstants.ANNOTATION_VALID_TRIGGERS, EAnnotationConstants.KEY_TRIGGERS);
       if (triggers != null)
       {
-        String[] triggerValueLiterals = triggers.split("\\s");
+        String[] triggerValueLiterals = triggers.split("\\s"); //$NON-NLS-1$
         Trigger[] triggerValues = new Trigger[triggerValueLiterals.length];
         for (int i = 0; i < triggerValueLiterals.length; ++i)
         {

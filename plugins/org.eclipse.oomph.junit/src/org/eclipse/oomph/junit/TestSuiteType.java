@@ -310,16 +310,16 @@ public class TestSuiteType extends TestSuite
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (iD: ");
+    result.append(" (iD: "); //$NON-NLS-1$
     if (iDESet)
     {
       result.append(iD);
     }
     else
     {
-      result.append("<unset>");
+      result.append("<unset>"); //$NON-NLS-1$
     }
-    result.append(", packageName: ");
+    result.append(", packageName: "); //$NON-NLS-1$
     result.append(packageName);
     result.append(')');
     return result.toString();

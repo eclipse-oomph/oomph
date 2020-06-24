@@ -23,7 +23,7 @@ public class ImportProjectsHandler extends AbstractDropdownItemHandler
 {
   public ImportProjectsHandler()
   {
-    super("Project", "Import Projects...");
+    super("Project", Messages.ImportProjectsHandler_text); //$NON-NLS-1$
   }
 
   public void run()

@@ -74,8 +74,8 @@ public class AbstractAPIBaselineTaskItemProvider extends SetupTaskItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_AbstractAPIBaselineTask_name_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_AbstractAPIBaselineTask_name_feature", "_UI_AbstractAPIBaselineTask_type"),
+        getString("_UI_AbstractAPIBaselineTask_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_AbstractAPIBaselineTask_name_feature", "_UI_AbstractAPIBaselineTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PDEPackage.Literals.ABSTRACT_API_BASELINE_TASK__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -88,8 +88,8 @@ public class AbstractAPIBaselineTaskItemProvider extends SetupTaskItemProvider
   protected void addActivatePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_AbstractAPIBaselineTask_activate_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_AbstractAPIBaselineTask_activate_feature", "_UI_AbstractAPIBaselineTask_type"),
+        getString("_UI_AbstractAPIBaselineTask_activate_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_AbstractAPIBaselineTask_activate_feature", "_UI_AbstractAPIBaselineTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PDEPackage.Literals.ABSTRACT_API_BASELINE_TASK__ACTIVATE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -117,7 +117,7 @@ public class AbstractAPIBaselineTaskItemProvider extends SetupTaskItemProvider
     StringBuilder builder = new StringBuilder();
 
     String name = getName(object);
-    Pattern NAME_LABEL_PATTERN = Pattern.compile("(.*?)[\\s-_]*(API)?[\\s-_]*(Baseline)?[\\s]*", Pattern.CASE_INSENSITIVE);
+    Pattern NAME_LABEL_PATTERN = Pattern.compile("(.*?)[\\s-_]*(API)?[\\s-_]*(Baseline)?[\\s]*", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
     Matcher matcher = NAME_LABEL_PATTERN.matcher(name);
     if (matcher.matches())
     {
@@ -133,11 +133,11 @@ public class AbstractAPIBaselineTaskItemProvider extends SetupTaskItemProvider
       builder.append(' ');
     }
 
-    builder.append(getString("_UI_APIBaselineTask_type"));
+    builder.append(getString("_UI_APIBaselineTask_type")); //$NON-NLS-1$
 
     if (apiBaselineTask.isActivate())
     {
-      builder.append(", activate");
+      builder.append(", activate"); //$NON-NLS-1$
     }
 
     return builder.toString();
@@ -147,7 +147,7 @@ public class AbstractAPIBaselineTaskItemProvider extends SetupTaskItemProvider
   {
     AbstractAPIBaselineTask apiBaselineTask = (AbstractAPIBaselineTask)object;
     String name = apiBaselineTask.getName();
-    return name == null ? "" : name;
+    return name == null ? "" : name; //$NON-NLS-1$
   }
 
   /**

@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.pde.api.tools.internal.ApiBaselineManager;
 import org.eclipse.pde.api.tools.internal.model.ApiModelFactory;
 import org.eclipse.pde.api.tools.internal.provisional.ApiPlugin;
@@ -57,7 +58,7 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
    * @generated
    * @ordered
    */
-  protected static final String TARGET_NAME_EDEFAULT = "";
+  protected static final String TARGET_NAME_EDEFAULT = ""; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getTargetName() <em>Target Name</em>}' attribute.
@@ -208,7 +209,7 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (targetName: ");
+    result.append(" (targetName: "); //$NON-NLS-1$
     result.append(targetName);
     result.append(')');
     return result.toString();
@@ -219,7 +220,7 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
     Method isDerivedFromTargetMethod;
     try
     {
-      isDerivedFromTargetMethod = ApiModelFactory.class.getMethod("isDerivedFromTarget", IApiBaseline.class, ITargetDefinition.class);
+      isDerivedFromTargetMethod = ApiModelFactory.class.getMethod("isDerivedFromTarget", IApiBaseline.class, ITargetDefinition.class); //$NON-NLS-1$
     }
     catch (NoSuchMethodException ex)
     {
@@ -261,7 +262,7 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
     // Work-around for PDE bug 489924:
     // API baseline from target X is not considered as derived from target X
     String location = baseline.getLocation();
-    if (!StringUtil.isEmpty(location) && location.startsWith("target:"))
+    if (!StringUtil.isEmpty(location) && location.startsWith("target:")) //$NON-NLS-1$
     {
       if (location.indexOf('\\') >= 0)
       {
@@ -280,8 +281,8 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
   {
     if (backupRequired)
     {
-      String backupName = baselineName + " " + System.currentTimeMillis();
-      context.log("Backing up existing baseline to " + backupName);
+      String backupName = baselineName + " " + System.currentTimeMillis(); //$NON-NLS-1$
+      context.log(NLS.bind(Messages.APIBaselineFromTargetTaskImpl_Backup_message, backupName));
 
       baselineManager.removeApiBaseline(baselineName);
       baseline.setName(backupName);
@@ -291,7 +292,7 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
 
     if (baseline != null)
     {
-      context.log("Removing existing baseline.");
+      context.log(Messages.APIBaselineFromTargetTaskImpl_RemoveBaseline_message);
       baselineManager.removeApiBaseline(baselineName);
       baseline = null;
     }
@@ -304,23 +305,23 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
 
     if (target == null)
     {
-      context.log("Creating new empty baseline because target " + targetName + " was not found.", Severity.WARNING);
+      context.log(NLS.bind(Messages.APIBaselineFromTargetTaskImpl_CreateEmptyBaseline_message, targetName), Severity.WARNING);
       baseline = ApiModelFactory.newApiBaseline(baselineName);
       baselineManager.addApiBaseline(baseline);
     }
 
     if (baseline == null)
     {
-      context.log("Creating new baseline from target " + targetName);
+      context.log(NLS.bind(Messages.APIBaselineFromTargetTaskImpl_CreatingBaseline_message, targetName));
       baseline = ReflectUtil.invokeMethod(
-          ApiModelFactory.class.getMethod("newApiBaselineFromTarget", String.class, ITargetDefinition.class, IProgressMonitor.class), null, baselineName,
+          ApiModelFactory.class.getMethod("newApiBaselineFromTarget", String.class, ITargetDefinition.class, IProgressMonitor.class), null, baselineName, //$NON-NLS-1$
           target, new ProgressLogMonitor(context));
       baselineManager.addApiBaseline(baseline);
     }
 
     if ((wasActive || isActivate()) && baselineManager.getDefaultApiBaseline() != baseline)
     {
-      context.log("Activating baseline: " + baselineName);
+      context.log(NLS.bind(Messages.APIBaselineFromTargetTaskImpl_ActivatingBaseline_message, baselineName));
       baselineManager.setDefaultApiBaseline(baselineName);
     }
   }

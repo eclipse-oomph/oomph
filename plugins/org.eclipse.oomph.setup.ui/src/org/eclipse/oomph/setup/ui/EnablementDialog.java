@@ -18,6 +18,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -31,10 +32,6 @@ import java.util.Map;
  */
 public class EnablementDialog extends AbstractSetupDialog
 {
-  private static final String TITLE = "Oomph Extension Installation";
-
-  private static final String BUTTON_LABEL = "OK";
-
   private final String productLabel;
 
   private final Map<EClass, EList<SetupTask>> enablementTasks;
@@ -47,7 +44,7 @@ public class EnablementDialog extends AbstractSetupDialog
 
   public EnablementDialog(Shell parentShell, String productLabel, Map<EClass, EList<SetupTask>> enablementTasks)
   {
-    super(parentShell, TITLE, 600, 400, SetupUIPlugin.INSTANCE, false);
+    super(parentShell, Messages.EnablementDialog_title, 600, 400, SetupUIPlugin.INSTANCE, false);
     this.productLabel = productLabel;
     this.enablementTasks = enablementTasks;
   }
@@ -55,13 +52,13 @@ public class EnablementDialog extends AbstractSetupDialog
   @Override
   protected String getShellText()
   {
-    return TITLE;
+    return Messages.EnablementDialog_title;
   }
 
   @Override
   protected String getDefaultMessage()
   {
-    return getDescription(productLabel, BUTTON_LABEL);
+    return getDescription(productLabel, Messages.EnablementDialog_buttonLabel);
   }
 
   @Override
@@ -83,7 +80,7 @@ public class EnablementDialog extends AbstractSetupDialog
   @Override
   protected void createButtonsForButtonBar(Composite parent)
   {
-    okButton = createButton(parent, IDialogConstants.OK_ID, BUTTON_LABEL, true);
+    okButton = createButton(parent, IDialogConstants.OK_ID, Messages.EnablementDialog_buttonLabel, true);
     cancelButton = createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
   }
 
@@ -121,7 +118,6 @@ public class EnablementDialog extends AbstractSetupDialog
 
   public static String getDescription(String productLabel, String buttonLabel)
   {
-    return "This setup requires " + productLabel + " to be updated to include extended task implementations. Press " + buttonLabel + " to update "
-        + productLabel + ".";
+    return NLS.bind(Messages.EnablementDialog_description, new Object[] { productLabel, buttonLabel, productLabel });
   }
 }

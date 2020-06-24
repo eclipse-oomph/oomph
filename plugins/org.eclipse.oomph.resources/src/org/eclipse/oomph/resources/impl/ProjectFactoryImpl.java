@@ -131,7 +131,7 @@ public abstract class ProjectFactoryImpl extends ModelElementImpl implements Pro
       excludedURIs = new HashSet<URI>();
       for (String path : getExcludedPaths())
       {
-        while (path.startsWith("/"))
+        while (path.startsWith("/")) //$NON-NLS-1$
         {
           path = path.substring(1);
         }
@@ -244,7 +244,7 @@ public abstract class ProjectFactoryImpl extends ModelElementImpl implements Pro
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (excludedPaths: ");
+    result.append(" (excludedPaths: "); //$NON-NLS-1$
     result.append(excludedPaths);
     result.append(')');
     return result.toString();

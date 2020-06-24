@@ -101,7 +101,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 {
   private static final int MAX_DESCRIPTION_LENGTH = 120;
 
-  private static final String PRODUCT_PREFIX = "product://";
+  private static final String PRODUCT_PREFIX = "product://"; //$NON-NLS-1$
 
   private final SelectionMemento selectionMemento;
 
@@ -170,7 +170,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
     indexLoader = new SpriteIndexLoader(stackComposite);
 
-    if (UIUtil.isBrowserAvailable() && "browser".equals(PropertiesUtil.getProperty("oomph.product.list")))
+    if (UIUtil.isBrowserAvailable() && "browser".equals(PropertiesUtil.getProperty("oomph.product.list"))) //$NON-NLS-1$ //$NON-NLS-2$
     {
       productList = new BrowserProductList(this, stackComposite, catalogSelector);
     }
@@ -188,7 +188,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
       public void run()
       {
-        handleFilter("");
+        handleFilter(""); //$NON-NLS-1$
 
         UIUtil.asyncExec(container, new Runnable()
         {
@@ -214,7 +214,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       {
         if (notification.getFeature() == SetupPackage.Literals.CATALOG_SELECTION__PRODUCT_CATALOGS)
         {
-          handleFilter("");
+          handleFilter(""); //$NON-NLS-1$
         }
       }
     };
@@ -324,7 +324,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
   private static String removeLinks(String description)
   {
-    return description.replaceAll("</?a[^>]*>", "");
+    return description.replaceAll("</?a[^>]*>", ""); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   private static int findFirstDot(String description)
@@ -382,7 +382,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       int dot = findFirstDot(description);
       if (dot == -1)
       {
-        description += ".";
+        description += "."; //$NON-NLS-1$
       }
       else
       {
@@ -392,7 +392,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     else
     {
       // TODO: Empty string? Or something like "No description available"?
-      description = "";
+      description = ""; //$NON-NLS-1$
     }
 
     String productHtml = large ? SimpleInstallerDialog.getProductTemplateLarge() : SimpleInstallerDialog.getProductTemplate();
@@ -402,36 +402,36 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       description = StringUtil.shorten(description, MAX_DESCRIPTION_LENGTH, true);
       description = removeLinks(description);
 
-      String productLink = "product://" + product.getProductCatalog().getName() + "/" + product.getName();
-      productHtml = productHtml.replace("%PRODUCT_LINK%", productLink);
+      String productLink = "product://" + product.getProductCatalog().getName() + "/" + product.getName(); //$NON-NLS-1$ //$NON-NLS-2$
+      productHtml = productHtml.replace("%PRODUCT_LINK%", productLink); //$NON-NLS-1$
     }
     else
     {
       URI brandingSiteURI = SetupWizard.getBrandingSiteURI(productVersion == null ? product : productVersion);
       if (brandingSiteURI != null)
       {
-        productHtml = productHtml.replace("%PRODUCT_BRANDING_SITE_DISPLAY_STYLE%", "inline-block");
-        productHtml = productHtml.replace("%PRODUCT_BRANDING_SITE_SRC%", brandingSiteURI.toString());
+        productHtml = productHtml.replace("%PRODUCT_BRANDING_SITE_DISPLAY_STYLE%", "inline-block"); //$NON-NLS-1$ //$NON-NLS-2$
+        productHtml = productHtml.replace("%PRODUCT_BRANDING_SITE_SRC%", brandingSiteURI.toString()); //$NON-NLS-1$
       }
       else
       {
-        productHtml = productHtml.replace("%PRODUCT_BRANDING_SITE_DISPLAY_STYLE%", "none");
+        productHtml = productHtml.replace("%PRODUCT_BRANDING_SITE_DISPLAY_STYLE%", "none"); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
       URI incubationURI = ImageURIRegistry.INSTANCE
-          .getImageURI(ExtendedImageRegistry.INSTANCE.getImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/eclipse_incubation.png")));
+          .getImageURI(ExtendedImageRegistry.INSTANCE.getImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/eclipse_incubation.png"))); //$NON-NLS-1$
 
-      productHtml = productHtml.replace("%PRODUCT_INCUBATATING_DISPLAY_STYLE%",
+      productHtml = productHtml.replace("%PRODUCT_INCUBATATING_DISPLAY_STYLE%", //$NON-NLS-1$
           productVersion != null
-              && "true".equals(BaseUtil.getAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING))
-                  ? "inline"
-                  : "none");
-      productHtml = productHtml.replace("%PRODUCT_INCUBATATING_SRC%", incubationURI.toString());
+              && "true".equals(BaseUtil.getAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING)) //$NON-NLS-1$
+                  ? "inline" //$NON-NLS-1$
+                  : "none"); //$NON-NLS-1$
+      productHtml = productHtml.replace("%PRODUCT_INCUBATATING_SRC%", incubationURI.toString()); //$NON-NLS-1$
     }
 
-    productHtml = productHtml.replace("%PRODUCT_ICON_SRC%", imageURI);
-    productHtml = productHtml.replace("%PRODUCT_TITLE%", label);
-    productHtml = productHtml.replace("%PRODUCT_DESCRIPTION%", description);
+    productHtml = productHtml.replace("%PRODUCT_ICON_SRC%", imageURI); //$NON-NLS-1$
+    productHtml = productHtml.replace("%PRODUCT_TITLE%", label); //$NON-NLS-1$
+    productHtml = productHtml.replace("%PRODUCT_DESCRIPTION%", description); //$NON-NLS-1$
     return productHtml;
   }
 
@@ -475,7 +475,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
           public void changing(LocationEvent event)
           {
             String url = event.location;
-            if (!"about:blank".equals(url))
+            if (!"about:blank".equals(url)) //$NON-NLS-1$
             {
               if (url.startsWith(PRODUCT_PREFIX))
               {
@@ -510,14 +510,14 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
         String productPageHTML = SimpleInstallerDialog.getProductTemplate();
         String simpleInstallerHTML = SimpleInstallerDialog.getPageTemplate();
-        productPageHTML = simpleInstallerHTML.replace("%CONTENT%", productsBuilder.toString());
+        productPageHTML = simpleInstallerHTML.replace("%CONTENT%", productsBuilder.toString()); //$NON-NLS-1$
         browser.setText(productPageHTML, true);
       }
 
       @Override
       public void reset(boolean clear)
       {
-        browser.setText(clear ? "" : browser.getText());
+        browser.setText(clear ? "" : browser.getText()); //$NON-NLS-1$
       }
 
       private void productSelected(String url, CatalogSelector catalogSelector)
@@ -671,9 +671,9 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
     private static final Color COLOR_SELECTION = SetupInstallerPlugin.getColor(174, 187, 221);
 
-    private static final Font FONT_TITLE = SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///+4/bold"));
+    private static final Font FONT_TITLE = SetupInstallerPlugin.getFont(SimpleInstallerDialog.getDefaultFont(), URI.createURI("font:///+4/bold")); //$NON-NLS-1$
 
-    private static final Font FONT_DESCRIPTION = SimpleInstallerDialog.getFont(1, "normal");
+    private static final Font FONT_DESCRIPTION = SimpleInstallerDialog.getFont(1, "normal"); //$NON-NLS-1$
 
     private final CompositeProductList list;
 
@@ -724,16 +724,16 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       listenToMouse(title);
 
       titleImage = new Label(titleComposite, SWT.NONE);
-      titleImage.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/eclipse_incubation.png"));
+      titleImage.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/eclipse_incubation.png")); //$NON-NLS-1$
       titleImage.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
-      titleImage.setToolTipText("Contains incubating components");
+      titleImage.setToolTipText(Messages.SimpleProductPage_Incubating_message);
       listenToMouse(titleImage);
 
       detailsLink = new Link(titleComposite, SWT.NONE);
       GridData detailsLinkGridData = new GridData(SWT.END, SWT.CENTER, false, false);
       detailsLink.setLayoutData(detailsLinkGridData);
-      detailsLink.setText("<a>details</a>");
-      detailsLink.setToolTipText("Opens a more detailed description, including package contents, in the system browser");
+      detailsLink.setText("<a>details</a>"); //$NON-NLS-1$
+      detailsLink.setToolTipText(Messages.SimpleProductPage_OpenDetails_message);
       detailsLink.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -772,10 +772,10 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         }
       });
 
-      title.setText("Ag");
+      title.setText("Ag"); //$NON-NLS-1$
       int titleHeight = title.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 
-      description.setText("Ag\nAg");
+      description.setText("Ag\nAg"); //$NON-NLS-1$
       int descriptionHeight = description.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 
       contentHeight = titleHeight + VERTICAL_SPACE + descriptionHeight;
@@ -803,7 +803,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       {
         title.setText(product.getLabel());
         titleImage.setVisible(productVersion != null
-            && "true".equals(BaseUtil.getAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING)));
+            && "true".equals(BaseUtil.getAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING))); //$NON-NLS-1$
         title.getParent().layout();
 
         Image image = SetupWizard.getBrandingImage(product);
@@ -814,7 +814,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
           description.setForeground(COLOR_TITLE_DISCONTINUED);
 
           logo.setImage(ExtendedImageRegistry.INSTANCE.getImage(ImageDescriptor.createWithFlags(ImageDescriptor.createFromImage(image), SWT.IMAGE_DISABLE)));
-          logo.setDecoratorImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/discontinued.png"));
+          logo.setDecoratorImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/discontinued.png")); //$NON-NLS-1$
         }
         else
         {
@@ -903,23 +903,23 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
     private static String shorten(GC gc, int width, int lines, String html)
     {
-      String plain = StringUtil.isEmpty(html) ? "No description available." : UIUtil.stripHTML(html);
+      String plain = StringUtil.isEmpty(html) ? Messages.SimpleProductPage_NoDescription_message : UIUtil.stripHTML(html);
 
       StringBuilder builder = new StringBuilder();
       int lineWidth = 0;
       int lineCount = 1;
 
-      String[] words = plain.split(" ");
+      String[] words = plain.split(" "); //$NON-NLS-1$
       for (String word : words)
       {
-        int wordWidth = gc.textExtent(word + " ").x;
+        int wordWidth = gc.textExtent(word + " ").x; //$NON-NLS-1$
         lineWidth += wordWidth;
         if (lineWidth > width)
         {
           if (++lineCount > lines)
           {
             int length = builder.length();
-            builder.replace(length - 1, length, "...");
+            builder.replace(length - 1, length, "..."); //$NON-NLS-1$
             break;
           }
 
@@ -927,7 +927,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         }
 
         builder.append(word);
-        builder.append(" ");
+        builder.append(" "); //$NON-NLS-1$
       }
 
       return builder.toString();
@@ -1018,7 +1018,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
     public SpriteIndexLoader(Composite parent)
     {
-      animator = new SpriteAnimator(parent, SWT.NONE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/progress_sprite.png"), 8, 4, 20);
+      animator = new SpriteAnimator(parent, SWT.NONE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/progress_sprite.png"), 8, 4, 20); //$NON-NLS-1$
     }
 
     public SpriteAnimator getAnimator()

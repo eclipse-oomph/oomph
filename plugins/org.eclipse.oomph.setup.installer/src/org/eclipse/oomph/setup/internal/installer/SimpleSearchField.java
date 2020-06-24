@@ -61,7 +61,7 @@ public class SimpleSearchField extends Composite
     searchField = new Text(this, SWT.NONE);
     searchField.setLayoutData(GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).create());
     searchField.setMessage(org.eclipse.ui.internal.WorkbenchMessages.FilteredTree_FilterMessage);
-    searchField.setFont(SimpleInstallerDialog.getFont(2, "normal"));
+    searchField.setFont(SimpleInstallerDialog.getFont(2, "normal")); //$NON-NLS-1$
     searchField.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
     searchField.addModifyListener(new ModifyListener()
     {
@@ -78,9 +78,9 @@ public class SimpleSearchField extends Composite
       {
         if (e.keyCode == SWT.ESC)
         {
-          if (!"".equals(searchField.getText()))
+          if (!"".equals(searchField.getText())) //$NON-NLS-1$
           {
-            searchField.setText("");
+            searchField.setText(""); //$NON-NLS-1$
             e.doit = false;
           }
         }
@@ -104,16 +104,16 @@ public class SimpleSearchField extends Composite
     buttonComposite.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(false, true).create());
 
     searchLabel = new Label(buttonComposite, SWT.NONE);
-    searchLabel.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/search.png"));
+    searchLabel.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/search.png")); //$NON-NLS-1$
 
-    clearSearchButton = new ImageHoverButton(buttonComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/search_erase.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/search_erase_hover.png"));
+    clearSearchButton = new ImageHoverButton(buttonComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/search_erase.png"), //$NON-NLS-1$
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/search_erase_hover.png")); //$NON-NLS-1$
     clearSearchButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        searchField.setText("");
+        searchField.setText(""); //$NON-NLS-1$
       }
     });
 

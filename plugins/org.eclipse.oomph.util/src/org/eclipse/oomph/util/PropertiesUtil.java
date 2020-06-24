@@ -38,9 +38,9 @@ import java.util.Vector;
  */
 public final class PropertiesUtil
 {
-  public static final String CONDITIONAL_EXPERT_FILTER = "org.eclipse.ui.views.properties.expert.conditional";
+  public static final String CONDITIONAL_EXPERT_FILTER = "org.eclipse.ui.views.properties.expert.conditional"; //$NON-NLS-1$
 
-  public static final String[] EXPERT_FILTER = { "org.eclipse.ui.views.properties.expert" };
+  public static final String[] EXPERT_FILTER = { "org.eclipse.ui.views.properties.expert" }; //$NON-NLS-1$
 
   private static final String TRUE = Boolean.TRUE.toString();
 
@@ -121,17 +121,17 @@ public final class PropertiesUtil
 
   public static String getUserHome()
   {
-    return getProperty("user.home", ".");
+    return getProperty("user.home", "."); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   public static String getTmpDir()
   {
-    return getProperty("java.io.tmpdir", ".");
+    return getProperty("java.io.tmpdir", "."); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   public static String getApplicationID()
   {
-    String applicationID = getProperty("eclipse.application");
+    String applicationID = getProperty("eclipse.application"); //$NON-NLS-1$
     if (StringUtil.isEmpty(applicationID))
     {
       IProduct product = Platform.getProduct();
@@ -146,7 +146,7 @@ public final class PropertiesUtil
 
   public static String getProductID()
   {
-    String productID = getProperty("eclipse.product");
+    String productID = getProperty("eclipse.product"); //$NON-NLS-1$
     if (StringUtil.isEmpty(productID))
     {
       IProduct product = Platform.getProduct();
@@ -167,7 +167,7 @@ public final class PropertiesUtil
       return product.getName();
     }
 
-    return "Eclipse";
+    return "Eclipse"; //$NON-NLS-1$
   }
 
   // public static void main(String[] args)
@@ -265,7 +265,7 @@ public final class PropertiesUtil
         ByteArrayOutputStream temp = new ByteArrayOutputStream();
         converter.store(temp, comment);
 
-        String string = temp.toString("8859_1");
+        String string = temp.toString("8859_1"); //$NON-NLS-1$
         int firstNL = string.indexOf(StringUtil.NL);
         if (firstNL != -1)
         {
@@ -282,7 +282,7 @@ public final class PropertiesUtil
           }
         }
 
-        IOUtil.copy(new ByteArrayInputStream(string.getBytes("8859_1")), stream);
+        IOUtil.copy(new ByteArrayInputStream(string.getBytes("8859_1")), stream); //$NON-NLS-1$
       }
     }
     catch (IOException ex)

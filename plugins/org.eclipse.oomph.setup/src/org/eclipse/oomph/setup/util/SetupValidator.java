@@ -104,7 +104,7 @@ public class SetupValidator extends EObjectValidator
    * @see org.eclipse.emf.common.util.Diagnostic#getCode()
    * @generated
    */
-  public static final String DIAGNOSTIC_SOURCE = "org.eclipse.oomph.setup";
+  public static final String DIAGNOSTIC_SOURCE = "org.eclipse.oomph.setup"; //$NON-NLS-1$
 
   /**
    * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -740,8 +740,8 @@ public class SetupValidator extends EObjectValidator
 
         data.add(finalRecursiveMacroTask);
 
-        diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, MACRO_NO_RECURSION, "_UI_MacroNoRecursion_diagnostic",
-            new Object[] { getAvailableChoices(choices, true, "'", Integer.MAX_VALUE) }, data.toArray(), context));
+        diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, MACRO_NO_RECURSION, "_UI_MacroNoRecursion_diagnostic", //$NON-NLS-1$
+            new Object[] { getAvailableChoices(choices, true, "'", Integer.MAX_VALUE) }, data.toArray(), context)); //$NON-NLS-1$
       }
 
       return false;
@@ -854,7 +854,7 @@ public class SetupValidator extends EObjectValidator
     {
       if (diagnostics != null)
       {
-        diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, MACRO_TASK_ID_REQUIRED, "_UI_MacroTaskDRequired_diagnostic", null,
+        diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, MACRO_TASK_ID_REQUIRED, "_UI_MacroTaskDRequired_diagnostic", null, //$NON-NLS-1$
             new Object[] { macroTask, SetupPackage.Literals.SETUP_TASK__ID }, context));
       }
 
@@ -897,7 +897,7 @@ public class SetupValidator extends EObjectValidator
         if (diagnostics != null)
         {
           diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, MACRO_TASK_ARGUMENTS_CORRESPOND_TO_PARAMETERS,
-              "_UI_MacroTaskMissingArgument_diagnostic", new Object[] { getAvailableChoices(unboundParameters, true, "'", Integer.MAX_VALUE) },
+              "_UI_MacroTaskMissingArgument_diagnostic", new Object[] { getAvailableChoices(unboundParameters, true, "'", Integer.MAX_VALUE) }, //$NON-NLS-1$ //$NON-NLS-2$
               new Object[] { macroTask, SetupPackage.Literals.MACRO_TASK__ARGUMENTS }, context));
         }
 
@@ -986,7 +986,7 @@ public class SetupValidator extends EObjectValidator
         if (diagnostics != null)
         {
           diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, ARGUMENT_CONSISTENT_PARAMETER_BINDING,
-              "_UI_ArgumentValueMustBeSpecified_diagnostic", null, new Object[] { argument, SetupPackage.Literals.ARGUMENT__VALUE }, context));
+              "_UI_ArgumentValueMustBeSpecified_diagnostic", null, new Object[] { argument, SetupPackage.Literals.ARGUMENT__VALUE }, context)); //$NON-NLS-1$
           result = false;
         }
         else
@@ -1006,7 +1006,7 @@ public class SetupValidator extends EObjectValidator
             if (diagnostics != null)
             {
               diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, ARGUMENT_CONSISTENT_PARAMETER_BINDING,
-                  "_UI_ArgumentParameterAlreadyBound_diagnostic", null, new Object[] { argument, SetupPackage.Literals.ARGUMENT__PARAMETER }, context));
+                  "_UI_ArgumentParameterAlreadyBound_diagnostic", null, new Object[] { argument, SetupPackage.Literals.ARGUMENT__PARAMETER }, context)); //$NON-NLS-1$
               result = false;
             }
             else
@@ -1025,7 +1025,7 @@ public class SetupValidator extends EObjectValidator
             if (diagnostics != null)
             {
               diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, ARGUMENT_CONSISTENT_PARAMETER_BINDING,
-                  "_UI_ArgumentParameterOutOfScope_diagnostic", null, new Object[] { argument, SetupPackage.Literals.ARGUMENT__PARAMETER }, context));
+                  "_UI_ArgumentParameterOutOfScope_diagnostic", null, new Object[] { argument, SetupPackage.Literals.ARGUMENT__PARAMETER }, context)); //$NON-NLS-1$
               result = false;
             }
             else
@@ -1138,8 +1138,8 @@ public class SetupValidator extends EObjectValidator
     {
       try
       {
-        Class<?> installableUnitClass = CommonPlugin.loadClass("org.eclipse.equinox.p2.metadata", "org.eclipse.equinox.internal.p2.metadata.InstallableUnit");
-        parseFilterMethod = installableUnitClass.getMethod("parseFilter", String.class);
+        Class<?> installableUnitClass = CommonPlugin.loadClass("org.eclipse.equinox.p2.metadata", "org.eclipse.equinox.internal.p2.metadata.InstallableUnit"); //$NON-NLS-1$ //$NON-NLS-2$
+        parseFilterMethod = installableUnitClass.getMethod("parseFilter", String.class); //$NON-NLS-1$
       }
       catch (Throwable throwable)
       {

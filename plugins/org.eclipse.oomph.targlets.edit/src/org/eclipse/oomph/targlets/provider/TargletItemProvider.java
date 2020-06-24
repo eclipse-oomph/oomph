@@ -87,7 +87,8 @@ public class TargletItemProvider extends ModelElementItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Targlet_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Targlet_name_feature", "_UI_Targlet_type"),
+        getString("_UI_Targlet_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Targlet_name_feature", "_UI_Targlet_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         TargletPackage.Literals.TARGLET__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -100,8 +101,8 @@ public class TargletItemProvider extends ModelElementItemProvider
   protected void addActiveRepositoryListNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Targlet_activeRepositoryListName_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Targlet_activeRepositoryListName_feature", "_UI_Targlet_type"),
+        getString("_UI_Targlet_activeRepositoryListName_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Targlet_activeRepositoryListName_feature", "_UI_Targlet_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         TargletPackage.Literals.TARGLET__ACTIVE_REPOSITORY_LIST_NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -114,8 +115,8 @@ public class TargletItemProvider extends ModelElementItemProvider
   protected void addIncludeSourcesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Targlet_includeSources_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Targlet_includeSources_feature", "_UI_Targlet_type"),
+        getString("_UI_Targlet_includeSources_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Targlet_includeSources_feature", "_UI_Targlet_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         TargletPackage.Literals.TARGLET__INCLUDE_SOURCES, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -128,8 +129,8 @@ public class TargletItemProvider extends ModelElementItemProvider
   protected void addIncludeAllPlatformsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Targlet_includeAllPlatforms_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Targlet_includeAllPlatforms_feature", "_UI_Targlet_type"),
+        getString("_UI_Targlet_includeAllPlatforms_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Targlet_includeAllPlatforms_feature", "_UI_Targlet_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         TargletPackage.Literals.TARGLET__INCLUDE_ALL_PLATFORMS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -142,7 +143,8 @@ public class TargletItemProvider extends ModelElementItemProvider
   protected void addIncludeAllRequirementsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Targlet_includeAllRequirements_feature"), getString("_UI_Targlet_includeAllRequirements_description"),
+        getString("_UI_Targlet_includeAllRequirements_feature"), //$NON-NLS-1$
+        getString("_UI_Targlet_includeAllRequirements_description"), //$NON-NLS-1$
         TargletPackage.Literals.TARGLET__INCLUDE_ALL_REQUIREMENTS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -155,8 +157,8 @@ public class TargletItemProvider extends ModelElementItemProvider
   protected void addIncludeBinaryEquivalentsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Targlet_includeBinaryEquivalents_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Targlet_includeBinaryEquivalents_feature", "_UI_Targlet_type"),
+        getString("_UI_Targlet_includeBinaryEquivalents_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Targlet_includeBinaryEquivalents_feature", "_UI_Targlet_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         TargletPackage.Literals.TARGLET__INCLUDE_BINARY_EQUIVALENTS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -169,7 +171,8 @@ public class TargletItemProvider extends ModelElementItemProvider
   protected void addProfilePropertiesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Targlet_profileProperties_feature"), getString("_UI_Targlet_profileProperties_description"),
+        getString("_UI_Targlet_profileProperties_feature"), //$NON-NLS-1$
+        getString("_UI_Targlet_profileProperties_description"), //$NON-NLS-1$
         TargletPackage.Literals.TARGLET__PROFILE_PROPERTIES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -255,7 +258,7 @@ public class TargletItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Targlet"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Targlet")); //$NON-NLS-1$
   }
 
   /**
@@ -279,7 +282,7 @@ public class TargletItemProvider extends ModelElementItemProvider
   public String getText(Object object)
   {
     String label = ((Targlet)object).getName();
-    return label == null || label.length() == 0 ? getString("_UI_Targlet_type") : label;
+    return label == null || label.length() == 0 ? getString("_UI_Targlet_type") : label; //$NON-NLS-1$
   }
 
   @Override

@@ -78,8 +78,8 @@ public class QueryAttributeItemProvider extends ItemProviderAdapter
   protected void addKeyPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_QueryAttribute_key_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_QueryAttribute_key_feature", "_UI_QueryAttribute_type"),
+        getString("_UI_QueryAttribute_key_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_QueryAttribute_key_feature", "_UI_QueryAttribute_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MylynPackage.Literals.QUERY_ATTRIBUTE__KEY, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -92,8 +92,8 @@ public class QueryAttributeItemProvider extends ItemProviderAdapter
   protected void addValuePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_QueryAttribute_value_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_QueryAttribute_value_feature", "_UI_QueryAttribute_type"),
+        getString("_UI_QueryAttribute_value_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_QueryAttribute_value_feature", "_UI_QueryAttribute_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MylynPackage.Literals.QUERY_ATTRIBUTE__VALUE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -117,7 +117,7 @@ public class QueryAttributeItemProvider extends ItemProviderAdapter
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/QueryAttribute"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/QueryAttribute")); //$NON-NLS-1$
   }
 
   /**
@@ -141,7 +141,7 @@ public class QueryAttributeItemProvider extends ItemProviderAdapter
   public String getText(Object object)
   {
     Map.Entry<?, ?> queryAttribute = (Map.Entry<?, ?>)object;
-    return "" + queryAttribute.getKey() + " = " + queryAttribute.getValue();
+    return "" + queryAttribute.getKey() + " = " + queryAttribute.getValue(); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

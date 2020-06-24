@@ -83,8 +83,8 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
   protected void addLocationPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_GitCloneTask_location_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_location_feature", "_UI_GitCloneTask_type"),
+        getString("_UI_GitCloneTask_location_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_location_feature", "_UI_GitCloneTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         GitPackage.Literals.GIT_CLONE_TASK__LOCATION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -97,9 +97,11 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
   protected void addLocationQualifierPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_GitCloneTask_locationQualifier_feature"), getString("_UI_GitCloneTask_locationQualifier_description"),
+        getString("_UI_GitCloneTask_locationQualifier_feature"), //$NON-NLS-1$
+        getString("_UI_GitCloneTask_locationQualifier_description"), //$NON-NLS-1$
         GitPackage.Literals.GIT_CLONE_TASK__LOCATION_QUALIFIER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
-        new String[] { "org.eclipse.ui.views.properties.expert.conditional" }));
+        new String[] { "org.eclipse.ui.views.properties.expert.conditional" //$NON-NLS-1$
+        }));
   }
 
   /**
@@ -111,8 +113,8 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
   protected void addRemoteNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_GitCloneTask_remoteName_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_remoteName_feature", "_UI_GitCloneTask_type"),
+        getString("_UI_GitCloneTask_remoteName_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_remoteName_feature", "_UI_GitCloneTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         GitPackage.Literals.GIT_CLONE_TASK__REMOTE_NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -125,8 +127,8 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
   protected void addRemoteURIPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_GitCloneTask_remoteURI_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_remoteURI_feature", "_UI_GitCloneTask_type"),
+        getString("_UI_GitCloneTask_remoteURI_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_remoteURI_feature", "_UI_GitCloneTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         GitPackage.Literals.GIT_CLONE_TASK__REMOTE_URI, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -139,8 +141,8 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
   protected void addPushURIPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_GitCloneTask_pushURI_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_pushURI_feature", "_UI_GitCloneTask_type"),
+        getString("_UI_GitCloneTask_pushURI_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_pushURI_feature", "_UI_GitCloneTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         GitPackage.Literals.GIT_CLONE_TASK__PUSH_URI, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -153,8 +155,8 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
   protected void addCheckoutBranchPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_GitCloneTask_checkoutBranch_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_checkoutBranch_feature", "_UI_GitCloneTask_type"),
+        getString("_UI_GitCloneTask_checkoutBranch_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_checkoutBranch_feature", "_UI_GitCloneTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         GitPackage.Literals.GIT_CLONE_TASK__CHECKOUT_BRANCH, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -167,8 +169,8 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
   protected void addRecursivePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_GitCloneTask_recursive_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_recursive_feature", "_UI_GitCloneTask_type"),
+        getString("_UI_GitCloneTask_recursive_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_recursive_feature", "_UI_GitCloneTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         GitPackage.Literals.GIT_CLONE_TASK__RECURSIVE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -181,8 +183,8 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
   protected void addRestrictToCheckoutBranchPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_GitCloneTask_restrictToCheckoutBranch_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_restrictToCheckoutBranch_feature", "_UI_GitCloneTask_type"),
+        getString("_UI_GitCloneTask_restrictToCheckoutBranch_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_GitCloneTask_restrictToCheckoutBranch_feature", "_UI_GitCloneTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         GitPackage.Literals.GIT_CLONE_TASK__RESTRICT_TO_CHECKOUT_BRANCH, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -228,7 +230,7 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/GitCloneTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/GitCloneTask")); //$NON-NLS-1$
   }
 
   /**
@@ -255,10 +257,10 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
     String branch = ((GitCloneTask)object).getCheckoutBranch();
     if ((uri == null || uri.length() == 0) && (branch == null || branch.length() == 0))
     {
-      return getString("_UI_GitCloneTask_type");
+      return getString("_UI_GitCloneTask_type"); //$NON-NLS-1$
     }
 
-    return "" + uri + "  (" + branch + ")";
+    return "" + uri + "  (" + branch + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   /**
@@ -310,11 +312,11 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
   @Override
   protected Command createSetCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Object value)
   {
-    if (feature == GitPackage.Literals.GIT_CLONE_TASK__LOCATION_QUALIFIER && ("".equals(value) || value == null))
+    if (feature == GitPackage.Literals.GIT_CLONE_TASK__LOCATION_QUALIFIER && ("".equals(value) || value == null)) //$NON-NLS-1$
     {
       // Ensure that the property is never set to null or the empty string.
       // That could cause prompting for the induced variable's value.
-      return super.createSetCommand(domain, owner, feature, " ");
+      return super.createSetCommand(domain, owner, feature, " "); //$NON-NLS-1$
     }
 
     return super.createSetCommand(domain, owner, feature, value);

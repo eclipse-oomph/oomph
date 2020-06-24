@@ -90,27 +90,27 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
     canWrite = IOUtil.canWriteFolder(store);
 
-    Field selfField = ReflectUtil.getField(SimpleProfileRegistry.class, "self");
+    Field selfField = ReflectUtil.getField(SimpleProfileRegistry.class, "self"); //$NON-NLS-1$
     self = (String)ReflectUtil.getValue(selfField, this);
 
     this.updateSelfProfile = updateSelfProfile;
 
-    Field profileLocksField = ReflectUtil.getField(SimpleProfileRegistry.class, "profileLocks");
+    Field profileLocksField = ReflectUtil.getField(SimpleProfileRegistry.class, "profileLocks"); //$NON-NLS-1$
     profileLocks = (Map<String, ProfileLock>)ReflectUtil.getValue(profileLocksField, this);
 
     try
     {
-      parserClass = CommonPlugin.loadClass(EngineActivator.ID, "org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry$Parser");
+      parserClass = CommonPlugin.loadClass(EngineActivator.ID, "org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry$Parser"); //$NON-NLS-1$
       parserConstructor = ReflectUtil.getConstructor(parserClass, SimpleProfileRegistry.class, BundleContext.class, String.class);
-      parseMethod = ReflectUtil.getMethod(parserClass, "parse", File.class);
-      addProfilePlaceHolderMethod = ReflectUtil.getMethod(parserClass, "addProfilePlaceHolder", String.class);
-      getProfileMapMethod = ReflectUtil.getMethod(parserClass, "getProfileMap");
+      parseMethod = ReflectUtil.getMethod(parserClass, "parse", File.class); //$NON-NLS-1$
+      addProfilePlaceHolderMethod = ReflectUtil.getMethod(parserClass, "addProfilePlaceHolder", String.class); //$NON-NLS-1$
+      getProfileMapMethod = ReflectUtil.getMethod(parserClass, "getProfileMap"); //$NON-NLS-1$
 
-      updateSelfProfileMethod = ReflectUtil.getMethod(SimpleProfileRegistry.class, "updateSelfProfile", Map.class);
+      updateSelfProfileMethod = ReflectUtil.getMethod(SimpleProfileRegistry.class, "updateSelfProfile", Map.class); //$NON-NLS-1$
     }
     catch (Throwable ex)
     {
-      throw new Exception("The internals of p2 have changed", ex);
+      throw new Exception(Messages.LazyProfileRegistry_P2InternalsChanged_exception, ex);
     }
   }
 
@@ -135,14 +135,14 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
   {
     Map<String, Profile> profileMap = getProfileMap();
     int size = profileMap.size();
-    monitor.beginTask("", size);
+    monitor.beginTask("", size); //$NON-NLS-1$
 
     try
     {
       List<Profile> result = new ArrayList<Profile>(size);
       for (Profile profile : profileMap.values())
       {
-        monitor.subTask("Loading " + profile.getProfileId());
+        monitor.subTask(NLS.bind(Messages.LazyProfileRegistry_Loading_task, profile.getProfileId()));
 
         try
         {
@@ -182,7 +182,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
         IProfile profile = getProfile(id);
         if (profile != null && profile.getTimestamp() == timestamp)
         {
-          throw new ProvisionException("Cannot remove the current profile timestamp");
+          throw new ProvisionException(Messages.LazyProfileRegistry_CannotRemoveCurrentProfile_exception);
         }
       }
     }
@@ -233,7 +233,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
     {
       if (store == null || !store.isDirectory())
       {
-        throw new IllegalStateException(NLS.bind("Registry Directory not available: {0}.", store));
+        throw new IllegalStateException(NLS.bind(Messages.LazyProfileRegistry_RegistryDirectoryNotAvailable_exception, store));
       }
 
       profileMap = new HashMap<String, org.eclipse.equinox.internal.p2.engine.Profile>();
@@ -251,7 +251,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
         profileDirectories = new File[0];
       }
 
-      monitor.beginTask("", profileDirectories.length);
+      monitor.beginTask("", profileDirectories.length); //$NON-NLS-1$
 
       try
       {
@@ -262,7 +262,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
           File profileFile = findLatestProfileFile(profileDirectory);
           if (profileFile == null)
           {
-            monitor.subTask("Deleting " + profileDirectory);
+            monitor.subTask(NLS.bind(Messages.LazyProfileRegistry_Deleting_task, profileDirectory));
             IOUtil.deleteBestEffort(profileFile);
           }
           else
@@ -270,7 +270,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
             String directoryName = profileDirectory.getName();
             String profileId = unescape(directoryName.substring(0, directoryName.lastIndexOf(PROFILE_EXT)));
 
-            monitor.subTask("Registering profile " + profileId);
+            monitor.subTask(NLS.bind(Messages.LazyProfileRegistry_Registering_task, profileId));
 
             LazyProfile profile = new LazyProfile(this, profileId, profileDirectory);
             profileMap.put(profileId, profile);
@@ -298,7 +298,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
   {
     if (store == null || !store.isDirectory())
     {
-      throw new IllegalStateException(NLS.bind("Registry Directory not available: {0}.", store));
+      throw new IllegalStateException(NLS.bind(Messages.LazyProfileRegistry_RegistryDirectoryNotAvailable_exception, store));
     }
 
     try
@@ -330,7 +330,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
               if (cause instanceof IOException)
               {
                 long length = profileFile.length();
-                throw new IORuntimeException("The file " + profileFile + " of length " + length + " failed to load properly", cause);
+                throw new IORuntimeException(NLS.bind(Messages.LazyProfileRegistry_LoadFailure_exception, profileFile, length), cause);
               }
 
               throw ex;
@@ -432,7 +432,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
       super(provisioningAgent);
 
       // If there is a shared base agent. The IProvisioningAgent.SHARED_BASE_AGENT is not available in older versions of p2.
-      IProvisioningAgent baseAgent = (IProvisioningAgent)provisioningAgent.getService("org.eclipse.equinox.shared.base.agent");
+      IProvisioningAgent baseAgent = (IProvisioningAgent)provisioningAgent.getService("org.eclipse.equinox.shared.base.agent"); //$NON-NLS-1$
       if (baseAgent != null)
       {
         // And it has a profile registry.
@@ -442,7 +442,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
           // Use that registry directly.
           // Otherwise org.eclipse.equinox.internal.p2.engine.SurrogateProfileHandler.getProfileRegistry()
           // assumes that the registry is in the installation folder.
-          ReflectUtil.setValue("profileRegistry", this, profileRegistry);
+          ReflectUtil.setValue("profileRegistry", this, profileRegistry); //$NON-NLS-1$
         }
       }
     }
@@ -455,10 +455,10 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
       // The method org.eclipse.equinox.internal.p2.engine.SurrogateProfileHandler.updateProperties(IProfile, Profile)
       // makes a mess of the it messes up this IProfile.PROP_SHARED_CACHE, assuming it's colocated with the installation.
       // For our shared pool installation, we'll need to correct that problem.
-      if (profile != null && "true".equals(profile.getProperty(org.eclipse.oomph.p2.core.Profile.PROP_PROFILE_SHARED_POOL)))
+      if (profile != null && "true".equals(profile.getProperty(org.eclipse.oomph.p2.core.Profile.PROP_PROFILE_SHARED_POOL))) //$NON-NLS-1$
       {
         // Fetch the soft reference to the shared profile...
-        SoftReference<IProfile> sharedProfileReference = ReflectUtil.getValue("cachedProfile", this);
+        SoftReference<IProfile> sharedProfileReference = ReflectUtil.getValue("cachedProfile", this); //$NON-NLS-1$
         if (sharedProfileReference != null)
         {
           // If it has a referent.

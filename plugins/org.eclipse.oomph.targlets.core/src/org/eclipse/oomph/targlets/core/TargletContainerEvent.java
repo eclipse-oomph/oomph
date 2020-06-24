@@ -52,7 +52,7 @@ public class TargletContainerEvent extends EventObject
   @Override
   public String toString()
   {
-    return getClass().getSimpleName() + "[source=" + getSource().getID() + "]";
+    return getClass().getSimpleName() + "[source=" + getSource().getID() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**
@@ -78,7 +78,7 @@ public class TargletContainerEvent extends EventObject
     @Override
     public String toString()
     {
-      return "TargletsChangedEvent[source=" + getSource().getID() + ", oldID=" + oldID + "]";
+      return "TargletsChangedEvent[source=" + getSource().getID() + ", oldID=" + oldID + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
   }
 
@@ -97,7 +97,7 @@ public class TargletContainerEvent extends EventObject
     @Override
     public String toString()
     {
-      return "TargletsChangedEvent[source=" + getSource().getID() + "]";
+      return "TargletsChangedEvent[source=" + getSource().getID() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -157,7 +157,7 @@ public class TargletContainerEvent extends EventObject
     @Override
     public String toString()
     {
-      return "ProfileUpdateSucceededEvent[source=" + getSource().getID() + ", profile=" + profile.getProfileId() + "]";
+      return "ProfileUpdateSucceededEvent[source=" + getSource().getID() + ", profile=" + profile.getProfileId() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
   }
 
@@ -184,7 +184,7 @@ public class TargletContainerEvent extends EventObject
     @Override
     public String toString()
     {
-      return "ProfileUpdateFailedEvent[source=" + getSource().getID() + ", updateProblem=" + updateProblem + "]";
+      return "ProfileUpdateFailedEvent[source=" + getSource().getID() + ", updateProblem=" + updateProblem + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
   }
 

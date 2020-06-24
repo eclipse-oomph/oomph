@@ -51,7 +51,7 @@ import java.util.Map;
  */
 public class ComponentDefGeneratorImpl extends ModelElementImpl implements ComponentDefGenerator
 {
-  private static final IPath DEFINITION_PATH = new Path("component.def");
+  private static final IPath DEFINITION_PATH = new Path("component.def"); //$NON-NLS-1$
 
   /**
    * <!-- begin-user-doc -->
@@ -138,7 +138,7 @@ public class ComponentDefGeneratorImpl extends ModelElementImpl implements Compo
     InstallableUnitDescription description = new InstallableUnitDescription();
     description.setId(id);
     description.setVersion(version);
-    description.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, "true");
+    description.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, "true"); //$NON-NLS-1$
     description.addProvidedCapabilities(Collections.singleton(MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID, id, version)));
     description.setTouchpointType(org.eclipse.equinox.spi.p2.publisher.PublisherHelper.TOUCHPOINT_OSGI);
     description.setArtifacts(new IArtifactKey[0]);

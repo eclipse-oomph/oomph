@@ -40,6 +40,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.LibraryLocation;
 import org.eclipse.jdt.launching.VMStandin;
 import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -136,7 +137,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * @generated
    * @ordered
    */
-  protected static final String VM_INSTALL_TYPE_EDEFAULT = "org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType";
+  protected static final String VM_INSTALL_TYPE_EDEFAULT = "org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType"; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getVMInstallType() <em>VM Install Type</em>}' attribute.
@@ -287,7 +288,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
       String version = getVersion();
       if (!StringUtil.isEmpty(version))
       {
-        return "JRE for " + version;
+        return "JRE for " + version; //$NON-NLS-1$
       }
 
       return null;
@@ -560,17 +561,17 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (version: ");
+    result.append(" (version: "); //$NON-NLS-1$
     result.append(version);
-    result.append(", location: ");
+    result.append(", location: "); //$NON-NLS-1$
     result.append(location);
-    result.append(", name: ");
+    result.append(", name: "); //$NON-NLS-1$
     result.append(name);
-    result.append(", vMInstallType: ");
+    result.append(", vMInstallType: "); //$NON-NLS-1$
     result.append(vMInstallType);
-    result.append(", executionEnvironmentDefault: ");
+    result.append(", executionEnvironmentDefault: "); //$NON-NLS-1$
     result.append(executionEnvironmentDefault);
-    result.append(", vMArguments: ");
+    result.append(", vMArguments: "); //$NON-NLS-1$
     result.append(vMArguments);
     result.append(')');
     return result.toString();
@@ -615,7 +616,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
       return null;
     }
 
-    return arguments.trim().replaceAll("(\n\r?|\r\n?)", StringUtil.NL);
+    return arguments.trim().replaceAll("(\n\r?|\r\n?)", StringUtil.NL); //$NON-NLS-1$
   }
 
   public boolean isNeeded(SetupTaskContext context) throws Exception
@@ -646,14 +647,14 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
           if (realVM == null)
           {
             setAsDefault = true;
-            context.log("Creating " + name + " with location " + location);
+            context.log(NLS.bind(Messages.JRETaskImpl_CreatingJRE_message, name, location));
 
             vmStandin = new VMStandin(type, EcoreUtil.generateUUID());
             vmStandin.setName(name);
           }
           else
           {
-            context.log("Updating " + name + " with location " + location);
+            context.log(NLS.bind(Messages.JRETaskImpl_UpdatingJRE_message, name, location));
             vmStandin = new VMStandin(realVM);
           }
 
@@ -661,8 +662,8 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
           IStatus validationStatus = type.validateInstallLocation(installLocation);
           if (!validationStatus.isOK())
           {
-            context.log("The location '" + location + "' is not valid");
-            context.log("Go back to the Variables page, be sure to select 'Show all variables', and change the location to a valid one");
+            context.log(NLS.bind(Messages.JRETaskImpl_InvalidLocation_message, location));
+            context.log(Messages.JRETaskImpl_GoBack_message);
             throw new CoreException(validationStatus);
           }
 
@@ -672,7 +673,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
 
           if (vmArguments != null)
           {
-            String[] vmArgumentsArray = new ExecutionArguments(vmArguments, "").getVMArgumentsArray();
+            String[] vmArgumentsArray = new ExecutionArguments(vmArguments, "").getVMArgumentsArray(); //$NON-NLS-1$
             if (vmArgumentsArray != null)
             {
               for (String vmArgument : vmArgumentsArray)
@@ -697,7 +698,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
           vmStandin.setVMArguments(mergedVMArguments.toArray(new String[mergedVMArguments.size()]));
           if (!mergedVMArguments.isEmpty())
           {
-            context.log("Setting VM arguments of " + name + " to " + StringUtil.implode(mergedVMArguments, '\0'));
+            context.log(NLS.bind(Messages.JRETaskImpl_SetVMArgs_message, name, StringUtil.implode(mergedVMArguments, '\0')));
           }
 
           if (!jreLibraries.isEmpty())
@@ -758,11 +759,11 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
             for (IExecutionEnvironment executionEnvironment : executionEnvironments)
             {
               String id = executionEnvironment.getId();
-              if (id.equals(version) || "CDC-1.1/Foundation-1.1".equals(id) && "J2SE-1.4".equals(version))
+              if (id.equals(version) || "CDC-1.1/Foundation-1.1".equals(id) && "J2SE-1.4".equals(version)) //$NON-NLS-1$ //$NON-NLS-2$
               {
                 if (executionEnvironment.getDefaultVM() == null)
                 {
-                  context.log("Setting the default execution environment to " + name);
+                  context.log(NLS.bind(Messages.JRETaskImpl_SettingEE_message, name));
                   executionEnvironment.setDefaultVM(realVM);
                 }
               }
@@ -800,7 +801,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
         else if (vmArguments != null)
         {
           // If the argument are not all already present...
-          String[] vmArgumentsArray = new ExecutionArguments(vmArguments, "").getVMArgumentsArray();
+          String[] vmArgumentsArray = new ExecutionArguments(vmArguments, "").getVMArgumentsArray(); //$NON-NLS-1$
           if (vmArgumentsArray != null && !Arrays.asList(vmInstallVMArguments).containsAll(Arrays.asList(vmArgumentsArray)))
           {
             return true;
@@ -814,7 +815,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
           for (IExecutionEnvironment executionEnvironment : executionEnvironments)
           {
             String id = executionEnvironment.getId();
-            if (id.equals(version) || "CDC-1.1/Foundation-1.1".equals(id) && "J2SE-1.4".equals(version))
+            if (id.equals(version) || "CDC-1.1/Foundation-1.1".equals(id) && "J2SE-1.4".equals(version)) //$NON-NLS-1$ //$NON-NLS-2$
             {
               // If the corresponding execution environment has no default, then the task is still needed, even though the JRE already exists.
               if (executionEnvironment.getDefaultVM() == null)

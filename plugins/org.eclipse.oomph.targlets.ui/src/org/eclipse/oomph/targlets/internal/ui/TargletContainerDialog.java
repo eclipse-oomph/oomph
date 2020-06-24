@@ -12,6 +12,7 @@ package org.eclipse.oomph.targlets.internal.ui;
 
 import org.eclipse.oomph.ui.OomphDialog;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -22,7 +23,7 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class TargletContainerDialog extends OomphDialog
 {
-  public static final String TITLE = "Targlet Container Editor";
+  public static final String TITLE = Messages.TargletContainerDialog_title;
 
   private final String targletContainerID;
 
@@ -49,13 +50,13 @@ public class TargletContainerDialog extends OomphDialog
   @Override
   protected String getDefaultMessage()
   {
-    return "Edit the targlet container " + targletContainerID + ".";
+    return NLS.bind(Messages.TargletContainerDialog_defaultMessage, targletContainerID);
   }
 
   @Override
   protected String getImagePath()
   {
-    return "full/wizban/NewTarglet.png";
+    return "full/wizban/NewTarglet.png"; //$NON-NLS-1$
   }
 
   @Override
@@ -67,7 +68,7 @@ public class TargletContainerDialog extends OomphDialog
   @Override
   protected void createUI(Composite parent)
   {
-    getShell().setImage(TargletsUIPlugin.INSTANCE.getSWTImage("full/obj16/TargletModelFile"));
+    getShell().setImage(TargletsUIPlugin.INSTANCE.getSWTImage("full/obj16/TargletModelFile")); //$NON-NLS-1$
 
     composite = new TargletContainerComposite(parent, SWT.NONE, targletContainerID);
     composite.setLayoutData(new GridData(GridData.FILL_BOTH));

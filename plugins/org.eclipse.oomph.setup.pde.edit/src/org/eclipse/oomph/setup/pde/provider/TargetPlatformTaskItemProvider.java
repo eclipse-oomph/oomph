@@ -72,8 +72,8 @@ public class TargetPlatformTaskItemProvider extends SetupTaskItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargetPlatformTask_name_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_TargetPlatformTask_name_feature", "_UI_TargetPlatformTask_type"),
+        getString("_UI_TargetPlatformTask_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_TargetPlatformTask_name_feature", "_UI_TargetPlatformTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PDEPackage.Literals.TARGET_PLATFORM_TASK__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -86,8 +86,8 @@ public class TargetPlatformTaskItemProvider extends SetupTaskItemProvider
   protected void addActivatePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargetPlatformTask_activate_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_TargetPlatformTask_activate_feature", "_UI_TargetPlatformTask_type"),
+        getString("_UI_TargetPlatformTask_activate_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_TargetPlatformTask_activate_feature", "_UI_TargetPlatformTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PDEPackage.Literals.TARGET_PLATFORM_TASK__ACTIVATE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -100,7 +100,7 @@ public class TargetPlatformTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/TargetPlatformTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/TargetPlatformTask")); //$NON-NLS-1$
   }
 
   /**
@@ -126,7 +126,7 @@ public class TargetPlatformTaskItemProvider extends SetupTaskItemProvider
     String label = ((TargetPlatformTask)object).getName();
     if (label == null)
     {
-      return getString("_UI_TargetPlatformTask_type");
+      return getString("_UI_TargetPlatformTask_type"); //$NON-NLS-1$
     }
 
     return label;

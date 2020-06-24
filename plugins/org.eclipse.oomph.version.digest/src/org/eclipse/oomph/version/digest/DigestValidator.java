@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.pde.core.IModel;
 import org.eclipse.pde.core.build.IBuild;
 import org.eclipse.pde.core.build.IBuildEntry;
@@ -93,7 +94,7 @@ public class DigestValidator extends VersionValidator
     {
       if (VersionUtil.DEBUG)
       {
-        System.out.println("Digest: Full validation...");
+        System.out.println("Digest: Full validation..."); //$NON-NLS-1$
       }
 
       buildState.setValidatorState(componentModel, null);
@@ -103,7 +104,7 @@ public class DigestValidator extends VersionValidator
     {
       if (VersionUtil.DEBUG)
       {
-        System.out.println("Digest: Incremental validation...");
+        System.out.println("Digest: Incremental validation..."); //$NON-NLS-1$
       }
 
       validatorState = validateDelta(delta, validatorState, componentModel, monitor);
@@ -112,13 +113,13 @@ public class DigestValidator extends VersionValidator
     afterValidation(validatorState);
     if (validatorState == null)
     {
-      throw new IllegalStateException("No validation state");
+      throw new IllegalStateException(Messages.DigestValidator_NoValidationState_exception);
     }
 
     byte[] validatorDigest = validatorState.getDigest();
     if (VersionUtil.DEBUG)
     {
-      System.out.println("DIGEST  = " + formatDigest(validatorDigest));
+      System.out.println("DIGEST  = " + formatDigest(validatorDigest)); //$NON-NLS-1$
     }
 
     byte[] releasedProjectDigest = releaseDigest.get(getName(project, componentModel));
@@ -128,7 +129,7 @@ public class DigestValidator extends VersionValidator
     {
       if (VersionUtil.DEBUG)
       {
-        System.out.println("RELEASE = " + formatDigest(releasedProjectDigest));
+        System.out.println("RELEASE = " + formatDigest(releasedProjectDigest)); //$NON-NLS-1$
       }
 
       changedSinceRelease = !MessageDigest.isEqual(validatorDigest, releasedProjectDigest);
@@ -148,7 +149,7 @@ public class DigestValidator extends VersionValidator
 
     if (VersionUtil.DEBUG)
     {
-      System.out.println("Digest: " + resource.getFullPath());
+      System.out.println("Digest: " + resource.getFullPath()); //$NON-NLS-1$
     }
 
     DigestValidatorState result = new DigestValidatorState();
@@ -171,7 +172,7 @@ public class DigestValidator extends VersionValidator
       byte[] digest = getFolderDigest(memberStates);
       if (VersionUtil.DEBUG)
       {
-        System.out.println("Considered: " + container.getFullPath() + " --> " + formatDigest(digest));
+        System.out.println("Considered: " + container.getFullPath() + " --> " + formatDigest(digest)); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
       result.setDigest(digest);
@@ -183,7 +184,7 @@ public class DigestValidator extends VersionValidator
       byte[] digest = getFileDigest(file);
       if (VersionUtil.DEBUG)
       {
-        System.out.println("Considered: " + file.getFullPath() + " --> " + formatDigest(digest));
+        System.out.println("Considered: " + file.getFullPath() + " --> " + formatDigest(digest)); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
       result.setDigest(digest);
@@ -329,7 +330,7 @@ public class DigestValidator extends VersionValidator
     List<DigestValidatorState> list = new ArrayList<DigestValidatorState>(states);
     Collections.sort(list);
 
-    MessageDigest digest = MessageDigest.getInstance("SHA");
+    MessageDigest digest = MessageDigest.getInstance("SHA"); //$NON-NLS-1$
     for (DigestValidatorState state : list)
     {
       byte[] bytes = state.getDigest();
@@ -355,10 +356,10 @@ public class DigestValidator extends VersionValidator
     {
       if (builder.length() != 0)
       {
-        builder.append(", ");
+        builder.append(", "); //$NON-NLS-1$
       }
 
-      builder.append("(byte)");
+      builder.append("(byte)"); //$NON-NLS-1$
       builder.append(b);
     }
 
@@ -405,7 +406,7 @@ public class DigestValidator extends VersionValidator
       {
         try
         {
-          target.move(target.getFullPath().addFileExtension("bak" + i), true, monitor);
+          target.move(target.getFullPath().addFileExtension("bak" + i), true, monitor); //$NON-NLS-1$
           break;
         }
         catch (Exception ex)
@@ -433,7 +434,7 @@ public class DigestValidator extends VersionValidator
     String name = resource.getName();
     if (resource.getType() == IResource.PROJECT && VersionUtil.getType(model) == IElement.Type.PRODUCT)
     {
-      name += "/" + model.getUnderlyingResource().getProjectRelativePath();
+      name += "/" + model.getUnderlyingResource().getProjectRelativePath(); //$NON-NLS-1$
     }
 
     return name;
@@ -456,7 +457,7 @@ public class DigestValidator extends VersionValidator
           try
           {
             IElement element = entry.getValue();
-            if (element.getName().endsWith(".source"))
+            if (element.getName().endsWith(".source")) //$NON-NLS-1$
             {
               continue;
             }
@@ -464,15 +465,16 @@ public class DigestValidator extends VersionValidator
             IModel componentModel = IReleaseManager.INSTANCE.getComponentModel(element.trimVersion());
             if (componentModel == null)
             {
-              addWarning(warnings, name + ": Component not found");
+              addWarning(warnings, NLS.bind(Messages.DigestValidator_ComponentNotFound_message, name));
               continue;
             }
 
             IResource resource = componentModel.getUnderlyingResource();
             if (resource == null)
             {
-              String type = componentModel instanceof IPluginModelBase ? "Plug-in" : "Feature";
-              addWarning(warnings, name + ": " + type + " is not in workspace");
+              String type = componentModel instanceof IPluginModelBase ? Messages.DigestValidator_Plugin_message_part
+                  : Messages.DigestValidator_Feature_message_part;
+              addWarning(warnings, NLS.bind(Messages.DigestValidator_NotInWorkspace_message, name, type));
               continue;
             }
 
@@ -480,8 +482,9 @@ public class DigestValidator extends VersionValidator
 
             if (!element.getVersion().equals(version))
             {
-              String type = componentModel instanceof IPluginModelBase ? "Plug-in" : "Feature";
-              addWarning(warnings, name + ": " + type + " version is not " + element.getVersion());
+              String type = componentModel instanceof IPluginModelBase ? Messages.DigestValidator_Plugin_message_part
+                  : Messages.DigestValidator_Feature_message_part;
+              addWarning(warnings, NLS.bind(Messages.DigestValidator_VersionIsNot_message, new Object[] { name, type, element.getVersion() }));
             }
 
             IProject project = resource.getProject();
@@ -499,7 +502,7 @@ public class DigestValidator extends VersionValidator
         }
         catch (Exception ex)
         {
-          addWarning(warnings, name + ": " + Activator.getStatus(ex).getMessage());
+          addWarning(warnings, name + ": " + Activator.getStatus(ex).getMessage()); //$NON-NLS-1$
         }
       }
 
@@ -522,7 +525,7 @@ public class DigestValidator extends VersionValidator
 
   public static IFile getDigestFile(IPath releasePath)
   {
-    return VersionUtil.getFile(releasePath, "digest");
+    return VersionUtil.getFile(releasePath, "digest"); //$NON-NLS-1$
   }
 
   /**
@@ -548,13 +551,13 @@ public class DigestValidator extends VersionValidator
     protected void beforeValidation(DigestValidatorState validatorState, IModel componentModel) throws Exception
     {
       considered.clear();
-      considered.add("");
+      considered.add(""); //$NON-NLS-1$
 
       if (VersionUtil.getType(componentModel) == IElement.Type.PRODUCT)
       {
         IPath projectRelativePath = componentModel.getUnderlyingResource().getProjectRelativePath();
         consider(projectRelativePath);
-        consider(projectRelativePath.removeFileExtension().addFileExtension("p2.inf"));
+        consider(projectRelativePath.removeFileExtension().addFileExtension("p2.inf")); //$NON-NLS-1$
 
         org.eclipse.pde.internal.core.iproduct.IProductModel productModel = (org.eclipse.pde.internal.core.iproduct.IProductModel)componentModel;
         org.eclipse.pde.internal.core.iproduct.IProduct product = productModel.getProduct();
@@ -578,7 +581,7 @@ public class DigestValidator extends VersionValidator
           {
             for (String binInclude : binIncludes.getTokens())
             {
-              IBuildEntry sources = build.getEntry("source." + binInclude);
+              IBuildEntry sources = build.getEntry("source." + binInclude); //$NON-NLS-1$
               if (sources != null)
               {
                 for (String source : sources.getTokens())

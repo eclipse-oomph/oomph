@@ -286,6 +286,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -310,26 +311,26 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     jreTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(jreTaskEClass, JRETask.class, "JRETask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getJRETask_Version(), ecorePackage.getEString(), "version", null, 1, 1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(jreTaskEClass, JRETask.class, "JRETask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getJRETask_Version(), ecorePackage.getEString(), "version", null, 1, 1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getJRETask_Location(), ecorePackage.getEString(), "location", null, 1, 1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getJRETask_Location(), ecorePackage.getEString(), "location", null, 1, 1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getJRETask_Name(), ecorePackage.getEString(), "name", null, 0, 1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEAttribute(getJRETask_Name(), ecorePackage.getEString(), "name", null, 0, 1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getJRETask_VMInstallType(), ecorePackage.getEString(), "vMInstallType", "org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType", 1, 1,
+    initEAttribute(getJRETask_VMInstallType(), ecorePackage.getEString(), "vMInstallType", "org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType", 1, 1, //$NON-NLS-1$ //$NON-NLS-2$
         JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getJRETask_ExecutionEnvironmentDefault(), ecorePackage.getEBoolean(), "executionEnvironmentDefault", "true", 0, 1, JRETask.class,
+    initEAttribute(getJRETask_ExecutionEnvironmentDefault(), ecorePackage.getEBoolean(), "executionEnvironmentDefault", "true", 0, 1, JRETask.class, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getJRETask_VMArguments(), ecorePackage.getEString(), "vMArguments", null, 0, 1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getJRETask_VMArguments(), ecorePackage.getEString(), "vMArguments", null, 0, 1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getJRETask_JRELibraries(), getJRELibrary(), null, "jRELibraries", null, 0, -1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getJRETask_JRELibraries(), getJRELibrary(), null, "jRELibraries", null, 0, -1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(jreLibraryEClass, JRELibrary.class, "JRELibrary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getJRELibrary_LibraryPath(), ecorePackage.getEString(), "libraryPath", null, 1, 1, JRELibrary.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(jreLibraryEClass, JRELibrary.class, "JRELibrary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getJRELibrary_LibraryPath(), ecorePackage.getEString(), "libraryPath", null, 1, 1, JRELibrary.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getJRELibrary_ExternalAnnotationsPath(), ecorePackage.getEString(), "externalAnnotationsPath", null, 1, 1, JRELibrary.class, !IS_TRANSIENT,
+    initEAttribute(getJRELibrary_ExternalAnnotationsPath(), ecorePackage.getEString(), "externalAnnotationsPath", null, 1, 1, JRELibrary.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
@@ -358,8 +359,9 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -370,142 +372,517 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    */
   protected void createVariableAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Variable";
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.1", "type", "JRE", "label", "JRE 1.1 Location", "description",
-        "The location of a JDK or JRE compatible with Java 1.1.", "version", "JRE-1.1" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.2}", "label", "JRE 1.2 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.3}", "label", "JRE 1.3 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.4}", "label", "JRE 1.4 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.5}", "label", "JRE 1.5 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-10}", "label", "JRE 10 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-11}", "label", "JRE 11 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-12}", "label", "JRE 12 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-13}", "label", "JRE 13 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-14}", "label", "JRE 14 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.2", "type", "JRE", "label", "JRE 1.2 Location", "description",
-        "The location of a JDK or JRE compatible with Java 1.2.", "version", "J2SE-1.2" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.3}", "label", "JRE 1.3 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.4}", "label", "JRE 1.4 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.5}", "label", "JRE 1.5 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-10}", "label", "JRE 10 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-11}", "label", "JRE 11 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-12}", "label", "JRE 12 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-13}", "label", "JRE 13 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-14}", "label", "JRE 14 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.3", "type", "JRE", "label", "JRE 1.3 Location", "description",
-        "The location of a JDK or JRE compatible with Java 1.3.", "version", "J2SE-1.3" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.4}", "label", "JRE 1.4 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.5}", "label", "JRE 1.5 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-10}", "label", "JRE 10 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-11}", "label", "JRE 11 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-12}", "label", "JRE 12 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-13}", "label", "JRE 13 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-14}", "label", "JRE 14 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.4", "type", "JRE", "label", "JRE 1.4 Location", "description",
-        "The location of a JDK or JRE compatible with Java 1.4.", "version", "J2SE-1.4" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.5}", "label", "JRE 1.5 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-10}", "label", "JRE 10 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-11}", "label", "JRE 11 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-12}", "label", "JRE 12 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-13}", "label", "JRE 13 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-14}", "label", "JRE 14 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.5", "type", "JRE", "label", "JRE 1.5 Location", "description",
-        "The location of a JDK or JRE compatible with Java 1.5.", "version", "J2SE-1.5" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.6}", "label", "JRE 1.6 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-10}", "label", "JRE 10 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-11}", "label", "JRE 11 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-12}", "label", "JRE 12 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-13}", "label", "JRE 13 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-14}", "label", "JRE 14 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.6", "type", "JRE", "label", "JRE 1.6 Location", "description",
-        "The location of a JDK or JRE compatible with Java 1.6.", "version", "JavaSE-1.6" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.7}", "label", "JRE 1.7 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-10}", "label", "JRE 10 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-11}", "label", "JRE 11 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-12}", "label", "JRE 12 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-13}", "label", "JRE 13 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-14}", "label", "JRE 14 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.7", "type", "JRE", "label", "JRE 1.7 Location", "description",
-        "The location of a JDK or JRE compatible with Java 1.7.", "version", "JavaSE-1.7" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-1.8}", "label", "JRE 1.8 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-10}", "label", "JRE 10 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-11}", "label", "JRE 11 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-12}", "label", "JRE 12 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-13}", "label", "JRE 13 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-14}", "label", "JRE 14 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.8", "type", "JRE", "label", "JRE 1.8 Location", "description",
-        "The location of a JDK or JRE compatible with Java 1.8.", "version", "JavaSE-1.8" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-9}", "label", "JRE 9 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-10}", "label", "JRE 10 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-11}", "label", "JRE 11 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-12}", "label", "JRE 12 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-13}", "label", "JRE 13 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-14}", "label", "JRE 14 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-9", "type", "JRE", "label", "JRE 9 Location", "description",
-        "The location of a JDK or JRE compatible with Java 9.", "version", "JavaSE-9" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-10}", "label", "JRE 10 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-11}", "label", "JRE 11 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-12}", "label", "JRE 12 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-13}", "label", "JRE 13 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-14}", "label", "JRE 14 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-10", "type", "JRE", "label", "JRE 10 Location", "description",
-        "The location of a JDK or JRE compatible with Java 10.", "version", "JavaSE-10" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-11}", "label", "JRE 11 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-12}", "label", "JRE 12 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-13}", "label", "JRE 13 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-14}", "label", "JRE 14 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-11", "type", "JRE", "label", "JRE 11 Location", "description",
-        "The location of a JDK or JRE compatible with Java 11.", "version", "JavaSE-11" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-12}", "label", "JRE 12 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-13}", "label", "JRE 13 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-14}", "label", "JRE 14 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-12", "type", "JRE", "label", "JRE 12 Location", "description",
-        "The location of a JDK or JRE compatible with Java 12.", "version", "JavaSE-12" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-13}", "label", "JRE 13 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-14}", "label", "JRE 14 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-13", "type", "JRE", "label", "JRE 13 Location", "description",
-        "The location of a JDK or JRE compatible with Java 13.", "version", "JavaSE-13" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-14}", "label", "JRE 14 Location" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-14", "type", "JRE", "label", "JRE 14 Location", "description",
-        "The location of a JDK or JRE compatible with Java 14.", "version", "JavaSE-14" });
-    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", new String[] { "value", "${jre.location-15}", "label", "JRE 15 Location" });
-    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-15", "type", "JRE", "label", "JRE 15 Location", "description",
-        "The location of a JDK or JRE compatible with Java 15.", "version", "JavaSE-15" });
+    String source = "http://www.eclipse.org/oomph/setup/Variable"; //$NON-NLS-1$
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.1", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 1.1 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 1.1.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "JRE-1.1" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.2}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.2 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.3}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.3 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.4}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.4 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.5}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.5 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.6}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.6 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.7}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.7 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.8}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.8 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-9}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 9 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-10}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 10 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-11}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 11 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-12}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 12 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-13}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 13 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-14}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 14 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.2", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 1.2 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 1.2.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "J2SE-1.2" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.3}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.3 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.4}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.4 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.5}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.5 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.6}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.6 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.7}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.7 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.8}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.8 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-9}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 9 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-10}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 10 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-11}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 11 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-12}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 12 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-13}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 13 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-14}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 14 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.3", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 1.3 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 1.3.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "J2SE-1.3" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.4}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.4 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.5}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.5 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.6}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.6 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.7}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.7 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.8}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.8 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-9}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 9 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-10}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 10 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-11}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 11 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-12}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 12 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-13}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 13 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-14}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 14 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.4", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 1.4 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 1.4.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "J2SE-1.4" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.5}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.5 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.6}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.6 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.7}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.7 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.8}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.8 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-9}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 9 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-10}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 10 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-11}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 11 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-12}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 12 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-13}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 13 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-14}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 14 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.5", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 1.5 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 1.5.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "J2SE-1.5" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.6}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.6 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.7}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.7 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.8}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.8 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-9}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 9 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-10}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 10 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-11}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 11 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-12}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 12 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-13}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 13 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-14}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 14 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.6", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 1.6 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 1.6.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "JavaSE-1.6" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.7}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.7 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.8}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.8 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-9}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 9 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-10}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 10 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-11}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 11 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-12}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 12 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-13}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 13 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-14}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 14 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.7", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 1.7 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 1.7.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "JavaSE-1.7" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-1.8}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 1.8 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-9}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 9 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-10}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 10 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-11}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 11 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-12}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 12 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-13}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 13 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-14}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 14 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.8", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 1.8 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 1.8.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "JavaSE-1.8" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-9}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 9 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-10}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 10 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-11}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 11 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-12}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 12 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-13}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 13 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-14}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 14 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-9", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 9 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 9.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "JavaSE-9" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-10}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 10 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-11}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 11 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-12}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 12 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-13}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 13 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-14}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 14 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-10", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 10 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 10.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "JavaSE-10" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-11}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 11 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-12}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 12 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-13}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 13 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-14}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 14 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-11", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 11 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 11.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "JavaSE-11" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-12}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 12 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-13}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 13 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-14}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 14 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-12", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 12 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 12.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "JavaSE-12" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-13}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 13 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-14}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 14 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-13", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 13 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 13.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "JavaSE-13" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-14}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 14 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-14", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 14 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 14.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "JavaSE-14" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-15}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 15 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-15", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 15 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 15.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "JavaSE-15" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -516,10 +893,15 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getJRETask_VMInstallType(), source, new String[] { "kind", "attribute", "name", "vmInstallType" });
-    addAnnotation(getJRETask_VMArguments(), source, new String[] { "kind", "attribute", "name", "vmArguments" });
-    addAnnotation(getJRETask_JRELibraries(), source, new String[] { "name", "jreLibrary" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getJRETask_VMInstallType(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "vmInstallType" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getJRETask_VMArguments(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "vmArguments" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getJRETask_JRELibraries(), source, new String[] { "name", "jreLibrary" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -530,9 +912,11 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    */
   protected void createEnablementAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(this, source,
-        new String[] { "variableName", "setup.jdt.p2", "repository", "${oomph.update.url}", "installableUnits", "org.eclipse.oomph.setup.jdt.feature.group" });
+    String source = "http://www.eclipse.org/oomph/setup/Enablement"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "variableName", "setup.jdt.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "${oomph.update.url}", //$NON-NLS-1$ //$NON-NLS-2$
+        "installableUnits", "org.eclipse.oomph.setup.jdt.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -543,9 +927,10 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.jdt.edit/icons/full/obj16" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source,
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.jdt.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -556,8 +941,9 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    */
   protected void createValidTriggersAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
-    addAnnotation(jreTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers"; //$NON-NLS-1$
+    addAnnotation(jreTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
 } // JDTPackageImpl

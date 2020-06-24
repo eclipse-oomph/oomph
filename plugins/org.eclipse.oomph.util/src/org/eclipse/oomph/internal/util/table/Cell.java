@@ -202,7 +202,7 @@ public final class Cell extends AbstractRange
   @Override
   public String toString()
   {
-    return "Cell" + coordinate() + " = " + value;
+    return "Cell" + coordinate() + " = " + value; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   String applyFormat(Object value)
@@ -221,7 +221,7 @@ public final class Cell extends AbstractRange
 
     if (value == null)
     {
-      return "";
+      return ""; //$NON-NLS-1$
     }
 
     return value.toString();

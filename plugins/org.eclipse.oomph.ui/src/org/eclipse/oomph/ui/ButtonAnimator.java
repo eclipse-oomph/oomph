@@ -138,11 +138,11 @@ public abstract class ButtonAnimator implements Runnable
     images[0] = button.getImage();
 
     String prefix = imagePrefix;
-    String suffix = "";
-    if (imagePrefix.endsWith(".png"))
+    String suffix = ""; //$NON-NLS-1$
+    if (imagePrefix.endsWith(".png")) //$NON-NLS-1$
     {
       prefix = prefix.substring(0, prefix.length() - 4);
-      suffix = ".png";
+      suffix = ".png"; //$NON-NLS-1$
     }
 
     for (int i = 0; i < images.length - 1; i++)

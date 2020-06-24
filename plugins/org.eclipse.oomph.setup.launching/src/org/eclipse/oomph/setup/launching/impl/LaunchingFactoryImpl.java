@@ -75,7 +75,7 @@ public class LaunchingFactoryImpl extends EFactoryImpl implements LaunchingFacto
       case LaunchingPackage.LAUNCH_TASK:
         return createLaunchTask();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

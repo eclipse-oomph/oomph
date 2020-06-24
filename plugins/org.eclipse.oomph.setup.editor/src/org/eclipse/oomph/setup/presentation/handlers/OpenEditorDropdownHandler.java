@@ -26,6 +26,7 @@ import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
@@ -34,7 +35,7 @@ import org.eclipse.ui.PlatformUI;
  */
 public class OpenEditorDropdownHandler extends AbstractDropdownHandler
 {
-  public static final String COMMAND_ID = "org.eclipse.oomph.setup.editor.openEditorDropdown";
+  public static final String COMMAND_ID = "org.eclipse.oomph.setup.editor.openEditorDropdown"; //$NON-NLS-1$
 
   public OpenEditorDropdownHandler()
   {
@@ -45,7 +46,7 @@ public class OpenEditorDropdownHandler extends AbstractDropdownHandler
   protected ActionDescriptor createActionDescriptor() throws Exception
   {
     final User user = SetupFactory.eINSTANCE.createUser();
-    ((InternalEObject)user).eSetProxyURI(SetupContext.USER_SETUP_URI.appendFragment("/"));
+    ((InternalEObject)user).eSetProxyURI(SetupContext.USER_SETUP_URI.appendFragment("/")); //$NON-NLS-1$
 
     // No need to dispose the adapter factory explicitly because the single adapted object is short-lived.
     ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
@@ -68,7 +69,7 @@ public class OpenEditorDropdownHandler extends AbstractDropdownHandler
   public static String getLabelText(ItemProviderAdapter itemProvider, EObject object, boolean qualified)
   {
     String itemLabel = SetupLabelProvider.getText(itemProvider, object);
-    return qualified ? "Open " + itemLabel : itemLabel;
+    return qualified ? NLS.bind(Messages.OpenEditorDropdownHandler_openItem, itemLabel) : itemLabel;
   }
 
   public static void openEditor(EObject object)

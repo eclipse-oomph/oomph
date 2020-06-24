@@ -252,7 +252,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (prefix: ");
+    result.append(" (prefix: "); //$NON-NLS-1$
     result.append(prefix);
     result.append(')');
     return result.toString();
@@ -269,7 +269,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
       }
     }
 
-    throw new IllegalStateException("The working set task must be indirectly contained by a scope");
+    throw new IllegalStateException(Messages.WorkingSetTaskImpl_NoContainingScope_exception);
   }
 
   @Override

@@ -318,6 +318,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -346,31 +347,31 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
     exclusionPredicateEClass.getESuperTypes().add(thePredicatesPackage.getPredicate());
 
     // Initialize classes, features, and operations; add parameters
-    initEClass(workingSetEClass, WorkingSet.class, "WorkingSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getWorkingSet_Name(), ecorePackage.getEString(), "name", null, 1, 1, WorkingSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(workingSetEClass, WorkingSet.class, "WorkingSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getWorkingSet_Name(), ecorePackage.getEString(), "name", null, 1, 1, WorkingSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getWorkingSet_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, WorkingSet.class, !IS_TRANSIENT,
+    initEReference(getWorkingSet_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, WorkingSet.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getWorkingSet_ID(), ecorePackage.getEString(), "iD", null, 0, 1, WorkingSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getWorkingSet_ID(), ecorePackage.getEString(), "iD", null, 0, 1, WorkingSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    EOperation op = initEOperation(getWorkingSet__Matches__IResource(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, thePredicatesPackage.getResource(), "resource", 0, 1, IS_UNIQUE, IS_ORDERED);
+    EOperation op = initEOperation(getWorkingSet__Matches__IResource(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, thePredicatesPackage.getResource(), "resource", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(workingSetGroupEClass, WorkingSetGroup.class, "WorkingSetGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getWorkingSetGroup_WorkingSets(), getWorkingSet(), null, "workingSets", null, 0, -1, WorkingSetGroup.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(workingSetGroupEClass, WorkingSetGroup.class, "WorkingSetGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getWorkingSetGroup_WorkingSets(), getWorkingSet(), null, "workingSets", null, 0, -1, WorkingSetGroup.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getWorkingSetGroup_WorkingSets().getEKeys().add(getWorkingSet_Name());
 
-    op = initEOperation(getWorkingSetGroup__GetWorkingSet__String(), getWorkingSet(), "getWorkingSet", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+    op = initEOperation(getWorkingSetGroup__GetWorkingSet__String(), getWorkingSet(), "getWorkingSet", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(inclusionPredicateEClass, InclusionPredicate.class, "InclusionPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getInclusionPredicate_IncludedWorkingSets(), getWorkingSet(), null, "includedWorkingSets", null, 0, -1, InclusionPredicate.class,
+    initEClass(inclusionPredicateEClass, InclusionPredicate.class, "InclusionPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getInclusionPredicate_IncludedWorkingSets(), getWorkingSet(), null, "includedWorkingSets", null, 0, -1, InclusionPredicate.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(exclusionPredicateEClass, ExclusionPredicate.class, "ExclusionPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getExclusionPredicate_ExcludedWorkingSets(), getWorkingSet(), null, "excludedWorkingSets", null, 0, -1, ExclusionPredicate.class,
+    initEClass(exclusionPredicateEClass, ExclusionPredicate.class, "ExclusionPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getExclusionPredicate_ExcludedWorkingSets(), getWorkingSet(), null, "excludedWorkingSets", null, 0, -1, ExclusionPredicate.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
@@ -393,9 +394,9 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source,
-        new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -406,9 +407,10 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.workingsets.edit/icons/full/obj16" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source,
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.workingsets.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -419,12 +421,18 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getWorkingSet_Predicates(), source, new String[] { "name", "predicate" });
-    addAnnotation(getWorkingSet_ID(), source, new String[] { "kind", "attribute", "name", "id" });
-    addAnnotation(getWorkingSetGroup_WorkingSets(), source, new String[] { "name", "workingSet" });
-    addAnnotation(getInclusionPredicate_IncludedWorkingSets(), source, new String[] { "name", "includedWorkingSet" });
-    addAnnotation(getExclusionPredicate_ExcludedWorkingSets(), source, new String[] { "name", "excludedWorkingSet" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getWorkingSet_Predicates(), source, new String[] { "name", "predicate" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getWorkingSet_ID(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "id" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getWorkingSetGroup_WorkingSets(), source, new String[] { "name", "workingSet" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getInclusionPredicate_IncludedWorkingSets(), source, new String[] { "name", "includedWorkingSet" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getExclusionPredicate_ExcludedWorkingSets(), source, new String[] { "name", "excludedWorkingSet" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
 } // WorkingSetsPackageImpl

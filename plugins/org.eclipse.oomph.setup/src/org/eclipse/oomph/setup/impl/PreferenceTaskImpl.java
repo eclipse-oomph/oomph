@@ -48,6 +48,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.osgi.util.NLS;
 
 import org.osgi.service.prefs.Preferences;
 import org.w3c.dom.Document;
@@ -302,9 +303,9 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (key: ");
+    result.append(" (key: "); //$NON-NLS-1$
     result.append(key);
-    result.append(", value: ");
+    result.append(", value: "); //$NON-NLS-1$
     result.append(value);
     result.append(')');
     return result.toString();
@@ -371,11 +372,11 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
     // Ignore project-specific preferences for projects that don't exist in the workspace.
     URI uri = PreferencesFactory.eINSTANCE.createURI(key);
-    if ("project".equals(uri.authority()))
+    if ("project".equals(uri.authority())) //$NON-NLS-1$
     {
       if (!ResourcesPlugin.getWorkspace().getRoot().getProject(URI.decode(uri.segment(0))).isAccessible())
       {
-        context.log("Ignoring preference " + key + " = " + value);
+        context.log(NLS.bind(Messages.PreferenceTaskImpl_IgnoringPreference_message, key, value));
         return;
       }
     }
@@ -646,7 +647,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
     public int getPriority()
     {
-      return key != null && "project".equals(key.authority()) ? PRIORITY_LATE : PRIORITY_EARLY;
+      return key != null && "project".equals(key.authority()) ? PRIORITY_LATE : PRIORITY_EARLY; //$NON-NLS-1$
     }
 
     public boolean isIgnored()
@@ -675,7 +676,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     protected boolean isExcluded()
     {
       // If the old value is an XML blob...
-      if (oldValue != null && oldValue.startsWith("<?xml "))
+      if (oldValue != null && oldValue.startsWith("<?xml ")) //$NON-NLS-1$
       {
         try
         {
@@ -735,10 +736,10 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     public static void main(String[] args)
     {
       PreferenceHandlerFactoryRegistry uriMappingRegistryImpl = (PreferenceHandlerFactoryRegistry)Factory.Registry.INSTANCE;
-      uriMappingRegistryImpl.put(URI.createURI("//"), null);
-      uriMappingRegistryImpl.put(URI.createURI("///"), null);
-      uriMappingRegistryImpl.put(URI.createURI("//instance/foo/bar/"), null);
-      uriMappingRegistryImpl.put(URI.createURI("//instance"), new Factory()
+      uriMappingRegistryImpl.put(URI.createURI("//"), null); //$NON-NLS-1$
+      uriMappingRegistryImpl.put(URI.createURI("///"), null); //$NON-NLS-1$
+      uriMappingRegistryImpl.put(URI.createURI("//instance/foo/bar/"), null); //$NON-NLS-1$
+      uriMappingRegistryImpl.put(URI.createURI("//instance"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
@@ -746,32 +747,32 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         }
       });
 
-      uriMappingRegistryImpl.getFactory(URI.createURI("//instance/foo/bar/myproperty"));
-      uriMappingRegistryImpl.getFactory(URI.createURI("//instance/fudge/bar/myproperty"));
+      uriMappingRegistryImpl.getFactory(URI.createURI("//instance/foo/bar/myproperty")); //$NON-NLS-1$
+      uriMappingRegistryImpl.getFactory(URI.createURI("//instance/fudge/bar/myproperty")); //$NON-NLS-1$
 
       {
-        PreferenceHandler handler = new ListPreferenceHandler(URI.createURI(""), "(?s)([^\\n]+\\n[0-9]+)", "([^\n]+)", "\n");
-        if (handler.isNeeded("a\n2\n", "b\n2\na\n1\n"))
+        PreferenceHandler handler = new ListPreferenceHandler(URI.createURI(""), "(?s)([^\\n]+\\n[0-9]+)", "([^\n]+)", "\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        if (handler.isNeeded("a\n2\n", "b\n2\na\n1\n")) //$NON-NLS-1$ //$NON-NLS-2$
         {
           String result = handler.merge();
           System.out.println(result);
         }
         else
         {
-          System.out.println("has conflict");
+          System.out.println("has conflict"); //$NON-NLS-1$
         }
       }
 
       {
-        PreferenceHandler handler = new ListPreferenceHandler(URI.createURI(""), "(?s)([^\\n]+\\n[0-9]+)", "([^ \n]+) ([^\n]+)", "\n");
-        if (handler.isNeeded("a b\n2\n", "a b\n3\nb a\n2\na a\n1\n"))
+        PreferenceHandler handler = new ListPreferenceHandler(URI.createURI(""), "(?s)([^\\n]+\\n[0-9]+)", "([^ \n]+) ([^\n]+)", "\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        if (handler.isNeeded("a b\n2\n", "a b\n3\nb a\n2\na a\n1\n")) //$NON-NLS-1$ //$NON-NLS-2$
         {
           String result = handler.merge();
           System.out.println(result);
         }
         else
         {
-          System.out.println("has conflict");
+          System.out.println("has conflict"); //$NON-NLS-1$
         }
       }
     }
@@ -796,8 +797,8 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     protected static void registerListHandlerFactory(String key, char itemSeparator, char keySeparator)
     {
       final String itemSeparatorStr = new String(new char[] { itemSeparator });
-      final String itemPattern = "([^" + itemSeparatorStr + "]+)";
-      final String keyPattern = keySeparator == (char)0 ? "(.*)" : "([^" + new String(new char[] { keySeparator }) + "]+)";
+      final String itemPattern = "([^" + itemSeparatorStr + "]+)"; //$NON-NLS-1$ //$NON-NLS-2$
+      final String keyPattern = keySeparator == (char)0 ? "(.*)" : "([^" + new String(new char[] { keySeparator }) + "]+)"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
       PreferenceHandlerFactoryRegistry registry = (PreferenceHandlerFactoryRegistry)Factory.Registry.INSTANCE;
       registry.put(URI.createURI(key), new Factory()
@@ -817,7 +818,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     static
     {
       PreferenceHandlerFactoryRegistry registry = (PreferenceHandlerFactoryRegistry)Factory.Registry.INSTANCE;
-      registry.put(URI.createURI("//"), new Factory()
+      registry.put(URI.createURI("//"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
@@ -825,30 +826,30 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         }
       });
 
-      registerListHandlerFactory("//instance/org.eclipse.ui.workbench/ENABLED_DECORATORS", ',', ':');
-      registerListHandlerFactory("//instance/org.eclipse.ui.navigator/org.eclipse.ui.navigator.ProjectExplorer.activatedExtensions", ';', '=');
-      registerListHandlerFactory("//instance/org.eclipse.ui.navigator/org.eclipse.ui.navigator.ProjectExplorer.filterActivation", ':');
+      registerListHandlerFactory("//instance/org.eclipse.ui.workbench/ENABLED_DECORATORS", ',', ':'); //$NON-NLS-1$
+      registerListHandlerFactory("//instance/org.eclipse.ui.navigator/org.eclipse.ui.navigator.ProjectExplorer.activatedExtensions", ';', '='); //$NON-NLS-1$
+      registerListHandlerFactory("//instance/org.eclipse.ui.navigator/org.eclipse.ui.navigator.ProjectExplorer.filterActivation", ':'); //$NON-NLS-1$
 
       // See Javadoc on PreferenceHandler:
       // registerListHandlerFactory("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.typefilter.disabled", ';');
       // registerListHandlerFactory("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.typefilter.enabled", ';');
 
-      registry.put(URI.createURI("//instance/org.eclipse.ui.workbench/"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.ui.workbench/"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
           String lastSegment = key.lastSegment();
-          if ("editors".equals(lastSegment))
+          if ("editors".equals(lastSegment)) //$NON-NLS-1$
           {
             return new IgnoredPreferenceHandler(key);
           }
 
-          if ("resourcetypes".equals(lastSegment))
+          if ("resourcetypes".equals(lastSegment)) //$NON-NLS-1$
           {
-            return new XMLPreferenceHandler(key, "info", new String[] { "extension", "name" }, null);
+            return new XMLPreferenceHandler(key, "info", new String[] { "extension", "name" }, null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
           }
 
-          if ("org.eclipse.ui.commands".equals(lastSegment))
+          if ("org.eclipse.ui.commands".equals(lastSegment)) //$NON-NLS-1$
           {
             return new PreferenceHandler(key)
             {
@@ -864,19 +865,19 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.core.runtime/content-types/"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.core.runtime/content-types/"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
           if (key.segmentCount() == 4)
           {
             String property = key.lastSegment();
-            if (property.equals("file-extensions") || property.equals("file-names"))
+            if (property.equals("file-extensions") || property.equals("file-names")) //$NON-NLS-1$ //$NON-NLS-2$
             {
               return new ContentTypeFileExtensionPreferenceHandler(key);
             }
 
-            if (property.equals("charset"))
+            if (property.equals("charset")) //$NON-NLS-1$
             {
               return new ContentTypeCharsetPreferenceHandler(key);
             }
@@ -886,12 +887,12 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.jdt.core/"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.jdt.core/"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
           String lastSegment = key.lastSegment();
-          if (lastSegment.startsWith("org.eclipse.jdt.core.formatter."))
+          if (lastSegment.startsWith("org.eclipse.jdt.core.formatter.")) //$NON-NLS-1$
           {
             return new IgnoredPreferenceHandler(key);
           }
@@ -900,12 +901,12 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
           String lastSegment = key.lastSegment();
-          if (lastSegment.startsWith("cleanup."))
+          if (lastSegment.startsWith("cleanup.")) //$NON-NLS-1$
           {
             return new PreferenceHandler(key)
             {
@@ -921,47 +922,39 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.formatterprofiles"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.formatterprofiles"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
-          return new XMLPreferenceHandler(key, "profile", new String[] { "name" }, null);
+          return new XMLPreferenceHandler(key, "profile", new String[] { "name" }, null); //$NON-NLS-1$ //$NON-NLS-2$
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/formatter_profile"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/formatter_profile"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
-          return new JDTProfileChoicePreferenceHandler(key, "formatter");
+          return new JDTProfileChoicePreferenceHandler(key, "formatter"); //$NON-NLS-1$
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.cleanupprofiles"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.cleanupprofiles"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
-          return new XMLPreferenceHandler(key, "profile", new String[] { "name" }, null);
+          return new XMLPreferenceHandler(key, "profile", new String[] { "name" }, null); //$NON-NLS-1$ //$NON-NLS-2$
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/cleanup_profile"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/cleanup_profile"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
-          return new JDTProfileChoicePreferenceHandler(key, "cleanup");
+          return new JDTProfileChoicePreferenceHandler(key, "cleanup"); //$NON-NLS-1$
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.team.core/file_types"), new Factory()
-      {
-        public PreferenceHandler create(URI key)
-        {
-          return new TeamFileModePreferenceHandler(key);
-        }
-      });
-
-      registry.put(URI.createURI("//instance/org.eclipse.team.core/cvs_mode_for_file_without_extensions"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.team.core/file_types"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
@@ -969,55 +962,63 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.text.custom_templates"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.team.core/cvs_mode_for_file_without_extensions"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
-          return new XMLPreferenceHandler(key, "template", new String[] { "id" }, null);
+          return new TeamFileModePreferenceHandler(key);
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.text.custom_code_templates"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.text.custom_templates"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
-          return new XMLPreferenceHandler(key, "template", new String[] { "context", "description", "name" }, null);
+          return new XMLPreferenceHandler(key, "template", new String[] { "id" }, null); //$NON-NLS-1$ //$NON-NLS-2$
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.ant.ui/org.eclipse.ant.ui.customtemplates"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.text.custom_code_templates"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
-          return new XMLPreferenceHandler(key, "template", new String[] { "context", "description", "name" }, new String[] { "id" });
+          return new XMLPreferenceHandler(key, "template", new String[] { "context", "description", "name" }, null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.core.variables/org.eclipse.core.variables.valueVariables"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.ant.ui/org.eclipse.ant.ui.customtemplates"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
-          return new XMLPreferenceHandler(key, "valueVariable", new String[] { "name" }, null);
+          return new XMLPreferenceHandler(key, "template", new String[] { "context", "description", "name" }, new String[] { "id" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.m2e.editor.xml/org.eclipse.m2e.editor.xml.templates"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.core.variables/org.eclipse.core.variables.valueVariables"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
-          return new XMLPreferenceHandler(key, "template", new String[] { "context", "description", "name" }, new String[] { "id" });
+          return new XMLPreferenceHandler(key, "valueVariable", new String[] { "name" }, null); //$NON-NLS-1$ //$NON-NLS-2$
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.cdt.ui/org.eclipse.cdt.ui.formatterprofiles"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.m2e.editor.xml/org.eclipse.m2e.editor.xml.templates"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
-          return new XMLPreferenceHandler(key, "profile", new String[] { "name" }, null);
+          return new XMLPreferenceHandler(key, "template", new String[] { "context", "description", "name" }, new String[] { "id" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.cdt.ui/formatter_profile"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.cdt.ui/org.eclipse.cdt.ui.formatterprofiles"), new Factory() //$NON-NLS-1$
+      {
+        public PreferenceHandler create(URI key)
+        {
+          return new XMLPreferenceHandler(key, "profile", new String[] { "name" }, null); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+      });
+
+      registry.put(URI.createURI("//instance/org.eclipse.cdt.ui/formatter_profile"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
@@ -1025,12 +1026,12 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         }
       });
 
-      registry.put(URI.createURI("//instance/org.eclipse.cdt.core/"), new Factory()
+      registry.put(URI.createURI("//instance/org.eclipse.cdt.core/"), new Factory() //$NON-NLS-1$
       {
         public PreferenceHandler create(URI key)
         {
           String lastSegment = key.lastSegment();
-          if (lastSegment.startsWith("org.eclipse.cdt.core.formatter."))
+          if (lastSegment.startsWith("org.eclipse.cdt.core.formatter.")) //$NON-NLS-1$
           {
             return new IgnoredPreferenceHandler(key);
           }
@@ -1207,7 +1208,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
             {
               if (i > 1)
               {
-                key.append("_._");
+                key.append("_._"); //$NON-NLS-1$
               }
 
               key.append(keyMatcher.group(i));
@@ -1273,12 +1274,12 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
   {
     public XMLPreferenceHandler(URI key, String tag, String[] requiredAttributes, String[] optionalAttributes)
     {
-      super(key, getItemPattern(tag), getKeyPattern(requiredAttributes, optionalAttributes), "\n");
+      super(key, getItemPattern(tag), getKeyPattern(requiredAttributes, optionalAttributes), "\n"); //$NON-NLS-1$
     }
 
     private static String getItemPattern(String tag)
     {
-      return "(?s)(<" + tag + " (?:[^>]*/>|.*?</" + tag + ">))";
+      return "(?s)(<" + tag + " (?:[^>]*/>|.*?</" + tag + ">))"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
     private static String getKeyPattern(String[] requiredAttributes, String[] optionalAttributes)
@@ -1295,20 +1296,20 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         boolean isOptional = optional.contains(attribute);
         if (isOptional)
         {
-          result.append("(?:");
+          result.append("(?:"); //$NON-NLS-1$
         }
 
         if (length != 0)
         {
-          result.append("[^>]+");
+          result.append("[^>]+"); //$NON-NLS-1$
         }
 
         result.append(attribute);
-        result.append("=\"([^\"]+)\"");
+        result.append("=\"([^\"]+)\""); //$NON-NLS-1$
 
         if (isOptional)
         {
-          result.append(")?");
+          result.append(")?"); //$NON-NLS-1$
         }
       }
 
@@ -1334,11 +1335,11 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       Object fileContentManager = null;
       try
       {
-        Class<?> teamClass = CommonPlugin.loadClass("org.eclipse.team.core", "org.eclipse.team.core.Team");
-        fileContentManager = ReflectUtil.invokeMethod("getFileContentManager", teamClass);
-        Object[] defaultNameMappings = (Object[])ReflectUtil.invokeMethod("getDefaultNameMappings", fileContentManager);
+        Class<?> teamClass = CommonPlugin.loadClass("org.eclipse.team.core", "org.eclipse.team.core.Team"); //$NON-NLS-1$ //$NON-NLS-2$
+        fileContentManager = ReflectUtil.invokeMethod("getFileContentManager", teamClass); //$NON-NLS-1$
+        Object[] defaultNameMappings = (Object[])ReflectUtil.invokeMethod("getDefaultNameMappings", fileContentManager); //$NON-NLS-1$
         populateMappings(DEFAULT_NAME_MAPPINGS, defaultNameMappings);
-        Object[] defaultExtensionMappings = (Object[])ReflectUtil.invokeMethod("getDefaultExtensionMappings", fileContentManager);
+        Object[] defaultExtensionMappings = (Object[])ReflectUtil.invokeMethod("getDefaultExtensionMappings", fileContentManager); //$NON-NLS-1$
         populateMappings(DEFAULT_EXTENSION_MAPPINGS, defaultExtensionMappings);
       }
       catch (Throwable throwable)
@@ -1351,8 +1352,8 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
     public TeamFileModePreferenceHandler(URI key)
     {
-      super(key, "(?s)([^\\n]+\\n[0-9]+)", "([^\n]+)", "\n");
-      isExtension = "file_types".equals(key.lastSegment());
+      super(key, "(?s)([^\\n]+\\n[0-9]+)", "([^\n]+)", "\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      isExtension = "file_types".equals(key.lastSegment()); //$NON-NLS-1$
     }
 
     @Override
@@ -1395,7 +1396,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         }
 
         ReflectUtil.invokeMethod(
-            ReflectUtil.getMethod(FILE_CONTENT_MANAGER.getClass(), isExtension ? "addExtensionMappings" : "addNameMappings", String[].class, int[].class),
+            ReflectUtil.getMethod(FILE_CONTENT_MANAGER.getClass(), isExtension ? "addExtensionMappings" : "addNameMappings", String[].class, int[].class), //$NON-NLS-1$ //$NON-NLS-2$
             FILE_CONTENT_MANAGER, names, types);
       }
     }
@@ -1404,9 +1405,9 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     {
       for (Object mapping : mappings)
       {
-        Object string = ReflectUtil.invokeMethod("getString", mapping);
-        int type = (Integer)ReflectUtil.invokeMethod("getType", mapping);
-        target.add(string + "\n" + type + "\n");
+        Object string = ReflectUtil.invokeMethod("getString", mapping); //$NON-NLS-1$
+        int type = (Integer)ReflectUtil.invokeMethod("getType", mapping); //$NON-NLS-1$
+        target.add(string + "\n" + type + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
       }
     }
   }
@@ -1420,8 +1421,8 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
     public ContentTypeFileExtensionPreferenceHandler(URI key)
     {
-      super(key, "([^,]+)", "([^,]+)", ",");
-      type = "file-extensions".equals(key.lastSegment()) ? IContentType.FILE_EXTENSION_SPEC : IContentType.FILE_NAME_SPEC;
+      super(key, "([^,]+)", "([^,]+)", ","); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      type = "file-extensions".equals(key.lastSegment()) ? IContentType.FILE_EXTENSION_SPEC : IContentType.FILE_NAME_SPEC; //$NON-NLS-1$
     }
 
     @Override
@@ -1480,7 +1481,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
    */
   public static abstract class ProfileChoicePreferenceHandler extends PreferenceHandler
   {
-    private static final Pattern SETTING_PATTERN = Pattern.compile("<setting id=\"([^\"]+)\" value=\"([^\"]+)\"");
+    private static final Pattern SETTING_PATTERN = Pattern.compile("<setting id=\"([^\"]+)\" value=\"([^\"]+)\""); //$NON-NLS-1$
 
     public ProfileChoicePreferenceHandler(URI key)
     {
@@ -1501,7 +1502,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     public void apply(SetupTaskContext context)
     {
       PreferenceProperty profiles = getProfilesPreferenceProperty();
-      Pattern pattern = Pattern.compile("(?s)(<profile[^\n]*name=\"" + Pattern.quote(newValue.substring(1)) + "\".*?</profile>)");
+      Pattern pattern = Pattern.compile("(?s)(<profile[^\n]*name=\"" + Pattern.quote(newValue.substring(1)) + "\".*?</profile>)"); //$NON-NLS-1$ //$NON-NLS-2$
       String value = profiles.get(null);
       if (value != null)
       {
@@ -1534,13 +1535,13 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     @Override
     protected PreferenceProperty getProfilesPreferenceProperty()
     {
-      return new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui." + profileType + "profiles");
+      return new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui." + profileType + "profiles"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     @Override
     protected PreferenceProperty getKeyPreferenceProperty(String propertyKey)
     {
-      return new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.jdt.core/" + propertyKey);
+      return new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.jdt.core/" + propertyKey); //$NON-NLS-1$
     }
   }
 
@@ -1554,13 +1555,13 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     @Override
     protected PreferenceProperty getProfilesPreferenceProperty()
     {
-      return new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.cdt.ui/org.eclipse.cdt.ui.formatterprofiles");
+      return new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.cdt.ui/org.eclipse.cdt.ui.formatterprofiles"); //$NON-NLS-1$
     }
 
     @Override
     protected PreferenceProperty getKeyPreferenceProperty(String propertyKey)
     {
-      return new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.cdt.core/" + propertyKey);
+      return new PreferencesUtil.PreferenceProperty("/instance/org.eclipse.cdt.core/" + propertyKey); //$NON-NLS-1$
     }
   }
 
@@ -1569,7 +1570,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
    */
   public static class PreferenceHandlerFactoryRegistry extends BasicEMap<URI, PreferenceHandler.Factory> implements PreferenceHandler.Factory.Registry
   {
-    private static final URI ROOT_PREFIX = URI.createURI("//");
+    private static final URI ROOT_PREFIX = URI.createURI("//"); //$NON-NLS-1$
 
     private static final long serialVersionUID = 1L;
 
@@ -1603,7 +1604,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       public void determineEntryType()
       {
-        isPrefixMapEntry = "".equals(key.authority()) ? key.segmentCount() == 0
+        isPrefixMapEntry = "".equals(key.authority()) ? key.segmentCount() == 0 //$NON-NLS-1$
             : key.segmentCount() == 0 ? key.hasAbsolutePath() : key.hasTrailingPathSeparator();
       }
     }
@@ -1649,22 +1650,22 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     {
       if (key == null)
       {
-        throw new RuntimeException("Key may not be null");
+        throw new RuntimeException(Messages.PreferenceTaskImpl_NullKey_exception);
       }
 
       if (!key.isHierarchical())
       {
-        throw new RuntimeException("Key is not hierarchical " + key);
+        throw new RuntimeException(NLS.bind(Messages.PreferenceTaskImpl_NonHierarchicalKey_exception, key));
       }
 
       if (key.authority() == null)
       {
-        throw new RuntimeException("Key has no authority " + key);
+        throw new RuntimeException(NLS.bind(Messages.PreferenceTaskImpl_NoAuthorityKey_excpetion, key));
       }
 
       if (key.scheme() != null)
       {
-        throw new RuntimeException("Key should not have a scheme " + key);
+        throw new RuntimeException(NLS.bind(Messages.PreferenceTaskImpl_NoSchemeKey_exception, key));
       }
     }
 
@@ -1673,7 +1674,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     {
       if (value == null)
       {
-        throw new RuntimeException("Value may not be null");
+        throw new RuntimeException(Messages.PreferenceTaskImpl_NullValue_exception);
       }
     }
 

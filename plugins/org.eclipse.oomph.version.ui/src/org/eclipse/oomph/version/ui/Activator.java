@@ -23,13 +23,13 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin
 {
-  public static final String CORRECTION_DELETE_GIF = "icons/correction_delete.gif";
+  public static final String CORRECTION_DELETE_GIF = "icons/correction_delete.gif"; //$NON-NLS-1$
 
-  public static final String CORRECTION_CHANGE_GIF = "icons/correction_change.gif";
+  public static final String CORRECTION_CHANGE_GIF = "icons/correction_change.gif"; //$NON-NLS-1$
 
-  public static final String CORRECTION_CONFIGURE_GIF = "icons/correction_configure.gif";
+  public static final String CORRECTION_CONFIGURE_GIF = "icons/correction_configure.gif"; //$NON-NLS-1$
 
-  public static final String PLUGIN_ID = "org.eclipse.oomph.version.ui";
+  public static final String PLUGIN_ID = "org.eclipse.oomph.version.ui"; //$NON-NLS-1$
 
   private static Activator plugin;
 

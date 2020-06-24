@@ -38,10 +38,9 @@ import java.util.Set;
 
 public class LicensePrePrompter extends AbstractSetupDialog
 {
-  private static final String DEFAULT_LICENSE_UUID = "DEFAULT_LICENSE";
+  private static final String DEFAULT_LICENSE_UUID = "DEFAULT_LICENSE"; //$NON-NLS-1$
 
-  private static final String DEFAULT_LICENSE_NAME = "Eclipse Foundation Software User Agreement";
-
+  @SuppressWarnings("nls")
   private static final Set<String> IMPLIED_LICENSE_UUIDS = Collections.unmodifiableSet(
       new HashSet<String>(Arrays.asList("6a3d083ad2bd7d3a80ee293235f8c5b1", "abc76a6cc9d06e4684ff61ed74a972c", "8d3137b6d090b6860d1b977a88ceb334",
           "d77cfd8b73fc71776727fcbb2605709", "6a3d083ad2bd7d3a80ee293235f8c5b1", "be4a7d94b4e1903e628a3001859739a8", "318bcab4617b336391ac7ab40514ccc3",
@@ -55,7 +54,7 @@ public class LicensePrePrompter extends AbstractSetupDialog
 
   public LicensePrePrompter(Shell parentShell, String license)
   {
-    super(parentShell, DEFAULT_LICENSE_NAME, 700, 700, SetupUIPlugin.INSTANCE, false);
+    super(parentShell, Messages.LicensePrePrompter_defaultLicense_name, 700, 700, SetupUIPlugin.INSTANCE, false);
     this.license = license;
     shellText = parentShell.getText();
   }
@@ -63,8 +62,7 @@ public class LicensePrePrompter extends AbstractSetupDialog
   @Override
   protected String getDefaultMessage()
   {
-    return "Applicable licenses will be discovered and prompted later in the installation process.\n"
-        + "Avoid such interruptions by accepting the licenses that govern Eclipse content now.";
+    return Messages.LicensePrePrompter_defaultMessage;
   }
 
   @Override
@@ -80,7 +78,7 @@ public class LicensePrePrompter extends AbstractSetupDialog
       public void changing(LocationEvent event)
       {
         String url = event.location;
-        if (!"about:blank".equals(url))
+        if (!"about:blank".equals(url)) //$NON-NLS-1$
         {
           OS.INSTANCE.openSystemBrowser(url);
           event.doit = false;
@@ -92,8 +90,8 @@ public class LicensePrePrompter extends AbstractSetupDialog
   @Override
   protected void createButtonsForButtonBar(Composite parent)
   {
-    createButton(parent, IDialogConstants.OK_ID, "Accept Now", true);
-    createButton(parent, IDialogConstants.CANCEL_ID, "Decide Later", false);
+    createButton(parent, IDialogConstants.OK_ID, Messages.LicensePrePrompter_acceptButton_text, true);
+    createButton(parent, IDialogConstants.CANCEL_ID, Messages.LicensePrePrompter_decideLaterButton_text, false);
   }
 
   public static EList<LicenseInfo> execute(Shell shell, User user)
@@ -123,14 +121,14 @@ public class LicensePrePrompter extends AbstractSetupDialog
     }
 
     EList<LicenseInfo> acceptedLicenses = new BasicEList<LicenseInfo>();
-    acceptedLicenses.add(new LicenseInfo(DEFAULT_LICENSE_UUID, "Marker to remember license pre-prompting"));
+    acceptedLicenses.add(new LicenseInfo(DEFAULT_LICENSE_UUID, Messages.LicensePrePrompter_defaultLicense_info));
 
     LicensePrePrompter prompter = new LicensePrePrompter(shell, license);
     if (prompter.open() == LicensePrePrompter.OK)
     {
       for (String uuid : unacceptedLicenses)
       {
-        acceptedLicenses.add(new LicenseInfo(uuid, DEFAULT_LICENSE_NAME));
+        acceptedLicenses.add(new LicenseInfo(uuid, Messages.LicensePrePrompter_defaultLicense_name));
       }
     }
 
@@ -144,7 +142,7 @@ public class LicensePrePrompter extends AbstractSetupDialog
 
     try
     {
-      String path = LicensePrePrompter.class.getPackage().getName().replace('.', '/') + "/license.html";
+      String path = LicensePrePrompter.class.getPackage().getName().replace('.', '/') + "/license.html"; //$NON-NLS-1$
       in = LicensePrePrompter.class.getClassLoader().getResourceAsStream(path);
       BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 

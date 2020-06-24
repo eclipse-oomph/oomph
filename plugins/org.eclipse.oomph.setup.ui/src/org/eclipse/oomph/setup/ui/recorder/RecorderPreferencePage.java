@@ -122,7 +122,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
     if (RecorderManager.INSTANCE.hasTemporaryRecorderTarget())
     {
       Label label = new Label(parent, SWT.NONE);
-      label.setText("The preference recorder settings are unavailable while recording into the selected file.");
+      label.setText(Messages.RecorderPreferencePage_recordingSettingsUnavailableForSelectedFile);
       return label;
     }
 
@@ -132,7 +132,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
     composite.setLayout(UIUtil.createGridLayout(columns));
 
     enableButton = new Button(composite, SWT.CHECK);
-    enableButton.setText("Record into:");
+    enableButton.setText(Messages.RecorderPreferencePage_enableButton_text);
     enableButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -143,7 +143,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
 
         if (!enableRecorder)
         {
-          policiesFilter.getFilterControl().setText("");
+          policiesFilter.getFilterControl().setText(""); //$NON-NLS-1$
         }
 
         updateEnablement();
@@ -160,7 +160,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
     targetCombo = new TableCombo(composite, SWT.BORDER | SWT.READ_ONLY);
     targetCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
     targetCombo.defineColumns(2);
-    targetCombo.setToolTipText("Select the recorder target file");
+    targetCombo.setToolTipText(Messages.RecorderPreferencePage_targetCombo_tooltip);
     targetCombo.getTable().addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -179,8 +179,8 @@ public class RecorderPreferencePage extends AbstractPreferencePage
               int dirtyPolicies = transaction.getPolicies(false).size();
               if (dirtyPolicies != 0)
               {
-                if (MessageDialog.openQuestion(getShell(), "Changed Recorder Policies",
-                    "Do you want to save the changed policies before you change the recorder target?"))
+                if (MessageDialog.openQuestion(getShell(), Messages.RecorderPreferencePage_saveChangedPoliciesDialog_title,
+                    Messages.RecorderPreferencePage_saveChangedPoliciesDialog_message))
                 {
                   transaction.commit();
                 }
@@ -224,8 +224,8 @@ public class RecorderPreferencePage extends AbstractPreferencePage
     selectRecorderTarget(uri);
     adapterFactory.dispose();
 
-    editButton = new ToolButton(composite, 0, SetupUIPlugin.INSTANCE.getSWTImage("edit.gif"), false);
-    editButton.setToolTipText("Open the recorder target file");
+    editButton = new ToolButton(composite, 0, SetupUIPlugin.INSTANCE.getSWTImage("edit.gif"), false); //$NON-NLS-1$
+    editButton.setToolTipText(Messages.RecorderPreferencePage_editButton_tooltip);
     editButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -254,7 +254,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
 
     policiesLabel = new Label(composite, SWT.NONE);
     policiesLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, columns, 1));
-    policiesLabel.setText("Check the preferences to record and uncheck those to ignore:");
+    policiesLabel.setText(Messages.RecorderPreferencePage_policiesLabel);
 
     FilterHandler filterHandler = new FilterHandler()
     {
@@ -317,7 +317,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
   protected void contributeButtons(Composite parent)
   {
     initializePreferencesButton = new Button(parent, SWT.PUSH);
-    initializePreferencesButton.setText("Initialize...");
+    initializePreferencesButton.setText(Messages.RecorderPreferencePage_initializePreferencesButton_text);
 
     int widthHint = convertHorizontalDLUsToPixels(IDialogConstants.BUTTON_WIDTH);
     Dialog.applyDialogFont(initializePreferencesButton);
@@ -354,7 +354,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
   {
     if (openTransactionJob == null)
     {
-      openTransactionJob = new Job("Open recorder transaction")
+      openTransactionJob = new Job(Messages.RecorderPreferencePage_openTransactionJob_name)
       {
         @Override
         protected IStatus run(final IProgressMonitor monitor)

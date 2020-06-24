@@ -16,6 +16,7 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -56,8 +57,8 @@ public abstract class PersistentMap<E>
       folder.mkdirs();
 
       String name = file.getName();
-      tempFile = new File(folder, name + ".temp");
-      lockFile = IOUtil.canWriteFolder(folder) ? new File(folder, name + ".lock") : null;
+      tempFile = new File(folder, name + ".temp"); //$NON-NLS-1$
+      lockFile = IOUtil.canWriteFolder(folder) ? new File(folder, name + ".lock") : null; //$NON-NLS-1$
     }
     else
     {
@@ -382,7 +383,7 @@ public abstract class PersistentMap<E>
       {
         if (System.currentTimeMillis() - start >= 10000L)
         {
-          throw new RuntimeException("Acquisition of lock file " + lockFile + " timed out", ex);
+          throw new RuntimeException(NLS.bind(Messages.PersistentMap_LockTimeout_exception, lockFile), ex);
         }
       }
 
@@ -392,7 +393,7 @@ public abstract class PersistentMap<E>
       }
       catch (InterruptedException ex)
       {
-        throw new RuntimeException("Acquisition of lock file " + lockFile + " interrupted", ex);
+        throw new RuntimeException(NLS.bind(Messages.PersistentMap_LockInterrupted_exception, lockFile), ex);
       }
     }
   }

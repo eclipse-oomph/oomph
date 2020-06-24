@@ -218,7 +218,7 @@ public class BuilderPredicateImpl extends PredicateImpl implements BuilderPredic
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (builder: ");
+    result.append(" (builder: "); //$NON-NLS-1$
     result.append(builder);
     result.append(')');
     return result.toString();

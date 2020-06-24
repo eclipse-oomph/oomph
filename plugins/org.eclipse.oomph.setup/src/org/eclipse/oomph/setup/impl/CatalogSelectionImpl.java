@@ -355,7 +355,7 @@ public class CatalogSelectionImpl extends ModelElementImpl implements CatalogSel
             }
           }
 
-          throw new IndexOutOfBoundsException("size=" + size() + " index=" + index);
+          throw new IndexOutOfBoundsException("size=" + size() + " index=" + index); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         @Override
@@ -476,13 +476,13 @@ public class CatalogSelectionImpl extends ModelElementImpl implements CatalogSel
         protected String delegateToString()
         {
           StringBuffer stringBuffer = new StringBuffer();
-          stringBuffer.append("[");
+          stringBuffer.append("["); //$NON-NLS-1$
           boolean first = true;
           for (Stream stream : this)
           {
             if (!first)
             {
-              stringBuffer.append(", ");
+              stringBuffer.append(", "); //$NON-NLS-1$
             }
             else
             {
@@ -492,7 +492,7 @@ public class CatalogSelectionImpl extends ModelElementImpl implements CatalogSel
             stringBuffer.append(String.valueOf(stream));
           }
 
-          stringBuffer.append("]");
+          stringBuffer.append("]"); //$NON-NLS-1$
           return stringBuffer.toString();
         }
 

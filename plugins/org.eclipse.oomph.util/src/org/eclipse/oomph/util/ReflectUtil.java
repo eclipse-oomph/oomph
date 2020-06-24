@@ -11,6 +11,8 @@
  */
 package org.eclipse.oomph.util;
 
+import org.eclipse.osgi.util.NLS;
+
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -60,7 +62,7 @@ public final class ReflectUtil
     catch (InvocationTargetException ex)
     {
       Throwable cause = ex.getCause();
-      if (cause != null && "org.eclipse.core.runtime.OperationCanceledException".equals(cause.getClass().getName()))
+      if (cause != null && "org.eclipse.core.runtime.OperationCanceledException".equals(cause.getClass().getName())) //$NON-NLS-1$
       {
         throw (RuntimeException)cause;
       }
@@ -124,7 +126,7 @@ public final class ReflectUtil
     catch (InvocationTargetException ex)
     {
       Throwable cause = ex.getCause();
-      if (cause != null && "org.eclipse.core.runtime.OperationCanceledException".equals(cause.getClass().getName()))
+      if (cause != null && "org.eclipse.core.runtime.OperationCanceledException".equals(cause.getClass().getName())) //$NON-NLS-1$
       {
         throw (RuntimeException)cause;
       }
@@ -203,7 +205,7 @@ public final class ReflectUtil
       Field field = getField((Class<?>)target, fieldName);
       if (field == null)
       {
-        throw new ReflectionException("No field " + fieldName);
+        throw new ReflectionException(NLS.bind(Messages.ReflectUtil_NoField_exception, fieldName));
       }
 
       return getValue(field, null);
@@ -212,7 +214,7 @@ public final class ReflectUtil
     Field field = getField(target.getClass(), fieldName);
     if (field == null)
     {
-      throw new ReflectionException("No field " + fieldName);
+      throw new ReflectionException(NLS.bind(Messages.ReflectUtil_NoField_exception, fieldName));
     }
 
     return getValue(field, target);

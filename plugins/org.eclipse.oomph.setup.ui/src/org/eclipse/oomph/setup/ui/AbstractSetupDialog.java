@@ -28,6 +28,6 @@ public abstract class AbstractSetupDialog extends OomphDialog
   @Override
   protected String getImagePath()
   {
-    return "install_wiz.png";
+    return "install_wiz.png"; //$NON-NLS-1$
   }
 }

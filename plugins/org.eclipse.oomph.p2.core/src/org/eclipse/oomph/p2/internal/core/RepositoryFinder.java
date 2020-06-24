@@ -15,6 +15,7 @@ import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.eclipse.osgi.util.NLS;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +27,7 @@ import java.util.regex.Pattern;
  */
 public class RepositoryFinder implements IApplication
 {
-  private static final boolean SUPPRESS_STATS = PropertiesUtil.isProperty("suppress.stats");
+  private static final boolean SUPPRESS_STATS = PropertiesUtil.isProperty("suppress.stats"); //$NON-NLS-1$
 
   public Object start(IApplicationContext context) throws Exception
   {
@@ -49,7 +50,7 @@ public class RepositoryFinder implements IApplication
 
     if (!SUPPRESS_STATS)
     {
-      System.out.println("Found " + urls.size() + " of " + repositories.length + " repositories:");
+      System.out.println(NLS.bind(Messages.RepositoryFinder_Found_message, urls.size(), repositories.length));
     }
 
     Collections.sort(urls);

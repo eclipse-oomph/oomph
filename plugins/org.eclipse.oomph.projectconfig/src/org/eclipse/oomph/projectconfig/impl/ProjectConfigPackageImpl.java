@@ -634,88 +634,88 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
     exclusionPredicateEClass.getESuperTypes().add(thePredicatesPackage.getPredicate());
 
     // Initialize classes, features, and operations; add parameters
-    initEClass(workspaceConfigurationEClass, WorkspaceConfiguration.class, "WorkspaceConfiguration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getWorkspaceConfiguration_Projects(), getProject(), getProject_Configuration(), "projects", null, 0, -1, WorkspaceConfiguration.class,
+    initEClass(workspaceConfigurationEClass, WorkspaceConfiguration.class, "WorkspaceConfiguration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getWorkspaceConfiguration_Projects(), getProject(), getProject_Configuration(), "projects", null, 0, -1, WorkspaceConfiguration.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getWorkspaceConfiguration_DefaultPreferenceNode(), thePreferencesPackage.getPreferenceNode(), null, "defaultPreferenceNode", null, 1, 1,
+    initEReference(getWorkspaceConfiguration_DefaultPreferenceNode(), thePreferencesPackage.getPreferenceNode(), null, "defaultPreferenceNode", null, 1, 1, //$NON-NLS-1$
         WorkspaceConfiguration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
-    initEReference(getWorkspaceConfiguration_InstancePreferenceNode(), thePreferencesPackage.getPreferenceNode(), null, "instancePreferenceNode", null, 1, 1,
+    initEReference(getWorkspaceConfiguration_InstancePreferenceNode(), thePreferencesPackage.getPreferenceNode(), null, "instancePreferenceNode", null, 1, 1, //$NON-NLS-1$
         WorkspaceConfiguration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
 
-    initEOperation(getWorkspaceConfiguration__ApplyPreferenceProfiles(), null, "applyPreferenceProfiles", 0, 1, IS_UNIQUE, IS_ORDERED);
+    initEOperation(getWorkspaceConfiguration__ApplyPreferenceProfiles(), null, "applyPreferenceProfiles", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEOperation(getWorkspaceConfiguration__UpdatePreferenceProfileReferences(), null, "updatePreferenceProfileReferences", 0, 1, IS_UNIQUE, IS_ORDERED);
+    initEOperation(getWorkspaceConfiguration__UpdatePreferenceProfileReferences(), null, "updatePreferenceProfileReferences", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    EOperation op = initEOperation(getWorkspaceConfiguration__GetProject__String(), getProject(), "getProject", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+    EOperation op = initEOperation(getWorkspaceConfiguration__GetProject__String(), getProject(), "getProject", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(projectEClass, Project.class, "Project", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProject_Configuration(), getWorkspaceConfiguration(), getWorkspaceConfiguration_Projects(), "configuration", null, 1, 1, Project.class,
+    initEClass(projectEClass, Project.class, "Project", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getProject_Configuration(), getWorkspaceConfiguration(), getWorkspaceConfiguration_Projects(), "configuration", null, 1, 1, Project.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getProject_PreferenceProfiles(), getPreferenceProfile(), getPreferenceProfile_Project(), "preferenceProfiles", null, 0, -1, Project.class,
+    initEReference(getProject_PreferenceProfiles(), getPreferenceProfile(), getPreferenceProfile_Project(), "preferenceProfiles", null, 0, -1, Project.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getProject_PreferenceNode(), thePreferencesPackage.getPreferenceNode(), null, "preferenceNode", null, 1, 1, Project.class, !IS_TRANSIENT,
+    initEReference(getProject_PreferenceNode(), thePreferencesPackage.getPreferenceNode(), null, "preferenceNode", null, 1, 1, Project.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getProject_PreferenceProfileReferences(), getPreferenceProfile(), getPreferenceProfile_ReferentProjects(), "preferenceProfileReferences",
+    initEReference(getProject_PreferenceProfileReferences(), getPreferenceProfile(), getPreferenceProfile_ReferentProjects(), "preferenceProfileReferences", //$NON-NLS-1$
         null, 0, -1, Project.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
 
-    op = initEOperation(getProject__GetProperty__URI(), thePreferencesPackage.getProperty(), "getProperty", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, thePreferencesPackage.getURI(), "path", 0, 1, IS_UNIQUE, IS_ORDERED);
+    op = initEOperation(getProject__GetProperty__URI(), thePreferencesPackage.getProperty(), "getProperty", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, thePreferencesPackage.getURI(), "path", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(preferenceProfileEClass, PreferenceProfile.class, "PreferenceProfile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getPreferenceProfile_PreferenceFilters(), getPreferenceFilter(), getPreferenceFilter_PreferenceProfile(), "preferenceFilters", null, 0, -1,
+    initEClass(preferenceProfileEClass, PreferenceProfile.class, "PreferenceProfile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getPreferenceProfile_PreferenceFilters(), getPreferenceFilter(), getPreferenceFilter_PreferenceProfile(), "preferenceFilters", null, 0, -1, //$NON-NLS-1$
         PreferenceProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
-    initEReference(getPreferenceProfile_ReferentProjects(), getProject(), getProject_PreferenceProfileReferences(), "referentProjects", null, 0, -1,
+    initEReference(getPreferenceProfile_ReferentProjects(), getProject(), getProject_PreferenceProfileReferences(), "referentProjects", null, 0, -1, //$NON-NLS-1$
         PreferenceProfile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
-    initEAttribute(getPreferenceProfile_Name(), ecorePackage.getEString(), "name", null, 1, 1, PreferenceProfile.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getPreferenceProfile_Name(), ecorePackage.getEString(), "name", null, 1, 1, PreferenceProfile.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getPreferenceProfile_Project(), getProject(), getProject_PreferenceProfiles(), "project", null, 0, 1, PreferenceProfile.class, !IS_TRANSIENT,
+    initEReference(getPreferenceProfile_Project(), getProject(), getProject_PreferenceProfiles(), "project", null, 0, 1, PreferenceProfile.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getPreferenceProfile_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, PreferenceProfile.class,
+    initEReference(getPreferenceProfile_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, PreferenceProfile.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    op = initEOperation(getPreferenceProfile__Matches__IProject(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
+    op = initEOperation(getPreferenceProfile__Matches__IProject(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    op = initEOperation(getPreferenceProfile__GetProperty__URI(), thePreferencesPackage.getProperty(), "getProperty", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, thePreferencesPackage.getURI(), "path", 0, 1, IS_UNIQUE, IS_ORDERED);
+    op = initEOperation(getPreferenceProfile__GetProperty__URI(), thePreferencesPackage.getProperty(), "getProperty", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, thePreferencesPackage.getURI(), "path", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(preferenceFilterEClass, PreferenceFilter.class, "PreferenceFilter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getPreferenceFilter_PreferenceNode(), thePreferencesPackage.getPreferenceNode(), null, "preferenceNode", null, 1, 1, PreferenceFilter.class,
+    initEClass(preferenceFilterEClass, PreferenceFilter.class, "PreferenceFilter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getPreferenceFilter_PreferenceNode(), thePreferencesPackage.getPreferenceNode(), null, "preferenceNode", null, 1, 1, PreferenceFilter.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getPreferenceFilter_PreferenceProfile(), getPreferenceProfile(), getPreferenceProfile_PreferenceFilters(), "preferenceProfile", null, 1, 1,
+    initEReference(getPreferenceFilter_PreferenceProfile(), getPreferenceProfile(), getPreferenceProfile_PreferenceFilters(), "preferenceProfile", null, 1, 1, //$NON-NLS-1$
         PreferenceFilter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
-    initEAttribute(getPreferenceFilter_Inclusions(), getPattern(), "inclusions", ".*", 1, 1, PreferenceFilter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getPreferenceFilter_Inclusions(), getPattern(), "inclusions", ".*", 1, 1, PreferenceFilter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPreferenceFilter_Exclusions(), getPattern(), "exclusions", "", 1, 1, PreferenceFilter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getPreferenceFilter_Exclusions(), getPattern(), "exclusions", "", 1, 1, PreferenceFilter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getPreferenceFilter_Properties(), thePreferencesPackage.getProperty(), null, "properties", null, 0, -1, PreferenceFilter.class, IS_TRANSIENT,
+    initEReference(getPreferenceFilter_Properties(), thePreferencesPackage.getProperty(), null, "properties", null, 0, -1, PreferenceFilter.class, IS_TRANSIENT, //$NON-NLS-1$
         IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
-    op = initEOperation(getPreferenceFilter__Matches__String(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, ecorePackage.getEString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED);
+    op = initEOperation(getPreferenceFilter__Matches__String(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, ecorePackage.getEString(), "value", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    op = initEOperation(getPreferenceFilter__GetProperty__String(), thePreferencesPackage.getProperty(), "getProperty", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+    op = initEOperation(getPreferenceFilter__GetProperty__String(), thePreferencesPackage.getProperty(), "getProperty", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(inclusionPredicateEClass, InclusionPredicate.class, "InclusionPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getInclusionPredicate_IncludedPreferenceProfiles(), getPreferenceProfile(), null, "includedPreferenceProfiles", null, 0, -1,
+    initEClass(inclusionPredicateEClass, InclusionPredicate.class, "InclusionPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getInclusionPredicate_IncludedPreferenceProfiles(), getPreferenceProfile(), null, "includedPreferenceProfiles", null, 0, -1, //$NON-NLS-1$
         InclusionPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
 
-    initEClass(exclusionPredicateEClass, ExclusionPredicate.class, "ExclusionPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getExclusionPredicate_ExcludedPreferenceProfiles(), getPreferenceProfile(), null, "excludedPreferenceProfiles", null, 0, -1,
+    initEClass(exclusionPredicateEClass, ExclusionPredicate.class, "ExclusionPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getExclusionPredicate_ExcludedPreferenceProfiles(), getPreferenceProfile(), null, "excludedPreferenceProfiles", null, 0, -1, //$NON-NLS-1$
         ExclusionPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
 
     // Initialize data types
-    initEDataType(patternEDataType, Pattern.class, "Pattern", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(patternEDataType, Pattern.class, "Pattern", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
     // Create resource
     createResource(eNS_URI);
@@ -737,9 +737,10 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.projectconfig.edit/icons/full/obj16" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "imageBaseURI", //$NON-NLS-1$
+        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.projectconfig.edit/icons/full/obj16" //$NON-NLS-1$
+    });
   }
 
   /**
@@ -750,11 +751,15 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getWorkspaceConfiguration_Projects(), source, new String[] { "name", "project" });
-    addAnnotation(getProject_PreferenceProfiles(), source, new String[] { "name", "preferenceProfile" });
-    addAnnotation(getPreferenceProfile_PreferenceFilters(), source, new String[] { "name", "preferenceFilter" });
-    addAnnotation(getPreferenceProfile_Predicates(), source, new String[] { "name", "predicate" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getWorkspaceConfiguration_Projects(), source, new String[] { "name", "project" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProject_PreferenceProfiles(), source, new String[] { "name", "preferenceProfile" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getPreferenceProfile_PreferenceFilters(), source, new String[] { "name", "preferenceFilter" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getPreferenceProfile_Predicates(), source, new String[] { "name", "predicate" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -765,9 +770,10 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
     addAnnotation(projectEClass, source,
-        new String[] { "constraints", "AllPreferencesManaged PreferenceProfileReferencesSpecifyUniqueProperties AllPropertiesHaveManagedValue" });
+        new String[] { "constraints", "AllPreferencesManaged PreferenceProfileReferencesSpecifyUniqueProperties AllPropertiesHaveManagedValue" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
 } // ProjectConfigPackageImpl

@@ -27,7 +27,7 @@ public class GitBashAction extends AbstractRepositoryAction
     String gitBash = GitBash.getExecutable(shell);
     if (gitBash != null)
     {
-      Runtime.getRuntime().exec("cmd /c cd \"" + workTree.getAbsolutePath() + "\" && start cmd.exe /c \"" + gitBash + "\" --login -i");
+      Runtime.getRuntime().exec("cmd /c cd \"" + workTree.getAbsolutePath() + "\" && start cmd.exe /c \"" + gitBash + "\" --login -i"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
   }
 }

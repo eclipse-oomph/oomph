@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.net.URI;
@@ -49,7 +50,7 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
   @Override
   public String getElementType()
   {
-    return "bundle pool";
+    return "bundle pool"; //$NON-NLS-1$
   }
 
   public AgentManager getAgentManager()
@@ -133,12 +134,12 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
       {
         try
         {
-          fileArtifactRepository = (IFileArtifactRepository)artifactRepositoryManager.createRepository(uri, "Shared Bundle Pool",
+          fileArtifactRepository = (IFileArtifactRepository)artifactRepositoryManager.createRepository(uri, Messages.BundlePoolImpl_SharedBundlePool_label,
               IArtifactRepositoryManager.TYPE_SIMPLE_REPOSITORY, null);
         }
         catch (ProvisionException ex)
         {
-          throw new P2Exception("Bundle pool " + location + " could not be loaded");
+          throw new P2Exception(NLS.bind(Messages.BundlePoolImpl_PoolNotLoaded_exception, location));
         }
       }
     }
@@ -189,7 +190,7 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
       {
         if (!location.equals(value))
         {
-          throw new IllegalArgumentException("Cache folder of a pooled profile cannot be changed: " + value);
+          throw new IllegalArgumentException(NLS.bind(Messages.BundlePoolImpl_CachCannotBeChanged_exception, value));
         }
 
         return this;

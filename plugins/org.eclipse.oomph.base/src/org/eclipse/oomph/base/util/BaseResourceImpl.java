@@ -12,6 +12,7 @@ package org.eclipse.oomph.base.util;
 
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.URI;
@@ -120,7 +121,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
               String normalizedURI = getURIConverter().normalize(uri).toString();
               if (!result.equals(normalizedURI))
               {
-                result += " -> " + normalizedURI;
+                result += " -> " + normalizedURI; //$NON-NLS-1$
               }
             }
 
@@ -131,12 +132,11 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
           public InputSource resolveEntity(String publicId, String systemId) throws SAXException
           {
             URI uri = getURI();
-            String message = "Unexpected entity: publicId=" + publicId + ", systemId=" + systemId + ", uri=" + uri;
-
+            String message = BasePlugin.INSTANCE.getStringX("_UI_BadEntity_diagnostic", publicId, systemId, uri); //$NON-NLS-1$
             URI normalizedURI = getURIConverter().normalize(uri);
             if (!normalizedURI.equals(uri))
             {
-              message += ", normalizedURI=" + normalizedURI;
+              message += ", normalizedURI=" + normalizedURI; //$NON-NLS-1$
             }
 
             throw new SAXException(message);
@@ -149,7 +149,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
             {
               // Split the string value into lines.
               String stringValue = value.toString();
-              String[] lines = stringValue.split("\n", Integer.MAX_VALUE);
+              String[] lines = stringValue.split("\n", Integer.MAX_VALUE); //$NON-NLS-1$
               if (lines.length > 1)
               {
                 // Ignore the first line if it's only white space and the last line if it's only white space.
@@ -195,7 +195,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
                     s.append(lines[0]);
                     if (++start < end)
                     {
-                      s.append("\n");
+                      s.append("\n"); //$NON-NLS-1$
                     }
                   }
 
@@ -211,7 +211,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
 
                     if (++i < end)
                     {
-                      s.append("\n");
+                      s.append("\n"); //$NON-NLS-1$
                     }
                   }
 
@@ -231,7 +231,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
 
   static
   {
-    GET_ELEMENT_INDENT_METHOD = ReflectUtil.getMethod(XMLString.class, "getElementIndent", int.class);
+    GET_ELEMENT_INDENT_METHOD = ReflectUtil.getMethod(XMLString.class, "getElementIndent", int.class); //$NON-NLS-1$
     GET_ELEMENT_INDENT_METHOD.setAccessible(true);
   }
 
@@ -248,7 +248,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
         {
           // Split what we know is a String value into lines.
           String stringValue = value.toString();
-          String[] lines = stringValue.split("\r?\n", Integer.MAX_VALUE);
+          String[] lines = stringValue.split("\r?\n", Integer.MAX_VALUE); //$NON-NLS-1$
           if (lines.length == 1)
           {
             // If there are no line separators, serialize just the string value.
@@ -259,7 +259,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
           // Compute the target format that will serialize nested under the element start/end tabs by one indentation level.
           String elementIdent = getElementIndent(1);
           String contentIndent = getElementIndent(2);
-          StringBuilder s = new StringBuilder("\n");
+          StringBuilder s = new StringBuilder("\n"); //$NON-NLS-1$
           for (int i = 0; i < lines.length; ++i)
           {
             // Only if the line isn't empty, serialize the indentation followed by the line content.
@@ -271,7 +271,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
             }
 
             // Always add the line separator.
-            s.append("\n");
+            s.append("\n"); //$NON-NLS-1$
           }
 
           // Add enough indentation so the closing element is indented correctly too.
@@ -291,7 +291,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
         }
         catch (Exception ex)
         {
-          return "";
+          return ""; //$NON-NLS-1$
         }
       }
     };
@@ -358,7 +358,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
         fragment.append(fragmentPath);
         if (basisObject != null)
         {
-          fragment.append("/'");
+          fragment.append("/'"); //$NON-NLS-1$
           encode(fragment, id);
           fragment.append('\'');
         }
@@ -404,7 +404,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
         if (basisObject != null)
         {
           StringBuilder fragment = new StringBuilder();
-          fragment.append("//'");
+          fragment.append("//'"); //$NON-NLS-1$
           encode(fragment, id);
           fragment.append('\'');
 
@@ -426,10 +426,51 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
     }
   }
 
-  private static final String[] ESCAPE = { "%00", "%01", "%02", "%03", "%04", "%05", "%06", "%07", "%08", "%09", "%0A", "%0B", "%0C", "%0D", "%0E", "%0F",
-      "%10", "%11", "%12", "%13", "%14", "%15", "%16", "%17", "%18", "%19", "%1A", "%1B", "%1C", "%1D", "%1E", "%1F", "%20", null, "%22", "%23", null, "%25",
-      "%26", "%27", null, null, null, null, "%2C", null, null, "%2F", null, null, null, null, null, null, null, null, null, null, "%3A", null, "%3C", null,
-      "%3E", null, };
+  private static final String[] ESCAPE = { //
+      "%00", //$NON-NLS-1$
+      "%01", //$NON-NLS-1$
+      "%02", //$NON-NLS-1$
+      "%03", //$NON-NLS-1$
+      "%04", //$NON-NLS-1$
+      "%05", //$NON-NLS-1$
+      "%06", //$NON-NLS-1$
+      "%07", //$NON-NLS-1$
+      "%08", //$NON-NLS-1$
+      "%09", //$NON-NLS-1$
+      "%0A", //$NON-NLS-1$
+      "%0B", //$NON-NLS-1$
+      "%0C", //$NON-NLS-1$
+      "%0D", //$NON-NLS-1$
+      "%0E", //$NON-NLS-1$
+      "%0F", //$NON-NLS-1$
+      "%10", //$NON-NLS-1$
+      "%11", //$NON-NLS-1$
+      "%12", //$NON-NLS-1$
+      "%13", //$NON-NLS-1$
+      "%14", //$NON-NLS-1$
+      "%15", //$NON-NLS-1$
+      "%16", //$NON-NLS-1$
+      "%17", //$NON-NLS-1$
+      "%18", //$NON-NLS-1$
+      "%19", //$NON-NLS-1$
+      "%1A", //$NON-NLS-1$
+      "%1B", //$NON-NLS-1$
+      "%1C", //$NON-NLS-1$
+      "%1D", //$NON-NLS-1$
+      "%1E", //$NON-NLS-1$
+      "%1F", //$NON-NLS-1$
+      "%20", //$NON-NLS-1$
+      null, "%22", //$NON-NLS-1$
+      "%23", //$NON-NLS-1$
+      null, "%25", //$NON-NLS-1$
+      "%26", //$NON-NLS-1$
+      "%27", //$NON-NLS-1$
+      null, null, null, null, "%2C", //$NON-NLS-1$
+      null, null, "%2F", //$NON-NLS-1$
+      null, null, null, null, null, null, null, null, null, null, "%3A", //$NON-NLS-1$
+      null, "%3C", //$NON-NLS-1$
+      null, "%3E", //$NON-NLS-1$
+      null, };
 
   private static void encode(StringBuilder result, String value)
   {

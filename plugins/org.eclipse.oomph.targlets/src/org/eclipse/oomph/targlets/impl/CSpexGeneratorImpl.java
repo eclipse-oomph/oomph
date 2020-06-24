@@ -45,7 +45,7 @@ import java.util.Map;
  */
 public class CSpexGeneratorImpl extends ModelElementImpl implements CSpexGenerator
 {
-  private static final IPath CSPEX_PATH = new Path("buckminster.cspex");
+  private static final IPath CSPEX_PATH = new Path("buckminster.cspex"); //$NON-NLS-1$
 
   /**
    * <!-- begin-user-doc -->

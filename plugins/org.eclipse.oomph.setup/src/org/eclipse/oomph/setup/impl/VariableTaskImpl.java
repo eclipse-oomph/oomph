@@ -66,7 +66,7 @@ import java.util.Set;
  */
 public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
 {
-  private static final String ANNOTATION_KEY = "platform:/plugin/org.eclipse.oomph.base/model/legacy/setup.ecore#//ContextVariableTask/stringSubstitution";
+  private static final String ANNOTATION_KEY = "platform:/plugin/org.eclipse.oomph.base/model/legacy/setup.ecore#//ContextVariableTask/stringSubstitution"; //$NON-NLS-1$
 
   /**
    * The default value of the '{@link #getType() <em>Type</em>}' attribute.
@@ -166,7 +166,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * @generated
    * @ordered
    */
-  protected static final URI STORAGE_URI_EDEFAULT = (URI)BaseFactory.eINSTANCE.createFromString(BasePackage.eINSTANCE.getURI(), "scope://");
+  protected static final URI STORAGE_URI_EDEFAULT = (URI)BaseFactory.eINSTANCE.createFromString(BasePackage.eINSTANCE.getURI(), "scope://"); //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getStorageURI() <em>Storage URI</em>}' attribute.
@@ -385,7 +385,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    */
   public void setStorePromptedValue(boolean newStorePromptedValue)
   {
-    setStorageURI(newStorePromptedValue ? URI.createURI("") : null);
+    setStorageURI(newStorePromptedValue ? URI.createURI("") : null); //$NON-NLS-1$
   }
 
   /**
@@ -584,7 +584,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
     result.append(name);
     if (value != null)
     {
-      result.append("=\"");
+      result.append("=\""); //$NON-NLS-1$
       result.append(value);
       result.append('"');
     }
@@ -652,7 +652,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    throw new UnsupportedOperationException("Variable task can't be executed");
+    throw new UnsupportedOperationException(Messages.VariableTaskImpl_NotExecutable_exception);
   }
 
   protected void eMigrate()
@@ -665,11 +665,11 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
       if (value != null)
       {
         String name = getName();
-        if (name != null && "true".equals(value))
+        if (name != null && "true".equals(value)) //$NON-NLS-1$
         {
           StringSubstitutionTask stringSubstitutionTask = SetupFactory.eINSTANCE.createStringSubstitutionTask();
           stringSubstitutionTask.setName(name);
-          stringSubstitutionTask.setValue("${" + name + "}");
+          stringSubstitutionTask.setValue("${" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
           EObject eContainer = eContainer();
           @SuppressWarnings("unchecked")
           List<EObject> list = (List<EObject>)eContainer.eGet(eContainmentFeature());

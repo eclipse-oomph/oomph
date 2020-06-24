@@ -71,8 +71,8 @@ public class StringSubstitutionTaskItemProvider extends SetupTaskItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_StringSubstitutionTask_name_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_StringSubstitutionTask_name_feature", "_UI_StringSubstitutionTask_type"),
+        getString("_UI_StringSubstitutionTask_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_StringSubstitutionTask_name_feature", "_UI_StringSubstitutionTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.STRING_SUBSTITUTION_TASK__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -85,8 +85,8 @@ public class StringSubstitutionTaskItemProvider extends SetupTaskItemProvider
   protected void addValuePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_StringSubstitutionTask_value_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_StringSubstitutionTask_value_feature", "_UI_StringSubstitutionTask_type"),
+        getString("_UI_StringSubstitutionTask_value_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_StringSubstitutionTask_value_feature", "_UI_StringSubstitutionTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.STRING_SUBSTITUTION_TASK__VALUE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -99,7 +99,7 @@ public class StringSubstitutionTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/StringSubstitutionTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/StringSubstitutionTask")); //$NON-NLS-1$
   }
 
   /**
@@ -120,6 +120,7 @@ public class StringSubstitutionTaskItemProvider extends SetupTaskItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     StringSubstitutionTask stringSubstitution = (StringSubstitutionTask)object;

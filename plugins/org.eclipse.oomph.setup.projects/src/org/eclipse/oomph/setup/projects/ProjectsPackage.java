@@ -43,7 +43,7 @@ public interface ProjectsPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNAME = "projects";
+  String eNAME = "projects"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -51,7 +51,7 @@ public interface ProjectsPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/oomph/setup/projects/1.0";
+  String eNS_URI = "http://www.eclipse.org/oomph/setup/projects/1.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -59,7 +59,7 @@ public interface ProjectsPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "projects";
+  String eNS_PREFIX = "projects"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.

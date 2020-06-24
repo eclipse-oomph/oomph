@@ -799,15 +799,15 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (iD: ");
+    result.append(" (iD: "); //$NON-NLS-1$
     result.append(iD);
-    result.append(", description: ");
+    result.append(", description: "); //$NON-NLS-1$
     result.append(description);
-    result.append(", excludedTriggers: ");
+    result.append(", excludedTriggers: "); //$NON-NLS-1$
     result.append(excludedTriggers);
-    result.append(", disabled: ");
+    result.append(", disabled: "); //$NON-NLS-1$
     result.append(disabled);
-    result.append(", filter: ");
+    result.append(", filter: "); //$NON-NLS-1$
     result.append(filter);
     result.append(')');
     return result.toString();

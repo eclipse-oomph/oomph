@@ -15,9 +15,9 @@ import java.io.IOException;
 /**
  * @author Christoph Laeubrich
  */
+@SuppressWarnings("nls")
 public class WindowsPowerShell implements DesktopSupport
 {
-
   private String executable;
 
   public WindowsPowerShell(String executable)

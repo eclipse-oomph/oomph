@@ -26,7 +26,7 @@ public class PerformHandler extends AbstractDropdownItemHandler
 
   public PerformHandler()
   {
-    super("update.png", "Perform Setup Tasks...");
+    super("update.png", Messages.PerformHandler_text); //$NON-NLS-1$
     manual = true;
   }
 

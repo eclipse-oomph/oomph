@@ -60,13 +60,13 @@ public class URIArgumentSelector
 
       try
       {
-        argumentSelectorInterface = CommonPlugin.loadClass("org.eclipse.debug.ui", "org.eclipse.debug.internal.ui.stringsubstitution.IArgumentSelector");
+        argumentSelectorInterface = CommonPlugin.loadClass("org.eclipse.debug.ui", "org.eclipse.debug.internal.ui.stringsubstitution.IArgumentSelector"); //$NON-NLS-1$ //$NON-NLS-2$
       }
       catch (ClassNotFoundException ex)
       {
         try
         {
-          argumentSelectorInterface = CommonPlugin.loadClass("org.eclipse.debug.ui", "org.eclipse.debug.ui.stringsubstitution.IArgumentSelector");
+          argumentSelectorInterface = CommonPlugin.loadClass("org.eclipse.debug.ui", "org.eclipse.debug.ui.stringsubstitution.IArgumentSelector"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         catch (ClassNotFoundException ex1)
         {
@@ -112,7 +112,7 @@ public class URIArgumentSelector
     protected void configureShell(Shell newShell)
     {
       super.configureShell(newShell);
-      newShell.setText("Variable Selection");
+      newShell.setText(Messages.URIArgumentSelector_shellText);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class URIArgumentSelector
       gridData.grabExcessHorizontalSpace = true;
       gridData.widthHint = 400;
 
-      createButton(composite, IDialogConstants.OPEN_ID, "Variables...", false);
+      createButton(composite, IDialogConstants.OPEN_ID, Messages.URIArgumentSelector_variablesButton_text, false);
 
       return composite;
     }

@@ -45,7 +45,7 @@ import java.util.Set;
 public class IndexManager
 {
   private static URI DEFAULT_INDEX_LOCATION = URI
-      .createURI("archive:http://www.eclipse.org/setups/setups.zip!/http/git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.setup");
+      .createURI("archive:http://www.eclipse.org/setups/setups.zip!/http/git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.setup"); //$NON-NLS-1$
 
   private final ResourceSet resourceSet = new ResourceSetImpl();
 
@@ -57,13 +57,13 @@ public class IndexManager
 
   public IndexManager()
   {
-    this(SetupContext.CONFIGURATION_STATE_LOCATION_URI.appendSegment("indices.xmi"),
-        new IndexManager(SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegment("indices.xmi"), null));
+    this(SetupContext.CONFIGURATION_STATE_LOCATION_URI.appendSegment("indices.xmi"), //$NON-NLS-1$
+        new IndexManager(SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegment("indices.xmi"), null)); //$NON-NLS-1$
   }
 
   private IndexManager(URI indicesLocation, IndexManager globalIndexManager)
   {
-    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new BaseResourceFactoryImpl());
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new BaseResourceFactoryImpl()); //$NON-NLS-1$
     this.indicesLocation = indicesLocation;
     indicesResource = resourceSet.createResource(indicesLocation);
     this.globalIndexManager = globalIndexManager;
@@ -114,7 +114,7 @@ public class IndexManager
     }
 
     Annotation annotation = getAnnotation();
-    Annotation labelsAnnotation = annotation.getAnnotation("labels");
+    Annotation labelsAnnotation = annotation.getAnnotation("labels"); //$NON-NLS-1$
 
     annotation.getDetails().removeKey(indexLocation.toString());
     if (labelsAnnotation != null)
@@ -133,11 +133,11 @@ public class IndexManager
     }
 
     Annotation annotation = getAnnotation();
-    Annotation labelsAnnotation = annotation.getAnnotation("labels");
+    Annotation labelsAnnotation = annotation.getAnnotation("labels"); //$NON-NLS-1$
     if (labelsAnnotation == null)
     {
       labelsAnnotation = BaseFactory.eINSTANCE.createAnnotation();
-      labelsAnnotation.setSource("labels");
+      labelsAnnotation.setSource("labels"); //$NON-NLS-1$
       annotation.getAnnotations().add(labelsAnnotation);
     }
 
@@ -199,7 +199,7 @@ public class IndexManager
 
       // Add a URI mapping to ensure that index folder maps to the folder of the specified index location.
       Map<URI, URI> uriMap = resourceSet.getURIConverter().getURIMap();
-      uriMap.put(SetupContext.INDEX_ROOT_URI, indexLocation.trimSegments(1).appendSegment(""));
+      uriMap.put(SetupContext.INDEX_ROOT_URI, indexLocation.trimSegments(1).appendSegment("")); //$NON-NLS-1$
     }
   }
 
@@ -246,8 +246,8 @@ public class IndexManager
             // and map the whole index folder to this locations's folder.
             // This brute force approach is most likely to fully override any mappings that might already be in place in the resource set.
             uriMap.put(SetupContext.INDEX_SETUP_LOCATION_URI, targtURI);
-            uriMap.put(SetupContext.INDEX_ROOT_LOCATION_URI, targtURI.trimSegments(1).appendSegment(""));
-            uriMap.put(SetupContext.INDEX_ROOT_URI, targtURI.trimSegments(1).appendSegment(""));
+            uriMap.put(SetupContext.INDEX_ROOT_LOCATION_URI, targtURI.trimSegments(1).appendSegment("")); //$NON-NLS-1$
+            uriMap.put(SetupContext.INDEX_ROOT_URI, targtURI.trimSegments(1).appendSegment("")); //$NON-NLS-1$
           }
         }
       }
@@ -263,7 +263,7 @@ public class IndexManager
       String name = detail.getValue();
       if (StringUtil.isEmpty(name))
       {
-        name = "<unnamed-index>";
+        name = "<unnamed-index>"; //$NON-NLS-1$
       }
 
       result.put(URI.createURI(detail.getKey()), name);
@@ -286,7 +286,7 @@ public class IndexManager
   public Map<URI, String> getIndexLabels(boolean local)
   {
     Annotation annotation = getAnnotation();
-    Annotation labelsAnnotation = annotation.getAnnotation("labels");
+    Annotation labelsAnnotation = annotation.getAnnotation("labels"); //$NON-NLS-1$
 
     Map<URI, String> result = new LinkedHashMap<URI, String>();
     Set<String> labels = new HashSet<String>();
@@ -320,12 +320,12 @@ public class IndexManager
         String itemText = detail.getValue();
         if (StringUtil.isEmpty(itemText))
         {
-          itemText = "<unnamed-index>";
+          itemText = "<unnamed-index>"; //$NON-NLS-1$
         }
 
         if (duplicates.contains(itemText))
         {
-          itemText += " - " + indexLocation;
+          itemText += " - " + indexLocation; //$NON-NLS-1$
         }
 
         result.put(indexLocation, itemText);
@@ -421,9 +421,9 @@ public class IndexManager
       ResourceSet configuredResourceSet = SetupCoreUtil.createResourceSet();
       URI indexLocation = configuredResourceSet.getURIConverter().normalize(SetupContext.INDEX_SETUP_URI);
       annotation = BaseFactory.eINSTANCE.createAnnotation();
-      annotation.setSource("IndexLocations");
+      annotation.setSource("IndexLocations"); //$NON-NLS-1$
       EMap<String, String> details = annotation.getDetails();
-      details.put(indexLocation.toString(), "Eclipse");
+      details.put(indexLocation.toString(), "Eclipse"); //$NON-NLS-1$
     }
 
     EList<EObject> contents = indicesResource.getContents();
@@ -453,7 +453,7 @@ public class IndexManager
 
     if (SetupContext.INDEX_SETUP_NAME.equals(indexLocation.lastSegment()))
     {
-      return indexLocation.trimSegments(1).appendSegment("");
+      return indexLocation.trimSegments(1).appendSegment(""); //$NON-NLS-1$
     }
 
     return indexLocation;

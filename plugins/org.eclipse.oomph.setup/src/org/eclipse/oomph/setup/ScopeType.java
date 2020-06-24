@@ -35,106 +35,112 @@ public enum ScopeType implements Enumerator
    * @generated
    * @ordered
    */
-  NONE(0, "None", "None"),
+  NONE(0, "None", "None"), //$NON-NLS-1$ //$NON-NLS-2$
+
   /**
    * The '<em><b>Product Catalog</b></em>' literal object.
    * <!-- begin-user-doc -->
-  * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #PRODUCT_CATALOG_VALUE
    * @generated
    * @ordered
    */
-  PRODUCT_CATALOG(1, "ProductCatalog", "ProductCatalog"),
+  PRODUCT_CATALOG(1, "ProductCatalog", "ProductCatalog"), //$NON-NLS-1$ //$NON-NLS-2$
+
   /**
    * The '<em><b>Product</b></em>' literal object.
    * <!-- begin-user-doc -->
-  * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #PRODUCT_VALUE
    * @generated
    * @ordered
    */
-  PRODUCT(2, "Product", "Eclipse"),
+  PRODUCT(2, "Product", "Eclipse"), //$NON-NLS-1$ //$NON-NLS-2$
+
   /**
    * The '<em><b>Product Version</b></em>' literal object.
    * <!-- begin-user-doc -->
-  * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #PRODUCT_VERSION_VALUE
    * @generated
    * @ordered
    */
-  PRODUCT_VERSION(3, "ProductVersion", "ProductVersion"),
+  PRODUCT_VERSION(3, "ProductVersion", "ProductVersion"), //$NON-NLS-1$ //$NON-NLS-2$
+
   /**
    * The '<em><b>Project Catalog</b></em>' literal object.
    * <!-- begin-user-doc -->
-  * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #PROJECT_CATALOG_VALUE
    * @generated
    * @ordered
    */
-  PROJECT_CATALOG(4, "ProjectCatalog", "ProjectCatalog"),
+  PROJECT_CATALOG(4, "ProjectCatalog", "ProjectCatalog"), //$NON-NLS-1$ //$NON-NLS-2$
+
   /**
    * The '<em><b>Project</b></em>' literal object.
    * <!-- begin-user-doc -->
-  * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #PROJECT_VALUE
    * @generated
    * @ordered
    */
-  PROJECT(5, "Project", "Project"),
+  PROJECT(5, "Project", "Project"), //$NON-NLS-1$ //$NON-NLS-2$
+
   /**
    * The '<em><b>Stream</b></em>' literal object.
    * <!-- begin-user-doc -->
-  * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #STREAM_VALUE
    * @generated
    * @ordered
    */
-  STREAM(6, "Stream", "Stream"),
+  STREAM(6, "Stream", "Stream"), //$NON-NLS-1$ //$NON-NLS-2$
+
   /**
    * The '<em><b>Installation</b></em>' literal object.
    * <!-- begin-user-doc -->
-  * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #INSTALLATION_VALUE
    * @generated
    * @ordered
    */
-  INSTALLATION(7, "Installation", "Installation"),
+  INSTALLATION(7, "Installation", "Installation"), //$NON-NLS-1$ //$NON-NLS-2$
+
   /**
    * The '<em><b>Workspace</b></em>' literal object.
    * <!-- begin-user-doc -->
-  * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #WORKSPACE_VALUE
    * @generated
    * @ordered
    */
-  WORKSPACE(8, "Workspace", "Workspace"),
+  WORKSPACE(8, "Workspace", "Workspace"), //$NON-NLS-1$ //$NON-NLS-2$
+
   /**
    * The '<em><b>User</b></em>' literal object.
    * <!-- begin-user-doc -->
-  * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #USER_VALUE
    * @generated
    * @ordered
    */
-  USER(9, "User", "User"),
+  USER(9, "User", "User"), //$NON-NLS-1$ //$NON-NLS-2$
+
   /**
    * The '<em><b>Macro</b></em>' literal object.
    * <!-- begin-user-doc -->
-  * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #MACRO_VALUE
    * @generated
    * @ordered
    */
-  MACRO(10, "Macro", "Macro");
+  MACRO(10, "Macro", "Macro"); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>None</b></em>' literal value.
    * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>None</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #NONE
    * @model name="None"
    * @generated
@@ -145,11 +151,7 @@ public enum ScopeType implements Enumerator
   /**
    * The '<em><b>Product Catalog</b></em>' literal value.
    * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>Product Catalog</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #PRODUCT_CATALOG
    * @model name="ProductCatalog"
    * @generated
@@ -160,11 +162,7 @@ public enum ScopeType implements Enumerator
   /**
    * The '<em><b>Product</b></em>' literal value.
    * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>Product</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #PRODUCT
    * @model name="Product" literal="Eclipse"
    * @generated
@@ -175,11 +173,7 @@ public enum ScopeType implements Enumerator
   /**
    * The '<em><b>Product Version</b></em>' literal value.
    * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>Product Version</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #PRODUCT_VERSION
    * @model name="ProductVersion"
    * @generated
@@ -190,11 +184,7 @@ public enum ScopeType implements Enumerator
   /**
    * The '<em><b>Project Catalog</b></em>' literal value.
    * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>Project Catalog</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #PROJECT_CATALOG
    * @model name="ProjectCatalog"
    * @generated
@@ -205,11 +195,7 @@ public enum ScopeType implements Enumerator
   /**
    * The '<em><b>Project</b></em>' literal value.
    * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>Project</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #PROJECT
    * @model name="Project"
    * @generated
@@ -220,11 +206,7 @@ public enum ScopeType implements Enumerator
   /**
    * The '<em><b>Stream</b></em>' literal value.
    * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>Stream</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #STREAM
    * @model name="Stream"
    * @generated
@@ -235,11 +217,7 @@ public enum ScopeType implements Enumerator
   /**
    * The '<em><b>Installation</b></em>' literal value.
    * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>Installation</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #INSTALLATION
    * @model name="Installation"
    * @generated
@@ -250,11 +228,7 @@ public enum ScopeType implements Enumerator
   /**
    * The '<em><b>Workspace</b></em>' literal value.
    * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>Workspace</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #WORKSPACE
    * @model name="Workspace"
    * @generated
@@ -265,11 +239,7 @@ public enum ScopeType implements Enumerator
   /**
    * The '<em><b>User</b></em>' literal value.
    * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of '<em><b>User</b></em>' literal object isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #USER
    * @model name="User"
    * @generated
@@ -291,7 +261,7 @@ public enum ScopeType implements Enumerator
   /**
    * An array of all the '<em><b>Scope Type</b></em>' enumerators.
    * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   private static final ScopeType[] VALUES_ARRAY = new ScopeType[] { NONE, PRODUCT_CATALOG, PRODUCT, PRODUCT_VERSION, PROJECT_CATALOG, PROJECT, STREAM,
@@ -300,7 +270,7 @@ public enum ScopeType implements Enumerator
   /**
    * A public read-only list of all the '<em><b>Scope Type</b></em>' enumerators.
    * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   public static final List<ScopeType> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
@@ -308,7 +278,7 @@ public enum ScopeType implements Enumerator
   /**
    * Returns the '<em><b>Scope Type</b></em>' literal with the specified literal value.
    * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @param literal the literal.
    * @return the matching enumerator or <code>null</code>.
    * @generated
@@ -329,7 +299,7 @@ public enum ScopeType implements Enumerator
   /**
    * Returns the '<em><b>Scope Type</b></em>' literal with the specified name.
    * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @param name the name.
    * @return the matching enumerator or <code>null</code>.
    * @generated
@@ -350,7 +320,7 @@ public enum ScopeType implements Enumerator
   /**
    * Returns the '<em><b>Scope Type</b></em>' literal with the specified integer value.
    * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @param value the integer value.
    * @return the matching enumerator or <code>null</code>.
    * @generated
@@ -387,21 +357,21 @@ public enum ScopeType implements Enumerator
 
   /**
    * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   private final int value;
 
   /**
    * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   private final String name;
 
   /**
    * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   private final String literal;
@@ -409,7 +379,7 @@ public enum ScopeType implements Enumerator
   /**
    * Only this class can construct instances.
    * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   private ScopeType(int value, String name, String literal)
@@ -421,7 +391,7 @@ public enum ScopeType implements Enumerator
 
   /**
    * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   public int getValue()
@@ -431,7 +401,7 @@ public enum ScopeType implements Enumerator
 
   /**
    * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   public String getName()
@@ -441,7 +411,7 @@ public enum ScopeType implements Enumerator
 
   /**
    * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   public String getLiteral()
@@ -452,7 +422,7 @@ public enum ScopeType implements Enumerator
   /**
    * Returns the literal value of the enumerator, which is its string representation.
    * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
   @Override

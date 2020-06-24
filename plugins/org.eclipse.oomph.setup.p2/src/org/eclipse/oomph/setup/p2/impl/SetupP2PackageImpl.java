@@ -261,18 +261,18 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
     p2TaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(p2TaskEClass, P2Task.class, "P2Task", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getP2Task_Label(), ecorePackage.getEString(), "label", null, 0, 1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEClass(p2TaskEClass, P2Task.class, "P2Task", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getP2Task_Label(), ecorePackage.getEString(), "label", null, 0, 1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getP2Task_Requirements(), theP2Package.getRequirement(), null, "requirements", null, 0, -1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getP2Task_Requirements(), theP2Package.getRequirement(), null, "requirements", null, 0, -1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getP2Task_Repositories(), theP2Package.getRepository(), null, "repositories", null, 0, -1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getP2Task_Repositories(), theP2Package.getRepository(), null, "repositories", null, 0, -1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getP2Task_LicenseConfirmationDisabled(), ecorePackage.getEBoolean(), "licenseConfirmationDisabled", null, 0, 1, P2Task.class, !IS_TRANSIENT,
+    initEAttribute(getP2Task_LicenseConfirmationDisabled(), ecorePackage.getEBoolean(), "licenseConfirmationDisabled", null, 0, 1, P2Task.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getP2Task_MergeDisabled(), ecorePackage.getEBoolean(), "mergeDisabled", null, 0, 1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getP2Task_MergeDisabled(), ecorePackage.getEBoolean(), "mergeDisabled", null, 0, 1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getP2Task_ProfileProperties(), ecorePackage.getEString(), "profileProperties", null, 0, 1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getP2Task_ProfileProperties(), ecorePackage.getEString(), "profileProperties", null, 0, 1, P2Task.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
@@ -293,9 +293,10 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
     addAnnotation(this, source,
-        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.p2.edit/icons/full/obj16" });
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.p2.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -306,9 +307,11 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getP2Task_Requirements(), source, new String[] { "name", "requirement" });
-    addAnnotation(getP2Task_Repositories(), source, new String[] { "name", "repository" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getP2Task_Requirements(), source, new String[] { "name", "requirement" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getP2Task_Repositories(), source, new String[] { "name", "repository" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
 } // SetupP2PackageImpl

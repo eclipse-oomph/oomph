@@ -196,7 +196,7 @@ public final class WorkspaceIUImporter
   {
     private ImportProjectsJob()
     {
-      super("Import projects");
+      super(Messages.WorkspaceIUImporter_Imports_job);
     }
 
     @Override

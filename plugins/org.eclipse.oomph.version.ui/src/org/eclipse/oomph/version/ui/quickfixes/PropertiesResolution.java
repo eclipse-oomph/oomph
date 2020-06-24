@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -54,8 +55,9 @@ public class PropertiesResolution extends AbstractResolution
   {
     IProject project = getMarker().getResource().getProject();
     VersionBuilderArguments arguments = new VersionBuilderArguments(project);
-    IFile propertiesFile = VersionUtil.getFile(new Path(arguments.getReleasePath()), "properties");
-    return "Add '" + propertyValue + "' to the " + propertyKey + " property of " + propertiesFile.getFullPath();
+    IFile propertiesFile = VersionUtil.getFile(new Path(arguments.getReleasePath()), "properties"); //$NON-NLS-1$
+    return NLS.bind(Messages.PropertiesResolution_description_addValueToKeyOfPropertiesFile,
+        new Object[] { propertyValue, propertyKey, propertiesFile.getFullPath() });
   }
 
   @Override
@@ -63,7 +65,7 @@ public class PropertiesResolution extends AbstractResolution
   {
     IProject project = marker.getResource().getProject();
     VersionBuilderArguments arguments = new VersionBuilderArguments(project);
-    IFile propertiesFile = VersionUtil.getFile(new Path(arguments.getReleasePath()), "properties");
+    IFile propertiesFile = VersionUtil.getFile(new Path(arguments.getReleasePath()), "properties"); //$NON-NLS-1$
     if (propertiesFile.exists())
     {
       Properties properties = new Properties();
@@ -75,8 +77,8 @@ public class PropertiesResolution extends AbstractResolution
         properties = new Properties();
         properties.load(contents);
 
-        String oldValue = properties.getProperty(propertyKey, "");
-        properties.setProperty(propertyKey, (oldValue + " " + propertyValue.replace("\\", "\\\\").replace(" ", "\\ ")).trim());
+        String oldValue = properties.getProperty(propertyKey, ""); //$NON-NLS-1$
+        properties.setProperty(propertyKey, (oldValue + " " + propertyValue.replace("\\", "\\\\").replace(" ", "\\ ")).trim()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
       }
       finally
       {
@@ -84,7 +86,7 @@ public class PropertiesResolution extends AbstractResolution
       }
 
       ByteArrayOutputStream out = new ByteArrayOutputStream();
-      properties.store(out, "");
+      properties.store(out, ""); //$NON-NLS-1$
       contents = new ByteArrayInputStream(out.toByteArray());
       propertiesFile.setContents(contents, true, true, null);
     }
@@ -95,11 +97,9 @@ public class PropertiesResolution extends AbstractResolution
    */
   public static class RootProjects extends PropertiesResolution
   {
-    private static final String LABEL = "Mark as root project";
-
     public RootProjects(IMarker marker)
     {
-      super(marker, LABEL, VersionBuilder.ROOT_PROJECTS_KEY, marker.getResource().getProject().getName());
+      super(marker, Messages.PropertiesResolution_rootProjects_label, VersionBuilder.ROOT_PROJECTS_KEY, marker.getResource().getProject().getName());
     }
   }
 
@@ -108,11 +108,9 @@ public class PropertiesResolution extends AbstractResolution
    */
   public static class IgnoredReferences extends PropertiesResolution
   {
-    private static final String LABEL = "Mark as ignored reference";
-
     public IgnoredReferences(IMarker marker)
     {
-      super(marker, LABEL, VersionBuilder.IGNORED_REFERENCES_KEY, Markers.getQuickFixReference(marker));
+      super(marker, Messages.PropertiesResolution_ignoredReferences_label, VersionBuilder.IGNORED_REFERENCES_KEY, Markers.getQuickFixReference(marker));
     }
   }
 }

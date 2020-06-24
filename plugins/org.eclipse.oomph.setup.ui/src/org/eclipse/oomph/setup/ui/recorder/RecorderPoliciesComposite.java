@@ -130,7 +130,7 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
     {
       URI relativePath = property.getRelativePath();
       // System.err.println("##" + relativePath);
-      URI instance = URI.createURI("//instance");
+      URI instance = URI.createURI("//instance"); //$NON-NLS-1$
       URI resolve = instance.appendSegments(relativePath.segments());
       if (PreferenceTaskImpl.PreferenceHandler.getHandler(resolve).isIgnored())
       {

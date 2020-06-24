@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 /**
  * @author Eike Stepper
  */
+@SuppressWarnings("nls")
 public final class CocoaUtil
 {
   private static final int ABOUT_ITEM_INDEX = 0;

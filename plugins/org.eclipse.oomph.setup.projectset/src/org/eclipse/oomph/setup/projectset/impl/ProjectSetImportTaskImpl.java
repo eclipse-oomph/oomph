@@ -200,7 +200,7 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (uRL: ");
+    result.append(" (uRL: "); //$NON-NLS-1$
     result.append(uRL);
     result.append(')');
     return result.toString();
@@ -228,7 +228,7 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
   {
     private static final IWorkspaceRoot ROOT = EcorePlugin.getWorkspaceRoot();
 
-    private static final File HISTORY = ProjectSetPlugin.INSTANCE.getStateLocation().append("import-history.properties").toFile();
+    private static final File HISTORY = ProjectSetPlugin.INSTANCE.getStateLocation().append("import-history.properties").toFile(); //$NON-NLS-1$
 
     private URI uri;
 

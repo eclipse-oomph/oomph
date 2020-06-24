@@ -54,7 +54,7 @@ public class GitApplyAction extends BaseSelectionListenerAction implements IObje
 
   public GitApplyAction()
   {
-    super("Adjust and Apply Patch");
+    super(Messages.GitApplyAction_ApplyPatch_label);
   }
 
   protected GitApplyAction(String text)
@@ -165,7 +165,7 @@ public class GitApplyAction extends BaseSelectionListenerAction implements IObje
       this.attachment = attachment;
       this.repository = repository;
       setText(repository.getWorkTree().getName());
-      setImageDescriptor(Activator.getImageDescriptor("icons/repository.gif"));
+      setImageDescriptor(Activator.getImageDescriptor("icons/repository.gif")); //$NON-NLS-1$
     }
 
     @Override
@@ -192,7 +192,7 @@ public class GitApplyAction extends BaseSelectionListenerAction implements IObje
 
       try
       {
-        File tempFile = File.createTempFile("~attachment-", ".patch");
+        File tempFile = File.createTempFile("~attachment-", ".patch"); //$NON-NLS-1$ //$NON-NLS-2$
         writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFile)));
 
         in = storage.getContents();
@@ -202,7 +202,7 @@ public class GitApplyAction extends BaseSelectionListenerAction implements IObje
         while ((line = reader.readLine()) != null)
         {
           writer.write(line);
-          writer.write("\n");
+          writer.write("\n"); //$NON-NLS-1$
         }
 
         return tempFile;
@@ -213,7 +213,7 @@ public class GitApplyAction extends BaseSelectionListenerAction implements IObje
       }
       catch (Exception ex)
       {
-        throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Problem while saving patch", ex));
+        throw new CoreException(new Status(IStatus.ERROR, Activator.PLUGIN_ID, Messages.GitApplyAction_Save_exception, ex));
       }
       finally
       {
@@ -247,7 +247,7 @@ public class GitApplyAction extends BaseSelectionListenerAction implements IObje
       {
         Shell shell = targetPart.getSite().getShell();
         File workTree = repository.getWorkTree();
-        String command = "git apply " + file.getAbsolutePath().replace('\\', '/');
+        String command = "git apply " + file.getAbsolutePath().replace('\\', '/'); //$NON-NLS-1$
 
         GitBash.executeCommand(shell, workTree, command);
       }

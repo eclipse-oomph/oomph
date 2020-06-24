@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.osgi.service.datalocation.Location;
+import org.eclipse.osgi.util.NLS;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -64,6 +65,16 @@ public abstract class OomphPlugin extends EMFPlugin
   protected OomphPlugin(ResourceLocator[] delegateResourceLocators)
   {
     super(delegateResourceLocators);
+  }
+
+  public String getStringX(String key, Object... substitutions)
+  {
+    return getString(key, substitutions);
+  }
+
+  public String getStringX(String key, boolean translate, Object... substitutions)
+  {
+    return getString(key, substitutions, translate);
   }
 
   public final boolean isOSGiRunning()
@@ -115,7 +126,7 @@ public abstract class OomphPlugin extends EMFPlugin
       }
     }
 
-    throw new IllegalStateException("The configuration location is unavailable");
+    throw new IllegalStateException(Messages.OomphPlugin_ConfigurationUnavailable_exception);
   }
 
   public final IPath getStateLocation() throws IllegalStateException
@@ -125,12 +136,12 @@ public abstract class OomphPlugin extends EMFPlugin
 
   public final IPath getUserLocation() throws IllegalStateException
   {
-    return new Path(PropertiesUtil.getUserHome()).append(".eclipse").append(getSymbolicName());
+    return new Path(PropertiesUtil.getUserHome()).append(".eclipse").append(getSymbolicName()); //$NON-NLS-1$
   }
 
   public final Preferences getInstancePreferences()
   {
-    return getPreferences("instance");
+    return getPreferences("instance"); //$NON-NLS-1$
   }
 
   public final Preference getInstancePreference(String key)
@@ -140,7 +151,7 @@ public abstract class OomphPlugin extends EMFPlugin
 
   public final Preferences getConfigurationPreferences()
   {
-    return getPreferences("configuration");
+    return getPreferences("configuration"); //$NON-NLS-1$
   }
 
   public final Preference getConfigurationPreference(String key)
@@ -329,7 +340,7 @@ public abstract class OomphPlugin extends EMFPlugin
   public final File exportResources(String entry)
   {
     Bundle bundle = getBundle();
-    File target = new File(PropertiesUtil.getProperty("java.io.tmpdir"), bundle.getSymbolicName() + "_" + bundle.getVersion());
+    File target = new File(PropertiesUtil.getProperty("java.io.tmpdir"), bundle.getSymbolicName() + "_" + bundle.getVersion()); //$NON-NLS-1$ //$NON-NLS-2$
     if (!target.exists())
     {
       exportResources(entry, target);
@@ -346,14 +357,14 @@ public abstract class OomphPlugin extends EMFPlugin
 
   private static void exportResources(Bundle bundle, String entry, File target)
   {
-    exportResources(bundle, entry.length(), entry, target.getAbsolutePath() + "/");
+    exportResources(bundle, entry.length(), entry, target.getAbsolutePath() + "/"); //$NON-NLS-1$
   }
 
   private static void exportResources(Bundle bundle, int sourceRootLength, String entry, String targetRoot)
   {
     File file = new File(targetRoot + entry.substring(sourceRootLength));
 
-    if (entry.endsWith("/"))
+    if (entry.endsWith("/")) //$NON-NLS-1$
     {
       file.mkdirs();
 
@@ -416,12 +427,12 @@ public abstract class OomphPlugin extends EMFPlugin
     try
     {
       ByteArrayOutputStream out = new ByteArrayOutputStream();
-      PrintStream printStream = new PrintStream(out, false, "UTF-8");
+      PrintStream printStream = new PrintStream(out, false, "UTF-8"); //$NON-NLS-1$
 
       print(object, null, printStream, 0, 0);
 
       printStream.close();
-      return new String(out.toByteArray(), "UTF-8");
+      return new String(out.toByteArray(), "UTF-8"); //$NON-NLS-1$
     }
     catch (UnsupportedEncodingException ex)
     {
@@ -440,34 +451,34 @@ public abstract class OomphPlugin extends EMFPlugin
       switch (severity)
       {
         case IStatus.OK:
-          stream.print("OK");
+          stream.print("OK"); //$NON-NLS-1$
           break;
 
         case IStatus.ERROR:
-          stream.print("ERROR");
+          stream.print("ERROR"); //$NON-NLS-1$
           break;
 
         case IStatus.WARNING:
-          stream.print("WARNING");
+          stream.print("WARNING"); //$NON-NLS-1$
           break;
 
         case IStatus.INFO:
-          stream.print("INFO");
+          stream.print("INFO"); //$NON-NLS-1$
           break;
 
         case IStatus.CANCEL:
-          stream.print("CANCEL");
+          stream.print("CANCEL"); //$NON-NLS-1$
           break;
 
         default:
-          stream.print("severity=");
+          stream.print("severity="); //$NON-NLS-1$
           stream.print(severity);
       }
 
-      stream.print(": ");
+      stream.print(": "); //$NON-NLS-1$
       stream.print(status.getPlugin());
 
-      stream.print(" code=");
+      stream.print(" code="); //$NON-NLS-1$
       stream.print(status.getCode());
 
       stream.print(' ');
@@ -507,7 +518,7 @@ public abstract class OomphPlugin extends EMFPlugin
       indent(stream, level);
       if (more != 0)
       {
-        stream.print("Caused by: ");
+        stream.print("Caused by: "); //$NON-NLS-1$
       }
 
       stream.print(t.getClass().getName());
@@ -515,7 +526,7 @@ public abstract class OomphPlugin extends EMFPlugin
       String msg = t.getLocalizedMessage();
       if (msg != null && msg.length() != 0)
       {
-        stream.print(": ");
+        stream.print(": "); //$NON-NLS-1$
         stream.print(msg);
       }
 
@@ -541,16 +552,16 @@ public abstract class OomphPlugin extends EMFPlugin
       for (int i = 0; i < stackTrace.length - more; i++)
       {
         indent(stream, level + 1);
-        stream.print("at ");
+        stream.print("at "); //$NON-NLS-1$
         stream.println(stackTrace[i].toString());
       }
 
       if (more != 0)
       {
         indent(stream, level + 1);
-        stream.print("... ");
+        stream.print("... "); //$NON-NLS-1$
         stream.print(more);
-        stream.println(" more");
+        stream.println(" more"); //$NON-NLS-1$
       }
     }
     else if (extra != null)
@@ -563,7 +574,7 @@ public abstract class OomphPlugin extends EMFPlugin
   {
     for (int i = 0; i < level; ++i)
     {
-      stream.print("  ");
+      stream.print("  "); //$NON-NLS-1$
     }
   }
 
@@ -574,25 +585,25 @@ public abstract class OomphPlugin extends EMFPlugin
     final File file = FileLocator.getBundleFile(bundle);
     if (file.isFile())
     {
-      if (file.getName().endsWith(".jar"))
+      if (file.getName().endsWith(".jar")) //$NON-NLS-1$
       {
         cp.add(file);
       }
     }
     else if (file.isDirectory())
     {
-      File classpathFile = new File(file, ".classpath");
+      File classpathFile = new File(file, ".classpath"); //$NON-NLS-1$
       if (classpathFile.isFile())
       {
         DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
         Element rootElement = XMLUtil.loadRootElement(documentBuilder, classpathFile);
-        XMLUtil.handleElementsByTagName(rootElement, "classpathentry", new XMLUtil.ElementHandler()
+        XMLUtil.handleElementsByTagName(rootElement, "classpathentry", new XMLUtil.ElementHandler() //$NON-NLS-1$
         {
           public void handleElement(Element element) throws Exception
           {
-            if ("output".equals(element.getAttribute("kind")))
+            if ("output".equals(element.getAttribute("kind"))) //$NON-NLS-1$ //$NON-NLS-2$
             {
-              String path = element.getAttribute("path");
+              String path = element.getAttribute("path"); //$NON-NLS-1$
               cp.add(new File(file, path));
             }
           }
@@ -609,7 +620,7 @@ public abstract class OomphPlugin extends EMFPlugin
 
   public static String getBuildID(Bundle bundle)
   {
-    URL url = bundle.getEntry("about.mappings");
+    URL url = bundle.getEntry("about.mappings"); //$NON-NLS-1$
     if (url != null)
     {
       InputStream source = null;
@@ -621,8 +632,8 @@ public abstract class OomphPlugin extends EMFPlugin
         Properties properties = new Properties();
         properties.load(source);
 
-        String buildID = (String)properties.get("0");
-        if (buildID != null && !buildID.startsWith("$"))
+        String buildID = (String)properties.get("0"); //$NON-NLS-1$
+        if (buildID != null && !buildID.startsWith("$")) //$NON-NLS-1$
         {
           return buildID;
         }
@@ -687,7 +698,7 @@ public abstract class OomphPlugin extends EMFPlugin
       String path = parent.getPath();
       if (path.length() != 0)
       {
-        path += "/";
+        path += "/"; //$NON-NLS-1$
       }
 
       return path + name;
@@ -700,13 +711,13 @@ public abstract class OomphPlugin extends EMFPlugin
         children = new ArrayList<BundleFile>();
 
         Bundle bundle = getBundle();
-        String path = "/" + getPath();
+        String path = "/" + getPath(); //$NON-NLS-1$
         Enumeration<String> paths = bundle.getEntryPaths(path);
         while (paths.hasMoreElements())
         {
           String childPath = paths.nextElement();
 
-          boolean directory = childPath.endsWith("/");
+          boolean directory = childPath.endsWith("/"); //$NON-NLS-1$
 
           String childName = new Path(childPath).removeTrailingSeparator().lastSegment();
           BundleFile child = new BundleFile(childName, directory, this);
@@ -768,7 +779,7 @@ public abstract class OomphPlugin extends EMFPlugin
       BundleFile child = getChild(name);
       if (child != null)
       {
-        throw new IllegalStateException("File already exists: " + child);
+        throw new IllegalStateException(NLS.bind(Messages.OomphPlugin_FileExists_excpetion, child));
       }
 
       child = new BundleFile(name, directory, this);
@@ -796,7 +807,7 @@ public abstract class OomphPlugin extends EMFPlugin
       String path = getPath();
       if (isDirectory())
       {
-        path += "/";
+        path += "/"; //$NON-NLS-1$
       }
 
       exportResources(bundle, path, target);
@@ -836,7 +847,7 @@ public abstract class OomphPlugin extends EMFPlugin
 
       try
       {
-        return out.toString("UTF-8");
+        return out.toString("UTF-8"); //$NON-NLS-1$
       }
       catch (UnsupportedEncodingException ex)
       {
@@ -853,7 +864,7 @@ public abstract class OomphPlugin extends EMFPlugin
 
       try
       {
-        InputStream in = new ByteArrayInputStream(contents.getBytes("UTF-8"));
+        InputStream in = new ByteArrayInputStream(contents.getBytes("UTF-8")); //$NON-NLS-1$
         out = new FileOutputStream(file);
         IOUtil.copy(in, out);
       }
@@ -886,7 +897,7 @@ public abstract class OomphPlugin extends EMFPlugin
     {
       if (!directory)
       {
-        throw new IllegalStateException("Should not be called on files");
+        throw new IllegalStateException(Messages.OomphPlugin_InvalidFiles_exception);
       }
     }
 
@@ -894,7 +905,7 @@ public abstract class OomphPlugin extends EMFPlugin
     {
       if (directory)
       {
-        throw new IllegalStateException("Should not be called on directories");
+        throw new IllegalStateException(Messages.OomphPlugin_InvalidDirectories_exception);
       }
     }
 
@@ -922,10 +933,10 @@ public abstract class OomphPlugin extends EMFPlugin
 
       public Root(Bundle bundle)
       {
-        super("", true, null);
+        super("", true, null); //$NON-NLS-1$
         if (bundle == null)
         {
-          throw new IllegalArgumentException("Bundle is null");
+          throw new IllegalArgumentException(Messages.OomphPlugin_NullBundle_exception);
         }
 
         this.bundle = bundle;
@@ -940,7 +951,7 @@ public abstract class OomphPlugin extends EMFPlugin
       @Override
       public String getPath()
       {
-        return "";
+        return ""; //$NON-NLS-1$
       }
     }
   }
@@ -1056,7 +1067,7 @@ public abstract class OomphPlugin extends EMFPlugin
     @Override
     public String toString()
     {
-      return getClass().getSimpleName() + "[" + key + "]";
+      return getClass().getSimpleName() + "[" + key + "]"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     private void flush()

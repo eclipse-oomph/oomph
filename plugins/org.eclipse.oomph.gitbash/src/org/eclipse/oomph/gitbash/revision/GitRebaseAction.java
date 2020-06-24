@@ -25,7 +25,7 @@ public class GitRebaseAction extends AbstractRevisionAction
   protected void run(Shell shell, Repository repository, File workTree, RevObject revision) throws Exception
   {
     String id = revision.getId().name();
-    System.out.println(workTree.getAbsolutePath() + " --> git rebase " + id);
+    System.out.println(workTree.getAbsolutePath() + " --> git rebase " + id); //$NON-NLS-1$
     // GitBash.executeCommand(shell, workTree, "git rebase ");
   }
 }

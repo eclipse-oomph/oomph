@@ -62,20 +62,20 @@ public class LicenseDialog extends AbstractConfirmDialog
 
   public LicenseDialog(Map<ILicense, List<IInstallableUnit>> licensesToIUs)
   {
-    super("Licenses", 1000, 600, "Remember accepted licenses");
+    super(Messages.LicenseDialog_title, 1000, 600, Messages.LicenseDialog_rememberButton_text);
     this.licensesToIUs = licensesToIUs;
   }
 
   @Override
   protected String getShellText()
   {
-    return "Oomph License Confirmation";
+    return Messages.LicenseDialog_shellText;
   }
 
   @Override
   protected String getDefaultMessage()
   {
-    return "Review and accept licenses before the software can be installed.";
+    return Messages.LicenseDialog_defaultMessage;
   }
 
   @Override
@@ -317,12 +317,12 @@ public class LicenseDialog extends AbstractConfirmDialog
     {
       if (element instanceof org.eclipse.equinox.internal.p2.metadata.License)
       {
-        return SetupUIPlugin.INSTANCE.getSWTImage("license");
+        return SetupUIPlugin.INSTANCE.getSWTImage("license"); //$NON-NLS-1$
       }
 
       if (element instanceof IUWithLicenseParent || element instanceof IInstallableUnit)
       {
-        return SetupUIPlugin.INSTANCE.getSWTImage("feature");
+        return SetupUIPlugin.INSTANCE.getSWTImage("feature"); //$NON-NLS-1$
       }
 
       return null;

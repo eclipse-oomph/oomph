@@ -504,19 +504,19 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
     }
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (id: ");
+    result.append(" (id: "); //$NON-NLS-1$
     result.append(getID());
-    result.append(", computedType: ");
+    result.append(", computedType: "); //$NON-NLS-1$
     result.append(computedType);
-    result.append(", resolvedType: ");
+    result.append(", resolvedType: "); //$NON-NLS-1$
     result.append(resolvedType);
 
     Map.Entry<String, String> preference = getPreference();
     if (preference != null)
     {
-      result.append(", ");
+      result.append(", "); //$NON-NLS-1$
       result.append(preference.getKey());
-      result.append(": ");
+      result.append(": "); //$NON-NLS-1$
       result.append(preference.getValue());
     }
 

@@ -36,6 +36,7 @@ import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -102,15 +103,14 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
         IProject project = ((IResource)element).getProject();
         if (!project.isAccessible())
         {
-          message = "The selected project is not accessible.\nSelect an accessible project to create the new " + modelName + " in.";
+          message = NLS.bind(Messages.ComponentModelWizard_ProjectNotAccessible_message, modelName);
         }
         else
         {
           file = project.getFile(getFileName());
           if (file.exists())
           {
-            message = "A " + modelName + " file does already exist in the selected project.\nDelete it first if you want to create a new " + modelName
-                + " in this project.";
+            message = NLS.bind(Messages.ComponentModelWizard_AlreadyExists_message, modelName, modelName);
           }
           else
           {
@@ -122,7 +122,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
 
     if (file == null && message == null)
     {
-      message = "No project is selected.\nSelect a project to create the new " + modelName + " in.";
+      message = NLS.bind(Messages.ComponentModelWizard_SelectProject_message, modelName);
     }
 
     if (message != null)
@@ -134,7 +134,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
     {
       IWizardPage page = createPage(file);
       page.setTitle(getModelName());
-      page.setDescription("Create a new " + modelName + " file.");
+      page.setDescription(NLS.bind(Messages.ComponentModelWizard_CreateFile_message, modelName));
 
       addPage(page);
     }
@@ -171,7 +171,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
             }
 
             Map<Object, Object> options = new HashMap<Object, Object>();
-            options.put(XMLResource.OPTION_ENCODING, "UTF-8");
+            options.put(XMLResource.OPTION_ENCODING, "UTF-8"); //$NON-NLS-1$
             resource.save(options);
           }
           catch (Exception exception)
@@ -209,7 +209,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
       }
       catch (PartInitException exception)
       {
-        MessageDialog.openError(workbenchWindow.getShell(), TargletEditorPlugin.INSTANCE.getString("_UI_OpenEditorError_label"), exception.getMessage());
+        MessageDialog.openError(workbenchWindow.getShell(), TargletEditorPlugin.INSTANCE.getString("_UI_OpenEditorError_label"), exception.getMessage()); //$NON-NLS-1$
         return false;
       }
 
@@ -245,10 +245,10 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
 
     public ErrorPage(String title, String message)
     {
-      super("Error");
+      super(Messages.ComponentModelWizard_Error_label);
       this.message = message;
       setTitle(title);
-      setErrorMessage(TargletEditorPlugin.INSTANCE.getString("_UI_ErrorPage_description"));
+      setErrorMessage(TargletEditorPlugin.INSTANCE.getString("_UI_ErrorPage_description")); //$NON-NLS-1$
     }
 
     public void createControl(Composite parent)
@@ -269,19 +269,19 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
     @Override
     protected Object getImage()
     {
-      return TargletEditorPlugin.INSTANCE.getImage("full/wizban/cdef_wiz.png");
+      return TargletEditorPlugin.INSTANCE.getImage("full/wizban/cdef_wiz.png"); //$NON-NLS-1$
     }
 
     @Override
     protected String getModelName()
     {
-      return TargletEditorPlugin.INSTANCE.getString("_UI_CDef_ModelName");
+      return TargletEditorPlugin.INSTANCE.getString("_UI_CDef_ModelName"); //$NON-NLS-1$
     }
 
     @Override
     protected String getFileName()
     {
-      return "component.def";
+      return "component.def"; //$NON-NLS-1$
     }
 
     @Override
@@ -305,11 +305,11 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
           composite.setLayout(new GridLayout(2, false));
 
           Label idLabel = new Label(composite, SWT.NONE);
-          idLabel.setText("Component ID:");
+          idLabel.setText(Messages.ComponentModelWizard_ComponentID_label);
           idLabel.setLayoutData(new GridData());
 
           final Text idText = new Text(composite, SWT.BORDER);
-          idText.setText(model.getID() == null ? "" : model.getID());
+          idText.setText(model.getID() == null ? "" : model.getID()); //$NON-NLS-1$
           idText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
           idText.addModifyListener(new ModifyListener()
           {
@@ -321,11 +321,11 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
           });
 
           Label versionLabel = new Label(composite, SWT.NONE);
-          versionLabel.setText("Component Version:");
+          versionLabel.setText(Messages.ComponentModelWizard_ComponentVersion_label);
           versionLabel.setLayoutData(new GridData());
 
           final Text versionText = new Text(composite, SWT.BORDER);
-          versionText.setText(model.getVersion() == null ? "" : model.getVersion().toString());
+          versionText.setText(model.getVersion() == null ? "" : model.getVersion().toString()); //$NON-NLS-1$
           versionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
           versionText.addModifyListener(new ModifyListener()
           {
@@ -359,14 +359,14 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
     protected String getErrorMessage(IFile file)
     {
       IProject project = file.getProject();
-      if (project.getFile("META-INF/MANIFEST.MF").exists())
+      if (project.getFile("META-INF/MANIFEST.MF").exists()) //$NON-NLS-1$
       {
-        return getErrorMessage(project, "The selected project appears to be a plugin component.");
+        return getErrorMessage(project, Messages.ComponentModelWizard_PluginComponent_message);
       }
 
       if (project.getFile(FeatureGenerator.FEATURE_XML).exists())
       {
-        return getErrorMessage(project, "The selected project appears to be a feature component.");
+        return getErrorMessage(project, Messages.ComponentModelWizard_FeatureComponent_message);
       }
 
       return null;
@@ -374,12 +374,12 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
 
     private String getErrorMessage(IProject project, String message)
     {
-      if (project.getFile("component.ext").exists())
+      if (project.getFile("component.ext").exists()) //$NON-NLS-1$
       {
-        return message + "\nSelect a project that is not already a component.";
+        return message + "\n" + Messages.ComponentModelWizard_ProjectAlreadyComponent_message; //$NON-NLS-1$
       }
 
-      return message + "\nEither select a project that is not already a component or create a component extension.";
+      return message + "\n" + Messages.ComponentModelWizard_SelectOrCreate_message; //$NON-NLS-1$
     }
   }
 
@@ -391,19 +391,19 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
     @Override
     protected Object getImage()
     {
-      return TargletEditorPlugin.INSTANCE.getImage("full/wizban/cext_wiz.png");
+      return TargletEditorPlugin.INSTANCE.getImage("full/wizban/cext_wiz.png"); //$NON-NLS-1$
     }
 
     @Override
     protected String getModelName()
     {
-      return TargletEditorPlugin.INSTANCE.getString("_UI_CExt_ModelName");
+      return TargletEditorPlugin.INSTANCE.getString("_UI_CExt_ModelName"); //$NON-NLS-1$
     }
 
     @Override
     protected String getFileName()
     {
-      return "component.ext";
+      return "component.ext"; //$NON-NLS-1$
     }
 
     @Override
@@ -420,7 +420,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
         public void createControl(Composite parent)
         {
           Label label = new Label(parent, SWT.WRAP);
-          label.setText("Press Finish to create the component extension file.");
+          label.setText(Messages.ComponentModelWizard_Finish_message);
           setControl(label);
         }
       };
@@ -430,9 +430,9 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
     protected String getErrorMessage(IFile file)
     {
       IProject project = file.getProject();
-      if (project.getFile("component.def").exists())
+      if (project.getFile("component.def").exists()) //$NON-NLS-1$
       {
-        return "A component definition already exists in the selected project.\nEdit the 'component.def' file directly if you want to change the dependencies of this component.";
+        return Messages.ComponentModelWizard_ComponentDefinitionExists_message;
       }
 
       return null;

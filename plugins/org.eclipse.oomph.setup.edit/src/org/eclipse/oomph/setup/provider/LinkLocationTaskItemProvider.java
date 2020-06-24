@@ -70,8 +70,8 @@ public class LinkLocationTaskItemProvider extends SetupTaskItemProvider
   protected void addPathPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_LinkLocationTask_path_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_LinkLocationTask_path_feature", "_UI_LinkLocationTask_type"),
+        getString("_UI_LinkLocationTask_path_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_LinkLocationTask_path_feature", "_UI_LinkLocationTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.LINK_LOCATION_TASK__PATH, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -84,8 +84,8 @@ public class LinkLocationTaskItemProvider extends SetupTaskItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_LinkLocationTask_name_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_LinkLocationTask_name_feature", "_UI_LinkLocationTask_type"),
+        getString("_UI_LinkLocationTask_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_LinkLocationTask_name_feature", "_UI_LinkLocationTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.LINK_LOCATION_TASK__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -98,7 +98,7 @@ public class LinkLocationTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/LinkLocationTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/LinkLocationTask")); //$NON-NLS-1$
   }
 
   /**
@@ -122,7 +122,8 @@ public class LinkLocationTaskItemProvider extends SetupTaskItemProvider
   public String getText(Object object)
   {
     String label = ((LinkLocationTask)object).getPath();
-    return label == null || label.length() == 0 ? getString("_UI_LinkLocationTask_type") : getString("_UI_LinkLocationTask_type") + " " + label;
+    return label == null || label.length() == 0 ? getString("_UI_LinkLocationTask_type") : //$NON-NLS-1$
+        getString("_UI_LinkLocationTask_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

@@ -36,7 +36,7 @@ public class ExitShell extends AnimatedShell<Boolean>
 
   private static final int BIG_FONT_PX = GearAnimator.BIG_FONT_PX;
 
-  private static final String[] LINES = { "You can take the questionnaire later via the Oomph Setup preferences:" };
+  private static final String[] LINES = { Messages.ExitShell_lines_youCanTakeQuestionnaireLater };
 
   private final GearAnimator gearAnimator;
 
@@ -107,8 +107,8 @@ public class ExitShell extends AnimatedShell<Boolean>
       fontPx = font.getFontData()[0].getHeight();
 
       purple = createColor(43, 34, 84);
-      image = loadImage("exit_page.png");
-      image_ovr = loadImage("exit_page_ovr.png");
+      image = loadImage("exit_page.png"); //$NON-NLS-1$
+      image_ovr = loadImage("exit_page_ovr.png"); //$NON-NLS-1$
     }
 
     @Override
@@ -179,7 +179,7 @@ public class ExitShell extends AnimatedShell<Boolean>
 
       gc.setForeground(purple);
       gc.setFont(gearAnimator.getBigFont());
-      drawText(gc, cX, BORDER + fontPx, "Exit Questionnaire?");
+      drawText(gc, cX, BORDER + fontPx, Messages.ExitShell_exitConfirmation);
 
       gc.setFont(font);
       drawText(gc, cX, 2 * BORDER + BIG_FONT_PX, LINES[0]);
@@ -198,10 +198,10 @@ public class ExitShell extends AnimatedShell<Boolean>
       gc.setForeground(purple);
 
       gc.setFont(hover == 0 ? gearAnimator.getHoverFont() : gearAnimator.getBigFont());
-      boxes[0] = drawText(gc, cX - 3 * BORDER, answerY, "Exit Now");
+      boxes[0] = drawText(gc, cX - 3 * BORDER, answerY, Messages.ExitShell_exitNow);
 
       gc.setFont(hover == 1 ? gearAnimator.getHoverFont() : gearAnimator.getBigFont());
-      boxes[1] = drawText(gc, cX + 3 * BORDER, answerY, "Go Back");
+      boxes[1] = drawText(gc, cX + 3 * BORDER, answerY, Messages.ExitShell_goBack);
 
       oldHover = hover;
     }

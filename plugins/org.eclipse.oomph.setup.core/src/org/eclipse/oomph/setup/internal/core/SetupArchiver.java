@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.xml.type.AnyType;
 
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -129,7 +130,7 @@ public class SetupArchiver implements IApplication
                 // If not, we fail early so we don't even try to load the resource.
                 // This way we don't end up with a resource with what's likely to be bad contents.
                 // At least for XML parsing fails, but with images, we can't check if the image is valid.
-                throw new IOException("The server is delivering inconsistent results for " + uri);
+                throw new IOException(NLS.bind(Messages.SetupArchiver_InconsistentResults_exception, uri));
               }
             }
             catch (IORuntimeException ex)
@@ -161,7 +162,7 @@ public class SetupArchiver implements IApplication
     for (int i = 0; i < arguments.length; ++i)
     {
       String argument = arguments[i];
-      if (argument.startsWith("-"))
+      if (argument.startsWith("-")) //$NON-NLS-1$
       {
         expectURIs = false;
       }
@@ -170,33 +171,33 @@ public class SetupArchiver implements IApplication
       {
         uris.add(URI.createURI(argument));
       }
-      else if ("-target".equals(argument))
+      else if ("-target".equals(argument)) //$NON-NLS-1$
       {
         file = new File(arguments[++i]);
       }
-      else if ("-uris".equals(argument))
+      else if ("-uris".equals(argument)) //$NON-NLS-1$
       {
         expectURIs = true;
       }
     }
 
     String url = file.getAbsolutePath();
-    if (url.startsWith("/home/data/httpd/"))
+    if (url.startsWith("/home/data/httpd/")) //$NON-NLS-1$
     {
-      url = "http://" + url.substring("/home/data/httpd/".length());
+      url = "http://" + url.substring("/home/data/httpd/".length()); //$NON-NLS-1$ //$NON-NLS-2$
       System.out.println();
-      System.out.println("--> " + url);
+      System.out.println("--> " + url); //$NON-NLS-1$
       System.out.println();
     }
 
     Set<String> entryNames = new HashSet<String>();
     long lastModified = file.lastModified();
-    File temp = new File(file.toString() + ".tmp");
+    File temp = new File(file.toString() + ".tmp"); //$NON-NLS-1$
     URI outputLocation;
 
     if (lastModified == 0)
     {
-      outputLocation = URI.createURI("archive:" + URI.createFileURI(file.toString()) + "!/");
+      outputLocation = URI.createURI("archive:" + URI.createFileURI(file.toString()) + "!/"); //$NON-NLS-1$ //$NON-NLS-2$
     }
     else
     {
@@ -204,10 +205,10 @@ public class SetupArchiver implements IApplication
 
       if (!temp.setLastModified(lastModified))
       {
-        throw new IORuntimeException("Could not set timestamp of " + temp);
+        throw new IORuntimeException(NLS.bind(Messages.SetupArchiver_CouldNotSetTimestamp_exception, temp));
       }
 
-      outputLocation = URI.createURI("archive:" + URI.createFileURI(temp.toString()) + "!/");
+      outputLocation = URI.createURI("archive:" + URI.createFileURI(temp.toString()) + "!/"); //$NON-NLS-1$ //$NON-NLS-2$
 
       ZipFile zipFile = null;
       try
@@ -221,26 +222,26 @@ public class SetupArchiver implements IApplication
           entryNames.add(name);
 
           URI path = URI.createURI(name);
-          URI uri = URI.createURI(path.segment(0) + ":" + "//" + path.segment(1));
+          URI uri = URI.createURI(path.segment(0) + ":" + "//" + path.segment(1)); //$NON-NLS-1$ //$NON-NLS-2$
           for (int i = 2, length = path.segmentCount(); i < length; ++i)
           {
             uri = uri.appendSegment(path.segment(i));
           }
 
-          URI archiveEntry = URI.createURI("archive:" + URI.createFileURI(file.toString()) + "!/" + path);
+          URI archiveEntry = URI.createURI("archive:" + URI.createFileURI(file.toString()) + "!/" + path); //$NON-NLS-1$ //$NON-NLS-2$
 
-          System.out.println("Previously mirrored " + uri + " -> " + archiveEntry);
+          System.out.println(NLS.bind(Messages.SetupArchiver_PreviouslyMirrored_message, uri, archiveEntry));
         }
       }
       catch (IOException ex)
       {
         if (!file.delete())
         {
-          throw new IORuntimeException("Could delete bad version of " + file);
+          throw new IORuntimeException(NLS.bind(Messages.SetupArchiver_CouldNotDeleteBadVersion_exception, file));
         }
 
         lastModified = 0;
-        outputLocation = URI.createURI("archive:" + URI.createFileURI(file.toString()) + "!/");
+        outputLocation = URI.createURI("archive:" + URI.createFileURI(file.toString()) + "!/"); //$NON-NLS-1$ //$NON-NLS-2$
       }
       finally
       {
@@ -295,7 +296,7 @@ public class SetupArchiver implements IApplication
       options.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
     }
 
-    options.put(Resource.OPTION_LINE_DELIMITER, "\n");
+    options.put(Resource.OPTION_LINE_DELIMITER, "\n"); //$NON-NLS-1$
 
     // Remove any folder redirections that might be in place for the location of the setups folder and folders under that.
     for (Iterator<URI> it = uriMap.keySet().iterator(); it.hasNext();)
@@ -317,11 +318,11 @@ public class SetupArchiver implements IApplication
     {
       URI uri = resource.getURI();
       URI normalizedURI = uriConverter.normalize(uri);
-      if ("ecore".equals(uri.fileExtension()) && (resource.getContents().isEmpty() || !resource.getErrors().isEmpty()))
+      if ("ecore".equals(uri.fileExtension()) && (resource.getContents().isEmpty() || !resource.getErrors().isEmpty())) //$NON-NLS-1$
       {
-        System.err.println("FAILED to load " + normalizedURI);
+        System.err.println(NLS.bind(Messages.SetupArchiver_FailedToLoad_message, normalizedURI));
         printDiagnostics(resource.getErrors());
-        System.err.println("Aborting");
+        System.err.println(Messages.SetupArchiver_Aborting_message);
         hasEcoreFailures = true;
         break;
       }
@@ -336,12 +337,12 @@ public class SetupArchiver implements IApplication
 
         URI normalizedURI = uriConverter.normalize(uri);
         String scheme = normalizedURI.scheme();
-        if (normalizedURI.query() == null && ("http".equals(scheme) || "https".equals(scheme)))
+        if (normalizedURI.query() == null && ("http".equals(scheme) || "https".equals(scheme))) //$NON-NLS-1$ //$NON-NLS-2$
         {
           URI path = URI.createURI(scheme);
           path = path.appendSegment(normalizedURI.authority());
           path = path.appendSegments(normalizedURI.segments());
-          System.out.println("Mirroring " + normalizedURI);
+          System.out.println(NLS.bind(Messages.SetupArchiver_Mirroring_message, normalizedURI));
 
           URI output = path.resolve(outputLocation);
           entryNames.remove(path.toString());
@@ -349,13 +350,13 @@ public class SetupArchiver implements IApplication
 
           if (resource.getContents().isEmpty() || !resource.getErrors().isEmpty())
           {
-            System.err.println("FAILED to load " + normalizedURI);
+            System.err.println(NLS.bind(Messages.SetupArchiver_FailedToLoad_message, normalizedURI));
             printDiagnostics(resource.getErrors());
             hasFailures = true;
           }
           else if (hasUnrecongizedXMLContent(resource))
           {
-            System.err.println("FAILED to load properly because of unrecognized XML content " + normalizedURI);
+            System.err.println(NLS.bind(Messages.SetupArchiver_FailedToLoadProperly_message, normalizedURI));
           }
           else
           {
@@ -367,25 +368,25 @@ public class SetupArchiver implements IApplication
 
               if (after - before > 0)
               {
-                System.err.println("CHANGED! " + normalizedURI);
+                System.err.println(NLS.bind(Messages.SetupArchiver_Changed_message, normalizedURI));
               }
             }
             catch (IOException ex)
             {
-              System.err.println("FAILED to save " + normalizedURI);
+              System.err.println(NLS.bind(Messages.SetupArchiver_FailedToSave_message, normalizedURI));
               ex.printStackTrace();
             }
           }
         }
         else
         {
-          System.out.println("Ignoring  " + normalizedURI);
+          System.out.println(NLS.bind(Messages.SetupArchiver_Ignoring_message, normalizedURI));
         }
       }
 
       if (hasFailures)
       {
-        System.err.println("There were failures so no entries will be deleted from the archive");
+        System.err.println(Messages.SetupArchiver_Failures_message);
       }
       else
       {
@@ -411,7 +412,7 @@ public class SetupArchiver implements IApplication
       {
         if (lastModified != 0 && !file.delete())
         {
-          System.err.println("Could not delete " + file);
+          System.err.println(NLS.bind(Messages.SetupArchiver_CouldNotDelete_message, file));
         }
       }
 
@@ -419,47 +420,47 @@ public class SetupArchiver implements IApplication
       {
         if (isDamaged(file))
         {
-          System.err.println("The resulting archive is damaged. Deleting " + file);
+          System.err.println(NLS.bind(Messages.SetupArchiver_ArchiveDamaged_message, file));
           file.delete();
         }
         else
         {
-          System.out.println("Successfully created " + file);
+          System.out.println(NLS.bind(Messages.SetupArchiver_SuccessfullyCreated_message, file));
         }
       }
       else if (isDamaged(temp))
       {
-        System.err.println("The resulting archive is damaged so the old one will be retained. Deleting " + temp);
+        System.err.println(NLS.bind(Messages.SetupArchiver_ArchiveDamagedKeepOld_message, temp));
         temp.delete();
       }
       else
       {
-        File backup = new File(file.getParentFile(), file.getName() + ".bak");
+        File backup = new File(file.getParentFile(), file.getName() + ".bak"); //$NON-NLS-1$
         try
         {
           IOUtil.copyFile(temp, backup);
         }
         catch (Throwable throwable)
         {
-          System.err.println("Could not create backup " + backup);
+          System.err.println(NLS.bind(Messages.SetupArchiver_CouldNotBackUp_message, backup));
         }
 
         if (temp.renameTo(file))
         {
-          System.out.println("Successful updates for " + file);
+          System.out.println(NLS.bind(Messages.SetupArchiver_SuccessfulUpdates_message, file));
         }
         else
         {
-          System.err.println("Could not rename " + temp + " to " + file);
+          System.err.println(NLS.bind(Messages.SetupArchiver_CouldNotRename_message, temp, file));
         }
       }
     }
     else
     {
-      System.out.println("No updates for " + file);
+      System.out.println(NLS.bind(Messages.SetupArchiver_NoUpdates_message, file));
       if (!temp.delete())
       {
-        System.err.println("Could not delete " + temp);
+        System.err.println(NLS.bind(Messages.SetupArchiver_CouldNotDelete_message, temp));
       }
     }
 
@@ -555,7 +556,8 @@ public class SetupArchiver implements IApplication
   {
     for (Resource.Diagnostic diagnostic : diagnostics)
     {
-      System.err.println("  ERROR: " + diagnostic.getMessage() + " " + diagnostic.getLine() + " " + diagnostic.getLine() + " " + diagnostic.getColumn());
+      System.err.println(NLS.bind(Messages.SetupArchiver_DiagnosticError_message,
+          new Object[] { diagnostic.getMessage(), diagnostic.getLine(), diagnostic.getLine(), diagnostic.getColumn() }));
     }
   }
 

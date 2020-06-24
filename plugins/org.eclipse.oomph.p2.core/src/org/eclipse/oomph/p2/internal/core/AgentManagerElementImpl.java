@@ -14,6 +14,8 @@ import org.eclipse.oomph.p2.P2Exception;
 import org.eclipse.oomph.p2.core.AgentManagerElement;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.osgi.util.NLS;
+
 /**
  * @author Eike Stepper
  */
@@ -34,7 +36,7 @@ public abstract class AgentManagerElementImpl implements AgentManagerElement
   {
     if (!force && isUsed())
     {
-      throw new P2Exception(StringUtil.cap(getElementType()) + " is used: " + this);
+      throw new P2Exception(NLS.bind(Messages.AgentManagerElementImpl_Used_exception, StringUtil.cap(getElementType()), this));
     }
 
     doDelete();

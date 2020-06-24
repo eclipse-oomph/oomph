@@ -212,23 +212,23 @@ public interface ITargletContainerDescriptor
       switch (severity)
       {
         case IStatus.OK:
-          builder.append("OK ");
+          builder.append("OK "); //$NON-NLS-1$
           break;
 
         case IStatus.INFO:
-          builder.append("INFO ");
+          builder.append("INFO "); //$NON-NLS-1$
           break;
 
         case IStatus.WARNING:
-          builder.append("WARNING ");
+          builder.append("WARNING "); //$NON-NLS-1$
           break;
 
         case IStatus.ERROR:
-          builder.append("ERROR ");
+          builder.append("ERROR "); //$NON-NLS-1$
           break;
 
         case IStatus.CANCEL:
-          builder.append("CANCEL ");
+          builder.append("CANCEL "); //$NON-NLS-1$
           break;
 
         default:

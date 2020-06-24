@@ -35,7 +35,7 @@ public enum UnsignedPolicy implements Enumerator
    * @generated
    * @ordered
    */
-  PROMPT(0, "PROMPT", "PROMPT"),
+  PROMPT(0, "PROMPT", "PROMPT"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>ACCEPT</b></em>' literal object.
@@ -45,7 +45,7 @@ public enum UnsignedPolicy implements Enumerator
    * @generated
    * @ordered
    */
-  ACCEPT(1, "ACCEPT", "ACCEPT"),
+  ACCEPT(1, "ACCEPT", "ACCEPT"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>DECLINE</b></em>' literal object.
@@ -55,15 +55,11 @@ public enum UnsignedPolicy implements Enumerator
    * @generated
    * @ordered
    */
-  DECLINE(2, "DECLINE", "DECLINE");
+  DECLINE(2, "DECLINE", "DECLINE"); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>PROMPT</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>PROMPT</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #PROMPT
    * @model
@@ -75,10 +71,6 @@ public enum UnsignedPolicy implements Enumerator
   /**
    * The '<em><b>ACCEPT</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>ACCEPT</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #ACCEPT
    * @model
@@ -90,10 +82,6 @@ public enum UnsignedPolicy implements Enumerator
   /**
    * The '<em><b>DECLINE</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>DECLINE</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #DECLINE
    * @model

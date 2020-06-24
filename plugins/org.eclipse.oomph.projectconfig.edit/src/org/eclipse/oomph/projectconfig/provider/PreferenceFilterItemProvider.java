@@ -95,8 +95,8 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
   protected void addPreferenceNodePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new PreferenceItemItemProvider.PreferenceItemPropertyDescriptor(
-        ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_PreferenceFilter_preferenceNode_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceFilter_preferenceNode_feature", "_UI_PreferenceFilter_type"),
+        ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_PreferenceFilter_preferenceNode_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceFilter_preferenceNode_feature", "_UI_PreferenceFilter_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectConfigPackage.Literals.PREFERENCE_FILTER__PREFERENCE_NODE, true, false, true, null, null, null)
     {
       @Override
@@ -139,8 +139,8 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
   protected void addInclusionsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceFilter_inclusions_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceFilter_inclusions_feature", "_UI_PreferenceFilter_type"),
+        getString("_UI_PreferenceFilter_inclusions_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceFilter_inclusions_feature", "_UI_PreferenceFilter_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectConfigPackage.Literals.PREFERENCE_FILTER__INCLUSIONS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -153,8 +153,8 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
   protected void addExclusionsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceFilter_exclusions_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceFilter_exclusions_feature", "_UI_PreferenceFilter_type"),
+        getString("_UI_PreferenceFilter_exclusions_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceFilter_exclusions_feature", "_UI_PreferenceFilter_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectConfigPackage.Literals.PREFERENCE_FILTER__EXCLUSIONS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -167,8 +167,8 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
   protected void addPropertiesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceFilter_properties_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceFilter_properties_feature", "_UI_PreferenceFilter_type"),
+        getString("_UI_PreferenceFilter_properties_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceFilter_properties_feature", "_UI_PreferenceFilter_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectConfigPackage.Literals.PREFERENCE_FILTER__PROPERTIES, false, false, false, null, null, null));
   }
 
@@ -192,7 +192,7 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/PreferenceFilter"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/PreferenceFilter")); //$NON-NLS-1$
   }
 
   /**
@@ -218,14 +218,14 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
     PreferenceFilter preferenceFilter = (PreferenceFilter)object;
     String label = preferenceFilter.getInclusions().toString();
     String exclusions = preferenceFilter.getExclusions().toString();
-    if (!"".equals(exclusions))
+    if (!"".equals(exclusions)) //$NON-NLS-1$
     {
-      label += " - " + exclusions;
+      label += " - " + exclusions; //$NON-NLS-1$
     }
 
     if (label == null)
     {
-      label = "<unnamed>";
+      label = "<unnamed>"; //$NON-NLS-1$
     }
 
     PreferenceNode preferenceNode = preferenceFilter.getPreferenceNode();
@@ -234,7 +234,7 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
       String name = preferenceNode.getName();
       if (name != null)
       {
-        label = name + " -> " + label;
+        label = name + " -> " + label; //$NON-NLS-1$
       }
     }
 
@@ -298,7 +298,7 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
           Object image = super.getImage(object);
           List<Object> images = new ArrayList<Object>(2);
           images.add(image);
-          images.add(EMFEditPlugin.INSTANCE.getImage("full/ovr16/ControlledObject"));
+          images.add(EMFEditPlugin.INSTANCE.getImage("full/ovr16/ControlledObject")); //$NON-NLS-1$
           return image = new ComposedImage(images);
         }
 
@@ -358,7 +358,7 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
         for (Property property : properties)
         {
           String name = property.getName();
-          name = name.replace(".", "\\.");
+          name = name.replace(".", "\\."); //$NON-NLS-1$ //$NON-NLS-2$
 
           int index = newInclusions.indexOf(name);
           if (index != -1)
@@ -402,13 +402,13 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
 
           if (newExclusions.length() != 0)
           {
-            newExclusions.append("|");
+            newExclusions.append("|"); //$NON-NLS-1$
           }
 
           newExclusions.append(name);
         }
 
-        CompoundCommand command = new CompoundCommand("Update filter patterns");
+        CompoundCommand command = new CompoundCommand(Messages.PreferenceFilterItemProvider_Update_command);
         command.append(SetCommand.create(domain, preferenceFilter, ProjectConfigPackage.Literals.PREFERENCE_FILTER__INCLUSIONS,
             Pattern.compile(newInclusions.toString())));
         command.append(SetCommand.create(domain, preferenceFilter, ProjectConfigPackage.Literals.PREFERENCE_FILTER__EXCLUSIONS,

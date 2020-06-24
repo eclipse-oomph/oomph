@@ -44,7 +44,7 @@ public class SynchronizerJob extends Job
 
   public SynchronizerJob(Synchronizer synchronizer, boolean deferLocal)
   {
-    super("Synchronizing");
+    super(Messages.SynchronizerJob_job);
     this.synchronizer = synchronizer;
     this.deferLocal = deferLocal;
   }
@@ -146,7 +146,7 @@ public class SynchronizerJob extends Job
     {
       Synchronization result = synchronizer.synchronize(deferLocal);
 
-      if (Boolean.getBoolean("org.eclipse.oomph.setup.sync.SynchronizerJob.testDelay"))
+      if (Boolean.getBoolean("org.eclipse.oomph.setup.sync.SynchronizerJob.testDelay")) //$NON-NLS-1$
       {
         for (int i = 0; i < 150 && !monitor.isCanceled() && !awaitCanceled; i++)
         {

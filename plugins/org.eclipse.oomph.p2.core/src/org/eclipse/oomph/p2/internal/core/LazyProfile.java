@@ -21,6 +21,7 @@ import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.index.IIndex;
 import org.eclipse.equinox.p2.query.IQuery;
 import org.eclipse.equinox.p2.query.IQueryResult;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.lang.ref.SoftReference;
@@ -77,7 +78,7 @@ public final class LazyProfile extends org.eclipse.equinox.internal.p2.engine.Pr
     org.eclipse.equinox.internal.p2.engine.Profile referent = registry.loadProfile(profileId, profileDirectory);
     if (referent == null)
     {
-      throw new P2Exception("Profile '" + profileId + "' could not be loaded from " + profileDirectory);
+      throw new P2Exception(NLS.bind(Messages.LazyProfile_ProfileNotLoaded_exception, profileId, profileDirectory));
     }
 
     referent.setParent(parent);
@@ -157,11 +158,11 @@ public final class LazyProfile extends org.eclipse.equinox.internal.p2.engine.Pr
     Profile delegate = getDelegate();
 
     // If we're getting the cache property and this is for an installation with a shared bundle pool...
-    if (IProfile.PROP_CACHE.equals(key) && "true".equals(delegate.getProperty(org.eclipse.oomph.p2.core.Profile.PROP_PROFILE_SHARED_POOL)))
+    if (IProfile.PROP_CACHE.equals(key) && "true".equals(delegate.getProperty(org.eclipse.oomph.p2.core.Profile.PROP_PROFILE_SHARED_POOL))) //$NON-NLS-1$
     {
       // If we're being called from org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry.updateRoamingProfile(Profile)
       StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-      if (stackTrace.length > 3 && "updateRoamingProfile".equals(stackTrace[2].getMethodName()))
+      if (stackTrace.length > 3 && "updateRoamingProfile".equals(stackTrace[2].getMethodName())) //$NON-NLS-1$
       {
         // Return the value of the install folder instead.
         // This will prevent that method from trying to change the value of the cache property.
@@ -188,7 +189,7 @@ public final class LazyProfile extends org.eclipse.equinox.internal.p2.engine.Pr
       // and this is a profile for an Oomph installation with a shared bundle pool for which the cache property has already been set,
       // we don't want org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry.updateRoamingProfile(Profile)
       // to change the cache location to point to the installation.
-      if ("true".equals(delegate.getProperty(org.eclipse.oomph.p2.core.Profile.PROP_PROFILE_SHARED_POOL)) && delegate.getProperty(IProfile.PROP_CACHE) != null)
+      if ("true".equals(delegate.getProperty(org.eclipse.oomph.p2.core.Profile.PROP_PROFILE_SHARED_POOL)) && delegate.getProperty(IProfile.PROP_CACHE) != null) //$NON-NLS-1$
       {
         return;
       }

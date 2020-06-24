@@ -264,6 +264,7 @@ public class Table extends RectangularRange
   /**
    * Example
    */
+  @SuppressWarnings("nls")
   public static void main(String[] args) throws Exception
   {
     Table table1 = new Table();

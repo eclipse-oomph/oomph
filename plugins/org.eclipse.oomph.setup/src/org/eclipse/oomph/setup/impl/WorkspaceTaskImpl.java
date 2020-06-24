@@ -43,7 +43,7 @@ public class WorkspaceTaskImpl extends SetupTaskImpl implements WorkspaceTask
    * @generated
    * @ordered
    */
-  protected static final String LOCATION_EDEFAULT = "";
+  protected static final String LOCATION_EDEFAULT = ""; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getLocation() <em>Location</em>}' attribute.
@@ -182,7 +182,7 @@ public class WorkspaceTaskImpl extends SetupTaskImpl implements WorkspaceTask
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (location: ");
+    result.append(" (location: "); //$NON-NLS-1$
     result.append(location);
     result.append(')');
     return result.toString();

@@ -178,16 +178,16 @@ public class FilePredicateImpl extends PredicateImpl implements FilePredicate
             if (i + 1 < length && filePattern.charAt(i + 1) == '*')
             {
               ++i;
-              pattern.append(".*");
+              pattern.append(".*"); //$NON-NLS-1$
             }
             else
             {
-              pattern.append("[^/]*");
+              pattern.append("[^/]*"); //$NON-NLS-1$
             }
           }
           else if (character == '?')
           {
-            pattern.append("[^/]");
+            pattern.append("[^/]"); //$NON-NLS-1$
           }
           else
           {
@@ -367,9 +367,9 @@ public class FilePredicateImpl extends PredicateImpl implements FilePredicate
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (filePattern: ");
+    result.append(" (filePattern: "); //$NON-NLS-1$
     result.append(filePattern);
-    result.append(", contentPattern: ");
+    result.append(", contentPattern: "); //$NON-NLS-1$
     result.append(contentPattern);
     result.append(')');
     return result.toString();

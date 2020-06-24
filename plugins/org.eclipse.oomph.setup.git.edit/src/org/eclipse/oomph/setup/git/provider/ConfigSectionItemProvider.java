@@ -101,7 +101,7 @@ public class ConfigSectionItemProvider extends ConfigSubsectionItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ConfigSection"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ConfigSection")); //$NON-NLS-1$
   }
 
   /**

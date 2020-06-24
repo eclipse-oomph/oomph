@@ -35,7 +35,7 @@ public interface InstallerUI
   public static final boolean SHOW_BUNDLE_POOL_UI = PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION) == null
       || !AgentManager.BUNDLE_POOL_LOCATION_NONE.equalsIgnoreCase(PropertiesUtil.getProperty(AgentManager.PROP_BUNDLE_POOL_LOCATION));
 
-  public static final boolean BITNESS_CHOOSE = PropertiesUtil.isProperty("oomph.setup.bitness.choose");
+  public static final boolean BITNESS_CHOOSE = PropertiesUtil.isProperty("oomph.setup.bitness.choose"); //$NON-NLS-1$
 
   public int show();
 

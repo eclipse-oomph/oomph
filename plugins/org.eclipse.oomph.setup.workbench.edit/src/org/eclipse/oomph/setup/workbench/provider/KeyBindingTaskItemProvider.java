@@ -77,8 +77,8 @@ public class KeyBindingTaskItemProvider extends SetupTaskItemProvider
   protected void addSchemePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_KeyBindingTask_scheme_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_KeyBindingTask_scheme_feature", "_UI_KeyBindingTask_type"),
+        getString("_UI_KeyBindingTask_scheme_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_KeyBindingTask_scheme_feature", "_UI_KeyBindingTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         WorkbenchPackage.Literals.KEY_BINDING_TASK__SCHEME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -91,8 +91,8 @@ public class KeyBindingTaskItemProvider extends SetupTaskItemProvider
   protected void addPlatformPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_KeyBindingTask_platform_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_KeyBindingTask_platform_feature", "_UI_KeyBindingTask_type"),
+        getString("_UI_KeyBindingTask_platform_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_KeyBindingTask_platform_feature", "_UI_KeyBindingTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         WorkbenchPackage.Literals.KEY_BINDING_TASK__PLATFORM, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -105,8 +105,8 @@ public class KeyBindingTaskItemProvider extends SetupTaskItemProvider
   protected void addLocalePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_KeyBindingTask_locale_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_KeyBindingTask_locale_feature", "_UI_KeyBindingTask_type"),
+        getString("_UI_KeyBindingTask_locale_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_KeyBindingTask_locale_feature", "_UI_KeyBindingTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         WorkbenchPackage.Literals.KEY_BINDING_TASK__LOCALE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -119,8 +119,8 @@ public class KeyBindingTaskItemProvider extends SetupTaskItemProvider
   protected void addKeysPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_KeyBindingTask_keys_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_KeyBindingTask_keys_feature", "_UI_KeyBindingTask_type"),
+        getString("_UI_KeyBindingTask_keys_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_KeyBindingTask_keys_feature", "_UI_KeyBindingTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         WorkbenchPackage.Literals.KEY_BINDING_TASK__KEYS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -133,8 +133,8 @@ public class KeyBindingTaskItemProvider extends SetupTaskItemProvider
   protected void addCommandPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_KeyBindingTask_command_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_KeyBindingTask_command_feature", "_UI_KeyBindingTask_type"),
+        getString("_UI_KeyBindingTask_command_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_KeyBindingTask_command_feature", "_UI_KeyBindingTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         WorkbenchPackage.Literals.KEY_BINDING_TASK__COMMAND, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -181,7 +181,7 @@ public class KeyBindingTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/KeyBindingTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/KeyBindingTask")); //$NON-NLS-1$
   }
 
   /**
@@ -205,7 +205,7 @@ public class KeyBindingTaskItemProvider extends SetupTaskItemProvider
   public String getText(Object object)
   {
     KeyBindingTask keyBindingTask = (KeyBindingTask)object;
-    return "" + keyBindingTask.getKeys() + " = " + keyBindingTask.getCommand();
+    return "" + keyBindingTask.getKeys() + " = " + keyBindingTask.getCommand(); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

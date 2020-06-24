@@ -26,7 +26,7 @@ public class ConfigureResolution extends AbstractResolution
 
   public ConfigureResolution(IMarker marker, String option)
   {
-    super(marker, "Configure the project to ignore the problem", Activator.CORRECTION_CONFIGURE_GIF);
+    super(marker, Messages.ConfigureResolution_label, Activator.CORRECTION_CONFIGURE_GIF);
     this.option = option;
   }
 
@@ -34,7 +34,7 @@ public class ConfigureResolution extends AbstractResolution
   public String getDescription()
   {
     IProject project = getMarker().getResource().getProject();
-    return "Set " + option + " = true in '/" + project.getName() + "/.project'";
+    return "Set " + option + " = true in '/" + project.getName() + "/.project'"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   @Override

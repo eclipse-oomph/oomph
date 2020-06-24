@@ -41,7 +41,7 @@ public enum Trigger implements Enumerator
    * @generated
    * @ordered
    */
-  BOOTSTRAP(0, "BOOTSTRAP", "BOOTSTRAP"),
+  BOOTSTRAP(0, "BOOTSTRAP", "BOOTSTRAP"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>STARTUP</b></em>' literal object.
@@ -51,7 +51,7 @@ public enum Trigger implements Enumerator
    * @generated
    * @ordered
    */
-  STARTUP(1, "STARTUP", "STARTUP"),
+  STARTUP(1, "STARTUP", "STARTUP"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>MANUAL</b></em>' literal object.
@@ -61,15 +61,11 @@ public enum Trigger implements Enumerator
    * @generated
    * @ordered
    */
-  MANUAL(2, "MANUAL", "MANUAL");
+  MANUAL(2, "MANUAL", "MANUAL"); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>BOOTSTRAP</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>BOOTSTRAP</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #BOOTSTRAP
    * @model
@@ -81,10 +77,6 @@ public enum Trigger implements Enumerator
   /**
    * The '<em><b>STARTUP</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>STARTUP</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #STARTUP
    * @model
@@ -96,10 +88,6 @@ public enum Trigger implements Enumerator
   /**
    * The '<em><b>MANUAL</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>MANUAL</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #MANUAL
    * @model

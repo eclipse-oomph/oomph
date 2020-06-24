@@ -27,11 +27,11 @@ public interface AgentManager
    * Specifies the location of the shared pool as a system property.
    * The special value "@none" indicates that no shared pool should be used.
    */
-  public static final String PROP_BUNDLE_POOL_LOCATION = "oomph.p2.pool";
+  public static final String PROP_BUNDLE_POOL_LOCATION = "oomph.p2.pool"; //$NON-NLS-1$
 
-  public static final String BUNDLE_POOL_LOCATION_NONE = "@none";
+  public static final String BUNDLE_POOL_LOCATION_NONE = "@none"; //$NON-NLS-1$
 
-  public static final String PROP_FLUSH = "oomph.p2.flush";
+  public static final String PROP_FLUSH = "oomph.p2.flush"; //$NON-NLS-1$
 
   public Agent getCurrentAgent();
 

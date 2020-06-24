@@ -37,12 +37,12 @@ public final class UIPlugin extends OomphUIPlugin
   {
     Method openRecorderMethod = null;
 
-    if (PropertiesUtil.isProperty("org.eclipse.swtbot.generator.enable"))
+    if (PropertiesUtil.isProperty("org.eclipse.swtbot.generator.enable")) //$NON-NLS-1$
     {
       try
       {
-        Class<?> startupRecorderClass = INSTANCE.getClass().getClassLoader().loadClass("org.eclipse.swtbot.generator.ui.StartupRecorder");
-        openRecorderMethod = ReflectUtil.getMethod(startupRecorderClass, "openRecorder", String.class);
+        Class<?> startupRecorderClass = INSTANCE.getClass().getClassLoader().loadClass("org.eclipse.swtbot.generator.ui.StartupRecorder"); //$NON-NLS-1$
+        openRecorderMethod = ReflectUtil.getMethod(startupRecorderClass, "openRecorder", String.class); //$NON-NLS-1$
       }
       catch (Throwable t)
       {

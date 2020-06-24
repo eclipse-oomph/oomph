@@ -31,9 +31,9 @@ public class TaskItemDecorator
 
   private static final TaskBar SYSTEM_TASK_BAR = WORKBENCH.getDisplay().getSystemTaskBar();
 
-  public static final String IDE_NODE = "org.eclipse.ui.ide";
+  public static final String IDE_NODE = "org.eclipse.ui.ide"; //$NON-NLS-1$
 
-  public static final String WORKSPACE_NAME = "WORKSPACE_NAME";
+  public static final String WORKSPACE_NAME = "WORKSPACE_NAME"; //$NON-NLS-1$
 
   private static final IEclipsePreferences IDE_PREFERENCES = InstanceScope.INSTANCE.getNode(IDE_NODE);
 
@@ -48,7 +48,7 @@ public class TaskItemDecorator
           if (WORKSPACE_NAME.equals(event.getKey()))
           {
             Object value = event.getNewValue();
-            update(value == null ? "" : value.toString());
+            update(value == null ? "" : value.toString()); //$NON-NLS-1$
           }
         }
       });
@@ -83,7 +83,7 @@ public class TaskItemDecorator
 
   private String getWorkspaceName()
   {
-    return IDE_PREFERENCES.get(WORKSPACE_NAME, "");
+    return IDE_PREFERENCES.get(WORKSPACE_NAME, ""); //$NON-NLS-1$
   }
 
   private void update(String label)

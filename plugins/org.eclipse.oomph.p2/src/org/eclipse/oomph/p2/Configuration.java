@@ -132,17 +132,17 @@ public interface Configuration extends ModelElement
   {
     public static Set<String> forWS()
     {
-      return getChoices(Platform.knownWSValues(), "org.eclipse.pde.ws.extra");
+      return getChoices(Platform.knownWSValues(), "org.eclipse.pde.ws.extra"); //$NON-NLS-1$
     }
 
     public static Set<String> forOS()
     {
-      return getChoices(Platform.knownOSValues(), "org.eclipse.pde.os.extra");
+      return getChoices(Platform.knownOSValues(), "org.eclipse.pde.os.extra"); //$NON-NLS-1$
     }
 
     public static Set<String> forArch()
     {
-      return getChoices(Platform.knownOSArchValues(), "org.eclipse.pde.arch.extra");
+      return getChoices(Platform.knownOSArchValues(), "org.eclipse.pde.arch.extra"); //$NON-NLS-1$
     }
 
     private static Set<String> getChoices(String[] values, String extraValuesPreference)
@@ -150,13 +150,13 @@ public interface Configuration extends ModelElement
       Set<String> result = new HashSet<String>();
       result.addAll(Arrays.asList(values));
 
-      IEclipsePreferences node = InstanceScope.INSTANCE.getNode("org.eclipse.pde.core");
+      IEclipsePreferences node = InstanceScope.INSTANCE.getNode("org.eclipse.pde.core"); //$NON-NLS-1$
       if (node != null)
       {
         String extraValues = node.get(extraValuesPreference, null);
         if (!StringUtil.isEmpty(extraValues))
         {
-          StringTokenizer tokenizer = new StringTokenizer(extraValues, ",");
+          StringTokenizer tokenizer = new StringTokenizer(extraValues, ","); //$NON-NLS-1$
           while (tokenizer.hasMoreTokens())
           {
             String extraValue = tokenizer.nextToken().trim();

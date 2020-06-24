@@ -55,6 +55,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.JFacePreferences;
 import org.eclipse.jface.resource.ColorRegistry;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ControlAdapter;
@@ -120,7 +121,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
 
   private static final int V_INDENT = 1;
 
-  private static String POLICY_HELP_MESSAGE = " Click the policy header to toggle all policies.";
+  private static String POLICY_HELP_MESSAGE = " " + Messages.SynchronizerDialog_policyHelpMessage; //$NON-NLS-1$
 
   private final PaintHandler paintHandler = new PaintHandler();
 
@@ -222,7 +223,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
   @Override
   public String getHelpPath()
   {
-    return SetupUIPlugin.INSTANCE.getSymbolicName() + "/html/RecorderHelp.html";
+    return SetupUIPlugin.INSTANCE.getSymbolicName() + "/html/RecorderHelp.html"; //$NON-NLS-1$
   }
 
   @Override
@@ -239,27 +240,26 @@ public class SynchronizerDialog extends AbstractSetupDialog
       case RECORD:
         if (recorderTarget instanceof User)
         {
-          return "Select what to record for reuse across all workspaces." + POLICY_HELP_MESSAGE;
+          return Messages.SynchronizerDialog_defaultMessage_selectWhatToRecord_allWorkspaces + POLICY_HELP_MESSAGE;
         }
 
         if (recorderTarget instanceof Installation)
         {
-          return "Select what to record for reuse across all workspaces of the current installation." + POLICY_HELP_MESSAGE;
+          return Messages.SynchronizerDialog_defaultMessage_selectWhatToRecord_installationWorkspaces + POLICY_HELP_MESSAGE;
         }
 
         if (recorderTarget instanceof Workspace)
         {
-          return "Select what to record for the use of just this workspace." + POLICY_HELP_MESSAGE;
+          return Messages.SynchronizerDialog_defaultMessage_selectWhatToRecord_workspace + POLICY_HELP_MESSAGE;
         }
 
-        return "Select what to record into " + recorderTargetText + "." + POLICY_HELP_MESSAGE;
+        return NLS.bind(Messages.SynchronizerDialog_defaultMessage_selectWhatToRecord_intoRecorderTarget, recorderTargetText) + POLICY_HELP_MESSAGE;
 
       case SYNC:
-        return "Select what to synchronize with " + getServiceLabel() + " for reuse across all machines." + POLICY_HELP_MESSAGE;
+        return NLS.bind(Messages.SynchronizerDialog_defaultMessage_selectWhatToSyncWithRemote, getServiceLabel()) + POLICY_HELP_MESSAGE;
 
       case RECORD_AND_SYNC:
-        return "Select what to record for reuse across all workspaces on this machine and what to synchronize with " + getServiceLabel()
-            + " for reuse across all your other machines." + POLICY_HELP_MESSAGE;
+        return NLS.bind(Messages.SynchronizerDialog_defaultMessage_selectWhatToRecordAndSync, getServiceLabel()) + POLICY_HELP_MESSAGE;
 
       default:
         return null;
@@ -301,7 +301,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
     tree.setFocus();
 
     labelColumn = new TreeColumn(tree, SWT.NONE);
-    labelColumn.setText("Preference");
+    labelColumn.setText(Messages.SynchronizerDialog_column_label);
     labelColumn.setWidth(200);
     labelColumn.setResizable(true);
 
@@ -310,7 +310,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
     if (mode.isRecord())
     {
       localColumn = new TreeColumn(tree, SWT.NONE);
-      localColumn.setText("Local Policy");
+      localColumn.setText(Messages.SynchronizerDialog_column_local);
       localColumn.setWidth(200);
       localColumn.setResizable(true);
 
@@ -321,7 +321,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
     if (mode.isSync())
     {
       remoteColumn = new TreeColumn(tree, SWT.NONE);
-      remoteColumn.setText("Remote Policy");
+      remoteColumn.setText(Messages.SynchronizerDialog_column_remote);
       remoteColumn.setWidth(200);
       remoteColumn.setResizable(true);
 
@@ -340,7 +340,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
       @Override
       public void widgetSelected(SelectionEvent event)
       {
-        String value = "";
+        String value = ""; //$NON-NLS-1$
         if (event.item instanceof TaskItem)
         {
           TaskItem taskItem = (TaskItem)event.item;
@@ -389,8 +389,8 @@ public class SynchronizerDialog extends AbstractSetupDialog
   {
     if (mode.isRecord())
     {
-      enableRecorderButton = createCheckbox(parent, "Recorder enabled");
-      enableRecorderButton.setToolTipText("The enablement can be changed later on the preference page Oomph | Setup | Preference Recorder");
+      enableRecorderButton = createCheckbox(parent, Messages.SynchronizerDialog_enableRecorderButton_text);
+      enableRecorderButton.setToolTipText(Messages.SynchronizerDialog_enableRecorderButton_tooltip);
       enableRecorderButton.setSelection(enableRecorder);
       enableRecorderButton.addSelectionListener(new SelectionAdapter()
       {
@@ -874,7 +874,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
           System.out.println(syncAction);
         }
 
-        System.out.println("----------------------------");
+        System.out.println("----------------------------"); //$NON-NLS-1$
       }
     }
 
@@ -886,7 +886,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
     IStorageService service = SynchronizerManager.INSTANCE.getStorage().getService();
     if (service == null)
     {
-      return "remote service";
+      return Messages.SynchronizerDialog_serviceLabel;
     }
 
     return service.getServiceLabel();
@@ -894,7 +894,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
 
   private static String getTitle(RecorderTransaction recorderTransaction)
   {
-    return recorderTransaction != null ? "Preference Recorder" : "Preference Synchronizer";
+    return recorderTransaction != null ? Messages.SynchronizerDialog_title_recorder : Messages.SynchronizerDialog_title_synchronizer;
   }
 
   /**
@@ -982,7 +982,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
     @Override
     public String toString()
     {
-      return record ? "record (" + value + ")" : "ignore";
+      return record ? "record (" + value + ")" : "ignore"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
   }
 
@@ -1295,11 +1295,11 @@ public class SynchronizerDialog extends AbstractSetupDialog
      */
     private static final class RecordAlways extends Choice
     {
-      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Right");
+      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Right"); //$NON-NLS-1$
 
       public RecordAlways(String targetText)
       {
-        super(IMAGE, "Always record into " + targetText);
+        super(IMAGE, NLS.bind(Messages.SynchronizerDialog_choice_recordAlways, targetText));
       }
 
       @Override
@@ -1314,11 +1314,11 @@ public class SynchronizerDialog extends AbstractSetupDialog
      */
     private static final class RecordNever extends Choice
     {
-      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Exclude");
+      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Exclude"); //$NON-NLS-1$
 
       public RecordNever(String targetText)
       {
-        super(IMAGE, "Never record into " + targetText);
+        super(IMAGE, NLS.bind(Messages.SynchronizerDialog_choice_recordNever, targetText));
       }
     }
 
@@ -1327,11 +1327,11 @@ public class SynchronizerDialog extends AbstractSetupDialog
      */
     private static final class RecordSkip extends Choice
     {
-      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Skip");
+      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Skip"); //$NON-NLS-1$
 
       public RecordSkip()
       {
-        super(IMAGE, "Skip this time");
+        super(IMAGE, Messages.SynchronizerDialog_choice_recordSkip);
       }
     }
 
@@ -1340,11 +1340,11 @@ public class SynchronizerDialog extends AbstractSetupDialog
      */
     private static final class SyncConflict extends Choice
     {
-      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Conflict");
+      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Conflict"); //$NON-NLS-1$
 
       public SyncConflict(String serviceLabel)
       {
-        super(IMAGE, "Conflict between local and " + serviceLabel + " values");
+        super(IMAGE, NLS.bind(Messages.SynchronizerDialog_choice_syncConflict, serviceLabel));
       }
 
       @Override
@@ -1365,11 +1365,11 @@ public class SynchronizerDialog extends AbstractSetupDialog
      */
     private static final class SyncLocal extends Choice
     {
-      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Right");
+      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Right"); //$NON-NLS-1$
 
       public SyncLocal()
       {
-        super(IMAGE, "Resolve with local value");
+        super(IMAGE, Messages.SynchronizerDialog_choice_syncLocal);
       }
 
       @Override
@@ -1390,11 +1390,11 @@ public class SynchronizerDialog extends AbstractSetupDialog
      */
     private static final class SyncRemote extends Choice
     {
-      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Left");
+      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Left"); //$NON-NLS-1$
 
       public SyncRemote(String serviceLabel)
       {
-        super(IMAGE, "Resolve with " + serviceLabel + " value");
+        super(IMAGE, NLS.bind(Messages.SynchronizerDialog_choice_syncRemote, serviceLabel));
       }
 
       @Override
@@ -1415,11 +1415,11 @@ public class SynchronizerDialog extends AbstractSetupDialog
      */
     private static final class SyncAlways extends Choice
     {
-      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Right");
+      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Right"); //$NON-NLS-1$
 
       public SyncAlways(String serviceLabel)
       {
-        super(IMAGE, "Always synchronize with " + serviceLabel);
+        super(IMAGE, NLS.bind(Messages.SynchronizerDialog_choice_syncAlways, serviceLabel));
       }
 
       @Override
@@ -1453,11 +1453,11 @@ public class SynchronizerDialog extends AbstractSetupDialog
      */
     private static final class SyncNever extends Choice
     {
-      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Exclude");
+      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Exclude"); //$NON-NLS-1$
 
       public SyncNever(String serviceLabel)
       {
-        super(IMAGE, "Never synchronize with " + serviceLabel);
+        super(IMAGE, NLS.bind(Messages.SynchronizerDialog_choice_syncNever, serviceLabel));
       }
 
       @Override
@@ -1472,11 +1472,11 @@ public class SynchronizerDialog extends AbstractSetupDialog
      */
     private static final class SyncSkip extends Choice
     {
-      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Skip");
+      private static final Image IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Skip"); //$NON-NLS-1$
 
       public SyncSkip()
       {
-        super(IMAGE, "Skip this time");
+        super(IMAGE, Messages.SynchronizerDialog_choice_syncSkip);
       }
 
       @Override
@@ -1829,7 +1829,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
    */
   private static final class RemoteColumnManager extends ColumnManager
   {
-    private static final Image TARGET_IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Remote");
+    private static final Image TARGET_IMAGE = SetupUIPlugin.INSTANCE.getSWTImage("sync/Remote"); //$NON-NLS-1$
 
     private final Choice[] normalChoices = new Choice[3];
 

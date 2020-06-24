@@ -433,6 +433,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -463,46 +464,46 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
     commandParameterEClass.getESuperTypes().add(theBasePackage.getModelElement());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(fileAssociationsTaskEClass, FileAssociationsTask.class, "FileAssociationsTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getFileAssociationsTask_Mappings(), getFileMapping(), null, "mappings", null, 1, -1, FileAssociationsTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(fileAssociationsTaskEClass, FileAssociationsTask.class, "FileAssociationsTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getFileAssociationsTask_Mappings(), getFileMapping(), null, "mappings", null, 1, -1, FileAssociationsTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(fileMappingEClass, FileMapping.class, "FileMapping", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getFileMapping_FilePattern(), ecorePackage.getEString(), "filePattern", null, 1, 1, FileMapping.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(fileMappingEClass, FileMapping.class, "FileMapping", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getFileMapping_FilePattern(), ecorePackage.getEString(), "filePattern", null, 1, 1, FileMapping.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFileMapping_DefaultEditorID(), ecorePackage.getEString(), "defaultEditorID", null, 0, 1, FileMapping.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getFileMapping_DefaultEditorID(), ecorePackage.getEString(), "defaultEditorID", null, 0, 1, FileMapping.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getFileMapping_Editors(), getFileEditor(), null, "editors", null, 0, -1, FileMapping.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getFileMapping_Editors(), getFileEditor(), null, "editors", null, 0, -1, FileMapping.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(fileEditorEClass, FileEditor.class, "FileEditor", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getFileEditor_ID(), ecorePackage.getEString(), "iD", null, 1, 1, FileEditor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(fileEditorEClass, FileEditor.class, "FileEditor", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getFileEditor_ID(), ecorePackage.getEString(), "iD", null, 1, 1, FileEditor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(keyBindingTaskEClass, KeyBindingTask.class, "KeyBindingTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getKeyBindingTask_Scheme(), ecorePackage.getEString(), "scheme", "org.eclipse.ui.defaultAcceleratorConfiguration", 1, 1,
+    initEClass(keyBindingTaskEClass, KeyBindingTask.class, "KeyBindingTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getKeyBindingTask_Scheme(), ecorePackage.getEString(), "scheme", "org.eclipse.ui.defaultAcceleratorConfiguration", 1, 1, //$NON-NLS-1$ //$NON-NLS-2$
         KeyBindingTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getKeyBindingTask_Contexts(), getKeyBindingContext(), null, "contexts", null, 1, -1, KeyBindingTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getKeyBindingTask_Contexts(), getKeyBindingContext(), null, "contexts", null, 1, -1, KeyBindingTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getKeyBindingTask_Platform(), ecorePackage.getEString(), "platform", null, 0, 1, KeyBindingTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getKeyBindingTask_Platform(), ecorePackage.getEString(), "platform", null, 0, 1, KeyBindingTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getKeyBindingTask_Locale(), ecorePackage.getEString(), "locale", null, 0, 1, KeyBindingTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getKeyBindingTask_Locale(), ecorePackage.getEString(), "locale", null, 0, 1, KeyBindingTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getKeyBindingTask_Keys(), ecorePackage.getEString(), "keys", null, 1, 1, KeyBindingTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getKeyBindingTask_Keys(), ecorePackage.getEString(), "keys", null, 1, 1, KeyBindingTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getKeyBindingTask_Command(), ecorePackage.getEString(), "command", null, 1, 1, KeyBindingTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getKeyBindingTask_Command(), ecorePackage.getEString(), "command", null, 1, 1, KeyBindingTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getKeyBindingTask_CommandParameters(), getCommandParameter(), null, "commandParameters", null, 0, -1, KeyBindingTask.class, !IS_TRANSIENT,
+    initEReference(getKeyBindingTask_CommandParameters(), getCommandParameter(), null, "commandParameters", null, 0, -1, KeyBindingTask.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(keyBindingContextEClass, KeyBindingContext.class, "KeyBindingContext", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getKeyBindingContext_ID(), ecorePackage.getEString(), "iD", "org.eclipse.ui.contexts.window", 0, 1, KeyBindingContext.class, !IS_TRANSIENT,
+    initEClass(keyBindingContextEClass, KeyBindingContext.class, "KeyBindingContext", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getKeyBindingContext_ID(), ecorePackage.getEString(), "iD", "org.eclipse.ui.contexts.window", 0, 1, KeyBindingContext.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(commandParameterEClass, CommandParameter.class, "CommandParameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getCommandParameter_ID(), ecorePackage.getEString(), "iD", null, 1, 1, CommandParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(commandParameterEClass, CommandParameter.class, "CommandParameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getCommandParameter_ID(), ecorePackage.getEString(), "iD", null, 1, 1, CommandParameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getCommandParameter_Value(), ecorePackage.getEString(), "value", null, 1, 1, CommandParameter.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getCommandParameter_Value(), ecorePackage.getEString(), "value", null, 1, 1, CommandParameter.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
@@ -529,8 +530,9 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Workbench.ecore" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Workbench.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -541,9 +543,11 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    */
   protected void createEnablementAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(this, source, new String[] { "variableName", "setup.workbench.p2", "repository", "${oomph.update.url}", "installableUnits",
-        "org.eclipse.oomph.setup.workbench.feature.group" });
+    String source = "http://www.eclipse.org/oomph/setup/Enablement"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "variableName", "setup.workbench.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "${oomph.update.url}", //$NON-NLS-1$ //$NON-NLS-2$
+        "installableUnits", "org.eclipse.oomph.setup.workbench.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -554,9 +558,10 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.workbench.edit/icons/full/obj16" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "imageBaseURI", //$NON-NLS-1$
+        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.workbench.edit/icons/full/obj16" //$NON-NLS-1$
+    });
   }
 
   /**
@@ -567,9 +572,11 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    */
   protected void createValidTriggersAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
-    addAnnotation(fileAssociationsTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
-    addAnnotation(keyBindingTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers"; //$NON-NLS-1$
+    addAnnotation(fileAssociationsTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(keyBindingTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -580,14 +587,24 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getFileAssociationsTask_Mappings(), source, new String[] { "name", "mapping" });
-    addAnnotation(getFileMapping_Editors(), source, new String[] { "name", "editor" });
-    addAnnotation(getFileEditor_ID(), source, new String[] { "kind", "attribute", "name", "id" });
-    addAnnotation(getKeyBindingTask_Contexts(), source, new String[] { "name", "context" });
-    addAnnotation(getKeyBindingTask_CommandParameters(), source, new String[] { "name", "commandParameter" });
-    addAnnotation(getKeyBindingContext_ID(), source, new String[] { "kind", "attribute", "name", "id" });
-    addAnnotation(getCommandParameter_ID(), source, new String[] { "kind", "attribute", "name", "id" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getFileAssociationsTask_Mappings(), source, new String[] { "name", "mapping" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getFileMapping_Editors(), source, new String[] { "name", "editor" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getFileEditor_ID(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "id" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getKeyBindingTask_Contexts(), source, new String[] { "name", "context" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getKeyBindingTask_CommandParameters(), source, new String[] { "name", "commandParameter" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getKeyBindingContext_ID(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "id" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getCommandParameter_ID(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "id" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
 } // WorkbenchPackageImpl

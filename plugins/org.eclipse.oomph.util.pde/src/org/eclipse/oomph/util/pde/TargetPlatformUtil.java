@@ -46,7 +46,7 @@ public final class TargetPlatformUtil
 
     try
     {
-      method = ITargetPlatformService.class.getMethod("getWorkspaceTargetDefinition");
+      method = ITargetPlatformService.class.getMethod("getWorkspaceTargetDefinition"); //$NON-NLS-1$
     }
     catch (NoSuchMethodException ex)
     {
@@ -127,7 +127,7 @@ public final class TargetPlatformUtil
 
   public static void resolveTargetDefinition(ITargetDefinition targetDefinition, IProgressMonitor monitor) throws CoreException
   {
-    monitor.beginTask("Resolving target platform", 100);
+    monitor.beginTask("Resolving target platform", 100); //$NON-NLS-1$
 
     try
     {
@@ -143,7 +143,7 @@ public final class TargetPlatformUtil
   public static void activateTargetDefinition(ITargetDefinition targetDefinition, IProgressMonitor monitor) throws CoreException
   {
     ITargetDefinition oldTargetDefinition = getActiveTargetDefinition();
-    monitor.beginTask("Set active target platform", 100);
+    monitor.beginTask(Messages.TargetPlatformUtil_SetActive_task, 100);
 
     try
     {

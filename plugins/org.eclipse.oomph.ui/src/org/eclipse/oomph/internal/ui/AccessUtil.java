@@ -44,12 +44,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class AccessUtil
 {
-  private static final String DATA_KEY = "oomph.access.key";
+  private static final String DATA_KEY = "oomph.access.key"; //$NON-NLS-1$
 
   public static void setKey(Widget widget, Object key)
   {
     widget.setData(DATA_KEY, key);
-    widget.setData("org.eclipse.swtbot.widget.key", key);
+    widget.setData("org.eclipse.swtbot.widget.key", key); //$NON-NLS-1$
   }
 
   public static Image capture(Control control)
@@ -172,27 +172,27 @@ public final class AccessUtil
 
   public static int getImageType(String fileExtension)
   {
-    if ("jpg".equalsIgnoreCase(fileExtension) || "jpeg".equalsIgnoreCase(fileExtension))
+    if ("jpg".equalsIgnoreCase(fileExtension) || "jpeg".equalsIgnoreCase(fileExtension)) //$NON-NLS-1$ //$NON-NLS-2$
     {
       return SWT.IMAGE_JPEG;
     }
 
-    if ("ico".equalsIgnoreCase(fileExtension))
+    if ("ico".equalsIgnoreCase(fileExtension)) //$NON-NLS-1$
     {
       return SWT.IMAGE_ICO;
     }
 
-    if ("bmp".equalsIgnoreCase(fileExtension))
+    if ("bmp".equalsIgnoreCase(fileExtension)) //$NON-NLS-1$
     {
       return SWT.IMAGE_BMP;
     }
 
-    if ("gif".equalsIgnoreCase(fileExtension))
+    if ("gif".equalsIgnoreCase(fileExtension)) //$NON-NLS-1$
     {
       return SWT.IMAGE_GIF;
     }
 
-    if ("tiff".equalsIgnoreCase(fileExtension))
+    if ("tiff".equalsIgnoreCase(fileExtension)) //$NON-NLS-1$
     {
       return SWT.IMAGE_TIFF;
     }
@@ -222,7 +222,7 @@ public final class AccessUtil
             top = Math.min(top, i);
             bottom = Math.max(bottom, i);
           }
-          System.err.print(transparent ? "0" : "1");
+          System.err.print(transparent ? "0" : "1"); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         System.err.println();
@@ -243,7 +243,7 @@ public final class AccessUtil
             top = Math.min(top, i);
             bottom = Math.max(bottom, i);
           }
-          System.err.print(transparent ? "0" : "1");
+          System.err.print(transparent ? "0" : "1"); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         System.err.println();

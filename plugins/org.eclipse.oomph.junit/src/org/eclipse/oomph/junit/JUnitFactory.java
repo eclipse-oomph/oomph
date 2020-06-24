@@ -102,7 +102,7 @@ public class JUnitFactory extends EFactoryImpl
       case JUnitPackage.PROPERTY_TYPE:
         return createPropertyType();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -123,7 +123,7 @@ public class JUnitFactory extends EFactoryImpl
       case JUnitPackage.TIME:
         return createTimeFromString(eDataType, initialValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -144,7 +144,7 @@ public class JUnitFactory extends EFactoryImpl
       case JUnitPackage.TIME:
         return convertTimeToString(eDataType, instanceValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -298,7 +298,7 @@ public class JUnitFactory extends EFactoryImpl
       return null;
     }
 
-    DecimalFormat decimalFormat = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+    DecimalFormat decimalFormat = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH)); //$NON-NLS-1$
     decimalFormat.setMaximumFractionDigits(6);
     return decimalFormat.format(instanceValue);
   }

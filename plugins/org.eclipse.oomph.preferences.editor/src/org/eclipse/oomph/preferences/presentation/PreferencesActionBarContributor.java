@@ -82,14 +82,14 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
    * <!-- end-user-doc -->
    * @generated
    */
-  protected IAction showPropertiesViewAction = new Action(PreferencesEditorPlugin.INSTANCE.getString("_UI_ShowPropertiesView_menu_item"))
+  protected IAction showPropertiesViewAction = new Action(PreferencesEditorPlugin.INSTANCE.getString("_UI_ShowPropertiesView_menu_item")) //$NON-NLS-1$
   {
     @Override
     public void run()
     {
       try
       {
-        getPage().showView("org.eclipse.ui.views.PropertySheet");
+        getPage().showView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
       }
       catch (PartInitException exception)
       {
@@ -105,7 +105,7 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
    * <!-- end-user-doc -->
    * @generated
    */
-  protected IAction refreshViewerAction = new Action(PreferencesEditorPlugin.INSTANCE.getString("_UI_RefreshViewer_menu_item"))
+  protected IAction refreshViewerAction = new Action(PreferencesEditorPlugin.INSTANCE.getString("_UI_RefreshViewer_menu_item")) //$NON-NLS-1$
   {
     @Override
     public boolean isEnabled()
@@ -187,8 +187,8 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
   public void contributeToToolBarGen(IToolBarManager toolBarManager)
   {
     super.contributeToToolBar(toolBarManager);
-    toolBarManager.add(new Separator("preferences-settings"));
-    toolBarManager.add(new Separator("preferences-additions"));
+    toolBarManager.add(new Separator("preferences-settings")); //$NON-NLS-1$
+    toolBarManager.add(new Separator("preferences-additions")); //$NON-NLS-1$
   }
 
   @Override
@@ -213,23 +213,23 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
   {
     super.contributeToMenu(menuManager);
 
-    IMenuManager submenuManager = new MenuManager(PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditor_menu"),
-        "org.eclipse.oomph.preferencesMenuID");
-    menuManager.insertAfter("additions", submenuManager);
-    submenuManager.add(new Separator("settings"));
-    submenuManager.add(new Separator("actions"));
-    submenuManager.add(new Separator("additions"));
-    submenuManager.add(new Separator("additions-end"));
+    IMenuManager submenuManager = new MenuManager(PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditor_menu"), //$NON-NLS-1$
+        "org.eclipse.oomph.preferencesMenuID"); //$NON-NLS-1$
+    menuManager.insertAfter("additions", submenuManager); //$NON-NLS-1$
+    submenuManager.add(new Separator("settings")); //$NON-NLS-1$
+    submenuManager.add(new Separator("actions")); //$NON-NLS-1$
+    submenuManager.add(new Separator("additions")); //$NON-NLS-1$
+    submenuManager.add(new Separator("additions-end")); //$NON-NLS-1$
 
     // Prepare for CreateChild item addition or removal.
     //
-    createChildMenuManager = new MenuManager(PreferencesEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item"));
-    submenuManager.insertBefore("additions", createChildMenuManager);
+    createChildMenuManager = new MenuManager(PreferencesEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item")); //$NON-NLS-1$
+    submenuManager.insertBefore("additions", createChildMenuManager); //$NON-NLS-1$
 
     // Prepare for CreateSibling item addition or removal.
     //
-    createSiblingMenuManager = new MenuManager(PreferencesEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item"));
-    submenuManager.insertBefore("additions", createSiblingMenuManager);
+    createSiblingMenuManager = new MenuManager(PreferencesEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item")); //$NON-NLS-1$
+    submenuManager.insertBefore("additions", createSiblingMenuManager); //$NON-NLS-1$
 
     // Force an update because Eclipse hides empty menus now.
     //
@@ -462,13 +462,13 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
     super.menuAboutToShow(menuManager);
     MenuManager submenuManager = null;
 
-    submenuManager = new MenuManager(PreferencesEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item"));
+    submenuManager = new MenuManager(PreferencesEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item")); //$NON-NLS-1$
     populateManager(submenuManager, createChildActions, null);
-    menuManager.insertBefore("edit", submenuManager);
+    menuManager.insertBefore("edit", submenuManager); //$NON-NLS-1$
 
-    submenuManager = new MenuManager(PreferencesEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item"));
+    submenuManager = new MenuManager(PreferencesEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item")); //$NON-NLS-1$
     populateManager(submenuManager, createSiblingActions, null);
-    menuManager.insertBefore("edit", submenuManager);
+    menuManager.insertBefore("edit", submenuManager); //$NON-NLS-1$
   }
 
   @Override
@@ -476,8 +476,8 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
   {
     menuAboutToShowGen(menuManager);
 
-    menuManager.insertAfter("ui-actions", new CommandContributionItem(new CommandContributionItemParameter(activeEditorPart.getEditorSite(),
-        "org.eclipse.oomph.preferences.editor.commands.Navigate", "org.eclipse.oomph.preferences.editor.commands.Navigate", 0)));
+    menuManager.insertAfter("ui-actions", new CommandContributionItem(new CommandContributionItemParameter(activeEditorPart.getEditorSite(), //$NON-NLS-1$
+        "org.eclipse.oomph.preferences.editor.commands.Navigate", "org.eclipse.oomph.preferences.editor.commands.Navigate", 0))); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**
@@ -489,11 +489,11 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
   @Override
   protected void addGlobalActions(IMenuManager menuManager)
   {
-    menuManager.insertAfter("additions-end", new Separator("ui-actions"));
-    menuManager.insertAfter("ui-actions", showPropertiesViewAction);
+    menuManager.insertAfter("additions-end", new Separator("ui-actions")); //$NON-NLS-1$ //$NON-NLS-2$
+    menuManager.insertAfter("ui-actions", showPropertiesViewAction); //$NON-NLS-1$
 
     refreshViewerAction.setEnabled(refreshViewerAction.isEnabled());
-    menuManager.insertAfter("ui-actions", refreshViewerAction);
+    menuManager.insertAfter("ui-actions", refreshViewerAction); //$NON-NLS-1$
 
     super.addGlobalActions(menuManager);
   }
@@ -519,9 +519,9 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
 
     public SynchronizedAction()
     {
-      super("Synchronized", IAction.AS_CHECK_BOX);
-      setImageDescriptor(PreferencesEditorPlugin.INSTANCE.getImageDescriptor("synchronized"));
-      setToolTipText("Keep the editor synchronized with changes to the underlying preference store");
+      super(Messages.PreferencesActionBarContributor_Synchronized_label, IAction.AS_CHECK_BOX);
+      setImageDescriptor(PreferencesEditorPlugin.INSTANCE.getImageDescriptor("synchronized")); //$NON-NLS-1$
+      setToolTipText(Messages.PreferencesActionBarContributor_Syncrhonized_description);
     }
 
     @Override

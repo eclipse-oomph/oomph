@@ -26,6 +26,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.osgi.util.NLS;
 
 import java.util.Collection;
 import java.util.List;
@@ -76,8 +77,9 @@ public class NamePredicateItemProvider extends PredicateItemProvider
   protected void addPatternPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_NamePredicate_pattern_feature"), getString("_UI_NamePredicate_pattern_description"), PredicatesPackage.Literals.NAME_PREDICATE__PATTERN,
-        true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_NamePredicate_pattern_feature"), //$NON-NLS-1$
+        getString("_UI_NamePredicate_pattern_description"), //$NON-NLS-1$
+        PredicatesPackage.Literals.NAME_PREDICATE__PATTERN, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -89,7 +91,7 @@ public class NamePredicateItemProvider extends PredicateItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/NamePredicate"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/NamePredicate")); //$NON-NLS-1$
   }
 
   /**
@@ -113,7 +115,8 @@ public class NamePredicateItemProvider extends PredicateItemProvider
   public String getText(Object object)
   {
     String label = ((NamePredicate)object).getPattern();
-    return label == null || label.length() == 0 ? getString("_UI_NamePredicate_type") : "Name matches " + label;
+    return label == null || label.length() == 0 ? getString("_UI_NamePredicate_type") //$NON-NLS-1$
+        : NLS.bind(Messages.NamePredicateItemProvider_NameMatches_label, label);
   }
 
   /**
@@ -176,7 +179,7 @@ public class NamePredicateItemProvider extends PredicateItemProvider
             {
               projectPattern.append('|');
             }
-            projectPattern.append(name.replaceAll("\\.", "\\\\."));
+            projectPattern.append(name.replaceAll("\\.", "\\\\.")); //$NON-NLS-1$ //$NON-NLS-2$
           }
           else
           {

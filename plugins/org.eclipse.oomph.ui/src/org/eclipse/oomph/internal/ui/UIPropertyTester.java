@@ -29,7 +29,7 @@ import org.osgi.service.prefs.Preferences;
  */
 public class UIPropertyTester extends PropertyTester
 {
-  public static final String SHOW_OFFLINE = "showOffline";
+  public static final String SHOW_OFFLINE = "showOffline"; //$NON-NLS-1$
 
   private static final Preferences PREFERENCES = UIPlugin.INSTANCE.getInstancePreferences();
 
@@ -41,7 +41,7 @@ public class UIPropertyTester extends PropertyTester
       {
         if (SHOW_OFFLINE.equals(event.getKey()))
         {
-          requestEvaluation("org.eclipse.oomph.ui." + SHOW_OFFLINE, "true".equals(event.getNewValue()));
+          requestEvaluation("org.eclipse.oomph.ui." + SHOW_OFFLINE, "true".equals(event.getNewValue())); //$NON-NLS-1$ //$NON-NLS-2$
         }
       }
     });
@@ -51,7 +51,7 @@ public class UIPropertyTester extends PropertyTester
     {
       public void run()
       {
-        UIPropertyTester.requestEvaluation("org.eclipse.oomph.ui." + SHOW_OFFLINE, true);
+        UIPropertyTester.requestEvaluation("org.eclipse.oomph.ui." + SHOW_OFFLINE, true); //$NON-NLS-1$
       }
     });
   }

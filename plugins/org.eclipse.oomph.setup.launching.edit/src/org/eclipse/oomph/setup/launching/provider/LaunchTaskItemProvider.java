@@ -71,8 +71,9 @@ public class LaunchTaskItemProvider extends SetupTaskItemProvider
   protected void addLauncherPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_LaunchTask_launcher_feature"), getString("_UI_LaunchTask_launcher_description"), LaunchingPackage.Literals.LAUNCH_TASK__LAUNCHER, true,
-        false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_LaunchTask_launcher_feature"), //$NON-NLS-1$
+        getString("_UI_LaunchTask_launcher_description"), //$NON-NLS-1$
+        LaunchingPackage.Literals.LAUNCH_TASK__LAUNCHER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -84,7 +85,7 @@ public class LaunchTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/LaunchTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/LaunchTask")); //$NON-NLS-1$
   }
 
   /**
@@ -108,7 +109,8 @@ public class LaunchTaskItemProvider extends SetupTaskItemProvider
   public String getText(Object object)
   {
     String label = ((LaunchTask)object).getLauncher();
-    return label == null || label.length() == 0 ? getString("_UI_LaunchTask_type") : getString("_UI_LaunchTask_type") + " " + label;
+    return label == null || label.length() == 0 ? getString("_UI_LaunchTask_type") : //$NON-NLS-1$
+        getString("_UI_LaunchTask_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

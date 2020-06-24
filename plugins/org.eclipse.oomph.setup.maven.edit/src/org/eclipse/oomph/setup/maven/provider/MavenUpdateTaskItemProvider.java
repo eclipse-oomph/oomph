@@ -75,8 +75,8 @@ public class MavenUpdateTaskItemProvider extends SetupTaskItemProvider
   protected void addProjectNamePatternsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MavenUpdateTask_projectNamePatterns_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_MavenUpdateTask_projectNamePatterns_feature", "_UI_MavenUpdateTask_type"),
+        getString("_UI_MavenUpdateTask_projectNamePatterns_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MavenUpdateTask_projectNamePatterns_feature", "_UI_MavenUpdateTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MavenPackage.Literals.MAVEN_UPDATE_TASK__PROJECT_NAME_PATTERNS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -89,8 +89,8 @@ public class MavenUpdateTaskItemProvider extends SetupTaskItemProvider
   protected void addOfflinePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MavenUpdateTask_offline_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_MavenUpdateTask_offline_feature", "_UI_MavenUpdateTask_type"),
+        getString("_UI_MavenUpdateTask_offline_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MavenUpdateTask_offline_feature", "_UI_MavenUpdateTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MavenPackage.Literals.MAVEN_UPDATE_TASK__OFFLINE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -103,8 +103,8 @@ public class MavenUpdateTaskItemProvider extends SetupTaskItemProvider
   protected void addUpdateSnapshotsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MavenUpdateTask_updateSnapshots_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_MavenUpdateTask_updateSnapshots_feature", "_UI_MavenUpdateTask_type"),
+        getString("_UI_MavenUpdateTask_updateSnapshots_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MavenUpdateTask_updateSnapshots_feature", "_UI_MavenUpdateTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MavenPackage.Literals.MAVEN_UPDATE_TASK__UPDATE_SNAPSHOTS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -117,7 +117,7 @@ public class MavenUpdateTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/MavenUpdateTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/MavenUpdateTask")); //$NON-NLS-1$
   }
 
   /**
@@ -142,24 +142,24 @@ public class MavenUpdateTaskItemProvider extends SetupTaskItemProvider
   {
     MavenUpdateTask mavenUpdateTask = (MavenUpdateTask)object;
     EList<String> projectNamePatterns = mavenUpdateTask.getProjectNamePatterns();
-    StringBuilder label = new StringBuilder(getString("_UI_MavenUpdateTask_type"));
+    StringBuilder label = new StringBuilder(getString("_UI_MavenUpdateTask_type")); //$NON-NLS-1$
     if (projectNamePatterns.isEmpty())
     {
-      label.append(" all");
+      label.append(" all"); //$NON-NLS-1$
     }
     else
     {
-      label.append(" (").append(StringUtil.implode(projectNamePatterns, '|')).append(')');
+      label.append(" (").append(StringUtil.implode(projectNamePatterns, '|')).append(')'); //$NON-NLS-1$
     }
 
     if (mavenUpdateTask.isOffline())
     {
-      label.append(" - offline");
+      label.append(" - offline"); //$NON-NLS-1$
     }
 
     if (mavenUpdateTask.isUpdateSnapshots())
     {
-      label.append(" - snapshots");
+      label.append(" - snapshots"); //$NON-NLS-1$
     }
 
     return label.toString();

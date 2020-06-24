@@ -46,7 +46,7 @@ import java.util.Map;
  */
 public abstract class ExternalResource extends PlatformObject implements IResource, IResourceProxy
 {
-  public static final QualifiedName BACKEND_RESOURCE_PROPERTY_NAME = new QualifiedName("org.eclipse.oomph.resources", "backendResource");
+  public static final QualifiedName BACKEND_RESOURCE_PROPERTY_NAME = new QualifiedName("org.eclipse.oomph.resources", "backendResource"); //$NON-NLS-1$ //$NON-NLS-2$
 
   private final ExternalContainer parent;
 

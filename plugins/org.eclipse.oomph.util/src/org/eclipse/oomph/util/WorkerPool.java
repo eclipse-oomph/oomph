@@ -442,7 +442,7 @@ public abstract class WorkerPool<P extends WorkerPool<P, K, W>, K, W extends Wor
     @Override
     public String toString()
     {
-      return "key=" + key + ", secondary=" + secondary + ", id=" + id;
+      return "key=" + key + ", secondary=" + secondary + ", id=" + id; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
   }
 }

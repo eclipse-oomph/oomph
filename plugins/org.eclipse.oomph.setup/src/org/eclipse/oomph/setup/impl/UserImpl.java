@@ -498,17 +498,17 @@ public class UserImpl extends ScopeImpl implements User
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (acceptedLicenses: ");
+    result.append(" (acceptedLicenses: "); //$NON-NLS-1$
     result.append(acceptedLicenses);
-    result.append(", acceptedCertificates: ");
+    result.append(", acceptedCertificates: "); //$NON-NLS-1$
     result.append(acceptedCertificates);
-    result.append(", unsignedPolicy: ");
+    result.append(", unsignedPolicy: "); //$NON-NLS-1$
     result.append(unsignedPolicy);
-    result.append(", certificatePolicy: ");
+    result.append(", certificatePolicy: "); //$NON-NLS-1$
     result.append(certificatePolicy);
-    result.append(", questionnaireDate: ");
+    result.append(", questionnaireDate: "); //$NON-NLS-1$
     result.append(questionnaireDate);
-    result.append(", preferenceRecorderDefault: ");
+    result.append(", preferenceRecorderDefault: "); //$NON-NLS-1$
     result.append(preferenceRecorderDefault);
     result.append(')');
     return result.toString();

@@ -35,7 +35,7 @@ public enum SyncPolicy implements Enumerator
    * @generated
    * @ordered
    */
-  INCLUDE(0, "Include", "Include"),
+  INCLUDE(0, "Include", "Include"), //$NON-NLS-1$ //$NON-NLS-2$
   /**
    * The '<em><b>Exclude</b></em>' literal object.
    * <!-- begin-user-doc -->
@@ -44,15 +44,11 @@ public enum SyncPolicy implements Enumerator
    * @generated
    * @ordered
    */
-  EXCLUDE(1, "Exclude", "Exclude");
+  EXCLUDE(1, "Exclude", "Exclude"); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Include</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Include</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #INCLUDE
    * @model name="Include"
@@ -64,10 +60,6 @@ public enum SyncPolicy implements Enumerator
   /**
    * The '<em><b>Exclude</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Exclude</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #EXCLUDE
    * @model name="Exclude"

@@ -186,7 +186,7 @@ public class ImportedPredicateImpl extends PredicateImpl implements ImportedPred
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (accessible: ");
+    result.append(" (accessible: "); //$NON-NLS-1$
     result.append(accessible);
     result.append(')');
     return result.toString();

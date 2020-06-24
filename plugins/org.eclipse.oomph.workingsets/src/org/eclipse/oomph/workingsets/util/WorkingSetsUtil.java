@@ -26,14 +26,14 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
  */
 public final class WorkingSetsUtil
 {
-  private static final String DEFAULT_WORKING_SET_GROUP_PREFERENCE_CONTENT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<workingsets:WorkingSetGroup xmi:version=\"2.0\" xmlns:xmi=\"http://www.omg.org/XMI\" xmlns:workingsets=\"http://www.eclipse.org/oomph/workingsets/1.0\"/>\n";
+  private static final String DEFAULT_WORKING_SET_GROUP_PREFERENCE_CONTENT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<workingsets:WorkingSetGroup xmi:version=\"2.0\" xmlns:xmi=\"http://www.omg.org/XMI\" xmlns:workingsets=\"http://www.eclipse.org/oomph/workingsets/1.0\"/>\n"; //$NON-NLS-1$
 
-  public static final String WORKING_SET_GROUP_PREFERENCE_KEY = "working.set.group";
+  public static final String WORKING_SET_GROUP_PREFERENCE_KEY = "working.set.group"; //$NON-NLS-1$
 
   public static final URI WORKING_SET_GROUP_PREFERENCE_URI = URI
-      .createURI("preference:/instance/org.eclipse.oomph.workingsets/" + WORKING_SET_GROUP_PREFERENCE_KEY + "/");
+      .createURI("preference:/instance/org.eclipse.oomph.workingsets/" + WORKING_SET_GROUP_PREFERENCE_KEY + "/"); //$NON-NLS-1$ //$NON-NLS-2$
 
-  public static final URI WORKING_SET_GROUP_PREFERENCE_RESOURCE_URI = WORKING_SET_GROUP_PREFERENCE_URI.trimSegments(1).appendSegment("Preferences.workingsets");
+  public static final URI WORKING_SET_GROUP_PREFERENCE_RESOURCE_URI = WORKING_SET_GROUP_PREFERENCE_URI.trimSegments(1).appendSegment("Preferences.workingsets"); //$NON-NLS-1$
 
   public static final IEclipsePreferences WORKING_SET_GROUP_PREFERENCES;
 

@@ -235,9 +235,9 @@ public class CommandParameterImpl extends ModelElementImpl implements CommandPar
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (iD: ");
+    result.append(" (iD: "); //$NON-NLS-1$
     result.append(iD);
-    result.append(", value: ");
+    result.append(", value: "); //$NON-NLS-1$
     result.append(value);
     result.append(')');
     return result.toString();

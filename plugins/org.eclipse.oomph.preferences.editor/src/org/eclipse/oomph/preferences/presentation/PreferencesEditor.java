@@ -625,8 +625,8 @@ public class PreferencesEditor extends MultiPageEditorPart
   {
     if (updateProblemIndication)
     {
-      BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK, "org.eclipse.oomph.preferences.editor", 0, null,
-          new Object[] { editingDomain.getResourceSet() });
+      BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK, "org.eclipse.oomph.preferences.editor", //$NON-NLS-1$
+          0, null, new Object[] { editingDomain.getResourceSet() });
       for (Diagnostic childDiagnostic : resourceToDiagnosticMap.values())
       {
         if (childDiagnostic.getSeverity() != Diagnostic.OK)
@@ -688,7 +688,8 @@ public class PreferencesEditor extends MultiPageEditorPart
    */
   protected boolean handleDirtyConflict()
   {
-    return MessageDialog.openQuestion(getSite().getShell(), getString("_UI_FileConflict_label"), getString("_WARN_FileConflict"));
+    return MessageDialog.openQuestion(getSite().getShell(), getString("_UI_FileConflict_label"), //$NON-NLS-1$
+        getString("_WARN_FileConflict")); //$NON-NLS-1$
   }
 
   /**
@@ -962,8 +963,8 @@ public class PreferencesEditor extends MultiPageEditorPart
    */
   protected void createContextMenuFor(StructuredViewer viewer)
   {
-    MenuManager contextMenu = new MenuManager("#PopUp");
-    contextMenu.add(new Separator("additions"));
+    MenuManager contextMenu = new MenuManager("#PopUp"); //$NON-NLS-1$
+    contextMenu.add(new Separator("additions")); //$NON-NLS-1$
     contextMenu.setRemoveAllWhenShown(true);
     contextMenu.addMenuListener(this);
     Menu menu = contextMenu.createContextMenu(viewer.getControl());
@@ -1100,14 +1101,16 @@ public class PreferencesEditor extends MultiPageEditorPart
     boolean hasErrors = !resource.getErrors().isEmpty();
     if (hasErrors || !resource.getWarnings().isEmpty())
     {
-      BasicDiagnostic basicDiagnostic = new BasicDiagnostic(hasErrors ? Diagnostic.ERROR : Diagnostic.WARNING, "org.eclipse.oomph.preferences.editor", 0,
-          getString("_UI_CreateModelError_message", resource.getURI()), new Object[] { exception == null ? (Object)resource : exception });
+      BasicDiagnostic basicDiagnostic = new BasicDiagnostic(hasErrors ? Diagnostic.ERROR : Diagnostic.WARNING, "org.eclipse.oomph.preferences.editor", //$NON-NLS-1$
+          0, getString("_UI_CreateModelError_message", resource.getURI()), //$NON-NLS-1$
+          new Object[] { exception == null ? (Object)resource : exception });
       basicDiagnostic.merge(EcoreUtil.computeDiagnostic(resource, true));
       return basicDiagnostic;
     }
     else if (exception != null)
     {
-      return new BasicDiagnostic(Diagnostic.ERROR, "org.eclipse.oomph.preferences.editor", 0, getString("_UI_CreateModelError_message", resource.getURI()),
+      return new BasicDiagnostic(Diagnostic.ERROR, "org.eclipse.oomph.preferences.editor", //$NON-NLS-1$
+          0, getString("_UI_CreateModelError_message", resource.getURI()), //$NON-NLS-1$
           new Object[] { exception });
     }
     else
@@ -1164,7 +1167,7 @@ public class PreferencesEditor extends MultiPageEditorPart
 
       createContextMenuFor(selectionViewer);
       int pageIndex = addPage(tree);
-      setPageText(pageIndex, getString("_UI_SelectionPage_label"));
+      setPageText(pageIndex, getString("_UI_SelectionPage_label")); //$NON-NLS-1$
 
       getSite().getShell().getDisplay().asyncExec(new Runnable()
       {
@@ -1217,7 +1220,7 @@ public class PreferencesEditor extends MultiPageEditorPart
   {
     if (getPageCount() <= 1)
     {
-      setPageText(0, "");
+      setPageText(0, ""); //$NON-NLS-1$
       if (getContainer() instanceof CTabFolder)
       {
         Point point = getContainer().getSize();
@@ -1238,7 +1241,7 @@ public class PreferencesEditor extends MultiPageEditorPart
   {
     if (getPageCount() > 1)
     {
-      setPageText(0, getString("_UI_SelectionPage_label"));
+      setPageText(0, getString("_UI_SelectionPage_label")); //$NON-NLS-1$
       if (getContainer() instanceof CTabFolder)
       {
         Point point = getContainer().getSize();
@@ -1307,9 +1310,9 @@ public class PreferencesEditor extends MultiPageEditorPart
 
   public static abstract class OutlinePage extends ContentOutlinePage implements IAdaptable
   {
-    private static final Object PREFERENCE_NODE_IMAGE = PreferencesEditPlugin.INSTANCE.getImage("full/obj16/PreferenceNode");
+    private static final Object PREFERENCE_NODE_IMAGE = PreferencesEditPlugin.INSTANCE.getImage("full/obj16/PreferenceNode"); //$NON-NLS-1$
 
-    private static final Object PROPERTY_IMAGE = PreferencesEditPlugin.INSTANCE.getImage("full/obj16/Property");
+    private static final Object PROPERTY_IMAGE = PreferencesEditPlugin.INSTANCE.getImage("full/obj16/Property"); //$NON-NLS-1$
 
     private TreeViewer contentOutlineViewer;
 
@@ -1465,7 +1468,7 @@ public class PreferencesEditor extends MultiPageEditorPart
 
         URI absolutePath = rootPreferenceNode.getAbsolutePath();
         String value = property.getValue();
-        propertyPresentation.getChildren().add(new PropertyPresentation(PreferencesFactory.eINSTANCE.convertURI(absolutePath) + "=" + value, property));
+        propertyPresentation.getChildren().add(new PropertyPresentation(PreferencesFactory.eINSTANCE.convertURI(absolutePath) + "=" + value, property)); //$NON-NLS-1$
       }
 
       public List<PreferenceNode> getWrappedObjects()
@@ -1505,7 +1508,7 @@ public class PreferencesEditor extends MultiPageEditorPart
       for (PreferenceNode node : preferenceNode.getChildren())
       {
         String name = node.getName();
-        if ("project".equals(name))
+        if ("project".equals(name)) //$NON-NLS-1$
         {
           for (PreferenceNode projectNode : node.getChildren())
           {
@@ -1516,7 +1519,7 @@ public class PreferencesEditor extends MultiPageEditorPart
             }
           }
         }
-        else if ("bundle_defaults".equals(name) || "default".equals(name) || "configuration".equals(name) || "instance".equals(name) || "secure".equals(name))
+        else if ("bundle_defaults".equals(name) || "default".equals(name) || "configuration".equals(name) || "instance".equals(name) || "secure".equals(name)) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
         {
           for (PreferenceNode child : node.getChildren())
           {
@@ -1746,7 +1749,7 @@ public class PreferencesEditor extends MultiPageEditorPart
     // Save only resources that have actually changed.
     //
     final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
-    if (!"preference".equals(editingDomain.getResourceSet().getResources().get(0).getURI().scheme()))
+    if (!"preference".equals(editingDomain.getResourceSet().getResources().get(0).getURI().scheme())) //$NON-NLS-1$
     {
       saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
       saveOptions.put(Resource.OPTION_LINE_DELIMITER, Resource.OPTION_LINE_DELIMITER_UNSPECIFIED);
@@ -1969,7 +1972,7 @@ public class PreferencesEditor extends MultiPageEditorPart
   {
     initGen(site, editorInput);
     IContextService contextService = UIUtil.getService(site, IContextService.class);
-    contextService.activateContext("org.eclipse.oomph.preferences.editor.context");
+    contextService.activateContext("org.eclipse.oomph.preferences.editor.context"); //$NON-NLS-1$
   }
 
   /**
@@ -2053,25 +2056,25 @@ public class PreferencesEditor extends MultiPageEditorPart
         {
           case 0:
           {
-            statusLineManager.setMessage(getString("_UI_NoObjectSelected"));
+            statusLineManager.setMessage(getString("_UI_NoObjectSelected")); //$NON-NLS-1$
             break;
           }
           case 1:
           {
             String text = new AdapterFactoryItemDelegator(adapterFactory).getText(collection.iterator().next());
-            statusLineManager.setMessage(getString("_UI_SingleObjectSelected", text));
+            statusLineManager.setMessage(getString("_UI_SingleObjectSelected", text)); //$NON-NLS-1$
             break;
           }
           default:
           {
-            statusLineManager.setMessage(getString("_UI_MultiObjectSelected", Integer.toString(collection.size())));
+            statusLineManager.setMessage(getString("_UI_MultiObjectSelected", Integer.toString(collection.size()))); //$NON-NLS-1$
             break;
           }
         }
       }
       else
       {
-        statusLineManager.setMessage("");
+        statusLineManager.setMessage(""); //$NON-NLS-1$
       }
     }
   }

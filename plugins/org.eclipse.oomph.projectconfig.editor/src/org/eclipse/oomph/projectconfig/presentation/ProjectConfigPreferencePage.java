@@ -110,7 +110,7 @@ public class ProjectConfigPreferencePage extends AbstractPreferencePage
     composite.setLayout(layout);
 
     automaticPreferenceManagementButton = new Button(composite, SWT.CHECK);
-    automaticPreferenceManagementButton.setText("Automatic preference management");
+    automaticPreferenceManagementButton.setText(Messages.ProjectConfigPreferencePage_AutomaticPreferenceManagement_label);
     automaticPreferenceManagementButton.setSelection(configurationManagementAutomatic);
     automaticPreferenceManagementButton.addSelectionListener(new SelectionAdapter()
     {
@@ -128,11 +128,11 @@ public class ProjectConfigPreferencePage extends AbstractPreferencePage
       GridData layoutData = new GridData(SWT.FILL, SWT.TOP, true, false);
       layoutData.horizontalIndent = 10;
       errorHandlingGroup.setLayoutData(layoutData);
-      errorHandlingGroup.setText("Invalid Configuration Handling");
+      errorHandlingGroup.setText(Messages.ProjectConfigPreferencePage_InvalidConfigurationHandling_label);
 
       {
         ignoreErrorsButton = new Button(errorHandlingGroup, SWT.RADIO);
-        ignoreErrorsButton.setText("Ignore errors");
+        ignoreErrorsButton.setText(Messages.ProjectConfigPreferencePage_IgnoreErrors_label);
         if (!configurationValidationPrompt)
         {
           ignoreErrorsButton.setSelection(true);
@@ -150,7 +150,7 @@ public class ProjectConfigPreferencePage extends AbstractPreferencePage
 
       {
         promptErrorsButton = new Button(errorHandlingGroup, SWT.RADIO);
-        promptErrorsButton.setText("Prompt to fix errors");
+        promptErrorsButton.setText(Messages.ProjectConfigPreferencePage_PromptFixErrors_label);
         if (configurationValidationPrompt)
         {
           promptErrorsButton.setSelection(true);
@@ -173,11 +173,11 @@ public class ProjectConfigPreferencePage extends AbstractPreferencePage
       GridData layoutData = new GridData(SWT.FILL, SWT.TOP, true, false);
       layoutData.horizontalIndent = 10;
       modificationHandlingGroup.setLayoutData(layoutData);
-      modificationHandlingGroup.setText("Managed Property Modification Handling");
+      modificationHandlingGroup.setText(Messages.ProjectConfigPreferencePage_ManagedPropertyModificationHandling_label);
 
       {
         overwriteButton = new Button(modificationHandlingGroup, SWT.RADIO);
-        overwriteButton.setText("Overwrite managed property with managing property");
+        overwriteButton.setText(Messages.ProjectConfigPreferencePage_Overwite_label);
         if (propertyModificationHandling == PropertyModificationHandling.OVERWRITE)
         {
           overwriteButton.setSelection(true);
@@ -195,7 +195,7 @@ public class ProjectConfigPreferencePage extends AbstractPreferencePage
 
       {
         propagate = new Button(modificationHandlingGroup, SWT.RADIO);
-        propagate.setText("Propogate managed property to managing property");
+        propagate.setText(Messages.ProjectConfigPreferencePage_Propagate_label);
         if (propertyModificationHandling == PropertyModificationHandling.PROPAGATE)
         {
           propagate.setSelection(true);
@@ -213,7 +213,7 @@ public class ProjectConfigPreferencePage extends AbstractPreferencePage
 
       {
         promptButton = new Button(modificationHandlingGroup, SWT.RADIO);
-        promptButton.setText("Prompt");
+        promptButton.setText(Messages.ProjectConfigPreferencePage_Prompt_label);
         if (propertyModificationHandling == PropertyModificationHandling.PROMPT)
         {
           promptButton.setSelection(true);
@@ -233,7 +233,7 @@ public class ProjectConfigPreferencePage extends AbstractPreferencePage
     update();
 
     Label label = new Label(composite, SWT.NONE);
-    label.setText("Manage Configuration:");
+    label.setText(Messages.ProjectConfigPreferencePage_ManageConfigurations_label);
 
     TreeViewer treeViewer = new TreeViewer(composite);
     AdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
@@ -255,7 +255,7 @@ public class ProjectConfigPreferencePage extends AbstractPreferencePage
 
     {
       Button applyButton = new Button(parent, SWT.PUSH);
-      applyButton.setText("Apply");
+      applyButton.setText(Messages.ProjectConfigPreferencePage_Apply_label);
 
       Dialog.applyDialogFont(applyButton);
       int widthHint = convertHorizontalDLUsToPixels(IDialogConstants.BUTTON_WIDTH);
@@ -280,7 +280,7 @@ public class ProjectConfigPreferencePage extends AbstractPreferencePage
 
     {
       Button editButton = new Button(parent, SWT.PUSH);
-      editButton.setText("Edit...");
+      editButton.setText(Messages.ProjectConfigPreferencePage_Edit_label);
 
       Dialog.applyDialogFont(editButton);
       int widthHint = convertHorizontalDLUsToPixels(IDialogConstants.BUTTON_WIDTH);
@@ -301,7 +301,7 @@ public class ProjectConfigPreferencePage extends AbstractPreferencePage
 
           try
           {
-            Method method = container.getClass().getMethod("close");
+            Method method = container.getClass().getMethod("close"); //$NON-NLS-1$
             method.invoke(container);
           }
           catch (Throwable ex)
@@ -325,10 +325,10 @@ public class ProjectConfigPreferencePage extends AbstractPreferencePage
       {
         try
         {
-          IEditorInput editorInput = new URIEditorInput(ProjectConfigUtil.PROJECT_CONFIG_URI.appendSegment("All.projectconfig"),
-              "Project Preference Configuration");
+          IEditorInput editorInput = new URIEditorInput(ProjectConfigUtil.PROJECT_CONFIG_URI.appendSegment("All.projectconfig"), //$NON-NLS-1$
+              Messages.ProjectConfigPreferencePage_ProjectPreferenceConfiguration_label);
           IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-          activePage.openEditor(editorInput, "org.eclipse.oomph.projectconfig.presentation.ProjectConfigEditorID");
+          activePage.openEditor(editorInput, "org.eclipse.oomph.projectconfig.presentation.ProjectConfigEditorID"); //$NON-NLS-1$
           activePage.showView(IPageLayout.ID_PROP_SHEET);
         }
         catch (Exception ex)

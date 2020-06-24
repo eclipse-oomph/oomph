@@ -359,22 +359,22 @@ public abstract class MouseHandler
 
       if ((index & NORTH) != 0)
       {
-        builder.append(" NORTH");
+        builder.append(" NORTH"); //$NON-NLS-1$
       }
 
       if ((index & SOUTH) != 0)
       {
-        builder.append(" SOUTH");
+        builder.append(" SOUTH"); //$NON-NLS-1$
       }
 
       if ((index & WEST) != 0)
       {
-        builder.append(" WEST");
+        builder.append(" WEST"); //$NON-NLS-1$
       }
 
       if ((index & EAST) != 0)
       {
-        builder.append(" EAST");
+        builder.append(" EAST"); //$NON-NLS-1$
       }
 
       return builder.toString().trim();

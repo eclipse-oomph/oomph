@@ -49,7 +49,7 @@ import java.util.Map;
  */
 public class ComponentExtGeneratorImpl extends ModelElementImpl implements ComponentExtGenerator
 {
-  private static final IPath EXTENSION_PATH = new Path("component.ext");
+  private static final IPath EXTENSION_PATH = new Path("component.ext"); //$NON-NLS-1$
 
   /**
    * <!-- begin-user-doc -->
@@ -151,7 +151,7 @@ public class ComponentExtGeneratorImpl extends ModelElementImpl implements Compo
         }
         else
         {
-          namespace = "osgi.bundle";
+          namespace = "osgi.bundle"; //$NON-NLS-1$
         }
 
         requirements.add(MetadataFactory.createRequirement(namespace, id, versionRange, requirement.getFilter(), requirement.isOptional(), true,

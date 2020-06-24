@@ -83,8 +83,7 @@ public final class ExternalFile extends ExternalResource implements IFile
 
   public String getCharset() throws CoreException
   {
-    // XXX
-    return "UTF-8";
+    return "UTF-8"; //$NON-NLS-1$
   }
 
   public String getCharset(boolean checkImplicit) throws CoreException
@@ -111,7 +110,7 @@ public final class ExternalFile extends ExternalResource implements IFile
     }
     catch (Exception ex)
     {
-      throw new CoreException(new Status(IStatus.ERROR, "org.eclipse.oomph.predicates", ex.getMessage(), ex));
+      throw new CoreException(new Status(IStatus.ERROR, "org.eclipse.oomph.predicates", ex.getMessage(), ex)); //$NON-NLS-1$
     }
   }
 

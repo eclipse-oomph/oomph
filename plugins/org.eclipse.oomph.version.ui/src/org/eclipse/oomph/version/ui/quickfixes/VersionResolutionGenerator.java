@@ -13,6 +13,7 @@ package org.eclipse.oomph.version.ui.quickfixes;
 import org.eclipse.oomph.version.Markers;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator2;
 
@@ -46,13 +47,13 @@ public class VersionResolutionGenerator implements IMarkerResolutionGenerator2
           @Override
           public String getLabel()
           {
-            return "Change to the omni version";
+            return Messages.VersionResolutionGenerator_changeToOmniVersion;
           }
 
           @Override
           public String getDescription()
           {
-            return "Change the version to " + alternativeReplacement;
+            return NLS.bind(Messages.VersionResolutionGenerator_changeVersionTo, alternativeReplacement);
           }
 
           @Override

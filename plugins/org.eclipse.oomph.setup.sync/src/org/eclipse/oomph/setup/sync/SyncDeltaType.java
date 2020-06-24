@@ -35,7 +35,7 @@ public enum SyncDeltaType implements Enumerator
    * @generated
    * @ordered
    */
-  UNCHANGED(0, "Unchanged", "Unchanged"),
+  UNCHANGED(0, "Unchanged", "Unchanged"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Changed</b></em>' literal object.
@@ -45,7 +45,7 @@ public enum SyncDeltaType implements Enumerator
    * @generated
    * @ordered
    */
-  CHANGED(1, "Changed", "Changed"),
+  CHANGED(1, "Changed", "Changed"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Removed</b></em>' literal object.
@@ -55,15 +55,11 @@ public enum SyncDeltaType implements Enumerator
    * @generated
    * @ordered
    */
-  REMOVED(2, "Removed", "Removed");
+  REMOVED(2, "Removed", "Removed"); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Unchanged</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Unchanged</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #UNCHANGED
    * @model name="Unchanged"
@@ -75,10 +71,6 @@ public enum SyncDeltaType implements Enumerator
   /**
    * The '<em><b>Changed</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Changed</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #CHANGED
    * @model name="Changed"
@@ -90,10 +82,6 @@ public enum SyncDeltaType implements Enumerator
   /**
    * The '<em><b>Removed</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Removed</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #REMOVED
    * @model name="Removed"

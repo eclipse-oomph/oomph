@@ -86,6 +86,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.LocationAdapter;
 import org.eclipse.swt.browser.LocationEvent;
@@ -148,11 +149,11 @@ import java.util.zip.ZipInputStream;
  */
 public class OpenDiscoveredType extends OomphDialog
 {
-  public static final String TITLE = "Open Discovered Type";
+  public static final String TITLE = Messages.OpenDiscoveredType_title;
 
-  public static final String MESSAGE = "Search Git repositories by entering the fully qualified name of a Java class or package";
+  public static final String MESSAGE = Messages.OpenDiscoveredType_message;
 
-  private static final String GIT_INDICES = PropertiesUtil.getProperty("oomph.git.index", "http://download.eclipse.org/oomph/git/git-index.zip");
+  private static final String GIT_INDICES = PropertiesUtil.getProperty("oomph.git.index", "http://download.eclipse.org/oomph/git/git-index.zip"); //$NON-NLS-1$ //$NON-NLS-2$
 
   private final DockableDialog.Dockable dockable = new DockableDialog.Dockable(this);
 
@@ -185,7 +186,7 @@ public class OpenDiscoveredType extends OomphDialog
   @Override
   public String getHelpPath()
   {
-    return SetupEditorPlugin.INSTANCE.getSymbolicName() + "/html/OpenInTypeBrowserHelp.html";
+    return SetupEditorPlugin.INSTANCE.getSymbolicName() + "/html/OpenInTypeBrowserHelp.html"; //$NON-NLS-1$
   }
 
   public DockableDialog.Dockable getDockable()
@@ -202,13 +203,13 @@ public class OpenDiscoveredType extends OomphDialog
   @Override
   protected String getDefaultMessage()
   {
-    return MESSAGE + ".";
+    return MESSAGE + "."; //$NON-NLS-1$
   }
 
   @Override
   protected String getImagePath()
   {
-    return "full/wizban/BrowseType";
+    return "full/wizban/BrowseType"; //$NON-NLS-1$
   }
 
   @Override
@@ -227,13 +228,13 @@ public class OpenDiscoveredType extends OomphDialog
   private void setSelectedItem(Item item)
   {
     selectedItem = item;
-    setSelectedLink(item != null && item.getName() != null && item.getName().startsWith("http") ? item.getName() : null);
+    setSelectedLink(item != null && item.getName() != null && item.getName().startsWith("http") ? item.getName() : null); //$NON-NLS-1$
   }
 
   @Override
   protected void createUI(Composite composite)
   {
-    getShell().setImage(SetupEditorPlugin.INSTANCE.getSWTImage("BrowseType"));
+    getShell().setImage(SetupEditorPlugin.INSTANCE.getSWTImage("BrowseType")); //$NON-NLS-1$
 
     SashForm sashForm = new SashForm(composite, SWT.SMOOTH | SWT.VERTICAL);
     sashForm.setLayout(new GridLayout());
@@ -253,8 +254,8 @@ public class OpenDiscoveredType extends OomphDialog
     ToolBar filterToolBar = new ToolBar(filterComposite, SWT.FLAT | SWT.RIGHT);
 
     final ToolItem collapseAllButton = new ToolItem(filterToolBar, SWT.NONE);
-    collapseAllButton.setToolTipText("Collapse All");
-    collapseAllButton.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("collapse-all"));
+    collapseAllButton.setToolTipText(Messages.OpenDiscoveredType_collapseAllButton_tooltip);
+    collapseAllButton.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("collapse-all")); //$NON-NLS-1$
     collapseAllButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -280,7 +281,7 @@ public class OpenDiscoveredType extends OomphDialog
       @Override
       public void changing(LocationEvent event)
       {
-        if (event.location != null && !event.location.startsWith("about:"))
+        if (event.location != null && !event.location.startsWith("about:")) //$NON-NLS-1$
         {
           event.doit = false;
           openProjectImporter(URI.createURI(event.location));
@@ -385,7 +386,7 @@ public class OpenDiscoveredType extends OomphDialog
               {
                 Item item = (Item)object;
                 String name = item.getName();
-                if (name != null && name.startsWith("http"))
+                if (name != null && name.startsWith("http")) //$NON-NLS-1$
                 {
                   result.add(name);
                 }
@@ -408,7 +409,7 @@ public class OpenDiscoveredType extends OomphDialog
         {
           final boolean internalWebBrowserAvailable = browserSupport.isInternalWebBrowserAvailable();
           final OpenLinkStyle openLinkStyle = getOpenLinkStyle();
-          manager.add(new Action("Open in External Browser")
+          manager.add(new Action(Messages.OpenDiscoveredType_action_openInExtBrowser)
           {
             {
               if (internalWebBrowserAvailable)
@@ -426,7 +427,7 @@ public class OpenDiscoveredType extends OomphDialog
 
           if (internalWebBrowserAvailable)
           {
-            manager.add(new Action("Open in Editor")
+            manager.add(new Action(Messages.OpenDiscoveredType_action_openInEditor)
             {
               {
                 setChecked(openLinkStyle == OpenLinkStyle.EDITOR);
@@ -439,7 +440,7 @@ public class OpenDiscoveredType extends OomphDialog
               }
             });
 
-            manager.add(new Action("Open in View")
+            manager.add(new Action(Messages.OpenDiscoveredType_action_openInView)
             {
               {
                 setChecked(openLinkStyle == OpenLinkStyle.VIEW);
@@ -455,7 +456,7 @@ public class OpenDiscoveredType extends OomphDialog
 
           if (selectedItem.rawLinks != null && selectedItem.rawLinks.get(selectedLink) != null)
           {
-            manager.add(new Action("Open in Java Editor")
+            manager.add(new Action(Messages.OpenDiscoveredType_action_openInJavaEditor)
             {
               {
                 setChecked(openLinkStyle == OpenLinkStyle.JAVA);
@@ -474,7 +475,7 @@ public class OpenDiscoveredType extends OomphDialog
             manager.add(new Separator());
             for (final URI projectSetupURI : getProjectSetups(selectedItem))
             {
-              manager.add(new Action("Open " + projectSetupURI.lastSegment() + " in Import Projects Wizard")
+              manager.add(new Action(NLS.bind(Messages.OpenDiscoveredType_action_openInImportProjectsWizard, projectSetupURI.lastSegment()))
               {
                 @Override
                 public void run()
@@ -516,7 +517,7 @@ public class OpenDiscoveredType extends OomphDialog
       for (String repo : item.getRepos())
       {
         URI uri = repositoryProjectSetups.get(repo);
-        if (uri == null && repo.endsWith(".git"))
+        if (uri == null && repo.endsWith(".git")) //$NON-NLS-1$
         {
           uri = repositoryProjectSetups.get(repo.substring(0, repo.length() - 4));
         }
@@ -597,7 +598,7 @@ public class OpenDiscoveredType extends OomphDialog
     root.getChildren().add(Item.createPlaceholderItem());
     masterViewer.setInput(root);
 
-    Job job = new Job("Git Browsing Index Loader")
+    Job job = new Job(Messages.OpenDiscoveredType_gitIndexLoaderJob_name)
     {
       @Override
       protected IStatus run(IProgressMonitor monitor)
@@ -607,7 +608,7 @@ public class OpenDiscoveredType extends OomphDialog
         SegmentSequence qualifiedName = null;
 
         ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
-        for (String gitIndex : StringUtil.explode(GIT_INDICES, " ", (char)0))
+        for (String gitIndex : StringUtil.explode(GIT_INDICES, " ", (char)0)) //$NON-NLS-1$
         {
           ZipInputStream zipInputStream = null;
           try
@@ -626,10 +627,10 @@ public class OpenDiscoveredType extends OomphDialog
             zipInputStream = new ZipInputStream(resourceSet.getURIConverter().createInputStream(URI.createURI(gitIndex)));
             if (zipInputStream.getNextEntry() != null)
             {
-              List<String> lines = IOUtil.readLines(zipInputStream, "UTF-8");
+              List<String> lines = IOUtil.readLines(zipInputStream, "UTF-8"); //$NON-NLS-1$
               for (String line : lines)
               {
-                if (line.startsWith("    "))
+                if (line.startsWith("    ")) //$NON-NLS-1$
                 {
                   className = line.trim();
                   Item classItem = packageItem.getItem(className);
@@ -642,11 +643,11 @@ public class OpenDiscoveredType extends OomphDialog
 
                   classItem.addLink(rawSourceFolderLink, sourceFolderLink, repo, repoLink);
                 }
-                else if (line.startsWith("   "))
+                else if (line.startsWith("   ")) //$NON-NLS-1$
                 {
                   packageName = line.trim();
-                  SegmentSequence segments = SegmentSequence.create(".", packageName);
-                  qualifiedName = SegmentSequence.create(".");
+                  SegmentSequence segments = SegmentSequence.create(".", packageName); //$NON-NLS-1$
+                  qualifiedName = SegmentSequence.create("."); //$NON-NLS-1$
                   Item item = root;
                   for (String segment : segments.segments())
                   {
@@ -663,35 +664,35 @@ public class OpenDiscoveredType extends OomphDialog
                     item = packageItem;
                   }
                 }
-                else if (line.startsWith("  "))
+                else if (line.startsWith("  ")) //$NON-NLS-1$
                 {
                   sourceFolder = line.trim();
-                  sourceFolderLink = repoLink.replace("${1}", sourceFolder + "/${1}");
+                  sourceFolderLink = repoLink.replace("${1}", sourceFolder + "/${1}"); //$NON-NLS-1$ //$NON-NLS-2$
                   if (rawRepoLink == null)
                   {
                     rawSourceFolderLink = null;
                   }
                   else
                   {
-                    rawSourceFolderLink = rawRepoLink.replace("${1}", sourceFolder + "/${1}");
+                    rawSourceFolderLink = rawRepoLink.replace("${1}", sourceFolder + "/${1}"); //$NON-NLS-1$ //$NON-NLS-2$
                   }
                 }
-                else if (line.startsWith(" "))
+                else if (line.startsWith(" ")) //$NON-NLS-1$
                 {
                   repo = line.trim();
-                  repoLink = link.replace("${0}", repo);
+                  repoLink = link.replace("${0}", repo); //$NON-NLS-1$
                   if (rawLink == null)
                   {
                     rawRepoLink = null;
                   }
                   else
                   {
-                    rawRepoLink = rawLink.replace("${0}", repo);
+                    rawRepoLink = rawLink.replace("${0}", repo); //$NON-NLS-1$
                   }
                 }
                 else
                 {
-                  List<String> links = StringUtil.explode(line, " ", (char)0);
+                  List<String> links = StringUtil.explode(line, " ", (char)0); //$NON-NLS-1$
                   link = links.get(0);
                   if (links.size() > 1)
                   {
@@ -728,9 +729,9 @@ public class OpenDiscoveredType extends OomphDialog
         {
           EObject eObject = it.next();
           EClass eClass = eObject.eClass();
-          if ("GitCloneTask".equals(eClass.getName()))
+          if ("GitCloneTask".equals(eClass.getName())) //$NON-NLS-1$
           {
-            EStructuralFeature eStructuralFeature = eClass.getEStructuralFeature("remoteURI");
+            EStructuralFeature eStructuralFeature = eClass.getEStructuralFeature("remoteURI"); //$NON-NLS-1$
             if (eStructuralFeature != null)
             {
               String remoteURI = (String)eObject.eGet(eStructuralFeature);
@@ -754,7 +755,7 @@ public class OpenDiscoveredType extends OomphDialog
                     }
                     else
                     {
-                      int index = remoteURI.indexOf("/");
+                      int index = remoteURI.indexOf("/"); //$NON-NLS-1$
                       if (index != -1)
                       {
                         if (oldURI.toString().toLowerCase().contains(remoteURI.substring(0, index).toLowerCase()))
@@ -818,7 +819,7 @@ public class OpenDiscoveredType extends OomphDialog
       detailsViewer.setInput(root);
     }
 
-    detailsLoadJob = new Job("Detail Loader")
+    detailsLoadJob = new Job(Messages.OpenDiscoveredType_detailLoaderJob_name)
     {
       @Override
       protected IStatus run(IProgressMonitor monitor)
@@ -854,13 +855,13 @@ public class OpenDiscoveredType extends OomphDialog
             {
               String link = entry.getKey();
               Item linkItem = Item.create(linkType, link);
-              linkItem.setText(link.replace(repoLink, ""));
+              linkItem.setText(link.replace(repoLink, "")); //$NON-NLS-1$
               ++count;
               groupChildren.add(linkItem);
               for (String repo : entry.getValue())
               {
-                linkItem.addLink(repo, repo, "");
-                groupLinkItem.addLink(repo, repo, "");
+                linkItem.addLink(repo, repo, ""); //$NON-NLS-1$
+                groupLinkItem.addLink(repo, repo, ""); //$NON-NLS-1$
                 linkItem.rawLinks = rawLinks;
               }
             }
@@ -934,6 +935,7 @@ public class OpenDiscoveredType extends OomphDialog
 
         }
       }
+
     };
 
     detailsLoadJob.setSystem(true);
@@ -949,14 +951,14 @@ public class OpenDiscoveredType extends OomphDialog
 
   private void setOpenLinkStyle(OpenLinkStyle style)
   {
-    Preference instancePreference = SetupEditorPlugin.INSTANCE.getInstancePreference(selectedItem.getType() + ".open.style");
+    Preference instancePreference = SetupEditorPlugin.INSTANCE.getInstancePreference(selectedItem.getType() + ".open.style"); //$NON-NLS-1$
     instancePreference.set(style.name());
   }
 
   private OpenLinkStyle getOpenLinkStyle()
   {
-    Preference instancePreference = SetupEditorPlugin.INSTANCE.getInstancePreference(selectedItem.getType() + ".open.style");
-    String name = instancePreference.get("VIEW");
+    Preference instancePreference = SetupEditorPlugin.INSTANCE.getInstancePreference(selectedItem.getType() + ".open.style"); //$NON-NLS-1$
+    String name = instancePreference.get("VIEW"); //$NON-NLS-1$
     try
     {
       return OpenLinkStyle.valueOf(OpenLinkStyle.class, name);
@@ -973,26 +975,26 @@ public class OpenDiscoveredType extends OomphDialog
     {
       setOpenLinkStyle(openLinkStyle);
 
-      String id = "org.eclipse.oomph.setup.type.browser";
+      String id = "org.eclipse.oomph.setup.type.browser"; //$NON-NLS-1$
       int style = 0;
       switch (openLinkStyle)
       {
         case EDITOR:
         {
-          id += ".editor";
+          id += ".editor"; //$NON-NLS-1$
           style = IWorkbenchBrowserSupport.AS_EDITOR;
           break;
         }
         case EXTERNAL:
         {
           style = IWorkbenchBrowserSupport.AS_EXTERNAL;
-          id += ".external";
+          id += ".external"; //$NON-NLS-1$
           break;
         }
         case VIEW:
         {
           style = IWorkbenchBrowserSupport.AS_VIEW;
-          id += ".view";
+          id += ".view"; //$NON-NLS-1$
           break;
         }
         case JAVA:
@@ -1006,7 +1008,7 @@ public class OpenDiscoveredType extends OomphDialog
 
             public OpenJavaEditorJob()
             {
-              super("Load " + rawLink);
+              super(NLS.bind(Messages.OpenDiscoveredType_openJavaEditorJob_name, rawLink));
             }
 
             @Override
@@ -1123,7 +1125,7 @@ public class OpenDiscoveredType extends OomphDialog
                       }
                     }
 
-                    page.openEditor(new StorageEditorInput(), "org.eclipse.jdt.ui.CompilationUnitEditor", true,
+                    page.openEditor(new StorageEditorInput(), "org.eclipse.jdt.ui.CompilationUnitEditor", true, //$NON-NLS-1$
                         IWorkbenchPage.MATCH_ID | IWorkbenchPage.MATCH_INPUT);
                   }
                   catch (PartInitException ex)
@@ -1225,7 +1227,7 @@ public class OpenDiscoveredType extends OomphDialog
         StringBuilder patternLiteral = new StringBuilder();
         if (StringUtil.trimLeft(patternString).equals(patternString))
         {
-          patternLiteral.append(".*?");
+          patternLiteral.append(".*?"); //$NON-NLS-1$
         }
 
         List<Integer> packageIndices = new ArrayList<Integer>();
@@ -1248,8 +1250,8 @@ public class OpenDiscoveredType extends OomphDialog
               }
 
               int lowerCaseCodePoint = Character.toLowerCase(codePoint);
-              patternLiteral.append("(?:[^\\p{Lu}&&[^").appendCodePoint(lowerCaseCodePoint).append("]]*(").appendCodePoint(codePoint).append(")|(")
-                  .appendCodePoint(lowerCaseCodePoint).append("))");
+              patternLiteral.append("(?:[^\\p{Lu}&&[^").appendCodePoint(lowerCaseCodePoint).append("]]*(").appendCodePoint(codePoint).append(")|(") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                  .appendCodePoint(lowerCaseCodePoint).append("))"); //$NON-NLS-1$
 
               if (grouped)
               {
@@ -1276,11 +1278,11 @@ public class OpenDiscoveredType extends OomphDialog
             {
               if (grouped)
               {
-                patternLiteral.append(").*?(");
+                patternLiteral.append(").*?("); //$NON-NLS-1$
               }
               else
               {
-                patternLiteral.append(".*?");
+                patternLiteral.append(".*?"); //$NON-NLS-1$
               }
 
               previousUpperCase = false;
@@ -1290,11 +1292,11 @@ public class OpenDiscoveredType extends OomphDialog
           {
             if (grouped)
             {
-              patternLiteral.append(").(");
+              patternLiteral.append(").("); //$NON-NLS-1$
             }
             else
             {
-              patternLiteral.append(".");
+              patternLiteral.append("."); //$NON-NLS-1$
             }
 
             previousUpperCase = false;
@@ -1331,12 +1333,12 @@ public class OpenDiscoveredType extends OomphDialog
 
         if (previousUpperCase)
         {
-          patternLiteral.append("[^\\p{Lu}]*");
+          patternLiteral.append("[^\\p{Lu}]*"); //$NON-NLS-1$
         }
 
         if (StringUtil.trimRight(patternString).equals(patternString))
         {
-          patternLiteral.append(".*");
+          patternLiteral.append(".*"); //$NON-NLS-1$
         }
         else
         {
@@ -1351,7 +1353,7 @@ public class OpenDiscoveredType extends OomphDialog
           patternLiteral.delete(packageIndices.get(last), patternLiteral.length());
           for (int i = last; i > 0; --i)
           {
-            patternLiteral.insert(packageIndices.get(i), "?");
+            patternLiteral.insert(packageIndices.get(i), "?"); //$NON-NLS-1$
           }
 
           packagePattern = Pattern.compile(patternLiteral.toString());
@@ -1453,13 +1455,13 @@ public class OpenDiscoveredType extends OomphDialog
       }
     };
 
-    private static final Image FOLDER_IMAGE = SetupEditorPlugin.INSTANCE.getSWTImage("obj16/folder");
+    private static final Image FOLDER_IMAGE = SetupEditorPlugin.INSTANCE.getSWTImage("obj16/folder"); //$NON-NLS-1$
 
-    private static final Image JAVA_CLASS_IMAGE = SetupEditorPlugin.INSTANCE.getSWTImage("full/obj16/JavaCompilationUnit");
+    private static final Image JAVA_CLASS_IMAGE = SetupEditorPlugin.INSTANCE.getSWTImage("full/obj16/JavaCompilationUnit"); //$NON-NLS-1$
 
-    private static final Image JAVA_PACKAGE_IMAGE = ExtendedImageRegistry.INSTANCE.getImage(P2EditPlugin.INSTANCE.getImage("full/obj16/Requirement_Package"));
+    private static final Image JAVA_PACKAGE_IMAGE = ExtendedImageRegistry.INSTANCE.getImage(P2EditPlugin.INSTANCE.getImage("full/obj16/Requirement_Package")); //$NON-NLS-1$
 
-    private static final Image SETUP_IMAGE = ExtendedImageRegistry.INSTANCE.getImage(SetupEditorPlugin.INSTANCE.getImage("full/obj16/SetupModelFile"));
+    private static final Image SETUP_IMAGE = ExtendedImageRegistry.INSTANCE.getImage(SetupEditorPlugin.INSTANCE.getImage("full/obj16/SetupModelFile")); //$NON-NLS-1$
 
     private Type type;
 
@@ -1527,20 +1529,20 @@ public class OpenDiscoveredType extends OomphDialog
         if (sourceLinks != null)
         {
           Map<String, Set<String>> links = new LinkedHashMap<String, Set<String>>();
-          String path = type == Type.CLASS ? name.replace('.', '/') + ".java" : name.replace('.', '/');
+          String path = type == Type.CLASS ? name.replace('.', '/') + ".java" : name.replace('.', '/'); //$NON-NLS-1$
           for (Map.Entry<String, Set<String>> entry : groupEntry.getValue().entrySet())
           {
             String link = entry.getKey();
             if (sourceLinks.contains(link))
             {
-              String javaLink = link.replace("${1}", path);
+              String javaLink = link.replace("${1}", path); //$NON-NLS-1$
               links.put(javaLink, entry.getValue());
               if (rawLinks != null && this.rawLinks != null)
               {
                 String rawLink = this.rawLinks.get(link);
                 if (rawLink != null)
                 {
-                  String rawJavaLink = rawLink.replace("${1}", path);
+                  String rawJavaLink = rawLink.replace("${1}", path); //$NON-NLS-1$
                   rawLinks.put(javaLink, rawJavaLink);
                 }
               }
@@ -1549,7 +1551,7 @@ public class OpenDiscoveredType extends OomphDialog
 
           if (!links.isEmpty())
           {
-            String repoLink = key.replace("${1}", "/").replace("://", ":////").replace("//", "/");
+            String repoLink = key.replace("${1}", "/").replace("://", ":////").replace("//", "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
             result.put(repoLink, links);
           }
         }
@@ -1588,12 +1590,12 @@ public class OpenDiscoveredType extends OomphDialog
 
     public static Item createRootItem()
     {
-      return new Item(Type.ROOT, "root");
+      return new Item(Type.ROOT, Messages.OpenDiscoveredType_rootItem_name);
     }
 
     public static Item createPlaceholderItem()
     {
-      return new Item(Type.PLACEHOLDER, "Loading...");
+      return new Item(Type.PLACEHOLDER, Messages.OpenDiscoveredType_placeHolderItem_name);
     }
 
     @Override
@@ -1674,7 +1676,7 @@ public class OpenDiscoveredType extends OomphDialog
 
           if (decoration != null)
           {
-            styledLabel.append(" - " + decoration, org.eclipse.emf.edit.provider.StyledString.Style.DECORATIONS_STYLER);
+            styledLabel.append(" - " + decoration, org.eclipse.emf.edit.provider.StyledString.Style.DECORATIONS_STYLER); //$NON-NLS-1$
           }
 
           return styledLabel;
@@ -1685,7 +1687,7 @@ public class OpenDiscoveredType extends OomphDialog
       {
         org.eclipse.emf.edit.provider.StyledString styledLabel = new org.eclipse.emf.edit.provider.StyledString();
         styledLabel.append(getText());
-        styledLabel.append(" - " + decoration, org.eclipse.emf.edit.provider.StyledString.Style.DECORATIONS_STYLER);
+        styledLabel.append(" - " + decoration, org.eclipse.emf.edit.provider.StyledString.Style.DECORATIONS_STYLER); //$NON-NLS-1$
         return styledLabel;
       }
 
@@ -1808,11 +1810,11 @@ public class OpenDiscoveredType extends OomphDialog
     {
       Item item = (Item)element;
       StringBuilder result = new StringBuilder();
-      result.append("<span style='white-space: nowrap;'>");
-      result.append(DiagnosticDecorator.enquote("<img style='padding-right: 2pt; margin-top: 2px; margin-bottom: -2pt;' src='"
-          + ImageURIRegistry.INSTANCE.getImageURI(ExtendedImageRegistry.INSTANCE.getImage(item.getImage())) + "'/> "));
+      result.append("<span style='white-space: nowrap;'>"); //$NON-NLS-1$
+      result.append(DiagnosticDecorator.enquote("<img style='padding-right: 2pt; margin-top: 2px; margin-bottom: -2pt;' src='" //$NON-NLS-1$
+          + ImageURIRegistry.INSTANCE.getImageURI(ExtendedImageRegistry.INSTANCE.getImage(item.getImage())) + "'/> ")); //$NON-NLS-1$
       result.append(URI.decode(item.getName()));
-      result.append("</span>");
+      result.append("</span>"); //$NON-NLS-1$
 
       List<URI> projectSetups = getProjectSetups(item);
       String decoration = item.getDecoration();
@@ -1843,27 +1845,27 @@ public class OpenDiscoveredType extends OomphDialog
         if (uris.size() == 1)
         {
           projectSetups.clear();
-          projectSetups.add(uris.iterator().next().trimFragment().appendFragment("/"));
+          projectSetups.add(uris.iterator().next().trimFragment().appendFragment("/")); //$NON-NLS-1$
         }
       }
 
       if (projectSetups.size() == 1)
       {
         URI projectSetupURI = projectSetups.get(0);
-        result.append("<br/>");
-        result.append("<span style='white-space: nowrap;'>");
+        result.append("<br/>"); //$NON-NLS-1$
+        result.append("<span style='white-space: nowrap;'>"); //$NON-NLS-1$
         result.append(DiagnosticDecorator.enquote(
-            "<img style='padding-right: 2pt; margin-top: 2px; margin-bottom: -2pt;' src='" + ImageURIRegistry.INSTANCE.getImageURI(Item.SETUP_IMAGE)) + "'/> ");
-        result.append("<a href=\"");
+            "<img style='padding-right: 2pt; margin-top: 2px; margin-bottom: -2pt;' src='" + ImageURIRegistry.INSTANCE.getImageURI(Item.SETUP_IMAGE)) + "'/> "); //$NON-NLS-1$ //$NON-NLS-2$
+        result.append("<a href=\""); //$NON-NLS-1$
         result.append(projectSetupURI);
-        result.append("\">");
+        result.append("\">"); //$NON-NLS-1$
         result.append(projectSetupURI.lastSegment());
-        result.append("</a>");
-        result.append("</span>");
+        result.append("</a>"); //$NON-NLS-1$
+        result.append("</span>"); //$NON-NLS-1$
       }
 
       String toolTip = result.toString();
-      AbstractHoverInformationControlManager hoverInformationControlManager = ReflectUtil.getValue("hoverInformationControlManager", toolTipSupport);
+      AbstractHoverInformationControlManager hoverInformationControlManager = ReflectUtil.getValue("hoverInformationControlManager", toolTipSupport); //$NON-NLS-1$
       Point size = UIUtil.caclcuateSize(toolTip);
       hoverInformationControlManager.setSizeConstraints(size.x + 4, size.y + 1, true, false);
 

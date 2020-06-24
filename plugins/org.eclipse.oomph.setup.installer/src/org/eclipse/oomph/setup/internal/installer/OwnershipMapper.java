@@ -49,6 +49,7 @@ import java.util.regex.Pattern;
 /**
  * @author Eike Stepper
  */
+@SuppressWarnings("nls")
 public final class OwnershipMapper
 {
   private static final String FILE_SEPARATOR = System.getProperty("file.separator");

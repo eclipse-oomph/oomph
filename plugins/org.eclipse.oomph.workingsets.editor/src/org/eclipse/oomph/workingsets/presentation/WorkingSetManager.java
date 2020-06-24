@@ -58,9 +58,9 @@ import java.util.Set;
  */
 public class WorkingSetManager
 {
-  private static final String WORKING_SET_PAGE = "org.eclipse.jdt.ui.JavaWorkingSetPage";
+  private static final String WORKING_SET_PAGE = "org.eclipse.jdt.ui.JavaWorkingSetPage"; //$NON-NLS-1$
 
-  private static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer";
+  private static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer"; //$NON-NLS-1$
 
   private static final IWorkingSetManager MANAGER = PlatformUI.getWorkbench().getWorkingSetManager();
 
@@ -239,9 +239,9 @@ public class WorkingSetManager
               {
                 handledNavigator = true;
 
-                Method getNavigatorActionServiceMethod = commonNavigator.getClass().getMethod("getNavigatorActionService");
+                Method getNavigatorActionServiceMethod = commonNavigator.getClass().getMethod("getNavigatorActionService"); //$NON-NLS-1$
                 Object navigatorActionService = getNavigatorActionServiceMethod.invoke(commonNavigator);
-                Field actionProviderInstancesField = navigatorActionService.getClass().getDeclaredField("actionProviderInstances");
+                Field actionProviderInstancesField = navigatorActionService.getClass().getDeclaredField("actionProviderInstances"); //$NON-NLS-1$
                 actionProviderInstancesField.setAccessible(true);
                 HashMap<?, ?> object = (HashMap<?, ?>)actionProviderInstancesField.get(navigatorActionService);
                 if (object != null)
@@ -249,10 +249,10 @@ public class WorkingSetManager
                   for (Object value : object.values())
                   {
                     Class<? extends Object> theClass = value.getClass();
-                    if ("org.eclipse.ui.internal.navigator.resources.actions.WorkingSetActionProvider".equals(theClass.getName()))
+                    if ("org.eclipse.ui.internal.navigator.resources.actions.WorkingSetActionProvider".equals(theClass.getName())) //$NON-NLS-1$
                     {
 
-                      Field workingSetField = theClass.getDeclaredField("workingSet");
+                      Field workingSetField = theClass.getDeclaredField("workingSet"); //$NON-NLS-1$
                       workingSetField.setAccessible(true);
                       IWorkingSet oldWorkingSet = (IWorkingSet)workingSetField.get(value);
 
@@ -264,7 +264,7 @@ public class WorkingSetManager
 
                       List<IWorkingSet> newActiveWorkingSets = getActiveWorkingSets(allWorkingSets.toArray(new IWorkingSet[allWorkingSets.size()]),
                           activeWorkingSets);
-                      StringBuilder id = new StringBuilder("Aggregate:");
+                      StringBuilder id = new StringBuilder("Aggregate:"); //$NON-NLS-1$
                       for (Iterator<IWorkingSet> it = newActiveWorkingSets.iterator(); it.hasNext();)
                       {
                         IWorkingSet iWorkingSet = it.next();
@@ -275,20 +275,20 @@ public class WorkingSetManager
                         else
                         {
                           id.append(iWorkingSet.getName());
-                          id.append(":");
+                          id.append(":"); //$NON-NLS-1$
                         }
                       }
 
                       IWorkingSet aggregateWorkingSet = MANAGER.getWorkingSet(id.toString());
                       if (aggregateWorkingSet == null)
                       {
-                        aggregateWorkingSet = MANAGER.createAggregateWorkingSet(id.toString(), "Multiple Working Sets",
+                        aggregateWorkingSet = MANAGER.createAggregateWorkingSet(id.toString(), "Multiple Working Sets", //$NON-NLS-1$
                             newActiveWorkingSets.toArray(new IWorkingSet[newActiveWorkingSets.size()]));
                         MANAGER.addWorkingSet(aggregateWorkingSet);
                       }
                       MANAGER.addRecentWorkingSet(aggregateWorkingSet);
 
-                      Method setWorkingSetMethod = theClass.getDeclaredMethod("setWorkingSet", IWorkingSet.class);
+                      Method setWorkingSetMethod = theClass.getDeclaredMethod("setWorkingSet", IWorkingSet.class); //$NON-NLS-1$
                       setWorkingSetMethod.setAccessible(true);
                       setWorkingSetMethod.invoke(value, aggregateWorkingSet);
                     }
@@ -305,22 +305,22 @@ public class WorkingSetManager
                 handledPackageExplorer = true;
 
                 Class<? extends IViewPart> packageExplorerClass = packageExplorer.getClass();
-                Method getWorkingSetModelMethod = packageExplorerClass.getMethod("getWorkingSetModel");
+                Method getWorkingSetModelMethod = packageExplorerClass.getMethod("getWorkingSetModel"); //$NON-NLS-1$
                 Object workingSetModel = getWorkingSetModelMethod.invoke(packageExplorer);
                 if (workingSetModel != null)
                 {
                   Class<?> workingSetModelClass = workingSetModel.getClass();
-                  Method getAllWorkingSetsMethod = workingSetModelClass.getMethod("getAllWorkingSets");
+                  Method getAllWorkingSetsMethod = workingSetModelClass.getMethod("getAllWorkingSets"); //$NON-NLS-1$
                   IWorkingSet[] allWorkingSets = (IWorkingSet[])getAllWorkingSetsMethod.invoke(workingSetModel);
 
-                  Method getActiveWorkingSetsMethod = workingSetModelClass.getMethod("getActiveWorkingSets");
+                  Method getActiveWorkingSetsMethod = workingSetModelClass.getMethod("getActiveWorkingSets"); //$NON-NLS-1$
                   IWorkingSet[] activeWorkingSets = (IWorkingSet[])getActiveWorkingSetsMethod.invoke(workingSetModel);
 
                   List<IWorkingSet> newActiveWorkingSets = getActiveWorkingSets(allWorkingSets, activeWorkingSets);
 
                   IWorkingSet[] orderedActiveWorkingSetsArray = newActiveWorkingSets.toArray(new IWorkingSet[newActiveWorkingSets.size()]);
 
-                  Method setWorkingSetsMethod = workingSetModelClass.getMethod("setActiveWorkingSets", IWorkingSet[].class);
+                  Method setWorkingSetsMethod = workingSetModelClass.getMethod("setActiveWorkingSets", IWorkingSet[].class); //$NON-NLS-1$
 
                   setWorkingSetsMethod.invoke(workingSetModel, new Object[] { orderedActiveWorkingSetsArray });
                 }

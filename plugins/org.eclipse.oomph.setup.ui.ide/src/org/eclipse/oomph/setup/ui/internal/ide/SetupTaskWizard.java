@@ -35,6 +35,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -65,7 +66,7 @@ import java.util.Map;
  */
 public class SetupTaskWizard extends Wizard implements INewWizard
 {
-  private static final String TEMPLATES = "templates";
+  private static final String TEMPLATES = "templates"; //$NON-NLS-1$
 
   private SetupTaskWizardPage page;
 
@@ -121,7 +122,7 @@ public class SetupTaskWizard extends Wizard implements INewWizard
     {
       e.printStackTrace();
       Throwable realException = e.getTargetException();
-      MessageDialog.openError(getShell(), "Error", realException.getMessage());
+      MessageDialog.openError(getShell(), Messages.SetupTaskWizard_errorDialog_title, realException.getMessage());
       return false;
     }
 
@@ -130,8 +131,8 @@ public class SetupTaskWizard extends Wizard implements INewWizard
 
   private void doFinish(Map<String, String> variables, IProgressMonitor monitor) throws Exception
   {
-    String sourceRoot = TEMPLATES + "/";
-    String targetRoot = new File(variables.get("@ContainerLocation@")) + "/";
+    String sourceRoot = TEMPLATES + "/"; //$NON-NLS-1$
+    String targetRoot = new File(variables.get("@ContainerLocation@")) + "/"; //$NON-NLS-1$ //$NON-NLS-2$
 
     final List<File> projects = new ArrayList<File>();
     final List<File> genModels = new ArrayList<File>();
@@ -157,7 +158,7 @@ public class SetupTaskWizard extends Wizard implements INewWizard
           for (File genModelFile : genModels)
           {
             IFile iFile = getIFile(genModelFile);
-            progress.setTaskName("Generating " + iFile.getFullPath());
+            progress.setTaskName(NLS.bind(Messages.SetupTaskWizard_fileGenerateTask_name, iFile.getFullPath()));
 
             URI uri = URI.createPlatformResourceURI(iFile.getFullPath().toString(), true);
 
@@ -174,9 +175,9 @@ public class SetupTaskWizard extends Wizard implements INewWizard
 
             GeneratorUIUtil.GeneratorOperation operation = new GeneratorUIUtil.GeneratorOperation(shell);
             operation.addGeneratorAndArguments(generator, genModel, GenBaseGeneratorAdapter.MODEL_PROJECT_TYPE,
-                CodeGenEcorePlugin.INSTANCE.getString("_UI_ModelProject_name"));
+                CodeGenEcorePlugin.INSTANCE.getString("_UI_ModelProject_name")); //$NON-NLS-1$
             operation.addGeneratorAndArguments(generator, genModel, GenBaseGeneratorAdapter.EDIT_PROJECT_TYPE,
-                CodeGenEcorePlugin.INSTANCE.getString("_UI_EditProject_name"));
+                CodeGenEcorePlugin.INSTANCE.getString("_UI_EditProject_name")); //$NON-NLS-1$
 
             operation.run(progress.newChild());
           }
@@ -192,7 +193,7 @@ public class SetupTaskWizard extends Wizard implements INewWizard
       }
     }, progress.newChild(generateWork));
 
-    progress.setTaskName("Opening files for editing...");
+    progress.setTaskName(Messages.SetupTaskWizard_fileOpenTask_name);
     shell.getDisplay().asyncExec(new Runnable()
     {
       public void run()
@@ -244,7 +245,7 @@ public class SetupTaskWizard extends Wizard implements INewWizard
 
     Bundle bundle = SetupUIIDEPlugin.INSTANCE.getBundle();
 
-    if (entry.endsWith("/"))
+    if (entry.endsWith("/")) //$NON-NLS-1$
     {
       file.mkdirs();
 
@@ -261,16 +262,16 @@ public class SetupTaskWizard extends Wizard implements INewWizard
     }
     else
     {
-      if (file.getName().endsWith(".genmodel"))
+      if (file.getName().endsWith(".genmodel")) //$NON-NLS-1$
       {
         genModels.add(file);
         filesToOpen.add(file);
       }
-      else if (file.getName().endsWith(".ecore"))
+      else if (file.getName().endsWith(".ecore")) //$NON-NLS-1$
       {
         filesToOpen.add(file);
       }
-      else if (file.getName().endsWith("TaskImpl.java"))
+      else if (file.getName().endsWith("TaskImpl.java")) //$NON-NLS-1$
       {
         filesToOpen.add(file);
       }
@@ -322,17 +323,17 @@ public class SetupTaskWizard extends Wizard implements INewWizard
   private static boolean isBinary(File file)
   {
     String name = file.getName();
-    if (name.endsWith(".gif"))
+    if (name.endsWith(".gif")) //$NON-NLS-1$
     {
       return true;
     }
 
-    if (name.endsWith(".png"))
+    if (name.endsWith(".png")) //$NON-NLS-1$
     {
       return true;
     }
 
-    if (name.endsWith(".bmp"))
+    if (name.endsWith(".bmp")) //$NON-NLS-1$
     {
       return true;
     }
@@ -379,7 +380,7 @@ public class SetupTaskWizard extends Wizard implements INewWizard
       while (entries.hasMoreElements())
       {
         String entry = entries.nextElement();
-        String expanded = expand(entry, "@ProjectName@", projectName);
+        String expanded = expand(entry, "@ProjectName@", projectName); //$NON-NLS-1$
 
         File file = new File(containerLocation, expanded.substring(TEMPLATES.length() + 1));
         projects.add(file);

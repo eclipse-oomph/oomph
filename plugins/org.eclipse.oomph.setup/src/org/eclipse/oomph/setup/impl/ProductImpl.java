@@ -126,7 +126,7 @@ public class ProductImpl extends ScopeImpl implements Product
     {
       if (EcoreUtil.isAncestor(this, newProductCatalog))
       {
-        throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+        throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
       }
       NotificationChain msgs = null;
       if (eInternalContainer() != null)

@@ -35,7 +35,7 @@ public class SimpleCheckbox extends FlatButton
   public SimpleCheckbox(Composite parent)
   {
     super(parent, SWT.CHECK);
-    setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/checkmark_checked.png"));
+    setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/checkmark_checked.png")); //$NON-NLS-1$
 
     setIconTextGap(10);
     addSelectionListener(new SelectionAdapter()
@@ -46,7 +46,7 @@ public class SimpleCheckbox extends FlatButton
         setChecked(!SimpleCheckbox.this.isChecked());
       }
     });
-    setFont(SimpleInstallerDialog.getFont(0, "bold"));
+    setFont(SimpleInstallerDialog.getFont(0, "bold")); //$NON-NLS-1$
     setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
     setDisabledBackgroundColor(null);
   }

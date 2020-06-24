@@ -39,6 +39,7 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -81,9 +82,9 @@ public abstract class PropertyField
 {
   public static final int NUM_COLUMNS = 3;
 
-  private static final String EMPTY = "";
+  private static final String EMPTY = ""; //$NON-NLS-1$
 
-  private static final Pattern JRE_LOCATION_VARIABLE_PATTERN = Pattern.compile("\\$\\{jre\\.location-([0-9]+)(?:\\.([0-9]+))?\\}");
+  private static final Pattern JRE_LOCATION_VARIABLE_PATTERN = Pattern.compile("\\$\\{jre\\.location-([0-9]+)(?:\\.([0-9]+))?\\}"); //$NON-NLS-1$
 
   public static PropertyField createField(final VariableTask variable)
   {
@@ -134,19 +135,19 @@ public abstract class PropertyField
 
       case FOLDER:
         FolderField folderField = new FolderField(choices);
-        folderField.setDialogText("Folder Selection");
-        folderField.setDialogMessage("Select a folder.");
+        folderField.setDialogText(Messages.PropertyField_folderField_text);
+        folderField.setDialogMessage(Messages.PropertyField_folderField_message);
         return folderField;
 
       case FILE:
         FileField fileField = new FileField(choices);
-        fileField.setDialogText("File Selection");
+        fileField.setDialogText(Messages.PropertyField_fileField_text);
         return fileField;
 
       case CONTAINER:
         ContainerField containerField = new ContainerField(choices);
-        containerField.setDialogText("Container Selection");
-        containerField.setDialogMessage("Select a container.");
+        containerField.setDialogText(Messages.PropertyField_containerField_text);
+        containerField.setDialogMessage(Messages.PropertyField_containerField_message);
         return containerField;
 
       case TEXT:
@@ -206,7 +207,7 @@ public abstract class PropertyField
   @Override
   public String toString()
   {
-    return getClass().getSimpleName() + "[label=" + labelText + ", value=" + value + "]";
+    return getClass().getSimpleName() + "[label=" + labelText + ", value=" + value + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   public final String getLabelText()
@@ -216,7 +217,7 @@ public abstract class PropertyField
 
   public final void setLabelText(String labelText)
   {
-    if (labelText.endsWith(":"))
+    if (labelText.endsWith(":")) //$NON-NLS-1$
     {
       labelText = labelText.substring(0, labelText.length() - 1);
     }
@@ -304,7 +305,7 @@ public abstract class PropertyField
     label.setLayoutData(labelGridData);
     if (labelText != null)
     {
-      label.setText(labelText + ":");
+      label.setText(labelText + ":"); //$NON-NLS-1$
     }
 
     Control control = createControl(parent);
@@ -434,7 +435,7 @@ public abstract class PropertyField
       }
     }
 
-    throw new IllegalArgumentException("Parent must have a GridLayout with 3 columns");
+    throw new IllegalArgumentException("Parent must have a GridLayout with 3 columns"); //$NON-NLS-1$
   }
 
   private void checkValueListener(ValueListener listener)
@@ -494,7 +495,7 @@ public abstract class PropertyField
     @Override
     public String getDefaultValue()
     {
-      return "false";
+      return "false"; //$NON-NLS-1$
     }
 
     @Override
@@ -607,7 +608,7 @@ public abstract class PropertyField
     @Override
     public String getDefaultValue()
     {
-      return choices == null || choices.isEmpty() ? "" : choices.get(0).getValue();
+      return choices == null || choices.isEmpty() ? "" : choices.get(0).getValue(); //$NON-NLS-1$
     }
 
     public final PropertyField getLinkField()
@@ -631,7 +632,7 @@ public abstract class PropertyField
 
       if (linkButton != null)
       {
-        String path = linked ? "linked.gif" : "icons/unlinked";
+        String path = linked ? "linked.gif" : "icons/unlinked"; //$NON-NLS-1$ //$NON-NLS-2$
         Image image = SetupUIPlugin.INSTANCE.getSWTImage(path);
 
         linkButton.setImage(image);
@@ -727,7 +728,7 @@ public abstract class PropertyField
       }
 
       String toolTip = getToolTip();
-      comboViewer.getCombo().setToolTipText(toolTip == null ? "" : toolTip);
+      comboViewer.getCombo().setToolTipText(toolTip == null ? "" : toolTip); //$NON-NLS-1$
     }
 
     @Override
@@ -774,7 +775,7 @@ public abstract class PropertyField
       toolBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 
       linkButton = new ToolItem(toolBar, SWT.PUSH);
-      linkButton.setToolTipText("Link with the '" + linkField.getLabelText() + "' field");
+      linkButton.setToolTipText(NLS.bind(Messages.PropertyField_linkButton_tooltip, linkField.getLabelText()));
       linkButton.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -1038,7 +1039,7 @@ public abstract class PropertyField
     public FolderField(String labelText, List<? extends VariableChoice> choices)
     {
       super(labelText, choices);
-      setButtonText("Browse...");
+      setButtonText(Messages.PropertyField_folderField_buttonText);
     }
 
     public final String getDialogText()
@@ -1126,7 +1127,7 @@ public abstract class PropertyField
     public FileField(String labelText, List<? extends VariableChoice> choices)
     {
       super(labelText, choices);
-      setButtonText("Browse...");
+      setButtonText(Messages.PropertyField_fileField_buttonText);
     }
 
     public final String getDialogText()
@@ -1190,7 +1191,7 @@ public abstract class PropertyField
     public ContainerField(String labelText, List<? extends VariableChoice> choices)
     {
       super(labelText, choices);
-      setButtonText("Browse...");
+      setButtonText(Messages.PropertyField_containerField_buttonText);
     }
 
     public final String getDialogText()
@@ -1265,7 +1266,7 @@ public abstract class PropertyField
       super(null, getJREChoices(jreFilter));
       this.jreFilter = jreFilter;
 
-      setButtonText("Select...");
+      setButtonText(Messages.PropertyField_jreField_buttonText);
     }
 
     private static List<? extends VariableChoice> getJREChoices(JREFilter jreFilter)
@@ -1278,8 +1279,8 @@ public abstract class PropertyField
         String folder = entry.getKey().toString();
         choice.setValue(folder);
         JRE jre = entry.getValue();
-        choice.setLabel(
-            (jre.isJDK() ? "JDK " : "JRE ") + jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro() + " " + jre.getBitness() + "bit -- " + folder);
+        choice.setLabel((jre.isJDK() ? "JDK " : "JRE ") + jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro() + " " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+            + NLS.bind(Messages.PropertyField_jreField_bitness, jre.getBitness()) + " -- " + folder); //$NON-NLS-1$
         choices.add(choice);
       }
 
@@ -1335,7 +1336,7 @@ public abstract class PropertyField
     public AuthenticatedField()
     {
       super(true);
-      setButtonText("Authenticate...");
+      setButtonText(Messages.PropertyField_authenticatedField_buttonText);
     }
 
     public void clear()
@@ -1354,7 +1355,7 @@ public abstract class PropertyField
       {
         if (toolTip.length() != 0)
         {
-          toolTip.append("\n");
+          toolTip.append("\n"); //$NON-NLS-1$
         }
 
         toolTip.append(authenticator.getMessage(IStatus.INFO));
@@ -1367,7 +1368,7 @@ public abstract class PropertyField
     protected void helperButtonSelected(SelectionEvent e)
     {
       String pluginID = SetupCorePlugin.INSTANCE.getSymbolicName();
-      MultiStatus status = new MultiStatus(pluginID, 0, "Authentication Status", null);
+      MultiStatus status = new MultiStatus(pluginID, 0, Messages.PropertyField_authenticatedField_authenticationStatus, null);
       for (Authenticator authenticator : authenticators)
       {
         int severity = authenticator.validate();
@@ -1379,25 +1380,25 @@ public abstract class PropertyField
       {
         case IStatus.INFO:
         {
-          status = new MultiStatus(pluginID, 0, "The password is successfully authenticated", null);
+          status = new MultiStatus(pluginID, 0, Messages.PropertyField_authenticatedField_status_authenticated, null);
           status.addAll(finalStatus);
           break;
         }
         case IStatus.WARNING:
         {
-          status = new MultiStatus(pluginID, 0, "The password cannot be authenticated", null);
+          status = new MultiStatus(pluginID, 0, Messages.PropertyField_authenticatedField_status_cannotAuthenticate, null);
           status.addAll(finalStatus);
           break;
         }
         case IStatus.ERROR:
         {
-          status = new MultiStatus(pluginID, 0, "The password is invalid", null);
+          status = new MultiStatus(pluginID, 0, Messages.PropertyField_authenticatedField_status_invalidPassword, null);
           status.addAll(finalStatus);
           break;
         }
       }
 
-      ErrorDialog.openError(getHelper().getShell(), "Authentication Status", null, status);
+      ErrorDialog.openError(getHelper().getShell(), Messages.PropertyField_authenticatedField_authenticationStatus, null, status);
     }
   }
 

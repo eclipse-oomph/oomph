@@ -52,9 +52,9 @@ public class SimpleReadmePage extends SimpleInstallerPage
     container.setBackground(AbstractSimpleDialog.COLOR_WHITE);
 
     Label title = new Label(container, SWT.NONE);
-    title.setText("README");
+    title.setText(Messages.SimpleReadmePage_title);
     title.setForeground(UIUtil.getEclipseThemeColor());
-    title.setFont(SimpleInstallerDialog.getFont(3, "bold"));
+    title.setFont(SimpleInstallerDialog.getFont(3, "bold")); //$NON-NLS-1$
     title.setLayoutData(GridDataFactory.swtDefaults().create());
 
     browser = new Browser(container, SWT.NONE);
@@ -72,10 +72,10 @@ public class SimpleReadmePage extends SimpleInstallerPage
   private void styleBrowser()
   {
     StringBuilder styleInjection = new StringBuilder();
-    styleInjection.append("var newStyle = document.createElement(\"style\");\n");
-    styleInjection.append("newStyle.setAttribute(\"type\", \"text/css\");\n");
-    styleInjection.append("newStyle.innerHTML = \"body{overflow-x:hidden}\"\n");
-    styleInjection.append("document.getElementsByTagName(\"head\")[0].appendChild(newStyle);\n");
+    styleInjection.append("var newStyle = document.createElement(\"style\");\n"); //$NON-NLS-1$
+    styleInjection.append("newStyle.setAttribute(\"type\", \"text/css\");\n"); //$NON-NLS-1$
+    styleInjection.append("newStyle.innerHTML = \"body{overflow-x:hidden}\"\n"); //$NON-NLS-1$
+    styleInjection.append("document.getElementsByTagName(\"head\")[0].appendChild(newStyle);\n"); //$NON-NLS-1$
     browser.execute(styleInjection.toString());
   }
 

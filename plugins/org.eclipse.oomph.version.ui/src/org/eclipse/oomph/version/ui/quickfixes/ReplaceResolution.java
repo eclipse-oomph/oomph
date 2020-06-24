@@ -32,34 +32,34 @@ public class ReplaceResolution extends AbstractDocumentResolution
   {
     super(marker, getLabel(marker, problemType, replacement), replacement == null ? Activator.CORRECTION_DELETE_GIF : Activator.CORRECTION_CHANGE_GIF);
     this.problemType = problemType;
-    this.replacement = replacement == null ? "" : replacement;
+    this.replacement = replacement == null ? "" : replacement; //$NON-NLS-1$
   }
 
   private static String getLabel(IMarker marker, String problemType, String replacement)
   {
     if (Markers.SCHEMA_BUILDER_PROBLEM.equals(problemType))
     {
-      return replacement == null ? "Remove the schema builder" : "Add the schema builder";
+      return replacement == null ? Messages.ReplaceResolution_label_removeSchemaBuilder : Messages.ReplaceResolution_label_addSchemaBuilder;
     }
 
     if (Markers.FEATURE_NATURE_PROBLEM.equals(problemType))
     {
-      return "Add the feature builder";
+      return Messages.ReplaceResolution_label_addFeatureBuilder;
     }
 
     if (Markers.FEATURE_CLOSURE_PROBLEM.equals(problemType))
     {
-      return "Add the plug-in reference";
+      return Messages.ReplaceResolution_label_addPluginReference;
     }
 
     if (Markers.DEBUG_OPTION_PROBLEM.equals(problemType))
     {
-      return "Change the debug option";
+      return Messages.ReplaceResolution_label_changeDebugOption;
     }
 
     if (Markers.AUTOMATIC_MODULE_NAME_PROBLEM.equals(problemType))
     {
-      return "Change the automatic module name";
+      return Messages.ReplaceResolution_label_changeAutomaticModuleName;
     }
 
     if (Markers.MAVEN_POM_PROBLEM.equals(problemType))
@@ -67,20 +67,21 @@ public class ReplaceResolution extends AbstractDocumentResolution
       String message = Markers.getAttribute(marker, IMarker.MESSAGE);
       if (message != null)
       {
-        if (message.startsWith("Maven artifactId"))
+        if (message.startsWith("Maven artifactId")) //$NON-NLS-1$
         {
-          return "Change the Maven artifactId";
+          return Messages.ReplaceResolution_label_changeMavenArtifactId;
         }
 
-        if (message.startsWith("Maven version"))
+        if (message.startsWith("Maven version")) //$NON-NLS-1$
         {
-          return "Change the Maven version";
+          return Messages.ReplaceResolution_label_changeMavenVersion;
         }
       }
     }
 
-    return replacement == null ? "Remove the reference"
-        : Markers.getQuickFixAlternativeReplacement(marker) == null ? "Change the version" : "Change to the extact version";
+    return replacement == null ? Messages.ReplaceResolution_label_removeReference
+        : Markers.getQuickFixAlternativeReplacement(marker) == null ? Messages.ReplaceResolution_label_changeVersion
+            : Messages.ReplaceResolution_label_changeToExactVersion;
   }
 
   @Override
@@ -88,7 +89,7 @@ public class ReplaceResolution extends AbstractDocumentResolution
   {
     if (replacement.length() != 0)
     {
-      return getLabel() + " to " + replacement;
+      return getLabel() + ' ' + Messages.ReplaceResolution_label_to + ' ' + replacement;
     }
 
     return super.getDescription();
@@ -138,7 +139,7 @@ public class ReplaceResolution extends AbstractDocumentResolution
 
         for (int i = 1; i < 9; i++)
         {
-          String insertTag = "\\" + i;
+          String insertTag = "\\" + i; //$NON-NLS-1$
           if (replacement.contains(insertTag))
           {
             int offset = matcher.start(i);
@@ -152,7 +153,7 @@ public class ReplaceResolution extends AbstractDocumentResolution
       {
         start = matcher.start();
         end = matcher.end();
-        replacement = "";
+        replacement = ""; //$NON-NLS-1$
       }
 
       document.replace(start, end - start, replacement);

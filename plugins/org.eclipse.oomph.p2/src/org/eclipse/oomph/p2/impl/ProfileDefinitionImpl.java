@@ -383,9 +383,9 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (includeSourceBundles: ");
+    result.append(" (includeSourceBundles: "); //$NON-NLS-1$
     result.append(includeSourceBundles);
-    result.append(", profileProperties: ");
+    result.append(", profileProperties: "); //$NON-NLS-1$
     result.append(profileProperties);
     result.append(')');
     return result.toString();

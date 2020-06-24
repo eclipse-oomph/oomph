@@ -79,8 +79,8 @@ public class JRELibraryItemProvider extends ItemProviderAdapter
   protected void addLibraryPathPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_JRELibrary_libraryPath_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_JRELibrary_libraryPath_feature", "_UI_JRELibrary_type"),
+        getString("_UI_JRELibrary_libraryPath_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_JRELibrary_libraryPath_feature", "_UI_JRELibrary_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         JDTPackage.Literals.JRE_LIBRARY__LIBRARY_PATH, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -93,8 +93,8 @@ public class JRELibraryItemProvider extends ItemProviderAdapter
   protected void addExternalAnnotationsPathPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_JRELibrary_externalAnnotationsPath_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_JRELibrary_externalAnnotationsPath_feature", "_UI_JRELibrary_type"),
+        getString("_UI_JRELibrary_externalAnnotationsPath_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_JRELibrary_externalAnnotationsPath_feature", "_UI_JRELibrary_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         JDTPackage.Literals.JRE_LIBRARY__EXTERNAL_ANNOTATIONS_PATH, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -118,7 +118,7 @@ public class JRELibraryItemProvider extends ItemProviderAdapter
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/JRELibrary"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/JRELibrary")); //$NON-NLS-1$
   }
 
   /**
@@ -145,7 +145,7 @@ public class JRELibraryItemProvider extends ItemProviderAdapter
     String libraryPath = jreLibrary.getLibraryPath();
     if (StringUtil.isEmpty(libraryPath))
     {
-      return getString("_UI_JRELibrary_type");
+      return getString("_UI_JRELibrary_type"); //$NON-NLS-1$
     }
 
     String label = libraryPath;
@@ -155,11 +155,11 @@ public class JRELibraryItemProvider extends ItemProviderAdapter
     {
       if (externalAnnotationsPath.length() == 0)
       {
-        label += " ~ \"\"";
+        label += " ~ \"\""; //$NON-NLS-1$
       }
       else
       {
-        label += " ~ " + externalAnnotationsPath;
+        label += " ~ " + externalAnnotationsPath; //$NON-NLS-1$
       }
     }
     return label;

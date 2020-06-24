@@ -56,11 +56,11 @@ public abstract class SimpleInstallerPage extends Composite
 
   protected static final Font FONT_LABEL = SimpleInstallerDialog.getDefaultFont();
 
-  protected static final Pattern PRODUCT_CATALOG_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_CATALOG_FILTER, ""));
+  protected static final Pattern PRODUCT_CATALOG_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_CATALOG_FILTER, "")); //$NON-NLS-1$
 
-  protected static final Pattern PRODUCT_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_FILTER, ""));
+  protected static final Pattern PRODUCT_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_FILTER, "")); //$NON-NLS-1$
 
-  protected static final Pattern PRODUCT_VERSION_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_VERSION_FILTER, ""));
+  protected static final Pattern PRODUCT_VERSION_FILTER = Pattern.compile(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_PRODUCT_VERSION_FILTER, "")); //$NON-NLS-1$
 
   protected final Installer installer;
 
@@ -99,7 +99,7 @@ public abstract class SimpleInstallerPage extends Composite
 
       backButton = new BackButton(buttonContainer);
       backButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).indent(15, 0).create());
-      backButton.setToolTipText("Back");
+      backButton.setToolTipText(Messages.SimpleInstallerPage_Back_message);
       backButton.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -204,7 +204,7 @@ public abstract class SimpleInstallerPage extends Composite
 
   protected void applyComboOrTextStyle(Control control)
   {
-    control.setFont(SimpleInstallerDialog.getFont(1, "normal"));
+    control.setFont(SimpleInstallerDialog.getFont(1, "normal")); //$NON-NLS-1$
     control.setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
     control.setBackground(AbstractSimpleDialog.COLOR_LIGHTEST_GRAY);
   }
@@ -214,7 +214,7 @@ public abstract class SimpleInstallerPage extends Composite
     Label label = new Label(parent, SWT.NONE);
     label.setLayoutData(GridDataFactory.swtDefaults().create());
     label.setText(text);
-    label.setFont(SimpleInstallerDialog.getFont(1, "bold"));
+    label.setFont(SimpleInstallerDialog.getFont(1, "bold")); //$NON-NLS-1$
     label.setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
     return label;
   }
@@ -238,7 +238,7 @@ public abstract class SimpleInstallerPage extends Composite
     }
 
     String name = productCatalog.getName();
-    if (SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(name) || "redirectable".equals(name) || productCatalog.getProducts().isEmpty())
+    if (SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(name) || "redirectable".equals(name) || productCatalog.getProducts().isEmpty()) //$NON-NLS-1$
     {
       return false;
     }
@@ -283,7 +283,7 @@ public abstract class SimpleInstallerPage extends Composite
     String hexString = Integer.toHexString(byteValue);
     if (hexString.length() == 1)
     {
-      hexString = "0" + hexString;
+      hexString = "0" + hexString; //$NON-NLS-1$
     }
 
     return hexString;
@@ -294,7 +294,7 @@ public abstract class SimpleInstallerPage extends Composite
    */
   public static final class FocusSelectionAdapter extends FocusAdapter
   {
-    public static final String ADAPTER_KEY = "focusSelectionAdapter";
+    public static final String ADAPTER_KEY = "focusSelectionAdapter"; //$NON-NLS-1$
 
     private Point nextSelectionRange;
 
@@ -340,19 +340,19 @@ public abstract class SimpleInstallerPage extends Composite
    */
   private static class BackButton extends ImageHoverButton
   {
-    private static final Image ARROW_LEFT = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/arrow_left.png");
+    private static final Image ARROW_LEFT = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/arrow_left.png"); //$NON-NLS-1$
 
-    private static final Image ARROW_LEFT_HOVER = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/arrow_left_hover.png");
+    private static final Image ARROW_LEFT_HOVER = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/arrow_left_hover.png"); //$NON-NLS-1$
 
-    private static final Image ARROW_LEFT_DISABLED = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/arrow_left_disabled.png");
+    private static final Image ARROW_LEFT_DISABLED = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/arrow_left_disabled.png"); //$NON-NLS-1$
 
-    private static final Font FONT = SimpleInstallerDialog.getFont(1, "bold");
+    private static final Font FONT = SimpleInstallerDialog.getFont(1, "bold"); //$NON-NLS-1$
 
     public BackButton(Composite parent)
     {
       super(parent, SWT.PUSH, ARROW_LEFT, ARROW_LEFT_HOVER, ARROW_LEFT_DISABLED);
       setIconTextGap(16);
-      setText("BACK");
+      setText(Messages.SimpleInstallerPage_Back_label);
       setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
       setFont(FONT);
     }

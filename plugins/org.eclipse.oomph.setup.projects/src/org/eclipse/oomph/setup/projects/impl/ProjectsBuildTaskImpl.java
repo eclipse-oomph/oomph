@@ -36,6 +36,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -430,13 +431,13 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (onlyNewProjects: ");
+    result.append(" (onlyNewProjects: "); //$NON-NLS-1$
     result.append(onlyNewProjects);
-    result.append(", refresh: ");
+    result.append(", refresh: "); //$NON-NLS-1$
     result.append(refresh);
-    result.append(", clean: ");
+    result.append(", clean: "); //$NON-NLS-1$
     result.append(clean);
-    result.append(", build: ");
+    result.append(", build: "); //$NON-NLS-1$
     result.append(build);
     result.append(')');
     return result.toString();
@@ -491,7 +492,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
     }
 
     IProgressMonitor monitor = context.getProgressMonitor(true);
-    monitor.beginTask("", (isRefresh() ? size : 0) + (isClean() ? size : 0) + (isBuild() ? size : 0));
+    monitor.beginTask("", (isRefresh() ? size : 0) + (isClean() ? size : 0) + (isBuild() ? size : 0)); //$NON-NLS-1$
 
     try
     {
@@ -499,7 +500,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
       {
         for (IProject project : projects)
         {
-          context.log("Refreshing " + project.getName(), false);
+          context.log(NLS.bind(Messages.ProjectsBuildTaskImpl_Refreshing_message, project.getName()), false);
           project.refreshLocal(IResource.DEPTH_INFINITE, MonitorUtil.create(monitor, 1));
         }
       }
@@ -558,20 +559,20 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
 
     if (isRefresh())
     {
-      tokens.add(" refresh");
+      tokens.add(Messages.ProjectsBuildTaskImpl_Refresh_message_part);
     }
 
     if (isClean())
     {
-      tokens.add(" clean");
+      tokens.add(Messages.ProjectsBuildTaskImpl_Clean_message_part);
     }
 
     if (isBuild())
     {
-      tokens.add(" build");
+      tokens.add(Messages.ProjectsBuildTaskImpl_Build_message_part);
     }
 
-    context.log("Nothing to" + StringUtil.implode(tokens, ','));
+    context.log(NLS.bind(Messages.ProjectsBuildTaskImpl_NothingToDo_message, StringUtil.implode(tokens, ',')));
   }
 
 } // ProjectsBuildTaskImpl

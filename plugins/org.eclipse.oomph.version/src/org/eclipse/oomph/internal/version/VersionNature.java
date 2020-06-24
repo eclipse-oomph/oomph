@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.CoreException;
  */
 public class VersionNature implements IProjectNature
 {
-  public static final String NATURE_ID = "org.eclipse.oomph.version.VersionNature";
+  public static final String NATURE_ID = "org.eclipse.oomph.version.VersionNature"; //$NON-NLS-1$
 
   private IProject project;
 

@@ -23,6 +23,7 @@ import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PartInitException;
@@ -94,7 +95,7 @@ public class ListFilesAction extends AbstractAction<Repository>
         finally
         {
           System.out.println();
-          System.out.println("Took " + (System.currentTimeMillis() - start) + " millis");
+          System.out.println(NLS.bind(Messages.ListFilesAction_Timing_message, System.currentTimeMillis() - start));
         }
       }
     };
@@ -107,7 +108,7 @@ public class ListFilesAction extends AbstractAction<Repository>
     Git git = new Git(repository);
 
     int commitCount = getCommitCount(git);
-    monitor.beginTask("Listing all files", commitCount);
+    monitor.beginTask(Messages.ListFilesAction_ListFiles_task, commitCount);
 
     Map<String, Set<String>> namesByExtension = new HashMap<String, Set<String>>();
 
@@ -127,7 +128,7 @@ public class ListFilesAction extends AbstractAction<Repository>
         int lastDot = name.lastIndexOf('.');
         if (lastDot == -1)
         {
-          extension = "";
+          extension = ""; //$NON-NLS-1$
         }
         else
         {
@@ -147,14 +148,14 @@ public class ListFilesAction extends AbstractAction<Repository>
 
       try
       {
-        Method closeMethod = walk.getClass().getMethod("close");
+        Method closeMethod = walk.getClass().getMethod("close"); //$NON-NLS-1$
         closeMethod.invoke(walk);
       }
       catch (Throwable ex)
       {
         try
         {
-          Method releaseMethod = walk.getClass().getMethod("release");
+          Method releaseMethod = walk.getClass().getMethod("release"); //$NON-NLS-1$
           releaseMethod.invoke(walk);
         }
         catch (Throwable ignore)
@@ -166,7 +167,7 @@ public class ListFilesAction extends AbstractAction<Repository>
       monitor.worked(1);
     }
 
-    final File file = new File("files-in-" + repository.getWorkTree().getName() + ".txt");
+    final File file = new File("files-in-" + repository.getWorkTree().getName() + ".txt"); //$NON-NLS-1$ //$NON-NLS-2$
     PrintStream stream = new PrintStream(file);
 
     try
@@ -174,12 +175,12 @@ public class ListFilesAction extends AbstractAction<Repository>
       for (String extension : sort(namesByExtension.keySet()))
       {
         List<String> names = sort(namesByExtension.get(extension));
-        System.out.println(extension + "\t" + names.size());
+        System.out.println(extension + "\t" + names.size()); //$NON-NLS-1$
 
-        stream.println(extension + "\t" + names.size());
+        stream.println(extension + "\t" + names.size()); //$NON-NLS-1$
         for (String name : names)
         {
-          stream.println("\t" + name);
+          stream.println("\t" + name); //$NON-NLS-1$
         }
       }
     }

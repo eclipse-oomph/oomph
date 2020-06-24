@@ -58,13 +58,13 @@ public class ArchiveResourceImpl extends ResourceImpl implements BytesResource
       int segmentCount = path.segmentCount();
       if (segmentCount > 2)
       {
-        URI uri = URI.createURI(path.segment(0) + "://" + path.segment(1));
+        URI uri = URI.createURI(path.segment(0) + "://" + path.segment(1)); //$NON-NLS-1$
         for (int i = 2, length = path.segmentCount(); i < length; ++i)
         {
           uri = uri.appendSegment(path.segment(i));
         }
 
-        URI archiveEntry = URI.createURI("archive:" + archiveURI + "!/" + path);
+        URI archiveEntry = URI.createURI("archive:" + archiveURI + "!/" + path); //$NON-NLS-1$ //$NON-NLS-2$
         handle(details, uri, archiveEntry);
       }
     }

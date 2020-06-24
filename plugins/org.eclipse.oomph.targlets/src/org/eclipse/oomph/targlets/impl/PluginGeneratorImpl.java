@@ -181,15 +181,15 @@ public class PluginGeneratorImpl extends ModelElementImpl implements PluginGener
           installableUnit.setRequiredCapabilities(requirements.toArray(new IRequirement[requirements.size()]));
         }
 
-        File buildPropertiesFile = new File(projectFolder, "build.properties");
+        File buildPropertiesFile = new File(projectFolder, "build.properties"); //$NON-NLS-1$
         if (buildPropertiesFile.exists())
         {
           Map<String, String> properties = PropertiesUtil.loadProperties(buildPropertiesFile);
-          String additionalBundles = properties.get("additional.bundles");
+          String additionalBundles = properties.get("additional.bundles"); //$NON-NLS-1$
           if (additionalBundles != null)
           {
             List<IRequirement> additionalRequirements = new ArrayList<IRequirement>();
-            for (String bundle : additionalBundles.trim().split("\\s*,\\s*"))
+            for (String bundle : additionalBundles.trim().split("\\s*,\\s*")) //$NON-NLS-1$
             {
               additionalRequirements
                   .add(MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, bundle, VersionRange.emptyRange, null, false, false, true));

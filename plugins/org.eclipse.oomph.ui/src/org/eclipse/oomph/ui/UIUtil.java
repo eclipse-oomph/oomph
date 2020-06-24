@@ -99,7 +99,7 @@ public final class UIUtil
 
     try
     {
-      colorTransparent = ReflectUtil.getValue("COLOR_TRANSPARENT", SWT.class);
+      colorTransparent = ReflectUtil.getValue("COLOR_TRANSPARENT", SWT.class); //$NON-NLS-1$
     }
     catch (Throwable ex)
     {
@@ -244,7 +244,7 @@ public final class UIUtil
   {
     if (parent == null || controlToCheck == null)
     {
-      throw new IllegalArgumentException("Neither parent nor controlToCheck must be null");
+      throw new IllegalArgumentException("Neither parent nor controlToCheck must be null"); //$NON-NLS-1$
     }
 
     if (controlToCheck == parent)
@@ -336,7 +336,7 @@ public final class UIUtil
 
       try
       {
-        control = ReflectUtil.getValue("text", combo);
+        control = ReflectUtil.getValue("text", combo); //$NON-NLS-1$
       }
       catch (Throwable ex)
       {
@@ -468,7 +468,7 @@ public final class UIUtil
     {
       if (errorImage == null)
       {
-        errorImage = UIPlugin.INSTANCE.getSWTImage("error");
+        errorImage = UIPlugin.INSTANCE.getSWTImage("error"); //$NON-NLS-1$
       }
 
       return errorImage;
@@ -478,7 +478,7 @@ public final class UIUtil
     {
       if (warningImage == null)
       {
-        warningImage = UIPlugin.INSTANCE.getSWTImage("warning");
+        warningImage = UIPlugin.INSTANCE.getSWTImage("warning"); //$NON-NLS-1$
       }
 
       return warningImage;
@@ -486,7 +486,7 @@ public final class UIUtil
 
     if (infoImage == null)
     {
-      infoImage = UIPlugin.INSTANCE.getSWTImage("info");
+      infoImage = UIPlugin.INSTANCE.getSWTImage("info"); //$NON-NLS-1$
     }
 
     return infoImage;
@@ -802,7 +802,7 @@ public final class UIUtil
         {
           if (t.breaksFlow())
           {
-            builder.append("\n");
+            builder.append("\n"); //$NON-NLS-1$
           }
         }
       }, Boolean.TRUE);
@@ -858,18 +858,18 @@ public final class UIUtil
         @Override
         public void handleSimpleTag(Tag t, MutableAttributeSet a, int pos)
         {
-          if ("img".equals(t.toString()))
+          if ("img".equals(t.toString())) //$NON-NLS-1$
           {
-            builder.append("      ");
+            builder.append("      "); //$NON-NLS-1$
           }
           else if (t.breaksFlow())
           {
             if (renderable && builder == result)
             {
-              builder.append("<br/>");
+              builder.append("<br/>"); //$NON-NLS-1$
             }
 
-            builder.append("\n");
+            builder.append("\n"); //$NON-NLS-1$
           }
         }
 
@@ -877,27 +877,27 @@ public final class UIUtil
         public void handleStartTag(Tag t, MutableAttributeSet a, int pos)
         {
           String tagName = t.toString();
-          if ("table".equals(tagName))
+          if ("table".equals(tagName)) //$NON-NLS-1$
           {
             table = new ArrayList<List<StringBuilder>>();
           }
-          else if ("tr".equals(tagName))
+          else if ("tr".equals(tagName)) //$NON-NLS-1$
           {
             row = new ArrayList<StringBuilder>();
             table.add(row);
           }
-          else if ("td".equals(tagName))
+          else if ("td".equals(tagName)) //$NON-NLS-1$
           {
             builder = new StringBuilder();
             row.add(builder);
           }
-          else if (tagName.startsWith("h") && tagName.length() > 1 && Character.isDigit(tagName.charAt(1)))
+          else if (tagName.startsWith("h") && tagName.length() > 1 && Character.isDigit(tagName.charAt(1))) //$NON-NLS-1$
           {
             appendLineFeed(true);
             appendLineFeed(false);
             if (renderable)
             {
-              builder.append("<b>");
+              builder.append("<b>"); //$NON-NLS-1$
             }
           }
           else
@@ -913,7 +913,7 @@ public final class UIUtil
         public void handleEndTag(Tag t, int pos)
         {
           String tagName = t.toString();
-          if ("table".equals(tagName))
+          if ("table".equals(tagName)) //$NON-NLS-1$
           {
             int[] widths = null;
             String[][][] tableEntries = new String[table.size()][][];
@@ -935,7 +935,7 @@ public final class UIUtil
               for (StringBuilder entry : row)
               {
                 String value = StringUtil.trimRight(entry.toString());
-                String[] lines = value.split("\n");
+                String[] lines = value.split("\n"); //$NON-NLS-1$
                 tableRow[columnIndex] = lines;
 
                 for (String line : lines)
@@ -951,7 +951,7 @@ public final class UIUtil
 
             if (renderable)
             {
-              builder.append("<pre>");
+              builder.append("<pre>"); //$NON-NLS-1$
             }
 
             for (String[][] row : tableEntries)
@@ -969,12 +969,12 @@ public final class UIUtil
                   int columnIndex = 0;
                   for (String[] column : row)
                   {
-                    String columnText = i < column.length ? column[i] : "";
+                    String columnText = i < column.length ? column[i] : ""; //$NON-NLS-1$
                     int columnWidth = widths[columnIndex];
                     append(columnText, columnWidth);
                     ++columnIndex;
                   }
-                  builder.append("\n");
+                  builder.append("\n"); //$NON-NLS-1$
                 }
               }
               else
@@ -982,12 +982,12 @@ public final class UIUtil
                 appendLineFeed(true);
                 for (int i = 0; i < maxLines; ++i)
                 {
-                  builder.append("|  ");
+                  builder.append("|  "); //$NON-NLS-1$
                   int columnIndex = 0;
                   for (String[] column : row)
                   {
-                    append(i < column.length ? column[i] : "", widths[columnIndex]);
-                    builder.append(columnIndex == row.length - 1 ? "  |" : "  |  ");
+                    append(i < column.length ? column[i] : "", widths[columnIndex]); //$NON-NLS-1$
+                    builder.append(columnIndex == row.length - 1 ? "  |" : "  |  "); //$NON-NLS-1$ //$NON-NLS-2$
                     ++columnIndex;
                   }
 
@@ -998,23 +998,23 @@ public final class UIUtil
 
             if (renderable)
             {
-              builder.append("</pre>");
+              builder.append("</pre>"); //$NON-NLS-1$
 
             }
 
             table = null;
           }
-          else if ("tr".equals(tagName))
+          else if ("tr".equals(tagName)) //$NON-NLS-1$
           {
           }
-          else if ("td".equals(tagName))
+          else if ("td".equals(tagName)) //$NON-NLS-1$
           {
           }
-          else if (tagName.startsWith("h") && tagName.length() > 1 && Character.isDigit(tagName.charAt(1)))
+          else if (tagName.startsWith("h") && tagName.length() > 1 && Character.isDigit(tagName.charAt(1))) //$NON-NLS-1$
           {
             if (renderable)
             {
-              builder.append("</b>");
+              builder.append("</b>"); //$NON-NLS-1$
               appendLineFeed(true);
             }
           }
@@ -1050,7 +1050,7 @@ public final class UIUtil
 
           if (renderable)
           {
-            builder.append("<br/>");
+            builder.append("<br/>"); //$NON-NLS-1$
           }
 
           builder.append('\n');
@@ -1077,7 +1077,7 @@ public final class UIUtil
     Shell shell = new Shell();
     GC gc = new GC(shell);
     FontRegistry fontRegistry = JFaceResources.getFontRegistry();
-    Font font = fontRegistry.get(fontRegistry.hasValueFor("org.eclipse.jdt.ui.javadocfont") ? "org.eclipse.jdt.ui.javadocfont" : JFaceResources.DIALOG_FONT);
+    Font font = fontRegistry.get(fontRegistry.hasValueFor("org.eclipse.jdt.ui.javadocfont") ? "org.eclipse.jdt.ui.javadocfont" : JFaceResources.DIALOG_FONT); //$NON-NLS-1$ //$NON-NLS-2$
     Font fixedPitchFont = JFaceResources.getTextFont();
 
     gc.setFont(font);
@@ -1091,11 +1091,11 @@ public final class UIUtil
     boolean browerAvailable = isBrowserAvailable();
 
     String text = stripHTMLFull(html, false).trim();
-    String[] lines = text.split("\n");
+    String[] lines = text.split("\n"); //$NON-NLS-1$
     int pixelWidth = 0;
     for (String line : lines)
     {
-      boolean isTableRow = line.startsWith("|");
+      boolean isTableRow = line.startsWith("|"); //$NON-NLS-1$
       if (!browerAvailable && isTableRow)
       {
         gc.setFont(fixedPitchFont);

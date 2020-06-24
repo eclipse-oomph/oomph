@@ -52,7 +52,7 @@ public class BaseValidator extends EObjectValidator
    * @see org.eclipse.emf.common.util.Diagnostic#getCode()
    * @generated
    */
-  public static final String DIAGNOSTIC_SOURCE = "org.eclipse.oomph.base";
+  public static final String DIAGNOSTIC_SOURCE = "org.eclipse.oomph.base"; //$NON-NLS-1$
 
   /**
    * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -197,7 +197,7 @@ public class BaseValidator extends EObjectValidator
     boolean result = source == null || isWellFormedURI(source);
     if (!result && diagnostics != null)
     {
-      diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, WELL_FORMED_SOURCE_URI, "_UI_AnnotationSourceURINotWellFormed_diagnostic", //
+      diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, WELL_FORMED_SOURCE_URI, "_UI_AnnotationSourceURINotWellFormed_diagnostic", //$NON-NLS-1$
           new Object[] { source }, new Object[] { annotation, BasePackage.Literals.ANNOTATION__SOURCE }, context));
     }
     return result;
@@ -283,7 +283,7 @@ public class BaseValidator extends EObjectValidator
    * @see #validateID_Pattern
    */
   public static final PatternMatcher[][] ID__PATTERN__VALUES = new PatternMatcher[][] {
-      new PatternMatcher[] { XMLTypeUtil.createPatternMatcher("[\\i-[:]][\\c-[:]]*") } };
+      new PatternMatcher[] { XMLTypeUtil.createPatternMatcher("[\\i-[:]][\\c-[:]]*") } }; //$NON-NLS-1$
 
   /**
    * Validates the Pattern constraint of '<em>ID</em>'.
@@ -300,7 +300,7 @@ public class BaseValidator extends EObjectValidator
   protected void reportDataValuePatternViolation(EDataType eDataType, Object value, PatternMatcher[] patterns, DiagnosticChain diagnostics,
       Map<Object, Object> context)
   {
-    diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, DATA_VALUE__MATCHES_PATTERN, "_UI_IDConstraint_diagnostic",
+    diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, DATA_VALUE__MATCHES_PATTERN, "_UI_IDConstraint_diagnostic", //$NON-NLS-1$
         new Object[] { getValueLabel(eDataType, value, context) }, new Object[] { value, eDataType, patterns }, context));
   }
 

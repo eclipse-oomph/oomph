@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.ProgressMonitorWrapper;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -211,7 +212,7 @@ public abstract class BackendSystem extends BackendContainer
         return system.createBackendFile(systemRelativeURI);
 
       default:
-        throw new BackendException("The " + type.toString().toLowerCase() + " can't be a member: " + delegateMember);
+        throw new BackendException(NLS.bind(Messages.BackendSystem_InvalidMember_exception, type.toString().toLowerCase(), delegateMember));
     }
   }
 
@@ -302,7 +303,7 @@ public abstract class BackendSystem extends BackendContainer
 
     public VisitorThread(VisitorThreadPool pool)
     {
-      super("VisitorThread-" + (++lastID));
+      super(NLS.bind(Messages.BackendSystem_Visitor_thread, ++lastID));
       this.pool = pool;
       setDaemon(true);
     }
@@ -511,13 +512,13 @@ public abstract class BackendSystem extends BackendContainer
    */
   private static final class VisitorThreadPool
   {
-    private static final String PROP_MAX_THREADS = "oomph.resources.VisitorThreadPool.MAX_THREADS";
+    private static final String PROP_MAX_THREADS = "oomph.resources.VisitorThreadPool.MAX_THREADS"; //$NON-NLS-1$
 
     private static final int DEFAULT_MAX_THREADS = 10;
 
     private static final int MAX_THREADS = PropertiesUtil.getProperty(PROP_MAX_THREADS, DEFAULT_MAX_THREADS);
 
-    private static final String PROP_SKIP_THRESHOLD = "oomph.resources.VisitorThreadPool.SKIP_THRESHOLD";
+    private static final String PROP_SKIP_THRESHOLD = "oomph.resources.VisitorThreadPool.SKIP_THRESHOLD"; //$NON-NLS-1$
 
     private static final int DEFAULT_SKIP_THRESHOLD = MAX_THREADS / 2;
 
@@ -654,7 +655,7 @@ public abstract class BackendSystem extends BackendContainer
 
       private Registry()
       {
-        addFactory("file", new LocalBackendSystem.Factory());
+        addFactory("file", new LocalBackendSystem.Factory()); //$NON-NLS-1$
       }
 
       private IFactory loadFactory(String scheme) throws BackendException
@@ -666,14 +667,14 @@ public abstract class BackendSystem extends BackendContainer
             IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
 
             for (IConfigurationElement configurationElement : extensionRegistry
-                .getConfigurationElementsFor("org.eclipse.oomph.resources.backendSystemFactories"))
+                .getConfigurationElementsFor("org.eclipse.oomph.resources.backendSystemFactories")) //$NON-NLS-1$
             {
-              String factoryScheme = configurationElement.getAttribute("scheme");
+              String factoryScheme = configurationElement.getAttribute("scheme"); //$NON-NLS-1$
               if (ObjectUtil.equals(factoryScheme, scheme))
               {
                 try
                 {
-                  return (IFactory)configurationElement.createExecutableExtension("class");
+                  return (IFactory)configurationElement.createExecutableExtension("class"); //$NON-NLS-1$
                 }
                 catch (Exception ex)
                 {
@@ -688,7 +689,7 @@ public abstract class BackendSystem extends BackendContainer
           }
         }
 
-        throw new BackendException("Backend system factory with scheme '" + scheme + "' not found");
+        throw new BackendException(NLS.bind(Messages.BackendSystem_SchemeNotFound_exception, scheme));
       }
 
       public synchronized IFactory getFactory(String scheme) throws BackendException

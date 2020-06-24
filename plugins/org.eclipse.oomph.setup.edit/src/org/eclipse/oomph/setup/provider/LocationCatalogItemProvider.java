@@ -122,7 +122,7 @@ public class LocationCatalogItemProvider extends ItemProviderAdapter
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/LocationCatalog"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/LocationCatalog")); //$NON-NLS-1$
   }
 
   /**
@@ -145,7 +145,7 @@ public class LocationCatalogItemProvider extends ItemProviderAdapter
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_LocationCatalog_type");
+    return getString("_UI_LocationCatalog_type"); //$NON-NLS-1$
   }
 
   /**

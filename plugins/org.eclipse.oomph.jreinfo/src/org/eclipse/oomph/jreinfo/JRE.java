@@ -120,7 +120,7 @@ public final class JRE implements Comparable<JRE>
 
   public boolean isCurrent()
   {
-    String systemJavaHome = System.getProperty("java.home");
+    String systemJavaHome = System.getProperty("java.home"); //$NON-NLS-1$
     return javaHome.getPath().equals(systemJavaHome);
   }
 
@@ -253,7 +253,7 @@ public final class JRE implements Comparable<JRE>
   @Override
   public String toString()
   {
-    return javaHome.getPath() + (isCurrent() ? " (Current)" : "");
+    return javaHome.getPath() + (isCurrent() ? " " + Messages.JRE_Current_message : ""); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   String toLine()
@@ -264,6 +264,6 @@ public final class JRE implements Comparable<JRE>
 
   static File getExecutable(File javaHome)
   {
-    return new File(javaHome, "bin/" + JREManager.JAVA_EXECUTABLE);
+    return new File(javaHome, "bin/" + JREManager.JAVA_EXECUTABLE); //$NON-NLS-1$
   }
 }

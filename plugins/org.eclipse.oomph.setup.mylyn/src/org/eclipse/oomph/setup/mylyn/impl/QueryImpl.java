@@ -151,7 +151,7 @@ public class QueryImpl extends ModelElementImpl implements Query
     {
       if (EcoreUtil.isAncestor(this, newTask))
       {
-        throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+        throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
       }
       NotificationChain msgs = null;
       if (eInternalContainer() != null)
@@ -409,9 +409,9 @@ public class QueryImpl extends ModelElementImpl implements Query
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (summary: ");
+    result.append(" (summary: "); //$NON-NLS-1$
     result.append(summary);
-    result.append(", uRL: ");
+    result.append(", uRL: "); //$NON-NLS-1$
     result.append(uRL);
     result.append(')');
     return result.toString();

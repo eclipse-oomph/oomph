@@ -54,6 +54,7 @@ import java.util.concurrent.Executors;
 /**
  * @author Eike Stepper
  */
+@SuppressWarnings("nls")
 public final class HTTPServer
 {
   private static final boolean DEBUG = false;

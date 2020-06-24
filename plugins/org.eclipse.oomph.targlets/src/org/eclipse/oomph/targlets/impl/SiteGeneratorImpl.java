@@ -52,7 +52,7 @@ import java.util.Map;
  */
 public class SiteGeneratorImpl extends ModelElementImpl implements SiteGenerator
 {
-  private static final IPath SITE_XML_PATH = new Path("site.xml");
+  private static final IPath SITE_XML_PATH = new Path("site.xml"); //$NON-NLS-1$
 
   /**
    * <!-- begin-user-doc -->
@@ -100,7 +100,7 @@ public class SiteGeneratorImpl extends ModelElementImpl implements SiteGenerator
 
         ComponentDefinition componentDefinition = TargletFactory.eINSTANCE.createComponentDefinition();
         componentDefinition.setID(name);
-        componentDefinition.setVersion(Version.createOSGi(1, 0, 0, "qualifier"));
+        componentDefinition.setVersion(Version.createOSGi(1, 0, 0, "qualifier")); //$NON-NLS-1$
 
         EList<Requirement> requirements = componentDefinition.getRequirements();
 
@@ -113,12 +113,12 @@ public class SiteGeneratorImpl extends ModelElementImpl implements SiteGenerator
 
         try
         {
-          List<Object> bundles = ReflectUtil.invokeMethod("getBundles", site);
+          List<Object> bundles = ReflectUtil.invokeMethod("getBundles", site); //$NON-NLS-1$
 
           for (Object bundle : bundles)
           {
-            String id = ReflectUtil.invokeMethod("getBundleIdentifier", bundle);
-            Version version = Version.create(ReflectUtil.<String> invokeMethod("getBundleVersion", bundle));
+            String id = ReflectUtil.invokeMethod("getBundleIdentifier", bundle); //$NON-NLS-1$
+            Version version = Version.create(ReflectUtil.<String> invokeMethod("getBundleVersion", bundle)); //$NON-NLS-1$
             requirements.add(P2Factory.eINSTANCE.createRequirement(id, version, true));
           }
         }

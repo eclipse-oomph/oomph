@@ -40,7 +40,7 @@ import java.util.Map;
  */
 public final class BaseEditUtil
 {
-  private static final String TASK_SUFFIX = " Task"; // TODO Can this be made translatable?
+  private static final String TASK_SUFFIX = BaseEditPlugin.INSTANCE.getString("_UI_Task_feature_part"); //$NON-NLS-1$
 
   private BaseEditUtil()
   {
@@ -49,12 +49,12 @@ public final class BaseEditUtil
   public static IconReflectiveItemProvider replaceReflectiveItemProvider(ComposedAdapterFactory adapterFactory)
   {
     EClass dynamicClass = EcoreFactory.eINSTANCE.createEClass();
-    dynamicClass.setName("Dynamic");
+    dynamicClass.setName("Dynamic"); //$NON-NLS-1$
 
     EPackage dynamicPackage = EcoreFactory.eINSTANCE.createEPackage();
-    dynamicPackage.setName("dynamic");
-    dynamicPackage.setNsPrefix("dynamic");
-    dynamicPackage.setNsURI("http://dynamic");
+    dynamicPackage.setName("dynamic"); //$NON-NLS-1$
+    dynamicPackage.setNsPrefix("dynamic"); //$NON-NLS-1$
+    dynamicPackage.setNsURI("http://dynamic"); //$NON-NLS-1$
     dynamicPackage.getEClassifiers().add(dynamicClass);
 
     AdapterFactory factory = adapterFactory.getFactoryForType(EcoreUtil.create(dynamicClass));
@@ -110,25 +110,25 @@ public final class BaseEditUtil
 
       try
       {
-        Class<?> setupCoreUtilClass = CommonPlugin.loadClass("org.eclipse.oomph.setup.core", "org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil");
-        Method createResourceSetMethod = setupCoreUtilClass.getMethod("createResourceSet");
+        Class<?> setupCoreUtilClass = CommonPlugin.loadClass("org.eclipse.oomph.setup.core", "org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil"); //$NON-NLS-1$ //$NON-NLS-2$
+        Method createResourceSetMethod = setupCoreUtilClass.getMethod("createResourceSet"); //$NON-NLS-1$
 
-        Class<?> imageDataClass = CommonPlugin.loadClass("org.eclipse.swt", "org.eclipse.swt.graphics.ImageData");
+        Class<?> imageDataClass = CommonPlugin.loadClass("org.eclipse.swt", "org.eclipse.swt.graphics.ImageData"); //$NON-NLS-1$ //$NON-NLS-2$
         imageDataConstructor = imageDataClass.getConstructor(InputStream.class);
 
-        Class<?> imageDescriptorClass = CommonPlugin.loadClass("org.eclipse.jface", "org.eclipse.jface.resource.ImageDescriptor");
-        imageDescriptorCreateFromImageDataMethod = imageDescriptorClass.getMethod("createFromImageData", imageDataClass);
+        Class<?> imageDescriptorClass = CommonPlugin.loadClass("org.eclipse.jface", "org.eclipse.jface.resource.ImageDescriptor"); //$NON-NLS-1$ //$NON-NLS-2$
+        imageDescriptorCreateFromImageDataMethod = imageDescriptorClass.getMethod("createFromImageData", imageDataClass); //$NON-NLS-1$
 
         ResourceSet resourceSet = (ResourceSet)createResourceSetMethod.invoke(null);
         uriConverter = resourceSet.getURIConverter();
         options = resourceSet.getLoadOptions();
 
-        Class<?> ecfURIHandlerImplClass = CommonPlugin.loadClass("org.eclipse.oomph.setup.core",
-            "org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl");
-        Object ecfCacheHandlingOption = ReflectUtil.getValue(ReflectUtil.getField(ecfURIHandlerImplClass, "OPTION_CACHE_HANDLING"), null);
-        Class<?> ecfURIHandlerImplCacheHandlingClass = CommonPlugin.loadClass("org.eclipse.oomph.setup.core",
-            "org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl$CacheHandling");
-        Object ecfOptionCacheHandlingValue = ReflectUtil.getValue(ReflectUtil.getField(ecfURIHandlerImplCacheHandlingClass, "CACHE_WITHOUT_ETAG_CHECKING"),
+        Class<?> ecfURIHandlerImplClass = CommonPlugin.loadClass("org.eclipse.oomph.setup.core", //$NON-NLS-1$
+            "org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl"); //$NON-NLS-1$
+        Object ecfCacheHandlingOption = ReflectUtil.getValue(ReflectUtil.getField(ecfURIHandlerImplClass, "OPTION_CACHE_HANDLING"), null); //$NON-NLS-1$
+        Class<?> ecfURIHandlerImplCacheHandlingClass = CommonPlugin.loadClass("org.eclipse.oomph.setup.core", //$NON-NLS-1$
+            "org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl$CacheHandling"); //$NON-NLS-1$
+        Object ecfOptionCacheHandlingValue = ReflectUtil.getValue(ReflectUtil.getField(ecfURIHandlerImplCacheHandlingClass, "CACHE_WITHOUT_ETAG_CHECKING"), //$NON-NLS-1$
             null);
         options.put(ecfCacheHandlingOption, ecfOptionCacheHandlingValue);
       }
@@ -199,9 +199,9 @@ public final class BaseEditUtil
     public String getTypeText(Object object)
     {
       String typeText = super.getTypeText(object);
-      if (typeText.endsWith(TASK_SUFFIX))
+      if (typeText.endsWith(" " + TASK_SUFFIX)) //$NON-NLS-1$
       {
-        typeText = typeText.substring(0, typeText.length() - TASK_SUFFIX.length());
+        typeText = typeText.substring(0, typeText.length() - TASK_SUFFIX.length() + 1);
       }
 
       return typeText;

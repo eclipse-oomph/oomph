@@ -115,7 +115,7 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
       String finalText = renderHTML(propertyDescriptors, element, false);
       try
       {
-        AbstractHoverInformationControlManager hoverInformationControlManager = ReflectUtil.getValue("hoverInformationControlManager", toolTipSupport);
+        AbstractHoverInformationControlManager hoverInformationControlManager = ReflectUtil.getValue("hoverInformationControlManager", toolTipSupport); //$NON-NLS-1$
         Point size = UIUtil.caclcuateSize(finalText);
         hoverInformationControlManager.setSizeConstraints(size.x, size.y + (propertyDescriptors.size() + 1) / 5 + 1, true, false);
       }
@@ -146,28 +146,28 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
     if (propertyDescriptors.size() > 0)
     {
       StringBuilder result = new StringBuilder();
-      result.append("<table style='word-wrap: break-word; word-break: break-all; " + (links ? "" : "margin-top: 3pt; ") + "border-collapse: collapse;'>");
+      result.append("<table style='word-wrap: break-word; word-break: break-all; " + (links ? "" : "margin-top: 3pt; ") + "border-collapse: collapse;'>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
       for (IItemPropertyDescriptor propertyDescriptor : propertyDescriptors)
       {
-        result.append("<tr>");
+        result.append("<tr>"); //$NON-NLS-1$
 
         String displayName = propertyDescriptor.getDisplayName(element);
-        result.append("<td style='word-break: keep-all; padding-left: 4pt; padding-right: 4pt; border: 1px solid gray;'>");
+        result.append("<td style='word-break: keep-all; padding-left: 4pt; padding-right: 4pt; border: 1px solid gray;'>"); //$NON-NLS-1$
         if (links)
         {
-          result.append("<a style='text-decoration: none; color: inherit;' href='property:/").append(URI.encodeSegment(displayName, false)).append("'>");
+          result.append("<a style='text-decoration: none; color: inherit;' href='property:/").append(URI.encodeSegment(displayName, false)).append("'>"); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         result.append(DiagnosticDecorator.escapeContent(displayName));
 
         if (links)
         {
-          result.append("</a>");
+          result.append("</a>"); //$NON-NLS-1$
         }
 
-        result.append("</td>");
+        result.append("</td>"); //$NON-NLS-1$
 
-        result.append("<td style='padding-right: 4pt; border: 1px solid gray;'>");
+        result.append("<td style='padding-right: 4pt; border: 1px solid gray;'>"); //$NON-NLS-1$
         IItemLabelProvider propertyLabelProvider = propertyDescriptor.getLabelProvider(element);
         Object propertyValue = propertyDescriptor.getPropertyValue(element);
         if (propertyValue instanceof IItemPropertySource)
@@ -183,7 +183,7 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
           {
             if (needsBreak)
             {
-              result.append("<br/>\n");
+              result.append("<br/>\n"); //$NON-NLS-1$
 
             }
             else
@@ -199,10 +199,10 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
           renderHTMLPropertyValue(result, propertyLabelProvider, propertyValue, links);
         }
 
-        result.append("</td>");
-        result.append("</tr>\n");
+        result.append("</td>"); //$NON-NLS-1$
+        result.append("</tr>\n"); //$NON-NLS-1$
       }
-      result.append("</table>");
+      result.append("</table>"); //$NON-NLS-1$
       return result.toString();
     }
 
@@ -233,19 +233,19 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
 
       if (href != null)
       {
-        result.append("<a href=\"").append(href).append("\">");
+        result.append("<a href=\"").append(href).append("\">"); //$NON-NLS-1$ //$NON-NLS-2$
       }
     }
 
     String valueText = propertyLabelProvider.getText(propertyValue);
-    if (valueText.endsWith("...") && propertyValue instanceof String)
+    if (valueText.endsWith("...") && propertyValue instanceof String) //$NON-NLS-1$
     {
-      String[] lines = propertyValue.toString().split("\r?\n");
+      String[] lines = propertyValue.toString().split("\r?\n"); //$NON-NLS-1$
       if (lines.length > 1)
       {
         for (String line : lines)
         {
-          result.append(escapeContent(line)).append("<br/>");
+          result.append(escapeContent(line)).append("<br/>"); //$NON-NLS-1$
         }
       }
       else
@@ -258,24 +258,24 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
       Object image = propertyLabelProvider.getImage(propertyValue);
       if (image != null)
       {
-        result.append("<img style='margin-bottom: -2px; margin-right: 4px;' src='"
-            + ImageURIRegistry.INSTANCE.getImageURI(ExtendedImageRegistry.INSTANCE.getImage(image)) + "'/>");
+        result.append("<img style='margin-bottom: -2px; margin-right: 4px;' src='" //$NON-NLS-1$
+            + ImageURIRegistry.INSTANCE.getImageURI(ExtendedImageRegistry.INSTANCE.getImage(image)) + "'/>"); //$NON-NLS-1$
       }
 
       if (!StringUtil.isEmpty(valueText))
       {
-        result.append(StringUtil.isEmpty(valueText) ? "&nbsp;" : escapeContent(valueText));
+        result.append(StringUtil.isEmpty(valueText) ? "&nbsp;" : escapeContent(valueText)); //$NON-NLS-1$
       }
     }
 
     if (href != null)
     {
-      result.append("<a/>");
+      result.append("<a/>"); //$NON-NLS-1$
     }
   }
 
   private static String escapeContent(String value)
   {
-    return DiagnosticDecorator.escapeContent(value).replace(" ", "&nbsp;");
+    return DiagnosticDecorator.escapeContent(value).replace(" ", "&nbsp;"); //$NON-NLS-1$ //$NON-NLS-2$
   }
 }

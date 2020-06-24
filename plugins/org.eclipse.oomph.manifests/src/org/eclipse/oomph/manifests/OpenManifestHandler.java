@@ -34,6 +34,7 @@ import org.eclipse.ui.part.FileEditorInput;
  */
 public class OpenManifestHandler extends AbstractProjectHandler
 {
+  @SuppressWarnings("nls")
   private static final ProjectType[] PROJECT_TYPES = {
       new ProjectType("org.eclipse.pde.PluginNature", "org.eclipse.pde.ui.manifestEditor", "META-INF/MANIFEST.MF"),
       new ProjectType("org.eclipse.pde.FeatureNature", "org.eclipse.pde.ui.featureEditor", "feature.xml"),
@@ -132,11 +133,11 @@ public class OpenManifestHandler extends AbstractProjectHandler
       if (object instanceof IJarEntryResource)
       {
         IJarEntryResource jarEntryResource = (IJarEntryResource)object;
-        if ("META-INF".equalsIgnoreCase(jarEntryResource.getName()))
+        if ("META-INF".equalsIgnoreCase(jarEntryResource.getName())) //$NON-NLS-1$
         {
           for (IJarEntryResource child : jarEntryResource.getChildren())
           {
-            if ("MANIFEST.MF".equalsIgnoreCase(child.getName()))
+            if ("MANIFEST.MF".equalsIgnoreCase(child.getName())) //$NON-NLS-1$
             {
               return new org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput(child);
             }
@@ -146,9 +147,9 @@ public class OpenManifestHandler extends AbstractProjectHandler
       else if (object instanceof IContainer)
       {
         IContainer container = (IContainer)object;
-        if ("META-INF".equalsIgnoreCase(container.getName()))
+        if ("META-INF".equalsIgnoreCase(container.getName())) //$NON-NLS-1$
         {
-          IFile file = container.getFile(new Path("MANIFEST.MF"));
+          IFile file = container.getFile(new Path("MANIFEST.MF")); //$NON-NLS-1$
           if (file.exists())
           {
             return new FileEditorInput(file);

@@ -65,13 +65,13 @@ public class StatusDialog extends DiagnosticDialog
               switch (diagnostic.getSeverity())
               {
                 case Diagnostic.ERROR:
-                  message = CommonUIPlugin.getPlugin().getString("_UI_DiagnosticError_label");
+                  message = CommonUIPlugin.getPlugin().getString("_UI_DiagnosticError_label"); //$NON-NLS-1$
                   break;
                 case Diagnostic.WARNING:
-                  message = CommonUIPlugin.getPlugin().getString("_UI_DiagnosticWarning_label");
+                  message = CommonUIPlugin.getPlugin().getString("_UI_DiagnosticWarning_label"); //$NON-NLS-1$
                   break;
                 default:
-                  message = CommonUIPlugin.getPlugin().getString("_UI_Diagnostic_label");
+                  message = CommonUIPlugin.getPlugin().getString("_UI_Diagnostic_label"); //$NON-NLS-1$
                   break;
               }
             }
@@ -85,13 +85,13 @@ public class StatusDialog extends DiagnosticDialog
             switch (diagnostic.getSeverity())
             {
               case Diagnostic.ERROR:
-                return UIPlugin.INSTANCE.getSWTImage("error");
+                return UIPlugin.INSTANCE.getSWTImage("error"); //$NON-NLS-1$
               case Diagnostic.CANCEL:
               case Diagnostic.WARNING:
-                return UIPlugin.INSTANCE.getSWTImage("warning");
+                return UIPlugin.INSTANCE.getSWTImage("warning"); //$NON-NLS-1$
               case Diagnostic.OK:
               case Diagnostic.INFO:
-                return UIPlugin.INSTANCE.getSWTImage("info");
+                return UIPlugin.INSTANCE.getSWTImage("info"); //$NON-NLS-1$
             }
             return null;
           }

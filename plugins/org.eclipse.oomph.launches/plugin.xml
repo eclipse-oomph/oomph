@@ -20,7 +20,7 @@
             class="org.eclipse.oomph.launches.LaunchConfigLabelDecorator"
             icon="icons/local_deco.gif"
             id="org.eclipse.oomph.LaunchConfigLabelDecorator"
-            label="Unshared Launch Configs"
+            label="%decorator.LaunchConfigLabel.label"
             lightweight="false"
             location="TOP_LEFT"
             state="true">

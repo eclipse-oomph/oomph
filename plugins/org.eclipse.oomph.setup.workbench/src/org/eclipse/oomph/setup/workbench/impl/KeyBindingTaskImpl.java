@@ -77,7 +77,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * @generated
    * @ordered
    */
-  protected static final String SCHEME_EDEFAULT = "org.eclipse.ui.defaultAcceleratorConfiguration";
+  protected static final String SCHEME_EDEFAULT = "org.eclipse.ui.defaultAcceleratorConfiguration"; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getScheme() <em>Scheme</em>}' attribute.
@@ -525,15 +525,15 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (scheme: ");
+    result.append(" (scheme: "); //$NON-NLS-1$
     result.append(scheme);
-    result.append(", platform: ");
+    result.append(", platform: "); //$NON-NLS-1$
     result.append(platform);
-    result.append(", locale: ");
+    result.append(", locale: "); //$NON-NLS-1$
     result.append(locale);
-    result.append(", keys: ");
+    result.append(", keys: "); //$NON-NLS-1$
     result.append(keys);
-    result.append(", command: ");
+    result.append(", command: "); //$NON-NLS-1$
     result.append(command);
     result.append(')');
     return result.toString();

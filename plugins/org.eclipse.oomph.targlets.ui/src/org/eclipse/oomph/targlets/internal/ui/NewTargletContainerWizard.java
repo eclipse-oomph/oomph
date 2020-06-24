@@ -29,7 +29,7 @@ public class NewTargletContainerWizard extends Wizard implements ITargetLocation
 
   public NewTargletContainerWizard()
   {
-    setWindowTitle("Add Targlet Container");
+    setWindowTitle(Messages.NewTargletContainerWizard_title);
   }
 
   public void setTarget(ITargetDefinition target)

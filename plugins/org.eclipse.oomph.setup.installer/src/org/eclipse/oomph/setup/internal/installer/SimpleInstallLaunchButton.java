@@ -54,7 +54,7 @@ public class SimpleInstallLaunchButton extends ImageHoverButton
     super(parent, SWT.PUSH);
 
     setForeground(UIUtil.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-    setFont(SimpleInstallerDialog.getFont(5, "bold"));
+    setFont(SimpleInstallerDialog.getFont(5, "bold")); //$NON-NLS-1$
     setCornerWidth(10);
     setAlignment(SWT.CENTER);
     setDisabledBackgroundColor(COLOR_DEFAULT_DISABLED_BACKGROUND);
@@ -63,7 +63,7 @@ public class SimpleInstallLaunchButton extends ImageHoverButton
 
     if (SimpleVariablePage.PROGRESS_WATCHDOG_TIMEOUT != 0)
     {
-      progressSpinner = new ProgressSpinner(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/progress_sprite.png"), 8, 4, 20);
+      progressSpinner = new ProgressSpinner(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/progress_sprite.png"), 8, 4, 20); //$NON-NLS-1$
 
       addControlListener(new ControlAdapter()
       {
@@ -96,7 +96,7 @@ public class SimpleInstallLaunchButton extends ImageHoverButton
   {
     if (progress < 0 || progress > 1)
     {
-      throw new IllegalArgumentException("Progress must be in [0..1]");
+      throw new IllegalArgumentException(Messages.SimpleInstallLaunchButton_BadProgress_exception);
     }
 
     this.progress = progress;
@@ -114,7 +114,7 @@ public class SimpleInstallLaunchButton extends ImageHoverButton
   {
     if (newState == null)
     {
-      throw new IllegalArgumentException("New state cannot be null!");
+      throw new IllegalArgumentException(Messages.SimpleInstallLaunchButton_NullState_exception);
     }
 
     if (currentState != newState)
@@ -166,7 +166,7 @@ public class SimpleInstallLaunchButton extends ImageHoverButton
     {
       if (speed < 0 || speed > 1)
       {
-        throw new IllegalArgumentException("speed must be between [0..1]");
+        throw new IllegalArgumentException(Messages.SimpleInstallLaunchButton_BadSpeed_exception);
       }
 
       int delay = Math.round((1f - speed) * MAXIMUM_PROGRESS_ANIMATION_DELAY);
@@ -252,16 +252,17 @@ public class SimpleInstallLaunchButton extends ImageHoverButton
    */
   public static enum State
   {
-    INSTALL("INSTALL", "Start product installation", COLOR_INSTALL, COLOR_FOREGROUND_DEFAULT,
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_install.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_install_hover.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_install_disabled.png")),
+    INSTALL(Messages.SimpleInstallLaunchButton_Install_label, Messages.SimpleInstallLaunchButton_Install_message, COLOR_INSTALL, COLOR_FOREGROUND_DEFAULT,
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_install.png"), //$NON-NLS-1$
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_install_hover.png"), //$NON-NLS-1$
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_install_disabled.png")), //$NON-NLS-1$
 
-    INSTALLING("INSTALLING", "Installion in progress", COLOR_INSTALLING, COLOR_INSTALLING_FOREGROUND, null, null, null),
+    INSTALLING(Messages.SimpleInstallLaunchButton_Installing_label, Messages.SimpleInstallLaunchButton_Installing_message, COLOR_INSTALLING,
+        COLOR_INSTALLING_FOREGROUND, null, null, null),
 
-    LAUNCH("LAUNCH", "Launch the selected product", COLOR_LAUNCH, COLOR_FOREGROUND_DEFAULT,
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_launch.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_launch_hover.png"), null);
+    LAUNCH(Messages.SimpleInstallLaunchButton_Launch_label, Messages.SimpleInstallLaunchButton_Launch_message, COLOR_LAUNCH, COLOR_FOREGROUND_DEFAULT,
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_launch.png"), //$NON-NLS-1$
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/install_button_launch_hover.png"), null); //$NON-NLS-1$
 
     public final Image icon;
 

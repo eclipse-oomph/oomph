@@ -328,7 +328,7 @@ public class ProjectToStreamMapEntryImpl extends MinimalEObjectImpl.Container im
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (selection: ");
+    result.append(" (selection: "); //$NON-NLS-1$
     result.append(selection);
     result.append(')');
     return result.toString();

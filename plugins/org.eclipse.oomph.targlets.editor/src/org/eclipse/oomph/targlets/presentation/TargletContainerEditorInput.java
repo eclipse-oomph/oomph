@@ -64,6 +64,6 @@ public final class TargletContainerEditorInput extends URIEditorInput
 
   public static String getContainerLabel(ITargletContainer targletContainer, boolean active)
   {
-    return targletContainer.getID() + " (" + targletContainer.getTargetDefinition().getName() + (active ? ", active" : "") + ")";
+    return targletContainer.getID() + " (" + targletContainer.getTargetDefinition().getName() + (active ? ", active" : "") + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
   }
 }

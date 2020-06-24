@@ -40,10 +40,6 @@ import java.util.Set;
  */
 public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuilderArguments
 {
-  private static final String PATH_LABEL = "Path to release specification file";
-
-  private static final String BUILDER_CONFIGURATION = "Version Builder Configuration";
-
   private VersionBuilderArguments values;
 
   private Text releasePathText;
@@ -84,15 +80,15 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
   @Override
   protected void configureShell(Shell newShell)
   {
-    newShell.setText(BUILDER_CONFIGURATION);
+    newShell.setText(Messages.ConfigurationDialog_title);
     super.configureShell(newShell);
   }
 
   @Override
   protected Control createDialogArea(Composite parent)
   {
-    setTitle(BUILDER_CONFIGURATION);
-    setMessage("Select a release specification file and check additional settings.");
+    setTitle(Messages.ConfigurationDialog_title);
+    setMessage(Messages.ConfigurationDialog_message);
 
     Composite dialogArea = (Composite)super.createDialogArea(parent);
 
@@ -100,7 +96,7 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     composite.setLayout(new GridLayout());
     composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-    new Label(composite, SWT.NONE).setText(PATH_LABEL + ": ");
+    new Label(composite, SWT.NONE).setText(Messages.ConfigurationDialog_pathLabel + ' ');
 
     releasePathText = new Text(composite, SWT.BORDER);
     releasePathText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -128,67 +124,67 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     };
 
     ignoreMalformedVersionsButton = new Button(composite, SWT.CHECK);
-    ignoreMalformedVersionsButton.setText("Ignore malformed versions");
+    ignoreMalformedVersionsButton.setText(Messages.ConfigurationDialog_ignoreMalformedVersionsButton_text);
     ignoreMalformedVersionsButton.setSelection(values.isIgnoreMalformedVersions());
     ignoreMalformedVersionsButton.addSelectionListener(buttonListener);
 
     ignoreFeatureNatureButton = new Button(composite, SWT.CHECK);
-    ignoreFeatureNatureButton.setText("Ignore feature nature");
+    ignoreFeatureNatureButton.setText(Messages.ConfigurationDialog_ignoreFeatureNatureButton_text);
     ignoreFeatureNatureButton.setSelection(values.isIgnoreFeatureNature());
     ignoreFeatureNatureButton.addSelectionListener(buttonListener);
 
     ignoreSchemaBuilderButton = new Button(composite, SWT.CHECK);
-    ignoreSchemaBuilderButton.setText("Ignore schema builder");
+    ignoreSchemaBuilderButton.setText(Messages.ConfigurationDialog_ignoreSchemaBuilderButton_text);
     ignoreSchemaBuilderButton.setSelection(values.isIgnoreSchemaBuilder());
     ignoreSchemaBuilderButton.addSelectionListener(buttonListener);
 
     ignoreDebugOptionsButton = new Button(composite, SWT.CHECK);
-    ignoreDebugOptionsButton.setText("Ignore debug options");
+    ignoreDebugOptionsButton.setText(Messages.ConfigurationDialog_ignoreDebugOptionsButton_text);
     ignoreDebugOptionsButton.setSelection(values.isIgnoreDebugOptions());
     ignoreDebugOptionsButton.addSelectionListener(buttonListener);
 
     ignoreAutomaticModuleNameButton = new Button(composite, SWT.CHECK);
-    ignoreAutomaticModuleNameButton.setText("Ignore automatic module name");
+    ignoreAutomaticModuleNameButton.setText(Messages.ConfigurationDialog_ignoreAutomaticModuleNameButton_text);
     ignoreAutomaticModuleNameButton.setSelection(values.isIgnoreAutomaticModuleName());
     ignoreAutomaticModuleNameButton.addSelectionListener(buttonListener);
 
     ignoreMissingDependencyRangesButton = new Button(composite, SWT.CHECK);
-    ignoreMissingDependencyRangesButton.setText("Ignore missing dependency version ranges");
+    ignoreMissingDependencyRangesButton.setText(Messages.ConfigurationDialog_ignoreMissingDependencyRangesButton_text);
     ignoreMissingDependencyRangesButton.setSelection(values.isIgnoreMissingDependencyRanges());
     ignoreMissingDependencyRangesButton.addSelectionListener(buttonListener);
 
     ignoreLaxLowerBoundDependencyButton = new Button(composite, SWT.CHECK);
-    ignoreLaxLowerBoundDependencyButton.setText("Ignore lax lower bound dependency versions");
+    ignoreLaxLowerBoundDependencyButton.setText(Messages.ConfigurationDialog_ignoreLaxLowerBoundDependencyButton_text);
     ignoreLaxLowerBoundDependencyButton.setSelection(values.isIgnoreLaxLowerBoundDependencyVersions());
     ignoreLaxLowerBoundDependencyButton.addSelectionListener(buttonListener);
 
     ignoreMissingExportVersionsButton = new Button(composite, SWT.CHECK);
-    ignoreMissingExportVersionsButton.setText("Ignore missing package export versions");
+    ignoreMissingExportVersionsButton.setText(Messages.ConfigurationDialog_ignoreMissingExportVersionsButton_text);
     ignoreMissingExportVersionsButton.setSelection(values.isIgnoreMissingExportVersions());
     ignoreMissingExportVersionsButton.addSelectionListener(buttonListener);
 
     ignoreFeatureContentChangesButton = new Button(composite, SWT.CHECK);
-    ignoreFeatureContentChangesButton.setText("Ignore feature content changes");
+    ignoreFeatureContentChangesButton.setText(Messages.ConfigurationDialog_ignoreFeatureContentChangesButton_text);
     ignoreFeatureContentChangesButton.setSelection(values.isIgnoreFeatureContentChanges());
     ignoreFeatureContentChangesButton.addSelectionListener(buttonListener);
 
     ignoreFeatureContentRedundancyButton = new Button(composite, SWT.CHECK);
-    ignoreFeatureContentRedundancyButton.setText("Ignore feature content redundancy");
+    ignoreFeatureContentRedundancyButton.setText(Messages.ConfigurationDialog_ignoreFeatureContentRedundancyButton_text);
     ignoreFeatureContentRedundancyButton.setSelection(values.isIgnoreFeatureContentRedundancy());
     ignoreFeatureContentRedundancyButton.addSelectionListener(buttonListener);
 
     checkFeatureClosureCompletenessButton = new Button(composite, SWT.CHECK);
-    checkFeatureClosureCompletenessButton.setText("Check feature closure completeness");
+    checkFeatureClosureCompletenessButton.setText(Messages.ConfigurationDialog_checkFeatureClosureCompletenessButton_text);
     checkFeatureClosureCompletenessButton.setSelection(values.isCheckFeatureClosureCompleteness());
     checkFeatureClosureCompletenessButton.addSelectionListener(buttonListener);
 
     checkFeatureClosureContentButton = new Button(composite, SWT.CHECK);
-    checkFeatureClosureContentButton.setText("Check feature closure content");
+    checkFeatureClosureContentButton.setText(Messages.ConfigurationDialog_checkFeatureClosureContentButton_text);
     checkFeatureClosureContentButton.setSelection(values.isCheckFeatureClosureContent());
     checkFeatureClosureContentButton.addSelectionListener(buttonListener);
 
     checkMavenPomButton = new Button(composite, SWT.CHECK);
-    checkMavenPomButton.setText("Check Maven POM");
+    checkMavenPomButton.setText(Messages.ConfigurationDialog_checkMavenPomButton_text);
     checkMavenPomButton.setSelection(values.isCheckMavenPom());
     checkMavenPomButton.addSelectionListener(buttonListener);
 
@@ -200,7 +196,7 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
   {
     if (releasePathText.getText().trim().length() == 0)
     {
-      setErrorMessage(PATH_LABEL + " is empty.");
+      setErrorMessage(Messages.ConfigurationDialog_emptyPathToSpecFile);
       return;
     }
 
@@ -208,7 +204,7 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     boolean completenessCheck = checkFeatureClosureCompletenessButton.getSelection();
     if (redundancyCheck && completenessCheck)
     {
-      setErrorMessage("Redundancy and completeness checks cannot be done at the same time.");
+      setErrorMessage(Messages.ConfigurationDialog_error_cantDoRedundancyAndCompletenessChecksAtSameTime);
       return;
     }
 

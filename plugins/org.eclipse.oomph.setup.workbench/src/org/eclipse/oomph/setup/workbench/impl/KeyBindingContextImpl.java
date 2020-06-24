@@ -41,7 +41,7 @@ public class KeyBindingContextImpl extends ModelElementImpl implements KeyBindin
    * @generated
    * @ordered
    */
-  protected static final String ID_EDEFAULT = "org.eclipse.ui.contexts.window";
+  protected static final String ID_EDEFAULT = "org.eclipse.ui.contexts.window"; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getID() <em>ID</em>}' attribute.
@@ -180,7 +180,7 @@ public class KeyBindingContextImpl extends ModelElementImpl implements KeyBindin
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (iD: ");
+    result.append(" (iD: "); //$NON-NLS-1$
     result.append(iD);
     result.append(')');
     return result.toString();

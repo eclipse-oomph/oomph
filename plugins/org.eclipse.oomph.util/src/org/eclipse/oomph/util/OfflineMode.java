@@ -20,7 +20,7 @@ import org.eclipse.emf.common.CommonPlugin;
  */
 public class OfflineMode
 {
-  private static final String COMMAND_ID = "org.eclipse.oomph.ui.ToggleOfflineMode";
+  private static final String COMMAND_ID = "org.eclipse.oomph.ui.ToggleOfflineMode"; //$NON-NLS-1$
 
   private static boolean initializedToggleStateAccessor;
 
@@ -64,7 +64,7 @@ public class OfflineMode
   {
     try
     {
-      CommonPlugin.loadClass("org.eclipse.oomph.ui", "org.eclipse.oomph.internal.ui.UIPlugin");
+      CommonPlugin.loadClass("org.eclipse.oomph.ui", "org.eclipse.oomph.internal.ui.UIPlugin"); //$NON-NLS-1$ //$NON-NLS-2$
     }
     catch (Throwable t)
     {

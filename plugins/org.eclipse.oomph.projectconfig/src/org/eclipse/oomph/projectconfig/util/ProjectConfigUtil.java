@@ -65,20 +65,20 @@ import java.util.regex.Pattern;
  */
 public final class ProjectConfigUtil
 {
-  private static final Pattern JDT_CORE_BREE_PATTERN = Pattern.compile("org\\.eclipse\\.jdt\\.core\\.compiler\\.codegen\\.targetPlatform" + "|"
-      + "org.eclipse\\.jdt\\.core\\.compiler\\.compliance" + "|" + "org\\.eclipse\\.jdt\\.core\\.compiler\\.source");
+  private static final Pattern JDT_CORE_BREE_PATTERN = Pattern.compile("org\\.eclipse\\.jdt\\.core\\.compiler\\.codegen\\.targetPlatform" + "|" //$NON-NLS-1$ //$NON-NLS-2$
+      + "org.eclipse\\.jdt\\.core\\.compiler\\.compliance" + "|" + "org\\.eclipse\\.jdt\\.core\\.compiler\\.source"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-  private static final Pattern RESOURCE_ENCODING_PROJECT_PATTERN = Pattern.compile("<project>");
+  private static final Pattern RESOURCE_ENCODING_PROJECT_PATTERN = Pattern.compile("<project>"); //$NON-NLS-1$
 
   private static final IWorkspaceRoot WORKSPACE_ROOT = ResourcesPlugin.getWorkspace().getRoot();
 
-  public static final String PROJECT_CONF_NODE_NAME = "org.eclipse.oomph.projectconfig";
+  public static final String PROJECT_CONF_NODE_NAME = "org.eclipse.oomph.projectconfig"; //$NON-NLS-1$
 
-  public static final String PROJECT_CONF_PROJECT_KEY = "project";
+  public static final String PROJECT_CONF_PROJECT_KEY = "project"; //$NON-NLS-1$
 
-  public static final String PROJECT_CONFIG_SCHEME = "configuration";
+  public static final String PROJECT_CONFIG_SCHEME = "configuration"; //$NON-NLS-1$
 
-  public static final URI PROJECT_CONFIG_URI = URI.createURI(PROJECT_CONFIG_SCHEME + ":/");
+  public static final URI PROJECT_CONFIG_URI = URI.createURI(PROJECT_CONFIG_SCHEME + ":/"); //$NON-NLS-1$
 
   public static WorkspaceConfiguration getWorkspaceConfiguration()
   {
@@ -153,11 +153,11 @@ public final class ProjectConfigUtil
   {
     EList<PreferenceProfile> result = new BasicEList<PreferenceProfile>();
 
-    PreferenceNode encodingPreferenceNode = projectPreferenceNode.getNode(URI.createURI("org.eclipse.core.resources/encoding"));
+    PreferenceNode encodingPreferenceNode = projectPreferenceNode.getNode(URI.createURI("org.eclipse.core.resources/encoding")); //$NON-NLS-1$
     if (encodingPreferenceNode != null)
     {
       PreferenceProfile encodingPreferenceProfile = ProjectConfigFactory.eINSTANCE.createPreferenceProfile();
-      encodingPreferenceProfile.setName("Core Resources Encoding for Local Resources");
+      encodingPreferenceProfile.setName(Messages.ProjectConfigUtil_CoreResourcesEncoding_label);
 
       PreferenceFilter encodingPreferenceFilter = ProjectConfigFactory.eINSTANCE.createPreferenceFilter();
       encodingPreferenceFilter.setExclusions(RESOURCE_ENCODING_PROJECT_PATTERN);
@@ -169,14 +169,14 @@ public final class ProjectConfigUtil
 
     try
     {
-      if (project.hasNature("org.eclipse.jdt.core.javanature"))
+      if (project.hasNature("org.eclipse.jdt.core.javanature")) //$NON-NLS-1$
       {
-        PreferenceNode jdtCorePreferenceNode = projectPreferenceNode.getNode("org.eclipse.jdt.core");
+        PreferenceNode jdtCorePreferenceNode = projectPreferenceNode.getNode("org.eclipse.jdt.core"); //$NON-NLS-1$
         if (jdtCorePreferenceNode != null)
         {
           PreferenceProfile jdtCompilerCompliancePreferenceProfile = ProjectConfigFactory.eINSTANCE.createPreferenceProfile();
 
-          jdtCompilerCompliancePreferenceProfile.setName("JDT Core Managed by Build Path");
+          jdtCompilerCompliancePreferenceProfile.setName(Messages.ProjectConfigUtil_JDTCoreManaged_label);
 
           PreferenceFilter jdtCompilerCompliancePreferenceFilter = ProjectConfigFactory.eINSTANCE.createPreferenceFilter();
           jdtCompilerCompliancePreferenceFilter.setInclusions(JDT_CORE_BREE_PATTERN);
@@ -198,7 +198,7 @@ public final class ProjectConfigUtil
   public static WorkspaceConfiguration getWorkspaceConfiguration(PreferenceNode cachedProjectsPreferenceNode)
   {
     ResourceSet resourceSet = new ResourceSetImpl();
-    Resource resource = resourceSet.createResource(URI.createURI("*.projectconfig"));
+    Resource resource = resourceSet.createResource(URI.createURI("*.projectconfig")); //$NON-NLS-1$
     resource.setURI(PROJECT_CONFIG_URI);
 
     PreferenceNode rootPreferenceNode = PreferencesUtil.getRootPreferenceNode();
@@ -342,7 +342,7 @@ public final class ProjectConfigUtil
             if (preferenceProfileReference.getPredicates().isEmpty())
             {
               PreferenceProfile proxy = ProjectConfigFactory.eINSTANCE.createPreferenceProfile();
-              ((InternalEObject)proxy).eSetProxyURI(URI.createURI(".#" + preferenceProfileReference.eResource().getURIFragment(preferenceProfileReference)));
+              ((InternalEObject)proxy).eSetProxyURI(URI.createURI(".#" + preferenceProfileReference.eResource().getURIFragment(preferenceProfileReference))); //$NON-NLS-1$
               copyPreferenceProfileReferences.add(proxy);
             }
           }
@@ -361,11 +361,11 @@ public final class ProjectConfigUtil
             Map<Object, Object> options = new HashMap<Object, Object>();
             options.put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
             options.put(XMLResource.OPTION_LINE_WIDTH, 10);
-            options.put(XMLResource.OPTION_ENCODING, "UTF-8");
+            options.put(XMLResource.OPTION_ENCODING, "UTF-8"); //$NON-NLS-1$
             try
             {
               StringWriter writer = new StringWriter();
-              OutputStream out = new URIConverter.WriteableOutputStream(writer, "UTF-8");
+              OutputStream out = new URIConverter.WriteableOutputStream(writer, "UTF-8"); //$NON-NLS-1$
               resource.save(out, options);
               projectPropertyValue = writer.toString();
             }
@@ -455,7 +455,7 @@ public final class ProjectConfigUtil
             else
             {
               EObject proxy = EcoreUtil.create(referencedEObject.eClass());
-              ((InternalEObject)proxy).eSetProxyURI(URI.createURI(".#" + eResource.getURIFragment(referencedEObject)));
+              ((InternalEObject)proxy).eSetProxyURI(URI.createURI(".#" + eResource.getURIFragment(referencedEObject))); //$NON-NLS-1$
               eObjects.add(proxy);
             }
           }
@@ -467,7 +467,7 @@ public final class ProjectConfigUtil
           if (eResource != null)
           {
             EObject proxy = EcoreUtil.create(referencedEObject.eClass());
-            ((InternalEObject)proxy).eSetProxyURI(URI.createURI(".#" + eResource.getURIFragment(referencedEObject)));
+            ((InternalEObject)proxy).eSetProxyURI(URI.createURI(".#" + eResource.getURIFragment(referencedEObject))); //$NON-NLS-1$
             eObject.eSet(eReference, proxy);
           }
         }

@@ -131,7 +131,7 @@ public class P2TaskUIServicesPrompter extends P2TaskUISevices
 
     public UnsatisifiedRequirementsPrompter(Shell parentShell, Set<Requirement> unsatisifiedRequirements, Set<IInstallableUnit> availableIUs)
     {
-      super(parentShell, "Requirements Update", 700, 500, "Remember my decision");
+      super(parentShell, Messages.P2TaskUIServicesPrompter_title, 700, 500, Messages.P2TaskUIServicesPrompter_rememberButton_text);
       this.unsatisifiedRequirements = unsatisifiedRequirements;
       this.availableIUs = availableIUs;
     }
@@ -139,13 +139,13 @@ public class P2TaskUIServicesPrompter extends P2TaskUISevices
     @Override
     protected String getDefaultMessage()
     {
-      return "The installation does not satisfy the requirements list below.";
+      return Messages.P2TaskUIServicesPrompter_defaultMessage;
     }
 
     @Override
     protected String getShellText()
     {
-      return "Eclipse Update";
+      return Messages.P2TaskUIServicesPrompter_shellText;
     }
 
     @Override
@@ -176,7 +176,7 @@ public class P2TaskUIServicesPrompter extends P2TaskUISevices
             {
               Requirement fakeIU = P2Factory.eINSTANCE.createRequirement(id);
               Version version = iu.getVersion();
-              String label = labelProvider.getText(fakeIU) + " " + version;
+              String label = labelProvider.getText(fakeIU) + " " + version; //$NON-NLS-1$
               ItemProvider iuItem = new ItemProvider(label, labelProvider.getImage(fakeIU));
               requirementChildren.add(iuItem);
             }
@@ -190,8 +190,8 @@ public class P2TaskUIServicesPrompter extends P2TaskUISevices
     @Override
     protected void doCreateButtons(Composite parent)
     {
-      createButton(parent, IDialogConstants.OK_ID, "Install", false);
-      createButton(parent, IDialogConstants.CANCEL_ID, "Skip", true);
+      createButton(parent, IDialogConstants.OK_ID, Messages.P2TaskUIServicesPrompter_installButton_text, false);
+      createButton(parent, IDialogConstants.CANCEL_ID, Messages.P2TaskUIServicesPrompter_skipButton_text, true);
     }
   }
 }

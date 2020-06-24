@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -75,13 +76,13 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
     container.setBackground(AbstractSimpleDialog.COLOR_WHITE);
 
     Label title = new Label(container, SWT.NONE);
-    title.setText("Keep Installer");
+    title.setText(Messages.SimpleKeepInstallerPage_title);
     title.setForeground(UIUtil.getEclipseThemeColor());
-    title.setFont(SimpleInstallerDialog.getFont(3, "bold"));
+    title.setFont(SimpleInstallerDialog.getFont(3, "bold")); //$NON-NLS-1$
     title.setLayoutData(GridDataFactory.swtDefaults().create());
 
     Label description = new Label(container, SWT.WRAP);
-    description.setText(KeepInstallerUtil.KEEP_INSTALLER_DESCRIPTION + ".");
+    description.setText(KeepInstallerUtil.KEEP_INSTALLER_DESCRIPTION + "."); //$NON-NLS-1$
     description.setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
     description.setLayoutData(GridDataFactory.swtDefaults().grab(true, false).indent(0, 10).create());
 
@@ -93,7 +94,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
     varContainer.setLayout(varContainerLayout);
     varContainer.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).indent(0, 48).create());
 
-    Label copyToLabel = createLabel(varContainer, "Copy to");
+    Label copyToLabel = createLabel(varContainer, Messages.SimpleKeepInstallerPage_CopyTo_label);
     copyToLabel.setLayoutData(GridDataFactory.swtDefaults().hint(144, SWT.DEFAULT).create());
 
     final Text locationText = createTextField(varContainer);
@@ -124,12 +125,12 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
 
         if (!folder.isDirectory())
         {
-          return "Path is not a directory.";
+          return Messages.SimpleKeepInstallerPage_PathNotDirectory_message;
         }
 
         if (!isEmpty(folder))
         {
-          return "Directory is not empty.";
+          return Messages.SimpleKeepInstallerPage_DirectoryNotEmpty_message;
         }
 
         return null;
@@ -142,17 +143,17 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
       }
     });
 
-    FlatButton folderButton = new ImageHoverButton(varContainer, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_hover.png"));
+    FlatButton folderButton = new ImageHoverButton(varContainer, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"), //$NON-NLS-1$
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_hover.png")); //$NON-NLS-1$
     folderButton.setLayoutData(GridDataFactory.swtDefaults().indent(12, 0).create());
-    folderButton.setToolTipText("Browse" + StringUtil.HORIZONTAL_ELLIPSIS);
+    folderButton.setToolTipText(Messages.SimpleKeepInstallerPage_Browse_label + StringUtil.HORIZONTAL_ELLIPSIS);
     folderButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
       {
         FileDialog chooser = new FileDialog(dialog.getShell(), SWT.APPLICATION_MODAL | SWT.SAVE);
-        chooser.setText("Keep Installer");
+        chooser.setText(Messages.SimpleKeepInstallerPage_KeepInstaller_label);
 
         if (!StringUtil.isEmpty(location))
         {
@@ -172,11 +173,11 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
     if (KeepInstallerUtil.getDesktopSupport() != null)
     {
       new Label(varContainer, SWT.NONE);
-      startMenuButton = createCheckbox(varContainer, "create start menu entry");
+      startMenuButton = createCheckbox(varContainer, Messages.SimpleKeepInstallerPage_StartMenu_label);
       startMenuButton.setChecked(true);
 
       new Label(varContainer, SWT.NONE);
-      desktopButton = createCheckbox(varContainer, "create desktop shortcut");
+      desktopButton = createCheckbox(varContainer, Messages.SimpleKeepInstallerPage_DesktopShortcut_message);
       desktopButton.setChecked(true);
     }
 
@@ -184,10 +185,10 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
 
     applyButton = new FlatButton(varContainer, SWT.PUSH);
     applyButton.setLayoutData(GridDataFactory.fillDefaults().indent(0, 43).hint(SWT.DEFAULT, 36).create());
-    applyButton.setText("APPLY");
+    applyButton.setText(Messages.SimpleKeepInstallerPage_Apply_label);
     applyButton.setBackground(SetupInstallerPlugin.getColor(50, 196, 0));
     applyButton.setForeground(AbstractSimpleDialog.COLOR_WHITE);
-    applyButton.setFont(SimpleInstallerDialog.getFont(5, "bold"));
+    applyButton.setFont(SimpleInstallerDialog.getFont(5, "bold")); //$NON-NLS-1$
     applyButton.setCornerWidth(10);
     applyButton.setAlignment(SWT.CENTER);
     applyButton.addSelectionListener(new SelectionAdapter()
@@ -209,7 +210,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
             {
               public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
               {
-                monitor.beginTask("Copying installer to " + location, IProgressMonitor.UNKNOWN);
+                monitor.beginTask(NLS.bind(Messages.SimpleKeepInstallerPage_CopyingInstaller_task, location), IProgressMonitor.UNKNOWN);
                 KeepInstallerUtil.keepInstaller(location, startPermanentInstaller, launcher, startMenu, desktop, false);
 
                 UIUtil.getDisplay().asyncExec(new Runnable()
@@ -249,7 +250,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
   public void setStartPermanentInstaller(boolean startPermanentInstaller)
   {
     this.startPermanentInstaller = startPermanentInstaller;
-    applyButton.setText(startPermanentInstaller ? "APPLY AND LAUNCH" : "APPLY");
+    applyButton.setText(startPermanentInstaller ? Messages.SimpleKeepInstallerPage_ApplyAndLaunch_label : Messages.SimpleKeepInstallerPage_Apply_label);
   }
 
   private SimpleCheckbox createCheckbox(Composite parent, String text)

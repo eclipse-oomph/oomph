@@ -108,8 +108,7 @@ public abstract class ExternalContainer extends ExternalResource implements ICon
 
   public String getDefaultCharset() throws CoreException
   {
-    // XXX
-    return "UTF-8";
+    return "UTF-8"; //$NON-NLS-1$
   }
 
   public String getDefaultCharset(boolean checkImplicit) throws CoreException

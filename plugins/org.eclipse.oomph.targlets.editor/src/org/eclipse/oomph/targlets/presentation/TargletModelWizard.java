@@ -79,13 +79,13 @@ public class TargletModelWizard extends Wizard implements INewWizard
    * The supported extensions for created files.
    */
   public static final List<String> FILE_EXTENSIONS = Collections
-      .unmodifiableList(Arrays.asList(TargletEditorPlugin.INSTANCE.getString("_UI_TargletEditorFilenameExtensions").split("\\s*,\\s*")));
+      .unmodifiableList(Arrays.asList(TargletEditorPlugin.INSTANCE.getString("_UI_TargletEditorFilenameExtensions").split("\\s*,\\s*"))); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * A formatted list of supported file extensions, suitable for display.
    */
-  public static final String FORMATTED_FILE_EXTENSIONS = TargletEditorPlugin.INSTANCE.getString("_UI_TargletEditorFilenameExtensions").replaceAll("\\s*,\\s*",
-      ", ");
+  public static final String FORMATTED_FILE_EXTENSIONS = TargletEditorPlugin.INSTANCE.getString("_UI_TargletEditorFilenameExtensions").replaceAll("\\s*,\\s*", //$NON-NLS-1$ //$NON-NLS-2$
+      ", "); //$NON-NLS-1$
 
   /**
    * This caches an instance of the model package.
@@ -138,8 +138,8 @@ public class TargletModelWizard extends Wizard implements INewWizard
   {
     this.workbench = workbench;
     this.selection = selection;
-    setWindowTitle(TargletEditorPlugin.INSTANCE.getString("_UI_TargletModelWizard_label"));
-    setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(TargletEditorPlugin.INSTANCE.getImage("full/wizban/NewTarglet.png")));
+    setWindowTitle(TargletEditorPlugin.INSTANCE.getString("_UI_TargletModelWizard_label")); //$NON-NLS-1$
+    setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(TargletEditorPlugin.INSTANCE.getImage("full/wizban/NewTarglet.png"))); //$NON-NLS-1$
   }
 
   /**
@@ -150,10 +150,10 @@ public class TargletModelWizard extends Wizard implements INewWizard
   {
     // Create a page, set the title, and the initial model file name.
     //
-    newFileCreationPage = new SetupModelWizardNewFileCreationPage("Whatever", selection);
-    newFileCreationPage.setTitle(TargletEditorPlugin.INSTANCE.getString("_UI_TargletModelWizard_label"));
-    newFileCreationPage.setDescription(TargletEditorPlugin.INSTANCE.getString("_UI_TargletModelWizard_description"));
-    newFileCreationPage.setFileName(TargletEditorPlugin.INSTANCE.getString("_UI_TargletEditorFilenameDefaultBase") + "." + FILE_EXTENSIONS.get(0));
+    newFileCreationPage = new SetupModelWizardNewFileCreationPage(Messages.TargletModelWizard_Whatever_label, selection);
+    newFileCreationPage.setTitle(TargletEditorPlugin.INSTANCE.getString("_UI_TargletModelWizard_label")); //$NON-NLS-1$
+    newFileCreationPage.setDescription(TargletEditorPlugin.INSTANCE.getString("_UI_TargletModelWizard_description")); //$NON-NLS-1$
+    newFileCreationPage.setFileName(TargletEditorPlugin.INSTANCE.getString("_UI_TargletEditorFilenameDefaultBase") + "." + FILE_EXTENSIONS.get(0)); //$NON-NLS-1$ //$NON-NLS-2$
     addPage(newFileCreationPage);
 
     // Try and get the resource selection to determine a current directory for the file dialog.
@@ -183,12 +183,12 @@ public class TargletModelWizard extends Wizard implements INewWizard
 
           // Make up a unique new name here.
           //
-          String defaultModelBaseFilename = TargletEditorPlugin.INSTANCE.getString("_UI_TargletEditorFilenameDefaultBase");
+          String defaultModelBaseFilename = TargletEditorPlugin.INSTANCE.getString("_UI_TargletEditorFilenameDefaultBase"); //$NON-NLS-1$
           String defaultModelFilenameExtension = FILE_EXTENSIONS.get(0);
-          String modelFilename = defaultModelBaseFilename + "." + defaultModelFilenameExtension;
+          String modelFilename = defaultModelBaseFilename + "." + defaultModelFilenameExtension; //$NON-NLS-1$
           for (int i = 1; ((IContainer)selectedResource).findMember(modelFilename) != null; ++i)
           {
-            modelFilename = defaultModelBaseFilename + i + "." + defaultModelFilenameExtension;
+            modelFilename = defaultModelBaseFilename + i + "." + defaultModelFilenameExtension; //$NON-NLS-1$
           }
           newFileCreationPage.setFileName(modelFilename);
         }
@@ -303,7 +303,7 @@ public class TargletModelWizard extends Wizard implements INewWizard
             // Save the contents of the resource to the file system.
             //
             Map<Object, Object> options = new HashMap<Object, Object>();
-            options.put(XMLResource.OPTION_ENCODING, "UTF-8");
+            options.put(XMLResource.OPTION_ENCODING, "UTF-8"); //$NON-NLS-1$
             resource.save(options);
           }
           catch (Exception exception)
@@ -344,7 +344,7 @@ public class TargletModelWizard extends Wizard implements INewWizard
       }
       catch (PartInitException exception)
       {
-        MessageDialog.openError(workbenchWindow.getShell(), TargletEditorPlugin.INSTANCE.getString("_UI_OpenEditorError_label"), exception.getMessage());
+        MessageDialog.openError(workbenchWindow.getShell(), TargletEditorPlugin.INSTANCE.getString("_UI_OpenEditorError_label"), exception.getMessage()); //$NON-NLS-1$
         return false;
       }
 
@@ -390,7 +390,7 @@ public class TargletModelWizard extends Wizard implements INewWizard
         String extension = new Path(getFileName()).getFileExtension();
         if (extension == null || !FILE_EXTENSIONS.contains(extension))
         {
-          String key = FILE_EXTENSIONS.size() > 1 ? "_WARN_FilenameExtensions" : "_WARN_FilenameExtension";
+          String key = FILE_EXTENSIONS.size() > 1 ? "_WARN_FilenameExtensions" : "_WARN_FilenameExtension"; //$NON-NLS-1$ //$NON-NLS-2$
           setErrorMessage(TargletEditorPlugin.INSTANCE.getString(key, new Object[] { FORMATTED_FILE_EXTENSIONS }));
           return false;
         }
@@ -473,7 +473,7 @@ public class TargletModelWizard extends Wizard implements INewWizard
 
       Label containerLabel = new Label(composite, SWT.LEFT);
       {
-        containerLabel.setText(TargletEditorPlugin.INSTANCE.getString("_UI_ModelObject"));
+        containerLabel.setText(TargletEditorPlugin.INSTANCE.getString("_UI_ModelObject")); //$NON-NLS-1$
 
         GridData data = new GridData();
         data.horizontalAlignment = GridData.FILL;
@@ -501,7 +501,7 @@ public class TargletModelWizard extends Wizard implements INewWizard
 
       Label encodingLabel = new Label(composite, SWT.LEFT);
       {
-        encodingLabel.setText(TargletEditorPlugin.INSTANCE.getString("_UI_XMLEncoding"));
+        encodingLabel.setText(TargletEditorPlugin.INSTANCE.getString("_UI_XMLEncoding")); //$NON-NLS-1$
 
         GridData data = new GridData();
         data.horizontalAlignment = GridData.FILL;
@@ -613,7 +613,7 @@ public class TargletModelWizard extends Wizard implements INewWizard
     {
       try
       {
-        return TargletEditPlugin.INSTANCE.getString("_UI_" + typeName + "_type");
+        return TargletEditPlugin.INSTANCE.getString("_UI_" + typeName + "_type"); //$NON-NLS-1$ //$NON-NLS-2$
       }
       catch (MissingResourceException mre)
       {
@@ -632,7 +632,7 @@ public class TargletModelWizard extends Wizard implements INewWizard
       if (encodings == null)
       {
         encodings = new ArrayList<String>();
-        for (StringTokenizer stringTokenizer = new StringTokenizer(TargletEditorPlugin.INSTANCE.getString("_UI_XMLEncodingChoices")); stringTokenizer
+        for (StringTokenizer stringTokenizer = new StringTokenizer(TargletEditorPlugin.INSTANCE.getString("_UI_XMLEncodingChoices")); stringTokenizer //$NON-NLS-1$
             .hasMoreTokens();)
         {
           encodings.add(stringTokenizer.nextToken());
@@ -666,7 +666,7 @@ public class TargletModelWizard extends Wizard implements INewWizard
         String extension = new Path(getFileName()).getFileExtension();
         if (extension == null || !FILE_EXTENSIONS.contains(extension))
         {
-          String key = FILE_EXTENSIONS.size() > 1 ? "_WARN_FilenameExtensions" : "_WARN_FilenameExtension";
+          String key = FILE_EXTENSIONS.size() > 1 ? "_WARN_FilenameExtensions" : "_WARN_FilenameExtension"; //$NON-NLS-1$ //$NON-NLS-2$
           setErrorMessage(TargletEditorPlugin.INSTANCE.getString(key, new Object[] { FORMATTED_FILE_EXTENSIONS }));
           return false;
         }

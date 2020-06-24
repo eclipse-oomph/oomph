@@ -47,7 +47,7 @@ public class BaseResourceFactoryImpl extends ResourceFactoryImpl
   public Resource createResource(URI uri)
   {
     BaseResource result = basicCreateResource(uri);
-    result.setEncoding("UTF-8");
+    result.setEncoding("UTF-8"); //$NON-NLS-1$
 
     Map<Object, Object> defaultLoadOptions = result.getDefaultLoadOptions();
     defaultLoadOptions.put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);

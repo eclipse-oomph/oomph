@@ -113,8 +113,8 @@ public class PreferenceItemItemProvider extends ModelElementItemProvider
   protected void addRootPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceItem_root_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceItem_root_feature", "_UI_PreferenceItem_type"),
+        getString("_UI_PreferenceItem_root_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceItem_root_feature", "_UI_PreferenceItem_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PreferencesPackage.Literals.PREFERENCE_ITEM__ROOT, false, false, false, null, null, null));
   }
 
@@ -127,8 +127,8 @@ public class PreferenceItemItemProvider extends ModelElementItemProvider
   protected void addAbsolutePathPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceItem_absolutePath_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceItem_absolutePath_feature", "_UI_PreferenceItem_type"),
+        getString("_UI_PreferenceItem_absolutePath_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceItem_absolutePath_feature", "_UI_PreferenceItem_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PreferencesPackage.Literals.PREFERENCE_ITEM__ABSOLUTE_PATH, false, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -141,8 +141,8 @@ public class PreferenceItemItemProvider extends ModelElementItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceItem_name_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceItem_name_feature", "_UI_PreferenceItem_type"),
+        getString("_UI_PreferenceItem_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceItem_name_feature", "_UI_PreferenceItem_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PreferencesPackage.Literals.PREFERENCE_ITEM__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -155,8 +155,8 @@ public class PreferenceItemItemProvider extends ModelElementItemProvider
   protected void addRelativePathPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceItem_relativePath_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceItem_relativePath_feature", "_UI_PreferenceItem_type"),
+        getString("_UI_PreferenceItem_relativePath_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceItem_relativePath_feature", "_UI_PreferenceItem_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PreferencesPackage.Literals.PREFERENCE_ITEM__RELATIVE_PATH, false, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -169,8 +169,8 @@ public class PreferenceItemItemProvider extends ModelElementItemProvider
   protected void addAncestorPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceItem_ancestor_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceItem_ancestor_feature", "_UI_PreferenceItem_type"),
+        getString("_UI_PreferenceItem_ancestor_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceItem_ancestor_feature", "_UI_PreferenceItem_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PreferencesPackage.Literals.PREFERENCE_ITEM__ANCESTOR, false, false, false, null, null, null));
   }
 
@@ -194,8 +194,8 @@ public class PreferenceItemItemProvider extends ModelElementItemProvider
   protected void addScopePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceItem_scope_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceItem_scope_feature", "_UI_PreferenceItem_type"),
+        getString("_UI_PreferenceItem_scope_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceItem_scope_feature", "_UI_PreferenceItem_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PreferencesPackage.Literals.PREFERENCE_ITEM__SCOPE, false, false, false, null, null, null));
   }
 
@@ -220,7 +220,8 @@ public class PreferenceItemItemProvider extends ModelElementItemProvider
   public String getText(Object object)
   {
     String label = ((PreferenceItem)object).getName();
-    return label == null || label.length() == 0 ? getString("_UI_PreferenceItem_type") : getString("_UI_PreferenceItem_type") + " " + label;
+    return label == null || label.length() == 0 ? getString("_UI_PreferenceItem_type") : //$NON-NLS-1$
+        getString("_UI_PreferenceItem_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

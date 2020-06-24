@@ -54,8 +54,8 @@ public class ProductToProductVersionMapEntryItemProvider extends ItemProviderAda
     implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
 {
   private final ModelElementItemProvider.HierarchicalPropertyDescriptor keyPropertyDescriptor = new ModelElementItemProvider.HierarchicalPropertyDescriptor(
-      ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ProductToProductVersionMapEntry_key_feature"),
-      getString("_UI_PropertyDescriptor_description", "_UI_ProductToProductVersionMapEntry_key_feature", "_UI_ProductToProductVersionMapEntry_type"),
+      ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ProductToProductVersionMapEntry_key_feature"), //$NON-NLS-1$
+      getString("_UI_PropertyDescriptor_description", "_UI_ProductToProductVersionMapEntry_key_feature", "_UI_ProductToProductVersionMapEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       SetupPackage.Literals.PRODUCT_TO_PRODUCT_VERSION_MAP_ENTRY__KEY, true, false, true, null, null, null)
   {
     @Override
@@ -102,8 +102,8 @@ public class ProductToProductVersionMapEntryItemProvider extends ItemProviderAda
   };
 
   private final ItemPropertyDescriptor valuePropertyDescriptor = new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-      getResourceLocator(), getString("_UI_ProductToProductVersionMapEntry_value_feature"),
-      getString("_UI_PropertyDescriptor_description", "_UI_ProductToProductVersionMapEntry_value_feature", "_UI_ProductToProductVersionMapEntry_type"),
+      getResourceLocator(), getString("_UI_ProductToProductVersionMapEntry_value_feature"), //$NON-NLS-1$
+      getString("_UI_PropertyDescriptor_description", "_UI_ProductToProductVersionMapEntry_value_feature", "_UI_ProductToProductVersionMapEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       SetupPackage.Literals.PRODUCT_TO_PRODUCT_VERSION_MAP_ENTRY__VALUE, true, false, true, null, null, null)
   {
     @Override
@@ -187,7 +187,7 @@ public class ProductToProductVersionMapEntryItemProvider extends ItemProviderAda
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ProductToProductVersionMapEntry"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ProductToProductVersionMapEntry")); //$NON-NLS-1$
   }
 
   /**
@@ -214,8 +214,8 @@ public class ProductToProductVersionMapEntryItemProvider extends ItemProviderAda
     Map.Entry<Product, ProductVersion> productToProductVersionMapEntry = (Map.Entry<Product, ProductVersion>)object;
     Product product = productToProductVersionMapEntry.getKey();
     ProductVersion version = productToProductVersionMapEntry.getValue();
-    return "" + (product == null ? "null" : keyPropertyDescriptor.getLabelProvider(object).getText(product)) + " -> "
-        + (version == null ? "null" : valuePropertyDescriptor.getLabelProvider(object).getText(version));
+    return "" + (product == null ? "null" : keyPropertyDescriptor.getLabelProvider(object).getText(product)) + " -> " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        + (version == null ? "null" : valuePropertyDescriptor.getLabelProvider(object).getText(version)); //$NON-NLS-1$
   }
 
   /**

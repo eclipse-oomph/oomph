@@ -82,7 +82,7 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
       case ResourcesPackage.MAVEN_PROJECT_FACTORY:
         return createMavenProjectFactory();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -97,7 +97,7 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
     switch (eDataType.getClassifierID())
     {
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -112,7 +112,7 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
     switch (eDataType.getClassifierID())
     {
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

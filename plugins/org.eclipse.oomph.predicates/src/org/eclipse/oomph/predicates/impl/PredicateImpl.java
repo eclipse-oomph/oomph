@@ -32,7 +32,7 @@ import java.util.regex.PatternSyntaxException;
  */
 public abstract class PredicateImpl extends ModelElementImpl implements Predicate
 {
-  private static final Pattern MATCH_NOTHING_PATTERN = Pattern.compile("$^");
+  private static final Pattern MATCH_NOTHING_PATTERN = Pattern.compile("$^"); //$NON-NLS-1$
 
   /**
    * <!-- begin-user-doc -->

@@ -60,13 +60,13 @@ public interface IElement
       @Override
       public String getTag()
       {
-        return "products";
+        return "products"; //$NON-NLS-1$
       }
 
       @Override
       public String toString()
       {
-        return "Product";
+        return "Product"; //$NON-NLS-1$
       }
     },
 
@@ -75,13 +75,13 @@ public interface IElement
       @Override
       public String getTag()
       {
-        return "includes";
+        return "includes"; //$NON-NLS-1$
       }
 
       @Override
       public String toString()
       {
-        return "Feature";
+        return "Feature"; //$NON-NLS-1$
       }
     },
 
@@ -90,13 +90,13 @@ public interface IElement
       @Override
       public String getTag()
       {
-        return "plugin";
+        return "plugin"; //$NON-NLS-1$
       }
 
       @Override
       public String toString()
       {
-        return "Plug-in";
+        return "Plug-in"; //$NON-NLS-1$
       }
     };
 

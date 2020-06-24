@@ -34,6 +34,7 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
@@ -84,38 +85,39 @@ public class ProjectCopyAction implements IObjectActionDelegate
       final IWorkspaceRoot ROOT = ResourcesPlugin.getWorkspace().getRoot();
       final File parentFolder = folder.getParentFile();
 
-      InputDialog dialog = new InputDialog(shell, "Copy Project", "Name of the new project:", source.getName(), new IInputValidator()
-      {
-        public String isValid(String newName)
-        {
-          try
+      InputDialog dialog = new InputDialog(shell, Messages.ProjectCopyAction_dialog_title, Messages.ProjectCopyAction_dialog_message, source.getName(),
+          new IInputValidator()
           {
-            IProject newProject = ROOT.getProject(newName);
-            if (newProject.exists())
+            public String isValid(String newName)
             {
-              return "Project " + newName + " already exists.";
-            }
+              try
+              {
+                IProject newProject = ROOT.getProject(newName);
+                if (newProject.exists())
+                {
+                  return NLS.bind(Messages.ProjectCopyAction_dialog_nameValidator_projectAlreadyExists, newName);
+                }
 
-            File newFolder = new File(parentFolder, newName);
-            if (newFolder.exists())
-            {
-              return "Location " + newFolder.getAbsolutePath() + " already exists.";
-            }
+                File newFolder = new File(parentFolder, newName);
+                if (newFolder.exists())
+                {
+                  return NLS.bind(Messages.ProjectCopyAction_dialog_nameValidator_locationAlreadyExists, newFolder.getAbsolutePath());
+                }
 
-            return null;
-          }
-          catch (Exception exception)
-          {
-            return exception.getLocalizedMessage();
-          }
-        }
-      });
+                return null;
+              }
+              catch (Exception exception)
+              {
+                return exception.getLocalizedMessage();
+              }
+            }
+          });
 
       if (dialog.open() == Dialog.OK)
       {
         final String newName = dialog.getValue();
 
-        new Job("Copy project")
+        new Job(Messages.ProjectCopyAction_copyProjectJob_name)
         {
           @Override
           protected IStatus run(IProgressMonitor monitor)
@@ -169,47 +171,47 @@ public class ProjectCopyAction implements IObjectActionDelegate
     }
     else
     {
-      if (source.equals(new File(folder, ".project")))
+      if (source.equals(new File(folder, ".project"))) //$NON-NLS-1$
       {
-        Replacer replacer = new Replacer("<name>" + oldName + "</name>", "<name>" + newName + "</name>");
+        Replacer replacer = new Replacer("<name>" + oldName + "</name>", "<name>" + newName + "</name>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         replacer.copy(source, target);
       }
-      else if (source.equals(new File(folder, ".options")))
+      else if (source.equals(new File(folder, ".options"))) //$NON-NLS-1$
       {
         Replacer replacer = new Replacer(true);
-        replacer.addSubstitution(oldName + "/", newName + "/");
+        replacer.addSubstitution(oldName + "/", newName + "/"); //$NON-NLS-1$ //$NON-NLS-2$
         replacer.copy(source, target);
       }
-      else if (source.equals(new File(new File(folder, "META-INF"), "MANIFEST.MF")))
+      else if (source.equals(new File(new File(folder, "META-INF"), "MANIFEST.MF"))) //$NON-NLS-1$ //$NON-NLS-2$
       {
         Replacer replacer = new Replacer(true);
-        replacer.addSubstitution("Bundle-SymbolicName: " + oldName, "Bundle-SymbolicName: " + newName);
-        replacer.addSubstitution("Automatic-Module-Name: " + oldName, "Automatic-Module-Name: " + newName);
+        replacer.addSubstitution("Bundle-SymbolicName: " + oldName, "Bundle-SymbolicName: " + newName); //$NON-NLS-1$ //$NON-NLS-2$
+        replacer.addSubstitution("Automatic-Module-Name: " + oldName, "Automatic-Module-Name: " + newName); //$NON-NLS-1$ //$NON-NLS-2$
         replacer.copy(source, target);
       }
-      else if (source.equals(new File(folder, "feature.xml")))
+      else if (source.equals(new File(folder, "feature.xml"))) //$NON-NLS-1$
       {
-        oldName = replaceFeatureSuffix(oldName, "");
-        newName = replaceFeatureSuffix(newName, "");
-        Replacer replacer = new Replacer("id=\"" + oldName + "\"", "id=\"" + newName + "\"");
+        oldName = replaceFeatureSuffix(oldName, ""); //$NON-NLS-1$
+        newName = replaceFeatureSuffix(newName, ""); //$NON-NLS-1$
+        Replacer replacer = new Replacer("id=\"" + oldName + "\"", "id=\"" + newName + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         replacer.copy(source, target);
       }
-      else if (source.equals(new File(folder, "component.def")))
+      else if (source.equals(new File(folder, "component.def"))) //$NON-NLS-1$
       {
-        oldName = replaceFeatureSuffix(oldName, ".feature.group");
-        newName = replaceFeatureSuffix(newName, ".feature.group");
-        Replacer replacer = new Replacer("id=\"" + oldName + "\"", "id=\"" + newName + "\"");
+        oldName = replaceFeatureSuffix(oldName, ".feature.group"); //$NON-NLS-1$
+        newName = replaceFeatureSuffix(newName, ".feature.group"); //$NON-NLS-1$
+        Replacer replacer = new Replacer("id=\"" + oldName + "\"", "id=\"" + newName + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         replacer.copy(source, target);
       }
-      else if (source.equals(new File(folder, "pom.xml")))
+      else if (source.equals(new File(folder, "pom.xml"))) //$NON-NLS-1$
       {
-        oldName = replaceFeatureSuffix(oldName, "");
-        newName = replaceFeatureSuffix(newName, "");
+        oldName = replaceFeatureSuffix(oldName, ""); //$NON-NLS-1$
+        newName = replaceFeatureSuffix(newName, ""); //$NON-NLS-1$
 
         DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
         Element rootElement = XMLUtil.loadRootElement(documentBuilder, source);
 
-        ElementUpdater artifactIDUpdater = new ElementUpdater(rootElement, "artifactId");
+        ElementUpdater artifactIDUpdater = new ElementUpdater(rootElement, "artifactId"); //$NON-NLS-1$
         String oldContents = IOUtil.readUTF8(source);
         String newContents = artifactIDUpdater.update(oldContents, newName);
         IOUtil.writeUTF8(target, newContents);
@@ -223,9 +225,9 @@ public class ProjectCopyAction implements IObjectActionDelegate
 
   private static String replaceFeatureSuffix(String name, String newSuffix)
   {
-    if (name.endsWith("-feature"))
+    if (name.endsWith("-feature")) //$NON-NLS-1$
     {
-      name = name.substring(0, name.length() - "-feature".length());
+      name = name.substring(0, name.length() - "-feature".length()); //$NON-NLS-1$
       name += newSuffix;
     }
 

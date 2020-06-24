@@ -28,6 +28,7 @@ import org.eclipse.equinox.internal.p2.repository.Transport;
 import org.eclipse.equinox.internal.provisional.p2.core.eventbus.IProvisioningEventBus;
 import org.eclipse.equinox.internal.provisional.p2.repository.IStateful;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -80,7 +81,7 @@ public class CachingTransport extends Transport
     eventBus = (IProvisioningEventBus)agent.getService(IProvisioningEventBus.SERVICE_NAME);
 
     File folder = P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.getUserHome()));
-    cacheFolder = new File(folder, "cache");
+    cacheFolder = new File(folder, "cache"); //$NON-NLS-1$
     cacheFolder.mkdirs();
   }
 
@@ -93,7 +94,7 @@ public class CachingTransport extends Transport
   {
     if (delegate instanceof CachingTransport)
     {
-      throw new IllegalArgumentException("CachingTransport should not be chained");
+      throw new IllegalArgumentException(Messages.CachingTransport_Chained_exception);
     }
 
     this.delegate = delegate;
@@ -109,7 +110,7 @@ public class CachingTransport extends Transport
   {
     if (DEBUG)
     {
-      log("  ! " + uri);
+      log("  ! " + uri); //$NON-NLS-1$
     }
 
     if (!isLoadingRepository(uri))
@@ -118,7 +119,7 @@ public class CachingTransport extends Transport
       // See org.eclipse.oomph.p2.internal.core.CachingRepositoryManager.Artifact.BetterMirrorSelector.ArtifactActivity.retry(ArtifactActivity)
       if (CachingRepositoryManager.BOGUS_SCHEME.equals(uri.getScheme()))
       {
-        IOException ex = new IOException("Repeated attemps to download " + uri.getRawSchemeSpecificPart() + " from the same site");
+        IOException ex = new IOException(NLS.bind(Messages.CachingTransport_RepeatedDownloads_exception, uri.getRawSchemeSpecificPart()));
         ex.fillInStackTrace();
         return P2CorePlugin.INSTANCE.getStatus(ex);
       }
@@ -150,7 +151,7 @@ public class CachingTransport extends Transport
       if (cacheFile.length() > 0)
       {
         String path = uri.getSchemeSpecificPart();
-        if (OfflineMode.isEnabled() || !path.endsWith("/site.xml") && !path.endsWith("/digest.zip"))
+        if (OfflineMode.isEnabled() || !path.endsWith("/site.xml") && !path.endsWith("/digest.zip")) //$NON-NLS-1$ //$NON-NLS-2$
         {
           FileInputStream cacheInputStream = null;
 
@@ -179,7 +180,7 @@ public class CachingTransport extends Transport
       try
       {
         cacheFile.getParentFile().mkdirs();
-        File tempCacheFile = new File(cacheFile.getPath() + ".downloading");
+        File tempCacheFile = new File(cacheFile.getPath() + ".downloading"); //$NON-NLS-1$
         try
         {
           statefulTarget = new StatefulFileOutputStream(tempCacheFile);
@@ -213,13 +214,13 @@ public class CachingTransport extends Transport
 
             // Remove the other form that might be cached.
             String path = cacheFile.getPath();
-            if (path.endsWith(".xml"))
+            if (path.endsWith(".xml")) //$NON-NLS-1$
             {
-              new File(path.substring(0, path.length() - 4) + ".jar").delete();
+              new File(path.substring(0, path.length() - 4) + ".jar").delete(); //$NON-NLS-1$
             }
-            else if (path.endsWith(".jar"))
+            else if (path.endsWith(".jar")) //$NON-NLS-1$
             {
-              new File(path.substring(0, path.length() - 4) + ".xml").delete();
+              new File(path.substring(0, path.length() - 4) + ".xml").delete(); //$NON-NLS-1$
             }
           }
           else
@@ -266,7 +267,7 @@ public class CachingTransport extends Transport
   {
     if (DEBUG)
     {
-      log("  ? " + uri);
+      log("  ? " + uri); //$NON-NLS-1$
     }
 
     if (isLoadingRepository(uri) && OfflineMode.isEnabled())
@@ -280,16 +281,16 @@ public class CachingTransport extends Transport
       CacheManager cacheManager = (CacheManager)agent.getService(CacheManager.SERVICE_NAME);
       if (cacheManager == null)
       {
-        throw new IllegalArgumentException("Cache manager service not available");
+        throw new IllegalArgumentException(Messages.CachingTransport_ServiceNotAvailable_exception);
       }
 
       // The file is not in Oomph's cache, so try to find if it's in p2's cache.
       org.eclipse.emf.common.util.URI location = org.eclipse.emf.common.util.URI.createURI(uri.toString());
       String fileExtension = location.fileExtension();
-      if ("xz".equals(fileExtension))
+      if ("xz".equals(fileExtension)) //$NON-NLS-1$
       {
         // The .xml.xz repository implementation caches using this approach.
-        Method method = ReflectUtil.getMethod(cacheManager, "getCacheFile", URI.class);
+        Method method = ReflectUtil.getMethod(cacheManager, "getCacheFile", URI.class); //$NON-NLS-1$
         File file = (File)ReflectUtil.invokeMethod(method, cacheManager, uri);
         if (file != null && file.exists())
         {
@@ -304,13 +305,13 @@ public class CachingTransport extends Transport
         {
           org.eclipse.emf.common.util.URI repositoryLocation = location.trimSegments(1);
           URI repositoryURI = new URI(repositoryLocation.toString());
-          Method method = ReflectUtil.getMethod(cacheManager, "getCache", URI.class, String.class);
+          Method method = ReflectUtil.getMethod(cacheManager, "getCache", URI.class, String.class); //$NON-NLS-1$
           File file = (File)ReflectUtil.invokeMethod(method, cacheManager, repositoryURI, prefix);
           if (file != null && file.exists())
           {
             if (!file.toString().endsWith(fileExtension))
             {
-              throw new FileNotFoundException("We're offline and there is a cached version, but with a different extension, so fail now and use that one.");
+              throw new FileNotFoundException(Messages.CachingTransport_UseOfflineCache_exception);
             }
 
             return file.lastModified();
@@ -352,7 +353,7 @@ public class CachingTransport extends Transport
         return cacheFile.lastModified();
       }
 
-      if (uri.toString().endsWith(".jar"))
+      if (uri.toString().endsWith(".jar")) //$NON-NLS-1$
       {
         // When p2 tries to load a content.xml, it still first tries a content.jar.
         // If there is a socket timeout exception, it has special case code that doesn't try to load the content.xml.
@@ -363,7 +364,7 @@ public class CachingTransport extends Transport
         if (statusException instanceof SocketTimeoutException)
         {
           IOException wrappedException = new IOExceptionWithCause(statusException);
-          ReflectUtil.setValue("exception", status, wrappedException);
+          ReflectUtil.setValue("exception", status, wrappedException); //$NON-NLS-1$
         }
       }
 
@@ -461,7 +462,7 @@ public class CachingTransport extends Transport
     LocationStack stack = REPOSITORY_LOCATIONS.get();
     for (int i = 1; i < stack.size(); i++)
     {
-      message = "   " + message;
+      message = "   " + message; //$NON-NLS-1$
     }
 
     System.out.println(message);
@@ -470,7 +471,7 @@ public class CachingTransport extends Transport
   static void startLoadingRepository(URI location)
   {
     String uri = location.toString();
-    if (uri.endsWith("/"))
+    if (uri.endsWith("/")) //$NON-NLS-1$
     {
       uri = uri.substring(0, uri.length() - 1);
     }
@@ -478,9 +479,9 @@ public class CachingTransport extends Transport
     LocationStack stack = REPOSITORY_LOCATIONS.get();
     stack.push(uri);
 
-    if (DEBUG && !uri.startsWith("file:"))
+    if (DEBUG && !uri.startsWith("file:")) //$NON-NLS-1$
     {
-      log("--> " + location);
+      log("--> " + location); //$NON-NLS-1$
     }
   }
 
@@ -493,9 +494,9 @@ public class CachingTransport extends Transport
       if (DEBUG)
       {
         String location = stack.peek();
-        if (!location.startsWith("file:"))
+        if (!location.startsWith("file:")) //$NON-NLS-1$
         {
-          log("<-- " + location);
+          log("<-- " + location); //$NON-NLS-1$
         }
       }
 

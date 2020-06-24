@@ -32,9 +32,9 @@ public final class RepositoryManager
 {
   public static final RepositoryManager INSTANCE = new RepositoryManager();
 
-  private static final String REPOSITORIES_KEY = "repositories";
+  private static final String REPOSITORIES_KEY = "repositories"; //$NON-NLS-1$
 
-  private static final String ACTIVE_REPOSITORY_KEY = "activeRepository";
+  private static final String ACTIVE_REPOSITORY_KEY = "activeRepository"; //$NON-NLS-1$
 
   private final IDialogSettings settings;
 
@@ -68,9 +68,9 @@ public final class RepositoryManager
 
     try
     {
-      if (ReflectUtil.invokeMethod("getWorkspaceRoot", EcorePlugin.class) != null)
+      if (ReflectUtil.invokeMethod("getWorkspaceRoot", EcorePlugin.class) != null) //$NON-NLS-1$
       {
-        repositories.add("platform:/resource/");
+        repositories.add("platform:/resource/"); //$NON-NLS-1$
       }
     }
     catch (Exception ex)
@@ -102,7 +102,7 @@ public final class RepositoryManager
 
     List<String> filteredRepositories = new ArrayList<String>(repositories);
     filteredRepositories.remove(currentProfileLocation);
-    filteredRepositories.remove("platform:/resource/");
+    filteredRepositories.remove("platform:/resource/"); //$NON-NLS-1$
     int size = filteredRepositories.size();
     if (size != 0)
     {

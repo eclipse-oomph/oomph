@@ -24,6 +24,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.pde.api.tools.internal.ApiBaselineManager;
 import org.eclipse.pde.api.tools.internal.model.ApiModelFactory;
 import org.eclipse.pde.api.tools.internal.provisional.ApiPlugin;
@@ -78,7 +79,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
    * @generated
    * @ordered
    */
-  protected static final String LOCATION_EDEFAULT = "";
+  protected static final String LOCATION_EDEFAULT = ""; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getLocation() <em>Location</em>}' attribute.
@@ -315,11 +316,11 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (version: ");
+    result.append(" (version: "); //$NON-NLS-1$
     result.append(version);
-    result.append(", location: ");
+    result.append(", location: "); //$NON-NLS-1$
     result.append(location);
-    result.append(", remoteURI: ");
+    result.append(", remoteURI: "); //$NON-NLS-1$
     result.append(remoteURI);
     result.append(')');
     return result.toString();
@@ -338,9 +339,9 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
       return false;
     }
 
-    baselineName = getName() + "-" + getVersion();
+    baselineName = getName() + "-" + getVersion(); //$NON-NLS-1$
     baselineDir = new File(getLocation());
-    remoteURIFile = new File(baselineDir, "remoteURI.txt");
+    remoteURIFile = new File(baselineDir, "remoteURI.txt"); //$NON-NLS-1$
 
     IApiBaselineManager baselineManager = apiPlugin.getApiBaselineManager();
     IApiBaseline baseline = baselineManager.getApiBaseline(baselineName);
@@ -354,7 +355,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
     if (!baselineDir.isDirectory() || !new File(baseline.getLocation()).equals(baselineDir))
     {
       baselineManager.removeApiBaseline(baselineName);
-      baseline.setName(baselineName + " " + System.currentTimeMillis());
+      baseline.setName(baselineName + " " + System.currentTimeMillis()); //$NON-NLS-1$
       baselineManager.addApiBaseline(baseline);
       return true;
     }
@@ -389,10 +390,10 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
         downloadAndUnzip(context);
       }
 
-      IOUtil.writeFile(remoteURIFile, getRemoteURI().getBytes("UTF-8"));
+      IOUtil.writeFile(remoteURIFile, getRemoteURI().getBytes("UTF-8")); //$NON-NLS-1$
 
       String location = baselineDir.toString();
-      context.log("Creating API baseline from " + location);
+      context.log(NLS.bind(Messages.APIBaselineTaskImpl_CreatingBaseline_message, location));
 
       baseline = ApiModelFactory.newApiBaseline(baselineName, location);
       ApiModelFactory.addComponents(baseline, location, new ProgressLogMonitor(context));
@@ -401,7 +402,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
 
     if (isActivate())
     {
-      context.log("Activating API baseline: " + baselineName);
+      context.log(NLS.bind(Messages.APIBaselineTaskImpl_ActivatingBaseline_message, baselineName));
       baselineManager.setDefaultApiBaseline(baselineName);
     }
   }
@@ -410,7 +411,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
   {
     if (remoteURIFile.exists())
     {
-      String zipLocationURL = new String(IOUtil.readFile(remoteURIFile), "UTF-8");
+      String zipLocationURL = new String(IOUtil.readFile(remoteURIFile), "UTF-8"); //$NON-NLS-1$
       if (!ObjectUtil.equals(zipLocationURL, getRemoteURI()))
       {
         return true;
@@ -430,7 +431,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
       @Override
       public void unzipFile(String name, InputStream zipStream)
       {
-        context.log("Unzipping " + name);
+        context.log(NLS.bind(Messages.APIBaselineTaskImpl_Unzipping_message, name));
         super.unzipFile(name, zipStream);
       }
     });

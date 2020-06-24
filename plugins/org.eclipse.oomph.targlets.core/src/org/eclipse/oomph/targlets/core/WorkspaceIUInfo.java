@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.io.IOException;
@@ -94,14 +95,14 @@ public final class WorkspaceIUInfo
         File existingLocation = new File(project.getLocation().toOSString()).getCanonicalFile();
         if (!existingLocation.equals(location))
         {
-          TargletsCorePlugin.INSTANCE.log("Project " + projectName + " exists in different location: " + existingLocation);
+          TargletsCorePlugin.INSTANCE.log(NLS.bind(Messages.WorkspaceIUInfo_ProjectExists_message, projectName, existingLocation));
           return ResourcesUtil.ImportResult.EXISTED_DIFFERENT_LOCATION;
         }
 
         return ResourcesUtil.ImportResult.EXISTED;
       }
 
-      monitor.setTaskName("Importing project " + projectName);
+      monitor.setTaskName(NLS.bind(Messages.WorkspaceIUInfo_Importing_task, projectName));
 
       BackendContainer backendContainer = getBackendContainer();
       backendContainer.importIntoWorkspace(project, monitor);
@@ -116,7 +117,7 @@ public final class WorkspaceIUInfo
     catch (Exception ex)
     {
       TargletsCorePlugin.INSTANCE.log(ex);
-      monitor.subTask("Failed to import project from " + this + " (see error log for details)");
+      monitor.subTask(NLS.bind(Messages.WorkspaceIUInfo_ImportFailed_message, this));
       return ResourcesUtil.ImportResult.ERROR;
     }
   }
@@ -152,6 +153,6 @@ public final class WorkspaceIUInfo
   @Override
   public String toString()
   {
-    return backendContainerURI + "[" + projectName + "]";
+    return backendContainerURI + "[" + projectName + "]"; //$NON-NLS-1$ //$NON-NLS-2$
   }
 }

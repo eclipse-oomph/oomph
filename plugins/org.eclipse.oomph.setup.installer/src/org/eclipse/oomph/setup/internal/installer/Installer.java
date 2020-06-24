@@ -161,7 +161,7 @@ public class Installer extends SetupWizard
   @Override
   public String getHelpPath()
   {
-    return HELP_FOLDER + "DocInstallWizard.html";
+    return HELP_FOLDER + "DocInstallWizard.html"; //$NON-NLS-1$
   }
 
   @Override
@@ -253,11 +253,11 @@ public class Installer extends SetupWizard
   private ToolItem createExtensionsButton(ConfigurationListener configurationListener)
   {
     ToolBar toolBar = configurationListener.getToolBar();
-    int index = toolBar.getItemCount() > 0 && toolBar.getItem(0).getData("ConfigurationSelectionAdapter") != null ? 1 : 0;
+    int index = toolBar.getItemCount() > 0 && toolBar.getItem(0).getData("ConfigurationSelectionAdapter") != null ? 1 : 0; //$NON-NLS-1$
     ToolItem extensionsButton = new ToolItem(toolBar, SWT.NONE, index);
     extensionsButton.setToolTipText(SimpleInstallerDialog.EXTENSIONS_MENU_ITEM_DESCRIPTION);
-    extensionsButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/extension_notification_overlay.png"));
-    AccessUtil.setKey(extensionsButton, "manageExtensions");
+    extensionsButton.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/extension_notification_overlay.png")); //$NON-NLS-1$
+    AccessUtil.setKey(extensionsButton, "manageExtensions"); //$NON-NLS-1$
     extensionsButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -332,9 +332,8 @@ public class Installer extends SetupWizard
 
   public boolean handleMissingIndex(Shell shell)
   {
-    int answer = new MessageDialog(shell, "Network Problem", null,
-        "The catalog could not be loaded. Please ensure that you have network access and, if needed, have configured your network proxy.", MessageDialog.ERROR,
-        new String[] { "Retry", "Configure Network Proxy...", "Exit" }, 0).open();
+    int answer = new MessageDialog(shell, Messages.Installer_NetworkProblem_title, null, Messages.Installer_TalogNotLoaded_message, MessageDialog.ERROR,
+        new String[] { Messages.Installer_Retry_label, Messages.Installer_Configure_label, Messages.Installer_Exit_label }, 0).open();
     switch (answer)
     {
       case 1:

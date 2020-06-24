@@ -31,9 +31,9 @@ public interface Profile extends IProfile, AgentElement
 
   public static final String PROP_IU_COMPATIBILITY = "org.eclipse.oomph.p2.iu.compatibility"; //$NON-NLS-1$
 
-  public static final String TYPE_INSTALLATION = "Installation";
+  public static final String TYPE_INSTALLATION = "Installation"; //$NON-NLS-1$
 
-  public static final String TYPE_TARGLET = "Targlet";
+  public static final String TYPE_TARGLET = "Targlet"; //$NON-NLS-1$
 
   public boolean isSelfHosting();
 

@@ -268,7 +268,8 @@ public class ManifestDiscovery
           if (!(button.getData() instanceof DiscoverPluginsListener))
           {
             FormToolkit toolkit = dependenciesPage.getManagedForm().getToolkit();
-            Button newButton = toolkit != null ? toolkit.createButton(composite3, "Discover...", SWT.PUSH) : new Button(composite3, SWT.PUSH);
+            Button newButton = toolkit != null ? toolkit.createButton(composite3, Messages.ManifestDiscovery_discoverButton_text, SWT.PUSH)
+                : new Button(composite3, SWT.PUSH);
             newButton.moveAbove(button);
             composite3.layout();
 
@@ -285,7 +286,8 @@ public class ManifestDiscovery
           if (!(button.getData() instanceof DiscoverPackagesListener))
           {
             FormToolkit toolkit = dependenciesPage.getManagedForm().getToolkit();
-            Button newButton = toolkit != null ? toolkit.createButton(composite3, "Discover...", SWT.PUSH) : new Button(composite3, SWT.PUSH);
+            Button newButton = toolkit != null ? toolkit.createButton(composite3, Messages.ManifestDiscovery_discoverButton_text, SWT.PUSH)
+                : new Button(composite3, SWT.PUSH);
             newButton.moveAbove(button);
             composite3.layout();
 
@@ -358,7 +360,7 @@ public class ManifestDiscovery
       this.namespace = namespace;
       this.dependenciesPage = dependenciesPage;
 
-      button.setText("Discover...");
+      button.setText(Messages.ManifestDiscovery_discoverButton_text);
       button.setLayoutData(gridData);
       button.setData(this);
 
@@ -422,7 +424,7 @@ public class ManifestDiscovery
   {
     public DiscoverPluginsListener(Button button, DependenciesPage dependenciesPage)
     {
-      super(button, "osgi.bundle", dependenciesPage);
+      super(button, "osgi.bundle", dependenciesPage); //$NON-NLS-1$
     }
 
     @Override
@@ -492,7 +494,7 @@ public class ManifestDiscovery
   {
     public DiscoverPackagesListener(Button button, DependenciesPage dependenciesPage)
     {
-      super(button, "java.package", dependenciesPage);
+      super(button, "java.package", dependenciesPage); //$NON-NLS-1$
     }
 
     @Override
@@ -555,18 +557,18 @@ public class ManifestDiscovery
       {
         if (builder.length() > 0)
         {
-          builder.append(",");
+          builder.append(","); //$NON-NLS-1$
           builder.append(lineDelimiter);
-          builder.append(" ");
+          builder.append(" "); //$NON-NLS-1$
         }
 
         Requirement requirement = (Requirement)object;
         builder.append(requirement.getName());
-        builder.append(";");
+        builder.append(";"); //$NON-NLS-1$
         builder.append(versionAttribute);
-        builder.append("=\"");
+        builder.append("=\""); //$NON-NLS-1$
         builder.append(requirement.getVersionRange());
-        builder.append("\"");
+        builder.append("\""); //$NON-NLS-1$
       }
 
       return builder.toString();

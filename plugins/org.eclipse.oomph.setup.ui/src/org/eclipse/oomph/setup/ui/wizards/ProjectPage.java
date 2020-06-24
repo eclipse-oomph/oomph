@@ -127,6 +127,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.IWizardContainer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.browser.LocationListener;
@@ -213,10 +214,10 @@ public class ProjectPage extends SetupWizardPage
 
   public ProjectPage(SelectionMemento selectionMemento)
   {
-    super("ProjectPage");
+    super("ProjectPage"); //$NON-NLS-1$
     this.selectionMemento = selectionMemento;
-    setTitle("Projects");
-    setDescription("Check the projects you want to provision, and for each choose its stream in the table column.");
+    setTitle(Messages.ProjectPage_title);
+    setDescription(Messages.ProjectPage_description);
   }
 
   @Override
@@ -263,9 +264,9 @@ public class ProjectPage extends SetupWizardPage
     ToolBar filterToolBar = new ToolBar(filterComposite, SWT.FLAT | SWT.RIGHT);
 
     final ToolItem addProjectButton = new ToolItem(filterToolBar, SWT.NONE);
-    addProjectButton.setToolTipText("Add user projects");
-    addProjectButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add_project"));
-    AccessUtil.setKey(addProjectButton, "addProject");
+    addProjectButton.setToolTipText(Messages.ProjectPage_addProjectButton_tooltip);
+    addProjectButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add_project")); //$NON-NLS-1$
+    AccessUtil.setKey(addProjectButton, "addProject"); //$NON-NLS-1$
 
     final Set<ProjectCatalog> projectCatalogs = new HashSet<ProjectCatalog>();
     addProjectButton.addSelectionListener(new SelectionAdapter()
@@ -279,10 +280,10 @@ public class ProjectPage extends SetupWizardPage
     });
 
     final ToolItem removeProjectButton = new ToolItem(filterToolBar, SWT.NONE);
-    removeProjectButton.setToolTipText("Remove the selected user projects");
-    removeProjectButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("remove_project"));
+    removeProjectButton.setToolTipText(Messages.ProjectPage_removeProjectButton_tooltip);
+    removeProjectButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("remove_project")); //$NON-NLS-1$
     removeProjectButton.setEnabled(false);
-    AccessUtil.setKey(removeProjectButton, "removeProject");
+    AccessUtil.setKey(removeProjectButton, "removeProject"); //$NON-NLS-1$
 
     final List<Project> projects = new ArrayList<Project>();
     final List<Project> userProjects = new ArrayList<Project>();
@@ -344,9 +345,9 @@ public class ProjectPage extends SetupWizardPage
     removeProjectButton.addSelectionListener(removeProjectSelectionAdapter);
 
     final ToolItem collapseAllButton = new ToolItem(filterToolBar, SWT.NONE);
-    collapseAllButton.setToolTipText("Collapse All");
-    collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all"));
-    AccessUtil.setKey(collapseAllButton, "collapse");
+    collapseAllButton.setToolTipText(Messages.ProjectPage_collapseAllButton_tooltip);
+    collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all")); //$NON-NLS-1$
+    AccessUtil.setKey(collapseAllButton, "collapse"); //$NON-NLS-1$
 
     final boolean supportsIndexSwitching = getPreviousPage() instanceof SetupWizardPage;
     configurationListener = new ConfigurationListener(getWizard(), catalogManager, filterToolBar)
@@ -373,10 +374,10 @@ public class ProjectPage extends SetupWizardPage
     getWizard().addConfigurationListener(configurationListener);
 
     final ToolItem catalogsButton = new ToolItem(filterToolBar, SWT.DROP_DOWN);
-    catalogsButton.setToolTipText("Select Catalogs");
-    catalogsButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("catalogs"));
+    catalogsButton.setToolTipText(Messages.ProjectPage_catalogsButton_tooltip);
+    catalogsButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("catalogs")); //$NON-NLS-1$
     catalogSelector.configure(getWizard(), catalogsButton, supportsIndexSwitching);
-    AccessUtil.setKey(catalogsButton, "catalogs");
+    AccessUtil.setKey(catalogsButton, "catalogs"); //$NON-NLS-1$
 
     PatternFilter patternFilter = new PatternFilter()
     {
@@ -405,7 +406,7 @@ public class ProjectPage extends SetupWizardPage
     filteredTree = new FilteredTreeWithoutWorkbench.WithCheckboxes(upperComposite, SWT.BORDER | SWT.MULTI, patternFilter, null);
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
-    AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
+    AccessUtil.setKey(filteredTree.getFilterControl(), "filter"); //$NON-NLS-1$
 
     projectViewer = filteredTree.getViewer();
     projectViewer.setUseHashlookup(true);
@@ -488,7 +489,7 @@ public class ProjectPage extends SetupWizardPage
     {
       public void changing(LocationEvent event)
       {
-        if (!"about:blank".equals(event.location))
+        if (!"about:blank".equals(event.location)) //$NON-NLS-1$
         {
           OS.INSTANCE.openSystemBrowser(event.location);
           event.doit = false;
@@ -530,41 +531,41 @@ public class ProjectPage extends SetupWizardPage
           String label = SetupCoreUtil.getLabel(scope);
 
           StringBuilder result = new StringBuilder();
-          result.append("<span style='white-space: nowrap; font-size: 150%;'><b>");
+          result.append("<span style='white-space: nowrap; font-size: 150%;'><b>"); //$NON-NLS-1$
           if (brandingSiteURI != null)
           {
-            result.append("<a style='text-decoration: none; color: inherit;' href='");
+            result.append("<a style='text-decoration: none; color: inherit;' href='"); //$NON-NLS-1$
             result.append(brandingSiteURI);
-            result.append("'>");
+            result.append("'>"); //$NON-NLS-1$
           }
 
-          result.append("<img style='padding-top: 4px;' src='");
+          result.append("<img style='padding-top: 4px;' src='"); //$NON-NLS-1$
           result.append(localBrandingImageURI);
-          result.append("' width='42' height='42' align='absmiddle'/>&nbsp;");
-          result.append(DiagnosticDecorator.escapeContent(label).replace(" ", "&nbsp;"));
-          result.append("</b></span>");
+          result.append("' width='42' height='42' align='absmiddle'/>&nbsp;"); //$NON-NLS-1$
+          result.append(DiagnosticDecorator.escapeContent(label).replace(" ", "&nbsp;")); //$NON-NLS-1$ //$NON-NLS-2$
+          result.append("</b></span>"); //$NON-NLS-1$
           if (brandingSiteURI != null)
           {
-            result.append("</a>");
+            result.append("</a>"); //$NON-NLS-1$
           }
 
           String description = scope.getDescription();
           if (!StringUtil.isEmpty(description))
           {
-            result.append("<br/>");
-            result.append("<span style='font-size: 50%;'><br/></span>");
+            result.append("<br/>"); //$NON-NLS-1$
+            result.append("<span style='font-size: 50%;'><br/></span>"); //$NON-NLS-1$
             result.append(description);
-            result.append("<br/>");
+            result.append("<br/>"); //$NON-NLS-1$
           }
 
           // Add extra invisible lines to convince the tool tip size calculation that the text is 3 lines longer.
           // result.append("<div style='height=0px; display:none;'>&nbsp;&nbsp;&nbsp;&nbps;&nbps;&nbps;&nbps;&nbps;&nbps;&nbps;<br/><br/></br></div>");
-          result.append("<div style='height=0px; display:none;'>&nbps;&nbps;&nbps;&nbps;&nbps;<br/><br/></br></div>");
+          result.append("<div style='height=0px; display:none;'>&nbps;&nbps;&nbps;&nbps;&nbps;<br/><br/></br></div>"); //$NON-NLS-1$
 
           return result.toString();
         }
 
-        return "";
+        return ""; //$NON-NLS-1$
       }
     };
 
@@ -661,17 +662,17 @@ public class ProjectPage extends SetupWizardPage
     bucketToolBar.setSize(46, 22);
 
     final ToolItem addButton = new ToolItem(bucketToolBar, SWT.PUSH);
-    addButton.setToolTipText("Add Projects (or double-click in upper tree)");
-    addButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add"));
+    addButton.setToolTipText(Messages.ProjectPage_projectViewer_addButton_tooltip);
+    addButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add")); //$NON-NLS-1$
     addButton.setEnabled(false);
-    AccessUtil.setKey(addButton, "choose");
+    AccessUtil.setKey(addButton, "choose"); //$NON-NLS-1$
     addButtonAnimator = new AddButtonAnimator(addButton);
 
     final ToolItem removeButton = new ToolItem(bucketToolBar, SWT.PUSH);
-    removeButton.setToolTipText("Remove Projects (or double-click in lower table)");
-    removeButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("remove"));
+    removeButton.setToolTipText(Messages.ProjectPage_projectViewer_removeButton_tooltip);
+    removeButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("remove")); //$NON-NLS-1$
     removeButton.setEnabled(false);
-    AccessUtil.setKey(removeButton, "unchoose");
+    AccessUtil.setKey(removeButton, "unchoose"); //$NON-NLS-1$
 
     addButton.addSelectionListener(new SelectionAdapter()
     {
@@ -714,14 +715,14 @@ public class ProjectPage extends SetupWizardPage
         .setLabelProvider(new CatalogColumnLabelProvider(labelProvider.getImage(SetupFactory.eINSTANCE.createProjectCatalog()), existingStreams));
 
     TableColumn catalogColumn = catalogViewerColumn.getColumn();
-    catalogColumn.setText("Catalog");
+    catalogColumn.setText(Messages.ProjectPage_column_catalog);
     streamTableLayout.setColumnData(catalogColumn, new ColumnWeightData(30, true));
 
     TableViewerColumn projectViewerColumn = new TableViewerColumn(streamViewer, SWT.NONE);
     projectViewerColumn.setLabelProvider(new ProjectColumnLabelProvider(labelProvider.getImage(SetupFactory.eINSTANCE.createProject()), existingStreams));
 
     TableColumn projectColumn = projectViewerColumn.getColumn();
-    projectColumn.setText("Project");
+    projectColumn.setText(Messages.ProjectPage_column_project);
     streamTableLayout.setColumnData(projectColumn, new ColumnWeightData(40, true));
 
     TableViewerColumn streamViewerColumn = new TableViewerColumn(streamViewer, SWT.NONE);
@@ -729,7 +730,7 @@ public class ProjectPage extends SetupWizardPage
     hookCellEditor(streamViewerColumn);
 
     TableColumn streamColumn = streamViewerColumn.getColumn();
-    streamColumn.setText("Stream");
+    streamColumn.setText(Messages.ProjectPage_column_stream);
     streamTableLayout.setColumnData(streamColumn, new ColumnWeightData(30, true));
 
     collapseAllButton.addSelectionListener(new SelectionAdapter()
@@ -1081,7 +1082,7 @@ public class ProjectPage extends SetupWizardPage
         IStatus status = configurationProcessor.getStatus();
         if (!status.isOK())
         {
-          new StatusDialog(getShell(), "Workspace Problems", null, status, Diagnostic.ERROR).open();
+          new StatusDialog(getShell(), Messages.ProjectPage_status_workspaceProblems, null, status, Diagnostic.ERROR).open();
         }
       }
     };
@@ -1117,7 +1118,7 @@ public class ProjectPage extends SetupWizardPage
     {
       if (SetupPropertyTester.getHandlingShell() != getShell())
       {
-        setErrorMessage("Another setup wizard is already open.  Complete that interaction before importing projects.");
+        setErrorMessage(Messages.ProjectPage_error_anotherWizardAlreadyOpen);
         projectViewer.getTree().setEnabled(false);
       }
       else if (!isPageComplete() || projectViewer.getInput() == null)
@@ -1564,7 +1565,7 @@ public class ProjectPage extends SetupWizardPage
 
     if (builder.length() != 0)
     {
-      builder.append(" - ");
+      builder.append(" - "); //$NON-NLS-1$
     }
 
     String label = SetupCoreUtil.getLabel(project);
@@ -1744,7 +1745,7 @@ public class ProjectPage extends SetupWizardPage
             Project project = (Project)object;
             if (project.getStreams().isEmpty())
             {
-              return SetupUIPlugin.INSTANCE.getSWTImage("folder");
+              return SetupUIPlugin.INSTANCE.getSWTImage("folder"); //$NON-NLS-1$
             }
           }
 
@@ -2064,7 +2065,7 @@ public class ProjectPage extends SetupWizardPage
   {
     public AddButtonAnimator(ToolItem addButton)
     {
-      super(SetupUIPlugin.INSTANCE, addButton, "add", 7);
+      super(SetupUIPlugin.INSTANCE, addButton, "add", 7); //$NON-NLS-1$
     }
 
     @Override
@@ -2096,7 +2097,7 @@ public class ProjectPage extends SetupWizardPage
 
     public AddUserProjectDialog(Shell parent, Set<ProjectCatalog> projectCatalogs, CatalogSelector catalogSelector, AdapterFactoryEditingDomain editingDomain)
     {
-      super(parent, "Add User Projects", SWT.OPEN | SWT.MULTI);
+      super(parent, Messages.ProjectPage_addUserProjectDialog_title, SWT.OPEN | SWT.MULTI);
       this.projectCatalogs = projectCatalogs;
       this.catalogSelector = catalogSelector;
       this.editingDomain = editingDomain;
@@ -2118,7 +2119,7 @@ public class ProjectPage extends SetupWizardPage
       applyDialogFont(upperComposite);
 
       Label label = new Label(upperComposite, SWT.NONE);
-      label.setText("Catalog:");
+      label.setText(Messages.ProjectPage_addUserProjectDialog_catalog);
       label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 
       catalogViewer = new ComboViewer(upperComposite, SWT.READ_ONLY);
@@ -2196,7 +2197,7 @@ public class ProjectPage extends SetupWizardPage
         public void widgetSelected(SelectionEvent event)
         {
           FileDialog fileDialog = new FileDialog(getShell(), style);
-          fileDialog.setFilterExtensions(new String[] { "*.setup" });
+          fileDialog.setFilterExtensions(new String[] { "*.setup" }); //$NON-NLS-1$
           fileDialog.open();
 
           String filterPath = fileDialog.getFilterPath();
@@ -2206,10 +2207,10 @@ public class ProjectPage extends SetupWizardPage
           for (int i = 0, len = fileNames.length; i < len; i++)
           {
             uris.append(URI.createFileURI(filterPath + File.separator + fileNames[i]).toString());
-            uris.append("  ");
+            uris.append("  "); //$NON-NLS-1$
           }
 
-          uriField.setText((uriField.getText() + "  " + uris.toString()).trim());
+          uriField.setText((uriField.getText() + "  " + uris.toString()).trim()); //$NON-NLS-1$
         }
       });
     }
@@ -2233,7 +2234,7 @@ public class ProjectPage extends SetupWizardPage
                   if (element instanceof IFile)
                   {
                     IFile file = (IFile)element;
-                    return "setup".equals(file.getFileExtension());
+                    return "setup".equals(file.getFileExtension()); //$NON-NLS-1$
                   }
 
                   return true;
@@ -2243,15 +2244,15 @@ public class ProjectPage extends SetupWizardPage
           for (int i = 0, len = files.length; i < len; i++)
           {
             uris.append(URI.createURI(files[i].getLocationURI().toString(), true));
-            uris.append("  ");
+            uris.append("  "); //$NON-NLS-1$
           }
 
-          uriField.setText((uriField.getText() + "  " + uris.toString()).trim());
+          uriField.setText((uriField.getText() + "  " + uris.toString()).trim()); //$NON-NLS-1$
         }
 
         private String getContextPath()
         {
-          return context != null && context.isPlatformResource() ? URI.createURI(".").resolve(context).path().substring(9) : null;
+          return context != null && context.isPlatformResource() ? URI.createURI(".").resolve(context).path().substring(9) : null; //$NON-NLS-1$
         }
 
         private Object[] getContextSelection()
@@ -2326,37 +2327,29 @@ public class ProjectPage extends SetupWizardPage
       {
         if (invalidURIsSize == 1)
         {
-          message.append("The URI ");
+          message.append(NLS.bind(Messages.ProjectPage_uriDoesNotContainValidProject, invalidURIs.get(0)));
         }
         else
         {
-          message.append("The URIs ");
-        }
-
-        for (int i = 0; i < invalidURIsSize; ++i)
-        {
-          if (i != 0)
+          StringBuilder uris = new StringBuilder();
+          for (int i = 0; i < invalidURIsSize; ++i)
           {
-            message.append(", ");
-
-            if (i + 1 == invalidURIsSize)
+            if (i != 0)
             {
-              message.append(" and ");
+              uris.append(", "); //$NON-NLS-1$
+
+              if (i + 1 == invalidURIsSize)
+              {
+                uris.append(' ' + Messages.ProjectPage_and + ' ');
+              }
             }
+
+            uris.append('\'');
+            uris.append(invalidURIs.get(i));
+            uris.append('\'');
           }
 
-          message.append('\'');
-          message.append(invalidURIs.get(i));
-          message.append('\'');
-        }
-
-        if (invalidURIsSize == 1)
-        {
-          message.append(" does not contain a valid project.");
-        }
-        else
-        {
-          message.append(" do not contain valid projects.");
+          message.append(NLS.bind(Messages.ProjectPage_urisDoNotContainValidProjects, uris.toString()));
         }
       }
 
@@ -2365,51 +2358,44 @@ public class ProjectPage extends SetupWizardPage
       {
         if (message.length() != 0)
         {
-          message.append("\n\n");
+          message.append("\n\n"); //$NON-NLS-1$
         }
 
         if (invalidProjectsSize == 1)
         {
-          message.append("The project ");
+          message.append(NLS.bind(Messages.ProjectPage_projectAlreadyInIndex, invalidProjects.get(0)));
         }
         else
         {
-          message.append("The projects ");
-        }
-
-        for (int i = 0; i < invalidProjectsSize; ++i)
-        {
-          if (i != 0)
+          StringBuilder projects = new StringBuilder();
+          for (int i = 0; i < invalidProjectsSize; ++i)
           {
-            message.append(", ");
-
-            if (i + 1 == invalidProjectsSize)
+            if (i != 0)
             {
-              message.append(" and ");
+              projects.append(", "); //$NON-NLS-1$
+
+              if (i + 1 == invalidProjectsSize)
+              {
+                projects.append(' ' + Messages.ProjectPage_and + ' ');
+              }
             }
+
+            projects.append('\'');
+            projects.append(invalidProjects.get(i).getLabel());
+            projects.append('\'');
           }
 
-          message.append('\'');
-          message.append(invalidProjects.get(i).getLabel());
-          message.append('\'');
-        }
-
-        if (invalidProjectsSize == 1)
-        {
-          message.append(" is already contained in the index.");
-        }
-        else
-        {
-          message.append(" are already contained in the index.");
+          message.append(NLS.bind(Messages.ProjectPage_projectsAlreadyInIndex, projects.toString()));
         }
       }
 
       if (message.length() == 0)
       {
-        message.append("No URIs were specified. Hit Cancel to terminate the dialog.");
+        message.append(Messages.ProjectPage_noUrisSpecified);
       }
 
-      ErrorDialog.openError(getShell(), "Error Adding Projects", null, new Status(IStatus.ERROR, SetupUIPlugin.INSTANCE.getSymbolicName(), message.toString()));
+      ErrorDialog.openError(getShell(), Messages.ProjectPage_errorDialog_title, null,
+          new Status(IStatus.ERROR, SetupUIPlugin.INSTANCE.getSymbolicName(), message.toString()));
       return false;
     }
 
@@ -2564,30 +2550,31 @@ public class ProjectPage extends SetupWizardPage
         if (applyConfigurationButton == null)
         {
           applyConfigurationButton = new ToolItem(toolBar, SWT.NONE, 0);
-          applyConfigurationButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("full/obj16/Configuration"));
+          applyConfigurationButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("full/obj16/Configuration")); //$NON-NLS-1$
 
           ConfigurationSelectionAdapter selectionListener = new ConfigurationSelectionAdapter();
           selectionListener.updateResources(resources);
           applyConfigurationButton.addSelectionListener(selectionListener);
-          applyConfigurationButton.setData("ConfigurationSelectionAdapter", selectionListener);
-          AccessUtil.setKey(applyConfigurationButton, "applyConfiguration");
+          applyConfigurationButton.setData("ConfigurationSelectionAdapter", selectionListener); //$NON-NLS-1$
+          AccessUtil.setKey(applyConfigurationButton, "applyConfiguration"); //$NON-NLS-1$
 
           toolBar.getParent().layout(true);
           toolBar.layout(true);
         }
         else
         {
-          ConfigurationSelectionAdapter selectionListener = (ConfigurationSelectionAdapter)applyConfigurationButton.getData("ConfigurationSelectionAdapter");
+          ConfigurationSelectionAdapter selectionListener = (ConfigurationSelectionAdapter)applyConfigurationButton.getData("ConfigurationSelectionAdapter"); //$NON-NLS-1$
           selectionListener.updateResources(resources);
         }
 
         if (indexLocation != null)
         {
-          applyConfigurationButton.setToolTipText("Switch to the catalog index from the clipboard: " + IndexManager.getUnderlyingLocation(indexLocation));
+          applyConfigurationButton.setToolTipText(
+              NLS.bind(Messages.ProjectPage_applyConfigurationButton_tooltip_switchToCatalogIndex, IndexManager.getUnderlyingLocation(indexLocation)));
         }
         else
         {
-          applyConfigurationButton.setToolTipText("Apply the configuration from the clipboard");
+          applyConfigurationButton.setToolTipText(Messages.ProjectPage_applyConfigurationButton_tooltip_applyConfig);
         }
       }
       else
@@ -2625,7 +2612,7 @@ public class ProjectPage extends SetupWizardPage
 
     public static boolean isIndexURI(URI uri)
     {
-      return uri != null && (uri.isArchive() || SetupContext.INDEX_SETUP_NAME.equals(uri.lastSegment()) || "zip".equals(uri.fileExtension()));
+      return uri != null && (uri.isArchive() || SetupContext.INDEX_SETUP_NAME.equals(uri.lastSegment()) || "zip".equals(uri.fileExtension())); //$NON-NLS-1$
     }
 
     public static URI getIndexURI(Collection<? extends Resource> resources)

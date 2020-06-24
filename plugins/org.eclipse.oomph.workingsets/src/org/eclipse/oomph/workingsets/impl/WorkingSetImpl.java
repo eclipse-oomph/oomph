@@ -333,9 +333,9 @@ public class WorkingSetImpl extends ModelElementImpl implements WorkingSet
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (name: ");
+    result.append(" (name: "); //$NON-NLS-1$
     result.append(name);
-    result.append(", iD: ");
+    result.append(", iD: "); //$NON-NLS-1$
     result.append(iD);
     result.append(')');
     return result.toString();

@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.osgi.util.NLS;
 
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
@@ -39,7 +40,7 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
   @Override
   public boolean canHandle(URI uri)
   {
-    return "preference".equals(uri.scheme());
+    return "preference".equals(uri.scheme()); //$NON-NLS-1$
   }
 
   protected static class PreferenceAccessor
@@ -99,7 +100,7 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
       @Override
       public void close() throws IOException
       {
-        accessor.put(new String(toByteArray(), "UTF-8"));
+        accessor.put(new String(toByteArray(), "UTF-8")); //$NON-NLS-1$
       }
     };
   }
@@ -111,7 +112,7 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
     String value = new PreferenceAccessor(preferencePath).get();
     if (value == null)
     {
-      throw new IOException("No preference value available for " + preferencePath);
+      throw new IOException(NLS.bind(Messages.PreferencesURIHandlerImpl_NoPreferenceAvailable_exception, preferencePath));
     }
     return new URIConverter.ReadableInputStream(value);
   }

@@ -77,6 +77,6 @@ public final class SynchronizedCounter
   @Override
   public String toString()
   {
-    return "Counter[" + count + "]";
+    return "Counter[" + count + "]"; //$NON-NLS-1$ //$NON-NLS-2$
   }
 }

@@ -62,7 +62,7 @@ public class CategoryGeneratorItemProvider extends SiteGeneratorItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/CategoryGenerator"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/CategoryGenerator")); //$NON-NLS-1$
   }
 
   /**
@@ -85,7 +85,7 @@ public class CategoryGeneratorItemProvider extends SiteGeneratorItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_CategoryGenerator_type");
+    return getString("_UI_CategoryGenerator_type"); //$NON-NLS-1$
   }
 
   /**

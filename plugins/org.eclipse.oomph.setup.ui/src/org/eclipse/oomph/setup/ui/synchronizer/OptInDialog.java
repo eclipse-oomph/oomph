@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui.synchronizer;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -39,10 +40,10 @@ public class OptInDialog extends AbstractServiceDialog
   @Override
   protected void createUI(Composite parent, String serviceLabel, String shortLabel)
   {
-    setMessage("Do you want to save your preferences on the " + serviceLabel + " server so you can share them on other workstations?");
+    setMessage(NLS.bind(Messages.OptInDialog_message, serviceLabel));
 
     Button yesButton = new Button(parent, SWT.RADIO);
-    yesButton.setText("Yes  - You will be required to login to your " + shortLabel + " account.");
+    yesButton.setText(NLS.bind(Messages.OptInDialog_yesButton_text, shortLabel));
     yesButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -53,7 +54,7 @@ public class OptInDialog extends AbstractServiceDialog
     });
 
     Button noButton = new Button(parent, SWT.RADIO);
-    noButton.setText("No  - Preferences will be saved locally.");
+    noButton.setText(Messages.OptInDialog_noButton_text);
     noButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -68,7 +69,7 @@ public class OptInDialog extends AbstractServiceDialog
   protected void createButtonsForButtonBar(Composite parent)
   {
     createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
-    createButton(parent, IDialogConstants.CANCEL_ID, "Ask Me Later", false);
+    createButton(parent, IDialogConstants.CANCEL_ID, Messages.OptInDialog_askMeLaterButton_text, false);
   }
 
   @Override

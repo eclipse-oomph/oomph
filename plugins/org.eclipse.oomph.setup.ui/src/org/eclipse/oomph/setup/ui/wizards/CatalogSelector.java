@@ -106,7 +106,7 @@ public class CatalogSelector
           if (!catalog.eIsProxy())
           {
             String name = catalog.getName();
-            if (!SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(name) && !"redirectable".equals(name))
+            if (!SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(name) && !"redirectable".equals(name)) //$NON-NLS-1$
             {
               final MenuItem item = new MenuItem(menu, SWT.CHECK);
               item.setText(SetupCoreUtil.getLabel(catalog));
@@ -139,7 +139,7 @@ public class CatalogSelector
             }
 
             MenuItem menuItem = new MenuItem(menu, SWT.CASCADE);
-            menuItem.setText("Switch Catalog Index");
+            menuItem.setText(Messages.CatalogSelector_menuItem_text);
             Menu switchMenu = new Menu(menu);
             menuItem.setMenu(switchMenu);
 
@@ -172,7 +172,7 @@ public class CatalogSelector
             }
 
             final MenuItem manageItem = new MenuItem(switchMenu, SWT.PUSH);
-            manageItem.setText("Manage...");
+            manageItem.setText(Messages.CatalogSelector_manageItem_text);
             manageItem.addSelectionListener(new SelectionAdapter()
             {
               @Override

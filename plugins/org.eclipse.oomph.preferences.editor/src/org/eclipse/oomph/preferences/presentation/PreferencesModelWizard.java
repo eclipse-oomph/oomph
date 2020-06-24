@@ -83,7 +83,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
    * @generated
    */
   public static final List<String> FILE_EXTENSIONS = Collections
-      .unmodifiableList(Arrays.asList(PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditorFilenameExtensions").split("\\s*,\\s*")));
+      .unmodifiableList(Arrays.asList(PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditorFilenameExtensions").split("\\s*,\\s*"))); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * A formatted list of supported file extensions, suitable for display.
@@ -91,8 +91,8 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final String FORMATTED_FILE_EXTENSIONS = PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditorFilenameExtensions")
-      .replaceAll("\\s*,\\s*", ", ");
+  public static final String FORMATTED_FILE_EXTENSIONS = PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditorFilenameExtensions") //$NON-NLS-1$
+      .replaceAll("\\s*,\\s*", ", "); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * This caches an instance of the model package.
@@ -160,9 +160,9 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
   {
     this.workbench = workbench;
     this.selection = selection;
-    setWindowTitle(PreferencesEditorPlugin.INSTANCE.getString("_UI_Wizard_label"));
+    setWindowTitle(PreferencesEditorPlugin.INSTANCE.getString("_UI_Wizard_label")); //$NON-NLS-1$
     setDefaultPageImageDescriptor(
-        ExtendedImageRegistry.INSTANCE.getImageDescriptor(PreferencesEditorPlugin.INSTANCE.getImage("full/wizban/NewPreferences.png")));
+        ExtendedImageRegistry.INSTANCE.getImageDescriptor(PreferencesEditorPlugin.INSTANCE.getImage("full/wizban/NewPreferences.png"))); //$NON-NLS-1$
   }
 
   /**
@@ -293,7 +293,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
       }
       catch (PartInitException exception)
       {
-        MessageDialog.openError(workbenchWindow.getShell(), PreferencesEditorPlugin.INSTANCE.getString("_UI_OpenEditorError_label"), exception.getMessage());
+        MessageDialog.openError(workbenchWindow.getShell(), PreferencesEditorPlugin.INSTANCE.getString("_UI_OpenEditorError_label"), exception.getMessage()); //$NON-NLS-1$
         return false;
       }
 
@@ -339,7 +339,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
         String extension = new Path(getFileName()).getFileExtension();
         if (extension == null || !FILE_EXTENSIONS.contains(extension))
         {
-          String key = FILE_EXTENSIONS.size() > 1 ? "_WARN_FilenameExtensions" : "_WARN_FilenameExtension";
+          String key = FILE_EXTENSIONS.size() > 1 ? "_WARN_FilenameExtensions" : "_WARN_FilenameExtension"; //$NON-NLS-1$ //$NON-NLS-2$
           setErrorMessage(PreferencesEditorPlugin.INSTANCE.getString(key, new Object[] { FORMATTED_FILE_EXTENSIONS }));
           return false;
         }
@@ -422,7 +422,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
 
       Label containerLabel = new Label(composite, SWT.LEFT);
       {
-        containerLabel.setText(PreferencesEditorPlugin.INSTANCE.getString("_UI_ModelObject"));
+        containerLabel.setText(PreferencesEditorPlugin.INSTANCE.getString("_UI_ModelObject")); //$NON-NLS-1$
 
         GridData data = new GridData();
         data.horizontalAlignment = GridData.FILL;
@@ -450,7 +450,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
 
       Label encodingLabel = new Label(composite, SWT.LEFT);
       {
-        encodingLabel.setText(PreferencesEditorPlugin.INSTANCE.getString("_UI_XMLEncoding"));
+        encodingLabel.setText(PreferencesEditorPlugin.INSTANCE.getString("_UI_XMLEncoding")); //$NON-NLS-1$
 
         GridData data = new GridData();
         data.horizontalAlignment = GridData.FILL;
@@ -562,7 +562,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
     {
       try
       {
-        return PreferencesEditPlugin.INSTANCE.getString("_UI_" + typeName + "_type");
+        return PreferencesEditPlugin.INSTANCE.getString("_UI_" + typeName + "_type"); //$NON-NLS-1$ //$NON-NLS-2$
       }
       catch (MissingResourceException mre)
       {
@@ -581,7 +581,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
       if (encodings == null)
       {
         encodings = new ArrayList<String>();
-        for (StringTokenizer stringTokenizer = new StringTokenizer(PreferencesEditorPlugin.INSTANCE.getString("_UI_XMLEncodingChoices")); stringTokenizer
+        for (StringTokenizer stringTokenizer = new StringTokenizer(PreferencesEditorPlugin.INSTANCE.getString("_UI_XMLEncodingChoices")); stringTokenizer //$NON-NLS-1$
             .hasMoreTokens();)
         {
           encodings.add(stringTokenizer.nextToken());
@@ -602,10 +602,10 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
   {
     // Create a page, set the title, and the initial model file name.
     //
-    newFileCreationPage = new PreferencesModelWizardNewFileCreationPage("Whatever", selection);
-    newFileCreationPage.setTitle(PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesModelWizard_label"));
-    newFileCreationPage.setDescription(PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesModelWizard_description"));
-    newFileCreationPage.setFileName(PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditorFilenameDefaultBase") + "." + FILE_EXTENSIONS.get(0));
+    newFileCreationPage = new PreferencesModelWizardNewFileCreationPage("Whatever", selection); //$NON-NLS-1$
+    newFileCreationPage.setTitle(PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesModelWizard_label")); //$NON-NLS-1$
+    newFileCreationPage.setDescription(PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesModelWizard_description")); //$NON-NLS-1$
+    newFileCreationPage.setFileName(PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditorFilenameDefaultBase") + "." + FILE_EXTENSIONS.get(0)); //$NON-NLS-1$ //$NON-NLS-2$
     addPage(newFileCreationPage);
 
     // Try and get the resource selection to determine a current directory for the file dialog.
@@ -635,20 +635,20 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
 
           // Make up a unique new name here.
           //
-          String defaultModelBaseFilename = PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditorFilenameDefaultBase");
+          String defaultModelBaseFilename = PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditorFilenameDefaultBase"); //$NON-NLS-1$
           String defaultModelFilenameExtension = FILE_EXTENSIONS.get(0);
-          String modelFilename = defaultModelBaseFilename + "." + defaultModelFilenameExtension;
+          String modelFilename = defaultModelBaseFilename + "." + defaultModelFilenameExtension; //$NON-NLS-1$
           for (int i = 1; ((IContainer)selectedResource).findMember(modelFilename) != null; ++i)
           {
-            modelFilename = defaultModelBaseFilename + i + "." + defaultModelFilenameExtension;
+            modelFilename = defaultModelBaseFilename + i + "." + defaultModelFilenameExtension; //$NON-NLS-1$
           }
           newFileCreationPage.setFileName(modelFilename);
         }
       }
     }
-    initialObjectCreationPage = new PreferencesModelWizardInitialObjectCreationPage("Whatever2");
-    initialObjectCreationPage.setTitle(PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesModelWizard_label"));
-    initialObjectCreationPage.setDescription(PreferencesEditorPlugin.INSTANCE.getString("_UI_Wizard_initial_object_description"));
+    initialObjectCreationPage = new PreferencesModelWizardInitialObjectCreationPage("Whatever2"); //$NON-NLS-1$
+    initialObjectCreationPage.setTitle(PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesModelWizard_label")); //$NON-NLS-1$
+    initialObjectCreationPage.setDescription(PreferencesEditorPlugin.INSTANCE.getString("_UI_Wizard_initial_object_description")); //$NON-NLS-1$
     addPage(initialObjectCreationPage);
   }
 

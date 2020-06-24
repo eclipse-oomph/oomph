@@ -61,7 +61,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
     final ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.HORIZONTAL);
 
     final ToolItem toolItem = new ToolItem(toolBar, SWT.CHECK);
-    toolItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("progress0.png"));
+    toolItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("progress0.png")); //$NON-NLS-1$
     toolItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -100,7 +100,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
     }
 
     // Create an animator to indicate the a setup is being performed, and to provide feedback once it's done.
-    final ButtonAnimator buttonAnimator = new ButtonAnimator(SetupEditorPlugin.INSTANCE, toolItem, "progress.png", 7, true)
+    final ButtonAnimator buttonAnimator = new ButtonAnimator(SetupEditorPlugin.INSTANCE, toolItem, "progress.png", 7, true) //$NON-NLS-1$
     {
       private boolean done;
 
@@ -154,29 +154,29 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
               {
                 case IStatus.OK:
                 {
-                  statusImage = "progress_success.png";
+                  statusImage = "progress_success.png"; //$NON-NLS-1$
                   delayedDispose(shell);
                   break;
                 }
                 case IStatus.WARNING:
                 {
-                  statusImage = "progress_warning.png";
+                  statusImage = "progress_warning.png"; //$NON-NLS-1$
                   break;
                 }
                 case IStatus.ERROR:
                 {
-                  statusImage = "progress_error.png";
+                  statusImage = "progress_error.png"; //$NON-NLS-1$
                   break;
                 }
                 case IStatus.CANCEL:
                 {
-                  statusImage = "progress_cancel.png";
+                  statusImage = "progress_cancel.png"; //$NON-NLS-1$
                   delayedDispose(shell);
                   break;
                 }
                 default:
                 {
-                  statusImage = "progress.png";
+                  statusImage = "progress.png"; //$NON-NLS-1$
                   break;
                 }
               }
@@ -188,7 +188,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
 
               for (int i = 0; i < images.length; ++i)
               {
-                images[i] = SetupEditorPlugin.INSTANCE.getSWTImage(i >= 4 ? statusImage : "progress.png");
+                images[i] = SetupEditorPlugin.INSTANCE.getSWTImage(i >= 4 ? statusImage : "progress.png"); //$NON-NLS-1$
               }
 
               done = true;
@@ -261,13 +261,13 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
     try
     {
       // Use the model service to move the perform status control before the progress bar.
-      Object model = ReflectUtil.getValue("model", workbenchWindow);
-      Object modelService = ReflectUtil.getValue("modelService", workbenchWindow);
-      Class<?> elementClass = CommonPlugin.loadClass("org.eclipse.ui.workbench", "org.eclipse.e4.ui.model.application.ui.MUIElement");
-      Method findMethod = ReflectUtil.getMethod(modelService.getClass(), "find", String.class, elementClass);
+      Object model = ReflectUtil.getValue("model", workbenchWindow); //$NON-NLS-1$
+      Object modelService = ReflectUtil.getValue("modelService", workbenchWindow); //$NON-NLS-1$
+      Class<?> elementClass = CommonPlugin.loadClass("org.eclipse.ui.workbench", "org.eclipse.e4.ui.model.application.ui.MUIElement"); //$NON-NLS-1$ //$NON-NLS-2$
+      Method findMethod = ReflectUtil.getMethod(modelService.getClass(), "find", String.class, elementClass); //$NON-NLS-1$
 
-      EObject progressBar = (EObject)ReflectUtil.invokeMethod(findMethod, modelService, "org.eclipse.ui.ProgressBar", model);
-      EObject performStatusBar = (EObject)ReflectUtil.invokeMethod(findMethod, modelService, "org.eclipse.oomph.setup.status", model);
+      EObject progressBar = (EObject)ReflectUtil.invokeMethod(findMethod, modelService, "org.eclipse.ui.ProgressBar", model); //$NON-NLS-1$
+      EObject performStatusBar = (EObject)ReflectUtil.invokeMethod(findMethod, modelService, "org.eclipse.oomph.setup.status", model); //$NON-NLS-1$
 
       if (progressBar == null)
       {

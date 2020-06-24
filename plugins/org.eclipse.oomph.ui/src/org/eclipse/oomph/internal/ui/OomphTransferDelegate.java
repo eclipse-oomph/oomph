@@ -264,7 +264,7 @@ public abstract class OomphTransferDelegate
   @Override
   public String toString()
   {
-    return super.toString() + " " + Arrays.asList(getTransfer().getSupportedTypes());
+    return super.toString() + " " + Arrays.asList(getTransfer().getSupportedTypes()); //$NON-NLS-1$
   }
 
   public abstract static class SelectionTransferDelegate extends OomphTransferDelegate
@@ -327,7 +327,7 @@ public abstract class OomphTransferDelegate
 
       result.setURIConverter(resourceSet.getURIConverter());
       result.setPackageRegistry(new EPackageRegistryImpl(resourceSet.getPackageRegistry()));
-      result.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", RESOURCE_FACTORY);
+      result.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", RESOURCE_FACTORY); //$NON-NLS-1$
 
       return result;
     }
@@ -499,7 +499,7 @@ public abstract class OomphTransferDelegate
           Registry packageRegistry = transferResourceSet.getPackageRegistry();
           for (EPackage ePackage : ePackages.toArray(new EPackage[ePackages.size()]))
           {
-            Resource resource = transferResourceSet.createResource(URI.createURI("*.ecore"));
+            Resource resource = transferResourceSet.createResource(URI.createURI("*.ecore")); //$NON-NLS-1$
             resource.getContents().add(ePackage);
             resource.setURI(ePackage.eResource().getURI());
 
@@ -532,7 +532,7 @@ public abstract class OomphTransferDelegate
           // Read in all the objects, which will use the appropriate registered packages.
           InternalEList<InternalEObject> eObjects = new BasicInternalEList<InternalEObject>(EObject.class);
           eObjectInputStream.loadEObjects(eObjects);
-          Resource resource = transferResourceSet.createResource(URI.createURI("*.xmi"));
+          Resource resource = transferResourceSet.createResource(URI.createURI("*.xmi")); //$NON-NLS-1$
           resource.getContents().addAll(eObjects);
 
           return eObjects;
@@ -1011,13 +1011,13 @@ public abstract class OomphTransferDelegate
           return result;
         }
 
-        String[] uriStrings = value.split("\r?\n");
+        String[] uriStrings = value.split("\r?\n"); //$NON-NLS-1$
         Set<URI> uris = new LinkedHashSet<URI>();
         for (String uriString : uriStrings)
         {
           try
           {
-            String trimmedURIString = uriString.trim().replace(" ", "%20");
+            String trimmedURIString = uriString.trim().replace(" ", "%20"); //$NON-NLS-1$ //$NON-NLS-2$
             URI uri = URI.createURI(trimmedURIString);
             if (uri.scheme() != null && uri.scheme().length() > 1)
             {
@@ -1047,7 +1047,7 @@ public abstract class OomphTransferDelegate
     {
       if (value != null)
       {
-        int start = value.indexOf("<?xml");
+        int start = value.indexOf("<?xml"); //$NON-NLS-1$
         if (start != -1)
         {
           int end = value.lastIndexOf('>');
@@ -1072,7 +1072,7 @@ public abstract class OomphTransferDelegate
       try
       {
         String name = XMLTypeFactory.eINSTANCE.convertHexBinary(IOUtil.getSHA1(xml));
-        XMLResource resource = (XMLResource)resourceSet.createResource(URI.createURI("dummy:/" + name + ".xmi"));
+        XMLResource resource = (XMLResource)resourceSet.createResource(URI.createURI("dummy:/" + name + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
         resource.load(new InputSource(new StringReader(xml)), null);
         return resource.getContents();
       }
@@ -1128,7 +1128,7 @@ public abstract class OomphTransferDelegate
     {
       if (!eObjects.isEmpty())
       {
-        XMLResource resource = (XMLResource)RESOURCE_FACTORY.createResource(URI.createURI("dummy:/*.xmi"));
+        XMLResource resource = (XMLResource)RESOURCE_FACTORY.createResource(URI.createURI("dummy:/*.xmi")); //$NON-NLS-1$
 
         ProxifyingCopier copier = new ProxifyingCopier(true, false);
         Collection<EObject> eObjectCopies = copier.copyAll(eObjects);
@@ -1154,7 +1154,7 @@ public abstract class OomphTransferDelegate
         {
           if (result.length() > 0)
           {
-            result.append(System.getProperty("line.separator"));
+            result.append(System.getProperty("line.separator")); //$NON-NLS-1$
           }
 
           result.append(value);

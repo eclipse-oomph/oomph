@@ -43,6 +43,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import org.eclipse.osgi.util.NLS;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -543,7 +545,7 @@ public class Synchronization
   {
     for (int i = lastID + 1; i < Integer.MAX_VALUE; i++)
     {
-      String id = "sync" + i;
+      String id = "sync" + i; //$NON-NLS-1$
       if (ids.add(id))
       {
         lastID = i;
@@ -551,7 +553,7 @@ public class Synchronization
       }
     }
 
-    throw new IllegalStateException("Too many IDs");
+    throw new IllegalStateException(Messages.Synchronization_TooManyIDs_exception);
   }
 
   public String getID(SyncAction action)
@@ -908,7 +910,7 @@ public class Synchronization
 
     public DuplicateIDException(String id)
     {
-      super("Duplicate ID: " + id);
+      super(NLS.bind(Messages.Synchronization_DuplicateID_exception, id));
     }
   }
 
@@ -921,7 +923,7 @@ public class Synchronization
 
     public ConflictException(SyncAction action)
     {
-      super("Conflict: " + action);
+      super(NLS.bind(Messages.Synchronization_Conflict_exception, action));
     }
   }
 }

@@ -75,8 +75,8 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
   protected void addRootFolderPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_SourceLocator_rootFolder_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_SourceLocator_rootFolder_feature", "_UI_SourceLocator_type"),
+        getString("_UI_SourceLocator_rootFolder_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_SourceLocator_rootFolder_feature", "_UI_SourceLocator_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ResourcesPackage.Literals.SOURCE_LOCATOR__ROOT_FOLDER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -89,8 +89,8 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
   protected void addExcludedPathsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_SourceLocator_excludedPaths_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_SourceLocator_excludedPaths_feature", "_UI_SourceLocator_type"),
+        getString("_UI_SourceLocator_excludedPaths_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_SourceLocator_excludedPaths_feature", "_UI_SourceLocator_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ResourcesPackage.Literals.SOURCE_LOCATOR__EXCLUDED_PATHS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -103,8 +103,8 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
   protected void addLocateNestedProjectsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_SourceLocator_locateNestedProjects_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_SourceLocator_locateNestedProjects_feature", "_UI_SourceLocator_type"),
+        getString("_UI_SourceLocator_locateNestedProjects_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_SourceLocator_locateNestedProjects_feature", "_UI_SourceLocator_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ResourcesPackage.Literals.SOURCE_LOCATOR__LOCATE_NESTED_PROJECTS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -151,7 +151,7 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/SourceLocator"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/SourceLocator")); //$NON-NLS-1$
   }
 
   /**
@@ -175,7 +175,8 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
   public String getText(Object object)
   {
     String label = ((SourceLocator)object).getRootFolder();
-    return label == null || label.length() == 0 ? getString("_UI_SourceLocator_type") : getString("_UI_SourceLocator_type") + " " + label;
+    return label == null || label.length() == 0 ? getString("_UI_SourceLocator_type") : //$NON-NLS-1$
+        getString("_UI_SourceLocator_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

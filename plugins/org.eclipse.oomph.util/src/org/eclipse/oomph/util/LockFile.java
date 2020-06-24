@@ -12,6 +12,8 @@ package org.eclipse.oomph.util;
 
 import org.eclipse.oomph.internal.util.UtilPlugin;
 
+import org.eclipse.osgi.util.NLS;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -54,7 +56,7 @@ public final class LockFile
         lock = stream.getChannel().tryLock();
         if (lock == null)
         {
-          throw new IOException(file + " could not be locked");
+          throw new IOException(NLS.bind(Messages.LockFile_CannotLock_exception, file));
         }
       }
       catch (IOException ex)

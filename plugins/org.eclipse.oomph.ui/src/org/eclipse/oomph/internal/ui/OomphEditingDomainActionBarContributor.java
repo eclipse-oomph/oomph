@@ -71,14 +71,14 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
     try
     {
       // Try to create EMF's expand-all action, which is new to EMF 2.14.
-      Field expandAllActionField = ReflectUtil.getField(EditingDomainActionBarContributor.class, "expandAllAction");
-      Class<?> expandAllActionClass = CommonPlugin.loadClass("org.eclipse.emf.edit.ui", "org.eclipse.emf.edit.ui.action.ExpandAllAction");
+      Field expandAllActionField = ReflectUtil.getField(EditingDomainActionBarContributor.class, "expandAllAction"); //$NON-NLS-1$
+      Class<?> expandAllActionClass = CommonPlugin.loadClass("org.eclipse.emf.edit.ui", "org.eclipse.emf.edit.ui.action.ExpandAllAction"); //$NON-NLS-1$ //$NON-NLS-2$
       Object expandAllAction = expandAllActionClass.newInstance();
       expandAllActionField.set(this, expandAllAction);
 
       // Try to create EMF's collapse-all action, which is new to EMF 2.14.
-      Field collapseAllActionField = ReflectUtil.getField(EditingDomainActionBarContributor.class, "collapseAllAction");
-      Class<?> collapseAllActionClass = CommonPlugin.loadClass("org.eclipse.emf.edit.ui", "org.eclipse.emf.edit.ui.action.CollapseAllAction");
+      Field collapseAllActionField = ReflectUtil.getField(EditingDomainActionBarContributor.class, "collapseAllAction"); //$NON-NLS-1$
+      Class<?> collapseAllActionClass = CommonPlugin.loadClass("org.eclipse.emf.edit.ui", "org.eclipse.emf.edit.ui.action.CollapseAllAction"); //$NON-NLS-1$ //$NON-NLS-2$
       Object collapseAllAction = collapseAllActionClass.newInstance();
       collapseAllActionField.set(this, collapseAllAction);
     }
@@ -117,7 +117,7 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
   {
     // Specialize this so we can add the find action relative to the delete action.
     DeleteAction deleteAction = super.createDeleteAction();
-    deleteAction.setId("delete");
+    deleteAction.setId("delete"); //$NON-NLS-1$
     return deleteAction;
   }
 
@@ -190,8 +190,8 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
   {
     super.menuAboutToShow(menuManager);
 
-    menuManager.insertAfter("delete", new ActionContributionItem(findAction));
-    menuManager.insertAfter("delete", new Separator());
+    menuManager.insertAfter("delete", new ActionContributionItem(findAction)); //$NON-NLS-1$
+    menuManager.insertAfter("delete", new Separator()); //$NON-NLS-1$
   }
 
   public static class FindAction extends Action
@@ -200,7 +200,7 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
 
     public FindAction()
     {
-      super("Find/Replace...", UIPlugin.INSTANCE.getImageDescriptor("search"));
+      super(Messages.OomphEditingDomainActionBarContributor_findOrReplace, UIPlugin.INSTANCE.getImageDescriptor("search")); //$NON-NLS-1$
     }
 
     @Override
@@ -239,9 +239,9 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
 
     public CollapseAllAction()
     {
-      super("Collapse All", IAction.AS_PUSH_BUTTON);
-      setImageDescriptor(UIPlugin.INSTANCE.getImageDescriptor("collapse-all"));
-      setToolTipText("Collapse all expanded elements");
+      super(Messages.OomphEditingDomainActionBarContributor_collapseAll_action, IAction.AS_PUSH_BUTTON);
+      setImageDescriptor(UIPlugin.INSTANCE.getImageDescriptor("collapse-all")); //$NON-NLS-1$
+      setToolTipText(Messages.OomphEditingDomainActionBarContributor_collapseAll_tooltip);
     }
 
     @Override

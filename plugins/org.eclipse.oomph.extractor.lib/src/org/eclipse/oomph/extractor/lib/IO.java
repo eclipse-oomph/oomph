@@ -40,12 +40,12 @@ public abstract class IO
       close(inputStream);
     }
 
-    return new String(outputStream.toByteArray(), "UTF-8");
+    return new String(outputStream.toByteArray(), "UTF-8"); //$NON-NLS-1$
   }
 
   public static void writeUTF8(File file, String contents) throws IOException
   {
-    InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8"));
+    InputStream inputStream = new ByteArrayInputStream(contents.getBytes("UTF-8")); //$NON-NLS-1$
     OutputStream outputStream = new FileOutputStream(file);
 
     try
@@ -68,7 +68,7 @@ public abstract class IO
     while (ze != null)
     {
       String name = ze.getName();
-      if (!"extractor.exe".equals(name) && !name.endsWith("/"))
+      if (!"extractor.exe".equals(name) && !name.endsWith("/")) //$NON-NLS-1$ //$NON-NLS-2$
       {
         File file = new File(targetFolder, name);
         file.getParentFile().mkdirs();

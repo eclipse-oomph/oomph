@@ -52,7 +52,7 @@ public class EclipseProjectFactoryImpl extends XMLProjectFactoryImpl implements 
   @Override
   protected String getXMLFileName()
   {
-    return ".project";
+    return ".project"; //$NON-NLS-1$
   }
 
   @Override
@@ -62,17 +62,17 @@ public class EclipseProjectFactoryImpl extends XMLProjectFactoryImpl implements 
     {
       public void handleElement(Element element) throws Exception
       {
-        if ("name".equals(element.getTagName()))
+        if ("name".equals(element.getTagName())) //$NON-NLS-1$
         {
           String name = element.getTextContent().trim();
           description.internalSetName(name);
         }
-        else if ("comment".equals(element.getTagName()))
+        else if ("comment".equals(element.getTagName())) //$NON-NLS-1$
         {
           String comment = element.getTextContent().trim();
           description.internalSetComment(comment);
         }
-        else if ("buildSpec".equals(element.getTagName()))
+        else if ("buildSpec".equals(element.getTagName())) //$NON-NLS-1$
         {
           XMLUtil.handleChildElements(element, new XMLUtil.ElementHandler()
           {
@@ -89,7 +89,7 @@ public class EclipseProjectFactoryImpl extends XMLProjectFactoryImpl implements 
             }
           });
         }
-        else if ("natures".equals(element.getTagName()))
+        else if ("natures".equals(element.getTagName())) //$NON-NLS-1$
         {
           XMLUtil.handleChildElements(element, new XMLUtil.ElementHandler()
           {

@@ -54,7 +54,7 @@ import java.util.Map;
  */
 public final class BaseUtil
 {
-  private static final String BOGUS_SCHEME = URI.createURI("bogus:bogus").scheme();
+  private static final String BOGUS_SCHEME = URI.createURI("bogus:bogus").scheme(); //$NON-NLS-1$
 
   private static final Adapter REDUCED = new Adapter()
   {
@@ -128,7 +128,7 @@ public final class BaseUtil
     String relativeURIFragmentPath = EcoreUtil.getRelativeURIFragmentPath(rootContainer, eObject);
     if (relativeURIFragmentPath.length() != 0)
     {
-      uri = uri.trimFragment().appendFragment(uri.fragment() + "/" + relativeURIFragmentPath);
+      uri = uri.trimFragment().appendFragment(uri.fragment() + "/" + relativeURIFragmentPath); //$NON-NLS-1$
     }
 
     return uri;
@@ -252,7 +252,7 @@ public final class BaseUtil
       URI uri = uris[i];
       if (uri != null)
       {
-        lockLocations[i] = uri.trimSegments(1).appendSegment(uri.lastSegment() + ".lock");
+        lockLocations[i] = uri.trimSegments(1).appendSegment(uri.lastSegment() + ".lock"); //$NON-NLS-1$
       }
     }
 
@@ -410,7 +410,7 @@ public final class BaseUtil
 
   public static URI createBogusURI(URI uri)
   {
-    return URI.createURI("bogus:" + uri);
+    return URI.createURI("bogus:" + uri); //$NON-NLS-1$
   }
 
   public static URI resolveBogusURI(URI uri)

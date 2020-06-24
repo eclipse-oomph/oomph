@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui.synchronizer;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -40,10 +41,10 @@ public class OptOutDialog extends AbstractServiceDialog
   @Override
   protected void createUI(Composite parent, String serviceLabel, String shortLabel)
   {
-    setMessage("You did not login to your " + shortLabel + " account. Do you want to try again later?");
+    setMessage(NLS.bind(Messages.OptOutDialog_message, shortLabel));
 
     Button yesButton = new Button(parent, SWT.RADIO);
-    yesButton.setText("Yes  - Skip now and try again later.");
+    yesButton.setText(Messages.OptOutDialog_yesButton_text);
     yesButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -54,7 +55,7 @@ public class OptOutDialog extends AbstractServiceDialog
     });
 
     Button noButton = new Button(parent, SWT.RADIO);
-    noButton.setText("No  - Disable preference synchronization.");
+    noButton.setText(Messages.OptOutDialog_noButton_text);
     noButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -67,7 +68,7 @@ public class OptOutDialog extends AbstractServiceDialog
     new Label(parent, SWT.NONE);
 
     Label hint = new Label(parent, SWT.WRAP);
-    hint.setText("You can change the synchronization settings at any time via\nPreferences | Oomph | Setup Tasks | Preference Synchronizer.");
+    hint.setText(Messages.OptOutDialog_hint);
   }
 
   @Override

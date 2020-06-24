@@ -81,7 +81,7 @@ public class SetupP2FactoryImpl extends EFactoryImpl implements SetupP2Factory
       case SetupP2Package.P2_TASK:
         return createP2Task();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

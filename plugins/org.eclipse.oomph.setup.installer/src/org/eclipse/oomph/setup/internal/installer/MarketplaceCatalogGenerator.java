@@ -119,6 +119,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Ed Merks
  */
+@SuppressWarnings("nls")
 public class MarketplaceCatalogGenerator implements IApplication
 {
   private static final String PROCESSING_ANNOTATION_SOURCE = "Processing";

@@ -87,17 +87,17 @@ import java.util.regex.Pattern;
  */
 public abstract class RecorderTransaction
 {
-  private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("\r\n?|\n\r?");
+  private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("\r\n?|\n\r?"); //$NON-NLS-1$
 
-  private static final String POLICIES_FILE_NAME = "policies.properties";
+  private static final String POLICIES_FILE_NAME = "policies.properties"; //$NON-NLS-1$
 
-  private static final String POLICIES_EXT_POINT = "org.eclipse.oomph.setup.ui.preferencePolicies";
+  private static final String POLICIES_EXT_POINT = "org.eclipse.oomph.setup.ui.preferencePolicies"; //$NON-NLS-1$
 
-  private static final String POLICY_RECORD = "record";
+  private static final String POLICY_RECORD = "record"; //$NON-NLS-1$
 
-  private static final String POLICY_IGNORE = "ignore";
+  private static final String POLICY_IGNORE = "ignore"; //$NON-NLS-1$
 
-  private static final String REMOVE_PREFERENCE_MARKER = "REMOVE_PREFERENCE_MARKER";
+  private static final String REMOVE_PREFERENCE_MARKER = "REMOVE_PREFERENCE_MARKER"; //$NON-NLS-1$
 
   private static RecorderTransaction instance;
 
@@ -339,7 +339,7 @@ public abstract class RecorderTransaction
 
     if (recorderAnnotation == null)
     {
-      CompoundTask preferenceCompound = SetupFactory.eINSTANCE.createCompoundTask("User Preferences");
+      CompoundTask preferenceCompound = SetupFactory.eINSTANCE.createCompoundTask(Messages.RecorderTransaction_preferenceCompound_name);
       preferenceContainer = preferenceCompound;
       rootObject.getSetupTasks().add(0, preferenceCompound);
 
@@ -517,8 +517,8 @@ public abstract class RecorderTransaction
     {
       try
       {
-        String pluginRelativePath = configurationElement.getAttribute("pluginRelativePath");
-        while (pluginRelativePath != null && pluginRelativePath.startsWith("/"))
+        String pluginRelativePath = configurationElement.getAttribute("pluginRelativePath"); //$NON-NLS-1$
+        while (pluginRelativePath != null && pluginRelativePath.startsWith("/")) //$NON-NLS-1$
         {
           pluginRelativePath = pluginRelativePath.substring(1);
         }
@@ -528,12 +528,12 @@ public abstract class RecorderTransaction
           continue;
         }
 
-        String policy = configurationElement.getAttribute("policy");
+        String policy = configurationElement.getAttribute("policy"); //$NON-NLS-1$
 
         IContributor contributor = configurationElement.getContributor();
         String contributorName = contributor.getName();
 
-        String key = "/instance/" + contributorName + "/" + pluginRelativePath;
+        String key = "/instance/" + contributorName + "/" + pluginRelativePath; //$NON-NLS-1$ //$NON-NLS-2$
         policies.put(key, policy);
       }
       catch (Exception ex)
@@ -735,7 +735,7 @@ public abstract class RecorderTransaction
   {
     try
     {
-      return ResourcesPlugin.getWorkspace().getRoot().getProject("org.eclipse.oomph.setup.ui").getFile(POLICIES_FILE_NAME);
+      return ResourcesPlugin.getWorkspace().getRoot().getProject("org.eclipse.oomph.setup.ui").getFile(POLICIES_FILE_NAME); //$NON-NLS-1$
     }
     catch (Throwable ex)
     {
@@ -914,7 +914,7 @@ public abstract class RecorderTransaction
   {
     if (instance != null)
     {
-      throw new IllegalStateException("A recorder transaction is already open");
+      throw new IllegalStateException("A recorder transaction is already open"); //$NON-NLS-1$
     }
 
     EditingDomain domain = ((IEditingDomainProvider)editor).getEditingDomain();
@@ -989,13 +989,13 @@ public abstract class RecorderTransaction
         @Override
         public String getLabel()
         {
-          return "Record Preferences";
+          return Messages.RecorderTransaction_changeCommand_label;
         }
 
         @Override
         public String getDescription()
         {
-          return "Records the preferences changes as preference tasks";
+          return Messages.RecorderTransaction_changeCommand_description;
         }
 
         @Override

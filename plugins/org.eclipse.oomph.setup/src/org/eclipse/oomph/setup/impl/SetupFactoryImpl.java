@@ -188,7 +188,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
       case SetupPackage.ARGUMENT:
         return createArgument();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -232,7 +232,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
       case SetupPackage.CERTIFICATE_INFO:
         return createCertificateInfoFromString(eDataType, initialValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -265,7 +265,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
       case SetupPackage.CERTIFICATE_INFO:
         return convertCertificateInfoToString(eDataType, instanceValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -576,7 +576,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
     ScopeType result = ScopeType.get(initialValue);
     if (result == null)
     {
-      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
     return result;
   }
@@ -667,7 +667,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
     Trigger result = Trigger.get(initialValue);
     if (result == null)
     {
-      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
     return result;
   }
@@ -692,7 +692,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
     VariableType result = VariableType.get(initialValue);
     if (result == null)
     {
-      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
     return result;
   }
@@ -717,7 +717,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
     UnsignedPolicy result = UnsignedPolicy.get(initialValue);
     if (result == null)
     {
-      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
     return result;
   }
@@ -742,7 +742,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
     CertificatePolicy result = CertificatePolicy.get(initialValue);
     if (result == null)
     {
-      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+      throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
     return result;
   }

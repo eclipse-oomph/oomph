@@ -64,7 +64,7 @@ public class CSpecGeneratorItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/CSpecGenerator"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/CSpecGenerator")); //$NON-NLS-1$
   }
 
   /**
@@ -87,7 +87,7 @@ public class CSpecGeneratorItemProvider extends ModelElementItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_CSpecGenerator_type");
+    return getString("_UI_CSpecGenerator_type"); //$NON-NLS-1$
   }
 
   /**

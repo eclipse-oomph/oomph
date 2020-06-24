@@ -24,7 +24,7 @@ public class SynchronizePreferencesHandler extends AbstractDropdownItemHandler
 {
   public SynchronizePreferencesHandler()
   {
-    super("sync/Remote", "Synchronize Preferences...");
+    super("sync/Remote", Messages.SynchronizePreferencesHandler_text); //$NON-NLS-1$
   }
 
   public void run()

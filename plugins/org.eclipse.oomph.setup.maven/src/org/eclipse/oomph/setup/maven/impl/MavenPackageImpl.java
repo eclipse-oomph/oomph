@@ -257,6 +257,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -283,20 +284,20 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
     mavenUpdateTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(mavenImportTaskEClass, MavenImportTask.class, "MavenImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getMavenImportTask_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 1, -1, MavenImportTask.class,
+    initEClass(mavenImportTaskEClass, MavenImportTask.class, "MavenImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getMavenImportTask_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 1, -1, MavenImportTask.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMavenImportTask_ProjectNameTemplate(), ecorePackage.getEString(), "projectNameTemplate", null, 0, 1, MavenImportTask.class, !IS_TRANSIENT,
+    initEAttribute(getMavenImportTask_ProjectNameTemplate(), ecorePackage.getEString(), "projectNameTemplate", null, 0, 1, MavenImportTask.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMavenImportTask_Profiles(), ecorePackage.getEString(), "profiles", null, 0, -1, MavenImportTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getMavenImportTask_Profiles(), ecorePackage.getEString(), "profiles", null, 0, -1, MavenImportTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(mavenUpdateTaskEClass, MavenUpdateTask.class, "MavenUpdateTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getMavenUpdateTask_ProjectNamePatterns(), ecorePackage.getEString(), "projectNamePatterns", null, 0, -1, MavenUpdateTask.class,
+    initEClass(mavenUpdateTaskEClass, MavenUpdateTask.class, "MavenUpdateTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getMavenUpdateTask_ProjectNamePatterns(), ecorePackage.getEString(), "projectNamePatterns", null, 0, -1, MavenUpdateTask.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMavenUpdateTask_Offline(), ecorePackage.getEBoolean(), "offline", null, 0, 1, MavenUpdateTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getMavenUpdateTask_Offline(), ecorePackage.getEBoolean(), "offline", null, 0, 1, MavenUpdateTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMavenUpdateTask_UpdateSnapshots(), ecorePackage.getEBoolean(), "updateSnapshots", null, 0, 1, MavenUpdateTask.class, !IS_TRANSIENT,
+    initEAttribute(getMavenUpdateTask_UpdateSnapshots(), ecorePackage.getEBoolean(), "updateSnapshots", null, 0, 1, MavenUpdateTask.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
@@ -323,8 +324,9 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -335,13 +337,20 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    */
   protected void createEnablementAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(this, source, new String[] { "variableName", "setup.maven.p2", "repository", "${oomph.update.url}", "installableUnits",
-        "org.eclipse.oomph.setup.maven.feature.group" });
-    addAnnotation(this, source, new String[] { "variableName", "setup.m2e.p2", "repository", "http://download.eclipse.org/technology/m2e/milestones/1.5",
-        "installableUnits", "org.eclipse.m2e.feature.feature.group", "releaseTrainAlternate", "true" });
-    addAnnotation(this, source, new String[] { "variableName", "setup.webtools.p2", "repository", "http://download.eclipse.org/webtools/repository/luna",
-        "releaseTrainAlternate", "true" });
+    String source = "http://www.eclipse.org/oomph/setup/Enablement"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "variableName", "setup.maven.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "${oomph.update.url}", //$NON-NLS-1$ //$NON-NLS-2$
+        "installableUnits", "org.eclipse.oomph.setup.maven.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(this, source, new String[] { "variableName", "setup.m2e.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "http://download.eclipse.org/technology/m2e/milestones/1.5", //$NON-NLS-1$ //$NON-NLS-2$
+        "installableUnits", "org.eclipse.m2e.feature.feature.group", //$NON-NLS-1$ //$NON-NLS-2$
+        "releaseTrainAlternate", "true" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(this, source, new String[] { "variableName", "setup.webtools.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "http://download.eclipse.org/webtools/repository/luna", //$NON-NLS-1$ //$NON-NLS-2$
+        "releaseTrainAlternate", "true" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -352,9 +361,10 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.maven.edit/icons/full/obj16" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source,
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.maven.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -365,9 +375,11 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    */
   protected void createValidTriggersAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
-    addAnnotation(mavenImportTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
-    addAnnotation(mavenUpdateTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers"; //$NON-NLS-1$
+    addAnnotation(mavenImportTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(mavenUpdateTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -378,10 +390,15 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getMavenImportTask_SourceLocators(), source, new String[] { "name", "sourceLocator" });
-    addAnnotation(getMavenImportTask_Profiles(), source, new String[] { "kind", "element", "name", "profile" });
-    addAnnotation(getMavenUpdateTask_ProjectNamePatterns(), source, new String[] { "kind", "element", "name", "projectNamePattern" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getMavenImportTask_SourceLocators(), source, new String[] { "name", "sourceLocator" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getMavenImportTask_Profiles(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "profile" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getMavenUpdateTask_ProjectNamePatterns(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "projectNamePattern" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
 } // MavenPackageImpl

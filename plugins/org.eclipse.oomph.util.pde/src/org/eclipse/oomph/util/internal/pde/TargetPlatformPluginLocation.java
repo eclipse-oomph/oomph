@@ -59,7 +59,7 @@ public class TargetPlatformPluginLocation implements IDynamicVariableResolver
                 if (location != null)
                 {
                   String scheme = location.getScheme();
-                  if ("file".equals(scheme))
+                  if ("file".equals(scheme)) //$NON-NLS-1$
                   {
                     File file = new File(location.getPath());
                     return file.getAbsolutePath();

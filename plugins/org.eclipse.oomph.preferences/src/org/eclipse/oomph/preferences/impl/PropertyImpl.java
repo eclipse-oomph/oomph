@@ -152,7 +152,7 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
     {
       if (EcoreUtil.isAncestor(this, newParent))
       {
-        throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+        throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
       }
       NotificationChain msgs = null;
       if (eInternalContainer() != null)
@@ -469,9 +469,9 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (value: ");
+    result.append(" (value: "); //$NON-NLS-1$
     result.append(value);
-    result.append(", secure: ");
+    result.append(", secure: "); //$NON-NLS-1$
     result.append(secure);
     result.append(')');
     return result.toString();

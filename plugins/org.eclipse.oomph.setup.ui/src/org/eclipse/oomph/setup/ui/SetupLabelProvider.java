@@ -31,6 +31,7 @@ import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -129,18 +130,18 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
   {
     if (object == null)
     {
-      return "";
+      return ""; //$NON-NLS-1$
     }
 
     EClass eClass = object.eClass();
     if (eClass == SetupPackage.Literals.USER || eClass == SetupPackage.Literals.INSTALLATION || eClass == SetupPackage.Literals.WORKSPACE)
     {
-      return SetupEditPlugin.getPlugin().getString("_UI_" + eClass.getName() + "_type");
+      return SetupEditPlugin.getPlugin().getString("_UI_" + eClass.getName() + "_type"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     if (object instanceof Index)
     {
-      return "Catalog Index " + itemProvider.getText(object);
+      return NLS.bind(Messages.SetupLabelProvider_catalogIndex, itemProvider.getText(object));
     }
 
     if (object instanceof Product)
@@ -177,7 +178,7 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
       return suffix;
     }
 
-    return prefix + " - " + suffix;
+    return prefix + " - " + suffix; //$NON-NLS-1$
   }
 
   /**

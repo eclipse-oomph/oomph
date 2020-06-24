@@ -30,7 +30,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  */
 public class RemoteResourcesPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage
 {
-  private static final String OFFLINE = "offline";
+  private static final String OFFLINE = "offline"; //$NON-NLS-1$
 
   public RemoteResourcesPreferencePage()
   {
@@ -101,22 +101,22 @@ public class RemoteResourcesPreferencePage extends FieldEditorPreferencePage imp
   {
     Composite parent = getFieldEditorParent();
 
-    BooleanFieldEditor offline = new BooleanFieldEditor(OFFLINE, "Use offline cache", parent);
+    BooleanFieldEditor offline = new BooleanFieldEditor(OFFLINE, Messages.RemoteResourcesPreferencePage_useOfflineCache_label, parent);
     offline.fillIntoGrid(parent, 2);
     addField(offline);
-    offline.getDescriptionControl(parent).setToolTipText("Use locally cached versions of remote resources whenever possible");
+    offline.getDescriptionControl(parent).setToolTipText(Messages.RemoteResourcesPreferencePage_useOfflineCache_tooltip);
 
-    BooleanFieldEditor showOffline = new BooleanFieldEditor(UIPropertyTester.SHOW_OFFLINE, "Show offline tool bar", parent);
+    BooleanFieldEditor showOffline = new BooleanFieldEditor(UIPropertyTester.SHOW_OFFLINE, Messages.RemoteResourcesPreferencePage_showOfflineToolbar_label, parent);
     showOffline.fillIntoGrid(parent, 2);
     addField(showOffline);
-    showOffline.getDescriptionControl(parent).setToolTipText("Show the offline toolbar contribution in the main toolbar");
+    showOffline.getDescriptionControl(parent).setToolTipText(Messages.RemoteResourcesPreferencePage_showOfflineToolbar_tooltip);
 
     Runnable runnable = null;
     try
     {
       @SuppressWarnings("unchecked")
-      Class<? extends Runnable> refreshCacheHandlerClass = (Class<? extends Runnable>)CommonPlugin.loadClass("org.eclipse.oomph.setup.editor",
-          "org.eclipse.oomph.setup.presentation.handlers.RefreshCacheHandler");
+      Class<? extends Runnable> refreshCacheHandlerClass = (Class<? extends Runnable>)CommonPlugin.loadClass("org.eclipse.oomph.setup.editor", //$NON-NLS-1$
+          "org.eclipse.oomph.setup.presentation.handlers.RefreshCacheHandler"); //$NON-NLS-1$
       runnable = refreshCacheHandlerClass.newInstance();
     }
     catch (Exception ex)
@@ -128,7 +128,7 @@ public class RemoteResourcesPreferencePage extends FieldEditorPreferencePage imp
     {
       final Runnable finalRunnable = runnable;
       Button refreshCache = new Button(parent, SWT.PUSH);
-      refreshCache.setText("Refresh Remote Cache...");
+      refreshCache.setText(Messages.RemoteResourcesPreferencePage_refreshRemoteCache);
       refreshCache.addSelectionListener(new SelectionAdapter()
       {
         @Override

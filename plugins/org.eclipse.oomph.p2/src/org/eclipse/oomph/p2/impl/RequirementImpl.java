@@ -60,7 +60,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class RequirementImpl extends ModelElementImpl implements Requirement
 {
-  private static final String ANNOTATION_KEY = "platform:/plugin/org.eclipse.oomph.base/model/legacy/setup.ecore#//Component/type";
+  private static final String ANNOTATION_KEY = "platform:/plugin/org.eclipse.oomph.base/model/legacy/setup.ecore#//Component/type"; //$NON-NLS-1$
 
   /**
    * The default value of the '{@link #getID() <em>ID</em>}' attribute.
@@ -100,7 +100,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * @generated
    * @ordered
    */
-  protected static final String NAMESPACE_EDEFAULT = "org.eclipse.equinox.p2.iu";
+  protected static final String NAMESPACE_EDEFAULT = "org.eclipse.equinox.p2.iu"; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getNamespace() <em>Namespace</em>}' attribute.
@@ -121,7 +121,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * @ordered
    */
   protected static final VersionRange VERSION_RANGE_EDEFAULT = (VersionRange)P2Factory.eINSTANCE.createFromString(P2Package.eINSTANCE.getVersionRange(),
-      "0.0.0");
+      "0.0.0"); //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getVersionRange() <em>Version Range</em>}' attribute.
@@ -389,7 +389,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
     boolean greedy = isGreedy();
     int max = getMax();
     String description = null;
-    IRequirement requirement = name == null || !name.startsWith("(")
+    IRequirement requirement = name == null || !name.startsWith("(") //$NON-NLS-1$
         ? MetadataFactory.createRequirement(namespace, name, versionRange, filter, min, max, greedy, description)
         : MetadataFactory.createRequirement(namespace, name, filter, min, max, greedy, description);
     return requirement;
@@ -790,7 +790,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
       EMap<String, String> details = annotation.getDetails();
       String value = details.get(ANNOTATION_KEY);
       boolean remove = false;
-      if ("eclipse.feature".equals(value))
+      if ("eclipse.feature".equals(value)) //$NON-NLS-1$
       {
         String id = getName();
         if (id != null)
@@ -799,7 +799,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
           remove = true;
         }
       }
-      else if ("osgi.bundle".equals(value))
+      else if ("osgi.bundle".equals(value)) //$NON-NLS-1$
       {
         remove = true;
       }
@@ -835,33 +835,33 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
 
     if (versionRange != null && !versionRange.equals(VersionRange.emptyRange))
     {
-      result.append(" ");
+      result.append(" "); //$NON-NLS-1$
       result.append(versionRange);
     }
 
     if (min != 1)
     {
-      result.append(" (min=" + min + ")");
+      result.append(" (min=" + min + ")"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     if (max != 1)
     {
-      result.append(" (max=" + max + ")");
+      result.append(" (max=" + max + ")"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     if (greedy && min == 0)
     {
-      result.append(" (greedy)");
+      result.append(" (greedy)"); //$NON-NLS-1$
     }
 
     if (filter != null)
     {
-      result.append(" (filter=" + filter + ")");
+      result.append(" (filter=" + filter + ")"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     if (description != null)
     {
-      result.append(" (description=" + description + ")");
+      result.append(" (description=" + description + ")"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     return result.toString();

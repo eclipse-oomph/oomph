@@ -46,23 +46,23 @@ import java.util.Map;
  */
 public class Release implements IRelease
 {
-  public static final String RELEASE_TAG = "release";
+  public static final String RELEASE_TAG = "release"; //$NON-NLS-1$
 
-  public static final String FEATURE_TAG = "feature";
+  public static final String FEATURE_TAG = "feature"; //$NON-NLS-1$
 
-  public static final String PLUGIN_TAG = "plugin";
+  public static final String PLUGIN_TAG = "plugin"; //$NON-NLS-1$
 
-  public static final String PRODUCT_TAG = "product";
+  public static final String PRODUCT_TAG = "product"; //$NON-NLS-1$
 
-  public static final String NAME_ATTRIBUTE = "name";
+  public static final String NAME_ATTRIBUTE = "name"; //$NON-NLS-1$
 
-  public static final String VERSION_ATTRIBUTE = "version";
+  public static final String VERSION_ATTRIBUTE = "version"; //$NON-NLS-1$
 
-  public static final String FRAGMENT_ATTRIBUTE = "fragment";
+  public static final String FRAGMENT_ATTRIBUTE = "fragment"; //$NON-NLS-1$
 
-  public static final String LICENSE_ATTRIBUTE = "license";
+  public static final String LICENSE_ATTRIBUTE = "license"; //$NON-NLS-1$
 
-  private static final String INDENT = "\t";
+  private static final String INDENT = "\t"; //$NON-NLS-1$
 
   private IFile file;
 
@@ -89,7 +89,7 @@ public class Release implements IRelease
 
       if (!handler.hasReleaseTag())
       {
-        throw new IOException("Release specification file does not contain a <release> element: " + file.getFullPath());
+        throw new IOException("Release specification file does not contain a <release> element: " + file.getFullPath()); //$NON-NLS-1$
       }
 
       digest = VersionUtil.getSHA1(file);
@@ -131,8 +131,8 @@ public class Release implements IRelease
     writeRelease(builder);
 
     String xml = builder.toString();
-    xml = xml.replace("\n", VersionUtil.getLineDelimiter(file));
-    ByteArrayInputStream contents = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+    xml = xml.replace("\n", VersionUtil.getLineDelimiter(file)); //$NON-NLS-1$
+    ByteArrayInputStream contents = new ByteArrayInputStream(xml.getBytes("UTF-8")); //$NON-NLS-1$
     if (file.exists())
     {
       file.setContents(contents, true, true, new NullProgressMonitor());
@@ -147,8 +147,8 @@ public class Release implements IRelease
 
   private void writeRelease(StringBuilder builder)
   {
-    builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    builder.append("<" + RELEASE_TAG + ">\n");
+    builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"); //$NON-NLS-1$
+    builder.append("<" + RELEASE_TAG + ">\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
     List<IElement> list = new ArrayList<IElement>(elements.keySet());
     Collections.sort(list, new Comparator<IElement>()
@@ -175,7 +175,7 @@ public class Release implements IRelease
       writeElement(builder, element, INDENT);
     }
 
-    builder.append("</" + RELEASE_TAG + ">\n");
+    builder.append("</" + RELEASE_TAG + ">\n"); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   private void writeElement(StringBuilder builder, IElement element, String indent)
@@ -184,13 +184,13 @@ public class Release implements IRelease
     Version version = element.getVersion();
 
     builder
-        .append(indent + "<" + element.getTag() + " " + NAME_ATTRIBUTE + "=\"" + name + "\" " + (element.isFragment() ? FRAGMENT_ATTRIBUTE + "=\"true\" " : "")
-            + VERSION_ATTRIBUTE + "=\"" + version + "\"" + (element.isLicenseFeature() ? " license=\"true\"" : ""));
+        .append(indent + "<" + element.getTag() + " " + NAME_ATTRIBUTE + "=\"" + name + "\" " + (element.isFragment() ? FRAGMENT_ATTRIBUTE + "=\"true\" " : "") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+            + VERSION_ATTRIBUTE + "=\"" + version + "\"" + (element.isLicenseFeature() ? " license=\"true\"" : "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
     List<IElement> content = element.getChildren();
     if (content.isEmpty())
     {
-      builder.append("/");
+      builder.append("/"); //$NON-NLS-1$
       writeElementEnd(builder, element);
     }
     else
@@ -202,19 +202,19 @@ public class Release implements IRelease
         writeElement(builder, child, indent + INDENT);
       }
 
-      builder.append(indent + "</" + element.getTag() + ">\n");
+      builder.append(indent + "</" + element.getTag() + ">\n"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
   private void writeElementEnd(StringBuilder builder, IElement element)
   {
-    builder.append(">");
+    builder.append(">"); //$NON-NLS-1$
     if (element.getVersion().equals(Version.emptyVersion))
     {
-      builder.append(" <!-- UNRESOLVED -->");
+      builder.append(" <!-- UNRESOLVED -->"); //$NON-NLS-1$
     }
 
-    builder.append("\n");
+    builder.append("\n"); //$NON-NLS-1$
   }
 
   /**
@@ -302,11 +302,11 @@ public class Release implements IRelease
     {
       String name = getString(attributes, NAME_ATTRIBUTE);
       Version version = new Version(getString(attributes, VERSION_ATTRIBUTE));
-      boolean isFragment = "true".equals(getString(attributes, FRAGMENT_ATTRIBUTE));
+      boolean isFragment = "true".equals(getString(attributes, FRAGMENT_ATTRIBUTE)); //$NON-NLS-1$
       Element element = new Element(type, name, version, isFragment);
 
       String license = getString(attributes, LICENSE_ATTRIBUTE);
-      if ("true".equals(license))
+      if ("true".equals(license)) //$NON-NLS-1$
       {
         element.setLicenseFeature(true);
       }
@@ -331,7 +331,7 @@ public class Release implements IRelease
         return value;
       }
 
-      throw new SAXException("Illegal value for " + name);
+      throw new SAXException("Illegal value for " + name); //$NON-NLS-1$
     }
 
     @Override

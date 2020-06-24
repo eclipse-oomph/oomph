@@ -291,11 +291,11 @@ public class ParameterImpl extends ModelElementImpl implements Parameter
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (name: ");
+    result.append(" (name: "); //$NON-NLS-1$
     result.append(name);
-    result.append(", description: ");
+    result.append(", description: "); //$NON-NLS-1$
     result.append(description);
-    result.append(", defaultValue: ");
+    result.append(", defaultValue: "); //$NON-NLS-1$
     result.append(defaultValue);
     result.append(')');
     return result.toString();

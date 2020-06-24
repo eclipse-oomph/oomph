@@ -18,6 +18,7 @@ import org.eclipse.oomph.version.ui.Activator;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Eike Stepper
@@ -26,7 +27,7 @@ public class IgnoreRootProjectsResolution extends AbstractResolution
 {
   public IgnoreRootProjectsResolution(IMarker marker)
   {
-    super(marker, "Ignore root components for release", Activator.CORRECTION_CONFIGURE_GIF);
+    super(marker, Messages.IgnoreRootProjectsResolution_label, Activator.CORRECTION_CONFIGURE_GIF);
   }
 
   @Override
@@ -42,8 +43,7 @@ public class IgnoreRootProjectsResolution extends AbstractResolution
     IProject project = marker.getResource().getProject();
     VersionBuilderArguments arguments = new VersionBuilderArguments(project);
 
-    return "Configure '" + arguments.getReleasePath()
-        + "' to stop checking that non-root elements are referenced by a root element. To re-enable this checking, use the Preferences dialog to manage the release check mode.";
+    return NLS.bind(Messages.IgnoreRootProjectsResolution_description, arguments.getReleasePath());
   }
 
   @Override

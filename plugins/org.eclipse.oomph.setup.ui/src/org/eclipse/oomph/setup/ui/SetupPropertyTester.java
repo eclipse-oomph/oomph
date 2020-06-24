@@ -28,21 +28,21 @@ import org.osgi.service.prefs.Preferences;
  */
 public class SetupPropertyTester extends PropertyTester
 {
-  public static final String PREFIX = "org.eclipse.oomph.setup.ui.";
+  public static final String PREFIX = "org.eclipse.oomph.setup.ui."; //$NON-NLS-1$
 
-  public static final String STARTING = "starting";
+  public static final String STARTING = "starting"; //$NON-NLS-1$
 
-  public static final String PERFORMING = "performing";
+  public static final String PERFORMING = "performing"; //$NON-NLS-1$
 
-  public static final String HANDLING = "handling";
+  public static final String HANDLING = "handling"; //$NON-NLS-1$
 
-  public static final String SYNC_ENABLED = "syncEnabled";
+  public static final String SYNC_ENABLED = "syncEnabled"; //$NON-NLS-1$
 
-  public static final String SHOW_TOOL_BAR_CONTRIBUTIONS = "showToolBarContributions";
+  public static final String SHOW_TOOL_BAR_CONTRIBUTIONS = "showToolBarContributions"; //$NON-NLS-1$
 
-  public static final String SHOW_PROGRESS_IN_WIZARD = "showProgressInWizard";
+  public static final String SHOW_PROGRESS_IN_WIZARD = "showProgressInWizard"; //$NON-NLS-1$
 
-  public static final String DONATING = "donating";
+  public static final String DONATING = "donating"; //$NON-NLS-1$
 
   private static final Preferences PREFERENCES = SetupUIPlugin.INSTANCE.getInstancePreferences();
 
@@ -66,7 +66,7 @@ public class SetupPropertyTester extends PropertyTester
       {
         if (SHOW_TOOL_BAR_CONTRIBUTIONS.equals(event.getKey()))
         {
-          UIPropertyTester.requestEvaluation(PREFIX + SHOW_TOOL_BAR_CONTRIBUTIONS, "true".equals(event.getNewValue()));
+          UIPropertyTester.requestEvaluation(PREFIX + SHOW_TOOL_BAR_CONTRIBUTIONS, "true".equals(event.getNewValue())); //$NON-NLS-1$
         }
       }
     });

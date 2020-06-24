@@ -28,15 +28,15 @@ public final class ProjectConfigSynchronizerPreferences
 
   private static final Preferences PREFERENCES = InstanceScope.INSTANCE.getNode(PREFERENCES_NODE_NAME);
 
-  private static final String CONFIGURATION_MANAGEMENT = "configurationManagement";
+  private static final String CONFIGURATION_MANAGEMENT = "configurationManagement"; //$NON-NLS-1$
 
-  private static final String CONFIGURATION_VALIDATION = "configurationValidation";
+  private static final String CONFIGURATION_VALIDATION = "configurationValidation"; //$NON-NLS-1$
 
-  private static final String PROPERTY_MODIFICATION_HANDLING = "propertyModificationHandling";
+  private static final String PROPERTY_MODIFICATION_HANDLING = "propertyModificationHandling"; //$NON-NLS-1$
 
-  private static final String EDIT_KEY = "edit";
+  private static final String EDIT_KEY = "edit"; //$NON-NLS-1$
 
-  private static final String PROPAGATE_KEY = "propagate";
+  private static final String PROPAGATE_KEY = "propagate"; //$NON-NLS-1$
 
   private ProjectConfigSynchronizerPreferences()
   {
@@ -56,22 +56,22 @@ public final class ProjectConfigSynchronizerPreferences
 
   public static boolean isConfigurationManagementAutomatic()
   {
-    return "automatic".equals(getPreference(CONFIGURATION_MANAGEMENT, "manual"));
+    return "automatic".equals(getPreference(CONFIGURATION_MANAGEMENT, "manual")); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   public static void setConfigurationManagementAutomatic(boolean automatic)
   {
-    setPreference(CONFIGURATION_MANAGEMENT, automatic ? "automatic" : "manual");
+    setPreference(CONFIGURATION_MANAGEMENT, automatic ? "automatic" : "manual"); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   public static boolean isConfigurationValidationPrompt()
   {
-    return "prompt".equals(getPreference(CONFIGURATION_VALIDATION, "prompt"));
+    return "prompt".equals(getPreference(CONFIGURATION_VALIDATION, "prompt")); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   public static void setConfigurationValidationPrompt(boolean prompt)
   {
-    setPreference(CONFIGURATION_VALIDATION, prompt ? "prompt" : "ignore");
+    setPreference(CONFIGURATION_VALIDATION, prompt ? "prompt" : "ignore"); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   public static PropertyModificationHandling getPropertyModificationHandling()

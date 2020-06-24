@@ -22,13 +22,13 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  */
 public final class EAnnotations
 {
-  private static final String ANNOTATION_LABEL_PROVIDER = "http://www.eclipse.org/oomph/base/LabelProvider";
+  private static final String ANNOTATION_LABEL_PROVIDER = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
 
-  private static final String KEY_IMAGE_BASE_URI = "imageBaseURI";
+  private static final String KEY_IMAGE_BASE_URI = "imageBaseURI"; //$NON-NLS-1$
 
-  private static final String KEY_IMAGE_URI = "imageURI";
+  private static final String KEY_IMAGE_URI = "imageURI"; //$NON-NLS-1$
 
-  private static final String KEY_TEXT = "text";
+  private static final String KEY_TEXT = "text"; //$NON-NLS-1$
 
   private EAnnotations()
   {
@@ -67,7 +67,7 @@ public final class EAnnotations
     URI imageBaseURI = getImageBaseURI(eClass);
     if (imageBaseURI != null)
     {
-      return imageBaseURI.appendSegment(eClass.getName() + ".gif");
+      return imageBaseURI.appendSegment(eClass.getName() + ".gif"); //$NON-NLS-1$
     }
 
     return null;

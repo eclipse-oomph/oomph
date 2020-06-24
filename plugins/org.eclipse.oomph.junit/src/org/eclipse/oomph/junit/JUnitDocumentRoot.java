@@ -404,7 +404,7 @@ public class JUnitDocumentRoot extends MinimalEObjectImpl.Container
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (mixed: ");
+    result.append(" (mixed: "); //$NON-NLS-1$
     result.append(mixed);
     result.append(')');
     return result.toString();

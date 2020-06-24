@@ -308,7 +308,7 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
 
         if (StringUtil.isEmpty(name))
         {
-          name = "." + extension;
+          name = "." + extension; //$NON-NLS-1$
           extension = null;
         }
 
@@ -381,7 +381,7 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
   {
     try
     {
-      return ReflectUtil.getMethod(FileEditorMapping.class, "setDefaultEditor", type);
+      return ReflectUtil.getMethod(FileEditorMapping.class, "setDefaultEditor", type); //$NON-NLS-1$
     }
     catch (Throwable ex)
     {
@@ -401,7 +401,7 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
         String name = mapping.getName();
         String extension = mapping.getExtension();
 
-        String pattern = name + (StringUtil.isEmpty(extension) ? "" : "." + extension);
+        String pattern = name + (StringUtil.isEmpty(extension) ? "" : "." + extension); //$NON-NLS-1$ //$NON-NLS-2$
         result.put(pattern, (FileEditorMapping)mapping);
       }
     }

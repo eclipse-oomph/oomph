@@ -36,6 +36,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.dnd.Clipboard;
@@ -77,7 +78,6 @@ import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.eclipse.ui.views.properties.PropertySheetSorter;
 
 import java.lang.reflect.Constructor;
-import java.text.MessageFormat;
 
 /**
  * @author Ed Merks
@@ -91,7 +91,7 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
     boolean hasEMFCopyPropertyValueAction;
     try
     {
-      ReflectUtil.getField(ExtendedPropertySheetPage.class, "copyPropertyValueAction");
+      ReflectUtil.getField(ExtendedPropertySheetPage.class, "copyPropertyValueAction"); //$NON-NLS-1$
       hasEMFCopyPropertyValueAction = true;
     }
     catch (Exception ex)
@@ -142,8 +142,8 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
     if (!HAS_EMF_COPY_VALUE_PROPERTY_ACTION)
     {
       Menu menu = getControl().getMenu();
-      IMenuManager menuManager = (IMenuManager)menu.getData("org.eclipse.jface.action.MenuManager.managerKey");
-      menuManager.insertAfter("copy", getCopyPropertyValueAction());
+      IMenuManager menuManager = (IMenuManager)menu.getData("org.eclipse.jface.action.MenuManager.managerKey"); //$NON-NLS-1$
+      menuManager.insertAfter("copy", getCopyPropertyValueAction()); //$NON-NLS-1$
     }
   }
 
@@ -318,7 +318,7 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
           IPropertySource propertySource = adapterFactoryContentProvider.getPropertySource(object);
           if (propertySource instanceof PropertySource && propertySource.getClass() == PropertySource.class)
           {
-            return new PropertySource(object, ReflectUtil.<IItemPropertySource> getValue("itemPropertySource", propertySource))
+            return new PropertySource(object, ReflectUtil.<IItemPropertySource> getValue("itemPropertySource", propertySource)) //$NON-NLS-1$
             {
               @Override
               protected IPropertyDescriptor createPropertyDescriptor(IItemPropertyDescriptor itemPropertyDescriptor)
@@ -493,13 +493,13 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
 
             button = new Button(composite, SWT.PUSH);
             button.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
-            button.setText("...");
+            button.setText("..."); //$NON-NLS-1$
             button.addSelectionListener(new SelectionAdapter()
             {
               @Override
               public void widgetSelected(SelectionEvent e)
               {
-                final String className = "org.eclipse.emf.edit.ui.provider.PropertyDescriptor$MultiLineInputDialog";
+                final String className = "org.eclipse.emf.edit.ui.provider.PropertyDescriptor$MultiLineInputDialog"; //$NON-NLS-1$
                 Dialog dialog;
 
                 String stringValue = valueHandler.toString(getValue());
@@ -511,28 +511,27 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
 
                 try
                 {
-                  Class<?> c = CommonPlugin.loadClass("org.eclipse.emf.edit.ui", className);
+                  Class<?> c = CommonPlugin.loadClass("org.eclipse.emf.edit.ui", className); //$NON-NLS-1$
                   if (c == null)
                   {
-                    throw new Exception("Could not find class " + className);
+                    throw new Exception("Could not find class " + className); //$NON-NLS-1$
                   }
 
                   Constructor<?> constructor = c.getConstructor(Shell.class, String.class, String.class, String.class, IInputValidator.class);
                   if (constructor == null)
                   {
-                    throw new Exception("Could not find constructor of " + className);
+                    throw new Exception("Could not find constructor of " + className); //$NON-NLS-1$
                   }
 
                   constructor.setAccessible(true);
 
-                  dialog = (Dialog)constructor.newInstance(composite.getShell(),
-                      EMFEditUIPlugin.INSTANCE.getString("_UI_FeatureEditorDialog_title",
-                          new Object[] { getDisplayName(), getEditLabelProvider().getText(object) }),
-                      EMFEditUIPlugin.INSTANCE.getString("_UI_MultiLineInputDialog_message"), stringValue, valueHandler);
+                  dialog = (Dialog)constructor.newInstance(composite.getShell(), EMFEditUIPlugin.INSTANCE.getString("_UI_FeatureEditorDialog_title", //$NON-NLS-1$
+                      new Object[] { getDisplayName(), getEditLabelProvider().getText(object) }),
+                      EMFEditUIPlugin.INSTANCE.getString("_UI_MultiLineInputDialog_message"), stringValue, valueHandler); //$NON-NLS-1$
 
                   if (dialog == null)
                   {
-                    throw new Exception("Could not open dialog " + className);
+                    throw new Exception("Could not open dialog " + className); //$NON-NLS-1$
                   }
                 }
                 catch (Throwable ex)
@@ -541,14 +540,14 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
                   return;
                 }
 
-                int shellStyle = (Integer)ReflectUtil.invokeMethod("getShellStyle", dialog);
-                ReflectUtil.invokeMethod(ReflectUtil.getMethod(dialog, "setShellStyle", int.class), dialog, shellStyle | SWT.MAX);
+                int shellStyle = (Integer)ReflectUtil.invokeMethod("getShellStyle", dialog); //$NON-NLS-1$
+                ReflectUtil.invokeMethod(ReflectUtil.getMethod(dialog, "setShellStyle", int.class), dialog, shellStyle | SWT.MAX); //$NON-NLS-1$
 
                 if (dialog.open() == Window.OK)
                 {
-                  String value = (String)ReflectUtil.invokeMethod("getValue", dialog);
+                  String value = (String)ReflectUtil.invokeMethod("getValue", dialog); //$NON-NLS-1$
 
-                  value = value.replaceAll("\r\n", "\n");
+                  value = value.replaceAll("\r\n", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
                   if (containsNull)
                   {
                     value = value.replace('\n', '\u0000');
@@ -567,7 +566,7 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
                     else
                     {
                       // try to insert the current value into the error message.
-                      setErrorMessage(MessageFormat.format(getErrorMessage(), new Object[] { newValue.toString() }));
+                      setErrorMessage(NLS.bind(getErrorMessage(), new Object[] { newValue.toString() }));
                     }
                   }
                 }
@@ -645,7 +644,7 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
 
     public CopyValuePropertyAction(Clipboard clipboard)
     {
-      super("Copy &Value");
+      super(Messages.OomphPropertySheetPage_copyValue);
       this.clipboard = clipboard;
       setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
     }

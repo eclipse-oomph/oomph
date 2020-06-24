@@ -59,9 +59,9 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
 {
   public static final SetupInstallerPlugin INSTANCE = new SetupInstallerPlugin();
 
-  public static final String FONT_OPEN_SANS = "font-open-sans";
+  public static final String FONT_OPEN_SANS = "font-open-sans"; //$NON-NLS-1$
 
-  public static final String FONT_LABEL_DEFAULT = FONT_OPEN_SANS + ".label-default";
+  public static final String FONT_LABEL_DEFAULT = FONT_OPEN_SANS + ".label-default"; //$NON-NLS-1$
 
   private static Implementation plugin;
 
@@ -86,7 +86,7 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
         final ITestHarness testHarness = testableObject.getTestHarness();
         if (testHarness != null)
         {
-          new Job("Test Harness")
+          new Job("Test Harness") //$NON-NLS-1$
           {
             @Override
             protected IStatus run(IProgressMonitor monitor)
@@ -134,7 +134,7 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
 
       if (PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_USER_HOME_REDIRECT))
       {
-        System.setProperty("user.home", new File(PropertiesUtil.getUserHome()).getCanonicalPath());
+        System.setProperty("user.home", new File(PropertiesUtil.getUserHome()).getCanonicalPath()); //$NON-NLS-1$
       }
 
       if (!PropertiesUtil.isProperty(SetupUIPlugin.PREF_HEADLESS) && !SetupUtil.SETUP_ARCHIVER_APPLICATION)
@@ -147,14 +147,14 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
           }
         });
 
-        File temporaryIconsFolder = new File(System.getProperty("java.io.tmpdir"), System.currentTimeMillis() + ".oomph.icons");
+        File temporaryIconsFolder = new File(System.getProperty("java.io.tmpdir"), System.currentTimeMillis() + ".oomph.icons"); //$NON-NLS-1$ //$NON-NLS-2$
         temporaryIconsFolder.mkdir();
         temporaryIconsFolder.deleteOnExit();
-        ReflectUtil.setValue("imageDirectory", ImageURIRegistry.INSTANCE, temporaryIconsFolder);
+        ReflectUtil.setValue("imageDirectory", ImageURIRegistry.INSTANCE, temporaryIconsFolder); //$NON-NLS-1$
 
         try
         {
-          Field field = ReflectUtil.getField(EMFPlugin.class, "IS_RESOURCES_BUNDLE_AVAILABLE");
+          Field field = ReflectUtil.getField(EMFPlugin.class, "IS_RESOURCES_BUNDLE_AVAILABLE"); //$NON-NLS-1$
           ReflectUtil.setValue(field, null, false, true);
         }
         catch (Throwable throwable)
@@ -164,12 +164,12 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
       }
 
       // Replace the default UI Callback Provider with our own because the default one doesn't work when there is no workbench.
-      ReflectUtil.setValue("callback", org.eclipse.equinox.internal.security.storage.CallbacksProvider.getDefault(), new UICallbackProvider());
+      ReflectUtil.setValue("callback", org.eclipse.equinox.internal.security.storage.CallbacksProvider.getDefault(), new UICallbackProvider()); //$NON-NLS-1$
 
       try
       {
         // Load this bundle early because it registers a system-wide authenticator to does not work when there is no workbench.
-        CommonPlugin.loadClass("org.eclipse.core.net", "org.eclipse.core.net.proxy.IProxyService");
+        CommonPlugin.loadClass("org.eclipse.core.net", "org.eclipse.core.net.proxy.IProxyService"); //$NON-NLS-1$ //$NON-NLS-2$
       }
       catch (ClassNotFoundException ex)
       {
@@ -183,7 +183,7 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
         @Override
         protected PasswordAuthentication getPasswordAuthentication()
         {
-          URI uri = URI.createURI(getRequestingScheme() + "://" + getRequestingHost());
+          URI uri = URI.createURI(getRequestingScheme() + "://" + getRequestingHost()); //$NON-NLS-1$
           Authorization authorization = SetupCoreUtil.AUTHORIZATION_HANDLER.authorize(uri);
           if (!authorization.isAuthorized())
           {
@@ -203,14 +203,14 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
       try
       {
         org.eclipse.equinox.internal.security.storage.PasswordProviderModuleExt defaultProvider = passwordProviderSelector
-            .findStorageModule("org.eclipse.equinox.security.ui.DefaultPasswordProvider");
+            .findStorageModule("org.eclipse.equinox.security.ui.DefaultPasswordProvider"); //$NON-NLS-1$
         if (defaultProvider != null)
         {
-          PasswordProvider passwordProvider = ReflectUtil.getValue("providerModule", defaultProvider);
+          PasswordProvider passwordProvider = ReflectUtil.getValue("providerModule", defaultProvider); //$NON-NLS-1$
           if (org.eclipse.equinox.internal.security.ui.storage.DefaultPasswordProvider.class.equals(passwordProvider.getClass()))
           {
             InstallerUIPrompt installerUIPrompt = new InstallerUIPrompt();
-            ReflectUtil.setValue("providerModule", defaultProvider, installerUIPrompt);
+            ReflectUtil.setValue("providerModule", defaultProvider, installerUIPrompt); //$NON-NLS-1$
           }
         }
       }
@@ -225,15 +225,15 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
       FontData[] fontData = JFaceResources.getDefaultFont().getFontData();
       int height = fontData == null || fontData.length == 0 ? 9 : (int)fontData[0].height;
 
-      loadFont("/fonts/OpenSans-Regular.ttf");
-      JFaceResources.getFontRegistry().put(SetupInstallerPlugin.FONT_LABEL_DEFAULT, new FontData[] { new FontData("Open Sans", height, SWT.BOLD) });
+      loadFont("/fonts/OpenSans-Regular.ttf"); //$NON-NLS-1$
+      JFaceResources.getFontRegistry().put(SetupInstallerPlugin.FONT_LABEL_DEFAULT, new FontData[] { new FontData("Open Sans", height, SWT.BOLD) }); //$NON-NLS-1$
     }
 
     private boolean loadFont(String path)
     {
       try
       {
-        URL url = new URL("platform:/plugin/" + SetupInstallerPlugin.INSTANCE.getSymbolicName() + path);
+        URL url = new URL("platform:/plugin/" + SetupInstallerPlugin.INSTANCE.getSymbolicName() + path); //$NON-NLS-1$
         URL fileURL = FileLocator.toFileURL(url);
         String filePath = fileURL.getPath();
         File file = new File(filePath);

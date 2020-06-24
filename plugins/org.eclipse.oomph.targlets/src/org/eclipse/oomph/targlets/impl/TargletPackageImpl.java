@@ -758,6 +758,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -799,91 +800,91 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     projectNameGeneratorEClass.getESuperTypes().add(getIUGenerator());
 
     // Initialize classes, features, and operations; add parameters
-    initEClass(targletContainerEClass, TargletContainer.class, "TargletContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getTargletContainer_ID(), ecorePackage.getEString(), "iD", null, 0, 1, TargletContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(targletContainerEClass, TargletContainer.class, "TargletContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getTargletContainer_ID(), ecorePackage.getEString(), "iD", null, 0, 1, TargletContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTargletContainer_Targlets(), getTarglet(), null, "targlets", null, 0, -1, TargletContainer.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getTargletContainer_Targlets(), getTarglet(), null, "targlets", null, 0, -1, TargletContainer.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(targletEClass, Targlet.class, "Targlet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getTarglet_Name(), ecorePackage.getEString(), "name", null, 1, 1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEClass(targletEClass, Targlet.class, "Targlet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getTarglet_Name(), ecorePackage.getEString(), "name", null, 1, 1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTarglet_Requirements(), theP2Package.getRequirement(), null, "requirements", null, 0, -1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getTarglet_Requirements(), theP2Package.getRequirement(), null, "requirements", null, 0, -1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTarglet_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 0, -1, Targlet.class, !IS_TRANSIENT,
+    initEReference(getTarglet_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 0, -1, Targlet.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTarglet_InstallableUnitGenerators(), getIUGenerator(), null, "installableUnitGenerators", null, 0, -1, Targlet.class, !IS_TRANSIENT,
+    initEReference(getTarglet_InstallableUnitGenerators(), getIUGenerator(), null, "installableUnitGenerators", null, 0, -1, Targlet.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTarglet_RepositoryLists(), theP2Package.getRepositoryList(), null, "repositoryLists", null, 0, -1, Targlet.class, !IS_TRANSIENT,
+    initEReference(getTarglet_RepositoryLists(), theP2Package.getRepositoryList(), null, "repositoryLists", null, 0, -1, Targlet.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTarglet_ActiveRepositoryListName(), ecorePackage.getEString(), "activeRepositoryListName", null, 0, 1, Targlet.class, !IS_TRANSIENT,
+    initEAttribute(getTarglet_ActiveRepositoryListName(), ecorePackage.getEString(), "activeRepositoryListName", null, 0, 1, Targlet.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTarglet_ActiveRepositoryList(), theP2Package.getRepositoryList(), null, "activeRepositoryList", null, 0, 1, Targlet.class, IS_TRANSIENT,
+    initEReference(getTarglet_ActiveRepositoryList(), theP2Package.getRepositoryList(), null, "activeRepositoryList", null, 0, 1, Targlet.class, IS_TRANSIENT, //$NON-NLS-1$
         IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEReference(getTarglet_ActiveRepositories(), theP2Package.getRepository(), null, "activeRepositories", null, 0, -1, Targlet.class, IS_TRANSIENT,
+    initEReference(getTarglet_ActiveRepositories(), theP2Package.getRepository(), null, "activeRepositories", null, 0, -1, Targlet.class, IS_TRANSIENT, //$NON-NLS-1$
         IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTarglet_IncludeSources(), ecorePackage.getEBoolean(), "includeSources", "true", 0, 1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getTarglet_IncludeSources(), ecorePackage.getEBoolean(), "includeSources", "true", 0, 1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTarglet_IncludeAllPlatforms(), ecorePackage.getEBoolean(), "includeAllPlatforms", null, 0, 1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getTarglet_IncludeAllPlatforms(), ecorePackage.getEBoolean(), "includeAllPlatforms", null, 0, 1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTarglet_IncludeAllRequirements(), ecorePackage.getEBoolean(), "includeAllRequirements", "true", 0, 1, Targlet.class, !IS_TRANSIENT,
+    initEAttribute(getTarglet_IncludeAllRequirements(), ecorePackage.getEBoolean(), "includeAllRequirements", "true", 0, 1, Targlet.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTarglet_DropinLocations(), getDropinLocation(), null, "dropinLocations", null, 0, -1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getTarglet_DropinLocations(), getDropinLocation(), null, "dropinLocations", null, 0, -1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTarglet_IncludeBinaryEquivalents(), ecorePackage.getEBoolean(), "includeBinaryEquivalents", "true", 0, 1, Targlet.class, !IS_TRANSIENT,
+    initEAttribute(getTarglet_IncludeBinaryEquivalents(), ecorePackage.getEBoolean(), "includeBinaryEquivalents", "true", 0, 1, Targlet.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTarglet_ProfileProperties(), ecorePackage.getEString(), "profileProperties", null, 0, 1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getTarglet_ProfileProperties(), ecorePackage.getEString(), "profileProperties", null, 0, 1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(componentExtensionEClass, ComponentExtension.class, "ComponentExtension", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getComponentExtension_Requirements(), theP2Package.getRequirement(), null, "requirements", null, 0, -1, ComponentExtension.class,
+    initEClass(componentExtensionEClass, ComponentExtension.class, "ComponentExtension", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getComponentExtension_Requirements(), theP2Package.getRequirement(), null, "requirements", null, 0, -1, ComponentExtension.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(componentDefinitionEClass, ComponentDefinition.class, "ComponentDefinition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getComponentDefinition_ID(), ecorePackage.getEString(), "iD", null, 1, 1, ComponentDefinition.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(componentDefinitionEClass, ComponentDefinition.class, "ComponentDefinition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getComponentDefinition_ID(), ecorePackage.getEString(), "iD", null, 1, 1, ComponentDefinition.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getComponentDefinition_Version(), theP2Package.getVersion(), "version", "1.0.0", 0, 1, ComponentDefinition.class, !IS_TRANSIENT,
+    initEAttribute(getComponentDefinition_Version(), theP2Package.getVersion(), "version", "1.0.0", 0, 1, ComponentDefinition.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(iuGeneratorEClass, IUGenerator.class, "IUGenerator", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(iuGeneratorEClass, IUGenerator.class, "IUGenerator", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    EOperation op = initEOperation(getIUGenerator__GenerateIUs__IProject_String_Map_EList(), null, "generateIUs", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, ecorePackage.getEString(), "qualifierReplacement", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getStringToVersionMap(), "iuVersions", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getInstallableUnit(), "result", 0, -1, IS_UNIQUE, IS_ORDERED);
+    EOperation op = initEOperation(getIUGenerator__GenerateIUs__IProject_String_Map_EList(), null, "generateIUs", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, thePredicatesPackage.getProject(), "project", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, ecorePackage.getEString(), "qualifierReplacement", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getStringToVersionMap(), "iuVersions", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getInstallableUnit(), "result", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
     addEException(op, theBasePackage.getException());
 
-    initEClass(featureGeneratorEClass, FeatureGenerator.class, "FeatureGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(featureGeneratorEClass, FeatureGenerator.class, "FeatureGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    initEClass(pluginGeneratorEClass, PluginGenerator.class, "PluginGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(pluginGeneratorEClass, PluginGenerator.class, "PluginGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    initEClass(componentDefGeneratorEClass, ComponentDefGenerator.class, "ComponentDefGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(componentDefGeneratorEClass, ComponentDefGenerator.class, "ComponentDefGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    initEClass(componentExtGeneratorEClass, ComponentExtGenerator.class, "ComponentExtGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(componentExtGeneratorEClass, ComponentExtGenerator.class, "ComponentExtGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    initEClass(cSpecGeneratorEClass, CSpecGenerator.class, "CSpecGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(cSpecGeneratorEClass, CSpecGenerator.class, "CSpecGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    initEClass(cSpexGeneratorEClass, CSpexGenerator.class, "CSpexGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(cSpexGeneratorEClass, CSpexGenerator.class, "CSpexGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    initEClass(siteGeneratorEClass, SiteGenerator.class, "SiteGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(siteGeneratorEClass, SiteGenerator.class, "SiteGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    initEClass(categoryGeneratorEClass, CategoryGenerator.class, "CategoryGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(categoryGeneratorEClass, CategoryGenerator.class, "CategoryGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    initEClass(productGeneratorEClass, ProductGenerator.class, "ProductGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(productGeneratorEClass, ProductGenerator.class, "ProductGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    initEClass(projectNameGeneratorEClass, ProjectNameGenerator.class, "ProjectNameGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(projectNameGeneratorEClass, ProjectNameGenerator.class, "ProjectNameGenerator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    initEClass(dropinLocationEClass, DropinLocation.class, "DropinLocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getDropinLocation_RootFolder(), ecorePackage.getEString(), "rootFolder", null, 1, 1, DropinLocation.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(dropinLocationEClass, DropinLocation.class, "DropinLocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getDropinLocation_RootFolder(), ecorePackage.getEString(), "rootFolder", null, 1, 1, DropinLocation.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getDropinLocation_Recursive(), ecorePackage.getEBoolean(), "recursive", "true", 0, 1, DropinLocation.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getDropinLocation_Recursive(), ecorePackage.getEBoolean(), "recursive", "true", 0, 1, DropinLocation.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize data types
-    initEDataType(installableUnitEDataType, IInstallableUnit.class, "InstallableUnit", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(stringToVersionMapEDataType, Map.class, "StringToVersionMap", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS,
-        "java.util.Map<java.lang.String, org.eclipse.equinox.p2.metadata.Version>");
+    initEDataType(installableUnitEDataType, IInstallableUnit.class, "InstallableUnit", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(stringToVersionMapEDataType, Map.class, "StringToVersionMap", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS, //$NON-NLS-1$
+        "java.util.Map<java.lang.String, org.eclipse.equinox.p2.metadata.Version>"); //$NON-NLS-1$
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore");
@@ -907,8 +908,9 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -919,9 +921,10 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
     addAnnotation(this, source,
-        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.targlets.edit/icons/full/obj16" });
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.targlets.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -932,19 +935,34 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getTargletContainer_ID(), source, new String[] { "kind", "attribute", "name", "id" });
-    addAnnotation(getTargletContainer_Targlets(), source, new String[] { "name", "targlet" });
-    addAnnotation(getTarglet_Requirements(), source, new String[] { "name", "requirement" });
-    addAnnotation(getTarglet_SourceLocators(), source, new String[] { "name", "sourceLocator" });
-    addAnnotation(getTarglet_InstallableUnitGenerators(), source, new String[] { "name", "installableUnitGenerator" });
-    addAnnotation(getTarglet_RepositoryLists(), source, new String[] { "name", "repositoryList" });
-    addAnnotation(getTarglet_ActiveRepositoryListName(), source, new String[] { "kind", "attribute", "name", "activeRepositoryList" });
-    addAnnotation(getTarglet_ActiveRepositoryList(), source, new String[] { "name", "activeRepository" });
-    addAnnotation(getTarglet_ActiveRepositories(), source, new String[] { "name", "activeRepository" });
-    addAnnotation(getTarglet_DropinLocations(), source, new String[] { "name", "dropinLocation" });
-    addAnnotation(getComponentExtension_Requirements(), source, new String[] { "name", "requirement" });
-    addAnnotation(getComponentDefinition_ID(), source, new String[] { "kind", "attribute", "name", "id" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getTargletContainer_ID(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "id" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTargletContainer_Targlets(), source, new String[] { "name", "targlet" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTarglet_Requirements(), source, new String[] { "name", "requirement" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTarglet_SourceLocators(), source, new String[] { "name", "sourceLocator" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTarglet_InstallableUnitGenerators(), source, new String[] { "name", "installableUnitGenerator" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTarglet_RepositoryLists(), source, new String[] { "name", "repositoryList" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTarglet_ActiveRepositoryListName(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "activeRepositoryList" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTarglet_ActiveRepositoryList(), source, new String[] { "name", "activeRepository" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTarglet_ActiveRepositories(), source, new String[] { "name", "activeRepository" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTarglet_DropinLocations(), source, new String[] { "name", "dropinLocation" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getComponentExtension_Requirements(), source, new String[] { "name", "requirement" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getComponentDefinition_ID(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "id" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -955,7 +973,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    */
   protected void createNoExpandAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/NoExpand";
+    String source = "http://www.eclipse.org/oomph/setup/NoExpand"; //$NON-NLS-1$
     addAnnotation(getTargletContainer_ID(), source, new String[] {});
   }
 

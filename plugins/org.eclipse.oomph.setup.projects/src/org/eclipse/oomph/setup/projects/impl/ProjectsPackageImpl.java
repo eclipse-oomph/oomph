@@ -311,6 +311,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -339,29 +340,29 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     projectsBuildTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(pathVariableTaskEClass, PathVariableTask.class, "PathVariableTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getPathVariableTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, PathVariableTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(pathVariableTaskEClass, PathVariableTask.class, "PathVariableTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getPathVariableTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, PathVariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPathVariableTask_URI(), ecorePackage.getEString(), "uRI", null, 0, 1, PathVariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getPathVariableTask_URI(), ecorePackage.getEString(), "uRI", null, 0, 1, PathVariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(projectsImportTaskEClass, ProjectsImportTask.class, "ProjectsImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getProjectsImportTask_Force(), ecorePackage.getEBoolean(), "force", null, 0, 1, ProjectsImportTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(projectsImportTaskEClass, ProjectsImportTask.class, "ProjectsImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getProjectsImportTask_Force(), ecorePackage.getEBoolean(), "force", null, 0, 1, ProjectsImportTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getProjectsImportTask_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 1, -1,
+    initEReference(getProjectsImportTask_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 1, -1, //$NON-NLS-1$
         ProjectsImportTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
 
-    initEClass(projectsBuildTaskEClass, ProjectsBuildTask.class, "ProjectsBuildTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProjectsBuildTask_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, ProjectsBuildTask.class,
+    initEClass(projectsBuildTaskEClass, ProjectsBuildTask.class, "ProjectsBuildTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getProjectsBuildTask_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, ProjectsBuildTask.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProjectsBuildTask_OnlyNewProjects(), ecorePackage.getEBoolean(), "onlyNewProjects", null, 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT,
+    initEAttribute(getProjectsBuildTask_OnlyNewProjects(), ecorePackage.getEBoolean(), "onlyNewProjects", null, 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProjectsBuildTask_Refresh(), ecorePackage.getEBoolean(), "refresh", null, 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getProjectsBuildTask_Refresh(), ecorePackage.getEBoolean(), "refresh", null, 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProjectsBuildTask_Clean(), ecorePackage.getEBoolean(), "clean", null, 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getProjectsBuildTask_Clean(), ecorePackage.getEBoolean(), "clean", null, 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProjectsBuildTask_Build(), ecorePackage.getEBoolean(), "build", "true", 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getProjectsBuildTask_Build(), ecorePackage.getEBoolean(), "build", "true", 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
@@ -390,8 +391,9 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -402,9 +404,11 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    */
   protected void createEnablementAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(this, source, new String[] { "variableName", "setup.projects.p2", "repository", "${oomph.update.url}", "installableUnits",
-        "org.eclipse.oomph.setup.projects.feature.group" });
+    String source = "http://www.eclipse.org/oomph/setup/Enablement"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "variableName", "setup.projects.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "${oomph.update.url}", //$NON-NLS-1$ //$NON-NLS-2$
+        "installableUnits", "org.eclipse.oomph.setup.projects.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -415,9 +419,10 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.projects.edit/icons/full/obj16" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "imageBaseURI", //$NON-NLS-1$
+        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.projects.edit/icons/full/obj16" //$NON-NLS-1$
+    });
   }
 
   /**
@@ -428,10 +433,13 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    */
   protected void createValidTriggersAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
-    addAnnotation(pathVariableTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
-    addAnnotation(projectsImportTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
-    addAnnotation(projectsBuildTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers"; //$NON-NLS-1$
+    addAnnotation(pathVariableTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(projectsImportTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(projectsBuildTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -442,10 +450,14 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getPathVariableTask_URI(), source, new String[] { "kind", "attribute", "name", "uri" });
-    addAnnotation(getProjectsImportTask_SourceLocators(), source, new String[] { "name", "sourceLocator" });
-    addAnnotation(getProjectsBuildTask_Predicates(), source, new String[] { "name", "predicate" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getPathVariableTask_URI(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "uri" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProjectsImportTask_SourceLocators(), source, new String[] { "name", "sourceLocator" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProjectsBuildTask_Predicates(), source, new String[] { "name", "predicate" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -456,7 +468,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    */
   protected void createRedirectAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Redirect";
+    String source = "http://www.eclipse.org/oomph/setup/Redirect"; //$NON-NLS-1$
     addAnnotation(getPathVariableTask_URI(), source, new String[] {});
   }
 

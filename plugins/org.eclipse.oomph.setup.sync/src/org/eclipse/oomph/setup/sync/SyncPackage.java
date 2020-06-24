@@ -41,7 +41,7 @@ public interface SyncPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNAME = "sync";
+  String eNAME = "sync"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -49,7 +49,7 @@ public interface SyncPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/oomph/setup/sync/1.0";
+  String eNS_URI = "http://www.eclipse.org/oomph/setup/sync/1.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -57,7 +57,7 @@ public interface SyncPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "sync";
+  String eNS_PREFIX = "sync"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.

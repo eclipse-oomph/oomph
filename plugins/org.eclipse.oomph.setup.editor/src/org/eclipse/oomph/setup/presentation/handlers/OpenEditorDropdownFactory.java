@@ -187,7 +187,7 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
           });
 
           MenuItem menuItem = new MenuItem(menu, SWT.CASCADE);
-          menuItem.setText("Parent Models");
+          menuItem.setText(Messages.OpenEditorDropdownFactory_menu_parentModels);
           menuItem.setMenu(subMenu);
         }
       }
@@ -217,7 +217,7 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
 
       final ImageDescriptor imageDescriptor = SetupLabelProvider.getImageDescriptor(itemProvider, object);
       final String text = OpenEditorDropdownHandler.getLabelText(itemProvider, object,
-          !"org.eclipse.oomph.setup.editor.open.menu.dynamic".equals(OpenEditorDropdownFactory.this.getId()));
+          !"org.eclipse.oomph.setup.editor.open.menu.dynamic".equals(OpenEditorDropdownFactory.this.getId())); //$NON-NLS-1$
 
       MenuItem item = new MenuItem(menu, SWT.PUSH);
       item.setImage(ExtendedImageRegistry.INSTANCE.getImage(imageDescriptor));

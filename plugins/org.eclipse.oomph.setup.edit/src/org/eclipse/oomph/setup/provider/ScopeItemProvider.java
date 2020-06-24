@@ -76,7 +76,8 @@ public class ScopeItemProvider extends SetupTaskContainerItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Scope_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Scope_name_feature", "_UI_Scope_type"),
+        getString("_UI_Scope_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Scope_name_feature", "_UI_Scope_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.SCOPE__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -89,7 +90,8 @@ public class ScopeItemProvider extends SetupTaskContainerItemProvider
   protected void addLabelPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Scope_label_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Scope_label_feature", "_UI_Scope_type"),
+        getString("_UI_Scope_label_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Scope_label_feature", "_UI_Scope_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.SCOPE__LABEL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -102,7 +104,8 @@ public class ScopeItemProvider extends SetupTaskContainerItemProvider
   protected void addDescriptionPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Scope_description_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Scope_description_feature", "_UI_Scope_type"),
+        getString("_UI_Scope_description_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Scope_description_feature", "_UI_Scope_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.SCOPE__DESCRIPTION, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -115,7 +118,8 @@ public class ScopeItemProvider extends SetupTaskContainerItemProvider
   protected void addQualifiedNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Scope_qualifiedName_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Scope_qualifiedName_feature", "_UI_Scope_type"),
+        getString("_UI_Scope_qualifiedName_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Scope_qualifiedName_feature", "_UI_Scope_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.SCOPE__QUALIFIED_NAME, false, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -137,6 +141,7 @@ public class ScopeItemProvider extends SetupTaskContainerItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     String label = getLabel(object);

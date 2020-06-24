@@ -58,7 +58,7 @@ public abstract class ProfileCreatorImpl extends HashMap<String, String> impleme
 
   public boolean is(String property)
   {
-    return "true".equals(get(property));
+    return "true".equals(get(property)); //$NON-NLS-1$
   }
 
   public File getFile(String property)
@@ -88,7 +88,7 @@ public abstract class ProfileCreatorImpl extends HashMap<String, String> impleme
 
   public ProfileCreator set(String property, boolean value)
   {
-    return set(property, value ? "true" : null);
+    return set(property, value ? "true" : null); //$NON-NLS-1$
   }
 
   public ProfileCreator set(String property, String value)
@@ -202,7 +202,7 @@ public abstract class ProfileCreatorImpl extends HashMap<String, String> impleme
     String value = getEnvironments();
     if (value != null)
     {
-      StringTokenizer tokenizer = new StringTokenizer(value, ",");
+      StringTokenizer tokenizer = new StringTokenizer(value, ","); //$NON-NLS-1$
       while (tokenizer.hasMoreTokens())
       {
         String token = tokenizer.nextToken();
@@ -299,32 +299,32 @@ public abstract class ProfileCreatorImpl extends HashMap<String, String> impleme
 
   public ProfileCreator addOS(String value)
   {
-    return addEnvironmentValue("osgi.os", value);
+    return addEnvironmentValue("osgi.os", value); //$NON-NLS-1$
   }
 
   public ProfileCreator removeOS(String value)
   {
-    return removeEnvironmentValue("osgi.os", value);
+    return removeEnvironmentValue("osgi.os", value); //$NON-NLS-1$
   }
 
   public ProfileCreator addWS(String value)
   {
-    return addEnvironmentValue("osgi.ws", value);
+    return addEnvironmentValue("osgi.ws", value); //$NON-NLS-1$
   }
 
   public ProfileCreator removeWS(String value)
   {
-    return removeEnvironmentValue("osgi.ws", value);
+    return removeEnvironmentValue("osgi.ws", value); //$NON-NLS-1$
   }
 
   public ProfileCreator addArch(String value)
   {
-    return addEnvironmentValue("osgi.arch", value);
+    return addEnvironmentValue("osgi.arch", value); //$NON-NLS-1$
   }
 
   public ProfileCreator removeArch(String value)
   {
-    return removeEnvironmentValue("osgi.arch", value);
+    return removeEnvironmentValue("osgi.arch", value); //$NON-NLS-1$
   }
 
   public String getLanguages()
@@ -344,7 +344,7 @@ public abstract class ProfileCreatorImpl extends HashMap<String, String> impleme
     String value = getLanguages();
     if (value != null)
     {
-      StringTokenizer tokenizer = new StringTokenizer(value, ",");
+      StringTokenizer tokenizer = new StringTokenizer(value, ","); //$NON-NLS-1$
       while (tokenizer.hasMoreTokens())
       {
         String token = tokenizer.nextToken();

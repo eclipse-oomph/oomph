@@ -96,6 +96,7 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRequest;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.osgi.service.datalocation.Location;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.io.IOException;
@@ -124,13 +125,13 @@ import java.util.Set;
 @SuppressWarnings("restriction")
 public class ProfileTransactionImpl implements ProfileTransaction
 {
-  public static final String PROP_ADDITIONAL_POOLS = "oomph.p2.additional.pools";
+  public static final String PROP_ADDITIONAL_POOLS = "oomph.p2.additional.pools"; //$NON-NLS-1$
 
-  public static final String ARTIFICIAL_ROOT_ID = "artificial_root";
+  public static final String ARTIFICIAL_ROOT_ID = "artificial_root"; //$NON-NLS-1$
 
   public static final String SOURCE_IU_ID = "org.eclipse.oomph.p2.source.container"; //$NON-NLS-1$
 
-  private static final String OSGI_RESOLVER_USES_MODE = "osgi.resolver.usesMode";
+  private static final String OSGI_RESOLVER_USES_MODE = "osgi.resolver.usesMode"; //$NON-NLS-1$
 
   private static final IRequirement BUNDLE_REQUIREMENT = MetadataFactory.createRequirement("org.eclipse.equinox.p2.eclipse.type", "bundle", null, null, false, //$NON-NLS-1$ //$NON-NLS-2$
       false, false);
@@ -209,7 +210,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
   {
     if (IMMUTABLE_PROPERTIES.contains(key) && !ObjectUtil.equals(profileProperties.get(key), value))
     {
-      throw new IllegalArgumentException("Property is immutable: " + key);
+      throw new IllegalArgumentException(NLS.bind("Property is immutable: {0}", key)); //$NON-NLS-1$
     }
 
     if (value != null)
@@ -332,7 +333,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     if (!committed)
     {
       committed = true;
-      monitor.beginTask("", 2);
+      monitor.beginTask("", 2); //$NON-NLS-1$
 
       try
       {
@@ -370,7 +371,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     final List<Runnable> cleanup = new ArrayList<Runnable>();
 
     boolean includeSourceBundles = profileDefinition.isIncludeSourceBundles();
-    monitor.beginTask("", includeSourceBundles ? 75 : 70);
+    monitor.beginTask("", includeSourceBundles ? 75 : 70); //$NON-NLS-1$
 
     try
     {
@@ -398,7 +399,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
           // This inspects the stack to see if this method is being called by getSolutionFor,
           // In which case we want to return nothing so these removals aren't considered by the slicer.
           StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-          if ("getSolutionFor".equals(stackTrace[2].getMethodName()))
+          if ("getSolutionFor".equals(stackTrace[2].getMethodName())) //$NON-NLS-1$
           {
             return Collections.emptyList();
           }
@@ -418,7 +419,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       // We don't want to do that for targlets, because we want to compute a new target platform without consider what existed before.
       if (isTarglet)
       {
-        provisioningContext.setProperty("org.eclipse.equinox.p2.internal.profileius", Boolean.FALSE.toString());
+        provisioningContext.setProperty("org.eclipse.equinox.p2.internal.profileius", Boolean.FALSE.toString()); //$NON-NLS-1$
       }
 
       IQueryable<IInstallableUnit> metadata = provisioningContext.getMetadata(MonitorUtil.create(monitor, 5));
@@ -507,7 +508,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
         public boolean commit(IProgressMonitor monitor) throws CoreException
         {
-          final String oldUsesMode = System.setProperty(OSGI_RESOLVER_USES_MODE, "ignore");
+          final String oldUsesMode = System.setProperty(OSGI_RESOLVER_USES_MODE, "ignore"); //$NON-NLS-1$
           cleanup.add(new Runnable()
           {
             public void run()
@@ -585,7 +586,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas)
   {
     // Undo (remove) the addition of our artificial root IU and compute the effective deltas (to remove redundancies in the operands).
-    Field operandsField = ReflectUtil.getField(ProvisioningPlan.class, "operands");
+    Field operandsField = ReflectUtil.getField(ProvisioningPlan.class, "operands"); //$NON-NLS-1$
     @SuppressWarnings("unchecked")
     List<Operand> operands = (List<Operand>)ReflectUtil.getValue(operandsField, provisioningPlan);
     for (Iterator<Operand> it = operands.iterator(); it.hasNext();)
@@ -694,7 +695,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     {
       try
       {
-        final Field mirrorsEnabledField = ReflectUtil.getField(SimpleArtifactRepository.class, "MIRRORS_ENABLED");
+        final Field mirrorsEnabledField = ReflectUtil.getField(SimpleArtifactRepository.class, "MIRRORS_ENABLED"); //$NON-NLS-1$
         ReflectUtil.setValue(mirrorsEnabledField, null, mirrors, true);
 
         cleanup.add(new Runnable()
@@ -769,7 +770,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
   {
     Agent agent = profile.getAgent();
 
-    boolean removeRepositories = !"false".equals(PropertiesUtil.getProperty(AgentManager.PROP_FLUSH));
+    boolean removeRepositories = !"false".equals(PropertiesUtil.getProperty(AgentManager.PROP_FLUSH)); //$NON-NLS-1$
     if (removeRepositories)
     {
       agent.flushCachedRepositories();
@@ -833,7 +834,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       metadataRepositories.add(metadataRepository);
     }
 
-    if (!"false".equalsIgnoreCase(PropertiesUtil.getProperty(PROP_ADDITIONAL_POOLS)))
+    if (!"false".equalsIgnoreCase(PropertiesUtil.getProperty(PROP_ADDITIONAL_POOLS))) //$NON-NLS-1$
     {
       for (BundlePool bundlePool : agent.getAgentManager().getBundlePools())
       {
@@ -857,7 +858,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
   {
     InstallableUnitDescription rootDescription = new InstallableUnitDescription();
     rootDescription.setId(ARTIFICIAL_ROOT_ID);
-    rootDescription.setVersion(Version.createOSGi(1, 0, 0, "v" + System.currentTimeMillis()));
+    rootDescription.setVersion(Version.createOSGi(1, 0, 0, "v" + System.currentTimeMillis())); //$NON-NLS-1$
     rootDescription.setSingleton(true);
     rootDescription.setArtifacts(new IArtifactKey[0]);
     rootDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
@@ -879,7 +880,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
         IRequirement rootRequirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, id, versionRange, filter, false, false);
         rootRequirements.add(rootRequirement);
-        if (rootIU.isSingleton() || "true".equals(rootIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP)))
+        if (rootIU.isSingleton() || "true".equals(rootIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP))) //$NON-NLS-1$
         {
           singletonRootRequirements.put(id, rootRequirement);
         }
@@ -888,7 +889,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       request.remove(rootIU);
     }
 
-    MultiStatus status = new MultiStatus(P2CorePlugin.INSTANCE.getSymbolicName(), 0, "Profile could not be changed", null);
+    MultiStatus status = new MultiStatus(P2CorePlugin.INSTANCE.getSymbolicName(), 0, Messages.ProfileTransactionImpl_CouldNotBeChanged_message, null);
 
     for (Requirement requirement : profileDefinition.getRequirements())
     {
@@ -996,13 +997,13 @@ public class ProfileTransactionImpl implements ProfileTransaction
       {
         Location location = Platform.getInstallLocation();
         org.eclipse.emf.common.util.URI installationLocation = org.eclipse.emf.common.util.URI.createURI(FileLocator.resolve(location.getURL()).toString());
-        org.eclipse.emf.common.util.URI tempDir = org.eclipse.emf.common.util.URI.createFileURI(PropertiesUtil.getProperty("java.io.tmpdir"));
+        org.eclipse.emf.common.util.URI tempDir = org.eclipse.emf.common.util.URI.createFileURI(PropertiesUtil.getProperty("java.io.tmpdir")); //$NON-NLS-1$
         if (!ObjectUtil.equals(installationLocation.device(), tempDir.device()))
         {
-          Field field = ReflectUtil.getField(NativeTouchpoint.class, "backups");
+          Field field = ReflectUtil.getField(NativeTouchpoint.class, "backups"); //$NON-NLS-1$
           @SuppressWarnings("unchecked")
           Map<IProfile, IBackupStore> backups = (Map<IProfile, IBackupStore>)ReflectUtil.getValue(field, null);
-          final File localTempFolder = new File(installationLocation.toFileString(), "backup");
+          final File localTempFolder = new File(installationLocation.toFileString(), "backup"); //$NON-NLS-1$
           final IProfile planProfile = provisioningPlan.getProfile();
           backups.put(planProfile, new IBackupStore()
           {
@@ -1111,7 +1112,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       // TODO What about source features?
       if (iu.satisfies(BUNDLE_REQUIREMENT))
       {
-        String id = iu.getId() + ".source";
+        String id = iu.getId() + ".source"; //$NON-NLS-1$
         Version version = iu.getVersion();
         VersionRange versionRange = new VersionRange(version, true, version, true);
 
@@ -1120,7 +1121,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
         {
           provisioningPlan.addInstallableUnit(sourceIU);
 
-          IRequirement sourceRequirement = MetadataFactory.createRequirement("osgi.bundle", id, versionRange, null, true, false, true);
+          IRequirement sourceRequirement = MetadataFactory.createRequirement("osgi.bundle", id, versionRange, null, true, false, true); //$NON-NLS-1$
           requirements.add(sourceRequirement);
         }
       }
@@ -1253,7 +1254,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
             final IArtifactRepository repository = collectEvent.getRepository();
             if (repository != null)
             {
-              monitor.subTask("Collecting " + requests.length + " artifacts from " + repository.getLocation());
+              monitor.subTask(NLS.bind(Messages.ProfileTransactionImpl_CollectingArtifacts_task, requests.length, repository.getLocation()));
               if (!repository.isModifiable())
               {
                 // We want to have the smallest artifacts at the top of the requests array,
@@ -1320,8 +1321,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
               processStats(repository);
 
               NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
-              monitor.subTask("Collected " + requests.length + " artifacts for " + repository.getLocation() + " in "
-                  + numberFormat.format((System.currentTimeMillis() - startTime) / 1000.0) + "s");
+              monitor.subTask(NLS.bind(Messages.ProfileTransactionImpl_CollectingArtifactsFor_task,
+                  new Object[] { requests.length, repository.getLocation(), numberFormat.format((System.currentTimeMillis() - startTime) / 1000.0) }));
             }
           }
         }
@@ -1332,7 +1333,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     {
       if (repository instanceof SimpleArtifactRepository)
       {
-        Object value = ReflectUtil.getValue("mirrors", repository);
+        Object value = ReflectUtil.getValue("mirrors", repository); //$NON-NLS-1$
         if (value instanceof BetterMirrorSelector)
         {
           BetterMirrorSelector mirrorSelector = (BetterMirrorSelector)value;
@@ -1358,7 +1359,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
    */
   private static final class ExecutePlanMonitor extends ProgressMonitorWrapper
   {
-    private static final String INSTALLING_PREFIX = "Installing ";
+    private static final String INSTALLING_PREFIX = Messages.ProfileTransactionImpl_Installing_task + " "; //$NON-NLS-1$
 
     private final Map<String, LinkedList<Version>> versions = new HashMap<String, LinkedList<Version>>();
 
@@ -1380,7 +1381,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
         Version version = getVersion(id);
         if (version != null)
         {
-          name += " [" + version + "]";
+          name += " [" + version + "]"; //$NON-NLS-1$ //$NON-NLS-2$
         }
       }
 
@@ -1499,7 +1500,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     @Override
     public String toString()
     {
-      return iu.toString() + " / " + propertyKey;
+      return iu.toString() + " / " + propertyKey; //$NON-NLS-1$
     }
   }
 
@@ -1526,9 +1527,9 @@ public class ProfileTransactionImpl implements ProfileTransaction
     {
       try
       {
-        monitor.beginTask("", uris.length + 1);
+        monitor.beginTask("", uris.length + 1); //$NON-NLS-1$
         monitor.worked(1);
-        begin("Load Repositories", monitor);
+        begin(Messages.ProfileTransactionImpl_LoadRepositories_task, monitor);
       }
       finally
       {
@@ -1550,7 +1551,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     @Override
     protected Worker createWorker(URI key, int workerID, boolean secondary)
     {
-      return new Worker("Repository loader for " + key, this, key, workerID, secondary);
+      return new Worker(NLS.bind(Messages.ProfileTransactionImpl_RepositoryLoader_thread, key), this, key, workerID, secondary);
     }
 
     /**

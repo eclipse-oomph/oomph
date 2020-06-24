@@ -31,6 +31,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -63,7 +64,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class PreferenceInitializationDialog extends AbstractSetupDialog
 {
-  private static final String TITLE = "Preference Initialization";
+  private static final String TITLE = Messages.PreferenceInitializationDialog_title;
 
   private final PreferenceManager preferenceManager;
 
@@ -75,7 +76,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
 
   public PreferenceInitializationDialog(PreferenceDialog preferenceDialog, PreferenceManager preferenceManager)
   {
-    super(preferenceDialog.getShell(), "Preference Pages", 500, 600, SetupUIPlugin.INSTANCE, true);
+    super(preferenceDialog.getShell(), Messages.PreferenceInitializationDialog_dialogTitle, 500, 600, SetupUIPlugin.INSTANCE, true);
     this.preferenceDialog = preferenceDialog;
     this.preferenceManager = preferenceManager;
   }
@@ -83,13 +84,13 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
   @Override
   protected String getDefaultMessage()
   {
-    return "Select the preference pages to initialize.";
+    return Messages.PreferenceInitializationDialog_defaultMessage;
   }
 
   @Override
   public String getHelpPath()
   {
-    return SetupUIPlugin.INSTANCE.getSymbolicName() + "/html/PreferenceInitializationHelp.html";
+    return SetupUIPlugin.INSTANCE.getSymbolicName() + "/html/PreferenceInitializationHelp.html"; //$NON-NLS-1$
   }
 
   @Override
@@ -190,7 +191,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
       {
         if (element == root)
         {
-          return "All Pages";
+          return Messages.PreferenceInitializationDialog_checkBoxTree_rootLabel;
         }
 
         IPreferenceNode preferenceNode = (IPreferenceNode)element;
@@ -198,7 +199,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
       }
     });
 
-    filteredTree = ReflectUtil.getValue("filteredTree", preferenceDialog);
+    filteredTree = ReflectUtil.getValue("filteredTree", preferenceDialog); //$NON-NLS-1$
     final TreeViewer viewer = filteredTree.getViewer();
     checkboxTreeViewer.setComparator(viewer.getComparator());
 
@@ -297,7 +298,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
     {
       setPreferenceDialog(preferenceDialog);
 
-      filteredTree.getFilterControl().setText("");
+      filteredTree.getFilterControl().setText(""); //$NON-NLS-1$
 
       IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
       IPreferenceNode selectedNode = (IPreferenceNode)selection.getFirstElement();
@@ -329,7 +330,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
     private void setPreferenceDialog(PreferenceDialog preferenceDialog)
     {
       this.preferenceDialog = preferenceDialog;
-      filteredTree = ReflectUtil.getValue("filteredTree", preferenceDialog);
+      filteredTree = ReflectUtil.getValue("filteredTree", preferenceDialog); //$NON-NLS-1$
       viewer = filteredTree.getViewer();
     }
 
@@ -344,7 +345,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
         {
           if (description.length() != 0)
           {
-            description.insert(0, " -> ");
+            description.insert(0, " -> "); //$NON-NLS-1$
           }
 
           description.insert(0, item.getText());
@@ -381,7 +382,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
             final Set<IPreferenceNode> badPages = new HashSet<IPreferenceNode>();
             try
             {
-              monitor.beginTask("Visiting preference pages", nodes.size());
+              monitor.beginTask(Messages.PreferenceInitializationDialog_visitingPreferencePagesTask_name, nodes.size());
 
               Map<String, IPreferenceNode> remainingNodes = new LinkedHashMap<String, IPreferenceNode>(nodes);
               remainingNodes.values().removeAll(visitedNodes);
@@ -423,13 +424,13 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
                     }
 
                     // Check if the current page is valid.
-                    IPreferencePage currentPage = (IPreferencePage)ReflectUtil.invokeMethod("getCurrentPage", preferenceDialog);
+                    IPreferencePage currentPage = (IPreferencePage)ReflectUtil.invokeMethod("getCurrentPage", preferenceDialog); //$NON-NLS-1$
                     if (currentPage != null && !currentPage.okToLeave())
                     {
                       // Log the fact that this page is ill behaved.
                       Bundle bundle = FrameworkUtil.getBundle(currentPage.getClass());
                       SetupUIPlugin.INSTANCE.log(new Status(IStatus.WARNING, bundle == null ? SetupUIPlugin.PLUGIN_ID : bundle.getSymbolicName(),
-                          "The preference page " + entry.getKey() + " comes up in an invalid state"));
+                          NLS.bind(Messages.PreferenceInitializationDialog_preferenceInvalidState_message, entry.getKey())));
 
                       // Remember this bad page and reopen the dialog without this bad page as the current page.
                       badPages.add(preferenceNode);
@@ -487,10 +488,10 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
                   {
                     IPreferencePage page = node.getPage();
                     pages.add(page);
-                    ReflectUtil.setValue("page", node, null);
+                    ReflectUtil.setValue("page", node, null); //$NON-NLS-1$
                   }
 
-                  ReflectUtil.invokeMethod("okPressed", preferenceDialog);
+                  ReflectUtil.invokeMethod("okPressed", preferenceDialog); //$NON-NLS-1$
 
                   // Close the current transaction.
                   RecorderTransaction transaction = RecorderTransaction.getInstance();

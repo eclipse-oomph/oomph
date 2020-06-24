@@ -101,7 +101,7 @@ public class ProductCatalogItemProvider extends ScopeItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ProductCatalog"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ProductCatalog")); //$NON-NLS-1$
   }
 
   /**
@@ -125,7 +125,7 @@ public class ProductCatalogItemProvider extends ScopeItemProvider
   public String getText(Object object)
   {
     String label = getLabel(object);
-    return label == null || label.length() == 0 ? getString("_UI_ProductCatalog_type") : label;
+    return label == null || label.length() == 0 ? getString("_UI_ProductCatalog_type") : label; //$NON-NLS-1$
   }
 
   /**

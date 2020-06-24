@@ -17,7 +17,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
  */
 public class PerformDropdownHandler extends AbstractDropdownHandler
 {
-  public static final String COMMAND_ID = "org.eclipse.oomph.setup.editor.performDropdown";
+  public static final String COMMAND_ID = "org.eclipse.oomph.setup.editor.performDropdown"; //$NON-NLS-1$
 
   public PerformDropdownHandler()
   {

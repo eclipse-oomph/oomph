@@ -25,6 +25,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,13 +41,13 @@ import java.util.regex.Pattern;
  */
 public class PomModulesUpdater extends WorkspaceUpdateListener
 {
-  public static final String ANNOTATION = "http:/www.eclipse.org/oomph/targlets/PomModulesUpdater";
+  public static final String ANNOTATION = "http:/www.eclipse.org/oomph/targlets/PomModulesUpdater"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_LOCATION = "location";
+  public static final String ANNOTATION_LOCATION = "location"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_MODULE_ROOTS = "moduleRoots";
+  public static final String ANNOTATION_MODULE_ROOTS = "moduleRoots"; //$NON-NLS-1$
 
-  private static final Pattern MODULES_PATTERN = Pattern.compile("([ \\t]*)<modules>.*?</modules>", Pattern.DOTALL);
+  private static final Pattern MODULES_PATTERN = Pattern.compile("([ \\t]*)<modules>.*?</modules>", Pattern.DOTALL); //$NON-NLS-1$
 
   public PomModulesUpdater()
   {
@@ -73,7 +74,7 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
             String roots = annotation.getDetails().get(ANNOTATION_MODULE_ROOTS);
             if (!StringUtil.isEmpty(roots))
             {
-              moduleRoots = roots.split(",");
+              moduleRoots = roots.split(","); //$NON-NLS-1$
               for (int i = 0; i < moduleRoots.length; i++)
               {
                 moduleRoots[i] = moduleRoots[i].replace('\\', '/');
@@ -85,7 +86,7 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
           }
           else
           {
-            TargletsCorePlugin.INSTANCE.log("Not a file: " + mainPom, IStatus.WARNING);
+            TargletsCorePlugin.INSTANCE.log(NLS.bind(Messages.PomModulesUpdater_NotFile_message, mainPom), IStatus.WARNING);
           }
         }
       }
@@ -95,7 +96,7 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
   private static void updatePomModules(final File mainPom, final String[] moduleRoots, final Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos,
       final IProgressMonitor monitor) throws Exception
   {
-    monitor.subTask("Checking for POM modules updates");
+    monitor.subTask(Messages.PomModulesUpdater_CheckingUpdates_task);
 
     new FileUpdater()
     {
@@ -112,7 +113,7 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
           StringBuilder builder = new StringBuilder();
           builder.append(start);
           builder.append(indent);
-          builder.append("<modules>");
+          builder.append("<modules>"); //$NON-NLS-1$
           builder.append(nl);
 
           List<String> modules = analyzeProjects(mainPom, moduleRoots, workspaceIUInfos, monitor);
@@ -120,14 +121,14 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
           {
             builder.append(indent);
             builder.append(indent);
-            builder.append("<module>");
+            builder.append("<module>"); //$NON-NLS-1$
             builder.append(module);
-            builder.append("</module>");
+            builder.append("</module>"); //$NON-NLS-1$
             builder.append(nl);
           }
 
           builder.append(indent);
-          builder.append("</modules>");
+          builder.append("</modules>"); //$NON-NLS-1$
           builder.append(end);
 
           return builder.toString();
@@ -139,7 +140,7 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
       @Override
       protected void setContents(URI uri, String encoding, String contents) throws IOException
       {
-        monitor.subTask("Updating " + (uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
+        monitor.subTask(NLS.bind("Updating {0}", uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString())); //$NON-NLS-1$
         super.setContents(uri, encoding, contents);
       }
     }.update(mainPom);
@@ -174,7 +175,7 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
 
       if (inRoot)
       {
-        File pom = new File(folder, "pom.xml");
+        File pom = new File(folder, "pom.xml"); //$NON-NLS-1$
         if (pom.isFile())
         {
           URI uri = URI.createFileURI(modulePath).deresolve(mainURI);

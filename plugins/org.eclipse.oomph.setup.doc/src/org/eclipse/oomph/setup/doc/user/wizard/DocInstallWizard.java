@@ -54,6 +54,7 @@ import java.util.Collections;
  *
  * @number 100
  */
+@SuppressWarnings("nls")
 public abstract class DocInstallWizard
 {
   /**

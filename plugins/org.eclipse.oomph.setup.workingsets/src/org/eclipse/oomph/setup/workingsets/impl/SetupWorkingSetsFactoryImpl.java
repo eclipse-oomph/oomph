@@ -75,7 +75,7 @@ public class SetupWorkingSetsFactoryImpl extends EFactoryImpl implements SetupWo
       case SetupWorkingSetsPackage.WORKING_SET_TASK:
         return createWorkingSetTask();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

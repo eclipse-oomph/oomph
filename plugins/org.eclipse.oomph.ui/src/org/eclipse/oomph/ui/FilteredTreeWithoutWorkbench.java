@@ -77,7 +77,7 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
   @Override
   protected WorkbenchJob doCreateRefreshJob()
   {
-    return new WorkbenchJob("Refresh Filter")
+    return new WorkbenchJob(Messages.FilteredTreeWithoutWorkbench_refreshJob_name)
     {
       @Override
       public IStatus runInUIThread(IProgressMonitor monitor)
@@ -113,7 +113,7 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
         try
         {
           redrawFalseControl.setRedraw(false);
-          if (Boolean.FALSE.equals(ReflectUtil.getValue("narrowingDown", FilteredTreeWithoutWorkbench.this)))
+          if (Boolean.FALSE.equals(ReflectUtil.getValue("narrowingDown", FilteredTreeWithoutWorkbench.this))) //$NON-NLS-1$
           {
             TreeItem[] is = treeViewer.getTree().getItems();
             for (int i = 0; i < is.length; i++)
@@ -250,7 +250,7 @@ public class FilteredTreeWithoutWorkbench extends FilteredTree
 
       try
       {
-        clearCachesMethod = ReflectUtil.getMethod(PatternFilter.class, "clearCaches");
+        clearCachesMethod = ReflectUtil.getMethod(PatternFilter.class, "clearCaches"); //$NON-NLS-1$
       }
       catch (Throwable t)
       {

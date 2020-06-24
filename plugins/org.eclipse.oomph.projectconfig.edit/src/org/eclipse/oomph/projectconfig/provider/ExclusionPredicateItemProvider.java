@@ -128,8 +128,8 @@ public class ExclusionPredicateItemProvider extends PredicateItemProvider
   protected void addExcludedPreferenceProfilesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ExclusionPredicate_excludedPreferenceProfiles_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ExclusionPredicate_excludedPreferenceProfiles_feature", "_UI_ExclusionPredicate_type"),
+        getString("_UI_ExclusionPredicate_excludedPreferenceProfiles_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ExclusionPredicate_excludedPreferenceProfiles_feature", "_UI_ExclusionPredicate_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectConfigPackage.Literals.EXCLUSION_PREDICATE__EXCLUDED_PREFERENCE_PROFILES, true, false, true, null, null, null)
     {
       @Override
@@ -151,7 +151,7 @@ public class ExclusionPredicateItemProvider extends PredicateItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ExclusionPredicate"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ExclusionPredicate")); //$NON-NLS-1$
   }
 
   /**
@@ -180,7 +180,7 @@ public class ExclusionPredicateItemProvider extends PredicateItemProvider
     {
       if (result.length() != 0)
       {
-        result.append(", ");
+        result.append(", "); //$NON-NLS-1$
       }
       result.append(preferenceProfile.getName());
     }

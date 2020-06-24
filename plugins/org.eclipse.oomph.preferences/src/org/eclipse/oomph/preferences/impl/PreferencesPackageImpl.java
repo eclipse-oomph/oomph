@@ -533,64 +533,64 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
     propertyEClass.getESuperTypes().add(getPreferenceItem());
 
     // Initialize classes, features, and operations; add parameters
-    initEClass(preferenceItemEClass, PreferenceItem.class, "PreferenceItem", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getPreferenceItem_Root(), getPreferenceNode(), null, "root", null, 0, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
+    initEClass(preferenceItemEClass, PreferenceItem.class, "PreferenceItem", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getPreferenceItem_Root(), getPreferenceNode(), null, "root", null, 0, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEReference(getPreferenceItem_Scope(), getPreferenceNode(), null, "scope", null, 0, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
+    initEReference(getPreferenceItem_Scope(), getPreferenceNode(), null, "scope", null, 0, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPreferenceItem_AbsolutePath(), getURI(), "absolutePath", null, 1, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
+    initEAttribute(getPreferenceItem_AbsolutePath(), getURI(), "absolutePath", null, 1, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPreferenceItem_Name(), ecorePackage.getEString(), "name", "", 1, 1, PreferenceItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getPreferenceItem_Name(), ecorePackage.getEString(), "name", "", 1, 1, PreferenceItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPreferenceItem_RelativePath(), getURI(), "relativePath", null, 1, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
+    initEAttribute(getPreferenceItem_RelativePath(), getURI(), "relativePath", null, 1, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEReference(getPreferenceItem_Ancestor(), getPreferenceItem(), null, "ancestor", null, 0, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE,
+    initEReference(getPreferenceItem_Ancestor(), getPreferenceItem(), null, "ancestor", null, 0, 1, PreferenceItem.class, IS_TRANSIENT, IS_VOLATILE, //$NON-NLS-1$
         !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
-    initEOperation(getPreferenceItem__GetParent(), getPreferenceNode(), "getParent", 0, 1, IS_UNIQUE, IS_ORDERED);
+    initEOperation(getPreferenceItem__GetParent(), getPreferenceNode(), "getParent", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(preferenceNodeEClass, PreferenceNode.class, "PreferenceNode", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getPreferenceNode_Parent(), getPreferenceNode(), getPreferenceNode_Children(), "parent", null, 0, 1, PreferenceNode.class, !IS_TRANSIENT,
+    initEClass(preferenceNodeEClass, PreferenceNode.class, "PreferenceNode", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getPreferenceNode_Parent(), getPreferenceNode(), getPreferenceNode_Children(), "parent", null, 0, 1, PreferenceNode.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getPreferenceNode_Children(), getPreferenceNode(), getPreferenceNode_Parent(), "children", null, 0, -1, PreferenceNode.class, !IS_TRANSIENT,
+    initEReference(getPreferenceNode_Children(), getPreferenceNode(), getPreferenceNode_Parent(), "children", null, 0, -1, PreferenceNode.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getPreferenceNode_Children().getEKeys().add(getPreferenceItem_Name());
-    initEReference(getPreferenceNode_Properties(), getProperty(), getProperty_Parent(), "properties", null, 0, -1, PreferenceNode.class, !IS_TRANSIENT,
+    initEReference(getPreferenceNode_Properties(), getProperty(), getProperty_Parent(), "properties", null, 0, -1, PreferenceNode.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getPreferenceNode_Properties().getEKeys().add(getPreferenceItem_Name());
-    initEAttribute(getPreferenceNode_Location(), ecorePackage.getEString(), "location", null, 0, 1, PreferenceNode.class, IS_TRANSIENT, IS_VOLATILE,
+    initEAttribute(getPreferenceNode_Location(), ecorePackage.getEString(), "location", null, 0, 1, PreferenceNode.class, IS_TRANSIENT, IS_VOLATILE, //$NON-NLS-1$
         !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
-    EOperation op = initEOperation(getPreferenceNode__GetNode__String(), getPreferenceNode(), "getNode", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+    EOperation op = initEOperation(getPreferenceNode__GetNode__String(), getPreferenceNode(), "getNode", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    op = initEOperation(getPreferenceNode__GetNode__URI(), getPreferenceNode(), "getNode", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getURI(), "path", 0, 1, IS_UNIQUE, IS_ORDERED);
+    op = initEOperation(getPreferenceNode__GetNode__URI(), getPreferenceNode(), "getNode", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getURI(), "path", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    op = initEOperation(getPreferenceNode__GetProperty__String(), getProperty(), "getProperty", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED);
+    op = initEOperation(getPreferenceNode__GetProperty__String(), getProperty(), "getProperty", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    op = initEOperation(getPreferenceNode__GetProperty__URI(), getProperty(), "getProperty", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getURI(), "path", 0, 1, IS_UNIQUE, IS_ORDERED);
+    op = initEOperation(getPreferenceNode__GetProperty__URI(), getProperty(), "getProperty", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getURI(), "path", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEOperation(getPreferenceNode__GetAncestor(), getPreferenceNode(), "getAncestor", 0, 1, IS_UNIQUE, IS_ORDERED);
+    initEOperation(getPreferenceNode__GetAncestor(), getPreferenceNode(), "getAncestor", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProperty_Parent(), getPreferenceNode(), getPreferenceNode_Properties(), "parent", null, 0, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getProperty_Parent(), getPreferenceNode(), getPreferenceNode_Properties(), "parent", null, 0, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProperty_Value(), getEscapedString(), "value", null, 1, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEAttribute(getProperty_Value(), getEscapedString(), "value", null, 1, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProperty_NonDefault(), ecorePackage.getEBoolean(), "nonDefault", null, 0, 1, Property.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
+    initEAttribute(getProperty_NonDefault(), ecorePackage.getEBoolean(), "nonDefault", null, 0, 1, Property.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProperty_Secure(), ecorePackage.getEBoolean(), "secure", null, 0, 1, Property.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getProperty_Secure(), ecorePackage.getEBoolean(), "secure", null, 0, 1, Property.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEOperation(getProperty__GetAncestor(), getProperty(), "getAncestor", 0, 1, IS_UNIQUE, IS_ORDERED);
+    initEOperation(getProperty__GetAncestor(), getProperty(), "getAncestor", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
     // Initialize data types
-    initEDataType(escapedStringEDataType, String.class, "EscapedString", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(uriEDataType, org.eclipse.emf.common.util.URI.class, "URI", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(preferenceNodeNameEDataType, String.class, "PreferenceNodeName", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(escapedStringEDataType, String.class, "EscapedString", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(uriEDataType, org.eclipse.emf.common.util.URI.class, "URI", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(preferenceNodeNameEDataType, String.class, "PreferenceNodeName", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
     // Create resource
     createResource(eNS_URI);
@@ -610,9 +610,10 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.preferences.edit/icons/full/obj16" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source,
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.preferences.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -623,10 +624,13 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getPreferenceNode_Children(), source, new String[] { "name", "child" });
-    addAnnotation(getPreferenceNode_Properties(), source, new String[] { "name", "property" });
-    addAnnotation(preferenceNodeNameEDataType, source, new String[] { "pattern", "[^/]+" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getPreferenceNode_Children(), source, new String[] { "name", "child" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getPreferenceNode_Properties(), source, new String[] { "name", "property" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(preferenceNodeNameEDataType, source, new String[] { "pattern", "[^/]+" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
 } // PreferencesPackageImpl

@@ -19,7 +19,7 @@ import org.eclipse.ui.IStartup;
  */
 public class EarlyStartup implements IStartup
 {
-  private static final boolean MANIFEST_DISCOVERY = !PropertiesUtil.isProperty("org.eclipse.oomph.targlets.ui.SKIP_MANIFEST_DISCOVERY");
+  private static final boolean MANIFEST_DISCOVERY = !PropertiesUtil.isProperty("org.eclipse.oomph.targlets.ui.SKIP_MANIFEST_DISCOVERY"); //$NON-NLS-1$
 
   public void earlyStartup()
   {

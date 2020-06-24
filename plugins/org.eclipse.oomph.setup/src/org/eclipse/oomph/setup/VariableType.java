@@ -35,7 +35,7 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  STRING(0, "STRING", "STRING"),
+  STRING(0, "STRING", "STRING"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>TEXT</b></em>' literal object.
@@ -45,7 +45,7 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  TEXT(1, "TEXT", "TEXT"),
+  TEXT(1, "TEXT", "TEXT"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>PASSWORD</b></em>' literal object.
@@ -55,7 +55,7 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  PASSWORD(2, "PASSWORD", "PASSWORD"),
+  PASSWORD(2, "PASSWORD", "PASSWORD"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>PATTERN</b></em>' literal object.
@@ -65,7 +65,7 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  PATTERN(3, "PATTERN", "PATTERN"),
+  PATTERN(3, "PATTERN", "PATTERN"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>URI</b></em>' literal object.
@@ -75,7 +75,7 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  URI(4, "URI", "URI"),
+  URI(4, "URI", "URI"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>FILE</b></em>' literal object.
@@ -85,7 +85,7 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  FILE(5, "FILE", "FILE"),
+  FILE(5, "FILE", "FILE"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>FOLDER</b></em>' literal object.
@@ -95,7 +95,7 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  FOLDER(6, "FOLDER", "FOLDER"),
+  FOLDER(6, "FOLDER", "FOLDER"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>RESOURCE</b></em>' literal object.
@@ -105,7 +105,7 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  RESOURCE(7, "RESOURCE", "RESOURCE"),
+  RESOURCE(7, "RESOURCE", "RESOURCE"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>CONTAINER</b></em>' literal object.
@@ -115,7 +115,7 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  CONTAINER(8, "CONTAINER", "CONTAINER"),
+  CONTAINER(8, "CONTAINER", "CONTAINER"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>PROJECT</b></em>' literal object.
@@ -125,7 +125,7 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  PROJECT(9, "PROJECT", "PROJECT"),
+  PROJECT(9, "PROJECT", "PROJECT"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>BOOLEAN</b></em>' literal object.
@@ -135,7 +135,7 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  BOOLEAN(10, "BOOLEAN", "BOOLEAN"),
+  BOOLEAN(10, "BOOLEAN", "BOOLEAN"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>INTEGER</b></em>' literal object.
@@ -145,7 +145,7 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  INTEGER(11, "INTEGER", "INTEGER"),
+  INTEGER(11, "INTEGER", "INTEGER"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>FLOAT</b></em>' literal object.
@@ -155,24 +155,21 @@ public enum VariableType implements Enumerator
    * @generated
    * @ordered
    */
-  FLOAT(12, "FLOAT", "FLOAT"),
+  FLOAT(12, "FLOAT", "FLOAT"), //$NON-NLS-1$ //$NON-NLS-2$
+
   /**
    * The '<em><b>JRE</b></em>' literal object.
    * <!-- begin-user-doc -->
-  * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #JRE_VALUE
    * @generated
    * @ordered
    */
-  JRE(13, "JRE", "JRE");
+  JRE(13, "JRE", "JRE"); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>STRING</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>STRING</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #STRING
    * @model
@@ -184,10 +181,6 @@ public enum VariableType implements Enumerator
   /**
    * The '<em><b>TEXT</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>TEXT</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #TEXT
    * @model
@@ -199,10 +192,6 @@ public enum VariableType implements Enumerator
   /**
    * The '<em><b>PASSWORD</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>PASSWORD</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #PASSWORD
    * @model
@@ -214,10 +203,6 @@ public enum VariableType implements Enumerator
   /**
    * The '<em><b>PATTERN</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>PATTERN</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #PATTERN
    * @model
@@ -229,10 +214,6 @@ public enum VariableType implements Enumerator
   /**
    * The '<em><b>URI</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>URI</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #URI
    * @model
@@ -244,10 +225,6 @@ public enum VariableType implements Enumerator
   /**
    * The '<em><b>FILE</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>FILE</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #FILE
    * @model
@@ -259,10 +236,6 @@ public enum VariableType implements Enumerator
   /**
    * The '<em><b>FOLDER</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>FOLDER</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #FOLDER
    * @model
@@ -274,10 +247,6 @@ public enum VariableType implements Enumerator
   /**
    * The '<em><b>RESOURCE</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>RESOURCE</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #RESOURCE
    * @model
@@ -289,10 +258,6 @@ public enum VariableType implements Enumerator
   /**
    * The '<em><b>CONTAINER</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>CONTAINER</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #CONTAINER
    * @model
@@ -304,10 +269,6 @@ public enum VariableType implements Enumerator
   /**
    * The '<em><b>PROJECT</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>PROJECT</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #PROJECT
    * @model
@@ -319,10 +280,6 @@ public enum VariableType implements Enumerator
   /**
    * The '<em><b>BOOLEAN</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>BOOLEAN</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #BOOLEAN
    * @model
@@ -334,10 +291,6 @@ public enum VariableType implements Enumerator
   /**
    * The '<em><b>INTEGER</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>INTEGER</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #INTEGER
    * @model
@@ -349,10 +302,6 @@ public enum VariableType implements Enumerator
   /**
    * The '<em><b>FLOAT</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>FLOAT</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #FLOAT
    * @model
@@ -364,10 +313,6 @@ public enum VariableType implements Enumerator
   /**
    * The '<em><b>JRE</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>JRE</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #JRE
    * @model

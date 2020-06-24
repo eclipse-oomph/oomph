@@ -45,7 +45,7 @@ public interface MavenPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNAME = "maven";
+  String eNAME = "maven"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -53,7 +53,7 @@ public interface MavenPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/oomph/setup/maven/1.0";
+  String eNS_URI = "http://www.eclipse.org/oomph/setup/maven/1.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -61,7 +61,7 @@ public interface MavenPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "maven";
+  String eNS_PREFIX = "maven"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.

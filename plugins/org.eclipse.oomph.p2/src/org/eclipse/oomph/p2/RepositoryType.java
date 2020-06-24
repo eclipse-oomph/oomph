@@ -35,7 +35,7 @@ public enum RepositoryType implements Enumerator
    * @generated
    * @ordered
    */
-  METADATA(0, "Metadata", "Metadata"),
+  METADATA(0, "Metadata", "Metadata"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Artifact</b></em>' literal object.
@@ -45,7 +45,7 @@ public enum RepositoryType implements Enumerator
    * @generated
    * @ordered
    */
-  ARTIFACT(1, "Artifact", "Artifact"),
+  ARTIFACT(1, "Artifact", "Artifact"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Combined</b></em>' literal object.
@@ -55,15 +55,11 @@ public enum RepositoryType implements Enumerator
    * @generated
    * @ordered
    */
-  COMBINED(2, "Combined", "Combined");
+  COMBINED(2, "Combined", "Combined"); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Metadata</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Metadata</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #METADATA
    * @model name="Metadata"
@@ -75,10 +71,6 @@ public enum RepositoryType implements Enumerator
   /**
    * The '<em><b>Artifact</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Artifact</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #ARTIFACT
    * @model name="Artifact"
@@ -90,10 +82,6 @@ public enum RepositoryType implements Enumerator
   /**
    * The '<em><b>Combined</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Combined</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #COMBINED
    * @model name="Combined"

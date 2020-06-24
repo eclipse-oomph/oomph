@@ -20,6 +20,8 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.eclipse.osgi.util.NLS;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -69,7 +71,8 @@ public class LocationPredicateItemProvider extends PredicateItemProvider
   protected void addPatternPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_LocationPredicate_pattern_feature"), getString("_UI_LocationPredicate_pattern_description"),
+        getString("_UI_LocationPredicate_pattern_feature"), //$NON-NLS-1$
+        getString("_UI_LocationPredicate_pattern_description"), //$NON-NLS-1$
         PredicatesPackage.Literals.LOCATION_PREDICATE__PATTERN, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -82,7 +85,7 @@ public class LocationPredicateItemProvider extends PredicateItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/LocationPredicate"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/LocationPredicate")); //$NON-NLS-1$
   }
 
   /**
@@ -106,7 +109,8 @@ public class LocationPredicateItemProvider extends PredicateItemProvider
   public String getText(Object object)
   {
     String label = ((LocationPredicate)object).getPattern();
-    return label == null || label.length() == 0 ? getString("_UI_LocationPredicate_type") : "Location like " + label;
+    return label == null || label.length() == 0 ? getString("_UI_LocationPredicate_type") //$NON-NLS-1$
+        : NLS.bind(Messages.LocationPredicateItemProvider_LocationLike_label, label);
   }
 
   /**

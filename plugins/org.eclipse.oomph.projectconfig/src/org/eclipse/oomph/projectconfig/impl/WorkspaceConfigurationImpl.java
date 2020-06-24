@@ -526,9 +526,9 @@ public class WorkspaceConfigurationImpl extends ModelElementImpl implements Work
         if (name != null)
         {
           String encodedName = URI.encodeSegment(name, false);
-          if (encodedName.startsWith("@"))
+          if (encodedName.startsWith("@")) //$NON-NLS-1$
           {
-            encodedName = "%40" + encodedName.substring(1);
+            encodedName = "%40" + encodedName.substring(1); //$NON-NLS-1$
           }
           return name;
         }
@@ -541,7 +541,7 @@ public class WorkspaceConfigurationImpl extends ModelElementImpl implements Work
   @Override
   public EObject eObjectForURIFragmentSegment(String uriFragmentSegment)
   {
-    if (!uriFragmentSegment.startsWith("@"))
+    if (!uriFragmentSegment.startsWith("@")) //$NON-NLS-1$
     {
       String preferenceNodeName = URI.decode(uriFragmentSegment);
       for (Project project : getProjects())

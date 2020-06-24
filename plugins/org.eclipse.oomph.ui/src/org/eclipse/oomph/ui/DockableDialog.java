@@ -128,7 +128,7 @@ public abstract class DockableDialog extends Dialog
 
     public IDialogSettings getBoundsSettings()
     {
-      return ReflectUtil.invokeMethod("getDialogBoundsSettings", dialog);
+      return ReflectUtil.invokeMethod("getDialogBoundsSettings", dialog); //$NON-NLS-1$
     }
 
     public int open()
@@ -148,13 +148,13 @@ public abstract class DockableDialog extends Dialog
       if (!handleWorkbenchPart(part))
       {
         // Only force it invisible if it isn't already invisible.
-        // The use may have minimized it himself, so we don't want to mark it forced unless we make it invisible.
+        // The user may have minimized it himself, so we don't want to mark it forced unless we make it invisible.
         if (shell.isVisible())
         {
           updateVisibility(shell, false);
         }
       }
-      else if (Boolean.TRUE.equals(shell.getData("forced")))
+      else if (Boolean.TRUE.equals(shell.getData("forced"))) //$NON-NLS-1$
       {
         updateVisibility(shell, true);
       }
@@ -231,7 +231,7 @@ public abstract class DockableDialog extends Dialog
   {
     if (visible)
     {
-      shell.setData("forced", null);
+      shell.setData("forced", null); //$NON-NLS-1$
 
       if (OS.INSTANCE.isWin())
       {
@@ -243,7 +243,7 @@ public abstract class DockableDialog extends Dialog
     }
     else
     {
-      shell.setData("forced", true);
+      shell.setData("forced", true); //$NON-NLS-1$
 
       shell.setVisible(false);
       if (OS.INSTANCE.isWin())
@@ -275,7 +275,7 @@ public abstract class DockableDialog extends Dialog
 
     List<Image> images = new ArrayList<Image>();
     images.add(image);
-    images.add(UIPlugin.INSTANCE.getSWTImage("docked_overlay"));
+    images.add(UIPlugin.INSTANCE.getSWTImage("docked_overlay")); //$NON-NLS-1$
     return ExtendedImageRegistry.INSTANCE.getImage(new DockedOverlayImage(images));
   }
 
@@ -350,7 +350,7 @@ public abstract class DockableDialog extends Dialog
     Dockable dockable = typedDialogs == null ? null : typedDialogs.get(type);
     if (dockable == null)
     {
-      dockable = ReflectUtil.invokeMethod("getDockable", factory.create(workbenchWindow));
+      dockable = ReflectUtil.invokeMethod("getDockable", factory.create(workbenchWindow)); //$NON-NLS-1$
       if (typedDialogs == null)
       {
         typedDialogs = new HashMap<Class<?>, Dockable>();
@@ -836,7 +836,7 @@ public abstract class DockableDialog extends Dialog
               partIDs.append(partReference.getId());
             }
 
-            dialogBoundsSettings.put("dockedParts", partIDs.toString());
+            dialogBoundsSettings.put("dockedParts", partIDs.toString()); //$NON-NLS-1$
           }
 
           dispose();
@@ -871,7 +871,7 @@ public abstract class DockableDialog extends Dialog
 
                     // If we've been forced to minimize the shell because there is no docking site in the perspective, but now we do have a docking site,
                     // make the shell visible again.
-                    if (!shell.isVisible() && Boolean.TRUE.equals(shell.getData("forced")))
+                    if (!shell.isVisible() && Boolean.TRUE.equals(shell.getData("forced"))) //$NON-NLS-1$
                     {
                       updateVisibility(shell, true);
                     }
@@ -893,7 +893,7 @@ public abstract class DockableDialog extends Dialog
               Rectangle bounds = getBounds(dockedTabFolder);
               setBounds(bounds);
               timeOfLastUpdate = System.currentTimeMillis();
-              if (!shell.isVisible() && Boolean.TRUE.equals(shell.getData("forced")))
+              if (!shell.isVisible() && Boolean.TRUE.equals(shell.getData("forced"))) //$NON-NLS-1$
               {
                 updateVisibility(shell, true);
               }
@@ -906,11 +906,11 @@ public abstract class DockableDialog extends Dialog
           IDialogSettings dialogBoundsSettings = dockableDialog.getBoundsSettings();
           if (dialogBoundsSettings != null)
           {
-            String dockedPartIDs = dialogBoundsSettings.get("dockedParts");
+            String dockedPartIDs = dialogBoundsSettings.get("dockedParts"); //$NON-NLS-1$
             if (!StringUtil.isEmpty(dockedPartIDs))
             {
               gatherTabFolders();
-              List<String> ids = StringUtil.explode(dockedPartIDs, " ");
+              List<String> ids = StringUtil.explode(dockedPartIDs, " "); //$NON-NLS-1$
               for (Set<IWorkbenchPartReference> partReferences : tabFolderParts.values())
               {
                 for (IWorkbenchPartReference partReference : partReferences)
@@ -980,10 +980,10 @@ public abstract class DockableDialog extends Dialog
         private void gatherTabFolders(IWorkbenchPartReference partReference)
         {
           // Get the widget associated the the part...
-          Object part = ReflectUtil.getValue("part", partReference);
+          Object part = ReflectUtil.getValue("part", partReference); //$NON-NLS-1$
           if (part != null)
           {
-            Object widget = ReflectUtil.invokeMethod("getWidget", part);
+            Object widget = ReflectUtil.invokeMethod("getWidget", part); //$NON-NLS-1$
             if (widget instanceof Control)
             {
               // Walk up until we hit a visible tab folder.

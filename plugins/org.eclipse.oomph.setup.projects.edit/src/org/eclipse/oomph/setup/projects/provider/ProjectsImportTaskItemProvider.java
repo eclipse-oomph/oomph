@@ -73,7 +73,8 @@ public class ProjectsImportTaskItemProvider extends SetupTaskItemProvider
   protected void addForcePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ProjectsImportTask_force_feature"), getString("_UI_ProjectsImportTask_force_description"),
+        getString("_UI_ProjectsImportTask_force_feature"), //$NON-NLS-1$
+        getString("_UI_ProjectsImportTask_force_description"), //$NON-NLS-1$
         ProjectsPackage.Literals.PROJECTS_IMPORT_TASK__FORCE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -119,7 +120,7 @@ public class ProjectsImportTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ProjectsImportTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ProjectsImportTask")); //$NON-NLS-1$
   }
 
   /**
@@ -142,7 +143,7 @@ public class ProjectsImportTaskItemProvider extends SetupTaskItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_ProjectsImportTask_type");
+    return getString("_UI_ProjectsImportTask_type"); //$NON-NLS-1$
   }
 
   /**

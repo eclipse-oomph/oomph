@@ -51,7 +51,7 @@ import java.util.Map;
  */
 public class CSpecGeneratorImpl extends ModelElementImpl implements CSpecGenerator
 {
-  private static final IPath CSPEC_PATH = new Path("buckminster.cspec");
+  private static final IPath CSPEC_PATH = new Path("buckminster.cspec"); //$NON-NLS-1$
 
   /**
    * <!-- begin-user-doc -->
@@ -92,12 +92,12 @@ public class CSpecGeneratorImpl extends ModelElementImpl implements CSpecGenerat
 
         DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder(); // TODO Cache it somewhere?
         Element rootElement = XMLUtil.loadRootElement(documentBuilder, inputStream);
-        String id = BuckminsterDependencyHandler.getP2ID(rootElement.getAttribute("name"), rootElement.getAttribute("componentType"));
+        String id = BuckminsterDependencyHandler.getP2ID(rootElement.getAttribute("name"), rootElement.getAttribute("componentType")); //$NON-NLS-1$ //$NON-NLS-2$
         if (!StringUtil.isEmpty(id))
         {
           ComponentDefinition componentDefinition = TargletFactory.eINSTANCE.createComponentDefinition();
           componentDefinition.setID(id);
-          componentDefinition.setVersion(Version.create(rootElement.getAttribute("version")));
+          componentDefinition.setVersion(Version.create(rootElement.getAttribute("version"))); //$NON-NLS-1$
 
           handleBuckminsterDependencies(rootElement, componentDefinition);
 
@@ -162,17 +162,17 @@ public class CSpecGeneratorImpl extends ModelElementImpl implements CSpecGenerat
   {
     public void handleDependencies(Element rootElement) throws Exception
     {
-      XMLUtil.handleElementsByTagName(rootElement, "cs:dependencies", new ElementHandler()
+      XMLUtil.handleElementsByTagName(rootElement, "cs:dependencies", new ElementHandler() //$NON-NLS-1$
       {
         public void handleElement(Element dependencies) throws Exception
         {
-          XMLUtil.handleElementsByTagName(dependencies, "cs:dependency", new ElementHandler()
+          XMLUtil.handleElementsByTagName(dependencies, "cs:dependency", new ElementHandler() //$NON-NLS-1$
           {
             public void handleElement(Element dependency) throws Exception
             {
-              String id = dependency.getAttribute("name");
-              String type = dependency.getAttribute("componentType");
-              String versionDesignator = dependency.getAttribute("versionDesignator");
+              String id = dependency.getAttribute("name"); //$NON-NLS-1$
+              String type = dependency.getAttribute("componentType"); //$NON-NLS-1$
+              String versionDesignator = dependency.getAttribute("versionDesignator"); //$NON-NLS-1$
 
               handleDependency(id, type, versionDesignator);
             }
@@ -198,7 +198,7 @@ public class CSpecGeneratorImpl extends ModelElementImpl implements CSpecGenerat
     {
       if (id != null && type != null)
       {
-        if (type.equals("eclipse.feature"))
+        if (type.equals("eclipse.feature")) //$NON-NLS-1$
         {
           return id + Requirement.FEATURE_SUFFIX;
         }

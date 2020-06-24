@@ -53,7 +53,7 @@ public class HelpSupport
 {
   private static final int INACTIVITY_SECONDS = 5;
 
-  private static final String HELP_CONTEXT = "/help";
+  private static final String HELP_CONTEXT = "/help"; //$NON-NLS-1$
 
   private final TitleAreaDialog dialog;
 
@@ -283,7 +283,7 @@ public class HelpSupport
   {
     if (calloutImages[number] == null)
     {
-      calloutImages[number] = UIPlugin.INSTANCE.getSWTImage("callout-" + number + ".png");
+      calloutImages[number] = UIPlugin.INSTANCE.getSWTImage("callout-" + number + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     return calloutImages[number];
@@ -316,7 +316,7 @@ public class HelpSupport
       }
     }
 
-    return "http://localhost:" + helpServer.getPort() + HELP_CONTEXT + path;
+    return "http://localhost:" + helpServer.getPort() + HELP_CONTEXT + path; //$NON-NLS-1$
   }
 
   private void setHelpPath(String path)
@@ -334,7 +334,7 @@ public class HelpSupport
       }
       else
       {
-        helpBrowser.setText("<h3>Help content not found.</h3>");
+        helpBrowser.setText("<h3>" + Messages.HelpSupport_contentNotFound + "</h3>"); //$NON-NLS-1$ //$NON-NLS-2$
       }
     }
   }
@@ -381,7 +381,7 @@ public class HelpSupport
   {
     public HelpAnimator(ToolItem helpButton)
     {
-      super(UIPlugin.INSTANCE, helpButton, "help.png", 10);
+      super(UIPlugin.INSTANCE, helpButton, "help.png", 10); //$NON-NLS-1$
     }
 
     @Override

@@ -245,9 +245,9 @@ public class LinkLocationTaskImpl extends SetupTaskImpl implements LinkLocationT
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (path: ");
+    result.append(" (path: "); //$NON-NLS-1$
     result.append(path);
-    result.append(", name: ");
+    result.append(", name: "); //$NON-NLS-1$
     result.append(name);
     result.append(')');
     return result.toString();
@@ -266,7 +266,7 @@ public class LinkLocationTaskImpl extends SetupTaskImpl implements LinkLocationT
       return false;
     }
 
-    File links = new File(context.getProductLocation(), "links");
+    File links = new File(context.getProductLocation(), "links"); //$NON-NLS-1$
     canonicalPath = new File(getPath()).getCanonicalFile();
 
     String name = getName();
@@ -275,15 +275,15 @@ public class LinkLocationTaskImpl extends SetupTaskImpl implements LinkLocationT
       name = canonicalPath.getName();
     }
 
-    link = new File(links, name + ".link");
+    link = new File(links, name + ".link"); //$NON-NLS-1$
     return !link.exists();
   }
 
   public void perform(SetupTaskContext context) throws Exception
   {
-    List<String> lines = Collections.singletonList("path=" + canonicalPath.toString().replace("\\", "\\\\"));
+    List<String> lines = Collections.singletonList("path=" + canonicalPath.toString().replace("\\", "\\\\")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     IOUtil.writeLines(link, null, lines);
-    context.setRestartNeeded("Product extension locations have been added to the installation.");
+    context.setRestartNeeded(Messages.LinkLocationTaskImpl_ProductExtensionLocationsAdded_message);
   }
 
 } // LinkLocationTaskImpl

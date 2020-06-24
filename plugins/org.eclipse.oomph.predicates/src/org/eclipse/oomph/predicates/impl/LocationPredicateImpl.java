@@ -201,7 +201,7 @@ public class LocationPredicateImpl extends PredicateImpl implements LocationPred
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (pattern: ");
+    result.append(" (pattern: "); //$NON-NLS-1$
     result.append(pattern);
     result.append(')');
     return result.toString();

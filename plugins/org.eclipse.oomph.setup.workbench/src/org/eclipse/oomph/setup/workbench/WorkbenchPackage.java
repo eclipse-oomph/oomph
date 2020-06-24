@@ -44,7 +44,7 @@ public interface WorkbenchPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNAME = "workbench";
+  String eNAME = "workbench"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -52,7 +52,7 @@ public interface WorkbenchPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/oomph/setup/workbench/1.0";
+  String eNS_URI = "http://www.eclipse.org/oomph/setup/workbench/1.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -60,7 +60,7 @@ public interface WorkbenchPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "workbench";
+  String eNS_PREFIX = "workbench"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.

@@ -13,6 +13,8 @@ package org.eclipse.oomph.util;
 
 import org.eclipse.emf.common.util.URI;
 
+import org.eclipse.osgi.util.NLS;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -29,9 +31,9 @@ public final class StringUtil
 
   public static final String NL = PropertiesUtil.getProperty("line.separator"); //$NON-NLS-1$
 
-  public static String HORIZONTAL_ELLIPSIS = "\u2026";
+  public static String HORIZONTAL_ELLIPSIS = "\u2026"; //$NON-NLS-1$
 
-  private static final Pattern WILDCARD_FILTER_PATTERN = Pattern.compile("(\\\\.|[*?])");
+  private static final Pattern WILDCARD_FILTER_PATTERN = Pattern.compile("(\\\\.|[*?])"); //$NON-NLS-1$
 
   private StringUtil()
   {
@@ -53,15 +55,15 @@ public final class StringUtil
 
       if (c > 0xfff)
       {
-        builder.append("\\u" + HexUtil.charToHex(c));
+        builder.append("\\u" + HexUtil.charToHex(c)); //$NON-NLS-1$
       }
       else if (c > 0xff)
       {
-        builder.append("\\u0" + HexUtil.charToHex(c));
+        builder.append("\\u0" + HexUtil.charToHex(c)); //$NON-NLS-1$
       }
       else if (c > 0x7f)
       {
-        builder.append("\\u00" + HexUtil.charToHex(c));
+        builder.append("\\u00" + HexUtil.charToHex(c)); //$NON-NLS-1$
       }
       else if (c < 32)
       {
@@ -95,11 +97,11 @@ public final class StringUtil
           default:
             if (c > 0xf)
             {
-              builder.append("\\u00" + HexUtil.charToHex(c));
+              builder.append("\\u00" + HexUtil.charToHex(c)); //$NON-NLS-1$
             }
             else
             {
-              builder.append("\\u000" + HexUtil.charToHex(c));
+              builder.append("\\u000" + HexUtil.charToHex(c)); //$NON-NLS-1$
             }
         }
       }
@@ -459,7 +461,7 @@ public final class StringUtil
 
     if (length <= HORIZONTAL_ELLIPSIS.length())
     {
-      throw new IllegalArgumentException("Length must at least " + HORIZONTAL_ELLIPSIS.length() + 1);
+      throw new IllegalArgumentException(NLS.bind(Messages.StringUtil_TooShort_exception, HORIZONTAL_ELLIPSIS.length() + 1));
     }
 
     if (input.length() <= length)
@@ -635,21 +637,21 @@ public final class StringUtil
 
   public static Pattern globPattern(String filter)
   {
-    StringBuffer pattern = new StringBuffer("(\\Q");
+    StringBuffer pattern = new StringBuffer("(\\Q"); //$NON-NLS-1$
     Matcher matcher = WILDCARD_FILTER_PATTERN.matcher(filter);
     while (matcher.find())
     {
       String separator = matcher.group(1);
       if (separator.length() == 2)
       {
-        matcher.appendReplacement(pattern, "");
-        if ("\\E".equals(separator))
+        matcher.appendReplacement(pattern, ""); //$NON-NLS-1$
+        if ("\\E".equals(separator)) //$NON-NLS-1$
         {
-          pattern.append("\\E\\\\E\\Q");
+          pattern.append("\\E\\\\E\\Q"); //$NON-NLS-1$
         }
-        else if ("\\\\".equals(separator))
+        else if ("\\\\".equals(separator)) //$NON-NLS-1$
         {
-          pattern.append("\\E\\\\\\Q");
+          pattern.append("\\E\\\\\\Q"); //$NON-NLS-1$
         }
         else
         {
@@ -663,23 +665,23 @@ public final class StringUtil
         switch (separatorChar)
         {
           case '*':
-            tail = ".*?";
+            tail = ".*?"; //$NON-NLS-1$
             break;
           case '?':
-            tail = ".";
+            tail = "."; //$NON-NLS-1$
             break;
           default:
-            throw new IllegalStateException("Pattern " + WILDCARD_FILTER_PATTERN + " should match a single character");
+            throw new IllegalStateException(NLS.bind(Messages.StringUtil_ShouldMatch_exception, WILDCARD_FILTER_PATTERN));
         }
-  
-        matcher.appendReplacement(pattern, "\\\\E)");
-        pattern.append(tail).append("(\\Q");
+
+        matcher.appendReplacement(pattern, "\\\\E)"); //$NON-NLS-1$
+        pattern.append(tail).append("(\\Q"); //$NON-NLS-1$
       }
     }
-  
+
     matcher.appendTail(pattern);
-    pattern.append("\\E)");
-  
+    pattern.append("\\E)"); //$NON-NLS-1$
+
     return Pattern.compile(pattern.toString(), Pattern.CASE_INSENSITIVE);
   }
 }

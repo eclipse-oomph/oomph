@@ -83,7 +83,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
       case BasePackage.STRING_TO_STRING_MAP_ENTRY:
         return (EObject)createStringToStringMapEntry();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -119,7 +119,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
       case BasePackage.ID:
         return createIDFromString(eDataType, initialValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -142,7 +142,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
       case BasePackage.ID:
         return convertIDToString(eDataType, instanceValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -278,9 +278,9 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
 
   private static final Pattern OS_SPECIFIC_LINE_SEPARATOR_PATTERN = Pattern.compile(StringUtil.NL);
 
-  private static final Pattern NORMALIZED_LINE_SEPARATOR_PATTERN = Pattern.compile("\r?\n");
+  private static final Pattern NORMALIZED_LINE_SEPARATOR_PATTERN = Pattern.compile("\r?\n"); //$NON-NLS-1$
 
-  private static final boolean NEEDS_CONVERSION = !"\n".equals(StringUtil.NL);
+  private static final boolean NEEDS_CONVERSION = !"\n".equals(StringUtil.NL); //$NON-NLS-1$
 
   /**
    * <!-- begin-user-doc -->
@@ -289,7 +289,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    */
   public String createText(String literal)
   {
-    return literal == null ? null : NEEDS_CONVERSION ? OS_SPECIFIC_LINE_SEPARATOR_PATTERN.matcher(literal).replaceAll("\n") : literal;
+    return literal == null ? null : NEEDS_CONVERSION ? OS_SPECIFIC_LINE_SEPARATOR_PATTERN.matcher(literal).replaceAll("\n") : literal; //$NON-NLS-1$
   }
 
   /**

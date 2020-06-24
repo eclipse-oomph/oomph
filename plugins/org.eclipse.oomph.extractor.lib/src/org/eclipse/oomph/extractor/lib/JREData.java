@@ -31,12 +31,12 @@ public final class JREData
     this.minor = minor;
     this.micro = micro;
     this.bitness = bitness;
-    javaHome = "";
+    javaHome = ""; //$NON-NLS-1$
   }
 
   public JREData(String args)
   {
-    this(args.split(" "));
+    this(args.split(" ")); //$NON-NLS-1$
   }
 
   public JREData(String[] args)
@@ -47,18 +47,18 @@ public final class JREData
     bitness = parseInt(args[3]);
     if (args.length > 4)
     {
-      javaHome = args[4].replace("%25", "%").replace("%20", " ");
+      javaHome = args[4].replace("%25", "%").replace("%20", " "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
     }
     else
     {
-      javaHome = "";
+      javaHome = ""; //$NON-NLS-1$
     }
   }
 
   public JREData()
   {
-    String version = System.getProperty("java.version");
-    String[] segments = version.split("\\.");
+    String version = System.getProperty("java.version"); //$NON-NLS-1$
+    String[] segments = version.split("\\."); //$NON-NLS-1$
 
     if (segments.length > 0)
     {
@@ -91,7 +91,7 @@ public final class JREData
     }
 
     bitness = determineBitness();
-    javaHome = System.getProperty("java.home");
+    javaHome = System.getProperty("java.home"); //$NON-NLS-1$
   }
 
   public int getMajor()
@@ -165,7 +165,7 @@ public final class JREData
     result.append(' ');
     result.append(bitness);
 
-    if (!"".equals(javaHome))
+    if (!"".equals(javaHome)) //$NON-NLS-1$
     {
       result.append(' ');
 
@@ -176,12 +176,12 @@ public final class JREData
         {
           case ' ':
           {
-            result.append("%20");
+            result.append("%20"); //$NON-NLS-1$
             break;
           }
           case '%':
           {
-            result.append("%25");
+            result.append("%25"); //$NON-NLS-1$
             break;
           }
           default:
@@ -198,17 +198,17 @@ public final class JREData
 
   public static int determineBitness()
   {
-    if ("64".equals(System.getProperty("sun.arch.data.model")))
+    if ("64".equals(System.getProperty("sun.arch.data.model"))) //$NON-NLS-1$ //$NON-NLS-2$
     {
       return 64;
     }
 
-    if ("64".equals(System.getProperty("com.ibm.vm.bitmode")))
+    if ("64".equals(System.getProperty("com.ibm.vm.bitmode"))) //$NON-NLS-1$ //$NON-NLS-2$
     {
       return 64;
     }
 
-    if (System.getProperty("os.arch").endsWith("64")) // Don't use contains() because of ARCH_IA64_32!
+    if (System.getProperty("os.arch").endsWith("64")) // Don't use contains() because of ARCH_IA64_32! //$NON-NLS-1$ //$NON-NLS-2$
     {
       return 64;
     }

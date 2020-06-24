@@ -24,6 +24,6 @@ public class GitPullAction extends AbstractRepositoryAction
   @Override
   protected void run(Shell shell, File workTree) throws Exception
   {
-    GitBash.executeCommand(shell, workTree, "git pull");
+    GitBash.executeCommand(shell, workTree, "git pull"); //$NON-NLS-1$
   }
 }

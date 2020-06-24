@@ -44,7 +44,8 @@ public class ErrorDialog extends MessageDialog
 
   protected ErrorDialog(String title, Throwable throwable, int defaultButtonID, int detailsButtonID, String... dialogButtonLabels)
   {
-    super(null, title, null, "Internal error:" + StringUtil.NL + getMessage(throwable), MessageDialog.ERROR, dialogButtonLabels, defaultButtonID);
+    super(null, title, null, Messages.ErrorDialog_message_internalError + StringUtil.NL + getMessage(throwable), MessageDialog.ERROR, dialogButtonLabels,
+        defaultButtonID);
     this.throwable = throwable;
     this.detailsButtonID = detailsButtonID;
     setShellStyle(SWT.SHELL_TRIM | SWT.BORDER | SWT.APPLICATION_MODAL);
@@ -136,7 +137,7 @@ public class ErrorDialog extends MessageDialog
 
   private static void openWithDetail(Throwable detail)
   {
-    ErrorDialog dialog = new ErrorDialog("Error", detail);
+    ErrorDialog dialog = new ErrorDialog(Messages.ErrorDialog_title, detail);
     dialog.open();
   }
 

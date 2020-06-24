@@ -62,7 +62,7 @@ public class EclipseProjectFactoryItemProvider extends XMLProjectFactoryItemProv
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/EclipseProjectFactory"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/EclipseProjectFactory")); //$NON-NLS-1$
   }
 
   /**
@@ -85,7 +85,7 @@ public class EclipseProjectFactoryItemProvider extends XMLProjectFactoryItemProv
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_EclipseProjectFactory_type");
+    return getString("_UI_EclipseProjectFactory_type"); //$NON-NLS-1$
   }
 
   /**

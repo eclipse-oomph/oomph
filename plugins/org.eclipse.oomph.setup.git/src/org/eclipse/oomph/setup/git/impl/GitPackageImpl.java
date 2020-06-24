@@ -381,6 +381,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -406,40 +407,40 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
     configSectionEClass.getESuperTypes().add(getConfigSubsection());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(gitCloneTaskEClass, GitCloneTask.class, "GitCloneTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getGitCloneTask_Location(), ecorePackage.getEString(), "location", "", 1, 1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(gitCloneTaskEClass, GitCloneTask.class, "GitCloneTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getGitCloneTask_Location(), ecorePackage.getEString(), "location", "", 1, 1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getGitCloneTask_LocationQualifier(), ecorePackage.getEString(), "locationQualifier", " ", 0, 1, GitCloneTask.class, !IS_TRANSIENT,
+    initEAttribute(getGitCloneTask_LocationQualifier(), ecorePackage.getEString(), "locationQualifier", " ", 0, 1, GitCloneTask.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getGitCloneTask_RemoteName(), ecorePackage.getEString(), "remoteName", "origin", 1, 1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getGitCloneTask_RemoteName(), ecorePackage.getEString(), "remoteName", "origin", 1, 1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getGitCloneTask_RemoteURI(), ecorePackage.getEString(), "remoteURI", null, 1, 1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getGitCloneTask_RemoteURI(), ecorePackage.getEString(), "remoteURI", null, 1, 1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getGitCloneTask_PushURI(), ecorePackage.getEString(), "pushURI", null, 0, 1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getGitCloneTask_PushURI(), ecorePackage.getEString(), "pushURI", null, 0, 1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getGitCloneTask_CheckoutBranch(), ecorePackage.getEString(), "checkoutBranch", "${scope.project.stream.name}", 1, 1, GitCloneTask.class,
+    initEAttribute(getGitCloneTask_CheckoutBranch(), ecorePackage.getEString(), "checkoutBranch", "${scope.project.stream.name}", 1, 1, GitCloneTask.class, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getGitCloneTask_Recursive(), ecorePackage.getEBoolean(), "recursive", "false", 0, 1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getGitCloneTask_Recursive(), ecorePackage.getEBoolean(), "recursive", "false", 0, 1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getGitCloneTask_ConfigSections(), getConfigSection(), null, "configSections", null, 0, -1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getGitCloneTask_ConfigSections(), getConfigSection(), null, "configSections", null, 0, -1, GitCloneTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getGitCloneTask_RestrictToCheckoutBranch(), ecorePackage.getEBoolean(), "restrictToCheckoutBranch", "false", 0, 1, GitCloneTask.class,
+    initEAttribute(getGitCloneTask_RestrictToCheckoutBranch(), ecorePackage.getEBoolean(), "restrictToCheckoutBranch", "false", 0, 1, GitCloneTask.class, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(configSectionEClass, ConfigSection.class, "ConfigSection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getConfigSection_Subsections(), getConfigSubsection(), null, "subsections", null, 0, -1, ConfigSection.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(configSectionEClass, ConfigSection.class, "ConfigSection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getConfigSection_Subsections(), getConfigSubsection(), null, "subsections", null, 0, -1, ConfigSection.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(configSubsectionEClass, ConfigSubsection.class, "ConfigSubsection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getConfigSubsection_Name(), ecorePackage.getEString(), "name", null, 1, 1, ConfigSubsection.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(configSubsectionEClass, ConfigSubsection.class, "ConfigSubsection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getConfigSubsection_Name(), ecorePackage.getEString(), "name", null, 1, 1, ConfigSubsection.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getConfigSubsection_Properties(), getConfigProperty(), null, "properties", null, 0, -1, ConfigSubsection.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getConfigSubsection_Properties(), getConfigProperty(), null, "properties", null, 0, -1, ConfigSubsection.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(configPropertyEClass, ConfigProperty.class, "ConfigProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getConfigProperty_Key(), ecorePackage.getEString(), "key", null, 1, 1, ConfigProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(configPropertyEClass, ConfigProperty.class, "ConfigProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getConfigProperty_Key(), ecorePackage.getEString(), "key", null, 1, 1, ConfigProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getConfigProperty_Value(), ecorePackage.getEString(), "value", null, 0, 1, ConfigProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getConfigProperty_Value(), ecorePackage.getEString(), "value", null, 0, 1, ConfigProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
@@ -474,11 +475,16 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    */
   protected void createEnablementAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(this, source,
-        new String[] { "variableName", "setup.git.p2", "repository", "${oomph.update.url}", "installableUnits", "org.eclipse.oomph.setup.git.feature.group" });
-    addAnnotation(this, source, new String[] { "variableName", "setup.egit.p2", "repository", "http://download.eclipse.org/egit/updates", "installableUnits",
-        "org.eclipse.egit.feature.group", "releaseTrainAlternate", "true" });
+    String source = "http://www.eclipse.org/oomph/setup/Enablement"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "variableName", "setup.git.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "${oomph.update.url}", //$NON-NLS-1$ //$NON-NLS-2$
+        "installableUnits", "org.eclipse.oomph.setup.git.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(this, source, new String[] { "variableName", "setup.egit.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "http://download.eclipse.org/egit/updates", //$NON-NLS-1$ //$NON-NLS-2$
+        "installableUnits", "org.eclipse.egit.feature.group", //$NON-NLS-1$ //$NON-NLS-2$
+        "releaseTrainAlternate", "true" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -489,9 +495,10 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.git.edit/icons/full/obj16" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source,
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.git.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -502,8 +509,9 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    */
   protected void createEcoreXXXAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/EcoreXXX";
-    addAnnotation(gitCloneTaskEClass, source, new String[] { "constraints", "IDRequired LocationOptional" });
+    String source = "http://www.eclipse.org/emf/2002/EcoreXXX"; //$NON-NLS-1$
+    addAnnotation(gitCloneTaskEClass, source, new String[] { "constraints", "IDRequired LocationOptional" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -514,8 +522,9 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    */
   protected void createValidTriggersAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
-    addAnnotation(gitCloneTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers"; //$NON-NLS-1$
+    addAnnotation(gitCloneTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -526,8 +535,9 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -538,28 +548,39 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    */
   protected void createVariableAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Variable";
-    addAnnotation(getGitCloneTask_Location(), source,
-        new String[] { "filter", "canonical", "type", "STRING", "label", "Git clone location rule", "description",
-            "The rule for the absolute folder location where the Git clone is located", "explicitType", "FOLDER", "explicitLabel",
-            "${@id.description} Git clone location", "explicitDescription", "The absolute folder location where the ${@id.description} Git clone is located" });
-    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${installation.location/git/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository}", "label",
-            "Located in a folder named \'git/<repo>\' within the installation folder" });
-    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${workspace.location/.git/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository}", "label",
-            "Located in a folder named \'.git/<repo>\' within the workspace folder" });
-    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${git.container.root/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository}", "label",
-            "Located in a folder named \'<repo>\' within the root Git-container folder " });
-    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${git.container.root/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository}-${@id.checkoutBranch}", "label",
-            "Located in a folder named \'<repo>-<branch>\' within the root Git-container folder " });
-    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${git.container.root/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository/}${@id.checkoutBranch}", "label",
-            "Located in a folder named \'<repo>/<branch>\' within the root Git-container folder " });
-    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${@id.location}", "label", "Located in the specified absolute folder location" });
+    String source = "http://www.eclipse.org/oomph/setup/Variable"; //$NON-NLS-1$
+    addAnnotation(getGitCloneTask_Location(), source, new String[] { "filter", "canonical", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "STRING", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "Git clone location rule", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The rule for the absolute folder location where the Git clone is located", //$NON-NLS-1$ //$NON-NLS-2$
+        "explicitType", "FOLDER", //$NON-NLS-1$ //$NON-NLS-2$
+        "explicitLabel", "${@id.description} Git clone location", //$NON-NLS-1$ //$NON-NLS-2$
+        "explicitDescription", "The absolute folder location where the ${@id.description} Git clone is located" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${installation.location/git/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in a folder named \'git/<repo>\' within the installation folder" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${workspace.location/.git/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in a folder named \'.git/<repo>\' within the workspace folder" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${git.container.root/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in a folder named \'<repo>\' within the root Git-container folder " //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${git.container.root/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository}-${@id.checkoutBranch}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in a folder named \'<repo>-<branch>\' within the root Git-container folder " //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${git.container.root/}${@id.locationQualifier|trim}${@id.remoteURI|gitRepository/}${@id.checkoutBranch}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in a folder named \'<repo>/<branch>\' within the root Git-container folder " //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getGitCloneTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${@id.location}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in the specified absolute folder location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -570,9 +591,14 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    */
   protected void createRuleVariableAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/RuleVariable";
-    addAnnotation(getGitCloneTask_Location(), source, new String[] { "name", "git.container.root", "type", "FOLDER", "label", "Root Git-container folder",
-        "defaultValue", "${user.home/git}", "description", "The root Git-container folder where all the Git clones are located", "storageURI", "scope://" });
+    String source = "http://www.eclipse.org/oomph/setup/RuleVariable"; //$NON-NLS-1$
+    addAnnotation(getGitCloneTask_Location(), source, new String[] { "name", "git.container.root", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "FOLDER", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "Root Git-container folder", //$NON-NLS-1$ //$NON-NLS-2$
+        "defaultValue", "${user.home/git}", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The root Git-container folder where all the Git clones are located", //$NON-NLS-1$ //$NON-NLS-2$
+        "storageURI", "scope://" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -583,7 +609,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    */
   protected void createRemoteResourceAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/RemoteResource";
+    String source = "http://www.eclipse.org/oomph/setup/RemoteResource"; //$NON-NLS-1$
     addAnnotation(getGitCloneTask_RemoteURI(), source, new String[] {});
   }
 
@@ -595,7 +621,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    */
   protected void createRedirectAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Redirect";
+    String source = "http://www.eclipse.org/oomph/setup/Redirect"; //$NON-NLS-1$
     addAnnotation(getGitCloneTask_RemoteURI(), source, new String[] {});
     addAnnotation(getGitCloneTask_PushURI(), source, new String[] {});
   }

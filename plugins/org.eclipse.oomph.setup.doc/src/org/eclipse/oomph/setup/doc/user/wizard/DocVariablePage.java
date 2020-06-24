@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Shell;
  *
  * @number 600
  */
+@SuppressWarnings("nls")
 public class DocVariablePage
 {
   /**

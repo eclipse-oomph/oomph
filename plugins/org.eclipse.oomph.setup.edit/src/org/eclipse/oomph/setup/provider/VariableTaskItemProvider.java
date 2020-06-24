@@ -92,7 +92,8 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
   protected void addTypePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_VariableTask_type_feature"), getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_type_feature", "_UI_VariableTask_type"),
+        getString("_UI_VariableTask_type_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_type_feature", "_UI_VariableTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.VARIABLE_TASK__TYPE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -105,7 +106,8 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_VariableTask_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_name_feature", "_UI_VariableTask_type"),
+        getString("_UI_VariableTask_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_name_feature", "_UI_VariableTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.VARIABLE_TASK__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -118,7 +120,8 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
   protected void addValuePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_VariableTask_value_feature"), getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_value_feature", "_UI_VariableTask_type"),
+        getString("_UI_VariableTask_value_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_value_feature", "_UI_VariableTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.VARIABLE_TASK__VALUE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -131,8 +134,8 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
   protected void addDefaultValuePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_VariableTask_defaultValue_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_defaultValue_feature", "_UI_VariableTask_type"),
+        getString("_UI_VariableTask_defaultValue_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_defaultValue_feature", "_UI_VariableTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.VARIABLE_TASK__DEFAULT_VALUE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -145,7 +148,8 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
   protected void addLabelPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_VariableTask_label_feature"), getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_label_feature", "_UI_VariableTask_type"),
+        getString("_UI_VariableTask_label_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_label_feature", "_UI_VariableTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.VARIABLE_TASK__LABEL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -158,8 +162,8 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
   protected void addStorageURIPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_VariableTask_storageURI_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_storageURI_feature", "_UI_VariableTask_type"),
+        getString("_UI_VariableTask_storageURI_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_storageURI_feature", "_UI_VariableTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.VARIABLE_TASK__STORAGE_URI, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -222,7 +226,7 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/VariableTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/VariableTask")); //$NON-NLS-1$
   }
 
   /**
@@ -243,6 +247,7 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     VariableTask variable = (VariableTask)object;

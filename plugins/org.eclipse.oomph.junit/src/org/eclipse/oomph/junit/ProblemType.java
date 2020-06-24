@@ -324,11 +324,11 @@ public class ProblemType extends MinimalEObjectImpl.Container
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (value: ");
+    result.append(" (value: "); //$NON-NLS-1$
     result.append(value);
-    result.append(", message: ");
+    result.append(", message: "); //$NON-NLS-1$
     result.append(message);
-    result.append(", type: ");
+    result.append(", type: "); //$NON-NLS-1$
     result.append(type);
     result.append(')');
     return result.toString();

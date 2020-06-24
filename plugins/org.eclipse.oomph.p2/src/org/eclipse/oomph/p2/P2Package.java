@@ -45,7 +45,7 @@ public interface P2Package extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNAME = "p2";
+  String eNAME = "p2"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -53,7 +53,7 @@ public interface P2Package extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/oomph/p2/1.0";
+  String eNS_URI = "http://www.eclipse.org/oomph/p2/1.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -61,7 +61,7 @@ public interface P2Package extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "p2";
+  String eNS_PREFIX = "p2"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.

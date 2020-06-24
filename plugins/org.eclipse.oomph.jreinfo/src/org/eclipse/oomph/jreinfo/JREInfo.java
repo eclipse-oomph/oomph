@@ -14,6 +14,8 @@ import org.eclipse.oomph.internal.jreinfo.JREInfoPlugin;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.XMLUtil;
 
+import org.eclipse.osgi.util.NLS;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.EntityResolver;
@@ -32,9 +34,9 @@ import java.io.StringReader;
  */
 public final class JREInfo
 {
-  private static final boolean SKIP_USER_HOME = PropertiesUtil.isProperty("oomph.jreinfo.skip.user.home");
+  private static final boolean SKIP_USER_HOME = PropertiesUtil.isProperty("oomph.jreinfo.skip.user.home"); //$NON-NLS-1$
 
-  private static final String[] EXTRA_SEARCH_PATH = PropertiesUtil.getProperty("oomph.jreinfo.extra.search.path", "").split(File.pathSeparator);
+  private static final String[] EXTRA_SEARCH_PATH = PropertiesUtil.getProperty("oomph.jreinfo.extra.search.path", "").split(File.pathSeparator); //$NON-NLS-1$ //$NON-NLS-2$
 
   public String javaHome;
 
@@ -66,7 +68,7 @@ public final class JREInfo
           //$FALL-THROUGH$
       }
 
-      String javaHome = System.getProperty("java.home");
+      String javaHome = System.getProperty("java.home"); //$NON-NLS-1$
       if (javaHome != null)
       {
         File javaHomeFolder = new File(javaHome);
@@ -95,8 +97,8 @@ public final class JREInfo
       {
         String userHome = PropertiesUtil.getUserHome();
         jreInfo = searchFolder(jreInfo, userHome);
-        jreInfo = searchFolder(jreInfo, userHome + "/java");
-        jreInfo = searchFolder(jreInfo, userHome + "/jvm");
+        jreInfo = searchFolder(jreInfo, userHome + "/java"); //$NON-NLS-1$
+        jreInfo = searchFolder(jreInfo, userHome + "/jvm"); //$NON-NLS-1$
       }
 
       for (int i = 0; i < EXTRA_SEARCH_PATH.length; i++)
@@ -122,7 +124,7 @@ public final class JREInfo
     try
     {
       ProcessBuilder builder = new ProcessBuilder();
-      builder.command("/usr/libexec/java_home", "-X");
+      builder.command("/usr/libexec/java_home", "-X"); //$NON-NLS-1$ //$NON-NLS-2$
 
       Process process = builder.start();
 
@@ -131,19 +133,19 @@ public final class JREInfo
       {
         public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
         {
-          return new InputSource(new StringReader(""));
+          return new InputSource(new StringReader("")); //$NON-NLS-1$
         }
       });
 
       Element rootElement = XMLUtil.loadRootElement(documentBuilder, process.getInputStream());
-      XMLUtil.handleElementsByTagName(rootElement, "key", new XMLUtil.ElementHandler()
+      XMLUtil.handleElementsByTagName(rootElement, "key", new XMLUtil.ElementHandler() //$NON-NLS-1$
       {
         public void handleElement(Element element) throws Exception
         {
           try
           {
             String text = element.getTextContent();
-            if (text != null && "JVMHomePath".equals(text.trim()))
+            if (text != null && "JVMHomePath".equals(text.trim())) //$NON-NLS-1$
             {
               Node siblingNode = element.getNextSibling();
               while (siblingNode != null)
@@ -151,7 +153,7 @@ public final class JREInfo
                 if (siblingNode instanceof Element)
                 {
                   Element sibling = (Element)siblingNode;
-                  if ("string".equals(sibling.getNodeName()))
+                  if ("string".equals(sibling.getNodeName())) //$NON-NLS-1$
                   {
                     String javaHome = sibling.getTextContent();
                     if (javaHome != null)
@@ -194,10 +196,10 @@ public final class JREInfo
   private static JREInfo getAllLinux()
   {
     JREInfo jreInfo = null;
-    jreInfo = searchFolder(jreInfo, "/usr/java");
-    jreInfo = searchFolder(jreInfo, "/usr/lib/jvm");
-    jreInfo = searchFolder(jreInfo, "/usr/lib64");
-    jreInfo = searchFolder(jreInfo, "/usr/lib64/jvm");
+    jreInfo = searchFolder(jreInfo, "/usr/java"); //$NON-NLS-1$
+    jreInfo = searchFolder(jreInfo, "/usr/lib/jvm"); //$NON-NLS-1$
+    jreInfo = searchFolder(jreInfo, "/usr/lib64"); //$NON-NLS-1$
+    jreInfo = searchFolder(jreInfo, "/usr/lib64/jvm"); //$NON-NLS-1$
     return jreInfo;
   }
 
@@ -232,10 +234,10 @@ public final class JREInfo
 
   static int isJDK(File javaHome) throws FileNotFoundException
   {
-    File binFolder = new File(javaHome, "bin");
+    File binFolder = new File(javaHome, "bin"); //$NON-NLS-1$
     if (!binFolder.isDirectory())
     {
-      throw new FileNotFoundException("Folder does not exist: " + binFolder);
+      throw new FileNotFoundException(NLS.bind(Messages.JREInfo_FolderDoesNotExist_exception, binFolder));
     }
 
     if (new File(binFolder, JREManager.JAVA_COMPILER).isFile())

@@ -84,7 +84,7 @@ public class GitFactoryImpl extends EFactoryImpl implements GitFactory
       case GitPackage.CONFIG_PROPERTY:
         return createConfigProperty();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

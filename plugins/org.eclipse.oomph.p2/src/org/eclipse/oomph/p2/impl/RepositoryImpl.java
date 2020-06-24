@@ -240,9 +240,9 @@ public class RepositoryImpl extends ModelElementImpl implements Repository
 
     if (type != RepositoryType.COMBINED)
     {
-      result.append(" (");
+      result.append(" ("); //$NON-NLS-1$
       result.append(type);
-      result.append(")");
+      result.append(")"); //$NON-NLS-1$
     }
 
     return result.toString();

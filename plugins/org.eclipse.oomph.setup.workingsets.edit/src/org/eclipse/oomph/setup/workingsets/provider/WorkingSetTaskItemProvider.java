@@ -76,9 +76,11 @@ public class WorkingSetTaskItemProvider extends SetupTaskItemProvider
   protected void addPrefixPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_WorkingSetTask_prefix_feature"), getString("_UI_WorkingSetTask_prefix_description"),
+        getString("_UI_WorkingSetTask_prefix_feature"), //$NON-NLS-1$
+        getString("_UI_WorkingSetTask_prefix_description"), //$NON-NLS-1$
         SetupWorkingSetsPackage.Literals.WORKING_SET_TASK__PREFIX, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
-        new String[] { "org.eclipse.ui.views.properties.expert" }));
+        new String[] { "org.eclipse.ui.views.properties.expert" //$NON-NLS-1$
+        }));
   }
 
   /**
@@ -123,7 +125,7 @@ public class WorkingSetTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/WorkingSetTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/WorkingSetTask")); //$NON-NLS-1$
   }
 
   /**
@@ -158,17 +160,17 @@ public class WorkingSetTaskItemProvider extends SetupTaskItemProvider
       {
         if (builder.length() != 0)
         {
-          builder.append(" + ");
+          builder.append(" + "); //$NON-NLS-1$
         }
 
         builder.append(name);
       }
     }
 
-    String label = getString("_UI_WorkingSetTask_type");
+    String label = getString("_UI_WorkingSetTask_type"); //$NON-NLS-1$
     if (builder.length() != 0)
     {
-      label += " (" + builder + ")";
+      label += " (" + builder + ")"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     return label;

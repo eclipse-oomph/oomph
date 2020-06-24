@@ -18,7 +18,7 @@ import org.eclipse.swt.dnd.TransferData;
  */
 public class OomphBinaryTransfer extends ByteArrayTransfer
 {
-  private static final String OOMPH_EOBJECT_TYPE = "OomphEObjects";
+  private static final String OOMPH_EOBJECT_TYPE = "OomphEObjects"; //$NON-NLS-1$
 
   private static final int OOMPH_EOBJECT_ID = registerType(OOMPH_EOBJECT_TYPE);
 

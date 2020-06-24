@@ -28,6 +28,7 @@ import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.nebula.jface.tablecomboviewer.TableComboViewer;
 import org.eclipse.nebula.widgets.tablecombo.TableCombo;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -60,7 +61,7 @@ import java.util.regex.Pattern;
  */
 public class SynchronizerPreferencePage extends AbstractPreferencePage
 {
-  public static final String ID = "org.eclipse.oomph.setup.SynchronizerPreferencePage";
+  public static final String ID = "org.eclipse.oomph.setup.SynchronizerPreferencePage"; //$NON-NLS-1$
 
   private final PageHandler pageHandler;
 
@@ -136,7 +137,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
     public Control createContents(Composite parent)
     {
       Text text = new Text(parent, SWT.READ_ONLY);
-      text.setText("User storage support has not been installed.");
+      text.setText(Messages.SynchronizerPreferencePage_disabledHandler_text);
       return text;
     }
 
@@ -187,12 +188,13 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
       if (service == null && !showServices)
       {
         Label label = new Label(main, SWT.NONE);
-        label.setText("No service available.");
+        label.setText(Messages.SynchronizerPreferencePage_noServiceAvailable);
       }
       else
       {
         enableButton = new Button(main, SWT.CHECK);
-        enableButton.setText("Synchronize with" + (showServices ? ":" : " " + service.getServiceLabel()));
+        enableButton.setText(showServices ? Messages.SynchronizerPreferencePage_enableButton_syncWith
+            : NLS.bind(Messages.SynchronizerPreferencePage_enableButton_syncWithService, service.getServiceLabel()));
         enableButton.addSelectionListener(new SelectionAdapter()
         {
           @Override
@@ -213,7 +215,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
 
               TableCombo tableCombo = viewer.getTableCombo();
               tableCombo.defineColumns(2);
-              tableCombo.setToolTipText("Select the service to synchronize with");
+              tableCombo.setToolTipText(Messages.SynchronizerPreferencePage_tableCombo_tooltip);
 
               return viewer;
             }
@@ -221,7 +223,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
         }
 
         syncButton = new Button(main, SWT.PUSH);
-        syncButton.setText("Synchronize Now...");
+        syncButton.setText(Messages.SynchronizerPreferencePage_syncButton_text);
         syncButton.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
         syncButton.addSelectionListener(new SelectionAdapter()
         {
@@ -242,7 +244,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
                   if (data instanceof PreferenceDialog)
                   {
                     PreferenceDialog preferenceDialog = (PreferenceDialog)data;
-                    ReflectUtil.invokeMethod("okPressed", preferenceDialog);
+                    ReflectUtil.invokeMethod("okPressed", preferenceDialog); //$NON-NLS-1$
                   }
                 }
                 catch (Throwable ex)
@@ -282,7 +284,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
         });
 
         viewButton = new Button(main, SWT.PUSH);
-        viewButton.setText("View Remote Storage...");
+        viewButton.setText(Messages.SynchronizerPreferencePage_viewButton_text);
         viewButton.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
         viewButton.addSelectionListener(new SelectionAdapter()
         {
@@ -298,7 +300,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
                 {
                   try
                   {
-                    File file = File.createTempFile("preference-synchornization-remote", ".xml");
+                    File file = File.createTempFile("preference-synchornization-remote", ".xml"); //$NON-NLS-1$ //$NON-NLS-2$
                     if (SynchronizerManager.INSTANCE.getRemoteDataProvider().retrieve(file))
                     {
                     }
@@ -316,7 +318,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
                           protected void configureShell(Shell newShell)
                           {
                             super.configureShell(newShell);
-                            newShell.setText("Remote Synchronization Storage");
+                            newShell.setText(Messages.SynchronizerPreferencePage_shellText);
                           }
 
                           @Override
@@ -346,8 +348,8 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
 
                             try
                             {
-                              Pattern xmlPattern = Pattern.compile("<\\??/?[^>]+\\??/?>", Pattern.DOTALL);
-                              Pattern attributePattern = Pattern.compile("\\s+([^=\">]+)=\"([^\"]*)\"", Pattern.DOTALL);
+                              Pattern xmlPattern = Pattern.compile("<\\??/?[^>]+\\??/?>", Pattern.DOTALL); //$NON-NLS-1$
+                              Pattern attributePattern = Pattern.compile("\\s+([^=\">]+)=\"([^\"]*)\"", Pattern.DOTALL); //$NON-NLS-1$
                               int index = 0;
                               List<StyleRange> styleRanges = new ArrayList<StyleRange>();
                               for (Matcher xmlMatcher = xmlPattern.matcher(data), attributeMatcher = attributePattern.matcher(data); index != -1
@@ -359,8 +361,8 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
                                   while (attributeMatcher.find(index) && attributeMatcher.end() < xmlEnd)
                                   {
                                     String attributeName = attributeMatcher.group(1);
-                                    boolean metaAttribute = attributeName.contains(":");
-                                    if (!metaAttribute || attributeName.equals("xsi:type"))
+                                    boolean metaAttribute = attributeName.contains(":"); //$NON-NLS-1$
+                                    if (!metaAttribute || attributeName.equals("xsi:type")) //$NON-NLS-1$
                                     {
                                       StyleRange styleRange = new StyleRange();
                                       styleRange.start = attributeMatcher.start(2);
@@ -407,8 +409,9 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
         });
 
         // USS doesn't yet expose pref page ID
-        PreferenceLinkArea credentialsLink = new PreferenceLinkArea(main, SWT.NONE, "org.eclipse.userstorage.ui.PreferencePage",
-            "See <a>''User Storage Service''</a> for credentials.", (IWorkbenchPreferenceContainer)getContainer(), null);
+        PreferenceLinkArea credentialsLink = new PreferenceLinkArea(main, SWT.NONE, "org.eclipse.userstorage.ui.PreferencePage", //$NON-NLS-1$
+            NLS.bind(Messages.SynchronizerPreferencePage_seeLinkforCredentials, "<a>''User Storage Service''</a>"), //$NON-NLS-1$
+            (IWorkbenchPreferenceContainer)getContainer(), null);
         credentialsLink.getControl().setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
 
         // deleteButton = new Button(main, SWT.PUSH);

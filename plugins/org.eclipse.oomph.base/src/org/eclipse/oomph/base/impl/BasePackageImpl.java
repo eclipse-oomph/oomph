@@ -409,36 +409,36 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
     annotationEClass.getESuperTypes().add(getModelElement());
 
     // Initialize classes, features, and operations; add parameters
-    initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getModelElement_Annotations(), getAnnotation(), getAnnotation_ModelElement(), "annotations", null, 0, -1, ModelElement.class, !IS_TRANSIENT,
+    initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getModelElement_Annotations(), getAnnotation(), getAnnotation_ModelElement(), "annotations", null, 0, -1, ModelElement.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    EOperation op = initEOperation(getModelElement__GetAnnotation__String(), getAnnotation(), "getAnnotation", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, ecorePackage.getEString(), "source", 0, 1, IS_UNIQUE, IS_ORDERED);
+    EOperation op = initEOperation(getModelElement__GetAnnotation__String(), getAnnotation(), "getAnnotation", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, ecorePackage.getEString(), "source", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(annotationEClass, Annotation.class, "Annotation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getAnnotation_ModelElement(), getModelElement(), getModelElement_Annotations(), "modelElement", null, 0, 1, Annotation.class, IS_TRANSIENT,
+    initEClass(annotationEClass, Annotation.class, "Annotation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getAnnotation_ModelElement(), getModelElement(), getModelElement_Annotations(), "modelElement", null, 0, 1, Annotation.class, IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAnnotation_Source(), ecorePackage.getEString(), "source", null, 0, 1, Annotation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getAnnotation_Source(), ecorePackage.getEString(), "source", null, 0, 1, Annotation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getAnnotation_Details(), getStringToStringMapEntry(), null, "details", null, 0, -1, Annotation.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getAnnotation_Details(), getStringToStringMapEntry(), null, "details", null, 0, -1, Annotation.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getAnnotation_Contents(), ecorePackage.getEObject(), null, "contents", null, 0, -1, Annotation.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getAnnotation_Contents(), ecorePackage.getEObject(), null, "contents", null, 0, -1, Annotation.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getAnnotation_References(), ecorePackage.getEObject(), null, "references", null, 0, -1, Annotation.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getAnnotation_References(), ecorePackage.getEObject(), null, "references", null, 0, -1, Annotation.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(stringToStringMapEntryEClass, Map.Entry.class, "StringToStringMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getStringToStringMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(stringToStringMapEntryEClass, Map.Entry.class, "StringToStringMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getStringToStringMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getStringToStringMapEntry_Value(), getText(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getStringToStringMapEntry_Value(), getText(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize data types
-    initEDataType(uriEDataType, org.eclipse.emf.common.util.URI.class, "URI", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(exceptionEDataType, Exception.class, "Exception", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(textEDataType, String.class, "Text", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(idEDataType, String.class, "ID", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(uriEDataType, org.eclipse.emf.common.util.URI.class, "URI", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(exceptionEDataType, Exception.class, "Exception", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(textEDataType, String.class, "Text", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(idEDataType, String.class, "ID", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
     // Create resource
     createResource(eNS_URI);
@@ -462,9 +462,10 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
     addAnnotation(this, source,
-        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.base.edit/icons/full/obj16" });
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.base.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -475,13 +476,19 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getModelElement_Annotations(), source, new String[] { "name", "annotation" });
-    addAnnotation(getAnnotation_Details(), source, new String[] { "name", "detail" });
-    addAnnotation(getAnnotation_Contents(), source, new String[] { "name", "content" });
-    addAnnotation(getAnnotation_References(), source, new String[] { "name", "reference" });
-    addAnnotation(getStringToStringMapEntry_Value(), source, new String[] { "kind", "element" });
-    addAnnotation(idEDataType, source, new String[] { "pattern", "[\\i-[:]][\\c-[:]]*" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getModelElement_Annotations(), source, new String[] { "name", "annotation" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getAnnotation_Details(), source, new String[] { "name", "detail" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getAnnotation_Contents(), source, new String[] { "name", "content" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getAnnotation_References(), source, new String[] { "name", "reference" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getStringToStringMapEntry_Value(), source, new String[] { "kind", "element" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(idEDataType, source, new String[] { "pattern", "[\\i-[:]][\\c-[:]]*" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -492,8 +499,9 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(annotationEClass, source, new String[] { "constraints", "WellFormedSourceURI" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(annotationEClass, source, new String[] { "constraints", "WellFormedSourceURI" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -504,7 +512,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    */
   protected void createNoExpandAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/NoExpand";
+    String source = "http://www.eclipse.org/oomph/setup/NoExpand"; //$NON-NLS-1$
     addAnnotation(getAnnotation_Source(), source, new String[] {});
     addAnnotation(getStringToStringMapEntry_Key(), source, new String[] {});
   }

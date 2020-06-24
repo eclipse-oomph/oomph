@@ -89,6 +89,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -117,9 +118,9 @@ import java.util.zip.ZipInputStream;
  */
 public final class SetupCoreUtil
 {
-  public static final String OOMPH_NAMESPACE = "org.eclipse.oomph";
+  public static final String OOMPH_NAMESPACE = "org.eclipse.oomph"; //$NON-NLS-1$
 
-  public static final String STATS_URI = "http://download.eclipse.org/stats/oomph";
+  public static final String STATS_URI = "http://download.eclipse.org/stats/oomph"; //$NON-NLS-1$
 
   public static final AuthorizationHandler AUTHORIZATION_HANDLER;
 
@@ -130,13 +131,13 @@ public final class SetupCoreUtil
     Resource.Factory factory = new BaseResourceFactoryImpl();
 
     Map<String, Object> extensionToFactoryMap = RESOURCE_FACTORY_REGISTRY.getExtensionToFactoryMap();
-    extensionToFactoryMap.put("xmi", factory);
-    extensionToFactoryMap.put("setup", factory);
-    extensionToFactoryMap.put("targlet", factory);
-    extensionToFactoryMap.put("def", factory);
-    extensionToFactoryMap.put("ext", factory);
+    extensionToFactoryMap.put("xmi", factory); //$NON-NLS-1$
+    extensionToFactoryMap.put("setup", factory); //$NON-NLS-1$
+    extensionToFactoryMap.put("targlet", factory); //$NON-NLS-1$
+    extensionToFactoryMap.put("def", factory); //$NON-NLS-1$
+    extensionToFactoryMap.put("ext", factory); //$NON-NLS-1$
 
-    extensionToFactoryMap.put("ecore", new EcoreResourceFactoryImpl());
+    extensionToFactoryMap.put("ecore", new EcoreResourceFactoryImpl()); //$NON-NLS-1$
   }
 
   public static URIConverter URI_CONVERTER = new ResourceSetImpl().getURIConverter();
@@ -148,9 +149,9 @@ public final class SetupCoreUtil
 
   private static final boolean SKIP_STATS = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_STATS_SKIP);
 
-  private static final URI HTTP_GIT_ECLIPSE_ORG = URI.createURI("http://git.eclipse.org/");
+  private static final URI HTTP_GIT_ECLIPSE_ORG = URI.createURI("http://git.eclipse.org/"); //$NON-NLS-1$
 
-  private static final URI HTTPS_GIT_ECLIPSE_ORG = URI.createURI("https://git.eclipse.org/");
+  private static final URI HTTPS_GIT_ECLIPSE_ORG = URI.createURI("https://git.eclipse.org/"); //$NON-NLS-1$
 
   private static volatile Map<URI, URI> archiveRedirections;
 
@@ -162,7 +163,7 @@ public final class SetupCoreUtil
     UIServices uiServices = (UIServices)agent.getService(UIServices.SERVICE_NAME);
 
     ISecurePreferences root = PreferencesUtil.getSecurePreferences();
-    ISecurePreferences securePreferences = root.node(OOMPH_NAMESPACE).node("hosts");
+    ISecurePreferences securePreferences = root.node(OOMPH_NAMESPACE).node("hosts"); //$NON-NLS-1$
 
     AUTHORIZATION_HANDLER = new AuthorizationHandlerImpl(uiServices, securePreferences);
   }
@@ -190,7 +191,7 @@ public final class SetupCoreUtil
             {
               macro.setLabel(marketPlaceListing.getLabel());
               macro.setName(marketPlaceListing.getListing().lastSegment());
-              macro.setDescription("<a href='" + marketPlaceListing.getListing() + "?'>" + marketPlaceListing.getLabel() + "</a>");
+              macro.setDescription("<a href='" + marketPlaceListing.getListing() + "?'>" + marketPlaceListing.getLabel() + "</a>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
               P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
               p2Task.setLabel(marketPlaceListing.getLabel());
               EList<Parameter> parameters = macro.getParameters();
@@ -205,17 +206,17 @@ public final class SetupCoreUtil
                     name = name.substring(0, name.length() - Requirement.FEATURE_SUFFIX.length());
                   }
 
-                  name += ".enabled";
+                  name += ".enabled"; //$NON-NLS-1$
 
                   Parameter parameter = SetupFactory.eINSTANCE.createParameter();
                   parameter.setName(name);
-                  parameter.setDescription("Whether to include '" + name + "' in the installation");
-                  parameter.setDefaultValue(MarketPlaceListing.isSelected(requirement) ? "true" : "false");
+                  parameter.setDescription(NLS.bind(Messages.SetupCoreUtil_Parameter_description, name));
+                  parameter.setDefaultValue(MarketPlaceListing.isSelected(requirement) ? "true" : "false"); //$NON-NLS-1$ //$NON-NLS-2$
                   parameters.add(parameter);
 
                   Annotation featureSubstitutionAnnotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_FEATURE_SUBSTITUTION);
-                  featureSubstitutionAnnotation.getDetails().put(P2Package.Literals.REQUIREMENT__OPTIONAL.getName(), "${" + name + "|not}");
-                  featureSubstitutionAnnotation.getDetails().put(P2Package.Literals.REQUIREMENT__GREEDY.getName(), "${" + name + "}");
+                  featureSubstitutionAnnotation.getDetails().put(P2Package.Literals.REQUIREMENT__OPTIONAL.getName(), "${" + name + "|not}"); //$NON-NLS-1$ //$NON-NLS-2$
+                  featureSubstitutionAnnotation.getDetails().put(P2Package.Literals.REQUIREMENT__GREEDY.getName(), "${" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
                   requirement.getAnnotations().add(featureSubstitutionAnnotation);
                 }
               }
@@ -247,7 +248,7 @@ public final class SetupCoreUtil
   {
     if (scope == null)
     {
-      return "";
+      return ""; //$NON-NLS-1$
     }
 
     String label = scope.getLabel();
@@ -438,7 +439,7 @@ public final class SetupCoreUtil
           return null;
         }
 
-        if ("ecore".equals(uri.fileExtension()))
+        if ("ecore".equals(uri.fileExtension())) //$NON-NLS-1$
         {
           Resource resource = null;
           synchronized (resourceSet)
@@ -495,7 +496,7 @@ public final class SetupCoreUtil
           @Override
           public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
           {
-            if (!"zip".equals(uri.fileExtension()) || Boolean.FALSE.equals(options.get(ResourceCopyTaskImpl.OPTION_ZIP_CACHE)))
+            if (!"zip".equals(uri.fileExtension()) || Boolean.FALSE.equals(options.get(ResourceCopyTaskImpl.OPTION_ZIP_CACHE))) //$NON-NLS-1$
             {
               return super.createInputStream(uri, options);
             }
@@ -620,7 +621,7 @@ public final class SetupCoreUtil
       {
         if (((String)key).startsWith(SetupProperties.PROP_REDIRECTION_BASE))
         {
-          String[] mapping = ((String)entry.getValue()).split("->");
+          String[] mapping = ((String)entry.getValue()).split("->"); //$NON-NLS-1$
           if (mapping.length == 1)
           {
             URI sourceURI = URI.createURI(mapping[0]);
@@ -629,7 +630,7 @@ public final class SetupCoreUtil
           else if (mapping.length == 2)
           {
             URI sourceURI = URI.createURI(mapping[0]);
-            URI targetURI = URI.createURI(mapping[1].replace("\\", "/"));
+            URI targetURI = URI.createURI(mapping[1].replace("\\", "/")); //$NON-NLS-1$ //$NON-NLS-2$
 
             // Only include the mapping if the target exists.
             // For example, we often include a redirection of the remote setup to the local git clone in an installed IDE,
@@ -640,7 +641,7 @@ public final class SetupCoreUtil
               // If the file is a relative path, interpret it as relative to the root folder of the installation.
               if (targetURI.isRelative())
               {
-                targetURI = targetURI.resolve(SetupContext.PRODUCT_LOCATION.trimSegments(OS.INSTANCE.isMac() ? 2 : 0).appendSegment(""));
+                targetURI = targetURI.resolve(SetupContext.PRODUCT_LOCATION.trimSegments(OS.INSTANCE.isMac() ? 2 : 0).appendSegment("")); //$NON-NLS-1$
               }
 
               File file = new File(targetURI.toFileString());
@@ -700,7 +701,7 @@ public final class SetupCoreUtil
       catch (IOException ex)
       {
         SetupCorePlugin.INSTANCE.log(ex, IStatus.WARNING);
-        ECFURIHandlerImpl.setExpectedETag(indexSetupArchiveLocation, "Failed");
+        ECFURIHandlerImpl.setExpectedETag(indexSetupArchiveLocation, "Failed"); //$NON-NLS-1$
       }
 
       archiveRedirections = redirections;
@@ -727,7 +728,7 @@ public final class SetupCoreUtil
       T value = values.get(i);
       if (count == size)
       {
-        SetupCorePlugin.INSTANCE.log("Circular dependencies " + value, IStatus.WARNING);
+        SetupCorePlugin.INSTANCE.log(NLS.bind(Messages.SetupCoreUtil_CircularDependencies_message, value), IStatus.WARNING);
         return;
       }
 
@@ -828,7 +829,7 @@ public final class SetupCoreUtil
 
     if (statusURI != null)
     {
-      statusURI = statusURI.appendSegment(prefix).appendSegment(success ? "success" : "failure");
+      statusURI = statusURI.appendSegment(prefix).appendSegment(success ? "success" : "failure"); //$NON-NLS-1$ //$NON-NLS-2$
 
       for (String name : names)
       {
@@ -845,12 +846,12 @@ public final class SetupCoreUtil
     {
       case PRODUCT_VERSION:
       {
-        return "product";
+        return "product"; //$NON-NLS-1$
       }
 
       case STREAM:
       {
-        return "project";
+        return "project"; //$NON-NLS-1$
       }
     }
 
@@ -952,7 +953,7 @@ public final class SetupCoreUtil
         if (copiedEObject != null)
         {
           put(eObject, copiedEObject);
-          ((InternalEObject)copiedEObject).eSetProxyURI(URI.createURI("bogus:/" + BaseUtil.getRootURI(eObject)));
+          ((InternalEObject)copiedEObject).eSetProxyURI(URI.createURI("bogus:/" + BaseUtil.getRootURI(eObject))); //$NON-NLS-1$
         }
 
         return copiedEObject;
@@ -961,7 +962,7 @@ public final class SetupCoreUtil
       @Override
       protected EClass getTarget(EClass eClass)
       {
-        return getEClass(eClass, "name", "nsURI");
+        return getEClass(eClass, "name", "nsURI"); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
       protected EClass getEClass(ENamedElement eNamedElement, String nameAnnotation, String nsURIAnnotation)
@@ -973,14 +974,14 @@ public final class SetupCoreUtil
           {
             if (eContainer instanceof EPackage)
             {
-              nsURIs = getAnnotation((EPackage)eContainer, "nsURIs");
+              nsURIs = getAnnotation((EPackage)eContainer, "nsURIs"); //$NON-NLS-1$
             }
           }
         }
 
         if (nsURIs == null)
         {
-          throw new IllegalStateException("Cannot find package URIs for " + EcoreUtil.getURI(eNamedElement));
+          throw new IllegalStateException(NLS.bind(Messages.SetupCoreUtil_MissingPackage_exception, EcoreUtil.getURI(eNamedElement)));
         }
 
         String name = getAnnotation(eNamedElement, nameAnnotation);
@@ -989,7 +990,7 @@ public final class SetupCoreUtil
           name = eNamedElement.getName();
         }
 
-        for (String nsURI : nsURIs.split(" "))
+        for (String nsURI : nsURIs.split(" ")) //$NON-NLS-1$
         {
           EPackage ePackage = packageRegistry.getEPackage(nsURI);
           if (ePackage != null)
@@ -1002,13 +1003,13 @@ public final class SetupCoreUtil
           }
         }
 
-        throw new IllegalStateException("Cannot find class '" + name + "' for to " + EcoreUtil.getURI(eNamedElement));
+        throw new IllegalStateException(NLS.bind(Messages.SetupCoreUtil_MissingClass_exception, name, EcoreUtil.getURI(eNamedElement)));
       }
 
       @Override
       protected EStructuralFeature getTarget(EStructuralFeature eStructuralFeature)
       {
-        String name = getAnnotation(eStructuralFeature, "name");
+        String name = getAnnotation(eStructuralFeature, "name"); //$NON-NLS-1$
         if (name == null)
         {
           name = eStructuralFeature.getName();
@@ -1020,16 +1021,16 @@ public final class SetupCoreUtil
           return result;
         }
 
-        throw new IllegalStateException("Cannot find feature corresponding to " + EcoreUtil.getURI(eStructuralFeature));
+        throw new IllegalStateException(NLS.bind(Messages.SetupCoreUtil_MissingFeature_exception, EcoreUtil.getURI(eStructuralFeature)));
       }
 
       @Override
       protected Setting getTarget(EStructuralFeature eStructuralFeature, EObject eObject, EObject copyEObject)
       {
-        String name = getAnnotation(eStructuralFeature, "name");
+        String name = getAnnotation(eStructuralFeature, "name"); //$NON-NLS-1$
 
         // The blank name is used to discard features which are not intended to be migrated.
-        if ("".equals(name))
+        if ("".equals(name)) //$NON-NLS-1$
         {
           return null;
         }
@@ -1039,10 +1040,10 @@ public final class SetupCoreUtil
           name = eStructuralFeature.getName();
         }
 
-        String targetName = getAnnotation(eStructuralFeature, "targetName");
+        String targetName = getAnnotation(eStructuralFeature, "targetName"); //$NON-NLS-1$
         if (targetName != null)
         {
-          EClass targetEClass = getEClass(eStructuralFeature, "targetName", "targetNsURI");
+          EClass targetEClass = getEClass(eStructuralFeature, "targetName", "targetNsURI"); //$NON-NLS-1$ //$NON-NLS-2$
           EClass eClass = copyEObject.eClass();
           for (EReference eReference : eClass.getEAllContainments())
           {
@@ -1074,17 +1075,17 @@ public final class SetupCoreUtil
           return setting;
         }
 
-        throw new IllegalStateException("Cannot find feature corresponding to " + EcoreUtil.getURI(eStructuralFeature));
+        throw new IllegalStateException(NLS.bind(Messages.SetupCoreUtil_MissingFeature_exception, EcoreUtil.getURI(eStructuralFeature)));
       }
 
       @Override
       protected void copyAttribute(EAttribute eAttribute, EObject eObject, EObject copyEObject)
       {
         // For attributes that are targeting an Annotation to be copied even if eIsSet is false.
-        String targetName = getAnnotation(eAttribute, "targetName");
+        String targetName = getAnnotation(eAttribute, "targetName"); //$NON-NLS-1$
         if (targetName != null)
         {
-          EClass targetEClass = getEClass(eAttribute, "targetName", "targetNsURI");
+          EClass targetEClass = getEClass(eAttribute, "targetName", "targetNsURI"); //$NON-NLS-1$ //$NON-NLS-2$
           if (targetEClass == BasePackage.Literals.ANNOTATION)
           {
             EStructuralFeature.Setting setting = getTarget(eAttribute, eObject, copyEObject);
@@ -1140,7 +1141,7 @@ public final class SetupCoreUtil
                 }
               }
 
-              throw new IllegalStateException("Couldn't find a matching feature for " + EcoreUtil.getURI(eStructuralFeature));
+              throw new IllegalStateException(NLS.bind(Messages.SetupCoreUtil_MissingMatchingFeature_exception, EcoreUtil.getURI(eStructuralFeature)));
             }
           }
 
@@ -1241,7 +1242,7 @@ public final class SetupCoreUtil
           EStructuralFeature targetEStructuralFeature = targetEClass.getEStructuralFeature(name);
           if (targetEStructuralFeature == null)
           {
-            throw new IllegalStateException("Cannot find feature corresponding to " + EcoreUtil.getURI(eStructuralFeature));
+            throw new IllegalStateException(NLS.bind(Messages.SetupCoreUtil_MisssingFeature_exception, EcoreUtil.getURI(eStructuralFeature)));
           }
 
           return demandCreateContainer(copyEObject, eReferenceType, eReference, targetEStructuralFeature, false);
@@ -1408,7 +1409,7 @@ public final class SetupCoreUtil
       {
         try
         {
-          ReflectUtil.invokeMethod(ReflectUtil.getMethod(modelElement.getClass(), "eMigrate"), modelElement);
+          ReflectUtil.invokeMethod(ReflectUtil.getMethod(modelElement.getClass(), "eMigrate"), modelElement); //$NON-NLS-1$
         }
         catch (ReflectionException exception)
         {
@@ -1426,7 +1427,7 @@ public final class SetupCoreUtil
 
   public static URI getEclipseBrandingImage()
   {
-    return URI.createPlatformPluginURI("org.eclipse.oomph.setup.ui/icons/committers.png", true);
+    return URI.createPlatformPluginURI("org.eclipse.oomph.setup.ui/icons/committers.png", true); //$NON-NLS-1$
   }
 
   public static URI getBrandingImageURI(Scope scope)

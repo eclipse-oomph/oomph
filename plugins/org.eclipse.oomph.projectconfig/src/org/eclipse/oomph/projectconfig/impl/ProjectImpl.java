@@ -140,7 +140,7 @@ public class ProjectImpl extends ModelElementImpl implements Project
     {
       if (EcoreUtil.isAncestor(this, newConfiguration))
       {
-        throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+        throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
       }
       NotificationChain msgs = null;
       if (eInternalContainer() != null)
@@ -459,9 +459,9 @@ public class ProjectImpl extends ModelElementImpl implements Project
       if (name != null)
       {
         String encodedName = URI.encodeSegment(name, false);
-        if (encodedName.startsWith("@"))
+        if (encodedName.startsWith("@")) //$NON-NLS-1$
         {
-          encodedName = "%40" + encodedName.substring(1);
+          encodedName = "%40" + encodedName.substring(1); //$NON-NLS-1$
         }
         return encodedName;
       }
@@ -473,7 +473,7 @@ public class ProjectImpl extends ModelElementImpl implements Project
   @Override
   public EObject eObjectForURIFragmentSegment(String uriFragmentSegment)
   {
-    if (!uriFragmentSegment.startsWith("@"))
+    if (!uriFragmentSegment.startsWith("@")) //$NON-NLS-1$
     {
       String preferenceProfileName = URI.decode(uriFragmentSegment);
       for (PreferenceProfile preferenceProfile : getPreferenceProfiles())

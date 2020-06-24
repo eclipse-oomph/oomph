@@ -75,14 +75,14 @@ public class InlineMacroTaskAction implements IObjectActionDelegate
     }
 
     action.setEnabled(!macroTasks.isEmpty());
-    action.setImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor("inline"));
+    action.setImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor("inline")); //$NON-NLS-1$
   }
 
   public void run(IAction action)
   {
     MacroTask firstTask = macroTasks.iterator().next();
     EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(firstTask);
-    CompoundCommand compoundCommand = new CompoundCommand("Inline");
+    CompoundCommand compoundCommand = new CompoundCommand(Messages.InlineMacroTaskAction_commandLabel);
 
     EObject rootContainer = EcoreUtil.getRootContainer(firstTask, true);
     EList<Adapter> eAdapters = rootContainer.eAdapters();

@@ -33,7 +33,7 @@ import java.net.URI;
  */
 public class CategoryGeneratorImpl extends SiteGeneratorImpl implements CategoryGenerator
 {
-  private static final IPath CATEGORY_XML_PATH = new Path("category.xml");
+  private static final IPath CATEGORY_XML_PATH = new Path("category.xml"); //$NON-NLS-1$
 
   /**
    * <!-- begin-user-doc -->

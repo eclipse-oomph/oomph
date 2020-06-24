@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IRegistryEventListener;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.osgi.util.NLS;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,13 +80,13 @@ public class TargletContainerListenerRegistry implements ITargletContainerListen
 
     if (targletContainerListeners.length != 0)
     {
-      monitor.beginTask("", targletContainerListeners.length);
+      monitor.beginTask("", targletContainerListeners.length); //$NON-NLS-1$
 
       for (ITargletContainerListener listener : targletContainerListeners)
       {
         try
         {
-          monitor.subTask("Sending " + event + " to " + listener);
+          monitor.subTask(NLS.bind(Messages.TargletContainerListenerRegistry_Sending_task, event, listener));
           listener.handleTargletContainerEvent(event, MonitorUtil.create(monitor, 1));
         }
         catch (Exception ex)
@@ -103,7 +104,7 @@ public class TargletContainerListenerRegistry implements ITargletContainerListen
    */
   public static class ExtensionPointHandler implements IRegistryEventListener
   {
-    public static final String EXTENSION_POINT = "org.eclipse.oomph.targlets.core.targletContainerListeners";
+    public static final String EXTENSION_POINT = "org.eclipse.oomph.targlets.core.targletContainerListeners"; //$NON-NLS-1$
 
     private final Map<IConfigurationElement, ITargletContainerListener> listeners = new HashMap<IConfigurationElement, ITargletContainerListener>();
 
@@ -170,7 +171,7 @@ public class TargletContainerListenerRegistry implements ITargletContainerListen
     {
       try
       {
-        ITargletContainerListener listener = (ITargletContainerListener)configurationElement.createExecutableExtension("class");
+        ITargletContainerListener listener = (ITargletContainerListener)configurationElement.createExecutableExtension("class"); //$NON-NLS-1$
         listeners.put(configurationElement, listener);
         INSTANCE.addListener(listener);
       }

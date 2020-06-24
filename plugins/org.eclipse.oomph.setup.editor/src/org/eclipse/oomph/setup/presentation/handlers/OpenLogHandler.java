@@ -29,7 +29,7 @@ public class OpenLogHandler extends AbstractDropdownItemHandler
 {
   public OpenLogHandler()
   {
-    super("Log", "Open Setup Log");
+    super("Log", Messages.OpenLogHandler_text); //$NON-NLS-1$
   }
 
   public void run()
@@ -47,7 +47,7 @@ public class OpenLogHandler extends AbstractDropdownItemHandler
 
         File file = new File(uri.toFileString());
 
-        IDE.openEditor(page, file.toURI(), "org.eclipse.ui.DefaultTextEditor", true);
+        IDE.openEditor(page, file.toURI(), "org.eclipse.ui.DefaultTextEditor", true); //$NON-NLS-1$
       }
     }
     catch (Exception ex)

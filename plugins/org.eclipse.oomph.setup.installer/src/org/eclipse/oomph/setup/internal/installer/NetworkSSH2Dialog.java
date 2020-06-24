@@ -22,9 +22,9 @@ import org.eclipse.swt.widgets.Shell;
 @SuppressWarnings("restriction")
 public class NetworkSSH2Dialog extends AbstractPreferenceDialog
 {
-  public static final String TITLE = "SSH2 Keys";
+  public static final String TITLE = Messages.NetworkSSH2Dialog_title;
 
-  public static final String DESCRIPTION = "Adjust your SSH2 key settings";
+  public static final String DESCRIPTION = Messages.NetworkSSH2Dialog_description;
 
   public NetworkSSH2Dialog(Shell parentShell)
   {
@@ -40,7 +40,7 @@ public class NetworkSSH2Dialog extends AbstractPreferenceDialog
   @Override
   protected String getDefaultMessage()
   {
-    return DESCRIPTION + ".";
+    return DESCRIPTION + "."; //$NON-NLS-1$
   }
 
   @Override

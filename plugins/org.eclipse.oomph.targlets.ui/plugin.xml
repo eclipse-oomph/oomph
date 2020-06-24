@@ -44,9 +44,9 @@
             class="org.eclipse.oomph.targlets.internal.ui.NewTargletContainerWizard"
             icon="icons/targlet_container.gif"
             id="org.eclipse.oomph.targlets.TargletProvisioner"
-            name="Targlet Container">
+            name="%targletProvisioner.name">
          <description>
-            Download plug-ins from a software site such as a p2 repository or update site.
+            %targletProvisioner.description
          </description>
       </locationProvider>
    </extension>
@@ -59,7 +59,7 @@
             name="Targlet">
       </profileType>
    </extension>
-   
+
    <extension
          point="org.eclipse.ui.exportWizards">
       <wizard
@@ -67,9 +67,9 @@
             class="org.eclipse.oomph.targlets.internal.ui.wizards.TargetDefinitionExportWizard"
             icon="icons/target_export.gif"
             id="org.eclipse.oomph.targlets.ui.TargetDefinitionExportWizard"
-            name="Target Definition">
+            name="%targetDefinitionExportWizard.name">
          <description>
-            Export a target definition to a file system folder.
+            %targetDefinitionExportWizard.description
          </description>
       </wizard>
    </extension>

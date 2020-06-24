@@ -95,7 +95,7 @@ public abstract class AbstractDropdownHandler extends AbstractHandler implements
       catch (Exception ex)
       {
         SetupEditorPlugin.getPlugin().log(ex);
-        return new ActionDescriptor(null, "Error: " + ex.getLocalizedMessage(), null);
+        return new ActionDescriptor(null, Messages.AbstractDropdownHandler_error + ": " + ex.getLocalizedMessage(), null); //$NON-NLS-1$
       }
     }
 

@@ -17,7 +17,7 @@ import org.eclipse.oomph.util.StringUtil;
  */
 public class Info
 {
-  private static final String SEPARATOR = " ";
+  private static final String SEPARATOR = " "; //$NON-NLS-1$
 
   private final String uuid;
 

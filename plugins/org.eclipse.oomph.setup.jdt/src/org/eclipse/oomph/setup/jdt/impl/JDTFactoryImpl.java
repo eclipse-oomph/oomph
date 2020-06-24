@@ -78,7 +78,7 @@ public class JDTFactoryImpl extends EFactoryImpl implements JDTFactory
       case JDTPackage.JRE_LIBRARY:
         return createJRELibrary();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

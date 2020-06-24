@@ -16,6 +16,7 @@ import org.eclipse.oomph.ui.OomphDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.Request;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -26,7 +27,7 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class JREDialog extends OomphDialog
 {
-  public static final String TITLE = "Java Virtual Machines";
+  public static final String TITLE = Messages.JREDialog_title;
 
   private final Request.Handler downloadHandler;
 
@@ -90,24 +91,17 @@ public class JREDialog extends OomphDialog
   @Override
   protected String getDefaultMessage()
   {
-    String message = "Select a Java ";
-
     if (filter != null)
     {
-      message += filter.toString() + ".";
+      return NLS.bind(Messages.JREDialog_selectJvm_withFilter, filter.toString());
     }
-    else
-    {
-      message += "VM.";
-    }
-
-    return message;
+    return Messages.JREDialog_selectJvm;
   }
 
   @Override
   protected String getImagePath()
   {
-    return "library_wiz.png";
+    return "library_wiz.png"; //$NON-NLS-1$
   }
 
   @Override
@@ -119,7 +113,7 @@ public class JREDialog extends OomphDialog
   @Override
   protected void createUI(Composite parent)
   {
-    getShell().setImage(JREInfoUIPlugin.INSTANCE.getSWTImage("jre"));
+    getShell().setImage(JREInfoUIPlugin.INSTANCE.getSWTImage("jre")); //$NON-NLS-1$
 
     composite = new JREComposite(parent, SWT.NONE, downloadHandler, filter, selectedElement)
     {

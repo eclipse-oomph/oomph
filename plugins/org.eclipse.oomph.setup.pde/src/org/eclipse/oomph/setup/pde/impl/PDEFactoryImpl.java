@@ -81,7 +81,7 @@ public class PDEFactoryImpl extends EFactoryImpl implements PDEFactory
       case PDEPackage.API_BASELINE_FROM_TARGET_TASK:
         return createAPIBaselineFromTargetTask();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

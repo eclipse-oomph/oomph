@@ -237,9 +237,9 @@ public class JRELibraryImpl extends MinimalEObjectImpl.Container implements JREL
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (libraryPath: ");
+    result.append(" (libraryPath: "); //$NON-NLS-1$
     result.append(libraryPath);
-    result.append(", externalAnnotationsPath: ");
+    result.append(", externalAnnotationsPath: "); //$NON-NLS-1$
     result.append(externalAnnotationsPath);
     result.append(')');
     return result.toString();

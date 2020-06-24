@@ -131,9 +131,9 @@ public final class P2Util
 
   public static Runnable preserveBundlePoolTimestamps(File bundlePoolLocation)
   {
-    final File featuresFolder = new File(bundlePoolLocation, "features");
+    final File featuresFolder = new File(bundlePoolLocation, "features"); //$NON-NLS-1$
     final long featuresFolderLastModified = featuresFolder.lastModified();
-    final File pluginsFolder = new File(bundlePoolLocation, "plugins");
+    final File pluginsFolder = new File(bundlePoolLocation, "plugins"); //$NON-NLS-1$
     final long pluginsFolderLastModified = pluginsFolder.lastModified();
 
     return new Runnable()
@@ -169,7 +169,7 @@ public final class P2Util
     Map<String, String> result = new LinkedHashMap<String, String>();
     if (!StringUtil.isEmpty(profileProperties))
     {
-      String[] properties = profileProperties.split(",");
+      String[] properties = profileProperties.split(","); //$NON-NLS-1$
       for (String property : properties)
       {
         int index = property.indexOf('=');
@@ -194,7 +194,7 @@ public final class P2Util
     {
       if (result.length() != 0)
       {
-        result.append(",");
+        result.append(","); //$NON-NLS-1$
       }
 
       String key = entry.getKey();

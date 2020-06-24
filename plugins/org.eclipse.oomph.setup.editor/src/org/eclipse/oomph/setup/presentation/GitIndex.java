@@ -48,7 +48,7 @@ public class GitIndex
     Map<String, Map<String, Map<String, Map<String, Set<String>>>>> repositoryIndices = new TreeMap<String, Map<String, Map<String, Map<String, Set<String>>>>>();
 
     Map<String, Map<String, Map<String, Set<String>>>> gitEclipseRepositoryIndex = new TreeMap<String, Map<String, Map<String, Set<String>>>>();
-    repositoryIndices.put("https://git.eclipse.org/c/${0}/tree/${1} https://git.eclipse.org/c/${0}/plain/${1}", gitEclipseRepositoryIndex);
+    repositoryIndices.put("https://git.eclipse.org/c/${0}/tree/${1} https://git.eclipse.org/c/${0}/plain/${1}", gitEclipseRepositoryIndex); //$NON-NLS-1$
     for (Enumeration<? extends ZipEntry> entries = zipFile.entries(); entries.hasMoreElements();)
     {
       ZipEntry zipEntry = entries.nextElement();
@@ -57,7 +57,7 @@ public class GitIndex
         InputStream inputStream = zipFile.getInputStream(zipEntry);
         String name = zipEntry.getName();
         String repo = name.substring(name.indexOf('/') + 1);
-        List<String> lines = readLines(inputStream, "UTF-8");
+        List<String> lines = readLines(inputStream, "UTF-8"); //$NON-NLS-1$
         for (String line : lines)
         {
           handleJavaPath(gitEclipseRepositoryIndex, repo, line);
@@ -75,293 +75,293 @@ public class GitIndex
     else
     {
       githubEclipseRepositories = Arrays.asList(new String[] { //
-          "eclipse/ConfigJSR", //
-          "eclipse/TrademarkDocs", //
-          "eclipse/Xpect", //
-          "eclipse/aCute", //
-          "eclipse/andmore", //
-          "eclipse/birt", //
-          "eclipse/buildr4eclipse", //
-          "eclipse/buildship", //
-          "eclipse/californium", //
-          "eclipse/californium.actinium", //
-          "eclipse/californium.core", //
-          "eclipse/californium.element-connector", //
-          "eclipse/californium.scandium", //
-          "eclipse/californium.tools", //
-          "eclipse/ceylon", //
-          "eclipse/ceylon-herd", //
-          "eclipse/ceylon-ide-common", //
-          "eclipse/ceylon-ide-eclipse", //
-          "eclipse/ceylon-ide-intellij", //
-          "eclipse/ceylon-lang.org", //
-          "eclipse/ceylon-sdk", //
-          "eclipse/ceylon-web-ide-backend", //
-          "eclipse/ceylon.formatter", //
-          "eclipse/ceylon.tool.converter.java2ceylon", //
-          "eclipse/cft", //
-          "eclipse/che", //
-          "eclipse/che-archetypes", //
-          "eclipse/che-dependencies", //
-          "eclipse/che-dev", //
-          "eclipse/che-dockerfiles", //
-          "eclipse/che-docs", //
-          "eclipse/che-lib", //
-          "eclipse/che-ls-jdt", //
-          "eclipse/che-parent", //
-          "eclipse/che-plugin-svn", //
-          "eclipse/che-theia-env-variables-plugin", //
-          "eclipse/che-theia-github-plugin", //
-          "eclipse/che-theia-machines-plugin", //
-          "eclipse/che-theia-ssh-plugin", //
-          "eclipse/che-theia-terminal-plugin", //
-          "eclipse/che-workspace-client", //
-          "eclipse/clatest", //
-          "eclipse/concierge", //
-          "eclipse/corrosion", //
-          "eclipse/cyclonedds", //
-          "eclipse/dawnsci", //
-          "eclipse/dirigible", //
-          "eclipse/dirigible-samples", //
-          "eclipse/ditto", //
-          "eclipse/ditto-examples", //
-          "eclipse/dsl4eclipse", //
-          "eclipse/eavp", //
-          "eclipse/ebr", //
-          "eclipse/eclemma", //
-          "eclipse/eclipse-collections", //
-          "eclipse/eclipse-collections-kata", //
-          "eclipse/eclipse-webhook", //
-          "eclipse/eclipse.github.com", //
-          "eclipse/eclipse.jdt.ls", //
-          "eclipse/eclipselink.runtime", //
-          "eclipse/edje", //
-          "eclipse/efxclipse", //
-          "eclipse/efxclipse-eclipse", //
-          "eclipse/efxclipse-rt", //
-          "eclipse/elk", //
-          "eclipse/elk-models", //
-          "eclipse/flux", //
-          "eclipse/gef", //
-          "eclipse/gef-legacy", //
-          "eclipse/gemini.blueprint", //
-          "eclipse/gemoc-studio", //
-          "eclipse/gemoc-studio-modeldebugging", //
-          "eclipse/gerrit-cla-plugin", //
-          "eclipse/golo-lang", //
-          "eclipse/gsc-ec-converter", //
-          "eclipse/hawkbit", //
-          "eclipse/hawkbit-examples", //
-          "eclipse/hawkbit-extensions", //
-          "eclipse/hipp2jipp", //
-          "eclipse/hono", //
-          "eclipse/ice", //
-          "eclipse/iottestware", //
-          "eclipse/iottestware.coap", //
-          "eclipse/iottestware.fuzzing", //
-          "eclipse/iottestware.mqtt", //
-          "eclipse/iottestware.opcua", //
-          "eclipse/january", //
-          "eclipse/january-forms", //
-          "eclipse/jdtc", //
-          "eclipse/jetty.alpn.api", //
-          "eclipse/jetty.parent", //
-          "eclipse/jetty.project", //
-          "eclipse/jetty.toolchain", //
-          "eclipse/jetty.website", //
-          "eclipse/jnosql-artemis", //
-          "eclipse/jnosql-artemis-extension", //
-          "eclipse/jnosql-diana", //
-          "eclipse/jnosql-diana-driver", //
-          "eclipse/jnosql-parent", //
-          "eclipse/kapua", //
-          "eclipse/keti", //
-          "eclipse/kura", //
-          "eclipse/kura-apps", //
-          "eclipse/leshan", //
-          "eclipse/leshan.osgi", //
-          "eclipse/lsp4j", //
-          "eclipse/lyo-store", //
-          "eclipse/lyo-trs-client", //
-          "eclipse/lyo-trs-server", //
-          "eclipse/lyo-validation", //
-          "eclipse/lyo.rio", //
-          "eclipse/manifest", //
-          "eclipse/microprofile", //
-          "eclipse/microprofile-bom", //
-          "eclipse/microprofile-conference", //
-          "eclipse/microprofile-config", //
-          "eclipse/microprofile-evolution-process", //
-          "eclipse/microprofile-fault-tolerance", //
-          "eclipse/microprofile-health", //
-          "eclipse/microprofile-jwt-auth", //
-          "eclipse/microprofile-lra", //
-          "eclipse/microprofile-metrics", //
-          "eclipse/microprofile-open-api", //
-          "eclipse/microprofile-opentracing", //
-          "eclipse/microprofile-parent", //
-          "eclipse/microprofile-rest-client", //
-          "eclipse/microprofile-samples", //
-          "eclipse/microprofile-sandbox", //
-          "eclipse/microprofile-service-mesh", //
-          "eclipse/milo", //
-          "eclipse/mita", //
-          "eclipse/mosquitto", //
-          "eclipse/mosquitto.rsmb", //
-          "eclipse/n4js", //
-          "eclipse/neoscada", //
-          "eclipse/ocl", //
-          "eclipse/omr", //
-          "eclipse/omr.website", //
-          "eclipse/openj9", //
-          "eclipse/openj9-docs", //
-          "eclipse/openj9-omr", //
-          "eclipse/openj9-systemtest", //
-          "eclipse/openj9-website", //
-          "eclipse/org.eclipse.scout.docs", //
-          "eclipse/orion", //
-          "eclipse/orion.client", //
-          "eclipse/orion.electron", //
-          "eclipse/orion.server", //
-          "eclipse/orion.server.node", //
-          "eclipse/packagedrone", //
-          "eclipse/paho.mqtt-sn.embedded-c", //
-          "eclipse/paho.mqtt-spy", //
-          "eclipse/paho.mqtt.android", //
-          "eclipse/paho.mqtt.c", //
-          "eclipse/paho.mqtt.cpp", //
-          "eclipse/paho.mqtt.d", //
-          "eclipse/paho.mqtt.embedded-c", //
-          "eclipse/paho.mqtt.golang", //
-          "eclipse/paho.mqtt.java", //
-          "eclipse/paho.mqtt.javascript", //
-          "eclipse/paho.mqtt.m2mqtt", //
-          "eclipse/paho.mqtt.python", //
-          "eclipse/paho.mqtt.ruby", //
-          "eclipse/paho.mqtt.rust", //
-          "eclipse/paho.mqtt.testing", //
-          "eclipse/ponte", //
-          "eclipse/rdf4j", //
-          "eclipse/rdf4j-doc", //
-          "eclipse/rdf4j-storage", //
-          "eclipse/rdf4j-testsuite", //
-          "eclipse/rdf4j-tools", //
-          "eclipse/reddeer", //
-          "eclipse/richbeans", //
-          "eclipse/risev2g", //
-          "eclipse/scanning", //
-          "eclipse/score", //
-          "eclipse/sequoyah", //
-          "eclipse/sirius-components", //
-          "eclipse/smarthome", //
-          "eclipse/smarthome-designer", //
-          "eclipse/smarthome-packaging-sample", //
-          "eclipse/smarthome.osgi-ri.enocean", //
-          "eclipse/sumo", //
-          "eclipse/texlipse", //
-          "eclipse/thym", //
-          "eclipse/tiaki-c", //
-          "eclipse/tiaki-java", //
-          "eclipse/titan.EclipsePlug-ins", //
-          "eclipse/titan.Libraries.TCCUsefulFunctions", //
-          "eclipse/titan.ProtocolModules.COMMON", //
-          "eclipse/titan.ProtocolModules.DHCP", //
-          "eclipse/titan.ProtocolModules.DHCPv6", //
-          "eclipse/titan.ProtocolModules.DIAMETER_ProtocolModule_Generator", //
-          "eclipse/titan.ProtocolModules.DNS", //
-          "eclipse/titan.ProtocolModules.FrameRelay", //
-          "eclipse/titan.ProtocolModules.FrameRelay-", //
-          "eclipse/titan.ProtocolModules.H248_v2", //
-          "eclipse/titan.ProtocolModules.HTTP2.0", //
-          "eclipse/titan.ProtocolModules.ICAP", //
-          "eclipse/titan.ProtocolModules.ICMP", //
-          "eclipse/titan.ProtocolModules.ICMPv6", //
-          "eclipse/titan.ProtocolModules.IKEv2", //
-          "eclipse/titan.ProtocolModules.IMAP_4rev1", //
-          "eclipse/titan.ProtocolModules.IP", //
-          "eclipse/titan.ProtocolModules.IPsec", //
-          "eclipse/titan.ProtocolModules.IUA", //
-          "eclipse/titan.ProtocolModules.JSON_v07_2006", //
-          "eclipse/titan.ProtocolModules.L2TP", //
-          "eclipse/titan.ProtocolModules.M3UA", //
-          "eclipse/titan.ProtocolModules.MIME", //
-          "eclipse/titan.ProtocolModules.MSRP", //
-          "eclipse/titan.ProtocolModules.PPP", //
-          "eclipse/titan.ProtocolModules.ProtoBuff", //
-          "eclipse/titan.ProtocolModules.RADIUS_ProtocolModule_Generator", //
-          "eclipse/titan.ProtocolModules.RTP", //
-          "eclipse/titan.ProtocolModules.RTSP", //
-          "eclipse/titan.ProtocolModules.SMPP", //
-          "eclipse/titan.ProtocolModules.SMTP", //
-          "eclipse/titan.ProtocolModules.SNMP", //
-          "eclipse/titan.ProtocolModules.SRTP", //
-          "eclipse/titan.ProtocolModules.TCP", //
-          "eclipse/titan.ProtocolModules.UDP", //
-          "eclipse/titan.ProtocolModules.WebSocket", //
-          "eclipse/titan.ProtocolModules.XMPP", //
-          "eclipse/titan.TestPorts.Common_Components.Abstract_Socket", //
-          "eclipse/titan.TestPorts.Common_Components.Socket-API", //
-          "eclipse/titan.TestPorts.HTTPmsg", //
-          "eclipse/titan.TestPorts.IPL4asp", //
-          "eclipse/titan.TestPorts.LANL2asp", //
-          "eclipse/titan.TestPorts.LDAPasp_RFC4511", //
-          "eclipse/titan.TestPorts.LDAPasp_RFC4511-", //
-          "eclipse/titan.TestPorts.LDAPmsg", //
-          "eclipse/titan.TestPorts.LDAPmsg-", //
-          "eclipse/titan.TestPorts.PCAPasp", //
-          "eclipse/titan.TestPorts.PIPEasp", //
-          "eclipse/titan.TestPorts.SCTPasp", //
-          "eclipse/titan.TestPorts.SIPmsg", //
-          "eclipse/titan.TestPorts.SQLasp", //
-          "eclipse/titan.TestPorts.SSHCLIENTasp", //
-          "eclipse/titan.TestPorts.STDINOUTmsg", //
-          "eclipse/titan.TestPorts.SUNRPCasp", //
-          "eclipse/titan.TestPorts.SUNRPCasp-", //
-          "eclipse/titan.TestPorts.TCPasp", //
-          "eclipse/titan.TestPorts.TELNETasp", //
-          "eclipse/titan.TestPorts.UDPasp", //
-          "eclipse/titan.TestPorts.UNIX_DOMAIN_SOCKETasp", //
-          "eclipse/titan.core", //
-          "eclipse/titan.misc", //
-          "eclipse/tm", //
-          "eclipse/tm4e", //
-          "eclipse/triquetrum", //
-          "eclipse/unide", //
-          "eclipse/unide.java", //
-          "eclipse/unide.python", //
-          "eclipse/vert.x", //
-          "eclipse/vorto", //
-          "eclipse/wakaama", //
-          "eclipse/webtools.jsdt", //
-          "eclipse/whiskers.arduino", //
-          "eclipse/whiskers.js", //
-          "eclipse/winery", //
-          "eclipse/www.eclipse.org-collections", //
-          "eclipse/xacc", //
-          "eclipse/xsemantics", //
-          "eclipse/xtext", //
-          "eclipse/xtext-core", //
-          "eclipse/xtext-eclipse", //
-          "eclipse/xtext-extras", //
-          "eclipse/xtext-gradle", //
-          "eclipse/xtext-idea", //
-          "eclipse/xtext-lib", //
-          "eclipse/xtext-maven", //
-          "eclipse/xtext-umbrella", //
-          "eclipse/xtext-web", //
-          "eclipse/xtext-xtend", //
+          "eclipse/ConfigJSR", //$NON-NLS-1$
+          "eclipse/TrademarkDocs", //$NON-NLS-1$
+          "eclipse/Xpect", //$NON-NLS-1$
+          "eclipse/aCute", //$NON-NLS-1$
+          "eclipse/andmore", //$NON-NLS-1$
+          "eclipse/birt", //$NON-NLS-1$
+          "eclipse/buildr4eclipse", //$NON-NLS-1$
+          "eclipse/buildship", //$NON-NLS-1$
+          "eclipse/californium", //$NON-NLS-1$
+          "eclipse/californium.actinium", //$NON-NLS-1$
+          "eclipse/californium.core", //$NON-NLS-1$
+          "eclipse/californium.element-connector", //$NON-NLS-1$
+          "eclipse/californium.scandium", //$NON-NLS-1$
+          "eclipse/californium.tools", //$NON-NLS-1$
+          "eclipse/ceylon", //$NON-NLS-1$
+          "eclipse/ceylon-herd", //$NON-NLS-1$
+          "eclipse/ceylon-ide-common", //$NON-NLS-1$
+          "eclipse/ceylon-ide-eclipse", //$NON-NLS-1$
+          "eclipse/ceylon-ide-intellij", //$NON-NLS-1$
+          "eclipse/ceylon-lang.org", //$NON-NLS-1$
+          "eclipse/ceylon-sdk", //$NON-NLS-1$
+          "eclipse/ceylon-web-ide-backend", //$NON-NLS-1$
+          "eclipse/ceylon.formatter", //$NON-NLS-1$
+          "eclipse/ceylon.tool.converter.java2ceylon", //$NON-NLS-1$
+          "eclipse/cft", //$NON-NLS-1$
+          "eclipse/che", //$NON-NLS-1$
+          "eclipse/che-archetypes", //$NON-NLS-1$
+          "eclipse/che-dependencies", //$NON-NLS-1$
+          "eclipse/che-dev", //$NON-NLS-1$
+          "eclipse/che-dockerfiles", //$NON-NLS-1$
+          "eclipse/che-docs", //$NON-NLS-1$
+          "eclipse/che-lib", //$NON-NLS-1$
+          "eclipse/che-ls-jdt", //$NON-NLS-1$
+          "eclipse/che-parent", //$NON-NLS-1$
+          "eclipse/che-plugin-svn", //$NON-NLS-1$
+          "eclipse/che-theia-env-variables-plugin", //$NON-NLS-1$
+          "eclipse/che-theia-github-plugin", //$NON-NLS-1$
+          "eclipse/che-theia-machines-plugin", //$NON-NLS-1$
+          "eclipse/che-theia-ssh-plugin", //$NON-NLS-1$
+          "eclipse/che-theia-terminal-plugin", //$NON-NLS-1$
+          "eclipse/che-workspace-client", //$NON-NLS-1$
+          "eclipse/clatest", //$NON-NLS-1$
+          "eclipse/concierge", //$NON-NLS-1$
+          "eclipse/corrosion", //$NON-NLS-1$
+          "eclipse/cyclonedds", //$NON-NLS-1$
+          "eclipse/dawnsci", //$NON-NLS-1$
+          "eclipse/dirigible", //$NON-NLS-1$
+          "eclipse/dirigible-samples", //$NON-NLS-1$
+          "eclipse/ditto", //$NON-NLS-1$
+          "eclipse/ditto-examples", //$NON-NLS-1$
+          "eclipse/dsl4eclipse", //$NON-NLS-1$
+          "eclipse/eavp", //$NON-NLS-1$
+          "eclipse/ebr", //$NON-NLS-1$
+          "eclipse/eclemma", //$NON-NLS-1$
+          "eclipse/eclipse-collections", //$NON-NLS-1$
+          "eclipse/eclipse-collections-kata", //$NON-NLS-1$
+          "eclipse/eclipse-webhook", //$NON-NLS-1$
+          "eclipse/eclipse.github.com", //$NON-NLS-1$
+          "eclipse/eclipse.jdt.ls", //$NON-NLS-1$
+          "eclipse/eclipselink.runtime", //$NON-NLS-1$
+          "eclipse/edje", //$NON-NLS-1$
+          "eclipse/efxclipse", //$NON-NLS-1$
+          "eclipse/efxclipse-eclipse", //$NON-NLS-1$
+          "eclipse/efxclipse-rt", //$NON-NLS-1$
+          "eclipse/elk", //$NON-NLS-1$
+          "eclipse/elk-models", //$NON-NLS-1$
+          "eclipse/flux", //$NON-NLS-1$
+          "eclipse/gef", //$NON-NLS-1$
+          "eclipse/gef-legacy", //$NON-NLS-1$
+          "eclipse/gemini.blueprint", //$NON-NLS-1$
+          "eclipse/gemoc-studio", //$NON-NLS-1$
+          "eclipse/gemoc-studio-modeldebugging", //$NON-NLS-1$
+          "eclipse/gerrit-cla-plugin", //$NON-NLS-1$
+          "eclipse/golo-lang", //$NON-NLS-1$
+          "eclipse/gsc-ec-converter", //$NON-NLS-1$
+          "eclipse/hawkbit", //$NON-NLS-1$
+          "eclipse/hawkbit-examples", //$NON-NLS-1$
+          "eclipse/hawkbit-extensions", //$NON-NLS-1$
+          "eclipse/hipp2jipp", //$NON-NLS-1$
+          "eclipse/hono", //$NON-NLS-1$
+          "eclipse/ice", //$NON-NLS-1$
+          "eclipse/iottestware", //$NON-NLS-1$
+          "eclipse/iottestware.coap", //$NON-NLS-1$
+          "eclipse/iottestware.fuzzing", //$NON-NLS-1$
+          "eclipse/iottestware.mqtt", //$NON-NLS-1$
+          "eclipse/iottestware.opcua", //$NON-NLS-1$
+          "eclipse/january", //$NON-NLS-1$
+          "eclipse/january-forms", //$NON-NLS-1$
+          "eclipse/jdtc", //$NON-NLS-1$
+          "eclipse/jetty.alpn.api", //$NON-NLS-1$
+          "eclipse/jetty.parent", //$NON-NLS-1$
+          "eclipse/jetty.project", //$NON-NLS-1$
+          "eclipse/jetty.toolchain", //$NON-NLS-1$
+          "eclipse/jetty.website", //$NON-NLS-1$
+          "eclipse/jnosql-artemis", //$NON-NLS-1$
+          "eclipse/jnosql-artemis-extension", //$NON-NLS-1$
+          "eclipse/jnosql-diana", //$NON-NLS-1$
+          "eclipse/jnosql-diana-driver", //$NON-NLS-1$
+          "eclipse/jnosql-parent", //$NON-NLS-1$
+          "eclipse/kapua", //$NON-NLS-1$
+          "eclipse/keti", //$NON-NLS-1$
+          "eclipse/kura", //$NON-NLS-1$
+          "eclipse/kura-apps", //$NON-NLS-1$
+          "eclipse/leshan", //$NON-NLS-1$
+          "eclipse/leshan.osgi", //$NON-NLS-1$
+          "eclipse/lsp4j", //$NON-NLS-1$
+          "eclipse/lyo-store", //$NON-NLS-1$
+          "eclipse/lyo-trs-client", //$NON-NLS-1$
+          "eclipse/lyo-trs-server", //$NON-NLS-1$
+          "eclipse/lyo-validation", //$NON-NLS-1$
+          "eclipse/lyo.rio", //$NON-NLS-1$
+          "eclipse/manifest", //$NON-NLS-1$
+          "eclipse/microprofile", //$NON-NLS-1$
+          "eclipse/microprofile-bom", //$NON-NLS-1$
+          "eclipse/microprofile-conference", //$NON-NLS-1$
+          "eclipse/microprofile-config", //$NON-NLS-1$
+          "eclipse/microprofile-evolution-process", //$NON-NLS-1$
+          "eclipse/microprofile-fault-tolerance", //$NON-NLS-1$
+          "eclipse/microprofile-health", //$NON-NLS-1$
+          "eclipse/microprofile-jwt-auth", //$NON-NLS-1$
+          "eclipse/microprofile-lra", //$NON-NLS-1$
+          "eclipse/microprofile-metrics", //$NON-NLS-1$
+          "eclipse/microprofile-open-api", //$NON-NLS-1$
+          "eclipse/microprofile-opentracing", //$NON-NLS-1$
+          "eclipse/microprofile-parent", //$NON-NLS-1$
+          "eclipse/microprofile-rest-client", //$NON-NLS-1$
+          "eclipse/microprofile-samples", //$NON-NLS-1$
+          "eclipse/microprofile-sandbox", //$NON-NLS-1$
+          "eclipse/microprofile-service-mesh", //$NON-NLS-1$
+          "eclipse/milo", //$NON-NLS-1$
+          "eclipse/mita", //$NON-NLS-1$
+          "eclipse/mosquitto", //$NON-NLS-1$
+          "eclipse/mosquitto.rsmb", //$NON-NLS-1$
+          "eclipse/n4js", //$NON-NLS-1$
+          "eclipse/neoscada", //$NON-NLS-1$
+          "eclipse/ocl", //$NON-NLS-1$
+          "eclipse/omr", //$NON-NLS-1$
+          "eclipse/omr.website", //$NON-NLS-1$
+          "eclipse/openj9", //$NON-NLS-1$
+          "eclipse/openj9-docs", //$NON-NLS-1$
+          "eclipse/openj9-omr", //$NON-NLS-1$
+          "eclipse/openj9-systemtest", //$NON-NLS-1$
+          "eclipse/openj9-website", //$NON-NLS-1$
+          "eclipse/org.eclipse.scout.docs", //$NON-NLS-1$
+          "eclipse/orion", //$NON-NLS-1$
+          "eclipse/orion.client", //$NON-NLS-1$
+          "eclipse/orion.electron", //$NON-NLS-1$
+          "eclipse/orion.server", //$NON-NLS-1$
+          "eclipse/orion.server.node", //$NON-NLS-1$
+          "eclipse/packagedrone", //$NON-NLS-1$
+          "eclipse/paho.mqtt-sn.embedded-c", //$NON-NLS-1$
+          "eclipse/paho.mqtt-spy", //$NON-NLS-1$
+          "eclipse/paho.mqtt.android", //$NON-NLS-1$
+          "eclipse/paho.mqtt.c", //$NON-NLS-1$
+          "eclipse/paho.mqtt.cpp", //$NON-NLS-1$
+          "eclipse/paho.mqtt.d", //$NON-NLS-1$
+          "eclipse/paho.mqtt.embedded-c", //$NON-NLS-1$
+          "eclipse/paho.mqtt.golang", //$NON-NLS-1$
+          "eclipse/paho.mqtt.java", //$NON-NLS-1$
+          "eclipse/paho.mqtt.javascript", //$NON-NLS-1$
+          "eclipse/paho.mqtt.m2mqtt", //$NON-NLS-1$
+          "eclipse/paho.mqtt.python", //$NON-NLS-1$
+          "eclipse/paho.mqtt.ruby", //$NON-NLS-1$
+          "eclipse/paho.mqtt.rust", //$NON-NLS-1$
+          "eclipse/paho.mqtt.testing", //$NON-NLS-1$
+          "eclipse/ponte", //$NON-NLS-1$
+          "eclipse/rdf4j", //$NON-NLS-1$
+          "eclipse/rdf4j-doc", //$NON-NLS-1$
+          "eclipse/rdf4j-storage", //$NON-NLS-1$
+          "eclipse/rdf4j-testsuite", //$NON-NLS-1$
+          "eclipse/rdf4j-tools", //$NON-NLS-1$
+          "eclipse/reddeer", //$NON-NLS-1$
+          "eclipse/richbeans", //$NON-NLS-1$
+          "eclipse/risev2g", //$NON-NLS-1$
+          "eclipse/scanning", //$NON-NLS-1$
+          "eclipse/score", //$NON-NLS-1$
+          "eclipse/sequoyah", //$NON-NLS-1$
+          "eclipse/sirius-components", //$NON-NLS-1$
+          "eclipse/smarthome", //$NON-NLS-1$
+          "eclipse/smarthome-designer", //$NON-NLS-1$
+          "eclipse/smarthome-packaging-sample", //$NON-NLS-1$
+          "eclipse/smarthome.osgi-ri.enocean", //$NON-NLS-1$
+          "eclipse/sumo", //$NON-NLS-1$
+          "eclipse/texlipse", //$NON-NLS-1$
+          "eclipse/thym", //$NON-NLS-1$
+          "eclipse/tiaki-c", //$NON-NLS-1$
+          "eclipse/tiaki-java", //$NON-NLS-1$
+          "eclipse/titan.EclipsePlug-ins", //$NON-NLS-1$
+          "eclipse/titan.Libraries.TCCUsefulFunctions", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.COMMON", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.DHCP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.DHCPv6", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.DIAMETER_ProtocolModule_Generator", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.DNS", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.FrameRelay", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.FrameRelay-", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.H248_v2", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.HTTP2.0", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.ICAP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.ICMP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.ICMPv6", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.IKEv2", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.IMAP_4rev1", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.IP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.IPsec", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.IUA", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.JSON_v07_2006", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.L2TP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.M3UA", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.MIME", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.MSRP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.PPP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.ProtoBuff", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.RADIUS_ProtocolModule_Generator", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.RTP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.RTSP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.SMPP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.SMTP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.SNMP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.SRTP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.TCP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.UDP", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.WebSocket", //$NON-NLS-1$
+          "eclipse/titan.ProtocolModules.XMPP", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.Common_Components.Abstract_Socket", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.Common_Components.Socket-API", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.HTTPmsg", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.IPL4asp", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.LANL2asp", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.LDAPasp_RFC4511", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.LDAPasp_RFC4511-", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.LDAPmsg", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.LDAPmsg-", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.PCAPasp", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.PIPEasp", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.SCTPasp", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.SIPmsg", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.SQLasp", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.SSHCLIENTasp", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.STDINOUTmsg", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.SUNRPCasp", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.SUNRPCasp-", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.TCPasp", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.TELNETasp", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.UDPasp", //$NON-NLS-1$
+          "eclipse/titan.TestPorts.UNIX_DOMAIN_SOCKETasp", //$NON-NLS-1$
+          "eclipse/titan.core", //$NON-NLS-1$
+          "eclipse/titan.misc", //$NON-NLS-1$
+          "eclipse/tm", //$NON-NLS-1$
+          "eclipse/tm4e", //$NON-NLS-1$
+          "eclipse/triquetrum", //$NON-NLS-1$
+          "eclipse/unide", //$NON-NLS-1$
+          "eclipse/unide.java", //$NON-NLS-1$
+          "eclipse/unide.python", //$NON-NLS-1$
+          "eclipse/vert.x", //$NON-NLS-1$
+          "eclipse/vorto", //$NON-NLS-1$
+          "eclipse/wakaama", //$NON-NLS-1$
+          "eclipse/webtools.jsdt", //$NON-NLS-1$
+          "eclipse/whiskers.arduino", //$NON-NLS-1$
+          "eclipse/whiskers.js", //$NON-NLS-1$
+          "eclipse/winery", //$NON-NLS-1$
+          "eclipse/www.eclipse.org-collections", //$NON-NLS-1$
+          "eclipse/xacc", //$NON-NLS-1$
+          "eclipse/xsemantics", //$NON-NLS-1$
+          "eclipse/xtext", //$NON-NLS-1$
+          "eclipse/xtext-core", //$NON-NLS-1$
+          "eclipse/xtext-eclipse", //$NON-NLS-1$
+          "eclipse/xtext-extras", //$NON-NLS-1$
+          "eclipse/xtext-gradle", //$NON-NLS-1$
+          "eclipse/xtext-idea", //$NON-NLS-1$
+          "eclipse/xtext-lib", //$NON-NLS-1$
+          "eclipse/xtext-maven", //$NON-NLS-1$
+          "eclipse/xtext-umbrella", //$NON-NLS-1$
+          "eclipse/xtext-web", //$NON-NLS-1$
+          "eclipse/xtext-xtend", //$NON-NLS-1$
       });
     }
 
     if (Boolean.TRUE)
     {
       Map<String, Map<String, Map<String, Set<String>>>> githubEclipseRepositoryIndex = new TreeMap<String, Map<String, Map<String, Set<String>>>>();
-      repositoryIndices.put("https://github.com/${0}/tree/master/${1} https://raw.githubusercontent.com/${0}/master/${1}", githubEclipseRepositoryIndex);
+      repositoryIndices.put("https://github.com/${0}/tree/master/${1} https://raw.githubusercontent.com/${0}/master/${1}", githubEclipseRepositoryIndex); //$NON-NLS-1$
       for (String githubEclipseRepository : githubEclipseRepositories)
       {
         try
         {
-          githubRepoIndex(githubEclipseRepositoryIndex, githubEclipseRepository, "");
+          githubRepoIndex(githubEclipseRepositoryIndex, githubEclipseRepository, ""); //$NON-NLS-1$
         }
         catch (Exception ex)
         {
@@ -376,9 +376,9 @@ public class GitIndex
   private static void saveIndex(Map<String, Map<String, Map<String, Map<String, Set<String>>>>> repositoryIndices, File target) throws IOException
   {
     ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)));
-    zipOutputStream.putNextEntry(new ZipEntry("index.txt"));
+    zipOutputStream.putNextEntry(new ZipEntry("index.txt")); //$NON-NLS-1$
 
-    PrintStream out = new PrintStream(zipOutputStream, false, "UTF-8");
+    PrintStream out = new PrintStream(zipOutputStream, false, "UTF-8"); //$NON-NLS-1$
 
     for (Map.Entry<String, Map<String, Map<String, Map<String, Set<String>>>>> entry : repositoryIndices.entrySet())
     {
@@ -388,40 +388,40 @@ public class GitIndex
       for (Map.Entry<String, Map<String, Map<String, Set<String>>>> repoEntry : repositoryIndex.entrySet())
       {
         String repo = repoEntry.getKey();
-        out.print(" ");
+        out.print(" "); //$NON-NLS-1$
         out.println(repo);
         Map<String, Map<String, Set<String>>> sourceFolders = repoEntry.getValue();
         for (Map.Entry<String, Map<String, Set<String>>> sourceFolderEntry : sourceFolders.entrySet())
         {
           String sourceFolder = sourceFolderEntry.getKey();
-          out.print("  ");
+          out.print("  "); //$NON-NLS-1$
           out.println(sourceFolder);
           Map<String, Set<String>> packages = sourceFolderEntry.getValue();
           for (Entry<String, Set<String>> packageEntry : packages.entrySet())
           {
             String packageName = packageEntry.getKey();
-            out.print("   ");
+            out.print("   "); //$NON-NLS-1$
             out.println(packageName);
             Set<String> classes = packageEntry.getValue();
             for (String className : classes)
             {
-              out.print("    ");
+              out.print("    "); //$NON-NLS-1$
               out.println(className);
               if (Boolean.FALSE)
               {
                 System.out.print(packageName);
-                System.out.print(".");
+                System.out.print("."); //$NON-NLS-1$
                 System.out.print(className);
-                System.out.print(" ->");
-                System.out.print(" https://git.eclipse.org/c/");
+                System.out.print(" ->"); //$NON-NLS-1$
+                System.out.print(" https://git.eclipse.org/c/"); //$NON-NLS-1$
                 System.out.print(repo);
-                System.out.print("/tree/");
+                System.out.print("/tree/"); //$NON-NLS-1$
                 System.out.print(sourceFolder);
-                System.out.print("/");
+                System.out.print("/"); //$NON-NLS-1$
                 System.out.print(packageName.replace('.', '/'));
-                System.out.print("/");
+                System.out.print("/"); //$NON-NLS-1$
                 System.out.print(className);
-                System.out.print(".java");
+                System.out.print(".java"); //$NON-NLS-1$
                 System.out.println();
               }
             }
@@ -437,15 +437,15 @@ public class GitIndex
   private static void handleJavaPath(Map<String, Map<String, Map<String, Set<String>>>> repositoryIndex, String repo, String line)
   {
     int rootPackageIndex = -1;
-    if (!line.startsWith("test/") && !line.startsWith("tests/") && !line.endsWith("package-info.java"))
+    if (!line.startsWith("test/") && !line.startsWith("tests/") && !line.endsWith("package-info.java")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     {
-      rootPackageIndex = line.indexOf("/org/");
+      rootPackageIndex = line.indexOf("/org/"); //$NON-NLS-1$
       if (rootPackageIndex == -1)
       {
-        rootPackageIndex = line.indexOf("/com/");
+        rootPackageIndex = line.indexOf("/com/"); //$NON-NLS-1$
         if (rootPackageIndex == -1)
         {
-          rootPackageIndex = line.indexOf("/javax/");
+          rootPackageIndex = line.indexOf("/javax/"); //$NON-NLS-1$
         }
       }
     }
@@ -483,17 +483,17 @@ public class GitIndex
     }
   }
 
-  private static final Pattern REPO_FULL_NAME_PATTERN = Pattern.compile("\"full_name\":\"([^\"]+)\"");
+  private static final Pattern REPO_FULL_NAME_PATTERN = Pattern.compile("\"full_name\":\"([^\"]+)\""); //$NON-NLS-1$
 
-  private static final Pattern MIRROR_URL_PATTERN = Pattern.compile("\"mirror_url\":(\"(|[^\"]+)\"|null)");
+  private static final Pattern MIRROR_URL_PATTERN = Pattern.compile("\"mirror_url\":(\"(|[^\"]+)\"|null)"); //$NON-NLS-1$
 
   private static Set<String> getGithubEclipseRepositoryIndex() throws Exception
   {
     Map<String, String> repos = new TreeMap<String, String>();
     for (int i = 1; i < 500; ++i)
     {
-      URL url = new URL("https://api.github.com/users/eclipse/repos?page=" + i);
-      List<String> lines = readLines(url, "UTF-8");
+      URL url = new URL("https://api.github.com/users/eclipse/repos?page=" + i); //$NON-NLS-1$
+      List<String> lines = readLines(url, "UTF-8"); //$NON-NLS-1$
       int count = 0;
       for (String line : lines)
       {
@@ -521,7 +521,7 @@ public class GitIndex
       Map.Entry<String, String> entry = it.next();
       if (entry.getValue() == null)
       {
-        System.out.println("\"" + entry.getKey() + "\", //");
+        System.out.println("\"" + entry.getKey() + "\", //"); //$NON-NLS-1$ //$NON-NLS-2$
       }
       else
       {
@@ -534,10 +534,10 @@ public class GitIndex
 
   public static void githubRepoIndex(Map<String, Map<String, Map<String, Set<String>>>> repositoryIndex, String repo, String path) throws Exception
   {
-    URL url = new URL("https://github.com/" + repo + "/tree/master/" + path);
-    List<String> lines = readLines(url, "UTF-8");
-    Pattern folderPattern = Pattern.compile("href=\"/" + repo + "/tree/master/([^\"]+)\"");
-    Pattern filePattern = Pattern.compile("href=\"/" + repo + "/blob/master/([^\"]+)\"");
+    URL url = new URL("https://github.com/" + repo + "/tree/master/" + path); //$NON-NLS-1$ //$NON-NLS-2$
+    List<String> lines = readLines(url, "UTF-8"); //$NON-NLS-1$
+    Pattern folderPattern = Pattern.compile("href=\"/" + repo + "/tree/master/([^\"]+)\""); //$NON-NLS-1$ //$NON-NLS-2$
+    Pattern filePattern = Pattern.compile("href=\"/" + repo + "/blob/master/([^\"]+)\""); //$NON-NLS-1$ //$NON-NLS-2$
     for (String line : lines)
     {
       Matcher matcher = folderPattern.matcher(line);
@@ -546,9 +546,9 @@ public class GitIndex
         String folder = matcher.group(1);
         int index = folder.lastIndexOf('/');
         String folderName = index == -1 ? folder : folder.substring(index + 1);
-        if (line.indexOf(">" + folderName + "</a>") != -1)
+        if (line.indexOf(">" + folderName + "</a>") != -1) //$NON-NLS-1$ //$NON-NLS-2$
         {
-          System.out.println(repo + "/" + folder);
+          System.out.println(repo + "/" + folder); //$NON-NLS-1$
           githubRepoIndex(repositoryIndex, repo, folder);
         }
       }
@@ -559,7 +559,7 @@ public class GitIndex
         {
           String file = matcher.group(1);
           // System.out.println(">" + file);
-          if (file.endsWith(".java"))
+          if (file.endsWith(".java")) //$NON-NLS-1$
           {
             handleJavaPath(repositoryIndex, repo, file);
           }
@@ -576,7 +576,7 @@ public class GitIndex
       try
       {
         InputStream inputStream = url.openStream();
-        List<String> lines = readLines(inputStream, "UTF-8");
+        List<String> lines = readLines(inputStream, "UTF-8"); //$NON-NLS-1$
         return lines;
       }
       catch (IOException ex)

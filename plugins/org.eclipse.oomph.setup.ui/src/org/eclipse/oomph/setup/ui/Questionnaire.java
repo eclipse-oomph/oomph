@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Shell;
  */
 public abstract class Questionnaire
 {
-  private static final String EXTENSION_POINT_ID = SetupUIPlugin.INSTANCE.getSymbolicName() + ".questionnaire";
+  private static final String EXTENSION_POINT_ID = SetupUIPlugin.INSTANCE.getSymbolicName() + ".questionnaire"; //$NON-NLS-1$
 
   private static Questionnaire instance;
 
@@ -47,7 +47,7 @@ public abstract class Questionnaire
     else
     {
       // Don't perform the questionnaire on the UI thread or RecorderTransaction.open() will deadlock.
-      new Thread("Questionnaire")
+      new Thread("Questionnaire") //$NON-NLS-1$
       {
         @Override
         public void run()
@@ -78,10 +78,10 @@ public abstract class Questionnaire
       {
         try
         {
-          int priority = Integer.parseInt(configurationElement.getAttribute("priority"));
+          int priority = Integer.parseInt(configurationElement.getAttribute("priority")); //$NON-NLS-1$
           if (priority < topPriority)
           {
-            instance = (Questionnaire)configurationElement.createExecutableExtension("class");
+            instance = (Questionnaire)configurationElement.createExecutableExtension("class"); //$NON-NLS-1$
             topPriority = priority;
           }
         }

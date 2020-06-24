@@ -46,12 +46,12 @@ public final class JREFilter
   {
     if (major == null && minor != null)
     {
-      throw new IllegalArgumentException("Minor can't be non-null if major is null");
+      throw new IllegalArgumentException(Messages.JREFilter_BadMinor_exception);
     }
 
     if (minor == null && micro != null)
     {
-      throw new IllegalArgumentException("Micro can't be non-null if minor is null");
+      throw new IllegalArgumentException(Messages.JREFilter_BadMicro_exception);
     }
 
     this.major = major;
@@ -81,7 +81,7 @@ public final class JREFilter
     }
     else
     {
-      String[] tokens = version.split("\\.");
+      String[] tokens = version.split("\\."); //$NON-NLS-1$
       major = getSegment(tokens, 0);
       minor = getSegment(tokens, 1);
       micro = getSegment(tokens, 2);
@@ -118,8 +118,8 @@ public final class JREFilter
 
   public String getQuery()
   {
-    return safe(JREManager.OS_TYPE.ordinal()) + "_" + safe(major) + "_" + safe(minor) + "_" + safe(micro) + "_" + safe(bitness) + "_"
-        + (Boolean.TRUE.equals(jdk) ? "1" : "0");
+    return safe(JREManager.OS_TYPE.ordinal()) + "_" + safe(major) + "_" + safe(minor) + "_" + safe(micro) + "_" + safe(bitness) + "_" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+        + (Boolean.TRUE.equals(jdk) ? "1" : "0"); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   @Override
@@ -133,37 +133,37 @@ public final class JREFilter
 
     if (minor != null)
     {
-      builder.append("." + minor);
+      builder.append("." + minor); //$NON-NLS-1$
     }
 
     if (micro != null)
     {
-      builder.append("." + micro);
+      builder.append("." + micro); //$NON-NLS-1$
     }
 
     if (bitness != null)
     {
       if (builder.length() != 0)
       {
-        builder.append(" ");
+        builder.append(" "); //$NON-NLS-1$
       }
 
       builder.append(bitness);
-      builder.append(" Bit");
+      builder.append(" Bit"); //$NON-NLS-1$
     }
 
     if (builder.length() != 0)
     {
-      builder.append(" ");
+      builder.append(" "); //$NON-NLS-1$
     }
 
     if (jdk != null)
     {
-      builder.append(jdk ? " JDK" : " JRE");
+      builder.append(jdk ? " JDK" : " JRE"); //$NON-NLS-1$ //$NON-NLS-2$
     }
     else
     {
-      builder.append("VM");
+      builder.append("VM"); //$NON-NLS-1$
     }
 
     return builder.toString();
@@ -188,6 +188,6 @@ public final class JREFilter
 
   private static String safe(Integer parameter)
   {
-    return parameter == null ? "0" : parameter.toString();
+    return parameter == null ? "0" : parameter.toString(); //$NON-NLS-1$
   }
 }

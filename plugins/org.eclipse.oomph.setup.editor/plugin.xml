@@ -123,56 +123,56 @@
          point="org.eclipse.ui.commands">
       <category
             id="org.eclipse.oomph.setup.category"
-            name="Oomph Setup">
+            name="%category.oomphSetup.name">
       </category>
       <command
             categoryId="org.eclipse.oomph.setup.category"
             defaultHandler="org.eclipse.oomph.setup.presentation.handlers.OpenEditorDropdownHandler"
             id="org.eclipse.oomph.setup.editor.openEditorDropdown"
-            name="Open Setup Editor">
+            name="%command.openEditorDropdown.name">
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
             id="org.eclipse.oomph.setup.editor.performDropdown"
-            name="Perform Dropdown">
+            name="%command.performDropdown.name">
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
             id="org.eclipse.oomph.setup.editor.perform"
-            name="Perform Setup Tasks">
+            name="%command.perform.name">
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
             id="org.eclipse.oomph.setup.editor.perform.startup"
-            name="Perform Setup Tasks (Startup)">
+            name="%command.performStartup.name">
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
             id="org.eclipse.oomph.setup.editor.importProjects"
-            name="Import Projects">
+            name="%command.importProjects.name">
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
             id="org.eclipse.oomph.setup.editor.synchronizePreferences"
-            name="Synchronize Preferences">
+            name="%command.synchronizePreferences.name">
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
             defaultHandler="org.eclipse.oomph.setup.presentation.handlers.OpenDiscoveredTypeHandler"
             id="org.eclipse.oomph.setup.editor.openDiscoveredType"
-            name="Open Discovered Type">
+            name="%command.openDiscoveredType.name">
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
             defaultHandler="org.eclipse.oomph.setup.presentation.handlers.OpenLogHandler"
             id="org.eclipse.oomph.setup.editor.openLog"
-            name="Open Setup Log">
+            name="%command.openLog.name">
       </command>
       <command
             categoryId="org.eclipse.oomph.setup.category"
             defaultHandler="org.eclipse.oomph.setup.presentation.handlers.RefreshCacheHandler"
             id="org.eclipse.oomph.setup.editor.refreshCache"
-            name="Refresh Remote Cache">
+            name="%command.refreshCache.name">
       </command>
       <command
             defaultHandler="org.eclipse.oomph.setup.presentation.handlers.DonateHandler"
@@ -294,13 +294,13 @@
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
                id="org.eclipse.oomph.setup.toolbar"
-               label="Setup">
+               label="%toolbarMenu.toolbar.label">
             <command
                   commandId="org.eclipse.oomph.setup.editor.performDropdown"
                   icon="icons/update.png"
                   id="org.eclipse.oomph.setup.perform.menu"
                   style="pulldown"
-                  tooltip="Perform Setup Tasks...">
+                  tooltip="%toolbarMenu.performDropdown.tooltip">
                <visibleWhen>
                   <test
                         forcePluginActivation="true"
@@ -314,7 +314,7 @@
                   icon="icons/prefs.gif"
                   id="org.eclipse.oomph.setup.editor.menu"
                   style="pulldown"
-                  tooltip="Open User">
+                  tooltip="%toolbarMenu.openEditorDropdown.tooltip">
                <visibleWhen>
                   <test
                         forcePluginActivation="true"
@@ -330,7 +330,7 @@
             locationURI="toolbar:org.eclipse.ui.trim.status">
          <toolbar
                id="org.eclipse.oomph.setup.status"
-               label="Status">
+               label="%statusMenu.toolbar.label">
             <command
                   commandId="org.eclipse.oomph.setup.editor.performDropdown"
                   icon="icons/spacer.gif"
@@ -384,13 +384,13 @@
          <command
                commandId="org.eclipse.oomph.setup.editor.perform"
                icon="icons/update.png"
-               label="Perform Setup Tasks..."
+               label="%performMenu.perform.label"
                style="push">
          </command>
          <command
                commandId="org.eclipse.oomph.setup.editor.perform.startup"
                icon="icons/update.png"
-               label="Perform Setup Tasks (Startup)..."
+               label="%performMenu.performStartup.label"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -403,13 +403,13 @@
          <command
                commandId="org.eclipse.oomph.setup.editor.importProjects"
                icon="icons/Project.gif"
-               label="Import Projects..."
+               label="%performMenu.importProjects.label"
                style="push">
          </command>
          <command
                commandId="org.eclipse.oomph.setup.editor.synchronizePreferences"
                icon="icons/Synchronize.gif"
-               label="Synchronize Preferences..."
+               label="%performMenu.synchronizePreferences.label"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -433,13 +433,13 @@
          <command
                commandId="org.eclipse.oomph.setup.editor.openLog"
                icon="icons/Log.gif"
-               label="Open Setup Log"
+               label="%performMenu.openLog.label"
                style="push">
          </command>
          <command
                commandId="org.eclipse.oomph.setup.editor.refreshCache"
                icon="icons/RefreshCache.gif"
-               label="Refresh Remote Cache"
+               label="%performMenu.refreshCache.label"
                style="push">
          </command>
       </menuContribution>
@@ -449,7 +449,7 @@
          <command
                commandId="org.eclipse.oomph.setup.editor.perform"
                icon="icons/update_gear.png"
-               label="Perform Setup Tasks..."
+               label="%helpMenu.perform.label"
                style="push">
          </command>
          <separator
@@ -463,7 +463,7 @@
          <command
                commandId="org.eclipse.oomph.setup.editor.openDiscoveredType"
                icon="icons/BrowseType.gif"
-               label="Open Discovered Type..."
+               label="%navigateMenu.openDiscoveredType.label"
                style="push">
          </command>
       </menuContribution>
@@ -476,7 +476,7 @@
          </separator>
          <menu
                icon="icons/full/obj16/SetupModelFile.gif"
-               label="Open Setup">
+               label="%navigateMenu.openSetup.label">
             <dynamic
                   class="org.eclipse.oomph.setup.presentation.handlers.OpenEditorDropdownFactory"
                   id="org.eclipse.oomph.setup.editor.open.menu.dynamic">
@@ -485,7 +485,7 @@
          <command
                commandId="org.eclipse.oomph.setup.editor.openLog"
                icon="icons/Log.gif"
-               label="Open Setup Log"
+               label="%navigateMenu.openLog.label"
                style="push">
          </command>
       </menuContribution>

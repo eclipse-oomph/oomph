@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.Status;
  */
 public final class SetupEditorPlugin extends OomphUIPlugin
 {
-  public static final String PLUGIN_ID = "org.eclipse.oomph.setup.editor";
+  public static final String PLUGIN_ID = "org.eclipse.oomph.setup.editor"; //$NON-NLS-1$
 
   /**
    * Keep track of the singleton.

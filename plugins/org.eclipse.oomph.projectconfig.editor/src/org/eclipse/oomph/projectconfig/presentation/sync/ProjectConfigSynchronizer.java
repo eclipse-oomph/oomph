@@ -86,7 +86,7 @@ public final class ProjectConfigSynchronizer implements IStartup
               {
                 // Visit the folder's children only if its the .settings folder.
                 IPath fullPath = delta.getFullPath();
-                if (!".settings".equals(fullPath.lastSegment()))
+                if (!".settings".equals(fullPath.lastSegment())) //$NON-NLS-1$
                 {
                   return false;
                 }
@@ -95,7 +95,7 @@ public final class ProjectConfigSynchronizer implements IStartup
               {
                 // Include only the *.prefs resources in the .settings folder.
                 IPath fullPath = delta.getFullPath();
-                if (fullPath.segmentCount() > 2 && "prefs".equals(fullPath.getFileExtension())
+                if (fullPath.segmentCount() > 2 && "prefs".equals(fullPath.getFileExtension()) //$NON-NLS-1$
                     && !ProjectConfigUtil.PROJECT_CONF_NODE_NAME.equals(fullPath.removeFileExtension().lastSegment()))
                 {
                   changedPaths.add(fullPath);
@@ -206,7 +206,7 @@ public final class ProjectConfigSynchronizer implements IStartup
                         if (dialog.hasUnmanagedProperties() && ProjectConfigSynchronizerPreferences.isEdit())
                         {
                           PreferenceDialog preferenceDialog = org.eclipse.ui.dialogs.PreferencesUtil.createPreferenceDialogOn(shell,
-                              "org.eclipse.oomph.projectconfig.presentation.ProjectConfigPreferencePage", null, null);
+                              "org.eclipse.oomph.projectconfig.presentation.ProjectConfigPreferencePage", null, null); //$NON-NLS-1$
                           preferenceDialog.open();
                         }
                       }
@@ -250,7 +250,7 @@ public final class ProjectConfigSynchronizer implements IStartup
                           {
                             try
                             {
-                              PreferencesUtil.getPreferences(newWorkspaceConfiguration.getInstancePreferenceNode().getParent().getNode("project"), false)
+                              PreferencesUtil.getPreferences(newWorkspaceConfiguration.getInstancePreferenceNode().getParent().getNode("project"), false) //$NON-NLS-1$
                                   .flush();
                             }
                             catch (BackingStoreException ex)

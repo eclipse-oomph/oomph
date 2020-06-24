@@ -218,7 +218,7 @@ public class PreferenceProfileImpl extends ModelElementImpl implements Preferenc
     {
       if (EcoreUtil.isAncestor(this, newProject))
       {
-        throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+        throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
       }
       NotificationChain msgs = null;
       if (eInternalContainer() != null)
@@ -520,7 +520,7 @@ public class PreferenceProfileImpl extends ModelElementImpl implements Preferenc
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (name: ");
+    result.append(" (name: "); //$NON-NLS-1$
     result.append(name);
     result.append(')');
     return result.toString();

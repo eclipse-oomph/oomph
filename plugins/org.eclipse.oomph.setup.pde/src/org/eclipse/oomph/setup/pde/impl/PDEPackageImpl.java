@@ -314,6 +314,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -341,30 +342,30 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
     apiBaselineFromTargetTaskEClass.getESuperTypes().add(getAbstractAPIBaselineTask());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(targetPlatformTaskEClass, TargetPlatformTask.class, "TargetPlatformTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getTargetPlatformTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, TargetPlatformTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(targetPlatformTaskEClass, TargetPlatformTask.class, "TargetPlatformTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getTargetPlatformTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, TargetPlatformTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTargetPlatformTask_Activate(), ecorePackage.getEBoolean(), "activate", "true", 0, 1, TargetPlatformTask.class, !IS_TRANSIENT,
+    initEAttribute(getTargetPlatformTask_Activate(), ecorePackage.getEBoolean(), "activate", "true", 0, 1, TargetPlatformTask.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(abstractAPIBaselineTaskEClass, AbstractAPIBaselineTask.class, "AbstractAPIBaselineTask", IS_ABSTRACT, !IS_INTERFACE,
+    initEClass(abstractAPIBaselineTaskEClass, AbstractAPIBaselineTask.class, "AbstractAPIBaselineTask", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getAbstractAPIBaselineTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, AbstractAPIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getAbstractAPIBaselineTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, AbstractAPIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAbstractAPIBaselineTask_Activate(), ecorePackage.getEBoolean(), "activate", "true", 0, 1, AbstractAPIBaselineTask.class, !IS_TRANSIENT,
+    initEAttribute(getAbstractAPIBaselineTask_Activate(), ecorePackage.getEBoolean(), "activate", "true", 0, 1, AbstractAPIBaselineTask.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(apiBaselineTaskEClass, APIBaselineTask.class, "APIBaselineTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getAPIBaselineTask_Version(), ecorePackage.getEString(), "version", null, 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(apiBaselineTaskEClass, APIBaselineTask.class, "APIBaselineTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getAPIBaselineTask_Version(), ecorePackage.getEString(), "version", null, 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAPIBaselineTask_Location(), ecorePackage.getEString(), "location", "", 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getAPIBaselineTask_Location(), ecorePackage.getEString(), "location", "", 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAPIBaselineTask_RemoteURI(), ecorePackage.getEString(), "remoteURI", null, 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getAPIBaselineTask_RemoteURI(), ecorePackage.getEString(), "remoteURI", null, 1, 1, APIBaselineTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(apiBaselineFromTargetTaskEClass, APIBaselineFromTargetTask.class, "APIBaselineFromTargetTask", !IS_ABSTRACT, !IS_INTERFACE,
+    initEClass(apiBaselineFromTargetTaskEClass, APIBaselineFromTargetTask.class, "APIBaselineFromTargetTask", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getAPIBaselineFromTargetTask_TargetName(), ecorePackage.getEString(), "targetName", "", 1, 1, APIBaselineFromTargetTask.class, !IS_TRANSIENT,
+    initEAttribute(getAPIBaselineFromTargetTask_TargetName(), ecorePackage.getEString(), "targetName", "", 1, 1, APIBaselineFromTargetTask.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
@@ -397,8 +398,9 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/PDE.ecore" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/PDE.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -409,9 +411,11 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    */
   protected void createEnablementAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(this, source,
-        new String[] { "variableName", "setup.pde.p2", "repository", "${oomph.update.url}", "installableUnits", "org.eclipse.oomph.setup.pde.feature.group" });
+    String source = "http://www.eclipse.org/oomph/setup/Enablement"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "variableName", "setup.pde.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "${oomph.update.url}", //$NON-NLS-1$ //$NON-NLS-2$
+        "installableUnits", "org.eclipse.oomph.setup.pde.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -422,9 +426,10 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.pde.edit/icons/full/obj16" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source,
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.pde.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -435,10 +440,13 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    */
   protected void createValidTriggersAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
-    addAnnotation(targetPlatformTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
-    addAnnotation(apiBaselineTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
-    addAnnotation(apiBaselineFromTargetTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers"; //$NON-NLS-1$
+    addAnnotation(targetPlatformTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(apiBaselineTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(apiBaselineFromTargetTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -449,39 +457,53 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    */
   protected void createVariableAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Variable";
-    addAnnotation(getAPIBaselineTask_Location(), source,
-        new String[] { "type", "STRING", "label", "API baseline location rule", "description",
-            "The rule for the absolute folder location where the API baseline is located", "explicitType", "FOLDER", "explicitLabel",
-            "${@id.name}-${@id.version} API baseline location", "explicitDescription",
-            "The absolute folder location where the ${@id.name}-${@id.version} API baseline is located" });
-    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${api.baselines.root/}${@id.name|lower}-${@id.version}", "label",
-            "Located in a folder named \'<name>-<version>\' within the root API baselines folder" });
-    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${installation.location/baselines/}${@id.name|lower}-${@id.version}", "label",
-            "Located in a folder named \'baselines/<name>-<version>\' within the installation folder" });
-    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${workspace.location/.baselines/}${@id.name|lower}-${@id.version}", "label",
-            "Located in a folder named \'.baselines/<name>-<version>\' within the workspace folder" });
-    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${@id.location}", "label", "Located in the specified absolute folder location" });
-    addAnnotation(getAPIBaselineFromTargetTask_TargetName(), source,
-        new String[] { "type", "STRING", "label", "API baseline location rule", "description",
-            "The rule for the absolute folder location where the API baseline is located", "explicitType", "FOLDER", "explicitLabel",
-            "${@id.name}-${@id.version} API baseline location", "explicitDescription",
-            "The absolute folder location where the ${@id.name}-${@id.version} API baseline is located" });
-    addAnnotation(getAPIBaselineFromTargetTask_TargetName(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${api.baselines.root/}${@id.name|lower}-${@id.version}", "label",
-            "Located in a folder named \'<name>-<version>\' within the root API baselines folder" });
-    addAnnotation(getAPIBaselineFromTargetTask_TargetName(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${installation.location/baselines/}${@id.name|lower}-${@id.version}", "label",
-            "Located in a folder named \'baselines/<name>-<version>\' within the installation folder" });
-    addAnnotation(getAPIBaselineFromTargetTask_TargetName(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${workspace.location/.baselines/}${@id.name|lower}-${@id.version}", "label",
-            "Located in a folder named \'.baselines/<name>-<version>\' within the workspace folder" });
-    addAnnotation(getAPIBaselineFromTargetTask_TargetName(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${@id.location}", "label", "Located in the specified absolute folder location" });
+    String source = "http://www.eclipse.org/oomph/setup/Variable"; //$NON-NLS-1$
+    addAnnotation(getAPIBaselineTask_Location(), source, new String[] { "type", "STRING", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "API baseline location rule", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The rule for the absolute folder location where the API baseline is located", //$NON-NLS-1$ //$NON-NLS-2$
+        "explicitType", "FOLDER", //$NON-NLS-1$ //$NON-NLS-2$
+        "explicitLabel", "${@id.name}-${@id.version} API baseline location", //$NON-NLS-1$ //$NON-NLS-2$
+        "explicitDescription", "The absolute folder location where the ${@id.name}-${@id.version} API baseline is located" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${api.baselines.root/}${@id.name|lower}-${@id.version}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in a folder named \'<name>-<version>\' within the root API baselines folder" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${installation.location/baselines/}${@id.name|lower}-${@id.version}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in a folder named \'baselines/<name>-<version>\' within the installation folder" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${workspace.location/.baselines/}${@id.name|lower}-${@id.version}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in a folder named \'.baselines/<name>-<version>\' within the workspace folder" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getAPIBaselineTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${@id.location}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in the specified absolute folder location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getAPIBaselineFromTargetTask_TargetName(), source, new String[] { "type", "STRING", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "API baseline location rule", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The rule for the absolute folder location where the API baseline is located", //$NON-NLS-1$ //$NON-NLS-2$
+        "explicitType", "FOLDER", //$NON-NLS-1$ //$NON-NLS-2$
+        "explicitLabel", "${@id.name}-${@id.version} API baseline location", //$NON-NLS-1$ //$NON-NLS-2$
+        "explicitDescription", "The absolute folder location where the ${@id.name}-${@id.version} API baseline is located" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getAPIBaselineFromTargetTask_TargetName(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${api.baselines.root/}${@id.name|lower}-${@id.version}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in a folder named \'<name>-<version>\' within the root API baselines folder" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getAPIBaselineFromTargetTask_TargetName(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${installation.location/baselines/}${@id.name|lower}-${@id.version}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in a folder named \'baselines/<name>-<version>\' within the installation folder" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getAPIBaselineFromTargetTask_TargetName(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${workspace.location/.baselines/}${@id.name|lower}-${@id.version}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in a folder named \'.baselines/<name>-<version>\' within the workspace folder" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getAPIBaselineFromTargetTask_TargetName(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${@id.location}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in the specified absolute folder location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -492,11 +514,19 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    */
   protected void createRuleVariableAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/RuleVariable";
-    addAnnotation(getAPIBaselineTask_Location(), source, new String[] { "name", "api.baselines.root", "type", "FOLDER", "label", "Root API baselines folder",
-        "description", "The root API baselines folder where all the API baselines are located", "storageURI", "scope://" });
-    addAnnotation(getAPIBaselineFromTargetTask_TargetName(), source, new String[] { "name", "api.baselines.root", "type", "FOLDER", "label",
-        "Root API baselines folder", "description", "The root API baselines folder where all the API baselines are located", "storageURI", "scope://" });
+    String source = "http://www.eclipse.org/oomph/setup/RuleVariable"; //$NON-NLS-1$
+    addAnnotation(getAPIBaselineTask_Location(), source, new String[] { "name", "api.baselines.root", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "FOLDER", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "Root API baselines folder", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The root API baselines folder where all the API baselines are located", //$NON-NLS-1$ //$NON-NLS-2$
+        "storageURI", "scope://" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getAPIBaselineFromTargetTask_TargetName(), source, new String[] { "name", "api.baselines.root", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "FOLDER", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "Root API baselines folder", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The root API baselines folder where all the API baselines are located", //$NON-NLS-1$ //$NON-NLS-2$
+        "storageURI", "scope://" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -507,7 +537,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    */
   protected void createRemoteResourceAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/RemoteResource";
+    String source = "http://www.eclipse.org/oomph/setup/RemoteResource"; //$NON-NLS-1$
     addAnnotation(getAPIBaselineTask_RemoteURI(), source, new String[] {});
   }
 
@@ -519,7 +549,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    */
   protected void createRedirectAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Redirect";
+    String source = "http://www.eclipse.org/oomph/setup/Redirect"; //$NON-NLS-1$
     addAnnotation(getAPIBaselineTask_RemoteURI(), source, new String[] {});
   }
 

@@ -179,6 +179,7 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -203,8 +204,8 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
     projectSetImportTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(projectSetImportTaskEClass, ProjectSetImportTask.class, "ProjectSetImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getProjectSetImportTask_URL(), ecorePackage.getEString(), "uRL", null, 1, 1, ProjectSetImportTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(projectSetImportTaskEClass, ProjectSetImportTask.class, "ProjectSetImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getProjectSetImportTask_URL(), ecorePackage.getEString(), "uRL", null, 1, 1, ProjectSetImportTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
@@ -231,8 +232,9 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/ProjectSet.ecore" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/ProjectSet.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -243,9 +245,11 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
    */
   protected void createEnablementAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(this, source, new String[] { "variableName", "setup.projectset.p2", "repository", "${oomph.update.url}", "installableUnits",
-        "org.eclipse.oomph.setup.projectset.feature.group" });
+    String source = "http://www.eclipse.org/oomph/setup/Enablement"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "variableName", "setup.projectset.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "${oomph.update.url}", //$NON-NLS-1$ //$NON-NLS-2$
+        "installableUnits", "org.eclipse.oomph.setup.projectset.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -256,9 +260,10 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.projectset.edit/icons/full/obj16" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "imageBaseURI", //$NON-NLS-1$
+        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.projectset.edit/icons/full/obj16" //$NON-NLS-1$
+    });
   }
 
   /**
@@ -269,8 +274,9 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
    */
   protected void createValidTriggersAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
-    addAnnotation(projectSetImportTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers"; //$NON-NLS-1$
+    addAnnotation(projectSetImportTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -281,7 +287,7 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
    */
   protected void createRedirectAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Redirect";
+    String source = "http://www.eclipse.org/oomph/setup/Redirect"; //$NON-NLS-1$
     addAnnotation(getProjectSetImportTask_URL(), source, new String[] {});
   }
 

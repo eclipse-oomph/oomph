@@ -101,7 +101,7 @@ public class OrPredicateItemProvider extends PredicateItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/OrPredicate"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/OrPredicate")); //$NON-NLS-1$
   }
 
   /**
@@ -124,7 +124,7 @@ public class OrPredicateItemProvider extends PredicateItemProvider
   @Override
   public String getText(Object object)
   {
-    return "Or";
+    return Messages.OrPredicateItemProvider_Or_label;
   }
 
   /**

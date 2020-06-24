@@ -94,12 +94,12 @@ public class PropertiesViewer extends TableViewer
     setContentProvider(new PropertiesContentProvider(adapterFactory));
 
     propertyColumn = new TableColumn(table, SWT.NONE);
-    propertyColumn.setText("Property");
+    propertyColumn.setText(Messages.PropertiesViewer_propertyColumn);
     propertyColumn.setWidth(200);
     propertyColumn.setResizable(false);
 
     valueColumn = new TableColumn(table, SWT.NONE);
-    valueColumn.setText("Value");
+    valueColumn.setText(Messages.PropertiesViewer_valueColumn);
     valueColumn.setWidth(400);
     valueColumn.setResizable(false);
 
@@ -216,7 +216,7 @@ public class PropertiesViewer extends TableViewer
         {
           public void run()
           {
-            ReflectUtil.setValue("listenToDeactivate", InformationPopupDialog.this, true);
+            ReflectUtil.setValue("listenToDeactivate", InformationPopupDialog.this, true); //$NON-NLS-1$
           }
         });
       }
@@ -256,7 +256,7 @@ public class PropertiesViewer extends TableViewer
     @Override
     protected IDialogSettings getDialogSettings()
     {
-      return UIPlugin.INSTANCE.getDialogSettings("InformationPopup");
+      return UIPlugin.INSTANCE.getDialogSettings("InformationPopup"); //$NON-NLS-1$
     }
   }
 
@@ -314,7 +314,7 @@ public class PropertiesViewer extends TableViewer
           String valueText = propertyLabelProvider.getText(propertyValue);
           if (StringUtil.isEmpty(valueText))
           {
-            valueText = "";
+            valueText = ""; //$NON-NLS-1$
           }
 
           EStructuralFeature.Setting setting = null;

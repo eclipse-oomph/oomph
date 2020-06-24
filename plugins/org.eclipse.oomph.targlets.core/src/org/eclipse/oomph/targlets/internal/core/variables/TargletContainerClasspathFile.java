@@ -30,10 +30,10 @@ public class TargletContainerClasspathFile implements IDynamicVariableResolver
   {
     try
     {
-      File tempFile = File.createTempFile("tcc-", ".properties");
+      File tempFile = File.createTempFile("tcc-", ".properties"); //$NON-NLS-1$ //$NON-NLS-2$
 
       String classpath = TargletContainerClasspath.getClasspath(containerID);
-      IOUtil.writeLines(tempFile, "UTF-8", Collections.singletonList(classpath));
+      IOUtil.writeLines(tempFile, "UTF-8", Collections.singletonList(classpath)); //$NON-NLS-1$
 
       return tempFile.getAbsolutePath();
     }

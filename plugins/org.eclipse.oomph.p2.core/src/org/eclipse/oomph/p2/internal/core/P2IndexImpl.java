@@ -51,7 +51,7 @@ public class P2IndexImpl implements P2Index
 {
   public static final P2IndexImpl INSTANCE = new P2IndexImpl();
 
-  private static final String INDEX_BASE = "http://download.eclipse.org/oomph/index/";
+  private static final String INDEX_BASE = "http://download.eclipse.org/oomph/index/"; //$NON-NLS-1$
 
   private long timeStamp;
 
@@ -87,7 +87,7 @@ public class P2IndexImpl implements P2Index
         initCapabilitiesCacheFile();
 
         zipFile = new ZipFile(capabilitiesCacheFile);
-        ZipEntry zipEntry = zipFile.getEntry("capabilities");
+        ZipEntry zipEntry = zipFile.getEntry("capabilities"); //$NON-NLS-1$
 
         inputStream = zipFile.getInputStream(zipEntry);
 
@@ -147,7 +147,7 @@ public class P2IndexImpl implements P2Index
         initRepositoriesCacheFile();
 
         zipFile = new ZipFile(repositoriesCacheFile);
-        ZipEntry zipEntry = zipFile.getEntry("repositories");
+        ZipEntry zipEntry = zipFile.getEntry("repositories"); //$NON-NLS-1$
 
         inputStream = zipFile.getInputStream(zipEntry);
 
@@ -228,11 +228,11 @@ public class P2IndexImpl implements P2Index
   {
     if (repositoriesCacheFile == null)
     {
-      IPath stateLocation = P2CorePlugin.INSTANCE.isOSGiRunning() ? P2CorePlugin.INSTANCE.getStateLocation() : new Path(".");
-      repositoriesCacheFile = new File(stateLocation.toOSString(), "repositories");
+      IPath stateLocation = P2CorePlugin.INSTANCE.isOSGiRunning() ? P2CorePlugin.INSTANCE.getStateLocation() : new Path("."); //$NON-NLS-1$
+      repositoriesCacheFile = new File(stateLocation.toOSString(), "repositories"); //$NON-NLS-1$
     }
 
-    downloadIfModifiedSince(new URL(INDEX_BASE + "repositories"), repositoriesCacheFile);
+    downloadIfModifiedSince(new URL(INDEX_BASE + "repositories"), repositoriesCacheFile); //$NON-NLS-1$
 
     return true;
   }
@@ -241,11 +241,11 @@ public class P2IndexImpl implements P2Index
   {
     if (capabilitiesCacheFile == null)
     {
-      IPath stateLocation = P2CorePlugin.INSTANCE.isOSGiRunning() ? P2CorePlugin.INSTANCE.getStateLocation() : new Path(".");
-      capabilitiesCacheFile = new File(stateLocation.toOSString(), "capabilities");
+      IPath stateLocation = P2CorePlugin.INSTANCE.isOSGiRunning() ? P2CorePlugin.INSTANCE.getStateLocation() : new Path("."); //$NON-NLS-1$
+      capabilitiesCacheFile = new File(stateLocation.toOSString(), "capabilities"); //$NON-NLS-1$
     }
 
-    downloadIfModifiedSince(new URL(INDEX_BASE + "capabilities"), capabilitiesCacheFile);
+    downloadIfModifiedSince(new URL(INDEX_BASE + "capabilities"), capabilitiesCacheFile); //$NON-NLS-1$
 
     return true;
   }
@@ -274,7 +274,7 @@ public class P2IndexImpl implements P2Index
 
       try
       {
-        InputStream inputStream = new URL(INDEX_BASE + namespace + "/" + name).openStream();
+        InputStream inputStream = new URL(INDEX_BASE + namespace + "/" + name).openStream(); //$NON-NLS-1$
         reader = new BufferedReader(new InputStreamReader(inputStream));
 
         String line = reader.readLine();
@@ -288,7 +288,7 @@ public class P2IndexImpl implements P2Index
 
         while ((line = reader.readLine()) != null)
         {
-          String[] tokens = line.split(",");
+          String[] tokens = line.split(","); //$NON-NLS-1$
           int repositoryID = Integer.parseInt(tokens[0]);
           Repository repository = repositories.get(repositoryID);
           if (repository != null)

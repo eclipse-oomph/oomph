@@ -44,11 +44,11 @@ import java.util.Set;
  */
 public class ExtensionsDialog extends AbstractSetupDialog
 {
-  public static final String TITLE = "Extensions";
+  public static final String TITLE = Messages.ExtensionsDialog_title;
 
-  public static final String HEADER = "Marketplace Listings and Configurations";
+  public static final String HEADER = Messages.ExtensionsDialog_header;
 
-  public static final String DESCRIPTION = "Select the extensions to retain";
+  public static final String DESCRIPTION = Messages.ExtensionsDialog_description;
 
   private CheckboxTableViewer extensionViewer;
 
@@ -76,7 +76,7 @@ public class ExtensionsDialog extends AbstractSetupDialog
   @Override
   protected String getDefaultMessage()
   {
-    return DESCRIPTION + ".";
+    return DESCRIPTION + "."; //$NON-NLS-1$
   }
 
   @Override
@@ -113,10 +113,10 @@ public class ExtensionsDialog extends AbstractSetupDialog
         URI uri = ((Resource)element).getURI();
         if (MarketPlaceListing.isMarketPlaceListing(uri))
         {
-          return SetupUIPlugin.INSTANCE.getSWTImage("marketplace16.png");
+          return SetupUIPlugin.INSTANCE.getSWTImage("marketplace16.png"); //$NON-NLS-1$
         }
 
-        return SetupUIPlugin.INSTANCE.getSWTImage("full/obj16/Configuration");
+        return SetupUIPlugin.INSTANCE.getSWTImage("full/obj16/Configuration"); //$NON-NLS-1$
       }
 
       @Override
@@ -157,8 +157,8 @@ public class ExtensionsDialog extends AbstractSetupDialog
   @Override
   protected void createButtonsForButtonBar(Composite parent)
   {
-    createButton(parent, IDialogConstants.CLIENT_ID, "Select &All", true);
-    createButton(parent, IDialogConstants.CLIENT_ID + 1, "&Deselect All", true);
+    createButton(parent, IDialogConstants.CLIENT_ID, Messages.ExtensionsDialog_selectAllButton_text, true);
+    createButton(parent, IDialogConstants.CLIENT_ID + 1, Messages.ExtensionsDialog_deselectAllButton_text, true);
 
     super.createButtonsForButtonBar(parent);
 

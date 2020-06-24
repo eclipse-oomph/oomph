@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class ProfileDetailsDialog extends OomphDialog
 {
-  public static final String TITLE = "Profile Details";
+  public static final String TITLE = Messages.ProfileDetailsDialog_title;
 
   private final Profile profile;
 
@@ -51,13 +51,13 @@ public class ProfileDetailsDialog extends OomphDialog
   @Override
   protected String getDefaultMessage()
   {
-    return "Browse the details of your p2 profile.";
+    return Messages.ProfileDetailsDialog_defaultMessage;
   }
 
   @Override
   protected String getImagePath()
   {
-    return "wizban/ProfileDetails.png";
+    return "wizban/ProfileDetails.png"; //$NON-NLS-1$
   }
 
   @Override
@@ -69,7 +69,7 @@ public class ProfileDetailsDialog extends OomphDialog
   @Override
   protected void createUI(Composite parent)
   {
-    getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("full/obj16/ProfileDefinition"));
+    getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("full/obj16/ProfileDefinition")); //$NON-NLS-1$
 
     composite = new ProfileDetailsComposite(parent, SWT.NONE, profile);
     composite.setLayoutData(new GridData(GridData.FILL_BOTH));

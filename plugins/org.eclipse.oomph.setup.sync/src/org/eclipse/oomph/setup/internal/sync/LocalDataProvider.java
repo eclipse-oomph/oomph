@@ -94,6 +94,6 @@ public class LocalDataProvider implements DataProvider
   @Override
   public String toString()
   {
-    return getClass().getSimpleName() + "[" + getLocalFile() + "]";
+    return getClass().getSimpleName() + "[" + getLocalFile() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
   }
 }

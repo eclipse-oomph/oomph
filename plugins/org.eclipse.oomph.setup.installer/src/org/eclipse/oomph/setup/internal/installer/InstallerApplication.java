@@ -71,9 +71,9 @@ public class InstallerApplication implements IApplication
 {
   public static final Integer EXIT_ERROR = 1;
 
-  private static final Preference PREF_MODE = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("mode");
+  private static final Preference PREF_MODE = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("mode"); //$NON-NLS-1$
 
-  private static final boolean SKIP_COCOA_MENU = PropertiesUtil.isProperty("oomph.cocoa.menu.skip");
+  private static final boolean SKIP_COCOA_MENU = PropertiesUtil.isProperty("oomph.cocoa.menu.skip"); //$NON-NLS-1$
 
   private Mode mode = Mode.SIMPLE;
 
@@ -120,7 +120,7 @@ public class InstallerApplication implements IApplication
 
     final InstallerUI[] installerDialog = { null };
 
-    Thread jreInitializer = new Thread("JRE Initializer")
+    Thread jreInitializer = new Thread(Messages.InstallerApplication_JREInitializer_thread)
     {
       @Override
       public void run()
@@ -151,14 +151,14 @@ public class InstallerApplication implements IApplication
     jreInitializer.setDaemon(true);
     jreInitializer.start();
 
-    String windowImages = context.getBrandingProperty("windowImages");
+    String windowImages = context.getBrandingProperty("windowImages"); //$NON-NLS-1$
     if (windowImages != null)
     {
       Bundle brandingBundle = context.getBrandingBundle();
       if (brandingBundle != null)
       {
         List<Image> images = new ArrayList<Image>();
-        for (String windowImageValue : StringUtil.explode(windowImages, ","))
+        for (String windowImageValue : StringUtil.explode(windowImages, ",")) //$NON-NLS-1$
         {
           URI windowImageURI = URI.createURI(windowImageValue);
           if (windowImageURI.isRelative())
@@ -183,7 +183,7 @@ public class InstallerApplication implements IApplication
     }
 
     boolean restarted = false;
-    File restarting = new File(SetupContext.CONFIGURATION_STATE_LOCATION_URI.appendSegment("restarting").toFileString());
+    File restarting = new File(SetupContext.CONFIGURATION_STATE_LOCATION_URI.appendSegment("restarting").toFileString()); //$NON-NLS-1$
     SelectionMemento selectionMemento = null;
 
     if (restarting.exists())
@@ -274,7 +274,7 @@ public class InstallerApplication implements IApplication
         {
           Shell shell = new Shell(display);
           if (MessageDialog.openQuestion(shell, PropertiesUtil.getProductName(),
-              "As an advanced user, do you want to keep the installer in a permanent location?"))
+              Messages.InstallerApplication_KeepInstaller_message))
           {
             if (new KeepInstallerDialog(shell, true).open() == KeepInstallerDialog.OK)
             {
@@ -401,7 +401,7 @@ public class InstallerApplication implements IApplication
       SetupInstallerPlugin.INSTANCE.log(t);
       final AtomicInteger exitCode = new AtomicInteger(EXIT_ERROR);
 
-      ErrorDialog dialog = new ErrorDialog("Error", t, 0, 2, IDialogConstants.OK_LABEL, "Update", IDialogConstants.SHOW_DETAILS_LABEL)
+      ErrorDialog dialog = new ErrorDialog(Messages.InstallerApplication_Error_title, t, 0, 2, IDialogConstants.OK_LABEL, Messages.InstallerApplication_Update_label, IDialogConstants.SHOW_DETAILS_LABEL)
       {
         @Override
         protected void buttonPressed(int buttonId)
@@ -420,8 +420,8 @@ public class InstallerApplication implements IApplication
           {
             final Shell shell = getShell();
 
-            if (!MessageDialog.openQuestion(shell, "Emergency Update", "This is an emergency update. Continue?\n\n"
-                + "To lower the risk of problems during this update it will be implied that you accept new licenses or unsigned content."))
+            if (!MessageDialog.openQuestion(shell, Messages.InstallerApplication_EmergencyUpdate_title,
+                Messages.InstallerApplication_EmergencyUpdate_message))
             {
               return;
             }
@@ -458,7 +458,7 @@ public class InstallerApplication implements IApplication
                       {
                         public void run()
                         {
-                          MessageDialog.openInformation(shell, "Update", "No updates were found.");
+                          MessageDialog.openInformation(shell, Messages.InstallerApplication_Update_label, Messages.InstallerApplication_NoUpdates_message);
                         }
                       });
 

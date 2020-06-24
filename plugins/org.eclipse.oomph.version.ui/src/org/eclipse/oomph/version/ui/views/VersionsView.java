@@ -36,6 +36,7 @@ import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.eclipse.osgi.service.resolver.BundleSpecification;
 import org.eclipse.osgi.service.resolver.ExportPackageDescription;
 import org.eclipse.osgi.service.resolver.ImportPackageSpecification;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.pde.core.IModel;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.PluginRegistry;
@@ -61,7 +62,7 @@ import java.util.Set;
  */
 public class VersionsView extends ViewPart
 {
-  public static final String ID = "org.eclipse.oomph.version.VersionsView";
+  public static final String ID = "org.eclipse.oomph.version.VersionsView"; //$NON-NLS-1$
 
   private TreeViewer viewer;
 
@@ -100,7 +101,7 @@ public class VersionsView extends ViewPart
 
   private void hookContextMenu()
   {
-    MenuManager menuMgr = new MenuManager("#PopupMenu");
+    MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
     menuMgr.setRemoveAllWhenShown(true);
     menuMgr.addMenuListener(new IMenuListener()
     {
@@ -149,11 +150,11 @@ public class VersionsView extends ViewPart
       @Override
       public void run()
       {
-        showMessage("Action 1 executed");
+        showMessage(Messages.VersionsView_action1_executedMessage);
       }
     };
-    action1.setText("Action 1");
-    action1.setToolTipText("Action 1 tooltip");
+    action1.setText(Messages.VersionsView_action1_text);
+    action1.setToolTipText(Messages.VersionsView_action1_tooltip);
     action1.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
 
     action2 = new Action()
@@ -161,11 +162,11 @@ public class VersionsView extends ViewPart
       @Override
       public void run()
       {
-        showMessage("Action 2 executed");
+        showMessage(Messages.VersionsView_action2_executedMessage);
       }
     };
-    action2.setText("Action 2");
-    action2.setToolTipText("Action 2 tooltip");
+    action2.setText(Messages.VersionsView_action2_text);
+    action2.setToolTipText(Messages.VersionsView_action2_tooltip);
     action2.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
     doubleClickAction = new Action()
     {
@@ -174,7 +175,7 @@ public class VersionsView extends ViewPart
       {
         ISelection selection = viewer.getSelection();
         Object obj = ((IStructuredSelection)selection).getFirstElement();
-        showMessage("Double-click detected on " + obj.toString());
+        showMessage(NLS.bind(Messages.VersionsView_doubleClickAction_detectedMessage, obj.toString()));
       }
     };
   }
@@ -192,7 +193,7 @@ public class VersionsView extends ViewPart
 
   private void showMessage(String message)
   {
-    MessageDialog.openInformation(viewer.getControl().getShell(), "Versions", message);
+    MessageDialog.openInformation(viewer.getControl().getShell(), Messages.VersionsView_messageDialog_versions, message);
   }
 
   /**

@@ -87,8 +87,8 @@ public class InstallationToWorkspacesMapEntryItemProvider extends ItemProviderAd
   protected void addKeyPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_InstallationToWorkspacesMapEntry_key_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_InstallationToWorkspacesMapEntry_key_feature", "_UI_InstallationToWorkspacesMapEntry_type"),
+        getString("_UI_InstallationToWorkspacesMapEntry_key_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_InstallationToWorkspacesMapEntry_key_feature", "_UI_InstallationToWorkspacesMapEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.INSTALLATION_TO_WORKSPACES_MAP_ENTRY__KEY, true, false, true, null, null, null));
   }
 
@@ -101,8 +101,8 @@ public class InstallationToWorkspacesMapEntryItemProvider extends ItemProviderAd
   protected void addValuePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_InstallationToWorkspacesMapEntry_value_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_InstallationToWorkspacesMapEntry_value_feature", "_UI_InstallationToWorkspacesMapEntry_type"),
+        getString("_UI_InstallationToWorkspacesMapEntry_value_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_InstallationToWorkspacesMapEntry_value_feature", "_UI_InstallationToWorkspacesMapEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.INSTALLATION_TO_WORKSPACES_MAP_ENTRY__VALUE, true, false, true, null, null, null));
   }
 
@@ -159,7 +159,7 @@ public class InstallationToWorkspacesMapEntryItemProvider extends ItemProviderAd
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/InstallationToWorkspacesMapEntry"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/InstallationToWorkspacesMapEntry")); //$NON-NLS-1$
   }
 
   /**

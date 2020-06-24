@@ -1139,51 +1139,51 @@ public class TestSuite extends MinimalEObjectImpl.Container
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (systemOut: ");
+    result.append(" (systemOut: "); //$NON-NLS-1$
     result.append(systemOut);
-    result.append(", systemErr: ");
+    result.append(", systemErr: "); //$NON-NLS-1$
     result.append(systemErr);
-    result.append(", errors: ");
+    result.append(", errors: "); //$NON-NLS-1$
     if (errorsESet)
     {
       result.append(errors);
     }
     else
     {
-      result.append("<unset>");
+      result.append("<unset>"); //$NON-NLS-1$
     }
-    result.append(", failures: ");
+    result.append(", failures: "); //$NON-NLS-1$
     if (failuresESet)
     {
       result.append(failures);
     }
     else
     {
-      result.append("<unset>");
+      result.append("<unset>"); //$NON-NLS-1$
     }
-    result.append(", hostName: ");
+    result.append(", hostName: "); //$NON-NLS-1$
     result.append(hostName);
-    result.append(", name: ");
+    result.append(", name: "); //$NON-NLS-1$
     result.append(name);
-    result.append(", tests: ");
+    result.append(", tests: "); //$NON-NLS-1$
     if (testsESet)
     {
       result.append(tests);
     }
     else
     {
-      result.append("<unset>");
+      result.append("<unset>"); //$NON-NLS-1$
     }
-    result.append(", time: ");
+    result.append(", time: "); //$NON-NLS-1$
     result.append(time);
-    result.append(", timestamp: ");
+    result.append(", timestamp: "); //$NON-NLS-1$
     if (timestampESet)
     {
       result.append(timestamp);
     }
     else
     {
-      result.append("<unset>");
+      result.append("<unset>"); //$NON-NLS-1$
     }
     result.append(')');
     return result.toString();

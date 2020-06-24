@@ -53,6 +53,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.p2.metadata.Version;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetHandle;
 import org.eclipse.pde.core.target.ITargetLocation;
@@ -252,7 +253,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * @generated
    * @ordered
    */
-  protected static final String TARGET_NAME_EDEFAULT = "Modular Target";
+  protected static final String TARGET_NAME_EDEFAULT = "Modular Target"; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getTargetName() <em>Target Name</em>}' attribute.
@@ -757,23 +758,23 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (targletURIs: ");
+    result.append(" (targletURIs: "); //$NON-NLS-1$
     result.append(targletURIs);
-    result.append(", operatingSystem: ");
+    result.append(", operatingSystem: "); //$NON-NLS-1$
     result.append(operatingSystem);
-    result.append(", windowingSystem: ");
+    result.append(", windowingSystem: "); //$NON-NLS-1$
     result.append(windowingSystem);
-    result.append(", architecture: ");
+    result.append(", architecture: "); //$NON-NLS-1$
     result.append(architecture);
-    result.append(", locale: ");
+    result.append(", locale: "); //$NON-NLS-1$
     result.append(locale);
-    result.append(", programArguments: ");
+    result.append(", programArguments: "); //$NON-NLS-1$
     result.append(programArguments);
-    result.append(", vMArguments: ");
+    result.append(", vMArguments: "); //$NON-NLS-1$
     result.append(vMArguments);
-    result.append(", targetName: ");
+    result.append(", targetName: "); //$NON-NLS-1$
     result.append(targetName);
-    result.append(", activateTarget: ");
+    result.append(", activateTarget: "); //$NON-NLS-1$
     result.append(activateTarget);
     result.append(')');
     return result.toString();
@@ -793,10 +794,10 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     TargletTask targletTask = (TargletTask)overriddenSetupTask;
     getTarglets().addAll(targletTask.getTarglets());
 
-    mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__OPERATING_SYSTEM, "operating systems");
-    mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__WINDOWING_SYSTEM, "windowing systems");
-    mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__ARCHITECTURE, "architectures");
-    mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__LOCALE, "locales");
+    mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__OPERATING_SYSTEM, "operating systems"); //$NON-NLS-1$
+    mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__WINDOWING_SYSTEM, "windowing systems"); //$NON-NLS-1$
+    mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__ARCHITECTURE, "architectures"); //$NON-NLS-1$
+    mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__LOCALE, "locales"); //$NON-NLS-1$
 
     mergeArguments(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__PROGRAM_ARGUMENTS);
     mergeArguments(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__VM_ARGUMENTS);
@@ -819,8 +820,8 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       {
         if (overriddenValue != null)
         {
-          getAnnotations()
-              .add(BaseFactory.eINSTANCE.createErrorAnnotation("The " + errorLabel + " '" + overriddenValue + "' and '" + overridingValue + "' collide."));
+          getAnnotations().add(BaseFactory.eINSTANCE
+              .createErrorAnnotation(NLS.bind(Messages.TargletTaskImpl_CollisionError_message, new Object[] { errorLabel, overriddenValue, overridingValue })));
         }
       }
     }
@@ -851,7 +852,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
       return null;
     }
 
-    return arguments.trim().replaceAll("(\n\r?|\r\n?)", StringUtil.NL);
+    return arguments.trim().replaceAll("(\n\r?|\r\n?)", StringUtil.NL); //$NON-NLS-1$
   }
 
   @Override
@@ -1021,22 +1022,22 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     {
       for (Repository p2Repository : targlet.getActiveRepositories())
       {
-        context.log("Repository " + p2Repository.getURL());
+        context.log(NLS.bind(Messages.TargletTaskImpl_Repository_message, p2Repository.getURL()));
       }
     }
 
     boolean offline = context.isOffline();
-    context.log("Offline = " + offline);
+    context.log(NLS.bind(Messages.TargletTaskImpl_Offline_message, offline));
 
     final boolean mirrors = context.isMirrors();
-    context.log("Mirrors = " + mirrors);
+    context.log(NLS.bind(Messages.TargletTaskImpl_Mirrors_message, mirrors));
 
     TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Object>()
     {
       public Object run(ITargetPlatformService service) throws CoreException
       {
         IProgressMonitor monitor = context.getProgressMonitor(true);
-        monitor.beginTask("", 100 + (targetDefinition == null ? 1 : 0));
+        monitor.beginTask("", 100 + (targetDefinition == null ? 1 : 0)); //$NON-NLS-1$
 
         try
         {
@@ -1087,7 +1088,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 
             targetDefinition.setTargetLocations(newLocations);
           }
-          else if (!targetName.equals("Oomph"))
+          else if (!targetName.equals("Oomph")) //$NON-NLS-1$
           {
             // With bug 431316 the default TargletContainer ID was changed from "Oomph" to "Modular Target".
             // Remove the old "Oomph" TargletContainer from the target definition to prevent duplicate/wrong resolution.
@@ -1102,7 +1103,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
                 if (location instanceof TargletContainer)
                 {
                   TargletContainer container = (TargletContainer)location;
-                  if (container.getID().equals("Oomph"))
+                  if (container.getID().equals("Oomph")) //$NON-NLS-1$
                   {
                     it.remove();
                     targetDefinition.setTargetLocations(list.toArray(new ITargetLocation[list.size()]));
@@ -1123,51 +1124,51 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
             targletContainer.setTarglets(targlets);
 
             boolean includeAllPlatforms = targletContainer.isIncludeAllPlatforms();
-            context.log("Include All Platforms = " + includeAllPlatforms);
+            context.log(NLS.bind(Messages.TargletTaskImpl_AllPlatforms_message, includeAllPlatforms));
             if (includeAllPlatforms)
             {
               for (Targlet targlet : targletContainer.getTarglets())
               {
                 if (targlet.isIncludeAllPlatforms())
                 {
-                  context.log("-> " + targlet.getName());
+                  context.log("-> " + targlet.getName()); //$NON-NLS-1$
                 }
               }
             }
 
             boolean includeAllRequirements = targletContainer.isIncludeAllRequirements();
-            context.log("Include All Requirements = " + includeAllRequirements);
+            context.log(NLS.bind(Messages.TargletTaskImpl_AllRequirements_message, includeAllRequirements));
             if (!includeAllRequirements)
             {
               for (Targlet targlet : targletContainer.getTarglets())
               {
                 if (!targlet.isIncludeAllRequirements())
                 {
-                  context.log("-> " + targlet.getName());
+                  context.log("-> " + targlet.getName()); //$NON-NLS-1$
                 }
               }
             }
 
             boolean includeBinaryEquivalents = targletContainer.isIncludeBinaryEquivalents();
-            context.log("Include Binary Equivalents = " + includeBinaryEquivalents);
+            context.log(NLS.bind(Messages.TargletTaskImpl_BinaryEquivalents_message, includeBinaryEquivalents));
             if (!includeBinaryEquivalents)
             {
               for (Targlet targlet : targletContainer.getTarglets())
               {
                 if (!targlet.isIncludeBinaryEquivalents())
                 {
-                  context.log("-> " + targlet.getName());
+                  context.log("-> " + targlet.getName()); //$NON-NLS-1$
                 }
               }
             }
 
             boolean includeSources = targletContainer.isIncludeSources();
-            context.log("Include Sources = " + includeSources);
+            context.log(NLS.bind(Messages.TargletTaskImpl_Sources_message, includeSources));
 
             String profileProperties = targletContainer.getProfileProperties();
             if (!StringUtil.isEmpty(profileProperties))
             {
-              context.log("Profile Properties = " + profileProperties);
+              context.log(NLS.bind(Messages.TargletTaskImpl_ProfileProperties_message, profileProperties));
             }
 
             targletContainer.forceUpdate(activateTarget, mirrors, MonitorUtil.create(monitor, 90));

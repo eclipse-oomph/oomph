@@ -47,21 +47,22 @@ import java.util.Map;
  */
 public class ExtendedConfigurationDialog extends TitleAreaDialog
 {
-  private static final String BUILDER_CONFIGURATION = "Extended Version Builder Configuration";
-
   private static final ColumnHandler[] COLUMN_HANDLERS = {
-      new ColumnHandler(IVersionBuilderArguments.IGNORE_MALFORMED_VERSIONS_ARGUMENT, "Ignore malformed versions"),
-      new ColumnHandler(IVersionBuilderArguments.IGNORE_FEATURE_NATURE_ARGUMENT, "Ignore feature nature"),
-      new ColumnHandler(IVersionBuilderArguments.IGNORE_SCHEMA_BUILDER_ARGUMENT, "Ignore schema builder"),
-      new ColumnHandler(IVersionBuilderArguments.IGNORE_DEBUG_OPTIONS_ARGUMENT, "Ignore debug options"),
-      new ColumnHandler(IVersionBuilderArguments.IGNORE_DEPENDENCY_RANGES_ARGUMENT, "Ignore missing dependency version ranges"),
-      new ColumnHandler(IVersionBuilderArguments.IGNORE_LAX_LOWER_BOUND_VERSIONS_ARGUMENT, "Ignore lax lower bound dependency versions"),
-      new ColumnHandler(IVersionBuilderArguments.IGNORE_EXPORT_VERSIONS_ARGUMENT, "Ignore missing package export versions"),
-      new ColumnHandler(IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT, "Ignore feature content changes"),
-      new ColumnHandler(IVersionBuilderArguments.IGNORE_CONTENT_REDUNDANCY_ARGUMENT, "Ignore feature content redundancy"),
-      new ColumnHandler(IVersionBuilderArguments.CHECK_CLOSURE_COMPLETENESS_ARGUMENT, "Check feature closure completeness"),
-      new ColumnHandler(IVersionBuilderArguments.CHECK_CLOSURE_CONTENT_ARGUMENT, "Check feature closure content"),
-      new ColumnHandler(IVersionBuilderArguments.CHECK_MAVEN_POM_ARGUMENT, "Check Maven POM") };
+      new ColumnHandler(IVersionBuilderArguments.IGNORE_MALFORMED_VERSIONS_ARGUMENT, Messages.ExtendedConfigurationDialog_column_ignoreMalformedVersions),
+      new ColumnHandler(IVersionBuilderArguments.IGNORE_FEATURE_NATURE_ARGUMENT, Messages.ExtendedConfigurationDialog_column_ignoreFeatureNature),
+      new ColumnHandler(IVersionBuilderArguments.IGNORE_SCHEMA_BUILDER_ARGUMENT, Messages.ExtendedConfigurationDialog_column_ignoreSchemaBuilder),
+      new ColumnHandler(IVersionBuilderArguments.IGNORE_DEBUG_OPTIONS_ARGUMENT, Messages.ExtendedConfigurationDialog_column_ignoreDebugOptions),
+      new ColumnHandler(IVersionBuilderArguments.IGNORE_DEPENDENCY_RANGES_ARGUMENT, Messages.ExtendedConfigurationDialog_column_ignoreMissingVersionRanges),
+      new ColumnHandler(IVersionBuilderArguments.IGNORE_LAX_LOWER_BOUND_VERSIONS_ARGUMENT,
+          Messages.ExtendedConfigurationDialog_column_ignoreLaxLowerVersionBound),
+      new ColumnHandler(IVersionBuilderArguments.IGNORE_EXPORT_VERSIONS_ARGUMENT,
+          Messages.ExtendedConfigurationDialog_column_ignoreMissingPackageExportVersions),
+      new ColumnHandler(IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT, Messages.ExtendedConfigurationDialog_column_ignoreFeatureChanges),
+      new ColumnHandler(IVersionBuilderArguments.IGNORE_CONTENT_REDUNDANCY_ARGUMENT, Messages.ExtendedConfigurationDialog_column_ignoreFeatureRedundancy),
+      new ColumnHandler(IVersionBuilderArguments.CHECK_CLOSURE_COMPLETENESS_ARGUMENT,
+          Messages.ExtendedConfigurationDialog_column_checkFeatureClosureCompleteness),
+      new ColumnHandler(IVersionBuilderArguments.CHECK_CLOSURE_CONTENT_ARGUMENT, Messages.ExtendedConfigurationDialog_column_checkFeatureClosureContent),
+      new ColumnHandler(IVersionBuilderArguments.CHECK_MAVEN_POM_ARGUMENT, Messages.ExtendedConfigurationDialog_column_checkMavenPom) };
 
   private final Map<IProject, VersionBuilderArguments> map = new HashMap<IProject, VersionBuilderArguments>();
 
@@ -95,17 +96,17 @@ public class ExtendedConfigurationDialog extends TitleAreaDialog
   @Override
   protected void configureShell(Shell newShell)
   {
-    newShell.setText(BUILDER_CONFIGURATION);
+    newShell.setText(Messages.ExtendedConfigurationDialog_title);
     super.configureShell(newShell);
   }
 
   @Override
   protected Control createDialogArea(Composite parent)
   {
-    setTitle(BUILDER_CONFIGURATION);
-    setMessage("Select a release specification file and check additional settings.");
+    setTitle(Messages.ExtendedConfigurationDialog_title);
+    setMessage(Messages.ExtendedConfigurationDialog_message);
 
-    ImageDescriptor imageDescriptor = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/Project.gif");
+    ImageDescriptor imageDescriptor = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/Project.gif"); //$NON-NLS-1$
     projectImage = imageDescriptor.createImage();
 
     Composite dialogArea = (Composite)super.createDialogArea(parent);
@@ -119,7 +120,7 @@ public class ExtendedConfigurationDialog extends TitleAreaDialog
 
     TableColumn column0 = new TableColumn(table, SWT.NONE);
     column0.setWidth(300);
-    column0.setText("Project");
+    column0.setText(Messages.ExtendedConfigurationDialog_column_project);
 
     for (ColumnHandler columnHandler : COLUMN_HANDLERS)
     {
@@ -197,7 +198,7 @@ public class ExtendedConfigurationDialog extends TitleAreaDialog
       column.setText(header);
 
       final ArrayList<Button> buttons = new ArrayList<Button>();
-      column.setData("buttons", buttons);
+      column.setData("buttons", buttons); //$NON-NLS-1$
       column.addSelectionListener(new SelectionListener()
       {
         public void widgetSelected(SelectionEvent e)
@@ -247,13 +248,13 @@ public class ExtendedConfigurationDialog extends TitleAreaDialog
       editor.setEditor(button, item, column);
 
       @SuppressWarnings("unchecked")
-      List<Button> buttons = (List<Button>)table.getColumns()[column].getData("buttons");
+      List<Button> buttons = (List<Button>)table.getColumns()[column].getData("buttons"); //$NON-NLS-1$
       buttons.add(button);
     }
 
     protected boolean isChecked(VersionBuilderArguments arguments)
     {
-      return "true".equals(arguments.get(key));
+      return "true".equals(arguments.get(key)); //$NON-NLS-1$
     }
 
     protected void setChecked(VersionBuilderArguments arguments, boolean checked)

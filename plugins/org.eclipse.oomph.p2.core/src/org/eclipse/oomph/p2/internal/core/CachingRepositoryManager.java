@@ -75,44 +75,44 @@ import java.util.concurrent.atomic.AtomicLong;
 @SuppressWarnings("restriction")
 public class CachingRepositoryManager<T>
 {
-  public static final String BOGUS_SCHEME = "bogus";
+  public static final String BOGUS_SCHEME = "bogus"; //$NON-NLS-1$
 
-  private static final Method METHOD_checkValidLocation = ReflectUtil.getMethod(AbstractRepositoryManager.class, "checkValidLocation", URI.class);
+  private static final Method METHOD_checkValidLocation = ReflectUtil.getMethod(AbstractRepositoryManager.class, "checkValidLocation", URI.class); //$NON-NLS-1$
 
-  private static final Method METHOD_enterLoad = ReflectUtil.getMethod(AbstractRepositoryManager.class, "enterLoad", URI.class, IProgressMonitor.class);
+  private static final Method METHOD_enterLoad = ReflectUtil.getMethod(AbstractRepositoryManager.class, "enterLoad", URI.class, IProgressMonitor.class); //$NON-NLS-1$
 
-  private static final Method METHOD_basicGetRepository = ReflectUtil.getMethod(AbstractRepositoryManager.class, "basicGetRepository", URI.class);
+  private static final Method METHOD_basicGetRepository = ReflectUtil.getMethod(AbstractRepositoryManager.class, "basicGetRepository", URI.class); //$NON-NLS-1$
 
-  private static final Method METHOD_fail = ReflectUtil.getMethod(AbstractRepositoryManager.class, "fail", URI.class, int.class);
+  private static final Method METHOD_fail = ReflectUtil.getMethod(AbstractRepositoryManager.class, "fail", URI.class, int.class); //$NON-NLS-1$
 
-  private static final Method METHOD_addRepository1 = ReflectUtil.getMethod(AbstractRepositoryManager.class, "addRepository", URI.class, boolean.class,
+  private static final Method METHOD_addRepository1 = ReflectUtil.getMethod(AbstractRepositoryManager.class, "addRepository", URI.class, boolean.class, //$NON-NLS-1$
       boolean.class);
 
-  private static final Method METHOD_loadIndexFile = ReflectUtil.getMethod(AbstractRepositoryManager.class, "loadIndexFile", URI.class, IProgressMonitor.class);
+  private static final Method METHOD_loadIndexFile = ReflectUtil.getMethod(AbstractRepositoryManager.class, "loadIndexFile", URI.class, IProgressMonitor.class); //$NON-NLS-1$
 
   private static final Method METHOD_getPreferredRepositorySearchOrder = ReflectUtil.getMethod(AbstractRepositoryManager.class,
-      "getPreferredRepositorySearchOrder", LocationProperties.class);
+      "getPreferredRepositorySearchOrder", LocationProperties.class); //$NON-NLS-1$
 
-  private static final Method METHOD_getAllSuffixes = ReflectUtil.getMethod(AbstractRepositoryManager.class, "getAllSuffixes");
+  private static final Method METHOD_getAllSuffixes = ReflectUtil.getMethod(AbstractRepositoryManager.class, "getAllSuffixes"); //$NON-NLS-1$
 
-  private static final Method METHOD_loadRepository = ReflectUtil.getMethod(AbstractRepositoryManager.class, "loadRepository", URI.class, String.class,
+  private static final Method METHOD_loadRepository = ReflectUtil.getMethod(AbstractRepositoryManager.class, "loadRepository", URI.class, String.class, //$NON-NLS-1$
       String.class, int.class, SubMonitor.class);
 
-  private static final Method METHOD_addRepository2 = ReflectUtil.getMethod(AbstractRepositoryManager.class, "addRepository", IRepository.class, boolean.class,
+  private static final Method METHOD_addRepository2 = ReflectUtil.getMethod(AbstractRepositoryManager.class, "addRepository", IRepository.class, boolean.class, //$NON-NLS-1$
       String.class);
 
-  private static final Method METHOD_removeRepository = ReflectUtil.getMethod(AbstractRepositoryManager.class, "removeRepository", URI.class, boolean.class);
+  private static final Method METHOD_removeRepository = ReflectUtil.getMethod(AbstractRepositoryManager.class, "removeRepository", URI.class, boolean.class); //$NON-NLS-1$
 
-  private static final Method METHOD_exitLoad = ReflectUtil.getMethod(AbstractRepositoryManager.class, "exitLoad", URI.class);
+  private static final Method METHOD_exitLoad = ReflectUtil.getMethod(AbstractRepositoryManager.class, "exitLoad", URI.class); //$NON-NLS-1$
 
-  private static final Method METHOD_broadcastChangeEvent = ReflectUtil.getMethod(AbstractRepositoryManager.class, "broadcastChangeEvent", URI.class, int.class,
+  private static final Method METHOD_broadcastChangeEvent = ReflectUtil.getMethod(AbstractRepositoryManager.class, "broadcastChangeEvent", URI.class, int.class, //$NON-NLS-1$
       int.class, boolean.class);
 
-  private static final String PROPERTY_VERSION = "version";
+  private static final String PROPERTY_VERSION = "version"; //$NON-NLS-1$
 
-  private static final String PROP_BETTER_MIRROR_SELECTION = "oomph.p2.mirror";
+  private static final String PROP_BETTER_MIRROR_SELECTION = "oomph.p2.mirror"; //$NON-NLS-1$
 
-  private static final String PROP_REPOSITORY_RETRY = "oomph.p2.repository.retry";
+  private static final String PROP_REPOSITORY_RETRY = "oomph.p2.repository.retry"; //$NON-NLS-1$
 
   private static final int MAX_RETRY = PropertiesUtil.getProperty(PROP_REPOSITORY_RETRY, 0);
 
@@ -128,7 +128,7 @@ public class CachingRepositoryManager<T>
   {
     this.delegate = delegate;
 
-    IAgentLocation agentLocation = ReflectUtil.getValue("agentLocation", delegate);
+    IAgentLocation agentLocation = ReflectUtil.getValue("agentLocation", delegate); //$NON-NLS-1$
     if (agentLocation != null)
     {
       URI rootLocation = agentLocation.getRootLocation();
@@ -136,7 +136,7 @@ public class CachingRepositoryManager<T>
       {
         if (!IOUtil.canWriteFolder(new File(rootLocation.getPath())))
         {
-          ReflectUtil.setValue("agentLocation", delegate, null);
+          ReflectUtil.setValue("agentLocation", delegate, null); //$NON-NLS-1$
         }
       }
     }
@@ -189,7 +189,7 @@ public class CachingRepositoryManager<T>
         String[] allSuffixes = getAllSuffixes();
         String[] suffixes = sortSuffixes(allSuffixes, preferredOrder);
 
-        sub = SubMonitor.convert(sub, NLS.bind("Adding repository {0}", location), suffixes.length * 100);
+        sub = SubMonitor.convert(sub, NLS.bind(Messages.CachingRepositoryManager_AddingRepository_task, location), suffixes.length * 100);
         ProvisionException failure = null;
 
         try
@@ -198,7 +198,7 @@ public class CachingRepositoryManager<T>
           {
             if (retry > 0)
             {
-              log(IStatus.WARNING, "Loading '" + location + "' failed. retry=" + retry, failure);
+              log(IStatus.WARNING, NLS.bind(Messages.CachingRepositoryManager_LoadingFailed_message, location, retry), failure);
             }
 
             failure = null;
@@ -282,12 +282,12 @@ public class CachingRepositoryManager<T>
     try
     {
       String path = location.toString();
-      if (!path.endsWith("/"))
+      if (!path.endsWith("/")) //$NON-NLS-1$
       {
-        path += "/";
+        path += "/"; //$NON-NLS-1$
       }
 
-      return transport.getCacheFile(new URI(path + "p2.index"));
+      return transport.getCacheFile(new URI(path + "p2.index")); //$NON-NLS-1$
     }
     catch (URISyntaxException ex)
     {
@@ -298,7 +298,7 @@ public class CachingRepositoryManager<T>
 
   private void cacheIndexFile(URI location, String suffix)
   {
-    if ("file".equals(location.getScheme()))
+    if ("file".equals(location.getScheme())) //$NON-NLS-1$
     {
       return;
     }
@@ -308,20 +308,20 @@ public class CachingRepositoryManager<T>
     Map<String, String> properties = PropertiesUtil.getProperties(cachedIndexFile);
     if (!properties.containsKey(PROPERTY_VERSION))
     {
-      properties.put(PROPERTY_VERSION, "1");
+      properties.put(PROPERTY_VERSION, "1"); //$NON-NLS-1$
     }
 
     if (repositoryType == IRepository.TYPE_METADATA)
     {
-      properties.put("metadata.repository.factory.order", suffix);
+      properties.put("metadata.repository.factory.order", suffix); //$NON-NLS-1$
     }
     else
     {
-      properties.put("artifact.repository.factory.order", suffix);
+      properties.put("artifact.repository.factory.order", suffix); //$NON-NLS-1$
     }
 
     // Cleanup; can be removed at some point in the future...
-    properties.remove("generated");
+    properties.remove("generated"); //$NON-NLS-1$
 
     try
     {
@@ -462,7 +462,7 @@ public class CachingRepositoryManager<T>
   public static boolean enableBetterMirrorSelection()
   {
     boolean originalBetterMirrorSelection = betterMirrorSelection;
-    setBetterMirrorSelection(!"false".equals(PropertiesUtil.getProperty(PROP_BETTER_MIRROR_SELECTION)));
+    setBetterMirrorSelection(!"false".equals(PropertiesUtil.getProperty(PROP_BETTER_MIRROR_SELECTION))); //$NON-NLS-1$
     return originalBetterMirrorSelection;
   }
 
@@ -523,7 +523,7 @@ public class CachingRepositoryManager<T>
       {
         try
         {
-          if (!"file".equalsIgnoreCase(uri.getScheme()) || new File(uri).isDirectory())
+          if (!"file".equalsIgnoreCase(uri.getScheme()) || new File(uri).isDirectory()) //$NON-NLS-1$
           {
             result.add(uri);
           }
@@ -568,14 +568,14 @@ public class CachingRepositoryManager<T>
         {
           // Create our improved mirror selector and reflectively set it to be the one used by this repository.
           final BetterMirrorSelector mirrorSelector = new BetterMirrorSelector(result, loader.getTransport(), eventBus);
-          ReflectUtil.setValue("mirrors", result, mirrorSelector);
+          ReflectUtil.setValue("mirrors", result, mirrorSelector); //$NON-NLS-1$
 
           // Because of the poor implementation in org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository.getMaximumThreads()
           // which was reported in https://bugs.eclipse.org/bugs/show_bug.cgi?id=471861 but is not yet fixed,
           // we work the around the problem by setting the global PROP_MAX_THREADS into the repository properties.
           if (GLOBAL_MAX_THREADS != null)
           {
-            Map<String, String> properties = ReflectUtil.getValue("properties", result);
+            Map<String, String> properties = ReflectUtil.getValue("properties", result); //$NON-NLS-1$
             Map<String, String> specializedProperties = new OrderedProperties()
             {
               @Override
@@ -585,7 +585,7 @@ public class CachingRepositoryManager<T>
                 {
                   // If the request for the entry set occurs when p2 is determining the maximum number of threads allowed by the repository...
                   StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-                  if (stackTrace.length > 5 && "getMaximumThreads".equals(stackTrace[5].getMethodName()))
+                  if (stackTrace.length > 5 && "getMaximumThreads".equals(stackTrace[5].getMethodName())) //$NON-NLS-1$
                   {
                     // If the repository itself doesn't restrict the maximum number of threads...
                     String respositoryMaxThreads = get(SimpleArtifactRepository.PROP_MAX_THREADS);
@@ -609,7 +609,7 @@ public class CachingRepositoryManager<T>
 
             // Copy over the properties and insert our specialized map reflective into the field of the base class.
             specializedProperties.putAll(properties);
-            ReflectUtil.setValue("properties", result, specializedProperties);
+            ReflectUtil.setValue("properties", result, specializedProperties); //$NON-NLS-1$
           }
         }
       }
@@ -792,12 +792,12 @@ public class CachingRepositoryManager<T>
             if (!newActivity.retry(previousActivity))
             {
               // Return a bogus URI that will refuse to try this artifactURI from this mirror again.
-              return new URI(BOGUS_SCHEME + ":" + artifactURI);
+              return new URI(BOGUS_SCHEME + ":" + artifactURI); //$NON-NLS-1$
             }
 
             // We don't expect to have repeated requests for the same artifact.
             // But this does happen if it's a .pack.gz produced by a version of Java newer than the version of Java being used by this process.
-            monitor.subTask("Repeated attempts to download " + artifactURI + " probably because it can't be processed");
+            monitor.subTask(NLS.bind(Messages.CachingRepositoryManager_RepeatedDownload_task, artifactURI));
           }
 
           // Use this location in the mirror instead of the original URI.
@@ -805,7 +805,7 @@ public class CachingRepositoryManager<T>
         }
         catch (URISyntaxException e)
         {
-          CachingRepositoryManager.log(IStatus.ERROR, "Unable to make location " + inputLocation + " relative to mirror " + location, e);
+          CachingRepositoryManager.log(IStatus.ERROR, NLS.bind(Messages.CachingRepositoryManager_NonRelative_message, inputLocation, location), e);
         }
 
         // If all else fails, we must use the original URI.
@@ -929,11 +929,11 @@ public class CachingRepositoryManager<T>
         NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
         int successes = mirrorActivity.getSuccesses();
         int failures = mirrorActivity.getFailures();
-        String message = "Mirrored " + successes + " artifacts from " + mirrorActivity.getLocation() + " at "
-            + numberFormat.format(mirrorActivity.getSpeed() / 1000) + "kb/s";
+        String message = NLS.bind(Messages.CachingRepositoryManager_Speed_message,
+            new Object[] { successes, mirrorActivity.getLocation(), numberFormat.format(mirrorActivity.getSpeed() / 1000) });
         if (failures > 0)
         {
-          message += " with " + failures + " failures";
+          message += " " + NLS.bind(Messages.CachingRepositoryManager_Failure_message, failures); //$NON-NLS-1$
         }
 
         return message;
@@ -966,11 +966,11 @@ public class CachingRepositoryManager<T>
         if (mirrorActivities == null)
         {
           // Delete to p2's implementation.
-          Method method = ReflectUtil.getMethod(this, "initMirrors", IProgressMonitor.class);
+          Method method = ReflectUtil.getMethod(this, "initMirrors", IProgressMonitor.class); //$NON-NLS-1$
           MirrorInfo[] mirrors = (MirrorInfo[])ReflectUtil.invokeMethod(method, this, monitor);
           if (mirrors == null)
           {
-            mirrors = (MirrorInfo[])ReflectUtil.getValue("mirrors", this);
+            mirrors = (MirrorInfo[])ReflectUtil.getValue("mirrors", this); //$NON-NLS-1$
             if (mirrors == null)
             {
               mirrors = new MirrorInfo[0];
@@ -1014,7 +1014,7 @@ public class CachingRepositoryManager<T>
           if (repositoryURI != null)
           {
             String locationString = repositoryURI.toString();
-            if (!locationString.endsWith("/"))
+            if (!locationString.endsWith("/")) //$NON-NLS-1$
             {
               locationString += Character.toString('/');
             }
@@ -1039,12 +1039,12 @@ public class CachingRepositoryManager<T>
 
       private URI getBaseURI()
       {
-        return ReflectUtil.getValue("baseURI", this);
+        return ReflectUtil.getValue("baseURI", this); //$NON-NLS-1$
       }
 
       private static String getLocationString(MirrorInfo mirrorInfo)
       {
-        return ReflectUtil.getValue("locationString", mirrorInfo);
+        return ReflectUtil.getValue("locationString", mirrorInfo); //$NON-NLS-1$
       }
 
       /**
@@ -1111,7 +1111,7 @@ public class CachingRepositoryManager<T>
         @Override
         public String toString()
         {
-          return "ArtifactActivity [start=" + start + ", end=" + end + ", size=" + size + ", duration=" + getDuration() + ", speed=" + getSpeed() + "]";
+          return "ArtifactActivity [start=" + start + ", end=" + end + ", size=" + size + ", duration=" + getDuration() + ", speed=" + getSpeed() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
         }
       }
 
@@ -1210,8 +1210,8 @@ public class CachingRepositoryManager<T>
         @Override
         public String toString()
         {
-          return "MirrorActivity [location=" + location + ", usages=" + usages.get() + ", successes=" + successes.get() + ", failures=" + failures.get()
-              + ", speed=" + speed.get() + ", probed=" + probed + "]";
+          return "MirrorActivity [location=" + location + ", usages=" + usages.get() + ", successes=" + successes.get() + ", failures=" + failures.get() //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+              + ", speed=" + speed.get() + ", probed=" + probed + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
       }
     }

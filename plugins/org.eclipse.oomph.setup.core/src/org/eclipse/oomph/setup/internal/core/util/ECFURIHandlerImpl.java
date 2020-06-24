@@ -73,6 +73,7 @@ import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.p2.core.UIServices.AuthenticationInfo;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.StorageException;
+import org.eclipse.osgi.util.NLS;
 
 import org.apache.http.cookie.Cookie;
 import org.apache.http.cookie.CookieSpecProvider;
@@ -115,27 +116,27 @@ import java.util.regex.Pattern;
  */
 public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 {
-  public static final String OPTION_CACHE_HANDLING = "OPTION_CACHE_HANDLING";
+  public static final String OPTION_CACHE_HANDLING = "OPTION_CACHE_HANDLING"; //$NON-NLS-1$
 
-  public static final String OPTION_AUTHORIZATION_HANDLER = "OPTION_AUTHORIZATION_HANDLER";
+  public static final String OPTION_AUTHORIZATION_HANDLER = "OPTION_AUTHORIZATION_HANDLER"; //$NON-NLS-1$
 
-  public static final String OPTION_AUTHORIZATION = "OPTION_AUTHORIZATION";
+  public static final String OPTION_AUTHORIZATION = "OPTION_AUTHORIZATION"; //$NON-NLS-1$
 
-  public static final String OPTION_PROXY_AUTHORIZATION = "OPTION_PROXY_AUTHORIZATION";
+  public static final String OPTION_PROXY_AUTHORIZATION = "OPTION_PROXY_AUTHORIZATION"; //$NON-NLS-1$
 
-  public static final String OPTION_MONITOR = "OPTION_MONITOR";
+  public static final String OPTION_MONITOR = "OPTION_MONITOR"; //$NON-NLS-1$
 
   public static final CookieStore COOKIE_STORE = FileTransferListener.DELEGATING_COOKIE_STORE;
 
-  public static final String OPTION_LOGIN_URI = "OPTION_LOGIN_URI";
+  public static final String OPTION_LOGIN_URI = "OPTION_LOGIN_URI"; //$NON-NLS-1$
 
-  public static final String OPTION_FORM_URI = "OPTION_FORM_URI";
+  public static final String OPTION_FORM_URI = "OPTION_FORM_URI"; //$NON-NLS-1$
 
-  public static final String OPTION_BASIC_AUTHENTICATION = "OPTION_BASIC_AUTHENTICATION";
+  public static final String OPTION_BASIC_AUTHENTICATION = "OPTION_BASIC_AUTHENTICATION"; //$NON-NLS-1$
 
-  private static final String FAILED_EXPECTED_ETAG = "-1";
+  private static final String FAILED_EXPECTED_ETAG = "-1"; //$NON-NLS-1$
 
-  private static final URI CACHE_FOLDER = SetupContext.GLOBAL_STATE_LOCATION_URI.appendSegment("cache");
+  private static final URI CACHE_FOLDER = SetupContext.GLOBAL_STATE_LOCATION_URI.appendSegment("cache"); //$NON-NLS-1$
 
   private static final Map<URI, String> EXPECTED_ETAGS = new HashMap<URI, String>();
 
@@ -149,16 +150,16 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
   private static final boolean TRACE = PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_ECF_TRACE);
 
-  private static final String API_GITHUB_HOST = "api.github.com";
+  private static final String API_GITHUB_HOST = "api.github.com"; //$NON-NLS-1$
 
-  private static final String CONTENT_TAG = "\"content\":\"";
+  private static final String CONTENT_TAG = "\"content\":\""; //$NON-NLS-1$
 
   private static final int CONNECT_TIMEOUT = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_ECF_CONNECT_TIMEOUT, 10000);
 
   private static final int READ_TIMEOUT = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_ECF_READ_TIMEOUT, 10000);
 
   private static final URI ACTUAL_INDEX_SETUP_ARCHIVE_LOCATION_URI = URI
-      .createURI(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI.toString().replace("http:", "https:"));
+      .createURI(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI.toString().replace("http:", "https:")); //$NON-NLS-1$ //$NON-NLS-2$
 
   private static boolean loggedBlockedURI;
 
@@ -168,14 +169,14 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     String userAgentProperty = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_USER_AGENT);
     if (userAgentProperty == null)
     {
-      StringBuilder userAgent = new StringBuilder("eclipse/oomph/");
+      StringBuilder userAgent = new StringBuilder("eclipse/oomph/"); //$NON-NLS-1$
       if (SetupUtil.INSTALLER_APPLICATION)
       {
-        userAgent.append("installer/");
+        userAgent.append("installer/"); //$NON-NLS-1$
       }
       else if (SetupUtil.SETUP_ARCHIVER_APPLICATION)
       {
-        userAgent.append("archiver/");
+        userAgent.append("archiver/"); //$NON-NLS-1$
       }
 
       Version oomphVersion = SetupCorePlugin.INSTANCE.getBundle().getVersion();
@@ -203,7 +204,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
   @Override
   public Map<String, ?> getAttributes(URI uri, Map<?, ?> options)
   {
-    if (uri.scheme().startsWith("http"))
+    if (uri.scheme().startsWith("http")) //$NON-NLS-1$
     {
       Set<String> requestedAttributes = getRequestedAttributes(options);
       if (requestedAttributes != null && requestedAttributes.contains(URIConverter.ATTRIBUTE_READ_ONLY) && requestedAttributes.size() == 1)
@@ -385,7 +386,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
   public static Job mirror(final Set<? extends URI> uris)
   {
-    Job job = new Job("ETag Mirror")
+    Job job = new Job(Messages.ECFURIHandlerImpl_ETagMirror_job)
     {
       @Override
       protected IStatus run(IProgressMonitor monitor)
@@ -409,12 +410,12 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
   {
     if (uriConverter.exists(file, null))
     {
-      URI eTagFile = file.appendFileExtension("etag");
+      URI eTagFile = file.appendFileExtension("etag"); //$NON-NLS-1$
       if (uriConverter.exists(eTagFile, null))
       {
         try
         {
-          return new String(BaseUtil.readFile(uriConverter, null, eTagFile), "UTF-8");
+          return new String(BaseUtil.readFile(uriConverter, null, eTagFile), "UTF-8"); //$NON-NLS-1$
         }
         catch (IORuntimeException ex)
         {
@@ -436,7 +437,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     {
       if (eTag != null)
       {
-        BaseUtil.writeFile(uriConverter, null, file.appendFileExtension("etag"), eTag.getBytes("UTF-8"));
+        BaseUtil.writeFile(uriConverter, null, file.appendFileExtension("etag"), eTag.getBytes("UTF-8")); //$NON-NLS-1$ //$NON-NLS-2$
       }
       else
       {
@@ -551,7 +552,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       return new IOExceptionWithCause(cause);
     }
 
-    return new IOExceptionWithCause((StringUtil.isEmpty(message) ? "Error: " : message + ": ") + url, cause);
+    return new IOExceptionWithCause((StringUtil.isEmpty(message) ? Messages.ECFURIHandlerImpl_Error_exception : message + ": ") + url, cause); //$NON-NLS-1$
   }
 
   /**
@@ -576,9 +577,9 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
      */
     public static final class Authorization
     {
-      public static final Authorization UNAUTHORIZED = new Authorization("", "");
+      public static final Authorization UNAUTHORIZED = new Authorization("", ""); //$NON-NLS-1$ //$NON-NLS-2$
 
-      public static final Authorization UNAUTHORIZEABLE = new Authorization("", "");
+      public static final Authorization UNAUTHORIZEABLE = new Authorization("", ""); //$NON-NLS-1$ //$NON-NLS-2$
 
       private final String user;
 
@@ -588,8 +589,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
       public Authorization(String user, String password)
       {
-        this.user = user == null ? "" : user;
-        this.password = obscure(password == null ? "" : password);
+        this.user = user == null ? "" : user; //$NON-NLS-1$
+        this.password = obscure(password == null ? "" : password); //$NON-NLS-1$
       }
 
       public String getUser()
@@ -604,12 +605,12 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
       public String getAuthorization()
       {
-        return "Basic " + obscure(user.length() == 0 ? getPassword() : user + ":" + getPassword());
+        return "Basic " + obscure(user.length() == 0 ? getPassword() : user + ":" + getPassword()); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
       public boolean isAuthorized()
       {
-        return !"".equals(password);
+        return !"".equals(password); //$NON-NLS-1$
       }
 
       public boolean isUnauthorizeable()
@@ -687,8 +688,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       @Override
       public String toString()
       {
-        return this == UNAUTHORIZEABLE ? "Authorization [unauthorizeable]"
-            : "Authorization [user=" + user + ", password=" + password + "]" + (saved ? " saved" : "");
+        return this == UNAUTHORIZEABLE ? "Authorization [unauthorizeable]" //$NON-NLS-1$
+            : "Authorization [user=" + user + ", password=" + password + "]" + (saved ? " saved" : ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
       }
 
     }
@@ -732,8 +733,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           try
           {
             ISecurePreferences node = securePreferences.node(host);
-            String user = node.get("user", "");
-            String password = node.get("password", "");
+            String user = node.get("user", ""); //$NON-NLS-1$ //$NON-NLS-2$
+            String password = node.get("password", ""); //$NON-NLS-1$ //$NON-NLS-2$
 
             Authorization authorization = new Authorization(user, password);
             if (authorization.isAuthorized())
@@ -786,8 +787,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                 try
                 {
                   ISecurePreferences node = securePreferences.node(host);
-                  node.put("user", user, false);
-                  node.put("password", password, true);
+                  node.put("user", user, false); //$NON-NLS-1$
+                  node.put("password", password, true); //$NON-NLS-1$
                   node.flush();
                   reauthorization.setSaved(true);
                 }
@@ -820,11 +821,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     public String toString()
     {
       StringBuilder result = new StringBuilder(super.toString());
-      result.append(" authorizations: ");
+      result.append(" authorizations: "); //$NON-NLS-1$
       result.append(authorizations);
-      result.append(" securePreferences: ");
+      result.append(" securePreferences: "); //$NON-NLS-1$
       result.append(securePreferences);
-      result.append(" uiServices: ");
+      result.append(" uiServices: "); //$NON-NLS-1$
       result.append(uiServices);
       return result.toString();
     }
@@ -896,9 +897,9 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         Map responseHeaders = receiveStartEvent.getResponseHeaders();
         if (responseHeaders != null)
         {
-          eTag = (String)responseHeaders.get("ETag");
+          eTag = (String)responseHeaders.get("ETag"); //$NON-NLS-1$
 
-          String lastModifiedValue = (String)responseHeaders.get("Last-Modified");
+          String lastModifiedValue = (String)responseHeaders.get("Last-Modified"); //$NON-NLS-1$
           if (lastModifiedValue != null)
           {
             Date date = parseHTTPDate(lastModifiedValue.toString());
@@ -962,14 +963,14 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       {
         if (fileTransfer != null)
         {
-          Object httpClient = ReflectUtil.getValue("httpClient", fileTransfer);
+          Object httpClient = ReflectUtil.getValue("httpClient", fileTransfer); //$NON-NLS-1$
 
           if (TRACE)
           {
-            System.out.println("> ECF: " + fileID.getURI() + " managing cookie store for: " + httpClient);
+            System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_ManageCookies_message, fileID.getURI(), httpClient));
           }
 
-          ReflectUtil.setValue("cookieStore", httpClient, new org.apache.http.client.CookieStore()
+          ReflectUtil.setValue("cookieStore", httpClient, new org.apache.http.client.CookieStore() //$NON-NLS-1$
           {
             @SuppressWarnings("all")
             public List<Cookie> getCookies()
@@ -1032,40 +1033,40 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           });
 
           @SuppressWarnings("deprecation")
-          String[] permissiveDatePatterns = ReflectUtil.getValue("DEFAULT_DATE_PATTERNS", org.apache.http.impl.cookie.BrowserCompatSpec.class);
+          String[] permissiveDatePatterns = ReflectUtil.getValue("DEFAULT_DATE_PATTERNS", org.apache.http.impl.cookie.BrowserCompatSpec.class); //$NON-NLS-1$
 
           try
           {
             // The following ensures that more permissive date patterns are used to parse the expiration date of cookies.
-            Object defaultParameters = ReflectUtil.getValue("defaultParams", httpClient);
+            Object defaultParameters = ReflectUtil.getValue("defaultParams", httpClient); //$NON-NLS-1$
 
             if (TRACE)
             {
-              System.out.println("> ECF: " + fileID.getURI() + " managing handling handling by modifying date patterns of default params");
+              System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_ManagingHandling_message, fileID.getURI()));
             }
 
             @SuppressWarnings("deprecation")
             String datePatternsParameterName = org.apache.http.cookie.params.CookieSpecPNames.DATE_PATTERNS;
-            ReflectUtil.invokeMethod(ReflectUtil.getMethod(defaultParameters, "setParameter", String.class, Object.class), defaultParameters,
+            ReflectUtil.invokeMethod(ReflectUtil.getMethod(defaultParameters, "setParameter", String.class, Object.class), defaultParameters, //$NON-NLS-1$
                 datePatternsParameterName, Arrays.asList(permissiveDatePatterns));
           }
           catch (Throwable throwable2)
           {
             if (TRACE)
             {
-              System.out.println("> ECF: " + fileID.getURI() + " managing cookie handling by modifying the cookie spec providers of the cookie spec registry");
+              System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_ManagingCookieHandling_message, fileID.getURI()));
             }
 
             // This is the case of the ECF implementation based on Apache 4.5.
-            Object copiedSpecRegistry = ReflectUtil.getValue("cookieSpecRegistry", httpClient);
-            ConcurrentHashMap<String, CookieSpecProvider> map = ReflectUtil.getValue("map", copiedSpecRegistry);
+            Object copiedSpecRegistry = ReflectUtil.getValue("cookieSpecRegistry", httpClient); //$NON-NLS-1$
+            ConcurrentHashMap<String, CookieSpecProvider> map = ReflectUtil.getValue("map", copiedSpecRegistry); //$NON-NLS-1$
             for (Map.Entry<String, CookieSpecProvider> entry : map.entrySet())
             {
               final CookieSpecProvider cookieSpecProvider = entry.getValue();
               if (cookieSpecProvider instanceof org.apache.http.impl.cookie.DefaultCookieSpecProvider)
               {
                 // Change the date patterns to be permissive.
-                ReflectUtil.setValue("datepatterns", cookieSpecProvider, permissiveDatePatterns);
+                ReflectUtil.setValue("datepatterns", cookieSpecProvider, permissiveDatePatterns); //$NON-NLS-1$
               }
             }
           }
@@ -1077,11 +1078,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         {
           try
           {
-            System.out.println("> ECF: " + fileID.getURI() + " failed to manage cookie store");
+            System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_FailedToManage_message, fileID.getURI()));
           }
           catch (URISyntaxException ex)
           {
-            System.out.println("> ECF:  bad fileID URI: " + fileID);
+            System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_BadFileID_message, fileID));
           }
         }
       }
@@ -1131,7 +1132,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       {
         if (TRACE)
         {
-          System.out.println("> ECF: " + uri + " adding cookie: " + httpCookie);
+          System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_AddingCookie_message, uri, httpCookie));
         }
 
         delegate.add(uri, httpCookie);
@@ -1164,7 +1165,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       {
         if (TRACE)
         {
-          System.out.println("> ECF: " + uri + " adding cookie: " + cookie);
+          System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_AddingCookie_message, uri, cookie));
         }
 
         return delegate.remove(uri, cookie);
@@ -1271,7 +1272,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
     private static final URIConverter URI_CONVERTER;
 
-    private static final String OPTION_ETAG_MIRROR = "OPTION_ETAG_MIRROR";
+    private static final String OPTION_ETAG_MIRROR = "OPTION_ETAG_MIRROR"; //$NON-NLS-1$
 
     static
     {
@@ -1294,7 +1295,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     @Override
     protected Worker createWorker(URI key, int workerID, boolean secondary)
     {
-      return new Worker("ETag Mirror " + key, this, key, workerID, secondary);
+      return new Worker(NLS.bind(Messages.ECFURIHandlerImpl_ETagMirror_thread, key), this, key, workerID, secondary);
     }
 
     public void begin(Set<? extends URI> uris, final IProgressMonitor monitor)
@@ -1303,8 +1304,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
       this.uris = uris;
       int size = uris.size();
-      monitor.beginTask("Mirroring " + size + " resource" + (size == 1 ? "" : "s"), uris.size());
-      super.begin("Mirroring", monitor);
+      monitor.beginTask(NLS.bind(Messages.ECFURIHandlerImpl_MirroringResources_task, size), uris.size());
+      super.begin(Messages.ECFURIHandlerImpl_Mirroring_task, monitor);
     }
 
     @Override
@@ -1336,7 +1337,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
         try
         {
-          workpoolMonitor.subTask("Mirroring " + key);
+          workpoolMonitor.subTask(NLS.bind(Messages.ECFURIHandlerImpl_MirrorURL_task, key));
         }
         catch (Exception ex)
         {
@@ -1430,7 +1431,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       uri = SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI.equals(uri) ? ACTUAL_INDEX_SETUP_ARCHIVE_LOCATION_URI : transform(originalURI, transformedOptions);
 
       // This is used to prefix all tracing statements.
-      tracePrefix = "> ECF: " + uri;
+      tracePrefix = NLS.bind(Messages.ECFURIHandlerImpl_ECFPrefix_message, uri);
 
       IProgressMonitor monitor = (IProgressMonitor)options.get(OPTION_MONITOR);
 
@@ -1442,11 +1443,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           File folder = new File(CACHE_FOLDER.toFileString());
           if (folder.isDirectory())
           {
-            System.out.println("Deleting cache folder: " + folder);
+            System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_DeletingCache_message, folder));
             IOUtil.deleteBestEffort(folder);
           }
 
-          throw new IOException("Simulated network problem: " + uri);
+          throw new IOException(NLS.bind(Messages.ECFURIHandlerImpl_NetworkProblem_exception, uri));
         }
 
         // Setup the basic context for subsequent processing.
@@ -1458,15 +1459,15 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
         if (TRACE)
         {
-          System.out.println(tracePrefix + " uri=" + uri);
-          System.out.println(tracePrefix + " cacheURI=" + cacheURI);
-          System.out.println(tracePrefix + " eTag=" + eTag);
-          System.out.println(tracePrefix + " expectedETag=" + expectedETag);
+          System.out.println(tracePrefix + " uri=" + uri); //$NON-NLS-1$
+          System.out.println(tracePrefix + " cacheURI=" + cacheURI); //$NON-NLS-1$
+          System.out.println(tracePrefix + " eTag=" + eTag); //$NON-NLS-1$
+          System.out.println(tracePrefix + " expectedETag=" + expectedETag); //$NON-NLS-1$
         }
 
         // To prevent Eclipse's Git server from being overload, because it can't scale to thousands of users, we block all direct access.
         String host = getHost(uri);
-        boolean isBlockedEclipseGitURI = !SetupUtil.SETUP_ARCHIVER_APPLICATION && "git.eclipse.org".equals(host);
+        boolean isBlockedEclipseGitURI = !SetupUtil.SETUP_ARCHIVER_APPLICATION && "git.eclipse.org".equals(host); //$NON-NLS-1$
         if (isBlockedEclipseGitURI && uriConverter.exists(cacheURI, options))
         {
           // If the file is in the cache, it's okay to use that cached version, so try that first.
@@ -1494,7 +1495,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
               // Proceed as if it doesn't exist.
               if (TRACE)
               {
-                System.out.println(tracePrefix + " unable to load cached content");
+                System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_UnableToLoadCache_message);
               }
             }
           }
@@ -1511,15 +1512,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
               String launcher = OS.getCurrentLauncher(true);
               if (launcher == null)
               {
-                launcher = "eclipse";
+                launcher = "eclipse"; //$NON-NLS-1$
               }
 
               // We'll log a single warning for this case.
-              SetupCorePlugin.INSTANCE.log("The Eclipse Git-hosted URI '" + uri + "' is blocked for direct access." + StringUtil.NL + //
-                  "Please open a Bugzilla to add it to an official Oomph catalog." + StringUtil.NL + //
-                  "For initial testing, use the file system local version of the resource." + StringUtil.NL + //
-                  "Alternatively, run the setup archiver application as follows:" + StringUtil.NL + //
-                  "  " + launcher + " -application org.eclipse.oomph.setup.core.SetupArchiver -consoleLog -noSplash -uris " + uri, //
+              SetupCorePlugin.INSTANCE.log(NLS.bind(Messages.ECFURIHandlerImpl_EclipseGitBlocked_meesage, uri, launcher), //
                   IStatus.WARNING);
 
               loggedBlockedURI = true;
@@ -1536,7 +1533,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           {
             if (TRACE)
             {
-              System.out.println("> ECF: " + loginURI + " reading login URI");
+              System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_ReadingLogin_message, loginURI));
             }
 
             InputStream inputStream = createInputStream(loginURI, options);
@@ -1561,7 +1558,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           {
             if (TRACE)
             {
-              System.out.println("> ECF: " + formURI + " processing form URI");
+              System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_ProcessingForm_message, formURI));
             }
 
             FormHandler formHandler = new FormHandler(formURI, uriConverter, authorizationHandler);
@@ -1623,10 +1620,10 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         {
           if (proxyWrapper.isProxified())
           {
-            System.out.println(tracePrefix + " proxy=" + proxyWrapper);
+            System.out.println(tracePrefix + " proxy=" + proxyWrapper); //$NON-NLS-1$
           }
 
-          System.out.println(tracePrefix + " authorizationHandler=" + authorizationHandler);
+          System.out.println(tracePrefix + " authorizationHandler=" + authorizationHandler); //$NON-NLS-1$
         }
 
         int triedReauthorization = 0;
@@ -1635,11 +1632,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         {
           if (TRACE)
           {
-            System.out.println(tracePrefix + " trying=" + i);
-            System.out.println(tracePrefix + " triedReauthorization=" + triedReauthorization);
-            System.out.println(tracePrefix + " authorization=" + authorization);
-            System.out.println(tracePrefix + " triedProxyReauthorization=" + triedProxyReauthorization);
-            System.out.println(tracePrefix + " proxyAuthorization=" + proxyAuthorization);
+            System.out.println(tracePrefix + " trying=" + i); //$NON-NLS-1$
+            System.out.println(tracePrefix + " triedReauthorization=" + triedReauthorization); //$NON-NLS-1$
+            System.out.println(tracePrefix + " authorization=" + authorization); //$NON-NLS-1$
+            System.out.println(tracePrefix + " triedProxyReauthorization=" + triedProxyReauthorization); //$NON-NLS-1$
+            System.out.println(tracePrefix + " proxyAuthorization=" + proxyAuthorization); //$NON-NLS-1$
           }
 
           // Configure the connection and its associated listener.
@@ -1655,7 +1652,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           {
             if (TRACE)
             {
-              System.out.println(tracePrefix + " " + ex.getClass().getSimpleName());
+              System.out.println(tracePrefix + " " + ex.getClass().getSimpleName()); //$NON-NLS-1$
               ex.printStackTrace(System.out);
             }
 
@@ -1671,7 +1668,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           {
             if (TRACE)
             {
-              System.out.println(tracePrefix + " InterruptedException");
+              System.out.println(tracePrefix + " InterruptedException"); //$NON-NLS-1$
               ex.printStackTrace(System.out);
             }
 
@@ -1684,7 +1681,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           {
             if (TRACE)
             {
-              System.out.println(tracePrefix + " transferLister.exception");
+              System.out.println(tracePrefix + " transferLister.exception"); //$NON-NLS-1$
               exception.printStackTrace(System.out);
             }
 
@@ -1704,7 +1701,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                 int errorCode = transferListener.getErrorCode();
                 if (TRACE)
                 {
-                  System.out.println(tracePrefix + " errorCode=" + errorCode);
+                  System.out.println(tracePrefix + " errorCode=" + errorCode); //$NON-NLS-1$
                 }
 
                 // If we have a proxy authentication problem...
@@ -1802,7 +1799,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
             if (TRACE)
             {
-              System.out.println(tracePrefix + " failing");
+              System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_Failing_message);
             }
 
             IOException ioException = createIOException(uri.toString(), transferListener.getException());
@@ -1865,7 +1862,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       InputStream result = uriConverter.createInputStream(cacheURI, options);
       if (TRACE)
       {
-        System.out.println(tracePrefix + " returning cached content");
+        System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_ReturningCachedContents_message);
       }
 
       return result;
@@ -1874,7 +1871,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     @Override
     protected InputStream handleEclipseGit() throws IOException
     {
-      throw new IOException("Eclipse Git access blocked: " + uri);
+      throw new IOException(NLS.bind(Messages.ECFURIHandlerImpl_EclipseGitAccessBlocked_message, uri));
     }
 
     @Override
@@ -1913,13 +1910,13 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     {
       Map<Object, Object> requestOptions = new HashMap<Object, Object>();
       requestOptions.put(IRetrieveFileTransferOptions.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
-      requestOptions.put("org.eclipse.ecf.provider.filetransfer.httpclient4.retrieve.connectTimeout", CONNECT_TIMEOUT);
+      requestOptions.put("org.eclipse.ecf.provider.filetransfer.httpclient4.retrieve.connectTimeout", CONNECT_TIMEOUT); //$NON-NLS-1$
       requestOptions.put(IRetrieveFileTransferOptions.READ_TIMEOUT, READ_TIMEOUT);
-      requestOptions.put("org.eclipse.ecf.provider.filetransfer.httpclient4.retrieve.readTimeout", READ_TIMEOUT);
+      requestOptions.put("org.eclipse.ecf.provider.filetransfer.httpclient4.retrieve.readTimeout", READ_TIMEOUT); //$NON-NLS-1$
 
-      if (!StringUtil.isEmpty(USER_AGENT) && host != null && host.endsWith(".eclipse.org"))
+      if (!StringUtil.isEmpty(USER_AGENT) && host != null && host.endsWith(".eclipse.org")) //$NON-NLS-1$
       {
-        putRequestHeader(requestOptions, "User-Agent", USER_AGENT);
+        putRequestHeader(requestOptions, "User-Agent", USER_AGENT); //$NON-NLS-1$
       }
 
       if (forceAuthorization != null)
@@ -1932,21 +1929,21 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, requestHeaders);
         }
 
-        putRequestHeader(requestOptions, "Authorization", forceAuthorization.getAuthorization());
+        putRequestHeader(requestOptions, "Authorization", forceAuthorization.getAuthorization()); //$NON-NLS-1$
 
         if (TRACE)
         {
-          System.out.println(tracePrefix + " forcing basic authentication: " + forceAuthorization);
+          System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_ForcingBaseAuthentication_message + forceAuthorization);
         }
       }
 
       if (transferListener.expectedETag != null && getCacheHandling(options) != CacheHandling.CACHE_IGNORE)
       {
-        putRequestHeader(requestOptions, "If-None-Match", transferListener.expectedETag);
+        putRequestHeader(requestOptions, "If-None-Match", transferListener.expectedETag); //$NON-NLS-1$
 
         if (TRACE)
         {
-          System.out.println(tracePrefix + " using If-None-Match : " + transferListener.expectedETag);
+          System.out.println(tracePrefix + " using If-None-Match : " + transferListener.expectedETag); //$NON-NLS-1$
         }
       }
 
@@ -1962,7 +1959,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       if (API_GITHUB_HOST.equals(getHost(uri)))
       {
         // Find the start tag in the JSON value.
-        String value = new String(bytes, "UTF-8");
+        String value = new String(bytes, "UTF-8"); //$NON-NLS-1$
         int start = value.indexOf(CONTENT_TAG);
         if (start != -1)
         {
@@ -1973,7 +1970,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           {
             // The content is delimited by \n so split on that during the conversion.
             String content = value.substring(start, end);
-            String[] split = content.split("\\\\n");
+            String[] split = content.split("\\\\n"); //$NON-NLS-1$
 
             // Write the converted bytes to a new stream and process those bytes instead.
             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -1993,7 +1990,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       {
         if (TRACE)
         {
-          System.out.println(tracePrefix + " writing cache");
+          System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_WritingCache_message);
         }
 
         BaseUtil.writeFile(uriConverter, options, cacheURI, bytes);
@@ -2006,7 +2003,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
         if (TRACE)
         {
-          System.out.println(tracePrefix + " failed writing cache");
+          System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_FailedWritingCache_message);
           ex.printStackTrace(System.out);
         }
       }
@@ -2030,7 +2027,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
       if (TRACE)
       {
-        System.out.println(tracePrefix + " returning successful results");
+        System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_ReturningSuccessfulResults_message);
       }
 
       return new ByteArrayInputStream(bytes);
@@ -2111,7 +2108,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     {
       if (TRACE)
       {
-        System.out.println(tracePrefix + " unsupported HEAD request");
+        System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_UnsupportedHreadRequest_message);
       }
 
       // Try instead to create an input stream and use the response to get at least the timestamp property.
@@ -2122,7 +2119,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       {
         InputStream inputStream = createInputStream(uri, specializedOptions);
         inputStream.close();
-        System.out.println(tracePrefix + " using response from GET request");
+        System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_UsingResponseFromGetRequest_message);
         return handleResponseAttributes(requestedAttributes, response);
       }
       catch (IOException ex)
@@ -2130,7 +2127,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         if (TRACE)
         {
           // This implies a GET request also fails, so continue the processing...
-          System.out.println(tracePrefix + " GET request failed");
+          System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_GetRequestFailed_message);
           ex.printStackTrace(System.out);
         }
       }
@@ -2151,39 +2148,39 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       // TODO
       // We might need to produce a result that is separated with & rather than ; for some servers?
 
-      URI expectedURI = URI.createURI("https://example.com/gerrit/gitweb?p=EXAMPLE.git;a=blob_plain;f=Src/com.example.releng/example.setup;hb=HEAD");
+      URI expectedURI = URI.createURI("https://example.com/gerrit/gitweb?p=EXAMPLE.git;a=blob_plain;f=Src/com.example.releng/example.setup;hb=HEAD"); //$NON-NLS-1$
       URI inputURI = URI.createURI(
-          "https://user:password@example.com:1234/gerrit/gitweb/EXAMPLE.git/Src/com.example.releng/example.setup?oomph=b[0..1];oomph_login=s://a/[0..1]/'login';oomph-p=[2];oomph-f=[3..];a=blob_plain;hb=HEAD;"
-              + "oomph-s=s;" + //
-              "oomph-S=S;" + //
-              "oomph-u=u;" + //
-              "oomph-U=U;" + //
-              "oomph-h=h;" + //
-              "oomph--p=p;" + //
-              "oomph-P=P;" + //
-              "oomph-a=a;" + //
-              "oomph-b=b;" + //
-              "oomph-text='text';" + //
-              "oomph-quote='';" + //
-              "oomph-slash=/;" + //
-              "oomph-colon=:;" + //
-              "oomph-r1=[1];" + //
-              "oomph-r2=[2];" + //
-              "oomph-r3=[-1];" + //
-              "oomph-r4=[-3..-1];" + //
-              "oomph-r5=[-2..]" + //
-              "" //
+          "https://user:password@example.com:1234/gerrit/gitweb/EXAMPLE.git/Src/com.example.releng/example.setup?oomph=b[0..1];oomph_login=s://a/[0..1]/'login';oomph-p=[2];oomph-f=[3..];a=blob_plain;hb=HEAD;" //$NON-NLS-1$
+              + "oomph-s=s;" + // //$NON-NLS-1$
+              "oomph-S=S;" + // //$NON-NLS-1$
+              "oomph-u=u;" + // //$NON-NLS-1$
+              "oomph-U=U;" + // //$NON-NLS-1$
+              "oomph-h=h;" + // //$NON-NLS-1$
+              "oomph--p=p;" + // //$NON-NLS-1$
+              "oomph-P=P;" + // //$NON-NLS-1$
+              "oomph-a=a;" + // //$NON-NLS-1$
+              "oomph-b=b;" + // //$NON-NLS-1$
+              "oomph-text='text';" + // //$NON-NLS-1$
+              "oomph-quote='';" + // //$NON-NLS-1$
+              "oomph-slash=/;" + // //$NON-NLS-1$
+              "oomph-colon=:;" + // //$NON-NLS-1$
+              "oomph-r1=[1];" + // //$NON-NLS-1$
+              "oomph-r2=[2];" + // //$NON-NLS-1$
+              "oomph-r3=[-1];" + // //$NON-NLS-1$
+              "oomph-r4=[-3..-1];" + // //$NON-NLS-1$
+              "oomph-r5=[-2..]" + // //$NON-NLS-1$
+              "" // //$NON-NLS-1$
       );
 
       inputURI = URI.createURI(
-          "https://example.com/gerrit/gitweb/EXAMPLE.git/Src/com.example.releng/example.setup?oomph=b[0..1];oomph_login=b[0]/'login';oomph-p=[2];oomph-f=[3..];a=blob_plain;hb=HEAD");
+          "https://example.com/gerrit/gitweb/EXAMPLE.git/Src/com.example.releng/example.setup?oomph=b[0..1];oomph_login=b[0]/'login';oomph-p=[2];oomph-f=[3..];a=blob_plain;hb=HEAD"); //$NON-NLS-1$
       new java.net.URI(inputURI.toString());
       HashMap<Object, Object> options = new HashMap<Object, Object>();
       URI uri = transform(inputURI, options);
-      System.err.println(">   " + expectedURI);
-      System.err.println(">>  " + inputURI);
-      System.err.println(">>> " + uri);
-      System.err.println(">>>>" + options.get(OPTION_LOGIN_URI));
+      System.err.println(">   " + expectedURI); //$NON-NLS-1$
+      System.err.println(">>  " + inputURI); //$NON-NLS-1$
+      System.err.println(">>> " + uri); //$NON-NLS-1$
+      System.err.println(">>>>" + options.get(OPTION_LOGIN_URI)); //$NON-NLS-1$
     }
 
     private static URI transform(URI uri, Map<Object, Object> options)
@@ -2191,7 +2188,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       String query = uri.query();
       if (query != null)
       {
-        List<String> parameters = StringUtil.explode(query, ";");
+        List<String> parameters = StringUtil.explode(query, ";"); //$NON-NLS-1$
         if (parameters.isEmpty())
         {
           return uri;
@@ -2200,7 +2197,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         Map<String, String> arguments = new LinkedHashMap<String, String>();
         for (String parameter : parameters)
         {
-          List<String> assignment = StringUtil.explode(parameter, "=");
+          List<String> assignment = StringUtil.explode(parameter, "="); //$NON-NLS-1$
           if (assignment.size() != 2)
           {
             return uri;
@@ -2218,7 +2215,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         {
           String key = entry.getKey();
           String value = entry.getValue();
-          if ("oomph".equals(key))
+          if ("oomph".equals(key)) //$NON-NLS-1$
           {
             String result = evaluate(value, uri);
             if (result != null)
@@ -2228,7 +2225,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
             continue;
           }
-          else if ("oomph_form".equals(key))
+          else if ("oomph_form".equals(key)) //$NON-NLS-1$
           {
             String result = evaluate(value, uri);
             if (result != null)
@@ -2238,7 +2235,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
             continue;
           }
-          else if ("oomph_login".equals(key))
+          else if ("oomph_login".equals(key)) //$NON-NLS-1$
           {
             String result = evaluate(value, uri);
             if (result != null)
@@ -2248,17 +2245,17 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
             continue;
           }
-          else if ("oomph_basic_auth".equals(key))
+          else if ("oomph_basic_auth".equals(key)) //$NON-NLS-1$
           {
-            basicAuthentication = "true".equals(value);
+            basicAuthentication = "true".equals(value); //$NON-NLS-1$
             continue;
           }
-          else if (key.startsWith("oomph-"))
+          else if (key.startsWith("oomph-")) //$NON-NLS-1$
           {
             String result = evaluate(value, uri);
             if (result != null)
             {
-              key = key.substring("oomph-".length());
+              key = key.substring("oomph-".length()); //$NON-NLS-1$
               value = result;
             }
           }
@@ -2360,7 +2357,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                 if (i + 5 < length && expression.charAt(i + 3) == '%' && expression.charAt(i + 4) == '2' && expression.charAt(i + 5) == '7')
                 {
                   i += 5;
-                  result.append("%27");
+                  result.append("%27"); //$NON-NLS-1$
                 }
                 else
                 {
@@ -2372,7 +2369,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
               if (i + 2 < length && expression.charAt(i + 1) == '2' && expression.charAt(i + 2) == '3')
               {
-                result.append("#");
+                result.append("#"); //$NON-NLS-1$
                 i += 2;
                 break;
               }
@@ -2459,7 +2456,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
             }
             case 'b':
             {
-              String base = uri.isHierarchical() ? uri.trimSegments(segmentCount).trimQuery().trimFragment().toString() : uri.scheme() + ":";
+              String base = uri.isHierarchical() ? uri.trimSegments(segmentCount).trimQuery().trimFragment().toString() : uri.scheme() + ":"; //$NON-NLS-1$
               result.append(base);
               break;
             }
@@ -2694,7 +2691,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         String hostName = address.getHostName();
         int port = address.getPort();
         Proxy.Type type = proxy.getType();
-        proxyURI = URI.createURI(type.toString() + "://" + hostName + ":" + port);
+        proxyURI = URI.createURI(type.toString() + "://" + hostName + ":" + port); //$NON-NLS-1$ //$NON-NLS-2$
       }
       else
       {
@@ -2785,7 +2782,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     {
       if (proxyData == null)
       {
-        return "Unproxified";
+        return "Unproxified"; //$NON-NLS-1$
       }
 
       // This is used for logging. We don't want to show the unobscured password in the log so we don't just use proxyData.toString.
@@ -2800,7 +2797,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       stringBuffer.append(proxyData.getUserId());
       stringBuffer.append(" password: "); //$NON-NLS-1$
       String password = proxyData.getPassword();
-      stringBuffer.append(password == null ? "" : XMLTypeFactory.eINSTANCE.convertBase64Binary(password.getBytes()));
+      stringBuffer.append(password == null ? "" : XMLTypeFactory.eINSTANCE.convertBase64Binary(password.getBytes())); //$NON-NLS-1$
       stringBuffer.append(" reqAuth: "); //$NON-NLS-1$
       stringBuffer.append(proxyData.isRequiresAuthentication());
       return stringBuffer.toString();
@@ -2898,21 +2895,21 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
   {
     private static final Map<URI, Authorization> AUTHORIZED_FORMS = Collections.synchronizedMap(new HashMap<URI, Authorization>());
 
-    private static final Pattern FORM_PATTERN = Pattern.compile("<\\s*form\\s*([^>]*)>(.*?)</\\s*form\\s*>", Pattern.DOTALL);
+    private static final Pattern FORM_PATTERN = Pattern.compile("<\\s*form\\s*([^>]*)>(.*?)</\\s*form\\s*>", Pattern.DOTALL); //$NON-NLS-1$
 
-    private static final Pattern INPUT_ELEMENT_PATTERN = Pattern.compile("<\\s*input\\s*([^>]*)>");
+    private static final Pattern INPUT_ELEMENT_PATTERN = Pattern.compile("<\\s*input\\s*([^>]*)>"); //$NON-NLS-1$
 
-    private static final Pattern ACTION_ATTRIBUTE_PATTERN = getAttributePattern("action");
+    private static final Pattern ACTION_ATTRIBUTE_PATTERN = getAttributePattern("action"); //$NON-NLS-1$
 
-    private static final Pattern ID_ATTRIBUTE_PATTERN = getAttributePattern("id");
+    private static final Pattern ID_ATTRIBUTE_PATTERN = getAttributePattern("id"); //$NON-NLS-1$
 
-    private static final Pattern NAME_ATTRIBUTE_PATTERN = getAttributePattern("name");
+    private static final Pattern NAME_ATTRIBUTE_PATTERN = getAttributePattern("name"); //$NON-NLS-1$
 
-    private static final Pattern TYPE_ATTRIBUTE_PATTERN = getAttributePattern("type");
+    private static final Pattern TYPE_ATTRIBUTE_PATTERN = getAttributePattern("type"); //$NON-NLS-1$
 
-    private static final Pattern VALUE_ATTRIBUTE_PATTERN = getAttributePattern("value");
+    private static final Pattern VALUE_ATTRIBUTE_PATTERN = getAttributePattern("value"); //$NON-NLS-1$
 
-    private static final Pattern HEX_ENTITY_PATTERN = Pattern.compile("&#x([0-9]+);");
+    private static final Pattern HEX_ENTITY_PATTERN = Pattern.compile("&#x([0-9]+);"); //$NON-NLS-1$
 
     private final URI formURI;
 
@@ -2939,7 +2936,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       if (authorizationHandler != null)
       {
         Authorization authorization = authorizationHandler.authorize(formURI);
-        URI formLockURI = URI.createURI("form:" + formURI);
+        URI formLockURI = URI.createURI("form:" + formURI); //$NON-NLS-1$
         CountDownLatch countDownLatch = acquireLock(formLockURI);
         try
         {
@@ -2991,7 +2988,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                   if (StringUtil.isEmpty(value) || emptyKeys.contains(key))
                   {
                     String type = parameterTypes.get(key);
-                    if ("password".equals(type))
+                    if ("password".equals(type)) //$NON-NLS-1$
                     {
                       parameterValues.put(key, PreferencesUtil.encrypt(authorization.getPassword()));
                     }
@@ -3039,10 +3036,10 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       ByteArrayOutputStream out = null;
       try
       {
-        String tracePrefix = "> ECF: " + formURI;
+        String tracePrefix = NLS.bind(Messages.ECFURIHandlerImpl_ECFPrefix_message, formURI);
         if (TRACE)
         {
-          System.out.println(tracePrefix + " reading form");
+          System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_ReadingForm_message);
         }
 
         // Ensure that the input stream really reads the remote form, not something from the cache.
@@ -3055,11 +3052,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         // Copy the result into memory and convert it to string.
         out = new ByteArrayOutputStream();
         IOUtil.copy(in, out);
-        String contents = out.toString("UTF-8");
+        String contents = out.toString("UTF-8"); //$NON-NLS-1$
 
         if (TRACE)
         {
-          System.out.println(tracePrefix + " finding form contents");
+          System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_FindingFormContents_message);
         }
 
         String formID = formURI.fragment();
@@ -3099,9 +3096,9 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                 // Record the values of all well-formed inputs.
                 if (name != null && type != null)
                 {
-                  parameterValues.put(name, value == null ? "" : value);
+                  parameterValues.put(name, value == null ? "" : value); //$NON-NLS-1$
                   parameterTypes.put(name, type);
-                  if ("password".equals(type))
+                  if ("password".equals(type)) //$NON-NLS-1$
                   {
                     secureParameters.add(name);
                   }
@@ -3116,11 +3113,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                 StringBuilder details = new StringBuilder();
                 for (Map.Entry<String, String> entry : parameterValues.entrySet())
                 {
-                  details.append(StringUtil.NL).append("   ").append(entry.getKey()).append("='").append(entry.getValue()).append("' type=")
+                  details.append(StringUtil.NL).append("   ").append(entry.getKey()).append("='").append(entry.getValue()).append("' type=") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                       .append(parameterTypes.get(entry.getKey()));
                 }
 
-                System.out.println(tracePrefix + " form parameters " + details);
+                System.out.println(tracePrefix + " form parameters " + details); //$NON-NLS-1$
               }
               return formActionURI;
             }
@@ -3129,7 +3126,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
         if (TRACE)
         {
-          System.out.println(tracePrefix + " form contents not found");
+          System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_FormContentsNotFound_message);
         }
 
         return null;
@@ -3145,10 +3142,10 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       boolean result = false;
       URL url = new URL(formActionURI.toString());
 
-      String tracePrefix = "> ECF: " + formActionURI;
+      String tracePrefix = NLS.bind(Messages.ECFURIHandlerImpl_ECFPrefix_message, formActionURI);
       if (TRACE)
       {
-        System.out.println(tracePrefix + " posting form");
+        System.out.println(tracePrefix + Messages.ECFURIHandlerImpl_PostingForm_message);
       }
 
       // Establish a connection that looks just like a browser connection to post the form data.
@@ -3156,9 +3153,9 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
       connection.setUseCaches(false);
       connection.setConnectTimeout(5000);
-      connection.setRequestMethod("POST");
-      connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-      connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+      connection.setRequestMethod("POST"); //$NON-NLS-1$
+      connection.setRequestProperty("User-Agent", "Mozilla/5.0"); //$NON-NLS-1$ //$NON-NLS-2$
+      connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded"); //$NON-NLS-1$ //$NON-NLS-2$
       connection.setDoOutput(true);
       connection.setInstanceFollowRedirects(false);
 
@@ -3176,7 +3173,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       List<HttpCookie> cookies = COOKIE_STORE.get(uri);
       for (HttpCookie httpCookie : cookies)
       {
-        connection.addRequestProperty("Cookie", httpCookie.toString().replace("\"", ""));
+        connection.addRequestProperty("Cookie", httpCookie.toString().replace("\"", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       }
 
       if (TRACE)
@@ -3184,10 +3181,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         StringBuilder details = new StringBuilder();
         for (HttpCookie httpCookie : cookies)
         {
-          details.append(StringUtil.NL).append("    ").append(httpCookie);
+          details.append(StringUtil.NL).append("    ").append(httpCookie); //$NON-NLS-1$
         }
 
-        System.out.println(tracePrefix + (details.length() == 0 ? " using no cookies" : " using cookies" + details));
+        System.out.println(tracePrefix
+            + (details.length() == 0 ? Messages.ECFURIHandlerImpl_UsingNoCookies_message : Messages.ECFURIHandlerImpl_UsingCookies_message + details));
       }
 
       handleProxy(connection);
@@ -3198,7 +3196,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
       if (TRACE)
       {
-        System.out.println(tracePrefix + " posting parameters" + StringUtil.NL + "    " + getForm(parameterValues, secureParameters, false));
+        System.out.println(tracePrefix + " posting parameters" + StringUtil.NL + "    " + getForm(parameterValues, secureParameters, false)); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
       data.writeBytes(form);
@@ -3210,7 +3208,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       {
         // Look for the cookies...
         Map<String, List<String>> headerFields = connection.getHeaderFields();
-        List<String> list = headerFields.get("Set-Cookie");
+        List<String> list = headerFields.get("Set-Cookie"); //$NON-NLS-1$
         if (list != null)
         {
           for (String value : list)
@@ -3268,7 +3266,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         form.append('=');
         try
         {
-          form.append(URLEncoder.encode(value, "UTF-8"));
+          form.append(URLEncoder.encode(value, "UTF-8")); //$NON-NLS-1$
         }
         catch (UnsupportedEncodingException ex)
         {
@@ -3290,7 +3288,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           Authorization authorization = new ECFURIHandlerImpl.AuthorizationHandler.Authorization(proxy.getUsername(), proxy.getPassword());
           if (authorization.isAuthorized())
           {
-            connection.setRequestProperty("Proxy-Authorization", authorization.getAuthorization());
+            connection.setRequestProperty("Proxy-Authorization", authorization.getAuthorization()); //$NON-NLS-1$
           }
         }
       }
@@ -3302,7 +3300,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
     private static Pattern getAttributePattern(String attributeName)
     {
-      return Pattern.compile("\\s*" + attributeName + "\\s*=\\s*(\"[^\"]*\"|'[^']*')");
+      return Pattern.compile("\\s*" + attributeName + "\\s*=\\s*(\"[^\"]*\"|'[^']*')"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     private static String getAttributeValue(Pattern attributePattern, String attributes)

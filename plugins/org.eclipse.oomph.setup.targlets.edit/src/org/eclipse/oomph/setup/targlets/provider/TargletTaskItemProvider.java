@@ -107,7 +107,7 @@ import java.util.regex.Pattern;
  */
 public class TargletTaskItemProvider extends SetupTaskItemProvider
 {
-  private static final Pattern VERSION_PATTERN = Pattern.compile("([1-9]+\\.[0-9]+)");
+  private static final Pattern VERSION_PATTERN = Pattern.compile("([1-9]+\\.[0-9]+)"); //$NON-NLS-1$
 
   /**
    * This constructs an instance from a factory and a notifier.
@@ -155,8 +155,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   protected void addTargetNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargletTask_targetName_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_targetName_feature", "_UI_TargletTask_type"),
+        getString("_UI_TargletTask_targetName_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_targetName_feature", "_UI_TargletTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupTargletsPackage.Literals.TARGLET_TASK__TARGET_NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -169,8 +169,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   protected void addActivateTargetPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargletTask_activateTarget_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_activateTarget_feature", "_UI_TargletTask_type"),
+        getString("_UI_TargletTask_activateTarget_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_activateTarget_feature", "_UI_TargletTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupTargletsPackage.Literals.TARGLET_TASK__ACTIVATE_TARGET, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -183,8 +183,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   protected void addTargletURIsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargletTask_targletURIs_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_targletURIs_feature", "_UI_TargletTask_type"),
+        getString("_UI_TargletTask_targletURIs_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_targletURIs_feature", "_UI_TargletTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupTargletsPackage.Literals.TARGLET_TASK__TARGLET_UR_IS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -197,8 +197,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   protected void addOperatingSystemPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargletTask_operatingSystem_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_operatingSystem_feature", "_UI_TargletTask_type"),
+        getString("_UI_TargletTask_operatingSystem_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_operatingSystem_feature", "_UI_TargletTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupTargletsPackage.Literals.TARGLET_TASK__OPERATING_SYSTEM, true, false, true, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
@@ -218,8 +218,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   protected void addWindowingSystemPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargletTask_windowingSystem_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_windowingSystem_feature", "_UI_TargletTask_type"),
+        getString("_UI_TargletTask_windowingSystem_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_windowingSystem_feature", "_UI_TargletTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupTargletsPackage.Literals.TARGLET_TASK__WINDOWING_SYSTEM, true, false, true, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
@@ -239,8 +239,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   protected void addArchitecturePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargletTask_architecture_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_architecture_feature", "_UI_TargletTask_type"),
+        getString("_UI_TargletTask_architecture_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_architecture_feature", "_UI_TargletTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupTargletsPackage.Literals.TARGLET_TASK__ARCHITECTURE, true, false, true, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
@@ -260,10 +260,11 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   protected void addLocalePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargletTask_locale_feature"), getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_locale_feature", "_UI_TargletTask_type"),
+        getString("_UI_TargletTask_locale_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_locale_feature", "_UI_TargletTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupTargletsPackage.Literals.TARGLET_TASK__LOCALE, true, false, true, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
-      private static final String NL_EXTRA = "org.eclipse.pde.nl.extra";
+      private static final String NL_EXTRA = "org.eclipse.pde.nl.extra"; //$NON-NLS-1$
 
       private LocaleItemLabelProvider labelProvider;
 
@@ -297,8 +298,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   protected void addProgramArgumentsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargletTask_programArguments_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_programArguments_feature", "_UI_TargletTask_type"),
+        getString("_UI_TargletTask_programArguments_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_programArguments_feature", "_UI_TargletTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupTargletsPackage.Literals.TARGLET_TASK__PROGRAM_ARGUMENTS, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -311,8 +312,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   protected void addVMArgumentsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_TargletTask_vMArguments_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_vMArguments_feature", "_UI_TargletTask_type"),
+        getString("_UI_TargletTask_vMArguments_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_TargletTask_vMArguments_feature", "_UI_TargletTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupTargletsPackage.Literals.TARGLET_TASK__VM_ARGUMENTS, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -321,11 +322,11 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     Set<String> result = new HashSet<String>();
     result.addAll(Arrays.asList(values));
 
-    IEclipsePreferences node = InstanceScope.INSTANCE.getNode("org.eclipse.pde.core");
+    IEclipsePreferences node = InstanceScope.INSTANCE.getNode("org.eclipse.pde.core"); //$NON-NLS-1$
     String extraValues = node.get(extraValuesPreference, null);
     if (!StringUtil.isEmpty(extraValues))
     {
-      StringTokenizer tokenizer = new StringTokenizer(extraValues, ",");
+      StringTokenizer tokenizer = new StringTokenizer(extraValues, ","); //$NON-NLS-1$
       while (tokenizer.hasMoreTokens())
       {
         String extraValue = tokenizer.nextToken().trim();
@@ -379,7 +380,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/TargletTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/TargletTask")); //$NON-NLS-1$
   }
 
   /**
@@ -407,11 +408,11 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     StringBuilder builder = new StringBuilder();
     Set<String> added = new HashSet<String>();
 
-    String targetNameLabel = "";
+    String targetNameLabel = ""; //$NON-NLS-1$
     String targetName = targletTask.getTargetName();
     if (targetName != null)
     {
-      Pattern TARGET_NAME_LABEL_PATTERN = Pattern.compile("(.*)[\\s-_](Modular)?[\\s-_]*(Target)?");
+      Pattern TARGET_NAME_LABEL_PATTERN = Pattern.compile("(.*)[\\s-_](Modular)?[\\s-_]*(Target)?"); //$NON-NLS-1$
       Matcher matcher = TARGET_NAME_LABEL_PATTERN.matcher(targetName);
       if (matcher.matches())
       {
@@ -430,7 +431,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
       {
         if (builder.length() != 0)
         {
-          builder.append(" + ");
+          builder.append(" + "); //$NON-NLS-1$
         }
 
         builder.append(name);
@@ -439,23 +440,23 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
 
     if (builder.length() != 0)
     {
-      builder.insert(0, " (");
+      builder.insert(0, " ("); //$NON-NLS-1$
       builder.append(')');
     }
 
     if (StringUtil.isEmpty(targetNameLabel))
     {
-      builder.insert(0, "Target");
+      builder.insert(0, "Target"); //$NON-NLS-1$
     }
     else
     {
-      builder.insert(0, " Target");
+      builder.insert(0, " Target"); //$NON-NLS-1$
       builder.insert(0, targetNameLabel);
     }
 
     if (targletTask.isActivateTarget())
     {
-      builder.append(", activate");
+      builder.append(", activate"); //$NON-NLS-1$
     }
 
     return builder.toString();
@@ -525,7 +526,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
         if (value instanceof URI)
         {
           final URI uri = (URI)value;
-          if ("target".equals(uri.fileExtension()) && uri.isPlatformResource())
+          if ("target".equals(uri.fileExtension()) && uri.isPlatformResource()) //$NON-NLS-1$
           {
             final Path path = new Path(uri.toPlatformString(true));
             try
@@ -602,8 +603,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                               }
 
                               // Reflectively get the underlying IDs and Versions.
-                              String[] ids = (String[])ReflectUtil.invokeMethod("getIds", iuBundleContainer);
-                              Version[] versions = (Version[])ReflectUtil.invokeMethod("getVersions", iuBundleContainer);
+                              String[] ids = (String[])ReflectUtil.invokeMethod("getIds", iuBundleContainer); //$NON-NLS-1$
+                              Version[] versions = (Version[])ReflectUtil.invokeMethod("getVersions", iuBundleContainer); //$NON-NLS-1$
 
                               for (int i = 0, length = ids.length; i < length; ++i)
                               {
@@ -628,10 +629,10 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
 
                             // Always create a new targlet, but name it to reflect that it represents a target platform.
                             Targlet targlet = TargletFactory.eINSTANCE.createTarglet();
-                            targlet.setName(getTargletName(StringUtil.cap(uri.trimFileExtension().lastSegment())) + "Target Platform");
+                            targlet.setName(getTargletName(StringUtil.cap(uri.trimFileExtension().lastSegment())) + "Target Platform"); //$NON-NLS-1$
 
                             // Use the standard variable to refer to the active repository.
-                            targlet.setActiveRepositoryListName("${eclipse.target.platform}");
+                            targlet.setActiveRepositoryListName("${eclipse.target.platform}"); //$NON-NLS-1$
 
                             // Add all the requirements to the new targlet.
                             targlet.getRequirements().addAll(requirements);
@@ -678,17 +679,17 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                               String newVmArguments = targletTask.getVMArguments();
                               if (StringUtil.isEmpty(newVmArguments))
                               {
-                                newVmArguments = "";
+                                newVmArguments = ""; //$NON-NLS-1$
                               }
                               else
                               {
-                                newVmArguments += "\n";
+                                newVmArguments += "\n"; //$NON-NLS-1$
                               }
 
                               newVmArguments += vmArguments;
 
                               compoundCommand.append(new SetCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__VM_ARGUMENTS,
-                                  newVmArguments.replaceAll("[\n\r]+", "\n").trim()));
+                                  newVmArguments.replaceAll("[\n\r]+", "\n").trim())); //$NON-NLS-1$ //$NON-NLS-2$
                             }
 
                             // Compose the program arguments if the are any.
@@ -697,17 +698,17 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                               String newProgramArguments = targletTask.getProgramArguments();
                               if (StringUtil.isEmpty(newProgramArguments))
                               {
-                                newProgramArguments = "";
+                                newProgramArguments = ""; //$NON-NLS-1$
                               }
                               else
                               {
-                                newProgramArguments += "\n";
+                                newProgramArguments += "\n"; //$NON-NLS-1$
                               }
 
                               newProgramArguments += programArguments;
 
                               compoundCommand.append(new SetCommand(domain, targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__PROGRAM_ARGUMENTS,
-                                  newProgramArguments.replaceAll("[\n\r]+", "\n").trim()));
+                                  newProgramArguments.replaceAll("[\n\r]+", "\n").trim())); //$NON-NLS-1$ //$NON-NLS-2$
                             }
 
                             return dropCommand.canExecute();
@@ -731,7 +732,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                                   if (child instanceof VariableTask)
                                   {
                                     VariableTask variableTask = (VariableTask)child;
-                                    if ("eclipse.target.platform".equals(variableTask.getName()))
+                                    if ("eclipse.target.platform".equals(variableTask.getName())) //$NON-NLS-1$
                                     {
                                       // Consider all the choices it provides.
                                       String candidate = null;
@@ -812,9 +813,9 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     final List<IPath> paths = new ArrayList<IPath>();
     for (Object value : collection)
     {
-      if ("org.eclipse.egit.ui.internal.repository.tree.RepositoryNode".equals(value.getClass().getName()))
+      if ("org.eclipse.egit.ui.internal.repository.tree.RepositoryNode".equals(value.getClass().getName())) //$NON-NLS-1$
       {
-        paths.add((IPath)ReflectUtil.invokeMethod("getPath", value));
+        paths.add((IPath)ReflectUtil.invokeMethod("getPath", value)); //$NON-NLS-1$
       }
     }
 
@@ -913,7 +914,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                 }
 
                 // Compute a nice name for the targlet and create requirements for all the root IUs.
-                targlet.setName(getTargletName("Default"));
+                targlet.setName(getTargletName("Default")); //$NON-NLS-1$
                 EList<Requirement> targletRequirements = targlet.getRequirements();
                 for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(ius))
                 {
@@ -954,7 +955,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                   // If it's a Git clone task.
                   EObject eObject = it.next();
                   EClass eClass = eObject.eClass();
-                  if ("GitCloneTask".equals(eClass.getName()) && eObject instanceof SetupTask)
+                  if ("GitCloneTask".equals(eClass.getName()) && eObject instanceof SetupTask) //$NON-NLS-1$
                   {
                     // If that task has an ID.
                     SetupTask setupTask = (SetupTask)eObject;
@@ -963,11 +964,11 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                     {
 
                       // Get the value of the remoteURI feature; it should have that feature.
-                      EStructuralFeature eStructuralFeature = eClass.getEStructuralFeature("remoteURI");
+                      EStructuralFeature eStructuralFeature = eClass.getEStructuralFeature("remoteURI"); //$NON-NLS-1$
                       if (eStructuralFeature != null)
                       {
                         // This is the variable reference for this task's location.
-                        String result = "${" + id + ".location}";
+                        String result = "${" + id + ".location}"; //$NON-NLS-1$ //$NON-NLS-2$
                         if (candidate != null)
                         {
                           candidate = result;
@@ -983,14 +984,14 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                             uri = URI.createURI(uri.opaquePart());
                           }
 
-                          if ("git".equals(uri.fileExtension()))
+                          if ("git".equals(uri.fileExtension())) //$NON-NLS-1$
                           {
                             uri = uri.trimFileExtension();
                           }
 
                           // If the path looks exactly like the location for this clone.
                           String baseName = URI.decode(uri.lastSegment());
-                          if (path.toString().endsWith("/" + baseName))
+                          if (path.toString().endsWith("/" + baseName)) //$NON-NLS-1$
                           {
                             // Use the variable for this task.
                             break;
@@ -1106,7 +1107,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
         localeMap = new HashMap<String, String>();
         for (Locale locale : Locale.getAvailableLocales())
         {
-          localeMap.put(locale.toString(), locale.toString() + " - " + locale.getDisplayName());
+          localeMap.put(locale.toString(), locale.toString() + " - " + locale.getDisplayName()); //$NON-NLS-1$
         }
       }
 

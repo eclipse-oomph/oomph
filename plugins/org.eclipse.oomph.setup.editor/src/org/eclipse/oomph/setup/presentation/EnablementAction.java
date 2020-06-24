@@ -28,6 +28,7 @@ import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 
@@ -53,10 +54,10 @@ public final class EnablementAction extends Action
     this.typeText = typeText;
     this.enablementTasks = enablementTasks;
 
-    defaultImageKey = SetupPackage.Literals.SETUP_TASK.isSuperTypeOf(eClass) ? "full/obj16/SetupTask" : "full/obj16/EObject";
+    defaultImageKey = SetupPackage.Literals.SETUP_TASK.isSuperTypeOf(eClass) ? "full/obj16/SetupTask" : "full/obj16/EObject"; //$NON-NLS-1$ //$NON-NLS-2$
 
-    setText(typeText + "...");
-    setToolTipText("Install the " + typeText + " extension model");
+    setText(typeText + "..."); //$NON-NLS-1$
+    setToolTipText(NLS.bind(Messages.EnablementAction_tooltip, typeText));
     setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor(defaultImageKey));
   }
 
@@ -88,7 +89,7 @@ public final class EnablementAction extends Action
       installation.getSetupTasks().addAll(enablementTasks);
 
       SetupWizard updater = new SetupWizard.Updater(self);
-      updater.setTriggerName("ENABLEMENT");
+      updater.setTriggerName("ENABLEMENT"); //$NON-NLS-1$
       updater.openDialog(UIUtil.getShell());
     }
   }

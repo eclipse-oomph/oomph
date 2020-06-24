@@ -69,6 +69,7 @@ import java.util.jar.JarFile;
 /**
  * @author Eike Stepper
  */
+@SuppressWarnings("nls")
 public final class P2Indexer implements IApplication
 {
   private static final String CHARSET = "UTF-8";

@@ -108,7 +108,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
    * @generated
    */
   public static final List<String> FILE_EXTENSIONS = Collections
-      .unmodifiableList(Arrays.asList(SetupEditorPlugin.INSTANCE.getString("_UI_SetupEditorFilenameExtensions").split("\\s*,\\s*")));
+      .unmodifiableList(Arrays.asList(SetupEditorPlugin.INSTANCE.getString("_UI_SetupEditorFilenameExtensions").split("\\s*,\\s*"))); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * A formatted list of supported file extensions, suitable for display.
@@ -116,8 +116,8 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final String FORMATTED_FILE_EXTENSIONS = SetupEditorPlugin.INSTANCE.getString("_UI_SetupEditorFilenameExtensions").replaceAll("\\s*,\\s*",
-      ", ");
+  public static final String FORMATTED_FILE_EXTENSIONS = SetupEditorPlugin.INSTANCE.getString("_UI_SetupEditorFilenameExtensions").replaceAll("\\s*,\\s*", //$NON-NLS-1$ //$NON-NLS-2$
+      ", "); //$NON-NLS-1$
 
   /**
    * This caches an instance of the model package.
@@ -179,8 +179,8 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
   {
     this.workbench = workbench;
     this.selection = selection;
-    setWindowTitle(SetupEditorPlugin.INSTANCE.getString("_UI_Wizard_label"));
-    setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(SetupEditorPlugin.INSTANCE.getImage("full/wizban/NewSetup.png")));
+    setWindowTitle(SetupEditorPlugin.INSTANCE.getString("_UI_Wizard_label")); //$NON-NLS-1$
+    setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(SetupEditorPlugin.INSTANCE.getImage("full/wizban/NewSetup.png"))); //$NON-NLS-1$
   }
 
   /**
@@ -192,8 +192,8 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
   @Override
   public void addPages()
   {
-    templateUsagePage = new TemplateUsagePage("Whatever3");
-    templateUsagePage.setDescription(SetupEditorPlugin.INSTANCE.getString("_UI_Wizard_initial_object_description"));
+    templateUsagePage = new TemplateUsagePage("Whatever3"); //$NON-NLS-1$
+    templateUsagePage.setDescription(SetupEditorPlugin.INSTANCE.getString("_UI_Wizard_initial_object_description")); //$NON-NLS-1$
     configureTemplateUsagePage(templateUsagePage);
     addPage(templateUsagePage);
   }
@@ -327,7 +327,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
       }
       catch (PartInitException exception)
       {
-        MessageDialog.openError(workbenchWindow.getShell(), SetupEditorPlugin.INSTANCE.getString("_UI_OpenEditorError_label"), exception.getMessage());
+        MessageDialog.openError(workbenchWindow.getShell(), SetupEditorPlugin.INSTANCE.getString("_UI_OpenEditorError_label"), exception.getMessage()); //$NON-NLS-1$
         return false;
       }
 
@@ -403,7 +403,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
 
       Label containerLabel = new Label(composite, SWT.LEFT);
       {
-        containerLabel.setText(SetupEditorPlugin.INSTANCE.getString("_UI_ModelObject"));
+        containerLabel.setText(SetupEditorPlugin.INSTANCE.getString("_UI_ModelObject")); //$NON-NLS-1$
 
         GridData data = new GridData();
         data.horizontalAlignment = GridData.FILL;
@@ -431,7 +431,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
 
       Label encodingLabel = new Label(composite, SWT.LEFT);
       {
-        encodingLabel.setText(SetupEditorPlugin.INSTANCE.getString("_UI_XMLEncoding"));
+        encodingLabel.setText(SetupEditorPlugin.INSTANCE.getString("_UI_XMLEncoding")); //$NON-NLS-1$
 
         GridData data = new GridData();
         data.horizontalAlignment = GridData.FILL;
@@ -464,7 +464,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
       String[] items = initialObjectField.getItems();
       for (int i = 0; i < items.length; ++i)
       {
-        if (items[i].equals("Project"))
+        if (items[i].equals("Project")) //$NON-NLS-1$
         {
           initialObjectField.select(i);
           break;
@@ -557,7 +557,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
     {
       try
       {
-        return SetupEditPlugin.INSTANCE.getString("_UI_" + typeName + "_type");
+        return SetupEditPlugin.INSTANCE.getString("_UI_" + typeName + "_type"); //$NON-NLS-1$ //$NON-NLS-2$
       }
       catch (MissingResourceException mre)
       {
@@ -576,7 +576,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
       if (encodings == null)
       {
         encodings = new ArrayList<String>();
-        for (StringTokenizer stringTokenizer = new StringTokenizer(SetupEditorPlugin.INSTANCE.getString("_UI_XMLEncodingChoices")); stringTokenizer
+        for (StringTokenizer stringTokenizer = new StringTokenizer(SetupEditorPlugin.INSTANCE.getString("_UI_XMLEncodingChoices")); stringTokenizer //$NON-NLS-1$
             .hasMoreTokens();)
         {
           encodings.add(stringTokenizer.nextToken());
@@ -621,8 +621,8 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
 
     public void addTemplate(String label, String templateFileName)
     {
-      URI templateFolder = URI.createPlatformPluginURI(SetupEditorPlugin.PLUGIN_ID, false).appendSegment("templates");
-      URI templateFile = templateFolder.appendSegment(templateFileName).appendFragment("/");
+      URI templateFolder = URI.createPlatformPluginURI(SetupEditorPlugin.PLUGIN_ID, false).appendSegment("templates"); //$NON-NLS-1$
+      URI templateFile = templateFolder.appendSegment(templateFileName).appendFragment("/"); //$NON-NLS-1$
 
       SetupTemplate template = new GenericSetupTemplate(label, templateFile);
       template.init(this);
@@ -699,7 +699,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
       UIUtil.applyGridData(templatesContainer).heightHint = 200;
 
       previewButton = new Button(composite, SWT.PUSH);
-      previewButton.setText("Preview >>>");
+      previewButton.setText(Messages.SetupModelWizard_previewButton + " >>>"); //$NON-NLS-1$
       GridData data = setButtonLayoutData(previewButton);
       data.horizontalAlignment = GridData.BEGINNING;
       previewButton.setLayoutData(data);
@@ -762,7 +762,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
             shell.setSize(shellSize.x, shellSize.y + sashHeight);
             composite.layout();
 
-            previewButton.setText("<<< Preview");
+            previewButton.setText("<<< " + Messages.SetupModelWizard_previewButton); //$NON-NLS-1$
           }
           else
           {
@@ -777,7 +777,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
             composite.layout();
             shell.setSize(shellSize.x, shellSize.y - sashHeight);
 
-            previewButton.setText("Preview >>>");
+            previewButton.setText(Messages.SetupModelWizard_previewButton + " >>>"); //$NON-NLS-1$
           }
         }
       });
@@ -849,7 +849,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
         SetupEditorPlugin.getPlugin().log(ex);
       }
 
-      return "No template selected";
+      return Messages.SetupModelWizard_noTemplateSelected;
     }
 
     private SetupTemplate getSelectedTemplate()
@@ -902,17 +902,17 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
     public void init(IWorkbench workbench, IStructuredSelection selection)
     {
       super.init(workbench, selection);
-      setWindowTitle(SetupEditorPlugin.INSTANCE.getString("_UI_Wizard_label"));
-      setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(SetupEditorPlugin.INSTANCE.getImage("full/wizban/NewSetup.png")));
+      setWindowTitle(SetupEditorPlugin.INSTANCE.getString("_UI_Wizard_label")); //$NON-NLS-1$
+      setDefaultPageImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(SetupEditorPlugin.INSTANCE.getImage("full/wizban/NewSetup.png"))); //$NON-NLS-1$
     }
 
     @Override
     protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
     {
-      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label"));
-      templateUsagePage.addTemplate("Eclipse Project", "@EclipseProjectTemplate@.setup");
-      templateUsagePage.addTemplate("Simple Project", "@SimpleProjectTemplate@.setup");
-      templateUsagePage.addTemplate("Github Project", "@GithubProjectTemplate@.setup");
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label")); //$NON-NLS-1$
+      templateUsagePage.addTemplate(Messages.SetupModelWizard_template_eclipseProject, "@EclipseProjectTemplate@.setup"); //$NON-NLS-1$
+      templateUsagePage.addTemplate(Messages.SetupModelWizard_template_simpleProject, "@SimpleProjectTemplate@.setup"); //$NON-NLS-1$
+      templateUsagePage.addTemplate(Messages.SetupModelWizard_template_githubProject, "@GithubProjectTemplate@.setup"); //$NON-NLS-1$
     }
   }
 
@@ -924,9 +924,9 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
     @Override
     protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
     {
-      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label3"));
-      templateUsagePage.addTemplate("Simple Configuration", "@ConfigurationTemplate@.setup");
-      templateUsagePage.addTemplate("Copy Current Configuration", "@CopyConfigurationTemplate@.setup");
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label3")); //$NON-NLS-1$
+      templateUsagePage.addTemplate(Messages.SetupModelWizard_template_simpleConfiguration, "@ConfigurationTemplate@.setup"); //$NON-NLS-1$
+      templateUsagePage.addTemplate(Messages.SetupModelWizard_template_copyCurrentConfiguration, "@CopyConfigurationTemplate@.setup"); //$NON-NLS-1$
     }
   }
 
@@ -938,8 +938,8 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
     @Override
     protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
     {
-      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label4"));
-      templateUsagePage.addTemplate("Simple Index", "@IndexTemplate@.setup");
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label4")); //$NON-NLS-1$
+      templateUsagePage.addTemplate(Messages.SetupModelWizard_template_simpleIndex, "@IndexTemplate@.setup"); //$NON-NLS-1$
     }
   }
 
@@ -951,8 +951,8 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
     @Override
     protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
     {
-      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label5"));
-      templateUsagePage.addTemplate("Simple Product Catalog", "@ProductCatalogTemplate@.setup");
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label5")); //$NON-NLS-1$
+      templateUsagePage.addTemplate(Messages.SetupModelWizard_template_simpleProductCatalog, "@ProductCatalogTemplate@.setup"); //$NON-NLS-1$
     }
   }
 
@@ -964,8 +964,8 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
     @Override
     protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
     {
-      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label6"));
-      templateUsagePage.addTemplate("Simple Project Catalog", "@ProjectCatalogTemplate@.setup");
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label6")); //$NON-NLS-1$
+      templateUsagePage.addTemplate(Messages.SetupModelWizard_template_simpleProjectCatalog, "@ProjectCatalogTemplate@.setup"); //$NON-NLS-1$
     }
   }
 
@@ -977,8 +977,8 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
     @Override
     protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
     {
-      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label2"));
-      templateUsagePage.addTemplate("Simple User Product", "@UserProductTemplate@.setup");
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label2")); //$NON-NLS-1$
+      templateUsagePage.addTemplate(Messages.SetupModelWizard_template_simpleUserProduct, "@UserProductTemplate@.setup"); //$NON-NLS-1$
     }
   }
 
@@ -990,8 +990,8 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
     @Override
     protected void configureTemplateUsagePage(TemplateUsagePage templateUsagePage)
     {
-      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label7"));
-      templateUsagePage.addTemplate("Macro", "@MacroTemplate@.setup");
+      templateUsagePage.setTitle(SetupEditorPlugin.INSTANCE.getString("_UI_SetupModelWizard_label7")); //$NON-NLS-1$
+      templateUsagePage.addTemplate(Messages.SetupModelWizard_template_macro, "@MacroTemplate@.setup"); //$NON-NLS-1$
     }
   }
 }

@@ -33,14 +33,14 @@ import java.io.File;
  */
 public class TargetDefinitionExportWizard extends Wizard implements IExportWizard
 {
-  public static final String TITLE = "Export Target Definition";
+  public static final String TITLE = Messages.TargetDefinitionExportWizard_title;
 
   private TargetDefinitionExportWizardPage page;
 
   public TargetDefinitionExportWizard()
   {
     setWindowTitle(TITLE);
-    setDefaultPageImageDescriptor(TargletsUIPlugin.INSTANCE.getImageDescriptor("target_wiz.png"));
+    setDefaultPageImageDescriptor(TargletsUIPlugin.INSTANCE.getImageDescriptor("target_wiz.png")); //$NON-NLS-1$
   }
 
   public void init(IWorkbench workbench, IStructuredSelection selection)
@@ -59,7 +59,7 @@ public class TargetDefinitionExportWizard extends Wizard implements IExportWizar
     final ITargetDefinition targetDefinition = page.getTargetDefinition();
     final File exportFolder = page.getExportFolder();
 
-    new Job("Export Target Definition")
+    new Job(Messages.TargetDefinitionExportWizard_exportTargetJob_name)
     {
       @Override
       protected IStatus run(IProgressMonitor monitor)
@@ -67,7 +67,7 @@ public class TargetDefinitionExportWizard extends Wizard implements IExportWizar
         try
         {
           boolean needsResolution = !targetDefinition.isResolved();
-          monitor.beginTask("", needsResolution ? 2 : 1);
+          monitor.beginTask("", needsResolution ? 2 : 1); //$NON-NLS-1$
 
           if (needsResolution)
           {
@@ -96,7 +96,7 @@ public class TargetDefinitionExportWizard extends Wizard implements IExportWizar
         TargetBundle[] bundles = targetDefinition.getAllBundles();
         int bundlesCount = bundles != null ? bundles.length : 0;
 
-        monitor.beginTask("", featuresCount + bundlesCount);
+        monitor.beginTask("", featuresCount + bundlesCount); //$NON-NLS-1$
 
         try
         {
@@ -109,7 +109,7 @@ public class TargetDefinitionExportWizard extends Wizard implements IExportWizar
               String source = feature.getLocation();
               monitor.subTask(source);
 
-              copy(source, new File(exportFolder, "features"));
+              copy(source, new File(exportFolder, "features")); //$NON-NLS-1$
               monitor.worked(1);
             }
           }
@@ -123,7 +123,7 @@ public class TargetDefinitionExportWizard extends Wizard implements IExportWizar
               String source = bundle.getBundleInfo().getLocation().getPath();
               monitor.subTask(source);
 
-              copy(source, new File(exportFolder, "plugins"));
+              copy(source, new File(exportFolder, "plugins")); //$NON-NLS-1$
               monitor.worked(1);
             }
           }

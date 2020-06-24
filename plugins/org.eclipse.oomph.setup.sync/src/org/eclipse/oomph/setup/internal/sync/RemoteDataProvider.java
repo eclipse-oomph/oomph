@@ -36,9 +36,9 @@ import java.util.zip.GZIPOutputStream;
  */
 public class RemoteDataProvider implements DataProvider
 {
-  public static final String APPLICATION_TOKEN = "cNhDr0INs8T109P8h6E1r_GvU3I";
+  public static final String APPLICATION_TOKEN = "cNhDr0INs8T109P8h6E1r_GvU3I"; //$NON-NLS-1$
 
-  public static final String KEY = "user_setup";
+  public static final String KEY = "user_setup"; //$NON-NLS-1$
 
   private static final byte[] GZIP_MAGIC = { (byte)0x1f, (byte)0x8b };
 
@@ -108,7 +108,7 @@ public class RemoteDataProvider implements DataProvider
     {
       InputStream contents = new FileInputStream(file);
 
-      if (!Boolean.getBoolean("org.eclipse.oomph.setup.sync.gzip.skip"))
+      if (!Boolean.getBoolean("org.eclipse.oomph.setup.sync.gzip.skip")) //$NON-NLS-1$
       {
         contents = new CompressingInputStream(contents);
       }
@@ -129,7 +129,7 @@ public class RemoteDataProvider implements DataProvider
   @Override
   public String toString()
   {
-    return getClass().getSimpleName() + "[" + getURI() + "]";
+    return getClass().getSimpleName() + "[" + getURI() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   public static void saveContents(InputStream contents, File file) throws IOException
@@ -157,7 +157,7 @@ public class RemoteDataProvider implements DataProvider
 
   public static void uncompressContents(InputStream contents, File file) throws IOException
   {
-    if (!Boolean.getBoolean("org.eclipse.oomph.setup.sync.gunzip.skip"))
+    if (!Boolean.getBoolean("org.eclipse.oomph.setup.sync.gunzip.skip")) //$NON-NLS-1$
     {
       contents = new BufferedInputStream(contents);
       contents.mark(GZIP_MAGIC_LENGTH);
@@ -257,7 +257,7 @@ public class RemoteDataProvider implements DataProvider
    */
   public static class SyncStorageCache extends FileStorageCache.SingleApplication.SingleKey
   {
-    private static final String FILE_NAME_PREFIX = "remote.cache";
+    private static final String FILE_NAME_PREFIX = "remote.cache"; //$NON-NLS-1$
 
     private static final String PROPERTIES_FILE_NAME = FILE_NAME_PREFIX + PROPERTIES;
 

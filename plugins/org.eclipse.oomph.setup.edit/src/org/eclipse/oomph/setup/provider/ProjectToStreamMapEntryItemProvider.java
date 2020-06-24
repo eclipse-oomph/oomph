@@ -54,8 +54,10 @@ public class ProjectToStreamMapEntryItemProvider extends ItemProviderAdapter
     implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
 {
   private ModelElementItemProvider.HierarchicalPropertyDescriptor keyPropertyDescriptor = new ModelElementItemProvider.HierarchicalPropertyDescriptor(
-      ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ProjectToStreamMapEntry_key_feature"),
-      getString("_UI_PropertyDescriptor_description", "_UI_ProjectToStreamMapEntry_key_feature", "_UI_ProjectToStreamMapEntry_type"),
+      ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ProjectToStreamMapEntry_key_feature"), //$NON-NLS-1$
+      getString("_UI_PropertyDescriptor_description", //$NON-NLS-1$
+          "_UI_ProjectToStreamMapEntry_key_feature", //$NON-NLS-1$
+          "_UI_ProjectToStreamMapEntry_type"), //$NON-NLS-1$
       SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY__KEY, true, false, true, null, null, null)
   {
     @Override
@@ -102,8 +104,8 @@ public class ProjectToStreamMapEntryItemProvider extends ItemProviderAdapter
   };
 
   protected ItemPropertyDescriptor valuePropertyDescriptor = new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-      getResourceLocator(), getString("_UI_ProjectToStreamMapEntry_value_feature"),
-      getString("_UI_PropertyDescriptor_description", "_UI_ProjectToStreamMapEntry_value_feature", "_UI_ProjectToStreamMapEntry_type"),
+      getResourceLocator(), getString("_UI_ProjectToStreamMapEntry_value_feature"), //$NON-NLS-1$
+      getString("_UI_PropertyDescriptor_description", "_UI_ProjectToStreamMapEntry_value_feature", "_UI_ProjectToStreamMapEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY__VALUE, true, false, true, null, null, null)
   {
     @Override
@@ -177,8 +179,8 @@ public class ProjectToStreamMapEntryItemProvider extends ItemProviderAdapter
   protected void addSelectionPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ProjectToStreamMapEntry_selection_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ProjectToStreamMapEntry_selection_feature", "_UI_ProjectToStreamMapEntry_type"),
+        getString("_UI_ProjectToStreamMapEntry_selection_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ProjectToStreamMapEntry_selection_feature", "_UI_ProjectToStreamMapEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY__SELECTION, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -202,7 +204,7 @@ public class ProjectToStreamMapEntryItemProvider extends ItemProviderAdapter
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ProjectToStreamMapEntry"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ProjectToStreamMapEntry")); //$NON-NLS-1$
   }
 
   /**
@@ -223,6 +225,7 @@ public class ProjectToStreamMapEntryItemProvider extends ItemProviderAdapter
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     @SuppressWarnings("unchecked")

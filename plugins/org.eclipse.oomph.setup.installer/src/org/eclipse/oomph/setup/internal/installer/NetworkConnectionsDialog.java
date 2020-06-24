@@ -34,9 +34,9 @@ import java.lang.reflect.Method;
 @SuppressWarnings("restriction")
 public class NetworkConnectionsDialog extends AbstractPreferenceDialog
 {
-  public static final String TITLE = "Network Connections";
+  public static final String TITLE = Messages.NetworkConnectionsDialog__title;
 
-  public static final String DESCRIPTION = "Adjust your network connection settings";
+  public static final String DESCRIPTION = Messages.NetworkConnectionsDialog__description;
 
   public NetworkConnectionsDialog(Shell parentShell)
   {
@@ -52,7 +52,7 @@ public class NetworkConnectionsDialog extends AbstractPreferenceDialog
   @Override
   protected String getDefaultMessage()
   {
-    return DESCRIPTION + ".";
+    return DESCRIPTION + "."; //$NON-NLS-1$
   }
 
   @Override
@@ -121,7 +121,7 @@ public class NetworkConnectionsDialog extends AbstractPreferenceDialog
 
     private int createProviderComposite(Composite composite)
     {
-      Method method = ReflectUtil.getMethod(ProxyPreferencePage.class, "createProviderComposite", Composite.class);
+      Method method = ReflectUtil.getMethod(ProxyPreferencePage.class, "createProviderComposite", Composite.class); //$NON-NLS-1$
       ReflectUtil.invokeMethod(method, this, composite);
       Control control = getLastChild(composite);
       Point size = control.computeSize(SWT.DEFAULT, SWT.DEFAULT);
@@ -130,7 +130,7 @@ public class NetworkConnectionsDialog extends AbstractPreferenceDialog
 
     private int createProxyEntriesComposite(Composite composite)
     {
-      Method method = ReflectUtil.getMethod(ProxyPreferencePage.class, "createProxyEntriesComposite", Composite.class);
+      Method method = ReflectUtil.getMethod(ProxyPreferencePage.class, "createProxyEntriesComposite", Composite.class); //$NON-NLS-1$
       ReflectUtil.invokeMethod(method, this, composite);
 
       Control control = getLastChild(composite);
@@ -150,7 +150,7 @@ public class NetworkConnectionsDialog extends AbstractPreferenceDialog
 
     private void createNonProxiedHostsComposite(Composite composite, int height)
     {
-      Method method = ReflectUtil.getMethod(ProxyPreferencePage.class, "createNonProxiedHostsComposite", Composite.class);
+      Method method = ReflectUtil.getMethod(ProxyPreferencePage.class, "createNonProxiedHostsComposite", Composite.class); //$NON-NLS-1$
       ReflectUtil.invokeMethod(method, this, composite);
 
       Control control = getLastChild(composite);
@@ -161,7 +161,7 @@ public class NetworkConnectionsDialog extends AbstractPreferenceDialog
 
     private void initializeValues()
     {
-      Method method = ReflectUtil.getMethod(ProxyPreferencePage.class, "initializeValues");
+      Method method = ReflectUtil.getMethod(ProxyPreferencePage.class, "initializeValues"); //$NON-NLS-1$
       ReflectUtil.invokeMethod(method, this);
     }
   }

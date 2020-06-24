@@ -25,6 +25,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.osgi.util.NLS;
 
 import org.w3c.dom.Element;
 
@@ -97,7 +98,7 @@ public abstract class XMLProjectFactoryImpl extends ProjectFactoryImpl implement
     }
     catch (Exception ex)
     {
-      String message = "Problem parsing " + (xmlFile != null ? xmlFile : xmlFilePath);
+      String message = NLS.bind(Messages.XMLProjectFactoryImpl_ProblemParsing_exception, xmlFile != null ? xmlFile : xmlFilePath);
       ResourcesPlugin.INSTANCE.log(new Exception(message, ex));
     }
 

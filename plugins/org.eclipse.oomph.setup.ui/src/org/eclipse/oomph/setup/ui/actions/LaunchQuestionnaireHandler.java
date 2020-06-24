@@ -29,7 +29,7 @@ public class LaunchQuestionnaireHandler extends AbstractHandler
   {
     if (!Questionnaire.exists())
     {
-      throw new ExecutionException("No questionnaire found");
+      throw new ExecutionException("No questionnaire found"); //$NON-NLS-1$
     }
 
     Shell parentShell = HandlerUtil.getActiveShellChecked(event);

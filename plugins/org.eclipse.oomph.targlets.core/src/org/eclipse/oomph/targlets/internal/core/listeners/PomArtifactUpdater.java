@@ -30,6 +30,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.VersionRange;
+import org.eclipse.osgi.util.NLS;
 
 import org.w3c.dom.Element;
 
@@ -45,11 +46,11 @@ import java.util.Map.Entry;
  */
 public class PomArtifactUpdater extends WorkspaceUpdateListener
 {
-  public static final String ANNOTATION = "http:/www.eclipse.org/oomph/targlets/PomArtifactUpdater";
+  public static final String ANNOTATION = "http:/www.eclipse.org/oomph/targlets/PomArtifactUpdater"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_SKIP_ARTIFACT_IDS = "skipArtifactIDs";
+  public static final String ANNOTATION_SKIP_ARTIFACT_IDS = "skipArtifactIDs"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_SKIP_VERSIONS = "skipVersions";
+  public static final String ANNOTATION_SKIP_VERSIONS = "skipVersions"; //$NON-NLS-1$
 
   public PomArtifactUpdater()
   {
@@ -65,8 +66,8 @@ public class PomArtifactUpdater extends WorkspaceUpdateListener
       for (Annotation annotation : BaseUtil.getAnnotations(targlet, ANNOTATION))
       {
         EMap<String, String> details = annotation.getDetails();
-        boolean skipArtifactIDs = "true".equalsIgnoreCase(details.get(ANNOTATION_SKIP_ARTIFACT_IDS));
-        boolean skipVersions = "true".equalsIgnoreCase(details.get(ANNOTATION_SKIP_VERSIONS));
+        boolean skipArtifactIDs = "true".equalsIgnoreCase(details.get(ANNOTATION_SKIP_ARTIFACT_IDS)); //$NON-NLS-1$
+        boolean skipVersions = "true".equalsIgnoreCase(details.get(ANNOTATION_SKIP_VERSIONS)); //$NON-NLS-1$
 
         if (!skipArtifactIDs || !skipVersions)
         {
@@ -81,7 +82,7 @@ public class PomArtifactUpdater extends WorkspaceUpdateListener
       final IProgressMonitor monitor) throws Exception
   {
     final DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
-    monitor.subTask("Checking for POM artifact updates");
+    monitor.subTask(Messages.PomArtifactUpdater_Checking_task);
 
     for (Entry<IInstallableUnit, WorkspaceIUInfo> entry : workspaceIUInfos.entrySet())
     {
@@ -91,7 +92,7 @@ public class PomArtifactUpdater extends WorkspaceUpdateListener
       WorkspaceIUInfo info = entry.getValue();
       File folder = info.getLocation();
 
-      final File pom = new File(folder, "pom.xml");
+      final File pom = new File(folder, "pom.xml"); //$NON-NLS-1$
       if (pom.isFile())
       {
         new FileUpdater()
@@ -116,16 +117,16 @@ public class PomArtifactUpdater extends WorkspaceUpdateListener
                   newID = newID.substring(0, newID.length() - Requirement.PROJECT_SUFFIX.length());
                 }
 
-                ElementUpdater artifactIDUpdater = new ElementUpdater(rootElement, "artifactId");
+                ElementUpdater artifactIDUpdater = new ElementUpdater(rootElement, "artifactId"); //$NON-NLS-1$
                 newContents = artifactIDUpdater.update(newContents, newID);
               }
 
               if (!skipVersions)
               {
                 VersionRange versionRange = P2Factory.eINSTANCE.createVersionRange(iu.getVersion(), VersionSegment.MICRO);
-                String newVersion = versionRange.getMinimum() + "-SNAPSHOT";
+                String newVersion = versionRange.getMinimum() + "-SNAPSHOT"; //$NON-NLS-1$
 
-                ElementUpdater versionUpdater = new ElementUpdater(rootElement, "version");
+                ElementUpdater versionUpdater = new ElementUpdater(rootElement, "version"); //$NON-NLS-1$
                 newContents = versionUpdater.update(newContents, newVersion);
               }
 
@@ -144,7 +145,8 @@ public class PomArtifactUpdater extends WorkspaceUpdateListener
           @Override
           protected void setContents(URI uri, String encoding, String contents) throws IOException
           {
-            monitor.subTask("Updating " + (uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
+            monitor.subTask(
+                NLS.bind(Messages.PomArtifactUpdater_Updating_task, uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
             super.setContents(uri, encoding, contents);
           }
         }.update(pom);

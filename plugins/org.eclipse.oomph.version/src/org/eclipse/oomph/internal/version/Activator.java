@@ -45,9 +45,9 @@ import java.util.Set;
  */
 public class Activator extends Plugin
 {
-  public static final String PLUGIN_ID = "org.eclipse.oomph.version";
+  public static final String PLUGIN_ID = "org.eclipse.oomph.version"; //$NON-NLS-1$
 
-  private static final String BUILD_STATES = "buildStates.bin";
+  private static final String BUILD_STATES = "buildStates.bin"; //$NON-NLS-1$
 
   private static Activator plugin;
 
@@ -129,7 +129,7 @@ public class Activator extends Plugin
     Activator.postBuildListener = postBuildListener;
   }
 
-  private static final String PREFERENCE_NODE = "/instance/" + PLUGIN_ID;
+  private static final String PREFERENCE_NODE = "/instance/" + PLUGIN_ID; //$NON-NLS-1$
 
   public static Set<String> getReleasePaths()
   {
@@ -195,7 +195,7 @@ public class Activator extends Plugin
     {
       if (root.nodeExists(PREFERENCE_NODE))
       {
-        Preferences node = root.node(PREFERENCE_NODE + "/laxLowerBound");
+        Preferences node = root.node(PREFERENCE_NODE + "/laxLowerBound"); //$NON-NLS-1$
         String value = node.get(releasePath, null);
         if (value != null)
         {
@@ -214,7 +214,7 @@ public class Activator extends Plugin
   public static void setLaxLowerBoundCheckMode(String releasePath, LaxLowerBoundCheckMode laxLowerBoundCheckMode)
   {
     Preferences root = Platform.getPreferencesService().getRootNode();
-    Preferences node = root.node(PREFERENCE_NODE + "/laxLowerBound");
+    Preferences node = root.node(PREFERENCE_NODE + "/laxLowerBound"); //$NON-NLS-1$
     node.put(releasePath, laxLowerBoundCheckMode.toString());
     try
     {

@@ -70,7 +70,7 @@ public class ProjectConfigValidator extends EObjectValidator
    * @see org.eclipse.emf.common.util.Diagnostic#getCode()
    * @generated
    */
-  public static final String DIAGNOSTIC_SOURCE = "org.eclipse.oomph.projectconfig";
+  public static final String DIAGNOSTIC_SOURCE = "org.eclipse.oomph.projectconfig"; //$NON-NLS-1$
 
   /**
    * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -319,11 +319,11 @@ public class ProjectConfigValidator extends EObjectValidator
     {
       if (i == size - 1 && size > 1)
       {
-        result.append(" and ");
+        result.append(Messages.ProjectConfigValidator_And);
       }
       else if (i != 0)
       {
-        result.append(", ");
+        result.append(", "); //$NON-NLS-1$
       }
       result.append(getObjectLabel(values.get(i), context));
     }
@@ -351,11 +351,11 @@ public class ProjectConfigValidator extends EObjectValidator
         {
           if (i == size - 1 && size > 1)
           {
-            substitution.append(" and ");
+            substitution.append(Messages.ProjectConfigValidator_And);
           }
           else if (i != 0)
           {
-            substitution.append(", ");
+            substitution.append(", "); //$NON-NLS-1$
           }
 
           int index = substitution.length();
@@ -364,7 +364,7 @@ public class ProjectConfigValidator extends EObjectValidator
           {
             if (count++ > 0)
             {
-              substitution.insert(index, "/");
+              substitution.insert(index, "/"); //$NON-NLS-1$
             }
 
             substitution.insert(index, getObjectLabel(preferenceNode, context));
@@ -375,14 +375,14 @@ public class ProjectConfigValidator extends EObjectValidator
         data.add(project);
         data.add(ProjectConfigPackage.Literals.PROJECT__PREFERENCE_PROFILE_REFERENCES);
         data.addAll(preferenceNodes);
-        diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_AllPreferencesManaged_diagnostic", new Object[] { substitution },
+        diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_AllPreferencesManaged_diagnostic", new Object[] { substitution }, //$NON-NLS-1$
             data.toArray(), context));
 
         for (Map.Entry<PreferenceNode, Set<Property>> entry : unmanagedPreferences.entrySet())
         {
           for (Property property : entry.getValue())
           {
-            diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_UnmanagedProperty_diagnostic",
+            diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_UnmanagedProperty_diagnostic", //$NON-NLS-1$
                 new Object[] { getObjectLabel(property, context) }, new Object[] { property, project }, context));
 
           }
@@ -520,9 +520,8 @@ public class ProjectConfigValidator extends EObjectValidator
             data.add(1, project);
             data.addAll(2, preferencesProfiles);
 
-            diagnostics.add(createDiagnostic(
-                Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_NonUniquePropertyApplication_diagnostic", new Object[] { getObjectLabel(property, context),
-                    getObjectLabel(preferencesProfiles, context), getObjectLabel(project, context), getObjectLabel(otherProperties, context) },
+            diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_NonUniquePropertyApplication_diagnostic", //$NON-NLS-1$
+                new Object[] { getObjectLabel(property, context), getObjectLabel(preferencesProfiles, context), getObjectLabel(project, context), getObjectLabel(otherProperties, context) },
                 data.toArray(), context));
           }
         }
@@ -545,7 +544,7 @@ public class ProjectConfigValidator extends EObjectValidator
             Set<Object> data = new LinkedHashSet<Object>();
             data.add(key);
             data.addAll(value.keySet());
-            BasicDiagnostic diagnostic = createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_OverlappingPreferenceProfile_diagnostic",
+            BasicDiagnostic diagnostic = createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_OverlappingPreferenceProfile_diagnostic", //$NON-NLS-1$
                 new Object[] { getObjectLabel(key, context), getObjectLabel(value.keySet(), context) }, data.toArray(), context);
 
             List<Project> referentProjects = new ArrayList<Project>(key.getReferentProjects());
@@ -561,7 +560,7 @@ public class ProjectConfigValidator extends EObjectValidator
               data2.add(otherPreferenceProfile);
               data2.addAll(otherReferentProjects);
               data2.addAll(propertyEntry.getValue());
-              BasicDiagnostic diagnostic2 = createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_OverlappingPreferenceProfileProperty_diagnostic",
+              BasicDiagnostic diagnostic2 = createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_OverlappingPreferenceProfileProperty_diagnostic", //$NON-NLS-1$
                   new Object[] { getObjectLabel(otherPreferenceProfile, context), getObjectLabel(otherReferentProjects, context) }, data2.toArray(), context);
               diagnostic.add(diagnostic2);
             }
@@ -628,12 +627,12 @@ public class ProjectConfigValidator extends EObjectValidator
           Property managedProperty = propertyEntry.getKey();
           Property managingProperty = propertyEntry.getValue();
 
-          diagnostics.add(createDiagnostic(Diagnostic.WARNING, DIAGNOSTIC_SOURCE, 0, "_UI_InconsistentPropertyValue_diagnostic",
+          diagnostics.add(createDiagnostic(Diagnostic.WARNING, DIAGNOSTIC_SOURCE, 0, "_UI_InconsistentPropertyValue_diagnostic", //$NON-NLS-1$
               new Object[] { getObjectLabel(managedProperty, context), PreferencesFactory.eINSTANCE.createEscapedString(managedProperty.getValue()),
                   getObjectLabel(managingProperty, context), PreferencesFactory.eINSTANCE.createEscapedString(managingProperty.getValue()) },
               new Object[] { managedProperty, managingProperty }, context));
 
-          diagnostics.add(createDiagnostic(Diagnostic.WARNING, DIAGNOSTIC_SOURCE, 0, "_UI_InconsistentPropertyValue_diagnostic",
+          diagnostics.add(createDiagnostic(Diagnostic.WARNING, DIAGNOSTIC_SOURCE, 0, "_UI_InconsistentPropertyValue_diagnostic", //$NON-NLS-1$
               new Object[] { getObjectLabel(managedProperty, context), PreferencesFactory.eINSTANCE.createEscapedString(managedProperty.getValue()),
                   getObjectLabel(managingProperty, context), PreferencesFactory.eINSTANCE.createEscapedString(managingProperty.getValue()) },
               new Object[] { project, managedProperty, managingProperty }, context));

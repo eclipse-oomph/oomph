@@ -35,18 +35,18 @@ import java.util.regex.Pattern;
  */
 public class MarketPlaceListing
 {
-  private static final String MARKET_PLACE_ANNOTATION = "https://marketplace.eclipse.org";
+  private static final String MARKET_PLACE_ANNOTATION = "https://marketplace.eclipse.org"; //$NON-NLS-1$
 
-  private static final Pattern MARKET_PLACE_CONTENT_PATTERN = Pattern.compile("(https?://marketplace\\.eclipse\\.org/content/[^/?#]*+)");
+  private static final Pattern MARKET_PLACE_CONTENT_PATTERN = Pattern.compile("(https?://marketplace\\.eclipse\\.org/content/[^/?#]*+)"); //$NON-NLS-1$
 
   private static final Pattern MARKET_PLACE_INSTALL_PATTERN = Pattern
-      .compile("https?://marketplace\\.eclipse\\.org/marketplace-client-intro\\?mpc_install=([0-9]+)");
+      .compile("https?://marketplace\\.eclipse\\.org/marketplace-client-intro\\?mpc_install=([0-9]+)"); //$NON-NLS-1$
 
-  private static final Pattern IU_PATTERN = Pattern.compile(" *<iu( ?[^>]*)>([^<]+)</iu>");
+  private static final Pattern IU_PATTERN = Pattern.compile(" *<iu( ?[^>]*)>([^<]+)</iu>"); //$NON-NLS-1$
 
-  private static final Pattern UPDATE_URL_PATTERN = Pattern.compile(" *<updateurl>([^<]+)</updateurl>");
+  private static final Pattern UPDATE_URL_PATTERN = Pattern.compile(" *<updateurl>([^<]+)</updateurl>"); //$NON-NLS-1$
 
-  private static final Pattern NODE_PATTERN = Pattern.compile(" *<node.*name=\"([^\"]*)\".*url=\"([^\"]*)\".*>");
+  private static final Pattern NODE_PATTERN = Pattern.compile(" *<node.*name=\"([^\"]*)\".*url=\"([^\"]*)\".*>"); //$NON-NLS-1$
 
   private static final Map<URI, MarketPlaceListing> MARKET_PLACE_LISTINGS = Collections.synchronizedMap(new WeakHashMap<URI, MarketPlaceListing>());
 
@@ -70,10 +70,10 @@ public class MarketPlaceListing
     try
     {
       inputStream = uriConverter.createInputStream(uri);
-      List<String> lines = IOUtil.readLines(inputStream, "UTF-8");
-      if (!lines.contains("<marketplace>"))
+      List<String> lines = IOUtil.readLines(inputStream, "UTF-8"); //$NON-NLS-1$
+      if (!lines.contains("<marketplace>")) //$NON-NLS-1$
       {
-        throw new IOException("Missing market place entry: " + (lines.isEmpty() ? "<no-content>" : lines.get(0)));
+        throw new IOException("Missing market place entry: " + (lines.isEmpty() ? "<no-content>" : lines.get(0))); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
       for (String line : lines)
@@ -86,12 +86,12 @@ public class MarketPlaceListing
           requirements.add(requirement);
 
           String attributes = iuMatcher.group(1);
-          if (attributes.contains("required=\"TRUE\""))
+          if (attributes.contains("required=\"TRUE\"")) //$NON-NLS-1$
           {
             setRequired(requirement);
           }
 
-          if (attributes.contains("selected=\"TRUE\""))
+          if (attributes.contains("selected=\"TRUE\"")) //$NON-NLS-1$
           {
             setSelected(requirement);
           }
@@ -108,9 +108,9 @@ public class MarketPlaceListing
         {
           label = nodeMatcher.group(1);
           String listingValue = nodeMatcher.group(2);
-          if (listingValue.startsWith("http:"))
+          if (listingValue.startsWith("http:")) //$NON-NLS-1$
           {
-            listingValue = "https:" + listingValue.substring("http:".length());
+            listingValue = "https:" + listingValue.substring("http:".length()); //$NON-NLS-1$ //$NON-NLS-2$
           }
 
           listing = URI.createURI(listingValue);
@@ -161,7 +161,7 @@ public class MarketPlaceListing
   public static boolean isRequired(Requirement requirement)
   {
     Annotation annotation = requirement.getAnnotation(MARKET_PLACE_ANNOTATION);
-    return annotation != null && "true".equals(annotation.getDetails().get("required"));
+    return annotation != null && "true".equals(annotation.getDetails().get("required")); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   private static void setRequired(Requirement requirement)
@@ -173,13 +173,13 @@ public class MarketPlaceListing
       annotation.setSource(MARKET_PLACE_ANNOTATION);
       requirement.getAnnotations().add(annotation);
     }
-    annotation.getDetails().put("required", "true");
+    annotation.getDetails().put("required", "true"); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   public static boolean isSelected(Requirement requirement)
   {
     Annotation annotation = requirement.getAnnotation(MARKET_PLACE_ANNOTATION);
-    return annotation != null && "true".equals(annotation.getDetails().get("selected"));
+    return annotation != null && "true".equals(annotation.getDetails().get("selected")); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   private static void setSelected(Requirement requirement)
@@ -191,7 +191,7 @@ public class MarketPlaceListing
       annotation.setSource(MARKET_PLACE_ANNOTATION);
       requirement.getAnnotations().add(annotation);
     }
-    annotation.getDetails().put("selected", "true");
+    annotation.getDetails().put("selected", "true"); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   public static boolean isMarketPlaceListing(URI uri)
@@ -231,13 +231,13 @@ public class MarketPlaceListing
     Matcher matcher = MARKET_PLACE_CONTENT_PATTERN.matcher(uri.toString());
     if (matcher.find())
     {
-      return URI.createURI(matcher.group(1) + "/api/p");
+      return URI.createURI(matcher.group(1) + "/api/p"); //$NON-NLS-1$
     }
 
     matcher = MARKET_PLACE_INSTALL_PATTERN.matcher(uri.toString());
     if (matcher.matches())
     {
-      return URI.createURI("https://marketplace.eclipse.org/node/" + matcher.group(1) + "/api/p");
+      return URI.createURI("https://marketplace.eclipse.org/node/" + matcher.group(1) + "/api/p"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     return null;

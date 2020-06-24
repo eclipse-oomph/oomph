@@ -64,7 +64,7 @@ public class ComponentExtGeneratorItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ComponentExtGenerator"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ComponentExtGenerator")); //$NON-NLS-1$
   }
 
   /**
@@ -87,7 +87,7 @@ public class ComponentExtGeneratorItemProvider extends ModelElementItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_ComponentExtGenerator_type");
+    return getString("_UI_ComponentExtGenerator_type"); //$NON-NLS-1$
   }
 
   /**

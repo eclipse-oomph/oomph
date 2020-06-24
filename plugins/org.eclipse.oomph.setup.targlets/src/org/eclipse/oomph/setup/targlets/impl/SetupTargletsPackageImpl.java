@@ -340,6 +340,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -366,34 +367,34 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
     targletTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(targletTaskEClass, TargletTask.class, "TargletTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getTargletTask_Targlets(), theTargletPackage.getTarglet(), null, "targlets", null, 0, -1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(targletTaskEClass, TargletTask.class, "TargletTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getTargletTask_Targlets(), theTargletPackage.getTarglet(), null, "targlets", null, 0, -1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTargletTask_TargletURIs(), ecorePackage.getEString(), "targletURIs", null, 0, -1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getTargletTask_TargletURIs(), ecorePackage.getEString(), "targletURIs", null, 0, -1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTargletTask_OperatingSystem(), ecorePackage.getEString(), "operatingSystem", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getTargletTask_OperatingSystem(), ecorePackage.getEString(), "operatingSystem", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTargletTask_WindowingSystem(), ecorePackage.getEString(), "windowingSystem", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getTargletTask_WindowingSystem(), ecorePackage.getEString(), "windowingSystem", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTargletTask_Architecture(), ecorePackage.getEString(), "architecture", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getTargletTask_Architecture(), ecorePackage.getEString(), "architecture", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTargletTask_Locale(), ecorePackage.getEString(), "locale", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getTargletTask_Locale(), ecorePackage.getEString(), "locale", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTargletTask_ProgramArguments(), ecorePackage.getEString(), "programArguments", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getTargletTask_ProgramArguments(), ecorePackage.getEString(), "programArguments", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTargletTask_VMArguments(), ecorePackage.getEString(), "vMArguments", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getTargletTask_VMArguments(), ecorePackage.getEString(), "vMArguments", null, 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTargletTask_ImplicitDependencies(), getImplicitDependency(), null, "implicitDependencies", null, 0, -1, TargletTask.class, !IS_TRANSIENT,
+    initEReference(getTargletTask_ImplicitDependencies(), getImplicitDependency(), null, "implicitDependencies", null, 0, -1, TargletTask.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTargletTask_TargetName(), ecorePackage.getEString(), "targetName", "Modular Target", 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getTargletTask_TargetName(), ecorePackage.getEString(), "targetName", "Modular Target", 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTargletTask_ActivateTarget(), ecorePackage.getEBoolean(), "activateTarget", "true", 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getTargletTask_ActivateTarget(), ecorePackage.getEBoolean(), "activateTarget", "true", 0, 1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(implicitDependencyEClass, ImplicitDependency.class, "ImplicitDependency", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getImplicitDependency_ID(), ecorePackage.getEString(), "iD", null, 1, 1, ImplicitDependency.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(implicitDependencyEClass, ImplicitDependency.class, "ImplicitDependency", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getImplicitDependency_ID(), ecorePackage.getEString(), "iD", null, 1, 1, ImplicitDependency.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getImplicitDependency_Version(), theP2Package.getVersion(), "version", "0.0.0", 0, 1, ImplicitDependency.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getImplicitDependency_Version(), theP2Package.getVersion(), "version", "0.0.0", 0, 1, ImplicitDependency.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
@@ -422,9 +423,9 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source,
-        new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -435,9 +436,11 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    */
   protected void createEnablementAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(this, source, new String[] { "variableName", "setup.targlets.p2", "repository", "${oomph.update.url}", "installableUnits",
-        "org.eclipse.oomph.targlets.feature.group org.eclipse.oomph.setup.targlets.feature.group" });
+    String source = "http://www.eclipse.org/oomph/setup/Enablement"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "variableName", "setup.targlets.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "${oomph.update.url}", //$NON-NLS-1$ //$NON-NLS-2$
+        "installableUnits", "org.eclipse.oomph.targlets.feature.group org.eclipse.oomph.setup.targlets.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -448,10 +451,12 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.targlets.edit/icons/full/obj16" });
-    addAnnotation(targletTaskEClass, source, new String[] { "text", "Targlets" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "imageBaseURI", //$NON-NLS-1$
+        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.targlets.edit/icons/full/obj16" //$NON-NLS-1$
+    });
+    addAnnotation(targletTaskEClass, source, new String[] { "text", "Targlets" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -462,8 +467,9 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    */
   protected void createValidTriggersAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
-    addAnnotation(targletTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers"; //$NON-NLS-1$
+    addAnnotation(targletTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -474,12 +480,19 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getTargletTask_Targlets(), source, new String[] { "name", "targlet" });
-    addAnnotation(getTargletTask_TargletURIs(), source, new String[] { "name", "targletURI" });
-    addAnnotation(getTargletTask_VMArguments(), source, new String[] { "kind", "attribute", "name", "vmArguments" });
-    addAnnotation(getTargletTask_ImplicitDependencies(), source, new String[] { "name", "implicitDependency" });
-    addAnnotation(getImplicitDependency_ID(), source, new String[] { "kind", "attribute", "name", "id" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getTargletTask_Targlets(), source, new String[] { "name", "targlet" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTargletTask_TargletURIs(), source, new String[] { "name", "targletURI" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTargletTask_VMArguments(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "vmArguments" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTargletTask_ImplicitDependencies(), source, new String[] { "name", "implicitDependency" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getImplicitDependency_ID(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "id" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -490,7 +503,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    */
   protected void createRedirectAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Redirect";
+    String source = "http://www.eclipse.org/oomph/setup/Redirect"; //$NON-NLS-1$
     addAnnotation(getTargletTask_TargletURIs(), source, new String[] {});
   }
 

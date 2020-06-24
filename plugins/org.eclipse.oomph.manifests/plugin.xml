@@ -16,24 +16,24 @@
    <extension
          point="org.eclipse.ui.commands">
       <category
-            name="Oomph"
+            name="%OomphCommand_category"
             id="org.eclipse.oomph">
       </category>
       <command
-            name="Open Project Manifest"
+            name="%command.openManifest.name"
             categoryId="org.eclipse.oomph"
             id="org.eclipse.oomph.OpenManifest">
       </command>
       <command
-            name="Open Project Properties"
+            name="%command.openProperties.name"
             categoryId="org.eclipse.oomph"
             id="org.eclipse.oomph.OpenProperties">
       </command>
       <command
             categoryId="org.eclipse.ui.category.project"
-            description="Clean and build the selected project"
+            description="%buildClean.command.description"
             id="org.eclipse.oomph.buildClean"
-            name="Build Clean">
+            name="%buildClean.command.name">
       </command>
    </extension>
 
@@ -144,7 +144,7 @@
          <command
                commandId="org.eclipse.oomph.buildClean"
                icon="icons/build.gif"
-               label="Build Clean"
+               label="%buildClean.menu.label"
                style="push">
             <visibleWhen
                   checkEnabled="false">

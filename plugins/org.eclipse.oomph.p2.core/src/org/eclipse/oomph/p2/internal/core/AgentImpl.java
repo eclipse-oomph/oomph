@@ -56,6 +56,7 @@ import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
+import org.eclipse.osgi.util.NLS;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -82,9 +83,9 @@ import java.util.regex.Pattern;
 @SuppressWarnings("restriction")
 public class AgentImpl extends AgentManagerElementImpl implements Agent
 {
-  public static final String ENGINE_PATH = "org.eclipse.equinox.p2.engine";
+  public static final String ENGINE_PATH = "org.eclipse.equinox.p2.engine"; //$NON-NLS-1$
 
-  private static final Pattern ECLIPSE_INI_SECTION_PATTERN = Pattern.compile("^(-vmargs)([\n\r]+.*)\\z|^(-[^\\n\\r]*[\\n\\r]*)((?:^[^-][^\\n\\r]*)*[\\n\\r]*)",
+  private static final Pattern ECLIPSE_INI_SECTION_PATTERN = Pattern.compile("^(-vmargs)([\n\r]+.*)\\z|^(-[^\\n\\r]*[\\n\\r]*)((?:^[^-][^\\n\\r]*)*[\\n\\r]*)", //$NON-NLS-1$
       Pattern.MULTILINE | Pattern.DOTALL);
 
   private final AgentManagerImpl agentManager;
@@ -118,7 +119,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     this.agentManager = agentManager;
     this.location = location;
 
-    bundlePoolMap = new PersistentMap<BundlePool>(new File(location, "pools.info"))
+    bundlePoolMap = new PersistentMap<BundlePool>(new File(location, "pools.info")) //$NON-NLS-1$
     {
       @Override
       protected BundlePool createElement(String key, String extraInfo)
@@ -148,7 +149,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       }
     };
 
-    profileMap = new PersistentMap<Profile>(new File(location, "profiles.info"))
+    profileMap = new PersistentMap<Profile>(new File(location, "profiles.info")) //$NON-NLS-1$
     {
       @Override
       protected Profile createElement(String profileID, String extraInfo)
@@ -158,10 +159,10 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
           return new ProfileImpl(AgentImpl.this, null, profileID, null, null, null);
         }
 
-        List<String> tokens = StringUtil.explode(extraInfo, "|");
+        List<String> tokens = StringUtil.explode(extraInfo, "|"); //$NON-NLS-1$
         int size = tokens.size();
 
-        String type = size > 0 ? tokens.get(0) : "";
+        String type = size > 0 ? tokens.get(0) : ""; //$NON-NLS-1$
         BundlePool bundlePool = size > 1 ? getBundlePool(tokens.get(1)) : null;
         File installFolder = size > 2 ? AgentImpl.getFile(tokens.get(2)) : null;
         File referencer = size > 3 ? AgentImpl.getFile(tokens.get(3)) : null;
@@ -190,7 +191,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   @Override
   public String getElementType()
   {
-    return "agent";
+    return "agent"; //$NON-NLS-1$
   }
 
   public void dispose()
@@ -310,7 +311,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
   public void refreshBundlePools(IProgressMonitor monitor)
   {
-    monitor.subTask("Refreshing " + getLocation() + " bundle pools");
+    monitor.subTask(NLS.bind(Messages.AgentImpl_Refreshing_task, getLocation()));
     bundlePoolMap.refresh();
     monitor.done();
   }
@@ -508,7 +509,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
   public void refreshProfiles(IProgressMonitor monitor)
   {
-    monitor.beginTask("", 10);
+    monitor.beginTask("", 10); //$NON-NLS-1$
 
     try
     {
@@ -583,7 +584,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
             {
               TransactionEvent transactionEvent = (TransactionEvent)event;
               IProfile profile = transactionEvent.getProfile();
-              if ("true".equals(profile.getProperty(Profile.PROP_PROFILE_SHARED_POOL)))
+              if ("true".equals(profile.getProperty(Profile.PROP_PROFILE_SHARED_POOL))) //$NON-NLS-1$
               {
                 String cache = profile.getProperty(IProfile.PROP_CACHE);
                 if (cache != null)
@@ -687,7 +688,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       engine = (IEngine)getProvisioningAgent().getService(IEngine.SERVICE_NAME);
       if (engine == null)
       {
-        throw new IllegalStateException("Engine could not be loaded");
+        throw new IllegalStateException(Messages.AgentImpl_EngineNotLoaded_exception);
       }
     }
 
@@ -701,7 +702,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       planner = (IPlanner)getProvisioningAgent().getService(IPlanner.SERVICE_NAME);
       if (planner == null)
       {
-        throw new IllegalStateException("Planner could not be loaded");
+        throw new IllegalStateException(Messages.AgentImpl_PlannerNotLoaded_exception);
       }
     }
 
@@ -742,21 +743,21 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     Set<File> cacheFiles = new LinkedHashSet<File>();
 
     IAgentLocation location = (IAgentLocation)getProvisioningAgent().getService(IAgentLocation.SERVICE_NAME);
-    File p2Cache = URIUtil.toFile(location.getDataArea(org.eclipse.equinox.internal.p2.repository.Activator.ID + "/cache/"));
+    File p2Cache = URIUtil.toFile(location.getDataArea(org.eclipse.equinox.internal.p2.repository.Activator.ID + "/cache/")); //$NON-NLS-1$
     File[] p2CacheFiles = p2Cache.listFiles();
     if (p2CacheFiles != null)
     {
       cacheFiles.addAll(Arrays.asList(p2CacheFiles));
     }
 
-    File oomphP2Cache = new File(P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.getUserHome())), "cache");
+    File oomphP2Cache = new File(P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.getUserHome())), "cache"); //$NON-NLS-1$
     File[] oomphP2CacheFiles = oomphP2Cache.listFiles();
     if (oomphP2CacheFiles != null)
     {
       cacheFiles.addAll(Arrays.asList(oomphP2CacheFiles));
     }
 
-    SubMonitor subMonitor = SubMonitor.convert(monitor, "Deleting Repository Cache Resources", cacheFiles.size());
+    SubMonitor subMonitor = SubMonitor.convert(monitor, Messages.AgentImpl_DeletingRepositoryCache_task, cacheFiles.size());
     for (File cacheFile : cacheFiles)
     {
       if (subMonitor.isCanceled())
@@ -764,7 +765,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
         break;
       }
 
-      subMonitor.subTask("Deleting " + cacheFile);
+      subMonitor.subTask(NLS.bind(Messages.AgentImpl_Deleting_task, cacheFile));
       IOUtil.deleteBestEffort(cacheFile, false);
       subMonitor.worked(1);
     }
@@ -786,8 +787,8 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       {
         // If the file slash.bmp exists in that artifact jar or folder...
         File artifactFile = bundlePool.getFileArtifactRepository().getArtifactFile(artifactKey);
-        if (artifactFile.isDirectory() ? new File(artifactFile, "splash.bmp").exists()
-            : URIConverter.INSTANCE.exists(URI.createURI("archive:" + URI.createFileURI(artifactFile.getAbsolutePath() + "!/splash.bmp")), null))
+        if (artifactFile.isDirectory() ? new File(artifactFile, "splash.bmp").exists() //$NON-NLS-1$
+            : URIConverter.INSTANCE.exists(URI.createURI("archive:" + URI.createFileURI(artifactFile.getAbsolutePath() + "!/splash.bmp")), null)) //$NON-NLS-1$ //$NON-NLS-2$
         {
           return artifactFile;
         }
@@ -814,10 +815,10 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
         {
           // The configuration folder should be nested in this install folder.
           File installFolder = new File(installFolderLocation);
-          File configurationFolder = new File(installFolder, "configuration");
+          File configurationFolder = new File(installFolder, "configuration"); //$NON-NLS-1$
 
           // If this is an installation based on a shared pool...
-          if ("true".equals(profile.getProperty(Profile.PROP_PROFILE_SHARED_POOL)))
+          if ("true".equals(profile.getProperty(Profile.PROP_PROFILE_SHARED_POOL))) //$NON-NLS-1$
           {
             try
             {
@@ -875,18 +876,18 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   {
     // It should have a config.ini file to set various system properties.
     // If it doesn't exist, it's not a well-formed installation so an exception will be thrown loading it and we'll exit this method as a result.
-    File configIniFile = new File(configurationFolder, "config.ini");
+    File configIniFile = new File(configurationFolder, "config.ini"); //$NON-NLS-1$
     Map<String, String> configProperties = PropertiesUtil.loadProperties(configIniFile);
 
     // The OSGi slash path might be specified using platform:/base/<bundle-id>
     // but that doesn't work for a shared installation because the referenced bundle doesn't physically exist in the installation.
     boolean changed = false;
-    String splashPath = configProperties.get("osgi.splashPath");
+    String splashPath = configProperties.get("osgi.splashPath"); //$NON-NLS-1$
     if (splashPath != null)
     {
       // If there is a splash path with a URI of this form...
       org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createURI(splashPath);
-      if ("platform".equals(uri.scheme()) && uri.segmentCount() >= 2 && "base".equals(uri.segment(0)))
+      if ("platform".equals(uri.scheme()) && uri.segmentCount() >= 2 && "base".equals(uri.segment(0))) //$NON-NLS-1$ //$NON-NLS-2$
       {
         File splashArtifactFile = getSplashArtifactFile(profile, bundlePool, uri.lastSegment());
         if (splashArtifactFile != null)
@@ -895,19 +896,19 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
           // The launcher and p2 have a bad habit of using URL.getPath which does not decode encoded character, e.g., %20 is not decode to the space
           // character.
           // So better we not produce an encoded URI.
-          configProperties.put("osgi.splashPath", createFileURI(splashArtifactFile));
+          configProperties.put("osgi.splashPath", createFileURI(splashArtifactFile)); //$NON-NLS-1$
           changed = true;
         }
       }
     }
 
     // The OSGi framework property might be a relative path, e.g., file:../<path-to-shared-pool>.
-    String osgiFramework = configProperties.get("osgi.framework");
+    String osgiFramework = configProperties.get("osgi.framework"); //$NON-NLS-1$
     if (osgiFramework != null)
     {
       // If file: is not followed by a '/', the URI won't be considered hierarchical even though it has file scheme.
       URI uri = URI.createURI(osgiFramework);
-      if (uri.hasOpaquePart() && "file".equals(uri.scheme()))
+      if (uri.hasOpaquePart() && "file".equals(uri.scheme())) //$NON-NLS-1$
       {
         // Resolve the relative path in the URI against the configuration folder's URI.
         // If that file exists, as expected will be the case.
@@ -918,7 +919,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
           // Replace the value with the absolute URI of the OSGi framework bundle.
           // The launcher and p2 have a bad habit of using URL.getPath which does not decode encoded character, e.g., %20 is not decode to the space character.
           // So better we not produce an encoded URI.
-          configProperties.put("osgi.framework", createFileURI(absoluteOSGiFrameworkLocation.toFileString()));
+          configProperties.put("osgi.framework", createFileURI(absoluteOSGiFrameworkLocation.toFileString())); //$NON-NLS-1$
           changed = true;
         }
       }
@@ -927,7 +928,8 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     // If there were changes made, save the configuration.
     if (changed)
     {
-      PropertiesUtil.saveProperties(configIniFile, configProperties, false, true, "This configuration file was written by: " + AgentImpl.class.getName());
+      PropertiesUtil.saveProperties(configIniFile, configProperties, false, true,
+          NLS.bind(Messages.AgentImpl_ConfigurationWrittenBy_message, AgentImpl.class.getName()));
     }
   }
 
@@ -936,7 +938,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     // We need to modify the eclipse.ini.
     // For generality we'll check the launcher name property to compute the name of the launcher ini.
     String launcherName = profile.getProperty(EclipseTouchpoint.PROFILE_PROP_LAUNCHER_NAME);
-    File iniFile = new File(installFolder, launcherName == null ? "eclipse.ini" : launcherName + ".ini");
+    File iniFile = new File(installFolder, launcherName == null ? "eclipse.ini" : launcherName + ".ini"); //$NON-NLS-1$ //$NON-NLS-2$
     String contents = new String(IOUtil.readFile(iniFile));
 
     // We will process all the sections, keeping them in a map from which we'll compute the modified contents.
@@ -959,7 +961,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       }
 
       // This will remove duplicates as well.
-      if (!argument.startsWith("--launcher.XXMaxPermSize") && !argument.startsWith("-startup") || !map.containsKey(argument))
+      if (!argument.startsWith("--launcher.XXMaxPermSize") && !argument.startsWith("-startup") || !map.containsKey(argument)) //$NON-NLS-1$ //$NON-NLS-2$
       {
         map.put(argument, extension);
       }
@@ -968,7 +970,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     // If there are relative paths, that needs to be made absolute, this is used as the base URI against which to resolve them.
     // We will build the new contents from the entries in the map.
     // And will preserve the existing line feed convention if we need to add new lines.
-    URI baseURI = URI.createFileURI(installFolder.toString()).appendSegment("");
+    URI baseURI = URI.createFileURI(installFolder.toString()).appendSegment(""); //$NON-NLS-1$
     StringBuilder newContents = new StringBuilder();
     String nl;
     for (Map.Entry<String, String> entry : map.entrySet())
@@ -979,7 +981,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       String value = entry.getValue();
       if (sharedPool)
       {
-        if ("-startup".equals(trimmedKey))
+        if ("-startup".equals(trimmedKey)) //$NON-NLS-1$
         {
           // Create the URI for the value, and resolve it against the base URI (in case it's relative) and also check that this library file actually exists.
           URI absoluteLauncherLibraryLocation = URI.createFileURI(value.trim()).resolve(baseURI);
@@ -993,7 +995,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
             // the installation can't roam.
             // Note that on the Mac we're replacing it with a relative path that starts with ..
             // so we'd better be sure we don't try to copy the file to itself.
-            File localLauncherLibraryFile = new File(new File(installFolder, "plugins"), absoluteLauncherLibraryLocation.lastSegment());
+            File localLauncherLibraryFile = new File(new File(installFolder, "plugins"), absoluteLauncherLibraryLocation.lastSegment()); //$NON-NLS-1$
             if (!localLauncherLibraryFile.equals(absoluteLauncherLibraryFile))
             {
               IOUtil.copyFile(absoluteLauncherLibraryFile, localLauncherLibraryFile);
@@ -1002,15 +1004,15 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
               nl = key.substring(trimmedKey.length());
 
               // The value is therefore the relative path to this copied target within the installation.
-              value = (Platform.OS_MACOSX.equals(Util.getOSFromProfile(profile)) ? "../Eclipse/plugins/" : "plugins/")
+              value = (Platform.OS_MACOSX.equals(Util.getOSFromProfile(profile)) ? "../Eclipse/plugins/" : "plugins/") //$NON-NLS-1$ //$NON-NLS-2$
                   + absoluteLauncherLibraryLocation.lastSegment() + nl;
             }
           }
         }
-        else if ("--launcher.library".equals(trimmedKey))
+        else if ("--launcher.library".equals(trimmedKey)) //$NON-NLS-1$
         {
           // If the launcher library, where the companion shared library is located, is a relative path.
-          if (value.startsWith("../"))
+          if (value.startsWith("../")) //$NON-NLS-1$
           {
             // Resolve it against against the base to determine the absolute location, checking that actually exists.
             URI absoluteBundleLocation = URI.createURI(value.trim()).resolve(baseURI);
@@ -1022,7 +1024,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
             }
           }
         }
-        else if ("-showsplash".equals(trimmedKey))
+        else if ("-showsplash".equals(trimmedKey)) //$NON-NLS-1$
         {
           String name = new File(value.trim()).getName();
           for (int index = name.indexOf('_');; index = name.indexOf(index + 1, '_'))
@@ -1044,13 +1046,13 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
             }
           }
         }
-        else if ("-configuration".equals(trimmedKey))
+        else if ("-configuration".equals(trimmedKey)) //$NON-NLS-1$
         {
           // On the Mac, a -configuration ../Eclipse/configuration is produced, but this breaks the ability to run a read-only installation.
           // Moreover, it isn't needed so best to omit it.
           continue;
         }
-        else if ("-install".equals(trimmedKey))
+        else if ("-install".equals(trimmedKey)) //$NON-NLS-1$
         {
           // Omit the install argument.
           // This is generally an absolute path that effectively points at the folder in which the launcher ini is located.
@@ -1074,10 +1076,10 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   {
     // For an installation with a shared bundle pool, this will be a relative path that navigates outside of the installation.
     // In that case, we want to make those references be absolute.
-    File bundlesInfoFile = new File(configurationFolder, "org.eclipse.equinox.simpleconfigurator/bundles.info");
+    File bundlesInfoFile = new File(configurationFolder, "org.eclipse.equinox.simpleconfigurator/bundles.info"); //$NON-NLS-1$
 
     // Read all the lines as UTF-8 as documented in a comment in that file.
-    List<String> lines = IOUtil.readLines(bundlesInfoFile, "UTF-8");
+    List<String> lines = IOUtil.readLines(bundlesInfoFile, "UTF-8"); //$NON-NLS-1$
     List<String> result = new ArrayList<String>();
     boolean changed = false;
     URI configurationFolderURI = URI.createFileURI(configurationFolder.toString());
@@ -1085,17 +1087,17 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     for (String line : lines)
     {
       // Ignore the comment lines.
-      if (!line.startsWith("#"))
+      if (!line.startsWith("#")) //$NON-NLS-1$
       {
         // Lines of of this form:
         // <bundle-id>,<version>,<location-URI>,<start-level>,<true|false>
         // As such, we can split the lines on ',' and generally expect 5 elements in the list.
-        List<String> elements = StringUtil.explode(line, ",");
+        List<String> elements = StringUtil.explode(line, ","); //$NON-NLS-1$
         if (elements.size() > 2)
         {
           // If the third element that needs to be modified it it's a relative path.
           String bundleReference = elements.get(2);
-          if (bundleReference.startsWith("../"))
+          if (bundleReference.startsWith("../")) //$NON-NLS-1$
           {
             // Resolve it against the location of the configuration folder, and if that bundle exists, as expected...
             URI absoluteBundleLocation = URI.createURI(bundleReference).resolve(configurationFolderURI);
@@ -1121,7 +1123,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     if (changed)
     {
       // Write the modified result back out to the bundles.info file.
-      IOUtil.writeLines(bundlesInfoFile, "UTF-8", result);
+      IOUtil.writeLines(bundlesInfoFile, "UTF-8", result); //$NON-NLS-1$
     }
   }
 
@@ -1130,7 +1132,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     // The platform.xml, initially will have the wrong site policy.
     // Also, regular p2 updates will mangle the site URL to be an poorly-formed relative file URI,
     // which again breaks the ability for the installation to roam.
-    File platformXML = new File(configurationFolder, "org.eclipse.update/platform.xml");
+    File platformXML = new File(configurationFolder, "org.eclipse.update/platform.xml"); //$NON-NLS-1$
     if (platformXML.isFile())
     {
       URI configurationFolderURI = URI.createFileURI(configurationFolder.toString());
@@ -1140,7 +1142,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       {
         // If the site URI is of the form file:../<path> then we need to make it absolute.
         URI siteURI = URI.createURI(site.getUrl());
-        if (siteURI.hasOpaquePart() && "file".equals(siteURI.scheme()))
+        if (siteURI.hasOpaquePart() && "file".equals(siteURI.scheme())) //$NON-NLS-1$
         {
           // Resolve it against the location of the configuration folder, checking if the folder really exists.
           URI absoluteSiteURI = URI.createURI(siteURI.opaquePart()).resolve(configurationFolderURI);
@@ -1186,14 +1188,14 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     if (type == null)
     {
       // This check is done for legacy reasons. The current targlet.ui plugin contributes a profileType extension.
-      if (delegate.getProperty("targlet.container.id") != null)
+      if (delegate.getProperty("targlet.container.id") != null) //$NON-NLS-1$
       {
-        return "Targlet";
+        return "Targlet"; //$NON-NLS-1$
       }
 
       if (delegate.getProperty(Profile.PROP_INSTALL_FOLDER) != null)
       {
-        return "Installation";
+        return "Installation"; //$NON-NLS-1$
       }
     }
 
@@ -1222,7 +1224,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
       try
       {
-        agentRefs = context.getServiceReferences(IProvisioningAgent.class, "(locationURI=" + location.toURI() + ")");
+        agentRefs = context.getServiceReferences(IProvisioningAgent.class, "(locationURI=" + location.toURI() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
       }
       catch (InvalidSyntaxException ex)
       {
@@ -1276,7 +1278,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
     if (provisioningAgent == null)
     {
-      throw new P2Exception("Provisioning agent could not be loaded from " + location);
+      throw new P2Exception(NLS.bind(Messages.AgentImpl_AgentNotLoaded_exception, location));
     }
 
     return provisioningAgent;
@@ -1284,7 +1286,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
   private static boolean cacheTransport(Transport transport)
   {
-    if (PropertiesUtil.isProperty("oomph.p2.disable.offline"))
+    if (PropertiesUtil.isProperty("oomph.p2.disable.offline")) //$NON-NLS-1$
     {
       return false;
     }
@@ -1324,9 +1326,9 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
     if (file.isAbsolute() && !path.startsWith(File.separator))
     {
-      return "file:/" + path;
+      return "file:/" + path; //$NON-NLS-1$
     }
 
-    return "file:" + path;
+    return "file:" + path; //$NON-NLS-1$
   }
 }

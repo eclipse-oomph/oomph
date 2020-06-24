@@ -27,8 +27,6 @@ import org.eclipse.userstorage.ui.AbstractDialog;
  */
 public abstract class AbstractServiceDialog extends AbstractDialog
 {
-  private static final String TITLE = "Preference Synchronization";
-
   private final IStorageService service;
 
   public AbstractServiceDialog(Shell parentShell, IStorageService service)
@@ -52,7 +50,7 @@ public abstract class AbstractServiceDialog extends AbstractDialog
   protected void configureShell(Shell newShell)
   {
     super.configureShell(newShell);
-    newShell.setText(TITLE);
+    newShell.setText(Messages.AbstractServiceDialog_title);
   }
 
   @Override
@@ -62,12 +60,12 @@ public abstract class AbstractServiceDialog extends AbstractDialog
     String shortLabel = serviceLabel;
 
     String authority = service.getServiceURI().getAuthority();
-    if (authority != null && authority.endsWith(".eclipse.org"))
+    if (authority != null && authority.endsWith(".eclipse.org")) //$NON-NLS-1$
     {
-      shortLabel = "Eclipse";
+      shortLabel = "Eclipse"; //$NON-NLS-1$
     }
 
-    setTitle(TITLE);
+    setTitle(Messages.AbstractServiceDialog_title);
     initializeDialogUnits(parent);
 
     Composite area = (Composite)super.createDialogArea(parent);

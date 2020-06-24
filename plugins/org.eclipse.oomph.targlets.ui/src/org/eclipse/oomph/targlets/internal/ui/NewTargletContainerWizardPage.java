@@ -30,15 +30,15 @@ import java.util.Set;
  */
 public class NewTargletContainerWizardPage extends WizardPage
 {
-  private static final String DEFAULT_ID_PREFIX = "Default";
+  private static final String DEFAULT_ID_PREFIX = "Default"; //$NON-NLS-1$
 
   private String containerID = DEFAULT_ID_PREFIX;
 
   public NewTargletContainerWizardPage()
   {
-    super("AddTargletContainer");
-    setTitle("Add Targlet Container");
-    setMessage("Enter the ID of the new targlet container.");
+    super("AddTargletContainer"); //$NON-NLS-1$
+    setTitle(Messages.NewTargletContainerWizardPage_title);
+    setMessage(Messages.NewTargletContainerWizardPage_message);
   }
 
   public String getContainerID()
@@ -59,7 +59,7 @@ public class NewTargletContainerWizardPage extends WizardPage
     Composite composite = SWTFactory.createComposite(parent, 2, 1, GridData.FILL_BOTH, 0, 0);
 
     Label label = new Label(composite, SWT.NONE);
-    label.setText("Targlet Container ID:");
+    label.setText(Messages.NewTargletContainerWizardPage_targletContainerId);
     label.setLayoutData(new GridData());
 
     final Text text = new Text(composite, SWT.BORDER);
@@ -72,14 +72,14 @@ public class NewTargletContainerWizardPage extends WizardPage
         containerID = text.getText();
         if (containerID.trim().length() == 0)
         {
-          setErrorMessage("Container ID must be specified and non-empty.");
+          setErrorMessage(Messages.NewTargletContainerWizardPage_error_containerIdNotPresent);
           setPageComplete(false);
           return;
         }
 
         if (ids.contains(containerID))
         {
-          setErrorMessage("Container ID must be unique across all target definitions.");
+          setErrorMessage(Messages.NewTargletContainerWizardPage_error_containerIdNotUnique);
           setPageComplete(false);
           return;
         }

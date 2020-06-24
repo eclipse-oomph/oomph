@@ -23,11 +23,11 @@
                class="org.eclipse.oomph.version.ui.actions.AddNatureAction"
                enablesFor="*"
                id="org.eclipse.oomph.AddNatureAction"
-               label="Add Version Management..."
+               label="%addNatureAction.label"
                menubarPath="org.eclipse.ui.projectConfigure/additions"
                state="true"
                style="push"
-               tooltip="Add the Version Management builder to the selected project(s)">
+               tooltip="%addNatureAction.tooltip">
          </action>
          <visibility>
             <not>
@@ -46,11 +46,11 @@
                class="org.eclipse.oomph.version.ui.actions.ConfigureBuilderAction"
                enablesFor="*"
                id="org.eclipse.oomph.ConfigureBuilderAction"
-               label="Configure Version Management..."
+               label="%configureBuilderAction.label"
                menubarPath="org.eclipse.ui.projectConfigure/additions"
                state="true"
                style="push"
-               tooltip="Configure the Version Management builder of the selected project(s)">
+               tooltip="%configureBuilderAction.tooltip">
          </action>
          <visibility>
 	            <objectState
@@ -67,11 +67,11 @@
                class="org.eclipse.oomph.version.ui.actions.RemoveNatureAction"
                enablesFor="*"
                id="org.eclipse.oomph.RemoveNatureAction"
-               label="Remove Version Management"
+               label="%removeNatureAction.label"
                menubarPath="org.eclipse.ui.projectConfigure/additions"
                state="true"
                style="push"
-               tooltip="Remove the Version Management builder from the selected project(s)">
+               tooltip="%removeNatureAction.tooltip">
          </action>
          <visibility>
 	            <objectState
@@ -89,10 +89,10 @@
                class="org.eclipse.oomph.version.ui.actions.ConfigureBuildersAction"
                enablesFor="*"
                id="org.eclipse.oomph.ConfigureBuilderAction"
-               label="Configure Version Management..."
+               label="%configureBuilderAction.label"
                state="true"
                style="push"
-               tooltip="Configure the Version Management builder of the associated project(s)">
+               tooltip="%configureBuilderAction.tooltip">
          </action>
          <visibility>
               <objectState
@@ -117,7 +117,7 @@
             category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             class="org.eclipse.oomph.version.ui.preferences.VersionBuilderPreferencePage"
             id="org.eclipse.oomph.version.ui.preferences.VersionBuilderPreferencePage"
-            name="Version Management">
+            name="%versionBuilderPreferencePage.name">
       </page>
    </extension>
 
@@ -125,16 +125,16 @@
          point="org.eclipse.ui.actionSets">
       <actionSet
             id="org.eclipse.oomph.version.ui.actions"
-            label="Version Management"
+            label="%versionManagementActionSet.label"
             visible="true">
          <action
                class="org.eclipse.oomph.version.ui.actions.ToggleApiBuilderAction"
                icon="icons/ApiBaseline.gif"
                id="org.eclipse.oomph.version.ui.ToggleApiBuilderAction"
-               label="Disable API Builder"
+               label="%toggleApiBuilderAction.label"
                style="toggle"
                toolbarPath="versionManagementGroup"
-               tooltip="Disable the API Analysis builder">
+               tooltip="%toggleApiBuilderAction.tooltip">
          </action>
       </actionSet>
    </extension>

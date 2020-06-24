@@ -108,7 +108,7 @@ import java.util.regex.Pattern;
 /**
  * @author Eike Stepper
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings({ "restriction", "nls" })
 public class ProductCatalogGenerator implements IApplication
 {
   private static final String JAVA_VERSION_PREFIX = "addJvmArg(jvmArg:-Dosgi.requiredJavaVersion=";

@@ -42,7 +42,7 @@ public interface LaunchingPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNAME = "launching";
+  String eNAME = "launching"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -50,7 +50,7 @@ public interface LaunchingPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/oomph/setup/launching/1.0";
+  String eNS_URI = "http://www.eclipse.org/oomph/setup/launching/1.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -58,7 +58,7 @@ public interface LaunchingPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "launching";
+  String eNS_PREFIX = "launching"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.

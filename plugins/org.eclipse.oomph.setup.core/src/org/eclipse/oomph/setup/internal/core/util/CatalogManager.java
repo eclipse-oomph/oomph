@@ -50,7 +50,7 @@ import java.util.Map;
  */
 public class CatalogManager
 {
-  public static final String PROPERTY_INDEX = "PROPERTY_INDEX";
+  public static final String PROPERTY_INDEX = "PROPERTY_INDEX"; //$NON-NLS-1$
 
   private final IndexManager indexManager = new IndexManager();
 
@@ -110,7 +110,7 @@ public class CatalogManager
     if (currentIndexURI.isArchive())
     {
       String authority = currentIndexURI.authority();
-      if (authority.equals(indexURI + "!"))
+      if (authority.equals(indexURI + "!")) //$NON-NLS-1$
       {
         return true;
       }
@@ -199,7 +199,7 @@ public class CatalogManager
     URIConverter uriConverter = resourceSet.getURIConverter();
 
     // Determine the URI of the selection from the name of the index.
-    URI catalogURI = StringUtil.isEmpty(indexName) || "Eclipse".equals(indexName) ? SetupContext.CATALOG_SELECTION_SETUP_URI
+    URI catalogURI = StringUtil.isEmpty(indexName) || "Eclipse".equals(indexName) ? SetupContext.CATALOG_SELECTION_SETUP_URI //$NON-NLS-1$
         : SetupContext.CATALOG_SELECTION_SETUP_URI.trimSegments(1)
             .appendSegment(URI.encodeSegment(indexName.replace(' ', '.').toLowerCase(), false) + '.' + SetupContext.CATALOG_SELECTION_SETUP_URI.lastSegment());
     if (catalogURI != null && !catalogURI.equals(SetupContext.CATALOG_SELECTION_SETUP_URI))
@@ -291,7 +291,7 @@ public class CatalogManager
     for (Iterator<T> it = scopes.iterator(); it.hasNext();)
     {
       T scope = it.next();
-      if ("redirectable".equals(scope.getName()))
+      if ("redirectable".equals(scope.getName())) //$NON-NLS-1$
       {
         it.remove();
       }
@@ -306,7 +306,7 @@ public class CatalogManager
     for (ProductCatalog productCatalog : index.getProductCatalogs())
     {
       URI uri = EcoreUtil.getURI(productCatalog);
-      if (!"catalog".equals(uri.scheme()) && !SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(productCatalog.getName())
+      if (!"catalog".equals(uri.scheme()) && !SelfProductCatalogURIHandlerImpl.SELF_PRODUCT_CATALOG_NAME.equals(productCatalog.getName()) //$NON-NLS-1$
           && !productCatalog.getProducts().isEmpty())
       {
         productCatalogs.add(productCatalog);

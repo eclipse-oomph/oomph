@@ -435,6 +435,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -463,48 +464,48 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
     queryEClass.getESuperTypes().add(theBasePackage.getModelElement());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(mylynQueriesTaskEClass, MylynQueriesTask.class, "MylynQueriesTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getMylynQueriesTask_ConnectorKind(), ecorePackage.getEString(), "connectorKind", "bugzilla", 1, 1, MylynQueriesTask.class, !IS_TRANSIENT,
+    initEClass(mylynQueriesTaskEClass, MylynQueriesTask.class, "MylynQueriesTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getMylynQueriesTask_ConnectorKind(), ecorePackage.getEString(), "connectorKind", "bugzilla", 1, 1, MylynQueriesTask.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMylynQueriesTask_RepositoryURL(), ecorePackage.getEString(), "repositoryURL", null, 1, 1, MylynQueriesTask.class, !IS_TRANSIENT,
+    initEAttribute(getMylynQueriesTask_RepositoryURL(), ecorePackage.getEString(), "repositoryURL", null, 1, 1, MylynQueriesTask.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMylynQueriesTask_UserID(), ecorePackage.getEString(), "userID", null, 0, 1, MylynQueriesTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getMylynQueriesTask_UserID(), ecorePackage.getEString(), "userID", null, 0, 1, MylynQueriesTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMylynQueriesTask_Password(), ecorePackage.getEString(), "password", null, 0, 1, MylynQueriesTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getMylynQueriesTask_Password(), ecorePackage.getEString(), "password", null, 0, 1, MylynQueriesTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getMylynQueriesTask_Queries(), getQuery(), getQuery_Task(), "queries", null, 0, -1, MylynQueriesTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getMylynQueriesTask_Queries(), getQuery(), getQuery_Task(), "queries", null, 0, -1, MylynQueriesTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(mylynBuildsTaskEClass, MylynBuildsTask.class, "MylynBuildsTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getMylynBuildsTask_ConnectorKind(), ecorePackage.getEString(), "connectorKind", "org.eclipse.mylyn.hudson", 1, 1, MylynBuildsTask.class,
+    initEClass(mylynBuildsTaskEClass, MylynBuildsTask.class, "MylynBuildsTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getMylynBuildsTask_ConnectorKind(), ecorePackage.getEString(), "connectorKind", "org.eclipse.mylyn.hudson", 1, 1, MylynBuildsTask.class, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMylynBuildsTask_ServerURL(), ecorePackage.getEString(), "serverURL", null, 1, 1, MylynBuildsTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getMylynBuildsTask_ServerURL(), ecorePackage.getEString(), "serverURL", null, 1, 1, MylynBuildsTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMylynBuildsTask_UserID(), ecorePackage.getEString(), "userID", null, 0, 1, MylynBuildsTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getMylynBuildsTask_UserID(), ecorePackage.getEString(), "userID", null, 0, 1, MylynBuildsTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMylynBuildsTask_Password(), ecorePackage.getEString(), "password", null, 0, 1, MylynBuildsTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getMylynBuildsTask_Password(), ecorePackage.getEString(), "password", null, 0, 1, MylynBuildsTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getMylynBuildsTask_BuildPlans(), getBuildPlan(), null, "buildPlans", null, 0, -1, MylynBuildsTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getMylynBuildsTask_BuildPlans(), getBuildPlan(), null, "buildPlans", null, 0, -1, MylynBuildsTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(buildPlanEClass, BuildPlan.class, "BuildPlan", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getBuildPlan_Name(), ecorePackage.getEString(), "name", null, 1, 1, BuildPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(buildPlanEClass, BuildPlan.class, "BuildPlan", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getBuildPlan_Name(), ecorePackage.getEString(), "name", null, 1, 1, BuildPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(queryEClass, Query.class, "Query", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getQuery_Task(), getMylynQueriesTask(), getMylynQueriesTask_Queries(), "task", null, 0, 1, Query.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(queryEClass, Query.class, "Query", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getQuery_Task(), getMylynQueriesTask(), getMylynQueriesTask_Queries(), "task", null, 0, 1, Query.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getQuery_Summary(), ecorePackage.getEString(), "summary", null, 1, 1, Query.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getQuery_Summary(), ecorePackage.getEString(), "summary", null, 1, 1, Query.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getQuery_URL(), ecorePackage.getEString(), "uRL", null, 0, 1, Query.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEAttribute(getQuery_URL(), ecorePackage.getEString(), "uRL", null, 0, 1, Query.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getQuery_Attributes(), getQueryAttribute(), null, "attributes", null, 0, -1, Query.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getQuery_Attributes(), getQueryAttribute(), null, "attributes", null, 0, -1, Query.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(queryAttributeEClass, Map.Entry.class, "QueryAttribute", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getQueryAttribute_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(queryAttributeEClass, Map.Entry.class, "QueryAttribute", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getQueryAttribute_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getQueryAttribute_Value(), ecorePackage.getEString(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getQueryAttribute_Value(), ecorePackage.getEString(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
@@ -533,8 +534,9 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Mylyn.ecore" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Mylyn.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -545,13 +547,19 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    */
   protected void createEnablementAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(this, source, new String[] { "variableName", "setup.mylyn.p2", "repository", "${oomph.update.url}", "installableUnits",
-        "org.eclipse.oomph.setup.mylyn.feature.group" });
-    addAnnotation(this, source, new String[] { "variableName", "setup.mylyn.updates.p2", "repository", "http://download.eclipse.org/mylyn/releases/latest",
-        "releaseTrainAlternate", "true" });
-    addAnnotation(mylynQueriesTaskEClass, source, new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" });
-    addAnnotation(mylynBuildsTaskEClass, source, new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" });
+    String source = "http://www.eclipse.org/oomph/setup/Enablement"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "variableName", "setup.mylyn.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "${oomph.update.url}", //$NON-NLS-1$ //$NON-NLS-2$
+        "installableUnits", "org.eclipse.oomph.setup.mylyn.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(this, source, new String[] { "variableName", "setup.mylyn.updates.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "http://download.eclipse.org/mylyn/releases/latest", //$NON-NLS-1$ //$NON-NLS-2$
+        "releaseTrainAlternate", "true" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(mylynQueriesTaskEClass, source, new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(mylynBuildsTaskEClass, source, new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -562,9 +570,10 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.mylyn.edit/icons/full/obj16" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source,
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.mylyn.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -575,9 +584,11 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    */
   protected void createValidTriggersAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
-    addAnnotation(mylynQueriesTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
-    addAnnotation(mylynBuildsTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers"; //$NON-NLS-1$
+    addAnnotation(mylynQueriesTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(mylynBuildsTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -588,11 +599,16 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getMylynQueriesTask_Queries(), source, new String[] { "name", "query" });
-    addAnnotation(getMylynBuildsTask_BuildPlans(), source, new String[] { "name", "buildPlan" });
-    addAnnotation(getQuery_URL(), source, new String[] { "kind", "attribute", "name", "url" });
-    addAnnotation(getQuery_Attributes(), source, new String[] { "name", "attribute" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getMylynQueriesTask_Queries(), source, new String[] { "name", "query" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getMylynBuildsTask_BuildPlans(), source, new String[] { "name", "buildPlan" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getQuery_URL(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "url" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getQuery_Attributes(), source, new String[] { "name", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -603,7 +619,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    */
   protected void createRedirectAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Redirect";
+    String source = "http://www.eclipse.org/oomph/setup/Redirect"; //$NON-NLS-1$
     addAnnotation(getMylynQueriesTask_RepositoryURL(), source, new String[] {});
     addAnnotation(getMylynBuildsTask_ServerURL(), source, new String[] {});
     addAnnotation(getQuery_URL(), source, new String[] {});

@@ -36,9 +36,9 @@ import java.lang.reflect.Constructor;
  */
 public class EarlyStartup implements IStartup
 {
-  private static final boolean DECORATE = PropertiesUtil.isProperty("org.eclipse.oomph.launches.TestElementLabelDecorator");
+  private static final boolean DECORATE = PropertiesUtil.isProperty("org.eclipse.oomph.launches.TestElementLabelDecorator"); //$NON-NLS-1$
 
-  private static final String JUNIT_PART_NAME = "org.eclipse.jdt.junit.ResultView";
+  private static final String JUNIT_PART_NAME = "org.eclipse.jdt.junit.ResultView"; //$NON-NLS-1$
 
   private final IWindowListener windowListener = new IWindowListener()
   {
@@ -168,9 +168,9 @@ public class EarlyStartup implements IStartup
   {
     try
     {
-      Object fTestViewer = ReflectUtil.getValue("fTestViewer", part);
-      TreeViewer fTreeViewer = ReflectUtil.getValue("fTreeViewer", fTestViewer);
-      IStyledLabelProvider fTreeLabelProvider = ReflectUtil.getValue("fTreeLabelProvider", fTestViewer);
+      Object fTestViewer = ReflectUtil.getValue("fTestViewer", part); //$NON-NLS-1$
+      TreeViewer fTreeViewer = ReflectUtil.getValue("fTreeViewer", fTestViewer); //$NON-NLS-1$
+      IStyledLabelProvider fTreeLabelProvider = ReflectUtil.getValue("fTreeLabelProvider", fTestViewer); //$NON-NLS-1$
       IBaseLabelProvider labelProvider = fTreeViewer.getLabelProvider();
 
       Constructor<? extends IBaseLabelProvider> constructor = ReflectUtil.getConstructor(labelProvider.getClass(), IStyledLabelProvider.class,

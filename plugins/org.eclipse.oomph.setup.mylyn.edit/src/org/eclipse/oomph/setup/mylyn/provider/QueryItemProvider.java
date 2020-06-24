@@ -75,7 +75,8 @@ public class QueryItemProvider extends ModelElementItemProvider
   protected void addSummaryPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Query_summary_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Query_summary_feature", "_UI_Query_type"),
+        getString("_UI_Query_summary_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Query_summary_feature", "_UI_Query_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MylynPackage.Literals.QUERY__SUMMARY, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -88,7 +89,8 @@ public class QueryItemProvider extends ModelElementItemProvider
   protected void addURLPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Query_uRL_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Query_uRL_feature", "_UI_Query_type"),
+        getString("_UI_Query_uRL_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Query_uRL_feature", "_UI_Query_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MylynPackage.Literals.QUERY__URL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -134,7 +136,7 @@ public class QueryItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Query"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Query")); //$NON-NLS-1$
   }
 
   /**
@@ -159,7 +161,7 @@ public class QueryItemProvider extends ModelElementItemProvider
   {
     String summary = ((Query)object).getSummary();
     String url = ((Query)object).getURL();
-    return StringUtil.isEmpty(summary) ? getString("_UI_Query_type") : "" + summary + (StringUtil.isEmpty(url) ? "" : ": " + url);
+    return StringUtil.isEmpty(summary) ? getString("_UI_Query_type") : "" + summary + (StringUtil.isEmpty(url) ? "" : ": " + url); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
   }
 
   /**

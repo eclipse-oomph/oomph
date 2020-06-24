@@ -92,8 +92,8 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
 
   public String getHelpPath()
   {
-    String id = "Doc" + getClass().getSimpleName();
-    return SetupWizard.HELP_FOLDER + id + ".html#" + id + "_1_table";
+    String id = "Doc" + getClass().getSimpleName(); //$NON-NLS-1$
+    return SetupWizard.HELP_FOLDER + id + ".html#" + id + "_1_table"; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   public ResourceSet getResourceSet()
@@ -203,7 +203,7 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
   public final void gotoNextPage()
   {
     IWizardPage page = getNextPage();
-    gotoPage("nextPressed", page);
+    gotoPage("nextPressed", page); //$NON-NLS-1$
   }
 
   public final void gotoPreviousPage()
@@ -211,7 +211,7 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     // Going back via WizardDialog.showPage() does not work because it screws up the previousPage of the current page!
     // See how isMovingToPreviousPage is (not!) used there...
     IWizardPage page = getPreviousPage();
-    gotoPage("backPressed", page);
+    gotoPage("backPressed", page); //$NON-NLS-1$
   }
 
   private void gotoPage(String methodName, IWizardPage page)
@@ -315,7 +315,7 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     try
     {
       IWizardContainer container = getContainer();
-      Method method = ReflectUtil.getMethod(container.getClass(), "getButton", int.class);
+      Method method = ReflectUtil.getMethod(container.getClass(), "getButton", int.class); //$NON-NLS-1$
       method.setAccessible(true);
       Button button = (Button)method.invoke(container, buttonID);
       return button;
@@ -493,7 +493,7 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
         return originalText;
       }
 
-      return " " + text.substring(0, text.length() - 1) + " " + text.charAt(text.length() - 1);
+      return " " + text.substring(0, text.length() - 1) + " " + text.charAt(text.length() - 1); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     protected Dialog createDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, int dialogImageType,

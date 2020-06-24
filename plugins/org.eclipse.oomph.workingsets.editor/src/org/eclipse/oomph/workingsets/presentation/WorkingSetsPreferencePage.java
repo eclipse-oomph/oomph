@@ -89,7 +89,7 @@ public class WorkingSetsPreferencePage extends AbstractPreferencePage
     gridLayout.numColumns += 2;
 
     Button editButton = new Button(parent, SWT.PUSH);
-    editButton.setText("Edit...");
+    editButton.setText(Messages.WorkingSetsPreferencePage_Edit_label);
 
     Dialog.applyDialogFont(editButton);
     int widthHint = convertHorizontalDLUsToPixels(IDialogConstants.BUTTON_WIDTH);
@@ -108,7 +108,7 @@ public class WorkingSetsPreferencePage extends AbstractPreferencePage
 
         try
         {
-          Method method = container.getClass().getMethod("close");
+          Method method = container.getClass().getMethod("close"); //$NON-NLS-1$
           method.invoke(container);
         }
         catch (Throwable ex)
@@ -121,7 +121,7 @@ public class WorkingSetsPreferencePage extends AbstractPreferencePage
     });
 
     Button applyButton = new Button(parent, SWT.PUSH);
-    applyButton.setText("Apply");
+    applyButton.setText(Messages.WorkingSetsPreferencePage_Apply_label);
 
     Dialog.applyDialogFont(applyButton);
     minButtonSize = applyButton.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
@@ -155,9 +155,9 @@ public class WorkingSetsPreferencePage extends AbstractPreferencePage
       {
         try
         {
-          IEditorInput editorInput = new URIEditorInput(WorkingSetsUtil.WORKING_SET_GROUP_PREFERENCE_RESOURCE_URI, "Dynamic Working Set Preferences");
+          IEditorInput editorInput = new URIEditorInput(WorkingSetsUtil.WORKING_SET_GROUP_PREFERENCE_RESOURCE_URI, Messages.WorkingSetsPreferencePage_DynamiWorkingSetPreferences_title);
           IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-          activePage.openEditor(editorInput, "org.eclipse.oomph.workingsets.presentation.WorkingSetsEditorID");
+          activePage.openEditor(editorInput, "org.eclipse.oomph.workingsets.presentation.WorkingSetsEditorID"); //$NON-NLS-1$
           activePage.showView(IPageLayout.ID_PROP_SHEET);
         }
         catch (Exception ex)

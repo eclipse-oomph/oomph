@@ -69,7 +69,7 @@ public class ProjectNameGeneratorImpl extends ModelElementImpl implements Projec
     ComponentDefinition componentDefinition = TargletFactory.eINSTANCE.createComponentDefinition();
     String name = project.getDescription().getName();
     componentDefinition.setID(name + Requirement.PROJECT_SUFFIX);
-    componentDefinition.setVersion(Version.createOSGi(1, 0, 0, "qualifier"));
+    componentDefinition.setVersion(Version.createOSGi(1, 0, 0, "qualifier")); //$NON-NLS-1$
 
     EList<Requirement> requirements = componentDefinition.getRequirements();
 

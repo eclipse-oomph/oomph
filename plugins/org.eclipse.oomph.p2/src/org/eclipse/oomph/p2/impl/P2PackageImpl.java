@@ -651,90 +651,90 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
     repositoryEClass.getESuperTypes().add(theBasePackage.getModelElement());
 
     // Initialize classes, features, and operations; add parameters
-    initEClass(profileDefinitionEClass, ProfileDefinition.class, "ProfileDefinition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProfileDefinition_Requirements(), getRequirement(), null, "requirements", null, 0, -1, ProfileDefinition.class, !IS_TRANSIENT,
+    initEClass(profileDefinitionEClass, ProfileDefinition.class, "ProfileDefinition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getProfileDefinition_Requirements(), getRequirement(), null, "requirements", null, 0, -1, ProfileDefinition.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getProfileDefinition_Repositories(), getRepository(), null, "repositories", null, 0, -1, ProfileDefinition.class, !IS_TRANSIENT,
+    initEReference(getProfileDefinition_Repositories(), getRepository(), null, "repositories", null, 0, -1, ProfileDefinition.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProfileDefinition_IncludeSourceBundles(), ecorePackage.getEBoolean(), "includeSourceBundles", null, 0, 1, ProfileDefinition.class,
+    initEAttribute(getProfileDefinition_IncludeSourceBundles(), ecorePackage.getEBoolean(), "includeSourceBundles", null, 0, 1, ProfileDefinition.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProfileDefinition_ProfileProperties(), ecorePackage.getEString(), "profileProperties", null, 0, 1, ProfileDefinition.class, !IS_TRANSIENT,
+    initEAttribute(getProfileDefinition_ProfileProperties(), ecorePackage.getEString(), "profileProperties", null, 0, 1, ProfileDefinition.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    EOperation op = initEOperation(getProfileDefinition__SetRequirements__EList(), null, "setRequirements", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getRequirement(), "requirements", 0, -1, IS_UNIQUE, IS_ORDERED);
+    EOperation op = initEOperation(getProfileDefinition__SetRequirements__EList(), null, "setRequirements", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getRequirement(), "requirements", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    op = initEOperation(getProfileDefinition__SetRepositories__EList(), null, "setRepositories", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getRepository(), "repositories", 0, -1, IS_UNIQUE, IS_ORDERED);
+    op = initEOperation(getProfileDefinition__SetRepositories__EList(), null, "setRepositories", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getRepository(), "repositories", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(configurationEClass, Configuration.class, "Configuration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getConfiguration_WS(), ecorePackage.getEString(), "wS", "ANY", 1, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(configurationEClass, Configuration.class, "Configuration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getConfiguration_WS(), ecorePackage.getEString(), "wS", "ANY", 1, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getConfiguration_OS(), ecorePackage.getEString(), "oS", "ANY", 1, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getConfiguration_OS(), ecorePackage.getEString(), "oS", "ANY", 1, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getConfiguration_Arch(), ecorePackage.getEString(), "arch", "ANY", 1, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getConfiguration_Arch(), ecorePackage.getEString(), "arch", "ANY", 1, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(requirementEClass, Requirement.class, "Requirement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getRequirement_ID(), ecorePackage.getEString(), "iD", null, 1, 1, Requirement.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(requirementEClass, Requirement.class, "Requirement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getRequirement_ID(), ecorePackage.getEString(), "iD", null, 1, 1, Requirement.class, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRequirement_Name(), ecorePackage.getEString(), "name", null, 1, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getRequirement_Name(), ecorePackage.getEString(), "name", null, 1, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRequirement_Namespace(), ecorePackage.getEString(), "namespace", "org.eclipse.equinox.p2.iu", 1, 1, Requirement.class, !IS_TRANSIENT,
+    initEAttribute(getRequirement_Namespace(), ecorePackage.getEString(), "namespace", "org.eclipse.equinox.p2.iu", 1, 1, Requirement.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRequirement_VersionRange(), getVersionRange(), "versionRange", "0.0.0", 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getRequirement_VersionRange(), getVersionRange(), "versionRange", "0.0.0", 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRequirement_Optional(), ecorePackage.getEBoolean(), "optional", null, 0, 1, Requirement.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getRequirement_Optional(), ecorePackage.getEBoolean(), "optional", null, 0, 1, Requirement.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRequirement_Greedy(), ecorePackage.getEBoolean(), "greedy", "true", 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getRequirement_Greedy(), ecorePackage.getEBoolean(), "greedy", "true", 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRequirement_Filter(), ecorePackage.getEString(), "filter", null, 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getRequirement_Filter(), ecorePackage.getEString(), "filter", null, 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRequirement_Type(), getRequirementType(), "type", null, 0, 1, Requirement.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
+    initEAttribute(getRequirement_Type(), getRequirementType(), "type", null, 0, 1, Requirement.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRequirement_Min(), ecorePackage.getEInt(), "min", "1", 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getRequirement_Min(), ecorePackage.getEInt(), "min", "1", 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRequirement_Max(), ecorePackage.getEInt(), "max", "1", 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getRequirement_Max(), ecorePackage.getEInt(), "max", "1", 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRequirement_Description(), ecorePackage.getEString(), "description", null, 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getRequirement_Description(), ecorePackage.getEString(), "description", null, 0, 1, Requirement.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    op = initEOperation(getRequirement__SetVersionRange__Version_VersionSegment(), null, "setVersionRange", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getVersion(), "version", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getVersionSegment(), "segment", 0, 1, IS_UNIQUE, IS_ORDERED);
+    op = initEOperation(getRequirement__SetVersionRange__Version_VersionSegment(), null, "setVersionRange", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getVersion(), "version", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getVersionSegment(), "segment", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(repositoryListEClass, RepositoryList.class, "RepositoryList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getRepositoryList_Repositories(), getRepository(), null, "repositories", null, 0, -1, RepositoryList.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(repositoryListEClass, RepositoryList.class, "RepositoryList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getRepositoryList_Repositories(), getRepository(), null, "repositories", null, 0, -1, RepositoryList.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRepositoryList_Name(), ecorePackage.getEString(), "name", null, 0, 1, RepositoryList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getRepositoryList_Name(), ecorePackage.getEString(), "name", null, 0, 1, RepositoryList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(repositoryEClass, Repository.class, "Repository", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getRepository_URL(), ecorePackage.getEString(), "uRL", null, 1, 1, Repository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(repositoryEClass, Repository.class, "Repository", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getRepository_URL(), ecorePackage.getEString(), "uRL", null, 1, 1, Repository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRepository_Type(), getRepositoryType(), "type", "Combined", 1, 1, Repository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getRepository_Type(), getRepositoryType(), "type", "Combined", 1, 1, Repository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize enums and add enum literals
-    initEEnum(repositoryTypeEEnum, RepositoryType.class, "RepositoryType");
+    initEEnum(repositoryTypeEEnum, RepositoryType.class, "RepositoryType"); //$NON-NLS-1$
     addEEnumLiteral(repositoryTypeEEnum, RepositoryType.METADATA);
     addEEnumLiteral(repositoryTypeEEnum, RepositoryType.ARTIFACT);
     addEEnumLiteral(repositoryTypeEEnum, RepositoryType.COMBINED);
 
-    initEEnum(versionSegmentEEnum, VersionSegment.class, "VersionSegment");
+    initEEnum(versionSegmentEEnum, VersionSegment.class, "VersionSegment"); //$NON-NLS-1$
     addEEnumLiteral(versionSegmentEEnum, VersionSegment.MAJOR);
     addEEnumLiteral(versionSegmentEEnum, VersionSegment.MINOR);
     addEEnumLiteral(versionSegmentEEnum, VersionSegment.MICRO);
     addEEnumLiteral(versionSegmentEEnum, VersionSegment.QUALIFIER);
 
-    initEEnum(requirementTypeEEnum, RequirementType.class, "RequirementType");
+    initEEnum(requirementTypeEEnum, RequirementType.class, "RequirementType"); //$NON-NLS-1$
     addEEnumLiteral(requirementTypeEEnum, RequirementType.NONE);
     addEEnumLiteral(requirementTypeEEnum, RequirementType.FEATURE);
     addEEnumLiteral(requirementTypeEEnum, RequirementType.PROJECT);
 
     // Initialize data types
-    initEDataType(versionEDataType, Version.class, "Version", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(versionRangeEDataType, VersionRange.class, "VersionRange", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(versionEDataType, Version.class, "Version", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(versionRangeEDataType, VersionRange.class, "VersionRange", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
     // Create resource
     createResource(eNS_URI);
@@ -756,9 +756,10 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
     addAnnotation(this, source,
-        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.p2.edit/icons/full/obj16" });
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.p2.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -769,14 +770,25 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getProfileDefinition_Requirements(), source, new String[] { "name", "requirement" });
-    addAnnotation(getProfileDefinition_Repositories(), source, new String[] { "name", "repository" });
-    addAnnotation(getConfiguration_WS(), source, new String[] { "kind", "attribute", "name", "ws" });
-    addAnnotation(getConfiguration_OS(), source, new String[] { "kind", "attribute", "name", "os" });
-    addAnnotation(getRequirement_ID(), source, new String[] { "kind", "attribute", "name", "id" });
-    addAnnotation(getRepositoryList_Repositories(), source, new String[] { "name", "repository" });
-    addAnnotation(getRepository_URL(), source, new String[] { "kind", "attribute", "name", "url" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getProfileDefinition_Requirements(), source, new String[] { "name", "requirement" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProfileDefinition_Repositories(), source, new String[] { "name", "repository" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getConfiguration_WS(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "ws" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getConfiguration_OS(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "os" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getRequirement_ID(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "id" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getRepositoryList_Repositories(), source, new String[] { "name", "repository" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getRepository_URL(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "url" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -787,7 +799,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    */
   protected void createRedirectAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Redirect";
+    String source = "http://www.eclipse.org/oomph/setup/Redirect"; //$NON-NLS-1$
     addAnnotation(getRepository_URL(), source, new String[] {});
   }
 

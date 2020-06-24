@@ -45,6 +45,7 @@ import java.util.Map;
  *
  * @number 800
  */
+@SuppressWarnings("nls")
 public class DocProgressPage
 {
   /**

@@ -240,7 +240,7 @@ public class TargletContainerImpl extends ModelElementImpl implements TargletCon
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (iD: ");
+    result.append(" (iD: "); //$NON-NLS-1$
     result.append(iD);
     result.append(')');
     return result.toString();

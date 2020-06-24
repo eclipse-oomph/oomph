@@ -23,7 +23,7 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin
 {
-  public static final String PLUGIN_ID = "org.eclipse.oomph.gitbash";
+  public static final String PLUGIN_ID = "org.eclipse.oomph.gitbash"; //$NON-NLS-1$
 
   private static Activator plugin;
 

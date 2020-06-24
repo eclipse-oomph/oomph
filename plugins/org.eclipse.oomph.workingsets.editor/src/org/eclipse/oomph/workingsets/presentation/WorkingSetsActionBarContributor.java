@@ -119,14 +119,14 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
    * <!-- end-user-doc -->
    * @generated
    */
-  protected IAction showPropertiesViewAction = new Action(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_ShowPropertiesView_menu_item"))
+  protected IAction showPropertiesViewAction = new Action(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_ShowPropertiesView_menu_item")) //$NON-NLS-1$
   {
     @Override
     public void run()
     {
       try
       {
-        getPage().showView("org.eclipse.ui.views.PropertySheet");
+        getPage().showView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
       }
       catch (PartInitException exception)
       {
@@ -142,7 +142,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
    * <!-- end-user-doc -->
    * @generated
    */
-  protected IAction refreshViewerAction = new Action(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_RefreshViewer_menu_item"))
+  protected IAction refreshViewerAction = new Action(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_RefreshViewer_menu_item")) //$NON-NLS-1$
   {
     @Override
     public boolean isEnabled()
@@ -198,7 +198,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
    */
   protected IMenuManager createSiblingMenuManager;
 
-  protected final ShowPreviewAction showPreviewAction = new ShowPreviewAction("Preview...");
+  protected final ShowPreviewAction showPreviewAction = new ShowPreviewAction(Messages.WorkingSetsActionBarContributor_ShowPreference_label);
 
   /**
    * This creates an instance of the contributor.
@@ -225,8 +225,8 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
   public void contributeToToolBar(IToolBarManager toolBarManager)
   {
     super.contributeToToolBar(toolBarManager);
-    toolBarManager.add(new Separator("workingsets-settings"));
-    toolBarManager.add(new Separator("workingsets-additions"));
+    toolBarManager.add(new Separator("workingsets-settings")); //$NON-NLS-1$
+    toolBarManager.add(new Separator("workingsets-additions")); //$NON-NLS-1$
   }
 
   /**
@@ -241,23 +241,23 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
   {
     super.contributeToMenu(menuManager);
 
-    IMenuManager submenuManager = new MenuManager(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_WorkingSetsEditor_menu"),
-        "org.eclipse.oomph.workingsetsMenuID");
-    menuManager.insertAfter("additions", submenuManager);
-    submenuManager.add(new Separator("settings"));
-    submenuManager.add(new Separator("actions"));
-    submenuManager.add(new Separator("additions"));
-    submenuManager.add(new Separator("additions-end"));
+    IMenuManager submenuManager = new MenuManager(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_WorkingSetsEditor_menu"), //$NON-NLS-1$
+        "org.eclipse.oomph.workingsetsMenuID"); //$NON-NLS-1$
+    menuManager.insertAfter("additions", submenuManager); //$NON-NLS-1$
+    submenuManager.add(new Separator("settings")); //$NON-NLS-1$
+    submenuManager.add(new Separator("actions")); //$NON-NLS-1$
+    submenuManager.add(new Separator("additions")); //$NON-NLS-1$
+    submenuManager.add(new Separator("additions-end")); //$NON-NLS-1$
 
     // Prepare for CreateChild item addition or removal.
     //
-    createChildMenuManager = new MenuManager(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item"));
-    submenuManager.insertBefore("additions", createChildMenuManager);
+    createChildMenuManager = new MenuManager(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item")); //$NON-NLS-1$
+    submenuManager.insertBefore("additions", createChildMenuManager); //$NON-NLS-1$
 
     // Prepare for CreateSibling item addition or removal.
     //
-    createSiblingMenuManager = new MenuManager(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item"));
-    submenuManager.insertBefore("additions", createSiblingMenuManager);
+    createSiblingMenuManager = new MenuManager(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item")); //$NON-NLS-1$
+    submenuManager.insertBefore("additions", createSiblingMenuManager); //$NON-NLS-1$
 
     // Force an update because Eclipse hides empty menus now.
     //
@@ -478,20 +478,20 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
     super.menuAboutToShow(menuManager);
     MenuManager submenuManager = null;
 
-    submenuManager = new MenuManager(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item"));
+    submenuManager = new MenuManager(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item")); //$NON-NLS-1$
     populateManager(submenuManager, createChildActions, null);
-    menuManager.insertBefore("edit", submenuManager);
+    menuManager.insertBefore("edit", submenuManager); //$NON-NLS-1$
 
-    submenuManager = new MenuManager(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item"));
+    submenuManager = new MenuManager(WorkingSetsEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item")); //$NON-NLS-1$
     populateManager(submenuManager, createSiblingActions, null);
-    menuManager.insertBefore("edit", submenuManager);
+    menuManager.insertBefore("edit", submenuManager); //$NON-NLS-1$
   }
 
   @Override
   public void menuAboutToShow(IMenuManager menuManager)
   {
     menuAboutToShowGen(menuManager);
-    menuManager.insertBefore("ui-actions", showPreviewAction);
+    menuManager.insertBefore("ui-actions", showPreviewAction); //$NON-NLS-1$
   }
 
   /**
@@ -503,11 +503,11 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
   @Override
   protected void addGlobalActions(IMenuManager menuManager)
   {
-    menuManager.insertAfter("additions-end", new Separator("ui-actions"));
-    menuManager.insertAfter("ui-actions", showPropertiesViewAction);
+    menuManager.insertAfter("additions-end", new Separator("ui-actions")); //$NON-NLS-1$ //$NON-NLS-2$
+    menuManager.insertAfter("ui-actions", showPropertiesViewAction); //$NON-NLS-1$
 
     refreshViewerAction.setEnabled(refreshViewerAction.isEnabled());
-    menuManager.insertAfter("ui-actions", refreshViewerAction);
+    menuManager.insertAfter("ui-actions", refreshViewerAction); //$NON-NLS-1$
 
     super.addGlobalActions(menuManager);
   }
@@ -550,7 +550,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
 
       public WorkingSetPresentation(WorkingSet workingSet)
       {
-        super(workingSet.getName(), WorkingSetsEditPlugin.INSTANCE.getImage("full/obj16/WorkingSet"));
+        super(workingSet.getName(), WorkingSetsEditPlugin.INSTANCE.getImage("full/obj16/WorkingSet")); //$NON-NLS-1$
 
         this.workingSet = workingSet;
       }
@@ -718,7 +718,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
     @Override
     protected IDialogSettings getDialogBoundsSettings()
     {
-      return WorkingSetsEditorPlugin.INSTANCE.getDialogSettings("Preview");
+      return WorkingSetsEditorPlugin.INSTANCE.getDialogSettings("Preview"); //$NON-NLS-1$
     }
 
     public void setWorkingSetsProvider(WorkingSetsProvider workingSetsProvider)
@@ -763,7 +763,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
         try
         {
           // It would be nice if we could generally figure out the editor that contributed the outline page.
-          Method method = ReflectUtil.getMethod(page, "getSetupEditor");
+          Method method = ReflectUtil.getMethod(page, "getSetupEditor"); //$NON-NLS-1$
           part = (IWorkbenchPart)method.invoke(page);
         }
         catch (Exception ex)
@@ -824,7 +824,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
     @Override
     protected Control createDialogArea(Composite parent)
     {
-      getShell().setText("Working Sets Preview");
+      getShell().setText(Messages.WorkingSetsActionBarContributor_WorkingSetsPreview_title);
 
       tree = new TreeViewer(parent);
       tree.expandAll();
@@ -859,7 +859,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
       tree.setLabelProvider(labelProvider);
 
       WorkingSet otherProjectsWorkingSet = WorkingSetsFactory.eINSTANCE.createWorkingSet();
-      otherProjectsWorkingSet.setName("Other Projects");
+      otherProjectsWorkingSet.setName(Messages.WorkingSetsActionBarContributor_OtherProjects_label);
       ItemProvider otherProjects = new WorkingSetPresentation(otherProjectsWorkingSet);
       children.add(otherProjects);
 
@@ -952,7 +952,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
     public ShowPreviewAction(String text)
     {
       super(text, IAction.AS_CHECK_BOX);
-      setImageDescriptor(WorkingSetsEditorPlugin.INSTANCE.getImageDescriptor("preview"));
+      setImageDescriptor(WorkingSetsEditorPlugin.INSTANCE.getImageDescriptor("preview")); //$NON-NLS-1$
     }
 
     @Override

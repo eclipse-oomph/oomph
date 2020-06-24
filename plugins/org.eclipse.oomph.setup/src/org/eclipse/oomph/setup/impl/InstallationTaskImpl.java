@@ -51,7 +51,7 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
    * @generated
    * @ordered
    */
-  protected static final String LOCATION_EDEFAULT = "";
+  protected static final String LOCATION_EDEFAULT = ""; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getLocation() <em>Location</em>}' attribute.
@@ -71,7 +71,7 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
    * @generated
    * @ordered
    */
-  protected static final String RELATIVE_PRODUCT_FOLDER_EDEFAULT = "";
+  protected static final String RELATIVE_PRODUCT_FOLDER_EDEFAULT = ""; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getRelativeProductFolder() <em>Relative Product Folder</em>}' attribute.
@@ -83,7 +83,7 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
    */
   protected String relativeProductFolder = RELATIVE_PRODUCT_FOLDER_EDEFAULT;
 
-  public static final String CONFIGURATION_FOLDER_NAME = "configuration";
+  public static final String CONFIGURATION_FOLDER_NAME = "configuration"; //$NON-NLS-1$
 
   /**
    * <!-- begin-user-doc -->
@@ -248,9 +248,9 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (location: ");
+    result.append(" (location: "); //$NON-NLS-1$
     result.append(location);
-    result.append(", relativeProductFolder: ");
+    result.append(", relativeProductFolder: "); //$NON-NLS-1$
     result.append(relativeProductFolder);
     result.append(')');
     return result.toString();
@@ -272,9 +272,9 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
   {
     String relativeProductFolder = context.getRelativeProductFolder();
     Map<URI, URI> map = context.getURIConverter().getURIMap();
-    map.put(URI.createURI("configuration:/"),
-        context.getTrigger() == Trigger.BOOTSTRAP ? URI.createFileURI(getLocation() + "/" + relativeProductFolder + "/" + CONFIGURATION_FOLDER_NAME + "/")
-            : getStaticConfigurationLocation().appendSegment(""));
+    map.put(URI.createURI("configuration:/"), //$NON-NLS-1$
+        context.getTrigger() == Trigger.BOOTSTRAP ? URI.createFileURI(getLocation() + "/" + relativeProductFolder + "/" + CONFIGURATION_FOLDER_NAME + "/") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            : getStaticConfigurationLocation().appendSegment("")); //$NON-NLS-1$
 
     // context.put("installation.product.location", context.getProductLocation().getAbsolutePath());
     // context.put("installation.product.configuration.location")

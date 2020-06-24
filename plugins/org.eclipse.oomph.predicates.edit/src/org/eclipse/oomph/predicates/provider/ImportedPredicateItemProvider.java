@@ -69,8 +69,8 @@ public class ImportedPredicateItemProvider extends PredicateItemProvider
   protected void addAccessiblePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ImportedPredicate_accessible_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ImportedPredicate_accessible_feature", "_UI_ImportedPredicate_type"),
+        getString("_UI_ImportedPredicate_accessible_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ImportedPredicate_accessible_feature", "_UI_ImportedPredicate_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PredicatesPackage.Literals.IMPORTED_PREDICATE__ACCESSIBLE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -83,7 +83,7 @@ public class ImportedPredicateItemProvider extends PredicateItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ImportedPredicate"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ImportedPredicate")); //$NON-NLS-1$
   }
 
   /**
@@ -106,10 +106,10 @@ public class ImportedPredicateItemProvider extends PredicateItemProvider
   @Override
   public String getText(Object object)
   {
-    String label = "Imported into the workspace";
+    String label = Messages.ImportedPredicateItemProvider_Imported_label;
     if (((ImportedPredicate)object).isAccessible())
     {
-      label += " and accessible";
+      label += " " + Messages.ImportedPredicateItemProvider_AndAccessible_label; //$NON-NLS-1$
     }
 
     return label;

@@ -32,7 +32,7 @@ import java.util.Map;
 /**
  * @author Eike Stepper
  */
-public class GearShell extends AnimatedShell<Map<URI, Pair<String, String>>>implements Listener
+public class GearShell extends AnimatedShell<Map<URI, Pair<String, String>>> implements Listener
 {
   private static final boolean TEST_OVERLAYS = false;
 
@@ -171,11 +171,11 @@ public class GearShell extends AnimatedShell<Map<URI, Pair<String, String>>>impl
       {
         if (page instanceof SummaryPage)
         {
-          System.out.println("Finish:");
+          System.out.println(Messages.GearShell_finish);
           Page[] pages = animator.getPages();
           for (int i = 1; i < GearAnimator.GEARS; i++)
           {
-            System.out.println("  " + pages[i].getTitle() + " = " + pages[i].getChoice());
+            System.out.println("  " + pages[i].getTitle() + " = " + pages[i].getChoice()); //$NON-NLS-1$ //$NON-NLS-2$
           }
 
           display.dispose();
@@ -183,7 +183,7 @@ public class GearShell extends AnimatedShell<Map<URI, Pair<String, String>>>impl
       }
     };
 
-    shell.setText("Questionnaire Test");
+    shell.setText(Messages.GearShell_text);
     shell.openModal();
 
     display.dispose();

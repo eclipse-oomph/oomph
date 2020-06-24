@@ -31,7 +31,7 @@ import java.util.Set;
  */
 public class OomphDropAdapter extends EditingDomainViewerDropAdapter
 {
-  private static final boolean HAS_EARLY_DRAG_SOURCE = "win32".equals(SWT.getPlatform());
+  private static final boolean HAS_EARLY_DRAG_SOURCE = "win32".equals(SWT.getPlatform()); //$NON-NLS-1$
 
   protected OomphTransferDelegate[] delegates;
 

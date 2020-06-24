@@ -542,11 +542,11 @@ public class TestCaseType extends MinimalEObjectImpl.Container
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (className: ");
+    result.append(" (className: "); //$NON-NLS-1$
     result.append(className);
-    result.append(", name: ");
+    result.append(", name: "); //$NON-NLS-1$
     result.append(name);
-    result.append(", time: ");
+    result.append(", time: "); //$NON-NLS-1$
     result.append(time);
     result.append(')');
     return result.toString();

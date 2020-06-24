@@ -64,6 +64,7 @@ import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.jface.preference.IPreferenceNode;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -115,15 +116,15 @@ public final class RecorderManager
     }
   };
 
-  private static final URI USER_URI = SetupContext.USER_SETUP_URI.appendFragment("/");
+  private static final URI USER_URI = SetupContext.USER_SETUP_URI.appendFragment("/"); //$NON-NLS-1$
 
   private static final URI USER_FILE_URI = SetupContext.resolve(SetupCoreUtil.createResourceSet().getURIConverter().normalize(SetupContext.USER_SETUP_URI));
 
-  private static final boolean SYNC_FOLDER_FIXED = PropertiesUtil.isProperty("oomph.setup.sync.folder.fixed");
+  private static final boolean SYNC_FOLDER_FIXED = PropertiesUtil.isProperty("oomph.setup.sync.folder.fixed"); //$NON-NLS-1$
 
-  private static final boolean SYNC_FOLDER_KEEP = PropertiesUtil.isProperty("oomph.setup.sync.folder.keep");
+  private static final boolean SYNC_FOLDER_KEEP = PropertiesUtil.isProperty("oomph.setup.sync.folder.keep"); //$NON-NLS-1$
 
-  private static final boolean SYNC_FOLDER_DEBUG = PropertiesUtil.isProperty("oomph.setup.sync.folder.debug");
+  private static final boolean SYNC_FOLDER_DEBUG = PropertiesUtil.isProperty("oomph.setup.sync.folder.debug"); //$NON-NLS-1$
 
   private final EarlySynchronization earlySynchronization = new EarlySynchronization();
 
@@ -248,7 +249,7 @@ public final class RecorderManager
     String value = SETUP_UI_PREFERENCES.getString(key);
     if (!StringUtil.isEmpty(value))
     {
-      for (String id : value.split(" "))
+      for (String id : value.split(" ")) //$NON-NLS-1$
       {
         result.add(id);
       }
@@ -712,7 +713,7 @@ public final class RecorderManager
     String fragment = uri.fragment();
     if (StringUtil.isEmpty(fragment))
     {
-      fragment = "/";
+      fragment = "/"; //$NON-NLS-1$
     }
 
     URI resourceURI = uri.trimFragment();
@@ -820,14 +821,14 @@ public final class RecorderManager
     if (hasPreferencePagesToInitialize(preferenceManager))
     {
       initializeItem = new ToolItem(toolBar, SWT.PUSH);
-      initializeItem.setImage(SetupUIPlugin.INSTANCE.getSWTImage("bulb0.png"));
-      initializeItem.setToolTipText("Initialize preference pages");
+      initializeItem.setImage(SetupUIPlugin.INSTANCE.getSWTImage("bulb0.png")); //$NON-NLS-1$
+      initializeItem.setToolTipText(Messages.RecorderManager_initializeItem_tooltip);
 
       final class Animator extends ButtonAnimator
       {
         public Animator(ToolItem toolItem)
         {
-          super(SetupUIPlugin.INSTANCE, toolItem, "bulb.png", 8);
+          super(SetupUIPlugin.INSTANCE, toolItem, "bulb.png", 8); //$NON-NLS-1$
         }
 
         @Override
@@ -887,11 +888,10 @@ public final class RecorderManager
     if (recordItem != null)
     {
       boolean recorderEnabled = INSTANCE.isRecorderEnabled();
-      String state = recorderEnabled ? "enabled" : "disabled";
-      String verb = !recorderEnabled ? "enable" : "disable";
 
-      recordItem.setImage(SetupUIPlugin.INSTANCE.getSWTImage("recorder_" + state + ".png"));
-      recordItem.setToolTipText("Oomph preference recorder " + state + " - Push to " + verb);
+      recordItem.setImage(SetupUIPlugin.INSTANCE.getSWTImage("recorder_" + (recorderEnabled ? "enabled" : "disabled") + ".png")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+      recordItem.setToolTipText(recorderEnabled ? Messages.RecorderManager_recordItem_tooltip_recorderEnabledPushToDisable
+          : Messages.RecorderManager_recordItem_tooltip_recorderDisabledPushToEnabled);
     }
   }
 
@@ -911,8 +911,7 @@ public final class RecorderManager
 
     if (SYNC_FOLDER_DEBUG)
     {
-
-      SetupUIPlugin.INSTANCE.log("Copy recorder target to " + target);
+      SetupUIPlugin.INSTANCE.log("Copy recorder target to " + target); //$NON-NLS-1$
     }
 
     return target;
@@ -929,7 +928,7 @@ public final class RecorderManager
 
     if (SYNC_FOLDER_DEBUG)
     {
-      SetupUIPlugin.INSTANCE.log("Copy recorder target back to " + source);
+      SetupUIPlugin.INSTANCE.log("Copy recorder target back to " + source); //$NON-NLS-1$
     }
 
     return target;
@@ -1055,7 +1054,7 @@ public final class RecorderManager
                   }
                   else
                   {
-                    Job job = new Job("Store preferences")
+                    Job job = new Job(Messages.RecorderManager_storePreferencesJob_name)
                     {
                       @Override
                       protected IStatus run(IProgressMonitor monitor)
@@ -1122,7 +1121,7 @@ public final class RecorderManager
           {
             try
             {
-              tmpFolder = new File(PropertiesUtil.getTmpDir(), "oomph.setup.sync");
+              tmpFolder = new File(PropertiesUtil.getTmpDir(), "oomph.setup.sync"); //$NON-NLS-1$
               tmpFolder.mkdirs();
 
               File[] tmpFiles = tmpFolder.listFiles();
@@ -1143,12 +1142,12 @@ public final class RecorderManager
 
           if (tmpFolder == null)
           {
-            tmpFolder = IOUtil.createTempFolder("sync-", true);
+            tmpFolder = IOUtil.createTempFolder("sync-", true); //$NON-NLS-1$
           }
 
           if (SYNC_FOLDER_DEBUG)
           {
-            SetupUIPlugin.INSTANCE.log("Early synchronization in " + tmpFolder);
+            SetupUIPlugin.INSTANCE.log("Early synchronization in " + tmpFolder); //$NON-NLS-1$
           }
 
           File target = RecorderManager.copyRecorderTarget(recorderTarget, tmpFolder);
@@ -1195,11 +1194,11 @@ public final class RecorderManager
           {
             if (deleted)
             {
-              SetupUIPlugin.INSTANCE.log("Deleted " + tmpFolder);
+              SetupUIPlugin.INSTANCE.log("Deleted " + tmpFolder); //$NON-NLS-1$
             }
             else
             {
-              SetupUIPlugin.INSTANCE.log("Failed to delete " + tmpFolder);
+              SetupUIPlugin.INSTANCE.log("Failed to delete " + tmpFolder); //$NON-NLS-1$
             }
           }
         }
@@ -1306,7 +1305,7 @@ public final class RecorderManager
 
     private Synchronization await(String serviceLabel, IProgressMonitor monitor)
     {
-      monitor.beginTask("Requesting data from " + serviceLabel + "...", IProgressMonitor.UNKNOWN);
+      monitor.beginTask(NLS.bind(Messages.RecorderManager_requestDataTask_name, serviceLabel), IProgressMonitor.UNKNOWN);
 
       try
       {
@@ -1375,7 +1374,7 @@ public final class RecorderManager
     @Override
     public String toString()
     {
-      return SyncInfo.class.getSimpleName() + "[" + EcoreUtil.getURI(recorderTarget) + " --> " + SynchronizerManager.SYNC_FOLDER + "]";
+      return SyncInfo.class.getSimpleName() + "[" + EcoreUtil.getURI(recorderTarget) + " --> " + SynchronizerManager.SYNC_FOLDER + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
   }
 }

@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.pde.core.IModel;
 import org.eclipse.pde.core.build.IBuild;
 import org.eclipse.pde.core.build.IBuildModel;
@@ -64,9 +65,9 @@ import java.util.Set;
  */
 public final class VersionUtil
 {
-  public static final String BUILDER_ID = "org.eclipse.oomph.version.VersionBuilder";
+  public static final String BUILDER_ID = "org.eclipse.oomph.version.VersionBuilder"; //$NON-NLS-1$
 
-  public static final boolean DEBUG = Boolean.valueOf(System.getProperty("org.eclipse.oomph.version.debug", "false"));
+  public static final boolean DEBUG = Boolean.valueOf(System.getProperty("org.eclipse.oomph.version.debug", "false")); //$NON-NLS-1$ //$NON-NLS-2$
 
   private static final IWorkspace WORKSPACE = ResourcesPlugin.getWorkspace();
 
@@ -141,11 +142,11 @@ public final class VersionUtil
           {
             if (target == '\n')
             {
-              return "\n";
+              return "\n"; //$NON-NLS-1$
             }
             else if (target == '\r')
             {
-              return "\r\n";
+              return "\r\n"; //$NON-NLS-1$
             }
             else
             {
@@ -156,11 +157,11 @@ public final class VersionUtil
           {
             if (target == '\n')
             {
-              return "\n\r";
+              return "\n\r"; //$NON-NLS-1$
             }
             else if (target == '\r')
             {
-              return "\r";
+              return "\r"; //$NON-NLS-1$
             }
             else
             {
@@ -211,7 +212,7 @@ public final class VersionUtil
 
     if (result.isEmpty())
     {
-      throw new IllegalStateException("The project " + project.getName() + " is neither a plugin nor a feature and contains no products");
+      throw new IllegalStateException(NLS.bind(Messages.VersionUtil_BadProjectType_exception, project.getName()));
     }
 
     return result;
@@ -258,7 +259,7 @@ public final class VersionUtil
           if (proxy.getType() == IResource.FILE)
           {
             String name = proxy.getName();
-            if (name.endsWith(".product"))
+            if (name.endsWith(".product")) //$NON-NLS-1$
             {
               org.eclipse.pde.internal.core.product.WorkspaceProductModel workspaceProductModel = new org.eclipse.pde.internal.core.product.WorkspaceProductModel(
                   (IFile)proxy.requestResource(), false);
@@ -306,12 +307,12 @@ public final class VersionUtil
       return normalize(version);
     }
 
-    throw new IllegalStateException("Unexpected model type " + componentModel);
+    throw new IllegalStateException(NLS.bind(Messages.VersionUtil_BadModelType_exception, componentModel));
   }
 
   public static void rebuildReleaseProjects(final Set<String> releasePaths)
   {
-    new Job("Rebuilding workspace")
+    new Job(Messages.VersionUtil_RebuildingWorkspace_job)
     {
       @Override
       protected IStatus run(IProgressMonitor monitor)
@@ -346,7 +347,7 @@ public final class VersionUtil
 
   public static void cleanReleaseProjects(final String releasePath)
   {
-    new Job("Cleaning workspace")
+    new Job(Messages.VersionUtil_CleaningWorkspace_job)
     {
       @Override
       protected IStatus run(IProgressMonitor monitor)
@@ -412,7 +413,7 @@ public final class VersionUtil
     IBuild build = buildModel.getBuild();
     if (build == null)
     {
-      throw new IllegalStateException("Could not determine build model for " + getName(componentModel));
+      throw new IllegalStateException(NLS.bind(Messages.VersionUtil_BadBuildModel_exception, getName(componentModel)));
     }
 
     return build;
@@ -438,7 +439,7 @@ public final class VersionUtil
       return null;
     }
 
-    throw new IllegalStateException("Could not determine build model for " + getName(componentModel));
+    throw new IllegalStateException(NLS.bind(Messages.VersionUtil_DependencyRangeMin_message, getName(componentModel)));
   }
 
   @SuppressWarnings("restriction")
@@ -460,7 +461,7 @@ public final class VersionUtil
       return ((org.eclipse.pde.internal.core.ifeature.IFeatureModel)componentModel).getFeature().getId();
     }
 
-    throw new IllegalStateException("Unexpected model type " + componentModel);
+    throw new IllegalStateException(NLS.bind(Messages.VersionUtil_BadModelType_exception, componentModel));
   }
 
   @SuppressWarnings("restriction")
@@ -481,6 +482,6 @@ public final class VersionUtil
       return IElement.Type.PRODUCT;
     }
 
-    throw new IllegalStateException("Unexpected model type " + componentModel);
+    throw new IllegalStateException(NLS.bind(Messages.VersionUtil_BadModelType_exception, componentModel));
   }
 }

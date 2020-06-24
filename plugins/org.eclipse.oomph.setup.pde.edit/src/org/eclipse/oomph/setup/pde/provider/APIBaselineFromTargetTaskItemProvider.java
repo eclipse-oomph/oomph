@@ -69,8 +69,8 @@ public class APIBaselineFromTargetTaskItemProvider extends AbstractAPIBaselineTa
   protected void addTargetNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_APIBaselineFromTargetTask_targetName_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineFromTargetTask_targetName_feature", "_UI_APIBaselineFromTargetTask_type"),
+        getString("_UI_APIBaselineFromTargetTask_targetName_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineFromTargetTask_targetName_feature", "_UI_APIBaselineFromTargetTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PDEPackage.Literals.API_BASELINE_FROM_TARGET_TASK__TARGET_NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -83,7 +83,7 @@ public class APIBaselineFromTargetTaskItemProvider extends AbstractAPIBaselineTa
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/APIBaselineFromTargetTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/APIBaselineFromTargetTask")); //$NON-NLS-1$
   }
 
   /**

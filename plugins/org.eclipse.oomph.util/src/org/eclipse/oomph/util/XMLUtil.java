@@ -159,10 +159,10 @@ public final class XMLUtil
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < index; i++)
         {
-          builder.append(".*?<" + tagName + ">.*?</" + tagName + ">");
+          builder.append(".*?<" + tagName + ">.*?</" + tagName + ">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
 
-        builder.append(".*?<" + tagName + ">(.*?)</" + tagName + ">.*");
+        builder.append(".*?<" + tagName + ">(.*?)</" + tagName + ">.*"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         Pattern pattern = Pattern.compile(builder.toString(), Pattern.DOTALL);
         Matcher matcher = pattern.matcher(text);

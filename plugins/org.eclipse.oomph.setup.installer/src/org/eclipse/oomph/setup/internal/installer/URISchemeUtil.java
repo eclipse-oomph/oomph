@@ -39,15 +39,15 @@ import java.util.Set;
 
 public final class URISchemeUtil
 {
-  private static final Preference PREF_WEB_LINKS = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("web-links");
+  private static final Preference PREF_WEB_LINKS = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("web-links"); //$NON-NLS-1$
 
-  private static final IOperatingSystemRegistration OPERATING_SYSTEM_REGISTRATION = ReflectUtil.invokeMethod("getInstance", IOperatingSystemRegistration.class);
+  private static final IOperatingSystemRegistration OPERATING_SYSTEM_REGISTRATION = ReflectUtil.invokeMethod("getInstance", IOperatingSystemRegistration.class); //$NON-NLS-1$
 
-  private static final String INSTALLER_SCHEME = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_URI_SCHEME + "installer", "eclipse+installer");
+  private static final String INSTALLER_SCHEME = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_URI_SCHEME + "installer", "eclipse+installer"); //$NON-NLS-1$ //$NON-NLS-2$
 
-  private static final String MARKETPLACE_SCHEME = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_URI_SCHEME + "mpc", "?");
+  private static final String MARKETPLACE_SCHEME = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_URI_SCHEME + "mpc", "?"); //$NON-NLS-1$ //$NON-NLS-2$
 
-  private static final String FAKE_ECLIPSE_HOME = PropertiesUtil.getProperty("oomph.setup.installer.uri.scheme.eclipse.home", null);
+  private static final String FAKE_ECLIPSE_HOME = PropertiesUtil.getProperty("oomph.setup.installer.uri.scheme.eclipse.home", null); //$NON-NLS-1$
 
   private static final Collection<IScheme> SCHEMES;
 
@@ -130,20 +130,20 @@ public final class URISchemeUtil
     {
       restore.run();
     }
-    return StringUtil.isEmpty(eclipseLauncher) || eclipseLauncher.startsWith("file:") ? "" : eclipseLauncher;
+    return StringUtil.isEmpty(eclipseLauncher) || eclipseLauncher.startsWith("file:") ? "" : eclipseLauncher; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   private static Runnable setEclipseHome(String eclipseHome)
   {
     if (!StringUtil.isEmpty(eclipseHome))
     {
-      final String originalHomeLocation = System.getProperty("eclipse.home.location");
-      System.setProperty("eclipse.home.location", eclipseHome);
+      final String originalHomeLocation = System.getProperty("eclipse.home.location"); //$NON-NLS-1$
+      System.setProperty("eclipse.home.location", eclipseHome); //$NON-NLS-1$
       return new Runnable()
       {
         public void run()
         {
-          System.setProperty("eclipse.home.location", originalHomeLocation);
+          System.setProperty("eclipse.home.location", originalHomeLocation); //$NON-NLS-1$
         }
       };
     }
@@ -351,9 +351,7 @@ public final class URISchemeUtil
   {
     if (KeepInstallerUtil.isTransientInstaller())
     {
-      if (MessageDialog.openConfirm(shell, "Web Links Activation",
-          "The installer can be registered to handle web links only if it is kept in a permanent location.  "
-              + "Do you wish to proceed with making it permanent?"))
+      if (MessageDialog.openConfirm(shell, Messages.URISchemeUtil_title, Messages.URISchemeUtil_description))
       {
         return RegistrationConfirmation.KEEP_INSTALLER;
       }
@@ -381,9 +379,7 @@ public final class URISchemeUtil
   {
     if (KeepInstallerUtil.isTransientInstaller())
     {
-      if (MessageDialog.openConfirm(shell, "Web Links Activation",
-          "The installer can be registered to handle web links only if it is kept in a permanent location.  "
-              + "Do you wish to proceed with making it permanent?"))
+      if (MessageDialog.openConfirm(shell, Messages.URISchemeUtil_title, Messages.URISchemeUtil_description))
       {
         return RegistrationConfirmation.KEEP_INSTALLER;
       }

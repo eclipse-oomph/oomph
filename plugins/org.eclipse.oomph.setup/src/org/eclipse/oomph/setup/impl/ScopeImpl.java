@@ -262,7 +262,7 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
     if (!labelQualifiers.isEmpty())
     {
       StringBuilder result = new StringBuilder(label);
-      result.append(" (");
+      result.append(" ("); //$NON-NLS-1$
       boolean first = true;
       for (String labelQualifier : labelQualifiers)
       {
@@ -272,14 +272,14 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
         }
         else
         {
-          result.append(" - ");
+          result.append(" - "); //$NON-NLS-1$
 
         }
 
         result.append(labelQualifier);
       }
 
-      result.append(")");
+      result.append(")"); //$NON-NLS-1$
 
       label = result.toString();
     }
@@ -391,11 +391,11 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (name: ");
+    result.append(" (name: "); //$NON-NLS-1$
     result.append(name);
-    result.append(", label: ");
+    result.append(", label: "); //$NON-NLS-1$
     result.append(label);
-    result.append(", description: ");
+    result.append(", description: "); //$NON-NLS-1$
     result.append(description);
     result.append(')');
     return result.toString();

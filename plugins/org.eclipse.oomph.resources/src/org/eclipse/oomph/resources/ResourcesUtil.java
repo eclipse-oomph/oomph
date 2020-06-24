@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.osgi.util.NLS;
 
 import org.w3c.dom.Element;
 
@@ -70,14 +71,14 @@ public final class ResourcesUtil
   public static String getProjectName(File folder) throws ParserConfigurationException, Exception
   {
     DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
-    Element rootElement = XMLUtil.loadRootElement(documentBuilder, new File(folder, ".project"));
+    Element rootElement = XMLUtil.loadRootElement(documentBuilder, new File(folder, ".project")); //$NON-NLS-1$
 
     final AtomicReference<String> projectName = new AtomicReference<String>();
     XMLUtil.handleChildElements(rootElement, new ElementHandler()
     {
       public void handleElement(Element element) throws Exception
       {
-        if ("name".equals(element.getTagName()))
+        if ("name".equals(element.getTagName())) //$NON-NLS-1$
         {
           projectName.set(element.getTextContent().trim());
         }
@@ -117,7 +118,7 @@ public final class ResourcesUtil
     if (locationURI != null)
     {
       String scheme = locationURI.getScheme();
-      return "file".equalsIgnoreCase(scheme);
+      return "file".equalsIgnoreCase(scheme); //$NON-NLS-1$
     }
 
     return false;
@@ -154,7 +155,7 @@ public final class ResourcesUtil
         File file;
         if (!local)
         {
-          projectFolder = File.createTempFile("local-", "");
+          projectFolder = File.createTempFile("local-", ""); //$NON-NLS-1$ //$NON-NLS-2$
           projectFolder.delete();
 
           file = new File(projectFolder, path.toOSString());
@@ -242,7 +243,7 @@ public final class ResourcesUtil
     String projectName = getProjectName(projectLocation);
     if (projectName == null || projectName.length() == 0)
     {
-      ResourcesPlugin.INSTANCE.log("No project name for folder " + projectLocation);
+      ResourcesPlugin.INSTANCE.log(NLS.bind(Messages.ResourcesUtil_NoProjectName_message, projectLocation));
       return ImportResult.ERROR;
     }
 
@@ -282,7 +283,7 @@ public final class ResourcesUtil
       locationPath = null;
     }
 
-    monitor.setTaskName("Importing project " + projectName);
+    monitor.setTaskName(NLS.bind(Messages.ResourcesUtil_ImportingProject_task, projectName));
 
     IProjectDescription projectDescription = workspace.newProjectDescription(projectName);
     projectDescription.setLocation(locationPath);
@@ -302,7 +303,7 @@ public final class ResourcesUtil
     File existingLocation = new File(project.getLocation().toOSString()).getCanonicalFile();
     if (!existingLocation.equals(location))
     {
-      ResourcesPlugin.INSTANCE.log("Project " + projectName + " exists in different location: " + existingLocation);
+      ResourcesPlugin.INSTANCE.log(NLS.bind(Messages.ResourcesUtil_DifferentLocation_message, projectName, existingLocation));
       return ImportResult.EXISTED_DIFFERENT_LOCATION;
     }
 
@@ -330,7 +331,7 @@ public final class ResourcesUtil
 
         for (File file : root.getLocation().toFile().listFiles())
         {
-          if (file.isDirectory() && !".metadata".equals(file.getName()))
+          if (file.isDirectory() && !".metadata".equals(file.getName())) //$NON-NLS-1$
           {
             IOUtil.deleteBestEffort(file);
           }

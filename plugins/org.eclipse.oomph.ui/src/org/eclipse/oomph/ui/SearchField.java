@@ -66,12 +66,12 @@ public class SearchField extends Composite
       @SuppressWarnings("restriction")
       protected void init(int treeStyle, PatternFilter filter)
       {
-        ReflectUtil.setValue("patternFilter", this, filter);
+        ReflectUtil.setValue("patternFilter", this, filter); //$NON-NLS-1$
 
         showFilterControls = PlatformUI.getPreferenceStore().getBoolean(IWorkbenchPreferenceConstants.SHOW_FILTERED_TEXTS);
         createControl(SearchField.this, treeStyle);
 
-        Job refreshJob = new Job("Refresh Filter")
+        Job refreshJob = new Job(Messages.SearchField_refreshJob_name)
         {
           @Override
           protected IStatus run(IProgressMonitor monitor)
@@ -92,7 +92,7 @@ public class SearchField extends Composite
         };
 
         refreshJob.setSystem(true);
-        ReflectUtil.setValue("refreshJob", this, refreshJob);
+        ReflectUtil.setValue("refreshJob", this, refreshJob); //$NON-NLS-1$
 
         setInitialText(org.eclipse.ui.internal.WorkbenchMessages.FilteredTree_FilterMessage);
         setFont(SearchField.this.getFont());
@@ -173,9 +173,9 @@ public class SearchField extends Composite
   protected void cancelPressed(TraverseEvent e)
   {
     Text filterControl = filteredTree.getFilterControl();
-    if (!"".equals(filterControl.getText()))
+    if (!"".equals(filterControl.getText())) //$NON-NLS-1$
     {
-      filterControl.setText("");
+      filterControl.setText(""); //$NON-NLS-1$
       e.doit = false;
     }
   }

@@ -200,7 +200,7 @@ public class NamePredicateImpl extends PredicateImpl implements NamePredicate
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (pattern: ");
+    result.append(" (pattern: "); //$NON-NLS-1$
     result.append(pattern);
     result.append(')');
     return result.toString();

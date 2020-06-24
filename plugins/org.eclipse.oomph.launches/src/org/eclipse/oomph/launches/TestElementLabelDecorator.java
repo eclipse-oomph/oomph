@@ -52,7 +52,7 @@ public class TestElementLabelDecorator extends BaseLabelProvider implements ILab
         if (count > 1)
         {
           double average = time / count;
-          return text + " = " + count + " x " + timeFormat.format(average) + " s";
+          return text + " = " + count + " x " + timeFormat.format(average) + " s"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
       }
     }

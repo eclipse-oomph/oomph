@@ -76,9 +76,11 @@ public class UserItemProvider extends ScopeItemProvider
   protected void addAcceptedLicensesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_User_acceptedLicenses_feature"), getString("_UI_PropertyDescriptor_description", "_UI_User_acceptedLicenses_feature", "_UI_User_type"),
+        getString("_UI_User_acceptedLicenses_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_User_acceptedLicenses_feature", "_UI_User_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.USER__ACCEPTED_LICENSES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
-        new String[] { "org.eclipse.ui.views.properties.expert" }));
+        new String[] { "org.eclipse.ui.views.properties.expert" //$NON-NLS-1$
+        }));
   }
 
   /**
@@ -90,10 +92,11 @@ public class UserItemProvider extends ScopeItemProvider
   protected void addAcceptedCertificatesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_User_acceptedCertificates_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_User_acceptedCertificates_feature", "_UI_User_type"),
+        getString("_UI_User_acceptedCertificates_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_User_acceptedCertificates_feature", "_UI_User_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.USER__ACCEPTED_CERTIFICATES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
-        new String[] { "org.eclipse.ui.views.properties.expert" }));
+        new String[] { "org.eclipse.ui.views.properties.expert" //$NON-NLS-1$
+        }));
   }
 
   /**
@@ -105,7 +108,8 @@ public class UserItemProvider extends ScopeItemProvider
   protected void addUnsignedPolicyPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_User_unsignedPolicy_feature"), getString("_UI_PropertyDescriptor_description", "_UI_User_unsignedPolicy_feature", "_UI_User_type"),
+        getString("_UI_User_unsignedPolicy_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_User_unsignedPolicy_feature", "_UI_User_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.USER__UNSIGNED_POLICY, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -118,7 +122,8 @@ public class UserItemProvider extends ScopeItemProvider
   protected void addCertificatePolicyPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_User_certificatePolicy_feature"), getString("_UI_PropertyDescriptor_description", "_UI_User_certificatePolicy_feature", "_UI_User_type"),
+        getString("_UI_User_certificatePolicy_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_User_certificatePolicy_feature", "_UI_User_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.USER__CERTIFICATE_POLICY, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -131,9 +136,11 @@ public class UserItemProvider extends ScopeItemProvider
   protected void addQuestionnaireDatePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_User_questionnaireDate_feature"), getString("_UI_PropertyDescriptor_description", "_UI_User_questionnaireDate_feature", "_UI_User_type"),
+        getString("_UI_User_questionnaireDate_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_User_questionnaireDate_feature", "_UI_User_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.USER__QUESTIONNAIRE_DATE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
-        new String[] { "org.eclipse.ui.views.properties.expert" }));
+        new String[] { "org.eclipse.ui.views.properties.expert" //$NON-NLS-1$
+        }));
   }
 
   /**
@@ -145,10 +152,11 @@ public class UserItemProvider extends ScopeItemProvider
   protected void addPreferenceRecorderDefaultPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_User_preferenceRecorderDefault_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_User_preferenceRecorderDefault_feature", "_UI_User_type"),
+        getString("_UI_User_preferenceRecorderDefault_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_User_preferenceRecorderDefault_feature", "_UI_User_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.USER__PREFERENCE_RECORDER_DEFAULT, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null,
-        new String[] { "org.eclipse.ui.views.properties.expert" }));
+        new String[] { "org.eclipse.ui.views.properties.expert" //$NON-NLS-1$
+        }));
   }
 
   /**
@@ -201,7 +209,7 @@ public class UserItemProvider extends ScopeItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/User"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/User")); //$NON-NLS-1$
   }
 
   /**
@@ -222,6 +230,7 @@ public class UserItemProvider extends ScopeItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     return getString("_UI_User_type");

@@ -112,7 +112,7 @@ public abstract class AbstractSimpleDialog extends Shell
       Bundle brandingBundle = product.getDefiningBundle();
       if (brandingBundle != null)
       {
-        String titleImageKey = product.getProperty("titleImage");
+        String titleImageKey = product.getProperty("titleImage"); //$NON-NLS-1$
         if (titleImageKey != null)
         {
           URI titleImageURI = URI.createURI(titleImageKey);
@@ -132,7 +132,7 @@ public abstract class AbstractSimpleDialog extends Shell
 
     if (titleImage == null)
     {
-      titleImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/title.png");
+      titleImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/title.png"); //$NON-NLS-1$
     }
 
     titleImageLabel.setImage(titleImage);
@@ -236,8 +236,8 @@ public abstract class AbstractSimpleDialog extends Shell
     if (dialogSizeSettings != null)
     {
       Point size = getShell().getSize();
-      dialogSizeSettings.put("width", size.x);
-      dialogSizeSettings.put("height", size.y);
+      dialogSizeSettings.put("width", size.x); //$NON-NLS-1$
+      dialogSizeSettings.put("height", size.y); //$NON-NLS-1$
     }
 
     dispose();
@@ -257,8 +257,8 @@ public abstract class AbstractSimpleDialog extends Shell
       try
       {
         Rectangle monitorBounds = display.getPrimaryMonitor().getBounds();
-        int savedWidth = dialogSizeSettings.getInt("width");
-        int savedHeigth = dialogSizeSettings.getInt("height");
+        int savedWidth = dialogSizeSettings.getInt("width"); //$NON-NLS-1$
+        int savedHeigth = dialogSizeSettings.getInt("height"); //$NON-NLS-1$
         return new Point(Math.min(monitorBounds.width, Math.max(width, savedWidth)), Math.min(monitorBounds.height, Math.max(height, savedHeigth)));
       }
       catch (NumberFormatException ex)

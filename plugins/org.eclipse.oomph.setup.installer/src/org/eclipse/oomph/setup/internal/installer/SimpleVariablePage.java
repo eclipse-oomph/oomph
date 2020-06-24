@@ -91,6 +91,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.Browser;
@@ -152,33 +153,33 @@ import java.util.Set;
  */
 public class SimpleVariablePage extends SimpleInstallerPage
 {
-  public static final int PROGRESS_WATCHDOG_TIMEOUT = PropertiesUtil.getProperty("oomph.progress.watchdog.timeout", 15);
+  public static final int PROGRESS_WATCHDOG_TIMEOUT = PropertiesUtil.getProperty("oomph.progress.watchdog.timeout", 15); //$NON-NLS-1$
 
-  private static final boolean EXIT_AFTER_LAUNCH = !PropertiesUtil.isProperty("oomph.no.exit.after.launch");
+  private static final boolean EXIT_AFTER_LAUNCH = !PropertiesUtil.isProperty("oomph.no.exit.after.launch"); //$NON-NLS-1$
 
-  private static final Preference PREF_STARTMENU_ENTRY = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("startMenuEntry");
+  private static final Preference PREF_STARTMENU_ENTRY = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("startMenuEntry"); //$NON-NLS-1$
 
-  private static final Preference PREF_DESKTOP_SHORTCUT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("desktopShortcut");
+  private static final Preference PREF_DESKTOP_SHORTCUT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("desktopShortcut"); //$NON-NLS-1$
 
-  private static final String PROP_INSTALL_ROOT = "oomph.setup.install.root";
+  private static final String PROP_INSTALL_ROOT = "oomph.setup.install.root"; //$NON-NLS-1$
 
-  private static final Preference PREF_INSTALL_ROOT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("installRoot");
+  private static final Preference PREF_INSTALL_ROOT = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("installRoot"); //$NON-NLS-1$
 
-  private static final File FILE_INSTALL_ROOT = new File(SetupInstallerPlugin.INSTANCE.getUserLocation().toFile(), PREF_INSTALL_ROOT.key() + ".txt");
+  private static final File FILE_INSTALL_ROOT = new File(SetupInstallerPlugin.INSTANCE.getUserLocation().toFile(), PREF_INSTALL_ROOT.key() + ".txt"); //$NON-NLS-1$
 
-  private static final String TEXT_README = "show readme file";
+  private static final String TEXT_README = Messages.SimpleVariablePage_ShowReadme_label;
 
-  private static final String TEXT_SYSTEM_EXPLORER = "open in system explorer";
+  private static final String TEXT_SYSTEM_EXPLORER = Messages.SimpleVariablePage_OpeSystemExplorer_label;
 
-  private static final String TEXT_KEEP = "keep installer";
+  private static final String TEXT_KEEP = Messages.SimpleVariablePage_KeepInstaller_label;
 
-  private static final String MESSAGE_SUCCESS = "Installation completed successfully.";
+  private static final String MESSAGE_SUCCESS = Messages.SimpleVariablePage_InstallSuccess_message;
 
-  private static final String MESSAGE_FAILURE = "Installation failed with an error.";
+  private static final String MESSAGE_FAILURE = Messages.SimpleVariablePage_InstallFail_message;
 
-  protected static final boolean JRE_CHOICE = Boolean.valueOf(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_JRE_CHOICE, "true"));
+  protected static final boolean JRE_CHOICE = Boolean.valueOf(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_JRE_CHOICE, "true")); //$NON-NLS-1$
 
-  protected static final boolean INSTALL_CHOICE = Boolean.valueOf(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALL_CHOICE, "true"));
+  protected static final boolean INSTALL_CHOICE = Boolean.valueOf(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALL_CHOICE, "true")); //$NON-NLS-1$
 
   private final SelectionMemento selectionMemento;
 
@@ -305,7 +306,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         public void changing(LocationEvent event)
         {
           String url = event.location;
-          if (!"about:blank".equals(url))
+          if (!"about:blank".equals(url)) //$NON-NLS-1$
           {
             OS.INSTANCE.openSystemBrowser(url);
             event.doit = false;
@@ -333,7 +334,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     variablesComposite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
     // Row 3
-    versionLabel = createLabel(variablesComposite, "Product Version");
+    versionLabel = createLabel(variablesComposite, Messages.SimpleVariablePage_ProductVersion_label);
 
     // Spacer to get a little bit more distance between labels and input fields
     versionSpacer = spacer(variablesComposite);
@@ -353,13 +354,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     if (InstallerUI.BITNESS_CHOOSE && JREManager.BITNESS_CHANGEABLE)
     {
-      bitness32Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_enabled.png"),
-          SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_selected.png"));
-      bitness32Button.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_disabled.png"));
+      bitness32Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_enabled.png"), //$NON-NLS-1$
+          SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_selected.png")); //$NON-NLS-1$
+      bitness32Button.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/32bit_disabled.png")); //$NON-NLS-1$
       bitness32Button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).indent(4, 0).hint(SWT.DEFAULT, 30).create());
       bitness32Button.setChecked(false);
       bitness32Button.setVisible(JREManager.BITNESS_CHANGEABLE);
-      bitness32Button.setToolTipText("Create a 32 bit installation");
+      bitness32Button.setToolTipText(Messages.SimpleVariablePage_32Bit_message);
       bitness32Button.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -371,13 +372,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
         }
       });
 
-      bitness64Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_enabled.png"),
-          SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_selected.png"));
-      bitness64Button.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_disabled.png"));
+      bitness64Button = new ImageCheckbox(variablesComposite, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_enabled.png"), //$NON-NLS-1$
+          SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_selected.png")); //$NON-NLS-1$
+      bitness64Button.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/64bit_disabled.png")); //$NON-NLS-1$
       bitness64Button.setLayoutData(GridDataFactory.swtDefaults().align(SWT.BEGINNING, SWT.BEGINNING).hint(SWT.DEFAULT, 30).create());
       bitness64Button.setChecked(true);
       bitness64Button.setVisible(JREManager.BITNESS_CHANGEABLE);
-      bitness64Button.setToolTipText("Create a 64 bit installation");
+      bitness64Button.setToolTipText(Messages.SimpleVariablePage_64Bit_message);
       bitness64Button.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -396,7 +397,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     }
 
     // Row 4
-    javaLabel = createLabel(variablesComposite, "Java VM");
+    javaLabel = createLabel(variablesComposite, Messages.SimpleVariablePage_JavaVM_label);
 
     javaSpacer = spacer(variablesComposite);
 
@@ -413,10 +414,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     });
 
-    javaButton = new ImageHoverButton(variablesComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_hover.png"), SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_disabled.png"));
+    javaButton = new ImageHoverButton(variablesComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"), //$NON-NLS-1$
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_hover.png"), SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_disabled.png")); //$NON-NLS-1$ //$NON-NLS-2$
     javaButton.setLayoutData(GridDataFactory.swtDefaults().indent(4, 0).create());
-    javaButton.setToolTipText("Select a Java VM");
+    javaButton.setToolTipText(Messages.SimpleVariablePage_JavaVM_message);
     javaButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -455,14 +456,14 @@ public class SimpleVariablePage extends SimpleInstallerPage
       @Override
       protected void setLabel(String text)
       {
-        super.setLabel(text + " ");
+        super.setLabel(text + " "); //$NON-NLS-1$
       }
     };
 
     javaTrailingSpacer = spacer(variablesComposite);
 
     // Row 5
-    installFolderLabel = createLabel(variablesComposite, "Installation Folder");
+    installFolderLabel = createLabel(variablesComposite, Messages.SimpleVariablePage_InstallationFolder_label);
     installFolderSpacer = spacer(variablesComposite);
 
     folderText = createTextField(variablesComposite);
@@ -510,8 +511,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
         validator.schedule();
 
         String productInstallFolder = getProductInstallFolder().toString();
-        installFolderLabel.setToolTipText("Install into the folder '" + productInstallFolder + "'");
-        installButton.setToolTipText("Start installing the product into '" + productInstallFolder + "'");
+        installFolderLabel.setToolTipText(NLS.bind(Messages.SimpleVariablePage_InstallInto_message, productInstallFolder));
+        installButton.setToolTipText(NLS.bind(Messages.SimpleVariablePage_Installing_message, productInstallFolder));
       }
     });
 
@@ -524,10 +525,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     };
 
-    folderButton = new ImageHoverButton(variablesComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_hover.png"), SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_disabled.png"));
+    folderButton = new ImageHoverButton(variablesComposite, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder.png"), //$NON-NLS-1$
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_hover.png"), SetupInstallerPlugin.INSTANCE.getSWTImage("simple/folder_disabled.png")); //$NON-NLS-1$ //$NON-NLS-2$
     folderButton.setLayoutData(GridDataFactory.swtDefaults().indent(4, 0).create());
-    folderButton.setToolTipText("Select an installation folder");
+    folderButton.setToolTipText(Messages.SimpleVariablePage_SelectInstallFolder_message);
     folderButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -535,7 +536,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       {
         DirectoryDialog dialog = new DirectoryDialog(getShell());
         dialog.setText(PropertiesUtil.getProductName());
-        dialog.setMessage("Select an installation folder:");
+        dialog.setMessage(Messages.SimpleVariablePage_SelectInstallFolder2_message);
 
         if (!StringUtil.isEmpty(installFolder))
         {
@@ -586,7 +587,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         spacer(variablesComposite);
         spacer(variablesComposite);
 
-        createStartMenuEntryButton = createCheckbox(variablesComposite, "create start menu entry");
+        createStartMenuEntryButton = createCheckbox(variablesComposite, Messages.SimpleVariablePage_StartMenu_label);
         createStartMenuEntryButton.setChecked(PREF_STARTMENU_ENTRY.get(true));
         createStartMenuEntryButton.addSelectionListener(new SelectionAdapter()
         {
@@ -605,7 +606,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         spacer(variablesComposite);
         spacer(variablesComposite);
 
-        createDesktopShortcutButton = createCheckbox(variablesComposite, "create desktop shortcut");
+        createDesktopShortcutButton = createCheckbox(variablesComposite, Messages.SimpleVariablePage_DesktopShortcut_label);
         createDesktopShortcutButton.setChecked(PREF_DESKTOP_SHORTCUT.get(true));
         createDesktopShortcutButton.addSelectionListener(new SelectionAdapter()
         {
@@ -642,7 +643,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
     duringInstallContainer.setLayout(UIUtil.createGridLayout(1));
 
     // During installation.
-    cancelButton = createButton(duringInstallContainer, "Cancel Installation", "Cancel", SetupInstallerPlugin.INSTANCE.getSWTImage("simple/delete.png"));
+    cancelButton = createButton(duringInstallContainer, Messages.SimpleVariablePage_CancelInstallation_label, Messages.SimpleVariablePage_Cancel_message,
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/delete.png")); //$NON-NLS-1$
     cancelButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -670,12 +672,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
         if (readmePath != null)
         {
           String relativeProductFolder = performer.getRelativeProductFolder();
-          java.net.URI readmeURI = new File(installFolder, relativeProductFolder + "/" + readmePath).toURI();
+          java.net.URI readmeURI = new File(installFolder, relativeProductFolder + "/" + readmePath).toURI(); //$NON-NLS-1$
           dialog.showReadme(readmeURI);
         }
       }
     });
-    showReadmeButton.setToolTipText("Show the readme file of the installed product");
+    showReadmeButton.setToolTipText(Messages.SimpleVariablePage_ShowReadme_message);
 
     openInSystemExplorerButton = createButton(afterInstallComposite, TEXT_SYSTEM_EXPLORER, null, null);
     openInSystemExplorerButton.addSelectionListener(new SelectionAdapter()
@@ -686,7 +688,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         String launchLocation = getProductInstallFolder().toURI().toString();
         if (OS.INSTANCE.isMac())
         {
-          launchLocation = launchLocation.replaceAll("/[^/]+.app/$", "/");
+          launchLocation = launchLocation.replaceAll("/[^/]+.app/$", "/"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         OS.INSTANCE.openSystemBrowser(launchLocation);
       }
@@ -761,7 +763,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   @Override
   protected void backSelected()
   {
-    if (promptLaunchProduct("You're about to install another product"))
+    if (promptLaunchProduct(Messages.SimpleVariablePage_InstallAnother_message))
     {
       super.backSelected();
     }
@@ -771,8 +773,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
   {
     if (installButton != null && installButton.getCurrentState() == State.LAUNCH)
     {
-      MessageDialog prompt = new MessageDialog(dialog, "Launch Product", null,
-          currentAction + " without having launched the installed product.\n\nDo you want to launch it now?", MessageDialog.QUESTION,
+      MessageDialog prompt = new MessageDialog(dialog, Messages.SimpleVariablePage_LaunchProduct_title, null,
+          currentAction + Messages.SimpleVariablePage_NoYetLaunched_message, MessageDialog.QUESTION,
           new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL, IDialogConstants.CANCEL_LABEL }, 0);
 
       int result = prompt.open();
@@ -805,7 +807,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     button.setText(text);
     button.setCornerWidth(10);
     button.setAlignment(SWT.CENTER);
-    button.setFont(SimpleInstallerDialog.getFont(1, "normal"));
+    button.setFont(SimpleInstallerDialog.getFont(1, "normal")); //$NON-NLS-1$
     button.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 22).create());
     button.setForeground(AbstractSimpleDialog.COLOR_LABEL_FOREGROUND);
 
@@ -941,7 +943,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     if (detailBrowser != null)
     {
       String html = SimpleInstallerDialog.getPageTemplate();
-      html = html.replace("%CONTENT%", SimpleProductPage.renderProduct(product, productVersion, true));
+      html = html.replace("%CONTENT%", SimpleProductPage.renderProduct(product, productVersion, true)); //$NON-NLS-1$
 
       detailBrowser.setText(html, true);
     }
@@ -1063,7 +1065,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       name = name.substring(lastDot + 1);
     }
 
-    name += "-" + selectedProductVersion.getName().replace('.', '-');
+    name += "-" + selectedProductVersion.getName().replace('.', '-'); //$NON-NLS-1$
 
     if (installRoot == null)
     {
@@ -1074,7 +1076,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       if (FILE_INSTALL_ROOT.isFile())
       {
-        List<String> lines = IOUtil.readLines(FILE_INSTALL_ROOT, "UTF-8");
+        List<String> lines = IOUtil.readLines(FILE_INSTALL_ROOT, "UTF-8"); //$NON-NLS-1$
         if (lines != null && !lines.isEmpty())
         {
           installRoot = lines.get(0);
@@ -1090,7 +1092,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         // Default to ${user.home}/eclipse, unless there is a file at that location, or what looks like an existing Eclipse installation.
         // In that case default just to ${user.home}.
         String defaultValue = PropertiesUtil.getUserHome();
-        File defaultInstallRoot = new File(defaultValue, "eclipse");
+        File defaultInstallRoot = new File(defaultValue, "eclipse"); //$NON-NLS-1$
         if (!defaultInstallRoot.exists())
         {
           defaultValue = defaultInstallRoot.toString();
@@ -1100,7 +1102,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
           boolean isEclipseInstallation = false;
           for (File file : defaultInstallRoot.listFiles())
           {
-            if ("eclipse.ini".equals(file.getName()))
+            if ("eclipse.ini".equals(file.getName())) //$NON-NLS-1$
             {
               isEclipseInstallation = true;
             }
@@ -1131,7 +1133,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     }
 
-    throw new IllegalStateException("User home is full");
+    throw new IllegalStateException(Messages.SimpleVariablePage_HomeFull_exception);
   }
 
   private void install()
@@ -1245,7 +1247,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     try
     {
-      IOUtil.writeLines(FILE_INSTALL_ROOT, "UTF-8", Collections.singletonList(installRoot));
+      IOUtil.writeLines(FILE_INSTALL_ROOT, "UTF-8", Collections.singletonList(installRoot)); //$NON-NLS-1$
 
       SimplePrompter prompter = new SimplePrompter(OS.INSTANCE.getForBitness(javaController.getBitness()), vmPath);
       performer = SetupTaskPerformer.create(uriConverter, prompter, Trigger.BOOTSTRAP, setupContext, false);
@@ -1258,25 +1260,19 @@ public class SimpleVariablePage extends SimpleInstallerPage
         {
           if (builder.length() != 0)
           {
-            builder.append(", ");
+            builder.append(", "); //$NON-NLS-1$
           }
 
           builder.append(variable.getName());
         }
 
         final String variables = builder.toString();
-        final boolean multi = unresolvedVariables.size() > 1;
-
         UIUtil.syncExec(new Runnable()
         {
           public void run()
           {
-            String message = "The variable" + (multi ? "s" : "") + " " + variables + " " + (multi ? "are" : "is") + " undefined. You likely declared "
-                + (multi ? "them" : "it")
-                + " in your 'user.setup' file without appropriate restrictions, so that you can't use the installer's simple mode anymore."
-                + "\n\nDo you want to switch to the advanced mode now?";
-
-            if (MessageDialog.openQuestion(getShell(), "Undefined Variables", message))
+            String message = NLS.bind(Messages.SimpleVariablePage_UndefinedVersiables_message, variables);
+            if (MessageDialog.openQuestion(getShell(), Messages.SimpleVariablePage_UndefinedVariables_title, message))
             {
               unresolvedVariables.clear();
               dialog.switchToAdvancedMode();
@@ -1289,7 +1285,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
           return;
         }
 
-        throw new UnloggedException("Undefined variable" + (multi ? "s" : "") + ": " + variables);
+        throw new UnloggedException(NLS.bind(Messages.SimpleVariablePage_UndefinedVariables_exception, variables));
       }
 
       EList<SetupTask> triggeredSetupTasks = performer.getTriggeredSetupTasks();
@@ -1302,7 +1298,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
             {
               public void run()
               {
-                EnablementDialog enablementDialog = new EnablementDialog(getShell(), "the installer", enablementTasks);
+                EnablementDialog enablementDialog = new EnablementDialog(getShell(), Messages.SimpleVariablePage_Installer_message, enablementTasks);
                 if (enablementDialog.open() == EnablementDialog.OK)
                 {
                   selectionMemento.setProductVersion(EcoreUtil.getURI(selectedProductVersion));
@@ -1338,14 +1334,14 @@ public class SimpleVariablePage extends SimpleInstallerPage
       performer.setOffline(PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP));
       performer.setMirrors(true);
       performer.setProgress(progress);
-      performer.log("Executing " + performer.getTrigger().toString().toLowerCase() + " tasks");
+      performer.log(NLS.bind(Messages.SimpleVariablePage_ExecutingTasks_message, performer.getTrigger().toString().toLowerCase()));
       performer.put(org.eclipse.equinox.internal.provisional.p2.core.eventbus.ProvisioningListener.class, new DownloadArtifactLister());
       performer.perform(progress);
       performer.recordVariables(installation, null, user);
       performer.savePasswords();
 
       File configurationLocation = performer.getProductConfigurationLocation();
-      installation.eResource().setURI(URI.createFileURI(new File(configurationLocation, "org.eclipse.oomph.setup/installation.setup").toString()));
+      installation.eResource().setURI(URI.createFileURI(new File(configurationLocation, "org.eclipse.oomph.setup/installation.setup").toString())); //$NON-NLS-1$
       BaseUtil.saveEObject(installation);
     }
     finally
@@ -1407,7 +1403,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       installButton.setCurrentState(State.LAUNCH);
       File launchLocation = performer.getExecutableInfo().getLaunchLocation();
-      installButton.setToolTipText("Launch '" + launchLocation + "'");
+      installButton.setToolTipText(NLS.bind(Messages.SimpleVariablePage_Launch_message, launchLocation));
 
       keepInstallerButton.setVisible(KeepInstallerUtil.canKeepInstaller());
 
@@ -1429,7 +1425,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       showReadmeButton.setVisible(readmePath != null);
 
-      openInSystemExplorerButton.setToolTipText("Open the folder '" + getProductInstallFolder() + "' in the system explorer");
+      openInSystemExplorerButton.setToolTipText(NLS.bind(Messages.SimpleVariablePage_OpenFolder_message, getProductInstallFolder()));
 
       boolean createMenuShortcut = createStartMenuEntryButton != null && createStartMenuEntryButton.isChecked();
       boolean createDesktopShortcut = createDesktopShortcutButton != null && createDesktopShortcutButton.isChecked();
@@ -1457,7 +1453,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         if (shortCutName == null)
         {
           ProductCatalog productCatalog = product.getProductCatalog();
-          String catalogName = "user.products".equals(productCatalog.getName()) ? "" : productCatalog.getLabel();
+          String catalogName = "user.products".equals(productCatalog.getName()) ? "" : productCatalog.getLabel(); //$NON-NLS-1$ //$NON-NLS-2$
           int firstDot = catalogName.indexOf('.');
           if (firstDot != -1)
           {
@@ -1465,26 +1461,26 @@ public class SimpleVariablePage extends SimpleInstallerPage
           }
 
           String productName = product.getName();
-          if (productName.startsWith("epp.package."))
+          if (productName.startsWith("epp.package.")) //$NON-NLS-1$
           {
-            productName = productName.substring("epp.package.".length());
+            productName = productName.substring("epp.package.".length()); //$NON-NLS-1$
           }
 
           productName = productName.replace('.', ' ');
 
-          String qualifiedProductName = productName + " " + selectedProductVersion.getName().replace('.', ' ');
+          String qualifiedProductName = productName + " " + selectedProductVersion.getName().replace('.', ' '); //$NON-NLS-1$
 
-          shortCutName = StringUtil.capAll(StringUtil.isEmpty(catalogName) ? qualifiedProductName : catalogName + " " + qualifiedProductName);
+          shortCutName = StringUtil.capAll(StringUtil.isEmpty(catalogName) ? qualifiedProductName : catalogName + " " + qualifiedProductName); //$NON-NLS-1$
         }
 
         if (createMenuShortcut)
         {
-          KeepInstallerUtil.createShortCut("Programs", "Eclipse", executable.getAbsolutePath(), shortCutName);
+          KeepInstallerUtil.createShortCut("Programs", "Eclipse", executable.getAbsolutePath(), shortCutName); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         if (createDesktopShortcut)
         {
-          KeepInstallerUtil.createShortCut("Desktop", null, executable.getAbsolutePath(), shortCutName);
+          KeepInstallerUtil.createShortCut("Desktop", null, executable.getAbsolutePath(), shortCutName); //$NON-NLS-1$
         }
       }
 
@@ -1527,7 +1523,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
         public String getLabel()
         {
-          return "Show log.";
+          return Messages.SimpleVariablePage_ShowLog_message;
         }
       };
     }
@@ -1542,7 +1538,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
         public String getLabel()
         {
-          return "Show Installer log.";
+          return Messages.SimpleVariablePage_ShowInstallerLog_message;
         }
       };
     }
@@ -1664,7 +1660,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     Object input = javaViewer.getInput();
     if (input instanceof Collection<?> && ((Collection<?>)input).isEmpty())
     {
-      return "Configuration of JRE failed.";
+      return Messages.SimpleVariablePage_JREFailed_message;
     }
 
     return null;
@@ -1675,7 +1671,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     File folder = new File(installFolder.trim());
     if (!folder.isAbsolute())
     {
-      folder = new File(PropertiesUtil.getUserHome(), "eclipse/" + installFolder.trim());
+      folder = new File(PropertiesUtil.getUserHome(), "eclipse/" + installFolder.trim()); //$NON-NLS-1$
     }
 
     return folder;
@@ -1695,10 +1691,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       if (StringUtil.isEmpty(installFolder.trim()))
       {
-        return Pair.create(Type.WARNING, "The folder is unspecified so '" + canonicalFolder + "' will be used.");
+        return Pair.create(Type.WARNING, NLS.bind(Messages.SimpleVariablePage_FolderUnspecified_message, canonicalFolder));
       }
 
-      return Pair.create(Type.WARNING, "The folder is specified as '" + installFolder + "' but '" + canonicalFolder + "' will be used.");
+      return Pair.create(Type.WARNING, NLS.bind(Messages.SimpleVariablePage_FolderDifferentFromSpecified_message, installFolder, canonicalFolder));
     }
 
     installRoot = parentFolder == null ? canonicalFolder.getAbsolutePath() : parentFolder.getAbsolutePath();
@@ -1710,7 +1706,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   {
     if (parentFolder == null)
     {
-      return Pair.create(Type.ERROR, "The product cannot be installed in the root of the file system.");
+      return Pair.create(Type.ERROR, Messages.SimpleVariablePage_InvalidRootFolder_message);
     }
 
     if (parentFolder.exists())
@@ -1734,7 +1730,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
           }
           catch (Exception ex)
           {
-            return Pair.create(Type.ERROR, "Folder '" + childFolder + "' cannot be created in the folder '" + parentFolder + "'.");
+            return Pair.create(Type.ERROR, NLS.bind(Messages.SimpleVariablePage_CannotCreateFolder_message, childFolder, parentFolder));
           }
         }
 
@@ -1750,11 +1746,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
           return result;
         }
 
-        return Pair.create(Type.ERROR, "Folder '" + childFolder + "' cannot be created in the read-only folder '" + parentFolder + "'.");
+        return Pair.create(Type.ERROR, NLS.bind(Messages.SimpleVariablePage_CannotCreateFolderReadonly_message, childFolder, parentFolder));
       }
 
       return Pair.create(Type.ERROR,
-          "Folder '" + childFolder + "' cannot be created in the folder '" + parentFolder + "' because '" + parentFolder.getName() + "' exists as a file.");
+          NLS.bind(Messages.SimpleVariablePage_CannotCreateFolderIsFile_message, new Object[] { childFolder, parentFolder, parentFolder.getName() }));
     }
 
     return validateFolder(parentFolder.getParentFile(), parentFolder.getName());
@@ -1762,7 +1758,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private Pair<Type, String> validateChildFolder(File parentFolder, String childFolder, boolean isProductLocation)
   {
-    String prefix = isProductLocation ? "Product folder '" : "Folder '";
+    String prefix = isProductLocation ? Messages.SimpleVariablePage_ProductFolder_message : Messages.SimpleVariablePage_Folder_message;
     File child = new File(parentFolder, childFolder);
     if (child.exists())
     {
@@ -1770,13 +1766,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
       {
         if (IOUtil.canWriteFolder(child))
         {
-          return Pair.create(Type.WARNING, prefix + child + " already exists.");
+          return Pair.create(Type.WARNING, prefix + child + Messages.SimpleVariablePage_AlreadyExists_message);
         }
 
-        return Pair.create(Type.ERROR, prefix + child + "' cannot be used because it is read-only.");
+        return Pair.create(Type.ERROR, prefix + child + Messages.SimpleVariablePage_IsReadOnly_message);
       }
 
-      return Pair.create(Type.ERROR, prefix + child + "' cannot be used because it exists as file.");
+      return Pair.create(Type.ERROR, prefix + child + Messages.SimpleVariablePage_ExistsAsFile_message);
     }
 
     try
@@ -1785,7 +1781,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     }
     catch (Exception ex)
     {
-      return Pair.create(Type.ERROR, prefix + childFolder + "' cannot be created.");
+      return Pair.create(Type.ERROR, prefix + childFolder + Messages.SimpleVariablePage_CannotBeCreated_message);
     }
 
     return null;
@@ -2056,7 +2052,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       if (setupTask != null)
       {
-        name = "Performing setup task " + setupTask.eClass().getName();
+        name = NLS.bind(Messages.SimpleVariablePage_PerformingTask_message, setupTask.eClass().getName());
       }
       else
       {
@@ -2152,7 +2148,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
                   {
                     if (message.length() != 0)
                     {
-                      message.append(", ");
+                      message.append(", "); //$NON-NLS-1$
                     }
 
                     message.append(hostURI);
@@ -2161,15 +2157,15 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
                 if (hosts.size() > 1)
                 {
-                  message.insert(0, "the following hosts: ");
+                  message.insert(0, Messages.SimpleVariablePage_SlowHost_message);
                 }
 
-                message.insert(0, "Artifact download is progressing very slowly from ");
+                message.insert(0, Messages.SimpleVariablePage_SlowDownload_message);
                 dialog.showMessage(message.toString().replace(' ', '\u00a0'), Type.WARNING, false);
               }
               else
               {
-                dialog.showMessage(("The installation process is taking longer than usual: " + safeName).replace(' ', '\u00a0'), Type.WARNING, false);
+                dialog.showMessage((Messages.SimpleVariablePage_TakingLong_message + safeName).replace(' ', '\u00a0'), Type.WARNING, false);
               }
 
               installButton.setProgressAnimationSpeed(0.4f);
@@ -2520,8 +2516,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
               }
               else
               {
-                boolean isExplicitFolder = folderLiteral.endsWith("/") || folderLiteral.endsWith("\\");
-                final String nameFilter = isExplicitFolder ? "" : name;
+                boolean isExplicitFolder = folderLiteral.endsWith("/") || folderLiteral.endsWith("\\"); //$NON-NLS-1$ //$NON-NLS-2$
+                final String nameFilter = isExplicitFolder ? "" : name; //$NON-NLS-1$
 
                 File searchFolder = isExplicitFolder ? folder : folder.getParentFile();
                 if (searchFolder != null)

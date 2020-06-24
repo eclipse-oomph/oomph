@@ -32,9 +32,9 @@ public class LaunchConfigLabelDecorator extends BaseLabelProvider implements ILa
   //
   // private static final Color GRAY = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
-  private static final ImageDescriptor LOCAL_OVERLAY = Activator.getImageDescriptor("local_ovr");
+  private static final ImageDescriptor LOCAL_OVERLAY = Activator.getImageDescriptor("local_ovr"); //$NON-NLS-1$
 
-  private static final ImageDescriptor EXAMPLE_OVERLAY = Activator.getImageDescriptor("example_ovr");
+  private static final ImageDescriptor EXAMPLE_OVERLAY = Activator.getImageDescriptor("example_ovr"); //$NON-NLS-1$
 
   private final ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
 
@@ -73,12 +73,12 @@ public class LaunchConfigLabelDecorator extends BaseLabelProvider implements ILa
   {
     if (isLocal(element))
     {
-      return "* " + text + " [local]";
+      return "* " + text + " [local]"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     if (isExampleCopy(element))
     {
-      return "~ " + text + " [example]";
+      return "~ " + text + " [example]"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     return null;
@@ -125,7 +125,7 @@ public class LaunchConfigLabelDecorator extends BaseLabelProvider implements ILa
       {
         IPath path = file.getFullPath();
         String[] segments = path.segments();
-        return segments.length == 4 && segments[1].equals("examples");
+        return segments.length == 4 && segments[1].equals("examples"); //$NON-NLS-1$
       }
     }
 

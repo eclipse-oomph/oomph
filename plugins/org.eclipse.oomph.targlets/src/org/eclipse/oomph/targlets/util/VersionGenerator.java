@@ -20,15 +20,15 @@ import java.util.Date;
  */
 public final class VersionGenerator
 {
-  private static final String QUALIFIER = "qualifier";
+  private static final String QUALIFIER = "qualifier"; //$NON-NLS-1$
 
-  private static final String QUALIFIER_SUFFIX = "." + QUALIFIER;
+  private static final String QUALIFIER_SUFFIX = "." + QUALIFIER; //$NON-NLS-1$
 
   private static final int QUALIFIER_LENGTH = QUALIFIER.length();
 
   public static String generateQualifierReplacement()
   {
-    return new SimpleDateFormat("'v'yyyyMMdd-HHmmss").format(new Date());
+    return new SimpleDateFormat("'v'yyyyMMdd-HHmmss").format(new Date()); //$NON-NLS-1$
   }
 
   public static String replaceQualifier(String version, String qualifierReplacement)

@@ -56,7 +56,7 @@ public final class GeneralDropAdapter extends OomphDropAdapter
   {
     if (!containmentFeature.isMany())
     {
-      throw new IllegalArgumentException("Not many-valued: " + containmentFeature);
+      throw new IllegalArgumentException("Not many-valued: " + containmentFeature); //$NON-NLS-1$
     }
 
     AdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
@@ -109,9 +109,9 @@ public final class GeneralDropAdapter extends OomphDropAdapter
     });
 
     ResourceSet resourceSet = editingDomain.getResourceSet();
-    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new ResourceFactoryImpl());
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new ResourceFactoryImpl()); //$NON-NLS-1$
 
-    Resource resource = resourceSet.createResource(URI.createURI("container.list"));
+    Resource resource = resourceSet.createResource(URI.createURI("container.list")); //$NON-NLS-1$
     resource.getContents().add(containerObject);
 
     return editingDomain;

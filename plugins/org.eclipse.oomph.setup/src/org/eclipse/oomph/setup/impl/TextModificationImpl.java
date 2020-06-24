@@ -220,9 +220,9 @@ public class TextModificationImpl extends ModelElementImpl implements TextModifi
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (pattern: ");
+    result.append(" (pattern: "); //$NON-NLS-1$
     result.append(pattern);
-    result.append(", substitutions: ");
+    result.append(", substitutions: "); //$NON-NLS-1$
     result.append(substitutions);
     result.append(')');
     return result.toString();

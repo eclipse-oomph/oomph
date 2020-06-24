@@ -67,6 +67,7 @@ import org.eclipse.equinox.p2.metadata.VersionedId;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.io.IOException;
@@ -89,41 +90,41 @@ import java.util.regex.Pattern;
  */
 public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 {
-  public static final String ANNOTATION = "http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator";
+  public static final String ANNOTATION = "http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_NAME = "name";
+  public static final String ANNOTATION_NAME = "name"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_LOCATION = "location";
+  public static final String ANNOTATION_LOCATION = "location"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_PREFERRED_REPOSITORIES = "preferredRepositories";
+  public static final String ANNOTATION_PREFERRED_REPOSITORIES = "preferredRepositories"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_GENERATE_IMPLICIT_UNITS = "generateImplicitUnits";
+  public static final String ANNOTATION_GENERATE_IMPLICIT_UNITS = "generateImplicitUnits"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_MINIMIZE_IMPLICIT_UNITS = "minimizeImplicitUnits";
+  public static final String ANNOTATION_MINIMIZE_IMPLICIT_UNITS = "minimizeImplicitUnits"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_GENERATE_VERSIONS = "generateVersions";
+  public static final String ANNOTATION_GENERATE_VERSIONS = "generateVersions"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_INCLUDE_ALL_PLATFORMS = "includeAllPlatforms";
+  public static final String ANNOTATION_INCLUDE_ALL_PLATFORMS = "includeAllPlatforms"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_INCLUDE_CONFIGURE_PHASE = "includeConfigurePhase";
+  public static final String ANNOTATION_INCLUDE_CONFIGURE_PHASE = "includeConfigurePhase"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_INCLUDE_MODE = "includeMode";
+  public static final String ANNOTATION_INCLUDE_MODE = "includeMode"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_INCLUDE_SOURCE = "includeSource";
+  public static final String ANNOTATION_INCLUDE_SOURCE = "includeSource"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_EXTRA_UNITS = "extraUnits";
+  public static final String ANNOTATION_EXTRA_UNITS = "extraUnits"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_SINGLE_LOCATION = "singleLocation";
+  public static final String ANNOTATION_SINGLE_LOCATION = "singleLocation"; //$NON-NLS-1$
 
-  public static final String ANNOTATION_GENERATE_SERVER_XML = "generateServerXML";
+  public static final String ANNOTATION_GENERATE_SERVER_XML = "generateServerXML"; //$NON-NLS-1$
 
-  public static final String NESTED_ANNOTATION_REPOSITORY_IDS = "RepositoryIDs";
+  public static final String NESTED_ANNOTATION_REPOSITORY_IDS = "RepositoryIDs"; //$NON-NLS-1$
 
-  private static final Pattern SEQUENCE_NUMBER_PATTERN = Pattern.compile("sequenceNumber=\"([0-9]+)\"");
+  private static final Pattern SEQUENCE_NUMBER_PATTERN = Pattern.compile("sequenceNumber=\"([0-9]+)\""); //$NON-NLS-1$
 
   private static final String TRUE = Boolean.TRUE.toString();
 
-  private static final String SETTINGS_NAMESPACE = "http://maven.apache.org/SETTINGS/1.0.0";
+  private static final String SETTINGS_NAMESPACE = "http://maven.apache.org/SETTINGS/1.0.0"; //$NON-NLS-1$
 
   public TargetDefinitionGenerator()
   {
@@ -152,17 +153,18 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       final List<IMetadataRepository> metadataRepositories, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, final IProgressMonitor monitor)
       throws Exception
   {
-    monitor.setTaskName("Checking for generated target definition updates");
+    monitor.setTaskName(Messages.TargetDefinitionGenerator_CheckingUpdates_task);
     EMap<String, String> details = annotation.getDetails();
 
     String targletName = details.get(ANNOTATION_NAME);
-    final String name = StringUtil.isEmpty(targletName) ? "Generated from " + targlet.getName() : targletName;
+    final String name = StringUtil.isEmpty(targletName) ? NLS.bind(Messages.TargetDefinitionGenerator_GeneratedFrom_message, targlet.getName())
+        : targletName;
 
     String location = details.get(ANNOTATION_LOCATION);
     if (StringUtil.isEmpty(location))
     {
-      location = File.createTempFile("tmp-", ".target").getAbsolutePath();
-      TargletsCorePlugin.INSTANCE.log("Generating target definition for targlet " + targlet.getName() + " to " + location);
+      location = File.createTempFile("tmp-", ".target").getAbsolutePath(); //$NON-NLS-1$ //$NON-NLS-2$
+      TargletsCorePlugin.INSTANCE.log(NLS.bind(Messages.TargetDefinitionGenerator_Generating_message, targlet.getName(), location));
     }
 
     File targetDefinition = new File(location);
@@ -175,7 +177,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     final boolean versions = isAnnotationDetail(annotation, ANNOTATION_GENERATE_VERSIONS, false);
     final boolean includeAllPlatforms = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_ALL_PLATFORMS, targlet.isIncludeAllPlatforms());
     final boolean includeConfigurePhase = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_CONFIGURE_PHASE, true);
-    final String includeMode = getAnnotationDetail(annotation, ANNOTATION_INCLUDE_MODE, targlet.isIncludeAllRequirements() ? "planner" : "slicer");
+    final String includeMode = getAnnotationDetail(annotation, ANNOTATION_INCLUDE_MODE, targlet.isIncludeAllRequirements() ? "planner" : "slicer"); //$NON-NLS-1$ //$NON-NLS-2$
     final boolean includeSource = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_SOURCE, targlet.isIncludeSources());
     final boolean generateServerXML = isAnnotationDetail(annotation, ANNOTATION_GENERATE_SERVER_XML, false);
 
@@ -211,19 +213,19 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         XML.Escaper escaper = new XML.Escaper(encoding);
 
         StringBuilder builder = new StringBuilder();
-        builder.append("<?xml version=\"1.0\" encoding=\"" + encoding + "\" standalone=\"no\"?>");
+        builder.append("<?xml version=\"1.0\" encoding=\"" + encoding + "\" standalone=\"no\"?>"); //$NON-NLS-1$ //$NON-NLS-2$
         builder.append(nl);
-        builder.append("<?pde version=\"3.8\"?>");
+        builder.append("<?pde version=\"3.8\"?>"); //$NON-NLS-1$
         builder.append(nl);
-        builder.append("<target name=\"" + escaper.escape(name) + "\" sequenceNumber=\"" + sequenceNumber + "\">");
+        builder.append("<target name=\"" + escaper.escape(name) + "\" sequenceNumber=\"" + sequenceNumber + "\">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         builder.append(nl);
-        builder.append("  <locations>");
+        builder.append("  <locations>"); //$NON-NLS-1$
         builder.append(nl);
 
         if (singleLocation)
         {
-          builder.append("    <location includeAllPlatforms=\"" + includeAllPlatforms + "\" includeConfigurePhase=\"" + includeConfigurePhase
-              + "\" includeMode=\"" + includeMode + "\" includeSource=\"" + includeSource + "\" type=\"InstallableUnit\">");
+          builder.append("    <location includeAllPlatforms=\"" + includeAllPlatforms + "\" includeConfigurePhase=\"" + includeConfigurePhase //$NON-NLS-1$ //$NON-NLS-2$
+              + "\" includeMode=\"" + includeMode + "\" includeSource=\"" + includeSource + "\" type=\"InstallableUnit\">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
           builder.append(nl);
 
           boolean first = true;
@@ -248,7 +250,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
                 for (String element : elements)
                 {
-                  builder.append("      ");
+                  builder.append("      "); //$NON-NLS-1$
                   builder.append(element);
                   builder.append(nl);
                 }
@@ -257,21 +259,21 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
               }
             }
 
-            builder.append("      <repository ");
+            builder.append("      <repository "); //$NON-NLS-1$
 
             java.net.URI repositoryLocation = repository.getLocation();
             String repositoryID = repositoryIDs.get(repositoryLocation.toString());
             if (repositoryID != null)
             {
 
-              builder.append("id=\"").append(repositoryID).append("\" ");
+              builder.append("id=\"").append(repositoryID).append("\" "); //$NON-NLS-1$ //$NON-NLS-2$
             }
 
-            builder.append("location=\"" + escaper.escape(repositoryLocation) + "\"/>");
+            builder.append("location=\"" + escaper.escape(repositoryLocation) + "\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
             builder.append(nl);
           }
 
-          builder.append("    </location>");
+          builder.append("    </location>"); //$NON-NLS-1$
           builder.append(nl);
         }
         else
@@ -284,8 +286,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
             List<IInstallableUnit> list = new ArrayList<IInstallableUnit>(set);
             if (!list.isEmpty())
             {
-              builder.append("    <location includeAllPlatforms=\"" + includeAllPlatforms + "\" includeConfigurePhase=\"" + includeConfigurePhase
-                  + "\" includeMode=\"" + includeMode + "\" includeSource=\"" + includeSource + "\" type=\"InstallableUnit\">");
+              builder.append("    <location includeAllPlatforms=\"" + includeAllPlatforms + "\" includeConfigurePhase=\"" + includeConfigurePhase //$NON-NLS-1$ //$NON-NLS-2$
+                  + "\" includeMode=\"" + includeMode + "\" includeSource=\"" + includeSource + "\" type=\"InstallableUnit\">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
               builder.append(nl);
 
               Collection<String> elements = new LinkedHashSet<String>();
@@ -298,32 +300,32 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
               for (String element : elements)
               {
-                builder.append("      ");
+                builder.append("      "); //$NON-NLS-1$
                 builder.append(element);
                 builder.append(nl);
               }
 
-              builder.append("      <repository ");
+              builder.append("      <repository "); //$NON-NLS-1$
 
               java.net.URI repositoryLocation = repository.getLocation();
               String repositoryID = repositoryIDs.get(repositoryLocation.toString());
               if (repositoryID != null)
               {
 
-                builder.append("id=\"").append(repositoryID).append("\" ");
+                builder.append("id=\"").append(repositoryID).append("\" "); //$NON-NLS-1$ //$NON-NLS-2$
               }
 
-              builder.append("location=\"" + escaper.escape(repositoryLocation) + "\"/>");
+              builder.append("location=\"" + escaper.escape(repositoryLocation) + "\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
               builder.append(nl);
-              builder.append("    </location>");
+              builder.append("    </location>"); //$NON-NLS-1$
               builder.append(nl);
             }
           }
         }
 
-        builder.append("  </locations>");
+        builder.append("  </locations>"); //$NON-NLS-1$
         builder.append(nl);
-        builder.append("</target>");
+        builder.append("</target>"); //$NON-NLS-1$
         builder.append(nl);
 
         return builder.toString();
@@ -332,8 +334,9 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       @Override
       protected void setContents(URI uri, String encoding, String contents) throws IOException
       {
-        monitor.subTask("Updating " + (uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
-        contents = contents.replace("sequenceNumber=\"" + sequenceNumber + "\"", "sequenceNumber=\"" + (sequenceNumber + 1) + "\"");
+        monitor.subTask(
+            NLS.bind(Messages.TargetDefinitionGenerator_Updating_task, uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
+        contents = contents.replace("sequenceNumber=\"" + sequenceNumber + "\"", "sequenceNumber=\"" + (sequenceNumber + 1) + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         super.setContents(uri, encoding, contents);
       }
 
@@ -345,7 +348,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
           version = Version.emptyVersion;
         }
 
-        return "<unit id=\"" + escaper.escape(iu.getId()) + "\" version=\"" + escaper.escape(version) + "\"/>";
+        return "<unit id=\"" + escaper.escape(iu.getId()) + "\" version=\"" + escaper.escape(version) + "\"/>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       }
 
     }.update(targetDefinition);
@@ -359,13 +362,13 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         {
           ResourceSet resourceSet = new ResourceSetImpl();
           final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(resourceSet.getPackageRegistry());
-          resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xml", new ResourceFactoryImpl()
+          resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xml", new ResourceFactoryImpl() //$NON-NLS-1$
           {
             @Override
             public Resource createResource(URI uri)
             {
               XMLResource result = new XMLResourceImpl(uri);
-              result.setEncoding("UTF-8");
+              result.setEncoding("UTF-8"); //$NON-NLS-1$
 
               result.getDefaultSaveOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
               result.getDefaultLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
@@ -388,7 +391,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
             }
           });
 
-          Resource resource = resourceSet.createResource(URI.createURI("settings.xml"));
+          Resource resource = resourceSet.createResource(URI.createURI("settings.xml")); //$NON-NLS-1$
           if (!StringUtil.isEmpty(oldContents))
           {
             try
@@ -403,7 +406,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
           if (resource.getContents().isEmpty())
           {
-            EStructuralFeature settingsElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "settings", true);
+            EStructuralFeature settingsElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "settings", true); //$NON-NLS-1$
             EClass documentRootEClass = settingsElement.getEContainingClass();
             EObject documentRoot = EcoreUtil.create(documentRootEClass);
             AnyType settings = XMLTypeFactory.eINSTANCE.createAnyType();
@@ -411,11 +414,11 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
             @SuppressWarnings("unchecked")
             EMap<String, String> xmlnsPrefixMap = (EMap<String, String>)documentRoot.eGet(extendedMetaData.getXMLNSPrefixMapFeature(documentRootEClass));
-            xmlnsPrefixMap.put("", SETTINGS_NAMESPACE);
-            xmlnsPrefixMap.put("xsi", XMLResource.XSI_URI);
+            xmlnsPrefixMap.put("", SETTINGS_NAMESPACE); //$NON-NLS-1$
+            xmlnsPrefixMap.put("xsi", XMLResource.XSI_URI); //$NON-NLS-1$
 
-            EStructuralFeature schemaLocation = extendedMetaData.demandFeature(XMLResource.XSI_URI, "schemaLocation", false);
-            settings.eSet(schemaLocation, SETTINGS_NAMESPACE + " http://maven.apache.org/xsd/settings-1.0.0.xsd");
+            EStructuralFeature schemaLocation = extendedMetaData.demandFeature(XMLResource.XSI_URI, "schemaLocation", false); //$NON-NLS-1$
+            settings.eSet(schemaLocation, SETTINGS_NAMESPACE + " http://maven.apache.org/xsd/settings-1.0.0.xsd"); //$NON-NLS-1$
 
             resource.getContents().add(documentRoot);
           }
@@ -423,14 +426,14 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
           EObject documentRoot = resource.getContents().get(0);
           AnyType rootElement = (AnyType)documentRoot.eContents().get(0);
 
-          EStructuralFeature serversElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "servers", true);
+          EStructuralFeature serversElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "servers", true); //$NON-NLS-1$
 
           @SuppressWarnings("unchecked")
           List<AnyType> serversGroup = (List<AnyType>)rootElement.eGet(serversElement);
           FeatureMap servers;
           if (serversGroup.isEmpty())
           {
-            FeatureMapUtil.addText(rootElement.getMixed(), nl + "  ");
+            FeatureMapUtil.addText(rootElement.getMixed(), nl + "  "); //$NON-NLS-1$
             AnyType serversInstance = XMLTypeFactory.eINSTANCE.createAnyType();
             serversGroup.add(serversInstance);
             FeatureMapUtil.addText(rootElement.getMixed(), nl);
@@ -441,10 +444,10 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
             servers = serversGroup.get(0).getMixed();
           }
 
-          EStructuralFeature serverElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "server", true);
-          EStructuralFeature idElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "id", true);
-          EStructuralFeature usernameElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "username", true);
-          EStructuralFeature passwordElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "password", true);
+          EStructuralFeature serverElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "server", true); //$NON-NLS-1$
+          EStructuralFeature idElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "id", true); //$NON-NLS-1$
+          EStructuralFeature usernameElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "username", true); //$NON-NLS-1$
+          EStructuralFeature passwordElement = extendedMetaData.demandFeature(SETTINGS_NAMESPACE, "password", true); //$NON-NLS-1$
 
           boolean added = false;
           LOOP: for (IMetadataRepository repository : metadataRepositories)
@@ -497,26 +500,26 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
                 added = true;
 
                 AnyType server = XMLTypeFactory.eINSTANCE.createAnyType();
-                FeatureMapUtil.addText(servers, nl + "    ");
+                FeatureMapUtil.addText(servers, nl + "    "); //$NON-NLS-1$
                 servers.add(FeatureMapUtil.createEntry(serverElement, server));
 
                 FeatureMap mixed = server.getMixed();
 
                 AnyType id = XMLTypeFactory.eINSTANCE.createAnyType();
                 FeatureMapUtil.addText(id.getMixed(), repositoryID);
-                FeatureMapUtil.addText(mixed, nl + "      ");
+                FeatureMapUtil.addText(mixed, nl + "      "); //$NON-NLS-1$
                 mixed.add(FeatureMapUtil.createEntry(idElement, id));
 
                 AnyType username = XMLTypeFactory.eINSTANCE.createAnyType();
                 FeatureMapUtil.addText(username.getMixed(), authenticationInfo.getUserName());
-                FeatureMapUtil.addText(mixed, nl + "      ");
+                FeatureMapUtil.addText(mixed, nl + "      "); //$NON-NLS-1$
                 mixed.add(FeatureMapUtil.createEntry(usernameElement, username));
 
                 AnyType password = XMLTypeFactory.eINSTANCE.createAnyType();
                 FeatureMapUtil.addText(password.getMixed(), authenticationInfo.getPassword());
-                FeatureMapUtil.addText(mixed, nl + "      ");
+                FeatureMapUtil.addText(mixed, nl + "      "); //$NON-NLS-1$
                 mixed.add(FeatureMapUtil.createEntry(passwordElement, password));
-                FeatureMapUtil.addText(mixed, nl + "    ");
+                FeatureMapUtil.addText(mixed, nl + "    "); //$NON-NLS-1$
               }
             }
             catch (LoginCanceledException ex)
@@ -531,7 +534,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
           if (added)
           {
-            FeatureMapUtil.addText(servers, nl + "  ");
+            FeatureMapUtil.addText(servers, nl + "  "); //$NON-NLS-1$
           }
 
           try
@@ -556,7 +559,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
           super.setContents(uri, encoding, contents);
         }
 
-      }.update(new File(PropertiesUtil.getUserHome(), ".m2/settings.xml"));
+      }.update(new File(PropertiesUtil.getUserHome(), ".m2/settings.xml")); //$NON-NLS-1$
     }
   }
 
@@ -584,7 +587,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     String values = annotation.getDetails().get(ANNOTATION_EXTRA_UNITS);
     if (!StringUtil.isEmpty(values))
     {
-      for (String value : values.replace(',', ' ').split(" "))
+      for (String value : values.replace(',', ' ').split(" ")) //$NON-NLS-1$
       {
         if (!StringUtil.isEmpty(value))
         {
@@ -606,7 +609,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     String values = annotation.getDetails().get(ANNOTATION_PREFERRED_REPOSITORIES);
     if (!StringUtil.isEmpty(values))
     {
-      for (String value : values.replace(',', ' ').split(" "))
+      for (String value : values.replace(',', ' ').split(" ")) //$NON-NLS-1$
       {
         if (!StringUtil.isEmpty(value))
         {
@@ -633,18 +636,18 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), monitor)))
     {
       String id = iu.getId();
-      if (id.endsWith(".source") || id.endsWith(".source.feature.group") || id.endsWith(".source.feature.feature.group") || id.endsWith(".feature.jar")
-          || ProfileTransactionImpl.SOURCE_IU_ID.equals(id) || id.equals("a.jre"))
+      if (id.endsWith(".source") || id.endsWith(".source.feature.group") || id.endsWith(".source.feature.feature.group") || id.endsWith(".feature.jar") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+          || ProfileTransactionImpl.SOURCE_IU_ID.equals(id) || id.equals("a.jre")) //$NON-NLS-1$
       {
         continue;
       }
 
-      if ("true".equals(iu.getProperty(TargletContainer.IU_PROPERTY_SOURCE)))
+      if ("true".equals(iu.getProperty(TargletContainer.IU_PROPERTY_SOURCE))) //$NON-NLS-1$
       {
         continue;
       }
 
-      if ("true".equals(iu.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)))
+      if ("true".equals(iu.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE))) //$NON-NLS-1$
       {
         continue;
       }
@@ -835,11 +838,11 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         int maxSafeChar = MAX_UTF_MAPPABLE_CODEPOINT;
         if (encoding != null)
         {
-          if (encoding.equalsIgnoreCase("ASCII") || encoding.equalsIgnoreCase("US-ASCII"))
+          if (encoding.equalsIgnoreCase("ASCII") || encoding.equalsIgnoreCase("US-ASCII")) //$NON-NLS-1$ //$NON-NLS-2$
           {
             maxSafeChar = MAX_ASCII_MAPPABLE_CODEPOINT;
           }
-          else if (encoding.equalsIgnoreCase("ISO-8859-1"))
+          else if (encoding.equalsIgnoreCase("ISO-8859-1")) //$NON-NLS-1$
           {
             maxSafeChar = MAX_LATIN1_MAPPABLE_CODEPOINT;
           }

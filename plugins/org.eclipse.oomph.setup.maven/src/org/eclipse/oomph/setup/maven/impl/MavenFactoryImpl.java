@@ -78,7 +78,7 @@ public class MavenFactoryImpl extends EFactoryImpl implements MavenFactory
       case MavenPackage.MAVEN_UPDATE_TASK:
         return createMavenUpdateTask();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

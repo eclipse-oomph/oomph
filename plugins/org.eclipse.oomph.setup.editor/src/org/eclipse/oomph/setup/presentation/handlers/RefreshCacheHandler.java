@@ -30,7 +30,7 @@ public class RefreshCacheHandler extends AbstractDropdownItemHandler
 {
   public RefreshCacheHandler()
   {
-    super("RefreshCache", "Refresh Remote Cache");
+    super("RefreshCache", Messages.RefreshCacheHandler_text); //$NON-NLS-1$
   }
 
   public void run()

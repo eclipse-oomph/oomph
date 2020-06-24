@@ -80,12 +80,12 @@ public class SimpleMessageOverlay extends Shell implements ControlListener
 
     if (type == null)
     {
-      throw new IllegalArgumentException("Type must not be null!");
+      throw new IllegalArgumentException(Messages.SimpleMessageOverlay_NullType_exception);
     }
 
     if (controlRelocator == null)
     {
-      throw new IllegalArgumentException("Control relocator must not be null!");
+      throw new IllegalArgumentException(Messages.SimpleMessageOverlay_NullRelocator_exception);
     }
 
     this.dialog = dialog;
@@ -242,7 +242,7 @@ public class SimpleMessageOverlay extends Shell implements ControlListener
 
     if (actionLabel != null)
     {
-      tmp += " " + actionLabel;
+      tmp += " " + actionLabel; //$NON-NLS-1$
       actionLabelStartIndex = message.length() + 1;
       actionLabelLength = actionLabel.length();
     }
@@ -255,7 +255,7 @@ public class SimpleMessageOverlay extends Shell implements ControlListener
         {
           tmp = StringUtil.shorten(message, MAX_MESSAGE_LENGTH - actionLabel.length() - 1, false);
           actionLabelStartIndex = tmp.length() + 1;
-          tmp += " " + actionLabel;
+          tmp += " " + actionLabel; //$NON-NLS-1$
           actionLabelLength = actionLabel.length();
         }
         catch (IllegalArgumentException ex)
@@ -330,12 +330,12 @@ public class SimpleMessageOverlay extends Shell implements ControlListener
    */
   public static enum Type
   {
-    ERROR(SetupInstallerPlugin.getColor(249, 54, 50), AbstractSimpleDialog.COLOR_WHITE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message_hover.png")), //
-    SUCCESS(SetupInstallerPlugin.getColor(58, 195, 4), AbstractSimpleDialog.COLOR_WHITE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message_hover.png")), //
+    ERROR(SetupInstallerPlugin.getColor(249, 54, 50), AbstractSimpleDialog.COLOR_WHITE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message.png"), //$NON-NLS-1$
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message_hover.png")), // //$NON-NLS-1$
+    SUCCESS(SetupInstallerPlugin.getColor(58, 195, 4), AbstractSimpleDialog.COLOR_WHITE, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message.png"), //$NON-NLS-1$
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message_hover.png")), // //$NON-NLS-1$
     WARNING(SetupInstallerPlugin.getColor(240, 173, 78), AbstractSimpleDialog.COLOR_WHITE,
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message.png"), SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message_hover.png"));
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message.png"), SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_message_hover.png")); //$NON-NLS-1$ //$NON-NLS-2$
 
     public final Color backgroundColor;
 

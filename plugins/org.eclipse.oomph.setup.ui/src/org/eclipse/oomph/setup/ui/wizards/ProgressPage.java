@@ -89,6 +89,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.ProgressMonitorPart;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.browser.LocationListener;
@@ -130,9 +131,9 @@ public class ProgressPage extends SetupWizardPage
 {
   public static final Object PROGRESS_FAMILY = new Object();
 
-  public static final String PROGRESS_STATUS = "org.eclipse.oomph.setup.status";
+  public static final String PROGRESS_STATUS = "org.eclipse.oomph.setup.status"; //$NON-NLS-1$
 
-  public static final String PAGE_NAME = "ProgressPage";
+  public static final String PAGE_NAME = "ProgressPage"; //$NON-NLS-1$
 
   private final Map<SetupTask, Point> setupTaskSelections = new HashMap<SetupTask, Point>();
 
@@ -258,8 +259,8 @@ public class ProgressPage extends SetupWizardPage
   public ProgressPage()
   {
     super(PAGE_NAME);
-    setTitle("Progress");
-    setDescription("Wait for the setup to complete, or cancel the progress indicator and press Back to make changes.");
+    setTitle(Messages.ProgressPage_title);
+    setDescription(Messages.ProgressPage_description);
   }
 
   @Override
@@ -270,7 +271,7 @@ public class ProgressPage extends SetupWizardPage
 
     SashForm sashForm = new SashForm(mainComposite, SWT.SMOOTH | SWT.VERTICAL);
     sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
-    AccessUtil.setKey(sashForm, "sash");
+    AccessUtil.setKey(sashForm, "sash"); //$NON-NLS-1$
 
     treeViewer = new TreeViewer(sashForm, SWT.BORDER);
     Tree tree = treeViewer.getTree();
@@ -319,7 +320,7 @@ public class ProgressPage extends SetupWizardPage
     });
 
     addHelpCallout(logText, 2);
-    AccessUtil.setKey(logText, "log");
+    AccessUtil.setKey(logText, "log"); //$NON-NLS-1$
 
     return mainComposite;
   }
@@ -327,7 +328,7 @@ public class ProgressPage extends SetupWizardPage
   @Override
   protected void createCheckButtons(ButtonBar buttonBar)
   {
-    scrollLockButton = buttonBar.addCheckButton("Scroll lock", "Keep the log from scrolling to the end when new messages are added", false, null);
+    scrollLockButton = buttonBar.addCheckButton(Messages.ProgressPage_scrollLockButton_text, Messages.ProgressPage_scrollLockButton_tooltip, false, null);
     scrollLock = scrollLockButton.getSelection();
     scrollLockButton.addSelectionListener(new SelectionAdapter()
     {
@@ -337,10 +338,10 @@ public class ProgressPage extends SetupWizardPage
         scrollLock = scrollLockButton.getSelection();
       }
     });
-    AccessUtil.setKey(scrollLockButton, "lock");
+    AccessUtil.setKey(scrollLockButton, "lock"); //$NON-NLS-1$
 
-    dismissButton = buttonBar.addCheckButton("Dismiss automatically", "Dismiss this wizard when all setup tasks have performed successfully", false,
-        "dismissAutomatically");
+    dismissButton = buttonBar.addCheckButton(Messages.ProgressPage_dismissButton_text, Messages.ProgressPage_dismissButton_tooltip, false,
+        "dismissAutomatically"); //$NON-NLS-1$
     dismissAutomatically = dismissButton.getSelection();
     dismissButton.addSelectionListener(new SelectionAdapter()
     {
@@ -350,7 +351,7 @@ public class ProgressPage extends SetupWizardPage
         dismissAutomatically = dismissButton.getSelection();
       }
     });
-    AccessUtil.setKey(dismissButton, "dismiss");
+    AccessUtil.setKey(dismissButton, "dismiss"); //$NON-NLS-1$
 
     if (getWizard().getOS().isCurrentOS())
     {
@@ -360,13 +361,13 @@ public class ProgressPage extends SetupWizardPage
       {
         if (getTrigger() == Trigger.BOOTSTRAP)
         {
-          launchButton = buttonBar.addCheckButton("Launch automatically", "Launch the installed product when all setup tasks have performed successfully", true,
-              "launchAutomatically");
+          launchButton = buttonBar.addCheckButton(Messages.ProgressPage_launchButton_text, Messages.ProgressPage_launchButton_tooltip, true,
+              "launchAutomatically"); //$NON-NLS-1$
         }
         else
         {
-          launchButton = buttonBar.addCheckButton("Restart automatically if needed",
-              "Restart the current product if the installation has been changed by setup tasks", false, "restartIfNeeded");
+          launchButton = buttonBar.addCheckButton(Messages.ProgressPage_restartButton_text, Messages.ProgressPage_restartButton_tooltip, false,
+              "restartIfNeeded"); //$NON-NLS-1$
         }
 
         launchAutomatically = launchButton.getSelection();
@@ -378,7 +379,7 @@ public class ProgressPage extends SetupWizardPage
             launchAutomatically = launchButton.getSelection();
           }
         });
-        AccessUtil.setKey(launchButton, "launch");
+        AccessUtil.setKey(launchButton, "launch"); //$NON-NLS-1$
       }
       else
       {
@@ -406,8 +407,8 @@ public class ProgressPage extends SetupWizardPage
             {
               ToolBar toolBar = (ToolBar)child;
               ToolItem minimizeButton = new ToolItem(toolBar, SWT.PUSH);
-              minimizeButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("hide"));
-              minimizeButton.setToolTipText("Minimize to the status area");
+              minimizeButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("hide")); //$NON-NLS-1$
+              minimizeButton.setToolTipText(Messages.ProgressPage_minimizeButton_tooltip);
               minimizeButton.addSelectionListener(new SelectionAdapter()
               {
                 @Override
@@ -446,7 +447,7 @@ public class ProgressPage extends SetupWizardPage
     };
 
     progressMonitorPart.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-    AccessUtil.setKey(progressMonitorPart, "progress");
+    AccessUtil.setKey(progressMonitorPart, "progress"); //$NON-NLS-1$
   }
 
   @Override
@@ -461,7 +462,7 @@ public class ProgressPage extends SetupWizardPage
       hasLaunched = false;
 
       progressPageLog = new ProgressPageLog(progressMonitorPart);
-      logDocument.set("");
+      logDocument.set(""); //$NON-NLS-1$
 
       // This is a private hook so we can monitor progress for documentation capture.
       ProgressLog progressLog = progressPageLog;
@@ -515,7 +516,7 @@ public class ProgressPage extends SetupWizardPage
           catch (Exception ex)
           {
             progressPageLog.log(ex);
-            setErrorMessage("Could not rename '" + configurationLocation + "'.  Press Back twice to choose a different installation location.");
+            setErrorMessage(NLS.bind(Messages.ProgressPage_error_couldNotRenameInstallation, configurationLocation));
             progressPageLog.done();
 
             throw new IORuntimeException(ex);
@@ -539,12 +540,12 @@ public class ProgressPage extends SetupWizardPage
 
       treeViewer.setInput(new ItemProvider(performer.getNeededTasks()));
 
-      String jobName = "Executing " + getTriggerName().toLowerCase() + " tasks";
+      String jobName = NLS.bind(Messages.ProgressPage_executeTasksJob_name, getTriggerName().toLowerCase());
       performer.log(jobName, false, Severity.INFO);
 
       if (renamed != null)
       {
-        performer.log("Renamed existing configuration folder to " + renamed);
+        performer.log(NLS.bind(Messages.ProgressPage_log_renamedFolder, renamed));
       }
 
       run(jobName, new ProgressLogRunnable()
@@ -696,10 +697,8 @@ public class ProgressPage extends SetupWizardPage
                   shell.setData(PROGRESS_STATUS, null);
                   if (trigger != Trigger.BOOTSTRAP)
                   {
-                    if (trigger == Trigger.STARTUP
-                        ? !"true".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_SHOW_INITIAL_PROGRESS))
-                            && !SetupPropertyTester.isShowProgressInWizard()
-                        : !SetupPropertyTester.isShowProgressInWizard())
+                    if (trigger == Trigger.STARTUP ? !"true".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_SHOW_INITIAL_PROGRESS)) //$NON-NLS-1$
+                        && !SetupPropertyTester.isShowProgressInWizard() : !SetupPropertyTester.isShowProgressInWizard())
                     {
                       shell.setVisible(false);
                     }
@@ -782,18 +781,18 @@ public class ProgressPage extends SetupWizardPage
                   public String toString()
                   {
                     StringBuilder result = new StringBuilder();
-                    result.append("Status WARNING");
-                    result.append(": ");
+                    result.append("Status WARNING"); //$NON-NLS-1$
+                    result.append(": "); //$NON-NLS-1$
                     result.append(getPlugin());
-                    result.append(" code=");
+                    result.append(" code="); //$NON-NLS-1$
                     result.append(getCode());
                     result.append(' ');
                     result.append(getMessage());
                     result.append(' ');
                     result.append(getException());
-                    result.append(" children=[");
+                    result.append(" children=["); //$NON-NLS-1$
                     result.append(status);
-                    result.append("]");
+                    result.append("]"); //$NON-NLS-1$
                     return result.toString();
                   }
                 });
@@ -803,7 +802,7 @@ public class ProgressPage extends SetupWizardPage
               {
                 long seconds = (System.currentTimeMillis() - start) / 1000;
                 progressLog.setTerminating();
-                progressLog.message("Took " + seconds + " seconds.");
+                progressLog.message(NLS.bind(Messages.ProgressPage_log_tookSeconds, seconds));
 
                 getWizard().sendStats(success);
 
@@ -813,7 +812,7 @@ public class ProgressPage extends SetupWizardPage
 
                 if (trigger == Trigger.STARTUP)
                 {
-                  StringBuilder startupLogMessage = new StringBuilder("Setup tasks were performed during startup");
+                  StringBuilder startupLogMessage = new StringBuilder(Messages.ProgressPage_log_startup);
                   int preferenceTaskCount = 0;
                   if (!restart)
                   {
@@ -828,24 +827,24 @@ public class ProgressPage extends SetupWizardPage
 
                   if (preferenceTaskCount == 1)
                   {
-                    startupLogMessage.append(" updating 1 preference");
+                    startupLogMessage.append(" ").append(Messages.ProgressPage_log_startup_updatingPreference); //$NON-NLS-1$
                   }
                   else if (preferenceTaskCount > 1)
                   {
-                    startupLogMessage.append(" updating ").append(preferenceTaskCount).append(" preferences");
+                    startupLogMessage.append(" ").append(NLS.bind(Messages.ProgressPage_log_startup_updatingPreferences, preferenceTaskCount)); //$NON-NLS-1$
                   }
 
-                  startupLogMessage.append(". See '").append(SetupContext.SETUP_LOG_URI.toFileString()).append("' for details");
+                  startupLogMessage.append(".").append(NLS.bind(Messages.ProgressPage_log_startup_seeLogForDetails, SetupContext.SETUP_LOG_URI.toFileString())); //$NON-NLS-1$
 
                   SetupUIPlugin.INSTANCE.log(startupLogMessage.toString(), IStatus.INFO);
                 }
 
                 if (restart)
                 {
-                  progressLog.message("A restart is needed for the following reasons:", false, Severity.INFO);
+                  progressLog.message(Messages.ProgressPage_log_restartIsNeeded, false, Severity.INFO);
                   for (String reason : restartReasons)
                   {
-                    progressLog.message("  - " + reason);
+                    progressLog.message("  - " + reason); //$NON-NLS-1$
                   }
 
                   wizard.setFinishAction(new Runnable()
@@ -883,7 +882,7 @@ public class ProgressPage extends SetupWizardPage
                     return Status.OK_STATUS;
                   }
 
-                  progressLog.message("Press Finish to restart now or Cancel to restart later.", Severity.INFO);
+                  progressLog.message(Messages.ProgressPage_log_pressFinishOrCancel, Severity.INFO);
                   disableCancelButton.set(false);
                 }
                 else
@@ -911,7 +910,7 @@ public class ProgressPage extends SetupWizardPage
 
                   if (success)
                   {
-                    progressLog.message("Press Finish to close the dialog.", Severity.INFO);
+                    progressLog.message(Messages.ProgressPage_log_pressFinishToClose, Severity.INFO);
 
                     if (launchButton != null && !hasLaunched && trigger == Trigger.BOOTSTRAP)
                     {
@@ -938,14 +937,14 @@ public class ProgressPage extends SetupWizardPage
                   {
                     if (progressLog.isCanceled())
                     {
-                      progressLog.message("Task execution was canceled.", Severity.WARNING);
+                      progressLog.message(Messages.ProgressPage_log_taskWasCanceled, Severity.WARNING);
                     }
                     else
                     {
-                      progressLog.message("There are failed tasks.", Severity.ERROR);
+                      progressLog.message(Messages.ProgressPage_log_failedTasks, Severity.ERROR);
                     }
 
-                    progressLog.message("Press Back to choose different settings or Cancel to abort.", Severity.INFO);
+                    progressLog.message(Messages.ProgressPage_log_pressBackOrCancel, Severity.INFO);
                   }
                 }
 
@@ -964,23 +963,23 @@ public class ProgressPage extends SetupWizardPage
                     {
                       if (restart)
                       {
-                        setMessage("Task execution has successfully completed but requires a restart.  Press Finish to restart now or Cancel to restart later.",
+                        setMessage(Messages.ProgressPage_taskSuccessfulAndRequiresRestart + Messages.ProgressPage_pressFinishOrCancel,
                             IMessageProvider.WARNING);
                         setButtonState(IDialogConstants.CANCEL_ID, true);
 
-                        shell.setData(PROGRESS_STATUS, new Status(IStatus.WARNING, SetupEditPlugin.INSTANCE.getSymbolicName(),
-                            "Task execution has successfully completed but requires a restart"));
+                        shell.setData(PROGRESS_STATUS,
+                            new Status(IStatus.WARNING, SetupEditPlugin.INSTANCE.getSymbolicName(), Messages.ProgressPage_taskSuccessfulAndRequiresRestart));
                       }
                       else
                       {
-                        setMessage("Task execution has successfully completed.  Press Back to choose different settings or Finish to exit.");
+                        setMessage(Messages.ProgressPage_taskSuccessful + Messages.ProgressPage_pressBackOrFinish);
                         if (disableCancelButton.get())
                         {
                           setButtonState(IDialogConstants.CANCEL_ID, false);
                         }
 
                         shell.setData(PROGRESS_STATUS,
-                            new Status(IStatus.OK, SetupEditPlugin.INSTANCE.getSymbolicName(), "Task execution has successfully completed"));
+                            new Status(IStatus.OK, SetupEditPlugin.INSTANCE.getSymbolicName(), Messages.ProgressPage_taskSuccessful));
                       }
                     }
                     else
@@ -988,15 +987,16 @@ public class ProgressPage extends SetupWizardPage
                       setButtonState(IDialogConstants.CANCEL_ID, true);
                       if (progressLog.isCanceled())
                       {
-                        setErrorMessage("Task execution was canceled.  Press Back to choose different settings or Cancel to abort.");
+                        setErrorMessage(Messages.ProgressPage_taskCanceled + Messages.ProgressPage_pressBackOrCancel);
 
-                        shell.setData(PROGRESS_STATUS, new Status(IStatus.CANCEL, SetupEditPlugin.INSTANCE.getSymbolicName(), "Task execution was canceled."));
+                        shell.setData(PROGRESS_STATUS,
+                            new Status(IStatus.CANCEL, SetupEditPlugin.INSTANCE.getSymbolicName(), Messages.ProgressPage_taskCanceled));
                       }
                       else
                       {
-                        setErrorMessage("There are failed tasks.  Press Back to choose different settings or Cancel to abort.");
+                        setErrorMessage(Messages.ProgressPage_failedTasks + Messages.ProgressPage_pressBackOrCancel);
 
-                        shell.setData(PROGRESS_STATUS, new Status(IStatus.ERROR, SetupEditPlugin.INSTANCE.getSymbolicName(), "Task execution was failed."));
+                        shell.setData(PROGRESS_STATUS, new Status(IStatus.ERROR, SetupEditPlugin.INSTANCE.getSymbolicName(), Messages.ProgressPage_taskFailed));
                       }
                     }
                   }
@@ -1076,7 +1076,7 @@ public class ProgressPage extends SetupWizardPage
     OS os = performer.getOS();
     if (os.isCurrentOS())
     {
-      performer.log("Launching the installed product...");
+      performer.log(Messages.ProgressPage_log_launchingProduct);
       ExecutableInfo info = performer.getExecutableInfo();
 
       List<String> command = new ArrayList<String>();
@@ -1088,15 +1088,15 @@ public class ProgressPage extends SetupWizardPage
       {
         SetupUIPlugin.initialStart(ws, performer.isOffline(), performer.isMirrors());
 
-        command.add("-data");
+        command.add("-data"); //$NON-NLS-1$
         command.add(ws.toString());
       }
 
-      command.add("-vmargs");
-      command.add("-Duser.dir=" + info.getEclipseLocation());
+      command.add("-vmargs"); //$NON-NLS-1$
+      command.add("-Duser.dir=" + info.getEclipseLocation()); //$NON-NLS-1$
       if (ws != null)
       {
-        command.add("-D" + SetupProperties.PROP_SETUP_SHOW_INITIAL_PROGRESS + "=true");
+        command.add("-D" + SetupProperties.PROP_SETUP_SHOW_INITIAL_PROGRESS + "=true"); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
       try
@@ -1105,7 +1105,7 @@ public class ProgressPage extends SetupWizardPage
       }
       catch (Exception ex)
       {
-        performer.log("Launching the installed product failed.");
+        performer.log(Messages.ProgressPage_log_productLaunchFailed);
         performer.log(ex);
         return false;
       }
@@ -1113,7 +1113,7 @@ public class ProgressPage extends SetupWizardPage
       return true;
     }
 
-    performer.log("Launching the installed product is not possible for cross-platform installs. Skipping.");
+    performer.log(Messages.ProgressPage_log_crossPlatformInstallLaunchNotPossible);
     return false;
   }
 
@@ -1410,7 +1410,7 @@ public class ProgressPage extends SetupWizardPage
           severity = pair.getElement2();
         }
 
-        line += "\n";
+        line += "\n"; //$NON-NLS-1$
 
         try
         {

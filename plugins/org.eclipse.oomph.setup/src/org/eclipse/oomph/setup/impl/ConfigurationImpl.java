@@ -500,9 +500,9 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (label: ");
+    result.append(" (label: "); //$NON-NLS-1$
     result.append(label);
-    result.append(", description: ");
+    result.append(", description: "); //$NON-NLS-1$
     result.append(description);
     result.append(')');
     return result.toString();

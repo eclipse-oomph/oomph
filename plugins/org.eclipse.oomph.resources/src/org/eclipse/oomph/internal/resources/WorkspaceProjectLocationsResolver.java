@@ -26,7 +26,7 @@ public class WorkspaceProjectLocationsResolver implements IDynamicVariableResolv
     StringBuilder result = new StringBuilder();
     for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects())
     {
-      if (project.isAccessible() && !"External Plug-in Libraries".equals(project.getName()))
+      if (project.isAccessible() && !"External Plug-in Libraries".equals(project.getName())) //$NON-NLS-1$
       {
         IPath location = project.getLocation();
         if (location != null)

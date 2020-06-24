@@ -44,7 +44,7 @@ public interface PreferencesPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNAME = "preferences";
+  String eNAME = "preferences"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -52,7 +52,7 @@ public interface PreferencesPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/Oomph/preferences/1.0";
+  String eNS_URI = "http://www.eclipse.org/Oomph/preferences/1.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -60,7 +60,7 @@ public interface PreferencesPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "preferences";
+  String eNS_PREFIX = "preferences"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.

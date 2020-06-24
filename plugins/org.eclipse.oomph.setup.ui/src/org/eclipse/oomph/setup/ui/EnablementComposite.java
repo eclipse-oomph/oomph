@@ -63,6 +63,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.ProgressMonitorPart;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -118,7 +119,7 @@ public class EnablementComposite extends Composite
 
     Tree tree = treeViewer.getTree();
     tree.setLayoutData(new GridData(GridData.FILL_BOTH));
-    AccessUtil.setKey(tree, "tree");
+    AccessUtil.setKey(tree, "tree"); //$NON-NLS-1$
 
     ButtonBar buttonBar = new ButtonBar(this)
     {
@@ -132,16 +133,17 @@ public class EnablementComposite extends Composite
     offlineProperty = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_OFFLINE);
     if (offlineProperty == null)
     {
-      offlineButton = buttonBar.addCheckButton("Offline", "Avoid unnecessary network requests during the installation process", false,
-          "toggleCommand:org.eclipse.oomph.ui.ToggleOfflineMode");
-      AccessUtil.setKey(offlineButton, "offline");
+      offlineButton = buttonBar.addCheckButton(Messages.EnablementComposite_offlineButton_text, Messages.EnablementComposite_offlineButton_tooltip, false,
+          "toggleCommand:org.eclipse.oomph.ui.ToggleOfflineMode"); //$NON-NLS-1$
+      AccessUtil.setKey(offlineButton, "offline"); //$NON-NLS-1$
     }
 
     mirrorsProperty = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_MIRRORS);
     if (mirrorsProperty == null)
     {
-      mirrorsButton = buttonBar.addCheckButton("Mirrors", "Make use of p2 mirrors during the installation process", true, "mirrors");
-      AccessUtil.setKey(mirrorsButton, "mirrors");
+      mirrorsButton = buttonBar.addCheckButton(Messages.EnablementComposite_mirrorsButton_text, Messages.EnablementComposite_mirrorsButton_tooltip, true,
+          "mirrors"); //$NON-NLS-1$
+      AccessUtil.setKey(mirrorsButton, "mirrors"); //$NON-NLS-1$
     }
 
     addDisposeListener(new DisposeListener()
@@ -230,7 +232,7 @@ public class EnablementComposite extends Composite
 
         for (int i = 0; i < jobs; i++)
         {
-          Job iconLoader = new Job("IconLoader-" + i)
+          Job iconLoader = new Job(NLS.bind(Messages.EnablementComposite_iconLoaderJob_name, i))
           {
             @Override
             protected IStatus run(IProgressMonitor monitor)
@@ -275,10 +277,10 @@ public class EnablementComposite extends Composite
 
     progressMonitorPart.attachToCancelComponent(null);
     progressMonitorPart.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-    AccessUtil.setKey(progressMonitorPart, "progress");
+    AccessUtil.setKey(progressMonitorPart, "progress"); //$NON-NLS-1$
     layout();
 
-    Job job = new Job("Install extensions")
+    Job job = new Job(Messages.EnablementComposite_installExtensionsJob_name)
     {
       @Override
       protected IStatus run(IProgressMonitor monitor)
@@ -432,7 +434,7 @@ public class EnablementComposite extends Composite
     public ClassItemProvider(AdapterFactory adapterFactory, EClass eClass, String typeText, EList<SetupTask> enablementTasks)
     {
       super(adapterFactory, typeText,
-          SetupUIPlugin.INSTANCE.getImage(SetupPackage.Literals.SETUP_TASK.isSuperTypeOf(eClass) ? "full/obj16/SetupTask" : "full/obj16/EObject"));
+          SetupUIPlugin.INSTANCE.getImage(SetupPackage.Literals.SETUP_TASK.isSuperTypeOf(eClass) ? "full/obj16/SetupTask" : "full/obj16/EObject")); //$NON-NLS-1$ //$NON-NLS-2$
       this.eClass = eClass;
 
       Map<String, Set<Requirement>> requirements = new HashMap<String, Set<Requirement>>();
@@ -455,20 +457,20 @@ public class EnablementComposite extends Composite
             Repository repository = repositories.get(0);
             String url = repository.getURL();
 
-            if (url.startsWith("${") && i + 1 < size)
+            if (url.startsWith("${") && i + 1 < size) //$NON-NLS-1$
             {
               SetupTask nextTask = enablementTasks.get(i + 1);
               if (nextTask instanceof VariableTask)
               {
                 VariableTask variableTask = (VariableTask)nextTask;
-                if (url.equals("${" + variableTask.getName() + "}"))
+                if (url.equals("${" + variableTask.getName() + "}")) //$NON-NLS-1$ //$NON-NLS-2$
                 {
                   url = variableTask.getValue();
                 }
               }
             }
 
-            if (url.equals("${" + SetupProperties.PROP_UPDATE_URL + "}"))
+            if (url.equals("${" + SetupProperties.PROP_UPDATE_URL + "}")) //$NON-NLS-1$ //$NON-NLS-2$
             {
               url = SetupCorePlugin.UPDATE_URL;
             }
@@ -484,7 +486,7 @@ public class EnablementComposite extends Composite
       inputData.repositories.addAll(urls);
 
       EList<Object> children = getChildren();
-      Image repositoryImage = SetupUIPlugin.INSTANCE.getSWTImage("full/obj16/Repository");
+      Image repositoryImage = SetupUIPlugin.INSTANCE.getSWTImage("full/obj16/Repository"); //$NON-NLS-1$
 
       for (String url : urls)
       {

@@ -43,7 +43,7 @@ import java.util.List;
  */
 public class WorkspaceItemProvider extends ScopeItemProvider
 {
-  private static final String EXPECTED_SUFFIX = ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup";
+  private static final String EXPECTED_SUFFIX = ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup"; //$NON-NLS-1$
 
   /**
    * This constructs an instance from a factory and a notifier.
@@ -83,7 +83,8 @@ public class WorkspaceItemProvider extends ScopeItemProvider
   protected void addStreamsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Workspace_streams_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Workspace_streams_feature", "_UI_Workspace_type"),
+        getString("_UI_Workspace_streams_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Workspace_streams_feature", "_UI_Workspace_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.WORKSPACE__STREAMS, true, false, true, null, null, null));
   }
 
@@ -165,7 +166,7 @@ public class WorkspaceItemProvider extends ScopeItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Workspace"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Workspace")); //$NON-NLS-1$
   }
 
   /**
@@ -186,6 +187,7 @@ public class WorkspaceItemProvider extends ScopeItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     Workspace workspace = (Workspace)object;

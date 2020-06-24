@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.preferences.IPreferenceNodeVisitor;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
+import org.eclipse.osgi.util.NLS;
 
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
@@ -69,23 +70,23 @@ public final class PreferencesUtil
    * A resource load option to load an instance using {@link #getRootPreferenceNode(boolean) PreferencesUtil.getRootPreferenceNode(true)}.
    * The resource must be {@link Resource#unload() unloaded}, to avoid dangling listeners.
    */
-  public static final String OPTION_SYNCHRONIZED_PREFERENCES = "SYNCHRONIZED_PREFERENCES";
+  public static final String OPTION_SYNCHRONIZED_PREFERENCES = "SYNCHRONIZED_PREFERENCES"; //$NON-NLS-1$
 
-  public static final String BUNDLE_DEFAULTS_NODE = "bundle_defaults";
+  public static final String BUNDLE_DEFAULTS_NODE = "bundle_defaults"; //$NON-NLS-1$
 
-  public static final String PREFERENCE_SCHEME = "preference";
+  public static final String PREFERENCE_SCHEME = "preference"; //$NON-NLS-1$
 
-  public static final URI ROOT_PREFERENCE_NODE_URI = URI.createURI(PREFERENCE_SCHEME + ":/");
+  public static final URI ROOT_PREFERENCE_NODE_URI = URI.createURI(PREFERENCE_SCHEME + ":/"); //$NON-NLS-1$
 
-  public static final String DEFAULT_NODE = "default";
+  public static final String DEFAULT_NODE = "default"; //$NON-NLS-1$
 
-  public static final String CONFIRGURATION_NODE = "configuration";
+  public static final String CONFIRGURATION_NODE = "configuration"; //$NON-NLS-1$
 
-  public static final String INSTANCE_NODE = "instance";
+  public static final String INSTANCE_NODE = "instance"; //$NON-NLS-1$
 
-  public static final String PROJECT_NODE = "project";
+  public static final String PROJECT_NODE = "project"; //$NON-NLS-1$
 
-  public static final String SECURE_NODE = "secure";
+  public static final String SECURE_NODE = "secure"; //$NON-NLS-1$
 
   public static final Set<String> ALL_CHILD_NODES = Collections.unmodifiableSet(new LinkedHashSet<String>(
       Arrays.asList(new String[] { SECURE_NODE, BUNDLE_DEFAULTS_NODE, DEFAULT_NODE, CONFIRGURATION_NODE, INSTANCE_NODE, PROJECT_NODE })));
@@ -109,17 +110,17 @@ public final class PreferencesUtil
           try
           {
             // Extract the node and container of the existing wrapper
-            org.eclipse.equinox.internal.security.storage.SecurePreferences node = ReflectUtil.getValue("node", defaultSecurePreferences);
-            org.eclipse.equinox.internal.security.storage.SecurePreferencesContainer container = ReflectUtil.getValue("container", defaultSecurePreferences);
+            org.eclipse.equinox.internal.security.storage.SecurePreferences node = ReflectUtil.getValue("node", defaultSecurePreferences); //$NON-NLS-1$
+            org.eclipse.equinox.internal.security.storage.SecurePreferencesContainer container = ReflectUtil.getValue("container", defaultSecurePreferences); //$NON-NLS-1$
 
             // Extract the options and root of the existing container.
-            Map<Object, Object> options = ReflectUtil.getValue("options", container);
-            org.eclipse.equinox.internal.security.storage.SecurePreferencesRoot root = ReflectUtil.getValue("root", container);
+            Map<Object, Object> options = ReflectUtil.getValue("options", container); //$NON-NLS-1$
+            org.eclipse.equinox.internal.security.storage.SecurePreferencesRoot root = ReflectUtil.getValue("root", container); //$NON-NLS-1$
 
             // Create a container that creates our specialized wrappers instead of the basic ones.
             container = new org.eclipse.equinox.internal.security.storage.SecurePreferencesContainer(root, options)
             {
-              final Map<org.eclipse.equinox.internal.security.storage.SecurePreferences, ISecurePreferences> myWrappers = ReflectUtil.getValue("wrappers",
+              final Map<org.eclipse.equinox.internal.security.storage.SecurePreferences, ISecurePreferences> myWrappers = ReflectUtil.getValue("wrappers", //$NON-NLS-1$
                   this);
 
               @Override
@@ -169,7 +170,7 @@ public final class PreferencesUtil
   public static PreferenceNode getRootPreferenceNode(Set<String> childNodes, boolean isSynchronized)
   {
     ResourceSet resourceSet = new ResourceSetImpl();
-    Resource resource = resourceSet.createResource(ROOT_PREFERENCE_NODE_URI.appendSegment("*.preferences"));
+    Resource resource = resourceSet.createResource(ROOT_PREFERENCE_NODE_URI.appendSegment("*.preferences")); //$NON-NLS-1$
     PreferenceNode root = PreferencesFactory.eINSTANCE.createPreferenceNode();
     resource.getContents().add(root);
 
@@ -220,7 +221,7 @@ public final class PreferencesUtil
     IEclipsePreferences preferences = getPreferences(preferenceNode);
     if (preferences == null)
     {
-      throw new BackingStoreException("The preference node is not backed by a real Eclipse preference" + preferenceNode);
+      throw new BackingStoreException(NLS.bind(Messages.PreferencesUtil_UnbackedPreferences_exception, preferenceNode));
     }
 
     return reconcile(preferenceNode, preferences);
@@ -425,7 +426,7 @@ public final class PreferencesUtil
           // Ignore.
         }
 
-        property.setValue(value == null ? "" : value);
+        property.setValue(value == null ? "" : value); //$NON-NLS-1$
 
         properties.add(property);
       }
@@ -478,7 +479,7 @@ public final class PreferencesUtil
 
     try
     {
-      Method getLocationMethod = preferences.getClass().getDeclaredMethod("getLocation");
+      Method getLocationMethod = preferences.getClass().getDeclaredMethod("getLocation"); //$NON-NLS-1$
       getLocationMethod.setAccessible(true);
       IPath location = (IPath)getLocationMethod.invoke(preferences);
       return location;
@@ -704,17 +705,17 @@ public final class PreferencesUtil
     private void refresh()
     {
       // Fetch the root node and check if it has been modified, i.e., whether it is dirty from unsaved changes.
-      Object root = ReflectUtil.invokeMethod("getRoot", node);
-      boolean modified = (Boolean)ReflectUtil.invokeMethod("isModified", root);
+      Object root = ReflectUtil.invokeMethod("getRoot", node); //$NON-NLS-1$
+      boolean modified = (Boolean)ReflectUtil.invokeMethod("isModified", root); //$NON-NLS-1$
       if (!modified)
       {
         // If it's not dirty, check if the expected time stamp is different from the timestamp on disk.
-        long lastModified = (Long)ReflectUtil.invokeMethod("getLastModified", root);
-        long timestamp = ReflectUtil.getValue("timestamp", root);
+        long lastModified = (Long)ReflectUtil.invokeMethod("getLastModified", root); //$NON-NLS-1$
+        long timestamp = ReflectUtil.getValue("timestamp", root); //$NON-NLS-1$
         if (lastModified != timestamp)
         {
           // If so, reload the secure storage from disk.
-          ReflectUtil.invokeMethod("load", root);
+          ReflectUtil.invokeMethod("load", root); //$NON-NLS-1$
         }
       }
     }
@@ -734,7 +735,7 @@ public final class PreferencesUtil
       IEclipsePreferences rootNode = Platform.getPreferencesService().getRootNode();
       node = rootNode;
 
-      String[] segments = preferencePropertyPath.split("/");
+      String[] segments = preferencePropertyPath.split("/"); //$NON-NLS-1$
       StringBuilder property = null;
       boolean startProperty = false;
       for (int i = 0; i < segments.length - 1; i++)
@@ -759,7 +760,7 @@ public final class PreferencesUtil
         }
         else
         {
-          if (node == rootNode && "secure".equals(segment))
+          if (node == rootNode && "secure".equals(segment)) //$NON-NLS-1$
           {
             rootNode = SecurePreferenceWapper.create(getSecurePreferences());
             node = rootNode;
@@ -856,14 +857,14 @@ public final class PreferencesUtil
 
     private String nextScope(String path)
     {
-      if (path.startsWith("/instance/"))
+      if (path.startsWith("/instance/")) //$NON-NLS-1$
       {
-        return "/default/" + path.substring("/instance/".length());
+        return "/default/" + path.substring("/instance/".length()); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
-      if (path.startsWith("/default/"))
+      if (path.startsWith("/default/")) //$NON-NLS-1$
       {
-        return "/bundle-defaults/" + path.substring("/default/".length());
+        return "/bundle-defaults/" + path.substring("/default/".length()); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
       return null;
@@ -1392,7 +1393,7 @@ public final class PreferencesUtil
    */
   private static class Cipher extends DESCipherImpl
   {
-    private static final String ENCRYPTION_PREFIX = "#!";
+    private static final String ENCRYPTION_PREFIX = "#!"; //$NON-NLS-1$
 
     public Cipher()
     {
@@ -1410,9 +1411,9 @@ public final class PreferencesUtil
       {
         return null;
       }
-      else if ("".equals(value))
+      else if ("".equals(value)) //$NON-NLS-1$
       {
-        return "";
+        return ""; //$NON-NLS-1$
       }
 
       try
@@ -1435,9 +1436,9 @@ public final class PreferencesUtil
       {
         return null;
       }
-      else if ("".equals(value))
+      else if ("".equals(value)) //$NON-NLS-1$
       {
-        return "";
+        return ""; //$NON-NLS-1$
       }
 
       if (value.startsWith(ENCRYPTION_PREFIX))
@@ -1486,22 +1487,22 @@ public final class PreferencesUtil
       for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace())
       {
         String methodName = stackTraceElement.getMethodName();
-        if ("initializeDefaultPreferences".equals(methodName))
+        if ("initializeDefaultPreferences".equals(methodName)) //$NON-NLS-1$
         {
           // Ignore preferences created during initialization.
           return;
         }
-        else if ("start".equals(methodName) && "org.eclipse.osgi.internal.framework.BundleContextImpl".equals(stackTraceElement.getClassName()))
+        else if ("start".equals(methodName) && "org.eclipse.osgi.internal.framework.BundleContextImpl".equals(stackTraceElement.getClassName())) //$NON-NLS-1$ //$NON-NLS-2$
         {
           // Ignore preferences created by bundle start.
           return;
         }
-        else if ("createExecutableExtension".equals(methodName)
-            && "org.eclipse.core.internal.registry.ConfigurationElementHandle".equals(stackTraceElement.getClassName()))
+        else if ("createExecutableExtension".equals(methodName) //$NON-NLS-1$
+            && "org.eclipse.core.internal.registry.ConfigurationElementHandle".equals(stackTraceElement.getClassName())) //$NON-NLS-1$
         {
           return;
         }
-        else if ("showPage".equals(methodName) && "org.eclipse.ui.internal.dialogs.FilteredPreferenceDialog".equals(stackTraceElement.getClassName()))
+        else if ("showPage".equals(methodName) && "org.eclipse.ui.internal.dialogs.FilteredPreferenceDialog".equals(stackTraceElement.getClassName())) //$NON-NLS-1$ //$NON-NLS-2$
         {
           return;
         }

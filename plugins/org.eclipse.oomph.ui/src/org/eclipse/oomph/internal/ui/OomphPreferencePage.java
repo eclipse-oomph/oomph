@@ -19,11 +19,11 @@ import org.eclipse.swt.widgets.Control;
  */
 public class OomphPreferencePage extends AbstractPreferencePage
 {
-  public static final String ID = "org.eclipse.oomph.ui.preferences.OomphPreferencePage";
+  public static final String ID = "org.eclipse.oomph.ui.preferences.OomphPreferencePage"; //$NON-NLS-1$
 
   public OomphPreferencePage()
   {
-    setDescription("Expand the tree to edit preferences for a specific feature.");
+    setDescription("Expand the tree to edit preferences for a specific feature."); //$NON-NLS-1$
     noDefaultAndApplyButton();
   }
 

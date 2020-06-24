@@ -57,7 +57,7 @@ public abstract class AbstractResolution extends WorkbenchMarkerResolution
 
   public String getDescription()
   {
-    return "";
+    return ""; //$NON-NLS-1$
   }
 
   public final Image getImage()
@@ -93,7 +93,7 @@ public abstract class AbstractResolution extends WorkbenchMarkerResolution
   @Override
   public void run(final IMarker[] markers, IProgressMonitor monitor)
   {
-    new UIJob("Applying Fixes")
+    new UIJob(Messages.AbstractResolution_jobName)
     {
       @Override
       public IStatus runInUIThread(IProgressMonitor monitor)

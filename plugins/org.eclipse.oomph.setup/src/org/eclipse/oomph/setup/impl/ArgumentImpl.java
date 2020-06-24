@@ -266,7 +266,7 @@ public class ArgumentImpl extends ModelElementImpl implements Argument
     {
       // Create a current document reference proxy with just the name as the fragment.
       Parameter parameter = SetupFactory.eINSTANCE.createParameter();
-      ((InternalEObject)parameter).eSetProxyURI(URI.createURI("#" + newName));
+      ((InternalEObject)parameter).eSetProxyURI(URI.createURI("#" + newName)); //$NON-NLS-1$
       setParameter(parameter);
     }
   }
@@ -551,7 +551,7 @@ public class ArgumentImpl extends ModelElementImpl implements Argument
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (value: ");
+    result.append(" (value: "); //$NON-NLS-1$
     result.append(value);
     result.append(')');
     return result.toString();

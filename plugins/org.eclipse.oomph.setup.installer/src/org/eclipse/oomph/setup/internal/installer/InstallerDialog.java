@@ -168,7 +168,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
   @Override
   protected void createToolItemsForToolBar(ToolBar toolBar)
   {
-    ToolItem networkProxySettingsToolItem = createToolItem(toolBar, "install_prefs_proxy.png", "Network proxy settings");
+    ToolItem networkProxySettingsToolItem = createToolItem(toolBar, "install_prefs_proxy.png", Messages.InstallerDialog_NetProxy_message); //$NON-NLS-1$
     networkProxySettingsToolItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -178,9 +178,9 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
         dialog.open();
       }
     });
-    AccessUtil.setKey(networkProxySettingsToolItem, "proxy");
+    AccessUtil.setKey(networkProxySettingsToolItem, "proxy"); //$NON-NLS-1$
 
-    ToolItem sshSettingsToolItem = createToolItem(toolBar, "install_prefs_ssh2.png", "SSH2 settings");
+    ToolItem sshSettingsToolItem = createToolItem(toolBar, "install_prefs_ssh2.png", Messages.InstallerDialog_SSH2_message); //$NON-NLS-1$
     sshSettingsToolItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -190,9 +190,9 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
         dialog.open();
       }
     });
-    AccessUtil.setKey(sshSettingsToolItem, "ssh");
+    AccessUtil.setKey(sshSettingsToolItem, "ssh"); //$NON-NLS-1$
 
-    ToolItem simpleToolItem = createToolItem(toolBar, "simple.png", "Switch to simple mode");
+    ToolItem simpleToolItem = createToolItem(toolBar, "simple.png", Messages.InstallerDialog_SwitchToSimpleModel_message); //$NON-NLS-1$
     simpleToolItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -202,9 +202,9 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
         setReturnCode(RETURN_SIMPLE);
       }
     });
-    AccessUtil.setKey(simpleToolItem, "simple");
+    AccessUtil.setKey(simpleToolItem, "simple"); //$NON-NLS-1$
 
-    final ToolItem webLinksToolItem = createToolItem(toolBar, URISchemeUtil.isRegistered() ? "web_links_registered.png" : "web_links_unregistered.png",
+    final ToolItem webLinksToolItem = createToolItem(toolBar, URISchemeUtil.isRegistered() ? "web_links_registered.png" : "web_links_unregistered.png", //$NON-NLS-1$ //$NON-NLS-2$
         SimpleInstallerDialog.WEB_LINKS_MENU_ITEM_DESCRIPTION);
     webLinksToolItem.addSelectionListener(new SelectionAdapter()
     {
@@ -222,13 +222,13 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
         }
 
         webLinksToolItem
-            .setImage(SetupInstallerPlugin.INSTANCE.getSWTImage(URISchemeUtil.isRegistered() ? "web_links_registered.png" : "web_links_unregistered.png"));
+            .setImage(SetupInstallerPlugin.INSTANCE.getSWTImage(URISchemeUtil.isRegistered() ? "web_links_registered.png" : "web_links_unregistered.png")); //$NON-NLS-1$ //$NON-NLS-2$
       }
     });
-    AccessUtil.setKey(simpleToolItem, "web-links");
+    AccessUtil.setKey(simpleToolItem, "web-links"); //$NON-NLS-1$
 
-    updateToolItem = createToolItem(toolBar, "install_update0.png", "Update");
-    updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching0.png"));
+    updateToolItem = createToolItem(toolBar, "install_update0.png", Messages.InstallerDialog_Update_message); //$NON-NLS-1$
+    updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching0.png")); //$NON-NLS-1$
     updateToolItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -237,7 +237,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
         selfUpdate();
       }
     });
-    AccessUtil.setKey(updateToolItem, "update");
+    AccessUtil.setKey(updateToolItem, "update"); //$NON-NLS-1$
   }
 
   protected final ToolItem createToolItem(ToolBar toolBar, String iconPath, String toolTip)
@@ -325,28 +325,28 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
           {
             if (updateSearching)
             {
-              updateToolItem.setToolTipText("Checking for updates...");
-              updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching" + icon + ".png"));
+              updateToolItem.setToolTipText(Messages.InstallerDialog_CheckForUpdates_message);
+              updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_searching" + icon + ".png")); //$NON-NLS-1$ //$NON-NLS-2$
               updateToolItem.setEnabled(false);
             }
             else if (updateError != null)
             {
               StringBuilder builder = new StringBuilder();
-              formatStatus(builder, "", updateError);
+              formatStatus(builder, "", updateError); //$NON-NLS-1$
               updateToolItem.setToolTipText(builder.toString());
-              updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_error.png"));
+              updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_error.png")); //$NON-NLS-1$
               updateToolItem.setEnabled(true);
             }
             else if (updateResolution != null)
             {
-              updateToolItem.setToolTipText("Install available updates");
-              updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update" + icon + ".png"));
+              updateToolItem.setToolTipText(Messages.InstallerDialog_InstallUpdates_message);
+              updateToolItem.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update" + icon + ".png")); //$NON-NLS-1$ //$NON-NLS-2$
               updateToolItem.setEnabled(true);
             }
             else
             {
-              updateToolItem.setToolTipText("No updates available");
-              updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update_disabled.png"));
+              updateToolItem.setToolTipText(Messages.InstallerDialog_NoUpdates_message);
+              updateToolItem.setDisabledImage(SetupInstallerPlugin.INSTANCE.getSWTImage("install_update_disabled.png")); //$NON-NLS-1$
               updateToolItem.setEnabled(false);
             }
           }
@@ -368,7 +368,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
 
           for (IStatus child : status.getChildren())
           {
-            formatStatus(builder, indent + "   ", child);
+            formatStatus(builder, indent + "   ", child); //$NON-NLS-1$
           }
         }
       });
@@ -383,9 +383,9 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
 
     versionLink = new Link(parent, SWT.NO_FOCUS);
     versionLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_CENTER));
-    versionLink.setToolTipText("About");
-    versionLink.setText("<a>0.0.0</a>");
-    AccessUtil.setKey(versionLink, "version");
+    versionLink.setToolTipText(Messages.InstallerDialog_About_message);
+    versionLink.setText("<a>0.0.0</a>"); //$NON-NLS-1$
+    AccessUtil.setKey(versionLink, "version"); //$NON-NLS-1$
 
     Thread thread = new ProductVersionInitializer();
     thread.start();
@@ -445,7 +445,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
   {
     public ProductVersionInitializer()
     {
-      super("Product Version Initializer");
+      super(Messages.InstallerDialog_ProductVersionInitializer_thread);
     }
 
     @Override
@@ -481,7 +481,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
                   }
                 });
 
-                versionLink.setText("<a>" + version + "</a>");
+                versionLink.setText("<a>" + version + "</a>"); //$NON-NLS-1$ //$NON-NLS-2$
                 versionLink.getParent().layout();
               }
               catch (Exception ex)
@@ -506,7 +506,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
   {
     public UpdateIconAnimator()
     {
-      super("Update Icon Animator");
+      super(Messages.InstallerDialog_UpdateIconAnimator_thread);
     }
 
     @Override
@@ -542,7 +542,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
   {
     public UpdateSearcher()
     {
-      super("Update Searcher");
+      super(Messages.InstallerDialog_UpdateSearcher_thread);
     }
 
     @Override
@@ -567,7 +567,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
   @Override
   protected IDialogSettings getDialogBoundsSettings()
   {
-    return SetupInstallerPlugin.INSTANCE.getDialogSettings("AdvancedInstaller");
+    return SetupInstallerPlugin.INSTANCE.getDialogSettings("AdvancedInstaller"); //$NON-NLS-1$
   }
 
   @Override

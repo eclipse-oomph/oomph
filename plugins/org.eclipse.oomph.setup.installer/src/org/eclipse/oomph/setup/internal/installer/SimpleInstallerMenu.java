@@ -60,8 +60,8 @@ public class SimpleInstallerMenu extends Shell implements Listener
     layout.verticalSpacing = 0;
     setLayout(layout);
 
-    FlatButton closeButton = new ImageHoverButton(this, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_hover.png"));
+    FlatButton closeButton = new ImageHoverButton(this, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close.png"), //$NON-NLS-1$
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/close_hover.png")); //$NON-NLS-1$
     closeButton.setLayoutData(GridDataFactory.swtDefaults().grab(true, false).align(SWT.END, SWT.BEGINNING).create());
     closeButton.addSelectionListener(new SelectionAdapter()
     {
@@ -79,7 +79,7 @@ public class SimpleInstallerMenu extends Shell implements Listener
   {
     if (name == null)
     {
-      throw new IllegalArgumentException("name must not be null");
+      throw new IllegalArgumentException(Messages.SimpleInstallerMenu_NullName_exception);
     }
 
     for (Control child : getChildren())
@@ -258,7 +258,7 @@ public class SimpleInstallerMenu extends Shell implements Listener
    */
   public static class InstallerMenuItem extends Composite
   {
-    private static final Font FONT = SimpleInstallerDialog.getFont(4, "bold");
+    private static final Font FONT = SimpleInstallerDialog.getFont(4, "bold"); //$NON-NLS-1$
 
     private ImageHoverButton button;
 
@@ -310,7 +310,7 @@ public class SimpleInstallerMenu extends Shell implements Listener
       button.setFont(FONT);
       button.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).create());
 
-      button.setText("");
+      button.setText(""); //$NON-NLS-1$
       Point defaultButtonSize = button.computeSize(SWT.DEFAULT, SWT.DEFAULT);
       gridData.heightHint = defaultButtonSize.y + 5;
     }

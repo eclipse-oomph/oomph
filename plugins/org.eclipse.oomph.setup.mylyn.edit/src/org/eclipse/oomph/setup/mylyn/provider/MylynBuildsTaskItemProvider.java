@@ -76,8 +76,8 @@ public class MylynBuildsTaskItemProvider extends SetupTaskItemProvider
   protected void addConnectorKindPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MylynBuildsTask_connectorKind_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_MylynBuildsTask_connectorKind_feature", "_UI_MylynBuildsTask_type"),
+        getString("_UI_MylynBuildsTask_connectorKind_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MylynBuildsTask_connectorKind_feature", "_UI_MylynBuildsTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MylynPackage.Literals.MYLYN_BUILDS_TASK__CONNECTOR_KIND, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -90,8 +90,8 @@ public class MylynBuildsTaskItemProvider extends SetupTaskItemProvider
   protected void addServerURLPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MylynBuildsTask_serverURL_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_MylynBuildsTask_serverURL_feature", "_UI_MylynBuildsTask_type"),
+        getString("_UI_MylynBuildsTask_serverURL_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MylynBuildsTask_serverURL_feature", "_UI_MylynBuildsTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MylynPackage.Literals.MYLYN_BUILDS_TASK__SERVER_URL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -104,8 +104,8 @@ public class MylynBuildsTaskItemProvider extends SetupTaskItemProvider
   protected void addUserIDPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MylynBuildsTask_userID_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_MylynBuildsTask_userID_feature", "_UI_MylynBuildsTask_type"),
+        getString("_UI_MylynBuildsTask_userID_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MylynBuildsTask_userID_feature", "_UI_MylynBuildsTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MylynPackage.Literals.MYLYN_BUILDS_TASK__USER_ID, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -118,8 +118,8 @@ public class MylynBuildsTaskItemProvider extends SetupTaskItemProvider
   protected void addPasswordPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MylynBuildsTask_password_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_MylynBuildsTask_password_feature", "_UI_MylynBuildsTask_type"),
+        getString("_UI_MylynBuildsTask_password_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MylynBuildsTask_password_feature", "_UI_MylynBuildsTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MylynPackage.Literals.MYLYN_BUILDS_TASK__PASSWORD, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -165,7 +165,7 @@ public class MylynBuildsTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/MylynBuildsTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/MylynBuildsTask")); //$NON-NLS-1$
   }
 
   /**
@@ -190,7 +190,7 @@ public class MylynBuildsTaskItemProvider extends SetupTaskItemProvider
   {
     String connectorKind = ((MylynBuildsTask)object).getConnectorKind();
     String serverURL = ((MylynBuildsTask)object).getServerURL();
-    return serverURL == null || serverURL.length() == 0 ? getString("_UI_MylynBuildsTask_type") : "" + serverURL + " (" + connectorKind + ")";
+    return serverURL == null || serverURL.length() == 0 ? getString("_UI_MylynBuildsTask_type") : "" + serverURL + " (" + connectorKind + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
   }
 
   /**

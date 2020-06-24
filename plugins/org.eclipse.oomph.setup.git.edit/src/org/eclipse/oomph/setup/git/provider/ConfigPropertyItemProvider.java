@@ -78,9 +78,9 @@ public class ConfigPropertyItemProvider extends ItemProviderAdapter
   protected void addKeyPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ConfigProperty_key_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ConfigProperty_key_feature", "_UI_ConfigProperty_type"), GitPackage.Literals.CONFIG_PROPERTY__KEY,
-        true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_ConfigProperty_key_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ConfigProperty_key_feature", "_UI_ConfigProperty_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        GitPackage.Literals.CONFIG_PROPERTY__KEY, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -92,8 +92,8 @@ public class ConfigPropertyItemProvider extends ItemProviderAdapter
   protected void addValuePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ConfigProperty_value_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ConfigProperty_value_feature", "_UI_ConfigProperty_type"),
+        getString("_UI_ConfigProperty_value_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ConfigProperty_value_feature", "_UI_ConfigProperty_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         GitPackage.Literals.CONFIG_PROPERTY__VALUE, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -117,7 +117,7 @@ public class ConfigPropertyItemProvider extends ItemProviderAdapter
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ConfigProperty"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ConfigProperty")); //$NON-NLS-1$
   }
 
   /**
@@ -143,7 +143,7 @@ public class ConfigPropertyItemProvider extends ItemProviderAdapter
     ConfigProperty property = (ConfigProperty)object;
     String key = property.getKey();
     String value = property.getValue();
-    return (key == null ? "" : key) + "=" + crop(value);
+    return (key == null ? "" : key) + "=" + crop(value); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

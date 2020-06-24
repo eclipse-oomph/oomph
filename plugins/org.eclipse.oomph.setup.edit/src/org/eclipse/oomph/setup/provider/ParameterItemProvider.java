@@ -72,7 +72,8 @@ public class ParameterItemProvider extends ModelElementItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Parameter_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Parameter_name_feature", "_UI_Parameter_type"),
+        getString("_UI_Parameter_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Parameter_name_feature", "_UI_Parameter_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.PARAMETER__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -85,8 +86,8 @@ public class ParameterItemProvider extends ModelElementItemProvider
   protected void addDescriptionPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Parameter_description_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Parameter_description_feature", "_UI_Parameter_type"),
+        getString("_UI_Parameter_description_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Parameter_description_feature", "_UI_Parameter_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.PARAMETER__DESCRIPTION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -99,8 +100,8 @@ public class ParameterItemProvider extends ModelElementItemProvider
   protected void addDefaultValuePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Parameter_defaultValue_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Parameter_defaultValue_feature", "_UI_Parameter_type"),
+        getString("_UI_Parameter_defaultValue_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Parameter_defaultValue_feature", "_UI_Parameter_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.PARAMETER__DEFAULT_VALUE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -113,7 +114,7 @@ public class ParameterItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Parameter"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Parameter")); //$NON-NLS-1$
   }
 
   /**
@@ -134,6 +135,7 @@ public class ParameterItemProvider extends ModelElementItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     Parameter parameter = (Parameter)object;

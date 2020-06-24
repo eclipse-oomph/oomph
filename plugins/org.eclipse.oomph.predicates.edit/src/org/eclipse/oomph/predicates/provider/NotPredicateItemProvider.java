@@ -101,7 +101,7 @@ public class NotPredicateItemProvider extends PredicateItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/NotPredicate"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/NotPredicate")); //$NON-NLS-1$
   }
 
   /**
@@ -124,7 +124,7 @@ public class NotPredicateItemProvider extends PredicateItemProvider
   @Override
   public String getText(Object object)
   {
-    return "Not";
+    return Messages.NotPredicateItemProvider_Not_label;
   }
 
   /**

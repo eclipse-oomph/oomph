@@ -62,7 +62,7 @@ public class MavenProjectFactoryItemProvider extends XMLProjectFactoryItemProvid
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/MavenProjectFactory"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/MavenProjectFactory")); //$NON-NLS-1$
   }
 
   /**
@@ -85,7 +85,7 @@ public class MavenProjectFactoryItemProvider extends XMLProjectFactoryItemProvid
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_MavenProjectFactory_type");
+    return getString("_UI_MavenProjectFactory_type"); //$NON-NLS-1$
   }
 
   /**

@@ -81,7 +81,7 @@ public class ConfigureMarketPlaceListingAction implements IObjectActionDelegate
     }
 
     action.setEnabled(shell != null && macroTasks.size() == 1);
-    action.setImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor("marketplace16.png"));
+    action.setImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor("marketplace16.png")); //$NON-NLS-1$
   }
 
   public void run(IAction action)
@@ -136,7 +136,7 @@ public class ConfigureMarketPlaceListingAction implements IObjectActionDelegate
       {
         String correspondParameterName = getCorrespondParameterName(requirement);
         Argument argument = arguments.get(correspondParameterName);
-        return argument != null && "true".equals(argument.getValue());
+        return argument != null && "true".equals(argument.getValue()); //$NON-NLS-1$
       }
 
       @Override
@@ -174,7 +174,7 @@ public class ConfigureMarketPlaceListingAction implements IObjectActionDelegate
           newArguments.add(otherArgument);
         }
 
-        CompoundCommand compoundCommand = new CompoundCommand("Configure Marketplace Listing");
+        CompoundCommand compoundCommand = new CompoundCommand(Messages.ConfigureMarketPlaceListingAction_commandLabel);
         if (addArgument)
         {
           // The command isn't executable unless we really change something, i.e., add a missing argument.

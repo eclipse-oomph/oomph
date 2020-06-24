@@ -42,7 +42,7 @@ public class StackComposite extends Composite
 
       try
       {
-        ReflectUtil.invokeMethod(getClass().getMethod("requestLayout"), this);
+        ReflectUtil.invokeMethod(getClass().getMethod("requestLayout"), this); //$NON-NLS-1$
       }
       catch (NoSuchMethodException ex)
       {

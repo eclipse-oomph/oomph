@@ -78,8 +78,9 @@ public class WorkingSetItemProvider extends ModelElementItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_WorkingSet_name_feature"), getString("_UI_WorkingSet_name_description"), WorkingSetsPackage.Literals.WORKING_SET__NAME, true, false,
-        false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_WorkingSet_name_feature"), //$NON-NLS-1$
+        getString("_UI_WorkingSet_name_description"), //$NON-NLS-1$
+        WorkingSetsPackage.Literals.WORKING_SET__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -91,8 +92,9 @@ public class WorkingSetItemProvider extends ModelElementItemProvider
   protected void addIDPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_WorkingSet_iD_feature"), getString("_UI_WorkingSet_iD_description"), WorkingSetsPackage.Literals.WORKING_SET__ID, true, false, false,
-        ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_WorkingSet_iD_feature"), //$NON-NLS-1$
+        getString("_UI_WorkingSet_iD_description"), //$NON-NLS-1$
+        WorkingSetsPackage.Literals.WORKING_SET__ID, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -137,7 +139,7 @@ public class WorkingSetItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/WorkingSet"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/WorkingSet")); //$NON-NLS-1$
   }
 
   /**
@@ -161,7 +163,7 @@ public class WorkingSetItemProvider extends ModelElementItemProvider
   public String getText(Object object)
   {
     String label = ((WorkingSet)object).getName();
-    return label == null ? "" : label;
+    return label == null ? "" : label; //$NON-NLS-1$
   }
 
   /**

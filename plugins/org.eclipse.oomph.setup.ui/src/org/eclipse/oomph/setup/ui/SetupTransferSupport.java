@@ -161,7 +161,7 @@ public class SetupTransferSupport
 
     final ResourceSet resourceSet = editingDomain.getResourceSet();
     SetupCoreUtil.configureResourceSet(resourceSet);
-    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("zip", new ArchiveResourceFactoryImpl());
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("zip", new ArchiveResourceFactoryImpl()); //$NON-NLS-1$
 
     commandStack.addCommandStackListener(new CommandStackListener()
     {
@@ -330,13 +330,13 @@ abstract class ResourceCommand extends AbstractOverrideableCommand implements Ab
   @Override
   public String doGetDescription()
   {
-    return EMFEditPlugin.INSTANCE.getString("_UI_LoadResources_description");
+    return EMFEditPlugin.INSTANCE.getString("_UI_LoadResources_description"); //$NON-NLS-1$
   }
 
   @Override
   public String doGetLabel()
   {
-    return EMFEditPlugin.INSTANCE.getString("_UI_LoadResources_label");
+    return EMFEditPlugin.INSTANCE.getString("_UI_LoadResources_label"); //$NON-NLS-1$
   }
 
   public boolean validate(Object owner, float location, int operations, int operation, Collection<?> collection)
@@ -391,7 +391,7 @@ class AddToResourceCommand extends ResourceCommand
     {
       EObject eObject = (EObject)object;
       Resource originalResource = eObject.eResource();
-      URI uri = originalResource == null ? URI.createURI("dummy:/*.xmi") : originalResource.getURI();
+      URI uri = originalResource == null ? URI.createURI("dummy:/*.xmi") : originalResource.getURI(); //$NON-NLS-1$
       Resource resource = resourceSet.getResource(uri, false);
       if (resource == null)
       {
@@ -426,7 +426,7 @@ class LoadResourceCommand extends ResourceCommand
 
       URI uri = (URI)object;
       String fileExtension = uri.fileExtension();
-      if (!"setup".equals(fileExtension) && !"zip".equals(fileExtension)
+      if (!"setup".equals(fileExtension) && !"zip".equals(fileExtension) //$NON-NLS-1$ //$NON-NLS-2$
           && MarketPlaceListing.getMarketPlaceListing(uri, domain.getResourceSet().getURIConverter()) == null)
       {
         return false;

@@ -24,6 +24,6 @@ public class GitCleanAction extends AbstractRepositoryAction
   @Override
   protected void run(Shell shell, File workTree) throws Exception
   {
-    GitBash.executeCommand(shell, workTree, "git clean -f -d");
+    GitBash.executeCommand(shell, workTree, "git clean -f -d"); //$NON-NLS-1$
   }
 }

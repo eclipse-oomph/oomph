@@ -59,17 +59,17 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
       if (EAnnotationConstants.ANNOTATION_VARIABLE.equals(source))
       {
         EMap<String, String> details = eAnnotation.getDetails();
-        String name = details.get("name");
+        String name = details.get("name"); //$NON-NLS-1$
         if (!StringUtil.isEmpty(name))
         {
-          String version = details.get("version");
+          String version = details.get("version"); //$NON-NLS-1$
           if (StringUtil.isEmpty(version))
           {
             int index = name.lastIndexOf('-');
-            version = "JavaSE-" + name.substring(index + 1);
+            version = "JavaSE-" + name.substring(index + 1); //$NON-NLS-1$
           }
 
-          VERSION_VARIABLES.put(version, "${" + name + "}");
+          VERSION_VARIABLES.put(version, "${" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
         }
       }
     }
@@ -118,7 +118,7 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
   protected void addVersionPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_JRETask_version_feature"), getString("_UI_PropertyDescriptor_description", "_UI_JRETask_version_feature", "_UI_JRETask_type"),
+        getString("_UI_JRETask_version_feature"), getString("_UI_PropertyDescriptor_description", "_UI_JRETask_version_feature", "_UI_JRETask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         JDTPackage.Literals.JRE_TASK__VERSION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
@@ -153,7 +153,8 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
   protected void addLocationPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_JRETask_location_feature"), getString("_UI_PropertyDescriptor_description", "_UI_JRETask_location_feature", "_UI_JRETask_type"),
+        getString("_UI_JRETask_location_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_JRETask_location_feature", "_UI_JRETask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         JDTPackage.Literals.JRE_TASK__LOCATION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -166,7 +167,8 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_JRETask_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_JRETask_name_feature", "_UI_JRETask_type"),
+        getString("_UI_JRETask_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_JRETask_name_feature", "_UI_JRETask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         JDTPackage.Literals.JRE_TASK__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -179,8 +181,8 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
   protected void addVMInstallTypePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_JRETask_vMInstallType_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_JRETask_vMInstallType_feature", "_UI_JRETask_type"), JDTPackage.Literals.JRE_TASK__VM_INSTALL_TYPE,
+        getString("_UI_JRETask_vMInstallType_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_JRETask_vMInstallType_feature", "_UI_JRETask_type"), JDTPackage.Literals.JRE_TASK__VM_INSTALL_TYPE, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
@@ -214,8 +216,8 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
   protected void addExecutionEnvironmentDefaultPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_JRETask_executionEnvironmentDefault_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_JRETask_executionEnvironmentDefault_feature", "_UI_JRETask_type"),
+        getString("_UI_JRETask_executionEnvironmentDefault_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_JRETask_executionEnvironmentDefault_feature", "_UI_JRETask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         JDTPackage.Literals.JRE_TASK__EXECUTION_ENVIRONMENT_DEFAULT, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -228,7 +230,8 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
   protected void addVMArgumentsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_JRETask_vMArguments_feature"), getString("_UI_PropertyDescriptor_description", "_UI_JRETask_vMArguments_feature", "_UI_JRETask_type"),
+        getString("_UI_JRETask_vMArguments_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_JRETask_vMArguments_feature", "_UI_JRETask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         JDTPackage.Literals.JRE_TASK__VM_ARGUMENTS, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -274,7 +277,7 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/JRETask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/JRETask")); //$NON-NLS-1$
   }
 
   /**
@@ -303,7 +306,7 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
 
     if (StringUtil.isEmpty(name))
     {
-      return getString("_UI_JRETask_type");
+      return getString("_UI_JRETask_type"); //$NON-NLS-1$
     }
 
     String label = name;
@@ -311,11 +314,11 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
     {
       if (location.length() == 0)
       {
-        label += " = \"\"";
+        label += " = \"\""; //$NON-NLS-1$
       }
       else
       {
-        label += " = " + location;
+        label += " = " + location; //$NON-NLS-1$
       }
     }
 

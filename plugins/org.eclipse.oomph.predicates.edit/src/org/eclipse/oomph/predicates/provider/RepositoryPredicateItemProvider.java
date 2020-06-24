@@ -28,6 +28,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.osgi.util.NLS;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -81,7 +82,7 @@ public class RepositoryPredicateItemProvider extends PredicateItemProvider
   protected void addProjectPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_RepositoryPredicate_project_feature"), getString("_UI_RepositoryPredicate_project_description"),
+        getString("_UI_RepositoryPredicate_project_feature"), getString("_UI_RepositoryPredicate_project_description"), //$NON-NLS-1$ //$NON-NLS-2$
         PredicatesPackage.Literals.REPOSITORY_PREDICATE__PROJECT, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
@@ -106,7 +107,7 @@ public class RepositoryPredicateItemProvider extends PredicateItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/RepositoryPredicate"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/RepositoryPredicate")); //$NON-NLS-1$
   }
 
   /**
@@ -130,7 +131,8 @@ public class RepositoryPredicateItemProvider extends PredicateItemProvider
   public String getText(Object object)
   {
     IProject project = ((RepositoryPredicate)object).getProject();
-    return project == null ? getString("_UI_RepositoryPredicate_type") : "In same repository as " + project.getName();
+    return project == null ? getString("_UI_RepositoryPredicate_type") //$NON-NLS-1$
+        : NLS.bind(Messages.RepositoryPredicateItemProvider_SameRepository_label, project.getName());
   }
 
   /**

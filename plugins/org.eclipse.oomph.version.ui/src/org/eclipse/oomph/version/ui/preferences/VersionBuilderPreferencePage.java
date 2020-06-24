@@ -103,13 +103,13 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
 
     TableViewerColumn releaseViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
     final TableColumn releaseColumn = releaseViewerColumn.getColumn();
-    releaseColumn.setText("Release");
+    releaseColumn.setText(Messages.VersionBuilderPreferencePage_column_release);
     releaseColumn.setResizable(false);
     releaseColumn.setMoveable(false);
 
     TableViewerColumn checkModeViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
     final TableColumn checkModeColumn = checkModeViewerColumn.getColumn();
-    checkModeColumn.setText("Check Mode");
+    checkModeColumn.setText(Messages.VersionBuilderPreferencePage_column_checkMode);
     checkModeColumn.setResizable(false);
     checkModeColumn.setMoveable(false);
     checkModeColumn.pack();
@@ -155,7 +155,7 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
 
     TableViewerColumn lowerBoundCheckModeViewerColumn = new TableViewerColumn(viewer, SWT.NONE);
     final TableColumn lowerBoundCheckModeColumn = lowerBoundCheckModeViewerColumn.getColumn();
-    lowerBoundCheckModeColumn.setText("Lower Bound Check Mode");
+    lowerBoundCheckModeColumn.setText(Messages.VersionBuilderPreferencePage_column_lowerBoundCheckMode);
     lowerBoundCheckModeColumn.setResizable(false);
     lowerBoundCheckModeColumn.setMoveable(false);
     lowerBoundCheckModeColumn.pack();
@@ -225,7 +225,7 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
       }
     });
 
-    viewer.setColumnProperties(new String[] { "releasePath", "checkMode", "lowerBoundCheckMode" });
+    viewer.setColumnProperties(new String[] { "releasePath", "checkMode", "lowerBoundCheckMode" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     viewer.setContentProvider(new ArrayContentProvider());
 
@@ -235,12 +235,12 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
     {
       public boolean canModify(Object element, String property)
       {
-        return "checkMode".equals(property) || "lowerBoundCheckMode".equals(property);
+        return "checkMode".equals(property) || "lowerBoundCheckMode".equals(property); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
       public Object getValue(Object element, String property)
       {
-        if (property.equals("checkMode"))
+        if (property.equals("checkMode")) //$NON-NLS-1$
         {
           return releaseCheckModes.get(element);
         }
@@ -256,7 +256,7 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
         }
 
         String releasePath = (String)element;
-        if (property.equals("checkMode"))
+        if (property.equals("checkMode")) //$NON-NLS-1$
         {
           releaseCheckModes.put(releasePath, (ReleaseCheckMode)value);
         }

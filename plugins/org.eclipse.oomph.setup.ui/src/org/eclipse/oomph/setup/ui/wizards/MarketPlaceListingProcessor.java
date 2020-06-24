@@ -70,6 +70,7 @@ import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.ProgressMonitorPart;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.browser.LocationListener;
@@ -116,7 +117,7 @@ public class MarketPlaceListingProcessor
     this.setupWizard = setupWizard;
     Resource marketPlaceListingResource = null;
     MarketPlaceListing marketPlaceListing = null;
-    URI uri = URI.createURI("unknown");
+    URI uri = URI.createURI("unknown"); //$NON-NLS-1$
     for (Resource resource : setupWizard.getUnappliedConfigurationResources())
     {
       uri = resource.getURI();
@@ -131,7 +132,7 @@ public class MarketPlaceListingProcessor
     this.marketPlaceListing = marketPlaceListing;
     this.marketPlaceListingResource = marketPlaceListingResource;
 
-    status = new MarketPlaceListingStatus("Problems were encountered processing the marketplace listing for '" + uri + "'");
+    status = new MarketPlaceListingStatus(NLS.bind(Messages.MarketPlaceListingProcessor_status_problemsEncountered, uri));
     shell = this.setupWizard.getShell();
   }
 
@@ -142,7 +143,7 @@ public class MarketPlaceListingProcessor
     this.shell = shell;
 
     setupWizard = null;
-    status = new MarketPlaceListingStatus("Problems were encountered processing the marketplace listing for '" + marketPlaceListingResource.getURI() + "'");
+    status = new MarketPlaceListingStatus(NLS.bind(Messages.MarketPlaceListingProcessor_status_problemsEncountered, marketPlaceListingResource.getURI()));
   }
 
   public boolean isMarketPlaceListing()
@@ -196,19 +197,19 @@ public class MarketPlaceListingProcessor
 
     if (marketPlaceListing.getUpdateSite() == null)
     {
-      status.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "The listing does not include an update site"));
+      status.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, Messages.MarketPlaceListingProcessor_status_noUpdateSiteInListing));
       return false;
     }
 
     if (marketPlaceListing.getRequirements().isEmpty())
     {
-      status.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "The listing does not specify any installable units"));
+      status.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, Messages.MarketPlaceListingProcessor_status_noIusInListing));
       return false;
     }
 
     Point size = getSize();
     final Set<Requirement> checkedRequirements = new LinkedHashSet<Requirement>();
-    OomphDialog marketPlaceListingDialog = new OomphDialog(shell, "", size.x, size.y, SetupUIPlugin.INSTANCE, false)
+    OomphDialog marketPlaceListingDialog = new OomphDialog(shell, "", size.x, size.y, SetupUIPlugin.INSTANCE, false) //$NON-NLS-1$
     {
       private ProgressMonitorPart progressMonitorPart;
 
@@ -225,19 +226,19 @@ public class MarketPlaceListingProcessor
       @Override
       protected String getShellText()
       {
-        return "Marketplace Install";
+        return Messages.MarketPlaceListingProcessor_shellText;
       }
 
       @Override
       protected String getImagePath()
       {
-        return "marketplace_banner.png";
+        return "marketplace_banner.png"; //$NON-NLS-1$
       }
 
       @Override
       protected String getDefaultMessage()
       {
-        return "Choose the features to install.";
+        return Messages.MarketPlaceListingProcessor_defaultMessage;
       }
 
       @Override
@@ -286,7 +287,7 @@ public class MarketPlaceListingProcessor
             {
               public void changing(LocationEvent event)
               {
-                if (!"about:blank".equals(event.location))
+                if (!"about:blank".equals(event.location)) //$NON-NLS-1$
                 {
                   OS.INSTANCE.openSystemBrowser(event.location);
                   event.doit = false;
@@ -384,46 +385,46 @@ public class MarketPlaceListingProcessor
               String label = installableUnit.getProperty(IInstallableUnit.PROP_NAME, null);
 
               StringBuilder result = new StringBuilder();
-              result.append("<span style='white-space: nowrap; font-size: 150%;'><b>");
+              result.append("<span style='white-space: nowrap; font-size: 150%;'><b>"); //$NON-NLS-1$
               if (brandingSiteURI != null)
               {
-                result.append("<a style='text-decoration: none; color: inherit;' href='");
+                result.append("<a style='text-decoration: none; color: inherit;' href='"); //$NON-NLS-1$
                 result.append(brandingSiteURI);
-                result.append("'>");
+                result.append("'>"); //$NON-NLS-1$
               }
 
               if (localBrandingImageURI != null)
               {
-                result.append("<img style='padding-top: 4px;' src='");
+                result.append("<img style='padding-top: 4px;' src='"); //$NON-NLS-1$
                 result.append(localBrandingImageURI);
-                result.append("' width='42' height='42' align='absmiddle'/>&nbsp;");
+                result.append("' width='42' height='42' align='absmiddle'/>&nbsp;"); //$NON-NLS-1$
               }
 
-              result.append(DiagnosticDecorator.escapeContent(label).replace(" ", "&nbsp;"));
-              result.append("</b></span>");
+              result.append(DiagnosticDecorator.escapeContent(label).replace(" ", "&nbsp;")); //$NON-NLS-1$ //$NON-NLS-2$
+              result.append("</b></span>"); //$NON-NLS-1$
 
               if (brandingSiteURI != null)
               {
-                result.append("</a>");
+                result.append("</a>"); //$NON-NLS-1$
               }
 
               String description = installableUnit.getProperty(IInstallableUnit.PROP_DESCRIPTION, null);
               if (!StringUtil.isEmpty(description))
               {
-                result.append("<br/>");
-                result.append("<span style='font-size: 50%;'><br/></span>");
+                result.append("<br/>"); //$NON-NLS-1$
+                result.append("<span style='font-size: 50%;'><br/></span>"); //$NON-NLS-1$
                 result.append(description);
-                result.append("<br/>");
+                result.append("<br/>"); //$NON-NLS-1$
               }
 
               // Add extra invisible lines to convince the tool tip size calculation that the text is 3 lines longer.
               // result.append("<div style='height=0px; display:none;'>&nbsp;&nbsp;&nbsp;&nbps;&nbps;&nbps;&nbps;&nbps;&nbps;&nbps;<br/><br/></br></div>");
-              result.append("<div style='height=0px; display:none;'>&nbps;&nbps;&nbps;&nbps;&nbps;<br/><br/></br></div>");
+              result.append("<div style='height=0px; display:none;'>&nbps;&nbps;&nbps;&nbps;&nbps;<br/><br/></br></div>"); //$NON-NLS-1$
 
               return result.toString();
             }
 
-            return "Loading...";
+            return Messages.MarketPlaceListingProcessor_tooltip_loading;
           }
         }
 
@@ -443,7 +444,7 @@ public class MarketPlaceListingProcessor
         final GridData progressAreaGridData = new GridData(GridData.FILL_HORIZONTAL);
         progressArea.setLayoutData(progressAreaGridData);
 
-        repositoryLoaderJob = new Job("Repository Loader")
+        repositoryLoaderJob = new Job(Messages.MarketPlaceListingProcessor_repositoryLoaderJob_name)
         {
           @Override
           protected IStatus run(IProgressMonitor monitor)
@@ -543,7 +544,8 @@ public class MarketPlaceListingProcessor
               {
                 public void run()
                 {
-                  new StatusDialog(parent.getShell(), "Problems", "Problem Loading Repository",
+                  new StatusDialog(parent.getShell(), Messages.MarketPlaceListingProcessor_problemDialog_title,
+                      Messages.MarketPlaceListingProcessor_problemDialog_message,
                       new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, ex.getLocalizedMessage(), ex), DiagnosticComposite.ERROR_WARNING_MASK).open();
                 }
               });
@@ -558,7 +560,8 @@ public class MarketPlaceListingProcessor
               {
                 public void run()
                 {
-                  new StatusDialog(parent.getShell(), "Problems", "Problem Loading Repository",
+                  new StatusDialog(parent.getShell(), Messages.MarketPlaceListingProcessor_problemDialog_title,
+                      Messages.MarketPlaceListingProcessor_problemDialog_message,
                       new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, ex.getLocalizedMessage(), ex), DiagnosticComposite.ERROR_WARNING_MASK).open();
                 }
               });
@@ -620,8 +623,8 @@ public class MarketPlaceListingProcessor
       {
         if (hasOptionalFeatures)
         {
-          createButton(parent, IDialogConstants.CLIENT_ID, "Select &All", true);
-          createButton(parent, IDialogConstants.CLIENT_ID + 1, "&Deselect All", true);
+          createButton(parent, IDialogConstants.CLIENT_ID, Messages.MarketPlaceListingProcessor_selectAllButton_text, true);
+          createButton(parent, IDialogConstants.CLIENT_ID + 1, Messages.MarketPlaceListingProcessor_deselectAllButton_text, true);
         }
 
         super.createButtonsForButtonBar(parent);
@@ -686,7 +689,7 @@ public class MarketPlaceListingProcessor
   protected String getCorrespondParameterName(Requirement requirement)
   {
     String name = requirement.getName();
-    return name.substring(0, name.length() - Requirement.FEATURE_SUFFIX.length()) + ".enabled";
+    return name.substring(0, name.length() - Requirement.FEATURE_SUFFIX.length()) + ".enabled"; //$NON-NLS-1$
   }
 
   protected void applyMarketPlaceListing(Set<Requirement> checkedRequirements)
@@ -724,7 +727,7 @@ public class MarketPlaceListingProcessor
     {
       Parameter parameter = argument.getParameter();
       String name = parameter.getName();
-      argument.setValue(checkedParameterNames.contains(name) ? "true" : "false");
+      argument.setValue(checkedParameterNames.contains(name) ? "true" : "false"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     return macroTask;
@@ -749,11 +752,12 @@ public class MarketPlaceListingProcessor
         EList<EObject> contents = resource.getContents();
         if (contents.isEmpty())
         {
-          childStatuses.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "The resource is empty"));
+          childStatuses.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, Messages.MarketPlaceListingProcessor_status_emptyResource));
         }
         else
         {
-          childStatuses.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "The resource contains a " + contents.get(0).eClass().getName()));
+          childStatuses.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID,
+              NLS.bind(Messages.MarketPlaceListingProcessor_status_resourceContains, contents.get(0).eClass().getName())));
         }
       }
       else
@@ -775,7 +779,7 @@ public class MarketPlaceListingProcessor
                 int line = xmiException.getLine();
                 if (line != 0)
                 {
-                  message += " (" + line + ", " + xmiException.getColumn() + ")";
+                  message += " (" + line + ", " + xmiException.getColumn() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 }
               }
             }
@@ -787,14 +791,14 @@ public class MarketPlaceListingProcessor
     }
 
     return new MultiStatus(SetupUIPlugin.PLUGIN_ID, 0, childStatuses.toArray(new IStatus[childStatuses.size()]),
-        "No " + expectedEClass.getName() + " could be loaded from " + uris, null);
+        NLS.bind(Messages.MarketPlaceListingProcessor_status_couldNotLoadFromUris, expectedEClass.getName(), uris), null);
   }
 
   private static class MarketPlaceListingStatus extends MultiStatus
   {
     public MarketPlaceListingStatus(Resource resource)
     {
-      super(SetupUIPlugin.PLUGIN_ID, 0, "Processing " + resource.getURI(), null);
+      super(SetupUIPlugin.PLUGIN_ID, 0, NLS.bind(Messages.MarketPlaceListingProcessor_MarketPlaceListingStatus_message, resource.getURI()), null);
     }
 
     public MarketPlaceListingStatus(String message)

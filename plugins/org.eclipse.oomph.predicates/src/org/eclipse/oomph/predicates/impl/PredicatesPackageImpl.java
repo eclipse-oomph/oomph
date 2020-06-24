@@ -576,6 +576,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -611,60 +612,60 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
     importedPredicateEClass.getESuperTypes().add(getPredicate());
 
     // Initialize classes, features, and operations; add parameters
-    initEClass(predicateEClass, Predicate.class, "Predicate", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(predicateEClass, Predicate.class, "Predicate", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    EOperation op = initEOperation(getPredicate__Matches__IResource(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getResource(), "resource", 0, 1, IS_UNIQUE, IS_ORDERED);
+    EOperation op = initEOperation(getPredicate__Matches__IResource(), ecorePackage.getEBoolean(), "matches", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getResource(), "resource", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(namePredicateEClass, NamePredicate.class, "NamePredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getNamePredicate_Pattern(), ecorePackage.getEString(), "pattern", null, 1, 1, NamePredicate.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(namePredicateEClass, NamePredicate.class, "NamePredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getNamePredicate_Pattern(), ecorePackage.getEString(), "pattern", null, 1, 1, NamePredicate.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(commentPredicateEClass, CommentPredicate.class, "CommentPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getCommentPredicate_Pattern(), ecorePackage.getEString(), "pattern", null, 1, 1, CommentPredicate.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(commentPredicateEClass, CommentPredicate.class, "CommentPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getCommentPredicate_Pattern(), ecorePackage.getEString(), "pattern", null, 1, 1, CommentPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(locationPredicateEClass, LocationPredicate.class, "LocationPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getLocationPredicate_Pattern(), ecorePackage.getEString(), "pattern", null, 1, 1, LocationPredicate.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(locationPredicateEClass, LocationPredicate.class, "LocationPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getLocationPredicate_Pattern(), ecorePackage.getEString(), "pattern", null, 1, 1, LocationPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(repositoryPredicateEClass, RepositoryPredicate.class, "RepositoryPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getRepositoryPredicate_Project(), getProject(), "project", null, 0, 1, RepositoryPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(repositoryPredicateEClass, RepositoryPredicate.class, "RepositoryPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getRepositoryPredicate_Project(), getProject(), "project", null, 0, 1, RepositoryPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(andPredicateEClass, AndPredicate.class, "AndPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getAndPredicate_Operands(), getPredicate(), null, "operands", null, 0, -1, AndPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(andPredicateEClass, AndPredicate.class, "AndPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getAndPredicate_Operands(), getPredicate(), null, "operands", null, 0, -1, AndPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(orPredicateEClass, OrPredicate.class, "OrPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getOrPredicate_Operands(), getPredicate(), null, "operands", null, 0, -1, OrPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(orPredicateEClass, OrPredicate.class, "OrPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getOrPredicate_Operands(), getPredicate(), null, "operands", null, 0, -1, OrPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(notPredicateEClass, NotPredicate.class, "NotPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getNotPredicate_Operand(), getPredicate(), null, "operand", null, 0, 1, NotPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(notPredicateEClass, NotPredicate.class, "NotPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getNotPredicate_Operand(), getPredicate(), null, "operand", null, 0, 1, NotPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(naturePredicateEClass, NaturePredicate.class, "NaturePredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getNaturePredicate_Nature(), ecorePackage.getEString(), "nature", null, 1, 1, NaturePredicate.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(naturePredicateEClass, NaturePredicate.class, "NaturePredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getNaturePredicate_Nature(), ecorePackage.getEString(), "nature", null, 1, 1, NaturePredicate.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(builderPredicateEClass, BuilderPredicate.class, "BuilderPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getBuilderPredicate_Builder(), ecorePackage.getEString(), "builder", null, 1, 1, BuilderPredicate.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(builderPredicateEClass, BuilderPredicate.class, "BuilderPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getBuilderPredicate_Builder(), ecorePackage.getEString(), "builder", null, 1, 1, BuilderPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(filePredicateEClass, FilePredicate.class, "FilePredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getFilePredicate_FilePattern(), ecorePackage.getEString(), "filePattern", null, 1, 1, FilePredicate.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(filePredicateEClass, FilePredicate.class, "FilePredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getFilePredicate_FilePattern(), ecorePackage.getEString(), "filePattern", null, 1, 1, FilePredicate.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getFilePredicate_ContentPattern(), ecorePackage.getEString(), "contentPattern", null, 0, 1, FilePredicate.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getFilePredicate_ContentPattern(), ecorePackage.getEString(), "contentPattern", null, 0, 1, FilePredicate.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(importedPredicateEClass, ImportedPredicate.class, "ImportedPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getImportedPredicate_Accessible(), ecorePackage.getEBoolean(), "accessible", "true", 0, 1, ImportedPredicate.class, !IS_TRANSIENT,
+    initEClass(importedPredicateEClass, ImportedPredicate.class, "ImportedPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getImportedPredicate_Accessible(), ecorePackage.getEBoolean(), "accessible", "true", 0, 1, ImportedPredicate.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize data types
-    initEDataType(projectEDataType, IProject.class, "Project", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(resourceEDataType, IResource.class, "Resource", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(projectEDataType, IProject.class, "Project", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(resourceEDataType, IResource.class, "Resource", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore");
@@ -686,8 +687,9 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -698,9 +700,10 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.predicates.edit/icons/full/obj16" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source,
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.predicates.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -711,9 +714,11 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getAndPredicate_Operands(), source, new String[] { "name", "operand" });
-    addAnnotation(getOrPredicate_Operands(), source, new String[] { "name", "operand" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getAndPredicate_Operands(), source, new String[] { "name", "operand" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getOrPredicate_Operands(), source, new String[] { "name", "operand" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
 } // PredicatesPackageImpl

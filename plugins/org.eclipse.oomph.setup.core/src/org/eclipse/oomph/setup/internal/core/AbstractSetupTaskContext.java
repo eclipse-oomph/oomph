@@ -45,6 +45,7 @@ import org.eclipse.equinox.p2.metadata.ITouchpointData;
 import org.eclipse.equinox.p2.metadata.ITouchpointInstruction;
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.util.Collection;
@@ -61,7 +62,7 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractSetupTaskContext extends StringExpander implements SetupTaskContext
 {
-  private static final Pattern setLauncherNamePattern = Pattern.compile("setLauncherName\\(name:([^)]*)\\)");
+  private static final Pattern setLauncherNamePattern = Pattern.compile("setLauncherName\\(name:([^)]*)\\)"); //$NON-NLS-1$
 
   private SetupPrompter prompter;
 
@@ -120,10 +121,10 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
         Object value = entry.getValue();
         put(key, value);
 
-        if ("eclipse.home.location".equals(key))
+        if ("eclipse.home.location".equals(key)) //$NON-NLS-1$
         {
           URI eclipseHomeRootLocation = URI.createURI(value.toString()).trimSegments(OS.INSTANCE.isMac() ? 3 : 1);
-          put("eclipse.home.root.location", eclipseHomeRootLocation.toString());
+          put("eclipse.home.root.location", eclipseHomeRootLocation.toString()); //$NON-NLS-1$
         }
 
         if (key instanceof String && value instanceof String)
@@ -134,12 +135,12 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     }
 
     OS os = getOS();
-    put("osgi.ws", os.getOsgiWS());
-    put("osgi.os", os.getOsgiOS());
-    put("osgi.arch", os.getOsgiArch());
-    filterContext.put("osgi.ws", os.getOsgiWS());
-    filterContext.put("osgi.os", os.getOsgiOS());
-    filterContext.put("osgi.arch", os.getOsgiArch());
+    put("osgi.ws", os.getOsgiWS()); //$NON-NLS-1$
+    put("osgi.os", os.getOsgiOS()); //$NON-NLS-1$
+    put("osgi.arch", os.getOsgiArch()); //$NON-NLS-1$
+    filterContext.put("osgi.ws", os.getOsgiWS()); //$NON-NLS-1$
+    filterContext.put("osgi.os", os.getOsgiOS()); //$NON-NLS-1$
+    filterContext.put("osgi.arch", os.getOsgiArch()); //$NON-NLS-1$
 
     filterContextIU = (InstallableUnit)InstallableUnit.contextIU(filterContext);
 
@@ -366,7 +367,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
   {
     if (scope == null)
     {
-      return "";
+      return ""; //$NON-NLS-1$
     }
 
     Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
@@ -407,7 +408,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       {
         for (ITouchpointData touchpointData : touchpointDatas)
         {
-          ITouchpointInstruction instruction = touchpointData.getInstruction("configure");
+          ITouchpointInstruction instruction = touchpointData.getInstruction("configure"); //$NON-NLS-1$
           if (instruction != null)
           {
             String body = instruction.getBody();
@@ -424,9 +425,9 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       }
     }
 
-    SetupCorePlugin.INSTANCE.log("Could not determine the launcher name from " + profile.getProfileId(), IStatus.WARNING);
+    SetupCorePlugin.INSTANCE.log(NLS.bind(Messages.AbstractSetupTaskContext_NoLauncherName_message, profile.getProfileId()), IStatus.WARNING);
 
-    return "eclipse";
+    return "eclipse"; //$NON-NLS-1$
   }
 
   public Profile getProfile()

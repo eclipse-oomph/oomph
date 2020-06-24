@@ -88,7 +88,7 @@ public class MylynFactoryImpl extends EFactoryImpl implements MylynFactory
       case MylynPackage.QUERY_ATTRIBUTE:
         return (EObject)createQueryAttribute();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

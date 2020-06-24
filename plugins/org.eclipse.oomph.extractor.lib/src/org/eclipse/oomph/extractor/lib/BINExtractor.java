@@ -33,9 +33,9 @@ import java.util.Vector;
  */
 public final class BINExtractor extends IO
 {
-  private static final String NL = System.getProperty("line.separator");
+  private static final String NL = System.getProperty("line.separator"); //$NON-NLS-1$
 
-  private static final boolean DEBUG = "true".equals(System.getProperty("org.eclipse.oomph.extractor.lib.BINExtractor.log"));
+  private static final boolean DEBUG = "true".equals(System.getProperty("org.eclipse.oomph.extractor.lib.BINExtractor.log")); //$NON-NLS-1$ //$NON-NLS-2$
 
   public static void main(String[] args) throws Exception
   {
@@ -60,7 +60,7 @@ public final class BINExtractor extends IO
     if (args.length > 2)
     {
       String arg = args[2];
-      if ("-export".equals(arg))
+      if ("-export".equals(arg)) //$NON-NLS-1$
       {
         if (args.length < 7)
         {
@@ -79,17 +79,17 @@ public final class BINExtractor extends IO
         }
         else
         {
-          jreTarCabFile = new File(zipFile.getAbsoluteFile().getParentFile(), "jre.tar.cab");
+          jreTarCabFile = new File(zipFile.getAbsoluteFile().getParentFile(), "jre.tar.cab"); //$NON-NLS-1$
         }
       }
-      else if ("--".equals(arg))
+      else if ("--".equals(arg)) //$NON-NLS-1$
       {
         extraArgs = 3;
       }
       else
       {
         javaHome = arg;
-        if (args.length > 3 && "--".equals(args[3]))
+        if (args.length > 3 && "--".equals(args[3])) //$NON-NLS-1$
         {
           extraArgs = 4;
         }
@@ -170,7 +170,7 @@ public final class BINExtractor extends IO
       for (int i = extraArgs; i < args.length; ++i)
       {
         String arg = args[i];
-        if ("-vmargs".equals(arg))
+        if ("-vmargs".equals(arg)) //$NON-NLS-1$
         {
           vmArgStart = i;
           ++vmArgCount;
@@ -183,19 +183,19 @@ public final class BINExtractor extends IO
         }
       }
 
-      PrintStream log = DEBUG ? new PrintStream(new File(targetFolder, "extractor.log"), "UTF-8") : null;
+      PrintStream log = DEBUG ? new PrintStream(new File(targetFolder, "extractor.log"), "UTF-8") : null; //$NON-NLS-1$ //$NON-NLS-2$
       if (DEBUG)
       {
         for (int i = 0; i < args.length; ++i)
         {
-          log.println("arg[" + i + "]='" + args[i] + "'");
+          log.println("arg[" + i + "]='" + args[i] + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
         log.println();
 
-        log.println("executable=" + executable);
-        log.println("targetFolder=" + targetFolder);
-        log.println("javaHome=" + javaHome);
-        log.println("vmArgs=" + vmArgs);
+        log.println("executable=" + executable); //$NON-NLS-1$
+        log.println("targetFolder=" + targetFolder); //$NON-NLS-1$
+        log.println("javaHome=" + javaHome); //$NON-NLS-1$
+        log.println("vmArgs=" + vmArgs); //$NON-NLS-1$
         log.println();
       }
 
@@ -216,7 +216,7 @@ public final class BINExtractor extends IO
       {
         for (int i = 0; i < command.length; ++i)
         {
-          log.println("command[" + i + "]='" + command[i] + "'");
+          log.println("command[" + i + "]='" + command[i] + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
 
         log.close();
@@ -228,7 +228,7 @@ public final class BINExtractor extends IO
 
   private static void exit()
   {
-    System.out.println("Usage: <product>.exe <product.zip> -export <marker.txt> <extractor>.exe <extractor-lib>.jar <product-descriptor> [<jre.tar.cab>]");
+    System.out.println("Usage: <product>.exe <product.zip> -export <marker.txt> <extractor>.exe <extractor-lib>.jar <product-descriptor> [<jre.tar.cab>]"); //$NON-NLS-1$
     System.exit(1);
   }
 
@@ -277,7 +277,7 @@ public final class BINExtractor extends IO
     if (javaHome != null)
     {
       String value = getVMPath(javaHome);
-      String option = "-vm";
+      String option = "-vm"; //$NON-NLS-1$
       int optionIndex = lines.indexOf(option);
 
       if (optionIndex != -1)
@@ -286,7 +286,7 @@ public final class BINExtractor extends IO
       }
       else
       {
-        int vmargsIndex = lines.indexOf("-vmargs");
+        int vmargsIndex = lines.indexOf("-vmargs"); //$NON-NLS-1$
         if (vmargsIndex == -1)
         {
           vmargsIndex = lines.size();
@@ -299,10 +299,10 @@ public final class BINExtractor extends IO
 
     if (vmArgs != null && !vmArgs.isEmpty())
     {
-      int vmargsIndex = lines.indexOf("-vmargs");
+      int vmargsIndex = lines.indexOf("-vmargs"); //$NON-NLS-1$
       if (vmargsIndex == -1)
       {
-        lines.add("-vmargs");
+        lines.add("-vmargs"); //$NON-NLS-1$
         vmargsIndex = lines.size();
       }
 
@@ -330,11 +330,11 @@ public final class BINExtractor extends IO
 
   private static String getVMPath(String javaHome)
   {
-    if (javaHome.endsWith(".exe"))
+    if (javaHome.endsWith(".exe")) //$NON-NLS-1$
     {
       return new File(javaHome).getParent();
     }
 
-    return new File(javaHome, "bin").toString();
+    return new File(javaHome, "bin").toString(); //$NON-NLS-1$
   }
 }

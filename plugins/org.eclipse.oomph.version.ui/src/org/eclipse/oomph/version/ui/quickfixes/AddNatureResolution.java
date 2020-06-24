@@ -18,6 +18,7 @@ import org.eclipse.oomph.version.ui.Activator;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.osgi.util.NLS;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,8 +32,8 @@ public class AddNatureResolution extends AbstractResolution
 
   public AddNatureResolution(IMarker marker, String nature)
   {
-    super(marker, VersionNature.NATURE_ID.equals(nature) ? "Add the version management builder" : "Add the nature " + nature,
-        Activator.CORRECTION_CONFIGURE_GIF);
+    super(marker, VersionNature.NATURE_ID.equals(nature) ? Messages.AddNatureResolution_label_addVersionManagementBuilder
+        : NLS.bind(Messages.AddNatureResolution_label_addNature, nature), Activator.CORRECTION_CONFIGURE_GIF);
     this.nature = nature;
   }
 

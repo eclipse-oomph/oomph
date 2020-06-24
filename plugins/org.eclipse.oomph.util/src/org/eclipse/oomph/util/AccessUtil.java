@@ -34,6 +34,7 @@ import java.util.Map;
  *
  * @author Ed Merks
  */
+@SuppressWarnings("nls")
 final class AccessUtil
 {
   /**

@@ -101,7 +101,7 @@ public class AndPredicateItemProvider extends PredicateItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/AndPredicate"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/AndPredicate")); //$NON-NLS-1$
   }
 
   /**
@@ -124,7 +124,7 @@ public class AndPredicateItemProvider extends PredicateItemProvider
   @Override
   public String getText(Object object)
   {
-    return "And";
+    return Messages.AndPredicateItemProvider_And_label;
   }
 
   /**

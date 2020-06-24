@@ -20,6 +20,8 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.osgi.util.NLS;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -301,11 +303,11 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (option: ");
+    result.append(" (option: "); //$NON-NLS-1$
     result.append(option);
-    result.append(", value: ");
+    result.append(", value: "); //$NON-NLS-1$
     result.append(value);
-    result.append(", vm: ");
+    result.append(", vm: "); //$NON-NLS-1$
     result.append(vm);
     result.append(')');
     return result.toString();
@@ -319,7 +321,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
 
   public String getLabel(String value)
   {
-    return getOption() + (value == null ? "" : (isVm() ? "" : " ") + value);
+    return getOption() + (value == null ? "" : (isVm() ? "" : " ") + value); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   @Override
@@ -341,7 +343,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
       return false;
     }
 
-    file = new File(context.getProductLocation(), context.getLauncherName() + ".ini");
+    file = new File(context.getProductLocation(), context.getLauncherName() + ".ini"); //$NON-NLS-1$
     boolean result = !file.exists() || createNewContent(context);
 
     // Ensure that the perform recomputes the contents because they could be modified by other tasks between now and when doPeform is called.
@@ -354,22 +356,22 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
   {
     if (file == null)
     {
-      file = new File(context.getProductLocation(), context.getLauncherName() + ".ini");
+      file = new File(context.getProductLocation(), context.getLauncherName() + ".ini"); //$NON-NLS-1$
     }
 
     if (!file.exists())
     {
-      context.log("Skipping because " + file + " does not exist");
+      context.log(NLS.bind(Messages.EclipseIniTaskImpl_Skipping_message, file));
       return;
     }
 
     if (contents != null || createNewContent(context))
     {
-      context.log("Changing " + file + " (" + getLabel(getValue()) + ")");
+      context.log(NLS.bind(Messages.EclipseIniTaskImpl_Changing_message, file, getLabel(getValue())));
 
       // Write the ini file with the system's default encoding; the native launcher reads it so.
       IOUtil.writeLines(file, null, contents);
-      context.setRestartNeeded("The " + file.getName() + " file has changed.");
+      context.setRestartNeeded(NLS.bind(Messages.EclipseIniTaskImpl_FileHasChanged_message, file.getName()));
     }
   }
 
@@ -378,7 +380,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
     // Read the existing ini file with the system's default encoding, like the native launcher does.
     List<String> oldContents = IOUtil.readLines(file, null);
     contents = new ArrayList<String>(oldContents);
-    int vmargsIndex = contents.indexOf("-vmargs");
+    int vmargsIndex = contents.indexOf("-vmargs"); //$NON-NLS-1$
 
     String option = getOption();
     String value = getValue();
@@ -389,7 +391,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
 
     if (isVm())
     {
-      String line = option + (value == null ? "" : value);
+      String line = option + (value == null ? "" : value); //$NON-NLS-1$
       if (vmargsIndex != -1)
       {
         for (int i = vmargsIndex + 1; i < contents.size(); i++)
@@ -405,7 +407,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
       }
       else
       {
-        contents.add("-vmargs");
+        contents.add("-vmargs"); //$NON-NLS-1$
       }
 
       if (line != null)

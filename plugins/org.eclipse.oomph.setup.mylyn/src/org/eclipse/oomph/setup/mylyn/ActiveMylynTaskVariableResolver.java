@@ -32,36 +32,36 @@ public class ActiveMylynTaskVariableResolver implements IDynamicVariableResolver
     ITask activeTask = TasksUi.getTaskActivityManager().getActiveTask();
     if (activeTask != null)
     {
-      if (argument == null || "Id".equalsIgnoreCase(argument))
+      if (argument == null || "Id".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return activeTask.getTaskId();
       }
 
-      if ("Key".equalsIgnoreCase(argument))
+      if ("Key".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return activeTask.getTaskKey();
       }
 
-      if ("Url".equalsIgnoreCase(argument))
+      if ("Url".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return activeTask.getUrl();
       }
 
-      if ("Kind".equalsIgnoreCase(argument))
+      if ("Kind".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return activeTask.getTaskKind();
       }
 
-      if ("Owner".equalsIgnoreCase(argument))
+      if ("Owner".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return activeTask.getOwner();
       }
 
-      if ("OwnerId".equalsIgnoreCase(argument))
+      if ("OwnerId".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         try
         {
-          return ReflectUtil.invokeMethod("getOwnerId", activeTask);
+          return ReflectUtil.invokeMethod("getOwnerId", activeTask); //$NON-NLS-1$
           // return activeTask.getOwnerId();
         }
         catch (Throwable ex)
@@ -70,73 +70,73 @@ public class ActiveMylynTaskVariableResolver implements IDynamicVariableResolver
         }
       }
 
-      if ("Priority".equalsIgnoreCase(argument))
+      if ("Priority".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return activeTask.getPriority();
       }
 
-      if ("RepositoryUrl".equalsIgnoreCase(argument))
+      if ("RepositoryUrl".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return activeTask.getRepositoryUrl();
       }
 
-      if ("Summary".equalsIgnoreCase(argument))
+      if ("Summary".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         String summary = activeTask.getSummary();
         return summary == null ? null : StringUtil.escape(summary);
       }
 
-      if ("ConnectorKind".equalsIgnoreCase(argument))
+      if ("ConnectorKind".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return activeTask.getConnectorKind();
       }
 
-      if ("HandleIdentifier".equalsIgnoreCase(argument))
+      if ("HandleIdentifier".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return activeTask.getHandleIdentifier();
       }
 
-      if ("CreationDate".equalsIgnoreCase(argument))
+      if ("CreationDate".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return formatDate(activeTask.getCreationDate());
       }
 
-      if ("CreationTime".equalsIgnoreCase(argument))
+      if ("CreationTime".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return formatTime(activeTask.getCreationDate());
       }
 
-      if ("CompletionDate".equalsIgnoreCase(argument))
+      if ("CompletionDate".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return formatDate(activeTask.getCompletionDate());
       }
 
-      if ("CompletionTime".equalsIgnoreCase(argument))
+      if ("CompletionTime".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return formatTime(activeTask.getCompletionDate());
       }
 
-      if ("DueDate".equalsIgnoreCase(argument))
+      if ("DueDate".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return formatDate(activeTask.getDueDate());
       }
 
-      if ("DueTime".equalsIgnoreCase(argument))
+      if ("DueTime".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return formatTime(activeTask.getDueDate());
       }
 
-      if ("ModificationDate".equalsIgnoreCase(argument))
+      if ("ModificationDate".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return formatDate(activeTask.getModificationDate());
       }
 
-      if ("ModificationTime".equalsIgnoreCase(argument))
+      if ("ModificationTime".equalsIgnoreCase(argument)) //$NON-NLS-1$
       {
         return formatTime(activeTask.getModificationDate());
       }
 
-      if (argument.startsWith("@"))
+      if (argument.startsWith("@")) //$NON-NLS-1$
       {
         return activeTask.getAttribute(argument.substring(1));
       }
@@ -147,7 +147,7 @@ public class ActiveMylynTaskVariableResolver implements IDynamicVariableResolver
 
   private static String formatDate(Date date)
   {
-    return date == null ? null : new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
+    return date == null ? null : new SimpleDateFormat("yyyyMMdd_HHmmss").format(date); //$NON-NLS-1$
   }
 
   private static String formatTime(Date date)

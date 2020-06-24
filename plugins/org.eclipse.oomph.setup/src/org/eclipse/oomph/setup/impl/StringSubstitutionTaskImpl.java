@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.core.variables.IStringVariableManager;
 import org.eclipse.core.variables.IValueVariable;
 import org.eclipse.core.variables.VariablesPlugin;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * <!-- begin-user-doc -->
@@ -242,9 +243,9 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (name: ");
+    result.append(" (name: "); //$NON-NLS-1$
     result.append(name);
-    result.append(", value: ");
+    result.append(", value: "); //$NON-NLS-1$
     result.append(value);
     result.append(')');
     return result.toString();
@@ -288,7 +289,7 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
   {
     String name = getName();
     String value = getValue();
-    context.log("Setting string substitution variable " + name + " = " + value);
+    context.log(NLS.bind(Messages.StringSubstitutionTaskImpl_SettingVariable_message, name, value));
 
     IValueVariable variable = getValueVariable(true);
     variable.setDescription(getDescription());

@@ -236,9 +236,9 @@ public class AttributeRuleImpl extends ModelElementImpl implements AttributeRule
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (attributeURI: ");
+    result.append(" (attributeURI: "); //$NON-NLS-1$
     result.append(attributeURI);
-    result.append(", value: ");
+    result.append(", value: "); //$NON-NLS-1$
     result.append(value);
     result.append(')');
     return result.toString();

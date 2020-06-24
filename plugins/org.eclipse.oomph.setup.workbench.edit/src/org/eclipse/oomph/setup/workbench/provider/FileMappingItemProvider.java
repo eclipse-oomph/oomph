@@ -75,8 +75,8 @@ public class FileMappingItemProvider extends ModelElementItemProvider
   protected void addFilePatternPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_FileMapping_filePattern_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_FileMapping_filePattern_feature", "_UI_FileMapping_type"),
+        getString("_UI_FileMapping_filePattern_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_FileMapping_filePattern_feature", "_UI_FileMapping_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         WorkbenchPackage.Literals.FILE_MAPPING__FILE_PATTERN, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -89,8 +89,8 @@ public class FileMappingItemProvider extends ModelElementItemProvider
   protected void addDefaultEditorIDPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_FileMapping_defaultEditorID_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_FileMapping_defaultEditorID_feature", "_UI_FileMapping_type"),
+        getString("_UI_FileMapping_defaultEditorID_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_FileMapping_defaultEditorID_feature", "_UI_FileMapping_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         WorkbenchPackage.Literals.FILE_MAPPING__DEFAULT_EDITOR_ID, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -136,7 +136,7 @@ public class FileMappingItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/FileMapping"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/FileMapping")); //$NON-NLS-1$
   }
 
   /**
@@ -164,13 +164,13 @@ public class FileMappingItemProvider extends ModelElementItemProvider
 
     if (StringUtil.isEmpty(label))
     {
-      label = getString("_UI_FileMapping_type");
+      label = getString("_UI_FileMapping_type"); //$NON-NLS-1$
     }
 
     String defaultEditorID = fileMapping.getDefaultEditorID();
     if (!StringUtil.isEmpty(defaultEditorID))
     {
-      label += " --> " + defaultEditorID;
+      label += " --> " + defaultEditorID; //$NON-NLS-1$
     }
 
     return label;

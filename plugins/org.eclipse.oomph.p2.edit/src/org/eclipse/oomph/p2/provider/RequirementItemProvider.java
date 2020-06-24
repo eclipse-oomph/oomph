@@ -51,7 +51,7 @@ import java.util.List;
  */
 public class RequirementItemProvider extends ModelElementItemProvider
 {
-  public static final String NAMESPACE_PACKAGE_ID = "java.package";
+  public static final String NAMESPACE_PACKAGE_ID = "java.package"; //$NON-NLS-1$
 
   /**
    * This constructs an instance from a factory and a notifier.
@@ -100,7 +100,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Requirement_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_name_feature", "_UI_Requirement_type"),
+        getString("_UI_Requirement_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_name_feature", "_UI_Requirement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         P2Package.Literals.REQUIREMENT__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -113,9 +114,9 @@ public class RequirementItemProvider extends ModelElementItemProvider
   protected void addNamespacePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Requirement_namespace_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_namespace_feature", "_UI_Requirement_type"), P2Package.Literals.REQUIREMENT__NAMESPACE,
-        true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+        getString("_UI_Requirement_namespace_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_namespace_feature", "_UI_Requirement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        P2Package.Literals.REQUIREMENT__NAMESPACE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -127,8 +128,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
   protected void addVersionRangePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Requirement_versionRange_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_versionRange_feature", "_UI_Requirement_type"),
+        getString("_UI_Requirement_versionRange_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_versionRange_feature", "_UI_Requirement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         P2Package.Literals.REQUIREMENT__VERSION_RANGE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -141,8 +142,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
   protected void addOptionalPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Requirement_optional_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_optional_feature", "_UI_Requirement_type"), P2Package.Literals.REQUIREMENT__OPTIONAL,
+        getString("_UI_Requirement_optional_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_optional_feature", "_UI_Requirement_type"), P2Package.Literals.REQUIREMENT__OPTIONAL, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null)
     {
       @Override
@@ -175,7 +176,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
   protected void addFilterPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Requirement_filter_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_filter_feature", "_UI_Requirement_type"),
+        getString("_UI_Requirement_filter_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_filter_feature", "_UI_Requirement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         P2Package.Literals.REQUIREMENT__FILTER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -188,7 +190,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
   protected void addTypePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Requirement_type_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_type_feature", "_UI_Requirement_type"),
+        getString("_UI_Requirement_type_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_type_feature", "_UI_Requirement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         P2Package.Literals.REQUIREMENT__TYPE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
@@ -273,7 +276,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
   protected void addMinPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Requirement_min_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_min_feature", "_UI_Requirement_type"),
+        getString("_UI_Requirement_min_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_min_feature", "_UI_Requirement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         P2Package.Literals.REQUIREMENT__MIN, true, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null)
     {
       @Override
@@ -332,7 +336,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
   protected void addMaxPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Requirement_max_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_max_feature", "_UI_Requirement_type"),
+        getString("_UI_Requirement_max_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_max_feature", "_UI_Requirement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         P2Package.Literals.REQUIREMENT__MAX, true, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null)
     {
       @Override
@@ -391,8 +396,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
   protected void addDescriptionPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Requirement_description_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_description_feature", "_UI_Requirement_type"),
+        getString("_UI_Requirement_description_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_description_feature", "_UI_Requirement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         P2Package.Literals.REQUIREMENT__DESCRIPTION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -405,7 +410,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
   protected void addGreedyPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Requirement_greedy_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Requirement_greedy_feature", "_UI_Requirement_type"),
+        getString("_UI_Requirement_greedy_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Requirement_greedy_feature", "_UI_Requirement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         P2Package.Literals.REQUIREMENT__GREEDY, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -425,11 +431,11 @@ public class RequirementItemProvider extends ModelElementItemProvider
         Requirement requirement = (Requirement)object;
 
         String namespace = requirement.getNamespace();
-        if ("osgi.bundle".equals(namespace))
+        if ("osgi.bundle".equals(namespace)) //$NON-NLS-1$
         {
           requirement.setNamespace(IInstallableUnit.NAMESPACE_IU_ID);
         }
-        else if (!"org.eclipse.equinox.p2.iu".equals(namespace) && !NAMESPACE_PACKAGE_ID.equals(namespace))
+        else if (!"org.eclipse.equinox.p2.iu".equals(namespace) && !NAMESPACE_PACKAGE_ID.equals(namespace)) //$NON-NLS-1$
         {
           continue;
         }
@@ -438,7 +444,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
         if (versionRange != null)
         {
           Version minimum = versionRange.getMinimum();
-          if (minimum.toString().endsWith(".qualifier"))
+          if (minimum.toString().endsWith(".qualifier")) //$NON-NLS-1$
           {
             VersionRange minimumVersionRange = P2Factory.eINSTANCE.createVersionRange(minimum, VersionSegment.MICRO);
             requirement.setVersionRange(minimumVersionRange);
@@ -478,15 +484,15 @@ public class RequirementItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    String key = "full/obj16/Requirement";
+    String key = "full/obj16/Requirement"; //$NON-NLS-1$
 
     Requirement requirement = (Requirement)object;
     String namespace = requirement.getNamespace();
     if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
     {
-      if ("*".equals(requirement.getName()))
+      if ("*".equals(requirement.getName())) //$NON-NLS-1$
       {
-        key += "_AllSources";
+        key += "_AllSources"; //$NON-NLS-1$
       }
       else
       {
@@ -494,17 +500,17 @@ public class RequirementItemProvider extends ModelElementItemProvider
         {
           case NONE:
           {
-            key += "_Plugin";
+            key += "_Plugin"; //$NON-NLS-1$
             break;
           }
           case FEATURE:
           {
-            key += "_Feature";
+            key += "_Feature"; //$NON-NLS-1$
             break;
           }
           case PROJECT:
           {
-            key += "_Project";
+            key += "_Project"; //$NON-NLS-1$
             break;
           }
         }
@@ -512,7 +518,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
     }
     else if (NAMESPACE_PACKAGE_ID.equals(namespace))
     {
-      key += "_Package";
+      key += "_Package"; //$NON-NLS-1$
     }
 
     Object result = overlayImage(object, getResourceLocator().getImage(key));
@@ -543,7 +549,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
     String name = requirement.getName();
     if (name == null || name.length() == 0)
     {
-      name = getString("_UI_Requirement_type");
+      name = getString("_UI_Requirement_type"); //$NON-NLS-1$
     }
     else
     {
@@ -568,8 +574,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
 
     VersionRange versionRange = requirement.getVersionRange();
     String filter = requirement.getFilter();
-    return name + (versionRange == null || VersionRange.emptyRange.equals(versionRange) ? "" : " " + versionRange)
-        + (StringUtil.isEmpty(filter) ? "" : " " + filter);
+    return name + (versionRange == null || VersionRange.emptyRange.equals(versionRange) ? "" : " " + versionRange) //$NON-NLS-1$ //$NON-NLS-2$
+        + (StringUtil.isEmpty(filter) ? "" : " " + filter); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**
@@ -622,7 +628,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
     {
       List<Object> images = new ArrayList<Object>(2);
       images.add(baseImage);
-      images.add(P2EditPlugin.INSTANCE.getImage(greedy ? "full/ovr16/greedy" : "full/ovr16/optional"));
+      images.add(P2EditPlugin.INSTANCE.getImage(greedy ? "full/ovr16/greedy" : "full/ovr16/optional")); //$NON-NLS-1$ //$NON-NLS-2$
       return new DecoratedImage(images);
     }
 
@@ -635,7 +641,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
     {
       List<Object> images = new ArrayList<Object>(2);
       images.add(baseImage);
-      images.add(P2EditPlugin.INSTANCE.getImage("full/ovr16/excluded"));
+      images.add(P2EditPlugin.INSTANCE.getImage("full/ovr16/excluded")); //$NON-NLS-1$
       return new DecoratedImage(images);
     }
 
@@ -643,7 +649,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
     {
       List<Object> images = new ArrayList<Object>(2);
       images.add(baseImage);
-      images.add(P2EditPlugin.INSTANCE.getImage(greedy ? "full/ovr16/greedy" : "full/ovr16/optional"));
+      images.add(P2EditPlugin.INSTANCE.getImage(greedy ? "full/ovr16/greedy" : "full/ovr16/optional")); //$NON-NLS-1$ //$NON-NLS-2$
       return new DecoratedImage(images);
     }
 

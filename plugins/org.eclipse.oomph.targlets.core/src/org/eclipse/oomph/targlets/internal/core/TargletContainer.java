@@ -157,19 +157,19 @@ import java.util.regex.Pattern;
 @SuppressWarnings("restriction")
 public class TargletContainer extends AbstractBundleContainer implements ITargletContainer
 {
-  public static final String TYPE = "Targlet";
+  public static final String TYPE = "Targlet"; //$NON-NLS-1$
 
-  public static final String IU_PROPERTY_SOURCE = "org.eclipse.oomph.targlet.source";
+  public static final String IU_PROPERTY_SOURCE = "org.eclipse.oomph.targlet.source"; //$NON-NLS-1$
 
   private static final ThreadLocal<Boolean> FORCE_UPDATE = new ThreadLocal<Boolean>();
 
   private static final ThreadLocal<Boolean> MIRRORS = new ThreadLocal<Boolean>();
 
-  private static final String A_PDE_TARGET_PLATFORM = "A.PDE.Target.Platform";
+  private static final String A_PDE_TARGET_PLATFORM = "A.PDE.Target.Platform"; //$NON-NLS-1$
 
   private static final String A_PDE_TARGET_PLATFORM_LOWER_CASE = A_PDE_TARGET_PLATFORM.toLowerCase();
 
-  private static final String FOLLOW_ARTIFACT_REPOSITORY_REFERENCES = "org.eclipse.equinox.p2.director.followArtifactRepositoryReferences";
+  private static final String FOLLOW_ARTIFACT_REPOSITORY_REFERENCES = "org.eclipse.equinox.p2.director.followArtifactRepositoryReferences"; //$NON-NLS-1$
 
   private static final byte[] BUFFER = new byte[8192];
 
@@ -179,7 +179,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
   private static final String PROP_WS = "osgi.ws"; //$NON-NLS-1$
 
-  private static final String IU_FILTER = PropertiesUtil.getProperty("oomph.targlets.iu.filter");
+  private static final String IU_FILTER = PropertiesUtil.getProperty("oomph.targlets.iu.filter"); //$NON-NLS-1$
 
   private static final Pattern IU_FILTER_PATTERN = IU_FILTER == null ? null : Pattern.compile(IU_FILTER);
 
@@ -196,7 +196,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     // Make the Targlets UI active so that PDE can use Platform.getAdapterManager() to load our registered adapters.
     try
     {
-      CommonPlugin.loadClass("org.eclipse.oomph.targlets.ui", "org.eclipse.oomph.targlets.internal.ui.TargletsUIPlugin");
+      CommonPlugin.loadClass("org.eclipse.oomph.targlets.ui", "org.eclipse.oomph.targlets.internal.ui.TargletsUIPlugin"); //$NON-NLS-1$ //$NON-NLS-2$
     }
     catch (Throwable ex)
     {
@@ -491,7 +491,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     builder.append("="); //$NON-NLS-1$
     builder.append(arch);
 
-    builder.append(",org.eclipse.swt.buildtime=true");
+    builder.append(",org.eclipse.swt.buildtime=true"); //$NON-NLS-1$
 
     return builder.toString();
   }
@@ -510,7 +510,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
   @Override
   public String toString()
   {
-    return "Targlet Container " + id;
+    return "Targlet Container " + id; //$NON-NLS-1$
   }
 
   @Override
@@ -721,7 +721,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         {
           if (file.isFile())
           {
-            if (file.getName().endsWith(".jar"))
+            if (file.getName().endsWith(".jar")) //$NON-NLS-1$
             {
               jarFile = new JarFile(file);
               if (jarFile.getJarEntry(FeatureGenerator.FEATURE_XML) != null)
@@ -867,9 +867,9 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     CacheUsageConfirmer cacheUsageConfirmer = TargletsCorePlugin.INSTANCE.getCacheUsageConfirmer();
     CacheUsageConfirmer oldCacheUsageConfirmer = (CacheUsageConfirmer)provisioningAgent.getService(CacheUsageConfirmer.SERVICE_NAME);
 
-    IEclipsePreferences garbageCollectorPreferences = ConfigurationScope.INSTANCE.getNode("org.eclipse.equinox.p2.garbagecollector");
-    String oldGCEnabled = garbageCollectorPreferences.get("gc_enabled", null);
-    garbageCollectorPreferences.putBoolean("gc_enabled", false);
+    IEclipsePreferences garbageCollectorPreferences = ConfigurationScope.INSTANCE.getNode("org.eclipse.equinox.p2.garbagecollector"); //$NON-NLS-1$
+    String oldGCEnabled = garbageCollectorPreferences.get("gc_enabled", null); //$NON-NLS-1$
+    garbageCollectorPreferences.putBoolean("gc_enabled", false); //$NON-NLS-1$
 
     boolean originalBetterMirrorSelection = CachingRepositoryManager.enableBetterMirrorSelection();
 
@@ -911,7 +911,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
           commitContext.getMetadataRepositories(), commitContext.getProvisioningPlan(), requiredProjects);
       TargletContainerListenerRegistry.INSTANCE.notifyListeners(event, progress.newChild());
 
-      monitor.subTask("Targlet container profile update completed");
+      monitor.subTask(Messages.TargletContainer_UpdateComplete_task);
     }
     catch (Throwable t)
     {
@@ -932,11 +932,11 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
       if (oldGCEnabled == null)
       {
-        garbageCollectorPreferences.remove("gc_enabled");
+        garbageCollectorPreferences.remove("gc_enabled"); //$NON-NLS-1$
       }
       else
       {
-        garbageCollectorPreferences.put("gc_enabled", oldGCEnabled);
+        garbageCollectorPreferences.put("gc_enabled", oldGCEnabled); //$NON-NLS-1$
       }
 
       if (cacheUsageConfirmer != null && oldCacheUsageConfirmer != null)
@@ -976,7 +976,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         }
 
         // If this is a wildcard requirement, we want to expand it to all the IUs in the targlet's source locator.
-        if ("*".equals(name) && IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
+        if ("*".equals(name) && IInstallableUnit.NAMESPACE_IU_ID.equals(namespace)) //$NON-NLS-1$
         {
           // Preprocess all the IUs to build a map from workspace IU Info to filter.
           // This ensures that a requirement on a plain.project will be filtered appropriately.
@@ -995,7 +995,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
           for (IInstallableUnit iu : ius)
           {
             // Ignore categories.
-            if ("true".equalsIgnoreCase(iu.getProperty("org.eclipse.equinox.p2.type.category")))
+            if ("true".equalsIgnoreCase(iu.getProperty("org.eclipse.equinox.p2.type.category"))) //$NON-NLS-1$ //$NON-NLS-2$
             {
               continue;
             }
@@ -1054,15 +1054,15 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     try
     {
       Writer writer = Persistence.toXML(id, targlets);
-      writer.write("\n<!-- Environment Properties: ");
+      writer.write("\n<!-- Environment Properties: "); //$NON-NLS-1$
       writer.write(environmentProperties);
-      writer.write(" -->");
-      writer.write("\n<!-- NL Property: ");
+      writer.write(" -->"); //$NON-NLS-1$
+      writer.write("\n<!-- NL Property: "); //$NON-NLS-1$
       writer.write(nlProperty);
-      writer.write(" -->\n");
+      writer.write(" -->\n"); //$NON-NLS-1$
 
-      final MessageDigest digest = MessageDigest.getInstance("SHA-1");
-      stream = new FilterInputStream(new ByteArrayInputStream(writer.toString().getBytes("UTF-8")))
+      final MessageDigest digest = MessageDigest.getInstance("SHA-1"); //$NON-NLS-1$
+      stream = new FilterInputStream(new ByteArrayInputStream(writer.toString().getBytes("UTF-8"))) //$NON-NLS-1$
       {
         @Override
         public int read() throws IOException
@@ -1140,12 +1140,12 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
   private static boolean isOSGiBundle(IInstallableUnit unit)
   {
-    return providesNamespace(unit, "osgi.bundle");
+    return providesNamespace(unit, "osgi.bundle"); //$NON-NLS-1$
   }
 
   private static boolean isFeatureJar(IInstallableUnit unit)
   {
-    return providesNamespace(unit, "org.eclipse.update.feature");
+    return providesNamespace(unit, "org.eclipse.update.feature"); //$NON-NLS-1$
   }
 
   private static boolean canResolve()
@@ -1160,8 +1160,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
     try
     {
-      Class<?> displayClass = CommonPlugin.loadClass("org.eclipse.swt", "org.eclipse.swt.widgets.Display");
-      Method getCurrentMethod = ReflectUtil.getMethod(displayClass, "getCurrent");
+      Class<?> displayClass = CommonPlugin.loadClass("org.eclipse.swt", "org.eclipse.swt.widgets.Display"); //$NON-NLS-1$ //$NON-NLS-2$
+      Method getCurrentMethod = ReflectUtil.getMethod(displayClass, "getCurrent"); //$NON-NLS-1$
       boolean isDisplayThread = ReflectUtil.invokeMethod(getCurrentMethod, null) != null;
       if (isDisplayThread)
       {
@@ -1171,9 +1171,9 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         return false;
       }
 
-      Class<?> platformUIClass = CommonPlugin.loadClass("org.eclipse.ui.workbench", "org.eclipse.ui.PlatformUI");
-      Object workbench = ReflectUtil.invokeMethod("getWorkbench", platformUIClass);
-      boolean isWorkbenchStarting = (Boolean)ReflectUtil.invokeMethod("isStarting", workbench);
+      Class<?> platformUIClass = CommonPlugin.loadClass("org.eclipse.ui.workbench", "org.eclipse.ui.PlatformUI"); //$NON-NLS-1$ //$NON-NLS-2$
+      Object workbench = ReflectUtil.invokeMethod("getWorkbench", platformUIClass); //$NON-NLS-1$
+      boolean isWorkbenchStarting = (Boolean)ReflectUtil.invokeMethod("isStarting", workbench); //$NON-NLS-1$
       if (isWorkbenchStarting)
       {
         // In Oxygen, the new Java indexer starts very early.
@@ -1211,7 +1211,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     for (Map.Entry<IInstallableUnit, WorkspaceIUInfo> entry : allProjects.entrySet())
     {
       IInstallableUnit iu = entry.getKey();
-      if ("true".equals(iu.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE_MAIN)))
+      if ("true".equals(iu.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE_MAIN))) //$NON-NLS-1$
       {
         mainIUs.put(entry.getValue(), iu);
       }
@@ -1220,7 +1220,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     Map<IInstallableUnit, WorkspaceIUInfo> result = new HashMap<IInstallableUnit, WorkspaceIUInfo>();
     for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), monitor)))
     {
-      if ("true".equals(iu.getProperty(TargletContainer.IU_PROPERTY_SOURCE)))
+      if ("true".equals(iu.getProperty(TargletContainer.IU_PROPERTY_SOURCE))) //$NON-NLS-1$
       {
         continue;
       }
@@ -1244,7 +1244,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
    */
   private static final class TargletCommitContext extends CommitContext
   {
-    private static final Pattern OSGI_PROPERTY_FILTER = Pattern.compile("(!?)\\((osgi.arch|osgi.os|osgi.ws)=([^)]+)\\)");
+    private static final Pattern OSGI_PROPERTY_FILTER = Pattern.compile("(!?)\\((osgi.arch|osgi.os|osgi.ws)=([^)]+)\\)"); //$NON-NLS-1$
 
     private static final String NATIVE_ARTIFACTS = "nativeArtifacts"; //$NON-NLS-1$
 
@@ -1337,7 +1337,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
                   // We can remove our synthetic IU to ensure that, whenever possible, a binary resolution for it is included in the TP.
                   // That's only necessary if the IU is a singleton.
-                  if (workspaceIU.isSingleton() || "true".equals(workspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP)))
+                  if (workspaceIU.isSingleton() || "true".equals(workspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP))) //$NON-NLS-1$
                   {
                     ius.remove(workspaceIU);
                   }
@@ -1371,7 +1371,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                         // to any version will result in the import of the project.
                         IInstallableUnit requiredWorkspaceIU = idToIUMap.get(new IU(name, Version.emptyVersion));
                         if (requiredWorkspaceIU != null && (requiredWorkspaceIU.isSingleton()
-                            || "true".equals(requiredWorkspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP))))
+                            || "true".equals(requiredWorkspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP)))) //$NON-NLS-1$
                         {
                           extraRequirements
                               .add(MetadataFactory.createRequirement(namespace, name, VersionRange.emptyRange, workspaceRequiredCapability.getFilter(),
@@ -1449,7 +1449,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                     {
                       IInstallableUnit requiredWorkspaceIU = idToIUMap.get(new IU(name, Version.emptyVersion));
                       if (requiredWorkspaceIU != null && !ius.contains(requiredWorkspaceIU)
-                          && (requiredWorkspaceIU.isSingleton() || "true".equals(requiredWorkspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP))))
+                          && (requiredWorkspaceIU.isSingleton() || "true".equals(requiredWorkspaceIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP)))) //$NON-NLS-1$
                       {
                         needsGeneralization = true;
                         generalizedRequirements[i] = MetadataFactory.createRequirement(namespace, name, VersionRange.emptyRange,
@@ -1612,11 +1612,11 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                 StringBuffer result = new StringBuffer();
                 if (matcher.group(1).length() == 0)
                 {
-                  matcher.appendReplacement(result, "($2=*)");
+                  matcher.appendReplacement(result, "($2=*)"); //$NON-NLS-1$
                 }
                 else
                 {
-                  matcher.appendReplacement(result, "!($2=nothing)");
+                  matcher.appendReplacement(result, "!($2=nothing)"); //$NON-NLS-1$
                 }
 
                 // Handle all the remaining matches the same way.
@@ -1624,11 +1624,11 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                 {
                   if (matcher.group(1).length() == 0)
                   {
-                    matcher.appendReplacement(result, "($2=*)");
+                    matcher.appendReplacement(result, "($2=*)"); //$NON-NLS-1$
                   }
                   else
                   {
-                    matcher.appendReplacement(result, "!($2=nothing)");
+                    matcher.appendReplacement(result, "!($2=nothing)"); //$NON-NLS-1$
                   }
                 }
 
@@ -1671,7 +1671,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               continue;
             }
 
-            String suffix = "";
+            String suffix = ""; //$NON-NLS-1$
             if (id.endsWith(Requirement.FEATURE_SUFFIX))
             {
               id = id.substring(0, id.length() - Requirement.FEATURE_SUFFIX.length());
@@ -1679,7 +1679,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             }
 
             InstallableUnitDescription description = new MetadataFactory.InstallableUnitDescription();
-            String workspaceSourceID = id + ".source" + suffix;
+            String workspaceSourceID = id + ".source" + suffix; //$NON-NLS-1$
             description.setId(workspaceSourceID);
             Version version = iu.getVersion();
             description.setVersion(version);
@@ -1693,9 +1693,9 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               {
                 String value = property.getValue();
 
-                if ("org.eclipse.equinox.p2.name".equals(key))
+                if ("org.eclipse.equinox.p2.name".equals(key)) //$NON-NLS-1$
                 {
-                  value = "Source for " + value;
+                  value = "Source for " + value; //$NON-NLS-1$
                 }
 
                 description.setProperty(key, value);
@@ -1755,7 +1755,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
           IInstallableUnit first = currentOperand.first();
           if (first != null)
           {
-            if ("true".equals(first.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)) && first instanceof ResolvedInstallableUnit)
+            if ("true".equals(first.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)) && first instanceof ResolvedInstallableUnit) //$NON-NLS-1$
             {
               List<ProvisioningAction> actions = new ArrayList<ProvisioningAction>(super.getActions(new InstallableUnitOperand(
                   new ResolvedInstallableUnit((IInstallableUnit)((ResolvedInstallableUnit)first).getMember(ResolvedInstallableUnit.MEMBER_ORIGINAL)), null)));
@@ -1786,7 +1786,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
           IInstallableUnit second = currentOperand.second();
           if (second != null)
           {
-            if ("true".equals(second.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)) && second instanceof ResolvedInstallableUnit)
+            if ("true".equals(second.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)) && second instanceof ResolvedInstallableUnit) //$NON-NLS-1$
             {
               List<ProvisioningAction> actions = new ArrayList<ProvisioningAction>(super.getActions(new InstallableUnitOperand(null,
                   new ResolvedInstallableUnit((IInstallableUnit)((ResolvedInstallableUnit)second).getMember(ResolvedInstallableUnit.MEMBER_ORIGINAL)))));
@@ -1819,7 +1819,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       Version version = Version.createOSGi(1, 0, 0);
       description.setVersion(version);
       description.addProvidedCapabilities(
-          Collections.singleton(MetadataFactory.createProvidedCapability(A_PDE_TARGET_PLATFORM, "Cannot be installed into the IDE", version)));
+          Collections.singleton(MetadataFactory.createProvidedCapability(A_PDE_TARGET_PLATFORM, Messages.TargletContainer_CannotInstall_message, version)));
       description.setTouchpointType(org.eclipse.equinox.spi.p2.publisher.PublisherHelper.TOUCHPOINT_OSGI);
       description.setArtifacts(new IArtifactKey[0]);
       return MetadataFactory.createInstallableUnit(description);
@@ -1968,13 +1968,13 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       }
     };
 
-    private static final EStructuralFeature LOCATION_TYPE_FEATURE = EXTENDED_META_DATA.demandFeature(null, "type", false);
+    private static final EStructuralFeature LOCATION_TYPE_FEATURE = EXTENDED_META_DATA.demandFeature(null, "type", false); //$NON-NLS-1$
 
-    private static final EStructuralFeature LOCATION_ID_FEATURE = EXTENDED_META_DATA.demandFeature(null, "id", false);
+    private static final EStructuralFeature LOCATION_ID_FEATURE = EXTENDED_META_DATA.demandFeature(null, "id", false); //$NON-NLS-1$
 
-    private static final EStructuralFeature LOCATION_FEATURE = EXTENDED_META_DATA.demandFeature(null, "location", true);
+    private static final EStructuralFeature LOCATION_FEATURE = EXTENDED_META_DATA.demandFeature(null, "location", true); //$NON-NLS-1$
 
-    private static final EStructuralFeature TARGLET_FEATURE = EXTENDED_META_DATA.demandFeature(null, "targlet", true);
+    private static final EStructuralFeature TARGLET_FEATURE = EXTENDED_META_DATA.demandFeature(null, "targlet", true); //$NON-NLS-1$
 
     private static final EClass DOCUMENT_ROOT_CLASS = LOCATION_FEATURE.getEContainingClass();
 
@@ -2040,7 +2040,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       documentRoot.eSet(LOCATION_FEATURE, location);
 
       FeatureMap targletFeatureMap = location.getAny();
-      FeatureMapUtil.addText(targletFeatureMap, "\n  ");
+      FeatureMapUtil.addText(targletFeatureMap, "\n  "); //$NON-NLS-1$
 
       EList<Targlet> copy = TargletFactory.eINSTANCE.copyTarglets(targlets);
       for (Targlet targlet : copy)

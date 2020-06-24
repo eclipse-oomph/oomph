@@ -101,7 +101,7 @@ public class ProductItemProvider extends ScopeItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Product"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Product")); //$NON-NLS-1$
   }
 
   /**
@@ -122,6 +122,7 @@ public class ProductItemProvider extends ScopeItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     String label = getLabel(object);

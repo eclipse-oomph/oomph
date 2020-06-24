@@ -235,9 +235,9 @@ public class DropinLocationImpl extends MinimalEObjectImpl.Container implements 
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (rootFolder: ");
+    result.append(" (rootFolder: "); //$NON-NLS-1$
     result.append(rootFolder);
-    result.append(", recursive: ");
+    result.append(", recursive: "); //$NON-NLS-1$
     result.append(recursive);
     result.append(')');
     return result.toString();

@@ -53,7 +53,7 @@ public class TargletContainerClasspath implements IDynamicVariableResolver
         {
           for (IArtifactKey artifactKey : iu.getArtifacts())
           {
-            if ("osgi.bundle".equals(artifactKey.getClassifier()) && !artifactKey.getId().endsWith(".source"))
+            if ("osgi.bundle".equals(artifactKey.getClassifier()) && !artifactKey.getId().endsWith(".source")) //$NON-NLS-1$ //$NON-NLS-2$
             {
               File file = artifactRepository.getArtifactFile(artifactKey);
               TargetPlatformClasspathFile.appendBundleClasspath(builder, file);

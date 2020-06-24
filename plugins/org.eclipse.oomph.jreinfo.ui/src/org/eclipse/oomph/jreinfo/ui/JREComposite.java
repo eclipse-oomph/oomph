@@ -42,6 +42,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.KeyAdapter;
@@ -72,15 +73,15 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class JREComposite extends Composite
 {
-  private static final Image IMAGE_GROUP = JREInfoUIPlugin.INSTANCE.getSWTImage("group");
+  private static final Image IMAGE_GROUP = JREInfoUIPlugin.INSTANCE.getSWTImage("group"); //$NON-NLS-1$
 
-  private static final Image IMAGE_JRE = JREInfoUIPlugin.INSTANCE.getSWTImage("jre");
+  private static final Image IMAGE_JRE = JREInfoUIPlugin.INSTANCE.getSWTImage("jre"); //$NON-NLS-1$
 
-  private static final Image IMAGE_JDK = JREInfoUIPlugin.INSTANCE.getSWTImage("jdk");
+  private static final Image IMAGE_JDK = JREInfoUIPlugin.INSTANCE.getSWTImage("jdk"); //$NON-NLS-1$
 
   private static final int EXTRA_WIDTH = OS.INSTANCE.isLinux() ? 10 : 0;
 
-  private static final String[] GROUPS = { "System", "User" };
+  private static final String[] GROUPS = { Messages.JREComposite_group_system, Messages.JREComposite_group_user };
 
   private static final Object[] EMPTY = new Object[0];
 
@@ -185,19 +186,19 @@ public class JREComposite extends Composite
     });
 
     TreeColumn locationColumn = new TreeColumn(tree, SWT.LEFT);
-    locationColumn.setText("Location");
+    locationColumn.setText(Messages.JREComposite_column_location);
     treeLayout.setColumnData(locationColumn, new ColumnWeightData(100));
 
     TreeColumn versionColumn = new TreeColumn(tree, SWT.LEFT);
-    versionColumn.setText("Version");
+    versionColumn.setText(Messages.JREComposite_column_version);
     treeLayout.setColumnData(versionColumn, new ColumnWeightData(1, 60 + EXTRA_WIDTH));
 
     TreeColumn bitnessColumn = new TreeColumn(tree, SWT.LEFT);
-    bitnessColumn.setText("Bitness");
+    bitnessColumn.setText(Messages.JREComposite_column_bitness);
     treeLayout.setColumnData(bitnessColumn, new ColumnWeightData(1, 60 + EXTRA_WIDTH));
 
     TreeColumn typeColumn = new TreeColumn(tree, SWT.LEFT);
-    typeColumn.setText("Type");
+    typeColumn.setText(Messages.JREComposite_column_type);
     treeLayout.setColumnData(typeColumn, new ColumnWeightData(1, 50 + EXTRA_WIDTH));
 
     Composite buttonComposite = new Composite(this, SWT.NONE);
@@ -206,7 +207,7 @@ public class JREComposite extends Composite
 
     browseButton = new Button(buttonComposite, SWT.NONE);
     browseButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-    browseButton.setText("&Browse...");
+    browseButton.setText(Messages.JREComposite_button_browse);
     browseButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -220,7 +221,7 @@ public class JREComposite extends Composite
     {
       downloadButton = new Button(buttonComposite, SWT.NONE);
       downloadButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-      downloadButton.setText("&Download...");
+      downloadButton.setText(Messages.JREComposite_button_download);
       downloadButton.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -233,7 +234,7 @@ public class JREComposite extends Composite
 
     removeButton = new Button(buttonComposite, SWT.NONE);
     removeButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-    removeButton.setText("&Remove");
+    removeButton.setText(Messages.JREComposite_button_remove);
     removeButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -245,7 +246,7 @@ public class JREComposite extends Composite
 
     refreshButton = new Button(buttonComposite, SWT.NONE);
     refreshButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-    refreshButton.setText("Re&fresh");
+    refreshButton.setText(Messages.JREComposite_button_refresh);
     refreshButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -325,8 +326,8 @@ public class JREComposite extends Composite
   {
     File rootFolder = null;
 
-    File file = new File(JREInfoPlugin.INSTANCE.getUserLocation().append("search.txt").toOSString());
-    List<String> lines = IOUtil.readLines(file, "UTF-8");
+    File file = new File(JREInfoPlugin.INSTANCE.getUserLocation().append("search.txt").toOSString()); //$NON-NLS-1$
+    List<String> lines = IOUtil.readLines(file, "UTF-8"); //$NON-NLS-1$
     if (!lines.isEmpty())
     {
       rootFolder = new File(lines.get(0));
@@ -341,7 +342,7 @@ public class JREComposite extends Composite
 
     DirectoryDialog dialog = new DirectoryDialog(getShell());
     dialog.setText(JREDialog.TITLE);
-    dialog.setMessage("Pick a root folder that will be recursively searched for Java virtual machines...");
+    dialog.setMessage(Messages.JREComposite_browseDialog_pickRootFolder);
     dialog.setFilterPath(filterPath);
 
     final String dir = dialog.open();
@@ -349,7 +350,7 @@ public class JREComposite extends Composite
     {
       if (!dir.equals(filterPath))
       {
-        IOUtil.writeLines(file, "UTF-8", Collections.singletonList(dir));
+        IOUtil.writeLines(file, "UTF-8", Collections.singletonList(dir)); //$NON-NLS-1$
       }
 
       try
@@ -373,8 +374,7 @@ public class JREComposite extends Composite
           treeViewer.setSelection(new StructuredSelection(new ArrayList<JRE>(jres)));
         }
 
-        MessageDialog.openInformation(getShell(), JREDialog.TITLE,
-            (size == 0 ? "No" : Integer.toString(size)) + " new VM" + (size == 1 ? "" : "s") + " found.");
+        MessageDialog.openInformation(getShell(), JREDialog.TITLE, getVMFoundMessage(size));
       }
       catch (InvocationTargetException ex)
       {
@@ -396,12 +396,12 @@ public class JREComposite extends Composite
 
   protected void downloadPressed()
   {
-    Request request = new Request("http://download.eclipse.org/oomph/jre/");
+    Request request = new Request("http://download.eclipse.org/oomph/jre/"); //$NON-NLS-1$
 
     JREFilter filter = getJREFilter();
     if (filter != null)
     {
-      request.put("vm", filter.getQuery());
+      request.put("vm", filter.getQuery()); //$NON-NLS-1$
     }
 
     downloadHandler.handleRequest(request);
@@ -438,6 +438,19 @@ public class JREComposite extends Composite
   protected void doubleClicked(JRE jre)
   {
     // Do nothing.
+  }
+
+  private String getVMFoundMessage(int count)
+  {
+    switch (count)
+    {
+      case 0:
+        return Messages.JREComposite_browseDialog_noNewVmsFound;
+      case 1:
+        return Messages.JREComposite_browseDialog_oneNewVmFound;
+      default:
+        return NLS.bind(Messages.JREComposite_browseDialog_newVmsFound, Integer.toString(count));
+    }
   }
 
   private boolean isExtraJRE(Object jre)
@@ -554,11 +567,11 @@ public class JREComposite extends Composite
           case 0:
             return jre.toString();
           case 1:
-            return jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro();
+            return jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro(); //$NON-NLS-1$ //$NON-NLS-2$
           case 2:
-            return jre.getBitness() + " Bit";
+            return jre.getBitness() + ' ' + Messages.JREComposite_bit;
           case 3:
-            return jre.isJDK() ? "JDK" : "JRE";
+            return jre.isJDK() ? "JDK" : "JRE"; //$NON-NLS-1$ //$NON-NLS-2$
         }
       }
 

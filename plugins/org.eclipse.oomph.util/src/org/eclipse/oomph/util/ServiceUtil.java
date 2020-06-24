@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.util;
 
+import org.eclipse.osgi.util.NLS;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -45,14 +47,14 @@ public final class ServiceUtil
     ServiceReference<?> serviceRef = bundleContext.getServiceReference(serviceName);
     if (serviceRef == null)
     {
-      throw new MissingServiceException("Missing OSGi service " + serviceName);
+      throw new MissingServiceException(NLS.bind(Messages.ServiceUtil_MissingService_exception, serviceName));
     }
 
     @SuppressWarnings("unchecked")
     T service = (T)bundleContext.getService(serviceRef);
     if (service == null)
     {
-      throw new MissingServiceException("Missing OSGi service " + serviceName);
+      throw new MissingServiceException(NLS.bind(Messages.ServiceUtil_MissingService_exception, serviceName));
     }
 
     services.put(service, serviceRef);

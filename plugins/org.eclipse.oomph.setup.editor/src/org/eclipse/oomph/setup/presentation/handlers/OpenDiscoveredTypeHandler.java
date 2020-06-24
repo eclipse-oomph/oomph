@@ -23,7 +23,7 @@ public class OpenDiscoveredTypeHandler extends AbstractDropdownItemHandler
 {
   public OpenDiscoveredTypeHandler()
   {
-    super("BrowseType", "Open Discovered Type...");
+    super("BrowseType", Messages.OpenDiscoveredTypeHandler_text); //$NON-NLS-1$
   }
 
   public void run()

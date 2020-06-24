@@ -157,7 +157,7 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
     {
       if (EcoreUtil.isAncestor(this, newParent))
       {
-        throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+        throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
       }
       NotificationChain msgs = null;
       if (eInternalContainer() != null)
@@ -246,7 +246,7 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
     if (authority != null)
     {
       preferenceNode = getRoot();
-      if (!"".equals(authority))
+      if (!"".equals(authority)) //$NON-NLS-1$
       {
         preferenceNode = preferenceNode.getNode(URI.decode(authority));
       }
@@ -342,11 +342,11 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
 
     boolean matched = false;
     String authority = absolutePath.authority();
-    if ("project".equals(authority))
+    if ("project".equals(authority)) //$NON-NLS-1$
     {
       matched = true;
 
-      PreferenceNode instancePreferenceNode = root.getNode("instance");
+      PreferenceNode instancePreferenceNode = root.getNode("instance"); //$NON-NLS-1$
       if (instancePreferenceNode != null)
       {
         PreferenceNode preferenceNode = instancePreferenceNode.getNode(relativePath);
@@ -357,11 +357,11 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
       }
     }
 
-    if (matched || "instance".equals(authority))
+    if (matched || "instance".equals(authority)) //$NON-NLS-1$
     {
       matched = true;
 
-      PreferenceNode instancePreferenceNode = root.getNode("configuration");
+      PreferenceNode instancePreferenceNode = root.getNode("configuration"); //$NON-NLS-1$
       if (instancePreferenceNode != null)
       {
         PreferenceNode preferenceNode = instancePreferenceNode.getNode(relativePath);
@@ -372,9 +372,9 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
       }
     }
 
-    if (matched || "configuration".equals(authority))
+    if (matched || "configuration".equals(authority)) //$NON-NLS-1$
     {
-      PreferenceNode instancePreferenceNode = root.getNode("default");
+      PreferenceNode instancePreferenceNode = root.getNode("default"); //$NON-NLS-1$
       if (instancePreferenceNode != null)
       {
         PreferenceNode preferenceNode = instancePreferenceNode.getNode(relativePath);
@@ -385,9 +385,9 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
       }
     }
 
-    if (matched || "default".equals(authority))
+    if (matched || "default".equals(authority)) //$NON-NLS-1$
     {
-      PreferenceNode instancePreferenceNode = root.getNode("bundle_default");
+      PreferenceNode instancePreferenceNode = root.getNode("bundle_default"); //$NON-NLS-1$
       if (instancePreferenceNode != null)
       {
         PreferenceNode preferenceNode = instancePreferenceNode.getNode(relativePath);
@@ -589,9 +589,9 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
       if (name != null)
       {
         String encodedName = URI.encodeSegment(name, false);
-        if (encodedName.startsWith("@"))
+        if (encodedName.startsWith("@")) //$NON-NLS-1$
         {
-          encodedName = "%40" + encodedName.substring(1);
+          encodedName = "%40" + encodedName.substring(1); //$NON-NLS-1$
         }
         return encodedName;
       }
@@ -603,7 +603,7 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
       String name = property.getName();
       if (name != null)
       {
-        return "^" + URI.encodeSegment(name, false);
+        return "^" + URI.encodeSegment(name, false); //$NON-NLS-1$
       }
     }
 
@@ -613,13 +613,13 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
   @Override
   public EObject eObjectForURIFragmentSegment(String uriFragmentSegment)
   {
-    if (uriFragmentSegment.startsWith("^"))
+    if (uriFragmentSegment.startsWith("^")) //$NON-NLS-1$
     {
       String preferenceNodeName = URI.decode(uriFragmentSegment.substring(1));
       return getProperty(preferenceNodeName);
     }
 
-    if (!uriFragmentSegment.startsWith("@"))
+    if (!uriFragmentSegment.startsWith("@")) //$NON-NLS-1$
     {
       String preferenceNodeName = URI.decode(uriFragmentSegment);
       return getNode(preferenceNodeName);
@@ -649,7 +649,7 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
       return null;
     }
 
-    if ("".equals(parentAbsolutePath.authority()))
+    if ("".equals(parentAbsolutePath.authority())) //$NON-NLS-1$
     {
       return URI.createHierarchicalURI(null, URI.encodeAuthority(name, false), null, null, null);
     }
@@ -669,7 +669,7 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
     PreferenceNode scope = getScope();
     if (this == scope)
     {
-      return URI.createURI("");
+      return URI.createURI(""); //$NON-NLS-1$
     }
 
     URI parentRelativePath = getParent().getRelativePath();
@@ -697,7 +697,7 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
       PreferenceNode greatGrandParent = grandParent.getParent();
       if (greatGrandParent == null)
       {
-        if ("project".equals(parent.getName()))
+        if ("project".equals(parent.getName())) //$NON-NLS-1$
         {
           break;
         }

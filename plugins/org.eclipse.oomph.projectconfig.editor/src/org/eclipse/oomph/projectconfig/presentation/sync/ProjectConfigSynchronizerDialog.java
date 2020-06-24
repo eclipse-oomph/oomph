@@ -196,10 +196,10 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
   protected Control createDialogArea(Composite parent)
   {
     Shell shell = getShell();
-    shell.setText("Preference Modification Problem");
-    shell.setImage(ExtendedImageRegistry.INSTANCE.getImage(ProjectConfigEditorPlugin.INSTANCE.getImage("full/obj16/ProjectConfigModelFile")));
+    shell.setText(Messages.ProjectConfigSynchronizerDialog_ModificationProblem_label);
+    shell.setImage(ExtendedImageRegistry.INSTANCE.getImage(ProjectConfigEditorPlugin.INSTANCE.getImage("full/obj16/ProjectConfigModelFile"))); //$NON-NLS-1$
 
-    setTitle("bar");
+    setTitle("bar"); //$NON-NLS-1$
 
     Composite area = (Composite)super.createDialogArea(parent);
 
@@ -212,8 +212,8 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
     container.setLayout(layout);
     container.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-    setTitle("Project-specific Preference Modification");
-    setErrorMessage("Project-specific properties that are not directly managed by a preference profile of that project have been modified\n");
+    setTitle(Messages.ProjectConfigSynchronizerDialog_ProjectSpecificPreferenceModification_label);
+    setErrorMessage(Messages.ProjectConfigSynchronizerDialog_UnmanagedPropertyModified_message);
 
     createUI(container);
 
@@ -240,7 +240,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
     if (managedPropertiesInput != null)
     {
       Label label = new Label(container, SWT.NONE);
-      label.setText("Modified Managed Properties:");
+      label.setText(Messages.ProjectConfigSynchronizerDialog_ModifiedManagedProperties_label);
       label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
       {
@@ -248,7 +248,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
         composite.setLayout(new GridLayout(2, false));
         composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
         Button overWriteButton = new Button(composite, SWT.RADIO);
-        overWriteButton.setText("Overwrite with managing property");
+        overWriteButton.setText(Messages.ProjectConfigSynchronizerDialog_Overwite_message);
         if (!propagate)
         {
           overWriteButton.setSelection(true);
@@ -265,7 +265,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
         });
 
         Button propogateButton = new Button(composite, SWT.RADIO);
-        propogateButton.setText("Propagate to managing property");
+        propogateButton.setText(Messages.ProjectConfigSynchronizerDialog_Propagate_label);
         if (propagate)
         {
           propogateButton.setSelection(true);
@@ -294,12 +294,12 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
       tree.setLinesVisible(true);
       tree.setHeaderVisible(true);
 
-      managedPropertiesViewer.setColumnProperties(new String[] { "property", "newValue", "profile", "profileValue" });
+      managedPropertiesViewer.setColumnProperties(new String[] { "property", "newValue", "profile", "profileValue" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
       final TreeViewerColumn propertyViewerColumn = new TreeViewerColumn(managedPropertiesViewer, SWT.NONE);
       final TreeColumn propertyColumn = propertyViewerColumn.getColumn();
       propertyViewerColumn.setLabelProvider(new DecoratingColumLabelProvider(labelProvider, new DialogLabelDecorator()));
-      propertyColumn.setText("Property");
+      propertyColumn.setText(Messages.ProjectConfigSynchronizerDialog_Property_label);
       propertyColumn.setResizable(true);
 
       final TreeViewerColumn newValueViewerColumn = new TreeViewerColumn(managedPropertiesViewer, SWT.NONE);
@@ -314,7 +314,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
             return PreferencesFactory.eINSTANCE.convertEscapedString(propertyItem.getProperty().getValue());
           }
 
-          return "";
+          return ""; //$NON-NLS-1$
         }
 
         @Override
@@ -325,7 +325,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
       });
 
       final TreeColumn newValueColumn = newValueViewerColumn.getColumn();
-      newValueColumn.setText("New Value");
+      newValueColumn.setText(Messages.ProjectConfigSynchronizerDialog_NewValue_label);
       newValueColumn.setResizable(true);
 
       final TreeViewerColumn profileViewerColumn = new TreeViewerColumn(managedPropertiesViewer, SWT.NONE);
@@ -343,11 +343,11 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
             {
               PreferenceProfile preferenceProfile = managingFilter.getPreferenceProfile();
               Project project = preferenceProfile.getProject();
-              return project.getPreferenceNode().getName() + "/" + preferenceProfile.getName();
+              return project.getPreferenceNode().getName() + "/" + preferenceProfile.getName(); //$NON-NLS-1$
             }
           }
 
-          return "";
+          return ""; //$NON-NLS-1$
         }
 
         private PreferenceFilter getManagingFilter(Property managingProperty)
@@ -389,7 +389,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
       });
 
       final TreeColumn profileColumn = profileViewerColumn.getColumn();
-      profileColumn.setText("Profile");
+      profileColumn.setText(Messages.ProjectConfigSynchronizerDialog_Profile_label);
       profileColumn.setResizable(true);
 
       final TreeViewerColumn profileValueViewerColumn = new TreeViewerColumn(managedPropertiesViewer, SWT.NONE);
@@ -404,7 +404,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
             return PreferencesFactory.eINSTANCE.convertEscapedString(propertyItem.getOtherProperty().getValue());
           }
 
-          return "";
+          return ""; //$NON-NLS-1$
         }
 
         @Override
@@ -415,7 +415,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
       });
 
       final TreeColumn profileValueColumn = profileValueViewerColumn.getColumn();
-      profileValueColumn.setText("Profile Value");
+      profileValueColumn.setText(Messages.ProjectConfigSynchronizerDialog_ProfileValue_label);
       profileValueColumn.setResizable(true);
 
       final ControlAdapter columnResizer = new ControlAdapter()
@@ -458,11 +458,11 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
     {
 
       Label label = new Label(container, SWT.NONE);
-      label.setText("Unmanaged Properties:");
+      label.setText(Messages.ProjectConfigSynchronizerDialog_UnmanagedPoperties_label);
       label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
       Button editButton = new Button(container, SWT.CHECK);
-      editButton.setText("Edit");
+      editButton.setText(Messages.ProjectConfigSynchronizerDialog_Edit_label);
       editButton.setSelection(edit);
       editButton.addSelectionListener(new SelectionAdapter()
       {
@@ -488,12 +488,12 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
       tree.setLinesVisible(true);
       tree.setHeaderVisible(true);
 
-      unmanagedPropertiesViewer.setColumnProperties(new String[] { "property", "newValue", "oldValue" });
+      unmanagedPropertiesViewer.setColumnProperties(new String[] { "property", "newValue", "oldValue" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
       final TreeViewerColumn propertyViewerColumn = new TreeViewerColumn(unmanagedPropertiesViewer, SWT.NONE);
       final TreeColumn propertyColumn = propertyViewerColumn.getColumn();
       propertyViewerColumn.setLabelProvider(new DecoratingColumLabelProvider(labelProvider, new DialogLabelDecorator()));
-      propertyColumn.setText("Property");
+      propertyColumn.setText(Messages.ProjectConfigSynchronizerDialog_Property_label);
       propertyColumn.setResizable(true);
 
       final TreeViewerColumn newValueViewerColumn = new TreeViewerColumn(unmanagedPropertiesViewer, SWT.NONE);
@@ -508,7 +508,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
             return PreferencesFactory.eINSTANCE.convertEscapedString(propertyItem.getProperty().getValue());
           }
 
-          return "";
+          return ""; //$NON-NLS-1$
         }
 
         @Override
@@ -519,7 +519,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
       });
 
       final TreeColumn newValueColumn = newValueViewerColumn.getColumn();
-      newValueColumn.setText("New Value");
+      newValueColumn.setText(Messages.ProjectConfigSynchronizerDialog_NewValue_label);
       newValueColumn.setResizable(true);
 
       final TreeViewerColumn oldValueValuerColumn = new TreeViewerColumn(unmanagedPropertiesViewer, SWT.NONE);
@@ -538,7 +538,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
             }
           }
 
-          return "";
+          return ""; //$NON-NLS-1$
         }
 
         @Override
@@ -549,7 +549,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
       });
 
       final TreeColumn oldValueColumn = oldValueValuerColumn.getColumn();
-      oldValueColumn.setText("Old Value");
+      oldValueColumn.setText(Messages.ProjectConfigSynchronizerDialog_OldValue_label);
       oldValueColumn.setResizable(true);
 
       final ControlAdapter columnResizer = new ControlAdapter()
@@ -678,7 +678,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
 
   public static class ProjectItem extends ItemProvider
   {
-    private static final Object IMAGE = ProjectConfigEditPlugin.INSTANCE.getImage("full/obj16/Project");
+    private static final Object IMAGE = ProjectConfigEditPlugin.INSTANCE.getImage("full/obj16/Project"); //$NON-NLS-1$
 
     private Project project;
 
@@ -697,7 +697,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
 
   public static class PreferenceNodeItem extends ItemProvider
   {
-    private static final Object IMAGE = PreferencesEditPlugin.INSTANCE.getImage("full/obj16/PreferenceNode");
+    private static final Object IMAGE = PreferencesEditPlugin.INSTANCE.getImage("full/obj16/PreferenceNode"); //$NON-NLS-1$
 
     private PreferenceNode preferenceNode;
 
@@ -716,7 +716,7 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
 
   public static class PropertyItem extends ItemProvider
   {
-    private static final Object IMAGE = PreferencesEditPlugin.INSTANCE.getImage("full/obj16/Property");
+    private static final Object IMAGE = PreferencesEditPlugin.INSTANCE.getImage("full/obj16/Property"); //$NON-NLS-1$
 
     private Property property;
 

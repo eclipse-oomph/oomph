@@ -73,7 +73,8 @@ public class ConfigurationItemProvider extends ModelElementItemProvider
   protected void addWSPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Configuration_wS_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Configuration_wS_feature", "_UI_Configuration_type"),
+        getString("_UI_Configuration_wS_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Configuration_wS_feature", "_UI_Configuration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         P2Package.Literals.CONFIGURATION__WS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
@@ -93,7 +94,8 @@ public class ConfigurationItemProvider extends ModelElementItemProvider
   protected void addOSPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Configuration_oS_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Configuration_oS_feature", "_UI_Configuration_type"),
+        getString("_UI_Configuration_oS_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Configuration_oS_feature", "_UI_Configuration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         P2Package.Literals.CONFIGURATION__OS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
@@ -113,8 +115,8 @@ public class ConfigurationItemProvider extends ModelElementItemProvider
   protected void addArchPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Configuration_arch_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Configuration_arch_feature", "_UI_Configuration_type"), P2Package.Literals.CONFIGURATION__ARCH,
+        getString("_UI_Configuration_arch_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Configuration_arch_feature", "_UI_Configuration_type"), P2Package.Literals.CONFIGURATION__ARCH, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
     {
       @Override
@@ -127,7 +129,7 @@ public class ConfigurationItemProvider extends ModelElementItemProvider
 
   private static Collection<?> withAny(Set<String> choices)
   {
-    choices.add("ANY");
+    choices.add("ANY"); //$NON-NLS-1$
     return choices;
   }
 
@@ -140,7 +142,7 @@ public class ConfigurationItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Configuration"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Configuration")); //$NON-NLS-1$
   }
 
   /**
@@ -164,7 +166,10 @@ public class ConfigurationItemProvider extends ModelElementItemProvider
   public String getText(Object object)
   {
     Configuration configuration = (Configuration)object;
-    return getString("_UI_Configuration_type") + " " + configuration.getWS() + "." + configuration.getOS() + "." + configuration.getArch();
+    return getString("_UI_Configuration_type") + //$NON-NLS-1$
+        " " + configuration.getWS() + //$NON-NLS-1$
+        "." + configuration.getOS() + //$NON-NLS-1$
+        "." + configuration.getArch(); //$NON-NLS-1$
   }
 
   /**

@@ -12,15 +12,18 @@ package org.eclipse.oomph.ostools;
 
 import org.eclipse.oomph.util.OS;
 
+import org.eclipse.osgi.util.NLS;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * @author Eike Stepper
  */
 public class PromptHandler extends AbstractLocationHandler
 {
-  private static final String[] LINUX_TERMINALS = { "gnome-terminal", "xterm" };
+  private static final String[] LINUX_TERMINALS = { "gnome-terminal", "xterm" }; //$NON-NLS-1$ //$NON-NLS-2$
 
   public PromptHandler()
   {
@@ -31,11 +34,11 @@ public class PromptHandler extends AbstractLocationHandler
   {
     if (OS.INSTANCE.isWin())
     {
-      Runtime.getRuntime().exec("cmd /c cd /d \"" + location + "\" && start cmd.exe");
+      Runtime.getRuntime().exec("cmd /c cd /d \"" + location + "\" && start cmd.exe"); //$NON-NLS-1$ //$NON-NLS-2$
     }
     else if (OS.INSTANCE.isMac())
     {
-      ProcessBuilder builder = new ProcessBuilder(new String[] { "/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal", location.toString() });
+      ProcessBuilder builder = new ProcessBuilder(new String[] { "/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal", location.toString() }); //$NON-NLS-1$
       builder.start();
     }
     else if (OS.INSTANCE.isLinux())
@@ -55,7 +58,7 @@ public class PromptHandler extends AbstractLocationHandler
         }
       }
 
-      throw new IOException("Could not start any terminal: " + LINUX_TERMINALS);
+      throw new IOException(NLS.bind(Messages.PromptHandler_TerminalFailure_exception, Arrays.asList(LINUX_TERMINALS)));
     }
   }
 }

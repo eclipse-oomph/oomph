@@ -35,7 +35,7 @@ public enum SyncActionType implements Enumerator
    * @generated
    * @ordered
    */
-  NONE(0, "None", "None"),
+  NONE(0, "None", "None"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Set Local</b></em>' literal object.
@@ -45,7 +45,7 @@ public enum SyncActionType implements Enumerator
    * @generated
    * @ordered
    */
-  SET_LOCAL(1, "SetLocal", "SetLocal"),
+  SET_LOCAL(1, "SetLocal", "SetLocal"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Set Remote</b></em>' literal object.
@@ -55,7 +55,7 @@ public enum SyncActionType implements Enumerator
    * @generated
    * @ordered
    */
-  SET_REMOTE(2, "SetRemote", "SetRemote"),
+  SET_REMOTE(2, "SetRemote", "SetRemote"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Remove Local</b></em>' literal object.
@@ -65,7 +65,7 @@ public enum SyncActionType implements Enumerator
    * @generated
    * @ordered
    */
-  REMOVE_LOCAL(3, "RemoveLocal", "RemoveLocal"),
+  REMOVE_LOCAL(3, "RemoveLocal", "RemoveLocal"), //$NON-NLS-1$ //$NON-NLS-2$
   /**
    * The '<em><b>Remove Remote</b></em>' literal object.
    * <!-- begin-user-doc -->
@@ -74,7 +74,7 @@ public enum SyncActionType implements Enumerator
    * @generated
    * @ordered
    */
-  REMOVE_REMOTE(4, "RemoveRemote", "RemoveRemote"),
+  REMOVE_REMOTE(4, "RemoveRemote", "RemoveRemote"), //$NON-NLS-1$ //$NON-NLS-2$
   /**
    * The '<em><b>Conflict</b></em>' literal object.
    * <!-- begin-user-doc -->
@@ -83,7 +83,7 @@ public enum SyncActionType implements Enumerator
    * @generated
    * @ordered
    */
-  CONFLICT(5, "Conflict", "Conflict"),
+  CONFLICT(5, "Conflict", "Conflict"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Exclude</b></em>' literal object.
@@ -93,15 +93,11 @@ public enum SyncActionType implements Enumerator
    * @generated
    * @ordered
    */
-  EXCLUDE(6, "Exclude", "Exclude");
+  EXCLUDE(6, "Exclude", "Exclude"); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>None</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>None</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #NONE
    * @model name="None"
@@ -113,10 +109,6 @@ public enum SyncActionType implements Enumerator
   /**
    * The '<em><b>Set Local</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Set Local</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #SET_LOCAL
    * @model name="SetLocal"
@@ -128,10 +120,6 @@ public enum SyncActionType implements Enumerator
   /**
    * The '<em><b>Set Remote</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Set Remote</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #SET_REMOTE
    * @model name="SetRemote"
@@ -143,10 +131,6 @@ public enum SyncActionType implements Enumerator
   /**
    * The '<em><b>Remove Local</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Remove Local</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #REMOVE_LOCAL
    * @model name="RemoveLocal"
@@ -158,10 +142,6 @@ public enum SyncActionType implements Enumerator
   /**
    * The '<em><b>Remove Remote</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Remove Remote</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #REMOVE_REMOTE
    * @model name="RemoveRemote"
@@ -173,10 +153,6 @@ public enum SyncActionType implements Enumerator
   /**
    * The '<em><b>Conflict</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Conflict</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #CONFLICT
    * @model name="Conflict"
@@ -188,10 +164,6 @@ public enum SyncActionType implements Enumerator
   /**
    * The '<em><b>Exclude</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Exclude</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #EXCLUDE
    * @model name="Exclude"

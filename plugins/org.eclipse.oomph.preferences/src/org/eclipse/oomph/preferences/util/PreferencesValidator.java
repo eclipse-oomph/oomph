@@ -51,7 +51,7 @@ public class PreferencesValidator extends EObjectValidator
    * @see org.eclipse.emf.common.util.Diagnostic#getCode()
    * @generated
    */
-  public static final String DIAGNOSTIC_SOURCE = "org.eclipse.oomph.preferences";
+  public static final String DIAGNOSTIC_SOURCE = "org.eclipse.oomph.preferences"; //$NON-NLS-1$
 
   /**
    * A constant with a fixed name that can be used as the base value for additional hand written constants.
@@ -188,7 +188,7 @@ public class PreferencesValidator extends EObjectValidator
    * @see #validatePreferenceNodeName_Pattern
    */
   public static final PatternMatcher[][] PREFERENCE_NODE_NAME__PATTERN__VALUES = new PatternMatcher[][] {
-      new PatternMatcher[] { XMLTypeUtil.createPatternMatcher("[^/]+") } };
+      new PatternMatcher[] { XMLTypeUtil.createPatternMatcher("[^/]+") } }; //$NON-NLS-1$
 
   /**
    * Validates the Pattern constraint of '<em>Preference Node Name</em>'.
@@ -208,7 +208,7 @@ public class PreferencesValidator extends EObjectValidator
     {
       PreferenceNode preferenceNode = (PreferenceNode)eObject;
       String name = preferenceNode.getName();
-      if (preferenceNode.getParent() == null && "".equals(name))
+      if (preferenceNode.getParent() == null && "".equals(name)) //$NON-NLS-1$
       {
         return true;
       }

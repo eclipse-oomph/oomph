@@ -50,9 +50,9 @@ import java.util.Comparator;
  */
 public interface Requirement extends ModelElement
 {
-  public static final String FEATURE_SUFFIX = ".feature.group";
+  public static final String FEATURE_SUFFIX = ".feature.group"; //$NON-NLS-1$
 
-  public static final String PROJECT_SUFFIX = ".plain.project";
+  public static final String PROJECT_SUFFIX = ".plain.project"; //$NON-NLS-1$
 
   public static final Comparator<Requirement> COMPARATOR = new Comparator<Requirement>()
   {

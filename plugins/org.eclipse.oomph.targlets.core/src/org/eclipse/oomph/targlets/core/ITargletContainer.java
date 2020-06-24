@@ -27,9 +27,9 @@ import java.util.Collection;
  */
 public interface ITargletContainer extends ITargetLocation
 {
-  public static final String TYPE = "Targlet";
+  public static final String TYPE = "Targlet"; //$NON-NLS-1$
 
-  public static final String IU_PROPERTY_SOURCE = "org.eclipse.oomph.targlet.source";
+  public static final String IU_PROPERTY_SOURCE = "org.eclipse.oomph.targlet.source"; //$NON-NLS-1$
 
   public String getID();
 

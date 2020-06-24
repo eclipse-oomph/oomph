@@ -382,9 +382,9 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (iD: ");
+    result.append(" (iD: "); //$NON-NLS-1$
     result.append(iD);
-    result.append(", type: ");
+    result.append(", type: "); //$NON-NLS-1$
     result.append(type);
     result.append(')');
     return result.toString();

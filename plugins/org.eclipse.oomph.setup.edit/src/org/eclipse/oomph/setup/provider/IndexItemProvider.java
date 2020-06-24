@@ -74,7 +74,8 @@ public class IndexItemProvider extends ModelElementItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Index_name_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Index_name_feature", "_UI_Index_type"),
+        getString("_UI_Index_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Index_name_feature", "_UI_Index_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.INDEX__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -87,8 +88,8 @@ public class IndexItemProvider extends ModelElementItemProvider
   protected void addDiscoverablePackagesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Index_discoverablePackages_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Index_discoverablePackages_feature", "_UI_Index_type"),
+        getString("_UI_Index_discoverablePackages_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Index_discoverablePackages_feature", "_UI_Index_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.INDEX__DISCOVERABLE_PACKAGES, true, false, true, null, null, null));
   }
 
@@ -135,7 +136,7 @@ public class IndexItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Index"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Index")); //$NON-NLS-1$
   }
 
   /**

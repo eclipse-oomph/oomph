@@ -75,7 +75,7 @@ public class ProjectSetFactoryImpl extends EFactoryImpl implements ProjectSetFac
       case ProjectSetPackage.PROJECT_SET_IMPORT_TASK:
         return createProjectSetImportTask();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

@@ -74,8 +74,8 @@ public class MavenImportTaskItemProvider extends SetupTaskItemProvider
   protected void addProjectNameTemplatePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MavenImportTask_projectNameTemplate_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_MavenImportTask_projectNameTemplate_feature", "_UI_MavenImportTask_type"),
+        getString("_UI_MavenImportTask_projectNameTemplate_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MavenImportTask_projectNameTemplate_feature", "_UI_MavenImportTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MavenPackage.Literals.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -88,8 +88,8 @@ public class MavenImportTaskItemProvider extends SetupTaskItemProvider
   protected void addProfilesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MavenImportTask_profiles_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_MavenImportTask_profiles_feature", "_UI_MavenImportTask_type"),
+        getString("_UI_MavenImportTask_profiles_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MavenImportTask_profiles_feature", "_UI_MavenImportTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MavenPackage.Literals.MAVEN_IMPORT_TASK__PROFILES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -135,7 +135,7 @@ public class MavenImportTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/MavenImportTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/MavenImportTask")); //$NON-NLS-1$
   }
 
   /**
@@ -158,7 +158,7 @@ public class MavenImportTaskItemProvider extends SetupTaskItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_MavenImportTask_type");
+    return getString("_UI_MavenImportTask_type"); //$NON-NLS-1$
   }
 
   /**

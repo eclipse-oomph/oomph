@@ -33,8 +33,8 @@ public class ToggleApiBuilderAction implements IWorkbenchWindowActionDelegate
     try
     {
       Bundle bundle = Activator.getPlugin().getBundle();
-      Class<?> c = bundle.loadClass("org.eclipse.pde.api.tools.internal.builder.ApiAnalysisBuilder");
-      buildDisabledField = c.getDeclaredField("buildDisabled");
+      Class<?> c = bundle.loadClass("org.eclipse.pde.api.tools.internal.builder.ApiAnalysisBuilder"); //$NON-NLS-1$
+      buildDisabledField = c.getDeclaredField("buildDisabled"); //$NON-NLS-1$
       buildDisabledField.setAccessible(true);
     }
     catch (Throwable ex)

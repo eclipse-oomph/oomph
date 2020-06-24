@@ -13,8 +13,8 @@
 
 <plugin>
 
-   <extension-point id="questionnaire" name="Questionnaire" schema="schema/questionnaire.exsd"/>
-   <extension-point id="preferencePolicies" name="Preference Policies" schema="schema/preferencePolicies.exsd"/>
+   <extension-point id="questionnaire" name="%extPoint.questionnaire.name" schema="schema/questionnaire.exsd"/>
+   <extension-point id="preferencePolicies" name="%extPoint.preferencePolicies.name" schema="schema/preferencePolicies.exsd"/>
 
    <extension
          point="org.eclipse.oomph.ui.deferredEarlyStart">
@@ -27,19 +27,19 @@
             category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             id="org.eclipse.oomph.setup.SetupPreferencePage"
             class="org.eclipse.oomph.setup.ui.SetupPreferencePage"
-            name="Setup Tasks">
+            name="%setupPreferencePage.name">
       </page>
       <page
             category="org.eclipse.oomph.setup.SetupPreferencePage"
             id="org.eclipse.oomph.setup.RecorderPreferencePage"
             class="org.eclipse.oomph.setup.ui.recorder.RecorderPreferencePage"
-            name="Preference Recorder">
+            name="%recorderPreferencePage.name">
       </page>
       <page
             category="org.eclipse.oomph.setup.SetupPreferencePage"
             id="org.eclipse.oomph.setup.SynchronizerPreferencePage"
             class="org.eclipse.oomph.setup.ui.synchronizer.SynchronizerPreferencePage"
-            name="Preference Synchronizer">
+            name="%synchronizerPreferencePage.name">
       </page>
    </extension>
 
@@ -52,10 +52,10 @@
                class="org.eclipse.oomph.setup.ui.actions.ToggleDisabledAction"
                enablesFor="multiple"
                id="org.eclipse.oomph.setup.ToggleDisabledAction"
-               label="Disabled"
+               label="%toggleDisabledAction.label"
                state="false"
                style="toggle"
-               tooltip="Changes the enablement of the task">
+               tooltip="%toggleDisabledAction.tooltip">
          </action>
       </objectContribution>
       <objectContribution
@@ -65,9 +65,9 @@
                class="org.eclipse.oomph.setup.ui.actions.InlineMacroTaskAction"
                enablesFor="multiple"
                id="org.eclipse.oomph.setup.InlineMacroTaskAction"
-               label="Inline"
+               label="%inlineMacroTaskAction.label"
                style="push"
-               tooltip="Replace the macro expansion task with an inline copy">
+               tooltip="%inlineMacroTaskAction.tooltip">
          </action>
       </objectContribution>
       <objectContribution
@@ -77,9 +77,9 @@
                class="org.eclipse.oomph.setup.ui.actions.ConfigureMarketPlaceListingAction"
                enablesFor="1"
                id="org.eclipse.oomph.setup.ConfigureMarketPlaceListingAction"
-               label="Configure Marketplace Listing..."
+               label="%configureMarketPlaceListingAction.label"
                style="push"
-               tooltip="Configure the marketplace listing to select the features to install">
+               tooltip="%configureMarketPlaceListingAction.tooltip">
          </action>
       </objectContribution>
    </extension>
@@ -91,9 +91,9 @@
             class="org.eclipse.oomph.setup.ui.wizards.SetupWizard$Importer"
             icon="icons/oomph_import.png"
             id="org.eclipse.oomph.setup.ui.ImportWizard"
-            name="Projects from Catalog">
+            name="%importWizard.name">
          <description>
-            Import projects from the Oomph catalogs into the workspace.
+            %importWizard.description
          </description>
       </wizard>
    </extension>
@@ -114,9 +114,9 @@
       <command
             categoryId="org.eclipse.oomph.setup.category"
             defaultHandler="org.eclipse.oomph.setup.ui.actions.LaunchQuestionnaireHandler"
-            description="Review the IDE&apos;s most fiercely contested preferences "
+            description="%command.questionnaire.description"
             id="org.eclipse.oomph.setup.ui.questionnaire"
-            name="Configuration Questionnaire">
+            name="%command.questionnaire.name">
       </command>
    </extension>
    <extension
@@ -125,7 +125,7 @@
             id="Q9TBg1mthjy0wSKVgrXfiBU4Kqz"
             authURI="https://accounts.eclipse.org/"
             icon="icons/oomph16.png"
-            name="Oomph">
+            name="%oomph">
       </client>
    </extension>
 

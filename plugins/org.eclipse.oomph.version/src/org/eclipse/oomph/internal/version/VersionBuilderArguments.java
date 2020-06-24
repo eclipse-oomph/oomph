@@ -78,7 +78,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
 
   public boolean isIgnoreMalformedVersions()
   {
-    return "true".equals(get(IVersionBuilderArguments.IGNORE_MALFORMED_VERSIONS_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_MALFORMED_VERSIONS_ARGUMENT)); //$NON-NLS-1$
   }
 
   public void setIgnoreMalformedVersions(boolean value)
@@ -88,7 +88,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
 
   public boolean isIgnoreFeatureNature()
   {
-    return "true".equals(get(IVersionBuilderArguments.IGNORE_FEATURE_NATURE_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_FEATURE_NATURE_ARGUMENT)); //$NON-NLS-1$
   }
 
   public void setIgnoreFeatureNature(boolean value)
@@ -98,7 +98,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
 
   public boolean isIgnoreSchemaBuilder()
   {
-    return "true".equals(get(IVersionBuilderArguments.IGNORE_SCHEMA_BUILDER_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_SCHEMA_BUILDER_ARGUMENT)); //$NON-NLS-1$
   }
 
   public void setIgnoreSchemaBuilder(boolean value)
@@ -108,7 +108,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
 
   public boolean isIgnoreDebugOptions()
   {
-    return "true".equals(get(IVersionBuilderArguments.IGNORE_DEBUG_OPTIONS_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_DEBUG_OPTIONS_ARGUMENT)); //$NON-NLS-1$
   }
 
   public void setIgnoreDebugOptions(boolean value)
@@ -118,7 +118,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
 
   public boolean isIgnoreAutomaticModuleName()
   {
-    return "true".equals(get(IVersionBuilderArguments.IGNORE_AUTOMATIC_MODULE_NAME_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_AUTOMATIC_MODULE_NAME_ARGUMENT)); //$NON-NLS-1$
   }
 
   public void setIgnoreAutomaticModuleName(boolean value)
@@ -128,7 +128,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
 
   public boolean isIgnoreMissingDependencyRanges()
   {
-    return "true".equals(get(IVersionBuilderArguments.IGNORE_DEPENDENCY_RANGES_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_DEPENDENCY_RANGES_ARGUMENT)); //$NON-NLS-1$
   }
 
   public void setIgnoreMissingDependencyRanges(boolean value)
@@ -138,7 +138,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
 
   public boolean isIgnoreLaxLowerBoundDependencyVersions()
   {
-    return "true".equals(get(IVersionBuilderArguments.IGNORE_LAX_LOWER_BOUND_VERSIONS_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_LAX_LOWER_BOUND_VERSIONS_ARGUMENT)); //$NON-NLS-1$
   }
 
   public void setIgnoreLaxLowerBoundDependencyVersions(boolean value)
@@ -148,7 +148,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
 
   public boolean isIgnoreMissingExportVersions()
   {
-    return "true".equals(get(IVersionBuilderArguments.IGNORE_EXPORT_VERSIONS_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_EXPORT_VERSIONS_ARGUMENT)); //$NON-NLS-1$
   }
 
   public void setIgnoreMissingExportVersions(boolean value)
@@ -158,7 +158,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
 
   public boolean isIgnoreFeatureContentChanges()
   {
-    return "true".equals(get(IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT)); //$NON-NLS-1$
   }
 
   public void setIgnoreFeatureContentChanges(boolean value)
@@ -168,7 +168,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
 
   public boolean isIgnoreFeatureContentRedundancy()
   {
-    return "true".equals(get(IVersionBuilderArguments.IGNORE_CONTENT_REDUNDANCY_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_CONTENT_REDUNDANCY_ARGUMENT)); //$NON-NLS-1$
   }
 
   public void setIgnoreFeatureContentRedundancy(boolean value)
@@ -178,7 +178,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
 
   public boolean isCheckFeatureClosureCompleteness()
   {
-    return "true".equals(get(IVersionBuilderArguments.CHECK_CLOSURE_COMPLETENESS_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.CHECK_CLOSURE_COMPLETENESS_ARGUMENT)); //$NON-NLS-1$
   }
 
   public void setCheckFeatureClosureCompleteness(boolean value)
@@ -188,7 +188,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
 
   public boolean isCheckFeatureClosureContent()
   {
-    return "true".equals(get(IVersionBuilderArguments.CHECK_CLOSURE_CONTENT_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.CHECK_CLOSURE_CONTENT_ARGUMENT)); //$NON-NLS-1$
   }
 
   public void setCheckFeatureClosureContent(boolean value)
@@ -198,7 +198,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
 
   public boolean isCheckMavenPom()
   {
-    return "true".equals(get(IVersionBuilderArguments.CHECK_MAVEN_POM_ARGUMENT));
+    return "true".equals(get(IVersionBuilderArguments.CHECK_MAVEN_POM_ARGUMENT)); //$NON-NLS-1$
   }
 
   public void setCheckMavenPom(boolean value)

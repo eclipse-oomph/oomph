@@ -47,6 +47,7 @@ import java.util.Iterator;
  *
  * @number 300
  */
+@SuppressWarnings("nls")
 public abstract class DocUpdateWizard extends DocInstallWizard
 {
   /**

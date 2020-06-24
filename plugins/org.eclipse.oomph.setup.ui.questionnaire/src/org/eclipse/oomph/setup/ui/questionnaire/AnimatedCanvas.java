@@ -386,7 +386,7 @@ public class AnimatedCanvas extends Canvas
     protected final Image loadImage(String name)
     {
       Display display = getDisplay();
-      String path = "images/" + name;
+      String path = "images/" + name; //$NON-NLS-1$
       Image image;
 
       if (QuestionnairePlugin.INSTANCE.isOSGiRunning())
@@ -399,7 +399,7 @@ public class AnimatedCanvas extends Canvas
           BundleFile file = rootFile.getChild(path);
           if (file == null)
           {
-            throw new IllegalStateException("Couldn't load " + path);
+            throw new IllegalStateException("Couldn't load " + path); //$NON-NLS-1$
           }
 
           stream = file.getContents();
@@ -437,7 +437,7 @@ public class AnimatedCanvas extends Canvas
       if (testStrings.length == 0)
       {
         pixelWidth = Integer.MAX_VALUE;
-        testStrings = new String[] { "Ag" };
+        testStrings = new String[] { "Ag" }; //$NON-NLS-1$
       }
 
       Display display = getDisplay();
@@ -468,7 +468,7 @@ public class AnimatedCanvas extends Canvas
           --fontSize;
         }
 
-        throw new RuntimeException("Could not create font: " + pixelHeight);
+        throw new RuntimeException("Could not create font: " + pixelHeight); //$NON-NLS-1$
       }
       finally
       {

@@ -73,8 +73,8 @@ public class InclusionPredicateItemProvider extends PredicateItemProvider
   protected void addIncludedPreferenceProfilesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_InclusionPredicate_includedPreferenceProfiles_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_InclusionPredicate_includedPreferenceProfiles_feature", "_UI_InclusionPredicate_type"),
+        getString("_UI_InclusionPredicate_includedPreferenceProfiles_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_InclusionPredicate_includedPreferenceProfiles_feature", "_UI_InclusionPredicate_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectConfigPackage.Literals.INCLUSION_PREDICATE__INCLUDED_PREFERENCE_PROFILES, true, false, true, null, null, null)
     {
       @Override
@@ -96,7 +96,7 @@ public class InclusionPredicateItemProvider extends PredicateItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/InclusionPredicate"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/InclusionPredicate")); //$NON-NLS-1$
   }
 
   /**
@@ -125,7 +125,7 @@ public class InclusionPredicateItemProvider extends PredicateItemProvider
     {
       if (result.length() != 0)
       {
-        result.append(", ");
+        result.append(", "); //$NON-NLS-1$
       }
       result.append(preferenceProfile.getName());
     }

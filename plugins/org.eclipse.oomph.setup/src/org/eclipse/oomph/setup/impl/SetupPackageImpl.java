@@ -2411,344 +2411,344 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     argumentEClass.getESuperTypes().add(theBasePackage.getModelElement());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(setupTaskEClass, SetupTask.class, "SetupTask", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getSetupTask_ID(), theBasePackage.getID(), "iD", null, 0, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEClass(setupTaskEClass, SetupTask.class, "SetupTask", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getSetupTask_ID(), theBasePackage.getID(), "iD", null, 0, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSetupTask_Description(), theBasePackage.getText(), "description", null, 0, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getSetupTask_Description(), theBasePackage.getText(), "description", null, 0, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSetupTask_ScopeType(), getScopeType(), "scopeType", null, 0, 1, SetupTask.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
+    initEAttribute(getSetupTask_ScopeType(), getScopeType(), "scopeType", null, 0, 1, SetupTask.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSetupTask_ExcludedTriggers(), getTriggerSet(), "excludedTriggers", "", 1, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getSetupTask_ExcludedTriggers(), getTriggerSet(), "excludedTriggers", "", 1, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSetupTask_Disabled(), ecorePackage.getEBoolean(), "disabled", null, 0, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getSetupTask_Disabled(), ecorePackage.getEBoolean(), "disabled", null, 0, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSetupTask_Predecessors(), getSetupTask(), null, "predecessors", null, 0, -1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getSetupTask_Predecessors(), getSetupTask(), null, "predecessors", null, 0, -1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSetupTask_Successors(), getSetupTask(), null, "successors", null, 0, -1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getSetupTask_Successors(), getSetupTask(), null, "successors", null, 0, -1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSetupTask_Restrictions(), getScope(), null, "restrictions", null, 0, -1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getSetupTask_Restrictions(), getScope(), null, "restrictions", null, 0, -1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getSetupTask_Filter(), getFilter(), "filter", null, 0, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEAttribute(getSetupTask_Filter(), getFilter(), "filter", null, 0, 1, SetupTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    addEOperation(setupTaskEClass, getScope(), "getScope", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEOperation(setupTaskEClass, getScope(), "getScope", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    EOperation op = addEOperation(setupTaskEClass, ecorePackage.getEBoolean(), "requires", 0, 1, IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, getSetupTask(), "setupTask", 0, 1, IS_UNIQUE, IS_ORDERED);
+    EOperation op = addEOperation(setupTaskEClass, ecorePackage.getEBoolean(), "requires", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, getSetupTask(), "setupTask", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    addEOperation(setupTaskEClass, getTriggerSet(), "getValidTriggers", 1, 1, IS_UNIQUE, IS_ORDERED);
+    addEOperation(setupTaskEClass, getTriggerSet(), "getValidTriggers", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    addEOperation(setupTaskEClass, getTriggerSet(), "getTriggers", 1, 1, IS_UNIQUE, IS_ORDERED);
+    addEOperation(setupTaskEClass, getTriggerSet(), "getTriggers", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(setupTaskContainerEClass, SetupTaskContainer.class, "SetupTaskContainer", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSetupTaskContainer_SetupTasks(), getSetupTask(), null, "setupTasks", null, 0, -1, SetupTaskContainer.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(setupTaskContainerEClass, SetupTaskContainer.class, "SetupTaskContainer", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getSetupTaskContainer_SetupTasks(), getSetupTask(), null, "setupTasks", null, 0, -1, SetupTaskContainer.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(scopeEClass, Scope.class, "Scope", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getScope_Name(), ecorePackage.getEString(), "name", null, 1, 1, Scope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEClass(scopeEClass, Scope.class, "Scope", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getScope_Name(), ecorePackage.getEString(), "name", null, 1, 1, Scope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getScope_Label(), ecorePackage.getEString(), "label", null, 0, 1, Scope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEAttribute(getScope_Label(), ecorePackage.getEString(), "label", null, 0, 1, Scope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getScope_Description(), theBasePackage.getText(), "description", null, 0, 1, Scope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getScope_Description(), theBasePackage.getText(), "description", null, 0, 1, Scope.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getScope_QualifiedName(), ecorePackage.getEString(), "qualifiedName", null, 1, 1, Scope.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
+    initEAttribute(getScope_QualifiedName(), ecorePackage.getEString(), "qualifiedName", null, 1, 1, Scope.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
-    addEOperation(scopeEClass, getScope(), "getParentScope", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEOperation(scopeEClass, getScope(), "getParentScope", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    addEOperation(scopeEClass, getScopeType(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED);
+    addEOperation(scopeEClass, getScopeType(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    addEOperation(scopeEClass, ecorePackage.getEString(), "getQualifiedLabel", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEOperation(scopeEClass, ecorePackage.getEString(), "getQualifiedLabel", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(indexEClass, Index.class, "Index", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getIndex_Name(), ecorePackage.getEString(), "name", null, 1, 1, Index.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEClass(indexEClass, Index.class, "Index", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getIndex_Name(), ecorePackage.getEString(), "name", null, 1, 1, Index.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getIndex_DiscoverablePackages(), ecorePackage.getEPackage(), null, "discoverablePackages", null, 0, -1, Index.class, !IS_TRANSIENT,
+    initEReference(getIndex_DiscoverablePackages(), ecorePackage.getEPackage(), null, "discoverablePackages", null, 0, -1, Index.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getIndex_ProductCatalogs(), getProductCatalog(), getProductCatalog_Index(), "productCatalogs", null, 0, -1, Index.class, !IS_TRANSIENT,
+    initEReference(getIndex_ProductCatalogs(), getProductCatalog(), getProductCatalog_Index(), "productCatalogs", null, 0, -1, Index.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getIndex_ProductCatalogs().getEKeys().add(getScope_Name());
-    initEReference(getIndex_ProjectCatalogs(), getProjectCatalog(), getProjectCatalog_Index(), "projectCatalogs", null, 0, -1, Index.class, !IS_TRANSIENT,
+    initEReference(getIndex_ProjectCatalogs(), getProjectCatalog(), getProjectCatalog_Index(), "projectCatalogs", null, 0, -1, Index.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getIndex_ProjectCatalogs().getEKeys().add(getScope_Name());
 
-    initEClass(catalogSelectionEClass, CatalogSelection.class, "CatalogSelection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getCatalogSelection_ProductCatalogs(), getProductCatalog(), null, "productCatalogs", null, 0, -1, CatalogSelection.class, !IS_TRANSIENT,
+    initEClass(catalogSelectionEClass, CatalogSelection.class, "CatalogSelection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getCatalogSelection_ProductCatalogs(), getProductCatalog(), null, "productCatalogs", null, 0, -1, CatalogSelection.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getCatalogSelection_ProductCatalogs().getEKeys().add(getScope_Name());
-    initEReference(getCatalogSelection_ProjectCatalogs(), getProjectCatalog(), null, "projectCatalogs", null, 0, -1, CatalogSelection.class, !IS_TRANSIENT,
+    initEReference(getCatalogSelection_ProjectCatalogs(), getProjectCatalog(), null, "projectCatalogs", null, 0, -1, CatalogSelection.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getCatalogSelection_ProjectCatalogs().getEKeys().add(getScope_Name());
-    initEReference(getCatalogSelection_DefaultProductVersions(), getProductToProductVersionMapEntry(), null, "defaultProductVersions", null, 0, -1,
+    initEReference(getCatalogSelection_DefaultProductVersions(), getProductToProductVersionMapEntry(), null, "defaultProductVersions", null, 0, -1, //$NON-NLS-1$
         CatalogSelection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
-    initEReference(getCatalogSelection_DefaultStreams(), getProjectToStreamMapEntry(), null, "defaultStreams", null, 0, -1, CatalogSelection.class,
+    initEReference(getCatalogSelection_DefaultStreams(), getProjectToStreamMapEntry(), null, "defaultStreams", null, 0, -1, CatalogSelection.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getCatalogSelection_SelectedStreams(), getStream(), null, "selectedStreams", null, 0, -1, CatalogSelection.class, IS_TRANSIENT, IS_VOLATILE,
+    initEReference(getCatalogSelection_SelectedStreams(), getStream(), null, "selectedStreams", null, 0, -1, CatalogSelection.class, IS_TRANSIENT, IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
-    initEClass(productCatalogEClass, ProductCatalog.class, "ProductCatalog", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProductCatalog_Index(), getIndex(), getIndex_ProductCatalogs(), "index", null, 0, 1, ProductCatalog.class, IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(productCatalogEClass, ProductCatalog.class, "ProductCatalog", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getProductCatalog_Index(), getIndex(), getIndex_ProductCatalogs(), "index", null, 0, 1, ProductCatalog.class, IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getProductCatalog_Products(), getProduct(), getProduct_ProductCatalog(), "products", null, 0, -1, ProductCatalog.class, !IS_TRANSIENT,
+    initEReference(getProductCatalog_Products(), getProduct(), getProduct_ProductCatalog(), "products", null, 0, -1, ProductCatalog.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getProductCatalog_Products().getEKeys().add(getScope_Name());
 
-    initEClass(productEClass, Product.class, "Product", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProduct_ProductCatalog(), getProductCatalog(), getProductCatalog_Products(), "productCatalog", null, 0, 1, Product.class, IS_TRANSIENT,
+    initEClass(productEClass, Product.class, "Product", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getProduct_ProductCatalog(), getProductCatalog(), getProductCatalog_Products(), "productCatalog", null, 0, 1, Product.class, IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getProduct_ProductCatalog().getEKeys().add(getScope_Name());
-    initEReference(getProduct_Versions(), getProductVersion(), getProductVersion_Product(), "versions", null, 1, -1, Product.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getProduct_Versions(), getProductVersion(), getProductVersion_Product(), "versions", null, 1, -1, Product.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getProduct_Versions().getEKeys().add(getScope_Name());
 
-    initEClass(productVersionEClass, ProductVersion.class, "ProductVersion", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProductVersion_Product(), getProduct(), getProduct_Versions(), "product", null, 1, 1, ProductVersion.class, IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(productVersionEClass, ProductVersion.class, "ProductVersion", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getProductVersion_Product(), getProduct(), getProduct_Versions(), "product", null, 1, 1, ProductVersion.class, IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProductVersion_RequiredJavaVersion(), ecorePackage.getEString(), "requiredJavaVersion", null, 0, 1, ProductVersion.class, !IS_TRANSIENT,
+    initEAttribute(getProductVersion_RequiredJavaVersion(), ecorePackage.getEString(), "requiredJavaVersion", null, 0, 1, ProductVersion.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(projectContainerEClass, ProjectContainer.class, "ProjectContainer", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProjectContainer_Projects(), getProject(), getProject_ProjectContainer(), "projects", null, 0, -1, ProjectContainer.class, !IS_TRANSIENT,
+    initEClass(projectContainerEClass, ProjectContainer.class, "ProjectContainer", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getProjectContainer_Projects(), getProject(), getProject_ProjectContainer(), "projects", null, 0, -1, ProjectContainer.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getProjectContainer_Projects().getEKeys().add(getScope_Name());
 
-    addEOperation(projectContainerEClass, getProjectContainer(), "getProjectContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEOperation(projectContainerEClass, getProjectContainer(), "getProjectContainer", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    addEOperation(projectContainerEClass, getProjectCatalog(), "getProjectCatalog", 0, 1, IS_UNIQUE, IS_ORDERED);
+    addEOperation(projectContainerEClass, getProjectCatalog(), "getProjectCatalog", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(projectCatalogEClass, ProjectCatalog.class, "ProjectCatalog", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProjectCatalog_Index(), getIndex(), getIndex_ProjectCatalogs(), "index", null, 0, 1, ProjectCatalog.class, IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(projectCatalogEClass, ProjectCatalog.class, "ProjectCatalog", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getProjectCatalog_Index(), getIndex(), getIndex_ProjectCatalogs(), "index", null, 0, 1, ProjectCatalog.class, IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(projectEClass, Project.class, "Project", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProject_Streams(), getStream(), getStream_Project(), "streams", null, 0, -1, Project.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(projectEClass, Project.class, "Project", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getProject_Streams(), getStream(), getStream_Project(), "streams", null, 0, -1, Project.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getProject_Streams().getEKeys().add(getScope_Name());
-    initEReference(getProject_ProjectContainer(), getProjectContainer(), getProjectContainer_Projects(), "projectContainer", null, 0, 1, Project.class,
+    initEReference(getProject_ProjectContainer(), getProjectContainer(), getProjectContainer_Projects(), "projectContainer", null, 0, 1, Project.class, //$NON-NLS-1$
         IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getProject_LogicalProjectContainer(), getProjectContainer(), null, "logicalProjectContainer", null, 0, 1, Project.class, !IS_TRANSIENT,
+    initEReference(getProject_LogicalProjectContainer(), getProjectContainer(), null, "logicalProjectContainer", null, 0, 1, Project.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getProject_ParentProject(), getProject(), null, "parentProject", null, 0, 1, Project.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE,
+    initEReference(getProject_ParentProject(), getProject(), null, "parentProject", null, 0, 1, Project.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEReference(getProject_ProjectCatalog(), getProjectCatalog(), null, "projectCatalog", null, 0, 1, Project.class, IS_TRANSIENT, IS_VOLATILE,
+    initEReference(getProject_ProjectCatalog(), getProjectCatalog(), null, "projectCatalog", null, 0, 1, Project.class, IS_TRANSIENT, IS_VOLATILE, //$NON-NLS-1$
         !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
-    initEClass(streamEClass, Stream.class, "Stream", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getStream_Project(), getProject(), getProject_Streams(), "project", null, 0, 1, Stream.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(streamEClass, Stream.class, "Stream", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getStream_Project(), getProject(), getProject_Streams(), "project", null, 0, 1, Stream.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(userEClass, User.class, "User", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getUser_AttributeRules(), getAttributeRule(), null, "attributeRules", null, 0, -1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(userEClass, User.class, "User", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getUser_AttributeRules(), getAttributeRule(), null, "attributeRules", null, 0, -1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getUser_AttributeRules().getEKeys().add(getAttributeRule_AttributeURI());
-    initEAttribute(getUser_AcceptedLicenses(), getLicenseInfo(), "acceptedLicenses", null, 0, -1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getUser_AcceptedLicenses(), getLicenseInfo(), "acceptedLicenses", null, 0, -1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getUser_AcceptedCertificates(), getCertificateInfo(), "acceptedCertificates", null, 0, -1, User.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getUser_AcceptedCertificates(), getCertificateInfo(), "acceptedCertificates", null, 0, -1, User.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getUser_UnsignedPolicy(), getUnsignedPolicy(), "unsignedPolicy", "PROMPT", 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getUser_UnsignedPolicy(), getUnsignedPolicy(), "unsignedPolicy", "PROMPT", 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getUser_CertificatePolicy(), getCertificatePolicy(), "certificatePolicy", "PROMPT", 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getUser_CertificatePolicy(), getCertificatePolicy(), "certificatePolicy", "PROMPT", 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getUser_QuestionnaireDate(), ecorePackage.getEDate(), "questionnaireDate", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getUser_QuestionnaireDate(), ecorePackage.getEDate(), "questionnaireDate", null, 0, 1, User.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getUser_PreferenceRecorderDefault(), ecorePackage.getEBoolean(), "preferenceRecorderDefault", "true", 0, 1, User.class, !IS_TRANSIENT,
+    initEAttribute(getUser_PreferenceRecorderDefault(), ecorePackage.getEBoolean(), "preferenceRecorderDefault", "true", 0, 1, User.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(attributeRuleEClass, AttributeRule.class, "AttributeRule", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getAttributeRule_AttributeURI(), theBasePackage.getURI(), "attributeURI", null, 0, 1, AttributeRule.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(attributeRuleEClass, AttributeRule.class, "AttributeRule", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getAttributeRule_AttributeURI(), theBasePackage.getURI(), "attributeURI", null, 0, 1, AttributeRule.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAttributeRule_Value(), ecorePackage.getEString(), "value", null, 1, 1, AttributeRule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getAttributeRule_Value(), ecorePackage.getEString(), "value", null, 1, 1, AttributeRule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(locationCatalogEClass, LocationCatalog.class, "LocationCatalog", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getLocationCatalog_Installations(), getInstallationToWorkspacesMapEntry(), null, "installations", null, 0, -1, LocationCatalog.class,
+    initEClass(locationCatalogEClass, LocationCatalog.class, "LocationCatalog", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getLocationCatalog_Installations(), getInstallationToWorkspacesMapEntry(), null, "installations", null, 0, -1, LocationCatalog.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getLocationCatalog_Workspaces(), getWorkspaceToInstallationsMapEntry(), null, "workspaces", null, 0, -1, LocationCatalog.class,
+    initEReference(getLocationCatalog_Workspaces(), getWorkspaceToInstallationsMapEntry(), null, "workspaces", null, 0, -1, LocationCatalog.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(installationEClass, Installation.class, "Installation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getInstallation_ProductVersion(), getProductVersion(), null, "productVersion", null, 1, 1, Installation.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(installationEClass, Installation.class, "Installation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getInstallation_ProductVersion(), getProductVersion(), null, "productVersion", null, 1, 1, Installation.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(installationTaskEClass, InstallationTask.class, "InstallationTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getInstallationTask_Location(), ecorePackage.getEString(), "location", "", 1, 1, InstallationTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(installationTaskEClass, InstallationTask.class, "InstallationTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getInstallationTask_Location(), ecorePackage.getEString(), "location", "", 1, 1, InstallationTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getInstallationTask_RelativeProductFolder(), ecorePackage.getEString(), "relativeProductFolder", "", 1, 1, InstallationTask.class,
+    initEAttribute(getInstallationTask_RelativeProductFolder(), ecorePackage.getEString(), "relativeProductFolder", "", 1, 1, InstallationTask.class, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(workspaceEClass, Workspace.class, "Workspace", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getWorkspace_Streams(), getStream(), null, "streams", null, 0, -1, Workspace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(workspaceEClass, Workspace.class, "Workspace", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getWorkspace_Streams(), getStream(), null, "streams", null, 0, -1, Workspace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(workspaceTaskEClass, WorkspaceTask.class, "WorkspaceTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getWorkspaceTask_Location(), ecorePackage.getEString(), "location", "", 1, 1, WorkspaceTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(workspaceTaskEClass, WorkspaceTask.class, "WorkspaceTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getWorkspaceTask_Location(), ecorePackage.getEString(), "location", "", 1, 1, WorkspaceTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(configurationEClass, Configuration.class, "Configuration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getConfiguration_Label(), ecorePackage.getEString(), "label", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(configurationEClass, Configuration.class, "Configuration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getConfiguration_Label(), ecorePackage.getEString(), "label", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getConfiguration_Description(), theBasePackage.getText(), "description", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getConfiguration_Description(), theBasePackage.getText(), "description", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getConfiguration_Installation(), getInstallation(), null, "installation", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getConfiguration_Installation(), getInstallation(), null, "installation", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getConfiguration_Workspace(), getWorkspace(), null, "workspace", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getConfiguration_Workspace(), getWorkspace(), null, "workspace", null, 0, 1, Configuration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(compoundTaskEClass, CompoundTask.class, "CompoundTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getCompoundTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, CompoundTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(compoundTaskEClass, CompoundTask.class, "CompoundTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getCompoundTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, CompoundTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(variableTaskEClass, VariableTask.class, "VariableTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getVariableTask_Type(), getVariableType(), "type", "STRING", 1, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(variableTaskEClass, VariableTask.class, "VariableTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getVariableTask_Type(), getVariableType(), "type", "STRING", 1, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVariableTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getVariableTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVariableTask_Value(), ecorePackage.getEString(), "value", null, 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getVariableTask_Value(), ecorePackage.getEString(), "value", null, 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVariableTask_DefaultValue(), ecorePackage.getEString(), "defaultValue", null, 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getVariableTask_DefaultValue(), ecorePackage.getEString(), "defaultValue", null, 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVariableTask_StorePromptedValue(), ecorePackage.getEBoolean(), "storePromptedValue", "true", 0, 1, VariableTask.class, IS_TRANSIENT,
+    initEAttribute(getVariableTask_StorePromptedValue(), ecorePackage.getEBoolean(), "storePromptedValue", "true", 0, 1, VariableTask.class, IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVariableTask_StorageURI(), theBasePackage.getURI(), "storageURI", "scope://", 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getVariableTask_StorageURI(), theBasePackage.getURI(), "storageURI", "scope://", 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVariableTask_Label(), ecorePackage.getEString(), "label", null, 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getVariableTask_Label(), ecorePackage.getEString(), "label", null, 0, 1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getVariableTask_Choices(), getVariableChoice(), null, "choices", null, 0, -1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getVariableTask_Choices(), getVariableChoice(), null, "choices", null, 0, -1, VariableTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(variableChoiceEClass, VariableChoice.class, "VariableChoice", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getVariableChoice_Value(), ecorePackage.getEString(), "value", null, 1, 1, VariableChoice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(variableChoiceEClass, VariableChoice.class, "VariableChoice", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getVariableChoice_Value(), ecorePackage.getEString(), "value", null, 1, 1, VariableChoice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getVariableChoice_Label(), ecorePackage.getEString(), "label", null, 0, 1, VariableChoice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(stringSubstitutionTaskEClass, StringSubstitutionTask.class, "StringSubstitutionTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getStringSubstitutionTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, StringSubstitutionTask.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getStringSubstitutionTask_Value(), ecorePackage.getEString(), "value", null, 1, 1, StringSubstitutionTask.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(redirectionTaskEClass, RedirectionTask.class, "RedirectionTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getRedirectionTask_SourceURL(), ecorePackage.getEString(), "sourceURL", null, 1, 1, RedirectionTask.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getRedirectionTask_TargetURL(), ecorePackage.getEString(), "targetURL", null, 1, 1, RedirectionTask.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(eclipseIniTaskEClass, EclipseIniTask.class, "EclipseIniTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getEclipseIniTask_Option(), ecorePackage.getEString(), "option", null, 1, 1, EclipseIniTask.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEclipseIniTask_Value(), ecorePackage.getEString(), "value", null, 0, 1, EclipseIniTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEclipseIniTask_Vm(), ecorePackage.getEBoolean(), "vm", null, 0, 1, EclipseIniTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getVariableChoice_Label(), ecorePackage.getEString(), "label", null, 0, 1, VariableChoice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(linkLocationTaskEClass, LinkLocationTask.class, "LinkLocationTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getLinkLocationTask_Path(), ecorePackage.getEString(), "path", null, 1, 1, LinkLocationTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(stringSubstitutionTaskEClass, StringSubstitutionTask.class, "StringSubstitutionTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getStringSubstitutionTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, StringSubstitutionTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getLinkLocationTask_Name(), ecorePackage.getEString(), "name", null, 0, 1, LinkLocationTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getStringSubstitutionTask_Value(), ecorePackage.getEString(), "value", null, 1, 1, StringSubstitutionTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(preferenceTaskEClass, PreferenceTask.class, "PreferenceTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getPreferenceTask_Key(), ecorePackage.getEString(), "key", null, 1, 1, PreferenceTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(redirectionTaskEClass, RedirectionTask.class, "RedirectionTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getRedirectionTask_SourceURL(), ecorePackage.getEString(), "sourceURL", null, 1, 1, RedirectionTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRedirectionTask_TargetURL(), ecorePackage.getEString(), "targetURL", null, 1, 1, RedirectionTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(eclipseIniTaskEClass, EclipseIniTask.class, "EclipseIniTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getEclipseIniTask_Option(), ecorePackage.getEString(), "option", null, 1, 1, EclipseIniTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEclipseIniTask_Value(), ecorePackage.getEString(), "value", null, 0, 1, EclipseIniTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getPreferenceTask_Value(), ecorePackage.getEString(), "value", null, 0, 1, PreferenceTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getEclipseIniTask_Vm(), ecorePackage.getEBoolean(), "vm", null, 0, 1, EclipseIniTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(resourceCopyTaskEClass, ResourceCopyTask.class, "ResourceCopyTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getResourceCopyTask_Force(), ecorePackage.getEBoolean(), "force", null, 0, 1, ResourceCopyTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(linkLocationTaskEClass, LinkLocationTask.class, "LinkLocationTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getLinkLocationTask_Path(), ecorePackage.getEString(), "path", null, 1, 1, LinkLocationTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getResourceCopyTask_SourceURL(), ecorePackage.getEString(), "sourceURL", null, 1, 1, ResourceCopyTask.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getResourceCopyTask_TargetURL(), ecorePackage.getEString(), "targetURL", null, 1, 1, ResourceCopyTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getLinkLocationTask_Name(), ecorePackage.getEString(), "name", null, 0, 1, LinkLocationTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(resourceCreationTaskEClass, ResourceCreationTask.class, "ResourceCreationTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getResourceCreationTask_Force(), ecorePackage.getEBoolean(), "force", null, 0, 1, ResourceCreationTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(preferenceTaskEClass, PreferenceTask.class, "PreferenceTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getPreferenceTask_Key(), ecorePackage.getEString(), "key", null, 1, 1, PreferenceTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPreferenceTask_Value(), ecorePackage.getEString(), "value", null, 0, 1, PreferenceTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(resourceCopyTaskEClass, ResourceCopyTask.class, "ResourceCopyTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getResourceCopyTask_Force(), ecorePackage.getEBoolean(), "force", null, 0, 1, ResourceCopyTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getResourceCreationTask_Content(), theBasePackage.getText(), "content", null, 1, 1, ResourceCreationTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getResourceCopyTask_SourceURL(), ecorePackage.getEString(), "sourceURL", null, 1, 1, ResourceCopyTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getResourceCreationTask_TargetURL(), ecorePackage.getEString(), "targetURL", null, 1, 1, ResourceCreationTask.class, !IS_TRANSIENT,
+    initEAttribute(getResourceCopyTask_TargetURL(), ecorePackage.getEString(), "targetURL", null, 1, 1, ResourceCopyTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(resourceCreationTaskEClass, ResourceCreationTask.class, "ResourceCreationTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getResourceCreationTask_Force(), ecorePackage.getEBoolean(), "force", null, 0, 1, ResourceCreationTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getResourceCreationTask_Content(), theBasePackage.getText(), "content", null, 1, 1, ResourceCreationTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getResourceCreationTask_TargetURL(), ecorePackage.getEString(), "targetURL", null, 1, 1, ResourceCreationTask.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getResourceCreationTask_Encoding(), ecorePackage.getEString(), "encoding", null, 0, 1, ResourceCreationTask.class, !IS_TRANSIENT,
+    initEAttribute(getResourceCreationTask_Encoding(), ecorePackage.getEString(), "encoding", null, 0, 1, ResourceCreationTask.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(textModifyTaskEClass, TextModifyTask.class, "TextModifyTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getTextModifyTask_URL(), ecorePackage.getEString(), "uRL", null, 1, 1, TextModifyTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(textModifyTaskEClass, TextModifyTask.class, "TextModifyTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getTextModifyTask_URL(), ecorePackage.getEString(), "uRL", null, 1, 1, TextModifyTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTextModifyTask_Modifications(), getTextModification(), null, "modifications", null, 0, -1, TextModifyTask.class, !IS_TRANSIENT,
+    initEReference(getTextModifyTask_Modifications(), getTextModification(), null, "modifications", null, 0, -1, TextModifyTask.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTextModifyTask_Encoding(), ecorePackage.getEString(), "encoding", null, 0, 1, TextModifyTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getTextModifyTask_Encoding(), ecorePackage.getEString(), "encoding", null, 0, 1, TextModifyTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(textModificationEClass, TextModification.class, "TextModification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getTextModification_Pattern(), ecorePackage.getEString(), "pattern", null, 1, 1, TextModification.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(textModificationEClass, TextModification.class, "TextModification", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getTextModification_Pattern(), ecorePackage.getEString(), "pattern", null, 1, 1, TextModification.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTextModification_Substitutions(), ecorePackage.getEString(), "substitutions", null, 0, -1, TextModification.class, !IS_TRANSIENT,
+    initEAttribute(getTextModification_Substitutions(), ecorePackage.getEString(), "substitutions", null, 0, -1, TextModification.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(productToProductVersionMapEntryEClass, Map.Entry.class, "ProductToProductVersionMapEntry", !IS_ABSTRACT, !IS_INTERFACE,
+    initEClass(productToProductVersionMapEntryEClass, Map.Entry.class, "ProductToProductVersionMapEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         !IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProductToProductVersionMapEntry_Key(), getProduct(), null, "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getProductToProductVersionMapEntry_Key(), getProduct(), null, "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getProductToProductVersionMapEntry_Value(), getProductVersion(), null, "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getProductToProductVersionMapEntry_Value(), getProductVersion(), null, "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(projectToStreamMapEntryEClass, Map.Entry.class, "ProjectToStreamMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getProjectToStreamMapEntry_Key(), getProject(), null, "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(projectToStreamMapEntryEClass, Map.Entry.class, "ProjectToStreamMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getProjectToStreamMapEntry_Key(), getProject(), null, "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getProjectToStreamMapEntry_Value(), getStream(), null, "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getProjectToStreamMapEntry_Value(), getStream(), null, "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getProjectToStreamMapEntry_Selection(), ecorePackage.getEBoolean(), "selection", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getProjectToStreamMapEntry_Selection(), ecorePackage.getEBoolean(), "selection", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(installationToWorkspacesMapEntryEClass, Map.Entry.class, "InstallationToWorkspacesMapEntry", !IS_ABSTRACT, !IS_INTERFACE,
+    initEClass(installationToWorkspacesMapEntryEClass, Map.Entry.class, "InstallationToWorkspacesMapEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         !IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getInstallationToWorkspacesMapEntry_Key(), getInstallation(), null, "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getInstallationToWorkspacesMapEntry_Key(), getInstallation(), null, "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getInstallationToWorkspacesMapEntry_Value(), getWorkspace(), null, "value", null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getInstallationToWorkspacesMapEntry_Value(), getWorkspace(), null, "value", null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(workspaceToInstallationsMapEntryEClass, Map.Entry.class, "WorkspaceToInstallationsMapEntry", !IS_ABSTRACT, !IS_INTERFACE,
+    initEClass(workspaceToInstallationsMapEntryEClass, Map.Entry.class, "WorkspaceToInstallationsMapEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         !IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getWorkspaceToInstallationsMapEntry_Key(), getWorkspace(), null, "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getWorkspaceToInstallationsMapEntry_Key(), getWorkspace(), null, "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getWorkspaceToInstallationsMapEntry_Value(), getInstallation(), null, "value", null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEReference(getWorkspaceToInstallationsMapEntry_Value(), getInstallation(), null, "value", null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(macroEClass, Macro.class, "Macro", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getMacro_LogicalContainer(), getMacroTask(), null, "logicalContainer", null, 0, 1, Macro.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(macroEClass, Macro.class, "Macro", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getMacro_LogicalContainer(), getMacroTask(), null, "logicalContainer", null, 0, 1, Macro.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getMacro_Parameters(), getParameter(), null, "parameters", null, 0, -1, Macro.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getMacro_Parameters(), getParameter(), null, "parameters", null, 0, -1, Macro.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getMacro_Parameters().getEKeys().add(getParameter_Name());
 
-    initEClass(parameterEClass, Parameter.class, "Parameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getParameter_Name(), ecorePackage.getEString(), "name", null, 1, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEClass(parameterEClass, Parameter.class, "Parameter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getParameter_Name(), ecorePackage.getEString(), "name", null, 1, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getParameter_Description(), theBasePackage.getText(), "description", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getParameter_Description(), theBasePackage.getText(), "description", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getParameter_DefaultValue(), ecorePackage.getEString(), "defaultValue", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEAttribute(getParameter_DefaultValue(), ecorePackage.getEString(), "defaultValue", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(macroTaskEClass, MacroTask.class, "MacroTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getMacroTask_Arguments(), getArgument(), getArgument_MacroTask(), "arguments", null, 0, -1, MacroTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(macroTaskEClass, MacroTask.class, "MacroTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getMacroTask_Arguments(), getArgument(), getArgument_MacroTask(), "arguments", null, 0, -1, MacroTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getMacroTask_Macro(), getMacro(), null, "macro", null, 1, 1, MacroTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
+    initEReference(getMacroTask_Macro(), getMacro(), null, "macro", null, 1, 1, MacroTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, //$NON-NLS-1$
         IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(argumentEClass, Argument.class, "Argument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getArgument_MacroTask(), getMacroTask(), getMacroTask_Arguments(), "macroTask", null, 0, 1, Argument.class, IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(argumentEClass, Argument.class, "Argument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getArgument_MacroTask(), getMacroTask(), getMacroTask_Arguments(), "macroTask", null, 0, 1, Argument.class, IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         !IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getArgument_Name(), ecorePackage.getEString(), "name", null, 0, 1, Argument.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+    initEAttribute(getArgument_Name(), ecorePackage.getEString(), "name", null, 0, 1, Argument.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, //$NON-NLS-1$
         !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getArgument_Parameter(), getParameter(), null, "parameter", null, 1, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEReference(getArgument_Parameter(), getParameter(), null, "parameter", null, 1, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getArgument_Value(), ecorePackage.getEString(), "value", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    initEAttribute(getArgument_Value(), ecorePackage.getEString(), "value", null, 0, 1, Argument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize enums and add enum literals
-    initEEnum(scopeTypeEEnum, ScopeType.class, "ScopeType");
+    initEEnum(scopeTypeEEnum, ScopeType.class, "ScopeType"); //$NON-NLS-1$
     addEEnumLiteral(scopeTypeEEnum, ScopeType.NONE);
     addEEnumLiteral(scopeTypeEEnum, ScopeType.PRODUCT_CATALOG);
     addEEnumLiteral(scopeTypeEEnum, ScopeType.PRODUCT);
@@ -2761,12 +2761,12 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addEEnumLiteral(scopeTypeEEnum, ScopeType.USER);
     addEEnumLiteral(scopeTypeEEnum, ScopeType.MACRO);
 
-    initEEnum(triggerEEnum, Trigger.class, "Trigger");
+    initEEnum(triggerEEnum, Trigger.class, "Trigger"); //$NON-NLS-1$
     addEEnumLiteral(triggerEEnum, Trigger.BOOTSTRAP);
     addEEnumLiteral(triggerEEnum, Trigger.STARTUP);
     addEEnumLiteral(triggerEEnum, Trigger.MANUAL);
 
-    initEEnum(variableTypeEEnum, VariableType.class, "VariableType");
+    initEEnum(variableTypeEEnum, VariableType.class, "VariableType"); //$NON-NLS-1$
     addEEnumLiteral(variableTypeEEnum, VariableType.STRING);
     addEEnumLiteral(variableTypeEEnum, VariableType.TEXT);
     addEEnumLiteral(variableTypeEEnum, VariableType.PASSWORD);
@@ -2782,22 +2782,22 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     addEEnumLiteral(variableTypeEEnum, VariableType.FLOAT);
     addEEnumLiteral(variableTypeEEnum, VariableType.JRE);
 
-    initEEnum(unsignedPolicyEEnum, UnsignedPolicy.class, "UnsignedPolicy");
+    initEEnum(unsignedPolicyEEnum, UnsignedPolicy.class, "UnsignedPolicy"); //$NON-NLS-1$
     addEEnumLiteral(unsignedPolicyEEnum, UnsignedPolicy.PROMPT);
     addEEnumLiteral(unsignedPolicyEEnum, UnsignedPolicy.ACCEPT);
     addEEnumLiteral(unsignedPolicyEEnum, UnsignedPolicy.DECLINE);
 
-    initEEnum(certificatePolicyEEnum, CertificatePolicy.class, "CertificatePolicy");
+    initEEnum(certificatePolicyEEnum, CertificatePolicy.class, "CertificatePolicy"); //$NON-NLS-1$
     addEEnumLiteral(certificatePolicyEEnum, CertificatePolicy.PROMPT);
     addEEnumLiteral(certificatePolicyEEnum, CertificatePolicy.ACCEPT);
     addEEnumLiteral(certificatePolicyEEnum, CertificatePolicy.DECLINE);
 
     // Initialize data types
-    initEDataType(triggerSetEDataType, Set.class, "TriggerSet", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS,
-        "java.util.Set<org.eclipse.oomph.setup.Trigger>");
-    initEDataType(licenseInfoEDataType, LicenseInfo.class, "LicenseInfo", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(filterEDataType, String.class, "Filter", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-    initEDataType(certificateInfoEDataType, CertificateInfo.class, "CertificateInfo", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+    initEDataType(triggerSetEDataType, Set.class, "TriggerSet", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS, //$NON-NLS-1$
+        "java.util.Set<org.eclipse.oomph.setup.Trigger>"); //$NON-NLS-1$
+    initEDataType(licenseInfoEDataType, LicenseInfo.class, "LicenseInfo", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(filterEDataType, String.class, "Filter", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(certificateInfoEDataType, CertificateInfo.class, "CertificateInfo", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
     // Create resource
     createResource(eNS_URI);
@@ -2827,9 +2827,10 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
     addAnnotation(this, source,
-        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.edit/icons/full/obj16" });
+        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -2840,45 +2841,88 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getSetupTask_ID(), source, new String[] { "kind", "attribute", "name", "id" });
-    addAnnotation(getSetupTask_Description(), source, new String[] { "kind", "element" });
-    addAnnotation(getSetupTask_Predecessors(), source, new String[] { "name", "predecessor" });
-    addAnnotation(getSetupTask_Successors(), source, new String[] { "name", "successor" });
-    addAnnotation(getSetupTask_Restrictions(), source, new String[] { "name", "restriction" });
-    addAnnotation(getSetupTaskContainer_SetupTasks(), source, new String[] { "name", "setupTask" });
-    addAnnotation(getScope_Description(), source, new String[] { "kind", "element" });
-    addAnnotation(getIndex_DiscoverablePackages(), source, new String[] { "name", "discoverablePackage" });
-    addAnnotation(getIndex_ProductCatalogs(), source, new String[] { "name", "productCatalog" });
-    addAnnotation(getIndex_ProjectCatalogs(), source, new String[] { "name", "projectCatalog" });
-    addAnnotation(getCatalogSelection_ProductCatalogs(), source, new String[] { "name", "productCatalog" });
-    addAnnotation(getCatalogSelection_ProjectCatalogs(), source, new String[] { "name", "projectCatalog" });
-    addAnnotation(getCatalogSelection_DefaultProductVersions(), source, new String[] { "name", "defaultProductVersion" });
-    addAnnotation(getCatalogSelection_DefaultStreams(), source, new String[] { "name", "defaultStream" });
-    addAnnotation(getProductCatalog_Products(), source, new String[] { "name", "product" });
-    addAnnotation(getProduct_Versions(), source, new String[] { "name", "version" });
-    addAnnotation(getProjectContainer_Projects(), source, new String[] { "name", "project" });
-    addAnnotation(getProject_Streams(), source, new String[] { "name", "stream" });
-    addAnnotation(getUser_AttributeRules(), source, new String[] { "name", "attributeRule" });
-    addAnnotation(getUser_AcceptedLicenses(), source, new String[] { "name", "acceptedLicense" });
-    addAnnotation(getUser_AcceptedCertificates(), source, new String[] { "name", "acceptedCertificate" });
-    addAnnotation(getLocationCatalog_Installations(), source, new String[] { "name", "installation" });
-    addAnnotation(getLocationCatalog_Workspaces(), source, new String[] { "name", "workspace" });
-    addAnnotation(getWorkspace_Streams(), source, new String[] { "name", "stream" });
-    addAnnotation(getConfiguration_Description(), source, new String[] { "kind", "element" });
-    addAnnotation(getVariableTask_Choices(), source, new String[] { "name", "choice" });
-    addAnnotation(getResourceCreationTask_Content(), source, new String[] { "kind", "element" });
-    addAnnotation(getTextModifyTask_URL(), source, new String[] { "kind", "attribute", "name", "url" });
-    addAnnotation(getTextModifyTask_Modifications(), source, new String[] { "name", "modification" });
-    addAnnotation(getTextModification_Substitutions(), source, new String[] { "kind", "element", "name", "substitution" });
-    addAnnotation(getProductToProductVersionMapEntry_Key(), source, new String[] { "kind", "attribute" });
-    addAnnotation(getProductToProductVersionMapEntry_Value(), source, new String[] { "kind", "attribute" });
-    addAnnotation(getProjectToStreamMapEntry_Key(), source, new String[] { "kind", "attribute" });
-    addAnnotation(getProjectToStreamMapEntry_Value(), source, new String[] { "kind", "attribute" });
-    addAnnotation(getMacro_Parameters(), source, new String[] { "kind", "element", "name", "parameter" });
-    addAnnotation(getParameter_Description(), source, new String[] { "kind", "element" });
-    addAnnotation(getMacroTask_Arguments(), source, new String[] { "kind", "element", "name", "argument" });
-    addAnnotation(getMacroTask_Macro(), source, new String[] { "kind", "attribute" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getSetupTask_ID(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "id" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getSetupTask_Description(), source, new String[] { "kind", "element" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getSetupTask_Predecessors(), source, new String[] { "name", "predecessor" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getSetupTask_Successors(), source, new String[] { "name", "successor" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getSetupTask_Restrictions(), source, new String[] { "name", "restriction" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getSetupTaskContainer_SetupTasks(), source, new String[] { "name", "setupTask" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getScope_Description(), source, new String[] { "kind", "element" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getIndex_DiscoverablePackages(), source, new String[] { "name", "discoverablePackage" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getIndex_ProductCatalogs(), source, new String[] { "name", "productCatalog" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getIndex_ProjectCatalogs(), source, new String[] { "name", "projectCatalog" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getCatalogSelection_ProductCatalogs(), source, new String[] { "name", "productCatalog" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getCatalogSelection_ProjectCatalogs(), source, new String[] { "name", "projectCatalog" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getCatalogSelection_DefaultProductVersions(), source, new String[] { "name", "defaultProductVersion" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getCatalogSelection_DefaultStreams(), source, new String[] { "name", "defaultStream" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProductCatalog_Products(), source, new String[] { "name", "product" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProduct_Versions(), source, new String[] { "name", "version" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProjectContainer_Projects(), source, new String[] { "name", "project" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProject_Streams(), source, new String[] { "name", "stream" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getUser_AttributeRules(), source, new String[] { "name", "attributeRule" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getUser_AcceptedLicenses(), source, new String[] { "name", "acceptedLicense" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getUser_AcceptedCertificates(), source, new String[] { "name", "acceptedCertificate" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getLocationCatalog_Installations(), source, new String[] { "name", "installation" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getLocationCatalog_Workspaces(), source, new String[] { "name", "workspace" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getWorkspace_Streams(), source, new String[] { "name", "stream" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getConfiguration_Description(), source, new String[] { "kind", "element" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getVariableTask_Choices(), source, new String[] { "name", "choice" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getResourceCreationTask_Content(), source, new String[] { "kind", "element" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTextModifyTask_URL(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "url" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTextModifyTask_Modifications(), source, new String[] { "name", "modification" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTextModification_Substitutions(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "substitution" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProductToProductVersionMapEntry_Key(), source, new String[] { "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProductToProductVersionMapEntry_Value(), source, new String[] { "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProjectToStreamMapEntry_Key(), source, new String[] { "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getProjectToStreamMapEntry_Value(), source, new String[] { "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getMacro_Parameters(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "parameter" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getParameter_Description(), source, new String[] { "kind", "element" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getMacroTask_Arguments(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "argument" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getMacroTask_Macro(), source, new String[] { "kind", "attribute" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -2889,7 +2933,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    */
   protected void createNoExpandAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/NoExpand";
+    String source = "http://www.eclipse.org/oomph/setup/NoExpand"; //$NON-NLS-1$
     addAnnotation(getSetupTask_ID(), source, new String[] {});
     addAnnotation(getSetupTask_Disabled(), source, new String[] {});
     addAnnotation(getSetupTask_Filter(), source, new String[] {});
@@ -2908,18 +2952,33 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    */
   protected void createRuleVariableAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/RuleVariable";
-    addAnnotation(getInstallationTask_Location(), source, new String[] { "name", "install.root", "type", "FOLDER", "label", "Root install folder",
-        "defaultValue", "${user.home}", "description", "The root install folder where all the products are installed", "storageURI", "scope://" });
-    addAnnotation(getInstallationTask_Location(), source,
-        new String[] { "name", "installation.id", "type", "STRING", "label", "Installation folder name", "defaultValue", "${scope.product.name|installationID}",
-            "description", "The name of the folder within the root install folder where the product is installed" });
-    addAnnotation(getWorkspaceTask_Location(), source,
-        new String[] { "name", "workspace.container.root", "type", "FOLDER", "label", "Root workspace-container folder", "defaultValue", "${user.home}",
-            "description", "The root workspace-container folder where all the workspaces are located", "storageURI", "scope://" });
-    addAnnotation(getWorkspaceTask_Location(), source,
-        new String[] { "name", "workspace.id", "type", "STRING", "label", "Workspace folder name", "defaultValue", "${scope.project.name|workspaceID}",
-            "description", "The name of the workspace folder within the root workspace-container folder where the workspaces are located" });
+    String source = "http://www.eclipse.org/oomph/setup/RuleVariable"; //$NON-NLS-1$
+    addAnnotation(getInstallationTask_Location(), source, new String[] { "name", "install.root", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "FOLDER", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "Root install folder", //$NON-NLS-1$ //$NON-NLS-2$
+        "defaultValue", "${user.home}", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The root install folder where all the products are installed", //$NON-NLS-1$ //$NON-NLS-2$
+        "storageURI", "scope://" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getInstallationTask_Location(), source, new String[] { "name", "installation.id", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "STRING", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "Installation folder name", //$NON-NLS-1$ //$NON-NLS-2$
+        "defaultValue", "${scope.product.name|installationID}", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The name of the folder within the root install folder where the product is installed" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getWorkspaceTask_Location(), source, new String[] { "name", "workspace.container.root", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "FOLDER", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "Root workspace-container folder", //$NON-NLS-1$ //$NON-NLS-2$
+        "defaultValue", "${user.home}", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The root workspace-container folder where all the workspaces are located", //$NON-NLS-1$ //$NON-NLS-2$
+        "storageURI", "scope://" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getWorkspaceTask_Location(), source, new String[] { "name", "workspace.id", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "STRING", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "Workspace folder name", //$NON-NLS-1$ //$NON-NLS-2$
+        "defaultValue", "${scope.project.name|workspaceID}", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The name of the workspace folder within the root workspace-container folder where the workspaces are located" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -2930,9 +2989,11 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    */
   protected void createValidTriggersAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
-    addAnnotation(stringSubstitutionTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
-    addAnnotation(preferenceTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers"; //$NON-NLS-1$
+    addAnnotation(stringSubstitutionTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(preferenceTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -2943,11 +3004,15 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
-    addAnnotation(macroEClass, source, new String[] { "constraints", "NoRecursion" });
-    addAnnotation(macroTaskEClass, source, new String[] { "constraints", "IDRequired ArgumentsCorrespondToParameters" });
-    addAnnotation(argumentEClass, source, new String[] { "constraints", "ConsistentParameterBinding" });
-    addAnnotation(filterEDataType, source, new String[] { "constraints", "WellformedFilterExpression" });
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
+    addAnnotation(macroEClass, source, new String[] { "constraints", "NoRecursion" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(macroTaskEClass, source, new String[] { "constraints", "IDRequired ArgumentsCorrespondToParameters" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(argumentEClass, source, new String[] { "constraints", "ConsistentParameterBinding" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(filterEDataType, source, new String[] { "constraints", "WellformedFilterExpression" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -2958,25 +3023,45 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    */
   protected void createVariableAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Variable";
-    addAnnotation(getInstallationTask_Location(), source,
-        new String[] { "filter", "canonical", "type", "STRING", "label", "Installation location rule", "description",
-            "The rule for the absolute folder location where the product is installed", "storageURI", null, "explicitType", "FOLDER", "explicitLabel",
-            "Installation location", "explicitDescription", "The absolute folder location where the product is installed" });
-    addAnnotation(getInstallationTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${install.root/}${installation.id}", "label", "Installed in a uniquely-named folder within the root install folder" });
-    addAnnotation(getInstallationTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${@id.location}", "label", "Installed in the specified absolute folder location" });
-    addAnnotation(getWorkspaceTask_Location(), source,
-        new String[] { "filter", "canonical", "type", "STRING", "label", "Workspace location rule", "description",
-            "The rule for the absolute folder location where the workspace is located", "storageURI", null, "explicitType", "FOLDER", "explicitLabel",
-            "Workspace location", "explicitDescription", "The absolute folder location where the workspace is located" });
-    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${installation.location/ws}", "label", "Located in a folder named \'ws\' within the installation folder" });
-    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", new String[] { "value", "${workspace.container.root/}${workspace.id}", "label",
-        "Located in a uniquely-named folder within the root workspace-container folder" });
-    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice",
-        new String[] { "value", "${@id.location}", "label", "Located in the specified absolute folder location" });
+    String source = "http://www.eclipse.org/oomph/setup/Variable"; //$NON-NLS-1$
+    addAnnotation(getInstallationTask_Location(), source, new String[] { "filter", "canonical", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "STRING", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "Installation location rule", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The rule for the absolute folder location where the product is installed", //$NON-NLS-1$ //$NON-NLS-2$
+        "storageURI", null, //$NON-NLS-1$
+        "explicitType", "FOLDER", //$NON-NLS-1$ //$NON-NLS-2$
+        "explicitLabel", "Installation location", //$NON-NLS-1$ //$NON-NLS-2$
+        "explicitDescription", "The absolute folder location where the product is installed" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getInstallationTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${install.root/}${installation.id}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Installed in a uniquely-named folder within the root install folder" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getInstallationTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${@id.location}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Installed in the specified absolute folder location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getWorkspaceTask_Location(), source, new String[] { "filter", "canonical", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "STRING", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "Workspace location rule", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The rule for the absolute folder location where the workspace is located", //$NON-NLS-1$ //$NON-NLS-2$
+        "storageURI", null, //$NON-NLS-1$
+        "explicitType", "FOLDER", //$NON-NLS-1$ //$NON-NLS-2$
+        "explicitLabel", "Workspace location", //$NON-NLS-1$ //$NON-NLS-2$
+        "explicitDescription", "The absolute folder location where the workspace is located" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${installation.location/ws}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in a folder named \'ws\' within the installation folder" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${workspace.container.root/}${workspace.id}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in a uniquely-named folder within the root workspace-container folder" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(getWorkspaceTask_Location(), new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${@id.location}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "Located in the specified absolute folder location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
 } // SetupPackageImpl

@@ -81,8 +81,8 @@ public class ImplicitDependencyItemProvider extends ItemProviderAdapter
   protected void addIDPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ImplicitDependency_iD_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ImplicitDependency_iD_feature", "_UI_ImplicitDependency_type"),
+        getString("_UI_ImplicitDependency_iD_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ImplicitDependency_iD_feature", "_UI_ImplicitDependency_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupTargletsPackage.Literals.IMPLICIT_DEPENDENCY__ID, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -95,8 +95,8 @@ public class ImplicitDependencyItemProvider extends ItemProviderAdapter
   protected void addVersionPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ImplicitDependency_version_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ImplicitDependency_version_feature", "_UI_ImplicitDependency_type"),
+        getString("_UI_ImplicitDependency_version_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ImplicitDependency_version_feature", "_UI_ImplicitDependency_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupTargletsPackage.Literals.IMPLICIT_DEPENDENCY__VERSION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -120,7 +120,7 @@ public class ImplicitDependencyItemProvider extends ItemProviderAdapter
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ImplicitDependency"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ImplicitDependency")); //$NON-NLS-1$
   }
 
   /**
@@ -147,13 +147,13 @@ public class ImplicitDependencyItemProvider extends ItemProviderAdapter
     String label = implicitDependency.getID();
     if (StringUtil.isEmpty(label))
     {
-      label = getString("_UI_ImplicitDependency_type");
+      label = getString("_UI_ImplicitDependency_type"); //$NON-NLS-1$
     }
 
     Version version = implicitDependency.getVersion();
     if (version != null && version != Version.emptyVersion)
     {
-      label += " " + version;
+      label += " " + version; //$NON-NLS-1$
     }
 
     return label;

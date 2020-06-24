@@ -105,15 +105,15 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
 {
   private static final Map<IWorkbenchPart, FindAndReplaceTarget> FIND_AND_REPLACE_TARGETS = new WeakHashMap<IWorkbenchPart, FindAndReplaceTarget>();
 
-  private static final Field FILTER_ACTION_FIELD = ReflectUtil.getField(PropertySheetPage.class, "filterAction");
+  private static final Field FILTER_ACTION_FIELD = ReflectUtil.getField(PropertySheetPage.class, "filterAction"); //$NON-NLS-1$
 
-  private static final Method GET_DESCRIPTOR_METHOD = ReflectUtil.getMethod(PropertySheetEntry.class, "getDescriptor");
+  private static final Method GET_DESCRIPTOR_METHOD = ReflectUtil.getMethod(PropertySheetEntry.class, "getDescriptor"); //$NON-NLS-1$
 
-  private static final Field OBJECT_FIELD = ReflectUtil.getField(PropertyDescriptor.class, "object");
+  private static final Field OBJECT_FIELD = ReflectUtil.getField(PropertyDescriptor.class, "object"); //$NON-NLS-1$
 
-  private static final Field ITEM_PROPERTY_DESCRIPTOR_FIELD = ReflectUtil.getField(PropertyDescriptor.class, "itemPropertyDescriptor");
+  private static final Field ITEM_PROPERTY_DESCRIPTOR_FIELD = ReflectUtil.getField(PropertyDescriptor.class, "itemPropertyDescriptor"); //$NON-NLS-1$
 
-  private static final Field ITEM_PROPERTY_SOURCE_FIELD = ReflectUtil.getField(PropertySource.class, "itemPropertySource");
+  private static final Field ITEM_PROPERTY_SOURCE_FIELD = ReflectUtil.getField(PropertySource.class, "itemPropertySource"); //$NON-NLS-1$
 
   private static final Styler MATCH_STYLER = new Styler()
   {
@@ -326,11 +326,11 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     {
       // If this is a shell for the find and replace dialog...
       Object data = shell.getData();
-      if (data instanceof Dialog && "org.eclipse.ui.texteditor.FindReplaceDialog".equals(data.getClass().getName()))
+      if (data instanceof Dialog && "org.eclipse.ui.texteditor.FindReplaceDialog".equals(data.getClass().getName())) //$NON-NLS-1$
       {
         // Find the last checkbox in the dialog.
         Dialog dialog = (Dialog)data;
-        Object checkBox = ReflectUtil.getValue("fIsRegExCheckBox", dialog);
+        Object checkBox = ReflectUtil.getValue("fIsRegExCheckBox", dialog); //$NON-NLS-1$
         if (checkBox instanceof Button)
         {
           // It should have grid data.
@@ -347,7 +347,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
             }
 
             // Keep state in a section of our dialog settings.
-            final IDialogSettings dialogSettings = UIPlugin.INSTANCE.getDialogSettings("org.eclipse.ui.texteditor.FindReplaceDialog");
+            final IDialogSettings dialogSettings = UIPlugin.INSTANCE.getDialogSettings("org.eclipse.ui.texteditor.FindReplaceDialog"); //$NON-NLS-1$
 
             // Create a search-type combo in the same group as the checkbox.
             final Composite group = checkBoxButton.getParent();
@@ -357,7 +357,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
             combo.setLayoutData(gridData);
 
             // The initial choice is remembered from the dialog settings.
-            searchType = SearchType.getSearchType(dialogSettings.get("search-type"));
+            searchType = SearchType.getSearchType(dialogSettings.get("search-type")); //$NON-NLS-1$
             combo.select(searchType.ordinal());
 
             // Listen for changes in the choice.
@@ -368,22 +368,18 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
               {
                 // Not only remember the choice, but record it in the dialog settings.
                 searchType = SearchType.values()[combo.getSelectionIndex()];
-                dialogSettings.put("search-type", searchType.key());
+                dialogSettings.put("search-type", searchType.key()); //$NON-NLS-1$
               }
             });
 
             String oldLabel = null;
             Button selectedRangeButton = null;
-            Object selectedRange = ReflectUtil.getValue("fSelectedRangeRadioButton", dialog);
+            Object selectedRange = ReflectUtil.getValue("fSelectedRangeRadioButton", dialog); //$NON-NLS-1$
             if (selectedRange instanceof Button)
             {
               selectedRangeButton = (Button)selectedRange;
-              String label = selectedRangeButton.getText();
-              if (label.endsWith("lines"))
-              {
-                oldLabel = label;
-                selectedRangeButton.setText(label.substring(0, label.length() - 5) + " elements");
-              }
+              oldLabel = selectedRangeButton.getText();
+              selectedRangeButton.setText(Messages.FindAndReplaceTarget_selectedElements);
             }
 
             // Relayout the shell.
@@ -391,7 +387,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
 
             // If we've never checked that the default size of the dialog is big enough to fit our controls,
             // do it this time.
-            if (!dialogSettings.getBoolean("resized"))
+            if (!dialogSettings.getBoolean("resized")) //$NON-NLS-1$
             {
               // Determine the bottom right corner location of the combo in absolute coordinates.
               Rectangle comboBounds = combo.getBounds();
@@ -424,7 +420,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
               }
 
               // Only do this once in this workspace.
-              dialogSettings.put("resized", true);
+              dialogSettings.put("resized", true); //$NON-NLS-1$
             }
 
             // Setup the task that needs to be done to undo what we've done here.
@@ -591,10 +587,10 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     // If we're updating the button state, the selection text is used to enable/disable the replace button state.
     // We want it enabled only if we've selected an editable property.
     StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-    if ("updateButtonState".equals(stackTrace[2].getMethodName()) && (selectedItem == null || selectedItem.itemPropertyDescriptor == null
+    if ("updateButtonState".equals(stackTrace[2].getMethodName()) && (selectedItem == null || selectedItem.itemPropertyDescriptor == null //$NON-NLS-1$
         || !selectedItem.itemPropertyDescriptor.canSetProperty(selectedItem.data.object)))
     {
-      return "";
+      return ""; //$NON-NLS-1$
     }
 
     // We use this only to initialize the text selection from a cell editor.
@@ -611,7 +607,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     }
 
     // Otherwise we have no selection; we must return a non-null value.
-    return "";
+    return ""; //$NON-NLS-1$
   }
 
   public Point getSelection()
@@ -754,13 +750,13 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     // If we want case-insensitive matching, encode that in the pattern.
     if (!caseSensitive)
     {
-      impliedPattern = "(?i)" + impliedPattern;
+      impliedPattern = "(?i)" + impliedPattern; //$NON-NLS-1$
     }
 
     // If we want whole word matching, add the word break delimiters to the pattern.
     if (wholeWord)
     {
-      impliedPattern = "\\b" + impliedPattern + "\\b";
+      impliedPattern = "\\b" + impliedPattern + "\\b"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     // This should always compile correctly.
@@ -916,7 +912,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
       // Make the properties view visible, creating it if necessary.
       IWorkbenchPartSite site = workbenchPart.getSite();
       IWorkbenchPage page = site.getPage();
-      IViewPart viewPart = page.findView("org.eclipse.ui.views.PropertySheet");
+      IViewPart viewPart = page.findView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
 
       // Sometimes showing the properties view gives it focus, e.g., when the editor is maximized.
       Display display = site.getShell().getDisplay();
@@ -927,10 +923,10 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
         suspendScopeChanges = true;
         if (item.itemPropertyDescriptor != null)
         {
-          viewPart = page.showView("org.eclipse.ui.views.PropertySheet", null, IWorkbenchPage.VIEW_VISIBLE);
+          viewPart = page.showView("org.eclipse.ui.views.PropertySheet", null, IWorkbenchPage.VIEW_VISIBLE); //$NON-NLS-1$
           if (viewPart == null)
           {
-            viewPart = page.showView("org.eclipse.ui.views.PropertySheet", null, IWorkbenchPage.VIEW_CREATE);
+            viewPart = page.showView("org.eclipse.ui.views.PropertySheet", null, IWorkbenchPage.VIEW_CREATE); //$NON-NLS-1$
           }
         }
 
@@ -976,7 +972,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
                 for (String filterFlag : filterFlags)
                 {
                   // If the filter is one for expert property...
-                  if ("org.eclipse.ui.views.properties.expert".equals(filterFlag))
+                  if ("org.eclipse.ui.views.properties.expert".equals(filterFlag)) //$NON-NLS-1$
                   {
                     Action action = ReflectUtil.getValue(FILTER_ACTION_FIELD, currentPage);
                     if (!action.isChecked())
@@ -1037,7 +1033,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
                         }
 
                         // Create a special string with ellipses at both ends.
-                        String specialText = "..." + itemValue.substring(begin + 1, end) + "...";
+                        String specialText = "..." + itemValue.substring(begin + 1, end) + "..."; //$NON-NLS-1$ //$NON-NLS-2$
 
                         // But that back into the item.
                         treeItem.setText(1, specialText);
@@ -1065,10 +1061,10 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
                         int width = event.gc.textExtent(matcher.group()).x;
                         event.gc.drawRectangle(event.x + x + 1, event.y, width + 1, event.height - 1);
                       }
-                      else if (text.endsWith("..."))
+                      else if (text.endsWith("...")) //$NON-NLS-1$
                       {
                         int x = event.gc.textExtent(text.substring(0, text.length() - 3)).x + treeItem.getTextBounds(1).x - treeItem.getBounds(1).x;
-                        int width = event.gc.textExtent("...").x;
+                        int width = event.gc.textExtent("...").x; //$NON-NLS-1$
                         event.gc.drawRectangle(event.x + x + 1, event.y, width + 1, event.height - 1);
                       }
                     }
@@ -1175,7 +1171,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
       {
         // Use the color from the theme that the editor uses to highlight the scope.
         final Color color = workbenchPart.getSite().getWorkbenchWindow().getWorkbench().getThemeManager().getCurrentTheme().getColorRegistry()
-            .get("org.eclipse.ui.editors.findScope");
+            .get("org.eclipse.ui.editors.findScope"); //$NON-NLS-1$
 
         final Styler scopeStyler = new Styler()
         {
@@ -1330,7 +1326,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     int start = matcher.start();
 
     // Escape the $ if we're not doing a regular expression replacement.
-    String replacement = regExReplace ? text : text.replace("$", "\\$");
+    String replacement = regExReplace ? text : text.replace("$", "\\$"); //$NON-NLS-1$ //$NON-NLS-2$
 
     // Append the replacement
     matcher.appendReplacement(result, replacement);
@@ -1476,7 +1472,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
   protected int replaceSelectionAll(String text, boolean regExReplace)
   {
     // Escape the $ if we're not doing a regular expression replacement.
-    String replacement = regExReplace ? text : text.replace("$", "\\$");
+    String replacement = regExReplace ? text : text.replace("$", "\\$"); //$NON-NLS-1$ //$NON-NLS-2$
 
     // We must have an editing domain.
     EditingDomain domain = ((IEditingDomainProvider)workbenchPart).getEditingDomain();
@@ -1589,7 +1585,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
       findReplaceable = true;
 
       // We want all the commands to be batched into a single undoable command.
-      replaceAllCommand = new CompoundCommand(CompoundCommand.MERGE_COMMAND_ALL, "Replace All")
+      replaceAllCommand = new CompoundCommand(CompoundCommand.MERGE_COMMAND_ALL, Messages.FindAndReplaceTarget_replaceAllCommand)
       {
       };
       pendingReplacements = Integer.MAX_VALUE;
@@ -1934,7 +1930,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
 
         public void remove()
         {
-          throw new UnsupportedOperationException("remove");
+          throw new UnsupportedOperationException("remove"); //$NON-NLS-1$
         }
       };
     }
@@ -1957,13 +1953,13 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
       @Override
       public String key()
       {
-        return "label+attribute";
+        return "label+attribute"; //$NON-NLS-1$
       }
 
       @Override
       public String label()
       {
-        return "Labels and attributes";
+        return Messages.FindAndReplaceTarget_labelsAndAttributes;
       }
     },
     LABEL()
@@ -1977,13 +1973,13 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
       @Override
       public String key()
       {
-        return "label";
+        return "label"; //$NON-NLS-1$
       }
 
       @Override
       public String label()
       {
-        return "Labels";
+        return Messages.FindAndReplaceTarget_labels;
       }
     },
     ATTRIBUTE()
@@ -1997,13 +1993,13 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
       @Override
       public String key()
       {
-        return "attribute";
+        return "attribute"; //$NON-NLS-1$
       }
 
       @Override
       public String label()
       {
-        return "Attributes";
+        return Messages.FindAndReplaceTarget_attributes;
       }
     },
     MODIFIABLE_ATTRIBUTE
@@ -2017,13 +2013,13 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
       @Override
       public String key()
       {
-        return "modifiable-attribute";
+        return "modifiable-attribute"; //$NON-NLS-1$
       }
 
       @Override
       public String label()
       {
-        return "Modifiable attributes";
+        return Messages.FindAndReplaceTarget_modifiableAttributes;
       }
     };
 

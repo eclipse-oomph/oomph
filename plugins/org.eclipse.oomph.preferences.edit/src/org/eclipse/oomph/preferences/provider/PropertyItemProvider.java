@@ -71,7 +71,8 @@ public class PropertyItemProvider extends PreferenceItemItemProvider
   protected void addValuePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Property_value_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Property_value_feature", "_UI_Property_type"),
+        getString("_UI_Property_value_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Property_value_feature", "_UI_Property_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PreferencesPackage.Literals.PROPERTY__VALUE, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -84,7 +85,8 @@ public class PropertyItemProvider extends PreferenceItemItemProvider
   protected void addNonDefaultPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Property_nonDefault_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Property_nonDefault_feature", "_UI_Property_type"),
+        getString("_UI_Property_nonDefault_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Property_nonDefault_feature", "_UI_Property_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PreferencesPackage.Literals.PROPERTY__NON_DEFAULT, false, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -97,8 +99,11 @@ public class PropertyItemProvider extends PreferenceItemItemProvider
   protected void addSecurePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Property_secure_feature"), getString("_UI_Property_secure_description"), PreferencesPackage.Literals.PROPERTY__SECURE, true, false,
-        false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, new String[] { "org.eclipse.ui.views.properties.expert" }));
+        getString("_UI_Property_secure_feature"), //$NON-NLS-1$
+        getString("_UI_Property_secure_description"), //$NON-NLS-1$
+        PreferencesPackage.Literals.PROPERTY__SECURE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null,
+        new String[] { "org.eclipse.ui.views.properties.expert" //$NON-NLS-1$
+        }));
   }
 
   /**
@@ -110,7 +115,7 @@ public class PropertyItemProvider extends PreferenceItemItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Property"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Property")); //$NON-NLS-1$
   }
 
   /**
@@ -136,7 +141,7 @@ public class PropertyItemProvider extends PreferenceItemItemProvider
     Property property = (Property)object;
     String name = property.getName();
     String value = property.getValue();
-    return (name == null ? "" : name) + "=" + crop(value);
+    return (name == null ? "" : name) + "=" + crop(value); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

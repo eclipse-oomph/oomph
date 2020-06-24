@@ -21,7 +21,7 @@
             objectClass="org.eclipse.core.resources.IProject">
          <menu
                id="org.eclipse.oomph"
-               label="Oomph"
+               label="%OomphMenu_label"
                path="additions">
             <separator
                   name="group1">
@@ -31,7 +31,7 @@
                class="org.eclipse.oomph.projectcopy.ProjectCopyAction"
                enablesFor="1"
                id="org.eclipse.oomph.CopyProjectAction"
-               label="Copy Project..."
+               label="%projectCopyAction.label"
                menubarPath="org.eclipse.oomph/group1"
                style="push">
          </action>

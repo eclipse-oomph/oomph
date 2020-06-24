@@ -93,7 +93,7 @@ public class ProjectConfigFactoryImpl extends EFactoryImpl implements ProjectCon
       case ProjectConfigPackage.EXCLUSION_PREDICATE:
         return createExclusionPredicate();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -110,7 +110,7 @@ public class ProjectConfigFactoryImpl extends EFactoryImpl implements ProjectCon
       case ProjectConfigPackage.PATTERN:
         return createPatternFromString(eDataType, initialValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -127,7 +127,7 @@ public class ProjectConfigFactoryImpl extends EFactoryImpl implements ProjectCon
       case ProjectConfigPackage.PATTERN:
         return convertPatternToString(eDataType, instanceValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

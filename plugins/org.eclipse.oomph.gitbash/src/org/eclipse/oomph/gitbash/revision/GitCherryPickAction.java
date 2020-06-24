@@ -27,6 +27,6 @@ public class GitCherryPickAction extends AbstractRevisionAction
   protected void run(Shell shell, Repository repository, File workTree, RevObject revision) throws Exception
   {
     String id = revision.getId().name();
-    GitBash.executeCommand(shell, workTree, "git cherry-pick -n " + id);
+    GitBash.executeCommand(shell, workTree, "git cherry-pick -n " + id); //$NON-NLS-1$
   }
 }

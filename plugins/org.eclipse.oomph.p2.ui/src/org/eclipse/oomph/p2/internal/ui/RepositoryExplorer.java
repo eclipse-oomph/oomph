@@ -115,6 +115,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.StyleRange;
@@ -203,17 +204,17 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private static final String DEFAULT_CAPABILITY_NAMESPACE = IInstallableUnit.NAMESPACE_IU_ID;
 
-  private static final String CURRENT_NAMESPACE_KEY = "currentNamespace";
+  private static final String CURRENT_NAMESPACE_KEY = "currentNamespace"; //$NON-NLS-1$
 
-  private static final String EXPERT_MODE_KEY = "expertMode";
+  private static final String EXPERT_MODE_KEY = "expertMode"; //$NON-NLS-1$
 
-  private static final String CATEGORIZE_ITEMS_KEY = "categorizeItems";
+  private static final String CATEGORIZE_ITEMS_KEY = "categorizeItems"; //$NON-NLS-1$
 
-  private static final String VERSION_SEGMENT_KEY = "versionSegment";
+  private static final String VERSION_SEGMENT_KEY = "versionSegment"; //$NON-NLS-1$
 
-  private static final String COMPATIBLE_VERSION_KEY = "compatibleVersion";
+  private static final String COMPATIBLE_VERSION_KEY = "compatibleVersion"; //$NON-NLS-1$
 
-  private static final String SOURCE_SUFFIX = ".source";
+  private static final String SOURCE_SUFFIX = ".source"; //$NON-NLS-1$
 
   private static final String SOURCE_FEATURE_SUFFIX = SOURCE_SUFFIX + Requirement.FEATURE_SUFFIX;
 
@@ -296,7 +297,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     }
     else
     {
-      categorizeItems = "true".equals(value);
+      categorizeItems = "true".equals(value); //$NON-NLS-1$
     }
 
     compatibleVersion = SETTINGS.getBoolean(COMPATIBLE_VERSION_KEY);
@@ -437,7 +438,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     formToolkit = new FormToolkit(display);
     FormColors colors = formToolkit.getColors();
-    colors.createColor("initial_repository", FormColors.blend(colors.getForeground().getRGB(), colors.getBackground().getRGB(), 75));
+    colors.createColor("initial_repository", FormColors.blend(colors.getForeground().getRGB(), colors.getBackground().getRGB(), 75)); //$NON-NLS-1$
 
     Form form = formToolkit.createForm(parent);
     container = form.getBody();
@@ -488,7 +489,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   private void createRepositoriesArea(Composite container)
   {
     repositoryCombo = createCombo(container, SWT.BORDER, true);
-    repositoryCombo.setToolTipText("Repository location (type a URL, drop a repository or pick from the drop down history)");
+    repositoryCombo.setToolTipText(Messages.RepositoryExplorer_repositoryCombo_tooltip);
     repositoryCombo.addFocusListener(repositoryComboHandler);
     repositoryCombo.addKeyListener(repositoryHistoryListener);
     repositoryCombo.addMouseListener(new MouseAdapter()
@@ -545,7 +546,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           }
         });
 
-    AdapterFactoryEditingDomain domain = ReflectUtil.getValue("domain", generalDropAdapter);
+    AdapterFactoryEditingDomain domain = ReflectUtil.getValue("domain", generalDropAdapter); //$NON-NLS-1$
 
     ComposedAdapterFactory composedAdapterFactory = (ComposedAdapterFactory)domain.getAdapterFactory();
     AdapterFactory factoryForType = composedAdapterFactory.getFactoryForType(repositoryList);
@@ -592,7 +593,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
                     try
                     {
                       // Works for IJavaProject.
-                      IPath path = ReflectUtil.invokeMethod("getFullPath", ReflectUtil.invokeMethod("getResource", object));
+                      IPath path = ReflectUtil.invokeMethod("getFullPath", ReflectUtil.invokeMethod("getResource", object)); //$NON-NLS-1$ //$NON-NLS-2$
                       org.eclipse.emf.common.util.URI uri = CommonPlugin
                           .resolve(org.eclipse.emf.common.util.URI.createPlatformResourceURI(path.toString(), true));
                       filteredCollection.add(uri);
@@ -602,7 +603,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
                       try
                       {
                         // Works for Git repository node.
-                        IPath path = ReflectUtil.invokeMethod("getPath", object);
+                        IPath path = ReflectUtil.invokeMethod("getPath", object); //$NON-NLS-1$
                         org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createFileURI(path.toFile().getAbsolutePath());
                         filteredCollection.add(uri);
                       }
@@ -637,7 +638,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         IContributionItem copyAction = manager.find(ActionFactory.COPY.getId());
         if (copyAction == null)
         {
-          Action generalCopyAction = new Action("Copy")
+          Action generalCopyAction = new Action(Messages.RepositoryExplorer_action_generalCopy)
           {
             @Override
             public void run()
@@ -655,7 +656,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           manager.add(copyAction);
         }
 
-        Action cutAction = new Action("Cut")
+        Action cutAction = new Action(Messages.RepositoryExplorer_action_cut)
         {
           @Override
           public void run()
@@ -683,13 +684,13 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           }
         };
 
-        pasteAction.setText("Paste");
+        pasteAction.setText(Messages.RepositoryExplorer_action_paste);
         pasteAction.setEnabled(pasteAction.updateSelection(new StructuredSelection(repositoryList)));
 
         Action generalPasteAction = pasteAction;
         if (!pasteAction.isEnabled())
         {
-          generalPasteAction = new Action("Paste")
+          generalPasteAction = new Action(Messages.RepositoryExplorer_action_generalPaste)
           {
             @Override
             public void run()
@@ -702,6 +703,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         generalPasteAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
         manager.add(generalPasteAction);
       }
+
     });
   }
 
@@ -746,7 +748,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       }
     };
 
-    searchField.getFilterControl().setToolTipText("Filter text may use * to match any characters or ? to match one character");
+    searchField.getFilterControl().setToolTipText(Messages.RepositoryExplorer_searchField_tooltip);
     searchField.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
     selectorComposite = formToolkit.createComposite(container, SWT.NONE);
@@ -795,14 +797,18 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     versionsGroup.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 
     final Button compatibleButton = new Button(versionsGroup, SWT.CHECK);
-    compatibleButton.setText("Compatible");
-    compatibleButton.setToolTipText("Show compatible versions");
+    compatibleButton.setText(Messages.RepositoryExplorer_versionSegmentButton_compatibleButton_text);
+    compatibleButton.setToolTipText(Messages.RepositoryExplorer_versionSegmentButton_compatibleButton_tooltip);
     compatibleButton.setSelection(compatibleVersion);
 
-    final Button majorButton = addVersionSegmentButton(versionsGroup, "Major", "Show major versions", VersionSegment.MAJOR);
-    final Button minorButton = addVersionSegmentButton(versionsGroup, "Minor", "Show minor versions", VersionSegment.MINOR);
-    addVersionSegmentButton(versionsGroup, "Micro", "Show micro versions", VersionSegment.MICRO);
-    addVersionSegmentButton(versionsGroup, "Qualifier", "Show qualified versions", VersionSegment.QUALIFIER);
+    final Button majorButton = addVersionSegmentButton(versionsGroup, Messages.RepositoryExplorer_versionSegmentButton_major_text,
+        Messages.RepositoryExplorer_versionSegmentButton_major_tooltip, VersionSegment.MAJOR);
+    final Button minorButton = addVersionSegmentButton(versionsGroup, Messages.RepositoryExplorer_versionSegmentButton_minor_text,
+        Messages.RepositoryExplorer_versionSegmentButton_minor_tooltip, VersionSegment.MINOR);
+    addVersionSegmentButton(versionsGroup, Messages.RepositoryExplorer_versionSegmentButton_micro_text,
+        Messages.RepositoryExplorer_versionSegmentButton_micro_tooltip, VersionSegment.MICRO);
+    addVersionSegmentButton(versionsGroup, Messages.RepositoryExplorer_versionSegmentButton_qualifier_text,
+        Messages.RepositoryExplorer_versionSegmentButton_qualifier_tooltip, VersionSegment.QUALIFIER);
 
     majorButton.setEnabled(!compatibleVersion);
     compatibleButton.addSelectionListener(new SelectionAdapter()
@@ -856,13 +862,13 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     IActionBars actionBars = getViewSite().getActionBars();
 
     IToolBarManager toolbarManager = actionBars.getToolBarManager();
-    toolbarManager.add(new Separator("additions"));
+    toolbarManager.add(new Separator("additions")); //$NON-NLS-1$
     toolbarManager.add(collapseAllAction);
 
-    toolbarManager.add(new Action("Refresh", P2UIPlugin.INSTANCE.getImageDescriptor("refresh"))
+    toolbarManager.add(new Action(Messages.RepositoryExplorer_action_refresh, P2UIPlugin.INSTANCE.getImageDescriptor("refresh")) //$NON-NLS-1$
     {
       {
-        setToolTipText("Reload the active repository and refresh the tree");
+        setToolTipText(Messages.RepositoryExplorer_action_refresh_tooltip);
       }
 
       @Override
@@ -877,11 +883,11 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       }
     });
 
-    toolbarManager.add(new Separator("modes"));
-    toolbarManager.add(new Action("Expert Mode", IAction.AS_CHECK_BOX)
+    toolbarManager.add(new Separator("modes")); //$NON-NLS-1$
+    toolbarManager.add(new Action(Messages.RepositoryExplorer_action_expertMode, IAction.AS_CHECK_BOX)
     {
       {
-        setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("obj16/capability"));
+        setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("obj16/capability")); //$NON-NLS-1$
         setChecked(expertMode);
       }
 
@@ -894,12 +900,12 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       }
     });
 
-    toolbarManager.add(new Separator("search"));
+    toolbarManager.add(new Separator("search")); //$NON-NLS-1$
     toolbarManager.add(searchRepositoriesAction);
     toolbarManager.add(searchRequirementsAction);
     toolbarManager.add(findRepositoriesAction);
 
-    toolbarManager.add(new Separator("end"));
+    toolbarManager.add(new Separator("end")); //$NON-NLS-1$
   }
 
   void activateAndLoadRepository(String repository)
@@ -1024,11 +1030,11 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       if (count > limit)
       {
         writer.newLine();
-        writer.writeString(count - limit + " more...");
+        writer.writeString(NLS.bind(Messages.RepositoryExplorer_iu_more, count - limit));
         writer.newLine();
       }
 
-      String xml = baos.toString("UTF-8");
+      String xml = baos.toString("UTF-8"); //$NON-NLS-1$
       new IUDialog(getSite().getShell(), xml, expertMode ? currentNamespace : null, id, versions).open();
     }
     catch (Exception ex)
@@ -1109,7 +1115,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     {
       ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
       copyAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
-      copyAction.setText("Copy with Version Range");
+      copyAction.setText(Messages.RepositoryExplorer_action_copy);
     }
     catch (RuntimeException ex)
     {
@@ -1153,7 +1159,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     contextMenu.addMenuListener(new IMenuListener()
     {
-      final Action showDetailsAction = new Action("Show Details...")
+      final Action showDetailsAction = new Action(Messages.RepositoryExplorer_action_showDetails)
       {
         @Override
         public void run()
@@ -1217,12 +1223,12 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       return expressions.iterator().next();
     }
 
-    StringBuilder result = new StringBuilder("");
+    StringBuilder result = new StringBuilder(""); //$NON-NLS-1$
     for (String expression : expressions)
     {
       if (result.length() == 0)
       {
-        result.append("(|");
+        result.append("(|"); //$NON-NLS-1$
       }
 
       result.append(expression);
@@ -1289,7 +1295,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private static boolean isCategory(IInstallableUnit iu)
   {
-    return "true".equalsIgnoreCase(iu.getProperty(QueryUtil.PROP_TYPE_CATEGORY));
+    return "true".equalsIgnoreCase(iu.getProperty(QueryUtil.PROP_TYPE_CATEGORY)); //$NON-NLS-1$
   }
 
   private static boolean isFeature(IInstallableUnit iu)
@@ -1419,7 +1425,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     {
       try
       {
-        byte[] bytes = string.getBytes("UTF-8");
+        byte[] bytes = string.getBytes("UTF-8"); //$NON-NLS-1$
         output.write(bytes, 0, bytes.length);
       }
       catch (Exception ex)
@@ -1434,7 +1440,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
    */
   private static final class IUDialog extends OomphDialog
   {
-    public static final String TITLE = "Installable Unit Details";
+    public static final String TITLE = Messages.RepositoryExplorer_iuDialog_title;
 
     private final String xml;
 
@@ -1449,11 +1455,11 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       StringBuilder expression = new StringBuilder();
       if (namespace == null)
       {
-        expression.append("<unit[^>]+'>");
+        expression.append("<unit[^>]+'>"); //$NON-NLS-1$
       }
       else
       {
-        expression.append("<provided namespace='").append(namespace).append("' name='").append(id).append("' version='(");
+        expression.append("<provided namespace='").append(namespace).append("' name='").append(id).append("' version='("); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         for (int i = 0, size = versions.size(); i < size; ++i)
         {
           if (i != 0)
@@ -1464,7 +1470,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           expression.append(versions.get(i));
         }
 
-        expression.append(")'/>");
+        expression.append(")'/>"); //$NON-NLS-1$
       }
 
       pattern = Pattern.compile(expression.toString());
@@ -1479,13 +1485,13 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     @Override
     protected String getDefaultMessage()
     {
-      return "Browse the XML representation of the selected installable units.";
+      return Messages.RepositoryExplorer_iuDialog_defaultMessage;
     }
 
     @Override
     protected String getImagePath()
     {
-      return "wizban/ProfileDetails.png";
+      return "wizban/ProfileDetails.png"; //$NON-NLS-1$
     }
 
     @Override
@@ -1524,8 +1530,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   {
     public CollapseAllAction()
     {
-      super("Collapse All", P2UIPlugin.INSTANCE.getImageDescriptor("collapse-all"));
-      setToolTipText("Collapse all tree items");
+      super(Messages.RepositoryExplorer_action_collapseAll_text, P2UIPlugin.INSTANCE.getImageDescriptor("collapse-all")); //$NON-NLS-1$
+      setToolTipText(Messages.RepositoryExplorer_action_collapseAll_tooltip);
       updateEnablement();
     }
 
@@ -1552,9 +1558,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   {
     public SearchRepositoriesAction()
     {
-      super("Search", Action.AS_CHECK_BOX);
-      setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("tool16/search_repository.png"));
-      setToolTipText("Search Eclipse repositories by provided capabilities");
+      super(Messages.RepositoryExplorer_action_searchRepositories_text, Action.AS_CHECK_BOX);
+      setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("tool16/search_repository.png")); //$NON-NLS-1$
+      setToolTipText(Messages.RepositoryExplorer_action_searchRepositories_tooltip);
     }
 
     public void update()
@@ -1602,9 +1608,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   {
     public SearchRequirementsAction()
     {
-      super("Search", Action.AS_CHECK_BOX);
-      setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("tool16/search_requirement.png"));
-      setToolTipText("Search Eclipse requirements by provided capabilities");
+      super(Messages.RepositoryExplorer_action_searchRequirements_text, Action.AS_CHECK_BOX);
+      setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("tool16/search_requirement.png")); //$NON-NLS-1$
+      setToolTipText(Messages.RepositoryExplorer_action_searchRequirements_tooltip);
     }
 
     public void update()
@@ -1634,9 +1640,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   {
     public FindRepositoriesAction()
     {
-      super("Find", Action.AS_CHECK_BOX);
-      setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("full/obj16/RepositoryList"));
-      setToolTipText("Find Eclipse repositories");
+      super(Messages.RepositoryExplorer_action_findRepositories_text, Action.AS_CHECK_BOX);
+      setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("full/obj16/RepositoryList")); //$NON-NLS-1$
+      setToolTipText(Messages.RepositoryExplorer_action_findRepositories_tooltip);
     }
 
     public void update()
@@ -1743,7 +1749,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     public LoadJob()
     {
-      super("Loading repository");
+      super(Messages.RepositoryExplorer_loadJob_name);
     }
 
     public void reschedule(URI location)
@@ -1783,7 +1789,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       catch (Exception ex)
       {
         List<IInstallableUnit> ius = null;
-        if ("file".equals(location.getScheme()))
+        if ("file".equals(location.getScheme())) //$NON-NLS-1$
         {
           try
           {
@@ -1795,7 +1801,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
             //$FALL-THROUGH$
           }
         }
-        else if ("platform".equals(location.getScheme()) && location.getPath() != null && location.getPath().startsWith("/resource/"))
+        else if ("platform".equals(location.getScheme()) && location.getPath() != null && location.getPath().startsWith("/resource/")) //$NON-NLS-1$ //$NON-NLS-2$
         {
           // This URI can't be a p2 repository so allow any exceptions this might raise to propagate.
           ius = analyzeIUs(location.toString());
@@ -1839,7 +1845,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
             if (repositoryManager.loadRepository(absolute, null) == null)
             {
-              throw new ProvisionException("No repository found at " + absolute + ".");
+              throw new ProvisionException("No repository found at " + absolute + "."); //$NON-NLS-1$ //$NON-NLS-2$
             }
           }
           catch (Exception ex)
@@ -1873,20 +1879,20 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     private List<IInstallableUnit> analyzeIUs(String path) throws Exception
     {
       // final SourceLocator sourceLocator = ResourcesFactory.eINSTANCE.createSourceLocator(path.toString(), true);
-      EFactory eFactory = ReflectUtil.getValue("eINSTANCE",
-          CommonPlugin.loadClass("org.eclipse.oomph.resources", "org.eclipse.oomph.resources.ResourcesFactory"));
-      Method createSourceLocatorMethod = ReflectUtil.getMethod(eFactory, "createSourceLocator", String.class, boolean.class);
+      EFactory eFactory = ReflectUtil.getValue("eINSTANCE", //$NON-NLS-1$
+          CommonPlugin.loadClass("org.eclipse.oomph.resources", "org.eclipse.oomph.resources.ResourcesFactory")); //$NON-NLS-1$ //$NON-NLS-2$
+      Method createSourceLocatorMethod = ReflectUtil.getMethod(eFactory, "createSourceLocator", String.class, boolean.class); //$NON-NLS-1$
       Object sourceLocator = ReflectUtil.invokeMethod(createSourceLocatorMethod, eFactory, path, true);
 
       // WorkspaceIUAnalyzer workspaceIUAnalyzer = new WorkspaceIUAnalyzer();
-      Object workspaceIUAnalyzer = CommonPlugin.loadClass("org.eclipse.oomph.targlets.core", "org.eclipse.oomph.targlets.internal.core.WorkspaceIUAnalyzer")
+      Object workspaceIUAnalyzer = CommonPlugin.loadClass("org.eclipse.oomph.targlets.core", "org.eclipse.oomph.targlets.internal.core.WorkspaceIUAnalyzer") //$NON-NLS-1$ //$NON-NLS-2$
           .newInstance();
 
       // EList<IInstallableUtil> result = workspaceIUAnalyzer.analyze(sourceLocator, IUGenerator.DEFAULTS, new NullProgressMonitor());
-      EList<?> iuGeneratorDefaults = ReflectUtil.getValue("DEFAULTS",
-          CommonPlugin.loadClass("org.eclipse.oomph.targlets", "org.eclipse.oomph.targlets.IUGenerator"));
+      EList<?> iuGeneratorDefaults = ReflectUtil.getValue("DEFAULTS", //$NON-NLS-1$
+          CommonPlugin.loadClass("org.eclipse.oomph.targlets", "org.eclipse.oomph.targlets.IUGenerator")); //$NON-NLS-1$ //$NON-NLS-2$
       EList<IInstallableUnit> result = ReflectUtil.invokeMethod(
-          ReflectUtil.getMethod(workspaceIUAnalyzer, "analyze", createSourceLocatorMethod.getReturnType(), EList.class, IProgressMonitor.class),
+          ReflectUtil.getMethod(workspaceIUAnalyzer, "analyze", createSourceLocatorMethod.getReturnType(), EList.class, IProgressMonitor.class), //$NON-NLS-1$
           workspaceIUAnalyzer, sourceLocator, iuGeneratorDefaults, new NullProgressMonitor());
 
       return result;
@@ -1900,7 +1906,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   {
     public AnalyzeJob()
     {
-      super("Analyzing repository");
+      super(Messages.RepositoryExplorer_analyzeJob_name);
     }
 
     public void reschedule()
@@ -1945,8 +1951,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       disposeChildren(parent);
 
       final Button button = new Button(parent, SWT.CHECK);
-      button.setText("Group items by category");
-      button.setToolTipText("Whether to show items in categories or in a complete list");
+      button.setText(Messages.RepositoryExplorer_groupButton_text);
+      button.setToolTipText(Messages.RepositoryExplorer_groupButton_tooltip);
       button.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
       button.setSelection(categorizeItems);
       button.addSelectionListener(new SelectionAdapter()
@@ -2062,7 +2068,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           if (roots.length == 0)
           {
             setItems(new Item[] { new StatusItem(new Status(IStatus.WARNING, P2UIPlugin.INSTANCE.getSymbolicName(),
-                "No categorized items " + (filter == null ? "" : "matching '" + filter + "'") + ". Disable 'Group items by category' to see more.")) });
+                (filter == null ? Messages.RepositoryExplorer_analyzeIus_noItems
+                    : NLS.bind(Messages.RepositoryExplorer_analyzeIus_noItemsMatchingFilter, filter)) + " " //$NON-NLS-1$
+                    + Messages.RepositoryExplorer_analyzeIus_disableGroupItemsToSeeMore)) });
           }
           else
           {
@@ -2126,7 +2134,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
                             if (ObjectUtil.equals(name, mainName))
                             {
-                              name += " (Source)";
+                              name += " (" + Messages.RepositoryExplorer_analyzeCategory_featureSource + ')'; //$NON-NLS-1$
                             }
                           }
 
@@ -2141,7 +2149,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
                             if (ObjectUtil.equals(name, mainName))
                             {
-                              name += " (Source)";
+                              name += " (" + Messages.RepositoryExplorer_analyzeCategory_otherIuSource + ')'; //$NON-NLS-1$
                             }
                           }
 
@@ -2285,7 +2293,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           if (featureItems.length == 0)
           {
             setItems(new Item[] { new StatusItem(new Status(IStatus.WARNING, P2UIPlugin.INSTANCE.getSymbolicName(),
-                "No feature items " + (filter == null ? "" : "matching '" + filter + "'") + ". Enable 'Expert mode' to see more.")) });
+                (filter == null ? Messages.RepositoryExplorer_analyzeIus_noFeatureItems
+                    : NLS.bind(Messages.RepositoryExplorer_analyzeIus_noFeatureItemsMatchingFilter, filter)) + " " //$NON-NLS-1$
+                    + Messages.RepositoryExplorer_analyzeIus_enableExpertModeToSeeMore)) });
           }
           else
           {
@@ -2311,7 +2321,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       CCombo namespaceCombo =
           // new CCombo(parent, SWT.BORDER | SWT.READ_ONLY | SWT.FLAT);
           createCombo(parent, SWT.BORDER | SWT.READ_ONLY | SWT.FLAT, false);
-      namespaceCombo.setToolTipText("Select the namespace of the capabilities to show");
+      namespaceCombo.setToolTipText(Messages.RepositoryExplorer_capabilitiesMode_namespaceCombo_tooltip);
 
       namespaceViewer = new ComboViewer(namespaceCombo);
       namespaceViewer.setComparator(new ViewerComparator());
@@ -2366,11 +2376,11 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           String namespace = capability.getNamespace();
           String name = capability.getName();
 
-          if ("org.eclipse.equinox.p2.flavor".equals(namespace))
+          if ("org.eclipse.equinox.p2.flavor".equals(namespace)) //$NON-NLS-1$
           {
             flavors.add(name);
           }
-          else if (!"A.PDE.Target.Platform".equalsIgnoreCase(namespace))
+          else if (!"A.PDE.Target.Platform".equalsIgnoreCase(namespace)) //$NON-NLS-1$
           {
             namespaces.add(namespace);
           }
@@ -2439,8 +2449,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           {
             if (capabilityItems.length == 0)
             {
-              setItems(new Item[] { new StatusItem(new Status(IStatus.WARNING, P2UIPlugin.INSTANCE.getSymbolicName(),
-                  "No items " + (filter == null ? "" : "matching '" + filter + "'") + ".")) });
+              setItems(new Item[] { new StatusItem(
+                  new Status(IStatus.WARNING, P2UIPlugin.INSTANCE.getSymbolicName(), filter == null ? Messages.RepositoryExplorer_capabilitiesMode_noItems
+                      : NLS.bind(Messages.RepositoryExplorer_capabilitiesMode_noItemsMatchingFilter, filter))) });
             }
             else
             {
@@ -2472,8 +2483,6 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
    */
   private final class RepositoryComboHandler implements FocusListener
   {
-    private static final String INITIAL_REPOSITORY_TEXT = "type repository url, drag and drop, or pick from list";
-
     private Color initialTextForegroundColor;
 
     private Color originalForeground;
@@ -2481,7 +2490,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     public void setActiveRepository(String activeRepository)
     {
       repositoryCombo.setForeground(getForegroundColor(activeRepository));
-      repositoryCombo.setText(activeRepository == null ? repositoryCombo.isFocusControl() ? "" : INITIAL_REPOSITORY_TEXT : activeRepository);
+      repositoryCombo.setText(
+          activeRepository == null ? repositoryCombo.isFocusControl() ? "" : Messages.RepositoryExplorer_repositoryCombo_initialText : activeRepository); //$NON-NLS-1$
     }
 
     private Color getForegroundColor(String activeRepository)
@@ -2493,7 +2503,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
       if (initialTextForegroundColor == null)
       {
-        initialTextForegroundColor = formToolkit.getColors().getColor("initial_repository");
+        initialTextForegroundColor = formToolkit.getColors().getColor("initial_repository"); //$NON-NLS-1$
       }
 
       return activeRepository == null && !repositoryCombo.isFocusControl() ? initialTextForegroundColor : originalForeground;
@@ -2501,9 +2511,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     public void focusGained(FocusEvent e)
     {
-      if (repositoryCombo.getText().equals(INITIAL_REPOSITORY_TEXT))
+      if (repositoryCombo.getText().equals(Messages.RepositoryExplorer_repositoryCombo_initialText))
       {
-        setActiveRepository("");
+        setActiveRepository(""); //$NON-NLS-1$
       }
     }
 
@@ -2775,7 +2785,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
    */
   private static final class VersionProvider extends LabelProvider implements IStructuredContentProvider
   {
-    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/version");
+    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/version"); //$NON-NLS-1$
 
     private TableViewer versionsViewer;
 
@@ -2862,7 +2872,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       int segments = version.getSegmentCount();
       if (segments == 0)
       {
-        return new ItemVersion(item, version, "0.0.0", filters);
+        return new ItemVersion(item, version, "0.0.0", filters); //$NON-NLS-1$
       }
 
       segments = Math.min(segments, versionSegment.ordinal() + 1);
@@ -2888,7 +2898,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
       if (segments < 3)
       {
-        builder.append(".x");
+        builder.append(".x"); //$NON-NLS-1$
       }
 
       return new ItemVersion(item, version, builder.toString(), filters);
@@ -3049,7 +3059,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
    */
   private static final class LoadingItem extends Item
   {
-    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/repository");
+    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/repository"); //$NON-NLS-1$
 
     private final URI location;
 
@@ -3067,7 +3077,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     @Override
     public String getLabel()
     {
-      return "Loading " + location;
+      return NLS.bind(Messages.RepositoryExplorer_loadingItem_loadingLocation, location);
     }
   }
 
@@ -3101,7 +3111,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
    */
   private static final class CategoryItem extends VersionedItem
   {
-    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/category");
+    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/category"); //$NON-NLS-1$
 
     private Item[] children;
 
@@ -3180,7 +3190,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
    */
   private static final class FeatureItem extends VersionedItem
   {
-    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactFeature");
+    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactFeature"); //$NON-NLS-1$
 
     private final String id;
 
@@ -3207,7 +3217,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
    */
   private static final class PluginItem extends VersionedItem
   {
-    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactPlugin");
+    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactPlugin"); //$NON-NLS-1$
 
     private final String id;
 
@@ -3234,15 +3244,15 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
    */
   private static final class CapabilityItem extends VersionedItem
   {
-    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/capability");
+    private static final Image IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/capability"); //$NON-NLS-1$
 
-    private static final Image FEATURE_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactFeature");
+    private static final Image FEATURE_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactFeature"); //$NON-NLS-1$
 
-    private static final Image PLUGIN_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactPlugin");
+    private static final Image PLUGIN_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/artifactPlugin"); //$NON-NLS-1$
 
-    private static final Image PACKAGE_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("full/obj16/Requirement_Package");
+    private static final Image PACKAGE_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("full/obj16/Requirement_Package"); //$NON-NLS-1$
 
-    private static final Image PROJECT_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("full/obj16/Requirement_Project");
+    private static final Image PROJECT_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("full/obj16/Requirement_Project"); //$NON-NLS-1$
 
     private String namespace;
 

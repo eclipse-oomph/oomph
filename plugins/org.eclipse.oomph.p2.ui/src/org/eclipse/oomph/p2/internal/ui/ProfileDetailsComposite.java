@@ -40,6 +40,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -79,10 +80,10 @@ public class ProfileDetailsComposite extends Composite
     Agent agent = profile.getAgent();
     BundlePool bundlePool = profile.getBundlePool();
 
-    addHeaderRow("Profile", profile.getLocation(), profile.getProfileId()).selectAll();
-    addHeaderRow("Agent", agent.getLocation(), null);
-    addHeaderRow("Bundle pool", bundlePool == null ? null : bundlePool.getLocation(), null);
-    addHeaderRow("Installation", profile.getInstallFolder(), null);
+    addHeaderRow(Messages.ProfileDetailsComposite_headerRow_profile, profile.getLocation(), profile.getProfileId()).selectAll();
+    addHeaderRow(Messages.ProfileDetailsComposite_headerRow_agent, agent.getLocation(), null);
+    addHeaderRow(Messages.ProfileDetailsComposite_headerRow_bundlePool, bundlePool == null ? null : bundlePool.getLocation(), null);
+    addHeaderRow(Messages.ProfileDetailsComposite_headerRow_installation, profile.getInstallFolder(), null);
 
     new Label(this, SWT.NONE);
     new Label(this, SWT.NONE);
@@ -112,7 +113,7 @@ public class ProfileDetailsComposite extends Composite
   {
     Label label = new Label(this, SWT.NONE);
     label.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
-    label.setText(name + ":");
+    label.setText(name + ":"); //$NON-NLS-1$
 
     Text text = new Text(this, SWT.BORDER | SWT.READ_ONLY);
     text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -126,8 +127,8 @@ public class ProfileDetailsComposite extends Composite
       text.setText(location.getAbsolutePath());
     }
 
-    ToolButton button = new ToolButton(this, SWT.PUSH, P2UIPlugin.INSTANCE.getSWTImage("obj16/folder"), false);
-    button.setToolTipText("Open " + name.toLowerCase() + " folder");
+    ToolButton button = new ToolButton(this, SWT.PUSH, P2UIPlugin.INSTANCE.getSWTImage("obj16/folder"), false); //$NON-NLS-1$
+    button.setToolTipText(NLS.bind(Messages.ProfileDetailsComposite_openFolder, name.toLowerCase()));
     button.setEnabled(location != null && location.isDirectory());
     button.addSelectionListener(new SelectionAdapter()
     {
@@ -144,7 +145,7 @@ public class ProfileDetailsComposite extends Composite
   private void createDefinitionTab(TabFolder tabFolder)
   {
     TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-    tabItem.setText("Definition");
+    tabItem.setText(Messages.ProfileDetailsComposite_tab_definition);
 
     final TreeViewer viewer = new TreeViewer(tabFolder, SWT.NONE);
     viewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
@@ -159,10 +160,10 @@ public class ProfileDetailsComposite extends Composite
       public void run()
       {
         ProfileDefinition definition = profile.getDefinition();
-        ItemProvider requirements = new ItemProvider(adapterFactory, "Requirements", P2UIPlugin.INSTANCE.getSWTImage("full/obj16/ProfileDefinition"),
-            definition.getRequirements());
-        ItemProvider repositories = new ItemProvider(adapterFactory, "Repositories", P2UIPlugin.INSTANCE.getSWTImage("full/obj16/RepositoryList"),
-            definition.getRepositories());
+        ItemProvider requirements = new ItemProvider(adapterFactory, Messages.ProfileDetailsComposite_tab_definition_requirements,
+            P2UIPlugin.INSTANCE.getSWTImage("full/obj16/ProfileDefinition"), definition.getRequirements()); //$NON-NLS-1$
+        ItemProvider repositories = new ItemProvider(adapterFactory, Messages.ProfileDetailsComposite_tab_definition_repositories,
+            P2UIPlugin.INSTANCE.getSWTImage("full/obj16/RepositoryList"), definition.getRepositories()); //$NON-NLS-1$
 
         ItemProvider input = new ItemProvider(adapterFactory);
         input.getChildren().add(requirements);
@@ -177,7 +178,7 @@ public class ProfileDetailsComposite extends Composite
   private void createInstalledUnitsTab(TabFolder tabFolder)
   {
     TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-    tabItem.setText("Installed Units");
+    tabItem.setText(Messages.ProfileDetailsComposite_tab_installedUnits);
 
     TableColumnLayout layout = new TableColumnLayout();
 
@@ -221,7 +222,7 @@ public class ProfileDetailsComposite extends Composite
   private void createPropertiesTab(TabFolder tabFolder)
   {
     TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-    tabItem.setText("Properties");
+    tabItem.setText(Messages.ProfileDetailsComposite_tab_properties);
 
     TableColumnLayout layout = new TableColumnLayout();
 
@@ -238,11 +239,11 @@ public class ProfileDetailsComposite extends Composite
     table.setLinesVisible(true);
 
     TableColumn keyColumn = new TableColumn(table, SWT.LEFT);
-    keyColumn.setText("Key");
+    keyColumn.setText(Messages.ProfileDetailsComposite_tab_properties_key);
     layout.setColumnData(keyColumn, new ColumnWeightData(40));
 
     TableColumn valueColumn = new TableColumn(table, SWT.LEFT);
-    valueColumn.setText("Value");
+    valueColumn.setText(Messages.ProfileDetailsComposite_tab_properties_value);
     layout.setColumnData(valueColumn, new ColumnWeightData(60));
 
     UIUtil.asyncExec(viewer.getControl(), new Runnable()

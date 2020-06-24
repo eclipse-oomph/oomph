@@ -52,8 +52,6 @@ import java.io.File;
  */
 public class TargetDefinitionExportWizardPage extends WizardPage
 {
-  private static final String DEFAULT_MESSAGE = "Select a target definition and enter a folder to which to export.";
-
   private TableViewer targetDefinitionViewer;
 
   private ITargetDefinition targetDefinition;
@@ -66,7 +64,7 @@ public class TargetDefinitionExportWizardPage extends WizardPage
 
   public TargetDefinitionExportWizardPage()
   {
-    super("page");
+    super("page"); //$NON-NLS-1$
   }
 
   public ITargetDefinition getTargetDefinition()
@@ -82,14 +80,14 @@ public class TargetDefinitionExportWizardPage extends WizardPage
   public void createControl(Composite parent)
   {
     setTitle(TargetDefinitionExportWizard.TITLE);
-    setMessage(DEFAULT_MESSAGE);
+    setMessage(Messages.TargetDefinitionExportWizardPage_defaultMessage);
 
     Composite container = new Composite(parent, SWT.NULL);
     setControl(container);
     container.setLayout(new GridLayout(1, false));
 
     Label targetPlatformLabel = new Label(container, SWT.NONE);
-    targetPlatformLabel.setText("Target platform:");
+    targetPlatformLabel.setText(Messages.TargetDefinitionExportWizardPage_targetPlatform);
 
     targetDefinitionViewer = new TableViewer(container, SWT.BORDER | SWT.V_SCROLL);
     targetDefinitionViewer.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -104,7 +102,7 @@ public class TargetDefinitionExportWizardPage extends WizardPage
     });
 
     Label exportFolderLabel = new Label(container, SWT.NONE);
-    exportFolderLabel.setText("Export folder:");
+    exportFolderLabel.setText(Messages.TargetDefinitionExportWizardPage_exportFolder);
 
     GridLayout compositeGridLayout = new GridLayout(2, false);
     compositeGridLayout.marginHeight = 0;
@@ -125,15 +123,15 @@ public class TargetDefinitionExportWizardPage extends WizardPage
     });
 
     Button browseButton = new Button(composite, SWT.NONE);
-    browseButton.setText("Browse...");
+    browseButton.setText(Messages.TargetDefinitionExportWizardPage_browseButton_text);
     browseButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
       {
         DirectoryDialog dialog = new DirectoryDialog(getShell());
-        dialog.setText("Export Folder");
-        dialog.setMessage("Select a folder to which to export:");
+        dialog.setText(Messages.TargetDefinitionExportWizardPage_exportFolderDialog_text);
+        dialog.setMessage(Messages.TargetDefinitionExportWizardPage_exportFolderDialog_message);
 
         String value = exportFolderText.getText();
         if (value.length() != 0)
@@ -163,7 +161,7 @@ public class TargetDefinitionExportWizardPage extends WizardPage
 
     setPageComplete(false);
 
-    new Job("Determine Target Definitions")
+    new Job(Messages.TargetDefinitionExportWizardPage_determineTargetsJob_name)
     {
       @Override
       protected IStatus run(IProgressMonitor monitor)
@@ -248,7 +246,7 @@ public class TargetDefinitionExportWizardPage extends WizardPage
     targetDefinition = (ITargetDefinition)selection.getFirstElement();
     if (targetDefinition == null)
     {
-      setMessage("Select a target definition to export.");
+      setMessage(Messages.TargetDefinitionExportWizardPage_selectTargetToExport);
       setPageComplete(false);
       return;
     }
@@ -256,7 +254,7 @@ public class TargetDefinitionExportWizardPage extends WizardPage
     String path = exportFolderText.getText();
     if (path.length() == 0)
     {
-      setMessage("Enter a folder to which to export.");
+      setMessage(Messages.TargetDefinitionExportWizardPage_enterFolderToExportTo);
       setPageComplete(false);
       return;
     }
@@ -272,7 +270,7 @@ public class TargetDefinitionExportWizardPage extends WizardPage
       return;
     }
 
-    setMessage(DEFAULT_MESSAGE);
+    setMessage(Messages.TargetDefinitionExportWizardPage_defaultMessage);
     setPageComplete(true);
   }
 
@@ -288,7 +286,7 @@ public class TargetDefinitionExportWizardPage extends WizardPage
     {
       if (element instanceof ITargetDefinition)
       {
-        return TargletsUIPlugin.INSTANCE.getSWTImage("target_obj");
+        return TargletsUIPlugin.INSTANCE.getSWTImage("target_obj"); //$NON-NLS-1$
       }
 
       return null;
@@ -303,13 +301,13 @@ public class TargetDefinitionExportWizardPage extends WizardPage
         String text = targetDefinition.getName();
         if (targetDefinition.getHandle().equals(activeTargetHandle))
         {
-          text += " (Active)";
+          text += ' ' + Messages.TargetDefinitionExportWizardPage_active;
         }
 
         return text;
       }
 
-      return "";
+      return ""; //$NON-NLS-1$
     }
 
     public Font getFont(Object element)

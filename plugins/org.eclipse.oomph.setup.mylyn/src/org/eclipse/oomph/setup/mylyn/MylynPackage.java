@@ -45,7 +45,7 @@ public interface MylynPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNAME = "mylyn";
+  String eNAME = "mylyn"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -53,7 +53,7 @@ public interface MylynPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/oomph/setup/mylyn/1.0";
+  String eNS_URI = "http://www.eclipse.org/oomph/setup/mylyn/1.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -61,7 +61,7 @@ public interface MylynPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "mylyn";
+  String eNS_PREFIX = "mylyn"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.

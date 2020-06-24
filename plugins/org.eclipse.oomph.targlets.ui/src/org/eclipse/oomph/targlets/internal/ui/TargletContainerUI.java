@@ -35,6 +35,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.internal.ui.shared.target.StyledBundleLabelProvider;
@@ -133,7 +134,7 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
           {
             WizardDialog wizardDialog = (WizardDialog)data;
 
-            IWizard wizard = ReflectUtil.getValue("wizard", wizardDialog);
+            IWizard wizard = ReflectUtil.getValue("wizard", wizardDialog); //$NON-NLS-1$
             if (wizard != null)
             {
               wizard.performFinish();
@@ -159,7 +160,7 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
           if (data instanceof PreferenceDialog)
           {
             PreferenceDialog preferenceDialog = (PreferenceDialog)data;
-            ReflectUtil.invokeMethod("okPressed", preferenceDialog);
+            ReflectUtil.invokeMethod("okPressed", preferenceDialog); //$NON-NLS-1$
           }
         }
         catch (Throwable ex)
@@ -227,7 +228,7 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
 
             if (descriptor.getWorkingDigest() != null)
             {
-              children.add(new StatusWrapper("Content is available from the last working profile"));
+              children.add(new StatusWrapper(Messages.TargletContainerUI_status_contentAvailableFromLastWorkingProfile));
             }
 
             try
@@ -247,12 +248,15 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
                   Map<P2Index.Repository, Set<Version>> composedResult = P2Index.INSTANCE.generateCapabilitiesFromComposedRepositories(simpleResult);
                   collectRepositories(composedResult, range, repositories);
 
-                  missingIUInfo = new StatusWrapper("Found " + repositories.size() + " " + "repositories that satisfy " + missingIU.getNamespace() + "/"
-                      + missingIU.getName() + " " + missingIU.getRange());
+                  String missingIUDescription = missingIU.getNamespace() + "/" + missingIU.getName() + " " + missingIU.getRange(); //$NON-NLS-1$ //$NON-NLS-2$
+                  missingIUInfo = new StatusWrapper(
+                      repositories.size() == 1 ? NLS.bind(Messages.TargletContainerUI_status_foundRepository, missingIUDescription)
+                          : NLS.bind(Messages.TargletContainerUI_status_foundRepositories, repositories.size(), missingIUDescription));
                   for (P2Index.Repository repository : repositories)
                   {
-                    missingIUInfo.addChild(new StatusWrapper(
-                        repository.getLocation() + "  (" + (repository.isComposed() ? "composed" : "simple") + ": " + repository.getCapabilityCount() + ")"));
+                    missingIUInfo.addChild(new StatusWrapper(repository.getLocation() + "  (" //$NON-NLS-1$
+                        + (repository.isComposed() ? Messages.TargletContainerUI_status_composed : Messages.TargletContainerUI_status_simple) + ": " //$NON-NLS-1$
+                        + repository.getCapabilityCount() + ")")); //$NON-NLS-1$
                   }
                 }
 
@@ -321,7 +325,7 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
       if (element instanceof ITargletContainer)
       {
         ITargletContainer location = (ITargletContainer)element;
-        String key = "targlet_container";
+        String key = "targlet_container"; //$NON-NLS-1$
 
         ITargletContainerDescriptor descriptor = location.getDescriptor();
         if (descriptor != null)
@@ -329,7 +333,7 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
           UpdateProblem updateProblem = descriptor.getUpdateProblem();
           if (updateProblem != null)
           {
-            key += "_problem";
+            key += "_problem"; //$NON-NLS-1$
           }
         }
 

@@ -79,6 +79,7 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
@@ -185,7 +186,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
   @Override
   protected String getImagePath()
   {
-    return "wizban/AgentManager.png";
+    return "wizban/AgentManager.png"; //$NON-NLS-1$
   }
 
   @Override
@@ -235,8 +236,8 @@ public abstract class SearchEclipseDialog extends OomphDialog
     ToolBar filterToolBar = new ToolBar(filterComposite, SWT.FLAT | SWT.RIGHT);
 
     final ToolItem collapseAllButton = new ToolItem(filterToolBar, SWT.NONE);
-    collapseAllButton.setToolTipText("Collapse All");
-    collapseAllButton.setImage(P2UIPlugin.INSTANCE.getSWTImage("collapse-all"));
+    collapseAllButton.setToolTipText(Messages.SearchEclipseDialog_collapseAllButton_tooltip);
+    collapseAllButton.setImage(P2UIPlugin.INSTANCE.getSWTImage("collapse-all")); //$NON-NLS-1$
     collapseAllButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -516,14 +517,14 @@ public abstract class SearchEclipseDialog extends OomphDialog
   @Override
   protected void createButtonsForButtonBar(Composite parent)
   {
-    Button applyButton = createButton(parent, APPLY_ID, "Apply", true);
+    Button applyButton = createButton(parent, APPLY_ID, Messages.SearchEclipseDialog_applyButton_text, true);
     applyButton.setEnabled(false);
     applyButton.setImage(getDefaultApplyImage());
 
     super.createButtonsForButtonBar(parent);
 
     Button okButton = getButton(IDialogConstants.OK_ID);
-    okButton.setText("Apply and Close");
+    okButton.setText(Messages.SearchEclipseDialog_okButton_text);
   }
 
   protected void updateButtons(boolean enabled)
@@ -554,10 +555,10 @@ public abstract class SearchEclipseDialog extends OomphDialog
   protected void loadModel()
   {
     Item root = Item.createItem();
-    root.getChildren().add(Item.createNamespaceItem("Loading..."));
+    root.getChildren().add(Item.createNamespaceItem(Messages.SearchEclipseDialog_loadingItem_namespace));
     capabilitiesViewer.setInput(root);
 
-    Job job = new Job("Capability Loader")
+    Job job = new Job(Messages.SearchEclipseDialog_capabilityLoaderJob_name)
     {
       @Override
       protected IStatus run(IProgressMonitor monitor)
@@ -567,15 +568,15 @@ public abstract class SearchEclipseDialog extends OomphDialog
         Map<String, Set<String>> capabilities = new LinkedHashMap<String, Set<String>>(P2Index.INSTANCE.getCapabilities());
         if (capabilities.isEmpty())
         {
-          children.add(Item.createNamespaceItem("Index unavailable"));
+          children.add(Item.createNamespaceItem(Messages.SearchEclipseDialog_indexUnavailableItem_namespace));
         }
         else
         {
-          Set<String> flavors = capabilities.get("org.eclipse.equinox.p2.flavor");
+          Set<String> flavors = capabilities.get("org.eclipse.equinox.p2.flavor"); //$NON-NLS-1$
           Set<String> capabilityKeys = capabilities.keySet();
           RepositoryExplorer.minimizeNamespaces(flavors, capabilityKeys);
-          capabilityKeys.remove("org.eclipse.equinox.p2.flavor");
-          capabilityKeys.remove("A.PDE.Target.Platform");
+          capabilityKeys.remove("org.eclipse.equinox.p2.flavor"); //$NON-NLS-1$
+          capabilityKeys.remove("A.PDE.Target.Platform"); //$NON-NLS-1$
           for (Entry<String, Set<String>> entry : capabilities.entrySet())
           {
             String namespace = entry.getKey();
@@ -583,11 +584,11 @@ public abstract class SearchEclipseDialog extends OomphDialog
             children.add(namespaceItem);
 
             Map<SegmentSequence, Item> hierarchicalChildren = new LinkedHashMap<SegmentSequence, Item>();
-            SegmentSequence baseName = SegmentSequence.create(".");
+            SegmentSequence baseName = SegmentSequence.create("."); //$NON-NLS-1$
             hierarchicalChildren.put(baseName, namespaceItem);
             for (String value : entry.getValue())
             {
-              SegmentSequence qualifiedName = SegmentSequence.create(".", value);
+              SegmentSequence qualifiedName = SegmentSequence.create(".", value); //$NON-NLS-1$
               SegmentSequence partialName = baseName;
               Item parent = namespaceItem;
               for (String segment : qualifiedName.segments())
@@ -640,10 +641,10 @@ public abstract class SearchEclipseDialog extends OomphDialog
     }
 
     Item root = Item.createItem();
-    root.getChildren().add(Item.createNamespaceItem("Loading..."));
+    root.getChildren().add(Item.createNamespaceItem(Messages.SearchEclipseDialog_loadingItem_namespace));
     detailsViewer.setInput(root);
 
-    detailsLoadJob = new Job("Detail Loader")
+    detailsLoadJob = new Job(Messages.SearchEclipseDialog_detailsLoadJob_name)
     {
       @Override
       protected IStatus run(IProgressMonitor monitor)
@@ -735,7 +736,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
       EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(firstElement);
       if (domain != null && firstElement != null)
       {
-        return new ApplyHandler(domain, firstElement, "Apply to")
+        return new ApplyHandler(domain, firstElement, Messages.SearchEclipseDialog_applyHandler_tooltipPrefix)
         {
           @Override
           public void apply()
@@ -769,7 +770,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
    */
   private static final class ItemFilter extends PatternFilter implements FilteredTreeWithoutWorkbench.ExpansionFilter
   {
-    private static final Pattern WILDCARD_FILTER_PATTERN = Pattern.compile("(\\\\.|[*?/.])");
+    private static final Pattern WILDCARD_FILTER_PATTERN = Pattern.compile("(\\\\.|[*?/.])"); //$NON-NLS-1$
 
     private Pattern filterPattern;
 
@@ -792,7 +793,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
       else
       {
         prefixFilterPatterns = new ArrayList<Pattern>();
-        StringBuffer pattern = new StringBuffer("(\\Q");
+        StringBuffer pattern = new StringBuffer("(\\Q"); //$NON-NLS-1$
         if (patternString.indexOf('/') == -1)
         {
           patternString = '/' + patternString;
@@ -804,14 +805,14 @@ public abstract class SearchEclipseDialog extends OomphDialog
           String separator = matcher.group(1);
           if (separator.length() == 2)
           {
-            matcher.appendReplacement(pattern, "");
-            if ("\\E".equals(separator))
+            matcher.appendReplacement(pattern, ""); //$NON-NLS-1$
+            if ("\\E".equals(separator)) //$NON-NLS-1$
             {
-              pattern.append("\\E\\\\E\\Q");
+              pattern.append("\\E\\\\E\\Q"); //$NON-NLS-1$
             }
-            else if ("\\\\".equals(separator))
+            else if ("\\\\".equals(separator)) //$NON-NLS-1$
             {
-              pattern.append("\\E\\\\\\Q");
+              pattern.append("\\E\\\\\\Q"); //$NON-NLS-1$
             }
             else
             {
@@ -825,36 +826,36 @@ public abstract class SearchEclipseDialog extends OomphDialog
             switch (separatorChar)
             {
               case '*':
-                tail = ".*?";
+                tail = ".*?"; //$NON-NLS-1$
                 break;
               case '?':
-                tail = ".";
+                tail = "."; //$NON-NLS-1$
                 break;
               case '/':
                 if (matcher.start(1) == 0)
                 {
-                  tail = "/.*?";
+                  tail = "/.*?"; //$NON-NLS-1$
                 }
                 else
                 {
-                  tail = ".*?/.*?";
+                  tail = ".*?/.*?"; //$NON-NLS-1$
                 }
                 break;
               case '.':
-                tail = "(\\.)";
+                tail = "(\\.)"; //$NON-NLS-1$
                 break;
               default:
-                throw new IllegalStateException("Pattern " + WILDCARD_FILTER_PATTERN + " should match a single character");
+                throw new IllegalStateException("Pattern " + WILDCARD_FILTER_PATTERN + " should match a single character"); //$NON-NLS-1$ //$NON-NLS-2$
             }
 
-            matcher.appendReplacement(pattern, "\\\\E)");
+            matcher.appendReplacement(pattern, "\\\\E)"); //$NON-NLS-1$
             prefixFilterPatterns.add(Pattern.compile(pattern.toString(), Pattern.CASE_INSENSITIVE));
-            pattern.append(tail).append("(\\Q");
+            pattern.append(tail).append("(\\Q"); //$NON-NLS-1$
           }
         }
 
         matcher.appendTail(pattern);
-        pattern.append("\\E)");
+        pattern.append("\\E)"); //$NON-NLS-1$
 
         filterPattern = Pattern.compile(pattern.toString(), Pattern.CASE_INSENSITIVE);
         prefixFilterPatterns.add(filterPattern);
@@ -915,8 +916,8 @@ public abstract class SearchEclipseDialog extends OomphDialog
         {
           Version minimum1 = item1.versionRange.getMinimum();
           Version minimum2 = item2.versionRange.getMinimum();
-          boolean qualifier1 = minimum1.getSegmentCount() >= 4 && !"".equals(minimum1.getSegment(3));
-          boolean qualifier2 = minimum2.getSegmentCount() >= 4 && !"".equals(minimum2.getSegment(3));
+          boolean qualifier1 = minimum1.getSegmentCount() >= 4 && !"".equals(minimum1.getSegment(3)); //$NON-NLS-1$
+          boolean qualifier2 = minimum2.getSegmentCount() >= 4 && !"".equals(minimum2.getSegment(3)); //$NON-NLS-1$
           if (qualifier1 && !qualifier2)
           {
             return 1;
@@ -955,19 +956,19 @@ public abstract class SearchEclipseDialog extends OomphDialog
       }
     };
 
-    private static final Image VERSION_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/version");
+    private static final Image VERSION_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/version"); //$NON-NLS-1$
 
-    private static final Image NAMESPACE_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/folder");
+    private static final Image NAMESPACE_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/folder"); //$NON-NLS-1$
 
-    private static final Image CAPABILITY_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/capability");
+    private static final Image CAPABILITY_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/capability"); //$NON-NLS-1$
 
-    private static final Image REPOSITORY_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/repository");
+    private static final Image REPOSITORY_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("obj16/repository"); //$NON-NLS-1$
 
-    private static final Image JAVA_PACKAGE_IMAGE = ExtendedImageRegistry.INSTANCE.getImage(P2EditPlugin.INSTANCE.getImage("full/obj16/Requirement_Package"));
+    private static final Image JAVA_PACKAGE_IMAGE = ExtendedImageRegistry.INSTANCE.getImage(P2EditPlugin.INSTANCE.getImage("full/obj16/Requirement_Package")); //$NON-NLS-1$
 
-    private static final Image BUNDLE_IMAGE = ExtendedImageRegistry.INSTANCE.getImage(P2EditPlugin.INSTANCE.getImage("full/obj16/Requirement_Plugin"));
+    private static final Image BUNDLE_IMAGE = ExtendedImageRegistry.INSTANCE.getImage(P2EditPlugin.INSTANCE.getImage("full/obj16/Requirement_Plugin")); //$NON-NLS-1$
 
-    private static final Image FEATURE_IMAGE = ExtendedImageRegistry.INSTANCE.getImage(P2EditPlugin.INSTANCE.getImage("full/obj16/Requirement_Feature"));
+    private static final Image FEATURE_IMAGE = ExtendedImageRegistry.INSTANCE.getImage(P2EditPlugin.INSTANCE.getImage("full/obj16/Requirement_Feature")); //$NON-NLS-1$
 
     private String namespace;
 
@@ -1000,7 +1001,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
 
     private Item(String namespace, String name)
     {
-      super(namespace + "/" + URI.decode(name), getImage(namespace, name));
+      super(namespace + "/" + URI.decode(name), getImage(namespace, name)); //$NON-NLS-1$
       this.namespace = namespace;
       this.name = name;
     }
@@ -1020,7 +1021,8 @@ public abstract class SearchEclipseDialog extends OomphDialog
     {
       super(repository.getLocation().toString(), REPOSITORY_IMAGE);
       int capabilityCount = repository.getCapabilityCount();
-      decoration = " " + capabilityCount + (capabilityCount == 1 ? " capability" : " capabilities");
+      decoration = " " //$NON-NLS-1$
+          + (capabilityCount == 1 ? Messages.SearchEclipseDialog_capability : NLS.bind(Messages.SearchEclipseDialog_capabilities, capabilityCount));
       this.repository = true;
     }
 
@@ -1130,7 +1132,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
       {
         org.eclipse.emf.edit.provider.StyledString styledLabel = new org.eclipse.emf.edit.provider.StyledString();
         styledLabel.append(getText());
-        styledLabel.append(" ");
+        styledLabel.append(" "); //$NON-NLS-1$
         styledLabel.append(decoration, org.eclipse.emf.edit.provider.StyledString.Style.DECORATIONS_STYLER);
         return styledLabel;
       }
@@ -1163,7 +1165,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
 
     private static Image getImage(String namespace, String name)
     {
-      if ("java.package".equals(namespace))
+      if ("java.package".equals(namespace)) //$NON-NLS-1$
       {
         return JAVA_PACKAGE_IMAGE;
       }
@@ -1178,12 +1180,12 @@ public abstract class SearchEclipseDialog extends OomphDialog
         return BUNDLE_IMAGE;
       }
 
-      if ("org.eclipse.update.feature".equals(namespace))
+      if ("org.eclipse.update.feature".equals(namespace)) //$NON-NLS-1$
       {
         return FEATURE_IMAGE;
       }
 
-      if ("osgi.fragment".equals(namespace) || "osgi.bundle".equals(namespace))
+      if ("osgi.fragment".equals(namespace) || "osgi.bundle".equals(namespace)) //$NON-NLS-1$ //$NON-NLS-2$
       {
         return BUNDLE_IMAGE;
       }
@@ -1197,7 +1199,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
    */
   private static final class CapabilityComposedImage extends ComposedImage
   {
-    private static final Image CONCRETE_CAPABILITY_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("ovr16/concrete_capability");
+    private static final Image CONCRETE_CAPABILITY_IMAGE = P2UIPlugin.INSTANCE.getSWTImage("ovr16/concrete_capability"); //$NON-NLS-1$
 
     private CapabilityComposedImage(Object image)
     {
@@ -1361,8 +1363,8 @@ public abstract class SearchEclipseDialog extends OomphDialog
       {
         StringBuilder result = new StringBuilder();
         result.append(DiagnosticDecorator
-            .enquote("<img src='" + ImageURIRegistry.INSTANCE.getImageURI(ExtendedImageRegistry.INSTANCE.getImage(item.getImage())) + "'/> "));
-        result.append("&nbsp;");
+            .enquote("<img src='" + ImageURIRegistry.INSTANCE.getImageURI(ExtendedImageRegistry.INSTANCE.getImage(item.getImage())) + "'/> ")); //$NON-NLS-1$ //$NON-NLS-2$
+        result.append("&nbsp;"); //$NON-NLS-1$
         result.append(item.getNamespace());
         result.append('/');
         result.append(URI.decode(item.getName()));
@@ -1378,9 +1380,9 @@ public abstract class SearchEclipseDialog extends OomphDialog
    */
   public static class Repositories extends SearchEclipseDialog
   {
-    public static final String MESSAGE = "Search Eclipse repositories by entering the fully qualified name of a Java package or installable unit";
+    public static final String MESSAGE = Messages.SearchEclipseDialog_repositoriesDialog_message;
 
-    public static final String TITLE = "Eclipse Repository Search";
+    public static final String TITLE = Messages.SearchEclipseDialog_repositoriesDialog_title;
 
     private String selectedRepository;
 
@@ -1392,7 +1394,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
     @Override
     public String getHelpPath()
     {
-      return P2UIPlugin.INSTANCE.getSymbolicName() + "/html/SearchEclipseRepositoriesHelp.html";
+      return P2UIPlugin.INSTANCE.getSymbolicName() + "/html/SearchEclipseRepositoriesHelp.html"; //$NON-NLS-1$
     }
 
     public String getSelectedRepository()
@@ -1421,7 +1423,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
     @Override
     protected Image getShellImage()
     {
-      return P2UIPlugin.INSTANCE.getSWTImage("tool16/search_repository.png");
+      return P2UIPlugin.INSTANCE.getSWTImage("tool16/search_repository.png"); //$NON-NLS-1$
     }
 
     @Override
@@ -1433,7 +1435,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
     @Override
     protected String getDefaultMessage()
     {
-      return MESSAGE + ".";
+      return MESSAGE + "."; //$NON-NLS-1$
     }
 
     @Override
@@ -1498,7 +1500,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
     {
       if (target instanceof org.eclipse.oomph.p2.Repository)
       {
-        return new ApplyHandler(domain, target, "Apply to")
+        return new ApplyHandler(domain, target, Messages.SearchEclipseDialog_repositoryApplyHandler_tooltipPrefix)
         {
           @Override
           public void apply()
@@ -1516,7 +1518,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
         {
           if (eReference.getEType() == P2Package.Literals.REPOSITORY && eReference.isContainment() && eReference.isMany())
           {
-            return new ApplyHandler(domain, target, "Add to")
+            return new ApplyHandler(domain, target, Messages.SearchEclipseDialog_eObjectApplyHandler_tooltipPrefix)
             {
               @Override
               public void apply()
@@ -1586,9 +1588,9 @@ public abstract class SearchEclipseDialog extends OomphDialog
    */
   public static class Requirements extends SearchEclipseDialog
   {
-    public static final String TITLE = "Eclipse Requirements Search";
+    public static final String TITLE = Messages.SearchEclipseDialog_requirementsDialog_title;
 
-    public static final String MESSAGE = "Search Eclipse requirements by entering the fully qualified name of a Java package or installable unit";
+    public static final String MESSAGE = Messages.SearchEclipseDialog_requirementsDialog_message;
 
     private Requirement selectedRequirement;
 
@@ -1600,7 +1602,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
     @Override
     public String getHelpPath()
     {
-      return P2UIPlugin.INSTANCE.getSymbolicName() + "/html/SearchEclipseRequirementsHelp.html";
+      return P2UIPlugin.INSTANCE.getSymbolicName() + "/html/SearchEclipseRequirementsHelp.html"; //$NON-NLS-1$
     }
 
     public Requirement getSelectedRequirement()
@@ -1655,7 +1657,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
     @Override
     protected Image getShellImage()
     {
-      return P2UIPlugin.INSTANCE.getSWTImage("tool16/search_requirement.png");
+      return P2UIPlugin.INSTANCE.getSWTImage("tool16/search_requirement.png"); //$NON-NLS-1$
     }
 
     @Override
@@ -1667,7 +1669,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
     @Override
     protected String getDefaultMessage()
     {
-      return MESSAGE + ".";
+      return MESSAGE + "."; //$NON-NLS-1$
     }
 
     @Override
@@ -1757,7 +1759,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
     {
       if (target instanceof Requirement)
       {
-        return new ApplyHandler(domain, target, "Apply to")
+        return new ApplyHandler(domain, target, Messages.SearchEclipseDialog_requirementApplyHandler_tooltipPrefix)
         {
           @Override
           public void apply()
@@ -1780,7 +1782,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
         {
           if (eReference.getEType() == P2Package.Literals.REQUIREMENT && eReference.isContainment() && eReference.isMany())
           {
-            return new ApplyHandler(domain, target, "Add to")
+            return new ApplyHandler(domain, target, Messages.SearchEclipseDialog_eObjectApplyHandler_tooltipPrefix)
             {
               @Override
               public void apply()
@@ -1947,14 +1949,14 @@ public abstract class SearchEclipseDialog extends OomphDialog
     public ApplyHandler(IWorkbenchPart workbenchPart)
     {
       image = workbenchPart.getTitleImage();
-      toolTipText = "Explore in " + workbenchPart.getTitle();
+      toolTipText = NLS.bind(Messages.SearchEclipseDialog_workbenchPathApplyHandler_tooltip, workbenchPart.getTitle());
     }
 
     public ApplyHandler(EditingDomain domain, Object target, String toolTipPrefix)
     {
       AdapterFactoryLabelProvider adapterFactoryLabelProvider = new AdapterFactoryLabelProvider(((AdapterFactoryEditingDomain)domain).getAdapterFactory());
       image = adapterFactoryLabelProvider.getImage(target);
-      toolTipText = toolTipPrefix + " " + adapterFactoryLabelProvider.getText(target);
+      toolTipText = toolTipPrefix + " " + adapterFactoryLabelProvider.getText(target); //$NON-NLS-1$
       adapterFactoryLabelProvider.dispose();
     }
 

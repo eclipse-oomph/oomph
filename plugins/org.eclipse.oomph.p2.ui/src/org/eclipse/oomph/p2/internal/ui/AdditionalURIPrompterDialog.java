@@ -80,14 +80,14 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
   @Override
   protected String getDefaultMessage()
   {
-    return "Some artifacts could not be downloaded from the " + (firstTime ? "repositories listed in the profiles" : "previously checked repositories") + ".\n"
-        + "Please check additional repositories and try again.";
+    return (firstTime ? Messages.AdditionalURIPrompterDialog_artifactsDownloadError_firstTime : Messages.AdditionalURIPrompterDialog_artifactsDownloadError)
+        + '\n' + Messages.AdditionalURIPrompterDialog_artifactsDownloadError_tryAgain;
   }
 
   @Override
   protected String getImagePath()
   {
-    return "wizban/AgentAnalyzer.png";
+    return "wizban/AgentAnalyzer.png"; //$NON-NLS-1$
   }
 
   @Override
@@ -110,7 +110,7 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
     artifactComposite.setLayout(artifactLayout);
 
     Label artifactLabel = new Label(artifactComposite, SWT.NONE);
-    artifactLabel.setText("Remaining Damaged Artifacts:");
+    artifactLabel.setText(Messages.AdditionalURIPrompterDialog_artifactLabel);
 
     TableViewer artifactViewer = new TableViewer(artifactComposite, SWT.BORDER | SWT.FULL_SELECTION);
     artifactViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -135,18 +135,18 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
 
     Label repositoryLabel = new Label(repositoryHeader, SWT.NONE);
     repositoryLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    repositoryLabel.setText("Additional Repositories:");
+    repositoryLabel.setText(Messages.AdditionalURIPrompterDialog_repositoryLabel);
 
     ToolBar toolBar = new ToolBar(repositoryHeader, SWT.FLAT | SWT.RIGHT);
     toolBar.setBounds(0, 0, 89, 23);
 
     ToolItem checkAll = new ToolItem(toolBar, SWT.NONE);
-    checkAll.setToolTipText("Check all repositories");
-    checkAll.setImage(getDefaultImage("tool16/checkAll"));
+    checkAll.setToolTipText(Messages.AdditionalURIPrompterDialog_checkAll_tooltip);
+    checkAll.setImage(getDefaultImage("tool16/checkAll")); //$NON-NLS-1$
 
     ToolItem uncheckAll = new ToolItem(toolBar, SWT.NONE);
-    uncheckAll.setToolTipText("Uncheck all repositories");
-    uncheckAll.setImage(getDefaultImage("tool16/uncheckAll"));
+    uncheckAll.setToolTipText(Messages.AdditionalURIPrompterDialog_uncheckAll_tooltip);
+    uncheckAll.setImage(getDefaultImage("tool16/uncheckAll")); //$NON-NLS-1$
 
     repositoryViewer = CheckboxTableViewer.newCheckList(repositoryComposite, SWT.BORDER | SWT.FULL_SELECTION);
     repositoryViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -184,15 +184,15 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
     uriComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     Label uriLabel = new Label(uriComposite, SWT.NONE);
-    uriLabel.setText("URI:");
+    uriLabel.setText(Messages.AdditionalURIPrompterDialog_uriLabel);
 
     final AtomicReference<URI> enteredURI = new AtomicReference<URI>();
     final Text uriText = new Text(uriComposite, SWT.BORDER);
     uriText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     final Button uriButton = new Button(uriComposite, SWT.NONE);
-    uriButton.setText("Add");
-    uriButton.setToolTipText("Add the entered URI to the repositories list");
+    uriButton.setText(Messages.AdditionalURIPrompterDialog_uriButton_text);
+    uriButton.setToolTipText(Messages.AdditionalURIPrompterDialog_uriButton_tooltip);
     uriButton.setEnabled(false);
     uriButton.addSelectionListener(new SelectionAdapter()
     {
@@ -206,7 +206,7 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
         repositoryViewer.setChecked(uri, true);
         checkStateChanged(null);
 
-        uriText.setText("");
+        uriText.setText(""); //$NON-NLS-1$
         uriText.setFocus();
       }
     });

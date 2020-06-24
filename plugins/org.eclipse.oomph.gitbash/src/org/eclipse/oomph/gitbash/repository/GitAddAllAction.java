@@ -24,6 +24,6 @@ public class GitAddAllAction extends AbstractRepositoryAction
   @Override
   protected void run(Shell shell, File workTree) throws Exception
   {
-    GitBash.executeCommand(shell, workTree, "git add --all");
+    GitBash.executeCommand(shell, workTree, "git add --all"); //$NON-NLS-1$
   }
 }

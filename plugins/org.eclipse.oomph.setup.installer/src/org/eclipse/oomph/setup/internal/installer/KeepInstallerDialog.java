@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -61,7 +62,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
   @Override
   protected String getDefaultMessage()
   {
-    return KeepInstallerUtil.KEEP_INSTALLER_DESCRIPTION + ".";
+    return KeepInstallerUtil.KEEP_INSTALLER_DESCRIPTION + "."; //$NON-NLS-1$
   }
 
   @Override
@@ -74,7 +75,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
   protected void createUI(Composite parent)
   {
     final Shell shell = getShell();
-    setTitle("Keep Installer");
+    setTitle(Messages.KeepInstallerDialog__title);
 
     GridLayout layout = new GridLayout(3, false);
     layout.marginWidth = getContainerMargin();
@@ -84,7 +85,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
 
     Label locationLabel = new Label(parent, SWT.NONE);
     locationLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
-    locationLabel.setText("Copy to:");
+    locationLabel.setText(Messages.KeepInstallerDialog_CopyTo_label);
 
     final Text locationText = new Text(parent, SWT.BORDER);
     locationText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
@@ -116,12 +117,12 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
 
         if (!folder.isDirectory())
         {
-          return "Path is not a directory.";
+          return Messages.KeepInstallerDialog_PathNoDirectory_message;
         }
 
         if (!isEmpty(folder))
         {
-          return "Directory is not empty.";
+          return Messages.KeepInstallerDialog_DirectoryNoEmpty_message;
         }
 
         return null;
@@ -135,14 +136,14 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
     });
 
     Button browseButton = new Button(parent, SWT.NONE);
-    browseButton.setText("Browse" + StringUtil.HORIZONTAL_ELLIPSIS);
+    browseButton.setText(Messages.KeepInstallerDialog_Browse_label + StringUtil.HORIZONTAL_ELLIPSIS);
     browseButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent e)
       {
         FileDialog dialog = new FileDialog(shell, SWT.APPLICATION_MODAL | SWT.SAVE);
-        dialog.setText("Keep Installer");
+        dialog.setText(Messages.KeepInstallerDialog__title);
 
         if (!StringUtil.isEmpty(location))
         {
@@ -164,13 +165,13 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       new Label(parent, SWT.NONE);
       startMenuButton = new Button(parent, SWT.CHECK);
       startMenuButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-      startMenuButton.setText("Create start menu entry");
+      startMenuButton.setText(Messages.KeepInstallerDialog_CreateStartMenu_label);
       startMenuButton.setSelection(true);
 
       new Label(parent, SWT.NONE);
       desktopButton = new Button(parent, SWT.CHECK);
       desktopButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-      desktopButton.setText("Create desktop shortcut");
+      desktopButton.setText(Messages.KeepInstallerDialog_CreateDesktopShortcut_label);
       desktopButton.setSelection(true);
     }
 
@@ -194,7 +195,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
         {
           public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
-            monitor.beginTask("Copying installer to " + location, IProgressMonitor.UNKNOWN);
+            monitor.beginTask(NLS.bind(Messages.KeepInstallerDialog_CopyingInstaller_task, location), IProgressMonitor.UNKNOWN);
             KeepInstallerUtil.keepInstaller(location, startPermanentInstaller, launcher, startMenu, desktop, false);
             monitor.done();
           }
@@ -229,7 +230,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
         String folderName = PropertiesUtil.getProductName().toLowerCase().replace('\u00A0', '-').replace(' ', '-');
         for (int i = 1; i < Integer.MAX_VALUE; i++)
         {
-          File folder = new File(home, folderName + (i > 1 ? i : ""));
+          File folder = new File(home, folderName + (i > 1 ? i : "")); //$NON-NLS-1$
           if (!folder.exists())
           {
             String path = folder.getAbsolutePath();

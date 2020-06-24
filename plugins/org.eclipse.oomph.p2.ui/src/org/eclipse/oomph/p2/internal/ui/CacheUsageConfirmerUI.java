@@ -14,6 +14,7 @@ import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.ui.UIUtil;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Shell;
 
 import java.io.File;
@@ -48,32 +49,32 @@ public class CacheUsageConfirmerUI extends CacheUsageConfirmer
               long days = age / (24 * 60 * 60 * 1000);
               if (days > 0)
               {
-                message = days + " days";
+                message = NLS.bind(Messages.CacheUsageConfirmerUI_cacheAge_days, days);
               }
               else
               {
                 long hours = age / (60 * 60 * 1000);
                 if (hours > 0)
                 {
-                  message = hours + " hours";
+                  message = NLS.bind(Messages.CacheUsageConfirmerUI_cacheAge_hours, hours);
                 }
                 else
                 {
                   long minutes = age / (60 * 1000);
                   if (minutes > 0)
                   {
-                    message = minutes + " minutes";
+                    message = NLS.bind(Messages.CacheUsageConfirmerUI_cacheAge_minutes, minutes);
                   }
                   else
                   {
-                    message = "a few seconds ";
+                    message = Messages.CacheUsageConfirmerUI_cacheAge_fewSeconds;
                   }
                 }
               }
 
-              cacheUsageConfirmed = MessageDialog.openQuestion(shell, "Download failure",
-                  "The following URI could not be downloaded:\n\n  " + uri + "\n\nA locally cached version that is " + message
-                      + " old is available.  Would you like to use locally cached versions, when available, to continue provisioning?");
+              cacheUsageConfirmed = MessageDialog.openQuestion(shell, Messages.CacheUsageConfirmerUI_downloadFailure,
+                  Messages.CacheUsageConfirmerUI_uriCouldNotBeDownloaded + "\n\n" + uri + "\n\n" //$NON-NLS-1$ //$NON-NLS-2$
+                      + NLS.bind(Messages.CacheUsageConfirmerUI_cacheAge_useCachedVersionsSuggestion, message));
             }
           });
         }

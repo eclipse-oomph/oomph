@@ -40,6 +40,7 @@ import org.eclipse.mylyn.commons.repositories.core.auth.AuthenticationType;
 import org.eclipse.mylyn.commons.repositories.core.auth.UserCredentials;
 import org.eclipse.mylyn.internal.builds.ui.BuildsUiInternal;
 import org.eclipse.mylyn.internal.builds.ui.BuildsUiPlugin;
+import org.eclipse.osgi.util.NLS;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -73,7 +74,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
    * @generated
    * @ordered
    */
-  protected static final String CONNECTOR_KIND_EDEFAULT = "org.eclipse.mylyn.hudson";
+  protected static final String CONNECTOR_KIND_EDEFAULT = "org.eclipse.mylyn.hudson"; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getConnectorKind() <em>Connector Kind</em>}' attribute.
@@ -429,13 +430,13 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (connectorKind: ");
+    result.append(" (connectorKind: "); //$NON-NLS-1$
     result.append(connectorKind);
-    result.append(", serverURL: ");
+    result.append(", serverURL: "); //$NON-NLS-1$
     result.append(serverURL);
-    result.append(", userID: ");
+    result.append(", userID: "); //$NON-NLS-1$
     result.append(userID);
-    result.append(", password: ");
+    result.append(", password: "); //$NON-NLS-1$
     result.append(password);
     result.append(')');
     return result.toString();
@@ -486,18 +487,18 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
           String serverURL = getServerURL();
           String userID = getUserID();
 
-          context.log("Adding " + connectorKind + " server: " + serverURL);
+          context.log(NLS.bind(Messages.MylynBuildsTaskImpl_AddingServer_message, connectorKind, serverURL));
 
           server = BuildsUi.createServer(connectorKind);
           server.setUrl(serverURL);
-          server.getAttributes().put("id", serverURL);
-          server.getAttributes().put("url", serverURL);
+          server.getAttributes().put("id", serverURL); //$NON-NLS-1$
+          server.getAttributes().put("url", serverURL); //$NON-NLS-1$
 
           boolean authenticate = isAuthenticate();
           if (authenticate)
           {
-            server.getAttributes().put("org.eclipse.mylyn.tasklist.repositories.enabled", "true");
-            server.getAttributes().put("org.eclipse.mylyn.repositories.username", userID);
+            server.getAttributes().put("org.eclipse.mylyn.tasklist.repositories.enabled", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+            server.getAttributes().put("org.eclipse.mylyn.repositories.username", userID); //$NON-NLS-1$
           }
 
           // Add credentials to the repository
@@ -519,7 +520,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
         Set<String> buildPlanNames = getMissingBuildPlans(server);
         for (String buildPlanName : buildPlanNames)
         {
-          context.log("Adding " + connectorKind + " build plan: " + buildPlanName);
+          context.log(NLS.bind(Messages.MylynBuildsTaskImpl_AddingBuildPlan_message, connectorKind, buildPlanName));
 
           IBuildPlan buildPlan = BuildFactory.eINSTANCE.createBuildPlan();
           buildPlan.setId(buildPlanName);
@@ -537,7 +538,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
 
   private boolean isAuthenticate()
   {
-    return !StringUtil.isEmpty(userID) && !"anonymous".equals(userID) && !StringUtil.isEmpty(password) && !" ".equals(password);
+    return !StringUtil.isEmpty(userID) && !"anonymous".equals(userID) && !StringUtil.isEmpty(password) && !" ".equals(password); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   private Set<String> getMissingBuildPlans(IBuildServer server)
@@ -568,7 +569,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
     {
       if (ObjectUtil.equals(server.getUrl(), serverURL) && ObjectUtil.equals(server.getConnectorKind(), connectorKind))
       {
-        if (!isAuthenticate() || userID.equals(server.getAttributes().get("org.eclipse.mylyn.repositories.username")))
+        if (!isAuthenticate() || userID.equals(server.getAttributes().get("org.eclipse.mylyn.repositories.username"))) //$NON-NLS-1$
         {
           return server;
         }

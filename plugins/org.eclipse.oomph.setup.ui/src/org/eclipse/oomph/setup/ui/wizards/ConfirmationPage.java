@@ -71,6 +71,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
@@ -150,9 +151,9 @@ public class ConfirmationPage extends SetupWizardPage
 
   public ConfirmationPage()
   {
-    super("ConfirmationPage");
-    setTitle("Confirmation");
-    setDescription("Review the tasks to be executed and optionally uncheck unwanted tasks.");
+    super("ConfirmationPage"); //$NON-NLS-1$
+    setTitle(Messages.ConfirmationPage_title);
+    setDescription(Messages.ConfirmationPage_description);
   }
 
   @Override
@@ -163,12 +164,12 @@ public class ConfirmationPage extends SetupWizardPage
 
     SashForm horizontalSash = new SashForm(mainComposite, SWT.SMOOTH | SWT.HORIZONTAL);
     UIUtil.grabVertical(UIUtil.applyGridData(horizontalSash));
-    AccessUtil.setKey(horizontalSash, "hsash");
+    AccessUtil.setKey(horizontalSash, "hsash"); //$NON-NLS-1$
 
     fillCheckPane(horizontalSash);
 
     SashForm verticalSash = new SashForm(horizontalSash, SWT.SMOOTH | SWT.VERTICAL);
-    AccessUtil.setKey(verticalSash, "vsash");
+    AccessUtil.setKey(verticalSash, "vsash"); //$NON-NLS-1$
 
     fillChildrenPane(verticalSash);
 
@@ -189,7 +190,7 @@ public class ConfirmationPage extends SetupWizardPage
   @Override
   protected void createCheckButtons(ButtonBar buttonBar)
   {
-    showAllButton = buttonBar.addCheckButton("Show all triggered tasks", "Show unneeded tasks in addition to the needed tasks", false, "showAll");
+    showAllButton = buttonBar.addCheckButton(Messages.ConfirmationPage_showAllButton_text, Messages.ConfirmationPage_showAllButton_tooltip, false, "showAll"); //$NON-NLS-1$
     showAllButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -203,26 +204,27 @@ public class ConfirmationPage extends SetupWizardPage
         }
       }
     });
-    AccessUtil.setKey(showAllButton, "showAllTasks");
+    AccessUtil.setKey(showAllButton, "showAllTasks"); //$NON-NLS-1$
 
     offlineProperty = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_OFFLINE);
     if (offlineProperty == null)
     {
-      offlineButton = buttonBar.addCheckButton("Offline", "Avoid unnecessary network requests during the installation process", false,
-          "toggleCommand:org.eclipse.oomph.ui.ToggleOfflineMode");
-      AccessUtil.setKey(offlineButton, "offline");
+      offlineButton = buttonBar.addCheckButton(Messages.ConfirmationPage_offlineButton_text, Messages.ConfirmationPage_offlineButton_tooltip, false,
+          "toggleCommand:org.eclipse.oomph.ui.ToggleOfflineMode"); //$NON-NLS-1$
+      AccessUtil.setKey(offlineButton, "offline"); //$NON-NLS-1$
     }
 
     mirrorsProperty = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_MIRRORS);
     if (mirrorsProperty == null)
     {
-      mirrorsButton = buttonBar.addCheckButton("Mirrors", "Make use of p2 mirrors during the installation process", true, "mirrors");
-      AccessUtil.setKey(mirrorsButton, "mirrors");
+      mirrorsButton = buttonBar.addCheckButton(Messages.ConfirmationPage_mirrorsButton_text, Messages.ConfirmationPage_mirrorsButton_tooltip, true, "mirrors"); //$NON-NLS-1$
+      AccessUtil.setKey(mirrorsButton, "mirrors"); //$NON-NLS-1$
     }
 
     if (getTrigger() == Trigger.BOOTSTRAP)
     {
-      overwriteButton = buttonBar.addCheckButton("Overwrite", "Rename the existing configuration folder during the installation process", false, null);
+      overwriteButton = buttonBar.addCheckButton(Messages.ConfirmationPage_overwriteButton_text, Messages.ConfirmationPage_overwriteButton_tooltip, false,
+          null);
       overwriteButton.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -231,11 +233,12 @@ public class ConfirmationPage extends SetupWizardPage
           validate();
         }
       });
-      AccessUtil.setKey(overwriteButton, "overwrite");
+      AccessUtil.setKey(overwriteButton, "overwrite"); //$NON-NLS-1$
     }
     else if (getWorkspace() != null)
     {
-      switchWorkspaceButton = buttonBar.addCheckButton("Switch workspace", "Switch to a different workspace", false, null);
+      switchWorkspaceButton = buttonBar.addCheckButton(Messages.ConfirmationPage_switchWorkspaceButton_text,
+          Messages.ConfirmationPage_switchWorkspaceButton_tooltip, false, null);
       switchWorkspaceButton.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -244,7 +247,7 @@ public class ConfirmationPage extends SetupWizardPage
           validate();
         }
       });
-      AccessUtil.setKey(switchWorkspaceButton, "switch");
+      AccessUtil.setKey(switchWorkspaceButton, "switch"); //$NON-NLS-1$
     }
   }
 
@@ -372,8 +375,8 @@ public class ConfirmationPage extends SetupWizardPage
       {
         try
         {
-          Class<?> openWorkspaceActionClass = CommonPlugin.loadClass("org.eclipse.ui.ide", "org.eclipse.ui.internal.ide.actions.OpenWorkspaceAction");
-          Class<?> chooseWorkspaceDataClass = CommonPlugin.loadClass("org.eclipse.ui.ide", "org.eclipse.ui.internal.ide.ChooseWorkspaceData");
+          Class<?> openWorkspaceActionClass = CommonPlugin.loadClass("org.eclipse.ui.ide", "org.eclipse.ui.internal.ide.actions.OpenWorkspaceAction"); //$NON-NLS-1$ //$NON-NLS-2$
+          Class<?> chooseWorkspaceDataClass = CommonPlugin.loadClass("org.eclipse.ui.ide", "org.eclipse.ui.internal.ide.ChooseWorkspaceData"); //$NON-NLS-1$ //$NON-NLS-2$
           Constructor<?> chooseWorkspaceDataConstructor = ReflectUtil.getConstructor(chooseWorkspaceDataClass, String.class);
           Object chooseWorkspaceData = chooseWorkspaceDataConstructor.newInstance(currentWorkspaceLocation.toString());
 
@@ -381,7 +384,7 @@ public class ConfirmationPage extends SetupWizardPage
           Class<?>[] declaredClasses = openWorkspaceActionClass.getDeclaredClasses();
           for (Class<?> declaredClass : declaredClasses)
           {
-            if ("WorkspaceMRUAction".equals(declaredClass.getSimpleName()))
+            if ("WorkspaceMRUAction".equals(declaredClass.getSimpleName())) //$NON-NLS-1$
             {
               Constructor<?> workspaceMRUActionConstructor = ReflectUtil.getConstructor(declaredClass, openWorkspaceActionClass, String.class,
                   chooseWorkspaceDataClass);
@@ -459,12 +462,12 @@ public class ConfirmationPage extends SetupWizardPage
     // If we can't find it, something is seriously wrong.
     if (workspaceRestrictedCompoundTask == null)
     {
-      throw new Exception("Workspace compound task could not be found");
+      throw new Exception("Workspace compound task could not be found"); //$NON-NLS-1$
     }
 
     // Put the workspace copy in a resource at the right location and save it.
     URI workspaceResourceURI = URI
-        .createFileURI(new File(performer.getWorkspaceLocation(), ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup").toString());
+        .createFileURI(new File(performer.getWorkspaceLocation(), ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup").toString()); //$NON-NLS-1$
     Resource workspaceResource = getResourceSet().getResourceFactoryRegistry().getFactory(workspaceResourceURI).createResource(workspaceResourceURI);
     workspaceResource.getContents().add(copiedWorkspace);
     BaseUtil.saveEObject(copiedWorkspace);
@@ -553,7 +556,7 @@ public class ConfirmationPage extends SetupWizardPage
         if (object == ROOT_ELEMENT)
         {
           Trigger trigger = getTrigger();
-          return StringUtil.cap(getText(trigger).toLowerCase()) + " Tasks";
+          return NLS.bind(Messages.ConfirmationPage_labelProvider_tasks, StringUtil.cap(getText(trigger).toLowerCase()));
         }
 
         return super.getText(object);
@@ -565,7 +568,7 @@ public class ConfirmationPage extends SetupWizardPage
         if (object == ROOT_ELEMENT)
         {
           Trigger trigger = getTrigger();
-          String key = StringUtil.cap(trigger.toString().toLowerCase()) + "Trigger";
+          String key = StringUtil.cap(trigger.toString().toLowerCase()) + "Trigger"; //$NON-NLS-1$
           return SetupUIPlugin.INSTANCE.getSWTImage(key);
         }
 
@@ -651,13 +654,13 @@ public class ConfirmationPage extends SetupWizardPage
       }
     };
 
-    MenuManager contextMenu = new MenuManager("#PopUp");
+    MenuManager contextMenu = new MenuManager("#PopUp"); //$NON-NLS-1$
     contextMenu.addMenuListener(new IMenuListener()
     {
       public void menuAboutToShow(IMenuManager manager)
       {
         final IStructuredSelection selection = (IStructuredSelection)selectionProvider.getSelection();
-        Action copy = new Action("Copy")
+        Action copy = new Action(Messages.ConfirmationPage_copyAction_text)
         {
           @SuppressWarnings("unchecked")
           @Override
@@ -729,7 +732,7 @@ public class ConfirmationPage extends SetupWizardPage
     addHelpCallout(tree, 2);
 
     final TreeColumn column = new TreeColumn(tree, SWT.NONE);
-    column.setText("Nested Elements");
+    column.setText(Messages.ConfirmationPage_column_nestedElements);
     columnResizer = new ControlAdapter()
     {
       @Override
@@ -844,7 +847,7 @@ public class ConfirmationPage extends SetupWizardPage
 
     if (switchWorkspaceButton != null && switchWorkspaceButton.isVisible() && switchWorkspaceButton.getSelection())
     {
-      setMessage("The IDE will be restarted with the new workspace " + getPerformer().getWorkspaceLocation() + ".", IMessageProvider.WARNING);
+      setMessage(NLS.bind(Messages.ConfirmationPage_ideWillBeRestartedWithNewWorkspace, getPerformer().getWorkspaceLocation()), IMessageProvider.WARNING);
     }
     else
     {
@@ -855,11 +858,11 @@ public class ConfirmationPage extends SetupWizardPage
     {
       if (getWizard().getPerformer().getNeededTasks().size() == 0)
       {
-        setMessage("No tasks need to perform.", IMessageProvider.WARNING);
+        setMessage(Messages.ConfirmationPage_noTasksToPerform, IMessageProvider.WARNING);
       }
       else
       {
-        setErrorMessage("Please check one or more tasks to continue with the installation process.");
+        setErrorMessage(Messages.ConfirmationPage_checkOneOrMoreTasksToContinue);
       }
 
       return;
@@ -867,14 +870,12 @@ public class ConfirmationPage extends SetupWizardPage
 
     if (configurationLocationExists && !overwriteButton.getSelection())
     {
-      setErrorMessage(
-          "The folder " + lastConfigurationLocation + " exists.\n Please check the Overwrite button to rename it and continue with the installation process.");
+      setErrorMessage(NLS.bind(Messages.ConfirmationPage_error_folderExists, lastConfigurationLocation));
       return;
     }
     else if (newWorkspaceLocation != null && !ObjectUtil.equals(newWorkspaceLocation, currentWorkspaceLocation) && !switchWorkspaceButton.getSelection())
     {
-      setErrorMessage("The workspace location is changed to " + getPerformer().getWorkspaceLocation()
-          + ".  Please check the 'Switch workspace' button to restarted the IDE, switch to the new workspace, and continue the installation process.");
+      setErrorMessage(NLS.bind(Messages.ConfirmationPage_error_workspaceLocationChanged, getPerformer().getWorkspaceLocation()));
       return;
     }
 

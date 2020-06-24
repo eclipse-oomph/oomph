@@ -93,7 +93,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public final class ProbingSubMonitor extends org.eclipse.oomph.util.SubMonitor
 {
-  private static final boolean TRACE = Boolean.getBoolean("submonitor.probing.trace");
+  private static final boolean TRACE = Boolean.getBoolean("submonitor.probing.trace"); //$NON-NLS-1$
 
   private static final Map<StackTraceElement, Statistics> STATISTICS = new HashMap<StackTraceElement, Statistics>();
 
@@ -276,7 +276,7 @@ public final class ProbingSubMonitor extends org.eclipse.oomph.util.SubMonitor
 
     if (location.isNativeMethod())
     {
-      builder.append("(Native Method)");
+      builder.append("(Native Method)"); //$NON-NLS-1$
     }
     else
     {
@@ -300,7 +300,7 @@ public final class ProbingSubMonitor extends org.eclipse.oomph.util.SubMonitor
         }
         else
         {
-          builder.append("(Unknown Source)");
+          builder.append("(Unknown Source)"); //$NON-NLS-1$
         }
       }
     }
@@ -367,7 +367,7 @@ public final class ProbingSubMonitor extends org.eclipse.oomph.util.SubMonitor
   static
   {
     final AtomicBoolean shuttingDown = new AtomicBoolean();
-    Runtime.getRuntime().addShutdownHook(new Thread("Progress Probe Shutdown Hook")
+    Runtime.getRuntime().addShutdownHook(new Thread("Progress Probe Shutdown Hook") //$NON-NLS-1$
     {
       @Override
       public void run()
@@ -387,7 +387,7 @@ public final class ProbingSubMonitor extends org.eclipse.oomph.util.SubMonitor
       }
     });
 
-    Thread monitor = new Thread("Progress Probe Monitor")
+    Thread monitor = new Thread("Progress Probe Monitor") //$NON-NLS-1$
     {
       @Override
       public void run()
@@ -479,7 +479,7 @@ public final class ProbingSubMonitor extends org.eclipse.oomph.util.SubMonitor
     @Override
     public String toString()
     {
-      return location + " - " + time;
+      return location + " - " + time; //$NON-NLS-1$
     }
   }
 
@@ -488,17 +488,17 @@ public final class ProbingSubMonitor extends org.eclipse.oomph.util.SubMonitor
    */
   private static final class Statistics
   {
-    public static final Format TICKS = new DecimalFormat("0 Ticks");
+    public static final Format TICKS = new DecimalFormat("0 Ticks"); //$NON-NLS-1$
 
-    public static final Format MILLIS = new DecimalFormat("0 ms");
+    public static final Format MILLIS = new DecimalFormat("0 ms"); //$NON-NLS-1$
 
-    public static final Format MILLIS_PRECISE = new DecimalFormat("0.00 ms");
+    public static final Format MILLIS_PRECISE = new DecimalFormat("0.00 ms"); //$NON-NLS-1$
 
-    public static final Format PERCENT = new DecimalFormat("0 %");
+    public static final Format PERCENT = new DecimalFormat("0 %"); //$NON-NLS-1$
 
     private static final int DEFAULT_COLUMNS = 3;
 
-    private static final boolean SMOOTH_BORDERS = "smooth".equalsIgnoreCase(System.getProperty("submonitor.probing.borders"));
+    private static final boolean SMOOTH_BORDERS = "smooth".equalsIgnoreCase(System.getProperty("submonitor.probing.borders")); //$NON-NLS-1$ //$NON-NLS-2$
 
     private static final Dumper DUMPER = SMOOTH_BORDERS ? Dumper.UTF8 : Dumper.ASCII;
 
@@ -601,7 +601,7 @@ public final class ProbingSubMonitor extends org.eclipse.oomph.util.SubMonitor
             {
               if (builder.length() != 0)
               {
-                builder.append(", ");
+                builder.append(", "); //$NON-NLS-1$
               }
 
               StackTraceElement forkTarget = row.forkTargets[i];
@@ -615,7 +615,7 @@ public final class ProbingSubMonitor extends org.eclipse.oomph.util.SubMonitor
         int forkTargetCol = table.bottomRight().col;
         if (forkTargetCol > lastCol)
         {
-          table.cell(forkTargetCol, 0).value("Fork Targets");
+          table.cell(forkTargetCol, 0).value("Fork Targets"); //$NON-NLS-1$
         }
 
         rows[0].footer(table, rowCount);
@@ -739,15 +739,15 @@ public final class ProbingSubMonitor extends org.eclipse.oomph.util.SubMonitor
         public int header(Table table, int rows)
         {
           int col = DEFAULT_COLUMNS - 1;
-          table.cell(++col, 0).value("Skips");
-          table.cell(++col, 0).value("Runs");
-          table.cell(++col, 0).value("Runs %");
-          table.cell(++col, 0).value("Sum");
-          table.cell(++col, 0).value("Min");
-          table.cell(++col, 0).value("Max");
-          table.cell(++col, 0).value("Range");
-          table.cell(++col, 0).value("Average/Runs");
-          table.cell(++col, 0).value("Average%");
+          table.cell(++col, 0).value("Skips"); //$NON-NLS-1$
+          table.cell(++col, 0).value("Runs"); //$NON-NLS-1$
+          table.cell(++col, 0).value("Runs %"); //$NON-NLS-1$
+          table.cell(++col, 0).value("Sum"); //$NON-NLS-1$
+          table.cell(++col, 0).value("Min"); //$NON-NLS-1$
+          table.cell(++col, 0).value("Max"); //$NON-NLS-1$
+          table.cell(++col, 0).value("Range"); //$NON-NLS-1$
+          table.cell(++col, 0).value("Average/Runs"); //$NON-NLS-1$
+          table.cell(++col, 0).value("Average%"); //$NON-NLS-1$
           table.row(0, 1).alignment(Alignment.RIGHT);
           return col;
         }
@@ -866,11 +866,11 @@ public final class ProbingSubMonitor extends org.eclipse.oomph.util.SubMonitor
           for (int i = 0; i < times.length; i++)
           {
             Cell timeCell = table.cell(DEFAULT_COLUMNS + 2 * i, 0);
-            timeCell.alignment(Alignment.RIGHT).value("Run" + (i + 1));
+            timeCell.alignment(Alignment.RIGHT).value("Run" + (i + 1)); //$NON-NLS-1$
           }
 
           Cell avgTimeCell = table.cell(DEFAULT_COLUMNS + 2 * times.length, 0);
-          avgTimeCell.alignment(Alignment.RIGHT).value("AVERAGE");
+          avgTimeCell.alignment(Alignment.RIGHT).value("AVERAGE"); //$NON-NLS-1$
 
           return avgTimeCell.col() + 1;
         }
@@ -907,7 +907,7 @@ public final class ProbingSubMonitor extends org.eclipse.oomph.util.SubMonitor
         @Override
         public void footer(Table table, int rows)
         {
-          table.cell(0, 1 + rows).value("TOTAL");
+          table.cell(0, 1 + rows).value("TOTAL"); //$NON-NLS-1$
           table.cell(1, 1 + rows).format(TICKS).value(new Formula.Sum(table.column(1, 1, 1)));
 
           for (int i = 0; i <= times.length; i++)

@@ -188,8 +188,12 @@ public class Element implements IElement
   @Override
   public String toString()
   {
-    return "Element[type=" + type + ", name=" + name + (licenseFeature ? ", licenseFeature=true" : "") + (fragment ? ", fragment=true" : "") + ", version="
-        + version + "]";
+    return "Element[type=" + type + //$NON-NLS-1$
+        ", name=" + name + //$NON-NLS-1$
+        (licenseFeature ? ", licenseFeature=true" : "") + //$NON-NLS-1$ //$NON-NLS-2$
+        (fragment ? ", fragment=true" : "") + //$NON-NLS-1$ //$NON-NLS-2$
+        ", version=" //$NON-NLS-1$
+        + version + "]"; //$NON-NLS-1$
   }
 
   @Override

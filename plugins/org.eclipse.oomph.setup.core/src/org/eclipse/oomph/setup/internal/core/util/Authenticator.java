@@ -64,14 +64,14 @@ public abstract class Authenticator
         if (AnnotationConstants.ANNOTATION_PASSWORD_VERIFICATION.equals(annotation.getSource()))
         {
           EMap<String, String> details = annotation.getDetails();
-          String type = details.get("type");
-          if ("form".equals(type))
+          String type = details.get("type"); //$NON-NLS-1$
+          if ("form".equals(type)) //$NON-NLS-1$
           {
-            String cookie = details.get("form.cookie");
-            String url = details.get("form.url");
+            String cookie = details.get("form.cookie"); //$NON-NLS-1$
+            String url = details.get("form.url"); //$NON-NLS-1$
             if (url != null)
             {
-              String formFields = details.get("form.parameters");
+              String formFields = details.get("form.parameters"); //$NON-NLS-1$
               if (formFields != null)
               {
                 if (result == null)
@@ -82,8 +82,8 @@ public abstract class Authenticator
                 Set<String> keys = new HashSet<String>();
                 final Map<String, String> map = new HashMap<String, String>();
                 String variableValue = variable.getValue();
-                map.put("value", variableValue);
-                map.put("form.url", url);
+                map.put("value", variableValue); //$NON-NLS-1$
+                map.put("form.url", url); //$NON-NLS-1$
                 StringExpander localExpander = new StringExpander()
                 {
                   @Override
@@ -105,19 +105,19 @@ public abstract class Authenticator
                   }
                 };
 
-                String formSecurity = details.get("form.secure.parameters");
-                List<String> secureKeys = formSecurity == null ? null : SegmentSequence.create(" ", formSecurity).segmentsList();
+                String formSecurity = details.get("form.secure.parameters"); //$NON-NLS-1$
+                List<String> secureKeys = formSecurity == null ? null : SegmentSequence.create(" ", formSecurity).segmentsList(); //$NON-NLS-1$
                 Map<String, String> parameters = new LinkedHashMap<String, String>();
-                for (String key : SegmentSequence.create(" ", formFields).segments())
+                for (String key : SegmentSequence.create(" ", formFields).segments()) //$NON-NLS-1$
                 {
-                  String detailKey = "form.parameter." + key;
+                  String detailKey = "form.parameter." + key; //$NON-NLS-1$
                   String unexpandedValue = details.get(detailKey);
                   String value = localExpander.expandString(unexpandedValue, keys);
                   if (value == null)
                   {
                     if (secureKeys.contains(key))
                     {
-                      value = PreferencesUtil.encrypt(" ");
+                      value = PreferencesUtil.encrypt(" "); //$NON-NLS-1$
                     }
                     else
                     {
@@ -130,36 +130,36 @@ public abstract class Authenticator
                 }
 
                 String formString = Form.getForm(parameters, secureKeys, true);
-                String formFilter = details.get("form.filter");
+                String formFilter = details.get("form.filter"); //$NON-NLS-1$
                 boolean isFiltered = formFilter != null && formString.matches(formFilter);
 
-                String ok = localExpander.expandString(details.get("form.ok"), keys);
+                String ok = localExpander.expandString(details.get("form.ok"), keys); //$NON-NLS-1$
                 if (ok == null)
                 {
                   continue;
                 }
 
-                String info = localExpander.expandString(details.get("form.info"), keys);
+                String info = localExpander.expandString(details.get("form.info"), keys); //$NON-NLS-1$
                 if (info == null)
                 {
                   continue;
                 }
 
-                String warning = localExpander.expandString(details.get("form.warning"), keys);
+                String warning = localExpander.expandString(details.get("form.warning"), keys); //$NON-NLS-1$
                 if (warning == null)
                 {
                   continue;
                 }
 
-                String error = localExpander.expandString(details.get("form.error"), keys);
+                String error = localExpander.expandString(details.get("form.error"), keys); //$NON-NLS-1$
                 if (error == null)
                 {
                   continue;
                 }
 
-                String verificationURL = localExpander.expandString(details.get("form.verification.url"));
+                String verificationURL = localExpander.expandString(details.get("form.verification.url")); //$NON-NLS-1$
                 Pattern verificationPattern = null;
-                String verificationMatches = localExpander.expandString(details.get("form.verification.matches"));
+                String verificationMatches = localExpander.expandString(details.get("form.verification.matches")); //$NON-NLS-1$
                 if (verificationMatches != null)
                 {
                   try
@@ -176,16 +176,16 @@ public abstract class Authenticator
               }
             }
           }
-          else if ("form-post".equals(type))
+          else if ("form-post".equals(type)) //$NON-NLS-1$
           {
-            String url = details.get("form.url");
-            String user = details.get("form.user");
-            String password = details.get("form.password");
-            String info = details.get("form.info");
-            String ok = details.get("form.ok");
-            String warning = details.get("form.warning");
-            String error = details.get("form.error");
-            String responseLocation = details.get("form.response.location.matches");
+            String url = details.get("form.url"); //$NON-NLS-1$
+            String user = details.get("form.user"); //$NON-NLS-1$
+            String password = details.get("form.password"); //$NON-NLS-1$
+            String info = details.get("form.info"); //$NON-NLS-1$
+            String ok = details.get("form.ok"); //$NON-NLS-1$
+            String warning = details.get("form.warning"); //$NON-NLS-1$
+            String error = details.get("form.error"); //$NON-NLS-1$
+            String responseLocation = details.get("form.response.location.matches"); //$NON-NLS-1$
             if (url != null && user != null && password != null && responseLocation != null && info != null && ok != null && warning != null && error != null)
             {
               if (result == null)
@@ -196,8 +196,8 @@ public abstract class Authenticator
               Set<String> keys = new HashSet<String>();
               final Map<String, String> map = new HashMap<String, String>();
               String variableValue = variable.getValue();
-              map.put("value", variableValue);
-              map.put("form.url", url);
+              map.put("value", variableValue); //$NON-NLS-1$
+              map.put("form.url", url); //$NON-NLS-1$
               StringExpander localExpander = new StringExpander()
               {
                 @Override
@@ -225,16 +225,16 @@ public abstract class Authenticator
                 continue;
               }
 
-              map.put("form.user", expandedUser);
+              map.put("form.user", expandedUser); //$NON-NLS-1$
 
               String expandedPassword = localExpander.expandString(password, keys);
               if (expandedPassword == null)
               {
-                expandedPassword = PreferencesUtil.encrypt(" ");
+                expandedPassword = PreferencesUtil.encrypt(" "); //$NON-NLS-1$
               }
-              map.put("form.password", expandedUser);
+              map.put("form.password", expandedUser); //$NON-NLS-1$
 
-              String formFilter = details.get("form.filter");
+              String formFilter = details.get("form.filter"); //$NON-NLS-1$
               boolean isFiltered = formFilter != null && expandedUser.matches(formFilter);
 
               String expandedResponseLocation = localExpander.expandString(responseLocation, keys);
@@ -291,7 +291,7 @@ public abstract class Authenticator
    */
   public static class Form extends Authenticator
   {
-    private static final Pattern CHARSET_PATTERN = Pattern.compile("charset=([A-Za-z0-9-_]+)");
+    private static final Pattern CHARSET_PATTERN = Pattern.compile("charset=([A-Za-z0-9-_]+)"); //$NON-NLS-1$
 
     private boolean isFiltered;
 
@@ -486,9 +486,9 @@ public abstract class Authenticator
       HttpURLConnection connection = (HttpURLConnection)url.openConnection();
       connection.setUseCaches(false);
       connection.setConnectTimeout(5000);
-      connection.setRequestMethod("POST");
-      connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-      connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+      connection.setRequestMethod("POST"); //$NON-NLS-1$
+      connection.setRequestProperty("User-Agent", "Mozilla/5.0"); //$NON-NLS-1$ //$NON-NLS-2$
+      connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded"); //$NON-NLS-1$ //$NON-NLS-2$
       connection.setDoOutput(true);
 
       handleProxy(connection);
@@ -509,7 +509,7 @@ public abstract class Authenticator
           if (verificationURI == null && verificationPattern != null)
           {
             // Use it to match the links returned in the response.
-            List<String> links = headerFields.get("Link");
+            List<String> links = headerFields.get("Link"); //$NON-NLS-1$
             if (links != null)
             {
               for (String link : links)
@@ -531,10 +531,10 @@ public abstract class Authenticator
         else
         {
           // Look for the cookies...
-          List<String> list = headerFields.get("Set-Cookie");
+          List<String> list = headerFields.get("Set-Cookie"); //$NON-NLS-1$
           if (list != null)
           {
-            String prefix = cookie + "=";
+            String prefix = cookie + "="; //$NON-NLS-1$
             for (String value : list)
             {
               // If the expected cookie is present, return true.
@@ -559,8 +559,8 @@ public abstract class Authenticator
       HttpURLConnection connection = (HttpURLConnection)url.openConnection();
       connection.setUseCaches(false);
       connection.setConnectTimeout(5000);
-      connection.setRequestMethod("GET");
-      connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+      connection.setRequestMethod("GET"); //$NON-NLS-1$
+      connection.setRequestProperty("User-Agent", "Mozilla/5.0"); //$NON-NLS-1$ //$NON-NLS-2$
 
       handleProxy(connection);
 
@@ -572,7 +572,7 @@ public abstract class Authenticator
         try
         {
           inputStream = connection.getInputStream();
-          String contentType = connection.getHeaderField("Content-Type");
+          String contentType = connection.getHeaderField("Content-Type"); //$NON-NLS-1$
           if (contentType != null)
           {
             Matcher matcher = CHARSET_PATTERN.matcher(contentType);
@@ -617,7 +617,7 @@ public abstract class Authenticator
         form.append('=');
         try
         {
-          form.append(URLEncoder.encode(value, "UTF-8"));
+          form.append(URLEncoder.encode(value, "UTF-8")); //$NON-NLS-1$
         }
         catch (UnsupportedEncodingException ex)
         {
@@ -645,7 +645,7 @@ public abstract class Authenticator
           Authorization authorization = new ECFURIHandlerImpl.AuthorizationHandler.Authorization(proxy.getUsername(), proxy.getPassword());
           if (authorization.isAuthorized())
           {
-            connection.setRequestProperty("Proxy-Authorization", authorization.getAuthorization());
+            connection.setRequestProperty("Proxy-Authorization", authorization.getAuthorization()); //$NON-NLS-1$
           }
         }
       }
@@ -828,7 +828,7 @@ public abstract class Authenticator
         {
           if (super.validHeaders(headers))
           {
-            List<String> locations = headers.get("Location");
+            List<String> locations = headers.get("Location"); //$NON-NLS-1$
             if (locations != null)
             {
               for (String location : locations)
@@ -869,7 +869,7 @@ public abstract class Authenticator
         form.append('=');
         try
         {
-          form.append(URLEncoder.encode(value, "UTF-8"));
+          form.append(URLEncoder.encode(value, "UTF-8")); //$NON-NLS-1$
         }
         catch (UnsupportedEncodingException ex)
         {
@@ -883,7 +883,7 @@ public abstract class Authenticator
     @Override
     public String toString()
     {
-      return "PostForm: uri=" + uri + " user=" + user + " password=" + (password == null ? null : PreferencesUtil.decrypt(password));
+      return "PostForm: uri=" + uri + " user=" + user + " password=" + (password == null ? null : PreferencesUtil.decrypt(password)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
   }
 

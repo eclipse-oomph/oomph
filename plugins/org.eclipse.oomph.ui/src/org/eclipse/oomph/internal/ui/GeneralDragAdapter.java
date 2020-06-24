@@ -81,9 +81,9 @@ public final class GeneralDragAdapter extends OomphDragAdapter
       // Ignore it if we can't set an image.
     }
 
-    contextMenu = new MenuManager("#PopUp");
+    contextMenu = new MenuManager("#PopUp"); //$NON-NLS-1$
 
-    contextMenu.add(new Separator("additions"));
+    contextMenu.add(new Separator("additions")); //$NON-NLS-1$
     contextMenu.setRemoveAllWhenShown(true);
     contextMenu.addMenuListener(new IMenuListener()
     {

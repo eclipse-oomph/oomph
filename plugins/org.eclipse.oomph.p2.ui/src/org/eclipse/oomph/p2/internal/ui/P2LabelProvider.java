@@ -39,7 +39,7 @@ import java.util.Map;
  */
 public final class P2LabelProvider extends LabelProvider implements IColorProvider, IFontProvider
 {
-  private static final String EXTENSION_POINT_ID = P2UIPlugin.INSTANCE.getSymbolicName() + ".profileTypes";
+  private static final String EXTENSION_POINT_ID = P2UIPlugin.INSTANCE.getSymbolicName() + ".profileTypes"; //$NON-NLS-1$
 
   private static final Map<String, Image> profileImages = new HashMap<String, Image>();
 
@@ -71,12 +71,12 @@ public final class P2LabelProvider extends LabelProvider implements IColorProvid
   {
     if (element instanceof Agent)
     {
-      return P2UIPlugin.INSTANCE.getSWTImage("obj16/agent");
+      return P2UIPlugin.INSTANCE.getSWTImage("obj16/agent"); //$NON-NLS-1$
     }
 
     if (element instanceof BundlePool)
     {
-      return P2UIPlugin.INSTANCE.getSWTImage("obj16/bundlePool");
+      return P2UIPlugin.INSTANCE.getSWTImage("obj16/bundlePool"); //$NON-NLS-1$
     }
 
     if (element instanceof Profile)
@@ -143,10 +143,10 @@ public final class P2LabelProvider extends LabelProvider implements IColorProvid
     IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
     for (IConfigurationElement configurationElement : extensionRegistry.getConfigurationElementsFor(EXTENSION_POINT_ID))
     {
-      String name = configurationElement.getAttribute("name");
+      String name = configurationElement.getAttribute("name"); //$NON-NLS-1$
       if (ObjectUtil.equals(name, profileType))
       {
-        String icon = configurationElement.getAttribute("icon");
+        String icon = configurationElement.getAttribute("icon"); //$NON-NLS-1$
         if (icon != null)
         {
           ImageDescriptor descriptor = AbstractUIPlugin.imageDescriptorFromPlugin(configurationElement.getNamespaceIdentifier(), icon);
@@ -155,7 +155,7 @@ public final class P2LabelProvider extends LabelProvider implements IColorProvid
       }
     }
 
-    return P2UIPlugin.INSTANCE.getSWTImage("obj16/profileUnknown");
+    return P2UIPlugin.INSTANCE.getSWTImage("obj16/profileUnknown"); //$NON-NLS-1$
   }
 
   public static Image getProfileImage(Profile profile)

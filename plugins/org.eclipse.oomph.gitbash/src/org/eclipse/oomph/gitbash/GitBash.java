@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Shell;
 
 import java.io.BufferedReader;
@@ -28,7 +29,7 @@ import java.io.InputStreamReader;
  */
 public class GitBash
 {
-  private static final String DEFAULT_EXECUTABLE = "C:\\Program Files (x86)\\Git\\bin\\sh.exe";
+  private static final String DEFAULT_EXECUTABLE = "C:\\Program Files (x86)\\Git\\bin\\sh.exe"; //$NON-NLS-1$
 
   public static boolean quiet;
 
@@ -45,7 +46,7 @@ public class GitBash
   {
     if (executable == null)
     {
-      File stateFile = Activator.getDefault().getStateLocation().append("git-bash.txt").toFile();
+      File stateFile = Activator.getDefault().getStateLocation().append("git-bash.txt").toFile(); //$NON-NLS-1$
       if (stateFile.isFile())
       {
         executable = loadFile(stateFile);
@@ -79,7 +80,7 @@ public class GitBash
 
       if (gitBash != null)
       {
-        ProcessBuilder builder = new ProcessBuilder(gitBash, "--login", "-c", command);
+        ProcessBuilder builder = new ProcessBuilder(gitBash, "--login", "-c", command); //$NON-NLS-1$ //$NON-NLS-2$
         builder.directory(workTree);
         builder.redirectErrorStream(true);
 
@@ -91,26 +92,26 @@ public class GitBash
         while ((line = reader.readLine()) != null)
         {
           output.append(line);
-          output.append("\n");
+          output.append("\n"); //$NON-NLS-1$
         }
 
         int exitValue = process.waitFor();
         if (exitValue == 0)
         {
-          String message = "Command '" + command + "' executed successfully";
+          String message = NLS.bind(Messages.GitBash_Success_message, command);
           if (!quiet)
           {
-            Activator.log(message + "\n" + output, IStatus.INFO);
-            MessageDialog.openInformation(shell, "Git Bash", message);
+            Activator.log(message + "\n" + output, IStatus.INFO); //$NON-NLS-1$
+            MessageDialog.openInformation(shell, Messages.GitBash_GitBash_title, message);
           }
         }
         else
         {
-          String message = "Command '" + command + "' failed: " + exitValue;
+          String message = NLS.bind(Messages.GitBash_Failed_message, command, exitValue);
           if (!quiet)
           {
-            Activator.log(message + "\n" + output, IStatus.ERROR);
-            MessageDialog.openError(shell, "Git Bash", message);
+            Activator.log(message + "\n" + output, IStatus.ERROR); //$NON-NLS-1$
+            MessageDialog.openError(shell, Messages.GitBash_GitBash_title, message);
           }
         }
       }
@@ -127,11 +128,11 @@ public class GitBash
 
   private static String openInputDialog(String initial, Shell shell)
   {
-    InputDialog dialog = new InputDialog(shell, "Git Bash", "Location:", initial, new IInputValidator()
+    InputDialog dialog = new InputDialog(shell, Messages.GitBash_GitBash_title, Messages.GitBash_Location_label, initial, new IInputValidator()
     {
       public String isValid(String newText)
       {
-        return new File(newText).isFile() ? null : "Not a file!";
+        return new File(newText).isFile() ? null : Messages.GitBash_NotFile_imessage;
       }
     });
 
@@ -183,7 +184,7 @@ public class GitBash
     }
     catch (IOException ex)
     {
-      throw new IllegalStateException("Could not write to " + file, ex);
+      throw new IllegalStateException(NLS.bind(Messages.GitBash_WriteFailuire_exception, file), ex);
     }
     finally
     {

@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.IOException;
 import java.util.Map;
@@ -32,9 +33,9 @@ import java.util.Map;
  */
 public class TargletContainerResourceFactory implements Factory
 {
-  public static final String PROTOCOL_NAME = "targlet_container";
+  public static final String PROTOCOL_NAME = "targlet_container"; //$NON-NLS-1$
 
-  public static final String OPTION_MIRRORS = "MIRRORS";
+  public static final String OPTION_MIRRORS = "MIRRORS"; //$NON-NLS-1$
 
   public TargletContainerResourceFactory()
   {
@@ -79,7 +80,7 @@ public class TargletContainerResourceFactory implements Factory
               }
             }
 
-            updateJob = new Job("Resolve Targlet Container " + targletContainer.getID())
+            updateJob = new Job(NLS.bind(Messages.TargletContainerResourceFactory_Resolve_job, targletContainer.getID()))
             {
               @Override
               protected IStatus run(IProgressMonitor monitor)

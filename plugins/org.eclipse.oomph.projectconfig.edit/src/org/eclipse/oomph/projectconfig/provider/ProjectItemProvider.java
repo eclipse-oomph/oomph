@@ -104,8 +104,8 @@ public class ProjectItemProvider extends ModelElementItemProvider
 
     try
     {
-      workbenchAdapterClass = CommonPlugin.loadClass("org.eclipse.ui.ide", "org.eclipse.ui.model.IWorkbenchAdapter");
-      method = workbenchAdapterClass.getMethod("getImageDescriptor", Object.class);
+      workbenchAdapterClass = CommonPlugin.loadClass("org.eclipse.ui.ide", "org.eclipse.ui.model.IWorkbenchAdapter"); //$NON-NLS-1$ //$NON-NLS-2$
+      method = workbenchAdapterClass.getMethod("getImageDescriptor", Object.class); //$NON-NLS-1$
     }
     catch (Throwable throwable)
     {
@@ -157,8 +157,8 @@ public class ProjectItemProvider extends ModelElementItemProvider
   protected void addPreferenceNodePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Project_preferenceNode_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Project_preferenceNode_feature", "_UI_Project_type"),
+        getString("_UI_Project_preferenceNode_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Project_preferenceNode_feature", "_UI_Project_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectConfigPackage.Literals.PROJECT__PREFERENCE_NODE, true, false, true, null, null, null));
   }
 
@@ -171,8 +171,8 @@ public class ProjectItemProvider extends ModelElementItemProvider
   protected void addPreferenceProfileReferencesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Project_preferenceProfileReferences_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Project_preferenceProfileReferences_feature", "_UI_Project_type"),
+        getString("_UI_Project_preferenceProfileReferences_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Project_preferenceProfileReferences_feature", "_UI_Project_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectConfigPackage.Literals.PROJECT__PREFERENCE_PROFILE_REFERENCES, true, false, true, null, null, null)
     {
       IItemLabelProvider labelProvider = new IItemLabelProvider()
@@ -192,7 +192,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
                 String name = preferenceNode.getName();
                 if (name != null)
                 {
-                  result += " - " + name;
+                  result += " - " + name; //$NON-NLS-1$
                 }
               }
             }
@@ -291,7 +291,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
       }
     }
 
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Project"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Project")); //$NON-NLS-1$
   }
 
   /**
@@ -316,7 +316,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
   {
     Project project = (Project)object;
     PreferenceNode preferenceNode = project.getPreferenceNode();
-    String label = "<invalid>";
+    String label = Messages.ProjectItemProvider_Invalid_label;
     if (preferenceNode != null)
     {
       String name = preferenceNode.getName();
@@ -426,7 +426,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
                 String name = preferenceNode.getName();
                 if (name != null)
                 {
-                  result += " - " + name;
+                  result += " - " + name; //$NON-NLS-1$
                 }
               }
             }
@@ -439,7 +439,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
             Object image = super.getImage(object);
             List<Object> images = new ArrayList<Object>(2);
             images.add(image);
-            images.add(EMFEditPlugin.INSTANCE.getImage("full/ovr16/ControlledObject"));
+            images.add(EMFEditPlugin.INSTANCE.getImage("full/ovr16/ControlledObject")); //$NON-NLS-1$
             return image = new ComposedImage(images);
           }
 
@@ -586,7 +586,8 @@ public class ProjectItemProvider extends ModelElementItemProvider
     Project project = (Project)object;
     if (references == null)
     {
-      references = new References(adapterFactory, "References", getResourceLocator().getImage("full/obj16/OutgoingLinks"), project);
+      references = new References(adapterFactory, Messages.ProjectItemProvider_References_label, getResourceLocator().getImage("full/obj16/OutgoingLinks"), //$NON-NLS-1$
+          project);
     }
     references.update();
     result.add(references);
@@ -604,18 +605,18 @@ public class ProjectItemProvider extends ModelElementItemProvider
     return super.createPrimaryDragAndDropCommand(domain, owner, location, operations, operation, collection);
   }
 
-  private static final Set<String> IGNORE_NAME_COMPONENTS = new HashSet<String>(Arrays.asList(new String[] { "org", "eclipse", "com" }));
+  private static final Set<String> IGNORE_NAME_COMPONENTS = new HashSet<String>(Arrays.asList("org", "eclipse", "com")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
   private static final Map<String, String> ACRYONYMS = new HashMap<String, String>();
 
   static
   {
-    ACRYONYMS.put("jdt", "JDT");
-    ACRYONYMS.put("pde", "PDE");
-    ACRYONYMS.put("ui", "UI");
-    ACRYONYMS.put("api", "API");
-    ACRYONYMS.put("ltk", "LTK");
-    ACRYONYMS.put("gmf", "GMF");
+    ACRYONYMS.put("jdt", "JDT"); //$NON-NLS-1$ //$NON-NLS-2$
+    ACRYONYMS.put("pde", "PDE"); //$NON-NLS-1$ //$NON-NLS-2$
+    ACRYONYMS.put("ui", "UI"); //$NON-NLS-1$ //$NON-NLS-2$
+    ACRYONYMS.put("api", "API"); //$NON-NLS-1$ //$NON-NLS-2$
+    ACRYONYMS.put("ltk", "LTK"); //$NON-NLS-1$ //$NON-NLS-2$
+    ACRYONYMS.put("gmf", "GMF"); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   private String[] getRootComponents(PreferenceNode preferenceNode, StringBuilder qualifiedPreferenceNodeName)
@@ -623,7 +624,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
     String[] rootNameComponents = null;
     for (String preferenceNodeName : preferenceNode.getRelativePath().segments())
     {
-      String[] nameComponents = URI.decode(preferenceNodeName).split("\\.");
+      String[] nameComponents = URI.decode(preferenceNodeName).split("\\."); //$NON-NLS-1$
 
       int start = 0;
       if (rootNameComponents == null)
@@ -737,7 +738,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
       AndPredicate andPredicate = createAndPredicate(project, rootNameComponents);
 
       NamePredicate namePredicate = PredicatesFactory.eINSTANCE.createNamePredicate();
-      namePredicate.setPattern(project.getPreferenceNode().getName().replace(".", "\\."));
+      namePredicate.setPattern(project.getPreferenceNode().getName().replace(".", "\\.")); //$NON-NLS-1$ //$NON-NLS-2$
       andPredicate.getOperands().add(namePredicate);
 
       preferenceProfile.getPredicates().add(andPredicate);
@@ -764,7 +765,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
       String bestNatureId = null;
       for (String natureId : natureIds)
       {
-        String[] natureComponents = natureId.split("\\.");
+        String[] natureComponents = natureId.split("\\."); //$NON-NLS-1$
         int index = 0;
         while (index < natureComponents.length && index < rootNameComponents.length)
         {
@@ -802,7 +803,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
     for (Property property : properties)
     {
       String name = property.getName();
-      name = name.replace(".", "\\.");
+      name = name.replace(".", "\\."); //$NON-NLS-1$ //$NON-NLS-2$
       if (pattern.length() != 0)
       {
         pattern.append('|');
@@ -818,7 +819,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
     StringBuilder pattern = new StringBuilder();
     for (String name : properties)
     {
-      name = name.replace(".", "\\.");
+      name = name.replace(".", "\\."); //$NON-NLS-1$ //$NON-NLS-2$
       if (pattern.length() != 0)
       {
         pattern.append('|');
@@ -858,7 +859,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
         PreferenceNode preferenceNode = preferenceFilter.getPreferenceNode();
         if (preferenceNode != null)
         {
-          text += " for " + PreferencesFactory.eINSTANCE.convertURI(preferenceNode.getRelativePath());
+          text += Messages.ProjectItemProvider_For_message_part + PreferencesFactory.eINSTANCE.convertURI(preferenceNode.getRelativePath());
         }
       }
     }
@@ -965,7 +966,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
               Pattern pattern = Pattern.compile(getPattern(entry.getValue()));
 
               PreferenceProfile exceptionalPreferenceProfile = ProjectConfigFactory.eINSTANCE.createPreferenceProfile();
-              exceptionalPreferenceProfile.setName(collidingPreferenceProfile.getName() + " Exceptional");
+              exceptionalPreferenceProfile.setName(collidingPreferenceProfile.getName() + Messages.ProjectItemProvider_Exceptional_label);
 
               PreferenceFilter exceptionalPreferenceFilter = ProjectConfigFactory.eINSTANCE.createPreferenceFilter();
               exceptionalPreferenceFilter.setInclusions(pattern);
@@ -994,7 +995,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
               }
               else
               {
-                exclusions = Pattern.compile(exclusions.toString() + "|" + pattern.toString());
+                exclusions = Pattern.compile(exclusions.toString() + "|" + pattern.toString()); //$NON-NLS-1$
               }
               command.appendAndExecute(
                   SetCommand.create(domain, collidingPreferenceFilter, ProjectConfigPackage.Literals.PREFERENCE_FILTER__EXCLUSIONS, exclusions));
@@ -1034,7 +1035,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
               }
               else
               {
-                exclusions = Pattern.compile(exclusions.toString() + "|" + unionPattern);
+                exclusions = Pattern.compile(exclusions.toString() + "|" + unionPattern); //$NON-NLS-1$
               }
               preferenceFilter.setExclusions(exclusions);
 
@@ -1044,7 +1045,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
               }
 
               PreferenceProfile exceptionalPreferenceProfile = ProjectConfigFactory.eINSTANCE.createPreferenceProfile();
-              exceptionalPreferenceProfile.setName(preferenceProfile.getName() + " Exceptional");
+              exceptionalPreferenceProfile.setName(preferenceProfile.getName() + Messages.ProjectItemProvider_Exceptional_label);
 
               PreferenceFilter exceptionalPreferenceFilter = ProjectConfigFactory.eINSTANCE.createPreferenceFilter();
               exceptionalPreferenceFilter.setInclusions(Pattern.compile(unionPattern));
@@ -1074,7 +1075,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
                 if (!properties.isEmpty())
                 {
                   PreferenceProfile partialPreferenceProfile = ProjectConfigFactory.eINSTANCE.createPreferenceProfile();
-                  partialPreferenceProfile.setName(preferenceProfile.getName() + " Partial " + ++count);
+                  partialPreferenceProfile.setName(preferenceProfile.getName() + Messages.ProjectItemProvider_Partial_label + ++count);
 
                   PreferenceFilter partialPreferenceFilter = ProjectConfigFactory.eINSTANCE.createPreferenceFilter();
                   partialPreferenceFilter.setInclusions(Pattern.compile(getNamePattern(properties)));
@@ -1090,7 +1091,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
                   for (String projectName : projectNames)
                   {
                     NamePredicate namePredicate = PredicatesFactory.eINSTANCE.createNamePredicate();
-                    namePredicate.setPattern(projectName.replace(".", "\\."));
+                    namePredicate.setPattern(projectName.replace(".", "\\.")); //$NON-NLS-1$ //$NON-NLS-2$
                     partialPreferenceProfile.getPredicates().add(namePredicate);
                   }
 

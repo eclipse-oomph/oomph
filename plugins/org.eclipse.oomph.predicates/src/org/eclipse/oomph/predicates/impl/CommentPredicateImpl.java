@@ -203,7 +203,7 @@ public class CommentPredicateImpl extends PredicateImpl implements CommentPredic
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (pattern: ");
+    result.append(" (pattern: "); //$NON-NLS-1$
     result.append(pattern);
     result.append(')');
     return result.toString();

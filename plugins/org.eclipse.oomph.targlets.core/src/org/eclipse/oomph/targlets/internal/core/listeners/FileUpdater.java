@@ -71,13 +71,13 @@ public abstract class FileUpdater
     String nl = (String)description.get(ContentHandler.LINE_DELIMITER_PROPERTY);
     if (nl == null)
     {
-      nl = System.getProperty("line.separator");
+      nl = System.getProperty("line.separator"); //$NON-NLS-1$
     }
 
     String encoding = (String)description.get(ContentHandler.CHARSET_PROPERTY);
     if (encoding == null)
     {
-      encoding = "UTF-8";
+      encoding = "UTF-8"; //$NON-NLS-1$
     }
 
     String oldContents = URI_CONVERTER.exists(uri, null) ? getContents(uri, encoding) : null;

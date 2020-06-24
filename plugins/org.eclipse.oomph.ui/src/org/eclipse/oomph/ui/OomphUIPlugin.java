@@ -81,7 +81,7 @@ public abstract class OomphUIPlugin extends OomphPlugin
     }
     catch (RuntimeException ex)
     {
-      throw new RuntimeException("Problem while getting image for " + key, ex);
+      throw new RuntimeException("Problem while getting image for " + key, ex); //$NON-NLS-1$
     }
   }
 
@@ -93,7 +93,7 @@ public abstract class OomphUIPlugin extends OomphPlugin
     }
     catch (RuntimeException ex)
     {
-      throw new RuntimeException("Problem while getting image descriptor for " + key, ex);
+      throw new RuntimeException("Problem while getting image descriptor for " + key, ex); //$NON-NLS-1$
     }
   }
 
@@ -129,16 +129,16 @@ public abstract class OomphUIPlugin extends OomphPlugin
 
   public static Color getColor(int r, int g, int b)
   {
-    return ExtendedColorRegistry.INSTANCE.getColor(null, null, URI.createURI("color://rgb/" + r + "/" + g + "/" + b));
+    return ExtendedColorRegistry.INSTANCE.getColor(null, null, URI.createURI("color://rgb/" + r + "/" + g + "/" + b)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   public static Color getColor(RGB rgb)
   {
-    return ExtendedColorRegistry.INSTANCE.getColor(null, null, URI.createURI("color://rgb/" + rgb.red + "/" + rgb.green + "/" + rgb.blue));
+    return ExtendedColorRegistry.INSTANCE.getColor(null, null, URI.createURI("color://rgb/" + rgb.red + "/" + rgb.green + "/" + rgb.blue)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   public static Color getColor(Color foregroundColor, Color backgroundColor, float h, float s, float b)
   {
-    return ExtendedColorRegistry.INSTANCE.getColor(foregroundColor, backgroundColor, URI.createURI("color://hsb/" + h + "/" + s + "/" + b));
+    return ExtendedColorRegistry.INSTANCE.getColor(foregroundColor, backgroundColor, URI.createURI("color://hsb/" + h + "/" + s + "/" + b)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 }

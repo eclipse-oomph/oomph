@@ -108,6 +108,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationAdapter;
@@ -161,13 +162,13 @@ import java.util.regex.Pattern;
  */
 public class ProductPage extends SetupWizardPage
 {
-  public static final String PAGE_NAME = "ProductPage";
+  public static final String PAGE_NAME = "ProductPage"; //$NON-NLS-1$
 
   private static final Product NO_PRODUCT = createNoProduct();
 
-  private static final Pattern RELEASE_LABEL_PATTERN = Pattern.compile(".*\\(([^)]*)\\)[^)]*");
+  private static final Pattern RELEASE_LABEL_PATTERN = Pattern.compile(".*\\(([^)]*)\\)[^)]*"); //$NON-NLS-1$
 
-  private static final boolean OS_CHOOSE = PropertiesUtil.isProperty("oomph.setup.os.choose");
+  private static final boolean OS_CHOOSE = PropertiesUtil.isProperty("oomph.setup.os.choose"); //$NON-NLS-1$
 
   private final SelectionMemento selectionMemento;
 
@@ -215,8 +216,8 @@ public class ProductPage extends SetupWizardPage
   {
     super(PAGE_NAME);
     this.selectionMemento = selectionMemento;
-    setTitle("Product");
-    setDescription("Select the product and choose the version you want to install.");
+    setTitle(Messages.ProductPage_title);
+    setDescription(Messages.ProductPage_description);
   }
 
   @Override
@@ -264,8 +265,8 @@ public class ProductPage extends SetupWizardPage
 
     versionLabel = new Label(lowerComposite, SWT.NONE);
     versionLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-    versionLabel.setText("Product Version:");
-    AccessUtil.setKey(versionLabel, "productVersion");
+    versionLabel.setText(Messages.ProductPage_ProductVersion_label);
+    AccessUtil.setKey(versionLabel, "productVersion"); //$NON-NLS-1$
 
     versionComboViewer = new ComboViewer(lowerComposite, SWT.READ_ONLY);
     versionComboViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
@@ -289,7 +290,7 @@ public class ProductPage extends SetupWizardPage
     versionComboViewer.setInput(NO_PRODUCT);
     final Combo versionCombo = versionComboViewer.getCombo();
     versionCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    AccessUtil.setKey(versionCombo, "versionChoice");
+    AccessUtil.setKey(versionCombo, "versionChoice"); //$NON-NLS-1$
 
     if (OS_CHOOSE)
     {
@@ -330,7 +331,7 @@ public class ProductPage extends SetupWizardPage
     }
     else if (InstallerUI.BITNESS_CHOOSE && JREManager.BITNESS_CHANGEABLE)
     {
-      bitness32Button = new ToolButton(lowerComposite, SWT.RADIO, SetupUIPlugin.INSTANCE.getSWTImage("32bit.png"), true);
+      bitness32Button = new ToolButton(lowerComposite, SWT.RADIO, SetupUIPlugin.INSTANCE.getSWTImage("32bit.png"), true); //$NON-NLS-1$
       bitness32Button.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
       bitness32Button.setSelection(false);
       bitness32Button.addSelectionListener(new SelectionAdapter()
@@ -344,7 +345,7 @@ public class ProductPage extends SetupWizardPage
         }
       });
 
-      bitness64Button = new ToolButton(lowerComposite, SWT.RADIO, SetupUIPlugin.INSTANCE.getSWTImage("64bit.png"), true);
+      bitness64Button = new ToolButton(lowerComposite, SWT.RADIO, SetupUIPlugin.INSTANCE.getSWTImage("64bit.png"), true); //$NON-NLS-1$
       bitness64Button.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
       bitness64Button.setSelection(true);
       bitness64Button.addSelectionListener(new SelectionAdapter()
@@ -366,18 +367,18 @@ public class ProductPage extends SetupWizardPage
 
     javaLabel = new Label(lowerComposite, SWT.RIGHT);
     javaLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-    javaLabel.setText("Java VM:");
+    javaLabel.setText(Messages.ProductPage_JVM_label);
 
     javaViewer = new ComboViewer(lowerComposite, SWT.READ_ONLY);
     javaViewer.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     javaViewer.setLabelProvider(new LabelProvider());
     javaViewer.setContentProvider(new ArrayContentProvider());
 
-    javaViewer.setInput(Collections.singletonList(new JRE(new File(""), 0, 0, 0, 0, false, 0)));
+    javaViewer.setInput(Collections.singletonList(new JRE(new File(""), 0, 0, 0, 0, false, 0))); //$NON-NLS-1$
 
-    javaButton = new ToolButton(lowerComposite, SWT.PUSH, JREInfoUIPlugin.INSTANCE.getSWTImage("jre"), true);
+    javaButton = new ToolButton(lowerComposite, SWT.PUSH, JREInfoUIPlugin.INSTANCE.getSWTImage("jre"), true); //$NON-NLS-1$
     javaButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
-    javaButton.setToolTipText("Manage Virtual Machines...");
+    javaButton.setToolTipText(Messages.ProductPage_ManageVirtualMachanges_message);
     javaButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -415,17 +416,17 @@ public class ProductPage extends SetupWizardPage
       @Override
       protected void setLabel(String text)
       {
-        super.setLabel(text + ":");
+        super.setLabel(text + ":"); //$NON-NLS-1$
       }
     };
 
     if (InstallerUI.SHOW_BUNDLE_POOL_UI)
     {
-      DialogSettingsPersistence useBundlePool = new DialogSettingsPersistence(getDialogSettings(), "useBundlePool");
+      DialogSettingsPersistence useBundlePool = new DialogSettingsPersistence(getDialogSettings(), "useBundlePool"); //$NON-NLS-1$
       poolButton = PersistentButton.create(lowerComposite, SWT.CHECK | SWT.RIGHT, true, useBundlePool);
-      AccessUtil.setKey(poolButton, "pools");
+      AccessUtil.setKey(poolButton, "pools"); //$NON-NLS-1$
       poolButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-      poolButton.setText("Bundle Pool:");
+      poolButton.setText(Messages.ProductPage_BundlePool_label);
 
       if (poolButton.getSelection())
       {
@@ -498,11 +499,11 @@ public class ProductPage extends SetupWizardPage
 
       Combo poolCombo = poolComboViewer.getCombo();
       poolCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-      AccessUtil.setKey(poolCombo, "poolChoice");
+      AccessUtil.setKey(poolCombo, "poolChoice"); //$NON-NLS-1$
 
-      managePoolsButton = new ToolButton(lowerComposite, SWT.PUSH, P2UIPlugin.INSTANCE.getSWTImage("obj16/bundlePool"), true);
+      managePoolsButton = new ToolButton(lowerComposite, SWT.PUSH, P2UIPlugin.INSTANCE.getSWTImage("obj16/bundlePool"), true); //$NON-NLS-1$
       managePoolsButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
-      managePoolsButton.setToolTipText("Manage Bundle Pools...");
+      managePoolsButton.setToolTipText(Messages.ProductPage_ManageBundlePools_message);
       managePoolsButton.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -511,7 +512,7 @@ public class ProductPage extends SetupWizardPage
           manageBundlePools();
         }
       });
-      AccessUtil.setKey(managePoolsButton, "managePools");
+      AccessUtil.setKey(managePoolsButton, "managePools"); //$NON-NLS-1$
     }
 
     final CatalogManager catalogManager = catalogSelector.getCatalogManager();
@@ -558,10 +559,10 @@ public class ProductPage extends SetupWizardPage
     ToolBar filterToolBar = new ToolBar(filterComposite, SWT.FLAT | SWT.RIGHT);
 
     final ToolItem addProductButton = new ToolItem(filterToolBar, SWT.NONE);
-    addProductButton.setToolTipText("Add user products");
-    addProductButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add_project"));
+    addProductButton.setToolTipText(Messages.ProductPage_AddUserProducts_message);
+    addProductButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add_project")); //$NON-NLS-1$
     addProductButton.setEnabled(false);
-    AccessUtil.setKey(addProductButton, "addProduct");
+    AccessUtil.setKey(addProductButton, "addProduct"); //$NON-NLS-1$
 
     final Set<ProductCatalog> userProductCatalogs = new HashSet<ProductCatalog>();
     addProductButton.addSelectionListener(new SelectionAdapter()
@@ -575,10 +576,10 @@ public class ProductPage extends SetupWizardPage
     });
 
     final ToolItem removeProductButton = new ToolItem(filterToolBar, SWT.NONE);
-    removeProductButton.setToolTipText("Remove the selected user products");
-    removeProductButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("remove_project"));
+    removeProductButton.setToolTipText(Messages.ProductPage_RemoveUserProduct_message);
+    removeProductButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("remove_project")); //$NON-NLS-1$
     removeProductButton.setEnabled(false);
-    AccessUtil.setKey(removeProductButton, "removeProduct");
+    AccessUtil.setKey(removeProductButton, "removeProduct"); //$NON-NLS-1$
 
     final List<Product> userProducts = new ArrayList<Product>();
     final SelectionAdapter removeProductSelectionAdapter = new SelectionAdapter()
@@ -605,24 +606,24 @@ public class ProductPage extends SetupWizardPage
     removeProductButton.addSelectionListener(removeProductSelectionAdapter);
 
     final ToolItem collapseAllButton = new ToolItem(filterToolBar, SWT.NONE);
-    collapseAllButton.setToolTipText("Collapse All");
-    collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all"));
-    AccessUtil.setKey(collapseAllButton, "collapse");
+    collapseAllButton.setToolTipText(Messages.ProductPage_CollapseAll_message);
+    collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all")); //$NON-NLS-1$
+    AccessUtil.setKey(collapseAllButton, "collapse"); //$NON-NLS-1$
 
     configurationListener = new ProjectPage.ConfigurationListener(getWizard(), catalogManager, filterToolBar);
     getWizard().addConfigurationListener(configurationListener);
 
     final ToolItem catalogsButton = new ToolItem(filterToolBar, SWT.DROP_DOWN);
-    catalogsButton.setToolTipText("Select Catalogs");
-    catalogsButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("catalogs"));
+    catalogsButton.setToolTipText(Messages.ProductPage_SelectCatalogs_message);
+    catalogsButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("catalogs")); //$NON-NLS-1$
     catalogSelector.configure(getWizard(), catalogsButton, true);
-    AccessUtil.setKey(catalogsButton, "catalogs");
+    AccessUtil.setKey(catalogsButton, "catalogs"); //$NON-NLS-1$
 
     final FilteredTreeWithoutWorkbench filteredTree = new FilteredTreeWithoutWorkbench(treeComposite, SWT.BORDER);
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
-    AccessUtil.setKey(filteredTree.getFilterControl(), "filter");
-    AccessUtil.setKey(filteredTree.getViewer().getTree(), "productTree");
+    AccessUtil.setKey(filteredTree.getFilterControl(), "filter"); //$NON-NLS-1$
+    AccessUtil.setKey(filteredTree.getViewer().getTree(), "productTree"); //$NON-NLS-1$
     addHelpCallout(filteredTree.getViewer().getTree(), 1);
 
     productViewer = filteredTree.getViewer();
@@ -719,7 +720,7 @@ public class ProductPage extends SetupWizardPage
         @Override
         public void changing(LocationEvent event)
         {
-          if (!"about:blank".equals(event.location))
+          if (!"about:blank".equals(event.location)) //$NON-NLS-1$
           {
             OS.INSTANCE.openSystemBrowser(event.location);
             event.doit = false;
@@ -727,7 +728,7 @@ public class ProductPage extends SetupWizardPage
         }
       });
 
-      AccessUtil.setKey(descriptionBrowser, "description");
+      AccessUtil.setKey(descriptionBrowser, "description"); //$NON-NLS-1$
     }
     else
     {
@@ -833,7 +834,7 @@ public class ProductPage extends SetupWizardPage
           IStatus status = marketPlaceListingProcessor.getStatus();
           if (!status.isOK())
           {
-            new StatusDialog(getShell(), "Marketplace Listing Problems", null, status, Diagnostic.ERROR).open();
+            new StatusDialog(getShell(), Messages.ProductPage_MPCProblems_title, null, status, Diagnostic.ERROR).open();
           }
 
           return;
@@ -887,7 +888,7 @@ public class ProductPage extends SetupWizardPage
         IStatus status = configurationProcessor.getStatus();
         if (!status.isOK())
         {
-          new StatusDialog(getShell(), "Installation Problems", null, status, Diagnostic.ERROR).open();
+          new StatusDialog(getShell(), Messages.ProductPage_InstallatinProblems_title, null, status, Diagnostic.ERROR).open();
         }
       }
     };
@@ -1019,8 +1020,7 @@ public class ProductPage extends SetupWizardPage
     }
 
     boolean productSelected = product != NO_PRODUCT;
-    String error = productSelected ? productVersion == null ? "The selected product has no versions that can be installed on this platform." : null
-        : "Select a product from the catalogs and choose the product version.";
+    String error = productSelected ? productVersion == null ? Messages.ProductPage_IncompatibleVersion_message : null : Messages.ProductPage_Select_message;
 
     Scope scope = productSelected ? product : getSelectedProductCatalog();
     if (descriptionBrowser != null)
@@ -1033,20 +1033,20 @@ public class ProductPage extends SetupWizardPage
     {
       String html = safe(scope == null ? null : scope.getDescription());
       URI brandingSiteURI = SetupWizard.getBrandingSiteURI(productVersion == null ? product : productVersion);
-      String plain = StringUtil.isEmpty(html) ? "No description available." : UIUtil.stripHTML(html);
+      String plain = StringUtil.isEmpty(html) ? Messages.ProductPage_NoDescription_message : UIUtil.stripHTML(html);
       String label = SetupCoreUtil.getLabel(scope);
       if (productVersion != null)
       {
         String productVersionLabel = getLabel(productVersion);
         if (!StringUtil.isEmpty(productVersionLabel))
         {
-          label += " \u2013 " + productVersionLabel;
+          label += " \u2013 " + productVersionLabel; //$NON-NLS-1$
         }
       }
 
       descriptionViewer.update(SetupWizard.getBrandingImage(product), label,
           productVersion != null
-              && "true".equals(BaseUtil.getAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING)),
+              && "true".equals(BaseUtil.getAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING)), //$NON-NLS-1$
           plain, brandingSiteURI == null ? null : brandingSiteURI.toString());
     }
 
@@ -1075,7 +1075,7 @@ public class ProductPage extends SetupWizardPage
       {
         if (error == null && productSelected && poolButton.getSelection())
         {
-          error = "Select a bundle pool or disable the use of a bundle pool.";
+          error = Messages.ProductPage_SelectBundlePool_message;
         }
 
         poolComboViewer.setSelection(StructuredSelection.EMPTY);
@@ -1117,54 +1117,54 @@ public class ProductPage extends SetupWizardPage
     URI brandingSiteURI = SetupWizard.getBrandingSiteURI(scope);
 
     StringBuilder result = new StringBuilder();
-    result.append("<html><body style='margin:5px;'>");
+    result.append("<html><body style='margin:5px;'>"); //$NON-NLS-1$
     if (brandingSiteURI != null)
     {
-      result.append("<a style='text-decoration: none; color: inherit;' href='");
+      result.append("<a style='text-decoration: none; color: inherit;' href='"); //$NON-NLS-1$
       result.append(brandingSiteURI);
-      result.append("'>");
+      result.append("'>"); //$NON-NLS-1$
     }
 
-    result.append("<img src='");
+    result.append("<img src='"); //$NON-NLS-1$
     result.append(imageURI);
-    result.append("' width='42' height='42' align='absmiddle'></img>");
-    result.append("<span><b>&nbsp;&nbsp;&nbsp;<span style='font-family:Arial,Verdana,sans-serif; font-size:100%'>");
+    result.append("' width='42' height='42' align='absmiddle'></img>"); //$NON-NLS-1$
+    result.append("<span><b>&nbsp;&nbsp;&nbsp;<span style='font-family:Arial,Verdana,sans-serif; font-size:100%'>"); //$NON-NLS-1$
     result.append(DiagnosticDecorator.escapeContent(safe(label)));
     if (!StringUtil.isEmpty(versionLabel))
     {
-      result.append(" &ndash; ");
+      result.append(" &ndash; "); //$NON-NLS-1$
       result.append(DiagnosticDecorator.escapeContent(versionLabel));
     }
 
-    if ("true".equals(BaseUtil.getAnnotation(scope, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING)))
+    if ("true".equals(BaseUtil.getAnnotation(scope, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING))) //$NON-NLS-1$
     {
       URI incubationURI = ImageURIRegistry.INSTANCE
-          .getImageURI(ExtendedImageRegistry.INSTANCE.getImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/eclipse_incubation.png")));
-      result.append("&nbsp;<img title='Contains incubating components' style='height: 2ex;' src='");
+          .getImageURI(ExtendedImageRegistry.INSTANCE.getImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/eclipse_incubation.png"))); //$NON-NLS-1$
+      result.append("&nbsp;<img title='Contains incubating components' style='height: 2ex;' src='"); //$NON-NLS-1$
       result.append(incubationURI);
-      result.append("' align='absmiddle'></img>");
+      result.append("' align='absmiddle'></img>"); //$NON-NLS-1$
     }
 
     if (brandingSiteURI != null)
     {
-      result.append("</a>");
+      result.append("</a>"); //$NON-NLS-1$
     }
 
-    result.append("</b>");
+    result.append("</b>"); //$NON-NLS-1$
 
     if (brandingSiteURI != null && !StringUtil.isEmpty(versionLabel))
     {
-      result.append("<a style='float: right; padding-top: 12px; padding-right: 15px; font-family:Arial,Verdana,sans-serif; font-size:75%' href='");
+      result.append("<a style='float: right; padding-top: 12px; padding-right: 15px; font-family:Arial,Verdana,sans-serif; font-size:75%' href='"); //$NON-NLS-1$
       result.append(brandingSiteURI);
-      result.append("'>");
-      result.append("details");
-      result.append("</a>");
+      result.append("'>"); //$NON-NLS-1$
+      result.append("details"); //$NON-NLS-1$
+      result.append("</a>"); //$NON-NLS-1$
     }
 
-    result.append("</span>");
-    result.append("<br/><hr/></span><span style='font-family:Arial,Verdana,sans-serif; font-size:75%'>");
+    result.append("</span>"); //$NON-NLS-1$
+    result.append("<br/><hr/></span><span style='font-family:Arial,Verdana,sans-serif; font-size:75%'>"); //$NON-NLS-1$
     result.append(safe(description));
-    result.append("</span></body></html>");
+    result.append("</span></body></html>"); //$NON-NLS-1$
     return result.toString();
   }
 
@@ -1309,11 +1309,11 @@ public class ProductPage extends SetupWizardPage
       for (ProductVersion productVersion : validProductVersions)
       {
         String versionName = productVersion.getName();
-        if ("latest.released".equals(versionName))
+        if ("latest.released".equals(versionName)) //$NON-NLS-1$
         {
           latestReleasedProductVersion = productVersion;
         }
-        else if ("latest".equals(versionName))
+        else if ("latest".equals(versionName)) //$NON-NLS-1$
         {
           latestProductVersion = productVersion;
         }
@@ -1325,7 +1325,7 @@ public class ProductPage extends SetupWizardPage
 
       if (latestReleasedProductVersion != null)
       {
-        if (latestReleasedProductVersion.getLabel().contains("(Luna)") && latestProductVersion != null && latestProductVersion.getLabel().contains("(Mars"))
+        if (latestReleasedProductVersion.getLabel().contains("(Luna)") && latestProductVersion != null && latestProductVersion.getLabel().contains("(Mars")) //$NON-NLS-1$ //$NON-NLS-2$
         {
           version = latestProductVersion;
         }
@@ -1375,19 +1375,19 @@ public class ProductPage extends SetupWizardPage
       }
     }
 
-    String result = "Install the " + label + " version ";
+    String result = NLS.bind(Messages.ProductPage_InstallVersion_message, label);
     String name = version.getName();
-    if ("latest.released".equals(name))
+    if ("latest.released".equals(name)) //$NON-NLS-1$
     {
-      result += "and update to the next service release or to the next full release";
+      result += Messages.ProductPage_UpdateRelease_message;
     }
-    else if ("latest".equals(name))
+    else if ("latest".equals(name)) //$NON-NLS-1$
     {
-      result += "and update to the next available version, including unreleased versions";
+      result += Messages.ProductPage_Update_message;
     }
     else
     {
-      result += "and update to the next service release";
+      result += Messages.ProductPage_UpdateServiceRelease_message;
     }
 
     return result;
@@ -1405,11 +1405,11 @@ public class ProductPage extends SetupWizardPage
   private static Product createNoProduct()
   {
     Product product = SetupFactory.eINSTANCE.createProduct();
-    product.setName("<no product selected>");
+    product.setName(Messages.ProductPage_NoProductSelected_label);
     product.setLabel(product.getName());
 
     ProductVersion version = SetupFactory.eINSTANCE.createProductVersion();
-    version.setName("<no product version selected>");
+    version.setName(Messages.ProductPage_NoProductVersionSelected_label);
     version.setLabel(version.getName());
 
     product.getVersions().add(version);
@@ -1420,7 +1420,7 @@ public class ProductPage extends SetupWizardPage
   {
     if (string == null)
     {
-      return "";
+      return ""; //$NON-NLS-1$
     }
 
     return string;
@@ -1433,7 +1433,7 @@ public class ProductPage extends SetupWizardPage
       return null;
     }
 
-    return new File(jre.getJavaHome(), "bin").toString();
+    return new File(jre.getJavaHome(), "bin").toString(); //$NON-NLS-1$
   }
 
   public static List<ProductVersion> getValidProductVersions(Product product, Pattern filter)
@@ -1446,7 +1446,7 @@ public class ProductPage extends SetupWizardPage
       {
         ProductVersion version = it.next();
         String label = version.getLabel();
-        if (label != null && (label.contains("Luna") || label.contains("Kepler") || label.contains("Juno")))
+        if (label != null && (label.contains("Luna") || label.contains("Kepler") || label.contains("Juno"))) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         {
           it.remove();
         }
@@ -1530,22 +1530,22 @@ public class ProductPage extends SetupWizardPage
       descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
       descriptionLabel.setForeground(foreground);
       descriptionLabel.setBackground(background);
-      descriptionLabel.setFont(SetupUIPlugin.getFont(font, URI.createURI("font:///+2/bold")));
+      descriptionLabel.setFont(SetupUIPlugin.getFont(font, URI.createURI("font:///+2/bold"))); //$NON-NLS-1$
 
       descriptionLabelImage = new CLabel(labelComposite, SWT.NONE);
       descriptionLabelImage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
       descriptionLabelImage.setForeground(foreground);
       descriptionLabelImage.setBackground(background);
-      descriptionLabelImage.setFont(SetupUIPlugin.getFont(font, URI.createURI("font:///+2/bold")));
-      descriptionLabelImage.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/eclipse_incubation.png"));
-      descriptionLabelImage.setToolTipText("Contains incubating components");
+      descriptionLabelImage.setFont(SetupUIPlugin.getFont(font, URI.createURI("font:///+2/bold"))); //$NON-NLS-1$
+      descriptionLabelImage.setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/eclipse_incubation.png")); //$NON-NLS-1$
+      descriptionLabelImage.setToolTipText(Messages.ProductPage_Incubating_message);
 
       detailsLink = new Link(labelComposite, SWT.NONE);
       detailsLink.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
-      detailsLink.setText("<a>details</a>");
+      detailsLink.setText("<a>details</a>"); //$NON-NLS-1$
       // detailsLink.setForeground(foreground);
       detailsLink.setBackground(background);
-      detailsLink.setToolTipText("Opens a more detailed description, including package contents, in the system browser");
+      detailsLink.setToolTipText(Messages.ProductPage_OpenDescription_message);
       detailsLink.addSelectionListener(new SelectionAdapter()
       {
         @Override
@@ -1871,7 +1871,7 @@ public class ProductPage extends SetupWizardPage
 
     public AddUserProductDialog(Shell parent, Set<ProductCatalog> productCatalog, CatalogSelector catalogSelector, AdapterFactoryEditingDomain editingDomain)
     {
-      super(parent, "Add User Products", SWT.OPEN | SWT.MULTI);
+      super(parent, Messages.ProductPage_AddUserProducts_title, SWT.OPEN | SWT.MULTI);
       productCatalogs = productCatalog;
       this.catalogSelector = catalogSelector;
       this.editingDomain = editingDomain;
@@ -1893,7 +1893,7 @@ public class ProductPage extends SetupWizardPage
       applyDialogFont(upperComposite);
 
       Label label = new Label(upperComposite, SWT.NONE);
-      label.setText("Catalog:");
+      label.setText(Messages.ProductPage_Catalog_label);
       label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 
       catalogViewer = new ComboViewer(upperComposite, SWT.READ_ONLY);
@@ -1965,7 +1965,7 @@ public class ProductPage extends SetupWizardPage
         public void widgetSelected(SelectionEvent event)
         {
           FileDialog fileDialog = new FileDialog(getShell(), style);
-          fileDialog.setFilterExtensions(new String[] { "*.setup" });
+          fileDialog.setFilterExtensions(new String[] { "*.setup" }); //$NON-NLS-1$
           fileDialog.open();
 
           String filterPath = fileDialog.getFilterPath();
@@ -1975,10 +1975,10 @@ public class ProductPage extends SetupWizardPage
           for (int i = 0, len = fileNames.length; i < len; i++)
           {
             uris.append(URI.createFileURI(filterPath + File.separator + fileNames[i]).toString());
-            uris.append("  ");
+            uris.append("  "); //$NON-NLS-1$
           }
 
-          uriField.setText((uriField.getText() + "  " + uris.toString()).trim());
+          uriField.setText((uriField.getText() + "  " + uris.toString()).trim()); //$NON-NLS-1$
         }
       });
     }
@@ -2038,22 +2038,22 @@ public class ProductPage extends SetupWizardPage
       {
         if (invalidURIsSize == 1)
         {
-          message.append("The URI ");
+          message.append(Messages.ProductPage_URIPrefix_message);
         }
         else
         {
-          message.append("The URIs ");
+          message.append(Messages.ProductPage_URIsPrefix_message);
         }
 
         for (int i = 0; i < invalidURIsSize; ++i)
         {
           if (i != 0)
           {
-            message.append(", ");
+            message.append(", "); //$NON-NLS-1$
 
             if (i + 1 == invalidURIsSize)
             {
-              message.append(" and ");
+              message.append(Messages.ProductPage_And_message);
             }
           }
 
@@ -2064,11 +2064,11 @@ public class ProductPage extends SetupWizardPage
 
         if (invalidURIsSize == 1)
         {
-          message.append(" does not contain a valid product.");
+          message.append(Messages.ProductPage_InvalidProduct_message);
         }
         else
         {
-          message.append(" do not contain valid products.");
+          message.append(Messages.ProductPage_InvalidProducts_message);
         }
       }
 
@@ -2077,27 +2077,27 @@ public class ProductPage extends SetupWizardPage
       {
         if (message.length() != 0)
         {
-          message.append("\n\n");
+          message.append("\n\n"); //$NON-NLS-1$
         }
 
         if (invalidProductsSize == 1)
         {
-          message.append("The product ");
+          message.append(Messages.ProductPage_Product_message);
         }
         else
         {
-          message.append("The products ");
+          message.append(Messages.ProductPage_Products_message);
         }
 
         for (int i = 0; i < invalidProductsSize; ++i)
         {
           if (i != 0)
           {
-            message.append(", ");
+            message.append(", "); //$NON-NLS-1$
 
             if (i + 1 == invalidProductsSize)
             {
-              message.append(" and ");
+              message.append(Messages.ProductPage_And_message);
             }
           }
 
@@ -2108,20 +2108,21 @@ public class ProductPage extends SetupWizardPage
 
         if (invalidProductsSize == 1)
         {
-          message.append(" is already contained in the index.");
+          message.append(Messages.ProductPage_AlreadyContained_message);
         }
         else
         {
-          message.append(" are already contained in the index.");
+          message.append(Messages.ProductPage_AlreadyContainedPlural_message);
         }
       }
 
       if (message.length() == 0)
       {
-        message.append("No URIs were specified. Hit Cancel to terminate the dialog.");
+        message.append(Messages.ProductPage_NoURIsSpecified_message);
       }
 
-      ErrorDialog.openError(getShell(), "Error Adding Products", null, new Status(IStatus.ERROR, SetupUIPlugin.INSTANCE.getSymbolicName(), message.toString()));
+      ErrorDialog.openError(getShell(), Messages.ProductPage_ErrorAdding_title, null,
+          new Status(IStatus.ERROR, SetupUIPlugin.INSTANCE.getSymbolicName(), message.toString()));
       return false;
     }
 

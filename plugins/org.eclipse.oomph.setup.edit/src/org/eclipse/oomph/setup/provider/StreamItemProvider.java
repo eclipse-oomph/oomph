@@ -62,7 +62,7 @@ public class StreamItemProvider extends ScopeItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Stream"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Stream")); //$NON-NLS-1$
   }
 
   /**
@@ -83,6 +83,7 @@ public class StreamItemProvider extends ScopeItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     String label = getLabel(object);

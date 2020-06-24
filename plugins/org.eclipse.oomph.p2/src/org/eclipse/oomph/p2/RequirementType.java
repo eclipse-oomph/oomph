@@ -35,7 +35,7 @@ public enum RequirementType implements Enumerator
    * @generated
    * @ordered
    */
-  NONE(0, "NONE", "None"),
+  NONE(0, "NONE", "None"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>FEATURE</b></em>' literal object.
@@ -45,7 +45,7 @@ public enum RequirementType implements Enumerator
    * @generated
    * @ordered
    */
-  FEATURE(1, "FEATURE", "Feature"),
+  FEATURE(1, "FEATURE", "Feature"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>PROJECT</b></em>' literal object.
@@ -55,15 +55,11 @@ public enum RequirementType implements Enumerator
    * @generated
    * @ordered
    */
-  PROJECT(2, "PROJECT", "Project");
+  PROJECT(2, "PROJECT", "Project"); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>NONE</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>NONE</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #NONE
    * @model literal="None"
@@ -75,10 +71,6 @@ public enum RequirementType implements Enumerator
   /**
    * The '<em><b>FEATURE</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>FEATURE</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #FEATURE
    * @model literal="Feature"
@@ -90,10 +82,6 @@ public enum RequirementType implements Enumerator
   /**
    * The '<em><b>PROJECT</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>PROJECT</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #PROJECT
    * @model literal="Project"

@@ -69,6 +69,7 @@ import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.RemoteConfig;
 import org.eclipse.jgit.transport.URIish;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.io.IOException;
@@ -114,7 +115,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * @generated
    * @ordered
    */
-  protected static final String LOCATION_EDEFAULT = "";
+  protected static final String LOCATION_EDEFAULT = ""; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getLocation() <em>Location</em>}' attribute.
@@ -134,7 +135,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * @generated
    * @ordered
    */
-  protected static final String LOCATION_QUALIFIER_EDEFAULT = " ";
+  protected static final String LOCATION_QUALIFIER_EDEFAULT = " "; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getLocationQualifier() <em>Location Qualifier</em>}' attribute.
@@ -154,7 +155,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * @generated
    * @ordered
    */
-  protected static final String REMOTE_NAME_EDEFAULT = "origin";
+  protected static final String REMOTE_NAME_EDEFAULT = "origin"; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getRemoteName() <em>Remote Name</em>}' attribute.
@@ -214,7 +215,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * @generated
    * @ordered
    */
-  protected static final String CHECKOUT_BRANCH_EDEFAULT = "${scope.project.stream.name}";
+  protected static final String CHECKOUT_BRANCH_EDEFAULT = "${scope.project.stream.name}"; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getCheckoutBranch() <em>Checkout Branch</em>}' attribute.
@@ -707,21 +708,21 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (location: ");
+    result.append(" (location: "); //$NON-NLS-1$
     result.append(location);
-    result.append(", locationQualifier: ");
+    result.append(", locationQualifier: "); //$NON-NLS-1$
     result.append(locationQualifier);
-    result.append(", remoteName: ");
+    result.append(", remoteName: "); //$NON-NLS-1$
     result.append(remoteName);
-    result.append(", remoteURI: ");
+    result.append(", remoteURI: "); //$NON-NLS-1$
     result.append(remoteURI);
-    result.append(", pushURI: ");
+    result.append(", pushURI: "); //$NON-NLS-1$
     result.append(pushURI);
-    result.append(", checkoutBranch: ");
+    result.append(", checkoutBranch: "); //$NON-NLS-1$
     result.append(checkoutBranch);
-    result.append(", recursive: ");
+    result.append(", recursive: "); //$NON-NLS-1$
     result.append(recursive);
-    result.append(", restrictToCheckoutBranch: ");
+    result.append(", restrictToCheckoutBranch: "); //$NON-NLS-1$
     result.append(restrictToCheckoutBranch);
     result.append(')');
     return result.toString();
@@ -748,7 +749,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     GitCloneTask gitCloneTask = (GitCloneTask)overriddenSetupTask;
     if (!ObjectUtil.equals(gitCloneTask.getRemoteURI(), getRemoteURI()) || !ObjectUtil.equals(gitCloneTask.getCheckoutBranch(), getCheckoutBranch()))
     {
-      Annotation errorAnnotation = BaseFactory.eINSTANCE.createErrorAnnotation("Multiple different Git clones cannot be at the same location");
+      Annotation errorAnnotation = BaseFactory.eINSTANCE.createErrorAnnotation(Messages.GitCloneTaskImpl_CloneCollision_message);
       getAnnotations().add(errorAnnotation);
     }
   }
@@ -774,23 +775,23 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     try
     {
       // Maybe the preference will be moved to the core...
-      IEclipsePreferences egitCorePreferences = InstanceScope.INSTANCE.getNode("org.eclipse.egit.core");
-      IEclipsePreferences egitCoreDefaultPreferences = DefaultScope.INSTANCE.getNode("org.eclipse.egit.core");
-      timeout = egitCorePreferences.getInt("core_remote_connection_timeout", egitCoreDefaultPreferences.getInt("core_remote_connection_timeout", 0));
+      IEclipsePreferences egitCorePreferences = InstanceScope.INSTANCE.getNode("org.eclipse.egit.core"); //$NON-NLS-1$
+      IEclipsePreferences egitCoreDefaultPreferences = DefaultScope.INSTANCE.getNode("org.eclipse.egit.core"); //$NON-NLS-1$
+      timeout = egitCorePreferences.getInt("core_remote_connection_timeout", egitCoreDefaultPreferences.getInt("core_remote_connection_timeout", 0)); //$NON-NLS-1$ //$NON-NLS-2$
 
-      Class<?> egitUIActivatorClass = CommonPlugin.loadClass("org.eclipse.egit.ui", "org.eclipse.egit.ui.Activator");
-      Object egitUIActivator = ReflectUtil.invokeMethod("getDefault", egitUIActivatorClass);
-      repositoryUtil = ReflectUtil.invokeMethod("getRepositoryUtil", egitUIActivator);
+      Class<?> egitUIActivatorClass = CommonPlugin.loadClass("org.eclipse.egit.ui", "org.eclipse.egit.ui.Activator"); //$NON-NLS-1$ //$NON-NLS-2$
+      Object egitUIActivator = ReflectUtil.invokeMethod("getDefault", egitUIActivatorClass); //$NON-NLS-1$
+      repositoryUtil = ReflectUtil.invokeMethod("getRepositoryUtil", egitUIActivator); //$NON-NLS-1$
 
       @SuppressWarnings("unchecked")
-      List<String> configuredRepositories = (List<String>)ReflectUtil.invokeMethod("getConfiguredRepositories", repositoryUtil);
+      List<String> configuredRepositories = (List<String>)ReflectUtil.invokeMethod("getConfiguredRepositories", repositoryUtil); //$NON-NLS-1$
       repositories = new HashSet<String>(configuredRepositories);
 
       if (timeout == 0)
       {
-        Object egitUIPreferenceStore = ReflectUtil.invokeMethod("getPreferenceStore", egitUIActivator);
-        timeout = ReflectUtil.invokeMethod(ReflectUtil.getMethod(egitUIPreferenceStore, "getInt", String.class), egitUIPreferenceStore,
-            "remote_connection_timeout");
+        Object egitUIPreferenceStore = ReflectUtil.invokeMethod("getPreferenceStore", egitUIActivator); //$NON-NLS-1$
+        timeout = ReflectUtil.invokeMethod(ReflectUtil.getMethod(egitUIPreferenceStore, "getInt", String.class), egitUIPreferenceStore, //$NON-NLS-1$
+            "remote_connection_timeout"); //$NON-NLS-1$
       }
     }
     catch (Throwable ex)
@@ -808,7 +809,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
     workDirExisted = true;
 
-    boolean needsToBeAdded = repositories != null && !repositories.contains(new File(workDir, ".git").toString());
+    boolean needsToBeAdded = repositories != null && !repositories.contains(new File(workDir, ".git").toString()); //$NON-NLS-1$
     if (workDir.list().length > 1)
     {
       // Even though cloning isn't needed, return true if the repository needs to be added to the repositories view.
@@ -816,7 +817,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       return needsToBeAdded;
     }
 
-    context.log("Opening Git clone " + workDir);
+    context.log(NLS.bind(Messages.GitCloneTaskImpl_OpeningClone_message, workDir));
 
     try
     {
@@ -876,7 +877,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       Set<String> gerritPatterns = getGerritPatterns(context);
 
       IProgressMonitor monitor = context.getProgressMonitor(true);
-      monitor.beginTask("", (cachedGit == null ? 51 : 0) + (!hasCheckout ? 3 : 0) + (isRecursive() ? 20 : 0));
+      monitor.beginTask("", (cachedGit == null ? 51 : 0) + (!hasCheckout ? 3 : 0) + (isRecursive() ? 20 : 0)); //$NON-NLS-1$
 
       try
       {
@@ -904,7 +905,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
           if (!hasCheckout)
           {
-            Ref branchRef = findRef(cachedGit.getRepository(), Constants.R_REMOTES + remoteName + "/" + checkoutBranch);
+            Ref branchRef = findRef(cachedGit.getRepository(), Constants.R_REMOTES + remoteName + "/" + checkoutBranch); //$NON-NLS-1$
             Ref tagRef = findRef(cachedGit.getRepository(), Constants.R_TAGS + checkoutBranch);
             if (branchRef == null && tagRef != null)
             {
@@ -938,8 +939,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
           try
           {
             // Add the clone to the Git repositories view.
-            Method addConfiguredRepositoryMethod = ReflectUtil.getMethod(repositoryUtil.getClass(), "addConfiguredRepository", File.class);
-            ReflectUtil.invokeMethod(addConfiguredRepositoryMethod, repositoryUtil, new File(workDir, ".git"));
+            Method addConfiguredRepositoryMethod = ReflectUtil.getMethod(repositoryUtil.getClass(), "addConfiguredRepository", File.class); //$NON-NLS-1$
+            ReflectUtil.invokeMethod(addConfiguredRepositoryMethod, repositoryUtil, new File(workDir, ".git")); //$NON-NLS-1$
           }
           catch (Throwable ex)
           {
@@ -960,7 +961,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
         if (ex instanceof OperationCanceledException)
         {
-          context.log("Deleting the result of the canceled clone operation");
+          context.log(Messages.GitCloneTaskImpl_DeletingClone_message);
         }
 
         try
@@ -1031,7 +1032,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   private static Git cloneRepository(SetupTaskContext context, File workDir, String checkoutBranch, boolean restrictToCheckoutBranch, String remoteName,
       String remoteURI, boolean recursive, int timeout, IProgressMonitor monitor) throws Exception
   {
-    context.log("Cloning Git repo " + remoteURI + " to " + workDir);
+    context.log(NLS.bind(Messages.GitCloneTaskImpl_CloningRepo_message, remoteURI, workDir));
 
     CloneCommand command = Git.cloneRepository();
     command.setNoCheckout(true);
@@ -1094,7 +1095,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         for (Map.Entry<String, List<String>> propertyEntry : subsectionEntry.getValue().entrySet())
         {
           String key = propertyEntry.getKey();
-          if ("core".equals(sectionName) && subsectionName == null && "autocrlf".equals(key))
+          if ("core".equals(sectionName) && subsectionName == null && "autocrlf".equals(key)) //$NON-NLS-1$ //$NON-NLS-2$
           {
             hasAutoCRLFProperty = true;
           }
@@ -1154,7 +1155,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     {
       if (key instanceof String)
       {
-        if (key.toString().endsWith(".gerrit.uri.pattern"))
+        if (key.toString().endsWith(".gerrit.uri.pattern")) //$NON-NLS-1$
         {
           Object value = context.get(key);
           if (value instanceof String)
@@ -1178,17 +1179,17 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       {
         RefSpec oldRrefSpec = new RefSpec();
         oldRrefSpec = oldRrefSpec.setForceUpdate(true);
-        oldRrefSpec = oldRrefSpec.setSourceDestination(Constants.R_HEADS + "*", Constants.R_REMOTES + remoteName + "/*");
+        oldRrefSpec = oldRrefSpec.setSourceDestination(Constants.R_HEADS + "*", Constants.R_REMOTES + remoteName + "/*"); //$NON-NLS-1$ //$NON-NLS-2$
 
         final String src = Constants.R_HEADS + checkoutBranch;
-        final String dst = Constants.R_REMOTES + remoteName + "/" + checkoutBranch;
+        final String dst = Constants.R_REMOTES + remoteName + "/" + checkoutBranch; //$NON-NLS-1$
         RefSpec newRefSpec = new RefSpec();
         newRefSpec = newRefSpec.setForceUpdate(true);
         newRefSpec = newRefSpec.setSourceDestination(src, dst);
 
         if (remoteConfig.addFetchRefSpec(newRefSpec) && remoteConfig.removeFetchRefSpec(oldRrefSpec) && context.isPerforming())
         {
-          context.log("Setting fetch ref spec for single branch clone");
+          context.log(Messages.GitCloneTaskImpl_FetchingRefSpec_message);
         }
 
         remoteConfig.update(config);
@@ -1246,7 +1247,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     {
       if (context.isPerforming())
       {
-        context.log("Setting " + ConfigConstants.CONFIG_KEY_AUTOCRLF + " = true");
+        context.log(NLS.bind(Messages.GitCloneTaskImpl_SettingConfig_message, ConfigConstants.CONFIG_KEY_AUTOCRLF));
       }
 
       config.setEnum(ConfigConstants.CONFIG_CORE_SECTION, null, ConfigConstants.CONFIG_KEY_AUTOCRLF, AutoCRLF.TRUE);
@@ -1262,10 +1263,10 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     {
       if (remoteName.equals(remoteConfig.getName()))
       {
-        RefSpec refSpec = new RefSpec("refs/notes/*:refs/notes/*");
+        RefSpec refSpec = new RefSpec("refs/notes/*:refs/notes/*"); //$NON-NLS-1$
         if (remoteConfig.addFetchRefSpec(refSpec) && context.isPerforming())
         {
-          context.log("Adding fetch ref spec: " + refSpec);
+          context.log(NLS.bind(Messages.GitCloneTaskImpl_AddingFetchRefSpec_message, refSpec));
         }
 
         remoteConfig.update(config);
@@ -1282,10 +1283,10 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     {
       if (remoteName.equals(remoteConfig.getName()))
       {
-        RefSpec refSpec = new RefSpec("HEAD:refs/for/" + checkoutBranch);
+        RefSpec refSpec = new RefSpec("HEAD:refs/for/" + checkoutBranch); //$NON-NLS-1$
         if (remoteConfig.addPushRefSpec(refSpec) && context.isPerforming())
         {
-          context.log("Adding push ref spec: " + refSpec);
+          context.log(NLS.bind(Messages.GitCloneTaskImpl_AddingPushRefSpec_message, refSpec));
         }
 
         remoteConfig.update(config);
@@ -1309,7 +1310,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         {
           if (context.isPerforming())
           {
-            context.log("Adding push URI: " + pushURI);
+            context.log(NLS.bind(Messages.GitCloneTaskImpl_AddingPushURI_message, pushURI));
           }
           uriAdded = remoteConfig.addPushURI(uri);
           if (uriAdded)
@@ -1325,12 +1326,12 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
   private static void createBranch(SetupTaskContext context, Git git, String checkoutBranch, String remoteName) throws Exception
   {
-    context.log("Creating local branch " + checkoutBranch);
+    context.log(NLS.bind(Messages.GitCloneTaskImpl_CreatingLocalBranch_message, checkoutBranch));
 
     CreateBranchCommand command = git.branchCreate();
     command.setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM);
     command.setName(checkoutBranch);
-    command.setStartPoint(Constants.R_REMOTES + remoteName + "/" + checkoutBranch);
+    command.setStartPoint(Constants.R_REMOTES + remoteName + "/" + checkoutBranch); //$NON-NLS-1$
     command.call();
 
     StoredConfig config = git.getRepository().getConfig();
@@ -1340,7 +1341,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
   private static void createTag(SetupTaskContext context, Git git, String checkoutTag) throws Exception
   {
-    context.log("Creating local tag " + checkoutTag);
+    context.log(NLS.bind(Messages.GitCloneTaskImpl_CreatingLocalTab_message, checkoutTag));
     CreateBranchCommand command = git.branchCreate();
     command.setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM);
     command.setName(checkoutTag);
@@ -1354,7 +1355,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
   private static void checkoutTag(SetupTaskContext context, Git git, String checkoutTag) throws Exception
   {
-    context.log("Checking out local branch " + checkoutTag);
+    context.log(NLS.bind(Messages.GitCloneTaskImpl_CheckingOutLocalBranch_message, checkoutTag));
 
     CheckoutCommand command = git.checkout();
     command.setName(Constants.R_HEADS + checkoutTag);
@@ -1363,7 +1364,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
   private static void checkoutBranch(SetupTaskContext context, Git git, String checkoutBranch) throws Exception
   {
-    context.log("Checking out local branch " + checkoutBranch);
+    context.log(NLS.bind(Messages.GitCloneTaskImpl_CheckingOutLocalBranch_message, checkoutBranch));
 
     CheckoutCommand command = git.checkout();
     command.setName(checkoutBranch);
@@ -1373,7 +1374,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   private static void addSubmodules(SetupTaskContext context, Git git, String checkoutBranch, String remoteName, Set<String> gerritPatterns,
       IProgressMonitor monitor) throws Exception
   {
-    context.log("Adding submodules");
+    context.log(Messages.GitCloneTaskImpl_AddingSubmodules_message);
 
     git.submoduleInit().call();
 
@@ -1401,7 +1402,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         {
           if (subRemoteURI.matches(gerritPattern))
           {
-            context.log("Configure Submodule " + generator.getModuleName());
+            context.log(NLS.bind(Messages.GitCloneTaskImpl_ConfigureSubmodule_message, generator.getModuleName()));
             Repository subRepo = generator.getRepository();
             StoredConfig subConfig = subRepo.getConfig();
             addGerritPullRefSpec(context, subConfig, remoteName);
@@ -1423,7 +1424,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
   private static void resetHard(SetupTaskContext context, Git git) throws Exception
   {
-    context.log("Resetting hard");
+    context.log(Messages.GitCloneTaskImpl_ResettingHard_message);
 
     ResetCommand command = git.reset();
     command.setMode(ResetType.HARD);

@@ -65,6 +65,7 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.window.Window;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.DisposeEvent;
@@ -105,55 +106,56 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 {
   private static final String CATALOGS_MENU_ITEM_TEXT = ProductCatalogsDialog.TITLE.toUpperCase() + StringUtil.HORIZONTAL_ELLIPSIS;
 
-  private static final String APPLY_CONFIGURATION_MENU_ITEM_TEXT = "APPLY CONFIGURATION";
+  private static final String APPLY_CONFIGURATION_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_AppyConfiguration_label;
 
-  private static final String APPLY_CONFIGURATION_MENU_ITEM_DESCRIPTION = "Apply the configuration from the clipboard";
+  private static final String APPLY_CONFIGURATION_MENU_ITEM_DESCRIPTION = Messages.SimpleInstallerDialog_ApplyConfiguration_message;
 
-  private static final String APPLY_MARKET_PLACE_LISTING_MENU_ITEM_TEXT = "APPLY MARKETPLACE LISTING" + StringUtil.HORIZONTAL_ELLIPSIS;
+  private static final String APPLY_MARKET_PLACE_LISTING_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_ApplyMarketplaceListing_label
+      + StringUtil.HORIZONTAL_ELLIPSIS;
 
-  private static final String APPLY_MARKET_PLACE_LISTING_MENU_ITEM_DESCRIPTION = "Apply the marketplace listing from the clipboard";
+  private static final String APPLY_MARKET_PLACE_LISTING_MENU_ITEM_DESCRIPTION = Messages.SimpleInstallerDialog_ApplyMarketplaceListing_message;
 
-  private static final String EXTENSIONS_MENU_ITEM_TEXT = "EXTENSIONS" + StringUtil.HORIZONTAL_ELLIPSIS;
+  private static final String EXTENSIONS_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_Extensions_label + StringUtil.HORIZONTAL_ELLIPSIS;
 
-  static final String EXTENSIONS_MENU_ITEM_DESCRIPTION = "Manage the applied marketplace listings and configurations";
+  static final String EXTENSIONS_MENU_ITEM_DESCRIPTION = Messages.SimpleInstallerDialog_Extensions_message;
 
-  private static final String SWITCH_CATALOG_INDEX_MENU_ITEM_TEXT = "SWITCH CATALOG INDEX";
+  private static final String SWITCH_CATALOG_INDEX_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_SwitchIndex_label;
 
-  private static final String BUNDLE_POOLS_MENU_ITEM_TEXT = "BUNDLE POOLS" + StringUtil.HORIZONTAL_ELLIPSIS;
+  private static final String BUNDLE_POOLS_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_BundlePools_label + StringUtil.HORIZONTAL_ELLIPSIS;
 
-  private static final String UPDATE_MENU_ITEM_TEXT = "UPDATE";
+  private static final String UPDATE_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_Update_label;
 
-  private static final String ADVANCED_MENU_ITEM_TEXT = "ADVANCED MODE" + StringUtil.HORIZONTAL_ELLIPSIS;
+  private static final String ADVANCED_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_AdvancedMode_label + StringUtil.HORIZONTAL_ELLIPSIS;
 
-  private static final String WEB_LINKS_MENU_ITEM_TEXT = "WEB LINKS" + StringUtil.HORIZONTAL_ELLIPSIS;
+  private static final String WEB_LINKS_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_WebLinks_label + StringUtil.HORIZONTAL_ELLIPSIS;
 
-  static final String WEB_LINKS_MENU_ITEM_DESCRIPTION = "Register this installer to automatically launch for links in a web browser";
+  static final String WEB_LINKS_MENU_ITEM_DESCRIPTION = Messages.SimpleInstallerDialog_WebLinks_message;
 
-  private static final String MARKET_PLACE_MENU_ITEM_TEXT = "MARKETPLACE" + StringUtil.HORIZONTAL_ELLIPSIS;
+  private static final String MARKET_PLACE_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_Marketplace_label + StringUtil.HORIZONTAL_ELLIPSIS;
 
-  private static final String ASK_A_QUESTION_MENU_ITEM_TEXT = "ASK A QUESTION" + StringUtil.HORIZONTAL_ELLIPSIS;
+  private static final String ASK_A_QUESTION_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_AskQuestion_label + StringUtil.HORIZONTAL_ELLIPSIS;
 
-  private static final String REPORT_A_PROBLEM_MENU_ITEM_TEXT = "REPORT A PROBLEM" + StringUtil.HORIZONTAL_ELLIPSIS;
+  private static final String REPORT_A_PROBLEM_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_ReportProblem_label + StringUtil.HORIZONTAL_ELLIPSIS;
 
-  private static final String CONTRIBUTE_MENU_ITEM_TEXT = "\u2605 CONTRIBUTE" + StringUtil.HORIZONTAL_ELLIPSIS;
+  private static final String CONTRIBUTE_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_Contribute_label + StringUtil.HORIZONTAL_ELLIPSIS;
 
-  private static final String ABOUT_MENU_ITEM_TEXT = "ABOUT";
+  private static final String ABOUT_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_About_label;
 
-  private static final String EXIT_MENU_ITEM_TEXT = "EXIT";
+  private static final String EXIT_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_Exit_label;
 
-  private static final Preference PREF_POOL_ENABLED = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("poolEnabled");
+  private static final Preference PREF_POOL_ENABLED = SetupInstallerPlugin.INSTANCE.getConfigurationPreference("poolEnabled"); //$NON-NLS-1$
 
-  private static final boolean MARKETPLACE_MENU_ITEM_ENABLED = !"false".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_MARKETPLACE));
+  private static final boolean MARKETPLACE_MENU_ITEM_ENABLED = !"false".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_MARKETPLACE)); //$NON-NLS-1$
 
-  private static final String HOST = PropertiesUtil.getProperty("oomph.setup.installer.host", "https://www.eclipse.org/setups/installer");
+  private static final String HOST = PropertiesUtil.getProperty("oomph.setup.installer.host", "https://www.eclipse.org/setups/installer"); //$NON-NLS-1$ //$NON-NLS-2$
 
-  private static final String PROBLEM_REPORT_URL = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_PROBLEM_REPORT, HOST + "/problem/");
+  private static final String PROBLEM_REPORT_URL = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_PROBLEM_REPORT, HOST + "/problem/"); //$NON-NLS-1$
 
-  private static final String FORUM_URL = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_FORUM, HOST + "/question/");
+  private static final String FORUM_URL = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_FORUM, HOST + "/question/"); //$NON-NLS-1$
 
-  private static final String CONTRIBUTE_URL = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_CONTRIBUTE, HOST + "/notification/");
+  private static final String CONTRIBUTE_URL = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_INSTALLER_CONTRIBUTE, HOST + "/notification/"); //$NON-NLS-1$
 
-  private static final File FILE_BRANDING_NOTIFICTION_URIS = new File(SetupInstallerPlugin.INSTANCE.getUserLocation().toFile(), "brandingNotificationURIs.txt");
+  private static final File FILE_BRANDING_NOTIFICTION_URIS = new File(SetupInstallerPlugin.INSTANCE.getUserLocation().toFile(), "brandingNotificationURIs.txt"); //$NON-NLS-1$
 
   private static Font defaultFont;
 
@@ -227,7 +229,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       IStatus status = marketPlaceListingProcessor.getStatus();
       if (!status.isOK())
       {
-        new StatusDialog(getShell(), "Marketplace Listing Problems", null, status, Diagnostic.ERROR).open();
+        new StatusDialog(getShell(), Messages.SimpleInstallerDialog_MPCProblems_title, null, status, Diagnostic.ERROR).open();
       }
     }
     else
@@ -252,7 +254,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         {
           applyInstallation();
 
-          productPage.handleFilter("");
+          productPage.handleFilter(""); //$NON-NLS-1$
           productPage.productSelected(productVersion.getProduct());
           variablePage.setProductVersion(productVersion);
           return true;
@@ -267,7 +269,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       IStatus status = configurationProcessor.getStatus();
       if (!status.isOK())
       {
-        new StatusDialog(getShell(), "Configuration Problems", null, status, Diagnostic.ERROR).open();
+        new StatusDialog(getShell(), Messages.SimpleInstallerDialog_ConfigurationProblems_title, null, status, Diagnostic.ERROR).open();
       }
     }
   }
@@ -275,7 +277,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   @Override
   protected IDialogSettings getDialogSizeSettings()
   {
-    return SetupInstallerPlugin.INSTANCE.getDialogSettings("SimpleInstaller");
+    return SetupInstallerPlugin.INSTANCE.getDialogSettings("SimpleInstaller"); //$NON-NLS-1$
   }
 
   @Override
@@ -325,11 +327,11 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     exitMenuButtonContainer.setLayout(UIUtil.createGridLayout(1));
     exitMenuButtonContainer.setLayoutData(GridDataFactory.swtDefaults().grab(false, true).align(SWT.CENTER, SWT.FILL).create());
 
-    FlatButton exitButton = new ImageHoverButton(exitMenuButtonContainer, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exit.png"),
-        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exit_hover.png"));
+    FlatButton exitButton = new ImageHoverButton(exitMenuButtonContainer, SWT.PUSH, SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exit.png"), //$NON-NLS-1$
+        SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exit_hover.png")); //$NON-NLS-1$
     exitButton.setShowButtonDownState(false);
     exitButton.setLayoutData(GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.BEGINNING).create());
-    exitButton.setToolTipText("Exit");
+    exitButton.setToolTipText(Messages.SimpleInstallerDialog_Exit_message);
     exitButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -505,7 +507,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         switchCatalogIndexItem.setVisible(switchCatalogVisible);
         if (switchCatalogVisible)
         {
-          switchCatalogIndexItem.setToolTipText("Switch to the catalog index from the clipboard: " + IndexManager.getUnderlyingLocation(indexLocation));
+          switchCatalogIndexItem.setToolTipText(
+              NLS.bind(Messages.SimpleInstallerDialog_SwitchCatalogIndex_message, IndexManager.getUnderlyingLocation(indexLocation)));
         }
 
         catalogsMenuItem.setVisible(showProductCatalogsItem);
@@ -584,10 +587,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     final SimpleInstallerMenu menu = new SimpleInstallerMenu(this);
 
     SimpleInstallerMenu.InstallerMenuItem updateInstallerItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
-    updateInstallerItem.setDefaultImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exclamation_circle.png"));
-    updateInstallerItem.setHoverImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exclamation_circle_hover.png"));
+    updateInstallerItem.setDefaultImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exclamation_circle.png")); //$NON-NLS-1$
+    updateInstallerItem.setHoverImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/exclamation_circle_hover.png")); //$NON-NLS-1$
     updateInstallerItem.setText(UPDATE_MENU_ITEM_TEXT);
-    updateInstallerItem.setToolTipText("Install available updates");
+    updateInstallerItem.setToolTipText(Messages.SimpleInstallerDialog_InstallUpdates_message);
     updateInstallerItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -627,8 +630,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     });
 
     SimpleInstallerMenu.InstallerMenuItem extensionsItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
-    extensionsItem.setDefaultImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/extension_circle.png"));
-    extensionsItem.setHoverImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/extension_circle_hover.png"));
+    extensionsItem.setDefaultImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/extension_circle.png")); //$NON-NLS-1$
+    extensionsItem.setHoverImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/extension_circle_hover.png")); //$NON-NLS-1$
     extensionsItem.setText(EXTENSIONS_MENU_ITEM_TEXT);
     extensionsItem.setToolTipText(EXTENSIONS_MENU_ITEM_DESCRIPTION);
     extensionsItem.setVisible(false);
@@ -678,14 +681,14 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         productCatalogsDialog.open();
       }
     });
-    AccessUtil.setKey(catalogsItem, "catalogs");
+    AccessUtil.setKey(catalogsItem, "catalogs"); //$NON-NLS-1$
 
     // Label spacer1 = new Label(menu, SWT.NONE);
     // spacer1.setLayoutData(GridDataFactory.swtDefaults().hint(SWT.DEFAULT, 46).create());
 
     SimpleInstallerMenu.InstallerMenuItem advancedModeItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
     advancedModeItem.setText(ADVANCED_MENU_ITEM_TEXT);
-    advancedModeItem.setToolTipText("Switch to advanced mode");
+    advancedModeItem.setToolTipText(Messages.SimpleInstallerDialog_SwitchToAdvancedMode_message);
     advancedModeItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -782,13 +785,13 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       SimpleInstallerMenu.InstallerMenuItem marketPlaceItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
       marketPlaceItem.setText(MARKET_PLACE_MENU_ITEM_TEXT);
-      marketPlaceItem.setToolTipText("Browse for marketplace listings and drag them onto the installer's title");
+      marketPlaceItem.setToolTipText(Messages.SimpleInstallerDialog_BrowseMPC_message);
       marketPlaceItem.addSelectionListener(new SelectionAdapter()
       {
         @Override
         public void widgetSelected(SelectionEvent e)
         {
-          OS.INSTANCE.openSystemBrowser("https://marketplace.eclipse.org");
+          OS.INSTANCE.openSystemBrowser("https://marketplace.eclipse.org"); //$NON-NLS-1$
         }
       });
     }
@@ -797,13 +800,13 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       SimpleInstallerMenu.InstallerMenuItem askAQuestionItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
       askAQuestionItem.setText(ASK_A_QUESTION_MENU_ITEM_TEXT);
-      askAQuestionItem.setToolTipText("Ask a question about the installer");
+      askAQuestionItem.setToolTipText(Messages.SimpleInstallerDialog_AskQuestion_message);
       askAQuestionItem.addSelectionListener(new SelectionAdapter()
       {
         @Override
         public void widgetSelected(SelectionEvent e)
         {
-          OS.INSTANCE.openSystemBrowser(FORUM_URL + "?version=" + URI.encodeQuery(SelfUpdate.getProductVersion(), false));
+          OS.INSTANCE.openSystemBrowser(FORUM_URL + "?version=" + URI.encodeQuery(SelfUpdate.getProductVersion(), false)); //$NON-NLS-1$
         }
       });
     }
@@ -812,13 +815,13 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       SimpleInstallerMenu.InstallerMenuItem reportAProblemItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
       reportAProblemItem.setText(REPORT_A_PROBLEM_MENU_ITEM_TEXT);
-      reportAProblemItem.setToolTipText("Report a problem with the installer");
+      reportAProblemItem.setToolTipText(Messages.SimpleInstallerDialog_ReportProblem_message);
       reportAProblemItem.addSelectionListener(new SelectionAdapter()
       {
         @Override
         public void widgetSelected(SelectionEvent e)
         {
-          OS.INSTANCE.openSystemBrowser(PROBLEM_REPORT_URL + "?version=" + URI.encodeQuery(SelfUpdate.getProductVersion(), false));
+          OS.INSTANCE.openSystemBrowser(PROBLEM_REPORT_URL + "?version=" + URI.encodeQuery(SelfUpdate.getProductVersion(), false)); //$NON-NLS-1$
         }
       });
     }
@@ -827,20 +830,20 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       SimpleInstallerMenu.InstallerMenuItem reportAProblemItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
       reportAProblemItem.setText(CONTRIBUTE_MENU_ITEM_TEXT);
-      reportAProblemItem.setToolTipText("Contribute to Eclipse");
+      reportAProblemItem.setToolTipText(Messages.SimpleInstallerDialog_Contribute_message);
       reportAProblemItem.addSelectionListener(new SelectionAdapter()
       {
         @Override
         public void widgetSelected(SelectionEvent e)
         {
-          OS.INSTANCE.openSystemBrowser(CONTRIBUTE_URL + "?version=" + URI.encodeQuery(SelfUpdate.getProductVersion(), false));
+          OS.INSTANCE.openSystemBrowser(CONTRIBUTE_URL + "?version=" + URI.encodeQuery(SelfUpdate.getProductVersion(), false)); //$NON-NLS-1$
         }
       });
     }
 
     SimpleInstallerMenu.InstallerMenuItem aboutItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
     aboutItem.setText(ABOUT_MENU_ITEM_TEXT);
-    aboutItem.setToolTipText("Show information about this installer");
+    aboutItem.setToolTipText(Messages.SimpleInstallerDialog_ShowAbout_message);
     aboutItem.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -887,7 +890,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       protected void createUI(Composite parent)
       {
         final Button enabledButton = new Button(parent, SWT.CHECK);
-        enabledButton.setText("Enable shared bundle pool");
+        enabledButton.setText(Messages.SimpleInstallerDialog_EnableBundlePool_label);
         enabledButton.setSelection(poolEnabled);
         enabledButton.addSelectionListener(new SelectionAdapter()
         {
@@ -1033,7 +1036,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       if (page instanceof SimpleVariablePage)
       {
         SimpleVariablePage variablePage = (SimpleVariablePage)page;
-        if (!variablePage.promptLaunchProduct("You're about to exit the installer"))
+        if (!variablePage.promptLaunchProduct(Messages.SimpleInstallerDialog_AboutToExit_message))
         {
           return;
         }
@@ -1166,7 +1169,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       if (FILE_BRANDING_NOTIFICTION_URIS.isFile())
       {
-        brandingNotificationURIs.addAll(IOUtil.readLines(FILE_BRANDING_NOTIFICTION_URIS, "UTF-8"));
+        brandingNotificationURIs.addAll(IOUtil.readLines(FILE_BRANDING_NOTIFICTION_URIS, "UTF-8")); //$NON-NLS-1$
       }
     }
     catch (RuntimeException ex)
@@ -1178,7 +1181,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
     try
     {
-      IOUtil.writeLines(FILE_BRANDING_NOTIFICTION_URIS, "UTF-8", new ArrayList<String>(brandingNotificationURIs));
+      IOUtil.writeLines(FILE_BRANDING_NOTIFICTION_URIS, "UTF-8", new ArrayList<String>(brandingNotificationURIs)); //$NON-NLS-1$
     }
     catch (RuntimeException ex)
     {
@@ -1192,7 +1195,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       if (FILE_BRANDING_NOTIFICTION_URIS.isFile())
       {
-        return IOUtil.readLines(FILE_BRANDING_NOTIFICTION_URIS, "UTF-8").contains(uri.toString());
+        return IOUtil.readLines(FILE_BRANDING_NOTIFICTION_URIS, "UTF-8").contains(uri.toString()); //$NON-NLS-1$
       }
     }
     catch (RuntimeException ex)
@@ -1225,8 +1228,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
   public static Font getFont(int relativeHeight, String style)
   {
-    String height = relativeHeight == 0 ? "" : relativeHeight > 0 ? "+" + relativeHeight : Integer.toString(relativeHeight);
-    return SetupInstallerPlugin.getFont(getDefaultFont(), org.eclipse.emf.common.util.URI.createURI("font:///" + height + "/" + style));
+    String height = relativeHeight == 0 ? "" : relativeHeight > 0 ? "+" + relativeHeight : Integer.toString(relativeHeight); //$NON-NLS-1$ //$NON-NLS-2$
+    return SetupInstallerPlugin.getFont(getDefaultFont(), org.eclipse.emf.common.util.URI.createURI("font:///" + height + "/" + style)); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   static Font getDefaultFont()
@@ -1277,7 +1280,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       try
       {
-        css = readBundleResource("html/css/simpleInstaller.css");
+        css = readBundleResource("html/css/simpleInstaller.css"); //$NON-NLS-1$
       }
       catch (IOException ex)
       {
@@ -1294,10 +1297,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       try
       {
-        pageTemplate = readBundleResource("html/PageTemplate.html");
+        pageTemplate = readBundleResource("html/PageTemplate.html"); //$NON-NLS-1$
 
         // Embed CSS
-        pageTemplate = pageTemplate.replace("%INSTALLER_CSS%", SimpleInstallerDialog.getCSS());
+        pageTemplate = pageTemplate.replace("%INSTALLER_CSS%", SimpleInstallerDialog.getCSS()); //$NON-NLS-1$
       }
       catch (IOException ex)
       {
@@ -1314,7 +1317,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       try
       {
-        productTemplate = readBundleResource("html/ProductTemplate.html");
+        productTemplate = readBundleResource("html/ProductTemplate.html"); //$NON-NLS-1$
       }
       catch (IOException ex)
       {
@@ -1331,7 +1334,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       try
       {
-        productTemplateLarge = readBundleResource("html/ProductTemplateLarge.html");
+        productTemplateLarge = readBundleResource("html/ProductTemplateLarge.html"); //$NON-NLS-1$
       }
       catch (IOException ex)
       {
@@ -1419,10 +1422,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       setShowButtonDownState(false);
       setCornerWidth(CORNER_WIDTH);
       setAlignment(SWT.CENTER);
-      setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_white.png"));
+      setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_white.png")); //$NON-NLS-1$
       setForeground(COLOR_WHITE);
       setBackground(COLOR_SUBTLE);
-      setFont(SimpleInstallerDialog.getFont(1, "bold"));
+      setFont(SimpleInstallerDialog.getFont(1, "bold")); //$NON-NLS-1$
       setVisible(false);
       addSelectionListener(new SelectionAdapter()
       {
@@ -1436,8 +1439,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
     protected void handleWidgetSelected()
     {
-      String resolvedURI = uri.toString().replace("${installer.version}", URI.encodeQuery(SelfUpdate.getProductVersion(), true)).replace("${scope}",
-          URI.encodeQuery(StringUtil.safe(scopeLabel).replace("+", "%2B"), false));
+      String resolvedURI = uri.toString().replace("${installer.version}", URI.encodeQuery(SelfUpdate.getProductVersion(), true)).replace("${scope}", //$NON-NLS-1$ //$NON-NLS-2$
+          URI.encodeQuery(StringUtil.safe(scopeLabel).replace("+", "%2B"), false)); //$NON-NLS-1$ //$NON-NLS-2$
       OS.INSTANCE.openSystemBrowser(resolvedURI);
       update(getURI(), getText(), getToolTipText(), AnimationStyle.NONE, false, buttonColor, scopeLabel);
     }
@@ -1479,12 +1482,12 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         animator = null;
         offset = 0;
         setBackground(buttonColor);
-        setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_black.png"));
+        setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_black.png")); //$NON-NLS-1$
       }
       else
       {
         setBackground(highlight ? buttonColor : COLOR_SUBTLE);
-        setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_white.png"));
+        setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_white.png")); //$NON-NLS-1$
         offset = animationStyle == AnimationStyle.REPEAT ? MAX_OFFSET : 0;
       }
     }
@@ -1495,14 +1498,14 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       animator = null;
       offset = 0;
       setBackground(buttonColor);
-      setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_black.png"));
+      setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_black.png")); //$NON-NLS-1$
     }
 
     @Override
     protected void onFocusOut(Event event)
     {
       setBackground(highlight ? buttonColor : COLOR_SUBTLE);
-      setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_white.png"));
+      setImage(SetupInstallerPlugin.INSTANCE.getSWTImage("simple/star_white.png")); //$NON-NLS-1$
       offset = animationStyle == AnimationStyle.REPEAT ? MAX_OFFSET : 0;
       redraw();
     }
@@ -1684,7 +1687,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
             String projectLabel = parentScope.getLabel();
             if (projectLabel != null)
             {
-              return projectLabel + "-" + label;
+              return projectLabel + "-" + label; //$NON-NLS-1$
             }
           }
 
@@ -1846,7 +1849,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
     public UpdateSearcher(Display display)
     {
-      super("Simple Update Searcher");
+      super(Messages.SimpleInstallerDialog_UpdateSearcher_job);
       this.display = display;
     }
 

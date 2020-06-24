@@ -287,11 +287,11 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (projectNamePatterns: ");
+    result.append(" (projectNamePatterns: "); //$NON-NLS-1$
     result.append(projectNamePatterns);
-    result.append(", offline: ");
+    result.append(", offline: "); //$NON-NLS-1$
     result.append(offline);
-    result.append(", updateSnapshots: ");
+    result.append(", updateSnapshots: "); //$NON-NLS-1$
     result.append(updateSnapshots);
     result.append(')');
     return result.toString();

@@ -35,7 +35,7 @@ import java.util.Set;
  */
 public class SimpleInstallerMenuButton extends Composite
 {
-  public static final String ACCESS_KEY = "menuButton";
+  public static final String ACCESS_KEY = "menuButton"; //$NON-NLS-1$
 
   private static final Cursor CURSOR_HAND = UIUtil.getDisplay().getSystemCursor(SWT.CURSOR_HAND);
 
@@ -71,7 +71,7 @@ public class SimpleInstallerMenuButton extends Composite
     };
 
     notificationOverlay.setCursor(CURSOR_HAND);
-    Image overlayImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/notification_overlay.png");
+    Image overlayImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/notification_overlay.png"); //$NON-NLS-1$
     Rectangle overlayImageBounds = overlayImage.getBounds();
     notificationOverlay.setImage(overlayImage);
     notificationOverlay.addMouseListener(new MouseAdapter()
@@ -93,9 +93,9 @@ public class SimpleInstallerMenuButton extends Composite
     notificationOverlay.setBounds(overlayX, overlayY, overlayImageBounds.width, overlayImageBounds.height);
     notificationOverlay.setVisible(false);
 
-    Image buttonImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/menu.png");
-    Image buttonHoverImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/menu_hover.png");
-    Image buttonDisabledImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/menu_disabled.png");
+    Image buttonImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/menu.png"); //$NON-NLS-1$
+    Image buttonHoverImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/menu_hover.png"); //$NON-NLS-1$
+    Image buttonDisabledImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/menu_disabled.png"); //$NON-NLS-1$
     button = new ImageHoverButton(container, SWT.PUSH, buttonImage, buttonHoverImage, buttonDisabledImage);
     AccessUtil.setKey(button, ACCESS_KEY);
 
@@ -126,9 +126,9 @@ public class SimpleInstallerMenuButton extends Composite
   {
     if (visible)
     {
-      Image overlayImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/extension_notification_overlay.png");
+      Image overlayImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/extension_notification_overlay.png"); //$NON-NLS-1$
       notificationOverlay.setImage(overlayImage);
-      notificationOverlay.setToolTipText("Marketplace listings and configurations have been applied");
+      notificationOverlay.setToolTipText(Messages.SimpleInstallerMenuButton_Applied_message);
       notificationOverlay.setVisible(true);
     }
     else
@@ -139,9 +139,9 @@ public class SimpleInstallerMenuButton extends Composite
 
   public void setNotificationVisible(boolean visible)
   {
-    Image overlayImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/notification_overlay.png");
+    Image overlayImage = SetupInstallerPlugin.INSTANCE.getSWTImage("simple/notification_overlay.png"); //$NON-NLS-1$
     notificationOverlay.setImage(overlayImage);
-    notificationOverlay.setToolTipText("Updates are available");
+    notificationOverlay.setToolTipText(Messages.SimpleInstallerMenuButton_UpdatesAvailable_message);
     notificationOverlay.setVisible(visible);
     notificationVisible = visible;
   }

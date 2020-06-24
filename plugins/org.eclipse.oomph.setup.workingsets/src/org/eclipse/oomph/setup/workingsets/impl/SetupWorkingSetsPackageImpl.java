@@ -195,6 +195,7 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("nls")
   public void initializePackageContents()
   {
     if (isInitialized)
@@ -220,10 +221,10 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
     workingSetTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(workingSetTaskEClass, WorkingSetTask.class, "WorkingSetTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getWorkingSetTask_Prefix(), ecorePackage.getEString(), "prefix", null, 0, 1, WorkingSetTask.class, !IS_TRANSIENT, !IS_VOLATILE,
+    initEClass(workingSetTaskEClass, WorkingSetTask.class, "WorkingSetTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getWorkingSetTask_Prefix(), ecorePackage.getEString(), "prefix", null, 0, 1, WorkingSetTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getWorkingSetTask_WorkingSets(), theWorkingSetsPackage.getWorkingSet(), null, "workingSets", null, 0, -1, WorkingSetTask.class,
+    initEReference(getWorkingSetTask_WorkingSets(), theWorkingSetsPackage.getWorkingSet(), null, "workingSets", null, 0, -1, WorkingSetTask.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     getWorkingSetTask_WorkingSets().getEKeys().add(theWorkingSetsPackage.getWorkingSet_Name());
 
@@ -251,9 +252,10 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
    */
   protected void createEcoreAnnotations()
   {
-    String source = "http://www.eclipse.org/emf/2002/Ecore";
+    String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
     addAnnotation(this, source,
-        new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore" });
+        new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+        });
   }
 
   /**
@@ -264,8 +266,9 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
    */
   protected void createValidTriggersAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers";
-    addAnnotation(workingSetTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" });
+    String source = "http://www.eclipse.org/oomph/setup/ValidTriggers"; //$NON-NLS-1$
+    addAnnotation(workingSetTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -276,9 +279,11 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
    */
   protected void createEnablementAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/setup/Enablement";
-    addAnnotation(this, source, new String[] { "variableName", "setup.workingsets.p2", "repository", "${oomph.update.url}", "installableUnits",
-        "org.eclipse.oomph.setup.workingsets.feature.group" });
+    String source = "http://www.eclipse.org/oomph/setup/Enablement"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "variableName", "setup.workingsets.p2", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "${oomph.update.url}", //$NON-NLS-1$ //$NON-NLS-2$
+        "installableUnits", "org.eclipse.oomph.setup.workingsets.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -289,10 +294,12 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
    */
   protected void createLabelProviderAnnotations()
   {
-    String source = "http://www.eclipse.org/oomph/base/LabelProvider";
-    addAnnotation(this, source, new String[] { "imageBaseURI",
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.workingsets.edit/icons/full/obj16" });
-    addAnnotation(workingSetTaskEClass, source, new String[] { "text", "Working Sets" });
+    String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
+    addAnnotation(this, source, new String[] { "imageBaseURI", //$NON-NLS-1$
+        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.workingsets.edit/icons/full/obj16" //$NON-NLS-1$
+    });
+    addAnnotation(workingSetTaskEClass, source, new String[] { "text", "Working Sets" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**
@@ -303,8 +310,9 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation(getWorkingSetTask_WorkingSets(), source, new String[] { "name", "workingSet" });
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getWorkingSetTask_WorkingSets(), source, new String[] { "name", "workingSet" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
 } // SetupWorkingSetsPackageImpl

@@ -79,7 +79,8 @@ public class AnnotationItemProvider extends ModelElementItemProvider
   protected void addSourcePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Annotation_source_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Annotation_source_feature", "_UI_Annotation_type"),
+        getString("_UI_Annotation_source_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Annotation_source_feature", "_UI_Annotation_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         BasePackage.Literals.ANNOTATION__SOURCE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -92,8 +93,8 @@ public class AnnotationItemProvider extends ModelElementItemProvider
   protected void addReferencesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Annotation_references_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Annotation_references_feature", "_UI_Annotation_type"),
+        getString("_UI_Annotation_references_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Annotation_references_feature", "_UI_Annotation_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         BasePackage.Literals.ANNOTATION__REFERENCES, true, false, true, null, null, null));
   }
 
@@ -140,7 +141,7 @@ public class AnnotationItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Annotation"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Annotation")); //$NON-NLS-1$
   }
 
   /**
@@ -166,7 +167,7 @@ public class AnnotationItemProvider extends ModelElementItemProvider
     Annotation annotation = (Annotation)object;
     if (annotation.getSource() != null)
     {
-      int index = getParent(annotation) instanceof EAnnotation ? -1 : annotation.getSource().lastIndexOf("/");
+      int index = getParent(annotation) instanceof EAnnotation ? -1 : annotation.getSource().lastIndexOf("/"); //$NON-NLS-1$
       if (index == -1)
       {
         return annotation.getSource();
@@ -175,7 +176,7 @@ public class AnnotationItemProvider extends ModelElementItemProvider
       return annotation.getSource().substring(index + 1);
     }
 
-    return getString("_UI_Annotation_type");
+    return getString("_UI_Annotation_type"); //$NON-NLS-1$
   }
 
   /**
@@ -254,7 +255,8 @@ public class AnnotationItemProvider extends ModelElementItemProvider
 
     if (qualify)
     {
-      return getString("_UI_CreateChild_text2", new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+      return getString("_UI_CreateChild_text2", //$NON-NLS-1$
+          new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
     }
     return super.getCreateChildText(owner, feature, child, selection);
   }

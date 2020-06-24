@@ -104,8 +104,8 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
   protected void addReferentProjectsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceProfile_referentProjects_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceProfile_referentProjects_feature", "_UI_PreferenceProfile_type"),
+        getString("_UI_PreferenceProfile_referentProjects_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceProfile_referentProjects_feature", "_UI_PreferenceProfile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectConfigPackage.Literals.PREFERENCE_PROFILE__REFERENT_PROJECTS, true, false, true, null, null, null)
     {
       @Override
@@ -146,8 +146,8 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
   protected void addNamePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_PreferenceProfile_name_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceProfile_name_feature", "_UI_PreferenceProfile_type"),
+        getString("_UI_PreferenceProfile_name_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_PreferenceProfile_name_feature", "_UI_PreferenceProfile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectConfigPackage.Literals.PREFERENCE_PROFILE__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -205,7 +205,7 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/PreferenceProfile"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/PreferenceProfile")); //$NON-NLS-1$
   }
 
   /**
@@ -229,7 +229,7 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
   public String getText(Object object)
   {
     String label = ((PreferenceProfile)object).getName();
-    return label == null ? "" : label;
+    return label == null ? "" : label; //$NON-NLS-1$
   }
 
   /**
@@ -309,7 +309,7 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
             Object image = super.getImage(object);
             List<Object> images = new ArrayList<Object>(2);
             images.add(image);
-            images.add(EMFEditPlugin.INSTANCE.getImage("full/ovr16/ControlledObject"));
+            images.add(EMFEditPlugin.INSTANCE.getImage("full/ovr16/ControlledObject")); //$NON-NLS-1$
             return image = new ComposedImage(images);
           }
 
@@ -466,7 +466,8 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
     PreferenceProfile preferenceProfile = (PreferenceProfile)object;
     if (referents == null)
     {
-      referents = new Referents(adapterFactory, "Referents", getResourceLocator().getImage("full/obj16/IncomingLinks"), preferenceProfile);
+      referents = new Referents(adapterFactory, Messages.PreferenceProfileItemProvider_Referents_label,
+          getResourceLocator().getImage("full/obj16/IncomingLinks"), preferenceProfile); //$NON-NLS-1$
     }
     referents.update();
     result.add(referents);

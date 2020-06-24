@@ -72,8 +72,8 @@ public class ResourceCreationTaskItemProvider extends SetupTaskItemProvider
   protected void addForcePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ResourceCreationTask_force_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ResourceCreationTask_force_feature", "_UI_ResourceCreationTask_type"),
+        getString("_UI_ResourceCreationTask_force_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ResourceCreationTask_force_feature", "_UI_ResourceCreationTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.RESOURCE_CREATION_TASK__FORCE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -86,8 +86,8 @@ public class ResourceCreationTaskItemProvider extends SetupTaskItemProvider
   protected void addContentPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ResourceCreationTask_content_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ResourceCreationTask_content_feature", "_UI_ResourceCreationTask_type"),
+        getString("_UI_ResourceCreationTask_content_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ResourceCreationTask_content_feature", "_UI_ResourceCreationTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.RESOURCE_CREATION_TASK__CONTENT, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -100,8 +100,8 @@ public class ResourceCreationTaskItemProvider extends SetupTaskItemProvider
   protected void addTargetURLPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ResourceCreationTask_targetURL_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ResourceCreationTask_targetURL_feature", "_UI_ResourceCreationTask_type"),
+        getString("_UI_ResourceCreationTask_targetURL_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ResourceCreationTask_targetURL_feature", "_UI_ResourceCreationTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.RESOURCE_CREATION_TASK__TARGET_URL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -114,8 +114,8 @@ public class ResourceCreationTaskItemProvider extends SetupTaskItemProvider
   protected void addEncodingPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ResourceCreationTask_encoding_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ResourceCreationTask_encoding_feature", "_UI_ResourceCreationTask_type"),
+        getString("_UI_ResourceCreationTask_encoding_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ResourceCreationTask_encoding_feature", "_UI_ResourceCreationTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.RESOURCE_CREATION_TASK__ENCODING, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -128,7 +128,7 @@ public class ResourceCreationTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ResourceCreationTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ResourceCreationTask")); //$NON-NLS-1$
   }
 
   /**
@@ -152,7 +152,8 @@ public class ResourceCreationTaskItemProvider extends SetupTaskItemProvider
   public String getText(Object object)
   {
     String label = ((ResourceCreationTask)object).getTargetURL();
-    return label == null || label.length() == 0 ? getString("_UI_ResourceCreationTask_type") : getString("_UI_ResourceCreationTask_type") + " " + label;
+    return label == null || label.length() == 0 ? getString("_UI_ResourceCreationTask_type") : //$NON-NLS-1$
+        getString("_UI_ResourceCreationTask_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

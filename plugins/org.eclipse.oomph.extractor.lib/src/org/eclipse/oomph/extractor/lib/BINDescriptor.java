@@ -24,9 +24,9 @@ import java.io.OutputStreamWriter;
  */
 public final class BINDescriptor
 {
-  private static final String CHARSET = "UTF-8";
+  private static final String CHARSET = "UTF-8"; //$NON-NLS-1$
 
-  private static final String NL = "\n";
+  private static final String NL = "\n"; //$NON-NLS-1$
 
   private final int format;
 

@@ -266,7 +266,7 @@ public abstract class P2ServiceUI extends DelegatingUIServices
                 ((GridData)parent.getLayoutData()).horizontalAlignment = SWT.FILL;
                 ((GridLayout)parent.getLayout()).numColumns++;
                 final Button rememberButton = new Button(parent, SWT.CHECK);
-                rememberButton.setText("Remember accepted certificates");
+                rememberButton.setText(Messages.P2ServiceUI_certs_rememberAccepted);
                 rememberButton.setFont(JFaceResources.getDialogFont());
                 GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
                 rememberButton.setLayoutData(data);
@@ -288,7 +288,7 @@ public abstract class P2ServiceUI extends DelegatingUIServices
                 ((GridData)parent.getLayoutData()).horizontalAlignment = SWT.FILL;
                 ((GridLayout)parent.getLayout()).numColumns++;
                 final Button alwaysButton = new Button(parent, SWT.CHECK);
-                alwaysButton.setText("Always accept certificates");
+                alwaysButton.setText(Messages.P2ServiceUI_certs_alwaysAccept);
                 alwaysButton.setFont(JFaceResources.getDialogFont());
                 GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
                 alwaysButton.setLayoutData(data);

@@ -38,7 +38,7 @@ public class TargetPlatformClasspathFile implements IDynamicVariableResolver
   {
     try
     {
-      File tempFile = File.createTempFile("pde-", ".properties");
+      File tempFile = File.createTempFile("pde-", ".properties"); //$NON-NLS-1$ //$NON-NLS-2$
 
       ITargetDefinition targetDefinition = TargetPlatformUtil.getActiveTargetDefinition();
       if (!targetDefinition.isResolved())
@@ -56,13 +56,13 @@ public class TargetPlatformClasspathFile implements IDynamicVariableResolver
           BundleInfo info = bundle.getBundleInfo();
           if (info != null)
           {
-            if (!info.getSymbolicName().endsWith(".source"))
+            if (!info.getSymbolicName().endsWith(".source")) //$NON-NLS-1$
             {
               URI location = info.getLocation();
               if (location != null)
               {
                 String scheme = location.getScheme();
-                if ("file".equals(scheme))
+                if ("file".equals(scheme)) //$NON-NLS-1$
                 {
                   appendBundleClasspath(builder, new File(location.getPath()));
                 }
@@ -72,7 +72,7 @@ public class TargetPlatformClasspathFile implements IDynamicVariableResolver
         }
       }
 
-      IOUtil.writeLines(tempFile, "UTF-8", Collections.singletonList(builder.toString()));
+      IOUtil.writeLines(tempFile, "UTF-8", Collections.singletonList(builder.toString())); //$NON-NLS-1$
       return tempFile.getAbsolutePath();
     }
     catch (Exception ex)
@@ -106,11 +106,11 @@ public class TargetPlatformClasspathFile implements IDynamicVariableResolver
     String bundleClasspath = manifest.get(Constants.BUNDLE_CLASSPATH);
     if (bundleClasspath != null)
     {
-      StringTokenizer tokenizer = new StringTokenizer(bundleClasspath, ",");
+      StringTokenizer tokenizer = new StringTokenizer(bundleClasspath, ","); //$NON-NLS-1$
       while (tokenizer.hasMoreTokens())
       {
         String token = tokenizer.nextToken();
-        if (".".equals(token))
+        if (".".equals(token)) //$NON-NLS-1$
         {
           appendFile(builder, bundleFolder);
         }

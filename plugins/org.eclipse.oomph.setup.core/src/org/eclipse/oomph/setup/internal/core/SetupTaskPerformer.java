@@ -139,6 +139,7 @@ import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.metadata.expression.IExpression;
 import org.eclipse.equinox.p2.metadata.expression.IExpressionVisitor;
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
+import org.eclipse.osgi.util.NLS;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -184,21 +185,21 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   public static final Adapter RULE_VARIABLE_ADAPTER = new AdapterImpl();
 
-  private static final Pattern FILTER_MEMBER_PATTERN = Pattern.compile("(\\(\\s*)([^~<>=\\(\\)]+)([~<>=\\\\(\\\\)])");
+  private static final Pattern FILTER_MEMBER_PATTERN = Pattern.compile("(\\(\\s*)([^~<>=\\(\\)]+)([~<>=\\\\(\\\\)])"); //$NON-NLS-1$
 
   private static final Map<String, ValueConverter> CONVERTERS = new LinkedHashMap<String, ValueConverter>();
 
   static
   {
-    CONVERTERS.put("java.lang.String", new ValueConverter());
-    CONVERTERS.put("org.eclipse.emf.common.util.URI", new URIValueConverter());
+    CONVERTERS.put("java.lang.String", new ValueConverter()); //$NON-NLS-1$
+    CONVERTERS.put("org.eclipse.emf.common.util.URI", new URIValueConverter()); //$NON-NLS-1$
   }
 
-  private static final SimpleDateFormat DATE_TIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+  private static final SimpleDateFormat DATE_TIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //$NON-NLS-1$
 
-  private static final Pattern INSTALLABLE_UNIT_WITH_RANGE_PATTERN = Pattern.compile("([^\\[\\(]*)(.*)");
+  private static final Pattern INSTALLABLE_UNIT_WITH_RANGE_PATTERN = Pattern.compile("([^\\[\\(]*)(.*)"); //$NON-NLS-1$
 
-  private static final Pattern ATTRIBUTE_REFERENCE_PATTERN = Pattern.compile("@[\\p{Alpha}_][\\p{Alnum}_]*");
+  private static final Pattern ATTRIBUTE_REFERENCE_PATTERN = Pattern.compile("@[\\p{Alpha}_][\\p{Alnum}_]*"); //$NON-NLS-1$
 
   private static final ThreadLocal<IProgressMonitor> CREATION_MONITOR = new ThreadLocal<IProgressMonitor>();
 
@@ -414,12 +415,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                   {
                     // If there is an instance with an empty value.
                     Object value = setupTask.eGet(eAttribute);
-                    if (value == null || "".equals(value))
+                    if (value == null || "".equals(value)) //$NON-NLS-1$
                     {
                       // If that instance has an ID and hence will create an implied variable and that variable name isn't already defined by an existing
                       // context variable.
                       String id = setupTask.getID();
-                      if (!StringUtil.isEmpty(id) && !keys.contains(id + "." + attributeName))
+                      if (!StringUtil.isEmpty(id) && !keys.contains(id + "." + attributeName)) //$NON-NLS-1$
                       {
                         EMap<String, String> details = eAnnotation.getDetails();
 
@@ -429,19 +430,19 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                         VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
                         annotateAttributeRuleVariable(variable, eAttribute);
                         variable.setName(variableName);
-                        variable.setType(VariableType.get(details.get("type")));
-                        variable.setLabel(details.get("label"));
-                        variable.setDescription(details.get("description"));
+                        variable.setType(VariableType.get(details.get("type"))); //$NON-NLS-1$
+                        variable.setLabel(details.get("label")); //$NON-NLS-1$
+                        variable.setDescription(details.get("description")); //$NON-NLS-1$
                         variable.eAdapters().add(RULE_VARIABLE_ADAPTER);
                         for (EAnnotation subAnnotation : eAnnotation.getEAnnotations())
                         {
-                          if ("Choice".equals(subAnnotation.getSource()))
+                          if ("Choice".equals(subAnnotation.getSource())) //$NON-NLS-1$
                           {
                             EMap<String, String> subDetails = subAnnotation.getDetails();
 
                             VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
-                            choice.setValue(subDetails.get("value"));
-                            choice.setLabel(subDetails.get("label"));
+                            choice.setValue(subDetails.get("value")); //$NON-NLS-1$
+                            choice.setLabel(subDetails.get("label")); //$NON-NLS-1$
 
                             variable.getChoices().add(choice);
                           }
@@ -653,7 +654,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             {
               if (eAttribute != SetupPackage.Literals.SETUP_TASK__ID && !eAttribute.isMany() && eAttribute.getEType().getInstanceClass() == String.class)
               {
-                String variableName = id + "." + ExtendedMetaData.INSTANCE.getName(eAttribute);
+                String variableName = id + "." + ExtendedMetaData.INSTANCE.getName(eAttribute); //$NON-NLS-1$
                 String value = (String)setupTask.eGet(eAttribute);
                 EAnnotation variableAnnotation = eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_VARIABLE);
                 String variableReference = getVariableReference(variableName, variableAnnotation);
@@ -734,7 +735,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                     {
                       EMap<String, String> details = variableAnnotation.getDetails();
                       VariableTask explicitVariable = SetupFactory.eINSTANCE.createVariableTask();
-                      String explicitVariableName = variableName + ".explicit";
+                      String explicitVariableName = variableName + ".explicit"; //$NON-NLS-1$
                       explicitVariable.setName(explicitVariableName);
                       explicitVariable.setStorageURI(null);
                       explicitVariable.setType(VariableType.get(details.get(EAnnotationConstants.KEY_EXPLICIT_TYPE)));
@@ -783,7 +784,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             if (!fullPromptUser)
             {
               // But don't do that for implied variables.
-              if (variable.getAnnotation("ImpliedVariable") == null)
+              if (variable.getAnnotation("ImpliedVariable") == null) //$NON-NLS-1$
               {
                 String promptedValue = getPrompter().getValue(variable);
                 if (promptedValue != null)
@@ -916,8 +917,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   {
     EClass eContainingClass = eAttribute.getEContainingClass();
     String instanceTypeName = eContainingClass.getInstanceTypeName();
-    String variableName = "@<id>."
-        + (instanceTypeName != null ? instanceTypeName + "." + ExtendedMetaData.INSTANCE.getName(eAttribute) : getAttributeURI(eAttribute));
+    String variableName = "@<id>." //$NON-NLS-1$
+        + (instanceTypeName != null ? instanceTypeName + "." + ExtendedMetaData.INSTANCE.getName(eAttribute) : getAttributeURI(eAttribute)); //$NON-NLS-1$
     return variableName;
   }
 
@@ -935,7 +936,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         String inherit = details.get(AnnotationConstants.KEY_INHERIT);
         if (inherit != null)
         {
-          for (String variableName : inherit.trim().split("\\s"))
+          for (String variableName : inherit.trim().split("\\s")) //$NON-NLS-1$
           {
             VariableTask referencedVariableTask = explicitKeys.get(variableName);
             if (referencedVariableTask != null)
@@ -950,7 +951,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                   String detailValue = detail.getValue();
                   if (detailKey != null && !AnnotationConstants.KEY_INHERIT.equals(detailKey) && detailValue != null)
                   {
-                    String target = "@{" + detailKey + "}";
+                    String target = "@{" + detailKey + "}"; //$NON-NLS-1$ //$NON-NLS-2$
                     if (value != null)
                     {
                       value = value.replace(target, detailValue);
@@ -986,7 +987,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             EStructuralFeature eStructuralFeature = BaseUtil.getFeature(setupTask.eClass(), target);
             if (eStructuralFeature != null && eStructuralFeature.getEType().getInstanceClass() == String.class)
             {
-              VariableTask variableTask = explicitKeys.get(id + "." + target);
+              VariableTask variableTask = explicitKeys.get(id + "." + target); //$NON-NLS-1$
               if (variableTask != null)
               {
                 EList<VariableChoice> targetChoices = variableTask.getChoices();
@@ -1008,7 +1009,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                     if (detailKey != null && !AnnotationConstants.KEY_INHERIT.equals(detailKey) && !AnnotationConstants.KEY_TARGET.equals(detailKey)
                         && !AnnotationConstants.KEY_LABEL.equals(detailKey) && !AnnotationConstants.KEY_DESCRIPTION.equals(detailKey) && detailValue != null)
                     {
-                      if (detailValue.startsWith("@"))
+                      if (detailValue.startsWith("@")) //$NON-NLS-1$
                       {
                         String featureName = detailValue.substring(1);
                         EStructuralFeature referencedEStructuralFeature = BaseUtil.getFeature(setupTask.eClass(), featureName);
@@ -1023,7 +1024,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                         }
                       }
 
-                      substitutions.put("@{" + detailKey + "}", detailValue);
+                      substitutions.put("@{" + detailKey + "}", detailValue); //$NON-NLS-1$ //$NON-NLS-2$
                     }
                   }
 
@@ -1034,7 +1035,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                       String value = (String)setupTask.eGet(eAttribute);
                       if (!StringUtil.isEmpty(value))
                       {
-                        substitutions.put("@{" + ExtendedMetaData.INSTANCE.getName(eAttribute) + "}", value);
+                        substitutions.put("@{" + ExtendedMetaData.INSTANCE.getName(eAttribute) + "}", value); //$NON-NLS-1$ //$NON-NLS-2$
                       }
                     }
                   }
@@ -1042,7 +1043,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                   String inheritedLabel = null;
                   String inheritedDescription = null;
 
-                  for (String variableName : inherit.trim().split("\\s"))
+                  for (String variableName : inherit.trim().split("\\s")) //$NON-NLS-1$
                   {
                     VariableTask referencedVariableTask = explicitKeys.get(variableName);
                     if (referencedVariableTask != null)
@@ -1161,12 +1162,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void annotateAttributeRuleVariable(VariableTask variable, EAttribute eAttribute)
   {
-    annotate(variable, "AttributeRuleVariable", eAttribute);
+    annotate(variable, "AttributeRuleVariable", eAttribute); //$NON-NLS-1$
   }
 
   public static EAttribute getAttributeRuleVariableData(VariableTask variable)
   {
-    Annotation annotation = variable.getAnnotation("AttributeRuleVariable");
+    Annotation annotation = variable.getAnnotation("AttributeRuleVariable"); //$NON-NLS-1$
     if (annotation != null)
     {
       return (EAttribute)annotation.getReferences().get(0);
@@ -1177,12 +1178,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void annotateImpliedVariable(VariableTask variable, SetupTask setupTask, EAttribute eAttribute)
   {
-    annotate(variable, "ImpliedVariable", setupTask, eAttribute);
+    annotate(variable, "ImpliedVariable", setupTask, eAttribute); //$NON-NLS-1$
   }
 
   public EStructuralFeature.Setting getImpliedVariableData(VariableTask variable)
   {
-    Annotation annotation = variable.getAnnotation("ImpliedVariable");
+    Annotation annotation = variable.getAnnotation("ImpliedVariable"); //$NON-NLS-1$
     if (annotation != null)
     {
       EList<EObject> references = annotation.getReferences();
@@ -1195,12 +1196,12 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void annotateRuleVariable(VariableTask variable, VariableTask dependentVariable)
   {
-    annotate(variable, "RuleVariable", dependentVariable);
+    annotate(variable, "RuleVariable", dependentVariable); //$NON-NLS-1$
   }
 
   public static VariableTask getRuleVariableData(VariableTask variable)
   {
-    Annotation annotation = variable.getAnnotation("RuleVariable");
+    Annotation annotation = variable.getAnnotation("RuleVariable"); //$NON-NLS-1$
     if (annotation != null)
     {
       return (VariableTask)annotation.getReferences().get(0);
@@ -1371,7 +1372,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   {
     EClass eClass = eAttribute.getEContainingClass();
     EPackage ePackage = eClass.getEPackage();
-    URI uri = URI.createURI(ePackage.getNsURI()).appendFragment("//" + eClass.getName() + "/" + eAttribute.getName());
+    URI uri = URI.createURI(ePackage.getNsURI()).appendFragment("//" + eClass.getName() + "/" + eAttribute.getName()); //$NON-NLS-1$ //$NON-NLS-2$
     return uri;
   }
 
@@ -1534,60 +1535,60 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         {
           case PRODUCT_CATALOG:
           {
-            generateScopeVariables(result, "product.catalog", qualifier, name, label, description);
+            generateScopeVariables(result, "product.catalog", qualifier, name, label, description); //$NON-NLS-1$
             qualifier = name;
             break;
           }
           case PRODUCT:
           {
-            generateScopeVariables(result, "product", qualifier, name, label, description);
-            qualifier += "." + name;
+            generateScopeVariables(result, "product", qualifier, name, label, description); //$NON-NLS-1$
+            qualifier += "." + name; //$NON-NLS-1$
             break;
           }
           case PRODUCT_VERSION:
           {
-            generateScopeVariables(result, "product.version", qualifier, name, label, description);
+            generateScopeVariables(result, "product.version", qualifier, name, label, description); //$NON-NLS-1$
             qualifier = null;
             break;
           }
           case PROJECT_CATALOG:
           {
-            generateScopeVariables(result, "project.catalog", qualifier, name, label, description);
+            generateScopeVariables(result, "project.catalog", qualifier, name, label, description); //$NON-NLS-1$
             qualifier = name;
             break;
           }
           case PROJECT:
           {
-            generateScopeVariables(result, "project", qualifier, name, label, description);
+            generateScopeVariables(result, "project", qualifier, name, label, description); //$NON-NLS-1$
 
             if (rootProject == null && scope.eResource() == stream.eResource())
             {
               rootProject = scope;
-              generateScopeVariables(result, "project.root", qualifier, name, label, description);
+              generateScopeVariables(result, "project.root", qualifier, name, label, description); //$NON-NLS-1$
             }
 
-            qualifier += "." + name;
+            qualifier += "." + name; //$NON-NLS-1$
             break;
           }
           case STREAM:
           {
-            generateScopeVariables(result, "project.stream", qualifier, name, label, description);
+            generateScopeVariables(result, "project.stream", qualifier, name, label, description); //$NON-NLS-1$
             qualifier = null;
             break;
           }
           case INSTALLATION:
           {
-            generateScopeVariables(result, "installation", qualifier, name, label, description);
+            generateScopeVariables(result, "installation", qualifier, name, label, description); //$NON-NLS-1$
             break;
           }
           case WORKSPACE:
           {
-            generateScopeVariables(result, "workspace", qualifier, name, label, description);
+            generateScopeVariables(result, "workspace", qualifier, name, label, description); //$NON-NLS-1$
             break;
           }
           case USER:
           {
-            generateScopeVariables(result, "user", qualifier, name, label, description);
+            generateScopeVariables(result, "user", qualifier, name, label, description); //$NON-NLS-1$
             break;
           }
           case MACRO:
@@ -1606,38 +1607,38 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void addBootstrapTasks(EList<SetupTask> result)
   {
-    addEclipseIniTask(result, false, "--launcher.appendVmargs", null);
+    addEclipseIniTask(result, false, "--launcher.appendVmargs", null); //$NON-NLS-1$
 
     String vmPath = getVMPath();
     if (vmPath != null)
     {
-      addEclipseIniTask(result, false, "-vm", vmPath);
+      addEclipseIniTask(result, false, "-vm", vmPath); //$NON-NLS-1$
     }
 
     String maxThreads = PropertiesUtil.getProperty(SimpleArtifactRepository.PROP_MAX_THREADS);
     if (maxThreads != null)
     {
-      addEclipseIniTask(result, true, "-D" + SimpleArtifactRepository.PROP_MAX_THREADS, "=" + maxThreads);
+      addEclipseIniTask(result, true, "-D" + SimpleArtifactRepository.PROP_MAX_THREADS, "=" + maxThreads); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
-    addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_UPDATE_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_UPDATE_URL))));
+    addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_UPDATE_URL, "=" + redirect(URI.createURI((String)get(SetupProperties.PROP_UPDATE_URL)))); //$NON-NLS-1$ //$NON-NLS-2$
 
-    addIndexRedirection(result, SetupContext.INDEX_SETUP_URI, "");
-    addIndexRedirection(result, SetupContext.INDEX_SETUP_LOCATION_URI, ".location");
-    addIndexRedirection(result, SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI, ".archive.location");
+    addIndexRedirection(result, SetupContext.INDEX_SETUP_URI, ""); //$NON-NLS-1$
+    addIndexRedirection(result, SetupContext.INDEX_SETUP_LOCATION_URI, ".location"); //$NON-NLS-1$
+    addIndexRedirection(result, SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI, ".archive.location"); //$NON-NLS-1$
 
-    boolean maybeRemoteDebug = "maybe".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_REMOTE_DEBUG));
+    boolean maybeRemoteDebug = "maybe".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_REMOTE_DEBUG)); //$NON-NLS-1$
     if (REMOTE_DEBUG || maybeRemoteDebug)
     {
-      String prefix = maybeRemoteDebug ? "-D" : "-";
-      addEclipseIniTask(result, true, prefix + "D" + SetupProperties.PROP_SETUP_REMOTE_DEBUG, "=true");
-      addEclipseIniTask(result, true, prefix + "Xdebug", "");
-      addEclipseIniTask(result, true, prefix + "Xrunjdwp:transport", "=dt_socket,server=y,suspend=n,address=8123");
+      String prefix = maybeRemoteDebug ? "-D" : "-"; //$NON-NLS-1$ //$NON-NLS-2$
+      addEclipseIniTask(result, true, prefix + "D" + SetupProperties.PROP_SETUP_REMOTE_DEBUG, "=true"); //$NON-NLS-1$ //$NON-NLS-2$
+      addEclipseIniTask(result, true, prefix + "Xdebug", ""); //$NON-NLS-1$ //$NON-NLS-2$
+      addEclipseIniTask(result, true, prefix + "Xrunjdwp:transport", "=dt_socket,server=y,suspend=n,address=8123"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     if (USER_HOME_REDIRECT)
     {
-      addEclipseIniTask(result, true, "-Duser.home", "=" + PropertiesUtil.getUserHome());
+      addEclipseIniTask(result, true, "-Duser.home", "=" + PropertiesUtil.getUserHome()); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -1646,27 +1647,27 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     URI redirectedURI = redirect(indexURI);
     if (!redirectedURI.equals(indexURI))
     {
-      URI baseURI = indexURI.trimSegments(1).appendSegment("");
+      URI baseURI = indexURI.trimSegments(1).appendSegment(""); //$NON-NLS-1$
       URI redirectedBaseURI = redirect(baseURI);
       if (!redirectedBaseURI.equals(baseURI))
       {
-        URI baseBaseURI = baseURI.trimSegments(1).appendSegment("");
+        URI baseBaseURI = baseURI.trimSegments(1).appendSegment(""); //$NON-NLS-1$
         URI redirectedBaseBaseURI = redirect(baseBaseURI);
         if (!redirectedBaseBaseURI.equals(baseBaseURI))
         {
-          addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection",
-              "=" + baseBaseURI + "->" + redirectedBaseBaseURI);
+          addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+              "=" + baseBaseURI + "->" + redirectedBaseBaseURI); //$NON-NLS-1$ //$NON-NLS-2$
         }
         else
         {
-          addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection",
-              "=" + baseURI + "->" + redirectedBaseURI);
+          addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+              "=" + baseURI + "->" + redirectedBaseURI); //$NON-NLS-1$ //$NON-NLS-2$
         }
       }
       // Don't add -D if we're redirecting into the default archive.
-      else if (!redirectedURI.isArchive() || !(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI + "!").equals(redirectedURI.authority()))
+      else if (!redirectedURI.isArchive() || !(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI + "!").equals(redirectedURI.authority())) //$NON-NLS-1$
       {
-        addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + indexURI + "->" + redirectedURI);
+        addEclipseIniTask(result, true, "-D" + SetupProperties.PROP_REDIRECTION_BASE + "index" + name + ".redirection", "=" + indexURI + "->" + redirectedURI); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
       }
     }
   }
@@ -1683,15 +1684,15 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void generateScopeVariables(EList<SetupTask> setupTasks, String type, String qualifier, String name, String label, String description)
   {
-    setupTasks.add(createVariable(setupTasks, "scope." + type + ".name", name, null));
+    setupTasks.add(createVariable(setupTasks, "scope." + type + ".name", name, null)); //$NON-NLS-1$ //$NON-NLS-2$
 
     if (qualifier != null)
     {
-      setupTasks.add(createVariable(setupTasks, "scope." + type + ".name.qualified", qualifier + "." + name, null));
+      setupTasks.add(createVariable(setupTasks, "scope." + type + ".name.qualified", qualifier + "." + name, null)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
-    setupTasks.add(createVariable(setupTasks, "scope." + type + ".label", label, null));
-    setupTasks.add(createVariable(setupTasks, "scope." + type + ".description", description, null));
+    setupTasks.add(createVariable(setupTasks, "scope." + type + ".label", label, null)); //$NON-NLS-1$ //$NON-NLS-2$
+    setupTasks.add(createVariable(setupTasks, "scope." + type + ".description", description, null)); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   private VariableTask createVariable(EList<SetupTask> setupTasks, String name, String value, String description)
@@ -1917,7 +1918,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private static void applyArguments(Map<EObject, Set<EObject>> macroCopies, MacroTask macroTask, Macro macro)
   {
-    final String macroTaskID = StringUtil.isEmpty(macroTask.getID()) ? "macro" : macroTask.getID();
+    final String macroTaskID = StringUtil.isEmpty(macroTask.getID()) ? "macro" : macroTask.getID(); //$NON-NLS-1$
     EList<Parameter> parameters = macro.getParameters();
     EList<Argument> arguments = macroTask.getArguments();
 
@@ -1956,7 +1957,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
           // Create the variable and add it at the start, it's marked local and will be qualified in the loop that follows.
           VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
-          variable.setName("*" + parameterName);
+          variable.setName("*" + parameterName); //$NON-NLS-1$
           variable.setValue(argumentValue);
           setupTasks.add(index++, variable);
 
@@ -2006,7 +2007,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           // If it's a variable and the name is "marked" to indicate it's a local variable...
           VariableTask variable = (VariableTask)setupTask;
           String name = variable.getName();
-          if (name != null && name.startsWith("*"))
+          if (name != null && name.startsWith("*")) //$NON-NLS-1$
           {
             // Change the name to be qualified, and remember to redirect uses of this variable name to the new local qualified name.
             String baseName = name.substring(1);
@@ -2032,14 +2033,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
             do
             {
               String group1 = matcher.group(1);
-              if ("$".equals(group1))
+              if ("$".equals(group1)) //$NON-NLS-1$
               {
-                matcher.appendReplacement(result, "\\$\\$");
+                matcher.appendReplacement(result, "\\$\\$"); //$NON-NLS-1$
               }
               else
               {
                 String key = matcher.group(2);
-                matcher.appendReplacement(result, "\\${" + remap(key).replace("$", "\\$") + "$3}");
+                matcher.appendReplacement(result, "\\${" + remap(key).replace("$", "\\$") + "$3}"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
               }
             } while (matcher.find());
 
@@ -2101,7 +2102,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               {
                 String memberName = matcher.group(2);
                 String remappedMemberName = valueTransformer.remap(memberName);
-                matcher.appendReplacement(result, "$1" + remappedMemberName.replace("$", "\\$") + "$3");
+                matcher.appendReplacement(result, "$1" + remappedMemberName.replace("$", "\\$") + "$3"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
               }
 
               matcher.appendTail(result);
@@ -2145,11 +2146,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     // Dump the result.
     if (Boolean.FALSE)
     {
-      BaseResourceImpl resource = new BaseResourceImpl(URI.createURI("dummy.setup"));
+      BaseResourceImpl resource = new BaseResourceImpl(URI.createURI("dummy.setup")); //$NON-NLS-1$
       resource.getContents().add(EcoreUtil.copy(macro));
       try
       {
-        System.out.println(macro.getLabel() + " : " + macroTaskID);
+        System.out.println(macro.getLabel() + " : " + macroTaskID); //$NON-NLS-1$
         resource.doSave(System.out, null);
         System.out.println();
       }
@@ -2248,17 +2249,17 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       if (!undeclaredVariables.isEmpty())
       {
-        throw new RuntimeException("Missing variables for " + undeclaredVariables);
+        throw new RuntimeException(NLS.bind(Messages.SetupTaskPerformer_MissingVariables_exception, undeclaredVariables));
       }
 
       if (!unresolvedVariables.isEmpty())
       {
-        throw new RuntimeException("Unresolved variables for " + unresolvedVariables);
+        throw new RuntimeException(NLS.bind(Messages.SetupTaskPerformer_UnresolvedVariables_exception, unresolvedVariables));
       }
 
       if (triggeredSetupTasks != null)
       {
-        monitor.beginTask("", triggeredSetupTasks.size());
+        monitor.beginTask("", triggeredSetupTasks.size()); //$NON-NLS-1$
 
         try
         {
@@ -2363,7 +2364,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public void task(SetupTask setupTask)
   {
     progress.task(setupTask);
-    log("Performing " + getLabel(setupTask), false, Severity.INFO);
+    log(NLS.bind(Messages.SetupTaskPerformer_Performing_message, getLabel(setupTask)), false, Severity.INFO);
   }
 
   public void log(Throwable t)
@@ -2458,7 +2459,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       try
       {
         PrintStream logStream = getLogStream(true);
-        logStream.println("[" + DATE_TIME.format(new Date()) + "] " + line);
+        logStream.println("[" + DATE_TIME.format(new Date()) + "] " + line); //$NON-NLS-1$ //$NON-NLS-2$
         logStream.flush();
       }
       catch (Exception ex)
@@ -2483,7 +2484,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       try
       {
         File location = getProductConfigurationLocation();
-        String path = SetupContext.OOMPH_NODE + "/" + SetupContext.LOG_FILE_NAME;
+        String path = SetupContext.OOMPH_NODE + "/" + SetupContext.LOG_FILE_NAME; //$NON-NLS-1$
 
         logFile = new File(location, path);
         logFile.getParentFile().mkdirs();
@@ -2495,7 +2496,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       {
         try
         {
-          logFile = File.createTempFile("OomphSetup", ".log");
+          logFile = File.createTempFile("OomphSetup", ".log"); //$NON-NLS-1$ //$NON-NLS-2$
           FileOutputStream out = new FileOutputStream(logFile, true);
           logStream = new PrintStream(out);
           return logStream;
@@ -2760,26 +2761,26 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   @Override
   protected String filter(String value, String filterName)
   {
-    if (filterName.equalsIgnoreCase("installationID"))
+    if (filterName.equalsIgnoreCase("installationID")) //$NON-NLS-1$
     {
-      String installRoot = specialResolve("install.root");
+      String installRoot = specialResolve("install.root"); //$NON-NLS-1$
       if (StringUtil.isEmpty(installRoot) || STRING_EXPANSION_PATTERN.matcher(installRoot).find())
       {
         return null;
       }
 
-      String installationID = lookup("installation.id.default");
+      String installationID = lookup("installation.id.default"); //$NON-NLS-1$
       if (StringUtil.isEmpty(installationID))
       {
-        String projectName = lookup("scope.project.root.name");
+        String projectName = lookup("scope.project.root.name"); //$NON-NLS-1$
         if (StringUtil.isEmpty(projectName))
         {
-          installationID = SegmentSequence.create(".", lookup("scope.product.name")).lastSegment() + "-"
-              + lookup("scope.product.version.name").replace('.', '-');
+          installationID = SegmentSequence.create(".", lookup("scope.product.name")).lastSegment() + "-" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+              + lookup("scope.product.version.name").replace('.', '-'); //$NON-NLS-1$
         }
         else
         {
-          String streamName = lookup("scope.project.stream.name");
+          String streamName = lookup("scope.project.stream.name"); //$NON-NLS-1$
           installationID = escape(projectName, streamName);
         }
       }
@@ -2787,7 +2788,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       String uniqueInstallationID = installationID;
       String relativeProductFolder = getRelativeProductFolder();
 
-      for (int i = 2; new File(installRoot + "/" + uniqueInstallationID + "/" + relativeProductFolder).exists(); ++i)
+      for (int i = 2; new File(installRoot + "/" + uniqueInstallationID + "/" + relativeProductFolder).exists(); ++i) //$NON-NLS-1$ //$NON-NLS-2$
       {
         uniqueInstallationID = installationID + i;
       }
@@ -2795,25 +2796,25 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       return uniqueInstallationID;
     }
 
-    if (filterName.equalsIgnoreCase("workspaceID"))
+    if (filterName.equalsIgnoreCase("workspaceID")) //$NON-NLS-1$
     {
-      String workspaceContainerRoot = specialResolve("workspace.container.root");
+      String workspaceContainerRoot = specialResolve("workspace.container.root"); //$NON-NLS-1$
       if (StringUtil.isEmpty(workspaceContainerRoot) || STRING_EXPANSION_PATTERN.matcher(workspaceContainerRoot).find())
       {
         return null;
       }
 
-      String workspaceID = lookup("workspace.id.default");
+      String workspaceID = lookup("workspace.id.default"); //$NON-NLS-1$
       if (StringUtil.isEmpty(workspaceID))
       {
-        String projectName = lookup("scope.project.root.name");
-        String streamName = lookup("scope.project.stream.name");
-        workspaceID = escape(projectName, streamName) + "-ws";
+        String projectName = lookup("scope.project.root.name"); //$NON-NLS-1$
+        String streamName = lookup("scope.project.stream.name"); //$NON-NLS-1$
+        workspaceID = escape(projectName, streamName) + "-ws"; //$NON-NLS-1$
       }
 
       String uniqueWorkspaceID = workspaceID;
 
-      for (int i = 2; new File(workspaceContainerRoot + "/" + uniqueWorkspaceID).exists(); ++i)
+      for (int i = 2; new File(workspaceContainerRoot + "/" + uniqueWorkspaceID).exists(); ++i) //$NON-NLS-1$
       {
         uniqueWorkspaceID = workspaceID + i;
       }
@@ -2826,7 +2827,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private String escape(String projectName, String streamName)
   {
-    return (projectName + "-" + streamName).replace('.', '-').replace('/', '-').replace('\\', '-');
+    return (projectName + "-" + streamName).replace('.', '-').replace('/', '-').replace('\\', '-'); //$NON-NLS-1$
   }
 
   @Override
@@ -2858,7 +2859,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     for (Matcher matcher = STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
     {
       String key = matcher.group(1);
-      if (!"$".equals(key))
+      if (!"$".equals(key)) //$NON-NLS-1$
       {
         key = matcher.group(2);
       }
@@ -2878,7 +2879,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   {
     for (EAttribute attribute : eObject.eClass().getEAllAttributes())
     {
-      if (attribute.isChangeable() && attribute.getEAttributeType().getInstanceClassName() == "java.lang.String"
+      if (attribute.isChangeable() && attribute.getEAttributeType().getInstanceClassName() == "java.lang.String" //$NON-NLS-1$
           && attribute != SetupPackage.Literals.VARIABLE_TASK__NAME)
       {
         if (attribute.isMany())
@@ -3231,16 +3232,16 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         String result = super.getText(object);
         if (object instanceof ProjectCatalog)
         {
-          if (!result.endsWith("Projects"))
+          if (!result.endsWith("Projects")) //$NON-NLS-1$
           {
-            result += " Projects";
+            result += " Projects"; //$NON-NLS-1$
           }
         }
         else if (object instanceof ProductCatalog)
         {
-          if (!result.endsWith("Products"))
+          if (!result.endsWith("Products")) //$NON-NLS-1$
           {
-            result += " Products";
+            result += " Products"; //$NON-NLS-1$
           }
         }
 
@@ -3335,11 +3336,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       if (VariableTask.DEFAULT_STORAGE_URI.equals(storageURI))
       {
         storageURI = PreferencesUtil.ROOT_PREFERENCE_NODE_URI
-            .appendSegments(new String[] { PreferencesUtil.SECURE_NODE, SetupContext.OOMPH_NODE, variable.getName(), "" });
+            .appendSegments(new String[] { PreferencesUtil.SECURE_NODE, SetupContext.OOMPH_NODE, variable.getName(), "" }); //$NON-NLS-1$
       }
       else if (storageURI != null && PreferencesUtil.PREFERENCE_SCHEME.equals(storageURI.scheme()) && !storageURI.hasTrailingPathSeparator())
       {
-        storageURI = storageURI.appendSegment("");
+        storageURI = storageURI.appendSegment(""); //$NON-NLS-1$
       }
     }
 
@@ -3351,7 +3352,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     for (Map.Entry<URI, String> entry : passwords.entrySet())
     {
       String value = PreferencesUtil.decrypt(entry.getValue());
-      if (!StringUtil.isEmpty(value) && !" ".equals(value))
+      if (!StringUtil.isEmpty(value) && !" ".equals(value)) //$NON-NLS-1$
       {
         URI storageURI = entry.getKey();
         URIConverter uriConverter = getURIConverter();
@@ -3587,7 +3588,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void performTask(SetupTask task, IProgressMonitor monitor) throws Exception
   {
-    monitor.beginTask("", 101);
+    monitor.beginTask("", 101); //$NON-NLS-1$
 
     try
     {
@@ -3616,7 +3617,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public void perform(IProgressMonitor monitor) throws Exception
   {
     boolean bootstrap = getTrigger() == Trigger.BOOTSTRAP;
-    monitor.beginTask("", 100 + (bootstrap ? 3 : 0));
+    monitor.beginTask("", 100 + (bootstrap ? 3 : 0)); //$NON-NLS-1$
 
     try
     {
@@ -3636,7 +3637,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     finally
     {
       monitor.done();
-      log("", false);
+      log("", false); //$NON-NLS-1$
     }
 
     hasSuccessfullyPerformed = true;
@@ -3644,16 +3645,16 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void performPostBootstrapTasks(IProgressMonitor monitor) throws Exception
   {
-    log("Performing post bootstrap tasks", false, Severity.INFO);
+    log(Messages.SetupTaskPerformer_PerformingPostBootstrap_message, false, Severity.INFO);
     File productConfigurationLocation = getProductConfigurationLocation();
 
     if (OS.INSTANCE.isMac())
     {
-      File file = new File(productConfigurationLocation, "config.ini");
-      log("Changing " + file + " (osgi.configuration.cascaded=false)", false, Severity.OK);
+      File file = new File(productConfigurationLocation, "config.ini"); //$NON-NLS-1$
+      log(NLS.bind(Messages.SetupTaskPerformer_ChangingConfiguration_message, file), false, Severity.OK);
 
       Map<String, String> configIni = PropertiesUtil.loadProperties(file);
-      configIni.put("osgi.configuration.cascaded", "false");
+      configIni.put("osgi.configuration.cascaded", "false"); //$NON-NLS-1$ //$NON-NLS-2$
       P2TaskImpl.saveConfigIni(file, configIni, SetupTaskPerformer.class);
     }
 
@@ -3661,7 +3662,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     File installFolder = profile.getInstallFolder();
     if (installFolder == null)
     {
-      log("No install folder found for profile", false, Severity.WARNING);
+      log(Messages.SetupTaskPerformer_NoInstallFolderForProfile_message, false, Severity.WARNING);
       monitor.worked(3);
       return;
     }
@@ -3669,14 +3670,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     File bundlePool = profile.getBundlePool().getLocation();
     if (!installFolder.equals(bundlePool))
     {
-      File garbageCollectorPreferences = new File(productConfigurationLocation, ".settings/org.eclipse.equinox.p2.garbagecollector.prefs");
-      IOUtil.writeLines(garbageCollectorPreferences, "8859_1", Arrays.asList(new String[] { "eclipse.preferences.version=1", "gc_enabled=false" }));
+      File garbageCollectorPreferences = new File(productConfigurationLocation, ".settings/org.eclipse.equinox.p2.garbagecollector.prefs"); //$NON-NLS-1$
+      IOUtil.writeLines(garbageCollectorPreferences, "8859_1", Arrays.asList("eclipse.preferences.version=1", "gc_enabled=false")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
     }
 
     monitor.worked(1);
 
     URIConverter uriConverter = getURIConverter();
-    String[] networkPreferences = new String[] { ".settings", "org.eclipse.core.net.prefs" };
+    String[] networkPreferences = new String[] { ".settings", "org.eclipse.core.net.prefs" }; //$NON-NLS-1$ //$NON-NLS-2$
     URI networkPreferencesSourceLocation = SetupContext.CONFIGURATION_LOCATION_URI.appendSegments(networkPreferences);
     if (uriConverter.exists(networkPreferencesSourceLocation, null))
     {
@@ -3695,7 +3696,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     File workspaceLocation = getWorkspaceLocation();
     if (workspaceLocation != null)
     {
-      String[] jschPreferences = new String[] { ".metadata", ".plugins", "org.eclipse.core.runtime", ".settings", "org.eclipse.jsch.core.prefs" };
+      String[] jschPreferences = new String[] { ".metadata", ".plugins", "org.eclipse.core.runtime", ".settings", "org.eclipse.jsch.core.prefs" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
       URI jschPreferencesSourceLocation = SetupContext.CONFIGURATION_LOCATION_URI.appendSegments(jschPreferences);
       if (uriConverter.exists(jschPreferencesSourceLocation, null))
       {
@@ -3725,7 +3726,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void performTriggeredSetupTasks(IProgressMonitor monitor) throws Exception
   {
-    monitor.beginTask("", 101);
+    monitor.beginTask("", 101); //$NON-NLS-1$
 
     try
     {
@@ -3790,7 +3791,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         totalWork += work;
       }
 
-      monitor.beginTask("", totalWork);
+      monitor.beginTask("", totalWork); //$NON-NLS-1$
 
       for (SetupTask neededTask : neededSetupTasks)
       {
@@ -3815,7 +3816,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           if (neededTask instanceof PreferenceTask)
           {
             PreferenceTask preferenceTask = (PreferenceTask)neededTask;
-            if ("/instance/org.eclipse.core.resources/description.autobuilding".equals(preferenceTask.getKey()))
+            if ("/instance/org.eclipse.core.resources/description.autobuilding".equals(preferenceTask.getKey())) //$NON-NLS-1$
             {
               String value = preferenceTask.getValue();
               autoBuilding = value == null ? Boolean.TRUE : Boolean.valueOf(value);
@@ -3862,7 +3863,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         // It's considered disabled if it's not installed at all.
         final boolean disabled = PDEAPIUtil.setDisableAPIAnalysisBuilder(true);
 
-        Job buildJob = new Job("Build")
+        Job buildJob = new Job(Messages.SetupTaskPerformer_Build_job)
         {
           @Override
           protected IStatus run(IProgressMonitor monitor)
@@ -3910,7 +3911,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void logJREInfos()
   {
-    log(System.getProperty("java.runtime.name") + " " + System.getProperty("java.runtime.version"));
+    log(System.getProperty("java.runtime.name") + " " + System.getProperty("java.runtime.version")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   private void logSetupInfos()
@@ -3921,13 +3922,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     if (installation != null)
     {
       ProductVersion productVersion = installation.getProductVersion();
-      log("Product " + productVersion.getQualifiedName());
+      log(NLS.bind(Messages.SetupTaskPerformer_Product_message, productVersion.getQualifiedName()));
     }
 
     File workspaceLocation = getWorkspaceLocation();
     if (workspaceLocation != null)
     {
-      log("Workspace " + workspaceLocation);
+      log(NLS.bind(Messages.SetupTaskPerformer_Workspace_message, workspaceLocation));
     }
 
     Workspace workspace = setupContext.getWorkspace();
@@ -3935,7 +3936,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       for (Stream stream : workspace.getStreams())
       {
-        log("Project " + stream.getQualifiedName());
+        log(NLS.bind(Messages.SetupTaskPerformer_ProjectMessage, stream.getQualifiedName()));
       }
     }
   }
@@ -3945,16 +3946,16 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     List<String> bundleInfos = new ArrayList<String>();
     for (Bundle bundle : bundles)
     {
-      StringBuilder builder = new StringBuilder("Bundle ");
+      StringBuilder builder = new StringBuilder("Bundle "); //$NON-NLS-1$
       builder.append(bundle.getSymbolicName());
-      builder.append(" ");
+      builder.append(" "); //$NON-NLS-1$
       builder.append(bundle.getVersion());
 
       InputStream source = null;
 
       try
       {
-        URL url = bundle.getResource("about.mappings");
+        URL url = bundle.getResource("about.mappings"); //$NON-NLS-1$
         if (url != null)
         {
           source = url.openStream();
@@ -3962,24 +3963,24 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           Properties properties = new Properties();
           properties.load(source);
 
-          String buildID = (String)properties.get("0");
-          if (buildID != null && !buildID.startsWith("$"))
+          String buildID = (String)properties.get("0"); //$NON-NLS-1$
+          if (buildID != null && !buildID.startsWith("$")) //$NON-NLS-1$
           {
-            builder.append(", build=");
+            builder.append(", build="); //$NON-NLS-1$
             builder.append(buildID);
           }
 
-          String gitBranch = (String)properties.get("1");
-          if (gitBranch != null && !gitBranch.startsWith("$"))
+          String gitBranch = (String)properties.get("1"); //$NON-NLS-1$
+          if (gitBranch != null && !gitBranch.startsWith("$")) //$NON-NLS-1$
           {
-            builder.append(", branch=");
+            builder.append(", branch="); //$NON-NLS-1$
             builder.append(gitBranch);
           }
 
-          String gitCommit = (String)properties.get("2");
-          if (gitCommit != null && !gitCommit.startsWith("$"))
+          String gitCommit = (String)properties.get("2"); //$NON-NLS-1$
+          if (gitCommit != null && !gitCommit.startsWith("$")) //$NON-NLS-1$
           {
-            builder.append(", commit=");
+            builder.append(", commit="); //$NON-NLS-1$
             builder.append(gitCommit);
           }
         }
@@ -4374,7 +4375,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     try
     {
-      Method getTypeTextMethod = ReflectUtil.getMethod(labelProvider.getClass(), "getTypeText", Object.class);
+      Method getTypeTextMethod = ReflectUtil.getMethod(labelProvider.getClass(), "getTypeText", Object.class); //$NON-NLS-1$
       getTypeTextMethod.setAccessible(true);
       type = getTypeTextMethod.invoke(labelProvider, setupTask).toString();
     }
@@ -4386,16 +4387,16 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     String label = labelProvider.getText(setupTask);
     if (!label.startsWith(type))
     {
-      label = type + " " + label;
+      label = type + " " + label; //$NON-NLS-1$
     }
 
     int eol = Math.min(label.indexOf('\r'), label.indexOf('\n'));
     if (eol != -1)
     {
-      label = label.substring(0, eol) + "...";
+      label = label.substring(0, eol) + "..."; //$NON-NLS-1$
     }
 
-    return label.startsWith(type) ? label : type + " " + label;
+    return label.startsWith(type) ? label : type + " " + label; //$NON-NLS-1$
   }
 
   public static void setCreationMonitor(IProgressMonitor monitor)
@@ -4417,7 +4418,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   public static String createQualifiedName(String id, String name)
   {
-    return "*" + id + "." + name;
+    return "*" + id + "." + name; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**
@@ -4477,7 +4478,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           {
             VariableTask variable = SetupFactory.eINSTANCE.createVariableTask();
             variable.setName(variableName);
-            variable.setLabel(variableName + " (undeclared)");
+            variable.setLabel(variableName + " (undeclared)"); //$NON-NLS-1$
             variable.setStorageURI(null);
             variable.getAnnotations().add(BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_UNDECLARED_VARIABLE));
             unresolvedVariables.add(variable);
@@ -4675,7 +4676,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       File workspaceLocation = composedPerformer.getWorkspaceLocation();
       if (workspaceLocation != null)
       {
-        File workspaceSetupLocation = new File(workspaceLocation, ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup");
+        File workspaceSetupLocation = new File(workspaceLocation, ".metadata/.plugins/org.eclipse.oomph.setup/workspace.setup"); //$NON-NLS-1$
         URI workspaceURI = URI.createFileURI(workspaceSetupLocation.toString());
         for (SetupTaskPerformer performer : performers)
         {
@@ -4686,7 +4687,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       File configurationLocation = composedPerformer.getProductConfigurationLocation();
       if (configurationLocation != null)
       {
-        File installationLocation = new File(configurationLocation, "org.eclipse.oomph.setup/installation.setup");
+        File installationLocation = new File(configurationLocation, "org.eclipse.oomph.setup/installation.setup"); //$NON-NLS-1$
         URI installationURI = URI.createFileURI(installationLocation.toString());
         for (SetupTaskPerformer performer : performers)
         {
@@ -4703,7 +4704,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       {
         Set<Object> value = entry.getValue();
         value.remove(null);
-        value.remove("");
+        value.remove(""); //$NON-NLS-1$
         if (value.size() == 1)
         {
           finalComposedMap.put(key, value.iterator().next());
@@ -4875,7 +4876,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
               repositoryLocation = getVariableReference(variableName, null);
 
-              isReleaseTrainAlternate = "true".equals(details.get(EAnnotationConstants.KEY_RELEASE_TRAIN_ALTERNATE));
+              isReleaseTrainAlternate = "true".equals(details.get(EAnnotationConstants.KEY_RELEASE_TRAIN_ALTERNATE)); //$NON-NLS-1$
             }
           }
         }
@@ -4885,7 +4886,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         String ius = details.get(EAnnotationConstants.KEY_INSTALLABLE_UNITS);
         if (!StringUtil.isEmpty(ius))
         {
-          for (String requirementSpecification : ius.split("\\s"))
+          for (String requirementSpecification : ius.split("\\s")) //$NON-NLS-1$
           {
             Matcher matcher = INSTALLABLE_UNIT_WITH_RANGE_PATTERN.matcher(requirementSpecification);
             if (matcher.matches())
@@ -4945,11 +4946,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       String filter = variableAnnotation.getDetails().get(EAnnotationConstants.KEY_FILTER);
       if (filter != null)
       {
-        return "${" + variableName + "|" + filter + "}";
+        return "${" + variableName + "|" + filter + "}"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       }
     }
 
-    return "${" + variableName + "}";
+    return "${" + variableName + "}"; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**
@@ -4980,7 +4981,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       needsConsole = computeNeedsConsole(performer);
       if (needsConsole && os.isWin())
       {
-        String consoleExecutableName = executableName.substring(0, executableName.length() - ".exe".length()) + "c.exe";
+        String consoleExecutableName = executableName.substring(0, executableName.length() - ".exe".length()) + "c.exe"; //$NON-NLS-1$ //$NON-NLS-2$
         File consoleExectuable = new File(executableFolder, consoleExecutableName);
         if (consoleExectuable.isFile())
         {
@@ -5019,7 +5020,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         if (task instanceof EclipseIniTask)
         {
           EclipseIniTask iniTask = (EclipseIniTask)task;
-          if (!iniTask.isVm() && "-console".equals(iniTask.getOption()))
+          if (!iniTask.isVm() && "-console".equals(iniTask.getOption())) //$NON-NLS-1$
           {
             return true;
           }
@@ -5062,8 +5063,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       // Disable API analysis building for the initial build.
       try
       {
-        Class<?> apiAnalysisBuilder = CommonPlugin.loadClass("org.eclipse.pde.api.tools", "org.eclipse.pde.api.tools.internal.builder.ApiAnalysisBuilder");
-        buildDisabledField = apiAnalysisBuilder.getDeclaredField("buildDisabled");
+        Class<?> apiAnalysisBuilder = CommonPlugin.loadClass("org.eclipse.pde.api.tools", "org.eclipse.pde.api.tools.internal.builder.ApiAnalysisBuilder"); //$NON-NLS-1$ //$NON-NLS-2$
+        buildDisabledField = apiAnalysisBuilder.getDeclaredField("buildDisabled"); //$NON-NLS-1$
         buildDisabledField.setAccessible(true);
       }
       catch (Exception ex)

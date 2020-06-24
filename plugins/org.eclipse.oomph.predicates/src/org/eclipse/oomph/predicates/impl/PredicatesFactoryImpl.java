@@ -132,7 +132,7 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
       case PredicatesPackage.IMPORTED_PREDICATE:
         return createImportedPredicate();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -151,7 +151,7 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
       case PredicatesPackage.RESOURCE:
         return createResourceFromString(eDataType, initialValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -170,7 +170,7 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
       case PredicatesPackage.RESOURCE:
         return convertResourceToString(eDataType, instanceValue);
       default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -401,7 +401,7 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
       return null;
     }
 
-    if (initialValue.endsWith("/"))
+    if (initialValue.endsWith("/")) //$NON-NLS-1$
     {
       return ResourcesPlugin.getWorkspace().getRoot().getFolder(new Path(initialValue));
     }
@@ -427,7 +427,7 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
       return resource.getFullPath().toString();
     }
 
-    return resource.getFullPath() + "/";
+    return resource.getFullPath() + "/"; //$NON-NLS-1$
   }
 
   /**

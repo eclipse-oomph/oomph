@@ -28,6 +28,8 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.eclipse.osgi.util.NLS;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -307,9 +309,9 @@ public class TextModifyTaskImpl extends SetupTaskImpl implements TextModifyTask
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (uRL: ");
+    result.append(" (uRL: "); //$NON-NLS-1$
     result.append(uRL);
-    result.append(", encoding: ");
+    result.append(", encoding: "); //$NON-NLS-1$
     result.append(encoding);
     result.append(')');
     return result.toString();
@@ -354,7 +356,7 @@ public class TextModifyTaskImpl extends SetupTaskImpl implements TextModifyTask
     URI uri = createResolvedURI(getURL());
     URIConverter uriConverter = context.getURIConverter();
 
-    context.log("Modifying " + uriConverter.normalize(uri));
+    context.log(NLS.bind(Messages.TextModifyTaskImpl_Modifying_message, uriConverter.normalize(uri)));
 
     String text = getText(context);
     for (TextModification modification : getModifications())
@@ -369,7 +371,7 @@ public class TextModifyTaskImpl extends SetupTaskImpl implements TextModifyTask
         Map<String, String> captures = new HashMap<String, String>();
         for (int i = 1, count = matcher.groupCount(); i <= count; ++i)
         {
-          captures.put("\\" + i, matcher.group(i));
+          captures.put("\\" + i, matcher.group(i)); //$NON-NLS-1$
         }
 
         for (int i = 1, count = matcher.groupCount(); i <= count; ++i)

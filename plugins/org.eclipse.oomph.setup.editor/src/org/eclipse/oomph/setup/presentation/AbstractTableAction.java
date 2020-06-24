@@ -75,7 +75,7 @@ public abstract class AbstractTableAction extends Action
       try
       {
         String html = renderHTML();
-        File tempFile = File.createTempFile("table", ".html");
+        File tempFile = File.createTempFile("table", ".html"); //$NON-NLS-1$ //$NON-NLS-2$
         IOUtil.writeUTF8(tempFile, html);
         OS.INSTANCE.openSystemBrowser(tempFile.toURI().toString());
       }

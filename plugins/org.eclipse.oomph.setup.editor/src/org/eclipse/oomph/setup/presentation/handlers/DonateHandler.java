@@ -42,17 +42,17 @@ public class DonateHandler extends AbstractHandler
     {
       String donating = SetupPropertyTester.getDonating();
       int style = IWorkbenchBrowserSupport.AS_EDITOR;
-      if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.donate.navigation", "false")))
+      if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.donate.navigation", "false"))) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       {
         style |= IWorkbenchBrowserSupport.NAVIGATION_BAR;
       }
 
-      if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.donate.location", "false")))
+      if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.donate.location", "false"))) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       {
         style |= IWorkbenchBrowserSupport.LOCATION_BAR;
       }
 
-      IWebBrowser browser = browserSupport.createBrowser(style, "donate", SetupEditorPlugin.INSTANCE.getString("_UI_Donate_label"), donating);
+      IWebBrowser browser = browserSupport.createBrowser(style, "donate", SetupEditorPlugin.INSTANCE.getString("_UI_Donate_label"), donating); //$NON-NLS-1$ //$NON-NLS-2$
       browser.openURL(new URL(donating));
     }
     catch (Exception ex)

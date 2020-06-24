@@ -157,7 +157,7 @@ public class AnnotationImpl extends ModelElementImpl implements Annotation
     {
       if (EcoreUtil.isAncestor(this, newModelElement))
       {
-        throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+        throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
       }
       NotificationChain msgs = null;
       if (eInternalContainer() != null)
@@ -434,7 +434,7 @@ public class AnnotationImpl extends ModelElementImpl implements Annotation
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (source: ");
+    result.append(" (source: "); //$NON-NLS-1$
     result.append(source);
     result.append(')');
     return result.toString();

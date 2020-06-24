@@ -45,7 +45,7 @@ public interface ResourcesPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNAME = "resources";
+  String eNAME = "resources"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -53,7 +53,7 @@ public interface ResourcesPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/oomph/resources/1.0";
+  String eNS_URI = "http://www.eclipse.org/oomph/resources/1.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -61,7 +61,7 @@ public interface ResourcesPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "resources";
+  String eNS_PREFIX = "resources"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.

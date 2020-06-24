@@ -73,8 +73,8 @@ public class ConfigurationItemProvider extends ModelElementItemProvider
   protected void addLabelPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Configuration_label_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Configuration_label_feature", "_UI_Configuration_type"),
+        getString("_UI_Configuration_label_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Configuration_label_feature", "_UI_Configuration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.CONFIGURATION__LABEL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -87,8 +87,8 @@ public class ConfigurationItemProvider extends ModelElementItemProvider
   protected void addDescriptionPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_Configuration_description_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_Configuration_description_feature", "_UI_Configuration_type"),
+        getString("_UI_Configuration_description_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Configuration_description_feature", "_UI_Configuration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.CONFIGURATION__DESCRIPTION, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -135,7 +135,7 @@ public class ConfigurationItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/Configuration"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/Configuration")); //$NON-NLS-1$
   }
 
   /**
@@ -156,6 +156,7 @@ public class ConfigurationItemProvider extends ModelElementItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     String label = ((Configuration)object).getLabel();

@@ -79,8 +79,8 @@ public class DropinLocationItemProvider extends ItemProviderAdapter
   protected void addRootFolderPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_DropinLocation_rootFolder_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_DropinLocation_rootFolder_feature", "_UI_DropinLocation_type"),
+        getString("_UI_DropinLocation_rootFolder_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_DropinLocation_rootFolder_feature", "_UI_DropinLocation_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         TargletPackage.Literals.DROPIN_LOCATION__ROOT_FOLDER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -93,8 +93,8 @@ public class DropinLocationItemProvider extends ItemProviderAdapter
   protected void addRecursivePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_DropinLocation_recursive_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_DropinLocation_recursive_feature", "_UI_DropinLocation_type"),
+        getString("_UI_DropinLocation_recursive_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_DropinLocation_recursive_feature", "_UI_DropinLocation_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         TargletPackage.Literals.DROPIN_LOCATION__RECURSIVE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -118,7 +118,7 @@ public class DropinLocationItemProvider extends ItemProviderAdapter
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/DropinLocation"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/DropinLocation")); //$NON-NLS-1$
   }
 
   /**
@@ -142,7 +142,8 @@ public class DropinLocationItemProvider extends ItemProviderAdapter
   public String getText(Object object)
   {
     String label = ((DropinLocation)object).getRootFolder();
-    return label == null || label.length() == 0 ? getString("_UI_DropinLocation_type") : getString("_UI_DropinLocation_type") + " " + label;
+    return label == null || label.length() == 0 ? getString("_UI_DropinLocation_type") : //$NON-NLS-1$
+        getString("_UI_DropinLocation_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

@@ -794,19 +794,19 @@ public class TargletImpl extends ModelElementImpl implements Targlet
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (name: ");
+    result.append(" (name: "); //$NON-NLS-1$
     result.append(name);
-    result.append(", activeRepositoryListName: ");
+    result.append(", activeRepositoryListName: "); //$NON-NLS-1$
     result.append(activeRepositoryListName);
-    result.append(", includeSources: ");
+    result.append(", includeSources: "); //$NON-NLS-1$
     result.append(includeSources);
-    result.append(", includeAllPlatforms: ");
+    result.append(", includeAllPlatforms: "); //$NON-NLS-1$
     result.append(includeAllPlatforms);
-    result.append(", includeAllRequirements: ");
+    result.append(", includeAllRequirements: "); //$NON-NLS-1$
     result.append(includeAllRequirements);
-    result.append(", includeBinaryEquivalents: ");
+    result.append(", includeBinaryEquivalents: "); //$NON-NLS-1$
     result.append(includeBinaryEquivalents);
-    result.append(", profileProperties: ");
+    result.append(", profileProperties: "); //$NON-NLS-1$
     result.append(profileProperties);
     result.append(')');
     return result.toString();

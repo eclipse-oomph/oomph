@@ -150,7 +150,7 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
 
       createAdviceFileAdvice(feature, info);
 
-      feature.setEnvironment("", "", "", "");
+      feature.setEnvironment("", "", "", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
       List<IInstallableUnit> childIUs = Collections.emptyList();
       InstallableUnit iu = (InstallableUnit)createGroupIU(feature, childIUs, info);
@@ -301,7 +301,7 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
                     return delegate.toString();
                   }
 
-                  return name + " " + versionRange;
+                  return name + " " + versionRange; //$NON-NLS-1$
                 }
               };
             }

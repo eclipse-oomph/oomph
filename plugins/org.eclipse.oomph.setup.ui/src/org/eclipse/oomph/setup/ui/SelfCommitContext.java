@@ -58,7 +58,7 @@ public class SelfCommitContext extends CommitContext
 
     // TODO Remove this temporary range conversion when all users can be expected to have a major range.
     String productID = PropertiesUtil.getProductID();
-    VersionRange deprecatedVersionRange = new VersionRange("[1.0.0,1.1.0)");
+    VersionRange deprecatedVersionRange = new VersionRange("[1.0.0,1.1.0)"); //$NON-NLS-1$
     ProfileDefinition profileDefinition = transaction.getProfileDefinition();
     for (Requirement requirement : profileDefinition.getRequirements())
     {
@@ -67,7 +67,7 @@ public class SelfCommitContext extends CommitContext
         installer = true;
         if (deprecatedVersionRange.equals(requirement.getVersionRange()))
         {
-          requirement.setVersionRange(new VersionRange("[1.0.0,2.0.0)"));
+          requirement.setVersionRange(new VersionRange("[1.0.0,2.0.0)")); //$NON-NLS-1$
           transaction.commit(new NullProgressMonitor());
 
           Profile profile = transaction.getProfile();

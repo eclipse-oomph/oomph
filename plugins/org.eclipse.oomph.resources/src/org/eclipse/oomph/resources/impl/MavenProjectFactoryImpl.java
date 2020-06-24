@@ -52,7 +52,7 @@ public class MavenProjectFactoryImpl extends XMLProjectFactoryImpl implements Ma
   @Override
   protected String getXMLFileName()
   {
-    return "pom.xml";
+    return "pom.xml"; //$NON-NLS-1$
   }
 
   @Override
@@ -62,12 +62,12 @@ public class MavenProjectFactoryImpl extends XMLProjectFactoryImpl implements Ma
     {
       public void handleElement(Element element) throws Exception
       {
-        if ("artifactId".equals(element.getTagName()))
+        if ("artifactId".equals(element.getTagName())) //$NON-NLS-1$
         {
           String name = element.getTextContent().trim();
           description.internalSetName(name);
         }
-        else if ("name".equals(element.getTagName()))
+        else if ("name".equals(element.getTagName())) //$NON-NLS-1$
         {
           String comment = element.getTextContent().trim();
           description.internalSetComment(comment);

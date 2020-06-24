@@ -57,6 +57,7 @@ import java.util.List;
 /**
  * @ignore
  */
+@SuppressWarnings("nls")
 public abstract class CaptureSetupWizard extends Capture.Window<WizardDialog>
 {
   protected SetupWizard getSetupWizard(WizardDialog wizardDialog)

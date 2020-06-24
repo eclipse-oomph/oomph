@@ -79,6 +79,7 @@ import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.io.IOException;
@@ -118,7 +119,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   private static final boolean SKIP = PropertiesUtil.isProperty(PROP_SKIP);
 
   // This is used only for documentation capture.
-  private static final boolean FORCE = PropertiesUtil.isProperty("oomph.setup.p2.force");
+  private static final boolean FORCE = PropertiesUtil.isProperty("oomph.setup.p2.force"); //$NON-NLS-1$
 
   private static final Object FIRST_CALL_DETECTION_KEY = new Object();
 
@@ -523,13 +524,13 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (label: ");
+    result.append(" (label: "); //$NON-NLS-1$
     result.append(label);
-    result.append(", licenseConfirmationDisabled: ");
+    result.append(", licenseConfirmationDisabled: "); //$NON-NLS-1$
     result.append(licenseConfirmationDisabled);
-    result.append(", mergeDisabled: ");
+    result.append(", mergeDisabled: "); //$NON-NLS-1$
     result.append(mergeDisabled);
-    result.append(", profileProperties: ");
+    result.append(", profileProperties: "); //$NON-NLS-1$
     result.append(profileProperties);
     result.append(')');
     return result.toString();
@@ -571,7 +572,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       }
       else
       {
-        setProfileProperties(profileProperties + "," + overriddenProfileProperties);
+        setProfileProperties(profileProperties + "," + overriddenProfileProperties); //$NON-NLS-1$
       }
     }
 
@@ -581,9 +582,9 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       String label = getLabel();
       if (!StringUtil.isEmpty(label))
       {
-        List<String> labelSegments = new UniqueEList<String>(SegmentSequence.create(" + ", overriddenLabel).segmentsList());
-        labelSegments.addAll(SegmentSequence.create(" + ", label).segmentsList());
-        overriddenLabel = SegmentSequence.create(" + ", labelSegments.toArray(new String[labelSegments.size()])).toString();
+        List<String> labelSegments = new UniqueEList<String>(SegmentSequence.create(" + ", overriddenLabel).segmentsList()); //$NON-NLS-1$
+        labelSegments.addAll(SegmentSequence.create(" + ", label).segmentsList()); //$NON-NLS-1$
+        overriddenLabel = SegmentSequence.create(" + ", labelSegments.toArray(new String[labelSegments.size()])).toString(); //$NON-NLS-1$
       }
 
       setLabel(overriddenLabel);
@@ -598,7 +599,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     {
       Requirement requirement = it.next();
       String name = requirement.getName();
-      if (StringUtil.isEmpty(name) || !installableUnitKeys.add(name + "->" + requirement.getVersionRange().toString()))
+      if (StringUtil.isEmpty(name) || !installableUnitKeys.add(name + "->" + requirement.getVersionRange().toString())) //$NON-NLS-1$
       {
         it.remove();
       }
@@ -735,31 +736,32 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   public void perform(final SetupTaskContext context) throws Exception
   {
     boolean offline = context.isOffline();
-    context.log("Offline = " + offline);
+    context.log(Messages.P2TaskImpl_offline + " = " + offline); //$NON-NLS-1$
 
     boolean mirrors = context.isMirrors();
-    context.log("Mirrors = " + mirrors);
+    context.log(Messages.P2TaskImpl_mirrors + " = " + mirrors); //$NON-NLS-1$
 
     String profileProperties = getProfileProperties();
     if (!StringUtil.isEmpty(profileProperties))
     {
-      context.log("Profile Properties = " + profileProperties);
+      context.log(Messages.P2TaskImpl_profileProperties + " = " + profileProperties); //$NON-NLS-1$
     }
 
     EList<Requirement> requirements = getRequirements();
     EList<Repository> repositories = getRepositories();
 
-    context.log("Resolving " + requirements.size() + (requirements.size() == 1 ? " requirement" : " requirements") + " from " + repositories.size()
-        + (repositories.size() == 1 ? " repository" : " repositories") + " to " + context.getProductLocation());
+    context.log((requirements.size() == 1 ? Messages.P2TaskImpl_resolvingRequirement : NLS.bind(Messages.P2TaskImpl_resolvingRequirements, requirements.size()))
+        + " " + (repositories.size() == 1 ? Messages.P2TaskImpl_fromRepository : NLS.bind(Messages.P2TaskImpl_fromRepositories, repositories.size())) //$NON-NLS-1$
+        + NLS.bind(Messages.P2TaskImpl_resolvingRequirements_to, context.getProductLocation()));
 
     for (Requirement requirement : requirements)
     {
-      context.log("Requirement " + requirement);
+      context.log(NLS.bind(Messages.P2TaskImpl_requirement, requirement));
     }
 
     for (Repository repository : repositories)
     {
-      context.log("Repository " + repository);
+      context.log(NLS.bind(Messages.P2TaskImpl_repository, repository));
     }
 
     Profile profile = getProfile(context);
@@ -884,11 +886,11 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         {
           if (profileChanged)
           {
-            context.setRestartNeeded("New software has been installed.");
+            context.setRestartNeeded(Messages.P2TaskImpl_newSoftwareInstalled);
           }
           else
           {
-            context.log("No software updates are available");
+            context.log(Messages.P2TaskImpl_noUpdatesAvailable);
           }
         }
         else
@@ -933,13 +935,13 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         bundlePool = P2Util.getAgentManager().getBundlePool(new File(bundlePoolLocation));
 
         // TODO Remove the following two lines after bug 485018 has been fixed.
-        File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features");
+        File eclipseExtensionFeaturesFolder = new File(bundlePoolLocation, ".eclipseextension/features"); //$NON-NLS-1$
         eclipseExtensionFeaturesFolder.mkdirs();
       }
       else
       {
         sharedPool = false;
-        File agentLocation = new File(productLocation, "p2");
+        File agentLocation = new File(productLocation, "p2"); //$NON-NLS-1$
         Agent agent = P2Util.createAgent(agentLocation);
         bundlePool = agent.addBundlePool(agentLocation.getParentFile());
       }
@@ -963,7 +965,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         profile = agent.getProfile(profileID);
         for (int i = 1; profile != null; ++i)
         {
-          profileID = baseProfileID + "_" + i;
+          profileID = baseProfileID + "_" + i; //$NON-NLS-1$
           profile = agent.getProfile(profileID);
         }
       }
@@ -1043,7 +1045,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       Collection<ILicense> licenses = iu.getLicenses(null);
       for (ILicense license : licenses)
       {
-        if ("license".equals(license.getBody()))
+        if ("license".equals(license.getBody())) //$NON-NLS-1$
         {
           // Work around bug 463387.
           continue;
@@ -1087,7 +1089,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       Confirmation confirmation = licenseConfirmer.confirm(false, licensesToIUs);
       if (!confirmation.isConfirmed())
       {
-        throw new OperationCanceledException("Licenses have been declined");
+        throw new OperationCanceledException("Licenses have been declined"); //$NON-NLS-1$
       }
 
       if (user != null && confirmation.isRemember())
@@ -1153,6 +1155,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
   public static void saveConfigIni(File file, Map<String, String> properties, Class<?> caller)
   {
-    PropertiesUtil.saveProperties(file, properties, false, true, "This configuration file was written by: " + caller.getName());
+    PropertiesUtil.saveProperties(file, properties, false, true, "This configuration file was written by: " + caller.getName()); //$NON-NLS-1$
   }
 } // InstallTaskImpl

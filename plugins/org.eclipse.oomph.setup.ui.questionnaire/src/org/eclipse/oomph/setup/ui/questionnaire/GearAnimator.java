@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class GearAnimator extends Animator
 {
-  public static final String RECORDER_PREFERENCE_KEY = "RECORDER_PREFERENCE_KEY";
+  public static final String RECORDER_PREFERENCE_KEY = "RECORDER_PREFERENCE_KEY"; //$NON-NLS-1$
 
   public static final int NONE = -1;
 
@@ -60,8 +60,9 @@ public class GearAnimator extends Animator
 
   private static final int CHOICES = NEXT - 1;
 
-  private static final String[] TITLES = { "Welcome to Eclipse", "Refresh Resources Automatically?", "Show Line Numbers in Editors?",
-      "Check Spelling in Text Editors?", "Execute Jobs in Background?", "Encode Text Files with UTF-8?", "Enable Preference Recorder?" };
+  private static final String[] TITLES = { Messages.GearAnimator_titles_welcome, Messages.GearAnimator_titles_refreshResources,
+      Messages.GearAnimator_titles_showLineNumbers, Messages.GearAnimator_titles_checkSpelling, Messages.GearAnimator_titles_executeJobsInBackground,
+      Messages.GearAnimator_titles_encodeTextFiles, Messages.GearAnimator_titles_enablePreferenceRecorder };
 
   static final int BIG_FONT_PX = 48;
 
@@ -181,36 +182,36 @@ public class GearAnimator extends Animator
     numberFont = createFont(24);
     tooltipFont = createFont(16);
 
-    exit = loadImage("exit.png");
-    exitHover = loadImage("exit_hover.png");
-    question = loadImage("question.png");
+    exit = loadImage("exit.png"); //$NON-NLS-1$
+    exitHover = loadImage("exit_hover.png"); //$NON-NLS-1$
+    question = loadImage("question.png"); //$NON-NLS-1$
 
-    welcomeImages[0] = loadImage("welcome.png");
-    welcomeImages[1] = loadImage("welcome_select.png");
+    welcomeImages[0] = loadImage("welcome.png"); //$NON-NLS-1$
+    welcomeImages[1] = loadImage("welcome_select.png"); //$NON-NLS-1$
 
-    summaryImages[0] = loadImage("summary.png");
-    summaryImages[1] = loadImage("summary_select.png");
+    summaryImages[0] = loadImage("summary.png"); //$NON-NLS-1$
+    summaryImages[1] = loadImage("summary_select.png"); //$NON-NLS-1$
 
-    backImages[0] = loadImage("back.png");
-    backImages[1] = loadImage("back_hover.png");
+    backImages[0] = loadImage("back.png"); //$NON-NLS-1$
+    backImages[1] = loadImage("back_hover.png"); //$NON-NLS-1$
 
-    nextImages[0] = loadImage("next.png");
-    nextImages[1] = loadImage("next_hover.png");
+    nextImages[0] = loadImage("next.png"); //$NON-NLS-1$
+    nextImages[1] = loadImage("next_hover.png"); //$NON-NLS-1$
 
     buttonR = nextImages[0].getBounds().height / 2;
     answerY = PAGE_HEIGHT + 4 * BORDER - buttonR;
 
-    yesImages[0] = loadImage("yes.png");
-    yesImages[1] = loadImage("yes_select.png");
-    yesImages[2] = loadImage("yes_hover.png");
-    yesImages[3] = loadImage("yes_big.png");
-    yesImages[4] = loadImage("yes_badge.png");
+    yesImages[0] = loadImage("yes.png"); //$NON-NLS-1$
+    yesImages[1] = loadImage("yes_select.png"); //$NON-NLS-1$
+    yesImages[2] = loadImage("yes_hover.png"); //$NON-NLS-1$
+    yesImages[3] = loadImage("yes_big.png"); //$NON-NLS-1$
+    yesImages[4] = loadImage("yes_badge.png"); //$NON-NLS-1$
 
-    noImages[0] = loadImage("no.png");
-    noImages[1] = loadImage("no_select.png");
-    noImages[2] = loadImage("no_hover.png");
-    noImages[3] = loadImage("no_big.png");
-    noImages[4] = loadImage("no_badge.png");
+    noImages[0] = loadImage("no.png"); //$NON-NLS-1$
+    noImages[1] = loadImage("no_select.png"); //$NON-NLS-1$
+    noImages[2] = loadImage("no_hover.png"); //$NON-NLS-1$
+    noImages[3] = loadImage("no_big.png"); //$NON-NLS-1$
+    noImages[4] = loadImage("no_badge.png"); //$NON-NLS-1$
 
     radius = 32;
     setSize((int)(GEARS * 2 * radius), (int)(2 * radius));
@@ -227,14 +228,14 @@ public class GearAnimator extends Animator
     purple = createColor(43, 34, 84);
     tooltipColor = createColor(253, 232, 206);
 
-    pages[0] = new ImagePage(0, TITLES[0], 0, 0, 0, new TextAnswer(""));
-    pages[1] = new PreferencePage(1, TITLES[1], 0, 5, 29, "/instance/org.eclipse.core.resources/refresh.lightweight.enabled");
-    pages[2] = new PreferencePage(2, TITLES[2], 1, 19, 30, "/instance/org.eclipse.ui.editors/lineNumberRuler");
-    pages[3] = new PreferencePage(3, TITLES[3], 1, 186, 37, "/instance/org.eclipse.ui.editors/spellingEnabled");
-    pages[4] = new PreferencePage(4, TITLES[4], 0, 23, 160, "/instance/org.eclipse.ui.workbench/RUN_IN_BACKGROUND");
-    pages[5] = new PreferencePage(5, TITLES[5], 0, 181, 95, "/instance/org.eclipse.core.resources/encoding", "UTF-8", null);
+    pages[0] = new ImagePage(0, TITLES[0], 0, 0, 0, new TextAnswer("")); //$NON-NLS-1$
+    pages[1] = new PreferencePage(1, TITLES[1], 0, 5, 29, "/instance/org.eclipse.core.resources/refresh.lightweight.enabled"); //$NON-NLS-1$
+    pages[2] = new PreferencePage(2, TITLES[2], 1, 19, 30, "/instance/org.eclipse.ui.editors/lineNumberRuler"); //$NON-NLS-1$
+    pages[3] = new PreferencePage(3, TITLES[3], 1, 186, 37, "/instance/org.eclipse.ui.editors/spellingEnabled"); //$NON-NLS-1$
+    pages[4] = new PreferencePage(4, TITLES[4], 0, 23, 160, "/instance/org.eclipse.ui.workbench/RUN_IN_BACKGROUND"); //$NON-NLS-1$
+    pages[5] = new PreferencePage(5, TITLES[5], 0, 181, 95, "/instance/org.eclipse.core.resources/encoding", "UTF-8", null); //$NON-NLS-1$ //$NON-NLS-2$
     pages[6] = new PreferencePage(6, TITLES[6], 1, 57, 82, RECORDER_PREFERENCE_KEY);
-    pages[7] = new SummaryPage(7, "Summary");
+    pages[7] = new SummaryPage(7, "Summary"); //$NON-NLS-1$
 
     pageBuffer = new Image(display, PAGE_WIDTH, PAGE_HEIGHT);
     pageGC = new GC(pageBuffer);
@@ -889,7 +890,7 @@ public class GearAnimator extends Animator
       questionPage.overlayX += x;
       questionPage.overlayY += y;
 
-      System.out.println("" + questionPage.overlayX + ", " + questionPage.overlayY);
+      System.out.println("" + questionPage.overlayX + ", " + questionPage.overlayY); //$NON-NLS-1$ //$NON-NLS-2$
 
       updatePage();
       overflow = true;
@@ -1310,8 +1311,8 @@ public class GearAnimator extends Animator
       setAnswers(answers);
 
       Display display = getDisplay();
-      image = doLoadImage(display, index, "");
-      overlay = doLoadImage(display, index, "_ovr");
+      image = doLoadImage(display, index, ""); //$NON-NLS-1$
+      overlay = doLoadImage(display, index, "_ovr"); //$NON-NLS-1$
 
       this.overlayX = overlayX;
       this.overlayY = overlayY;
@@ -1348,7 +1349,7 @@ public class GearAnimator extends Animator
     {
       try
       {
-        return loadImage("page" + index + suffix + ".png");
+        return loadImage("page" + index + suffix + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
       }
       catch (Exception ex)
       {
@@ -1378,7 +1379,7 @@ public class GearAnimator extends Animator
 
     public PreferencePage(int index, String title, int overlayChoice, int overlayX, int overlayY, String preferenceKey)
     {
-      this(index, title, overlayChoice, overlayX, overlayY, preferenceKey, "true", "false");
+      this(index, title, overlayChoice, overlayX, overlayY, preferenceKey, "true", "false"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     public final URI getPreferenceKey()
@@ -1407,7 +1408,7 @@ public class GearAnimator extends Animator
     public SummaryPage(int index, String title)
     {
       super(index, title);
-      setAnswers(new Answer[] { new TextAnswer("Finish") });
+      setAnswers(new Answer[] { new TextAnswer("Finish") }); //$NON-NLS-1$
     }
 
     @Override
@@ -1495,7 +1496,7 @@ public class GearAnimator extends Animator
         }
 
         String title = page.getTitle();
-        if (title.endsWith("?"))
+        if (title.endsWith("?")) //$NON-NLS-1$
         {
           title = title.substring(0, title.length() - 1);
         }

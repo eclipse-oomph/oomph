@@ -46,11 +46,11 @@ import java.util.Map;
  */
 public class WorkspaceIUAnalyzer
 {
-  public static final String IU_PROPERTY_WORKSPACE = "org.eclipse.oomph.targlet.workspace";
+  public static final String IU_PROPERTY_WORKSPACE = "org.eclipse.oomph.targlet.workspace"; //$NON-NLS-1$
 
-  public static final String IU_PROPERTY_WORKSPACE_MAIN = "org.eclipse.oomph.targlet.workspace.main";
+  public static final String IU_PROPERTY_WORKSPACE_MAIN = "org.eclipse.oomph.targlet.workspace.main"; //$NON-NLS-1$
 
-  private final MultiStatus status = new MultiStatus(TargletsCorePlugin.INSTANCE.getSymbolicName(), 0, "Workspace IU Analysis", null);
+  private final MultiStatus status = new MultiStatus(TargletsCorePlugin.INSTANCE.getSymbolicName(), 0, Messages.WorkspaceIUAnalyzer_Analysis_message, null);
 
   private final Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = Collections.synchronizedMap(new HashMap<IInstallableUnit, WorkspaceIUInfo>());
 
@@ -159,7 +159,7 @@ public class WorkspaceIUAnalyzer
 
       for (IInstallableUnit iu : workspaceIUInfos.keySet())
       {
-        if (!iu.isSingleton() && !"true".equals(iu.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP)))
+        if (!iu.isSingleton() && !"true".equals(iu.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP))) //$NON-NLS-1$
         {
           Requirement requirement = omniRootRequirements.remove(iu.getId());
           if (requirement != null)
@@ -178,6 +178,6 @@ public class WorkspaceIUAnalyzer
 
   protected void log(IProject project, Exception ex)
   {
-    SourceLocatorImpl.addStatus(status, TargletsCorePlugin.INSTANCE, "project " + project.getName(), ex);
+    SourceLocatorImpl.addStatus(status, TargletsCorePlugin.INSTANCE, "project " + project.getName(), ex); //$NON-NLS-1$
   }
 }

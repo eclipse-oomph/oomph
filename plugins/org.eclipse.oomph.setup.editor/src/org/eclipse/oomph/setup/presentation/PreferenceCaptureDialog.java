@@ -94,7 +94,7 @@ import java.util.Set;
  */
 public class PreferenceCaptureDialog extends Dialog
 {
-  private static final URI INSTANCE_URI = URI.createURI("//" + PreferencesUtil.INSTANCE_NODE);
+  private static final URI INSTANCE_URI = URI.createURI("//" + PreferencesUtil.INSTANCE_NODE); //$NON-NLS-1$
 
   protected ILabelProvider labelProvider;
 
@@ -126,14 +126,14 @@ public class PreferenceCaptureDialog extends Dialog
   protected void configureShell(Shell shell)
   {
     super.configureShell(shell);
-    shell.setText(fromEclipsePreferenceFile ? "Import Preferences" : "Capture Preferences");
-    shell.setImage(SetupEditorPlugin.INSTANCE.getSWTImage(fromEclipsePreferenceFile ? "preference_importer" : "preference_picker"));
+    shell.setText(fromEclipsePreferenceFile ? Messages.PreferenceCaptureDialog_shellText_importPrefs : Messages.PreferenceCaptureDialog_shellText_capturePrefs);
+    shell.setImage(SetupEditorPlugin.INSTANCE.getSWTImage(fromEclipsePreferenceFile ? "preference_importer" : "preference_picker")); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   @Override
   protected IDialogSettings getDialogBoundsSettings()
   {
-    return SetupEditorPlugin.INSTANCE.getDialogSettings(fromEclipsePreferenceFile ? "PreferenceImport" : "PreferenceCapture");
+    return SetupEditorPlugin.INSTANCE.getDialogSettings(fromEclipsePreferenceFile ? "PreferenceImport" : "PreferenceCapture"); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   protected List<?> getAvailablePreferences()
@@ -182,7 +182,7 @@ public class PreferenceCaptureDialog extends Dialog
     if (fromEclipsePreferenceFile)
     {
       Group preferenceFileGroup = new Group(contents, SWT.NONE);
-      preferenceFileGroup.setText("Eclipse Preference File");
+      preferenceFileGroup.setText(Messages.PreferenceCaptureDialog_preferenceFileGroup_text);
       preferenceFileGroup.setLayout(new GridLayout(2, false));
       preferenceFileGroup.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 3, 1));
 
@@ -190,14 +190,14 @@ public class PreferenceCaptureDialog extends Dialog
       preferenceFileText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 1, 1));
 
       Button preferenceFileBrowseButton = new Button(preferenceFileGroup, SWT.PUSH);
-      preferenceFileBrowseButton.setText("Browse...");
+      preferenceFileBrowseButton.setText(Messages.PreferenceCaptureDialog_preferenceFileBrowseButton_text);
       preferenceFileBrowseButton.addSelectionListener(new SelectionAdapter()
       {
         @Override
         public void widgetSelected(SelectionEvent e)
         {
           FileDialog dialog = new FileDialog(getShell(), SWT.OPEN | SWT.MULTI);
-          dialog.setFilterExtensions(new String[] { "*.epf" });
+          dialog.setFilterExtensions(new String[] { "*.epf" }); //$NON-NLS-1$
           String result = dialog.open();
           if (result != null)
           {
@@ -208,7 +208,7 @@ public class PreferenceCaptureDialog extends Dialog
     }
 
     Group filterGroupComposite = new Group(contents, SWT.NONE);
-    filterGroupComposite.setText("Filter Available Preferences");
+    filterGroupComposite.setText(Messages.PreferenceCaptureDialog_filterGroup_text);
     filterGroupComposite.setLayout(new GridLayout(1, false));
     filterGroupComposite.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 3, 1));
 
@@ -227,7 +227,7 @@ public class PreferenceCaptureDialog extends Dialog
     }
 
     Label availablePreferencesLabel = new Label(availablePreferencesComposite, SWT.NONE);
-    availablePreferencesLabel.setText("Available Preferences");
+    availablePreferencesLabel.setText(Messages.PreferenceCaptureDialog_availablePreferencesLabel);
     GridData availablePreferencesLabelGridData = new GridData();
     availablePreferencesLabelGridData.verticalAlignment = SWT.FILL;
     availablePreferencesLabelGridData.horizontalAlignment = SWT.FILL;
@@ -271,14 +271,14 @@ public class PreferenceCaptureDialog extends Dialog
     new Label(controlButtons, SWT.NONE);
 
     final Button addButton = new Button(controlButtons, SWT.PUSH);
-    addButton.setText("Add");
+    addButton.setText(Messages.PreferenceCaptureDialog_addButton_text);
     GridData addButtonGridData = new GridData();
     addButtonGridData.verticalAlignment = SWT.FILL;
     addButtonGridData.horizontalAlignment = SWT.FILL;
     addButton.setLayoutData(addButtonGridData);
 
     final Button removeButton = new Button(controlButtons, SWT.PUSH);
-    removeButton.setText("Remove");
+    removeButton.setText(Messages.PreferenceCaptureDialog_removeButton_text);
     GridData removeButtonGridData = new GridData();
     removeButtonGridData.verticalAlignment = SWT.FILL;
     removeButtonGridData.horizontalAlignment = SWT.FILL;
@@ -304,7 +304,7 @@ public class PreferenceCaptureDialog extends Dialog
     }
 
     Label selectedPreferencesLabel = new Label(selectedPreferencesComposite, SWT.NONE);
-    selectedPreferencesLabel.setText("Selected Preferences");
+    selectedPreferencesLabel.setText(Messages.PreferenceCaptureDialog_selectedPreferencesLabel);
     GridData selectedPreferencesLabelGridData = new GridData();
     selectedPreferencesLabelGridData.horizontalSpan = 2;
     selectedPreferencesLabelGridData.horizontalAlignment = SWT.FILL;
@@ -368,7 +368,7 @@ public class PreferenceCaptureDialog extends Dialog
             for (Map.Entry<String, String> entry : loadProperties.entrySet())
             {
               String key = entry.getKey();
-              if (key.startsWith("/"))
+              if (key.startsWith("/")) //$NON-NLS-1$
               {
                 preferences.put(PreferencesFactory.eINSTANCE.createURI(key), new Pair<String, String>(null, entry.getValue()));
               }
@@ -379,7 +379,7 @@ public class PreferenceCaptureDialog extends Dialog
           }
           catch (IORuntimeException ex)
           {
-            children.add(new ItemProvider(ex.getMessage(), UIPlugin.INSTANCE.getImage("error")));
+            children.add(new ItemProvider(ex.getMessage(), UIPlugin.INSTANCE.getImage("error"))); //$NON-NLS-1$
           }
 
           availablePreferencesTreeViewer.refresh();
@@ -632,8 +632,8 @@ public class PreferenceCaptureDialog extends Dialog
 
       ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.HORIZONTAL);
       defaultsToolItem = new ToolItem(toolBar, SWT.CHECK);
-      defaultsToolItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("filter_advanced_properties"));
-      defaultsToolItem.setToolTipText("Hide preferences set to their default value");
+      defaultsToolItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("filter_advanced_properties")); //$NON-NLS-1$
+      defaultsToolItem.setToolTipText(Messages.PreferenceCaptureDialog_defaultsToolItem_tooltip);
       defaultsToolItem.addSelectionListener(new SelectionAdapter()
       {
         @Override

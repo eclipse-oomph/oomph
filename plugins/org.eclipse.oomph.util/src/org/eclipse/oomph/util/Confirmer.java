@@ -69,7 +69,7 @@ public interface Confirmer
     @Override
     public String toString()
     {
-      return (confirmed ? "Accept" : "Decline") + (remember ? " (remember)" : "");
+      return (confirmed ? Messages.Confirmer_Accept_label : Messages.Confirmer_Decline_label) + (remember ? " " + Messages.Confirmer_Remember_label : ""); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 }

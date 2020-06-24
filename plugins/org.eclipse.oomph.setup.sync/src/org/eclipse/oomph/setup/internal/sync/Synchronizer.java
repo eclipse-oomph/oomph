@@ -16,6 +16,8 @@ import org.eclipse.oomph.setup.internal.sync.Snapshot.WorkingCopy;
 import org.eclipse.oomph.setup.sync.SyncAction;
 import org.eclipse.oomph.util.LockFile;
 
+import org.eclipse.osgi.util.NLS;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -170,7 +172,7 @@ public class Synchronizer
   @Override
   public String toString()
   {
-    return getClass().getSimpleName() + "[" + localSnapshot + " <--> " + remoteSnapshot + "]";
+    return getClass().getSimpleName() + "[" + localSnapshot + " <--> " + remoteSnapshot + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   protected void syncStarted()
@@ -318,7 +320,7 @@ public class Synchronizer
 
     public LockException(File file)
     {
-      super("Another synchronization process has locked " + file);
+      super(NLS.bind(Messages.Synchronizer_OtherSyncLock_exception, file));
     }
   }
 }

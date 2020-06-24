@@ -43,7 +43,7 @@ public interface JDTPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNAME = "jdt";
+  String eNAME = "jdt"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -51,7 +51,7 @@ public interface JDTPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/oomph/setup/jdt/1.0";
+  String eNS_URI = "http://www.eclipse.org/oomph/setup/jdt/1.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -59,7 +59,7 @@ public interface JDTPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "jdt";
+  String eNS_PREFIX = "jdt"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.

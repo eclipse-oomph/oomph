@@ -37,6 +37,7 @@ import org.eclipse.mylyn.internal.tasks.ui.util.TasksUiInternal;
 import org.eclipse.mylyn.tasks.core.AbstractRepositoryConnector;
 import org.eclipse.mylyn.tasks.core.TaskRepository;
 import org.eclipse.mylyn.tasks.ui.TasksUi;
+import org.eclipse.osgi.util.NLS;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -74,7 +75,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
    * @generated
    * @ordered
    */
-  protected static final String CONNECTOR_KIND_EDEFAULT = "bugzilla";
+  protected static final String CONNECTOR_KIND_EDEFAULT = "bugzilla"; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getConnectorKind() <em>Connector Kind</em>}' attribute.
@@ -451,13 +452,13 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (connectorKind: ");
+    result.append(" (connectorKind: "); //$NON-NLS-1$
     result.append(connectorKind);
-    result.append(", repositoryURL: ");
+    result.append(", repositoryURL: "); //$NON-NLS-1$
     result.append(repositoryURL);
-    result.append(", userID: ");
+    result.append(", userID: "); //$NON-NLS-1$
     result.append(userID);
-    result.append(", password: ");
+    result.append(", password: "); //$NON-NLS-1$
     result.append(password);
     result.append(')');
     return result.toString();
@@ -491,7 +492,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
 
     if (repository == null)
     {
-      context.log("Adding " + connectorKind + " repository: " + repositoryURL);
+      context.log(NLS.bind(Messages.MylynQueriesTaskImpl_AddingRepository_message, connectorKind, repositoryURL));
       repository = new TaskRepository(connectorKind, repositoryURL);
       repository.setCredentials(AuthenticationType.PROXY, null, true);
     }
@@ -516,7 +517,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
 
         if (repositoryQuery == null)
         {
-          context.log("Adding " + connectorKind + " query: " + summary);
+          context.log(NLS.bind(Messages.MylynQueriesTaskImpl_AddingQuery_message, connectorKind, summary));
           String handle = TasksUiPlugin.getTaskList().getUniqueHandleIdentifier();
           repositoryQuery = new RepositoryQuery(connectorKind, handle);
           repositoryQuery.setSummary(summary);
@@ -529,7 +530,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
         }
         else
         {
-          context.log("Changing " + connectorKind + " query: " + summary);
+          context.log(NLS.bind(Messages.MylynQueriesTaskImpl_ChaningQuery_message, connectorKind, summary));
 
           repositoryQuery.setRepositoryUrl(repositoryURL);
           configureQuery(context, query, repositoryQuery);
@@ -579,7 +580,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
     String url = StringUtil.safe(query.getURL());
     if (!ObjectUtil.equals(url, repositoryQuery.getUrl()))
     {
-      context.log("Setting query URL = " + url);
+      context.log(NLS.bind(Messages.MylynQueriesTaskImpl_SettingQuery_message, url));
       repositoryQuery.setUrl(url);
     }
 
@@ -594,7 +595,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
       String repositoryValue = repositoryAttributes.get(key);
       if (!ObjectUtil.equals(value, repositoryValue))
       {
-        context.log("Setting query attribute " + key + " = " + value);
+        context.log(NLS.bind(Messages.MylynQueriesTaskImpl_SettingQueryAttribute_message, key, value));
         repositoryQuery.setAttribute(key, value);
       }
     }
@@ -603,7 +604,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
     {
       if (!attributes.containsKey(key))
       {
-        context.log("Removing query attribute " + key);
+        context.log(NLS.bind(Messages.MylynQueriesTaskImpl_RemovingQueryAttribute_message, key));
         repositoryQuery.setAttribute(key, null);
       }
     }
@@ -611,6 +612,6 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
 
   private boolean isAuthenticate()
   {
-    return !StringUtil.isEmpty(userID) && !"anonymous".equals(userID) && !StringUtil.isEmpty(password) && !" ".equals(password);
+    return !StringUtil.isEmpty(userID) && !"anonymous".equals(userID) && !StringUtil.isEmpty(password) && !" ".equals(password); //$NON-NLS-1$ //$NON-NLS-2$
   }
 } // MylynQueriesTaskImpl

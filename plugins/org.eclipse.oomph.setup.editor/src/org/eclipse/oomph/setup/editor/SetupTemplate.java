@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Control;
  */
 public abstract class SetupTemplate
 {
-  public static final String PRODUCT_GROUP = "org.eclipse.oomph.setup.projectTemplates";
+  public static final String PRODUCT_GROUP = "org.eclipse.oomph.setup.projectTemplates"; //$NON-NLS-1$
 
   private final String label;
 
@@ -56,7 +56,7 @@ public abstract class SetupTemplate
   protected void init()
   {
     ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
-    resource = resourceSet.createResource(URI.createURI("*.setup"));
+    resource = resourceSet.createResource(URI.createURI("*.setup")); //$NON-NLS-1$
   }
 
   public void updatePreview()

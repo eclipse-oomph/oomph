@@ -23,9 +23,9 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class AgentManagerDialog extends OomphDialog
 {
-  public static final String TITLE = "Bundle Pool Management";
+  public static final String TITLE = Messages.AgentManagerDialog_title;
 
-  public static final String MESSAGE = "Double-click the bundle pool to be used for provisioning";
+  public static final String MESSAGE = Messages.AgentManagerDialog_message;
 
   private BundlePool selectedPool;
 
@@ -66,19 +66,19 @@ public class AgentManagerDialog extends OomphDialog
   @Override
   protected String getDefaultMessage()
   {
-    return MESSAGE + ".";
+    return MESSAGE + "."; //$NON-NLS-1$
   }
 
   @Override
   protected String getImagePath()
   {
-    return "wizban/AgentManager.png";
+    return "wizban/AgentManager.png"; //$NON-NLS-1$
   }
 
   @Override
   public String getHelpPath()
   {
-    return P2UIPlugin.INSTANCE.getSymbolicName() + "/html/AgentManagerHelp.html";
+    return P2UIPlugin.INSTANCE.getSymbolicName() + "/html/AgentManagerHelp.html"; //$NON-NLS-1$
   }
 
   @Override
@@ -90,7 +90,7 @@ public class AgentManagerDialog extends OomphDialog
   @Override
   protected void createUI(Composite parent)
   {
-    getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("obj16/bundlePool"));
+    getShell().setImage(P2UIPlugin.INSTANCE.getSWTImage("obj16/bundlePool")); //$NON-NLS-1$
 
     composite = new AgentManagerComposite(parent, SWT.NONE, selectedPool)
     {
@@ -105,10 +105,10 @@ public class AgentManagerDialog extends OomphDialog
       protected void profilesShown(boolean profilesShown)
       {
         super.profilesShown(profilesShown);
-        String message = MESSAGE + ".";
+        String message = MESSAGE + "."; //$NON-NLS-1$
         if (profilesShown)
         {
-          message += " Double-click profiles to see their details.";
+          message += " " + Messages.AgentManagerDialog_profilesShownMessage; //$NON-NLS-1$
         }
 
         setMessage(message);

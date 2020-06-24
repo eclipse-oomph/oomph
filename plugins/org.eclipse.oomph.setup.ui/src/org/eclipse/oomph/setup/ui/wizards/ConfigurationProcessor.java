@@ -47,6 +47,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.osgi.util.NLS;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -66,7 +67,7 @@ public class ConfigurationProcessor
 
   protected Installation installation;
 
-  private final ScopeStatus status = new ScopeStatus(null, "Problems were encountered processing the configuration");
+  private final ScopeStatus status = new ScopeStatus(null, Messages.ConfigurationProcessor_configurationStatus_error);
 
   private final ScopeStatus installationStatus;
 
@@ -87,10 +88,10 @@ public class ConfigurationProcessor
       workspace = configuration.getWorkspace();
     }
 
-    installationStatus = new ScopeStatus(installation, "Problems were encountered processing the installation");
+    installationStatus = new ScopeStatus(installation, Messages.ConfigurationProcessor_installationStatus_error);
     status.add(installationStatus);
 
-    workspaceStatus = new ScopeStatus(workspace, "Problems were encountered processing the workspace");
+    workspaceStatus = new ScopeStatus(workspace, Messages.ConfigurationProcessor_workspaceStatus_error);
     status.add(workspaceStatus);
   }
 
@@ -162,7 +163,7 @@ public class ConfigurationProcessor
 
     if (installation == null && workspace == null && setupWizard.isSimple())
     {
-      installationStatus.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "The configuraton is empty"));
+      installationStatus.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, Messages.ConfigurationProcessor_installationStatus_configEmpty));
       return false;
     }
 
@@ -177,7 +178,7 @@ public class ConfigurationProcessor
 
   protected boolean handleNullProductVersion()
   {
-    addStatus(IStatus.ERROR, installation, "No product version is specified");
+    addStatus(IStatus.ERROR, installation, Messages.ConfigurationProcessor_status_noProductVersion);
     return false;
   }
 
@@ -224,7 +225,7 @@ public class ConfigurationProcessor
       Index productCatalogIndex = productCatalog.getIndex();
       if (productCatalogIndex == index)
       {
-        if (!"self".equals(productCatalog.getName()))
+        if (!"self".equals(productCatalog.getName())) //$NON-NLS-1$
         {
           catalogManager.selectCatalog(true, productCatalog, true);
         }
@@ -235,7 +236,7 @@ public class ConfigurationProcessor
       }
     }
 
-    if ("self.empty.product.version".equals(productVersion.getQualifiedName()))
+    if ("self.empty.product.version".equals(productVersion.getQualifiedName())) //$NON-NLS-1$
     {
       return applyEmptyProductVersion();
     }
@@ -299,19 +300,19 @@ public class ConfigurationProcessor
 
   protected boolean handleNoUserProductCatalog(ProductVersion productVersion)
   {
-    addStatus(IStatus.ERROR, productVersion, "Cannot add the product to the user product catalog because the index doesn't contain one");
+    addStatus(IStatus.ERROR, productVersion, Messages.ConfigurationProcessor_status_productNotInIndex);
     return false;
   }
 
   protected boolean handleProxyProductVersion(ProductVersion productVersion)
   {
-    addStatus(IStatus.ERROR, productVersion, "The product version cannot be resolved");
+    addStatus(IStatus.ERROR, productVersion, Messages.ConfigurationProcessor_status_unresolvableVersion);
     return false;
   }
 
   protected boolean handleNullProduct(ProductVersion productVersion)
   {
-    addStatus(IStatus.ERROR, productVersion, "The product version is not contained by a product");
+    addStatus(IStatus.ERROR, productVersion, Messages.ConfigurationProcessor_status_versionNotInProduct);
     return false;
   }
 
@@ -325,7 +326,7 @@ public class ConfigurationProcessor
 
     if (installation == null && workspace == null && !setupWizard.isSimple())
     {
-      workspaceStatus.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "The configuration is empty"));
+      workspaceStatus.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, Messages.ConfigurationProcessor_workspaceStatus_configEmpty));
       return false;
     }
 
@@ -351,11 +352,12 @@ public class ConfigurationProcessor
         EList<EObject> contents = resource.getContents();
         if (contents.isEmpty())
         {
-          childStatuses.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "The resource is empty"));
+          childStatuses.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, Messages.ConfigurationProcessor_status_emptyResource));
         }
         else
         {
-          childStatuses.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID, "The resource contains a " + contents.get(0).eClass().getName()));
+          childStatuses.add(new Status(IStatus.ERROR, SetupUIPlugin.PLUGIN_ID,
+              NLS.bind(Messages.ConfigurationProcessor_status_resourceContains, contents.get(0).eClass().getName())));
         }
       }
       else
@@ -377,7 +379,7 @@ public class ConfigurationProcessor
                 int line = xmiException.getLine();
                 if (line != 0)
                 {
-                  message += " (" + line + ", " + xmiException.getColumn() + ")";
+                  message += " (" + line + ", " + xmiException.getColumn() + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 }
               }
             }
@@ -389,18 +391,20 @@ public class ConfigurationProcessor
     }
 
     return new MultiStatus(SetupUIPlugin.PLUGIN_ID, 0, childStatuses.toArray(new IStatus[childStatuses.size()]),
-        "No " + expectedEClass.getName() + " could be loaded from " + uris, null);
+        NLS.bind(Messages.ConfigurationProcessor_status_couldNotLoadFromUris, expectedEClass.getName(), uris), null);
   }
 
   protected boolean handleWorkspace()
   {
     if (setupWizard.isSimple())
     {
-      int answer = new MessageDialog(setupWizard.getShell(), "Configuration Handling", null,
-          "The configuration contains a workspace that can only be handled by the advanced mode of the installer.", MessageDialog.WARNING,
-          installation == null ? //
-              new String[] { "Switch to Advanced Mode", "Cancel" } : //
-              new String[] { "Switch to Avanced Mode", "Apply only Installation", "Cancel" },
+      int answer = new MessageDialog(setupWizard.getShell(), Messages.ConfigurationProcessor_configHandlingDialog_title, null,
+          Messages.ConfigurationProcessor_configHandlingDialog_message, MessageDialog.WARNING, installation == null ? //
+              new String[] { Messages.ConfigurationProcessor_configHandlingDialog_button_advancedMode,
+                  Messages.ConfigurationProcessor_configHandlingDialog_button_cancel }
+              : new String[] { Messages.ConfigurationProcessor_configHandlingDialog_button_advancedMode,
+                  Messages.ConfigurationProcessor_configHandlingDialog_button_applyOnlyInstallation,
+                  Messages.ConfigurationProcessor_configHandlingDialog_button_cancel },
           0).open();
       switch (answer)
       {
@@ -439,14 +443,14 @@ public class ConfigurationProcessor
     {
       if (stream.eIsProxy())
       {
-        addStatus(IStatus.ERROR, stream, "The referenced stream cannot be resolved");
+        addStatus(IStatus.ERROR, stream, Messages.ConfigurationProcessor_status_unresolvableStream);
       }
       else
       {
         Project project = stream.getProject();
         if (project == null)
         {
-          addStatus(IStatus.ERROR, stream, "The referenced stream is not contained by a project");
+          addStatus(IStatus.ERROR, stream, Messages.ConfigurationProcessor_status_streamNotInProject);
         }
         else
         {
@@ -472,20 +476,17 @@ public class ConfigurationProcessor
             if (logicalProjectContainer == null)
             {
               addStatus(IStatus.ERROR, stream,
-                  "The referenced stream's root project is not contained by a project catalog and it doesn't specify a logical project container: "
-                      + EcoreUtil.getURI(rootProject));
+                  Messages.ConfigurationProcessor_status_rootProjectNotInCatalog_noContainer + " " + EcoreUtil.getURI(rootProject)); //$NON-NLS-1$
             }
             else if (logicalProjectContainer.eIsProxy())
             {
               addStatus(IStatus.ERROR, stream,
-                  "The referenced stream's root project is not contained by a project catalog and its logical project container cannot be resolved: "
-                      + EcoreUtil.getURI(logicalProjectContainer));
+                  Messages.ConfigurationProcessor_status_rootProjectNotInCatalog_unresolvableContainer + " " + EcoreUtil.getURI(logicalProjectContainer)); //$NON-NLS-1$
             }
             else if (logicalProjectContainer instanceof Project)
             {
               addStatus(IStatus.ERROR, stream,
-                  "The referenced stream's root project is not contained by a project catalog and is not contained by its logical project container: "
-                      + EcoreUtil.getURI(logicalProjectContainer));
+                  Messages.ConfigurationProcessor_status_rootProjectNotInCatalog_notInContainer + " " + EcoreUtil.getURI(logicalProjectContainer)); //$NON-NLS-1$
             }
             else
             {
@@ -505,9 +506,9 @@ public class ConfigurationProcessor
                 }
                 else
                 {
-                  addStatus(IStatus.ERROR, stream, "Cannot add the stream's root project: " + EcoreUtil.getURI(rootProject));
+                  addStatus(IStatus.ERROR, stream, Messages.ConfigurationProcessor_status_cannotAddRootProject + " " + EcoreUtil.getURI(rootProject)); //$NON-NLS-1$
                   addStatus(IStatus.ERROR, stream,
-                      "The target project catalog does not contain an extensible user project: " + EcoreUtil.getURI(logicalProjectCatalog));
+                      Messages.ConfigurationProcessor_status_noExtensibleProjectInCatalog + " " + EcoreUtil.getURI(logicalProjectCatalog)); //$NON-NLS-1$
                 }
               }
               else
@@ -550,7 +551,7 @@ public class ConfigurationProcessor
     if (setupWorkspace.getStreams().isEmpty() && !setupWorkspace.getSetupTasks().isEmpty())
     {
       WorkspaceTask workspaceTask = SetupFactory.eINSTANCE.createWorkspaceTask();
-      workspaceTask.setID("workspace");
+      workspaceTask.setID("workspace"); //$NON-NLS-1$
       setupWorkspace.getSetupTasks().add(0, workspaceTask);
     }
 
@@ -611,22 +612,23 @@ public class ConfigurationProcessor
   protected boolean addCatalog(boolean product, Scope catalogScope, Scope originatingScope)
   {
     CatalogManager catalogManager = setupWizard.getCatalogManager();
-    Scope catalog = catalogManager.getCatalog(product, "redirectable");
-    String label = product ? "product" : "project";
+    Scope catalog = catalogManager.getCatalog(product, "redirectable"); //$NON-NLS-1$
+    String label = product ? "product" : "project"; //$NON-NLS-1$ //$NON-NLS-2$
     if (catalog == null)
     {
-      addStatus(IStatus.ERROR, originatingScope, "Cannot add the catalog " + EcoreUtil.getURI(catalogScope));
+      addStatus(IStatus.ERROR, originatingScope, NLS.bind(Messages.ConfigurationProcessor_status_cannotAddCatalog, EcoreUtil.getURI(catalogScope)));
 
       ResourceSet resourceSet = setupWizard.getResourceSet();
-      Resource resource = resourceSet.getResource(URI.createURI("index:/redirectable." + label + "s.setup"), false);
+      Resource resource = resourceSet.getResource(URI.createURI("index:/redirectable." + label + "s.setup"), false); //$NON-NLS-1$ //$NON-NLS-2$
       if (resource == null)
       {
-        addStatus(IStatus.ERROR, originatingScope, "There is no redirectable " + label + " catalog is in the index");
+        addStatus(IStatus.ERROR, originatingScope, product ? Messages.ConfigurationProcessor_status_noRedirectableProductCatalog
+            : Messages.ConfigurationProcessor_status_noRedirectableProjectCatalog);
       }
       else
       {
         addStatus(IStatus.ERROR, originatingScope,
-            "The redirectable " + label + " catalog in the index is already redirected to " + resourceSet.getURIConverter().normalize(resource.getURI()));
+            NLS.bind(Messages.ConfigurationProcessor_status_catalogAlreadyRedirected, label, resourceSet.getURIConverter().normalize(resource.getURI())));
       }
 
       return false;
@@ -642,8 +644,8 @@ public class ConfigurationProcessor
     EList<SetupTask> setupTasks = (product ? installation : workspace).getSetupTasks();
     EclipseIniTask redirectionEclipseIniTask = SetupFactory.eINSTANCE.createEclipseIniTask();
     redirectionEclipseIniTask.setVm(true);
-    redirectionEclipseIniTask.setOption("-Doomph.redirection." + (product ? "products" : "projects") + "=");
-    redirectionEclipseIniTask.setValue(sourceURI + "->" + targetURI);
+    redirectionEclipseIniTask.setOption("-Doomph.redirection." + (product ? "products" : "projects") + "="); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+    redirectionEclipseIniTask.setValue(sourceURI + "->" + targetURI); //$NON-NLS-1$
     setupTasks.add(0, redirectionEclipseIniTask);
 
     return true;
@@ -682,7 +684,7 @@ public class ConfigurationProcessor
 
     public ScopeStatus(Scope scope)
     {
-      super(SetupUIPlugin.PLUGIN_ID, 0, "Processing " + EcoreUtil.getURI(scope), null);
+      super(SetupUIPlugin.PLUGIN_ID, 0, NLS.bind(Messages.ConfigurationProcessor_scopeStatus_message, EcoreUtil.getURI(scope)), null);
       this.scope = scope;
     }
 

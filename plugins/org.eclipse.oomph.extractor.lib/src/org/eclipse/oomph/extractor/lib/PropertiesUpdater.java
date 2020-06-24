@@ -44,7 +44,7 @@ public final class PropertiesUpdater
     try
     {
       targetProperties.putAll(sourceProperties);
-      targetProperties.store(targetOutputStream, "This configuration file was written by: org.eclipse.oomph.extractor.lib.PropertiesUpdater");
+      targetProperties.store(targetOutputStream, "This configuration file was written by: org.eclipse.oomph.extractor.lib.PropertiesUpdater"); //$NON-NLS-1$
     }
     finally
     {

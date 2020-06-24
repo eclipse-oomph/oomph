@@ -32,6 +32,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.IWizardContainer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -45,7 +46,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ExtensionPage extends SetupWizardPage
 {
-  private static final String SETUP_EXTENSION_ANALYSIS_TITLE = "Setup Extension Analysis";
+  private static final String SETUP_EXTENSION_ANALYSIS_TITLE = Messages.ExtensionPage_Analysis_title;
 
   private EnablementComposite enablementComposite;
 
@@ -59,8 +60,8 @@ public class ExtensionPage extends SetupWizardPage
 
   protected ExtensionPage()
   {
-    super("ExtensionPage");
-    setTitle("Extensions");
+    super("ExtensionPage"); //$NON-NLS-1$
+    setTitle(Messages.ExtensionPage_Extensions_title);
   }
 
   @Override
@@ -76,7 +77,7 @@ public class ExtensionPage extends SetupWizardPage
     stackComposite.setTopControl(messageComposite);
 
     Label initialLabel = new Label(messageComposite, SWT.NONE);
-    initialLabel.setText("Analyzing the needed setup extensions...");
+    initialLabel.setText(Messages.ExtensionPage_Analyzing_message);
 
     GridData data = new GridData();
     data.grabExcessHorizontalSpace = true;
@@ -130,9 +131,8 @@ public class ExtensionPage extends SetupWizardPage
           protected Dialog createDialog()
           {
             return createDialog(getShell(), SETUP_EXTENSION_ANALYSIS_TITLE, null,
-                "Analyzing the needed setup extensions has taken more than " + (System.currentTimeMillis() - getStart()) / 1000
-                    + " seconds.  Would you like to continue this step?",
-                MessageDialog.QUESTION, new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL }, 0);
+                NLS.bind(Messages.ExtensionPage_AnalyzingLongRunning_message, (System.currentTimeMillis() - getStart()) / 1000), MessageDialog.QUESTION,
+                new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL }, 0);
           }
 
           @Override
@@ -189,7 +189,7 @@ public class ExtensionPage extends SetupWizardPage
         if (enablementComposite.setInput(triggeredSetupTasks) != null)
         {
           stackComposite.setTopControl(enablementComposite);
-          setDescription(EnablementDialog.getDescription("the installer", "Finish"));
+          setDescription(EnablementDialog.getDescription(Messages.ExtensionPage_Installer_label, Messages.ExtensionPage_Finished_label));
           setPageComplete(false);
         }
         else

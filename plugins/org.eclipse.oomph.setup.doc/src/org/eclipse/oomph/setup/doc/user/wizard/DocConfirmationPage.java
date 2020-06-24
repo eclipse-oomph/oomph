@@ -35,6 +35,7 @@ import java.util.Map;
  *
  * @number 700
  */
+@SuppressWarnings("nls")
 public class DocConfirmationPage
 {
   /**

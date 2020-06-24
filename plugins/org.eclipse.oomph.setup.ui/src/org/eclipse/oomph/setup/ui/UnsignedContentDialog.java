@@ -37,20 +37,20 @@ public class UnsignedContentDialog extends AbstractConfirmDialog
 
   public UnsignedContentDialog(String[] unsignedContent)
   {
-    super("Unsigned Content", 600, 400, "Remember choice");
+    super(Messages.UnsignedContentDialog_title, 600, 400, Messages.UnsignedContentDialog_rememberButton_text);
     this.unsignedContent = unsignedContent;
   }
 
   @Override
   protected String getShellText()
   {
-    return "Ooomph Unsigned Content Confirmation";
+    return Messages.UnsignedContentDialog_shellText;
   }
 
   @Override
   protected String getDefaultMessage()
   {
-    return "Accept unsigned content before the software can be installed.";
+    return Messages.UnsignedContentDialog_defaultMessage;
   }
 
   @Override
@@ -161,12 +161,12 @@ public class UnsignedContentDialog extends AbstractConfirmDialog
       File file = new File((String)element);
       if (file.isDirectory())
       {
-        return SetupUIPlugin.INSTANCE.getSWTImage("unsigned-directory");
+        return SetupUIPlugin.INSTANCE.getSWTImage("unsigned-directory"); //$NON-NLS-1$
       }
 
       if (file.isFile())
       {
-        return SetupUIPlugin.INSTANCE.getSWTImage("unsigned-file");
+        return SetupUIPlugin.INSTANCE.getSWTImage("unsigned-file"); //$NON-NLS-1$
       }
 
       return null;

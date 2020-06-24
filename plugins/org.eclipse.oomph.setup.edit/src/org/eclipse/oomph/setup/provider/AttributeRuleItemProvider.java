@@ -73,8 +73,8 @@ public class AttributeRuleItemProvider extends ModelElementItemProvider
   protected void addAttributeURIPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_AttributeRule_attributeURI_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_AttributeRule_attributeURI_feature", "_UI_AttributeRule_type"),
+        getString("_UI_AttributeRule_attributeURI_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_AttributeRule_attributeURI_feature", "_UI_AttributeRule_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.ATTRIBUTE_RULE__ATTRIBUTE_URI, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -87,8 +87,8 @@ public class AttributeRuleItemProvider extends ModelElementItemProvider
   protected void addValuePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_AttributeRule_value_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_AttributeRule_value_feature", "_UI_AttributeRule_type"),
+        getString("_UI_AttributeRule_value_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_AttributeRule_value_feature", "_UI_AttributeRule_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.ATTRIBUTE_RULE__VALUE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -101,7 +101,7 @@ public class AttributeRuleItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/AttributeRule"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/AttributeRule")); //$NON-NLS-1$
   }
 
   /**
@@ -122,6 +122,7 @@ public class AttributeRuleItemProvider extends ModelElementItemProvider
    * @generated NOT
    */
   @Override
+  @SuppressWarnings("nls")
   public String getText(Object object)
   {
     AttributeRule attributeRule = (AttributeRule)object;

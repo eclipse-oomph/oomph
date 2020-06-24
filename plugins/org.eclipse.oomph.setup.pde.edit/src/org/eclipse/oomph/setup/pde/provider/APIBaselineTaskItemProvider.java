@@ -72,8 +72,8 @@ public class APIBaselineTaskItemProvider extends AbstractAPIBaselineTaskItemProv
   protected void addVersionPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_APIBaselineTask_version_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_version_feature", "_UI_APIBaselineTask_type"),
+        getString("_UI_APIBaselineTask_version_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_version_feature", "_UI_APIBaselineTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PDEPackage.Literals.API_BASELINE_TASK__VERSION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -86,8 +86,8 @@ public class APIBaselineTaskItemProvider extends AbstractAPIBaselineTaskItemProv
   protected void addLocationPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_APIBaselineTask_location_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_location_feature", "_UI_APIBaselineTask_type"),
+        getString("_UI_APIBaselineTask_location_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_location_feature", "_UI_APIBaselineTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PDEPackage.Literals.API_BASELINE_TASK__LOCATION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -100,8 +100,8 @@ public class APIBaselineTaskItemProvider extends AbstractAPIBaselineTaskItemProv
   protected void addRemoteURIPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_APIBaselineTask_remoteURI_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_remoteURI_feature", "_UI_APIBaselineTask_type"),
+        getString("_UI_APIBaselineTask_remoteURI_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_APIBaselineTask_remoteURI_feature", "_UI_APIBaselineTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         PDEPackage.Literals.API_BASELINE_TASK__REMOTE_URI, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -114,7 +114,7 @@ public class APIBaselineTaskItemProvider extends AbstractAPIBaselineTaskItemProv
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/APIBaselineTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/APIBaselineTask")); //$NON-NLS-1$
   }
 
   /**

@@ -78,8 +78,8 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
   protected void addOnlyNewProjectsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ProjectsBuildTask_onlyNewProjects_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ProjectsBuildTask_onlyNewProjects_feature", "_UI_ProjectsBuildTask_type"),
+        getString("_UI_ProjectsBuildTask_onlyNewProjects_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ProjectsBuildTask_onlyNewProjects_feature", "_UI_ProjectsBuildTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectsPackage.Literals.PROJECTS_BUILD_TASK__ONLY_NEW_PROJECTS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -92,8 +92,8 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
   protected void addRefreshPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ProjectsBuildTask_refresh_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ProjectsBuildTask_refresh_feature", "_UI_ProjectsBuildTask_type"),
+        getString("_UI_ProjectsBuildTask_refresh_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ProjectsBuildTask_refresh_feature", "_UI_ProjectsBuildTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectsPackage.Literals.PROJECTS_BUILD_TASK__REFRESH, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -106,8 +106,8 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
   protected void addCleanPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ProjectsBuildTask_clean_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ProjectsBuildTask_clean_feature", "_UI_ProjectsBuildTask_type"),
+        getString("_UI_ProjectsBuildTask_clean_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ProjectsBuildTask_clean_feature", "_UI_ProjectsBuildTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectsPackage.Literals.PROJECTS_BUILD_TASK__CLEAN, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -120,8 +120,8 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
   protected void addBuildPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_ProjectsBuildTask_build_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_ProjectsBuildTask_build_feature", "_UI_ProjectsBuildTask_type"),
+        getString("_UI_ProjectsBuildTask_build_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ProjectsBuildTask_build_feature", "_UI_ProjectsBuildTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectsPackage.Literals.PROJECTS_BUILD_TASK__BUILD, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -167,7 +167,7 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/ProjectsBuildTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/ProjectsBuildTask")); //$NON-NLS-1$
   }
 
   /**
@@ -191,7 +191,7 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
   public String getText(Object object)
   {
     ProjectsBuildTask projectsBuildTask = (ProjectsBuildTask)object;
-    String label = getString("_UI_ProjectsBuildTask_type");
+    String label = getString("_UI_ProjectsBuildTask_type"); //$NON-NLS-1$
     List<String> tags = new ArrayList<String>();
     if (projectsBuildTask.isOnlyNewProjects())
     {
@@ -215,7 +215,7 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
 
     if (!tags.isEmpty())
     {
-      return label + " (" + StringUtil.implode(tags, ',').replace(",", ", ") + ")";
+      return label + " (" + StringUtil.implode(tags, ',').replace(",", ", ") + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
     }
 
     return label;

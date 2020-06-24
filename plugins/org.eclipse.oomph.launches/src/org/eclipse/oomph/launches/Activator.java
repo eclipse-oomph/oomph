@@ -49,6 +49,6 @@ public class Activator extends AbstractUIPlugin
 
   public static ImageDescriptor getImageDescriptor(String key)
   {
-    return imageDescriptorFromPlugin(PLUGIN_ID, "icons/" + key + ".gif");
+    return imageDescriptorFromPlugin(PLUGIN_ID, "icons/" + key + ".gif"); //$NON-NLS-1$ //$NON-NLS-2$
   }
 }

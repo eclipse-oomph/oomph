@@ -35,7 +35,7 @@ public enum VersionSegment implements Enumerator
    * @generated
    * @ordered
    */
-  MAJOR(0, "Major", "Major"),
+  MAJOR(0, "Major", "Major"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Minor</b></em>' literal object.
@@ -45,7 +45,7 @@ public enum VersionSegment implements Enumerator
    * @generated
    * @ordered
    */
-  MINOR(0, "Minor", "Minor"),
+  MINOR(0, "Minor", "Minor"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Micro</b></em>' literal object.
@@ -55,7 +55,7 @@ public enum VersionSegment implements Enumerator
    * @generated
    * @ordered
    */
-  MICRO(0, "Micro", "Micro"),
+  MICRO(0, "Micro", "Micro"), //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Qualifier</b></em>' literal object.
@@ -65,15 +65,11 @@ public enum VersionSegment implements Enumerator
    * @generated
    * @ordered
    */
-  QUALIFIER(0, "Qualifier", "Qualifier");
+  QUALIFIER(0, "Qualifier", "Qualifier"); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
    * The '<em><b>Major</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Major</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #MAJOR
    * @model name="Major"
@@ -85,10 +81,6 @@ public enum VersionSegment implements Enumerator
   /**
    * The '<em><b>Minor</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Minor</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #MINOR
    * @model name="Minor"
@@ -100,10 +92,6 @@ public enum VersionSegment implements Enumerator
   /**
    * The '<em><b>Micro</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Micro</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #MICRO
    * @model name="Micro"
@@ -115,10 +103,6 @@ public enum VersionSegment implements Enumerator
   /**
    * The '<em><b>Qualifier</b></em>' literal value.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of '<em><b>Qualifier</b></em>' literal object isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @see #QUALIFIER
    * @model name="Qualifier"

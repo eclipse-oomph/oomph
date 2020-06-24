@@ -22,10 +22,10 @@ package org.eclipse.oomph.targlets;
  */
 public interface FeatureGenerator extends IUGenerator
 {
-  public static final String FEATURE_XML = "feature.xml";
+  public static final String FEATURE_XML = "feature.xml"; //$NON-NLS-1$
 
-  public static final String PROP_REQUIRED_LICENCSE_FEATURE_ID = "org.eclipse.oomph.targlets.core.requiredLicenseFeatureID";
+  public static final String PROP_REQUIRED_LICENCSE_FEATURE_ID = "org.eclipse.oomph.targlets.core.requiredLicenseFeatureID"; //$NON-NLS-1$
 
-  public static final String PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE = "org.eclipse.oomph.targlets.core.requiredLicenseFeatureVersionRange";
+  public static final String PROP_REQUIRED_LICENCSE_FEATURE_VERSION_RANGE = "org.eclipse.oomph.targlets.core.requiredLicenseFeatureVersionRange"; //$NON-NLS-1$
 
 } // FeatureGenerator

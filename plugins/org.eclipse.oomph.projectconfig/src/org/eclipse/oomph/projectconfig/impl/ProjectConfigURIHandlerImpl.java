@@ -19,6 +19,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
 
+import org.eclipse.osgi.util.NLS;
+
 import org.osgi.service.prefs.BackingStoreException;
 
 import java.io.ByteArrayInputStream;
@@ -69,7 +71,8 @@ public class ProjectConfigURIHandlerImpl extends URIHandlerImpl
 
       return new ProjectConfigInput();
     }
-    throw new IOException("No preference value available for ");
+
+    throw new IOException(NLS.bind(Messages.ProjectConfigURIHandlerImpl_Unavailable_exception, uri));
   }
 
   @Override
@@ -94,20 +97,20 @@ public class ProjectConfigURIHandlerImpl extends URIHandlerImpl
         @Override
         public void write(int b) throws IOException
         {
-          throw new IOException("Write not supported");
+          throw new IOException(Messages.ProjectConfigURIHandlerImpl_WriteNotSupported_exception);
         }
       }
 
       return new ProjectConfigOutput();
     }
 
-    throw new IOException("Output not supported");
+    throw new IOException(Messages.ProjectConfigURIHandlerImpl_OutputNotSupported_exception);
   }
 
   @Override
   public void delete(URI uri, Map<?, ?> options) throws IOException
   {
-    throw new IOException("Delete not supported");
+    throw new IOException(Messages.ProjectConfigURIHandlerImpl_DeleteNotSupported_exception);
   }
 
   @Override

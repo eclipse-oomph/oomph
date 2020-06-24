@@ -78,8 +78,8 @@ public class CatalogSelectionItemProvider extends ModelElementItemProvider
   protected void addProductCatalogsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_CatalogSelection_productCatalogs_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_CatalogSelection_productCatalogs_feature", "_UI_CatalogSelection_type"),
+        getString("_UI_CatalogSelection_productCatalogs_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_CatalogSelection_productCatalogs_feature", "_UI_CatalogSelection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.CATALOG_SELECTION__PRODUCT_CATALOGS, true, false, true, null, null, null));
   }
 
@@ -92,8 +92,8 @@ public class CatalogSelectionItemProvider extends ModelElementItemProvider
   protected void addProjectCatalogsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_CatalogSelection_projectCatalogs_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_CatalogSelection_projectCatalogs_feature", "_UI_CatalogSelection_type"),
+        getString("_UI_CatalogSelection_projectCatalogs_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_CatalogSelection_projectCatalogs_feature", "_UI_CatalogSelection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.CATALOG_SELECTION__PROJECT_CATALOGS, true, false, true, null, null, null));
   }
 
@@ -106,8 +106,8 @@ public class CatalogSelectionItemProvider extends ModelElementItemProvider
   protected void addSelectedStreamsPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_CatalogSelection_selectedStreams_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_CatalogSelection_selectedStreams_feature", "_UI_CatalogSelection_type"),
+        getString("_UI_CatalogSelection_selectedStreams_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_CatalogSelection_selectedStreams_feature", "_UI_CatalogSelection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.CATALOG_SELECTION__SELECTED_STREAMS, true, false, true, null, null, null));
   }
 
@@ -156,7 +156,7 @@ public class CatalogSelectionItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/CatalogSelection"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/CatalogSelection")); //$NON-NLS-1$
   }
 
   /**
@@ -179,7 +179,7 @@ public class CatalogSelectionItemProvider extends ModelElementItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_CatalogSelection_type");
+    return getString("_UI_CatalogSelection_type"); //$NON-NLS-1$
   }
 
   /**

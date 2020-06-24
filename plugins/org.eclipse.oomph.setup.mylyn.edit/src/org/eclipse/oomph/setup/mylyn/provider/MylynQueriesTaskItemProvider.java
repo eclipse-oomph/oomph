@@ -76,8 +76,8 @@ public class MylynQueriesTaskItemProvider extends SetupTaskItemProvider
   protected void addConnectorKindPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MylynQueriesTask_connectorKind_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_MylynQueriesTask_connectorKind_feature", "_UI_MylynQueriesTask_type"),
+        getString("_UI_MylynQueriesTask_connectorKind_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MylynQueriesTask_connectorKind_feature", "_UI_MylynQueriesTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MylynPackage.Literals.MYLYN_QUERIES_TASK__CONNECTOR_KIND, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -90,8 +90,8 @@ public class MylynQueriesTaskItemProvider extends SetupTaskItemProvider
   protected void addRepositoryURLPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MylynQueriesTask_repositoryURL_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_MylynQueriesTask_repositoryURL_feature", "_UI_MylynQueriesTask_type"),
+        getString("_UI_MylynQueriesTask_repositoryURL_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MylynQueriesTask_repositoryURL_feature", "_UI_MylynQueriesTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MylynPackage.Literals.MYLYN_QUERIES_TASK__REPOSITORY_URL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -104,8 +104,8 @@ public class MylynQueriesTaskItemProvider extends SetupTaskItemProvider
   protected void addUserIDPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MylynQueriesTask_userID_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_MylynQueriesTask_userID_feature", "_UI_MylynQueriesTask_type"),
+        getString("_UI_MylynQueriesTask_userID_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MylynQueriesTask_userID_feature", "_UI_MylynQueriesTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MylynPackage.Literals.MYLYN_QUERIES_TASK__USER_ID, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -118,8 +118,8 @@ public class MylynQueriesTaskItemProvider extends SetupTaskItemProvider
   protected void addPasswordPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_MylynQueriesTask_password_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_MylynQueriesTask_password_feature", "_UI_MylynQueriesTask_type"),
+        getString("_UI_MylynQueriesTask_password_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MylynQueriesTask_password_feature", "_UI_MylynQueriesTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         MylynPackage.Literals.MYLYN_QUERIES_TASK__PASSWORD, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -165,7 +165,7 @@ public class MylynQueriesTaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/MylynQueriesTask"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/MylynQueriesTask")); //$NON-NLS-1$
   }
 
   /**
@@ -190,7 +190,7 @@ public class MylynQueriesTaskItemProvider extends SetupTaskItemProvider
   {
     String repositoryURL = ((MylynQueriesTask)object).getRepositoryURL();
     String connectorKind = ((MylynQueriesTask)object).getConnectorKind();
-    return repositoryURL == null || repositoryURL.length() == 0 ? getString("_UI_MylynQueriesTask_type") : "" + repositoryURL + " (" + connectorKind + ")";
+    return repositoryURL == null || repositoryURL.length() == 0 ? getString("_UI_MylynQueriesTask_type") : "" + repositoryURL + " (" + connectorKind + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
   }
 
   /**

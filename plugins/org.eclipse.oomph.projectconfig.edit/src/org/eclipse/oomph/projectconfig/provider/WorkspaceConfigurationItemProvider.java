@@ -73,8 +73,8 @@ public class WorkspaceConfigurationItemProvider extends ModelElementItemProvider
   protected void addDefaultPreferenceNodePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_WorkspaceConfiguration_defaultPreferenceNode_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_WorkspaceConfiguration_defaultPreferenceNode_feature", "_UI_WorkspaceConfiguration_type"),
+        getString("_UI_WorkspaceConfiguration_defaultPreferenceNode_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_WorkspaceConfiguration_defaultPreferenceNode_feature", "_UI_WorkspaceConfiguration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectConfigPackage.Literals.WORKSPACE_CONFIGURATION__DEFAULT_PREFERENCE_NODE, true, false, true, null, null, null));
   }
 
@@ -87,8 +87,8 @@ public class WorkspaceConfigurationItemProvider extends ModelElementItemProvider
   protected void addInstancePreferenceNodePropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_WorkspaceConfiguration_instancePreferenceNode_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_WorkspaceConfiguration_instancePreferenceNode_feature", "_UI_WorkspaceConfiguration_type"),
+        getString("_UI_WorkspaceConfiguration_instancePreferenceNode_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_WorkspaceConfiguration_instancePreferenceNode_feature", "_UI_WorkspaceConfiguration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         ProjectConfigPackage.Literals.WORKSPACE_CONFIGURATION__INSTANCE_PREFERENCE_NODE, true, false, true, null, null, null));
   }
 
@@ -145,7 +145,7 @@ public class WorkspaceConfigurationItemProvider extends ModelElementItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/WorkspaceConfiguration"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/WorkspaceConfiguration")); //$NON-NLS-1$
   }
 
   /**
@@ -168,7 +168,7 @@ public class WorkspaceConfigurationItemProvider extends ModelElementItemProvider
   @Override
   public String getText(Object object)
   {
-    return getString("_UI_WorkspaceConfiguration_type");
+    return getString("_UI_WorkspaceConfiguration_type"); //$NON-NLS-1$
   }
 
   /**

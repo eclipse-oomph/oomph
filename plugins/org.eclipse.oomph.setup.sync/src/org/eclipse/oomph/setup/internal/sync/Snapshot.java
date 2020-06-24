@@ -15,6 +15,8 @@ import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotFoundException;
 import org.eclipse.oomph.util.IOUtil;
 
+import org.eclipse.osgi.util.NLS;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -46,19 +48,19 @@ public class Snapshot
     this.dataProvider = dataProvider;
 
     String prefix = dataProvider.getLocation().toString().toLowerCase();
-    info = new File(folder, prefix + "-???.xml").toString();
+    info = new File(folder, prefix + "-???.xml").toString(); //$NON-NLS-1$
 
     if (incremental)
     {
-      oldFile = new File(folder, prefix + "-old.xml");
+      oldFile = new File(folder, prefix + "-old.xml"); //$NON-NLS-1$
     }
     else
     {
       oldFile = null;
     }
 
-    newFile = new File(folder, prefix + "-new.xml");
-    tmpFile = new File(folder, prefix + "-tmp.xml");
+    newFile = new File(folder, prefix + "-new.xml"); //$NON-NLS-1$
+    tmpFile = new File(folder, prefix + "-tmp.xml"); //$NON-NLS-1$
   }
 
   public DataProvider getDataProvider()
@@ -120,7 +122,7 @@ public class Snapshot
   @Override
   public String toString()
   {
-    return getClass().getSimpleName() + "[" + dataProvider + " --> " + info + "]";
+    return getClass().getSimpleName() + "[" + dataProvider + " --> " + info + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   private void doCommit(boolean updateDataProvider) throws IOException, NotCurrentException
@@ -159,7 +161,7 @@ public class Snapshot
     SyncUtil.deleteFile(target);
     if (!tmpFile.renameTo(target))
     {
-      throw new IOException("Could not rename " + tmpFile + " to " + target);
+      throw new IOException(NLS.bind(Messages.Snapshot_CouldNotRename_exception, tmpFile, target));
     }
   }
 

@@ -64,10 +64,10 @@ public class ProvisioningAgentProvider extends DefaultAgentProvider
                 // We'll compute the path relative to the configuration area.
                 // For a read-only installation, this will be a surrogate installation in ~/.eclipse.
                 URI defaultLocation = URIUtil.append(
-                    URIUtil.fromString(org.eclipse.equinox.internal.p2.core.Activator.getContext().getProperty(OSGIUtils.PROP_CONFIG_AREA) + "../p2"), "");
+                    URIUtil.fromString(org.eclipse.equinox.internal.p2.core.Activator.getContext().getProperty(OSGIUtils.PROP_CONFIG_AREA) + "../p2"), ""); //$NON-NLS-1$ //$NON-NLS-2$
 
                 // Replace the bad agent location with this good one.
-                ReflectUtil.setValue("location", org.eclipse.equinox.internal.p2.core.Activator.agentDataLocation, defaultLocation);
+                ReflectUtil.setValue("location", org.eclipse.equinox.internal.p2.core.Activator.agentDataLocation, defaultLocation); //$NON-NLS-1$
               }
               catch (URISyntaxException ex)
               {
@@ -82,27 +82,27 @@ public class ProvisioningAgentProvider extends DefaultAgentProvider
     {
       // P2 will always creates a path that assumes there agent is nested in the installation, relative to the configuration folder there.
       String path = location.getRawPath();
-      if (path != null && path.endsWith("/../p2"))
+      if (path != null && path.endsWith("/../p2")) //$NON-NLS-1$
       {
         // If there is no directory existing at this path, then likely we have a shared pool installation.
         File folder = new File(path);
         if (!folder.isDirectory())
         {
           // Check if there is a config.ini existing in the configuration folder.
-          File configIniFile = new File(folder.getParentFile().getParentFile(), "config.ini");
+          File configIniFile = new File(folder.getParentFile().getParentFile(), "config.ini"); //$NON-NLS-1$
           if (configIniFile.isFile())
           {
             // Load the properties from it and fetch the data area property.
             // That's where the shared agent is really definitely located.
             Map<String, String> properties = PropertiesUtil.loadProperties(configIniFile);
-            String dataArea = properties.get("eclipse.p2.data.area");
+            String dataArea = properties.get("eclipse.p2.data.area"); //$NON-NLS-1$
             if (dataArea != null)
             {
               // If will generally be a file URI, but double check just in case.
-              if (dataArea.startsWith("file:/"))
+              if (dataArea.startsWith("file:/")) //$NON-NLS-1$
               {
                 // The path should generally correspond to an existing folder.
-                File dataAreaFolder = new File(dataArea.substring("file:/".length() - 1));
+                File dataAreaFolder = new File(dataArea.substring("file:/".length() - 1)); //$NON-NLS-1$
                 if (dataAreaFolder.isDirectory())
                 {
                   try

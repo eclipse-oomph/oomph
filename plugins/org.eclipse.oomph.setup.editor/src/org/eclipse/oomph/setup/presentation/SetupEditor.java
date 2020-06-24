@@ -210,6 +210,7 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.AuthenticationEvent;
 import org.eclipse.swt.browser.AuthenticationListener;
@@ -311,17 +312,17 @@ import java.util.regex.Pattern;
 public class SetupEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker,
     IRevertablePart, WorkingSetsActionBarContributor.PreviewDialog.Previewable
 {
-  private static final URI LEGACY_MODELS = URI.createURI("platform:/plugin/" + BasePlugin.INSTANCE.getSymbolicName() + "/model/legacy");
+  private static final URI LEGACY_MODELS = URI.createURI("platform:/plugin/" + BasePlugin.INSTANCE.getSymbolicName() + "/model/legacy"); //$NON-NLS-1$ //$NON-NLS-2$
 
-  private static final URI LEGACY_EXAMPLE_URI = URI.createURI("file:/example.setup");
+  private static final URI LEGACY_EXAMPLE_URI = URI.createURI("file:/example.setup"); //$NON-NLS-1$
 
-  private static final Object VARIABLE_GROUP_IMAGE = SetupEditorPlugin.INSTANCE.getImage("full/obj16/VariableGroup");
+  private static final Object VARIABLE_GROUP_IMAGE = SetupEditorPlugin.INSTANCE.getImage("full/obj16/VariableGroup"); //$NON-NLS-1$
 
-  private static final Pattern HEADER_PATTERN = Pattern.compile("(<h1)(>)");
+  private static final Pattern HEADER_PATTERN = Pattern.compile("(<h1)(>)"); //$NON-NLS-1$
 
-  private static final Pattern IMAGE_PATTERN = Pattern.compile("(<img )(src=)");
+  private static final Pattern IMAGE_PATTERN = Pattern.compile("(<img )(src=)"); //$NON-NLS-1$
 
-  private static final URI COMPOSITE_OUTLINE_COLOR = URI.createURI("color://rgb/138/110/85");
+  private static final URI COMPOSITE_OUTLINE_COLOR = URI.createURI("color://rgb/138/110/85"); //$NON-NLS-1$
 
   private static final Object UNDECLARED_VARIABLE_GROUP_IMAGE;
 
@@ -329,7 +330,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   {
     List<Object> images = new ArrayList<Object>(2);
     images.add(VARIABLE_GROUP_IMAGE);
-    images.add(EMFEditUIPlugin.INSTANCE.getImage("full/ovr16/error_ovr.gif"));
+    images.add(EMFEditUIPlugin.INSTANCE.getImage("full/ovr16/error_ovr.gif")); //$NON-NLS-1$
     ComposedImage composedImage = new ErrorOverlayImage(images);
     UNDECLARED_VARIABLE_GROUP_IMAGE = ExtendedImageRegistry.INSTANCE.getImage(composedImage);
   }
@@ -784,9 +785,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   private AtomicReference<ResourceMirror> resourceMirror;
 
-  private final ItemProvider loadingResourceInput = new ItemProvider(Collections.singleton(new ItemProvider("Loading resource...")));
+  private final ItemProvider loadingResourceInput = new ItemProvider(Collections.singleton(new ItemProvider(Messages.SetupEditor_loadingResourceInput_text)));
 
-  private final ItemProvider loadingResourceSetInput = new ItemProvider(Collections.singleton(new ItemProvider("Loading resource set...")));
+  private final ItemProvider loadingResourceSetInput = new ItemProvider(
+      Collections.singleton(new ItemProvider(Messages.SetupEditor_loadingResourceSetInput_text)));
 
   private DelegatingDialogSettings dialogSettings = new DelegatingDialogSettings();
 
@@ -989,7 +991,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             updateProblemIndication();
 
             // Force updates such a revalidation and content out update.
-            ReflectUtil.invokeMethod("notifyListeners", editingDomain.getCommandStack());
+            ReflectUtil.invokeMethod("notifyListeners", editingDomain.getCommandStack()); //$NON-NLS-1$
             selectionViewer.refresh();
           }
         }
@@ -1071,8 +1073,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   {
     if (updateProblemIndication)
     {
-      BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK, "org.eclipse.oomph.setup.editor", 0, null,
-          new Object[] { editingDomain.getResourceSet() });
+      BasicDiagnostic diagnostic = new BasicDiagnostic(Diagnostic.OK, "org.eclipse.oomph.setup.editor", //$NON-NLS-1$
+          0, null, new Object[] { editingDomain.getResourceSet() });
       for (Diagnostic childDiagnostic : resourceToDiagnosticMap.values())
       {
         if (childDiagnostic.getSeverity() != Diagnostic.OK)
@@ -1151,7 +1153,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   protected boolean handleDirtyConflict()
   {
-    return MessageDialog.openQuestion(getSite().getShell(), getString("_UI_FileConflict_label"), getString("_WARN_FileConflict"));
+    return MessageDialog.openQuestion(getSite().getShell(), getString("_UI_FileConflict_label"), //$NON-NLS-1$
+        getString("_WARN_FileConflict")); //$NON-NLS-1$
   }
 
   /**
@@ -1289,7 +1292,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             {
               if (MarketPlaceListing.getMarketPlaceListing(uri, resourceSet.getURIConverter()) != null)
               {
-                return SetupEditorPlugin.INSTANCE.getImage("marketplace16.png");
+                return SetupEditorPlugin.INSTANCE.getImage("marketplace16.png"); //$NON-NLS-1$
               }
             }
 
@@ -1302,13 +1305,13 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             if (itemPropertyDescriptors == null)
             {
               super.getPropertyDescriptors(object);
-              itemPropertyDescriptors.add(new ItemPropertyDescriptor(resourceItemProviderAdapterFactory, "Resolved URI", "The resolved URI of the resource",
-                  (EStructuralFeature)null, false)
+              itemPropertyDescriptors.add(new ItemPropertyDescriptor(resourceItemProviderAdapterFactory, Messages.SetupEditor_resolvedUriDescriptor_name,
+                  Messages.SetupEditor_resolvedUriDescriptor_description, (EStructuralFeature)null, false)
               {
                 @Override
                 public Object getFeature(Object object)
                 {
-                  return "resolvedURI";
+                  return "resolvedURI"; //$NON-NLS-1$
                 }
 
                 @Override
@@ -1497,13 +1500,13 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               @Override
               public String doGetDescription()
               {
-                return EMFEditPlugin.INSTANCE.getString("_UI_LoadResources_description");
+                return EMFEditPlugin.INSTANCE.getString("_UI_LoadResources_description"); //$NON-NLS-1$
               }
 
               @Override
               public String doGetLabel()
               {
-                return EMFEditPlugin.INSTANCE.getString("_UI_LoadResources_label");
+                return EMFEditPlugin.INSTANCE.getString("_UI_LoadResources_label"); //$NON-NLS-1$
               }
 
               public boolean validate(Object owner, float location, int operations, int operation, Collection<?> collection)
@@ -1850,7 +1853,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   protected void createContextMenuFor(StructuredViewer viewer)
   {
     // Refuse to add the popup extender because we don't want all those things polluting the menu.
-    MenuManager contextMenu = new MenuManager("#PopUp")
+    MenuManager contextMenu = new MenuManager("#PopUp") //$NON-NLS-1$
     {
       @Override
       @SuppressWarnings("restriction")
@@ -1860,7 +1863,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         if (itemToAdd instanceof org.eclipse.ui.internal.PluginActionContributionItem)
         {
           // Hide these annoying actions.
-          return id != null && !id.contains("debug.ui") && !"ValidationAction".equals(id) && !id.contains("mylyn");
+          return id != null && !id.contains("debug.ui") && !"ValidationAction".equals(id) && !id.contains("mylyn"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
 
         if (itemToAdd instanceof MenuManager)
@@ -1868,7 +1871,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           // Hide all sub menus except our own.
           if (id != null)
           {
-            if ("team.main".equals(id) || "replaceWithMenu".equals(id) || "compareWithMenu".equals(id))
+            if ("team.main".equals(id) || "replaceWithMenu".equals(id) || "compareWithMenu".equals(id)) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             {
               itemToAdd.setVisible(false);
             }
@@ -1879,7 +1882,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     };
 
-    contextMenu.add(new Separator("additions"));
+    contextMenu.add(new Separator("additions")); //$NON-NLS-1$
     contextMenu.setRemoveAllWhenShown(true);
     contextMenu.addMenuListener(this);
     Menu menu = contextMenu.createContextMenu(viewer.getControl());
@@ -1917,7 +1920,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               if (container.isAccessible())
               {
                 // If there is, redirect the file system folder to the workspace folder.
-                URI redirectedWorkspaceURI = URI.createPlatformResourceURI(container.getFullPath().toString(), true).appendSegment("");
+                URI redirectedWorkspaceURI = URI.createPlatformResourceURI(container.getFullPath().toString(), true).appendSegment(""); //$NON-NLS-1$
                 workspaceMappings.put(uri, redirectedWorkspaceURI);
                 break;
               }
@@ -2106,14 +2109,14 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               try
               {
                 SetupCoreUtil.migrate(mainResource, migratedContents);
-                CompoundCommand command = new CompoundCommand(1, "Replace with Migrated Contents");
+                CompoundCommand command = new CompoundCommand(1, Messages.SetupEditor_command_replaceWithMigratedContents);
                 command.append(new RemoveCommand(editingDomain, mainResource.getContents(), new ArrayList<EObject>(mainResource.getContents())));
                 command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
                 editingDomain.getCommandStack().execute(command);
               }
               catch (RuntimeException ex)
               {
-                CompoundCommand command = new CompoundCommand(1, "Add Partially Migrated Contents");
+                CompoundCommand command = new CompoundCommand(1, Messages.SetupEditor_command_addPartiallyMigratedContents);
                 command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
                 editingDomain.getCommandStack().execute(command);
 
@@ -2124,7 +2127,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               for (Resource resource : resourceSet.getResources())
               {
                 URI uri = resource.getURI();
-                if ("bogus".equals(uri.scheme()) || LEGACY_EXAMPLE_URI.equals(uri))
+                if ("bogus".equals(uri.scheme()) || LEGACY_EXAMPLE_URI.equals(uri)) //$NON-NLS-1$
                 {
                   resource.getErrors().clear();
                   resource.getWarnings().clear();
@@ -2149,14 +2152,16 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     boolean hasErrors = !resource.getErrors().isEmpty();
     if (hasErrors || !resource.getWarnings().isEmpty())
     {
-      BasicDiagnostic basicDiagnostic = new BasicDiagnostic(hasErrors ? Diagnostic.ERROR : Diagnostic.WARNING, "org.eclipse.oomph.setup.editor", 0,
-          getString("_UI_CreateModelError_message", resource.getURI()), new Object[] { exception == null ? (Object)resource : exception });
+      BasicDiagnostic basicDiagnostic = new BasicDiagnostic(hasErrors ? Diagnostic.ERROR : Diagnostic.WARNING, "org.eclipse.oomph.setup.editor", //$NON-NLS-1$
+          0, getString("_UI_CreateModelError_message", resource.getURI()), //$NON-NLS-1$
+          new Object[] { exception == null ? (Object)resource : exception });
       basicDiagnostic.merge(EcoreUtil.computeDiagnostic(resource, true));
       return basicDiagnostic;
     }
     else if (exception != null)
     {
-      return new BasicDiagnostic(Diagnostic.ERROR, "org.eclipse.oomph.setup.editor", 0, getString("_UI_CreateModelError_message", resource.getURI()),
+      return new BasicDiagnostic(Diagnostic.ERROR, "org.eclipse.oomph.setup.editor", //$NON-NLS-1$
+          0, getString("_UI_CreateModelError_message", resource.getURI()), //$NON-NLS-1$
           new Object[] { exception });
     }
     else
@@ -2172,13 +2177,13 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     final ColumnViewerInformationControlToolTipSupport toolTipSupport = new ColumnViewerInformationControlToolTipSupport(viewer, locationListener);
 
-    final AbstractHoverInformationControlManager hoverInformationControlManager = ReflectUtil.getValue("hoverInformationControlManager", toolTipSupport);
+    final AbstractHoverInformationControlManager hoverInformationControlManager = ReflectUtil.getValue("hoverInformationControlManager", toolTipSupport); //$NON-NLS-1$
 
     @SuppressWarnings("restriction")
     final org.eclipse.jface.internal.text.InformationControlReplacer informationControlReplacer = hoverInformationControlManager.getInternalAccessor()
         .getInformationControlReplacer();
 
-    final IInformationControlCloser informationControlReplacerCloser = ReflectUtil.getValue("fInformationControlCloser", informationControlReplacer);
+    final IInformationControlCloser informationControlReplacerCloser = ReflectUtil.getValue("fInformationControlCloser", informationControlReplacer); //$NON-NLS-1$
 
     class Closer implements IInformationControlCloser, Listener
     {
@@ -2205,7 +2210,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           shell.getDisplay().removeFilter(SWT.MouseExit, this);
         }
 
-        shell = control == null ? null : (Shell)ReflectUtil.getValue("fShell", control);
+        shell = control == null ? null : (Shell)ReflectUtil.getValue("fShell", control); //$NON-NLS-1$
         informationControlCloser.setInformationControl(control);
       }
 
@@ -2240,14 +2245,14 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             Rectangle trim = shell.computeTrim(bounds.x, bounds.y, bounds.width, bounds.height);
             if (!trim.contains(location))
             {
-              ReflectUtil.invokeMethod("hideInformationControl", informationControlReplacer);
+              ReflectUtil.invokeMethod("hideInformationControl", informationControlReplacer); //$NON-NLS-1$
             }
           }
         }
       }
     }
 
-    ReflectUtil.setValue("fInformationControlCloser", informationControlReplacer, new Closer(informationControlReplacerCloser));
+    ReflectUtil.setValue("fInformationControlCloser", informationControlReplacer, new Closer(informationControlReplacerCloser)); //$NON-NLS-1$
 
     locationListener.setToolTipSupport(toolTipSupport);
 
@@ -2357,9 +2362,9 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         super.buildToolTipText(result, labelProvider, diagnostic, object);
 
         // We want to insert a header if the first header is the one for problems on children.
-        if (result.indexOf("<h1>Problems on Children</h1>\n") != index)
+        if (result.indexOf("<h1>" + Messages.SetupEditor_closer_tooltip_problemsOnChildren + "</h1>\n") != index) //$NON-NLS-1$ //$NON-NLS-2$
         {
-          result.insert(index, "<h1>Problems</h1>\n");
+          result.insert(index, "<h1>" + Messages.SetupEditor_closer_tooltip_problems + "</h1>\n"); //$NON-NLS-1$ //$NON-NLS-2$
         }
       }
 
@@ -2399,18 +2404,18 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         StringBuilder result = new StringBuilder();
 
-        result.append("<div style='word-break: break-all;'>");
+        result.append("<div style='word-break: break-all;'>"); //$NON-NLS-1$
 
         URI imageURI = ImageURIRegistry.INSTANCE.getImageURI(image);
         String labelText = setupLabelProvider.getText(object);
         if (!extend)
         {
-          result.append("<a href='about:blank?extend' style='text-decoration: none; color: inherit;'>");
-          result.append("<img style='padding-right: 2pt; margin-top: 2px; margin-bottom: -2pt;' src='");
+          result.append("<a href='about:blank?extend' style='text-decoration: none; color: inherit;'>"); //$NON-NLS-1$
+          result.append("<img style='padding-right: 2pt; margin-top: 2px; margin-bottom: -2pt;' src='"); //$NON-NLS-1$
           result.append(imageURI);
-          result.append("'/><b>");
+          result.append("'/><b>"); //$NON-NLS-1$
           result.append(DiagnosticDecorator.escapeContent(labelText));
-          result.append("</b></a>");
+          result.append("</b></a>"); //$NON-NLS-1$
         }
         else
         {
@@ -2429,33 +2434,33 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
           for (Object element : path)
           {
-            result.append("<div style='margin-left: ").append(indent).append("px;'>");
+            result.append("<div style='margin-left: ").append(indent).append("px;'>"); //$NON-NLS-1$ //$NON-NLS-2$
             ToolTipLabelProvider.renderHTMLPropertyValue(result, itemDelegator, element, true);
-            result.append("</div>");
+            result.append("</div>"); //$NON-NLS-1$
 
             indent += 10;
           }
 
-          result.append("<div style='margin-left: ").append(indent).append("px;'>");
-          result.append("<a href='about:blank?no-extend' style='text-decoration: none; color: inherit;'>");
-          result.append("<img style='padding-right: 2pt; margin-top: 2px; margin-bottom: -2pt;' src='");
+          result.append("<div style='margin-left: ").append(indent).append("px;'>"); //$NON-NLS-1$ //$NON-NLS-2$
+          result.append("<a href='about:blank?no-extend' style='text-decoration: none; color: inherit;'>"); //$NON-NLS-1$
+          result.append("<img style='padding-right: 2pt; margin-top: 2px; margin-bottom: -2pt;' src='"); //$NON-NLS-1$
           result.append(imageURI);
-          result.append("'/><b>");
+          result.append("'/><b>"); //$NON-NLS-1$
           result.append(DiagnosticDecorator.escapeContent(labelText));
-          result.append("</b></a>");
-          result.append("</div>");
+          result.append("</b></a>"); //$NON-NLS-1$
+          result.append("</div>"); //$NON-NLS-1$
 
           indent += 10;
 
           for (Object child : itemDelegator.getChildren(object))
           {
-            result.append("<div style='margin-left: ").append(indent).append("px;'>");
+            result.append("<div style='margin-left: ").append(indent).append("px;'>"); //$NON-NLS-1$ //$NON-NLS-2$
             ToolTipLabelProvider.renderHTMLPropertyValue(result, itemDelegator, child, true);
-            result.append("</div>");
+            result.append("</div>"); //$NON-NLS-1$
           }
         }
 
-        result.append("</div>\n");
+        result.append("</div>\n"); //$NON-NLS-1$
 
         List<IItemPropertyDescriptor> propertyDescriptors = new ArrayList<IItemPropertyDescriptor>();
         List<IItemPropertyDescriptor> underlyingPropertyDescriptors = itemDelegator.getPropertyDescriptors(object);
@@ -2468,7 +2473,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           IItemPropertyDescriptor itemPropertyDescriptor = it.next();
           String[] filterFlags = itemPropertyDescriptor.getFilterFlags(object);
-          if (!showAdvancedProperties && filterFlags != null && filterFlags.length > 0 && "org.eclipse.ui.views.properties.expert".equals(filterFlags[0]))
+          if (!showAdvancedProperties && filterFlags != null && filterFlags.length > 0 && "org.eclipse.ui.views.properties.expert".equals(filterFlags[0])) //$NON-NLS-1$
           {
             it.remove();
             continue;
@@ -2480,12 +2485,12 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           {
             // Filter out the description property.
             EStructuralFeature eStructuralFeature = (EStructuralFeature)feature;
-            if ("description".equals(eStructuralFeature.getName()) && propertyValue instanceof String)
+            if ("description".equals(eStructuralFeature.getName()) && propertyValue instanceof String) //$NON-NLS-1$
             {
               String description = propertyValue.toString();
               if (description != null)
               {
-                result.append("<h1>Description</h1>");
+                result.append("<h1>" + Messages.SetupEditor_closer_tooltip_description + "</h1>"); //$NON-NLS-1$ //$NON-NLS-2$
                 result.append(description);
                 it.remove();
                 continue;
@@ -2514,18 +2519,18 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           StringBuffer improvedDiagnosticText = new StringBuffer();
           while (matcher.find())
           {
-            matcher.appendReplacement(improvedDiagnosticText, "$1" + "style='margin-bottom: -2pt;' " + "$2");
+            matcher.appendReplacement(improvedDiagnosticText, "$1" + "style='margin-bottom: -2pt;' " + "$2"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
           }
 
           matcher.appendTail(improvedDiagnosticText);
 
-          result.append("\n").append(improvedDiagnosticText);
+          result.append("\n").append(improvedDiagnosticText); //$NON-NLS-1$
         }
 
         String propertyTable = ToolTipLabelProvider.renderHTML(propertyDescriptors, object, true);
         if (propertyTable != null)
         {
-          result.append("\n<h1>Properties</h1>\n");
+          result.append("\n<h1>" + Messages.SetupEditor_closer_tooltip_properties + "</h1>\n"); //$NON-NLS-1$ //$NON-NLS-2$
           result.append('\n').append(propertyTable);
         }
 
@@ -2534,7 +2539,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         Matcher matcher = HEADER_PATTERN.matcher(result);
         while (matcher.find())
         {
-          matcher.appendReplacement(improvedResult, "$1" + " style='padding-bottom: 2pt; padding-top: 4pt;'" + "$2");
+          matcher.appendReplacement(improvedResult, "$1" + " style='padding-bottom: 2pt; padding-top: 4pt;'" + "$2"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
 
         matcher.appendTail(improvedResult);
@@ -2543,7 +2548,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         try
         {
-          AbstractHoverInformationControlManager hoverInformationControlManager = ReflectUtil.getValue("hoverInformationControlManager", toolTipSupport);
+          AbstractHoverInformationControlManager hoverInformationControlManager = ReflectUtil.getValue("hoverInformationControlManager", toolTipSupport); //$NON-NLS-1$
           Point size = UIUtil.caclcuateSize(finalText);
           hoverInformationControlManager.setSizeConstraints(size.x, size.y + (propertyDescriptors.size() + 1) / 3 + 1, true, false);
         }
@@ -2571,7 +2576,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         Matcher matcher = IMAGE_PATTERN.matcher(builder);
         if (matcher.find())
         {
-          matcher.appendReplacement(improvedResult, "$1" + "style='padding-bottom: 1px;' " + "$2");
+          matcher.appendReplacement(improvedResult, "$1" + "style='padding-bottom: 1px;' " + "$2"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
 
         matcher.appendTail(improvedResult);
@@ -2581,7 +2586,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     // private static final URI FOREGROUND_COLOR = URI.createURI("color://rgb/85/113/138");
 
-    final Color syntheticColor = ExtendedColorRegistry.INSTANCE.getColor(null, null, URI.createURI("color://rgb/85/113/138"));
+    final Color syntheticColor = ExtendedColorRegistry.INSTANCE.getColor(null, null, URI.createURI("color://rgb/85/113/138")); //$NON-NLS-1$
     final Font font = viewer.getControl().getFont();
     viewer.setLabelProvider(new DecoratingColumLabelProvider(setupLabelProvider, diagnosticDecorator)
     {
@@ -2601,7 +2606,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             {
               if (builder.length() != 0)
               {
-                builder.append(", ");
+                builder.append(", "); //$NON-NLS-1$
               }
 
               String label = restriction.getLabel();
@@ -2616,14 +2621,14 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             String string = builder.toString();
             if (text.contains(string))
             {
-              string = "";
+              string = ""; //$NON-NLS-1$
             }
             else
             {
-              string = ": " + string;
+              string = ": " + string; //$NON-NLS-1$
             }
 
-            text += "  [restricted" + string + "]";
+            text += "  [" + Messages.SetupEditor_viewer_restricted + string + "]"; //$NON-NLS-1$ //$NON-NLS-2$
           }
         }
 
@@ -2663,7 +2668,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         try
         {
-          IViewPart propertiesView = getSite().getPage().showView("org.eclipse.ui.views.PropertySheet", null, IWorkbenchPage.VIEW_VISIBLE);
+          IViewPart propertiesView = getSite().getPage().showView("org.eclipse.ui.views.PropertySheet", null, IWorkbenchPage.VIEW_VISIBLE); //$NON-NLS-1$
           if (propertiesView instanceof PropertySheet)
           {
             // If the properties view wasn't showing, but is present in a different perspective,
@@ -2697,7 +2702,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           exitEvent.y = -1;
           control.notifyListeners(SWT.MouseExit, exitEvent);
 
-          ReflectUtil.setValue("currentCell", toolTipSupport, null);
+          ReflectUtil.setValue("currentCell", toolTipSupport, null); //$NON-NLS-1$
 
           Event event = new Event();
           event.display = e.display;
@@ -2757,7 +2762,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     int pageIndex = addPage(tree);
 
-    setPageText(pageIndex, getString("_UI_SelectionPage_label"));
+    setPageText(pageIndex, getString("_UI_SelectionPage_label")); //$NON-NLS-1$
 
     getSite().getShell().getDisplay().asyncExec(new Runnable()
     {
@@ -2796,7 +2801,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   {
     resourceMirror = new AtomicReference<ResourceMirror>();
     final Tree tree = selectionViewer.getTree();
-    Job job = new Job("Loading Model")
+    Job job = new Job(Messages.SetupEditor_loadingModelJob_name)
     {
       @Override
       public boolean belongsTo(Object family)
@@ -2908,7 +2913,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   {
     if (getPageCount() <= 1)
     {
-      setPageText(0, "");
+      setPageText(0, ""); //$NON-NLS-1$
       if (getContainer() instanceof CTabFolder)
       {
         Point point = getContainer().getSize();
@@ -2929,7 +2934,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   {
     if (getPageCount() > 1)
     {
-      setPageText(0, getString("_UI_SelectionPage_label"));
+      setPageText(0, getString("_UI_SelectionPage_label")); //$NON-NLS-1$
       if (getContainer() instanceof CTabFolder)
       {
         Point point = getContainer().getSize();
@@ -3039,16 +3044,16 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     public OutlinePreviewPage()
     {
-      compositeStream.setLabel("Composite Stream");
-      compositeStream.setName("composite");
-      compositeStream.setDescription("This is a stream to represent the composition of all the workspace's streams");
+      compositeStream.setLabel(Messages.SetupEditor_outlinePreviewPage_compositeStream_label);
+      compositeStream.setName("composite"); //$NON-NLS-1$
+      compositeStream.setDescription(Messages.SetupEditor_outlinePreviewPage_compositeStream_description);
 
-      compositeConfiguration.setLabel("Configurations");
-      compositeConfiguration.setDescription("All available configurations");
+      compositeConfiguration.setLabel(Messages.SetupEditor_outlinePreviewPage_compositeConfiguration_label);
+      compositeConfiguration.setDescription(Messages.SetupEditor_outlinePreviewPage_compositeConfiguration_description);
 
-      compositeMacro.setName("macros");
-      compositeMacro.setLabel("Macros");
-      compositeMacro.setDescription("All available macros");
+      compositeMacro.setName("macros"); //$NON-NLS-1$
+      compositeMacro.setLabel(Messages.SetupEditor_outlinePreviewPage_compositeMacro_label);
+      compositeMacro.setDescription(Messages.SetupEditor_outlinePreviewPage_compositeMacro_description);
     }
 
     private class VariableContainer extends ItemProvider
@@ -3285,7 +3290,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         public void menuAboutToShow(IMenuManager manager)
         {
-          manager.insertBefore("edit", previewAction);
+          manager.insertBefore("edit", previewAction); //$NON-NLS-1$
         }
       });
 
@@ -3574,7 +3579,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       EList<Pair<SegmentSequence, String>> pairs = new BasicEList<Pair<SegmentSequence, String>>();
       for (String string : strings)
       {
-        pairs.add(new Pair<SegmentSequence, String>(SegmentSequence.create(".", string), string));
+        pairs.add(new Pair<SegmentSequence, String>(SegmentSequence.create(".", string), string)); //$NON-NLS-1$
       }
 
       @SuppressWarnings("unchecked")
@@ -3587,7 +3592,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       EList<Pair<SegmentSequence, VariableTask>> pairs = new BasicEList<Pair<SegmentSequence, VariableTask>>();
       for (VariableTask variable : variables)
       {
-        pairs.add(new Pair<SegmentSequence, VariableTask>(SegmentSequence.create(".", variable.getName()), variable));
+        pairs.add(new Pair<SegmentSequence, VariableTask>(SegmentSequence.create(".", variable.getName()), variable)); //$NON-NLS-1$
       }
 
       @SuppressWarnings("unchecked")
@@ -3977,7 +3982,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         workspace.getSetupTasks().add(macroTask);
 
         String id = macro.getName();
-        macroTask.setID(StringUtil.isEmpty(id) ? "macro" : id);
+        macroTask.setID(StringUtil.isEmpty(id) ? "macro" : id); //$NON-NLS-1$
         EList<Parameter> parameters = macro.getParameters();
         EList<Argument> arguments = macroTask.getArguments();
         for (Parameter parameter : parameters)
@@ -3990,7 +3995,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
           Argument argument = SetupFactory.eINSTANCE.createArgument();
           argument.setParameter(parameter);
-          argument.setValue("${" + parameterName + "}");
+          argument.setValue("${" + parameterName + "}"); //$NON-NLS-1$ //$NON-NLS-2$
           arguments.add(argument);
         }
 
@@ -4032,8 +4037,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           performerCopyMap.put(key, performerCopyMap.get(value));
         }
 
-        URI baseURI = URI.createURI("performer:/" + scope.getQualifiedName());
-        URI uri = baseURI.appendSegment("tasks.setup");
+        URI baseURI = URI.createURI("performer:/" + scope.getQualifiedName()); //$NON-NLS-1$
+        URI uri = baseURI.appendSegment("tasks.setup"); //$NON-NLS-1$
         URI scopeURI = context == null ? scope.eResource().getURI() : context.eResource().getURI();
 
         Resource fakeResource = new BaseResourceImpl(uri);
@@ -4064,7 +4069,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             notifiers.add(resource);
 
             URI originalURI = resource.getURI();
-            URI newURI = baseURI.appendSegment(originalURI.scheme() + ":").appendSegments(originalURI.segments());
+            URI newURI = baseURI.appendSegment(originalURI.scheme() + ":").appendSegments(originalURI.segments()); //$NON-NLS-1$
             resource.setURI(newURI);
 
             if (scopeURI.equals(originalURI))
@@ -4094,7 +4099,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           }
         }
 
-        ItemProvider undeclaredVariablesItem = new VariableContainer(setupTaskPerformer, "Undeclared Variables", UNDECLARED_VARIABLE_GROUP_IMAGE);
+        ItemProvider undeclaredVariablesItem = new VariableContainer(setupTaskPerformer, Messages.SetupEditor_outlinePreviewPage_undeclaredVariables,
+            UNDECLARED_VARIABLE_GROUP_IMAGE);
         EList<Object> undeclaredVariablesItemChildren = undeclaredVariablesItem.getChildren();
         Set<String> undeclaredVariables = setupTaskPerformer.getUndeclaredVariables();
         for (String key : sortStrings(undeclaredVariables))
@@ -4113,7 +4119,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         Map<String, VariableTask> variablesMap = new LinkedHashMap<String, VariableTask>();
 
-        ItemProvider unresolvedVariablesItem = new VariableContainer(setupTaskPerformer, "Unresolved Variables", VARIABLE_GROUP_IMAGE);
+        ItemProvider unresolvedVariablesItem = new VariableContainer(setupTaskPerformer, Messages.SetupEditor_outlinePreviewPage_unresolvedVariables,
+            VARIABLE_GROUP_IMAGE);
         EList<Object> unresolvedVariablesItemChildren = unresolvedVariablesItem.getChildren();
         List<VariableTask> unresolvedVariables = setupTaskPerformer.getUnresolvedVariables();
         for (VariableTask variable : sortVariables(unresolvedVariables))
@@ -4133,7 +4140,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           result.add(unresolvedVariablesItem);
         }
 
-        ItemProvider resolvedVariablesItem = new VariableContainer(setupTaskPerformer, "Resolved Variables", VARIABLE_GROUP_IMAGE);
+        ItemProvider resolvedVariablesItem = new VariableContainer(setupTaskPerformer, Messages.SetupEditor_outlinePreviewPage_resolvedVariables,
+            VARIABLE_GROUP_IMAGE);
         EList<Object> resolvedVariablesItemChildren = resolvedVariablesItem.getChildren();
         List<VariableTask> resolvedVariables = setupTaskPerformer.getResolvedVariables();
         for (VariableTask variable : sortVariables(resolvedVariables))
@@ -4289,7 +4297,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             {
               if (eAttribute != SetupPackage.Literals.SETUP_TASK__ID && !eAttribute.isMany() && eAttribute.getEType().getInstanceClass() == String.class)
               {
-                String variableName = id + "." + ExtendedMetaData.INSTANCE.getName(eAttribute);
+                String variableName = id + "." + ExtendedMetaData.INSTANCE.getName(eAttribute); //$NON-NLS-1$
                 VariableTask variable = variablesMap.get(variableName);
                 if (variable != null)
                 {
@@ -4331,7 +4339,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             String macroTaskID = macroTask.getID();
             if (macroTaskID != null)
             {
-              String qualifiedTaskID = id == null ? macroTaskID : id + "*" + macroTaskID;
+              String qualifiedTaskID = id == null ? macroTaskID : id + "*" + macroTaskID; //$NON-NLS-1$
               gatherMacroChildren(macroTaskMap, argumentBindingMap, false, qualifiedTaskID, children);
             }
           }
@@ -4409,11 +4417,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       toolBarManager.add(previewAction);
 
-      toolBarManager.add(new Action("Show tasks for all triggers", IAction.AS_RADIO_BUTTON)
+      toolBarManager.add(new Action(Messages.SetupEditor_outlinePreviewPage_action_showTasksForAllTriggers, IAction.AS_RADIO_BUTTON)
       {
         {
           setChecked(true);
-          setImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(SetupEditorPlugin.INSTANCE.getImage("AllTrigger")));
+          setImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(SetupEditorPlugin.INSTANCE.getImage("AllTrigger"))); //$NON-NLS-1$
         }
 
         @Override
@@ -4427,10 +4435,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       for (final Trigger trigger : Trigger.VALUES)
       {
         final String label = trigger.getLiteral().toLowerCase();
-        toolBarManager.add(new Action("Show tasks for the " + label + " trigger", IAction.AS_RADIO_BUTTON)
+        toolBarManager.add(new Action(NLS.bind(Messages.SetupEditor_outlinePreviewPage_action_showTasksForTrigger, label), IAction.AS_RADIO_BUTTON)
         {
           {
-            setImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(SetupEditorPlugin.INSTANCE.getImage(StringUtil.cap(label) + "Trigger")));
+            setImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(SetupEditorPlugin.INSTANCE.getImage(StringUtil.cap(label) + "Trigger"))); //$NON-NLS-1$
           }
 
           @Override
@@ -4484,8 +4492,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       public PreviewAction()
       {
-        super("Preview Triggered Tasks", IAction.AS_CHECK_BOX);
-        setImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(SetupEditorPlugin.INSTANCE.getImage("preview.png")));
+        super(Messages.SetupEditor_outlinePreviewPage_action_previewTriggeredTasks, IAction.AS_CHECK_BOX);
+        setImageDescriptor(ExtendedImageRegistry.INSTANCE.getImageDescriptor(SetupEditorPlugin.INSTANCE.getImage("preview.png"))); //$NON-NLS-1$
         contentOutlineViewer.addPostSelectionChangedListener(this);
       }
 
@@ -5115,25 +5123,25 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           case 0:
           {
-            statusLineManager.setMessage(getString("_UI_NoObjectSelected"));
+            statusLineManager.setMessage(getString("_UI_NoObjectSelected")); //$NON-NLS-1$
             break;
           }
           case 1:
           {
             String text = new AdapterFactoryItemDelegator(adapterFactory).getText(collection.iterator().next());
-            statusLineManager.setMessage(getString("_UI_SingleObjectSelected", text));
+            statusLineManager.setMessage(getString("_UI_SingleObjectSelected", text)); //$NON-NLS-1$
             break;
           }
           default:
           {
-            statusLineManager.setMessage(getString("_UI_MultiObjectSelected", Integer.toString(collection.size())));
+            statusLineManager.setMessage(getString("_UI_MultiObjectSelected", Integer.toString(collection.size()))); //$NON-NLS-1$
             break;
           }
         }
       }
       else
       {
-        statusLineManager.setMessage("");
+        statusLineManager.setMessage(""); //$NON-NLS-1$
       }
     }
   }
@@ -5448,7 +5456,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private void initializeCreator()
     {
-      ReflectUtil.setValue("replacementInformationControlCreator", toolTipSupport, new AbstractReusableInformationControlCreator()
+      ReflectUtil.setValue("replacementInformationControlCreator", toolTipSupport, new AbstractReusableInformationControlCreator() //$NON-NLS-1$
       {
         @Override
         @SuppressWarnings("restriction")
@@ -5457,7 +5465,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           IInformationControl informationControl;
           if (org.eclipse.jface.internal.text.html.BrowserInformationControl.isAvailable(parent))
           {
-            String symbolicFont = ReflectUtil.invokeMethod("getSymbolicFont", toolTipSupport);
+            String symbolicFont = ReflectUtil.invokeMethod("getSymbolicFont", toolTipSupport); //$NON-NLS-1$
             org.eclipse.jface.internal.text.html.BrowserInformationControl browserInformationControl = new org.eclipse.jface.internal.text.html.BrowserInformationControl(
                 parent, symbolicFont, true)
             {
@@ -5465,7 +5473,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               protected void createContent(Composite parent)
               {
                 super.createContent(parent);
-                content = browser = ReflectUtil.getValue("fBrowser", this);
+                content = browser = ReflectUtil.getValue("fBrowser", this); //$NON-NLS-1$
                 createToolBar();
               }
 
@@ -5490,7 +5498,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               protected void createContent(Composite parent)
               {
                 super.createContent(parent);
-                content = noBrowser = ReflectUtil.getValue("fText", this);
+                content = noBrowser = ReflectUtil.getValue("fText", this); //$NON-NLS-1$
                 createToolBar();
               }
 
@@ -5504,13 +5512,13 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             };
           }
 
-          Color foregroundColor = ReflectUtil.getValue("foregroundColor", toolTipSupport);
+          Color foregroundColor = ReflectUtil.getValue("foregroundColor", toolTipSupport); //$NON-NLS-1$
           if (foregroundColor != null)
           {
             informationControl.setForegroundColor(foregroundColor);
           }
 
-          Color backgroundColor = ReflectUtil.getValue("backgroundColor", toolTipSupport);
+          Color backgroundColor = ReflectUtil.getValue("backgroundColor", toolTipSupport); //$NON-NLS-1$
           if (backgroundColor != null)
           {
             informationControl.setBackgroundColor(backgroundColor);
@@ -5700,8 +5708,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               {
                 MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
                 int count = (adjustedStart + limit - 1) / limit;
-                menuItem.setText("Forward More (" + count + ')');
-                menuItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("forward"));
+                menuItem.setText(Messages.SetupEditor_setupLocationListener_menu_forwardMore + " (" + count + ')'); //$NON-NLS-1$
+                menuItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("forward")); //$NON-NLS-1$
                 menuItem.addSelectionListener(new SelectionAdapter()
                 {
                   @Override
@@ -5722,8 +5730,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             {
               MenuItem menuItem = new MenuItem(menu, SWT.RADIO);
               int count = (size - adjustedEnd + limit - 1) / limit;
-              menuItem.setText("Back More (" + count + ')');
-              menuItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("backward"));
+              menuItem.setText(Messages.SetupEditor_setupLocationListener_menu_backMore + " (" + count + ')'); //$NON-NLS-1$
+              menuItem.setImage(SetupEditorPlugin.INSTANCE.getSWTImage("backward")); //$NON-NLS-1$
               menuItem.addSelectionListener(new SelectionAdapter()
               {
                 @Override
@@ -5774,15 +5782,15 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
       }
 
-      backwardItem = createItem(SWT.DROP_DOWN, "backward", "Back", new NavigationListener(false));
+      backwardItem = createItem(SWT.DROP_DOWN, "backward", Messages.SetupEditor_setupLocationListener_backwardItem_tooltip, new NavigationListener(false)); //$NON-NLS-1$
 
-      forwardItem = createItem(SWT.DROP_DOWN, "forward", "Forward", new NavigationListener(true));
+      forwardItem = createItem(SWT.DROP_DOWN, "forward", Messages.SetupEditor_setupLocationListener_forwardItem_tooltip, new NavigationListener(true)); //$NON-NLS-1$
 
       new ToolItem(toolBar, SWT.SEPARATOR);
 
       if (editorSpecific)
       {
-        showSetupItem = createItem(SWT.PUSH, "locate_value", "Show in this Setup Editor", new SelectionAdapter()
+        showSetupItem = createItem(SWT.PUSH, "locate_value", Messages.SetupEditor_setupLocationListener_showSetupItem_tooltip, new SelectionAdapter() //$NON-NLS-1$
         {
           @Override
           public void widgetSelected(SelectionEvent e)
@@ -5809,7 +5817,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         });
       }
 
-      editSetupItem = createItem(SWT.PUSH, "edit_setup", "Open in Setup Editor", new SelectionAdapter()
+      editSetupItem = createItem(SWT.PUSH, "edit_setup", Messages.SetupEditor_setupLocationListener_editSetupItem_tooltip, new SelectionAdapter() //$NON-NLS-1$
       {
         @Override
         public void widgetSelected(SelectionEvent e)
@@ -5819,7 +5827,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
       });
 
-      editTextItem = createItem(SWT.PUSH, "edit_text", "Open in Text Editor", new SelectionAdapter()
+      editTextItem = createItem(SWT.PUSH, "edit_text", Messages.SetupEditor_setupLocationListener_editTextItem_tooltip, new SelectionAdapter() //$NON-NLS-1$
       {
         @Override
         public void widgetSelected(SelectionEvent e)
@@ -5829,25 +5837,26 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
       });
 
-      showAdvancedPropertiesItem = createItem(SWT.CHECK, "filter_advanced_properties", "Show Advanced Properties", new SelectionAdapter()
-      {
-        @Override
-        public void widgetSelected(SelectionEvent e)
-        {
-          navigate(toolTipIndex);
-        }
-      });
+      showAdvancedPropertiesItem = createItem(SWT.CHECK, "filter_advanced_properties", //$NON-NLS-1$
+          Messages.SetupEditor_setupLocationListener_showAdvancedPropertiesItem_tooltip, new SelectionAdapter()
+          {
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+              navigate(toolTipIndex);
+            }
+          });
 
       if (editorSpecific)
       {
-        createItem(SWT.PUSH, "show_properties_view", "Show Properties View", new SelectionAdapter()
+        createItem(SWT.PUSH, "show_properties_view", Messages.SetupEditor_setupLocationListener_showPropertiesViewItem_tooltip, new SelectionAdapter() //$NON-NLS-1$
         {
           @Override
           public void widgetSelected(SelectionEvent e)
           {
             try
             {
-              setupEditor.getSite().getWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.PropertySheet");
+              setupEditor.getSite().getWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
             }
             catch (PartInitException ex)
             {
@@ -5856,7 +5865,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           }
         });
 
-        createItem(SWT.PUSH, "open_browser", "Open Information Browser", new SelectionAdapter()
+        createItem(SWT.PUSH, "open_browser", Messages.SetupEditor_setupLocationListener_openInfoBrowserItem_tooltip, new SelectionAdapter() //$NON-NLS-1$
         {
           @Override
           public void widgetSelected(SelectionEvent e)
@@ -5867,7 +5876,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         new ToolItem(toolBar, SWT.SEPARATOR);
 
-        showToolTipsItem = createItem(SWT.CHECK, "show_tooltips", "Show Tooltips (Alt-Mouse-Click)", new SelectionAdapter()
+        showToolTipsItem = createItem(SWT.CHECK, "show_tooltips", Messages.SetupEditor_setupLocationListener_showToolTipsItem_tooltip, new SelectionAdapter() //$NON-NLS-1$
         {
           @Override
           public void widgetSelected(SelectionEvent e)
@@ -5877,15 +5886,16 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           }
         });
 
-        liveValidationItem = createItem(SWT.CHECK, "live_validation", "Live Validation", new SelectionAdapter()
-        {
-          @Override
-          public void widgetSelected(SelectionEvent e)
-          {
-            boolean liveValidation = liveValidationItem.getSelection();
-            setupEditor.getActionBarContributor().setLiveValidation(liveValidation);
-          }
-        });
+        liveValidationItem = createItem(SWT.CHECK, "live_validation", Messages.SetupEditor_setupLocationListener_liveValidationItem_tooltip, //$NON-NLS-1$
+            new SelectionAdapter()
+            {
+              @Override
+              public void widgetSelected(SelectionEvent e)
+              {
+                boolean liveValidation = liveValidationItem.getSelection();
+                setupEditor.getActionBarContributor().setLiveValidation(liveValidation);
+              }
+            });
       }
     }
 
@@ -5995,7 +6005,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       if (browser != null)
       {
         String url = browser.getUrl();
-        if (!"about:blank".equals(url))
+        if (!"about:blank".equals(url)) //$NON-NLS-1$
         {
           URI uri = URI.createURI(event.location);
           uri = ECFURIHandlerImpl.transform(uri, null);
@@ -6021,19 +6031,19 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         // On the Mac, the query URI isn't resolved against the blank page URI.
         if (originalURI.trimQuery().isCurrentDocumentReference())
         {
-          originalURI = URI.createURI("about:blank" + originalURI);
+          originalURI = URI.createURI("about:blank" + originalURI); //$NON-NLS-1$
         }
 
         String query = originalURI.query();
         if (query != null)
         {
-          originalURI = originalURI.trimQuery().appendQuery(query.replace("%5B", "[").replaceAll("%5D", "]"));
+          originalURI = originalURI.trimQuery().appendQuery(query.replace("%5B", "[").replaceAll("%5D", "]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         }
 
         String fragment = originalURI.fragment();
         if (fragment != null)
         {
-          originalURI = originalURI.trimFragment().appendFragment(fragment.replace("%5B", "[").replaceAll("%5D", "]"));
+          originalURI = originalURI.trimFragment().appendFragment(fragment.replace("%5B", "[").replaceAll("%5D", "]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         }
       }
 
@@ -6101,14 +6111,14 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
           if (event.doit)
           {
-            if ("path".equals(uri.scheme()))
+            if ("path".equals(uri.scheme())) //$NON-NLS-1$
             {
               viewer = setupEditor.selectionViewer;
               super.changing(event);
             }
           }
 
-          if (event.location.equals("about:blank"))
+          if (event.location.equals("about:blank")) //$NON-NLS-1$
           {
             // Force event processing; on the Mac this allows the browser to redraw the text.
             if (OS.INSTANCE.isMac())
@@ -6122,11 +6132,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               });
             }
           }
-          else if (event.location.startsWith("about:blank#"))
+          else if (event.location.startsWith("about:blank#")) //$NON-NLS-1$
           {
             event.doit = false;
           }
-          else if ("about:blank?extend".equals(event.location))
+          else if ("about:blank?extend".equals(event.location)) //$NON-NLS-1$
           {
             ToolTipObject wrapper = toolTipObjects.get(toolTipIndex);
             ToolTipObject extendedWrapper = new ToolTipObject(wrapper.getWrappedObject(), this, wrapper.getSetupEditor(), true, false);
@@ -6135,7 +6145,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
             event.doit = false;
           }
-          else if ("about:blank?no-extend".equals(event.location))
+          else if ("about:blank?no-extend".equals(event.location)) //$NON-NLS-1$
           {
             ToolTipObject wrapper = toolTipObjects.get(toolTipIndex);
             ToolTipObject extendedWrapper = new ToolTipObject(wrapper.getWrappedObject(), this, wrapper.getSetupEditor(), false, false);
@@ -6144,7 +6154,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
             event.doit = false;
           }
-          else if ("property".equals(uri.scheme()))
+          else if ("property".equals(uri.scheme())) //$NON-NLS-1$
           {
             ToolTipObject wrapper = toolTipObjects.get(toolTipIndex);
             setupEditor.getActionBarContributor().openInPropertiesView(wrapper.getSetupEditor(), wrapper.getWrappedObject(), URI.decode(uri.segment(0)));
@@ -6197,7 +6207,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
 
       String styleSheet = toolTipSupport.getStyleSheet();
-      String symbolicFont = (String)ReflectUtil.invokeMethod("getSymbolicFont", toolTipSupport);
+      String symbolicFont = (String)ReflectUtil.invokeMethod("getSymbolicFont", toolTipSupport); //$NON-NLS-1$
 
       FontData fontData = JFaceResources.getFontRegistry().getFontData(symbolicFont)[0];
       styleSheet = org.eclipse.jface.internal.text.html.HTMLPrinter.convertTopLevelFont(styleSheet, fontData);
@@ -6218,7 +6228,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         setEditor(null);
         toolTipObject = null;
         toolTipIndex = -1;
-        setText("No history");
+        setText(Messages.SetupEditor_setupLocationListener_noHistory);
       }
       else
       {
@@ -6373,7 +6383,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     @Override
     public String toString()
     {
-      return super.toString() + " -> " + wrappedObject;
+      return super.toString() + " -> " + wrappedObject; //$NON-NLS-1$
     }
 
     public static Object unwrap(Object object)
@@ -6473,7 +6483,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         // Otherwise it must be an appropriate object with an associated URI.
         URI uri = SetupActionBarContributor.getEditURI(ToolTipObject.unwrap(input), true);
-        event.location = uri == null ? "about:blank" : uri.toString();
+        event.location = uri == null ? "about:blank" : uri.toString(); //$NON-NLS-1$
         locationListener.changing(event);
 
         // If there is no URI, treat it as if we were selected by navigating from a page.
@@ -6487,13 +6497,13 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     @Override
     protected IDialogSettings getDialogBoundsSettings()
     {
-      return SetupEditorPlugin.INSTANCE.getDialogSettings("Browser");
+      return SetupEditorPlugin.INSTANCE.getDialogSettings("Browser"); //$NON-NLS-1$
     }
 
     @Override
     protected Control createContents(Composite parent)
     {
-      getShell().setText("Setup Information Browser");
+      getShell().setText(Messages.SetupEditor_setupLocationListener_setupInformationBrowser);
 
       // Create this just like the column viewer tooltip information control so that the we can reuse the logic in the setup location listener.
       Composite composite = new Composite(parent, SWT.NONE);

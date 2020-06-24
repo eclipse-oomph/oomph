@@ -6,7 +6,5 @@
 
 /**
  * The generated EMF edit support of the setup model.
- *
- *
  */
 package org.eclipse.oomph.setup.provider;

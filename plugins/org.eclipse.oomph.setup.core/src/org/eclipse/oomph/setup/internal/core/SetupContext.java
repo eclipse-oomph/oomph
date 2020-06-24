@@ -71,15 +71,15 @@ public class SetupContext
   public static final boolean USE_RESOURCES_BUNDLE = PropertiesUtil.getProperty(SetupProperties.PROP_DO_NOT_LOAD_RESOURCES_PLUGIN) == null
       && CommonPlugin.IS_RESOURCES_BUNDLE_AVAILABLE;
 
-  public static final String OOMPH_NODE = "org.eclipse.oomph.setup";
+  public static final String OOMPH_NODE = "org.eclipse.oomph.setup"; //$NON-NLS-1$
 
-  public static final String LOG_FILE_NAME = "setup.log";
+  public static final String LOG_FILE_NAME = "setup.log"; //$NON-NLS-1$
 
-  public static final String USER_SCHEME = "user";
+  public static final String USER_SCHEME = "user"; //$NON-NLS-1$
 
   public static boolean isUserScheme(String scheme)
   {
-    return USER_SCHEME.equals(scheme) || "user-ext".equals(scheme);
+    return USER_SCHEME.equals(scheme) || "user-ext".equals(scheme); //$NON-NLS-1$
   }
 
   /**
@@ -117,54 +117,54 @@ public class SetupContext
 
   // State locations
 
-  public static final URI GLOBAL_STATE_LOCATION_URI = URI.createFileURI(PropertiesUtil.getUserHome()).appendSegments(new String[] { ".eclipse", OOMPH_NODE });
+  public static final URI GLOBAL_STATE_LOCATION_URI = URI.createFileURI(PropertiesUtil.getUserHome()).appendSegments(new String[] { ".eclipse", OOMPH_NODE }); //$NON-NLS-1$
 
-  public static final URI GLOBAL_SETUPS_URI = URI.createURI(USER_SCHEME + ":/");
+  public static final URI GLOBAL_SETUPS_URI = URI.createURI(USER_SCHEME + ":/"); //$NON-NLS-1$
 
-  public static final URI GLOBAL_SETUPS_LOCATION_URI = GLOBAL_STATE_LOCATION_URI.appendSegment("setups");
+  public static final URI GLOBAL_SETUPS_LOCATION_URI = GLOBAL_STATE_LOCATION_URI.appendSegment("setups"); //$NON-NLS-1$
 
   public static final URI CONFIGURATION_STATE_LOCATION_URI = CONFIGURATION_LOCATION_URI.appendSegment(OOMPH_NODE);
 
   public static final URI WORKSPACE_STATE_LOCATION_URI = WORKSPACE_LOCATION_URI == null ? null
-      : WORKSPACE_LOCATION_URI.appendSegments(new String[] { ".metadata", ".plugins", OOMPH_NODE });
+      : WORKSPACE_LOCATION_URI.appendSegments(new String[] { ".metadata", ".plugins", OOMPH_NODE }); //$NON-NLS-1$ //$NON-NLS-2$
 
   // Resource locations
 
   public static final URI SETUP_LOG_URI = CONFIGURATION_STATE_LOCATION_URI.appendSegment(LOG_FILE_NAME);
 
-  public static final String INDEX_SETUP_NAME = "org.eclipse.setup";
+  public static final String INDEX_SETUP_NAME = "org.eclipse.setup"; //$NON-NLS-1$
 
-  public static final URI INDEX_ROOT_URI = URI.createURI("index:/");
+  public static final URI INDEX_ROOT_URI = URI.createURI("index:/"); //$NON-NLS-1$
 
   public static final URI INDEX_SETUP_URI = INDEX_ROOT_URI.appendSegment(INDEX_SETUP_NAME);
 
-  public static final URI INDEX_ROOT_LOCATION_URI = URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/");
+  public static final URI INDEX_ROOT_LOCATION_URI = URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/"); //$NON-NLS-1$
 
   public static final URI INDEX_SETUP_LOCATION_URI = INDEX_ROOT_LOCATION_URI.trimSegments(1).appendSegment(INDEX_SETUP_NAME);
 
-  public static final URI INDEX_SETUP_ARCHIVE_LOCATION_URI = URI.createURI("http://www.eclipse.org/setups/setups.zip");
+  public static final URI INDEX_SETUP_ARCHIVE_LOCATION_URI = URI.createURI("http://www.eclipse.org/setups/setups.zip"); //$NON-NLS-1$
 
-  public static final URI INSTALLATION_SETUP_FILE_NAME_URI = URI.createURI("installation.setup");
+  public static final URI INSTALLATION_SETUP_FILE_NAME_URI = URI.createURI("installation.setup"); //$NON-NLS-1$
 
   public static final URI INSTALLATION_SETUP_URI = CONFIGURATION_STATE_LOCATION_URI.appendSegment(INSTALLATION_SETUP_FILE_NAME_URI.lastSegment());
 
-  public static final URI WORKSPACE_SETUP_FILE_NAME_URI = URI.createURI("workspace.setup");
+  public static final URI WORKSPACE_SETUP_FILE_NAME_URI = URI.createURI("workspace.setup"); //$NON-NLS-1$
 
   public static final URI WORKSPACE_SETUP_URI = WORKSPACE_STATE_LOCATION_URI == null ? null
       : WORKSPACE_STATE_LOCATION_URI.appendSegment(WORKSPACE_SETUP_FILE_NAME_URI.lastSegment());
 
   public static final URI WORKSPACE_SETUP_RELATIVE_URI = URI
-      .createHierarchicalURI(new String[] { ".metadata", ".plugins", OOMPH_NODE, WORKSPACE_SETUP_FILE_NAME_URI.lastSegment() }, null, null);
+      .createHierarchicalURI(new String[] { ".metadata", ".plugins", OOMPH_NODE, WORKSPACE_SETUP_FILE_NAME_URI.lastSegment() }, null, null); //$NON-NLS-1$ //$NON-NLS-2$
 
-  public static final URI USER_SETUP_URI = GLOBAL_SETUPS_URI.appendSegment("user.setup");
+  public static final URI USER_SETUP_URI = GLOBAL_SETUPS_URI.appendSegment("user.setup"); //$NON-NLS-1$
 
-  public static final URI USER_SETUP_LOCATION_URI = GLOBAL_SETUPS_LOCATION_URI.appendSegment("user.setup");
+  public static final URI USER_SETUP_LOCATION_URI = GLOBAL_SETUPS_LOCATION_URI.appendSegment("user.setup"); //$NON-NLS-1$
 
-  public static final URI CATALOG_SELECTION_SETUP_URI = GLOBAL_SETUPS_URI.appendSegment("catalogs.setup");
+  public static final URI CATALOG_SELECTION_SETUP_URI = GLOBAL_SETUPS_URI.appendSegment("catalogs.setup"); //$NON-NLS-1$
 
-  public static final URI CATALOG_SELECTION_SETUP_LOCATION_URI = GLOBAL_SETUPS_LOCATION_URI.appendSegment("catalogs.setup");
+  public static final URI CATALOG_SELECTION_SETUP_LOCATION_URI = GLOBAL_SETUPS_LOCATION_URI.appendSegment("catalogs.setup"); //$NON-NLS-1$
 
-  public static final URI LOCATION_CATALOG_SETUP_URI = GLOBAL_SETUPS_URI.appendSegment("locations.setup");
+  public static final URI LOCATION_CATALOG_SETUP_URI = GLOBAL_SETUPS_URI.appendSegment("locations.setup"); //$NON-NLS-1$
 
   private static volatile SetupContext self = new SetupContext();
 
@@ -181,16 +181,16 @@ public class SetupContext
   private SetupContext()
   {
     installation = createInstallation();
-    ((InternalEObject)installation).eSetProxyURI(INSTALLATION_SETUP_URI.appendFragment("/"));
+    ((InternalEObject)installation).eSetProxyURI(INSTALLATION_SETUP_URI.appendFragment("/")); //$NON-NLS-1$
 
     workspace = createWorkspace();
     if (WORKSPACE_SETUP_URI != null)
     {
-      ((InternalEObject)workspace).eSetProxyURI(WORKSPACE_SETUP_URI.appendFragment("/"));
+      ((InternalEObject)workspace).eSetProxyURI(WORKSPACE_SETUP_URI.appendFragment("/")); //$NON-NLS-1$
     }
 
     user = createUser();
-    ((InternalEObject)user).eSetProxyURI(USER_SETUP_URI.appendFragment("/"));
+    ((InternalEObject)user).eSetProxyURI(USER_SETUP_URI.appendFragment("/")); //$NON-NLS-1$
   }
 
   private SetupContext(Installation installation, Workspace workspace, User user)
@@ -254,7 +254,7 @@ public class SetupContext
     URI uri = installation.eResource().getURI();
     if (uri.segmentCount() > 3)
     {
-      String eclipseLauncher = PropertiesUtil.getProperty("eclipse.launcher");
+      String eclipseLauncher = PropertiesUtil.getProperty("eclipse.launcher"); //$NON-NLS-1$
       if (eclipseLauncher != null)
       {
         File eclipseLauncherExecutable = new File(eclipseLauncher);
@@ -364,21 +364,21 @@ public class SetupContext
   public static User createUser()
   {
     User user = SetupFactory.eINSTANCE.createUser();
-    user.setName(PropertiesUtil.getProperty("user.name", "user"));
+    user.setName(PropertiesUtil.getProperty("user.name", "user")); //$NON-NLS-1$ //$NON-NLS-2$
     return user;
   }
 
   public static Workspace createWorkspace()
   {
     Workspace workspace = SetupFactory.eINSTANCE.createWorkspace();
-    workspace.setName("workspace");
+    workspace.setName("workspace"); //$NON-NLS-1$
     return workspace;
   }
 
   public static Installation createInstallation()
   {
     Installation installation = SetupFactory.eINSTANCE.createInstallation();
-    installation.setName("installation");
+    installation.setName("installation"); //$NON-NLS-1$
     return installation;
   }
 
@@ -531,14 +531,14 @@ public class SetupContext
     {
       if (!Platform.isRunning())
       {
-        return URI.createFileURI(File.createTempFile("installation", "").toString());
+        return URI.createFileURI(File.createTempFile("installation", "").toString()); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
       Location location = Platform.getInstallLocation();
       URI result = getURI(location);
       if (OS.INSTANCE.isMac())
       {
-        result = result.trimSegments(1).appendSegment("Eclipse");
+        result = result.trimSegments(1).appendSegment("Eclipse"); //$NON-NLS-1$
       }
 
       return result;
@@ -566,7 +566,7 @@ public class SetupContext
     {
       if (!Platform.isRunning())
       {
-        return URI.createFileURI(File.createTempFile(InstallationTaskImpl.CONFIGURATION_FOLDER_NAME, "").toString());
+        return URI.createFileURI(File.createTempFile(InstallationTaskImpl.CONFIGURATION_FOLDER_NAME, "").toString()); //$NON-NLS-1$
       }
 
       Location location = Platform.getConfigurationLocation();
@@ -575,12 +575,12 @@ public class SetupContext
       Location parentLocation = location.getParentLocation();
       if (parentLocation != null)
       {
-        URI targetInstallation = result.appendSegment(OOMPH_NODE).appendSegment("installation.setup");
+        URI targetInstallation = result.appendSegment(OOMPH_NODE).appendSegment("installation.setup"); //$NON-NLS-1$
         File target = new File(targetInstallation.toFileString());
         if (!target.exists())
         {
           URI parentURI = getURI(parentLocation);
-          URI sourceInstallation = parentURI.appendSegment(OOMPH_NODE).appendSegment("installation.setup");
+          URI sourceInstallation = parentURI.appendSegment(OOMPH_NODE).appendSegment("installation.setup"); //$NON-NLS-1$
           File source = new File(sourceInstallation.toFileString());
           if (source.exists())
           {
@@ -683,7 +683,7 @@ public class SetupContext
 
       if (productCatalog == null || productCatalog.getProducts().isEmpty() || productCatalog.getProducts().get(0).getVersions().isEmpty())
       {
-        Resource selfProductCatalogResource = BaseUtil.loadResourceSafely(resourceSet, URI.createURI("catalog:/self-product-catalog.setup"));
+        Resource selfProductCatalogResource = BaseUtil.loadResourceSafely(resourceSet, URI.createURI("catalog:/self-product-catalog.setup")); //$NON-NLS-1$
         productCatalog = (ProductCatalog)EcoreUtil.getObjectByType(selfProductCatalogResource.getContents(), SetupPackage.Literals.PRODUCT_CATALOG);
       }
 

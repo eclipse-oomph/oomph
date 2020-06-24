@@ -26,6 +26,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -43,7 +44,7 @@ import java.util.Map;
  */
 public abstract class JREController implements ISelectionChangedListener
 {
-  private static final String NO_JRE_FOUND = "No match; click to configure...";
+  private static final String NO_JRE_FOUND = Messages.JREController_noJreFound;
 
   private final Label label;
 
@@ -91,15 +92,15 @@ public abstract class JREController implements ISelectionChangedListener
 
       if (label != null)
       {
-        String text = "Java";
+        String text = "Java"; //$NON-NLS-1$
         if (!StringUtil.isEmpty(javaVersion))
         {
-          text += " " + javaVersion + "+";
+          text += " " + javaVersion + "+"; //$NON-NLS-1$ //$NON-NLS-2$
 
-          label.setToolTipText("Choose a Java Virtual Machine. The selected product version requires Java " + javaVersion + " or higher");
+          label.setToolTipText(NLS.bind(Messages.JREController_chooseJvm_tooltip, javaVersion));
         }
 
-        text += " VM";
+        text += " VM"; //$NON-NLS-1$
         setLabel(text);
       }
     }

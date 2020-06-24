@@ -213,7 +213,7 @@ public class NaturePredicateImpl extends PredicateImpl implements NaturePredicat
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (nature: ");
+    result.append(" (nature: "); //$NON-NLS-1$
     result.append(nature);
     result.append(')');
     return result.toString();

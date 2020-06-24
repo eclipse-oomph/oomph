@@ -33,13 +33,11 @@ import java.util.Map;
  */
 public class ConfigureBuildersAction extends AbstractAction<Map<IProject, VersionBuilderArguments>>
 {
-  private static final String TITLE = "Configure Version Management";
-
   private Map<IProject, VersionBuilderArguments> oldMap;
 
   public ConfigureBuildersAction()
   {
-    super(TITLE);
+    super(Messages.ConfigureBuildersAction_title);
   }
 
   @Override

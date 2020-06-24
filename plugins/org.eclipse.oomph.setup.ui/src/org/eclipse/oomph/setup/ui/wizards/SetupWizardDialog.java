@@ -50,17 +50,17 @@ public class SetupWizardDialog extends OomphWizardDialog
   protected void createButtonsForButtonBar(Composite parent)
   {
     super.createButtonsForButtonBar(parent);
-    AccessUtil.setKey(getButton(IDialogConstants.BACK_ID), "back");
-    AccessUtil.setKey(getButton(IDialogConstants.NEXT_ID), "next");
-    AccessUtil.setKey(getButton(IDialogConstants.FINISH_ID), "finish");
-    AccessUtil.setKey(getButton(IDialogConstants.CANCEL_ID), "cancel");
+    AccessUtil.setKey(getButton(IDialogConstants.BACK_ID), "back"); //$NON-NLS-1$
+    AccessUtil.setKey(getButton(IDialogConstants.NEXT_ID), "next"); //$NON-NLS-1$
+    AccessUtil.setKey(getButton(IDialogConstants.FINISH_ID), "finish"); //$NON-NLS-1$
+    AccessUtil.setKey(getButton(IDialogConstants.CANCEL_ID), "cancel"); //$NON-NLS-1$
   }
 
   @Override
   protected void createToolItemsForToolBar(ToolBar toolBar)
   {
     ToolItem helpButton = toolBar.getItems()[0];
-    AccessUtil.setKey(helpButton, "help");
+    AccessUtil.setKey(helpButton, "help"); //$NON-NLS-1$
   }
 
   @Override

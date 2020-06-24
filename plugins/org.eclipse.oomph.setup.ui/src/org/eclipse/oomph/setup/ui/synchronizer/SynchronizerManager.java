@@ -44,6 +44,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
@@ -81,13 +82,13 @@ public final class SynchronizerManager
 
   private static final File USER_SETUP = new File(SetupContext.USER_SETUP_LOCATION_URI.toFileString());
 
-  private static final LockFile USER_SETUP_LOCK = new LockFile(new File(USER_SETUP.getParentFile(), USER_SETUP.getName() + ".lock"));
+  private static final LockFile USER_SETUP_LOCK = new LockFile(new File(USER_SETUP.getParentFile(), USER_SETUP.getName() + ".lock")); //$NON-NLS-1$
 
-  private static final PropertyFile CONFIG = new PropertyFile(SetupSyncPlugin.INSTANCE.getUserLocation().append("sync.properties").toFile());
+  private static final PropertyFile CONFIG = new PropertyFile(SetupSyncPlugin.INSTANCE.getUserLocation().append("sync.properties").toFile()); //$NON-NLS-1$
 
-  private static final String CONFIG_SYNC_ENABLED = "sync.enabled";
+  private static final String CONFIG_SYNC_ENABLED = "sync.enabled"; //$NON-NLS-1$
 
-  private static final String CONFIG_CONNECTION_OFFERED = "connection.offered";
+  private static final String CONFIG_CONNECTION_OFFERED = "connection.offered"; //$NON-NLS-1$
 
   /**
    * If set to <code>true</code> the {@link #CONFIG_CONNECTION_OFFERED} property is cleared before each access,
@@ -134,7 +135,7 @@ public final class SynchronizerManager
   {
     try
     {
-      return Boolean.parseBoolean(CONFIG.getProperty(CONFIG_SYNC_ENABLED, "false"));
+      return Boolean.parseBoolean(CONFIG.getProperty(CONFIG_SYNC_ENABLED, "false")); //$NON-NLS-1$
     }
     catch (Throwable ex)
     {
@@ -149,11 +150,11 @@ public final class SynchronizerManager
 
     if (enabled)
     {
-      changed = CONFIG.compareAndSetProperty(CONFIG_SYNC_ENABLED, "true", "false", null);
+      changed = CONFIG.compareAndSetProperty(CONFIG_SYNC_ENABLED, "true", "false", null); //$NON-NLS-1$ //$NON-NLS-2$
     }
     else
     {
-      changed = CONFIG.compareAndSetProperty(CONFIG_SYNC_ENABLED, "false", "true");
+      changed = CONFIG.compareAndSetProperty(CONFIG_SYNC_ENABLED, "false", "true"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     if (changed)
@@ -431,11 +432,11 @@ public final class SynchronizerManager
    */
   private static final class SkipHandler extends SynchronizerAdapter implements Impact
   {
-    private static final String CONFIG_SKIPPED_LOCAL = "skipped.local";
+    private static final String CONFIG_SKIPPED_LOCAL = "skipped.local"; //$NON-NLS-1$
 
-    private static final String CONFIG_SKIPPED_REMOTE = "skipped.remote";
+    private static final String CONFIG_SKIPPED_REMOTE = "skipped.remote"; //$NON-NLS-1$
 
-    private static final String ID_SEPARATOR = " ";
+    private static final String ID_SEPARATOR = " "; //$NON-NLS-1$
 
     private final Set<Location> skippedLocations = new HashSet<Location>();
 
@@ -696,7 +697,7 @@ public final class SynchronizerManager
             {
               final IProgressMonitor monitor = new NullProgressMonitor();
 
-              Job watchDog = new Job("Synchronizer Watch Dog")
+              Job watchDog = new Job(Messages.SynchronizerManager_watchDogJob_name)
               {
                 @Override
                 protected IStatus run(IProgressMonitor monitor)
@@ -750,7 +751,7 @@ public final class SynchronizerManager
 
     private Synchronization await(String serviceLabel, IProgressMonitor monitor)
     {
-      monitor.beginTask("Requesting data from " + serviceLabel + "...", IProgressMonitor.UNKNOWN);
+      monitor.beginTask(NLS.bind(Messages.SynchronizerManager_requestDataTask_name, serviceLabel), IProgressMonitor.UNKNOWN);
 
       try
       {
@@ -767,10 +768,10 @@ public final class SynchronizerManager
   {
     final IStorage storage = SynchronizerManager.INSTANCE.getStorage();
     IStorageService service = storage.getService();
-    String serviceLabel = service == null ? "Unknown" : service.getServiceLabel();
+    String serviceLabel = service == null ? "Unknown" : service.getServiceLabel(); //$NON-NLS-1$
     SetupUIPlugin.INSTANCE.log(
-        new Status(IStatus.WARNING, SetupUIPlugin.PLUGIN_ID, "Window -> Preferences -> Oomph -> Setup Tasks -> Preference Synchronizer -> 'Synchronize with "
-            + serviceLabel + "' is enabled and the synchronization has failed for the following reason:", throwable));
+        new Status(IStatus.WARNING, SetupUIPlugin.PLUGIN_ID, "Window -> Preferences -> Oomph -> Setup Tasks -> Preference Synchronizer -> 'Synchronize with " //$NON-NLS-1$
+            + serviceLabel + "' is enabled and the synchronization has failed for the following reason:", throwable)); //$NON-NLS-1$
   }
 
   /**

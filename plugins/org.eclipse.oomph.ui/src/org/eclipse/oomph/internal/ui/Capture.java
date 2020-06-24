@@ -219,7 +219,7 @@ public abstract class Capture<T>
     Button defaultButton = getShell(element).getDefaultButton();
     if (defaultButton != null)
     {
-      ReflectUtil.invokeMethod(ReflectUtil.getMethod(Button.class, "setDefault", boolean.class), defaultButton, false);
+      ReflectUtil.invokeMethod(ReflectUtil.getMethod(Button.class, "setDefault", boolean.class), defaultButton, false); //$NON-NLS-1$
     }
   }
 
@@ -388,7 +388,7 @@ public abstract class Capture<T>
       return AccessUtil.capture(control);
     }
 
-    throw new UnsupportedOperationException("Unexpected widget " + widget);
+    throw new UnsupportedOperationException("Unexpected widget " + widget); //$NON-NLS-1$
   }
 
   protected void close(T element)
@@ -429,7 +429,7 @@ public abstract class Capture<T>
     @Override
     protected void open(D dialog)
     {
-      ReflectUtil.invokeMethod(ReflectUtil.getMethod(dialog.getClass(), "open"), dialog);
+      ReflectUtil.invokeMethod(ReflectUtil.getMethod(dialog.getClass(), "open"), dialog); //$NON-NLS-1$
     }
   }
 }

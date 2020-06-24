@@ -30,6 +30,7 @@ import java.lang.reflect.Proxy;
  */
 public class ActiveMylynTaskArgumentSelector
 {
+  @SuppressWarnings("nls")
   private static final String[] ATTRIBUTES = { "Id", "Key", "Url", "Kind", "Owner", "OwnerId", "Priority", "RepositoryUrl", "Summary", "ConnectorKind",
       "HandleIdentifier", "CreationDate", "CreationTime", "CompletionDate", "CompletionTime", "DueDate", "DueTime", "ModificationDate", "ModificationTime" };
 
@@ -41,16 +42,16 @@ public class ActiveMylynTaskArgumentSelector
       public String getText(Object element)
       {
         String text = (String)element;
-        if ("Id".equalsIgnoreCase(text))
+        if ("Id".equalsIgnoreCase(text)) //$NON-NLS-1$
         {
-          text += "  (default)";
+          text += "  " + Messages.ActiveMylynTaskArgumentSelector_elementDialog_defaultElement; //$NON-NLS-1$
         }
         else
         {
-          text = text.replaceAll("([a-z])([A-Z])", "$1 $2");
-          text = text.replaceAll("Date", "Date  (yyyyMMdd_HHmmss)");
-          text = text.replaceAll("Time", "Time  (milliseconds since Unix epoch)");
-          text = text.replaceAll("Summary", "Summary  (escaped)");
+          text = text.replaceAll("([a-z])([A-Z])", "$1 $2"); //$NON-NLS-1$ //$NON-NLS-2$
+          text = text.replaceAll("Date", Messages.ActiveMylynTaskArgumentSelector_elementDialog_date); //$NON-NLS-1$
+          text = text.replaceAll("Time", Messages.ActiveMylynTaskArgumentSelector_elementDialog_time); //$NON-NLS-1$
+          text = text.replaceAll("Summary", Messages.ActiveMylynTaskArgumentSelector_elementDialog_summary); //$NON-NLS-1$
         }
 
         return text;
@@ -59,8 +60,8 @@ public class ActiveMylynTaskArgumentSelector
 
     ElementListSelectionDialog dialog = new ElementListSelectionDialog(shell, labelProvider);
     dialog.setElements(ATTRIBUTES);
-    dialog.setTitle("Select Task Attribute");
-    dialog.setMessage("Select a task attribute (? = any character, * = any String):");
+    dialog.setTitle(Messages.ActiveMylynTaskArgumentSelector_elementDialog_title);
+    dialog.setMessage(Messages.ActiveMylynTaskArgumentSelector_elementDialog_message);
     if (dialog.open() == Window.OK)
     {
       return (String)dialog.getResult()[0];
@@ -80,13 +81,13 @@ public class ActiveMylynTaskArgumentSelector
 
       try
       {
-        argumentSelectorInterface = CommonPlugin.loadClass("org.eclipse.debug.ui", "org.eclipse.debug.internal.ui.stringsubstitution.IArgumentSelector");
+        argumentSelectorInterface = CommonPlugin.loadClass("org.eclipse.debug.ui", "org.eclipse.debug.internal.ui.stringsubstitution.IArgumentSelector"); //$NON-NLS-1$ //$NON-NLS-2$
       }
       catch (ClassNotFoundException ex)
       {
         try
         {
-          argumentSelectorInterface = CommonPlugin.loadClass("org.eclipse.debug.ui", "org.eclipse.debug.ui.stringsubstitution.IArgumentSelector");
+          argumentSelectorInterface = CommonPlugin.loadClass("org.eclipse.debug.ui", "org.eclipse.debug.ui.stringsubstitution.IArgumentSelector"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         catch (ClassNotFoundException ex1)
         {

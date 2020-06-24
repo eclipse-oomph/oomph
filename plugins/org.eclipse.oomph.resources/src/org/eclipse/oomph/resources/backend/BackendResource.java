@@ -27,7 +27,7 @@ import java.util.Queue;
  */
 public abstract class BackendResource
 {
-  public static final String RESOURCE_SCHEME = "archive";
+  public static final String RESOURCE_SCHEME = "archive"; //$NON-NLS-1$
 
   private final BackendSystem system;
 
@@ -95,15 +95,15 @@ public abstract class BackendResource
     try
     {
       BackendSystem system = getSystem();
-      String uri = RESOURCE_SCHEME + ":" + system.getSystemURI() + "!";
+      String uri = RESOURCE_SCHEME + ":" + system.getSystemURI() + "!"; //$NON-NLS-1$ //$NON-NLS-2$
       if (!systemRelativeURI.isEmpty())
       {
-        uri += "/" + systemRelativeURI;
+        uri += "/" + systemRelativeURI; //$NON-NLS-1$
       }
 
       if (isContainer())
       {
-        uri += "/";
+        uri += "/"; //$NON-NLS-1$
       }
 
       return URI.createURI(uri);
@@ -132,8 +132,8 @@ public abstract class BackendResource
   {
     if (base.getSystem() == system)
     {
-      URI baseURI = makeAbsolute(base.getSystemRelativeURI()).appendSegment("");
-      URI uri = makeAbsolute(systemRelativeURI).appendSegment("");
+      URI baseURI = makeAbsolute(base.getSystemRelativeURI()).appendSegment(""); //$NON-NLS-1$
+      URI uri = makeAbsolute(systemRelativeURI).appendSegment(""); //$NON-NLS-1$
       return uri.deresolve(baseURI, true, true, false).trimSegments(1);
     }
 
@@ -331,7 +331,7 @@ public abstract class BackendResource
       if (RESOURCE_SCHEME.equals(scheme))
       {
         String authority = absoluteURI.authority();
-        if (authority.endsWith("!"))
+        if (authority.endsWith("!")) //$NON-NLS-1$
         {
           authority = authority.substring(0, authority.length() - 1);
         }
@@ -373,7 +373,7 @@ public abstract class BackendResource
 
   public static BackendResource get(String rootFolder) throws BackendException
   {
-    String prefix = RESOURCE_SCHEME + ":";
+    String prefix = RESOURCE_SCHEME + ":"; //$NON-NLS-1$
     if (rootFolder.startsWith(prefix))
     {
       URI uri = URI.createURI(rootFolder);
@@ -384,11 +384,11 @@ public abstract class BackendResource
     String absolutePath = folder.getAbsolutePath();
 
     URI fileURI = URI.createFileURI(absolutePath);
-    URI uri = URI.createURI(prefix + fileURI.trimSegments(fileURI.segmentCount()).toString() + "!/").appendSegments(fileURI.segments());
+    URI uri = URI.createURI(prefix + fileURI.trimSegments(fileURI.segmentCount()).toString() + "!/").appendSegments(fileURI.segments()); //$NON-NLS-1$
 
     if (folder.isDirectory())
     {
-      uri = uri.appendSegment("");
+      uri = uri.appendSegment(""); //$NON-NLS-1$
     }
 
     return get(uri);
@@ -396,7 +396,7 @@ public abstract class BackendResource
 
   private static URI makeAbsolute(URI uri)
   {
-    return URI.createHierarchicalURI("absolute", null, null, uri.segments(), null, null);
+    return URI.createHierarchicalURI("absolute", null, null, uri.segments(), null, null); //$NON-NLS-1$
   }
 
   /**

@@ -63,9 +63,9 @@ public class SimpleInstallationLogPage extends SimpleInstallerPage
     container.setBackground(AbstractSimpleDialog.COLOR_WHITE);
 
     Label title = new Label(container, SWT.NONE);
-    title.setText("INSTALLATION LOG");
+    title.setText(Messages.SimpleInstallationLogPage_title);
     title.setForeground(UIUtil.getEclipseThemeColor());
-    title.setFont(SimpleInstallerDialog.getFont(3, "bold"));
+    title.setFont(SimpleInstallerDialog.getFont(3, "bold")); //$NON-NLS-1$
     title.setLayoutData(GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.END).create());
 
     logFilePathLabel = new Label(container, SWT.NONE);
@@ -112,12 +112,12 @@ public class SimpleInstallationLogPage extends SimpleInstallerPage
       {
         text.setText(readLog());
         logFilePathLabel.setVisible(true);
-        logFilePathLabel.setText("Location: " + this.installationLogFile.getAbsolutePath());
+        logFilePathLabel.setText(Messages.SimpleInstallationLogPage_Location_label + this.installationLogFile.getAbsolutePath());
       }
       else
       {
         logFilePathLabel.setVisible(false);
-        text.setText("No installation log available.");
+        text.setText(Messages.SimpleInstallationLogPage_NoLog_message);
       }
 
       scrolledComposite.setMinSize(text.computeSize(SWT.DEFAULT, SWT.DEFAULT));

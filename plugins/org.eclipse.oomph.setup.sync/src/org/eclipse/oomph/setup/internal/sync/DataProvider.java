@@ -15,6 +15,8 @@ import org.eclipse.oomph.setup.sync.SyncPackage;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.osgi.util.NLS;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -76,7 +78,7 @@ public interface DataProvider
 
     public NotFoundException(URI uri)
     {
-      super("Not found: " + uri);
+      super(NLS.bind(Messages.DataProvider_NotFound_exception, uri));
     }
   }
 
@@ -89,7 +91,7 @@ public interface DataProvider
 
     public NotCurrentException(URI uri)
     {
-      super("Not current: " + uri);
+      super(NLS.bind(Messages.DataProvider_NotCurrent_exception, uri));
     }
   }
 }

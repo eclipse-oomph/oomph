@@ -90,7 +90,8 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
   protected void addLabelPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_P2Task_label_feature"), getString("_UI_PropertyDescriptor_description", "_UI_P2Task_label_feature", "_UI_P2Task_type"),
+        getString("_UI_P2Task_label_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_P2Task_label_feature", "_UI_P2Task_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupP2Package.Literals.P2_TASK__LABEL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -103,8 +104,8 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
   protected void addLicenseConfirmationDisabledPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_P2Task_licenseConfirmationDisabled_feature"),
-        getString("_UI_PropertyDescriptor_description", "_UI_P2Task_licenseConfirmationDisabled_feature", "_UI_P2Task_type"),
+        getString("_UI_P2Task_licenseConfirmationDisabled_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_P2Task_licenseConfirmationDisabled_feature", "_UI_P2Task_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupP2Package.Literals.P2_TASK__LICENSE_CONFIRMATION_DISABLED, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -117,7 +118,8 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
   protected void addMergeDisabledPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_P2Task_mergeDisabled_feature"), getString("_UI_PropertyDescriptor_description", "_UI_P2Task_mergeDisabled_feature", "_UI_P2Task_type"),
+        getString("_UI_P2Task_mergeDisabled_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_P2Task_mergeDisabled_feature", "_UI_P2Task_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupP2Package.Literals.P2_TASK__MERGE_DISABLED, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
@@ -130,7 +132,8 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
   protected void addProfilePropertiesPropertyDescriptor(Object object)
   {
     itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-        getString("_UI_P2Task_profileProperties_feature"), getString("_UI_P2Task_profileProperties_description"),
+        getString("_UI_P2Task_profileProperties_feature"), //$NON-NLS-1$
+        getString("_UI_P2Task_profileProperties_description"), //$NON-NLS-1$
         SetupP2Package.Literals.P2_TASK__PROFILE_PROPERTIES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
@@ -182,7 +185,7 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/P2Task"));
+    return overlayImage(object, getResourceLocator().getImage("full/obj16/P2Task")); //$NON-NLS-1$
   }
 
   /**
@@ -206,7 +209,7 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
   public String getText(Object object)
   {
     String label = ((P2Task)object).getLabel();
-    return label == null || label.length() == 0 ? getString("_UI_P2Task_type") : getString("_UI_P2Task_type") + " (" + label + ")";
+    return label == null || label.length() == 0 ? getString("_UI_P2Task_type") : getString("_UI_P2Task_type") + " (" + label + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
   }
 
   /**

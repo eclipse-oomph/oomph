@@ -80,7 +80,7 @@ public class ToggleDisabledAction implements IObjectActionDelegate
     }
 
     action.setEnabled(!tasks.isEmpty());
-    action.setImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor(disabled ? "checkbox_checked" : "checkbox_unchecked"));
+    action.setImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor(disabled ? "checkbox_checked" : "checkbox_unchecked")); //$NON-NLS-1$ //$NON-NLS-2$
     action.setChecked(disabled);
   }
 
@@ -90,7 +90,8 @@ public class ToggleDisabledAction implements IObjectActionDelegate
     boolean value = !firstTask.isDisabled();
 
     EditingDomain editingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(firstTask);
-    CompoundCommand compoundCommand = new CompoundCommand(value ? "Set Disabled" : "Set Enabled");
+    CompoundCommand compoundCommand = new CompoundCommand(
+        value ? Messages.ToggleDisabledAction_commandLabel_setDisabled : Messages.ToggleDisabledAction_commandLabel_setEanbled);
 
     for (SetupTask task : tasks)
     {

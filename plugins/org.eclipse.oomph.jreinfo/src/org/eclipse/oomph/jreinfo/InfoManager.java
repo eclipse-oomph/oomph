@@ -19,6 +19,7 @@ import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 
 import org.osgi.framework.Bundle;
 
@@ -84,7 +85,7 @@ final class InfoManager
                 lines.add(info.toLine());
               }
 
-              IOUtil.writeLines(getCacheFile(), "UTF-8", lines);
+              IOUtil.writeLines(getCacheFile(), "UTF-8", lines); //$NON-NLS-1$
             }
             catch (Exception ex)
             {
@@ -111,7 +112,7 @@ final class InfoManager
     {
       try
       {
-        for (String line : IOUtil.readLines(cacheFile, "UTF-8"))
+        for (String line : IOUtil.readLines(cacheFile, "UTF-8")) //$NON-NLS-1$
         {
           try
           {
@@ -124,7 +125,7 @@ final class InfoManager
           catch (RuntimeException ex)
           {
             JREInfoPlugin.INSTANCE.log(new Status(IStatus.WARNING, JREInfoPlugin.INSTANCE.getSymbolicName(),
-                "The cache file '" + cacheFile + "' contains an invalid JRE entry: '" + line + "'", ex));
+                NLS.bind(Messages.InfoManager_InvalidJREEntry_message, cacheFile, line), ex));
           }
         }
       }
@@ -137,7 +138,7 @@ final class InfoManager
 
   private static File getCacheFile()
   {
-    return new File(JREInfoPlugin.INSTANCE.getUserLocation().append("infos.txt").toOSString());
+    return new File(JREInfoPlugin.INSTANCE.getUserLocation().append("infos.txt").toOSString()); //$NON-NLS-1$
   }
 
   private static JREData testJRE(File javaHome)
@@ -153,7 +154,7 @@ final class InfoManager
     try
     {
       ProcessBuilder builder = new ProcessBuilder();
-      builder.command(executable, "-cp", LIB_CLASS_PATH, JREValidator.class.getName());
+      builder.command(executable, "-cp", LIB_CLASS_PATH, JREValidator.class.getName()); //$NON-NLS-1$
 
       process = builder.start();
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -187,7 +188,7 @@ final class InfoManager
 
     try
     {
-      Bundle bundle = Platform.getBundle("org.eclipse.oomph.extractor.lib");
+      Bundle bundle = Platform.getBundle("org.eclipse.oomph.extractor.lib"); //$NON-NLS-1$
       if (bundle != null)
       {
         List<File> classPath = OomphPlugin.getClassPath(bundle);

@@ -19,7 +19,7 @@
             category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             id="org.eclipse.oomph.jreinfo.ui.JREPreferencePage"
             class="org.eclipse.oomph.jreinfo.ui.JREPreferencePage"
-            name="Java Virtual Machines">
+            name="%jvmPage.name">
       </page>
    </extension>
 

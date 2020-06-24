@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Control;
  */
 public class ButtonBar
 {
-  private static final String TOGGLE_COMMAND_PREFIX = "toggleCommand:";
+  private static final String TOGGLE_COMMAND_PREFIX = "toggleCommand:"; //$NON-NLS-1$
 
   private final Composite parent;
 

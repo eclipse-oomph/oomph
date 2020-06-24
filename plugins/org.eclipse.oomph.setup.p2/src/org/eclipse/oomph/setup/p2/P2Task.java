@@ -65,7 +65,7 @@ public interface P2Task extends SetupTask
    */
   void setLabel(String value);
 
-  public static final String PROP_SKIP = "oomph.setup.p2.skip";
+  public static final String PROP_SKIP = "oomph.setup.p2.skip"; //$NON-NLS-1$
 
   /**
    * Returns the value of the '<em><b>Requirements</b></em>' containment reference list.

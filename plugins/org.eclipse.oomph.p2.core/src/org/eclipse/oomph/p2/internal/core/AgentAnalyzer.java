@@ -38,6 +38,7 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
+import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.io.IOException;
@@ -86,7 +87,7 @@ public final class AgentAnalyzer
     this.handler = handler;
 
     Collection<Profile> allProfiles = agent.getAllProfiles();
-    monitor.beginTask("Loading profiles...", allProfiles.size());
+    monitor.beginTask(Messages.AgentAnalyzer_LoadingProfiles_task, allProfiles.size());
 
     IFileArtifactRepository downloadCacheRepository = agent.getDownloadCacheRepository();
     File downloadCacheRepositoryLocation = new File(downloadCacheRepository.getLocation());
@@ -147,8 +148,8 @@ public final class AgentAnalyzer
   public void awaitAnalyzing(IProgressMonitor monitor)
   {
     int totalWork = bundlePools.size();
-    SubMonitor progress = SubMonitor.convert(monitor, "Analyzing...", totalWork).detectCancelation();
-    progress.subTask("Analyzing artifacts...");
+    SubMonitor progress = SubMonitor.convert(monitor, Messages.AgentAnalyzer_Analyzing_task, totalWork).detectCancelation();
+    progress.subTask(Messages.AgentAnalyzer_AnalyzingArtifacts_task);
 
     int work = totalWork - (int)analyzeLatch.getCount();
     if (work != 0)
@@ -529,7 +530,7 @@ public final class AgentAnalyzer
 
     Job analyze(final CountDownLatch analyzeLatch, final boolean analyzeDamage)
     {
-      Job job = new Job("Analyzing bundle pool " + location)
+      Job job = new Job(NLS.bind(Messages.AgentAnalyzer_AnalyzingBundlePool_job, location))
       {
         @Override
         protected IStatus run(IProgressMonitor monitor)
@@ -648,7 +649,7 @@ public final class AgentAnalyzer
           }
         }
 
-        monitor.subTask("Validating " + artifact);
+        monitor.subTask(NLS.bind(Messages.AgentAnalyzer_Validating_task, artifact));
         if (isDamaged(artifact))
         {
           synchronized (this)
@@ -742,12 +743,12 @@ public final class AgentAnalyzer
         if (AnalyzedArtifact.TYPE_FEATURE.equals(type))
         {
           action = new org.eclipse.equinox.p2.publisher.eclipse.FeaturesAction(new File[] { file });
-          namespace = "org.eclipse.update.feature";
+          namespace = "org.eclipse.update.feature"; //$NON-NLS-1$
         }
         else if (AnalyzedArtifact.TYPE_PLUGIN.equals(type))
         {
           action = new org.eclipse.equinox.p2.publisher.eclipse.BundlesAction(new File[] { file });
-          namespace = "osgi.bundle";
+          namespace = "osgi.bundle"; //$NON-NLS-1$
         }
         else
         {
@@ -789,14 +790,14 @@ public final class AgentAnalyzer
    */
   public static final class AnalyzedProfile implements Comparable<AnalyzedProfile>
   {
-    public static final String ECLIPSE = "Eclipse";
+    public static final String ECLIPSE = "Eclipse"; //$NON-NLS-1$
 
-    public static final String TARGLET = "Targlet";
+    public static final String TARGLET = "Targlet"; //$NON-NLS-1$
 
-    public static final String UNKNOWN = "Unknown";
+    public static final String UNKNOWN = "Unknown"; //$NON-NLS-1$
 
     @Deprecated
-    private static final String PROP_TARGLET_CONTAINER_ID = "targlet.container.id";
+    private static final String PROP_TARGLET_CONTAINER_ID = "targlet.container.id"; //$NON-NLS-1$
 
     private final AnalyzedBundlePool bundlePool;
 
@@ -962,7 +963,7 @@ public final class AgentAnalyzer
     {
       if (isUnused())
       {
-        monitor.subTask("Deleting " + this);
+        monitor.subTask(NLS.bind(Messages.AgentAnalyzer_Deleting_task, this));
         p2Profile.delete();
 
         boolean artifactsChanged = false;
@@ -1001,13 +1002,13 @@ public final class AgentAnalyzer
    */
   public static final class AnalyzedArtifact implements Comparable<AnalyzedArtifact>
   {
-    public static final String REPAIR_TASK_NAME = "Repairing artifacts";
+    public static final String REPAIR_TASK_NAME = Messages.AgentAnalyzer_RepairingArtifacts_task;
 
-    public static final String TYPE_FEATURE = "Feature";
+    public static final String TYPE_FEATURE = "Feature"; //$NON-NLS-1$
 
-    public static final String TYPE_PLUGIN = "Plugin";
+    public static final String TYPE_PLUGIN = "Plugin"; //$NON-NLS-1$
 
-    public static final String TYPE_BINARY = "Binary";
+    public static final String TYPE_BINARY = "Binary"; //$NON-NLS-1$
 
     private final AnalyzedBundlePool bundlePool;
 
@@ -1028,11 +1029,11 @@ public final class AgentAnalyzer
       this.file = file;
 
       String classifier = key.getClassifier();
-      if ("org.eclipse.update.feature".equals(classifier))
+      if ("org.eclipse.update.feature".equals(classifier)) //$NON-NLS-1$
       {
         type = TYPE_FEATURE;
       }
-      else if ("osgi.bundle".equals(classifier))
+      else if ("osgi.bundle".equals(classifier)) //$NON-NLS-1$
       {
         type = TYPE_PLUGIN;
       }
@@ -1148,7 +1149,7 @@ public final class AgentAnalyzer
     @Override
     public String toString()
     {
-      return key.getId() + " " + key.getVersion();
+      return key.getId() + " " + key.getVersion(); //$NON-NLS-1$
     }
 
     void addProfile(AnalyzedProfile profile)
@@ -1179,7 +1180,7 @@ public final class AgentAnalyzer
       }
       else
       {
-        monitor.subTask("Deleting " + this);
+        monitor.subTask(NLS.bind(Messages.AgentAnalyzer_Deleting_task, this));
         IOUtil.deleteBestEffort(file);
         damaged = true;
 
@@ -1207,7 +1208,7 @@ public final class AgentAnalyzer
 
     private void deleteUnused(IProgressMonitor monitor)
     {
-      monitor.subTask("Deleting " + this);
+      monitor.subTask(NLS.bind(Messages.AgentAnalyzer_Deleting_task, this));
       IFileArtifactRepository p2BundlePool = bundlePool.getP2BundlePool(monitor);
       p2BundlePool.removeDescriptor(key, monitor);
       damaged = false;
@@ -1240,7 +1241,7 @@ public final class AgentAnalyzer
         return true;
       }
 
-      monitor.subTask("Repairing " + this);
+      monitor.subTask(NLS.bind(Messages.AgentAnalyzer_Repairing_task, this));
       if (repositoryURIs == null ? doRepair(monitor) : doRepair(repositoryURIs, monitor))
       {
         damaged = false;

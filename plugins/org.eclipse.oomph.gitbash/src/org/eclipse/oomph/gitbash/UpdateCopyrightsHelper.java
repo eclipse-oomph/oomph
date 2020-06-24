@@ -59,6 +59,7 @@ import java.util.regex.Pattern;
 /**
  * @author Eike Stepper
  */
+@SuppressWarnings("nls")
 public class UpdateCopyrightsHelper
 {
   private static final String[] DEFAULT_IGNORED_MESSAGE_VERBS = { "update", "adjust", "fix" };

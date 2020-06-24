@@ -15,21 +15,21 @@ package org.eclipse.oomph.base;
  */
 public final class BaseAnnotationConstants
 {
-  public static final String ANNOTATION_SOURCE = "http://www.eclipse.org/oomph/Migrator";
+  public static final String ANNOTATION_SOURCE = "http://www.eclipse.org/oomph/Migrator"; //$NON-NLS-1$
+
+  public static final String ANNOTATION_ERROR = "http://www.eclipse.org/oomph/base/Error"; //$NON-NLS-1$
+
+  public static final String ANNOTATION_WARNING = "http://www.eclipse.org/oomph/base/Warning"; //$NON-NLS-1$
+
+  public static final String ANNOTATION_INFO = "http://www.eclipse.org/oomph/base/Info"; //$NON-NLS-1$
+
+  public static final String KEY_DIAGNOSTIC = "diagnostic"; //$NON-NLS-1$
+
+  public static final String ANNOTATION_CONVERSION = "http://www.eclipse.org/oomph/base/Conversion"; //$NON-NLS-1$
+
+  public static final String KEY_ECLASS = "eClass"; //$NON-NLS-1$
 
   private BaseAnnotationConstants()
   {
   }
-
-  public static final String ANNOTATION_ERROR = "http://www.eclipse.org/oomph/base/Error";
-
-  public static final String ANNOTATION_WARNING = "http://www.eclipse.org/oomph/base/Warning";
-
-  public static final String ANNOTATION_INFO = "http://www.eclipse.org/oomph/base/Info";
-
-  public static final String KEY_DIAGNOSTIC = "diagnostic";
-
-  public static final String ANNOTATION_CONVERSION = "http://www.eclipse.org/oomph/base/Conversion";
-
-  public static final String KEY_ECLASS = "eClass";
 }

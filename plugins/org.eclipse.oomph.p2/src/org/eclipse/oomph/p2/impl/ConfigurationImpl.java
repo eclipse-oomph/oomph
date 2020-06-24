@@ -43,7 +43,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * @generated
    * @ordered
    */
-  protected static final String WS_EDEFAULT = "ANY";
+  protected static final String WS_EDEFAULT = "ANY"; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getWS() <em>WS</em>}' attribute.
@@ -63,7 +63,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * @generated
    * @ordered
    */
-  protected static final String OS_EDEFAULT = "ANY";
+  protected static final String OS_EDEFAULT = "ANY"; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getOS() <em>OS</em>}' attribute.
@@ -83,7 +83,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * @generated
    * @ordered
    */
-  protected static final String ARCH_EDEFAULT = "ANY";
+  protected static final String ARCH_EDEFAULT = "ANY"; //$NON-NLS-1$
 
   /**
    * The cached value of the '{@link #getArch() <em>Arch</em>}' attribute.
@@ -292,11 +292,11 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (wS: ");
+    result.append(" (wS: "); //$NON-NLS-1$
     result.append(wS);
-    result.append(", oS: ");
+    result.append(", oS: "); //$NON-NLS-1$
     result.append(oS);
-    result.append(", arch: ");
+    result.append(", arch: "); //$NON-NLS-1$
     result.append(arch);
     result.append(')');
     return result.toString();

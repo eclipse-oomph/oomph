@@ -29,7 +29,7 @@ public abstract class JREDownloadHandler extends Request.Handler.Modifier
   protected void modify(Request request)
   {
     Product product = getProduct();
-    request.put("pn", product.getLabel());
+    request.put("pn", product.getLabel()); //$NON-NLS-1$
 
     Annotation annotation = product.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
     if (annotation != null)
@@ -37,13 +37,13 @@ public abstract class JREDownloadHandler extends Request.Handler.Modifier
       String uri = annotation.getDetails().get(AnnotationConstants.KEY_URI);
       if (uri != null)
       {
-        request.put("pu", uri);
+        request.put("pu", uri); //$NON-NLS-1$
       }
 
       String imageURI = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
       if (imageURI != null)
       {
-        request.put("pi", imageURI);
+        request.put("pi", imageURI); //$NON-NLS-1$
       }
     }
   }

@@ -162,7 +162,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class SetupActionBarContributor extends OomphEditingDomainActionBarContributor implements ISelectionChangedListener
 {
-  private static final String ENABLEMENT_ITEM_PREFIX = EnablementAction.class.getName() + "-";
+  private static final String ENABLEMENT_ITEM_PREFIX = EnablementAction.class.getName() + "-"; //$NON-NLS-1$
 
   private static final Comparator<? super IAction> ACTION_COMPARATOR = new Comparator<IAction>()
   {
@@ -203,7 +203,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
    * <!-- end-user-doc -->
    * @generated
    */
-  protected IAction refreshViewerAction = new Action(SetupEditorPlugin.INSTANCE.getString("_UI_RefreshViewer_menu_item"))
+  protected IAction refreshViewerAction = new Action(SetupEditorPlugin.INSTANCE.getString("_UI_RefreshViewer_menu_item")) //$NON-NLS-1$
   {
     @Override
     public boolean isEnabled()
@@ -282,7 +282,8 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
   private final ShowInformationBrowserAction showInformationBrowserAction = new ShowInformationBrowserAction();
 
-  protected final WorkingSetsActionBarContributor.ShowPreviewAction showPreviewAction = new ShowPreviewAction("Show Working Sets Preview");
+  protected final WorkingSetsActionBarContributor.ShowPreviewAction showPreviewAction = new ShowPreviewAction(
+      Messages.SetupActionBarContributor_action_showWorkingSetsPreview);
 
   protected final DeleteUnrecognizedContentAction deleteUnrecognizedContentAction = new DeleteUnrecognizedContentAction();
 
@@ -332,9 +333,9 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     validateAction = null;
 
     showPropertiesViewAction.setPage(getPage());
-    liveValidationAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("live_validation"));
-    refreshViewerAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("refresh_view"));
-    controlAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("control"));
+    liveValidationAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("live_validation")); //$NON-NLS-1$
+    refreshViewerAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("refresh_view")); //$NON-NLS-1$
+    controlAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("control")); //$NON-NLS-1$
 
     loadResourceAction = new LoadResourceAction()
     {
@@ -397,11 +398,11 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       }
     };
 
-    loadResourceAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("load"));
-    loadResourceAction.setId("load");
+    loadResourceAction.setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("load")); //$NON-NLS-1$
+    loadResourceAction.setId("load"); //$NON-NLS-1$
 
-    controlAction.setId("control");
-    liveValidationAction.setId("live");
+    controlAction.setId("control"); //$NON-NLS-1$
+    liveValidationAction.setId("live"); //$NON-NLS-1$
 
     super.init(actionBars);
   }
@@ -425,7 +426,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   @Override
   public void contributeToToolBar(IToolBarManager toolBarManager)
   {
-    toolBarManager.add(new Separator("setup-settings"));
+    toolBarManager.add(new Separator("setup-settings")); //$NON-NLS-1$
     toolBarManager.add(recordPreferencesAction);
     toolBarManager.add(capturePreferencesAction);
     toolBarManager.add(importPreferencesAction);
@@ -436,7 +437,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     toolBarManager.add(showPreviewAction);
     toolBarManager.add(toggleViewerInputAction);
     super.contributeToToolBar(toolBarManager);
-    toolBarManager.add(new Separator("setup-additions"));
+    toolBarManager.add(new Separator("setup-additions")); //$NON-NLS-1$
   }
 
   /**
@@ -450,22 +451,22 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   {
     super.contributeToMenu(menuManager);
 
-    IMenuManager submenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_SetupEditor_menu"), "org.eclipse.oomph.setupMenuID");
-    menuManager.insertAfter("additions", submenuManager);
-    submenuManager.add(new Separator("settings"));
-    submenuManager.add(new Separator("actions"));
-    submenuManager.add(new Separator("additions"));
-    submenuManager.add(new Separator("additions-end"));
+    IMenuManager submenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_SetupEditor_menu"), "org.eclipse.oomph.setupMenuID"); //$NON-NLS-1$ //$NON-NLS-2$
+    menuManager.insertAfter("additions", submenuManager); //$NON-NLS-1$
+    submenuManager.add(new Separator("settings")); //$NON-NLS-1$
+    submenuManager.add(new Separator("actions")); //$NON-NLS-1$
+    submenuManager.add(new Separator("additions")); //$NON-NLS-1$
+    submenuManager.add(new Separator("additions-end")); //$NON-NLS-1$
 
     // Prepare for CreateChild item addition or removal.
     //
-    createChildMenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item"));
-    submenuManager.insertBefore("additions", createChildMenuManager);
+    createChildMenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item")); //$NON-NLS-1$
+    submenuManager.insertBefore("additions", createChildMenuManager); //$NON-NLS-1$
 
     // Prepare for CreateSibling item addition or removal.
     //
-    createSiblingMenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item"));
-    submenuManager.insertBefore("additions", createSiblingMenuManager);
+    createSiblingMenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item")); //$NON-NLS-1$
+    submenuManager.insertBefore("additions", createSiblingMenuManager); //$NON-NLS-1$
 
     // Force an update because Eclipse hides empty menus now.
     //
@@ -485,8 +486,8 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   {
     contributeToMenuGen(menuManager);
 
-    ReflectUtil.setValue("image", createChildMenuManager, SetupEditorPlugin.INSTANCE.getImageDescriptor("create_child"));
-    ReflectUtil.setValue("image", createSiblingMenuManager, SetupEditorPlugin.INSTANCE.getImageDescriptor("create_sibling"));
+    ReflectUtil.setValue("image", createChildMenuManager, SetupEditorPlugin.INSTANCE.getImageDescriptor("create_child")); //$NON-NLS-1$ //$NON-NLS-2$
+    ReflectUtil.setValue("image", createSiblingMenuManager, SetupEditorPlugin.INSTANCE.getImageDescriptor("create_sibling")); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**
@@ -673,12 +674,12 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
         if (variable.getAnnotation(AnnotationConstants.ANNOTATION_GLOBAL_VARIABLE) == null)
         {
           String name = variable.getName();
-          if (name != null && !name.startsWith("*"))
+          if (name != null && !name.startsWith("*")) //$NON-NLS-1$
           {
             Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_GLOBAL_VARIABLE);
             CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
             Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
-            action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_GLOBAL_VARIABLE);
+            action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_GLOBAL_VARIABLE); //$NON-NLS-1$
             actions.add(action);
           }
         }
@@ -686,10 +687,10 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
         if (variable.getAnnotation(AnnotationConstants.ANNOTATION_INHERITED_CHOICES) == null)
         {
           Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_INHERITED_CHOICES);
-          annotation.getDetails().put(AnnotationConstants.KEY_INHERIT, "");
+          annotation.getDetails().put(AnnotationConstants.KEY_INHERIT, ""); //$NON-NLS-1$
           CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
           Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
-          action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_INHERITED_CHOICES);
+          action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_INHERITED_CHOICES); //$NON-NLS-1$
           actions.add(action);
         }
       }
@@ -702,7 +703,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
           Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_FEATURE_SUBSTITUTION);
           CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
           Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
-          action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_FEATURE_SUBSTITUTION);
+          action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_FEATURE_SUBSTITUTION); //$NON-NLS-1$
           actions.add(action);
         }
 
@@ -722,7 +723,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
                 ((EObject)detail).eSet(BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY__KEY, name);
                 CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.ANNOTATION__DETAILS, detail);
                 Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
-                action.setText(action.getText() + " - " + name);
+                action.setText(action.getText() + " - " + name); //$NON-NLS-1$
                 actions.add(action);
               }
             }
@@ -733,13 +734,13 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
           if (modelElement.getAnnotation(AnnotationConstants.ANNOTATION_INDUCED_CHOICES) == null)
           {
             Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_INDUCED_CHOICES);
-            annotation.getDetails().put(AnnotationConstants.KEY_INHERIT, "");
-            annotation.getDetails().put(AnnotationConstants.KEY_LABEL, "");
-            annotation.getDetails().put(AnnotationConstants.KEY_TARGET, "");
-            annotation.getDetails().put(AnnotationConstants.KEY_DESCRIPTION, "");
+            annotation.getDetails().put(AnnotationConstants.KEY_INHERIT, ""); //$NON-NLS-1$
+            annotation.getDetails().put(AnnotationConstants.KEY_LABEL, ""); //$NON-NLS-1$
+            annotation.getDetails().put(AnnotationConstants.KEY_TARGET, ""); //$NON-NLS-1$
+            annotation.getDetails().put(AnnotationConstants.KEY_DESCRIPTION, ""); //$NON-NLS-1$
             CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
             Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
-            action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_INDUCED_CHOICES);
+            action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_INDUCED_CHOICES); //$NON-NLS-1$
             actions.add(action);
           }
         }
@@ -750,7 +751,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
             Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_MATCH_CHOICE);
             CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
             Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
-            action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_MATCH_CHOICE);
+            action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_MATCH_CHOICE); //$NON-NLS-1$
             actions.add(action);
           }
         }
@@ -773,7 +774,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
             CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
             Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
-            action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_BRANDING_INFO);
+            action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_BRANDING_INFO); //$NON-NLS-1$
             actions.add(action);
           }
         }
@@ -792,7 +793,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       if (eAttribute.isChangeable() && eAttribute.getEAnnotation(EAnnotationConstants.ANNOTATION_NO_EXPAND) == null)
       {
         String instanceClassName = eAttribute.getEAttributeType().getInstanceClassName();
-        if (!"java.lang.String".equals(instanceClassName) && !"org.eclipse.emf.common.util.URI".equals(instanceClassName))
+        if (!"java.lang.String".equals(instanceClassName) && !"org.eclipse.emf.common.util.URI".equals(instanceClassName)) //$NON-NLS-1$ //$NON-NLS-2$
         {
           result.add(eAttribute);
         }
@@ -938,20 +939,20 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
   protected void populateManager(IContributionManager manager, Collection<? extends IAction> actions, String contributionID)
   {
-    manager.add(new Separator("elements"));
-    manager.add(new Separator("elements-end"));
-    manager.add(new Separator("scopes"));
-    manager.add(new Separator("scopes-end"));
-    manager.add(new Separator("defaults"));
-    manager.add(new Separator("defaults-end"));
-    manager.add(new Separator("installations"));
-    manager.add(new Separator("installations-end"));
-    manager.add(new Separator("tasks"));
-    manager.add(new Separator("tasks-end"));
-    manager.add(new Separator("annotations"));
-    manager.add(new Separator("annotations-end"));
-    manager.add(new Separator("additions"));
-    manager.add(new Separator("additions-end"));
+    manager.add(new Separator("elements")); //$NON-NLS-1$
+    manager.add(new Separator("elements-end")); //$NON-NLS-1$
+    manager.add(new Separator("scopes")); //$NON-NLS-1$
+    manager.add(new Separator("scopes-end")); //$NON-NLS-1$
+    manager.add(new Separator("defaults")); //$NON-NLS-1$
+    manager.add(new Separator("defaults-end")); //$NON-NLS-1$
+    manager.add(new Separator("installations")); //$NON-NLS-1$
+    manager.add(new Separator("installations-end")); //$NON-NLS-1$
+    manager.add(new Separator("tasks")); //$NON-NLS-1$
+    manager.add(new Separator("tasks-end")); //$NON-NLS-1$
+    manager.add(new Separator("annotations")); //$NON-NLS-1$
+    manager.add(new Separator("annotations-end")); //$NON-NLS-1$
+    manager.add(new Separator("additions")); //$NON-NLS-1$
+    manager.add(new Separator("additions-end")); //$NON-NLS-1$
 
     List<IAction> elements = new ArrayList<IAction>();
     List<IAction> scopes = new ArrayList<IAction>();
@@ -1046,30 +1047,30 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     removeInstalledClasses(installedClasses, additionalTasks);
     Collections.sort(tasks, ACTION_COMPARATOR);
 
-    populateManagerGen(manager, elements, "elements-end");
+    populateManagerGen(manager, elements, "elements-end"); //$NON-NLS-1$
 
     if (!additionalElements.isEmpty())
     {
-      populateManagerEnablements(manager, SetupEditorPlugin.INSTANCE.getString("_UI_AdditionalElements_menu_item"), "elements-end", additionalElements);
+      populateManagerEnablements(manager, SetupEditorPlugin.INSTANCE.getString("_UI_AdditionalElements_menu_item"), "elements-end", additionalElements); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
-    populateManagerGen(manager, scopes, "scopes-end");
-    populateManagerGen(manager, defaults, "defaults-end");
-    populateManagerGen(manager, installations, "installations-end");
-    populateManagerGen(manager, tasks, "tasks-end");
+    populateManagerGen(manager, scopes, "scopes-end"); //$NON-NLS-1$
+    populateManagerGen(manager, defaults, "defaults-end"); //$NON-NLS-1$
+    populateManagerGen(manager, installations, "installations-end"); //$NON-NLS-1$
+    populateManagerGen(manager, tasks, "tasks-end"); //$NON-NLS-1$
 
     if (!additionalTasks.isEmpty())
     {
-      populateManagerEnablements(manager, SetupEditorPlugin.INSTANCE.getString("_UI_AdditionalTasks_menu_item"), "tasks-end", additionalTasks);
+      populateManagerEnablements(manager, SetupEditorPlugin.INSTANCE.getString("_UI_AdditionalTasks_menu_item"), "tasks-end", additionalTasks); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
-    populateManagerGen(manager, annotations, "annotations-end");
-    populateManagerGen(manager, additions, "additions-end");
+    populateManagerGen(manager, annotations, "annotations-end"); //$NON-NLS-1$
+    populateManagerGen(manager, additions, "additions-end"); //$NON-NLS-1$
   }
 
   private String getInstalledClass(EClass eClass)
   {
-    return eClass.getEPackage().getNsURI() + "#" + eClass.getName();
+    return eClass.getEPackage().getNsURI() + "#" + eClass.getName(); //$NON-NLS-1$
   }
 
   private void removeInstalledClasses(Set<String> installedClasses, List<EnablementAction> actions)
@@ -1106,7 +1107,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
             for (int i = 0; i < jobs; i++)
             {
-              Job iconLoader = new Job("IconLoader-" + i)
+              Job iconLoader = new Job("IconLoader-" + i) //$NON-NLS-1$
               {
                 @Override
                 protected IStatus run(IProgressMonitor monitor)
@@ -1201,23 +1202,23 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     super.menuAboutToShow(menuManager);
     MenuManager submenuManager = null;
 
-    submenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item"),
-        SetupEditorPlugin.INSTANCE.getImageDescriptor("create_child"), "CreateChild");
+    submenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item"), //$NON-NLS-1$
+        SetupEditorPlugin.INSTANCE.getImageDescriptor("create_child"), "CreateChild"); //$NON-NLS-1$ //$NON-NLS-2$
     populateManager(submenuManager, createChildActions, null);
-    menuManager.insertBefore("edit", submenuManager);
+    menuManager.insertBefore("edit", submenuManager); //$NON-NLS-1$
 
-    submenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item"),
-        SetupEditorPlugin.INSTANCE.getImageDescriptor("create_sibling"), "CreateSibling");
+    submenuManager = new MenuManager(SetupEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item"), //$NON-NLS-1$
+        SetupEditorPlugin.INSTANCE.getImageDescriptor("create_sibling"), "CreateSibling"); //$NON-NLS-1$ //$NON-NLS-2$
     populateManager(submenuManager, createSiblingActions, null);
-    menuManager.insertBefore("edit", submenuManager);
+    menuManager.insertBefore("edit", submenuManager); //$NON-NLS-1$
 
     if (deleteUnrecognizedContentAction.isApplicable())
     {
-      menuManager.insertBefore("edit", deleteUnrecognizedContentAction);
+      menuManager.insertBefore("edit", deleteUnrecognizedContentAction); //$NON-NLS-1$
     }
 
-    menuManager.insertBefore("ui-actions", openInSetupEditorAction);
-    menuManager.insertBefore("ui-actions", openInTextEditorAction);
+    menuManager.insertBefore("ui-actions", openInSetupEditorAction); //$NON-NLS-1$
+    menuManager.insertBefore("ui-actions", openInTextEditorAction); //$NON-NLS-1$
   }
 
   /**
@@ -1228,11 +1229,11 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
    */
   protected void addGlobalActionsGen(IMenuManager menuManager)
   {
-    menuManager.insertAfter("additions-end", new Separator("ui-actions"));
-    menuManager.insertAfter("ui-actions", showPropertiesViewAction);
+    menuManager.insertAfter("additions-end", new Separator("ui-actions")); //$NON-NLS-1$ //$NON-NLS-2$
+    menuManager.insertAfter("ui-actions", showPropertiesViewAction); //$NON-NLS-1$
 
     refreshViewerAction.setEnabled(refreshViewerAction.isEnabled());
-    menuManager.insertAfter("ui-actions", refreshViewerAction);
+    menuManager.insertAfter("ui-actions", refreshViewerAction); //$NON-NLS-1$
 
     super.addGlobalActions(menuManager);
   }
@@ -1242,10 +1243,10 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   {
     addGlobalActionsGen(menuManager);
     showTooltipsAction.setChecked(isShowTooltips());
-    menuManager.insertAfter("live", new ActionContributionItem(showTooltipsAction));
-    menuManager.insertBefore("properties", new ActionContributionItem(showInformationBrowserAction));
-    menuManager.insertBefore("properties", showPreviewAction);
-    menuManager.insertBefore("load", menuManager.remove("control"));
+    menuManager.insertAfter("live", new ActionContributionItem(showTooltipsAction)); //$NON-NLS-1$
+    menuManager.insertBefore("properties", new ActionContributionItem(showInformationBrowserAction)); //$NON-NLS-1$
+    menuManager.insertBefore("properties", showPreviewAction); //$NON-NLS-1$
+    menuManager.insertBefore("load", menuManager.remove("control")); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**
@@ -1355,7 +1356,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   {
     public PreferenceRecorderToolbarAction(boolean withDialog)
     {
-      super("Record Preferences", SetupEditorPlugin.INSTANCE.getImageDescriptor("preference_recorder"));
+      super(Messages.SetupActionBarContributor_action_recordPreferences, SetupEditorPlugin.INSTANCE.getImageDescriptor("preference_recorder")); //$NON-NLS-1$
     }
 
     @Override
@@ -1405,8 +1406,10 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
     public PreferenceCaptureToolbarAction(boolean fromEclipsePreferenceFile)
     {
-      super(fromEclipsePreferenceFile ? "Import Preferences" : "Capture Preferences",
-          SetupEditorPlugin.INSTANCE.getImageDescriptor(fromEclipsePreferenceFile ? "preference_importer" : "preference_picker"));
+      super(
+          fromEclipsePreferenceFile ? Messages.SetupActionBarContributor_action_preferenceCapture_importPrefs
+              : Messages.SetupActionBarContributor_action_preferenceCapture_capturePrefs,
+          SetupEditorPlugin.INSTANCE.getImageDescriptor(fromEclipsePreferenceFile ? "preference_importer" : "preference_picker")); //$NON-NLS-1$ //$NON-NLS-2$
       this.fromEclipsePreferenceFile = fromEclipsePreferenceFile;
     }
 
@@ -1456,9 +1459,9 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
     public TestInstallAction()
     {
-      super("Test Install", AS_PUSH_BUTTON);
-      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("run"));
-      setToolTipText("Launch the installer with the current project");
+      super(Messages.SetupActionBarContributor_action_testInstall, AS_PUSH_BUTTON);
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("run")); //$NON-NLS-1$
+      setToolTipText(Messages.SetupActionBarContributor_action_testInstall_tooltip);
     }
 
     @SuppressWarnings("unused")
@@ -1512,9 +1515,9 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   {
     public CommandTableAction()
     {
-      super("Command Table");
-      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("commands"));
-      setToolTipText("Show a table of all available commands");
+      super(Messages.SetupActionBarContributor_action_commandTable);
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("commands")); //$NON-NLS-1$
+      setToolTipText(Messages.SetupActionBarContributor_action_commandTable_tooltip);
     }
 
     @SuppressWarnings("unchecked")
@@ -1556,11 +1559,11 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       PrintStream out = new PrintStream(baos);
-      out.println("<table border=\"1\">");
+      out.println("<table border=\"1\">"); //$NON-NLS-1$
 
       for (String category : categories)
       {
-        out.println("<tr><td colspan=\"3\" bgcolor=\"eae6ff\"><br><h2>" + category + "</h2></td></tr>");
+        out.println("<tr><td colspan=\"3\" bgcolor=\"eae6ff\"><br><h2>" + category + "</h2></td></tr>"); //$NON-NLS-1$ //$NON-NLS-2$
 
         List<Command> commands = map.get(category);
         Collections.sort(commands);
@@ -1577,7 +1580,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
               {
                 if (keys.length() != 0)
                 {
-                  keys.append("<br>");
+                  keys.append("<br>"); //$NON-NLS-1$
                 }
 
                 keys.append(binding.getTriggerSequence());
@@ -1587,7 +1590,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
           if (keys.length() == 0)
           {
-            keys.append("&nbsp;");
+            keys.append("&nbsp;"); //$NON-NLS-1$
           }
 
           String name;
@@ -1600,21 +1603,21 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
             name = command.getId();
           }
 
-          out.println("<tr><td valign=\"top\" width=\"200\">" + name + "</td><td valign=\"top\" width=\"400\">" + command.getId()
-              + "</td><td valign=\"top\" width=\"100\">" + keys + "</td></tr>");
+          out.println("<tr><td valign=\"top\" width=\"200\">" + name + "</td><td valign=\"top\" width=\"400\">" + command.getId() //$NON-NLS-1$ //$NON-NLS-2$
+              + "</td><td valign=\"top\" width=\"100\">" + keys + "</td></tr>"); //$NON-NLS-1$ //$NON-NLS-2$
         }
       }
 
-      out.println("</table>");
+      out.println("</table>"); //$NON-NLS-1$
 
       try
       {
         out.flush();
-        return baos.toString("UTF-8");
+        return baos.toString("UTF-8"); //$NON-NLS-1$
       }
       catch (UnsupportedEncodingException ex)
       {
-        return "UTF-8 is unsupported";
+        return Messages.SetupActionBarContributor_html_Utf8IsUnsupported;
       }
     }
 
@@ -1648,7 +1651,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       @Override
       protected IDialogSettings getDialogBoundsSettings()
       {
-        return SetupEditorPlugin.INSTANCE.getDialogSettings("CommandTable");
+        return SetupEditorPlugin.INSTANCE.getDialogSettings("CommandTable"); //$NON-NLS-1$
       }
     }
   }
@@ -1660,9 +1663,9 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   {
     public EditorTableAction()
     {
-      super("Editor Table");
-      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("FileEditor"));
-      setToolTipText("Show a table of all available editors");
+      super(Messages.SetupActionBarContributor_action_editorTable);
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("FileEditor")); //$NON-NLS-1$
+      setToolTipText(Messages.SetupActionBarContributor_action_editorTable_tooltip);
     }
 
     @SuppressWarnings("restriction")
@@ -1671,26 +1674,26 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       PrintStream out = new PrintStream(baos);
-      out.println("<table border=\"1\">");
-      out.println("<tr><td bgcolor=\"eae6ff\">ID</td><td bgcolor=\"eae6ff\">Label</td></tr>");
+      out.println("<table border=\"1\">"); //$NON-NLS-1$
+      out.println("<tr><td bgcolor=\"eae6ff\">ID</td><td bgcolor=\"eae6ff\">Label</td></tr>"); //$NON-NLS-1$
 
       org.eclipse.ui.internal.registry.EditorRegistry registry = (org.eclipse.ui.internal.registry.EditorRegistry)PlatformUI.getWorkbench().getEditorRegistry();
       IEditorDescriptor[] editors = registry.getSortedEditorsFromPlugins();
       for (IEditorDescriptor editor : editors)
       {
-        out.println("<tr><td>" + editor.getId() + "</td><td>" + editor.getLabel() + "</td></tr>");
+        out.println("<tr><td>" + editor.getId() + "</td><td>" + editor.getLabel() + "</td></tr>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       }
 
-      out.println("</table>");
+      out.println("</table>"); //$NON-NLS-1$
 
       try
       {
         out.flush();
-        return baos.toString("UTF-8");
+        return baos.toString("UTF-8"); //$NON-NLS-1$
       }
       catch (UnsupportedEncodingException ex)
       {
-        return "UTF-8 is unsupported";
+        return Messages.SetupActionBarContributor_html_Utf8IsUnsupported;
       }
     }
 
@@ -1724,7 +1727,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       @Override
       protected IDialogSettings getDialogBoundsSettings()
       {
-        return SetupEditorPlugin.INSTANCE.getDialogSettings("EditorTable");
+        return SetupEditorPlugin.INSTANCE.getDialogSettings("EditorTable"); //$NON-NLS-1$
       }
     }
   }
@@ -1735,9 +1738,9 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
     public ToggleViewerInputAction()
     {
-      super("Show Resources", IAction.AS_CHECK_BOX);
-      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("ToggleInput"));
-      setToolTipText("Show all resources");
+      super(Messages.SetupActionBarContributor_action_showResources, IAction.AS_CHECK_BOX);
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("ToggleInput")); //$NON-NLS-1$
+      setToolTipText(Messages.SetupActionBarContributor_action_showResources_tooltip);
     }
 
     @Override
@@ -1803,8 +1806,8 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
     public OpenInSetupEditorAction()
     {
-      setText("Open in Setup Editor");
-      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("edit_setup"));
+      setText(Messages.SetupActionBarContributor_action_openInSetupEditor);
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("edit_setup")); //$NON-NLS-1$
     }
 
     @Override
@@ -1816,7 +1819,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     public void open(Object object)
     {
       final URI uri = getEditURI(object, true);
-      if ("performer".equals(uri.scheme()))
+      if ("performer".equals(uri.scheme())) //$NON-NLS-1$
       {
         SetupEditorSupport.getEditor(setupEditor.getSite().getWorkbenchWindow().getActivePage(),
             OpenInTextEditorAction.createEditorInput(uri.trimFragment(), object), uri, true);
@@ -1874,14 +1877,14 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
     public OpenInTextEditorAction()
     {
-      setText("Open in Text Editor");
-      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("edit_text"));
+      setText(Messages.SetupActionBarContributor_action_openInTextEditor);
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("edit_text")); //$NON-NLS-1$
     }
 
     @Override
     public void run()
     {
-      if ("performer".equals(uri.scheme()))
+      if ("performer".equals(uri.scheme())) //$NON-NLS-1$
       {
         SetupEditorSupport.getTextEditor(setupEditor.getSite().getWorkbenchWindow().getActivePage(), createEditorInput(uri.trimFragment(), object));
       }
@@ -1987,7 +1990,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     public void open(Object object)
     {
       final URI uri = getEditURI(object, true);
-      if ("performer".equals(uri.scheme()))
+      if ("performer".equals(uri.scheme())) //$NON-NLS-1$
       {
         SetupEditorSupport.getTextEditor(setupEditor.getSite().getWorkbenchWindow().getActivePage(), createEditorInput(uri.trimFragment(), object));
       }
@@ -2042,8 +2045,8 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
     public DeleteUnrecognizedContentAction()
     {
-      setText("Delete Unrecognized Content");
-      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("remove_unrecognized_content"));
+      setText(Messages.SetupActionBarContributor_action_deleteUnrecognizedContent);
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("remove_unrecognized_content")); //$NON-NLS-1$
     }
 
     @Override
@@ -2121,12 +2124,12 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
   public static boolean isShowTooltips()
   {
-    return SetupUIPlugin.INSTANCE.getInstancePreference("showTooltips").get(true);
+    return SetupUIPlugin.INSTANCE.getInstancePreference("showTooltips").get(true); //$NON-NLS-1$
   }
 
   public static void setShowTooltips(boolean showTooltips)
   {
-    SetupUIPlugin.INSTANCE.getInstancePreference("showTooltips").set(showTooltips);
+    SetupUIPlugin.INSTANCE.getInstancePreference("showTooltips").set(showTooltips); //$NON-NLS-1$
   }
 
   /**
@@ -2136,9 +2139,9 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   {
     public ShowTooltipsAction()
     {
-      setText("Show Tooltips");
+      setText(Messages.SetupActionBarContributor_action_showTooltips);
       setChecked(isShowTooltips());
-      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("show_tooltips"));
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("show_tooltips")); //$NON-NLS-1$
     }
 
     @Override
@@ -2158,8 +2161,8 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
     public ShowInformationBrowserAction()
     {
-      super("Show Information Browser", Action.AS_CHECK_BOX);
-      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("open_browser"));
+      super(Messages.SetupActionBarContributor_action_showInformationBrowser, Action.AS_CHECK_BOX);
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("open_browser")); //$NON-NLS-1$
     }
 
     @Override
@@ -2222,8 +2225,8 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
     private ShowPropertiesViewAction()
     {
-      super(SetupEditorPlugin.INSTANCE.getString("_UI_ShowPropertiesView_menu_item"), SetupEditorPlugin.INSTANCE.getImageDescriptor("show_properties_view"));
-      setId("properties");
+      super(SetupEditorPlugin.INSTANCE.getString("_UI_ShowPropertiesView_menu_item"), SetupEditorPlugin.INSTANCE.getImageDescriptor("show_properties_view")); //$NON-NLS-1$ //$NON-NLS-2$
+      setId("properties"); //$NON-NLS-1$
     }
 
     public void setPage(IWorkbenchPage page)
@@ -2236,7 +2239,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     {
       try
       {
-        page.showView("org.eclipse.ui.views.PropertySheet");
+        page.showView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
       }
       catch (PartInitException exception)
       {
@@ -2248,7 +2251,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     {
       try
       {
-        IViewPart propertiesView = page.showView("org.eclipse.ui.views.PropertySheet");
+        IViewPart propertiesView = page.showView("org.eclipse.ui.views.PropertySheet"); //$NON-NLS-1$
         if (propertiesView instanceof PropertySheet)
         {
           PropertySheet propertySheet = (PropertySheet)propertiesView;
