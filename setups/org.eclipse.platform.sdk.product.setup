@@ -49,7 +49,7 @@
       vm="true"/>
   <version name="latest"
       label="Latest (4.17 - 2020-09)"
-      requiredJavaVersion="1.8">
+      requiredJavaVersion="11">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
@@ -97,7 +97,7 @@
   </version>
   <version name="4.17"
       label="4.17 - 2020-09"
-      requiredJavaVersion="1.8">
+      requiredJavaVersion="11">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail

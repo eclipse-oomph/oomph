@@ -131,16 +131,17 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final Map<String, String> ICONS = new HashMap<String, String>();
 
-  private static final List<String> PRODUCT_IDS = Arrays
-      .asList(new String[] { "epp.package.java", "epp.package.jee", "epp.package.cpp", "epp.package.javascript", "epp.package.php", "epp.package.committers",
-          "epp.package.dsl", "epp.package.modeling", "epp.package.rcp", "epp.package.testing", "epp.package.parallel", "epp.package.scout", "epp.package.rust",
-          "org.eclipse.platform.ide", "org.eclipse.sdk.ide", "epp.package.reporting", "epp.package.android", "epp.package.automotive" });
-
-  private static final String ALL_PRODUCT_ID = "all";
+  private static final String ECLIPSE_PLATFORM_SDK_PRODUCT_IDE_ID = "org.eclipse.sdk.ide";
 
   private static final String ECLIPSE_PLATFORM_SDK_PRODUCT_ID = "eclipse.platform.sdk";
 
-  // private static final List<String> SPECIAL_PRODUCT_IDS = Arrays.asList(new String[] { "org.eclipse.platform.ide", "org.eclipse.sdk.ide" });
+  private static final List<String> PRODUCT_IDS = Arrays
+      .asList(new String[] { "epp.package.java", "epp.package.jee", "epp.package.cpp", "epp.package.javascript", "epp.package.php", "epp.package.committers",
+          "epp.package.dsl", "epp.package.modeling", "epp.package.rcp", "epp.package.testing", "epp.package.parallel", "epp.package.scout", "epp.package.rust",
+          "org.eclipse.platform.ide", ECLIPSE_PLATFORM_SDK_PRODUCT_IDE_ID, "epp.package.reporting", "epp.package.android", "epp.package.automotive" });
+
+  private static final String ALL_PRODUCT_ID = "all";
+
   private static final List<String> SPECIAL_PRODUCT_IDS = Arrays.asList(new String[] { "org.eclipse.platform.ide" });
 
   private static final Set<String> EXCLUDED_IDS = new HashSet<String>(Arrays.asList("epp.package.mobile"));
@@ -176,6 +177,8 @@ public class ProductCatalogGenerator implements IApplication
   private final IMetadataRepositoryManager manager = getMetadataRepositoryManager();
 
   private final Map<String, IMetadataRepository> eppMetaDataRepositories = new HashMap<String, IMetadataRepository>();
+
+  private final Map<String, IMetadataRepository> platformMetaDataRepositories = new HashMap<String, IMetadataRepository>();
 
   private final Map<String, List<TrainAndVersion>> trainsAndVersions = new HashMap<String, List<TrainAndVersion>>();
 
@@ -581,8 +584,8 @@ public class ProductCatalogGenerator implements IApplication
     }
 
     addProductVersion(log, product, latestVersion, VersionSegment.MAJOR, latestTrainAndVersion.getTrainURI(), latestTrainAndVersion.getEPPURI(), latestTrain,
-        eppMetaDataRepositories, "latest", "Latest (" + eclipseVersionPrefix + latestTrainLabel + ")",
-        p2TaskLabel + " (" + eclipseVersionPrefix + latestTrainLabel + ")", latestTrainsIUs, emfRepositoryLocation);
+        "latest", "Latest (" + eclipseVersionPrefix + latestTrainLabel + ")", p2TaskLabel + " (" + eclipseVersionPrefix + latestTrainLabel + ")",
+        latestTrainsIUs, emfRepositoryLocation);
 
     if (!latestUnreleased || size != 1)
     {
@@ -604,9 +607,8 @@ public class ProductCatalogGenerator implements IApplication
       }
 
       addProductVersion(log, product, releasedVersion, IS_RANGE_NARROW ? VersionSegment.MINOR : VersionSegment.MAJOR, releasedTrainAndVersion.getTrainURI(),
-          releasedTrainAndVersion.getEPPURI(), releasedTrain, eppMetaDataRepositories, "latest.released",
-          "Latest Release (" + eclipseVersionPrefix + releasedTrainLabel + ")", p2TaskLabel + " (" + eclipseVersionPrefix + releasedTrainLabel + ")",
-          releasedTrainAndVersion.getIUs(), emfRepositoryLocation);
+          releasedTrainAndVersion.getEPPURI(), releasedTrain, "latest.released", "Latest Release (" + eclipseVersionPrefix + releasedTrainLabel + ")",
+          p2TaskLabel + " (" + eclipseVersionPrefix + releasedTrainLabel + ")", releasedTrainAndVersion.getIUs(), emfRepositoryLocation);
     }
 
     for (int i = 0; i < size; i++)
@@ -625,7 +627,7 @@ public class ProductCatalogGenerator implements IApplication
       }
 
       addProductVersion(log, product, version, IS_RANGE_NARROW ? VersionSegment.MINOR : VersionSegment.MAJOR, entry.getTrainURI(), entry.getEPPURI(), train,
-          eppMetaDataRepositories, name, trainLabel, p2TaskLabel + " (" + trainLabel + ")", entry.getIUs(), emfRepositoryLocation);
+          name, trainLabel, p2TaskLabel + " (" + trainLabel + ")", entry.getIUs(), emfRepositoryLocation);
     }
 
     System.out.println(log);
@@ -839,7 +841,7 @@ public class ProductCatalogGenerator implements IApplication
     Map<String, Set<IInstallableUnit>> versionIUs = new TreeMap<String, Set<IInstallableUnit>>();
     @SuppressWarnings("unchecked")
     IQuery<IInstallableUnit> query = QueryUtil.createCompoundQuery((List<IQuery<IInstallableUnit>>)(List<?>)Arrays
-        .asList(new IQuery<?>[] { QueryUtil.createIUQuery("org.eclipse.sdk.ide"), QueryUtil.createLatestIUQuery() }), true);
+        .asList(new IQuery<?>[] { QueryUtil.createIUQuery(ECLIPSE_PLATFORM_SDK_PRODUCT_IDE_ID), QueryUtil.createLatestIUQuery() }), true);
     IInstallableUnit ide = null;
     for (IInstallableUnit iu : P2Util.asIterable(repository.query(query, null)))
     {
@@ -853,6 +855,11 @@ public class ProductCatalogGenerator implements IApplication
       synchronized (labels)
       {
         labels.put(ECLIPSE_PLATFORM_SDK_PRODUCT_ID, "Eclipse SDK");
+      }
+
+      synchronized (platformMetaDataRepositories)
+      {
+        platformMetaDataRepositories.put(train, repository);
       }
 
       URI releaseURI = eclipsePlatformSite.toString().contains("I-builds") ? eclipsePlatformSite : URI.createURI(repository.getLocation().toString());
@@ -1229,8 +1236,7 @@ public class ProductCatalogGenerator implements IApplication
   }
 
   private void addProductVersion(StringBuilder log, Product product, Version version, VersionSegment versionSegment, URI trainURI, URI eppURI, String train,
-      Map<String, IMetadataRepository> eppMetaDataRepositories, String name, String label, String p2TaskLabel, Map<String, Set<IInstallableUnit>> ius,
-      String emfRepositoryLocation)
+      String name, String label, String p2TaskLabel, Map<String, Set<IInstallableUnit>> ius, String emfRepositoryLocation)
   {
     log.append("  ").append(label);
 
@@ -1303,7 +1309,7 @@ public class ProductCatalogGenerator implements IApplication
       requirement.setVersionRange(versionRange);
       p2Task.getRequirements().add(requirement);
       addRootIURequirements(p2Task.getRequirements(), versionSegment, ius);
-      addAdditionalInstallRootIURequirements(p2Task.getRequirements(), productName, train, eppMetaDataRepositories, ius);
+      addAdditionalInstallRootIURequirements(p2Task.getRequirements(), productName, train, ius);
     }
     else
     {
@@ -1325,11 +1331,8 @@ public class ProductCatalogGenerator implements IApplication
 
     productVersion.getSetupTasks().add(p2Task);
 
-    String idPrefix = "tooling"
-        + (SPECIAL_PRODUCT_IDS.contains(productName) || ALL_PRODUCT_ID.equals(productName) || ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName)
-            ? "epp.package.java"
-            : productName)
-        + ".ini.";
+    String idPrefix = "tooling" + (SPECIAL_PRODUCT_IDS.contains(productName) || ALL_PRODUCT_ID.equals(productName) ? "epp.package.java"
+        : ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) ? "org.eclipse.platform.sdk" : productName) + ".ini.";
 
     Version maxJavaVersion = null;
     if (train.compareTo("neon") >= 0)
@@ -1337,56 +1340,20 @@ public class ProductCatalogGenerator implements IApplication
       maxJavaVersion = Version.create("1.8.0");
     }
 
-    IMetadataRepository eppMetaDataRepository = eppMetaDataRepositories.get(train);
-    if (eppMetaDataRepository != null)
+    IMetadataRepository metadDataRepository = ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) ? platformMetaDataRepositories.get(train)
+        : eppMetaDataRepositories.get(train);
     {
-      for (IInstallableUnit iu : P2Util.asIterable(eppMetaDataRepository.query(QueryUtil.createIUAnyQuery(), null)))
+      Version javaVersion = getRequiredJavaVersion(metadDataRepository, idPrefix);
+      if (maxJavaVersion == null || javaVersion != null && maxJavaVersion.compareTo(javaVersion) < 0)
       {
-        String id = iu.getId();
-        if (id.startsWith(idPrefix) && (SPECIAL_PRODUCT_IDS.contains(productName) || ALL_PRODUCT_ID.equals(productName)
-            || ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) || iu.getVersion().equals(version)))
-        {
-          Collection<ITouchpointData> touchpointDatas = iu.getTouchpointData();
-          if (touchpointDatas != null)
-          {
-            for (ITouchpointData touchpointData : touchpointDatas)
-            {
-              ITouchpointInstruction instruction = touchpointData.getInstruction("configure");
-              if (instruction != null)
-              {
-                String body = instruction.getBody();
-                if (body != null)
-                {
-                  int pos = body.indexOf(JAVA_VERSION_PREFIX);
-                  if (pos != -1)
-                  {
-                    pos += JAVA_VERSION_PREFIX.length();
-                    Version javaVersion = Version.parseVersion(body.substring(pos, body.indexOf(')', pos)));
-                    if (maxJavaVersion == null || maxJavaVersion.compareTo(javaVersion) < 0)
-                    {
-                      maxJavaVersion = javaVersion;
-                    }
-
-                    // IMatchExpression<IInstallableUnit> filter = iu.getFilter();
-                    // Object[] parameters = filter.getParameters();
-                    // if (parameters != null)
-                    // {
-                    // for (Object parameter : parameters)
-                    // {
-                    // if (parameter instanceof IFilterExpression)
-                    // {
-                    // IFilterExpression filterExpression = (IFilterExpression)parameter;
-                    // System.out.println(" " + filterExpression.toString() + " --> " + javaVersion);
-                    // }
-                    // }
-                    // }
-                  }
-                }
-              }
-            }
-          }
-        }
+        maxJavaVersion = javaVersion;
       }
+    }
+
+    if (maxJavaVersion == null && ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName))
+    {
+      idPrefix = "toolingepp.package.java.ini.";
+      maxJavaVersion = getRequiredJavaVersion(eppMetaDataRepositories.get(train), idPrefix);
     }
 
     if (maxJavaVersion != null)
@@ -1440,6 +1407,60 @@ public class ProductCatalogGenerator implements IApplication
         product.getLabel().replaceAll(" \\(.+\\)", "") + " - " + label.replaceAll(" \\(.+\\)", ""));
 
     log.append('\n');
+  }
+
+  private Version getRequiredJavaVersion(IMetadataRepository metadDataRepository, String idPrefix)
+  {
+    Version maxJavaVersion = null;
+    if (metadDataRepository != null)
+    {
+      for (IInstallableUnit iu : P2Util.asIterable(metadDataRepository.query(QueryUtil.createIUAnyQuery(), null)))
+      {
+        String id = iu.getId();
+        if (id.startsWith(idPrefix))
+        {
+          Version javaVersion = getRequiredJavaVersion(iu);
+          if (maxJavaVersion == null || javaVersion != null && maxJavaVersion.compareTo(javaVersion) < 0)
+          {
+            maxJavaVersion = javaVersion;
+          }
+        }
+      }
+    }
+
+    return maxJavaVersion;
+  }
+
+  private Version getRequiredJavaVersion(IInstallableUnit iu)
+  {
+    Version maxJavaVersion = null;
+    Collection<ITouchpointData> touchpointDatas = iu.getTouchpointData();
+    if (touchpointDatas != null)
+    {
+      for (ITouchpointData touchpointData : touchpointDatas)
+      {
+        ITouchpointInstruction instruction = touchpointData.getInstruction("configure");
+        if (instruction != null)
+        {
+          String body = instruction.getBody();
+          if (body != null)
+          {
+            int pos = body.indexOf(JAVA_VERSION_PREFIX);
+            if (pos != -1)
+            {
+              pos += JAVA_VERSION_PREFIX.length();
+              Version javaVersion = Version.parseVersion(body.substring(pos, body.indexOf(')', pos)));
+              if (maxJavaVersion == null || maxJavaVersion.compareTo(javaVersion) < 0)
+              {
+                maxJavaVersion = javaVersion;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return maxJavaVersion;
   }
 
   private String getKey(String productLabel)
@@ -1610,8 +1631,7 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
-  private void addAdditionalInstallRootIURequirements(EList<Requirement> requirements, String productName, String train,
-      Map<String, IMetadataRepository> eppMetaDataRepositories, Map<String, Set<IInstallableUnit>> ius)
+  private void addAdditionalInstallRootIURequirements(EList<Requirement> requirements, String productName, String train, Map<String, Set<IInstallableUnit>> ius)
   {
     IMetadataRepository eppMetadataRepository = eppMetaDataRepositories.get(train);
     IInstallableUnit maxProductIU = null;
@@ -1671,7 +1691,7 @@ public class ProductCatalogGenerator implements IApplication
       return;
     }
 
-    if (name.equals("org.eclipse.sdk.ide"))
+    if (name.equals(ECLIPSE_PLATFORM_SDK_PRODUCT_IDE_ID))
     {
       product.setDescription("This package contains the IDE provided by the Eclipse project's platform build.");
       return;
