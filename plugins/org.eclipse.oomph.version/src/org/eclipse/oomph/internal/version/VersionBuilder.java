@@ -678,7 +678,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
             Markers.deleteAllMarkers(projectDescription, Markers.VALIDATOR_CLASS_PROBLEM);
 
             Class<?> c = Class.forName(validatorClassName, true, VersionBuilder.class.getClassLoader());
-            validator = (VersionValidator)c.newInstance();
+            validator = (VersionValidator)c.getDeclaredConstructor().newInstance();
 
             if (VersionUtil.DEBUG)
             {

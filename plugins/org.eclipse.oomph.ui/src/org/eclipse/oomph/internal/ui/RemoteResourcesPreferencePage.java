@@ -106,7 +106,8 @@ public class RemoteResourcesPreferencePage extends FieldEditorPreferencePage imp
     addField(offline);
     offline.getDescriptionControl(parent).setToolTipText(Messages.RemoteResourcesPreferencePage_useOfflineCache_tooltip);
 
-    BooleanFieldEditor showOffline = new BooleanFieldEditor(UIPropertyTester.SHOW_OFFLINE, Messages.RemoteResourcesPreferencePage_showOfflineToolbar_label, parent);
+    BooleanFieldEditor showOffline = new BooleanFieldEditor(UIPropertyTester.SHOW_OFFLINE, Messages.RemoteResourcesPreferencePage_showOfflineToolbar_label,
+        parent);
     showOffline.fillIntoGrid(parent, 2);
     addField(showOffline);
     showOffline.getDescriptionControl(parent).setToolTipText(Messages.RemoteResourcesPreferencePage_showOfflineToolbar_tooltip);
@@ -117,7 +118,7 @@ public class RemoteResourcesPreferencePage extends FieldEditorPreferencePage imp
       @SuppressWarnings("unchecked")
       Class<? extends Runnable> refreshCacheHandlerClass = (Class<? extends Runnable>)CommonPlugin.loadClass("org.eclipse.oomph.setup.editor", //$NON-NLS-1$
           "org.eclipse.oomph.setup.presentation.handlers.RefreshCacheHandler"); //$NON-NLS-1$
-      runnable = refreshCacheHandlerClass.newInstance();
+      runnable = refreshCacheHandlerClass.getDeclaredConstructor().newInstance();
     }
     catch (Exception ex)
     {

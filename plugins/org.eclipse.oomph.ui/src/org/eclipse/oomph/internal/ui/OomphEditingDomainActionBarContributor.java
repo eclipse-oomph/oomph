@@ -73,13 +73,13 @@ public class OomphEditingDomainActionBarContributor extends EditingDomainActionB
       // Try to create EMF's expand-all action, which is new to EMF 2.14.
       Field expandAllActionField = ReflectUtil.getField(EditingDomainActionBarContributor.class, "expandAllAction"); //$NON-NLS-1$
       Class<?> expandAllActionClass = CommonPlugin.loadClass("org.eclipse.emf.edit.ui", "org.eclipse.emf.edit.ui.action.ExpandAllAction"); //$NON-NLS-1$ //$NON-NLS-2$
-      Object expandAllAction = expandAllActionClass.newInstance();
+      Object expandAllAction = expandAllActionClass.getDeclaredConstructor().newInstance();
       expandAllActionField.set(this, expandAllAction);
 
       // Try to create EMF's collapse-all action, which is new to EMF 2.14.
       Field collapseAllActionField = ReflectUtil.getField(EditingDomainActionBarContributor.class, "collapseAllAction"); //$NON-NLS-1$
       Class<?> collapseAllActionClass = CommonPlugin.loadClass("org.eclipse.emf.edit.ui", "org.eclipse.emf.edit.ui.action.CollapseAllAction"); //$NON-NLS-1$ //$NON-NLS-2$
-      Object collapseAllAction = collapseAllActionClass.newInstance();
+      Object collapseAllAction = collapseAllActionClass.getDeclaredConstructor().newInstance();
       collapseAllActionField.set(this, collapseAllAction);
     }
     catch (Exception ex)

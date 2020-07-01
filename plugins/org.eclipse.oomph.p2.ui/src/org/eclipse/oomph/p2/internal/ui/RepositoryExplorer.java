@@ -1886,7 +1886,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
       // WorkspaceIUAnalyzer workspaceIUAnalyzer = new WorkspaceIUAnalyzer();
       Object workspaceIUAnalyzer = CommonPlugin.loadClass("org.eclipse.oomph.targlets.core", "org.eclipse.oomph.targlets.internal.core.WorkspaceIUAnalyzer") //$NON-NLS-1$ //$NON-NLS-2$
-          .newInstance();
+          .getDeclaredConstructor().newInstance();
 
       // EList<IInstallableUtil> result = workspaceIUAnalyzer.analyze(sourceLocator, IUGenerator.DEFAULTS, new NullProgressMonitor());
       EList<?> iuGeneratorDefaults = ReflectUtil.getValue("DEFAULTS", //$NON-NLS-1$
