@@ -58,11 +58,13 @@ import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.provider.ItemProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.emf.edit.ui.provider.ExtendedColorRegistry;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -101,10 +103,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
@@ -113,6 +117,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.progress.JobInfo;
 import org.eclipse.ui.internal.progress.ProgressManager;
+import org.eclipse.ui.themes.ColorUtil;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -220,6 +225,8 @@ public class ProgressPage extends SetupWizardPage
   };
 
   private StyledText logText;
+
+  private Map<Severity, Color> logTextColors = new HashMap<ProgressLog.Severity, Color>();
 
   private ProgressMonitorPart progressMonitorPart;
 
@@ -1417,30 +1424,9 @@ public class ProgressPage extends SetupWizardPage
           int length = logDocument.getLength();
           logDocument.replace(length, 0, line);
 
-          int colorID;
-          switch (severity)
+          Color color = getColor(severity);
+          if (color != null)
           {
-            case INFO:
-              colorID = SWT.COLOR_BLUE;
-              break;
-
-            case WARNING:
-              colorID = SWT.COLOR_DARK_YELLOW;
-              break;
-
-            case ERROR:
-              colorID = SWT.COLOR_RED;
-              break;
-
-            default:
-              colorID = SWT.COLOR_BLACK;
-              break;
-
-          }
-
-          if (colorID != SWT.COLOR_BLACK)
-          {
-            Color color = logText.getDisplay().getSystemColor(colorID);
             StyleRange styleRange = new StyleRange(length, line.length(), color, null);
             if (severity == Severity.INFO)
             {
@@ -1461,6 +1447,40 @@ public class ProgressPage extends SetupWizardPage
           SetupUIPlugin.INSTANCE.log(ex);
         }
       }
+    }
+
+    private Color getColor(Severity severity)
+    {
+      if (logTextColors.isEmpty())
+      {
+        Display display = logText.getDisplay();
+        Color infoColor = display.getSystemColor(SWT.COLOR_BLUE);
+        Color warningColor = ExtendedColorRegistry.INSTANCE.getColor(null, null, URI.createURI("color://rgb/230/189/43")); //$NON-NLS-1$
+        Color errorColor = display.getSystemColor(SWT.COLOR_RED);
+        float[] hsb = logText.getBackground().getRGB().getHSB();
+        if (hsb[2] < 0.4f)
+        {
+          logTextColors.put(Severity.INFO, getLighterColor(infoColor));
+          logTextColors.put(Severity.WARNING, getLighterColor(warningColor));
+          logTextColors.put(Severity.ERROR, getLighterColor(errorColor));
+        }
+        else
+        {
+          logTextColors.put(Severity.INFO, infoColor);
+          logTextColors.put(Severity.WARNING, warningColor);
+          logTextColors.put(Severity.ERROR, errorColor);
+        }
+      }
+
+      return logTextColors.get(severity);
+    }
+
+    private Color getLighterColor(Color color)
+    {
+      RGB white = new RGB(255, 255, 255);
+      RGB lighterColor = ColorUtil.blend(color.getRGB(), white, 50);
+      return ExtendedColorRegistry.INSTANCE.getColor(null, null,
+          URI.createURI("color://rgb/" + lighterColor.red + "/" + lighterColor.green + "/" + lighterColor.blue)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
     private void logTaskName(String name)
