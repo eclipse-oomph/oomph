@@ -45,6 +45,7 @@ import org.eclipse.oomph.setup.internal.core.AbstractSetupTaskContext;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.internal.installer.DesktopSupport.ShortcutType;
 import org.eclipse.oomph.setup.internal.installer.SimpleInstallLaunchButton.State;
 import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.Type;
 import org.eclipse.oomph.setup.internal.installer.SimpleProductPage.ProductComposite;
@@ -1472,15 +1473,14 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
           shortCutName = StringUtil.capAll(StringUtil.isEmpty(catalogName) ? qualifiedProductName : catalogName + " " + qualifiedProductName); //$NON-NLS-1$
         }
-
         if (createMenuShortcut)
         {
-          KeepInstallerUtil.createShortCut("Programs", "Eclipse", executable.getAbsolutePath(), shortCutName); //$NON-NLS-1$ //$NON-NLS-2$
+          KeepInstallerUtil.createShortCut(ShortcutType.START_MENU, "Eclipse", executable, shortCutName, product.getDescription(), product.getName()); //$NON-NLS-1$
         }
 
         if (createDesktopShortcut)
         {
-          KeepInstallerUtil.createShortCut("Desktop", null, executable.getAbsolutePath(), shortCutName); //$NON-NLS-1$
+          KeepInstallerUtil.createShortCut(ShortcutType.DESKTOP, null, executable, shortCutName, product.getDescription(), product.getName());
         }
       }
 

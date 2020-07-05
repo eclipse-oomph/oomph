@@ -12,6 +12,7 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.setup.internal.installer.DesktopSupport.ShortcutType;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
@@ -40,19 +41,19 @@ public final class KeepInstallerUtil
   {
   }
 
-  public static void createShortCut(String specialFolder, String target)
+  private static void createShortCut(ShortcutType type, File target)
   {
-    createShortCut(specialFolder, null, target, PropertiesUtil.getProductName());
+    createShortCut(type, null, target, PropertiesUtil.getProductName(), null, PropertiesUtil.getProductID());
   }
 
-  public static void createShortCut(String specialFolder, String groupName, String target, String shortcutName)
+  public static void createShortCut(ShortcutType type, String groupName, File target, String shortcutName, String description, String id)
   {
     try
     {
       DesktopSupport desktopSupport = KeepInstallerUtil.getDesktopSupport();
       if (desktopSupport != null)
       {
-        desktopSupport.createShortCut(specialFolder, groupName, target, shortcutName);
+        desktopSupport.createShortCut(type, groupName, target, shortcutName, description, id);
       }
     }
     catch (IOException ex)
@@ -134,6 +135,10 @@ public final class KeepInstallerUtil
             }
           }
         }
+        else if (OS.INSTANCE.isLinux())
+        {
+          desktopSupport = new FreeDesktopSupport();
+        }
       }
       catch (Exception ex)
       {
@@ -152,13 +157,13 @@ public final class KeepInstallerUtil
     IOUtil.copyTree(source, target, true);
 
     String launcherName = new File(launcher).getName();
-    String permanentLauncher = new File(target, launcherName).getAbsolutePath();
+    File permanentLauncher = new File(target, launcherName);
 
     if (startPermanentInstaller)
     {
       // Include the application arguments in this launch.
       List<String> command = new ArrayList<String>();
-      command.add(permanentLauncher);
+      command.add(permanentLauncher.getAbsolutePath());
       command.addAll(Arrays.asList(Platform.getApplicationArgs()));
       try
       {
@@ -177,12 +182,12 @@ public final class KeepInstallerUtil
 
     if (startMenu)
     {
-      createShortCut("Programs", permanentLauncher); //$NON-NLS-1$
+      createShortCut(ShortcutType.START_MENU, permanentLauncher);
     }
 
     if (desktop)
     {
-      createShortCut("Desktop", permanentLauncher); //$NON-NLS-1$
+      createShortCut(ShortcutType.DESKTOP, permanentLauncher);
     }
 
     if (quickLaunch)

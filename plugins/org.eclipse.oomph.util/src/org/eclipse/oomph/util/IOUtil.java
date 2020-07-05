@@ -843,7 +843,7 @@ public final class IOUtil
     return new String(outputStream.toByteArray(), "UTF-8"); //$NON-NLS-1$
   }
 
-  public static void writeUTF8(File file, String contents) throws Exception
+  public static void writeUTF8(File file, String contents) throws IOException
   {
     mkdirs(file.getParentFile());
 

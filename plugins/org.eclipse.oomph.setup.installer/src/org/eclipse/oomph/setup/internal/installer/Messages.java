@@ -37,6 +37,10 @@ public class Messages extends NLS
 
   public static String ExtensionPage_Installer_label;
 
+  public static String FreeDesktopSupport_CannotCreateDirectory;
+
+  public static String FreeDesktopSupport_NoUserHome;
+
   public static String Installer_Configure_label;
 
   public static String Installer_Exit_label;

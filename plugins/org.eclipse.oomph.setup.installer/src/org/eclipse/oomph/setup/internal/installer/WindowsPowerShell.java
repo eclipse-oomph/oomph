@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -31,14 +32,27 @@ public class WindowsPowerShell implements DesktopSupport
         "& { (new-object -c shell.application).namespace('" + location + "').parsename('" + launcherName + "').invokeverb('taskbarpin') }" });
   }
 
-  public void createShortCut(String specialFolder, String groupName, String target, String shortcutName) throws IOException
+  public boolean createShortCut(ShortcutType type, String groupName, File target, String shortcutName, String description, String id) throws IOException
   {
+    String specialFolder;
+    switch (type)
+    {
+      case DESKTOP:
+        specialFolder = "Desktop";
+        break;
+      case START_MENU:
+        specialFolder = "Programs";
+        break;
+      default:
+        // unsupported type
+        return false;
+    }
     if (groupName != null)
     {
       Runtime.getRuntime().exec(new String[] { executable, "-command",
           "& { " + "$folderPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) '" + groupName + "';" + //
               "[system.io.directory]::CreateDirectory($folderPath); " + //
-              "$linkPath = Join-Path $folderPath '" + shortcutName + ".lnk'; $targetPath = '" + target
+              "$linkPath = Join-Path $folderPath '" + shortcutName + ".lnk'; $targetPath = '" + target.getAbsolutePath()
               + "'; $link = (New-Object -ComObject WScript.Shell).CreateShortcut( $linkpath ); $link.TargetPath = $targetPath; $link.Save()}" });
 
     }
@@ -46,9 +60,11 @@ public class WindowsPowerShell implements DesktopSupport
     {
       Runtime.getRuntime()
           .exec(new String[] { executable, "-command",
-              "& {$linkPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) '" + shortcutName + ".lnk'; $targetPath = '" + target
+              "& {$linkPath = Join-Path ([Environment]::GetFolderPath('" + specialFolder + "')) '" + shortcutName + ".lnk'; $targetPath = '"
+                  + target.getAbsolutePath()
                   + "'; $link = (New-Object -ComObject WScript.Shell).CreateShortcut( $linkpath ); $link.TargetPath = $targetPath; $link.Save()}" });
 
     }
+    return true;
   }
 }
