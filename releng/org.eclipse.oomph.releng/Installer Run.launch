@@ -13,6 +13,6 @@
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_ANT_TARGETS" value="run,"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LAUNCH_CONFIGURATION_BUILD_SCOPE" value="${none}"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${workspace_loc:/org.eclipse.oomph.releng/deploy.ant}"/>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Dgit.clone.location=${git.clone.oomph}&#13;&#10;-Dgit.clone.uri=${file_uri:${git.clone.oomph}}&#13;&#10;-Dos.${target.os}=true&#13;&#10;-Dws.${target.ws}=true&#13;&#10;-Darch.${target.arch}=true&#13;&#10;-Dplatform.suffix=${target.os}.${target.ws}.${target.arch}"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Dgit.clone.location=${git.clone.oomph}&#13;&#10;-Dgit.clone.uri=${file_uri:${git.clone.oomph}}&#13;&#10;-Dos.${target.os}=true&#13;&#10;-Dws.${target.ws}=true&#13;&#10;-Darch.${target.arch}=true&#13;&#10;-Dplatform.suffix=${target.os}.${target.ws}.${target.arch}&#13;&#10;-Duser.home=${system_property:user.home}"/>
 <stringAttribute key="process_factory_id" value="org.eclipse.ant.ui.remoteAntProcessFactory"/>
 </launchConfiguration>
