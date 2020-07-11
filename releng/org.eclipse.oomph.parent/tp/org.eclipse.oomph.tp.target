@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="55">
+<target name="Generated from Oomph" sequenceNumber="56">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.assertj" version="0.0.0"/>
@@ -26,7 +26,7 @@
       <repository location="http://download.eclipse.org/nebula/snapshot"/>
       <repository location="http://download.eclipse.org/technology/swtbot/snapshots"/>
       <repository location="http://download.eclipse.org/webtools/repository/latest"/>
-      <repository location="http://download.eclipse.org/eclipse/updates/4.17-I-builds"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.16/R-4.16-202006040540"/>
     </location>
   </locations>
 </target>
