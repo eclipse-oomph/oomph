@@ -63,7 +63,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -80,13 +80,13 @@
           label="Eclipse IDE for Java Developers (2020-09)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -106,15 +106,15 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.editors_feature.feature.group"/>
         <requirement
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -183,7 +183,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -200,13 +200,13 @@
           label="Eclipse IDE for Java Developers (2020-09)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -226,15 +226,15 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.editors_feature.feature.group"/>
         <requirement
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1296,7 +1296,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -1313,13 +1313,13 @@
           label="Eclipse IDE for Enterprise Java Developers (2020-09)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -1485,9 +1485,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1696,7 +1696,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -1713,13 +1713,13 @@
           label="Eclipse IDE for Enterprise Java Developers (2020-09)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -1885,9 +1885,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4320,7 +4320,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -4337,15 +4337,13 @@
           label="Eclipse IDE for C/C++ Developers (2020-09)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.cdt.arduino.feature.group"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -4381,10 +4379,6 @@
         <requirement
             name="org.eclipse.launchbar.remote.feature.group"/>
         <requirement
-            name="org.eclipse.linuxtools.cdt.libhover.devhelp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.linuxtools.cdt.libhover.feature.feature.group"/>
-        <requirement
             name="org.eclipse.linuxtools.changelog.c.feature.group"/>
         <requirement
             name="org.eclipse.linuxtools.gcov.feature.group"/>
@@ -4409,9 +4403,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4520,7 +4514,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -4537,15 +4531,13 @@
           label="Eclipse IDE for C/C++ Developers (2020-09)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.cdt.arduino.feature.group"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -4581,10 +4573,6 @@
         <requirement
             name="org.eclipse.launchbar.remote.feature.group"/>
         <requirement
-            name="org.eclipse.linuxtools.cdt.libhover.devhelp.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.linuxtools.cdt.libhover.feature.feature.group"/>
-        <requirement
             name="org.eclipse.linuxtools.changelog.c.feature.group"/>
         <requirement
             name="org.eclipse.linuxtools.gcov.feature.group"/>
@@ -4609,9 +4597,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6001,7 +5989,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -6018,13 +6006,13 @@
           label="Eclipse IDE for JavaScript and Web Developers (2020-09)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -6038,7 +6026,7 @@
         <requirement
             name="org.eclipse.help.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.editors_feature.feature.group"/>
         <requirement
             name="org.eclipse.rse.feature.group"/>
         <requirement
@@ -6052,9 +6040,9 @@
         <requirement
             name="org.eclipse.wst.server_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6125,7 +6113,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -6142,13 +6130,13 @@
           label="Eclipse IDE for JavaScript and Web Developers (2020-09)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -6162,7 +6150,7 @@
         <requirement
             name="org.eclipse.help.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.editors_feature.feature.group"/>
         <requirement
             name="org.eclipse.rse.feature.group"/>
         <requirement
@@ -6176,9 +6164,9 @@
         <requirement
             name="org.eclipse.wst.server_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7084,7 +7072,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -7101,13 +7089,13 @@
           label="Eclipse IDE for PHP Developers (2020-09)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -7145,9 +7133,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7228,7 +7216,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -7245,13 +7233,13 @@
           label="Eclipse IDE for PHP Developers (2020-09)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -7289,9 +7277,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8231,7 +8219,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -8248,13 +8236,13 @@
           label="Eclipse IDE for Eclipse Committers (2020-09)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -8326,9 +8314,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8443,7 +8431,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -8460,13 +8448,13 @@
           label="Eclipse IDE for Eclipse Committers (2020-09)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -8538,9 +8526,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9859,7 +9847,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -9876,13 +9864,13 @@
           label="Eclipse DSL Tools (2020-09)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.18.0,4.0.0)"/>
@@ -9902,9 +9890,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9967,7 +9955,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -9984,13 +9972,13 @@
           label="Eclipse DSL Tools (2020-09)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.18.0,4.0.0)"/>
@@ -10010,9 +9998,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -10854,7 +10842,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -10871,13 +10859,13 @@
           label="Eclipse Modeling Tools (2020-09)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -10896,10 +10884,6 @@
             name="org.eclipse.emf.ecoretools.design.feature.group"/>
         <requirement
             name="org.eclipse.emf.ecp.emfforms.sdk.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.parsley.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.parsley.sdk.source.feature.group"/>
         <requirement
             name="org.eclipse.emf.query.sdk.feature.group"/>
         <requirement
@@ -10931,9 +10915,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11030,7 +11014,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -11047,13 +11031,13 @@
           label="Eclipse Modeling Tools (2020-09)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -11072,10 +11056,6 @@
             name="org.eclipse.emf.ecoretools.design.feature.group"/>
         <requirement
             name="org.eclipse.emf.ecp.emfforms.sdk.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.parsley.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.parsley.sdk.source.feature.group"/>
         <requirement
             name="org.eclipse.emf.query.sdk.feature.group"/>
         <requirement
@@ -11107,9 +11087,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12473,7 +12453,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -12490,13 +12470,13 @@
           label="Eclipse for RCP and RAP Developers (2020-09)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.18.0,4.0.0)"/>
@@ -12534,9 +12514,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12617,7 +12597,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -12634,13 +12614,13 @@
           label="Eclipse for RCP and RAP Developers (2020-09)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.18.0,4.0.0)"/>
@@ -12678,9 +12658,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13880,7 +13860,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -13897,13 +13877,13 @@
           label="Eclipse for Testers (2020-09)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
@@ -13911,9 +13891,9 @@
         <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13964,7 +13944,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -13981,13 +13961,13 @@
           label="Eclipse for Testers (2020-09)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
@@ -13995,9 +13975,9 @@
         <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14765,7 +14745,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -14782,23 +14762,19 @@
           label="Eclipse for Scientific Computing (2020-09)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
             name="org.eclipse.cdt.build.crossgcc.feature.group"/>
         <requirement
-            name="org.eclipse.cdt.bupc.feature.group"/>
-        <requirement
             name="org.eclipse.cdt.cmake.feature.group"/>
-        <requirement
-            name="org.eclipse.cdt.core.parser.upc.feature.feature.group"/>
         <requirement
             name="org.eclipse.cdt.debug.standalone.feature.group"/>
         <requirement
@@ -14836,9 +14812,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14929,7 +14905,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -14946,23 +14922,19 @@
           label="Eclipse for Scientific Computing (2020-09)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
             name="org.eclipse.cdt.build.crossgcc.feature.group"/>
         <requirement
-            name="org.eclipse.cdt.bupc.feature.group"/>
-        <requirement
             name="org.eclipse.cdt.cmake.feature.group"/>
-        <requirement
-            name="org.eclipse.cdt.core.parser.upc.feature.feature.group"/>
         <requirement
             name="org.eclipse.cdt.debug.standalone.feature.group"/>
         <requirement
@@ -15000,9 +14972,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16238,7 +16210,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -16255,13 +16227,13 @@
           label="Eclipse for Scout Developers (2020-09)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -16289,9 +16261,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16362,7 +16334,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -16379,13 +16351,13 @@
           label="Eclipse for Scout Developers (2020-09)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -16413,9 +16385,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17451,7 +17423,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -17468,13 +17440,13 @@
           label="Eclipse IDE for Rust Developers (2020-09)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
         <requirement
@@ -17484,13 +17456,13 @@
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.editors_feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17547,7 +17519,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -17564,13 +17536,13 @@
           label="Eclipse IDE for Rust Developers (2020-09)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
         <requirement
@@ -17580,13 +17552,13 @@
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.editors_feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18196,7 +18168,7 @@
     <version
         name="latest"
         label="Latest (2020-09)"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -18209,15 +18181,15 @@
           label="Eclipse Platform (2020-09)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18260,7 +18232,7 @@
     <version
         name="2020-09"
         label="2020-09"
-        requiredJavaVersion="1.8">
+        requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
@@ -18273,15 +18245,15 @@
           label="Eclipse Platform (2020-09)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.16.0,5.0.0)"/>
+            versionRange="[4.17.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09">
+            url="http://download.eclipse.org/releases/2020-09/202007171000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
