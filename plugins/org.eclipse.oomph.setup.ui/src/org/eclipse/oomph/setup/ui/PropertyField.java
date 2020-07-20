@@ -126,7 +126,17 @@ public abstract class PropertyField
             {
               int major = Integer.valueOf(matcher.group(1));
               int minor = matcher.group(2) == null ? -1 : Integer.valueOf(matcher.group(2)) - 1;
-              return new JREField(new JREFilter(minor == -1 ? 1 : major, minor == -1 ? major - 1 : minor, null), choices);
+              if (minor == -1)
+              {
+                if (major == 9)
+                {
+                  return new JREField(new JREFilter(1, 8, null), choices);
+                }
+
+                return new JREField(new JREFilter(major - 1, null, null), choices);
+              }
+
+              return new JREField(new JREFilter(major, minor, null), choices);
             }
           }
         }

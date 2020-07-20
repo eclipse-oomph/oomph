@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -229,7 +230,7 @@ public abstract class JREController implements ISelectionChangedListener
           Object oldElement = viewer == null ? null : ((IStructuredSelection)viewer.getSelection()).getFirstElement();
           JRE oldJRE = oldElement instanceof JRE ? (JRE)oldElement : jre;
 
-          Collection<JRE> jres = JREManager.INSTANCE.getJREs(jreFilter).values();
+          Collection<JRE> jres = Arrays.asList(JREManager.INSTANCE.getAllJREs(jreFilter));
 
           if (viewer != null)
           {
@@ -331,7 +332,7 @@ public abstract class JREController implements ISelectionChangedListener
     return null;
   }
 
-  private JRE getDefaultJRE(String javaVersion)
+  protected JRE getDefaultJRE(String javaVersion)
   {
     if (javaVersion != null)
     {
@@ -352,8 +353,11 @@ public abstract class JREController implements ISelectionChangedListener
 
     if (jre != null)
     {
-      String javaHome = jre.getJavaHome().getAbsolutePath();
-      JREManager.INSTANCE.setDefaultJRE(bitness, javaVersion, javaHome);
+      File javaHome = jre.getJavaHome();
+      if (javaHome != null)
+      {
+        JREManager.INSTANCE.setDefaultJRE(bitness, javaVersion, javaHome.getAbsolutePath());
+      }
     }
 
     jreChanged(jre);

@@ -65,6 +65,8 @@ public final class JREManager
 
   private final List<String> javaHomes = new ArrayList<String>();
 
+  private final List<JRE.Descriptor> descriptors = new ArrayList<JRE.Descriptor>();
+
   private String systemJavaHome;
 
   private JREManager()
@@ -247,6 +249,12 @@ public final class JREManager
     }
   }
 
+  public synchronized void setJREs(Collection<JRE.Descriptor> jreDescriptors)
+  {
+    descriptors.clear();
+    descriptors.addAll(jreDescriptors);
+  }
+
   public Map<File, JRE> getJREs()
   {
     return getJREs(null);
@@ -352,6 +360,25 @@ public final class JREManager
     return jres.toArray(new JRE[jres.size()]);
   }
 
+  public JRE[] getAllJREs(JREFilter filter)
+  {
+    List<JRE> jres = new ArrayList<JRE>();
+    for (JRE.Descriptor descriptor : descriptors)
+    {
+      JRE jre = new JRE(descriptor);
+      if (jre.isMatch(filter))
+      {
+        jres.add(jre);
+      }
+    }
+
+    Collections.sort(jres);
+
+    jres.addAll(0, getJREs(filter).values());
+
+    return jres.toArray(new JRE[jres.size()]);
+  }
+
   private synchronized Set<File> getJavaHomes()
   {
     Set<File> all = new HashSet<File>();
@@ -451,8 +478,8 @@ public final class JREManager
       }
       catch (IOException ex)
       {
-        JREInfoPlugin.INSTANCE.log(
-            new Status(IStatus.WARNING, JREInfoPlugin.INSTANCE.getSymbolicName(), NLS.bind(Messages.JREManager_Problem_message, javaHome), ex));
+        JREInfoPlugin.INSTANCE
+            .log(new Status(IStatus.WARNING, JREInfoPlugin.INSTANCE.getSymbolicName(), NLS.bind(Messages.JREManager_Problem_message, javaHome), ex));
       }
     }
 

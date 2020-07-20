@@ -26,6 +26,7 @@ import org.eclipse.oomph.p2.internal.core.AgentImpl;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.InstallationTask;
+import org.eclipse.oomph.setup.Macro;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -69,6 +70,7 @@ import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.query.CompoundQueryable;
 import org.eclipse.equinox.p2.query.IQuery;
+import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.ICompositeRepository;
@@ -149,6 +151,8 @@ public class ProductCatalogGenerator implements IApplication
   private static final String EPP_INSTALL_ROOTS_FILTER = "(org.eclipse.epp.install.roots=true)";
 
   private static final boolean IS_RANGE_NARROW = Boolean.FALSE;
+
+  private static final String JUSTJ_JRES = "http://download.eclipse.org/justj/sandbox/jres/14/updates/nightly";
 
   private URI outputLocation;
 
@@ -466,47 +470,47 @@ public class ProductCatalogGenerator implements IApplication
 
       if (outputLocation != null)
       {
+        URI jresURI = outputLocation.trimSegments(1).appendSegment("org.eclipse.jres.setup");
+        Resource jresResource = new BaseResourceFactoryImpl().createResource(jresURI);
+        Macro jreMacro = getJREs();
+        jresResource.getContents().add(jreMacro);
+        jresResource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
+
         for (Product product : new ArrayList<Product>(products))
         {
           if (ALL_PRODUCT_ID.equals(product.getName()))
           {
             products.remove(product);
 
-            if (outputLocation != null)
-            {
-              URI allProductURI = outputLocation.trimSegments(1).appendSegment("org.eclipse.all.product.setup");
-              Resource allProductResource = new BaseResourceFactoryImpl().createResource(allProductURI);
-              EclipseIniTask eclipseIniTask = SetupFactory.eINSTANCE.createEclipseIniTask();
-              eclipseIniTask.setVm(true);
-              eclipseIniTask.setOption("-Xmx");
-              eclipseIniTask.setValue("5g");
-              product.getSetupTasks().add(eclipseIniTask);
+            URI allProductURI = outputLocation.trimSegments(1).appendSegment("org.eclipse.all.product.setup");
+            Resource allProductResource = new BaseResourceFactoryImpl().createResource(allProductURI);
+            EclipseIniTask eclipseIniTask = SetupFactory.eINSTANCE.createEclipseIniTask();
+            eclipseIniTask.setVm(true);
+            eclipseIniTask.setOption("-Xmx");
+            eclipseIniTask.setValue("5g");
+            product.getSetupTasks().add(eclipseIniTask);
 
-              allProductResource.getContents().add(product);
+            allProductResource.getContents().add(product);
 
-              allProductResource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
-            }
+            allProductResource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
           }
 
           if (ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(product.getName()))
           {
             products.remove(product);
 
-            if (outputLocation != null)
-            {
-              URI eclipsePlatformSDKProductURI = outputLocation.trimSegments(1).appendSegment("org.eclipse.platform.sdk.product.setup");
-              Resource eclipsePlatformSDKProductResource = new BaseResourceFactoryImpl().createResource(eclipsePlatformSDKProductURI);
-              EclipseIniTask eclipseIniTask = SetupFactory.eINSTANCE.createEclipseIniTask();
-              eclipseIniTask.setVm(true);
-              eclipseIniTask.setOption("-Xmx");
-              eclipseIniTask.setValue("3g");
-              product.getSetupTasks().add(eclipseIniTask);
+            URI eclipsePlatformSDKProductURI = outputLocation.trimSegments(1).appendSegment("org.eclipse.platform.sdk.product.setup");
+            Resource eclipsePlatformSDKProductResource = new BaseResourceFactoryImpl().createResource(eclipsePlatformSDKProductURI);
+            EclipseIniTask eclipseIniTask = SetupFactory.eINSTANCE.createEclipseIniTask();
+            eclipseIniTask.setVm(true);
+            eclipseIniTask.setOption("-Xmx");
+            eclipseIniTask.setValue("3g");
+            product.getSetupTasks().add(eclipseIniTask);
 
-              eclipsePlatformSDKProductResource.getContents().add(product);
+            eclipsePlatformSDKProductResource.getContents().add(product);
 
-              eclipsePlatformSDKProductResource
-                  .save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
-            }
+            eclipsePlatformSDKProductResource
+                .save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
           }
         }
 
@@ -649,7 +653,8 @@ public class ProductCatalogGenerator implements IApplication
 
       URI effectiveEPPURI = isStaging ? stagingEPPLocation : eppURI;
       IMetadataRepository eppMetaDataRepository = manager.loadRepository(new java.net.URI(effectiveEPPURI.toString()), null);
-      IMetadataRepository latestEPPMetaDataRepository = isStaging && stagingUseComposite || compositeTrains.contains(train) ? eppMetaDataRepository
+      IMetadataRepository latestEPPMetaDataRepository = isStaging && stagingUseComposite || compositeTrains.contains(train) || !isLatestReleased()
+          ? eppMetaDataRepository
           : getLatestRepository(manager, eppMetaDataRepository);
       if (latestEPPMetaDataRepository != eppMetaDataRepository)
       {
@@ -995,7 +1000,7 @@ public class ProductCatalogGenerator implements IApplication
       throws URISyntaxException, ProvisionException
   {
     IMetadataRepository result = repository;
-    if (!isLatestReleased() && repository instanceof ICompositeRepository<?>)
+    if (repository instanceof ICompositeRepository<?>)
     {
       ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)repository;
       long latest = Integer.MIN_VALUE;
@@ -2043,7 +2048,7 @@ public class ProductCatalogGenerator implements IApplication
         if (filter != null)
         {
           String value = RequirementImpl.formatMatchExpression(filter);
-          if (EPP_INSTALL_ROOTS_FILTER.equals(value))
+          if (EPP_INSTALL_ROOTS_FILTER.equals(value) && !capability.getName().startsWith("org.eclipse.justj."))
           {
             rootInstallIUs.add(capability.getName());
           }
@@ -2052,6 +2057,90 @@ public class ProductCatalogGenerator implements IApplication
     }
 
     return rootInstallIUs;
+  }
+
+  private Macro getJREs() throws ProvisionException, URISyntaxException
+  {
+    // The p2 task for each JRE version will be stored in a macro.
+    Macro jreMacro = SetupFactory.eINSTANCE.createMacro();
+    jreMacro.setName("jre");
+    jreMacro.setLabel("JRE");
+    jreMacro.setDescription("The JRE macro provides tasks for installing JREs from JustJ's p2 update sites");
+
+    // Load the JustJ update sites and look for all the IUs that represent the full JRE.
+    IMetadataRepositoryManager manager = getMetadataRepositoryManager();
+    IMetadataRepository jreRepository = manager.loadRepository(new java.net.URI(JUSTJ_JRES), null);
+    IQueryResult<IInstallableUnit> features = jreRepository.query(QueryUtil.createIUGroupQuery(), null);
+    Set<IInstallableUnit> ius = new TreeSet<IInstallableUnit>(Collections.reverseOrder());
+    for (IInstallableUnit iu : features)
+    {
+      if (iu.getId().endsWith(".full.feature.group"))
+      {
+        ius.add(iu);
+      }
+    }
+
+    // Boil them down by versions, excluding minor versions.
+    // Because they are sorted this will grab the version with the larget micro version.
+    Map<Version, IInstallableUnit> jreVersions = new TreeMap<Version, IInstallableUnit>();
+    for (IInstallableUnit iu : ius)
+    {
+      Version version = iu.getVersion();
+      if (version instanceof OSGiVersion)
+      {
+        OSGiVersion osgiVersion = (OSGiVersion)version;
+        Version jreVersion = Version.createOSGi(osgiVersion.getMajor(), osgiVersion.getMinor(), 0);
+        if (!jreVersions.containsKey(jreVersion))
+        {
+          jreVersions.put(jreVersion, iu);
+        }
+      }
+    }
+
+    for (Map.Entry<Version, IInstallableUnit> entry : jreVersions.entrySet())
+    {
+      IInstallableUnit iu = entry.getValue();
+      IMetadataRepository childRepository = findRepository(jreRepository, iu);
+      System.out.println("jre=" + iu + " -> " + childRepository.getLocation());
+
+      Requirement jreRequirement = P2Factory.eINSTANCE.createRequirement(iu.getId());
+      Repository jreChildRepository = P2Factory.eINSTANCE.createRepository(childRepository.getLocation().toString());
+
+      P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
+      p2Task.getRequirements().add(jreRequirement);
+      p2Task.getRepositories().add(jreChildRepository);
+
+      // Get the version without the qualifier.
+      OSGiVersion osgiVersion = (OSGiVersion)iu.getVersion();
+      Version jreVersion = Version.createOSGi(osgiVersion.getMajor(), osgiVersion.getMinor(), osgiVersion.getMicro());
+      p2Task.setLabel("JRE " + jreVersion);
+      String description = iu.getProperty(IInstallableUnit.PROP_DESCRIPTION, null);
+      p2Task.setDescription(description);
+      jreMacro.getSetupTasks().add(p2Task);
+    }
+
+    return jreMacro;
+  }
+
+  private IMetadataRepository findRepository(IMetadataRepository repository, IInstallableUnit iu) throws URISyntaxException, ProvisionException
+  {
+    if (repository instanceof ICompositeRepository<?>)
+    {
+      ICompositeRepository<?> compositeRepository = (ICompositeRepository<?>)repository;
+      for (java.net.URI childURI : compositeRepository.getChildren())
+      {
+        childURI = new java.net.URI(trimEmptyTrailingSegment(URI.createURI(childURI.toString())).toString());
+        IMetadataRepository childRepository = manager.loadRepository(childURI, null);
+        if (childRepository.query(QueryUtil.createIUQuery(iu.getId(), iu.getVersion()), null).isEmpty())
+        {
+          return findRepository(childRepository, iu);
+        }
+      }
+
+      throw new IllegalStateException("The iu " + iu + " is not found");
+    }
+
+    return repository;
   }
 
   /**

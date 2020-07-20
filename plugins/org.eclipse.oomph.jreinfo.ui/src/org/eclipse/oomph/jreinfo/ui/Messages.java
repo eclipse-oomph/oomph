@@ -17,6 +17,8 @@ public class Messages
 
   public static String JREComposite_group_user;
 
+  public static String JREComposite_group_external;
+
   public static String JREComposite_column_location;
 
   public static String JREComposite_column_version;

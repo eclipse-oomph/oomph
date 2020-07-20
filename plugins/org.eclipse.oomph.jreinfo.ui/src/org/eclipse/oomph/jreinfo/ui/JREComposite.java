@@ -83,6 +83,9 @@ public class JREComposite extends Composite
 
   private static final String[] GROUPS = { Messages.JREComposite_group_system, Messages.JREComposite_group_user };
 
+  private static final String[] AUGMENTED_GROUPS = { Messages.JREComposite_group_system, Messages.JREComposite_group_user,
+      Messages.JREComposite_group_external };
+
   private static final Object[] EMPTY = new Object[0];
 
   private final JREContentProvider contentProvider = new JREContentProvider();
@@ -479,7 +482,8 @@ public class JREComposite extends Composite
     {
       if (element == JREManager.INSTANCE)
       {
-        return GROUPS;
+        return filter == null || Boolean.FALSE.equals(filter.isDescriptor())
+            || JREManager.INSTANCE.getAllJREs(new JREFilter(null, null, null, Boolean.TRUE)).length == 0 ? GROUPS : AUGMENTED_GROUPS;
       }
 
       if (element == GROUPS[0])
@@ -491,6 +495,11 @@ public class JREComposite extends Composite
       {
         extras = JREManager.INSTANCE.getJREs(null, true);
         return extras;
+      }
+
+      if (element == AUGMENTED_GROUPS[2])
+      {
+        return JREManager.INSTANCE.getAllJREs(new JREFilter(null, null, null, Boolean.TRUE));
       }
 
       return EMPTY;
@@ -569,7 +578,7 @@ public class JREComposite extends Composite
           case 1:
             return jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro(); //$NON-NLS-1$ //$NON-NLS-2$
           case 2:
-            return jre.getBitness() + ' ' + Messages.JREComposite_bit;
+            return jre.getBitness() + " " + Messages.JREComposite_bit; //$NON-NLS-1$
           case 3:
             return jre.isJDK() ? "JDK" : "JRE"; //$NON-NLS-1$ //$NON-NLS-2$
         }

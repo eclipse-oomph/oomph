@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Macro
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
+    name="jre"
+    label="JRE">
+  <setupTask
+      xsi:type="setup.p2:P2Task"
+      label="JRE 14.0.1">
+    <requirement
+        name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"/>
+    <repository
+        url="http://download.eclipse.org/justj/sandbox/jres/14/updates/nightly/N202006111141"/>
+    <description>
+      Contains the plug-ins and fragments for the OpenJDK Hotspot JRE Complete.
+      Provides the complete set of modules of the JDK, excluding incubators.
+    </description>
+  </setupTask>
+  <description>The JRE macro provides tasks for installing JREs from JustJ's p2 update sites</description>
+</setup:Macro>

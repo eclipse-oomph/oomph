@@ -14,15 +14,20 @@ import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
+import org.eclipse.oomph.jreinfo.JRE;
+import org.eclipse.oomph.jreinfo.JREManager;
+import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.p2.internal.ui.CacheUsageConfirmerUI;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
+import org.eclipse.oomph.setup.Macro;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
@@ -33,6 +38,7 @@ import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.IndexManager;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.util.MarketPlaceListing;
 import org.eclipse.oomph.setup.p2.util.P2TaskUISevices;
 import org.eclipse.oomph.setup.ui.P2TaskUIServicesPrompter;
@@ -109,6 +115,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -1354,6 +1362,45 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     protected void indexLoaded(final Index index)
     {
       wizard.indexLoaded(index);
+
+      List<JRE.Descriptor> jreDescriptors = new ArrayList<JRE.Descriptor>();
+      Annotation jresAnnotation = index.getAnnotation(AnnotationConstants.ANNOTATION_JRE);
+      if (jresAnnotation != null)
+      {
+        EList<EObject> references = jresAnnotation.getReferences();
+        for (EObject eObject : references)
+        {
+          if (eObject instanceof Macro)
+          {
+            Macro jresMacro = (Macro)eObject;
+            EList<SetupTask> setupTasks = jresMacro.getSetupTasks();
+            for (SetupTask setupTask : setupTasks)
+            {
+              if (setupTask instanceof P2Task)
+              {
+                P2Task jreP2Task = (P2Task)setupTask;
+                String label = jreP2Task.getLabel();
+                Matcher matcher = Pattern.compile("([1-9][0-9]*)\\.([0-9]+)\\.([0-9]+)").matcher(label); //$NON-NLS-1$
+                if (matcher.find())
+                {
+                  EList<Repository> repositories = jreP2Task.getRepositories();
+                  Repository repository = repositories.get(0);
+                  JRE.Descriptor descriptor = new JRE.Descriptor(label + " - " + repository.getURL(), //$NON-NLS-1$
+                      Integer.parseInt(matcher.group(1)), //
+                      Integer.parseInt(matcher.group(2)), //
+                      Integer.parseInt(matcher.group(3)), //
+                      64, //
+                      false, //
+                      jreP2Task);
+                  jreDescriptors.add(descriptor);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      JREManager.INSTANCE.setJREs(jreDescriptors);
     }
 
     protected boolean shouldReload(EClass eClass)

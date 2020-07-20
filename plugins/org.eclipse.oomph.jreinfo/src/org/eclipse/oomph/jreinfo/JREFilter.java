@@ -27,6 +27,8 @@ public final class JREFilter
 
   private final Boolean jdk;
 
+  private final Boolean descriptor;
+
   public JREFilter()
   {
     this((Integer)null, (Integer)null, (Integer)null);
@@ -59,6 +61,7 @@ public final class JREFilter
     this.micro = micro;
     this.bitness = bitness;
     this.jdk = jdk;
+    descriptor = Boolean.FALSE;
   }
 
   public JREFilter(int bitness)
@@ -72,6 +75,11 @@ public final class JREFilter
   }
 
   public JREFilter(String version, Integer bitness, Boolean jdk)
+  {
+    this(version, bitness, jdk, Boolean.FALSE);
+  }
+
+  public JREFilter(String version, Integer bitness, Boolean jdk, Boolean descriptor)
   {
     if (StringUtil.isEmpty(version))
     {
@@ -89,6 +97,7 @@ public final class JREFilter
 
     this.bitness = bitness;
     this.jdk = jdk;
+    this.descriptor = descriptor;
   }
 
   public Integer getMajor()
@@ -114,6 +123,11 @@ public final class JREFilter
   public Boolean isJDK()
   {
     return jdk;
+  }
+
+  public Boolean isDescriptor()
+  {
+    return descriptor;
   }
 
   public String getQuery()

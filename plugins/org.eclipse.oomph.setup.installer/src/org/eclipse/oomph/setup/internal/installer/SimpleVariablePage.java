@@ -437,7 +437,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     };
 
-    javaController = new JREController(javaLabel, javaViewer, downloadHandler)
+    javaController = new AugmentedJREController(javaLabel, javaViewer, downloadHandler)
     {
       @Override
       protected void modelEmpty(boolean empty)
@@ -451,7 +451,10 @@ public class SimpleVariablePage extends SimpleInstallerPage
       {
         super.jreChanged(jre);
         validatePage();
-        javaCombo.setToolTipText(jre == null ? null : jre.getJavaHome().toString());
+        javaCombo.setToolTipText(jre == null ? null : jre.getDescriptor() != null ? jre.getDescriptor().getLabel() : jre.getJavaHome().toString());
+
+        SetupContext setupContext = SetupContext.create(getResourceSet(), selectedProductVersion);
+        updateSetupContext(setupContext, jre);
       }
 
       @Override

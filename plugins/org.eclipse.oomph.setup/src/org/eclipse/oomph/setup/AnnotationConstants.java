@@ -83,6 +83,8 @@ public final class AnnotationConstants
 
   public static final String ANNOTATION_RELEASE_TRAIN_ALTERNATE = "http://www.eclipse.org/oomph/setup/ReleaseTrainAlternate"; //$NON-NLS-1$
 
+  public static final String ANNOTATION_JRE = "http://www.eclipse.org/oomph/setup/JRE"; //$NON-NLS-1$
+
   private AnnotationConstants()
   {
   }

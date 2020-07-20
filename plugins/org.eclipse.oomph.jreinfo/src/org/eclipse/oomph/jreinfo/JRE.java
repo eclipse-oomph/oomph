@@ -21,6 +21,8 @@ public final class JRE implements Comparable<JRE>
 
   private final File javaHome;
 
+  private final Descriptor descriptor;
+
   private final int major;
 
   private final int minor;
@@ -36,6 +38,7 @@ public final class JRE implements Comparable<JRE>
   public JRE(File javaHome, int major, int minor, int micro, int bitness, boolean jdk, long lastModified)
   {
     this.javaHome = javaHome;
+    descriptor = null;
     this.major = major;
     this.minor = minor;
     this.micro = micro;
@@ -44,9 +47,22 @@ public final class JRE implements Comparable<JRE>
     this.lastModified = lastModified;
   }
 
+  JRE(Descriptor descriptor)
+  {
+    javaHome = null;
+    this.descriptor = descriptor;
+    major = descriptor.getMajor();
+    minor = descriptor.getMinor();
+    micro = descriptor.getMicro();
+    bitness = descriptor.getBitness();
+    jdk = descriptor.isJDK();
+    lastModified = -1;
+  }
+
   JRE(File javaHome, JRE info)
   {
     this.javaHome = javaHome;
+    descriptor = null;
     major = info.major;
     minor = info.minor;
     micro = info.micro;
@@ -57,6 +73,7 @@ public final class JRE implements Comparable<JRE>
 
   JRE(String line)
   {
+    descriptor = null;
     String[] tokens = line.split(SEPARATOR);
     javaHome = new File(tokens[0]);
     major = Integer.parseInt(tokens[1]);
@@ -72,9 +89,14 @@ public final class JRE implements Comparable<JRE>
     return javaHome;
   }
 
+  public Descriptor getDescriptor()
+  {
+    return descriptor;
+  }
+
   public File getJavaExecutable()
   {
-    return getExecutable(javaHome);
+    return javaHome == null ? null : getExecutable(javaHome);
   }
 
   public int getMajor()
@@ -104,6 +126,11 @@ public final class JRE implements Comparable<JRE>
 
   public boolean isValid()
   {
+    if (descriptor != null)
+    {
+      return true;
+    }
+
     File executable = getJavaExecutable();
     if (!executable.isFile())
     {
@@ -120,6 +147,11 @@ public final class JRE implements Comparable<JRE>
 
   public boolean isCurrent()
   {
+    if (descriptor != null)
+    {
+      return false;
+    }
+
     String systemJavaHome = System.getProperty("java.home"); //$NON-NLS-1$
     return javaHome.getPath().equals(systemJavaHome);
   }
@@ -134,6 +166,12 @@ public final class JRE implements Comparable<JRE>
 
     Boolean filterJDK = filter.isJDK();
     if (filterJDK != null && jdk != filterJDK.booleanValue())
+    {
+      return false;
+    }
+
+    Boolean filterDescriptor = filter.isDescriptor();
+    if (filterDescriptor != null && descriptor != null != filterDescriptor.booleanValue())
     {
       return false;
     }
@@ -190,6 +228,7 @@ public final class JRE implements Comparable<JRE>
     final int prime = 31;
     int result = 1;
     result = prime * result + (javaHome == null ? 0 : javaHome.hashCode());
+    result = prime * result + (descriptor == null ? 0 : descriptor.hashCode());
     return result;
   }
 
@@ -224,6 +263,18 @@ public final class JRE implements Comparable<JRE>
       return false;
     }
 
+    if (descriptor == null)
+    {
+      if (other.descriptor != null)
+      {
+        return false;
+      }
+    }
+    else if (!descriptor.equals(other.descriptor))
+    {
+      return false;
+    }
+
     return true;
   }
 
@@ -253,6 +304,11 @@ public final class JRE implements Comparable<JRE>
   @Override
   public String toString()
   {
+    if (descriptor != null)
+    {
+      return descriptor.getLabel();
+    }
+
     return javaHome.getPath() + (isCurrent() ? " " + Messages.JRE_Current_message : ""); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
@@ -265,5 +321,77 @@ public final class JRE implements Comparable<JRE>
   static File getExecutable(File javaHome)
   {
     return new File(javaHome, "bin/" + JREManager.JAVA_EXECUTABLE); //$NON-NLS-1$
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public final static class Descriptor
+  {
+    private String label;
+
+    private final int major;
+
+    private final int minor;
+
+    private final int micro;
+
+    private int bitness;
+
+    private final boolean jdk;
+
+    private final Object data;
+
+    public Descriptor(String label, int major, int minor, int micro, int bitness, boolean jdk, Object data)
+    {
+      this.label = label;
+      this.data = data;
+      this.major = major;
+      this.minor = minor;
+      this.micro = micro;
+      this.bitness = bitness;
+      this.jdk = jdk;
+    }
+
+    public String getLabel()
+    {
+      return label;
+    }
+
+    public int getMajor()
+    {
+      return major;
+    }
+
+    public int getMinor()
+    {
+      return minor;
+    }
+
+    public int getMicro()
+    {
+      return micro;
+    }
+
+    public int getBitness()
+    {
+      return bitness;
+    }
+
+    public boolean isJDK()
+    {
+      return jdk;
+    }
+
+    public Object getData()
+    {
+      return data;
+    }
+
+    @Override
+    public String toString()
+    {
+      return label;
+    }
   }
 }

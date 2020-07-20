@@ -397,7 +397,7 @@ public class ProductPage extends SetupWizardPage
       }
     };
 
-    javaController = new JREController(javaLabel, javaViewer, downloadHandler)
+    javaController = new AugmentedJREController(javaLabel, javaViewer, downloadHandler)
     {
       @Override
       protected void modelEmpty(boolean empty)
@@ -409,8 +409,10 @@ public class ProductPage extends SetupWizardPage
       @Override
       protected void jreChanged(JRE jre)
       {
-        getWizard().setVMPath(getVMOption(jre));
-        getWizard().setOS(getWizard().getOS().getForBitness(getBitness()));
+        SetupWizard wizard = getWizard();
+        wizard.setVMPath(getVMOption(jre));
+        wizard.setOS(wizard.getOS().getForBitness(getBitness()));
+        updateSetupContext(wizard.getSetupContext(), jre);
       }
 
       @Override
@@ -1428,12 +1430,20 @@ public class ProductPage extends SetupWizardPage
 
   public static String getVMOption(JRE jre)
   {
+    // There should be no VM option if it's the VM for the system JRE.
     if (jre == null || jre.equals(JREManager.INSTANCE.getSystemJRE()))
     {
       return null;
     }
 
-    return new File(jre.getJavaHome(), "bin").toString(); //$NON-NLS-1$
+    // THere should be no VM option if there is no Java home, i.e., if this is a descriptor-based JRE.
+    File javaHome = jre.getJavaHome();
+    if (javaHome == null)
+    {
+      return null;
+    }
+
+    return new File(javaHome, "bin").toString(); //$NON-NLS-1$
   }
 
   public static List<ProductVersion> getValidProductVersions(Product product, Pattern filter)
