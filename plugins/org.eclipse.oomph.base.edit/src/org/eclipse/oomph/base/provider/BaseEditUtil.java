@@ -201,7 +201,7 @@ public final class BaseEditUtil
       String typeText = super.getTypeText(object);
       if (typeText.endsWith(" " + TASK_SUFFIX)) //$NON-NLS-1$
       {
-        typeText = typeText.substring(0, typeText.length() - TASK_SUFFIX.length() + 1);
+        typeText = typeText.substring(0, typeText.length() - (TASK_SUFFIX.length() + 1));
       }
 
       return typeText;
