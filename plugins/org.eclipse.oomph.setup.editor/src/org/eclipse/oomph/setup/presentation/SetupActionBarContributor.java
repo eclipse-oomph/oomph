@@ -370,10 +370,10 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
         if (loadResourceDialog.open() == IDialogConstants.OK_ID)
         {
+          List<Resource> loadedResources = new ArrayList<Resource>();
           synchronized (resourceSet)
           {
             int index = 0;
-            List<Resource> loadedResources = new ArrayList<Resource>();
             for (URI uri : loadedURIs)
             {
               Resource resource = resourceSet.getResource(uri, false);
@@ -383,16 +383,16 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
                 resources.move(++index, resource);
               }
             }
+          }
 
-            if (!loadedResources.isEmpty())
+          if (!loadedResources.isEmpty())
+          {
+            if (!toggleViewerInputAction.isChecked())
             {
-              if (!toggleViewerInputAction.isChecked())
-              {
-                toggleViewerInputAction.run();
-              }
-
-              toggleViewerInputAction.select(new StructuredSelection(loadedResources));
+              toggleViewerInputAction.run();
             }
+
+            toggleViewerInputAction.select(new StructuredSelection(loadedResources));
           }
         }
       }
