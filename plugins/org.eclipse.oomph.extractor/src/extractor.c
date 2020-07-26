@@ -1150,12 +1150,12 @@ main (int argcIgnored, char** argvIngored)
     debug = TRUE;
 
     // Attach to the console and redirect to it.
-    if (AttachConsole(ATTACH_PARENT_PROCESS))
-    {
-      freopen("CONIN$", "r",stdin);
-      freopen("CONOUT$", "w",stdout);
-      freopen("CONOUT$", "w",stderr);
-    }
+    // if (AttachConsole(ATTACH_PARENT_PROCESS))
+    // {
+      // freopen("CONIN$", "r",stdin);
+      // freopen("CONOUT$", "w",stdout);
+      // freopen("CONOUT$", "w",stderr);
+    // }
 
     // Shift the args to remove this one.
     --argc;
