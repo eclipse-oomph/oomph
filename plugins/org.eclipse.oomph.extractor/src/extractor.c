@@ -21,6 +21,7 @@
 
 static char* lib = NULL;
 static char* cab = NULL;
+static char* productTar = NULL;
 static BOOL debug = FALSE;
 
 // See https://de.wikipedia.org/wiki/DLL_Hijacking
@@ -221,14 +222,19 @@ findDescriptor (char* executable, REQ* req, BOOL ignoreCab)
 
   wchar_t* wideExecutable = convertUTF8ToUTF16 (executable);
   FILE* file = _wfopen (wideExecutable, L"rb");
+  byte in_buffer[4048];
+  int in_buffer_pos = 0;
+  int in_buffer_size = 0;
 
   BOOL retcode = FALSE;
   byte b;
   long pos = 0;
-  byte libdata[60000];
-  int libdataSize = 0;
+  int libdataSize = 60000;
+  byte libdata[libdataSize];
+  int libdataPos = 0;
 
-  FILE *cabFile = NULL;
+  FILE *outFile = NULL;
+
   int o;
   int markerLimit = 6;
   for (o = 0; o < markerLimit; ++o)
@@ -236,18 +242,48 @@ findDescriptor (char* executable, REQ* req, BOOL ignoreCab)
     int k = 0;
     for (;;)
     {
-      if (fread (&b, 1, 1, file) == 0)
+      if (o >= 2)
+      {
+        // Only start using the buffer after we've read the descriptor because the descriptor processing reads directly from the file.
+        if (in_buffer_pos >= in_buffer_size)
+        {
+          in_buffer_size = fread(in_buffer, 1, 4048, file);
+          if (in_buffer_size == 0)
+          {
+            break;
+          }
+          in_buffer_pos = 0;
+        }
+
+        b = in_buffer[in_buffer_pos++];
+      }
+      else if (fread (&b, 1, 1, file) == 0)
       {
         break;
       }
 
       if (o == 1)
       {
-        libdata[libdataSize++] = b;
+        libdata[libdataPos++] = b;
       }
-      else if (cabFile != NULL)
+      else if (outFile != NULL)
       {
-        fwrite (&b, 1, 1, cabFile);
+        libdata[libdataPos++] = b;
+        if (libdataPos == libdataSize)
+        {
+          // Don't write the trailing bytes that might be part of the marker.
+          fwrite (libdata, libdataPos - size, 1, outFile);
+
+          // Move the trailing bytes to the start
+          int n;
+          int m = libdataSize  - size;
+          for (n = 0; n < size; ++n, ++m)
+          {
+            libdata[n] = libdata[m];
+          }
+
+          libdataPos = size;
+        }
       }
 
       while (k > 0 && marker[k] != b)
@@ -284,8 +320,9 @@ findDescriptor (char* executable, REQ* req, BOOL ignoreCab)
           lib = getTempFile ("ext", ".jar");
 
           FILE *fp = _wfopen (convertUTF8ToUTF16 (lib), L"wb");
-          fwrite (libdata, libdataSize - size, 1, fp);
+          fwrite (libdata, libdataPos - size, 1, fp);
           fclose (fp);
+          libdataPos = 0;
 
           // Extract the product descriptor.
           int size = 2048;
@@ -294,7 +331,7 @@ findDescriptor (char* executable, REQ* req, BOOL ignoreCab)
           fgets (buffer, size, file);
           sscanf (buffer, "%d", &req->format);
 
-          if (req->format == 1 || ignoreCab)
+          if (req->format == 1 || (req->format == 2 && ignoreCab))
           {
             markerLimit = 2;
           }
@@ -333,32 +370,80 @@ findDescriptor (char* executable, REQ* req, BOOL ignoreCab)
         }
         else if (o == 2)
         {
-          // We've found the preceding libdata.jar. Skip...
-          if (debug)
+          if (req->format == 3)
           {
-            printf ("Finished libdata.jar\n");
-            fflush (stdout);
+            if (debug)
+            {
+              printf ("Found start of product tar\n");
+              fflush (stdout);
+            }
+            productTar = getTempFile ("product", ".tar");
+            outFile = _wfopen (convertUTF8ToUTF16 (productTar), L"wb");
+          }
+          else
+          {
+            // We've found the preceding libdata.jar. Skip...
+            if (debug)
+            {
+              printf ("Finished libdata.jar\n");
+              fflush (stdout);
+            }
           }
         }
         else if (o == 3)
         {
-          if (debug)
+          if (req->format == 3)
           {
-            printf ("Found start of cab\n");
-            fflush (stdout);
+            if (debug)
+            {
+              printf ("Found end of product tar\n");
+              fflush (stdout);
+            }
+
+            if (libdataPos - size > 0)
+            {
+              fwrite (libdata, libdataPos - size, 1, outFile);
+            }
+
+            fclose (outFile);
           }
-          cab = getTempFile ("jre", ".cab");
-          cabFile = _wfopen (convertUTF8ToUTF16 (cab), L"wb");
+          else
+          {
+            if (debug)
+            {
+              printf ("Found start of cab\n");
+              fflush (stdout);
+            }
+            cab = getTempFile ("jre", ".cab");
+            outFile = _wfopen (convertUTF8ToUTF16 (cab), L"wb");
+          }
         }
         else if (o == 4)
         {
-          if (debug)
+          if (req->format == 3)
           {
-            printf ("Found end of cab\n");
-            fflush (stdout);
-          }
+            if (debug)
+            {
+              printf ("Found end of cab\n");
+              fflush (stdout);
+            }
 
-          fclose (cabFile);
+            if (libdataPos - size > 0)
+            {
+              fwrite (libdata, libdataPos - size, 1, outFile);
+            }
+
+            fclose (outFile);
+          }
+          else
+          {
+            if (debug)
+            {
+              printf ("Found end of product tar\n");
+              fflush (stdout);
+            }
+
+          }
         }
         else
         {
@@ -381,7 +466,7 @@ findDescriptor (char* executable, REQ* req, BOOL ignoreCab)
 }
 
 static BOOL
-execCommand (char *cmdline)
+execCommand (char *cmdline, BOOL show, BOOL wait)
 {
   if (debug)
   {
@@ -397,7 +482,7 @@ execCommand (char *cmdline)
   ZeroMemory(&si, sizeof(si) );
   si.cb = sizeof(si);
   si.dwFlags = STARTF_USESHOWWINDOW;
-  si.wShowWindow = SW_HIDE;
+  si.wShowWindow = show ? SW_SHOWNORMAL : SW_HIDE;
 
   ZeroMemory(&pi, sizeof(pi) );
 
@@ -418,7 +503,10 @@ execCommand (char *cmdline)
   }
 
   // Wait until child process exits.
-  WaitForSingleObject (pi.hProcess, INFINITE);
+  if (wait)
+  {
+    WaitForSingleObject (pi.hProcess, INFINITE);
+  }
 
   DWORD exitCode;
   if (GetExitCodeProcess (pi.hProcess, &exitCode) != FALSE)
@@ -431,6 +519,11 @@ execCommand (char *cmdline)
   CloseHandle (pi.hThread);
 
   free (wideCommandLine);
+
+  if (!wait)
+  {
+    return TRUE;
+  }
 
   return result;
 }
@@ -483,7 +576,7 @@ execLib (char* javaHome, char *vmargs, char* className, char* args)
     }
   }
 
-  return execCommand (cmdline);
+  return execCommand (cmdline, FALSE, TRUE);
 }
 
 static BOOL
@@ -588,12 +681,18 @@ findAllJREsAndVMs (JRE** defaultJRE)
 }
 
 static char*
-getProductCommandLineArguments (int argc, char*argv[])
+getProductCommandLineArguments (int argc, char*argv[], BOOL ignoreVM)
 {
   // Compute the length of the result.
   // Each argument will be surrounded by quotes and separated by a space, so include room for these three additional characters.
   // Also include room for the terminating null character.
   int length = 1;
+  if (!ignoreVM)
+  {
+    // If there is a -vm, we'll append \bin to it.
+    length +=  4;
+  }
+
   int i = 0;
   while (++i < argc)
   {
@@ -609,7 +708,7 @@ getProductCommandLineArguments (int argc, char*argv[])
   i = 0;
   while (++i < argc)
   {
-    if (i == 1 && strcmp ("-vm", argv[i]) == 0)
+    if (i == 1 && ignoreVM && strcmp ("-vm", argv[1]) == 0)
     {
       // Ignore the VM argument and the value that follows.
       ++i;
@@ -624,7 +723,13 @@ getProductCommandLineArguments (int argc, char*argv[])
       {
         strncat (result, " \"", length);
       }
+
       strncat (result, argv[i], length);
+      if (i == 2 && strcmp ("-vm", argv[1]) == 0)
+      {
+        strncat (result, "\\bin", length);
+      }
+
       strncat (result, "\"", length);
     }
   }
@@ -662,7 +767,6 @@ getArgv (char** argv[])
  * Untar
  ***************************************************************************************/
 
-/* Parse an octal number, ignoring leading and trailing nonsense. */
 static int
 parseoct (const char *p, size_t n)
 {
@@ -673,6 +777,7 @@ parseoct (const char *p, size_t n)
     ++p;
     --n;
   }
+
   while (*p >= '0' && *p <= '7' && n > 0)
   {
     i *= 8;
@@ -680,18 +785,23 @@ parseoct (const char *p, size_t n)
     ++p;
     --n;
   }
-  return (i);
+
+  return i;
 }
 
-/* Returns true if this is 512 zero bytes. */
-static int
-is_end_of_archive (const char *p)
+static BOOL
+isEndOfArchive (const char *p)
 {
   int n;
   for (n = 511; n >= 0; --n)
+  {
     if (p[n] != '\0')
-      return (0);
-  return (1);
+    {
+      return 0;
+    }
+  }
+
+  return 1;
 }
 
 static char*
@@ -715,14 +825,13 @@ getAbsolutePath (char* pathname, char* targetDir)
   return result;
 }
 
-/* Create a directory, including parent directories as necessary. */
 static void
-create_dir (char *pathname, char *targetDir)
+createDirectory (char *pathname, char *targetDir)
 {
   char *p;
   int r;
 
-  /* Strip trailing '/' */
+  // Strip trailing '/'
   if (pathname[strlen (pathname) - 1] == '/')
   {
     pathname[strlen (pathname) - 1] = '\0';
@@ -730,21 +839,22 @@ create_dir (char *pathname, char *targetDir)
 
   char* path = getAbsolutePath (pathname, targetDir);
 
-  /* Try creating the directory. */
+  // Try creating the directory.
   r = mkdir (path);
 
   if (r != 0)
   {
-    /* On failure, try creating parent directory. */
+    // try creating parent directory.
     p = strrchr (pathname, '/');
     if (p != NULL)
     {
       *p = '\0';
-      create_dir (pathname, targetDir);
+      createDirectory (pathname, targetDir);
       *p = '/';
       r = mkdir (path);
     }
   }
+
   if (r != 0)
   {
     fprintf (stderr, "Could not create directory %s\n", path);
@@ -752,9 +862,8 @@ create_dir (char *pathname, char *targetDir)
   }
 }
 
-/* Create a file, including parent directory as necessary. */
 static FILE *
-create_file (char *pathname, char * targetDir)
+createFile (char *pathname, char * targetDir)
 {
   FILE *f;
 
@@ -762,37 +871,40 @@ create_file (char *pathname, char * targetDir)
   f = fopen (path, "wb");
   if (f == NULL)
   {
-    /* Try creating parent dir and then creating file. */
+    // Try creating parent directory and then creating file.
     char *p = strrchr (pathname, '/');
     if (p != NULL)
     {
       *p = '\0';
-      create_dir (pathname, targetDir);
+      createDirectory (pathname, targetDir);
       *p = '/';
       f = fopen (path, "wb");
     }
   }
+
   return f;
 }
 
-/* Verify the tar checksum. */
 static int
-verify_checksum (const char *p)
+verifyChecksum (const char *p)
 {
   int n, u = 0;
   for (n = 0; n < 512; ++n)
   {
     if (n < 148 || n > 155)
-      /* Standard tar checksum adds unsigned bytes. */
+    {
+      // The standard tar checksum adds unsigned bytes.
       u += ((unsigned char *) p)[n];
+    }
     else
+    {
       u += 0x20;
-
+    }
   }
-  return (u == parseoct (p + 148, 8));
+
+  return u == parseoct (p + 148, 8);
 }
 
-/* Extract a tar archive. */
 static void
 untar (FILE *a, char *path, char* targetDir)
 {
@@ -807,9 +919,13 @@ untar (FILE *a, char *path, char* targetDir)
     fflush (stdout);
   }
 
+  char *longLink = NULL;
+  char *longLinkOffset = NULL;
+
   for (;;)
   {
     bytes_read = fread (buff, 1, 512, a);
+
     if (bytes_read < 512)
     {
       fprintf (stderr, "Short read on %s: expected 512, got %lu\n", path, (unsigned long) bytes_read);
@@ -817,7 +933,7 @@ untar (FILE *a, char *path, char* targetDir)
       return;
     }
 
-    if (is_end_of_archive (buff))
+    if (isEndOfArchive (buff))
     {
       if (debug)
       {
@@ -827,12 +943,17 @@ untar (FILE *a, char *path, char* targetDir)
 
       return;
     }
-    if (!verify_checksum (buff))
+
+    if (!verifyChecksum (buff))
     {
       fprintf (stderr, "Checksum failure\n");
       fflush (stderr);
       return;
     }
+
+    // File modes don't matter on Windows.
+    buff[100] = 0;
+
     filesize = parseoct (buff + 124, 12);
     switch (buff[156])
     {
@@ -865,13 +986,29 @@ untar (FILE *a, char *path, char* targetDir)
         }
         break;
       case '5':
-        if (debug)
+        if (longLink != NULL)
         {
-          printf (" Extracting dir %s\n", buff);
-          fflush (stdout);
+          if (debug)
+          {
+            printf (" Extracting long directory %s\n", longLink);
+            fflush (stdout);
+          }
+
+          createDirectory (longLink, targetDir);
+          longLink = NULL;
+          longLinkOffset = NULL;
+        }
+        else
+        {
+          if (debug)
+          {
+            printf (" Extracting directory %s\n", buff);
+            fflush (stdout);
+          }
+
+          createDirectory (buff, targetDir);
         }
 
-        create_dir (buff, targetDir);
         filesize = 0;
         break;
       case '6':
@@ -882,14 +1019,42 @@ untar (FILE *a, char *path, char* targetDir)
         }
         break;
       default:
-        if (debug)
+        if (strcmp(buff, "././@LongLink") == 0)
         {
-          printf (" Extracting file %s\n", buff);
-          fflush (stdout);
+          if (debug)
+          {
+            printf (" Reading long link %s\n", buff);
+            fflush (stdout);
+          }
+
+          longLink = malloc(filesize + 1);
+          longLinkOffset = longLink;
         }
-        f = create_file (buff, targetDir);
+        else if (longLink != NULL)
+        {
+          if (debug)
+          {
+            printf (" Extracting long file %s\n", longLink);
+            fflush (stdout);
+          }
+
+          f = createFile (longLink, targetDir);
+          longLink = NULL;
+          longLinkOffset = NULL;
+        }
+        else
+        {
+          if (debug)
+          {
+            printf (" Extracting file %s\n", buff);
+            fflush (stdout);
+          }
+
+          f = createFile (buff, targetDir);
+        }
         break;
     }
+
     while (filesize > 0)
     {
       bytes_read = fread (buff, 1, 512, a);
@@ -899,8 +1064,12 @@ untar (FILE *a, char *path, char* targetDir)
         fflush (stderr);
         return;
       }
+
       if (filesize < 512)
+      {
         bytes_read = filesize;
+      }
+
       if (f != NULL)
       {
         if (fwrite (buff, 1, bytes_read, f) != bytes_read)
@@ -911,8 +1080,21 @@ untar (FILE *a, char *path, char* targetDir)
           f = NULL;
         }
       }
+      else if (longLinkOffset != NULL)
+      {
+        int i;
+        for (i = 0; i < bytes_read; ++i)
+        {
+          longLinkOffset[i] = buff[i];
+        }
+
+        longLinkOffset += bytes_read;
+        longLinkOffset[0] = 0;
+      }
+
       filesize -= bytes_read;
     }
+
     if (f != NULL)
     {
       fclose (f);
@@ -930,7 +1112,7 @@ extractTar (char * tarFile, char *targetDir, BOOL createRoot)
 
   if (createRoot)
   {
-    create_dir (root, targetDir);
+    createDirectory (root, targetDir);
   }
 
   FILE *a = fopen (tarFile, "rb");
@@ -966,6 +1148,14 @@ main (int argcIgnored, char** argvIngored)
   if (argc > 1 && strcmp (argv[1], "--debug") == 0)
   {
     debug = TRUE;
+
+    // Attach to the console and redirect to it.
+    if (AttachConsole(ATTACH_PARENT_PROCESS))
+    {
+      freopen("CONIN$", "r",stdin);
+      freopen("CONOUT$", "w",stdout);
+      freopen("CONOUT$", "w",stderr);
+    }
 
     // Shift the args to remove this one.
     --argc;
@@ -1006,7 +1196,54 @@ main (int argcIgnored, char** argvIngored)
   char sysdir[MAX_PATH];
   if (!GetSystemDirectory (sysdir, sizeof(sysdir)))
   {
+    fprintf (stderr, "No system directory\n");
+    fflush (stderr);
     return EXIT_FAILURE_SYSTEM_DIRECTORY;
+  }
+
+  if (productTar != NULL)
+  {
+    char* targetFolder = getTempFile ("eoi", "");
+    if (targetFolder == NULL)
+    {
+      char label[MAX_PATH];
+      if (snprintf (label, sizeof(label), "Extract %s to:", req.productName) >= sizeof(label))
+      {
+        return EXIT_FAILURE_BUFFER_OVERFLOW;
+      }
+
+      targetFolder = browseForFolder (NULL, label);
+    }
+    else
+    {
+      DeleteFile (targetFolder);
+    }
+
+    if (targetFolder == NULL)
+    {
+      return EXIT_CANCEL;
+    }
+
+    char *targetFolderWithSlash = malloc (strlen (targetFolder) + 1);
+    targetFolderWithSlash[0] = 0;
+    strcat (targetFolderWithSlash, targetFolder);
+    strcat (targetFolderWithSlash, "\\");
+
+    extractTar(productTar, targetFolderWithSlash, TRUE);
+
+    char* productCommandLineArguments = getProductCommandLineArguments (argc, argv, FALSE);
+    char *command = malloc(strlen(sysdir) + strlen(targetFolderWithSlash) + strlen(req.launcherPath) +  strlen(productCommandLineArguments) + 10);
+    command[0] = 0;
+    strcat(command, "\"");
+    strcat(command, targetFolderWithSlash);
+    strcat(command, req.launcherPath);
+    strcat(command, "\"");
+    strcat(command, " ");
+    strcat(command, productCommandLineArguments);
+
+    execCommand(command, TRUE, FALSE);
+
+    return EXIT_SUCCESS;
   }
 
   char * tarFile = NULL;
@@ -1026,7 +1263,7 @@ main (int argcIgnored, char** argvIngored)
     char root[2];
     root[0] = '/';
     root[1] = 0;
-    create_dir (root, targetFolder);
+    createDirectory (root, targetFolder);
 
     if (debug)
     {
@@ -1040,7 +1277,7 @@ main (int argcIgnored, char** argvIngored)
       return EXIT_FAILURE_BUFFER_OVERFLOW;
     }
 
-    execCommand (expand);
+    execCommand (expand, FALSE, TRUE);
 
     tarFile = malloc (strlen (targetFolder) + 30);
     tarFile[0] = 0;
@@ -1151,7 +1388,7 @@ main (int argcIgnored, char** argvIngored)
           free (jreTargetFolder);
         }
 
-        char* productCommandLineArguments = getProductCommandLineArguments (argc, argv);
+        char* productCommandLineArguments = getProductCommandLineArguments (argc, argv, TRUE);
         JRE* argJRE = tarFile != NULL || jre == defaultJRE ? NULL : jre;
         if (extractProduct (jre, argJRE, (debug ? "-Dorg.eclipse.oomph.extractor.lib.BINExtractor.log=true" : NULL), executable, targetFolder,
                             productCommandLineArguments))
