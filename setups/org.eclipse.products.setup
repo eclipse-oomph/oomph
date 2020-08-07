@@ -112,9 +112,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -232,9 +232,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1485,9 +1485,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1885,9 +1885,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4379,6 +4379,10 @@
         <requirement
             name="org.eclipse.launchbar.remote.feature.group"/>
         <requirement
+            name="org.eclipse.linuxtools.cdt.libhover.devhelp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.cdt.libhover.feature.feature.group"/>
+        <requirement
             name="org.eclipse.linuxtools.changelog.c.feature.group"/>
         <requirement
             name="org.eclipse.linuxtools.gcov.feature.group"/>
@@ -4403,9 +4407,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4573,6 +4577,10 @@
         <requirement
             name="org.eclipse.launchbar.remote.feature.group"/>
         <requirement
+            name="org.eclipse.linuxtools.cdt.libhover.devhelp.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.linuxtools.cdt.libhover.feature.feature.group"/>
+        <requirement
             name="org.eclipse.linuxtools.changelog.c.feature.group"/>
         <requirement
             name="org.eclipse.linuxtools.gcov.feature.group"/>
@@ -4597,9 +4605,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6040,9 +6048,9 @@
         <requirement
             name="org.eclipse.wst.server_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6164,9 +6172,9 @@
         <requirement
             name="org.eclipse.wst.server_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7133,9 +7141,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7277,9 +7285,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8314,9 +8322,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8526,9 +8534,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9890,9 +9898,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9998,9 +10006,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -10915,9 +10923,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11087,9 +11095,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12514,9 +12522,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12658,9 +12666,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13891,9 +13899,9 @@
         <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13975,9 +13983,9 @@
         <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14812,9 +14820,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14972,9 +14980,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16261,9 +16269,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16385,9 +16393,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17460,9 +17468,9 @@
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17556,9 +17564,9 @@
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2020-09/M1"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18193,7 +18201,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.17.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18261,7 +18269,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.17.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2020-09/202007171000">
+            url="http://download.eclipse.org/releases/2020-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
