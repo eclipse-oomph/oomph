@@ -322,12 +322,15 @@
     <mapping
         filePattern="*.launch"
         defaultEditorID="org.eclipse.ui.genericeditor.GenericEditor"/>
+    <mapping
+        filePattern="*.sh"
+        defaultEditorID="org.eclipse.ui.genericeditor.GenericEditor"/>
     <description>Bindings for JET templates</description>
   </setupTask>
   <setupTask
       xsi:type="setup:StringSubstitutionTask"
       name="maven.build.java.home"
-      value="${jre.location-1.8}">
+      value="${jre.location-11}">
     <description>The location used to specify JAVA_HOME in the External Tools Configurations.</description>
   </setupTask>
   <setupTask
