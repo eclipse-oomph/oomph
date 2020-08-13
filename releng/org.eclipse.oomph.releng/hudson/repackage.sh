@@ -193,7 +193,7 @@ rm -rf $TMP
 # DISABLE THIS WHOLE PART!
 else
 echo "Copying repackaged-products"
-cp -a $GIT/products/org.eclipse.oomph.setup.installer.product/target/repackaged-products $PRODUCTS
+cp -a $GIT/products/org.eclipse.oomph.setup.installer.product/target/repackaged-products/* $PRODUCTS
 fi
 
 cp -a $GIT/products/org.eclipse.oomph.setup.installer.product/target/repository $PRODUCTS
