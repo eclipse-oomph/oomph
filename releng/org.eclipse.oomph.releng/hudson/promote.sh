@@ -56,11 +56,7 @@ set -o errexit
 #   $WORKSPACE/updates/org.eclipse.oomph.site.zip
 #
 #   $WORKSPACE/products/
-#   $WORKSPACE/products/eclipse-inst-linux32.tar.gz
-#   $WORKSPACE/products/eclipse-inst-linux64.tar.gz
-#   $WORKSPACE/products/eclipse-inst-mac64.tar.gz
-#   $WORKSPACE/products/eclipse-inst-win32.exe
-#   $WORKSPACE/products/eclipse-inst-win64.exe
+#   $WORKSPACE/products/eclipse-inst(-jre)?(-restricted)?-(linux|mac|win)64.(tar.gz|dmg|exe|zip)
 #   $WORKSPACE/products/repository/
 #   $WORKSPACE/products/repository/binary/
 #   $WORKSPACE/products/repository/features/
@@ -128,7 +124,7 @@ mkdir $PRODUCTS_TMP
 mkdir $PRODUCTS_TMP/latest
 
 cd $WORKSPACE/products
-for f in *.exe *.tar.gz *.dmg; do
+for f in *.exe *.zip *.tar.gz *.dmg; do
   echo "Promoting $f to $PRODUCTS_TMP/latest"
   cp -a $f $PRODUCTS_TMP/latest
 
@@ -163,6 +159,7 @@ if [[ "$BUILD_TYPE" != nightly ]]; then
     "Eclipse Installer $FOLDER"
 else
   cp -a $PRODUCTS/product.properties $PRODUCTS_TMP
+  cp -a $PRODUCTS/*.zip $PRODUCTS_TMP
   cp -a $PRODUCTS/*.exe $PRODUCTS_TMP
   cp -a $PRODUCTS/*.tar.gz $PRODUCTS_TMP
   for f in $PRODUCTS/*.dmg; do
