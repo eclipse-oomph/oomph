@@ -26,12 +26,14 @@ PRODUCTS=$WORKSPACE/products
 rm -rf $PRODUCTS
 mkdir $PRODUCTS
 
+# DISABLE THIS WHOLE PART!
+if [[ false == true ]]; then
 SOURCE=$GIT/products/org.eclipse.oomph.setup.installer.product/target/products
 cd $SOURCE
 
 TMP=$WORKSPACE/eclipse-installer
 
-for f in *.zip; do
+for f in *.zip *.tar.gz; do
   echo "Repackaging $f"
 
   rm -rf $TMP
@@ -66,7 +68,7 @@ for f in *.zip; do
       zip -r -q unsigned.zip "Eclipse Installer.app"
       rm -rf "Eclipse Installer.app"
       curl -o signed.zip -F file=@unsigned.zip -F entitlements=@$GIT/releng/org.eclipse.oomph.releng/hudson/installer.entitlements http://172.30.206.146:8282/macosx-signing-service/1.0.1-SNAPSHOT
-      
+
       actualSize=$(wc -c signed.zip | cut -f 1 -d ' ')
       if [ $actualSize -lt 40000000 ]; then
         echo "signed.zip is just $actualSize bytes large!"
@@ -75,7 +77,7 @@ for f in *.zip; do
         echo ""
         exit 1
       fi
-      
+
       unzip -qq signed.zip
       rm -f unsigned.zip signed.zip
     fi
@@ -85,39 +87,41 @@ for f in *.zip; do
     echo "  Building eclipse-inst-mac$bitness.tar.gz"
     tar -czf $PRODUCTS/eclipse-inst-mac$bitness.tar.gz "Eclipse Installer.app"
 
-    echo "  Building eclipse-inst-mac$bitness.dmg"
+    if [[ "$PACK_AND_SIGN" == true ]]; then
+      echo "  Building eclipse-inst-mac$bitness.dmg"
 
-    TIMESTAMP=$(date +%s%N)
-    UNNOTARIZED_DMG=$PRODUCTS/eclipse-inst-mac$bitness.$TIMESTAMP.dmg
-    curl -o $UNNOTARIZED_DMG --write-out '%{http_code}\n' -F sign=true -F source=@$PRODUCTS/eclipse-inst-mac$bitness.tar.gz http://build.eclipse.org:31338/dmg-packager
-    
-    echo "  Notarizing eclipse-inst-mac$bitness.$TIMESTAMP.dmg"
-    RESPONSE=$(curl -X POST -F file=@$UNNOTARIZED_DMG -F 'options={"primaryBundleId": "app-bundle", "staple": true};type=application/json' http://172.30.206.146:8383/macos-notarization-service/notarize)
-    UUID=$(echo $RESPONSE | grep -Po '"uuid"\s*:\s*"\K[^"]+')
-    STATUS=$(echo $RESPONSE | grep -Po '"status"\s*:\s*"\K[^"]+')
-    echo "  Progress: $RESPONSE"
+      TIMESTAMP=$(date +%s%N)
+      UNNOTARIZED_DMG=$PRODUCTS/eclipse-inst-mac$bitness.$TIMESTAMP.dmg
+      curl -o $UNNOTARIZED_DMG --write-out '%{http_code}\n' -F sign=true -F source=@$PRODUCTS/eclipse-inst-mac$bitness.tar.gz http://build.eclipse.org:31338/dmg-packager
 
-    while [[ $STATUS == 'IN_PROGRESS' ]]; do
-      sleep 1m
-      RESPONSE=$(curl -s http://172.30.206.146:8383/macos-notarization-service/$UUID/status)
+      echo "  Notarizing eclipse-inst-mac$bitness.$TIMESTAMP.dmg"
+      RESPONSE=$(curl -X POST -F file=@$UNNOTARIZED_DMG -F 'options={"primaryBundleId": "app-bundle", "staple": true};type=application/json' http://172.30.206.146:8383/macos-notarization-service/notarize)
+      UUID=$(echo $RESPONSE | grep -Po '"uuid"\s*:\s*"\K[^"]+')
       STATUS=$(echo $RESPONSE | grep -Po '"status"\s*:\s*"\K[^"]+')
       echo "  Progress: $RESPONSE"
-    done
 
-    if [[ $STATUS != 'COMPLETE' ]]; then
-      echo "Notarization failed: $RESPONSE"
-      exit 1
+      while [[ $STATUS == 'IN_PROGRESS' ]]; do
+        sleep 1m
+        RESPONSE=$(curl -s http://172.30.206.146:8383/macos-notarization-service/$UUID/status)
+        STATUS=$(echo $RESPONSE | grep -Po '"status"\s*:\s*"\K[^"]+')
+        echo "  Progress: $RESPONSE"
+      done
+
+      if [[ $STATUS != 'COMPLETE' ]]; then
+        echo "Notarization failed: $RESPONSE"
+        exit 1
+      fi
+
+      mv $UNNOTARIZED_DMG $UNNOTARIZED_DMG.unnotarized
+
+      echo "  Downloading stapled result"
+
+      curl -JO http://172.30.206.146:8383/macos-notarization-service/$UUID/download
+
+      echo "  Moving stapled notarized result"
+
+      mv eclipse-inst-mac$bitness.$TIMESTAMP.dmg $PRODUCTS/eclipse-inst-mac$bitness.dmg
     fi
-
-    mv $UNNOTARIZED_DMG $UNNOTARIZED_DMG.unnotarized
-
-    echo "  Downloading stapled result"
-      
-    curl -JO http://172.30.206.146:8383/macos-notarization-service/$UUID/download
-    
-    echo "  Moving stapled notarized result"
-
-    mv eclipse-inst-mac$bitness.$TIMESTAMP.dmg $PRODUCTS/eclipse-inst-mac$bitness.dmg
 
   elif [[ $f == *win32* ]]; then
     rm -f eclipsec.exe
@@ -137,7 +141,13 @@ for f in *.zip; do
       fi
     fi
 
-    zip -r -9 -qq --symlinks $PRODUCTS/$f *
+    if [[ $OSTYPE == cygwin ||  $OSTYPE = msys ]]; then
+      ZIP_OPTIONS="-r -9 -qq"
+    else
+      ZIP_OPTIONS="-r -9 -qq --symlinks"
+    fi
+
+    zip $ZIP_OPTIONS $PRODUCTS/$f *
 
     extractor=eclipse-inst-win$bitness.exe
     marker=$GIT/plugins/org.eclipse.oomph.extractor/marker.txt
@@ -180,6 +190,12 @@ for f in *.zip; do
 done
 
 rm -rf $TMP
+# DISABLE THIS WHOLE PART!
+else
+echo "Copying repackaged-products"
+cp -a $GIT/products/org.eclipse.oomph.setup.installer.product/target/repackaged-products $PRODUCTS
+fi
+
 cp -a $GIT/products/org.eclipse.oomph.setup.installer.product/target/repository $PRODUCTS
 
 rm -rf $WORKSPACE/help
@@ -189,7 +205,7 @@ cd $GIT
 cp releng/org.eclipse.oomph.releng.helpcenter/html/* $WORKSPACE/help
 cp releng/org.eclipse.oomph.releng.helpcenter/docs.txt $WORKSPACE/help/.docs
 
-for i in $( cat releng/org.eclipse.oomph.releng.helpcenter/docs.txt ); do
+for i in $( cat releng/org.eclipse.oomph.releng.helpcenter/docs.txt | sed 's/\r//' ); do
   echo "Unzipping $i"
   unzip -qq plugins/$i/target/$i-*-SNAPSHOT.jar \
     "javadoc/*" \
@@ -207,4 +223,3 @@ for i in $( cat releng/org.eclipse.oomph.releng.helpcenter/docs.txt ); do
 done
 
 echo ""
-
