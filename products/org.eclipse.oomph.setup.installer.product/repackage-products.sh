@@ -30,7 +30,7 @@ for i in $(ls); do
       mkdir -p tmp
       cd tmp
       unzip -qq ../$i
-      tar -cf ../${i%.zip}.tar *
+      tar -cf --format=gnu ../${i%.zip}.tar *
       cd ..
       rm -rf tmp
       product=${i%.zip}.tar
