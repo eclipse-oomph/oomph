@@ -30,6 +30,8 @@ public interface IElement
 
   public String getName();
 
+  public String getID();
+
   public Version getVersion();
 
   public Version getResolvedVersion();

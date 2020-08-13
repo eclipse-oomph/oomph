@@ -56,6 +56,8 @@ public class Release implements IRelease
 
   public static final String NAME_ATTRIBUTE = "name"; //$NON-NLS-1$
 
+  public static final String ID_ATTRIBUTE = "id"; //$NON-NLS-1$
+
   public static final String VERSION_ATTRIBUTE = "version"; //$NON-NLS-1$
 
   public static final String FRAGMENT_ATTRIBUTE = "fragment"; //$NON-NLS-1$
@@ -183,9 +185,12 @@ public class Release implements IRelease
     String name = element.getName();
     Version version = element.getVersion();
 
-    builder
-        .append(indent + "<" + element.getTag() + " " + NAME_ATTRIBUTE + "=\"" + name + "\" " + (element.isFragment() ? FRAGMENT_ATTRIBUTE + "=\"true\" " : "") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-            + VERSION_ATTRIBUTE + "=\"" + version + "\"" + (element.isLicenseFeature() ? " license=\"true\"" : "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+    builder.append(indent + "<" + element.getTag() + " " + // //$NON-NLS-1$ //$NON-NLS-2$
+        NAME_ATTRIBUTE + "=\"" + name + "\" " + // //$NON-NLS-1$ //$NON-NLS-2$
+        (element.isFragment() ? FRAGMENT_ATTRIBUTE + "=\"true\" " : "") + // //$NON-NLS-1$ //$NON-NLS-2$
+        (element.getID() != null ? ID_ATTRIBUTE + "=\"" + element.getID() + "\" " : "") + // //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        VERSION_ATTRIBUTE + "=\"" + version + "\"" + // //$NON-NLS-1$ //$NON-NLS-2$
+        (element.isLicenseFeature() ? " license=\"true\"" : "")); //$NON-NLS-1$ //$NON-NLS-2$
 
     List<IElement> content = element.getChildren();
     if (content.isEmpty())
@@ -301,9 +306,10 @@ public class Release implements IRelease
     private IElement createElement(IElement.Type type, Attributes attributes) throws SAXException
     {
       String name = getString(attributes, NAME_ATTRIBUTE);
+      String id = getString(attributes, ID_ATTRIBUTE);
       Version version = new Version(getString(attributes, VERSION_ATTRIBUTE));
       boolean isFragment = "true".equals(getString(attributes, FRAGMENT_ATTRIBUTE)); //$NON-NLS-1$
-      Element element = new Element(type, name, version, isFragment);
+      Element element = new Element(type, name, id, version, isFragment);
 
       String license = getString(attributes, LICENSE_ATTRIBUTE);
       if ("true".equals(license)) //$NON-NLS-1$
@@ -326,7 +332,7 @@ public class Release implements IRelease
     private String getString(Attributes attributes, String name) throws SAXException
     {
       String value = attributes.getValue(name);
-      if (value != null || LICENSE_ATTRIBUTE.equals(name) || FRAGMENT_ATTRIBUTE.equals(name))
+      if (value != null || LICENSE_ATTRIBUTE.equals(name) || FRAGMENT_ATTRIBUTE.equals(name) || ID_ATTRIBUTE.equals(name))
       {
         return value;
       }

@@ -202,7 +202,7 @@ public class ReleaseManager implements IReleaseManager
 
       String name = description.getSymbolicName();
       Version version = description.getVersion();
-      return new Element(Type.PLUGIN, name, version, pluginModel instanceof IFragmentModel);
+      return new Element(Type.PLUGIN, name, null, version, pluginModel instanceof IFragmentModel);
     }
 
     if (componentModel instanceof org.eclipse.pde.internal.core.ifeature.IFeatureModel)
@@ -222,7 +222,7 @@ public class ReleaseManager implements IReleaseManager
     String name = feature.getId();
     String versionValue = feature.getVersion();
     Version version = new Version(StringUtil.isEmpty(versionValue) ? "1.0.0.qualifier" : versionValue); //$NON-NLS-1$
-    IElement element = new Element(Type.FEATURE, name, version);
+    IElement element = new Element(Type.FEATURE, name, null, version);
 
     if (withContent)
     {
@@ -231,7 +231,7 @@ public class ReleaseManager implements IReleaseManager
       String licenseFeatureID = feature.getLicenseFeatureID();
       if (!StringUtil.isEmpty(licenseFeatureID))
       {
-        Element child = new Element(IElement.Type.FEATURE, licenseFeatureID, feature.getLicenseFeatureVersion());
+        Element child = new Element(IElement.Type.FEATURE, licenseFeatureID, null, feature.getLicenseFeatureVersion());
         if (resolve)
         {
           child.resolveVersion();
@@ -243,7 +243,7 @@ public class ReleaseManager implements IReleaseManager
 
       for (org.eclipse.pde.internal.core.ifeature.IFeatureChild versionable : feature.getIncludedFeatures())
       {
-        Element child = new Element(IElement.Type.FEATURE, versionable.getId(), versionable.getVersion());
+        Element child = new Element(IElement.Type.FEATURE, versionable.getId(), null, versionable.getVersion());
         if (resolve)
         {
           child.resolveVersion();
@@ -254,7 +254,7 @@ public class ReleaseManager implements IReleaseManager
 
       for (org.eclipse.pde.internal.core.ifeature.IFeaturePlugin versionable : feature.getPlugins())
       {
-        Element child = new Element(IElement.Type.PLUGIN, versionable.getId(), versionable.getVersion(), versionable.isFragment());
+        Element child = new Element(IElement.Type.PLUGIN, versionable.getId(), null, versionable.getVersion(), versionable.isFragment());
         if (resolve)
         {
           child.resolveVersion();
@@ -281,7 +281,7 @@ public class ReleaseManager implements IReleaseManager
     String name = product.getId();
     String versionValue = product.getVersion();
     Version version = new Version(StringUtil.isEmpty(versionValue) ? "1.0.0.qualifier" : versionValue); //$NON-NLS-1$
-    IElement element = new Element(Type.PRODUCT, name, version);
+    IElement element = new Element(Type.PRODUCT, name, product.getProductId(), version);
     List<IElement> children = element.getChildren();
 
     for (org.eclipse.pde.internal.core.iproduct.IProductFeature versionable : product.getFeatures())
@@ -292,7 +292,7 @@ public class ReleaseManager implements IReleaseManager
         featureVersion = "0.0.0"; //$NON-NLS-1$
       }
 
-      Element child = new Element(IElement.Type.FEATURE, versionable.getId(), featureVersion);
+      Element child = new Element(IElement.Type.FEATURE, versionable.getId(), null, featureVersion);
       if (resolve)
       {
         child.resolveVersion();
@@ -309,7 +309,7 @@ public class ReleaseManager implements IReleaseManager
         pluginVersion = "0.0.0"; //$NON-NLS-1$
       }
 
-      Element child = new Element(IElement.Type.PLUGIN, versionable.getId(), pluginVersion, versionable.isFragment());
+      Element child = new Element(IElement.Type.PLUGIN, versionable.getId(), null, pluginVersion, versionable.isFragment());
       if (resolve)
       {
         child.resolveVersion();

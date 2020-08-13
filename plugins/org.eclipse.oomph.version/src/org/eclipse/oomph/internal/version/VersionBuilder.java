@@ -758,7 +758,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
         {
           for (BundleDescription requiredBundleDescription : requiredBundles)
           {
-            IElement element = new Element(Type.PLUGIN, requiredBundleDescription.getSymbolicName(), false);
+            IElement element = new Element(Type.PLUGIN, requiredBundleDescription.getSymbolicName(), null, false);
             IProject childProject = getProject(element);
             if (childProject != null)
             {
@@ -1138,7 +1138,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     {
       Markers.deleteAllMarkers(file, Markers.MAVEN_POM_PROBLEM);
 
-      final String componentName = element.getName();
+      final String componentName = element.getID() == null ? element.getName() : element.getID();
       final String componentVersion = StringUtil.removeSuffix(element.getVersion().toString(), ".qualifier"); //$NON-NLS-1$
       final String componentType = element.getType().toString().toLowerCase();
 
@@ -1547,7 +1547,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
           BundleDescription supplierBundle = supplier.getSupplier();
           if (supplierBundle != null)
           {
-            IElement element = resolveElement(new Element(Type.PLUGIN, supplierBundle.getName(), supplierBundle.getHost() != null));
+            IElement element = resolveElement(new Element(Type.PLUGIN, supplierBundle.getName(), null, supplierBundle.getHost() != null));
             if (element != null)
             {
               IModel componentModel = ReleaseManager.INSTANCE.getComponentModel(element.trimVersion());

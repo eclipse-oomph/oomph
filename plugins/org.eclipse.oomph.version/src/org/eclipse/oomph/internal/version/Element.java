@@ -33,6 +33,8 @@ public class Element implements IElement
 
   private final String name;
 
+  private final String id;
+
   private Version version;
 
   private final boolean fragment;
@@ -43,34 +45,36 @@ public class Element implements IElement
 
   private Set<IElement> allChildren;
 
-  public Element(Element.Type type, String name, Version version)
+  public Element(Element.Type type, String name, String id, Version version)
   {
-    this(type, name, version, false);
+    this(type, name, id, version, false);
   }
 
-  public Element(Element.Type type, String name, Version version, boolean fragment)
+  public Element(Element.Type type, String name, String id, Version version, boolean fragment)
   {
     this.type = type;
     this.name = name;
+    this.id = id;
     this.fragment = fragment;
     this.version = VersionUtil.normalize(version);
   }
 
-  public Element(Element.Type type, String name, String version)
+  public Element(Element.Type type, String name, String id, String version)
   {
-    this(type, name, version, false);
+    this(type, name, id, version, false);
   }
 
-  public Element(Element.Type type, String name, String version, boolean fragment)
+  public Element(Element.Type type, String name, String id, String version, boolean fragment)
   {
-    this(type, name, new Version(version), fragment);
+    this(type, name, id, new Version(version), fragment);
   }
 
-  public Element(Type type, String name, boolean fragment)
+  public Element(Type type, String name, String id, boolean fragment)
   {
     this.type = type;
     this.name = name;
     this.fragment = fragment;
+    this.id = id;
     version = Version.emptyVersion;
   }
 
@@ -87,6 +91,11 @@ public class Element implements IElement
   public String getName()
   {
     return name;
+  }
+
+  public String getID()
+  {
+    return id;
   }
 
   public Version getVersion()
@@ -190,6 +199,7 @@ public class Element implements IElement
   {
     return "Element[type=" + type + //$NON-NLS-1$
         ", name=" + name + //$NON-NLS-1$
+        (id == null ? "" : ", id=" + id) + //$NON-NLS-1$ //$NON-NLS-2$
         (licenseFeature ? ", licenseFeature=true" : "") + //$NON-NLS-1$ //$NON-NLS-2$
         (fragment ? ", fragment=true" : "") + //$NON-NLS-1$ //$NON-NLS-2$
         ", version=" //$NON-NLS-1$
@@ -203,6 +213,7 @@ public class Element implements IElement
     int result = 1;
     result = prime * result + (name == null ? 0 : name.hashCode());
     result = prime * result + (getType() == null ? 0 : getType().hashCode());
+    result = prime * result + (id == null ? 0 : id.hashCode());
     return result;
   }
 
@@ -237,6 +248,18 @@ public class Element implements IElement
       return false;
     }
 
+    if (id == null)
+    {
+      if (other.id != null)
+      {
+        return false;
+      }
+    }
+    else if (!id.equals(other.id))
+    {
+      return false;
+    }
+
     if (getType() != other.getType())
     {
       return false;
@@ -255,7 +278,7 @@ public class Element implements IElement
 
   public IElement trimVersion()
   {
-    Element element = new Element(type, name, fragment);
+    Element element = new Element(type, name, id, fragment);
     if (isLicenseFeature())
     {
       element.setLicenseFeature(true);
