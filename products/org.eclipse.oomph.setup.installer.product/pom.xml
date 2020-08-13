@@ -266,6 +266,7 @@
                   <id>org.eclipse.oomph.setup.installer.product</id>
                   <rootFolders>
                     <macosx>Eclipse Installer.app</macosx>
+                    <linux>eclipse-installer</linux>
                   </rootFolders>
                 </product>
                 <product>
@@ -281,6 +282,7 @@
                   <attachId>restricted</attachId>
                   <rootFolders>
                     <macosx>Eclipse Installer.app</macosx>
+                    <linux>eclipse-installer</linux>
                   </rootFolders>
                 </product>
                 <product>
@@ -288,6 +290,7 @@
                   <attachId>with-jre-restricted</attachId>
                   <rootFolders>
                     <macosx>Eclipse Installer.app</macosx>
+                    <linux>eclipse-installer</linux>
                   </rootFolders>
                 </product>
               </products>
