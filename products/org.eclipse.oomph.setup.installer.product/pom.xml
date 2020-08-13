@@ -273,6 +273,7 @@
                   <attachId>with-jre</attachId>
                   <rootFolders>
                     <macosx>Eclipse Installer.app</macosx>
+                    <linux>eclipse-installer</linux>
                   </rootFolders>
                 </product>
                 <product>
