@@ -159,7 +159,11 @@ if [[ "$BUILD_TYPE" != nightly ]]; then
     "Eclipse Installer $FOLDER"
 else
   cp -a $PRODUCTS/product.properties $PRODUCTS_TMP
-  cp -a $PRODUCTS/*.zip $PRODUCTS_TMP
+  for f in $PRODUCTS/*.zip; do
+    if [[ -f $f ]]; then
+      cp -a $f $PRODUCTS_TMP
+    fi
+  done
   cp -a $PRODUCTS/*.exe $PRODUCTS_TMP
   cp -a $PRODUCTS/*.tar.gz $PRODUCTS_TMP
   for f in $PRODUCTS/*.dmg; do
