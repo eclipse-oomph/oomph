@@ -187,7 +187,7 @@
                 </goals>
                 <phase>integration-test</phase>
                 <configuration>
-                  <source>${project.build.directory}/products/org.eclipse.oomph.setup.installer.product-macosx.cocoa.x86_64.tar.gz</source>
+                  <source>${project.build.directory}/repackaged-products/eclipse-inst-mac64.tar.gz</source>
                   <timeoutMillis>600000</timeoutMillis> <!-- 10 min -->
                   <sign>true</sign>
                 </configuration>
@@ -199,7 +199,7 @@
                 </goals>
                 <phase>integration-test</phase>
                 <configuration>
-                  <source>${project.build.directory}/products/org.eclipse.oomph.setup.installer.product.with-jre-macosx.cocoa.x86_64.tar.gz</source>
+                  <source>${project.build.directory}/repackaged-products/eclipse-inst-jre-mac64.tar.gz</source>
                   <timeoutMillis>600000</timeoutMillis> <!-- 10 min -->
                   <sign>true</sign>
                 </configuration>
@@ -211,7 +211,7 @@
                 </goals>
                 <phase>integration-test</phase>
                 <configuration>
-                  <source>${project.build.directory}/products/org.eclipse.oomph.setup.installer.product.restricted-macosx.cocoa.x86_64.tar.gz</source>
+                  <source>${project.build.directory}/repackaged-products/eclipse-inst-restricted-mac64.tar.gz</source>
                   <timeoutMillis>600000</timeoutMillis> <!-- 10 min -->
                   <sign>true</sign>
                 </configuration>
@@ -223,7 +223,7 @@
                 </goals>
                 <phase>integration-test</phase>
                 <configuration>
-                  <source>${project.build.directory}/products/org.eclipse.oomph.setup.installer.product.with-jre.restricted-macosx.cocoa.x86_64.tar.gz</source>
+                  <source>${project.build.directory}/repackaged-products/eclipse-inst-jre-restricted-mac64.tar.gz</source>
                   <timeoutMillis>600000</timeoutMillis> <!-- 10 min -->
                   <sign>true</sign>
                 </configuration>
