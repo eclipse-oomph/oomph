@@ -66,15 +66,18 @@ public class AugmentedJREController extends JREController
       }
     }
 
-    JRE.Descriptor jreDescriptor = jre.getDescriptor();
-    if (jreDescriptor != null)
+    if (jre != null)
     {
-      SetupTask setupTask = (SetupTask)jreDescriptor.getData();
-      SetupTask setupTaskCopy = EcoreUtil.copy(setupTask);
-      Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_JRE);
-      setupTaskCopy.getAnnotations().add(annotation);
-      setupTaskCopy.setExcludedTriggers(new LinkedHashSet<Trigger>(Arrays.asList(new Trigger[] { Trigger.STARTUP, Trigger.MANUAL })));
-      setupTasks.add(0, setupTaskCopy);
+      JRE.Descriptor jreDescriptor = jre.getDescriptor();
+      if (jreDescriptor != null)
+      {
+        SetupTask setupTask = (SetupTask)jreDescriptor.getData();
+        SetupTask setupTaskCopy = EcoreUtil.copy(setupTask);
+        Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_JRE);
+        setupTaskCopy.getAnnotations().add(annotation);
+        setupTaskCopy.setExcludedTriggers(new LinkedHashSet<Trigger>(Arrays.asList(new Trigger[] { Trigger.STARTUP, Trigger.MANUAL })));
+        setupTasks.add(0, setupTaskCopy);
+      }
     }
   }
 
