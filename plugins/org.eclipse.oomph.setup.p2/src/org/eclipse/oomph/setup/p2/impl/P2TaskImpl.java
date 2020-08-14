@@ -76,6 +76,7 @@ import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.IRepositoryManager;
+import org.eclipse.equinox.p2.repository.IRepositoryReference;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
@@ -792,10 +793,11 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       @Override
       public ProvisioningContext createProvisioningContext(ProfileTransaction transaction, IProfileChangeRequest profileChangeRequest) throws CoreException
       {
+        ProvisioningContext result;
         if (context.get(Resolution.class) != null)
         {
           final IProvisioningAgent provisioningAgent = transaction.getProfile().getAgent().getProvisioningAgent();
-          return new ProvisioningContext(provisioningAgent)
+          result = new ProvisioningContext(provisioningAgent)
           {
             private URI[] metadataRepositories;
 
@@ -811,6 +813,14 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
                 {
                   IMetadataRepository repository = metadataRepositoryManager.getRepository(uri);
                   loadedRepositories.add(repository);
+
+                  Collection<IRepositoryReference> references = repository.getReferences();
+                  for (IRepositoryReference reference : references)
+                  {
+                    URI location = reference.getLocation();
+                    IMetadataRepository referencedRepository = metadataRepositoryManager.getRepository(location);
+                    loadedRepositories.add(referencedRepository);
+                  }
                 }
 
                 if (!loadedRepositories.contains(null))
@@ -830,8 +840,13 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
             }
           };
         }
+        else
+        {
+          result = super.createProvisioningContext(transaction, profileChangeRequest);
+        }
 
-        return super.createProvisioningContext(transaction, profileChangeRequest);
+        result.setProperty(ProvisioningContext.FOLLOW_REPOSITORY_REFERENCES, Boolean.TRUE.toString());
+        return result;
       }
 
       @Override
