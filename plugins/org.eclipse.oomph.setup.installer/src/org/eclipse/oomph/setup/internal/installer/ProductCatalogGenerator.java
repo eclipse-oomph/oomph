@@ -152,7 +152,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final boolean IS_RANGE_NARROW = Boolean.FALSE;
 
-  private static final String JUSTJ_JRES = "http://download.eclipse.org/justj/sandbox/jres/14/updates/nightly";
+  private static final String JUSTJ_JRES = "https://download.eclipse.org/justj/sandbox/jres";
 
   private URI outputLocation;
 
@@ -2131,7 +2131,7 @@ public class ProductCatalogGenerator implements IApplication
       {
         childURI = new java.net.URI(trimEmptyTrailingSegment(URI.createURI(childURI.toString())).toString());
         IMetadataRepository childRepository = manager.loadRepository(childURI, null);
-        if (childRepository.query(QueryUtil.createIUQuery(iu.getId(), iu.getVersion()), null).isEmpty())
+        if (!childRepository.query(QueryUtil.createIUQuery(iu.getId(), iu.getVersion()), null).isEmpty())
         {
           return findRepository(childRepository, iu);
         }

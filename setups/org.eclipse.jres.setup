@@ -9,11 +9,23 @@
     label="JRE">
   <setupTask
       xsi:type="setup.p2:P2Task"
-      label="JRE 14.0.1">
+      label="JRE 11.0.2">
     <requirement
         name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"/>
     <repository
-        url="http://download.eclipse.org/justj/sandbox/jres/14/updates/nightly/N202006111141"/>
+        url="https://download.eclipse.org/justj/sandbox/jres/11/updates/release/11.0.2"/>
+    <description>
+      Contains the plug-ins and fragments for the OpenJDK Hotspot JRE Complete.
+      Provides the complete set of modules of the JDK, excluding incubators.
+    </description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup.p2:P2Task"
+      label="JRE 14.0.2">
+    <requirement
+        name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"/>
+    <repository
+        url="https://download.eclipse.org/justj/sandbox/jres/14/updates/release/14.0.2"/>
     <description>
       Contains the plug-ins and fragments for the OpenJDK Hotspot JRE Complete.
       Provides the complete set of modules of the JDK, excluding incubators.
