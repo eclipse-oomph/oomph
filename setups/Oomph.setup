@@ -419,7 +419,7 @@
             source="http:/www.eclipse.org/oomph/targlets/PomArtifactUpdater">
           <detail
               key="skipArtifactIDs">
-            <value>false</value>
+            <value>true</value>
           </detail>
           <detail
               key="skipVersions">
