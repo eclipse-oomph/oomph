@@ -357,6 +357,30 @@
       value="${maven.build.command}">
     <description>The location of the mvn command that will execute mvn on your operating system; it is used in the External Tools Configurations.</description>
   </setupTask>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      filter="(osgi.os=win32)"
+      type="FILE"
+      name="maven.bash.home"
+      defaultValue="C:/Program Files/Git/bin"
+      label="Maven bash Home">
+    <description>The absolute path location of the folder containing the bash.exe on your operating system; it is used in the External Tools Configurations. You may leave the default if you don't intend to do Maven builds.</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:VariableTask"
+      filter="(!(osgi.os=win32))"
+      type="FILE"
+      name="maven.bash.home"
+      defaultValue="/bin"
+      label="Maven bash Home">
+    <description>The absolute path location of the folder containing the bash executable on your operating system; it is used in the External Tools Configurations. You may leave the default if you don't intend to do Maven builds.</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:StringSubstitutionTask"
+      name="maven.bash.home"
+      value="${maven.bash.home}">
+    <description>The location of the mvn command that will execute mvn on your operating system; it is used in the External Tools Configurations.</description>
+  </setupTask>
   <stream name="master"
       label="Master">
     <setupTask
@@ -449,6 +473,8 @@
         </annotation>
         <requirement
             name="*"/>
+        <requirement
+            name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.feature.group"/>
         <sourceLocator
             rootFolder="${git.clone.oomph.location}">
           <predicate
@@ -487,6 +513,8 @@
               url="http://download.eclipse.org/technology/swtbot/snapshots"/>
           <repository
               url="http://download.eclipse.org/webtools/repository/latest"/>
+          <repository
+              url="http://download.eclipse.org/justj/jres/11/updates/release/11.0.2"/>
         </repositoryList>
         <repositoryList
             name="2020-06">
@@ -517,6 +545,8 @@
               url="http://download.eclipse.org/technology/swtbot/snapshots"/>
           <repository
               url="http://download.eclipse.org/webtools/repository/latest"/>
+          <repository
+              url="http://download.eclipse.org/justj/jres/11/updates/release/11.0.2"/>
         </repositoryList>
         <repositoryList
             name="2020-03">

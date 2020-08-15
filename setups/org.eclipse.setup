@@ -12,7 +12,7 @@
     </detail>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/JRE-to-be-enabled">
+      source="http://www.eclipse.org/oomph/setup/JRE">
     <reference
         href="org.eclipse.jres.setup#/"/>
   </annotation>
