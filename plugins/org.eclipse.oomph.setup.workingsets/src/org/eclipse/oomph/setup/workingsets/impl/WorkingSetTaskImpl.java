@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -378,7 +379,10 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
     workingSets.removeAll(existingWorkingSets.values());
 
     Resource resource = defaultWorkingSetGroup.eResource();
-    resource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
+    Map<Object, Object> options = new HashMap<Object, Object>();
+    options.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
+    options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
+    resource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, options));
   }
 
   @Override
