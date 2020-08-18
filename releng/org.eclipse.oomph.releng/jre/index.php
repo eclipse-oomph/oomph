@@ -26,13 +26,15 @@ $pageAuthor     = "estepper";
 #
 
 $pStart = "<p style='margin: 0ex 8em 0ex 4em;'>";
-$addModulesProblem = "Manual addition of <a href='https://wiki.eclipse.org/Configure_Eclipse_for_Java_9'>--add-modules=ALL-SYSTEM</a> required for applications based on Eclipse Neon (4.7) or older.";
-$bestChoice = "<span style='color: DarkOrange;'>&#x2605;</span> The <b>best default choice</b> that is most compatible with all current and older Eclipse products.";
+$addModulesProblem = "Manual addition of <a href='https://wiki.eclipse.org/Configure_Eclipse_for_Java_9'>--add-modules ALL-SYSTEM</a> required for applications based on Eclipse Neon (4.7) or older.";
+$bestChoice = "<span style='color: DarkOrange;'>&#x2605;</span> A good choice for Eclipse products 2020-06 version and older.";
+$bestChoiceNew = "<span style='color: DarkOrange;'>&#x2605;</span> The <b>best default choice</b> for Eclipse products Oxygen version and newer, i.e., for any recent or current Eclipse product.";
 
 $oracle = array(
-  "https://www.oracle.com/technetwork/java/javase/downloads/jdk13-downloads-5672538.html", "", $pStart . $addModulesProblem . "</p>",
-  "https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase12-5440181.html", "", $pStart . $addModulesProblem . " This version has reached <b>end of life</b>. Use JDK 13 instead.</p>",
-  "https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html", "", $pStart . $addModulesProblem . "</p>",
+  "https://www.oracle.com/java/technologies/javase-jdk14-downloads.html", "", $pStart . $addModulesProblem . "</p>",
+  "https://www.oracle.com/technetwork/java/javase/downloads/jdk13-downloads-5672538.html", "", $pStart . $addModulesProblem . " This version has reached <b>end of life</b>. Use JDK 14 instead.</p>",
+  "https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase12-5440181.html", "", $pStart . $addModulesProblem . " This version has reached <b>end of life</b>. Use JDK 14 instead.</p>",
+  "https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html", "", $pStart . $addModulesProblem .  "<br>" . $bestChoiceNew . "</p>",
   "https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase10-4425482.html", "",  $pStart . $addModulesProblem . "</p>",
   "https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase9-3934878.html", "",  $pStart . $addModulesProblem . "</p>",
   "http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html", "http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html", $pStart . $bestChoice . "</p>",
@@ -109,8 +111,21 @@ else
 }
 
 
-$lrningist = "\n";
-for ($v= 13, $i = 0; $v >= $minor; $v--, $i++) {
+$downloadImage = "<img src=\"https://dev.eclipse.org/small_icons/actions/go-bottom.png\"/>&nbsp;&nbsp;";
+$indent = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+if ($major > 8)
+{
+  $adoptOpenJDKVersions = "11, 14";
+}
+else
+{
+  $adoptOpenJDKVersions = "8, 11, 14";
+}
+
+$list .= "      <h5>$indent$downloadImage<a href='https://adoptopenjdk.net/'>AdoptOpenJDK $adoptOpenJDKVersions</a></h5>\n$pStart" . "Provides both Hotspot and J9 variants.";
+
+
+for ($v= 14, $i = 0; $v > $major || $v == $major && $v >= $minor; $v--, $i++) {
   $index = 3 * $i + 1;
   if ($index >= count($oracle))
   {
@@ -132,10 +147,6 @@ for ($v= 13, $i = 0; $v >= $minor; $v--, $i++) {
     $brandVersion = $v;
   }
 
-  $indent = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-  $downloadImage = "<img src=\"https://dev.eclipse.org/small_icons/actions/go-bottom.png\"/>&nbsp;&nbsp;";
-
-
   $info = $oracle[3 * $i + 2] . "\n";
 
   if (!$jdk)
@@ -155,12 +166,12 @@ for ($v= 13, $i = 0; $v >= $minor; $v--, $i++) {
   }
 }
 
-if ($major != 0 && $minor != 0)
+if ($major != 0)
 {
   if ($productName == "Eclipse Installer")
   {
     $requirement = <<<EOHTML
-    <p>Unfortunately the Java version needed to run $productName couldn't be found on your system.
+    <p>Unfortunately the Java version needed to run <b>$productName</b> couldn't be found on your system.
     You need the following version or a higher version:</p>
 
     <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java $major.$minor.$micro ($bitness Bit)</h3>
@@ -170,7 +181,7 @@ EOHTML;
   else
   {
     $requirement = <<<EOHTML
-    <p>The Java version needed to run $productName must be the following version or a higher version:</p>
+    <p>The Java version needed to run <b>$productName</b> must be the following version or a higher version:</p>
 
     <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java $major.$minor.$micro ($bitness Bit)</h3>
     <br>
@@ -234,7 +245,7 @@ $html = <<<EOHTML
     <br>
 
 $requirement\n
-    <p>Please download and install a $jreInstruction</p>
+    <p style='padding-bottom: 1ex;'>Please download and install a $jreInstruction.</p>
 $additionalInstructions
 $list<br>
     <!--
