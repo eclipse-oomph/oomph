@@ -22,7 +22,7 @@ Eike Stepper - initial API and implementation
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <tycho.scmUrl>scm:git:https://git.eclipse.org/r/p/oomph/org.eclipse.oomph.git</tycho.scmUrl>
     <tycho-version>1.7.0</tycho-version>
-    <jarsigner-version>1.1.7</jarsigner-version>
+    <jarsigner-version>1.1.8-SNAPSHOT</jarsigner-version>
     <os-jvm-flags/>
   </properties>
 
@@ -45,7 +45,6 @@ Eike Stepper - initial API and implementation
     </pluginRepository>
 -->
 
-<!--
     <pluginRepository>
       <id>eclipse-maven-snapshots</id>
       <url>https://repo.eclipse.org/content/repositories/snapshots</url>
@@ -60,7 +59,6 @@ Eike Stepper - initial API and implementation
         <enabled>true</enabled>
       </snapshots>
     </pluginRepository>
--->
 
   </pluginRepositories>
 
