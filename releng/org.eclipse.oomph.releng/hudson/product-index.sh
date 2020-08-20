@@ -26,10 +26,16 @@ for i in $named_releases $numbered_releases; do
     #ls eclipse-inst*
     for b in 32 64; do
       for os in win mac linux; do
-        if [ -f eclipse-inst-$os$b.exe ]; then
+        if [ -f eclipse-inst-jre-restricted-$os$b.exe ]; then
+          candidate=eclipse-inst-jre-restricted-$os$b.exe
+        elif [ -f eclipse-inst-$os$b.exe ]; then
           candidate=eclipse-inst-$os$b.exe
+        elif [ -f eclipse-inst-jre-restricted-$os$b.dmg ]; then
+          candidate=eclipse-inst-jre-restricted-$os$b.dmg
         elif [ -f eclipse-inst-$os$b.dmg ]; then
           candidate=eclipse-inst-$os$b.dmg
+        elif [ -f eclipse-inst-jre-restricted-$os$b.tar.gz ]; then
+          candidate=eclipse-inst-jre-restricted-$os$b.tar.gz
         elif [ -f eclipse-inst-$os$b.tar.gz ]; then
           candidate=eclipse-inst-$os$b.tar.gz
         else
