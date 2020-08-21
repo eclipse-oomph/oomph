@@ -201,7 +201,7 @@ else
       echo "Notarizing $f"
       echo "Notarizing ${f/.dmg//}"
       cp -a $f $PRODUCTS
-    elif
+    else
       cp -a $f $PRODUCTS
     fi
   done
