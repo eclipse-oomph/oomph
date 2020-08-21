@@ -219,8 +219,11 @@ else
 
       if [[ $STATUS != 'COMPLETE' ]]; then
         echo "Notarization failed: $RESPONSE"
-        echo "Continuing without this one."
-        #exit 1
+        if [[ $f != *-jre-* ]]; then
+          echo "Continuing without this one."
+        else
+          exit 1
+        fi
       else
         mv $UNNOTARIZED_DMG $UNNOTARIZED_DMG.unnotarized
         echo "  Downloading stapled result"
