@@ -29,6 +29,7 @@ mkdir $PRODUCTS
 TMP=$WORKSPACE/eclipse-installer
 
 # DISABLE THIS WHOLE PART!
+
 if [[ false == true ]]; then
 SOURCE=$GIT/products/org.eclipse.oomph.setup.installer.product/target/products
 cd $SOURCE
@@ -109,15 +110,18 @@ for f in *.zip *.tar.gz; do
 
       if [[ $STATUS != 'COMPLETE' ]]; then
         echo "Notarization failed: $RESPONSE"
-        # Continue, but ignoring this one.
-        # exit 1
-      else
-        mv $UNNOTARIZED_DMG $UNNOTARIZED_DMG.unnotarized
-        echo "  Downloading stapled result"
-        curl -JO http://172.30.206.146:8383/macos-notarization-service/$UUID/download
-        echo "  Copying stapled notarized result"
-        cp -a UNNOTARIZED_DMG $PRODUCTS
+        exit 1
       fi
+
+      mv $UNNOTARIZED_DMG $UNNOTARIZED_DMG.unnotarized
+
+      echo "  Downloading stapled result"
+
+      curl -JO http://172.30.206.146:8383/macos-notarization-service/$UUID/download
+
+      echo "  Moving stapled notarized result"
+
+      mv eclipse-inst-mac$bitness.$TIMESTAMP.dmg $PRODUCTS/eclipse-inst-mac$bitness.dmg
     fi
 
   elif [[ $f == *win32* ]]; then
@@ -215,20 +219,16 @@ else
 
       if [[ $STATUS != 'COMPLETE' ]]; then
         echo "Notarization failed: $RESPONSE"
-        exit 1
+        echo "Continuing without this one."
+        #exit 1
+      else
+        mv $UNNOTARIZED_DMG $UNNOTARIZED_DMG.unnotarized
+        echo "  Downloading stapled result"
+        curl -JO http://172.30.206.146:8383/macos-notarization-service/$UUID/download
+        ls -sail
+        echo "  Copying stapled notarized result"
+        cp -a $UNNOTARIZED_DMG $PRODUCTS
       fi
-
-      mv $UNNOTARIZED_DMG $UNNOTARIZED_DMG.unnotarized
-
-      echo "  Downloading stapled result"
-
-      curl -JO http://172.30.206.146:8383/macos-notarization-service/$UUID/download
-
-      ls -sail
-
-      echo "  Copying stapled notarized result"
-
-      cp -a $UNNOTARIZED_DMG $PRODUCTS
 
       cd -
       rm -rf $TMP
