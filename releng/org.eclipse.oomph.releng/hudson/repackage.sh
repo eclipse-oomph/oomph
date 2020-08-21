@@ -192,8 +192,17 @@ done
 rm -rf $TMP
 # DISABLE THIS WHOLE PART!
 else
-echo "Copying repackaged-products"
-cp -a $GIT/products/org.eclipse.oomph.setup.installer.product/target/repackaged-products/* $PRODUCTS
+  echo "Copying repackaged-products"
+  cd $GIT/products/org.eclipse.oomph.setup.installer.product/target/repackaged-products/
+  for f in eclipse-inst*; do 
+    echo "Copying $f"
+    if [[ $f == *.dmg]]; then
+      echo "Notarizing $f"
+      cp -a $f $PRODUCTS
+    elif
+      cp -a $f $PRODUCTS
+    fi
+  done
 fi
 
 cp -a $GIT/products/org.eclipse.oomph.setup.installer.product/target/repository $PRODUCTS
