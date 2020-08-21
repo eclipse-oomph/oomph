@@ -219,7 +219,7 @@ else
 
       if [[ $STATUS != 'COMPLETE' ]]; then
         echo "Notarization failed: $RESPONSE"
-        if [[ $f != *-jre-* ]]; then
+        if [[ $f == *-jre-* ]]; then
           echo "Continuing without this one."
         else
           exit 1
