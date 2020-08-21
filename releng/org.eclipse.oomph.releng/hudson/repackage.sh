@@ -195,12 +195,46 @@ else
   TIMESTAMP=$(date +%s%N)
   echo "Copying repackaged-products"
   cd $GIT/products/org.eclipse.oomph.setup.installer.product/target/repackaged-products/
-  for f in eclipse-inst*; do 
+  for f in eclipse-inst*; do
     echo "Copying $f"
     if [[ $f == *.dmg ]]; then
       echo "Notarizing $f"
-      echo "Notarizing ${f/.dmg//}"
-      cp -a $f $PRODUCTS
+      UNNOTARIZED_DMG=${f/.dmg/}.$TIMESTAMP.dmg
+      mkdir -p $TMP
+      cp -a $f $TMP/$UNNOTARIZED_DMG
+      cd $TMP
+
+      RESPONSE=$(curl -X POST -F file=@$UNNOTARIZED_DMG -F 'options={"primaryBundleId": "app-bundle", "staple": true};type=application/json' http://172.30.206.146:8383/macos-notarization-service/notarize)
+      UUID=$(echo $RESPONSE | grep -Po '"uuid"\s*:\s*"\K[^"]+')
+      STATUS=$(echo $RESPONSE | grep -Po '"status"\s*:\s*"\K[^"]+')
+      echo "  Progress: $RESPONSE"
+
+      while [[ $STATUS == 'IN_PROGRESS' ]]; do
+        sleep 1m
+        RESPONSE=$(curl -s http://172.30.206.146:8383/macos-notarization-service/$UUID/status)
+        STATUS=$(echo $RESPONSE | grep -Po '"status"\s*:\s*"\K[^"]+')
+        echo "  Progress: $RESPONSE"
+      done
+
+      if [[ $STATUS != 'COMPLETE' ]]; then
+        echo "Notarization failed: $RESPONSE"
+        exit 1
+      fi
+
+      mv $UNNOTARIZED_DMG $UNNOTARIZED_DMG.unnotarized
+
+      echo "  Downloading stapled result"
+
+      curl -JO http://172.30.206.146:8383/macos-notarization-service/$UUID/download
+
+      ls -sail
+
+      echo "  Copying stapled notarized result"
+
+      cp -a $UNNOTARIZED_DMG $PRODUCTS
+
+      cd -
+      rm -rf $TMP
     else
       cp -a $f $PRODUCTS
     fi
