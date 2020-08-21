@@ -26,12 +26,12 @@ PRODUCTS=$WORKSPACE/products
 rm -rf $PRODUCTS
 mkdir $PRODUCTS
 
+TMP=$WORKSPACE/eclipse-installer
+
 # DISABLE THIS WHOLE PART!
 if [[ false == true ]]; then
 SOURCE=$GIT/products/org.eclipse.oomph.setup.installer.product/target/products
 cd $SOURCE
-
-TMP=$WORKSPACE/eclipse-installer
 
 for f in *.zip *.tar.gz; do
   echo "Repackaging $f"
