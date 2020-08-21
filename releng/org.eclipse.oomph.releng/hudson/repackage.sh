@@ -192,12 +192,14 @@ done
 rm -rf $TMP
 # DISABLE THIS WHOLE PART!
 else
+  TIMESTAMP=$(date +%s%N)
   echo "Copying repackaged-products"
   cd $GIT/products/org.eclipse.oomph.setup.installer.product/target/repackaged-products/
   for f in eclipse-inst*; do 
     echo "Copying $f"
-    if [[ $f == *.dmg]]; then
+    if [[ $f == *.dmg ]]; then
       echo "Notarizing $f"
+      echo "Notarizing ${f/.dmg//}"
       cp -a $f $PRODUCTS
     elif
       cp -a $f $PRODUCTS
