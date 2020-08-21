@@ -227,7 +227,7 @@ else
         curl -JO http://172.30.206.146:8383/macos-notarization-service/$UUID/download
         ls -sail
         echo "  Copying stapled notarized result"
-        cp -a $UNNOTARIZED_DMG $PRODUCTS
+        cp -a $UNNOTARIZED_DMG $PRODUCTS/$f
       fi
 
       cd -
