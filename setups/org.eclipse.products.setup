@@ -1323,10 +1323,6 @@
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
-            name="org.eclipse.cft.server.core.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.cft.server.ui.feature.feature.group"/>
-        <requirement
             name="org.eclipse.datatools.common.doc.user.feature.group"/>
         <requirement
             name="org.eclipse.datatools.connectivity.doc.user.feature.group"/>
@@ -1476,6 +1472,8 @@
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
@@ -1723,10 +1721,6 @@
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
-            name="org.eclipse.cft.server.core.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.cft.server.ui.feature.feature.group"/>
-        <requirement
             name="org.eclipse.datatools.common.doc.user.feature.group"/>
         <requirement
             name="org.eclipse.datatools.connectivity.doc.user.feature.group"/>
@@ -1876,6 +1870,8 @@
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
@@ -4294,14 +4290,13 @@
       </setupTask>
     </version>
     <description>
-      Tools for developers working with Java and Web applications, including a Java IDE, tools for Web Services, JPA and Data Tools, JSF, Mylyn, Maven and Gradle, Git, and more.&lt;br/>
+      Tools for developers working with Java and Web applications, including a Java IDE, tools for Web Services, JPA and Data Tools, JavaServer Pages and Faces, Mylyn, Maven and Gradle, Git, and more.&lt;br/>
       &lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?classification=WebTools&quot;>here&lt;/a> to file a bug against Eclipse Web Tools Platform.&lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=M2E-WTP&quot;>here&lt;/a> to file a bug against Maven integration for web projects.&lt;br/>
       Click &lt;a href=&quot;https://github.com/eclipse/wildwebdeveloper/issues/new&quot;>here&lt;/a> to report an issue against Eclipse Wild Web Developer (incubating).&lt;br/>
       &lt;br/>
-      Installation of stable release of &lt;a href=&quot;https://nodejs.org/&quot;>node.js&lt;/a> is strongly recommended.
     </description>
   </product>
   <product name="epp.package.cpp"
@@ -6042,6 +6037,8 @@
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
+            name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
+        <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.server_adapters.feature.feature.group"/>
@@ -6165,6 +6162,8 @@
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
@@ -7137,6 +7136,8 @@
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
+            name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
+        <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
@@ -7280,6 +7281,8 @@
             name="org.eclipse.php.rdt.sync.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
@@ -8320,6 +8323,8 @@
         <requirement
             name="org.eclipse.rcp.source.feature.group"/>
         <requirement
+            name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
+        <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
             url="http://download.eclipse.org/technology/epp/packages/2020-09"/>
@@ -8531,6 +8536,8 @@
             name="org.eclipse.platform.source.feature.group"/>
         <requirement
             name="org.eclipse.rcp.source.feature.group"/>
+        <requirement
+            name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
