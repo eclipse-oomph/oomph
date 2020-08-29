@@ -45,7 +45,7 @@ for i in $named_releases $numbered_releases; do
 
           if [ "$candidate" != "" ]; then
             #echo "  >> $i/$j/$(ls $candidate)"
-            echo "  <installer release=\"$i/$j\" os=\"$os\" bitness=\"$b\" jre=\"$jre\"url=\"https://www.eclipse.org/downloads/download.php?file=/oomph/epp/$i/$j/$candidate\"/>"
+            echo "  <installer release=\"$i/$j\" os=\"$os\" bitness=\"$b\" jre=\"$jre\" url=\"https://www.eclipse.org/downloads/download.php?file=/oomph/epp/$i/$j/$candidate\"/>"
           fi
         done
       done
