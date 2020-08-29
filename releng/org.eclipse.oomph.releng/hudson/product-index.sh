@@ -27,7 +27,7 @@ for i in $named_releases $numbered_releases; do
     for b in 32 64; do
       for os in win mac linux; do
         for jre in "true" "false"; do
-          if [[ $jre == "false ]]; then
+          if [ "$jre" == "false" ]; then
             prefix="eclipse-inst-"
           else
             prefix="eclipse-inst-jre-"
