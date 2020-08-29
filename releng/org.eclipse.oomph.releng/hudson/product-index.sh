@@ -38,7 +38,7 @@ for i in $named_releases $numbered_releases; do
           elif [ -f $prefix$os$b.dmg ]; then
             candidate=$prefix$os$b.dmg
           elif [ -f $prefix$os$b.tar.gz ]; then
-            if [ "$os" == "mac" -a -f eclipse-inst-$os$b.dmg]; then
+            if [ "$os" == "mac" -a -f eclipse-inst-$os$b.dmg ]; then
               # Don't include mac *.tar.gz if there is a *.dmg
               candidate=""
             else
