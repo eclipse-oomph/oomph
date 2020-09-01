@@ -391,18 +391,31 @@ public final class JREManager
   {
     javaHomes.clear();
 
-    String installerLocation = getInstallerLocation();
+    File installerLocation = getInstallerLocation();
     JREInfo info = JREInfo.getAll();
     while (info != null)
     {
       // Ignore the JRE that is embedded in the installation itself.
-      if (installerLocation == null || !info.javaHome.startsWith(installerLocation))
+      if (installerLocation == null || !isAncestor(installerLocation, new File(info.javaHome)))
       {
         javaHomes.add(info.javaHome);
       }
 
       info = info.next;
     }
+  }
+
+  private boolean isAncestor(File parent, File child)
+  {
+    for (File file = IOUtil.getCanonicalFile(child); file != null; file = file.getParentFile())
+    {
+      if (parent.equals(file))
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private static List<String> loadExtraJavaHomes()
@@ -542,7 +555,7 @@ public final class JREManager
     return 32;
   }
 
-  private static String getInstallerLocation()
+  private static File getInstallerLocation()
   {
     try
     {
@@ -559,7 +572,7 @@ public final class JREManager
             {
               result = result.appendSegment(""); //$NON-NLS-1$
             }
-            return result.toFileString();
+            return IOUtil.getCanonicalFile(new File(result.toFileString()));
           }
         }
       }
