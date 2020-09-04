@@ -514,7 +514,7 @@
           <repository
               url="http://download.eclipse.org/webtools/repository/latest"/>
           <repository
-              url="http://download.eclipse.org/justj/jres/11/updates/release/11.0.2"/>
+              url="http://download.eclipse.org/justj/jres/14/updates/release/14.0.2"/>
         </repositoryList>
         <repositoryList
             name="2020-06">
@@ -545,8 +545,6 @@
               url="http://download.eclipse.org/technology/swtbot/snapshots"/>
           <repository
               url="http://download.eclipse.org/webtools/repository/latest"/>
-          <repository
-              url="http://download.eclipse.org/justj/jres/11/updates/release/11.0.2"/>
         </repositoryList>
         <repositoryList
             name="2020-03">
