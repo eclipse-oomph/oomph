@@ -436,15 +436,15 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.p2"
-        value="http://download.eclipse.org/eclipse/updates/4.17-I-builds"
-        label="Eclipse Latest I-Build p2 Repository - 4.17">
+        value="http://download.eclipse.org/eclipse/updates/4.18-I-builds"
+        label="Eclipse Latest I-Build p2 Repository - 4.18">
       <description>The update site of the latest Eclipse project's builds, typically an I-Build for the next release</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.release.p2"
-        value="http://download.eclipse.org/eclipse/updates/4.16/R-4.16-202006040540"
-        label="Eclipse Latest Release p2 Repository - 4.16">
+        value="http://download.eclipse.org/eclipse/updates/4.17/R-4.17-202009021800"
+        label="Eclipse Latest Release p2 Repository - 4.17">
       <description>The update site of the latest released Eclipse project's builds, always an R-Build for the most recent release</description>
     </setupTask>
     <setupTask
@@ -455,6 +455,9 @@
         label="Target Platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <choice
+          value="2020-12"
+          label="Eclipse 2020-12 - 4.18"/>
       <choice
           value="2020-09"
           label="Eclipse 2020-09 - 4.17"/>
@@ -520,7 +523,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest"
-        value="2020-09"
+        value="2020-12"
         storageURI="scope://Workspace"
         label="Target Platform Latest">
       <annotation
@@ -530,7 +533,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest.released"
-        value="2020-06"
+        value="2020-09"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -607,7 +610,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.api.baseline.target.platform.latest.released"
-        value="2020-06"
+        value="2020-09"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -653,8 +656,15 @@
       id="workspace"/>
   <setupTask
       xsi:type="setup:ResourceCreationTask"
-      content="MAX_RECENT_WORKSPACES=5&#xD;&#xA;RECENT_WORKSPACES=${workspace.location|property}&#xD;&#xA;RECENT_WORKSPACES_PROTOCOL=3&#xD;&#xA;SHOW_WORKSPACE_SELECTION_DIALOG=true&#xD;&#xA;eclipse.preferences.version=1"
-      targetURL="configuration:/.settings/org.eclipse.ui.ide.prefs"/>
+      targetURL="configuration:/.settings/org.eclipse.ui.ide.prefs">
+    <content>
+      MAX_RECENT_WORKSPACES=5
+      RECENT_WORKSPACES=${workspace.location|property}
+      RECENT_WORKSPACES_PROTOCOL=3
+      SHOW_WORKSPACE_SELECTION_DIALOG=true
+      eclipse.preferences.version=1
+    </content>
+  </setupTask>
   <setupTask
       xsi:type="setup:TextModifyTask"
       url="configuration:/config.ini">
@@ -671,9 +681,14 @@
       <repositoryList
           name="None"/>
       <repositoryList
+          name="2020-12">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.18-I-builds"/>
+      </repositoryList>
+      <repositoryList
           name="2020-09">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.17-I-builds"/>
+            url="http://download.eclipse.org/eclipse/updates/4.17/R-4.17-202009021800"/>
       </repositoryList>
       <repositoryList
           name="2020-06">
@@ -778,6 +793,11 @@
         includeSources="false">
       <repositoryList
           name="None"/>
+      <repositoryList
+          name="2020-09">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.17/R-4.17-202009021800"/>
+      </repositoryList>
       <repositoryList
           name="2020-06">
         <repository

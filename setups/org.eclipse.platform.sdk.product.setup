@@ -11,7 +11,7 @@
       source="http://www.eclipse.org/oomph/setup/BrandingInfo">
     <detail
         key="notificationURI">
-      <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;campaign=2020-06</value>
+      <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;campaign=2020-09</value>
     </detail>
     <detail
         key="notificationLabel">
@@ -68,17 +68,17 @@
           name="org.eclipse.sdk.ide"
           versionRange="[4.17.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/eclipse/updates/4.17-I-builds"/>
+          url="http://download.eclipse.org/eclipse/updates/4.17/R-4.17-202009021800"/>
     </setupTask>
   </version>
   <version name="latest.released"
-      label="Latest Release (4.16 - 2020-06)"
-      requiredJavaVersion="1.8">
+      label="Latest Release (4.17 - 2020-09)"
+      requiredJavaVersion="11">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>http://download.eclipse.org/eclipse/downloads/drops4/R-4.16-202006040540/</value>
+        <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.17RC2-202009021800/</value>
       </detail>
       <detail
           key="shortcut">
@@ -87,12 +87,12 @@
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse SDK (4.16 - 2020-06)">
+        label="Eclipse SDK (4.17 - 2020-09)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.16.0,5.0.0)"/>
+          versionRange="[4.17.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/eclipse/updates/4.16/R-4.16-202006040540"/>
+          url="http://download.eclipse.org/eclipse/updates/4.17/R-4.17-202009021800"/>
     </setupTask>
   </version>
   <version name="4.17"
@@ -100,6 +100,10 @@
       requiredJavaVersion="11">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="status">
+        <value>current</value>
+      </detail>
       <detail
           key="siteURI">
         <value>http://download.eclipse.org/eclipse/downloads/drops4/S-4.17RC2-202009021800/</value>
@@ -116,7 +120,7 @@
           name="org.eclipse.sdk.ide"
           versionRange="[4.17.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/eclipse/updates/4.17-I-builds"/>
+          url="http://download.eclipse.org/eclipse/updates/4.17/R-4.17-202009021800"/>
     </setupTask>
   </version>
   <version name="4.16"
@@ -126,7 +130,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="status">
-        <value>current</value>
+        <value>outdated</value>
       </detail>
       <detail
           key="siteURI">
