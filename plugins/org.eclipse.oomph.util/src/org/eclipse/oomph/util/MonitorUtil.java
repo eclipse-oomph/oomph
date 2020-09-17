@@ -11,7 +11,6 @@
 package org.eclipse.oomph.util;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IProgressMonitorWithBlocking;
 
 /**
  * Various static helper methods for dealing progress monitors.
@@ -25,7 +24,7 @@ public final class MonitorUtil
   }
 
   @SuppressWarnings("all")
-  public static IProgressMonitorWithBlocking create(IProgressMonitor monitor, int ticks)
+  public static org.eclipse.core.runtime.IProgressMonitorWithBlocking create(IProgressMonitor monitor, int ticks)
   {
     return new org.eclipse.core.runtime.SubProgressMonitor(monitor, ticks);
   }

@@ -285,7 +285,7 @@ public class ProductCatalogGenerator implements IApplication
   private String[] getTrains()
   {
     return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06", "2019-09", "2019-12",
-        "2020-03", "2020-06", "2020-09" };
+        "2020-03", "2020-06", "2020-09", "2020-12" };
   }
 
   private URI getEclipsePlatformSite(String train)
@@ -653,8 +653,7 @@ public class ProductCatalogGenerator implements IApplication
 
       URI effectiveEPPURI = isStaging ? stagingEPPLocation : eppURI;
       IMetadataRepository eppMetaDataRepository = manager.loadRepository(new java.net.URI(effectiveEPPURI.toString()), null);
-      IMetadataRepository latestEPPMetaDataRepository = isStaging && stagingUseComposite || compositeTrains.contains(train) || !isLatestReleased()
-          ? eppMetaDataRepository
+      IMetadataRepository latestEPPMetaDataRepository = isStaging && stagingUseComposite || compositeTrains.contains(train) ? eppMetaDataRepository
           : getLatestRepository(manager, eppMetaDataRepository);
       if (latestEPPMetaDataRepository != eppMetaDataRepository)
       {

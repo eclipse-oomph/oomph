@@ -90,6 +90,7 @@ public void recurse(IContainer container, IProgressMonitor monitor) throws Excep
  *
  * @author Eike Stepper
  */
+@SuppressWarnings("deprecation")
 public class SubMonitor implements IProgressMonitorWithBlocking
 {
   /**
