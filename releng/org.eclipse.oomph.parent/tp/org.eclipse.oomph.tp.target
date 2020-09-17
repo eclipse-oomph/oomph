@@ -27,7 +27,7 @@
       <repository location="http://download.eclipse.org/technology/swtbot/snapshots"/>
       <repository location="http://download.eclipse.org/webtools/repository/latest"/>
       <repository location="http://download.eclipse.org/justj/jres/14/updates/release/14.0.2"/>
-      <repository location="http://download.eclipse.org/eclipse/updates/4.17-I-builds"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.17/R-4.17-202009021800"/>
     </location>
   </locations>
 </target>
