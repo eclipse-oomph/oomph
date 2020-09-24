@@ -314,6 +314,7 @@ public class MarketplaceCatalogGenerator implements IApplication
     platformVersions.put("platform.version=4.14", "2019-12");
     platformVersions.put("platform.version=4.15", "2020-03");
     platformVersions.put("platform.version=4.16", "2020-06");
+    platformVersions.put("platform.version=4.17", "2020-09");
 
     Set<URI> nodeQueryURIs = new LinkedHashSet<URI>();
     {
