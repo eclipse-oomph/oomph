@@ -475,7 +475,9 @@
         var summaryError = document.getElementById('summary-error');
         summaryError.style.display = 'inline-block';
         var summaryErrorCount = document.getElementById('summary-error-count');
-        summaryErrorCount.innerText = errorCount + warningCount;
+        summaryErrorCount.innerText = errorCount;
+        var summaryWarningCount = document.getElementById('summary-warning-count');
+        summaryWarningCount.innerText = warningCount;
       }
     }
 
@@ -625,7 +627,7 @@
 
       var prefix = '_' + project.getAttribute('name') + '_';
 
-      if (style == 'all' || style == 'error' && problem[0] != null || style == null && problem[0] != 'Error.png') {
+      if (style == 'all' || style == 'error' && problem[0] != null || style == null && problem[0] != 'Error.png' || style == 'site-error' && mainUpdateURLProblem != null) {
         var sectionTemplate = document.getElementById('marketplace-insertion-section');
         var section = sectionTemplate.cloneNode(true);
         var allIDs = section.querySelectorAll("*[id]");
@@ -1060,7 +1062,7 @@ or can be added to the
 while creating a new installation.
                 </p>
 <p id="summary" style="display: none;">
-There are a total of <span id="summary-count">1000+</span> listings<span id="summary-error" style="display: none;">, <span id="summary-error-count">many</span> of which contain errors or warnings</span>.
+There are a total of <span id="summary-count">1000+</span> listings<span id="summary-error" style="display: none;">, <span id="summary-error-count">0</span> of which contain errors and <span id="summary-warning-count">0</span> of which contain warnings</span>.
 <p>
 </div>
                 <hr class="clearer"/>
