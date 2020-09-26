@@ -145,9 +145,9 @@ Eike Stepper - initial API and implementation
                 </artifact>
               </target>
               <!--  This is needed for Tycho 2.0.0, but breaks 1.7.0 because the compiler source/target levels are not set properly.
-              <executionEnvironment>org.eclipse.justj.openjdk.hotspot.jre.minimal-14</executionEnvironment>
+              <executionEnvironment>org.eclipse.justj.openjdk.hotspot.jre.minimal-15</executionEnvironment>
               -->
-              <executionEnvironmentDefault>org.eclipse.justj.openjdk.hotspot.jre.minimal-14</executionEnvironmentDefault>
+              <executionEnvironmentDefault>org.eclipse.justj.openjdk.hotspot.jre.minimal-15</executionEnvironmentDefault>
               <includePackedArtifacts>true</includePackedArtifacts>
               <environments>
                 <environment>
