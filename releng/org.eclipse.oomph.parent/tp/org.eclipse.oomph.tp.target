@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="62">
+<target name="Generated from Oomph" sequenceNumber="63">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
@@ -26,8 +26,8 @@
       <repository location="http://download.eclipse.org/nebula/snapshot"/>
       <repository location="http://download.eclipse.org/technology/swtbot/snapshots"/>
       <repository location="http://download.eclipse.org/webtools/repository/latest"/>
-      <repository location="http://download.eclipse.org/justj/jres/14/updates/release/14.0.2"/>
       <repository location="http://download.eclipse.org/justj/jres/15/updates/milestone/latest"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.17/R-4.17-202009021800"/>
     </location>
   </locations>
 </target>
