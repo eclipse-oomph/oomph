@@ -284,6 +284,45 @@
       }
 
       var style = getParameter(window.location.search, 'style');
+
+      var titleSection = document.getElementById('title');
+      if (nodeID != null || url != null)
+      {
+        titleSection.innerText = " for a single listing";
+      }
+      else if (style == null)
+      {
+        titleSection.innerText = 'usable ' + titleSection.innerText;
+      }
+      else if (style == 'all')
+      {
+        titleSection.innerText = 'all ' + titleSection.innerText;
+      }
+      else if (style == 'warning')
+      {
+        titleSection.innerText += ' with warnings'
+      }
+      else if (style == 'error-only')
+      {
+        titleSection.innerText += ' with errors'
+      }
+      else if (style == 'error')
+      {
+        titleSection.innerText += ' with errors or warnings'
+      }
+      else if (style == 'site-error')
+      {
+        titleSection.innerText += ' with broken sites'
+      }
+      else if (style == 'resolution-error')
+      {
+        titleSection.innerText += ' with resolution errors'
+      }
+      else if (style == 'iu-error')
+      {
+        titleSection.innerText += ' with installable unit errors'
+      }
+
       if (nodeID != null) {
         style='all';
         loadSingleMarketplaceListings(style, url, null, nodeID);
@@ -345,14 +384,22 @@
       }
     }
 
-    function copyToClipboard(id) {
-      var $temp = $('<input>');
-      $('body').append($temp);
-      var e = document.getElementById(id);
-      var link = e.href;
-      $temp.val(link).select();
-      document.execCommand('copy');
+    function copyToClipboard(element) {
+      var $temp = $("<textarea>");
+      $("body").append($temp);
+      $temp.val($(element).text().replaceAll('>', '>\n')).select();
+      document.execCommand("copy");
       $temp.remove();
+    }
+
+    function downloadXML(filename, textElement) {
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/xml;charset=utf-8,' + encodeURIComponent($(textElement).text().replaceAll('>', '>\n')));
+      element.setAttribute('download', filename);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
     }
 
     function popup(id) {
@@ -396,6 +443,12 @@
       }
     }
 
+    function summarize(style)
+    {
+      var listingSummary = document.getElementById('listing-summary');
+      listingSummary.innerText = '<?xml version="1.0" encoding="UTF-8"?>\n<listings' + (style == null ? '' : ' style="' + style + '"') + '>\n' + listingSummary.innerText + '</listings>';
+    }
+
     function loadSingleMarketplaceListings(style, url, id, nodeID) {
       var request = new XMLHttpRequest();
       var fetchURL = "fetch.php?id=" + (id != null ? id : nodeID);
@@ -409,6 +462,7 @@
           var parser = new DOMParser();
           var xmlDoc = parser.parseFromString(request.responseText, "text/xml");
           createMarketplaceListings(xmlDoc, style, url);
+          summarize(style);
           var expandButton = document.getElementsByClassName('marketplace-section_arrow')[0];
           expandButton.onclick();
         }
@@ -429,6 +483,7 @@
           var parser = new DOMParser();
           var xmlDoc = parser.parseFromString(request.responseText, "text/xml");
           createMarketplaceListings(xmlDoc, style, url);
+          summarize(style);
           if (url != null) {
             var expandButton = document.getElementsByClassName('marketplace-section_arrow')[0];
             expandButton.onclick();
@@ -445,12 +500,14 @@
       progressTextHTML.innerText = 'Processing ' + projects.length + ' lists.';
 
       var count = 0;
+      var displayCount = 0;
       var warningCount = 0;
       var errorCount = 0;
       for (var i = 0; i < projects.length; ++i) {
         var result = createMarketplaceListing(projects[i], style, url);
+        ++count;
         if (result != null) {
-          ++count;
+          ++displayCount;
           if (result[0] == 'Error.png') {
             ++errorCount;
           } else if (result[0] == 'Warning.png') {
@@ -466,14 +523,22 @@
       summarySection.style.display = 'block';
       var summaryCount = document.getElementById('summary-count');
       if (style == null) {
-        summaryCount.innerText = count - errorCount + ' usable ';
+        summaryCount.innerText = displayCount + ' usable ';
       } else {
         summaryCount.innerText = count;
+        if (style != 'all')
+        {
+          var displaySummary = document.getElementById('display-summary');
+          displaySummary.style.display = 'inline-block';
+          var summaryDisplayCount = document.getElementById('display-count');
+          summaryDisplayCount.innerText = displayCount;
+        }
       }
 
       if (style != null) {
         var summaryError = document.getElementById('summary-error');
         summaryError.style.display = 'inline-block';
+
         var summaryErrorCount = document.getElementById('summary-error-count');
         summaryErrorCount.innerText = errorCount;
         var summaryWarningCount = document.getElementById('summary-warning-count');
@@ -627,7 +692,14 @@
 
       var prefix = '_' + project.getAttribute('name') + '_';
 
-      if (style == 'all' || style == 'error' && problem[0] != null || style == null && problem[0] != 'Error.png' || style == 'site-error' && mainUpdateURLProblem != null) {
+      if (style == 'all' || 
+            style == 'error' && problem[0] != null || 
+            style == null && problem[0] != 'Error.png' || 
+            style == 'warning' && problem[0] == 'Warning.png' || 
+            style == 'error-only' && problem[0] == 'Error.png' || 
+            style == 'site-error' && mainUpdateURLProblem != null || 
+            style == 'iu-error' &&  bogusIUs || 
+            style == 'resolution-error' && mainUpdateURLProblem == null && problem[0] == 'Error.png') {
         var sectionTemplate = document.getElementById('marketplace-insertion-section');
         var section = sectionTemplate.cloneNode(true);
         var allIDs = section.querySelectorAll("*[id]");
@@ -642,20 +714,25 @@
   
         sectionTemplate.parentNode.insertBefore(section, sectionTemplate);
         updateMarketplace(prefix, imageURI, siteURI, marketplaceID, title, body, ' and create an installation that includes <b>' + title + '</b>', mainUpdateURL, mainUpdateURLProblem, mainIUs, streamDetails);
-      }
 
-      if (problem[0] != null) {
-        var statusHTML = document.getElementById(prefix +'marketplace-status-image');
-        if (statusHTML != null) {
-          statusHTML.src = problem[0];
-          statusHTML.style.display = 'inline-block';
-          statusHTML.onclick = function() {
-            popupMessage('Error.png', problem[1]);
+        if (problem[0] != null) {
+          var statusHTML = document.getElementById(prefix +'marketplace-status-image');
+          if (statusHTML != null) {
+            statusHTML.src = problem[0];
+            statusHTML.style.display = 'inline-block';
+            statusHTML.onclick = function() {
+              popupMessage('Error.png', problem[1]);
+            }
           }
         }
+
+        var listingSummary = document.getElementById('listing-summary');
+        listingSummary.innerText += '  <listing id="' + marketplaceID + '" uri="' + siteURI + '"/>\n';
+
+        return problem;
       }
 
-      return problem;
+      return null;
     }
 
     function updateMarketplace(prefix, imageURI, siteURI, marketplaceID, title, body, instruction, mainUpdateURL, mainUpdateURLProblem, mainIUs, streamDetails) {
@@ -712,8 +789,9 @@ var init = function() {
 
           var mainIUHTML = mainIUHTMLPrototype.cloneNode(true);
           if (value == 'BogusIU') {
+	        const bogusIU = key;
             var popup = function() {
-              popupMessage('Error.png', "The installable unit with id '" + key + "' cannot be resolved in the repository:\n  " + mainUpdateURL);
+              popupMessage('Error.png', "The installable unit with id '" + bogusIU + "' cannot be resolved in the repository:\n  " + mainUpdateURL);
             };
 
             mainIUHTML.querySelector('button').onclick = popup;
@@ -1049,7 +1127,7 @@ var init = function() {
                 <h3 class="section-header">
                   <button id="mpc_arrow" class="orange bb" onclick="expand_collapse('mpc');">&#x25E2;</button>
                   <img  style="height: 2.5ex;" src="https://marketplace.eclipse.org/sites/default/files/styles/ds_medium/public/mpc-logo-marketplace.png?itok=F0Yk3YlX"/>
-                  <span style=" font-variant: small-caps;">Marketplace.Eclipse.org listings</span>
+                  <span style=" font-variant: small-caps;">Marketplace.Eclipse.org <span id="title">listings</span></span>
                 </h3>
 <div class="toggle-target" id="mpc">
                 <p>
@@ -1062,8 +1140,9 @@ or can be added to the
 while creating a new installation.
                 </p>
 <p id="summary" style="display: none;">
-There are a total of <span id="summary-count">1000+</span> listings<span id="summary-error" style="display: none;">, <span id="summary-error-count">0</span> of which contain errors and <span id="summary-warning-count">0</span> of which contain warnings</span>.
-<p>
+There are a total of <span id="summary-count">1000+</span> listings<span id="display-summary" style="display:none;">, <span id="display-count">0</span> displayed</span><span id="summary-error" style="display: none;">, <span id="summary-error-count">0</span> of which contain errors and <span id="summary-warning-count">0</span> of which contain warnings</span>.
+</p>
+<pre id="listing-summary" style="display: none;"></pre>
 </div>
                 <hr class="clearer"/>
 
@@ -1158,30 +1237,43 @@ The catalog is being loaded.
           <aside class="main-sidebar-default-margin" id="main-sidebar">
             <ul id="leftnav" class="ul-left-nav fa-ul hidden-print">
               <li class="separator">
-                <a class="separator" href="https://wiki.eclipse.org/Oomph" target="oomph_wiki">Documentation</a>
+                <a class="separator">
+                  <button id="copy" title="Copy Listing Summary to Clipboard" class="orange" style="background-color: transparent; border: none; padding: 0px 0px;" onclick="copyToClipboard('#listing-summary');">&#x270e;</button>
+                  <a id="download" title="Download Listing Summary" href="" class="orange" style="color: DarkOrange;" onclick="downloadXML('list-report.xml', '#listing-summary');">&#x21e9;</a>
+                  Reports
+                </a>
               </li>
               <li>
                 <i class="fa fa-caret-right fa-fw"/></i>
-                <a href="https://wiki.eclipse.org/Eclipse_Oomph_FAQ" target="oomph_wiki">FAQ</a>
+                <a href="?">Usuable Listings</a>
               </li>
               <li>
-                <i class="fa fa-caret-right fa-fw"></i>
-                <a href="https://wiki.eclipse.org/Eclipse_Platform_SDK_Provisioning" target="oomph_wiki">Sample Use Case</a>
+                <i class="fa fa-caret-right fa-fw"/></i>
+                <a href="?style=all">All Listings</a>
               </li>
               <li>
-                <i class="fa fa-caret-right fa-fw"></i>
-                <a href="https://wiki.eclipse.org/Eclipse_Oomph_Authoring#Automation_and_Specialization_with_Configurations" target="oomph_wiki">Customized Usage</a>
-              </li>
-              <li class="separator">
-                <a class="separator">Downloads</a>
+                <i class="fa fa-caret-right fa-fw"/></i>
+                <a href="?style=warning">Listings with Warnings</a>
               </li>
               <li>
-                <i class="fa fa-caret-right fa-fw"></i>
-                <a href="https://wiki.eclipse.org/Eclipse_Installer" target="oomph_wiki">Eclipse Installer</a>
+                <i class="fa fa-caret-right fa-fw"/></i>
+                <a href="?style=error-only">Listings with Errors</a>
               </li>
               <li>
-                <i class="fa fa-caret-right fa-fw"></i>
-                <a href="https://wiki.eclipse.org/Oomph#Update_Sites" target="oomph_wiki">Update Sites</a>
+                <i class="fa fa-caret-right fa-fw"/></i>
+                <a href="?style=error">Listings with Errors or Warnings</a>
+              </li>
+              <li>
+                <i class="fa fa-caret-right fa-fw"/></i>
+                <a href="?style=site-error">Listings with Broken Sites</a>
+              </li>
+              <li>
+                <i class="fa fa-caret-right fa-fw"/></i>
+                <a href="?style=resolution-error">Listings with Resolution Errors</a>
+              </li>
+              <li>
+                <i class="fa fa-caret-right fa-fw"/></i>
+                <a href="?style=iu-error">Listings with Unit Errors</a>
               </li>
               <li class="separator">Community</li>
               <li>
@@ -1190,11 +1282,7 @@ The catalog is being loaded.
               </li>
               <li>
                 <i class="fa fa-caret-right fa-fw"></i>
-                <a href="https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Oomph" target="oomph_bugzilla">Report a Problem</a>
-              </li>
-              <li>
-                <i class="fa fa-caret-right fa-fw"></i>
-                <a href="https://ci.eclipse.org/oomph/" target="oomph_ci">Contribute</a>
+                <a href="https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Oomph&amp;component=Setup&amp;short_desc=Marketplace%20reports" target="oomph_bugzilla">Report a Problem</a>
               </li>
             </ul>
           </aside>
