@@ -137,10 +137,10 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final String ECLIPSE_PLATFORM_SDK_PRODUCT_ID = "eclipse.platform.sdk";
 
-  private static final List<String> PRODUCT_IDS = Arrays
-      .asList(new String[] { "epp.package.java", "epp.package.jee", "epp.package.cpp", "epp.package.javascript", "epp.package.php", "epp.package.committers",
-          "epp.package.dsl", "epp.package.modeling", "epp.package.rcp", "epp.package.testing", "epp.package.parallel", "epp.package.scout", "epp.package.rust",
-          "org.eclipse.platform.ide", ECLIPSE_PLATFORM_SDK_PRODUCT_IDE_ID, "epp.package.reporting", "epp.package.android", "epp.package.automotive" });
+  private static final List<String> PRODUCT_IDS = Arrays.asList(new String[] { "epp.package.java", "epp.package.jee", "epp.package.cpp", "epp.package.embedcpp",
+      "epp.package.javascript", "epp.package.php", "epp.package.committers", "epp.package.dsl", "epp.package.modeling", "epp.package.rcp",
+      "epp.package.testing", "epp.package.parallel", "epp.package.scout", "epp.package.rust", "org.eclipse.platform.ide", ECLIPSE_PLATFORM_SDK_PRODUCT_IDE_ID,
+      "epp.package.reporting", "epp.package.android", "epp.package.automotive" });
 
   private static final String ALL_PRODUCT_ID = "all";
 
@@ -1467,8 +1467,17 @@ public class ProductCatalogGenerator implements IApplication
     return maxJavaVersion;
   }
 
+  /**
+   * Returns a unique key for each product label.
+   * The key's value is arbitrary and not used as anything other than a key into various maps in catalog generator.
+   *
+   * @param productLabel the user visible label of the product.
+   * @return a unique key.
+   */
   private String getKey(String productLabel)
   {
+    // The order of checks in this method is relevant as some product
+    // labels tests may be true for multiple of the ifs below.
     if (productLabel.contains("Eierlegende"))
     {
       return "All";
@@ -1488,6 +1497,10 @@ public class ProductCatalogGenerator implements IApplication
     else if (productLabel.contains("Mobile"))
     {
       return "Mobile";
+    }
+    else if (productLabel.contains("Embedded"))
+    {
+      return "EmbedC";
     }
     else if (productLabel.contains("C/C++"))
     {
@@ -1954,7 +1967,11 @@ public class ProductCatalogGenerator implements IApplication
                 if (releasePackages.equals(productEntry.getKey()))
                 {
                   System.out.println(releaseEntry.getKey() + " -> " + packageName + " -> " + packageURI);
-                  productEntry.getValue().put(key, packageURI);
+                  URI oldURI = productEntry.getValue().put(key, packageURI);
+                  if (oldURI != null)
+                  {
+                    System.err.println("Conflicting key");
+                  }
                   break LOOP;
                 }
               }
