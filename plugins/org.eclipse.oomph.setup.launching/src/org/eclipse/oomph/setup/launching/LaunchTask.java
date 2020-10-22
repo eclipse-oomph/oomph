@@ -22,6 +22,7 @@ import org.eclipse.oomph.setup.SetupTask;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.launching.LaunchTask#getLauncher <em>Launcher</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.launching.LaunchTask#isRunEveryStartup <em>Run Every Startup</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.launching.LaunchingPackage#getLaunchTask()
@@ -55,5 +56,28 @@ public interface LaunchTask extends SetupTask
    * @generated
    */
   void setLauncher(String value);
+
+  /**
+   * Returns the value of the '<em><b>Run Every Startup</b></em>' attribute.
+   * The default value is <code>"false"</code>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Run Every Startup</em>' attribute.
+   * @see #setRunEveryStartup(boolean)
+   * @see org.eclipse.oomph.setup.launching.LaunchingPackage#getLaunchTask_RunEveryStartup()
+   * @model default="false"
+   * @generated
+   */
+  boolean isRunEveryStartup();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.launching.LaunchTask#isRunEveryStartup <em>Run Every Startup</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Run Every Startup</em>' attribute.
+   * @see #isRunEveryStartup()
+   * @generated
+   */
+  void setRunEveryStartup(boolean value);
 
 } // LaunchTask

@@ -178,13 +178,22 @@ public interface LaunchingPackage extends EPackage
   int LAUNCH_TASK__LAUNCHER = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Run Every Startup</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LAUNCH_TASK__RUN_EVERY_STARTUP = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+
+  /**
    * The number of structural features of the '<em>Launch Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int LAUNCH_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+  int LAUNCH_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.launching.LaunchTask <em>Launch Task</em>}'.
@@ -206,6 +215,17 @@ public interface LaunchingPackage extends EPackage
    * @generated
    */
   EAttribute getLaunchTask_Launcher();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.launching.LaunchTask#isRunEveryStartup <em>Run Every Startup</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Run Every Startup</em>'.
+   * @see org.eclipse.oomph.setup.launching.LaunchTask#isRunEveryStartup()
+   * @see #getLaunchTask()
+   * @generated
+   */
+  EAttribute getLaunchTask_RunEveryStartup();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -247,6 +267,14 @@ public interface LaunchingPackage extends EPackage
      * @generated
      */
     EAttribute LAUNCH_TASK__LAUNCHER = eINSTANCE.getLaunchTask_Launcher();
+
+    /**
+     * The meta object literal for the '<em><b>Run Every Startup</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute LAUNCH_TASK__RUN_EVERY_STARTUP = eINSTANCE.getLaunchTask_RunEveryStartup();
 
   }
 

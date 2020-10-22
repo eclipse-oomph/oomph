@@ -50,6 +50,7 @@ import org.eclipse.osgi.util.NLS;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.launching.impl.LaunchTaskImpl#getLauncher <em>Launcher</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.launching.impl.LaunchTaskImpl#isRunEveryStartup <em>Run Every Startup</em>}</li>
  * </ul>
  *
  * @generated
@@ -77,6 +78,26 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
    * @ordered
    */
   protected String launcher = LAUNCHER_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isRunEveryStartup() <em>Run Every Startup</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isRunEveryStartup()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean RUN_EVERY_STARTUP_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isRunEveryStartup() <em>Run Every Startup</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isRunEveryStartup()
+   * @generated
+   * @ordered
+   */
+  protected boolean runEveryStartup = RUN_EVERY_STARTUP_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -129,6 +150,31 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
    * <!-- end-user-doc -->
    * @generated
    */
+  public boolean isRunEveryStartup()
+  {
+    return runEveryStartup;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setRunEveryStartup(boolean newRunEveryStartup)
+  {
+    boolean oldRunEveryStartup = runEveryStartup;
+    runEveryStartup = newRunEveryStartup;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, LaunchingPackage.LAUNCH_TASK__RUN_EVERY_STARTUP, oldRunEveryStartup, runEveryStartup));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
@@ -136,6 +182,8 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
     {
       case LaunchingPackage.LAUNCH_TASK__LAUNCHER:
         return getLauncher();
+      case LaunchingPackage.LAUNCH_TASK__RUN_EVERY_STARTUP:
+        return isRunEveryStartup();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -152,6 +200,9 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
     {
       case LaunchingPackage.LAUNCH_TASK__LAUNCHER:
         setLauncher((String)newValue);
+        return;
+      case LaunchingPackage.LAUNCH_TASK__RUN_EVERY_STARTUP:
+        setRunEveryStartup((Boolean)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -170,6 +221,9 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
       case LaunchingPackage.LAUNCH_TASK__LAUNCHER:
         setLauncher(LAUNCHER_EDEFAULT);
         return;
+      case LaunchingPackage.LAUNCH_TASK__RUN_EVERY_STARTUP:
+        setRunEveryStartup(RUN_EVERY_STARTUP_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -186,6 +240,8 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
     {
       case LaunchingPackage.LAUNCH_TASK__LAUNCHER:
         return LAUNCHER_EDEFAULT == null ? launcher != null : !LAUNCHER_EDEFAULT.equals(launcher);
+      case LaunchingPackage.LAUNCH_TASK__RUN_EVERY_STARTUP:
+        return runEveryStartup != RUN_EVERY_STARTUP_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -206,6 +262,8 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
     StringBuilder result = new StringBuilder(super.toString());
     result.append(" (launcher: "); //$NON-NLS-1$
     result.append(launcher);
+    result.append(", runEveryStartup: "); //$NON-NLS-1$
+    result.append(runEveryStartup);
     result.append(')');
     return result.toString();
   }
@@ -220,7 +278,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
   {
     String launcher = getLauncher();
     Trigger trigger = context.getTrigger();
-    if (trigger == Trigger.STARTUP)
+    if (trigger == Trigger.STARTUP && !isRunEveryStartup())
     {
       // If we've performed this task at least once, don't do it automatically again.
       String property = HISTORY.getProperty(launcher, null);

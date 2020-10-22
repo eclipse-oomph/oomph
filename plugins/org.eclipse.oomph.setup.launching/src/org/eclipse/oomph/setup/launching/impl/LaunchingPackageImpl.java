@@ -132,6 +132,16 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getLaunchTask_RunEveryStartup()
+  {
+    return (EAttribute)launchTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public LaunchingFactory getLaunchingFactory()
   {
     return (LaunchingFactory)getEFactoryInstance();
@@ -162,6 +172,7 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
     // Create classes and their features
     launchTaskEClass = createEClass(LAUNCH_TASK);
     createEAttribute(launchTaskEClass, LAUNCH_TASK__LAUNCHER);
+    createEAttribute(launchTaskEClass, LAUNCH_TASK__RUN_EVERY_STARTUP);
   }
 
   /**
@@ -206,6 +217,8 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
     initEClass(launchTaskEClass, LaunchTask.class, "LaunchTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
     initEAttribute(getLaunchTask_Launcher(), ecorePackage.getEString(), "launcher", null, 1, 1, LaunchTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getLaunchTask_RunEveryStartup(), ecorePackage.getEBoolean(), "runEveryStartup", "false", 0, 1, LaunchTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Launching.ecore");

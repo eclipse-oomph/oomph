@@ -12,6 +12,8 @@
     <genClasses ecoreClass="Launching.ecore#//LaunchTask" labelFeature="#//launching/LaunchTask/launcher">
       <genFeatures createChild="false" propertyDescription="The name of a launch configuration or the workspace absolute path of a launch configuration file"
           ecoreFeature="ecore:EAttribute Launching.ecore#//LaunchTask/launcher"/>
+      <genFeatures createChild="false" propertyDescription="Always run this launcher if triggered by STARTUP"
+          ecoreFeature="ecore:EAttribute Launching.ecore#//LaunchTask/runEveryStartup"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

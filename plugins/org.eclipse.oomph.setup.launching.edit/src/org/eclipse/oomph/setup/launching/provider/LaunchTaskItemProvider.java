@@ -58,6 +58,7 @@ public class LaunchTaskItemProvider extends SetupTaskItemProvider
       super.getPropertyDescriptors(object);
 
       addLauncherPropertyDescriptor(object);
+      addRunEveryStartupPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -74,6 +75,20 @@ public class LaunchTaskItemProvider extends SetupTaskItemProvider
         getString("_UI_LaunchTask_launcher_feature"), //$NON-NLS-1$
         getString("_UI_LaunchTask_launcher_description"), //$NON-NLS-1$
         LaunchingPackage.Literals.LAUNCH_TASK__LAUNCHER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Run Every Startup feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addRunEveryStartupPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_LaunchTask_runEveryStartup_feature"), //$NON-NLS-1$
+        getString("_UI_LaunchTask_runEveryStartup_description"), //$NON-NLS-1$
+        LaunchingPackage.Literals.LAUNCH_TASK__RUN_EVERY_STARTUP, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -128,6 +143,7 @@ public class LaunchTaskItemProvider extends SetupTaskItemProvider
     switch (notification.getFeatureID(LaunchTask.class))
     {
       case LaunchingPackage.LAUNCH_TASK__LAUNCHER:
+      case LaunchingPackage.LAUNCH_TASK__RUN_EVERY_STARTUP:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }
