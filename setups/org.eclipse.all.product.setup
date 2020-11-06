@@ -45,7 +45,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2020-12/M1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1</value>
       </detail>
       <detail
           key="shortcut">
@@ -57,8 +57,6 @@
         label="Eclipse Eierlegende Wollmilchsau (2020-12)">
       <requirement
           name="Application Development Frameworks"/>
-      <requirement
-          name="Cloud Tools"/>
       <requirement
           name="Collaboration"/>
       <requirement
@@ -88,7 +86,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.18.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2020-12/202010161000">
+          url="http://download.eclipse.org/releases/2020-12/202011061000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -157,7 +155,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2020-12/M1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1</value>
       </detail>
       <detail
           key="shortcut">
@@ -169,8 +167,6 @@
         label="Eclipse Eierlegende Wollmilchsau (2020-12)">
       <requirement
           name="Application Development Frameworks"/>
-      <requirement
-          name="Cloud Tools"/>
       <requirement
           name="Collaboration"/>
       <requirement
@@ -200,7 +196,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.18.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2020-12/202010161000">
+          url="http://download.eclipse.org/releases/2020-12/202011061000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
