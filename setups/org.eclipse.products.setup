@@ -68,7 +68,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -190,7 +190,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -1369,7 +1369,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-enterprise-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -1765,7 +1765,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-enterprise-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -4588,7 +4588,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -4784,7 +4784,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6365,7 +6365,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6493,7 +6493,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6613,7 +6613,11 @@
         </repository>
       </setupTask>
     </version>
-    <description>An IDE for Embedded C/C++ developers. It includes cross (Arm and RISC-V) managed build plug-ins and debug plug-ins for SEGGER J-Link, OpenOCD, and QEMU, plus a number of templates to create ready to run blinky projects.</description>
+    <description>
+      An IDE for Embedded C/C++ developers. It includes cross (Arm and RISC-V) managed build plug-ins and debug plug-ins for SEGGER J-Link, OpenOCD, and QEMU, plus a number of templates to create ready to run blinky projects.
+      &lt;br/>
+      This package includes a new major release of the Embedded CDT plug-ins (v6); to avoid compatibility issues with previous versions, it is recommended to &lt;b>create a new workspace&lt;/b> with the new version and &lt;b>import the projects&lt;/b> there.
+    </description>
   </product>
   <product name="epp.package.javascript"
       label="Eclipse IDE for Web and JavaScript Developers">
@@ -6636,7 +6640,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-web-and-javascript-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-web-and-javascript-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6764,7 +6768,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-web-and-javascript-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-web-and-javascript-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -7793,7 +7797,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -7941,7 +7945,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9024,7 +9028,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9242,7 +9246,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -10774,7 +10778,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -10882,7 +10886,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -11827,7 +11831,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -11999,7 +12003,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -13530,7 +13534,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -13674,7 +13678,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15013,7 +15017,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15097,7 +15101,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15944,7 +15948,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -16100,7 +16104,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -17487,7 +17491,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -17611,7 +17615,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -18766,7 +18770,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-rust-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-rust-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -18862,7 +18866,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m1/eclipse-ide-rust-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-rust-developers</value>
         </detail>
         <detail
             key="shortcut">

@@ -152,7 +152,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final boolean IS_RANGE_NARROW = Boolean.FALSE;
 
-  private static final String JUSTJ_JRES = "https://download.eclipse.org/justj/jres";
+  private static final String JUSTJ_JRES = "http://download.eclipse.org/justj/jres";
 
   private URI outputLocation;
 

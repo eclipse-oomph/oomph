@@ -13,7 +13,7 @@
     <requirement
         name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"/>
     <repository
-        url="https://download.eclipse.org/justj/jres/11/updates/release/11.0.2"/>
+        url="http://download.eclipse.org/justj/jres/11/updates/release/11.0.2"/>
     <description>
       Contains the plug-ins and fragments for the OpenJDK Hotspot JRE Complete.
       Provides the complete set of modules of the JDK, excluding incubators.
@@ -25,7 +25,7 @@
     <requirement
         name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"/>
     <repository
-        url="https://download.eclipse.org/justj/jres/14/updates/release/14.0.2"/>
+        url="http://download.eclipse.org/justj/jres/14/updates/release/14.0.2"/>
     <description>
       Contains the plug-ins and fragments for the OpenJDK Hotspot JRE Complete.
       Provides the complete set of modules of the JDK, excluding incubators.
