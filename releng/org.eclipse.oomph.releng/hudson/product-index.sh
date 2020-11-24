@@ -24,7 +24,7 @@ for i in $named_releases $numbered_releases; do
     cd $root/$i/$j
     #echo $i/$j
     #ls eclipse-inst*
-    for b in 32 64; do
+    for b in 32 64 aarch64; do
       for os in win mac linux; do
         for jre in "true" "false"; do
           if [ "$jre" == "false" ]; then
@@ -37,6 +37,8 @@ for i in $named_releases $numbered_releases; do
             candidate=$prefix$os$b.exe
           elif [ -f $prefix$os$b.dmg ]; then
             candidate=$prefix$os$b.dmg
+          elif [ -f $prefix$os-$b.tar.gz ]; then
+            candidate=$prefix$os-$b.tar.gz
           elif [ -f $prefix$os$b.tar.gz ]; then
             if [ "$os" == "mac" -a -f eclipse-inst-$os$b.dmg ]; then
               # Don't include mac *.tar.gz if there is a *.dmg
