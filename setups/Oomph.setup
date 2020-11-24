@@ -514,7 +514,7 @@
           <repository
               url="http://download.eclipse.org/webtools/repository/latest"/>
           <repository
-              url="http://download.eclipse.org/justj/jres/14/updates/release/14.0.2"/>
+              url="http://download.eclipse.org/justj/jres/15/updates/milestone/latest"/>
         </repositoryList>
         <repositoryList
             name="2020-09">

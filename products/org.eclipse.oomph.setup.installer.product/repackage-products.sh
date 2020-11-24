@@ -65,6 +65,12 @@ for i in $(ls); do
     else
       cp $i ../repackaged-products/eclipse-inst$restricted-mac64.tar.gz
     fi
+  elif [[ $i == *linux*aarch64* ]]; then
+    if [[ $i == *with-jre* ]]; then
+      cp $i ../repackaged-products/eclipse-inst-jre$restricted-linux-aarch64.tar.gz
+    else
+      cp $i ../repackaged-products/eclipse-inst$restricted-linux-aarch64.tar.gz
+    fi
   elif [[ $i == *linux* ]]; then
     if [[ $i == *with-jre* ]]; then
       cp $i ../repackaged-products/eclipse-inst-jre$restricted-linux64.tar.gz
