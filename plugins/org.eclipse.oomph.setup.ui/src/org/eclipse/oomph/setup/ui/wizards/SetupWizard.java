@@ -17,6 +17,7 @@ import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
 import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.p2.Repository;
+import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.p2.internal.ui.CacheUsageConfirmerUI;
 import org.eclipse.oomph.setup.AnnotationConstants;
@@ -50,6 +51,7 @@ import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.util.EList;
@@ -69,6 +71,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.IPageChangeProvider;
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -1374,6 +1378,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
           {
             Macro jresMacro = (Macro)eObject;
             EList<SetupTask> setupTasks = jresMacro.getSetupTasks();
+            LOOP: //
             for (SetupTask setupTask : setupTasks)
             {
               if (setupTask instanceof P2Task)
@@ -1384,6 +1389,17 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                 if (matcher.find())
                 {
                   EList<Repository> repositories = jreP2Task.getRepositories();
+                  for (Requirement requirement : jreP2Task.getRequirements())
+                  {
+                    // The requirements capture filter information about arch/os combinations for which JREs are available.
+                    // We should not offer a JRE feature for which there isn't really an actual JRE fragment for the current arch/os available.
+                    String filter = requirement.getFilter();
+                    if (!matchesFilterContext(filter))
+                    {
+                      continue LOOP;
+                    }
+                  }
+
                   Repository repository = repositories.get(0);
                   JRE.Descriptor descriptor = new JRE.Descriptor(label + " - " + repository.getURL(), //$NON-NLS-1$
                       Integer.parseInt(matcher.group(1)), //
@@ -1401,6 +1417,35 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       }
 
       JREManager.INSTANCE.setJREs(jreDescriptors);
+    }
+
+    @SuppressWarnings("restriction")
+    private boolean matchesFilterContext(String filter)
+    {
+      if (StringUtil.isEmpty(filter))
+      {
+        return true;
+      }
+
+      OS os = wizard.getOS();
+      Map<String, String> filterContext = new LinkedHashMap<String, String>();
+      filterContext.put("osgi.ws", os.getOsgiWS()); //$NON-NLS-1$
+      filterContext.put("osgi.os", os.getOsgiOS()); //$NON-NLS-1$
+      filterContext.put("osgi.arch", os.getOsgiArch()); //$NON-NLS-1$
+
+      org.eclipse.equinox.internal.p2.metadata.InstallableUnit filterContextIU = (org.eclipse.equinox.internal.p2.metadata.InstallableUnit)org.eclipse.equinox.internal.p2.metadata.InstallableUnit
+          .contextIU(filterContext);
+
+      try
+      {
+        IMatchExpression<IInstallableUnit> matchExpression = org.eclipse.equinox.internal.p2.metadata.InstallableUnit.parseFilter(filter);
+        return matchExpression.isMatch(filterContextIU);
+      }
+      catch (RuntimeException ex)
+      {
+        // If the filter can't be parsed, assume it matches nothing.
+        return false;
+      }
     }
 
     protected boolean shouldReload(EClass eClass)

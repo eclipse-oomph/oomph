@@ -150,6 +150,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final String EPP_INSTALL_ROOTS_FILTER = "(org.eclipse.epp.install.roots=true)";
 
+  private static final Pattern ARCH_OS_FILTER_PATTERN = Pattern.compile("\\(\\&\\(osgi\\.arch=([^)]+)\\)\\(osgi\\.os=([^)]+)\\)\\)");
+
   private static final boolean IS_RANGE_NARROW = Boolean.FALSE;
 
   private static final String JUSTJ_JRES = "http://download.eclipse.org/justj/jres";
@@ -2097,7 +2099,7 @@ public class ProductCatalogGenerator implements IApplication
     }
 
     // Boil them down by versions, excluding minor versions.
-    // Because they are sorted this will grab the version with the larget micro version.
+    // Because they are sorted this will grab the version with the largest micro version.
     Map<Version, IInstallableUnit> jreVersions = new TreeMap<Version, IInstallableUnit>();
     for (IInstallableUnit iu : ius)
     {
@@ -2120,6 +2122,35 @@ public class ProductCatalogGenerator implements IApplication
       System.out.println("jre=" + iu + " -> " + childRepository.getLocation());
 
       Requirement jreRequirement = P2Factory.eINSTANCE.createRequirement(iu.getId());
+      StringBuilder compositeFilter = new StringBuilder();
+      for (IRequirement requirement : iu.getRequirements())
+      {
+        if (requirement instanceof IRequiredCapability)
+        {
+          IRequiredCapability capability = (IRequiredCapability)requirement;
+          IMatchExpression<IInstallableUnit> filter = capability.getFilter();
+          if (filter != null)
+          {
+            String value = RequirementImpl.formatMatchExpression(filter);
+            Matcher matcher = ARCH_OS_FILTER_PATTERN.matcher(value);
+            if (matcher.matches())
+            {
+              if (compositeFilter.length() == 0)
+              {
+                compositeFilter.append("(|");
+              }
+
+              compositeFilter.append(value);
+            }
+          }
+        }
+      }
+
+      if (compositeFilter.length() != 0)
+      {
+        jreRequirement.setFilter(compositeFilter.append(')').toString());
+      }
+
       Repository jreChildRepository = P2Factory.eINSTANCE.createRepository(childRepository.getLocation().toString());
 
       P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
