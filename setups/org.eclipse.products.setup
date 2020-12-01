@@ -68,7 +68,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -190,7 +190,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -1298,7 +1298,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <version
@@ -1343,7 +1343,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <description>The essential tools for any Java developer, including a Java IDE, a Git client, XML Editor, Maven and Gradle integration</description>
@@ -1369,7 +1369,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-enterprise-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -1765,7 +1765,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-enterprise-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -4506,7 +4506,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <version
@@ -4554,7 +4554,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <description>
@@ -4588,7 +4588,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -4782,7 +4782,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6293,7 +6293,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <version
@@ -6335,7 +6335,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <description>An IDE for C/C++ developers.</description>
@@ -6361,7 +6361,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6487,7 +6487,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6606,7 +6606,8 @@
       </setupTask>
     </version>
     <description>
-      An IDE for Embedded C/C++ developers. It includes cross (Arm and RISC-V) managed build plug-ins and debug plug-ins for SEGGER J-Link, OpenOCD, and QEMU, plus a number of templates to create ready to run blinky projects.
+      An &lt;a href=&quot;https://eclipse-embed-cdt.github.io&quot;>IDE for Embedded C/C++ developers&lt;/a>. It includes cross (&lt;b>Arm&lt;/b&lt; and &lt;b>RISC-V&lt;/b>) managed build plug-ins and debug plug-ins for SEGGER &lt;b>J-Link&lt;/b>, &lt;b>OpenOCD&lt;/b>, and &lt;b>QEMU&lt;/b>, plus a number of templates to create ready to run blinky projects.
+      &lt;br/>
       &lt;br/>
       This package includes a new major release of the Embedded CDT plug-ins (v6); to avoid compatibility issues with previous versions, it is recommended to &lt;b>create a new workspace&lt;/b> with the new version and &lt;b>import the projects&lt;/b> there.
     </description>
@@ -6632,7 +6633,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-web-and-javascript-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-web-and-javascript-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6760,7 +6761,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-web-and-javascript-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-web-and-javascript-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -7789,7 +7790,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -7937,7 +7938,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9020,7 +9021,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9238,7 +9239,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -10770,7 +10771,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -10878,7 +10879,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -11749,7 +11750,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <version
@@ -11797,7 +11798,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <description>The essential tools for Java and DSL developers, including a Java &amp; Xtend IDE, a DSL Framework (Xtext), a Git client, XML Editor, and Maven integration.</description>
@@ -11823,7 +11824,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -11995,7 +11996,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -13448,7 +13449,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <version
@@ -13496,7 +13497,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <description>
@@ -13526,7 +13527,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -13670,7 +13671,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14935,7 +14936,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <version
@@ -14983,7 +14984,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <description>A complete set of tools for developers who want to create Eclipse plug-ins, Rich Client Applications or Remote Application Platform (RCP+RAP), plus Maven and Gradle tooling, and an XML editor. It contains the EGit tooling for accessing Git version control systems, and Eclipse Passage which helps with license management for Eclipse-based products.</description>
@@ -15009,7 +15010,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15093,7 +15094,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15872,7 +15873,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <version
@@ -15914,7 +15915,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <description>This package contains Eclipse features that support the software development quality assurance process, such as Jubula.</description>
@@ -15940,7 +15941,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -16096,7 +16097,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -17415,7 +17416,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <version
@@ -17457,7 +17458,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <description>Tools for C, C++, Fortran, and UPC, including MPI, OpenMP, OpenACC, a parallel debugger, and remotely building, running and monitoring applications.</description>
@@ -17483,7 +17484,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -17607,7 +17608,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -18688,7 +18689,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <version
@@ -18736,7 +18737,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <description>&lt;a href=&quot;http://www.eclipse.org/scout&quot;>Eclipse Scout&lt;/a> is a Java/HTML5 framework to develop business applications that run on the desktop, on tablets and mobile devices. This package includes Eclipse IDE support for Scout developers and source code.</description>
@@ -18762,7 +18763,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-rust-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-rust-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -18858,7 +18859,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m2/eclipse-ide-rust-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/m3/eclipse-ide-rust-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -20222,7 +20223,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <version
@@ -20262,7 +20263,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <description>This package contains the absolute minimal IDE, suitable only as a base for installing other tools.</description>
@@ -22111,7 +22112,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <version
@@ -22155,7 +22156,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <description>Java EE tools and BIRT reporting tool for Java developers to create Java EE and Web applications that also have reporting needs.</description>
@@ -22667,7 +22668,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <version
@@ -22715,7 +22716,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <description>This package contains frameworks and tools used for the development of embedded automotive software: In addition to Eclipse Platform, Java Development Tools, and Plug-in Development Environment, it includes EMF, Sphinx, GMF, Xtext, Xtend, Xpand, UML2, selected other modeling components, C/C++ development tools, and XML/XSD editors and tools. To keep the package at a reasonable size, it includes only the runtime binaries but no source code and no developer documentation.</description>
@@ -22900,7 +22901,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.23"/>
+            url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
       </setupTask>
     </version>
     <description>
