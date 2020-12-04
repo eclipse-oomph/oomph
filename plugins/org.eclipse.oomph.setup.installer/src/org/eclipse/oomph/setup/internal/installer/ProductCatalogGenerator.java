@@ -781,6 +781,7 @@ public class ProductCatalogGenerator implements IApplication
       }
 
       ius.keySet().removeAll(requirements);
+      ius.keySet().remove("org.eclipse.epp.package.common.feature.feature.group");
 
       for (String specialProductID : SPECIAL_PRODUCT_IDS)
       {

@@ -11,7 +11,8 @@
       xsi:type="setup.p2:P2Task"
       label="JRE 11.0.2">
     <requirement
-        name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"/>
+        name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"
+        filter="(|(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
     <repository
         url="http://download.eclipse.org/justj/jres/11/updates/release/11.0.2"/>
     <description>
@@ -23,9 +24,23 @@
       xsi:type="setup.p2:P2Task"
       label="JRE 14.0.2">
     <requirement
-        name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"/>
+        name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"
+        filter="(|(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
     <repository
         url="http://download.eclipse.org/justj/jres/14/updates/release/14.0.2"/>
+    <description>
+      Contains the plug-ins and fragments for the OpenJDK Hotspot JRE Complete.
+      Provides the complete set of modules of the JDK, excluding incubators.
+    </description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup.p2:P2Task"
+      label="JRE 15.0.1">
+    <requirement
+        name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"
+        filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
+    <repository
+        url="http://download.eclipse.org/justj/jres/15/updates/release/15.0.1"/>
     <description>
       Contains the plug-ins and fragments for the OpenJDK Hotspot JRE Complete.
       Provides the complete set of modules of the JDK, excluding incubators.
