@@ -315,6 +315,7 @@ public class MarketplaceCatalogGenerator implements IApplication
     platformVersions.put("platform.version=4.15", "2020-03");
     platformVersions.put("platform.version=4.16", "2020-06");
     platformVersions.put("platform.version=4.17", "2020-09");
+    platformVersions.put("platform.version=4.18", "2020-12");
 
     Set<URI> nodeQueryURIs = new LinkedHashSet<URI>();
     {
@@ -333,7 +334,7 @@ public class MarketplaceCatalogGenerator implements IApplication
     }
 
     long startRepositoryLoads = System.currentTimeMillis();
-    System.out.println("Gathering " + nodeQueryURIs.size() + " listings: " + (startRepositoryLoads - startListings) / 1000);
+    System.out.println("Gathering " + nodeQueryURIs.size() + " listings: " + (startRepositoryLoads - startListings) / 1000 + " seconds");
 
     {
       Set<String> updateURLs = new LinkedHashSet<String>();
@@ -787,10 +788,10 @@ public class MarketplaceCatalogGenerator implements IApplication
     output.save(null);
 
     long startTesting = System.currentTimeMillis();
-    System.out.println("Loaded repositories : " + (startTesting - startRepositoryLoads) / 1000);
+    System.out.println("Loaded repositories : " + (startTesting - startRepositoryLoads) / 1000 + " seconds");
     test();
     long finishTesting = System.currentTimeMillis();
-    System.out.println("Testing : " + (finishTesting - startTesting) / 1000);
+    System.out.println("Testing : " + (finishTesting - startTesting) / 1000 + " seconds");
   }
 
   private void generateReport() throws Exception
