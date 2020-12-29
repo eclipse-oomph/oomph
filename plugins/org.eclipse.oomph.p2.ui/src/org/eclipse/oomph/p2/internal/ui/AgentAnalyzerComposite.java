@@ -775,8 +775,8 @@ public class AgentAnalyzerComposite extends Composite
         deleteUnusedArtifactsButton.setEnabled(false);
       }
 
-      changed |= updateButton(repairAllArtifactsButton, currentBundlePool.getDamagedArtifactsCount(), Messages.AgentAnalyzerComposite_bundlePool_repairDamagedArtifacts,
-          Messages.AgentAnalyzerComposite_bundlePool_repairDamagedArtifacts_withCount);
+      changed |= updateButton(repairAllArtifactsButton, currentBundlePool.getDamagedArtifactsCount(),
+          Messages.AgentAnalyzerComposite_bundlePool_repairDamagedArtifacts, Messages.AgentAnalyzerComposite_bundlePool_repairDamagedArtifacts_withCount);
 
       if (currentBundlePool.isAnalyzingDamage() && repairAllArtifactsButton.isEnabled())
       {
@@ -845,8 +845,8 @@ public class AgentAnalyzerComposite extends Composite
       changed |= updateButton(selectAllArtifactsButton, elements.length, Messages.AgentAnalyzerComposite_artifact_selectAll,
           Messages.AgentAnalyzerComposite_artifact_selectAll_withCount);
 
-      changed |= updateButton(repairAllArtifactsButton, currentBundlePool.getDamagedArtifactsCount(), Messages.AgentAnalyzerComposite_bundlePool_repairDamagedArtifacts,
-          Messages.AgentAnalyzerComposite_bundlePool_repairDamagedArtifacts_withCount);
+      changed |= updateButton(repairAllArtifactsButton, currentBundlePool.getDamagedArtifactsCount(),
+          Messages.AgentAnalyzerComposite_bundlePool_repairDamagedArtifacts, Messages.AgentAnalyzerComposite_bundlePool_repairDamagedArtifacts_withCount);
 
       if (currentBundlePool.isAnalyzingDamage() && repairAllArtifactsButton.isEnabled())
       {
@@ -874,7 +874,7 @@ public class AgentAnalyzerComposite extends Composite
   {
     int len = profiles.length;
     String message = len == 1 ? Messages.AgentAnalyzerComposite_profile_doYouWantToDeleteProfile
-        : NLS.bind(Messages.AgentAnalyzerComposite_profile_doYouWantToDeleteProfile, len);
+        : NLS.bind(Messages.AgentAnalyzerComposite_profile_doYouWantToDeleteProfiles, len);
 
     if (MessageDialog.openQuestion(getShell(), AgentAnalyzerDialog.TITLE, message))
     {
