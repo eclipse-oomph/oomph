@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="66">
+<target name="Generated from Oomph" sequenceNumber="67">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="javaewah" version="0.0.0"/>
+      <unit id="net.i2p.crypto.eddsa" version="0.0.0"/>
+      <unit id="org.apache.commons.compress" version="0.0.0"/>
+      <unit id="org.apache.sshd.osgi" version="0.0.0"/>
+      <unit id="org.apache.sshd.sftp" version="0.0.0"/>
+      <unit id="org.bouncycastle.bcpg" version="0.0.0"/>
+      <unit id="org.bouncycastle.bcprov" version="0.0.0"/>
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
@@ -16,6 +23,7 @@
       <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.oauth" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
+      <unit id="org.slf4j.api" version="0.0.0"/>
       <repository location="http://download.eclipse.org/usssdk/updates/latest"/>
       <repository location="http://download.eclipse.org/egit/updates"/>
       <repository location="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
@@ -27,7 +35,7 @@
       <repository location="http://download.eclipse.org/technology/swtbot/snapshots"/>
       <repository location="http://download.eclipse.org/webtools/repository/latest"/>
       <repository location="http://download.eclipse.org/justj/jres/15/updates/release/15.0.1"/>
-      <repository location="http://download.eclipse.org/eclipse/updates/4.18/R-4.18-202012021800"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.19-I-builds"/>
     </location>
   </locations>
 </target>

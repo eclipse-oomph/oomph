@@ -39,8 +39,6 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.internal.ui.shared.target.StyledBundleLabelProvider;
-import org.eclipse.pde.ui.target.ITargetLocationEditor;
-import org.eclipse.pde.ui.target.ITargetLocationUpdater;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -57,10 +55,8 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public class TargletContainerUI implements IAdapterFactory, ITargetLocationEditor, ITargetLocationUpdater
+public class TargletContainerUI extends BaseWithDeprecation implements IAdapterFactory
 {
-  private static final Class<?>[] ADAPTERS = { ITreeContentProvider.class, ILabelProvider.class, ITargetLocationEditor.class, ITargetLocationUpdater.class };
-
   private static final Object[] NO_CHILDREN = new Object[0];
 
   private final ComposedAdapterFactory adapterFactory;
@@ -98,12 +94,12 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
         return new ContainerLabelProvider();
       }
 
-      if (adapterType == ITargetLocationEditor.class)
+      if (adapterType == org.eclipse.pde.ui.target.ITargetLocationEditor.class)
       {
         return this;
       }
 
-      if (adapterType == ITargetLocationUpdater.class)
+      if (adapterType == org.eclipse.pde.ui.target.ITargetLocationUpdater.class)
       {
         return this;
       }
@@ -112,11 +108,13 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
     return null;
   }
 
+  @Override
   public boolean canEdit(ITargetDefinition target, ITargetLocation targetLocation)
   {
     return targetLocation instanceof ITargletContainer;
   }
 
+  @Override
   public IWizard getEditWizard(ITargetDefinition target, ITargetLocation targetLocation)
   {
     final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
@@ -176,11 +174,13 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
     return null;
   }
 
+  @Override
   public boolean canUpdate(ITargetDefinition target, ITargetLocation targetLocation)
   {
     return targetLocation instanceof ITargletContainer;
   }
 
+  @Override
   public IStatus update(ITargetDefinition target, ITargetLocation targetLocation, IProgressMonitor monitor)
   {
     return ((ITargletContainer)targetLocation).updateProfile(monitor);
@@ -522,5 +522,32 @@ public class TargletContainerUI implements IAdapterFactory, ITargetLocationEdito
     {
       return labelProvider.getText(wrappedObject);
     }
+  }
+}
+
+@SuppressWarnings("deprecation")
+class BaseWithDeprecation implements org.eclipse.pde.ui.target.ITargetLocationEditor, org.eclipse.pde.ui.target.ITargetLocationUpdater
+{
+  static final Class<?>[] ADAPTERS = { ITreeContentProvider.class, ILabelProvider.class, org.eclipse.pde.ui.target.ITargetLocationEditor.class,
+      org.eclipse.pde.ui.target.ITargetLocationUpdater.class };
+
+  public boolean canUpdate(ITargetDefinition target, ITargetLocation targetLocation)
+  {
+    return false;
+  }
+
+  public IStatus update(ITargetDefinition target, ITargetLocation targetLocation, IProgressMonitor monitor)
+  {
+    return null;
+  }
+
+  public boolean canEdit(ITargetDefinition target, ITargetLocation targetLocation)
+  {
+    return false;
+  }
+
+  public IWizard getEditWizard(ITargetDefinition target, ITargetLocation targetLocation)
+  {
+    return null;
   }
 }

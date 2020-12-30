@@ -287,7 +287,7 @@ public class ProductCatalogGenerator implements IApplication
   private String[] getTrains()
   {
     return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06", "2019-09", "2019-12",
-        "2020-03", "2020-06", "2020-09", "2020-12" };
+        "2020-03", "2020-06", "2020-09", "2020-12", "2021-03" };
   }
 
   private URI getEclipsePlatformSite(String train)
