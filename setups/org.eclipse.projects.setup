@@ -35,7 +35,7 @@
         name="git.user.id"
         defaultValue="anonymous"
         label="Eclipse Git/Gerrit user ID">
-      <description>The user ID of the Eclipse Git/Gerrit account</description>
+      <description>The user ID of the Eclipse Git/Gerrit account, i.e., the 'Username' of your profile at https://git.eclipse.org/r/settings but not the numeric ID, the Email, nor the Full name of your profile</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"

@@ -46,7 +46,7 @@
         xsi:type="setup:VariableTask"
         name="git.user.id"
         label="Eclipse Git/Gerrit user ID">
-      <description>The user ID of the Eclipse Git/Gerrit account</description>
+      <description>The user ID of the Eclipse Git/Gerrit account, i.e., the 'Username' of your profile at https://git.eclipse.org/r/settings but not the numeric ID, the Email, nor the Full name of your profile</description>
     </setupTask>
     <stream
         href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']/@projects[name='simrel']/@streams[name='master']"/>
