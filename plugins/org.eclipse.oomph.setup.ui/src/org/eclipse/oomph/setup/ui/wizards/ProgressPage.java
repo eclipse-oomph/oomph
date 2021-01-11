@@ -14,6 +14,8 @@ import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.OomphAdapterFactoryContentProvider;
+import org.eclipse.oomph.jreinfo.JRE;
+import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.setup.CertificatePolicy;
 import org.eclipse.oomph.setup.Installation;
@@ -1089,6 +1091,22 @@ public class ProgressPage extends SetupWizardPage
       List<String> command = new ArrayList<String>();
       File executable = info.getExecutable();
       command.add(executable.toString());
+
+      // This is to ensure that if there is no -vm argument, the product should be launched with the system JRE and not the JRE of the installer,
+      // which is likely a minimized JustJ JRE.
+      if (!performer.hasProductIniVMArg())
+      {
+        JRE systemJRE = JREManager.INSTANCE.getSystemJRE();
+        if (systemJRE != null)
+        {
+          File javaHome = systemJRE.getJavaHome();
+          if (javaHome != null)
+          {
+            command.add("-vm"); //$NON-NLS-1$
+            command.add(new File(javaHome, "bin").toString()); //$NON-NLS-1$
+          }
+        }
+      }
 
       File ws = performer.getWorkspaceLocation();
       if (ws != null)

@@ -72,6 +72,7 @@ import org.eclipse.oomph.setup.p2.impl.P2TaskImpl;
 import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.util.CollectionUtil;
+import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.MonitorUtil;
 import org.eclipse.oomph.util.OS;
@@ -260,6 +261,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private boolean hasSuccessfullyPerformed;
 
+  private boolean hasProductIniVMArg;
+
   private File logFile;
 
   public SetupTaskPerformer(URIConverter uriConverter, SetupPrompter prompter, Trigger trigger, SetupContext setupContext, Stream stream)
@@ -278,6 +281,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public String getVMPath()
   {
     return getPrompter().getVMPath();
+  }
+
+  public boolean hasProductIniVMArg()
+  {
+    return hasProductIniVMArg;
   }
 
   public boolean hasSuccessfullyPerformed()
@@ -3721,6 +3729,21 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     else
     {
       monitor.worked(1);
+    }
+
+    File iniFile = new File(getProductLocation(), getLauncherName() + ".ini"); //$NON-NLS-1$
+    if (iniFile.exists())
+    {
+      try
+      {
+        // Read the existing ini file with the system's default encoding, like the native launcher does.
+        List<String> contents = IOUtil.readLines(iniFile, null);
+        hasProductIniVMArg = contents.contains("-vm"); //$NON-NLS-1$
+      }
+      catch (IORuntimeException ex)
+      {
+        //$FALL-THROUGH$
+      }
     }
   }
 
