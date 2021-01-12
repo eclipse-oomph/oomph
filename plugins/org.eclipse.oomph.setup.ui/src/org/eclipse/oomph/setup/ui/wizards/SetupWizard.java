@@ -1367,56 +1367,59 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       wizard.indexLoaded(index);
 
-      List<JRE.Descriptor> jreDescriptors = new ArrayList<JRE.Descriptor>();
-      Annotation jresAnnotation = index.getAnnotation(AnnotationConstants.ANNOTATION_JRE);
-      if (jresAnnotation != null)
+      if (index != null)
       {
-        EList<EObject> references = jresAnnotation.getReferences();
-        for (EObject eObject : references)
+        List<JRE.Descriptor> jreDescriptors = new ArrayList<JRE.Descriptor>();
+        Annotation jresAnnotation = index.getAnnotation(AnnotationConstants.ANNOTATION_JRE);
+        if (jresAnnotation != null)
         {
-          if (eObject instanceof Macro)
+          EList<EObject> references = jresAnnotation.getReferences();
+          for (EObject eObject : references)
           {
-            Macro jresMacro = (Macro)eObject;
-            EList<SetupTask> setupTasks = jresMacro.getSetupTasks();
-            LOOP: //
-            for (SetupTask setupTask : setupTasks)
+            if (eObject instanceof Macro)
             {
-              if (setupTask instanceof P2Task)
+              Macro jresMacro = (Macro)eObject;
+              EList<SetupTask> setupTasks = jresMacro.getSetupTasks();
+              LOOP: //
+              for (SetupTask setupTask : setupTasks)
               {
-                P2Task jreP2Task = (P2Task)setupTask;
-                String label = jreP2Task.getLabel();
-                Matcher matcher = Pattern.compile("([1-9][0-9]*)\\.([0-9]+)\\.([0-9]+)").matcher(label); //$NON-NLS-1$
-                if (matcher.find())
+                if (setupTask instanceof P2Task)
                 {
-                  EList<Repository> repositories = jreP2Task.getRepositories();
-                  for (Requirement requirement : jreP2Task.getRequirements())
+                  P2Task jreP2Task = (P2Task)setupTask;
+                  String label = jreP2Task.getLabel();
+                  Matcher matcher = Pattern.compile("([1-9][0-9]*)\\.([0-9]+)\\.([0-9]+)").matcher(label); //$NON-NLS-1$
+                  if (matcher.find())
                   {
-                    // The requirements capture filter information about arch/os combinations for which JREs are available.
-                    // We should not offer a JRE feature for which there isn't really an actual JRE fragment for the current arch/os available.
-                    String filter = requirement.getFilter();
-                    if (!matchesFilterContext(filter))
+                    EList<Repository> repositories = jreP2Task.getRepositories();
+                    for (Requirement requirement : jreP2Task.getRequirements())
                     {
-                      continue LOOP;
+                      // The requirements capture filter information about arch/os combinations for which JREs are available.
+                      // We should not offer a JRE feature for which there isn't really an actual JRE fragment for the current arch/os available.
+                      String filter = requirement.getFilter();
+                      if (!matchesFilterContext(filter))
+                      {
+                        continue LOOP;
+                      }
                     }
-                  }
 
-                  Repository repository = repositories.get(0);
-                  JRE.Descriptor descriptor = new JRE.Descriptor(label + " - " + repository.getURL(), //$NON-NLS-1$
-                      Integer.parseInt(matcher.group(1)), //
-                      Integer.parseInt(matcher.group(2)), //
-                      Integer.parseInt(matcher.group(3)), //
-                      64, //
-                      false, //
-                      jreP2Task);
-                  jreDescriptors.add(descriptor);
+                    Repository repository = repositories.get(0);
+                    JRE.Descriptor descriptor = new JRE.Descriptor(label + " - " + repository.getURL(), //$NON-NLS-1$
+                        Integer.parseInt(matcher.group(1)), //
+                        Integer.parseInt(matcher.group(2)), //
+                        Integer.parseInt(matcher.group(3)), //
+                        64, //
+                        false, //
+                        jreP2Task);
+                    jreDescriptors.add(descriptor);
+                  }
                 }
               }
             }
           }
         }
-      }
 
-      JREManager.INSTANCE.setJREs(jreDescriptors);
+        JREManager.INSTANCE.setJREs(jreDescriptors);
+      }
     }
 
     @SuppressWarnings("restriction")
