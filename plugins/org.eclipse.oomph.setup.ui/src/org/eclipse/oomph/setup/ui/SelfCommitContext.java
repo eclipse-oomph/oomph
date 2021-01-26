@@ -13,9 +13,7 @@ package org.eclipse.oomph.setup.ui;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.Repository;
-import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.CertificateConfirmer;
-import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
 import org.eclipse.oomph.setup.User;
@@ -24,7 +22,6 @@ import org.eclipse.oomph.setup.p2.impl.P2TaskImpl;
 import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.util.Confirmer;
-import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -33,8 +30,6 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
-import org.eclipse.equinox.p2.metadata.IInstallableUnit;
-import org.eclipse.equinox.p2.metadata.VersionRange;
 
 /**
  * @author Eike Stepper
@@ -54,31 +49,7 @@ public class SelfCommitContext extends CommitContext
 
   public ProfileTransaction migrateProfile(ProfileTransaction transaction) throws CoreException
   {
-    boolean installer = false;
-
-    // TODO Remove this temporary range conversion when all users can be expected to have a major range.
-    String productID = PropertiesUtil.getProductID();
-    VersionRange deprecatedVersionRange = new VersionRange("[1.0.0,1.1.0)"); //$NON-NLS-1$
-    ProfileDefinition profileDefinition = transaction.getProfileDefinition();
-    for (Requirement requirement : profileDefinition.getRequirements())
-    {
-      if (IInstallableUnit.NAMESPACE_IU_ID.equals(requirement.getNamespace()) && productID.equals(requirement.getName()))
-      {
-        installer = true;
-        if (deprecatedVersionRange.equals(requirement.getVersionRange()))
-        {
-          requirement.setVersionRange(new VersionRange("[1.0.0,2.0.0)")); //$NON-NLS-1$
-          transaction.commit(new NullProgressMonitor());
-
-          Profile profile = transaction.getProfile();
-          transaction = profile.change();
-        }
-
-        break;
-      }
-    }
-
-    repositoryChanged = installer ? changeRepositoryIfNeeded(profileDefinition) : false;
+    repositoryChanged = SetupUtil.INSTALLER_APPLICATION && changeRepositoryIfNeeded(transaction.getProfileDefinition());
     return transaction;
   }
 
