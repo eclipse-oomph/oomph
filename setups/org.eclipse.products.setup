@@ -4828,7 +4828,7 @@
       </setupTask>
     </version>
     <description>
-      Tools for developers working with Java and Web applications, including a Java IDE, tools for Web Services, JPA and Data Tools, JavaServer Pages and Faces, Mylyn, Maven and Gradle, Git, and more.&lt;br/>
+      Tools for developers working with Java and Web applications, including a Java IDE, tools for Web Services, JPA and Data Tools, editors for JavaScript, TypeScript, HTML, CSS, XML, Yaml, Markdown, JavaServer Pages and JavaServer Faces, with Angular and React framework support, Mylyn, Maven and Gradle Integration, a Git client, and more.&lt;br/>
       &lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?classification=WebTools&quot;>here&lt;/a> to file a bug against Eclipse Web Tools Platform.&lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br/>
