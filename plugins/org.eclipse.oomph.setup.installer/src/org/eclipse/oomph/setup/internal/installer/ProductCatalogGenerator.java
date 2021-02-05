@@ -1745,7 +1745,8 @@ public class ProductCatalogGenerator implements IApplication
     {
       InputStream in = null;
 
-      final String branch = i == trains.length ? "master" : trains[i].toUpperCase();
+      final String branch = i == trains.length ? "master" : trains[i].startsWith("20") ? trains[i] + "_R" : trains[i].toUpperCase();
+
       String url = "https://git.eclipse.org/c/epp/org.eclipse.epp.packages.git/plain/packages/org.eclipse.epp.package." + name + ".feature/epp.website.xml"
           + "?h=" + branch;
       try
@@ -2067,7 +2068,8 @@ public class ProductCatalogGenerator implements IApplication
         if (filter != null)
         {
           String value = RequirementImpl.formatMatchExpression(filter);
-          if (EPP_INSTALL_ROOTS_FILTER.equals(value) && !capability.getName().startsWith("org.eclipse.justj."))
+          if (EPP_INSTALL_ROOTS_FILTER.equals(value) && !capability.getName().startsWith("org.eclipse.justj.")
+              && !capability.getName().equals("org.eclipse.oomph.setup.feature.group"))
           {
             rootInstallIUs.add(capability.getName());
           }

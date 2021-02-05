@@ -114,9 +114,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -238,9 +238,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1583,6 +1583,8 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
+            name="org.eclipse.m2e.pde.feature.feature.group"/>
+        <requirement
             name="org.eclipse.m2e.wtp.feature.feature.group"/>
         <requirement
             name="org.eclipse.m2e.wtp.jaxrs.feature.feature.group"/>
@@ -1619,9 +1621,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1979,6 +1981,8 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
+            name="org.eclipse.m2e.pde.feature.feature.group"/>
+        <requirement
             name="org.eclipse.m2e.wtp.feature.feature.group"/>
         <requirement
             name="org.eclipse.m2e.wtp.jaxrs.feature.feature.group"/>
@@ -2015,9 +2019,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4938,9 +4942,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -5130,9 +5134,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6839,9 +6843,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7091,9 +7095,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7305,9 +7309,9 @@
         <requirement
             name="org.eclipse.wst.server_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7433,9 +7437,9 @@
         <requirement
             name="org.eclipse.wst.server_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8540,9 +8544,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8688,9 +8692,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9835,6 +9839,8 @@
         <requirement
             name="org.eclipse.m2e.lemminx.feature.feature.group"/>
         <requirement
+            name="org.eclipse.m2e.pde.feature.feature.group"/>
+        <requirement
             name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.builds.feature.group"/>
@@ -9885,9 +9891,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -10055,6 +10061,8 @@
         <requirement
             name="org.eclipse.m2e.lemminx.feature.feature.group"/>
         <requirement
+            name="org.eclipse.m2e.pde.feature.feature.group"/>
+        <requirement
             name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.builds.feature.group"/>
@@ -10105,9 +10113,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11695,9 +11703,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11803,9 +11811,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12840,9 +12848,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13016,9 +13024,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14615,6 +14623,8 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
+            name="org.eclipse.m2e.pde.feature.feature.group"/>
+        <requirement
             name="org.eclipse.passage.ldc.feature.feature.group"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
@@ -14627,9 +14637,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14759,6 +14769,8 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
+            name="org.eclipse.m2e.pde.feature.feature.group"/>
+        <requirement
             name="org.eclipse.passage.ldc.feature.feature.group"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
@@ -14771,9 +14783,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16124,13 +16136,13 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2021-03)"
+        label="Latest (2020-12)"
         requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/r/eclipse-ide-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -16139,16 +16151,16 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse for Testers (2021-03)">
+          label="Eclipse for Testers (2020-12)">
         <requirement
             name="epp.package.testing"
-            versionRange="[4.19.0,5.0.0)"/>
+            versionRange="[4.18.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.19.0,5.0.0)"/>
+            versionRange="[4.18.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.19.0,5.0.0)"/>
+            versionRange="[4.18.0,5.0.0)"/>
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
@@ -16156,9 +16168,9 @@
         <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-12/202012101200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2020-12/202012161000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16201,48 +16213,6 @@
             url="http://download.eclipse.org/technology/epp/packages/2020-12/202012101200"/>
         <repository
             url="http://download.eclipse.org/releases/2020-12/202012161000">
-          <annotation
-              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
-        </repository>
-      </setupTask>
-    </version>
-    <version
-        name="2021-03"
-        label="2021-03"
-        requiredJavaVersion="11">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-testers</value>
-        </detail>
-        <detail
-            key="shortcut">
-          <value>Eclipse IDE for Testers - 2021-03</value>
-        </detail>
-      </annotation>
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse for Testers (2021-03)">
-        <requirement
-            name="epp.package.testing"
-            versionRange="[4.19.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.19.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.19.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.epp.mpc.feature.group"/>
-        <requirement
-            name="org.eclipse.jubula.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
-        <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17169,9 +17139,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17325,9 +17295,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18778,9 +18748,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18902,9 +18872,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -20109,9 +20079,9 @@
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -20205,9 +20175,9 @@
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202101141300"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -20946,7 +20916,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.19.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -21014,7 +20984,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.19.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202101151000">
+            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
