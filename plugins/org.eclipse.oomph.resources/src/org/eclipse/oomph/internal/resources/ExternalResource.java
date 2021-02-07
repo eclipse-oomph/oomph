@@ -144,6 +144,11 @@ public abstract class ExternalResource extends PlatformObject implements IResour
     throw new ReadOnlyException();
   }
 
+  public IMarker createMarker(String type, Map<String, Object> attributes) throws CoreException
+  {
+    throw new ReadOnlyException();
+  }
+
   public IResourceProxy createProxy()
   {
     return this;
