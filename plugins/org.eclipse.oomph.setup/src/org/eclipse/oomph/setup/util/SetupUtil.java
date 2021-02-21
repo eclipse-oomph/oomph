@@ -87,6 +87,31 @@ public final class SetupUtil
     return result.toString();
   }
 
+  public static String descape(String string)
+  {
+    return new StringExpander()
+    {
+
+      @Override
+      protected String resolve(String key)
+      {
+        return CONTROL_CHARACTER_VALUES.containsKey(key) ? CONTROL_CHARACTER_VALUES.get(key) : key;
+      }
+
+      @Override
+      protected boolean isUnexpanded(String key)
+      {
+        return !CONTROL_CHARACTER_VALUES.containsKey(key);
+      }
+
+      @Override
+      protected String filter(String value, String filterName)
+      {
+        return value;
+      }
+    }.expandString(string);
+  }
+
   public static Set<String> getResolvingTargetDefinitions(SetupTaskContext context)
   {
     @SuppressWarnings("unchecked")

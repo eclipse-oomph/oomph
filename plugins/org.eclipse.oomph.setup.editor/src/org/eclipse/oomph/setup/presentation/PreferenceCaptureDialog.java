@@ -19,6 +19,8 @@ import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.PreferenceTask;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
+import org.eclipse.oomph.setup.util.SetupUtil;
+import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
@@ -405,7 +407,30 @@ public class PreferenceCaptureDialog extends Dialog
     for (Object object : included)
     {
       PreferenceTask preferenceTask = (PreferenceTask)object;
-      result.put(PreferencesFactory.eINSTANCE.createURI(preferenceTask.getKey()), new Pair<String, String>(null, preferenceTask.getValue()));
+      new StringExpander()
+      {
+        @Override
+        protected String resolve(String key)
+        {
+          return null;
+        }
+
+        @Override
+        protected boolean isUnexpanded(String key)
+        {
+          return false;
+        }
+
+        @Override
+        protected String filter(String value, String filterName)
+        {
+          return null;
+        }
+      };
+
+      String escapedValue = preferenceTask.getValue();
+      String actualValue = SetupUtil.descape(escapedValue);
+      result.put(PreferencesFactory.eINSTANCE.createURI(preferenceTask.getKey()), new Pair<String, String>(null, actualValue));
     }
 
     return result;
