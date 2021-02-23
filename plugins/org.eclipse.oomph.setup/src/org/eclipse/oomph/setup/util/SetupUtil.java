@@ -37,6 +37,27 @@ public final class SetupUtil
 
   private static final Map<EClass, Set<Trigger>> TRIGGERS = Collections.synchronizedMap(new HashMap<EClass, Set<Trigger>>());
 
+  private static final StringExpander UNESCAPE_STRING_EXPANDER = new StringExpander()
+  {
+    @Override
+    protected String resolve(String key)
+    {
+      return CONTROL_CHARACTER_VALUES.containsKey(key) ? CONTROL_CHARACTER_VALUES.get(key) : key;
+    }
+
+    @Override
+    protected boolean isUnexpanded(String key)
+    {
+      return !CONTROL_CHARACTER_VALUES.containsKey(key);
+    }
+
+    @Override
+    protected String filter(String value, String filterName)
+    {
+      return value;
+    }
+  };
+
   public static final String INSTALLER_UPDATE_URL = PropertiesUtil.getProperty(SetupProperties.PROP_INSTALLER_UPDATE_URL, DEFAULT_INSTALLER_UPDATE_URL)
       .replace('\\', '/');
 
@@ -87,29 +108,9 @@ public final class SetupUtil
     return result.toString();
   }
 
-  public static String descape(String string)
+  public static String unescape(String string)
   {
-    return new StringExpander()
-    {
-
-      @Override
-      protected String resolve(String key)
-      {
-        return CONTROL_CHARACTER_VALUES.containsKey(key) ? CONTROL_CHARACTER_VALUES.get(key) : key;
-      }
-
-      @Override
-      protected boolean isUnexpanded(String key)
-      {
-        return !CONTROL_CHARACTER_VALUES.containsKey(key);
-      }
-
-      @Override
-      protected String filter(String value, String filterName)
-      {
-        return value;
-      }
-    }.expandString(string);
+    return UNESCAPE_STRING_EXPANDER.expandString(string);
   }
 
   public static Set<String> getResolvingTargetDefinitions(SetupTaskContext context)
