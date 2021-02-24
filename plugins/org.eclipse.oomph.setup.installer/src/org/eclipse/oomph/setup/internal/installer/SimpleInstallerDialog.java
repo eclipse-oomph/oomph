@@ -507,8 +507,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         switchCatalogIndexItem.setVisible(switchCatalogVisible);
         if (switchCatalogVisible)
         {
-          switchCatalogIndexItem.setToolTipText(
-              NLS.bind(Messages.SimpleInstallerDialog_SwitchCatalogIndex_message, IndexManager.getUnderlyingLocation(indexLocation)));
+          switchCatalogIndexItem
+              .setToolTipText(NLS.bind(Messages.SimpleInstallerDialog_SwitchCatalogIndex_message, IndexManager.getUnderlyingLocation(indexLocation)));
         }
 
         catalogsMenuItem.setVisible(showProductCatalogsItem);
@@ -1266,7 +1266,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       int height = gc.getFontMetrics().getHeight();
       int totalWidth = height * x;
       int totalHeight = height * y;
-      return new Point(totalWidth, totalHeight);
+      Rectangle monitorArea = Display.getCurrent().getPrimaryMonitor().getClientArea();
+      return new Point(Math.min(totalWidth, monitorArea.width / 3), Math.min(totalHeight, 2 * monitorArea.height / 3));
     }
     finally
     {
