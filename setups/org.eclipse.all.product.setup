@@ -45,7 +45,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2</value>
       </detail>
       <detail
           key="shortcut">
@@ -86,7 +86,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.19.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2021-03/202102051000">
+          url="http://download.eclipse.org/releases/2021-03/202102261000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -153,7 +153,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2</value>
       </detail>
       <detail
           key="shortcut">
@@ -194,7 +194,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.19.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2021-03/202102051000">
+          url="http://download.eclipse.org/releases/2021-03/202102261000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>

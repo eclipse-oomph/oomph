@@ -68,7 +68,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -114,9 +114,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -192,7 +192,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -238,9 +238,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1437,7 +1437,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-enterprise-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -1621,9 +1621,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1835,7 +1835,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-enterprise-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-enterprise-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -2019,9 +2019,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -4832,7 +4832,7 @@
       </setupTask>
     </version>
     <description>
-      Tools for developers working with Java and Web applications, including a Java IDE, tools for Web Services, JPA and Data Tools, editors for JavaScript, TypeScript, HTML, CSS, XML, Yaml, Markdown, JavaServer Pages and JavaServer Faces, with Angular and React framework support, Mylyn, Maven and Gradle Integration, a Git client, and more.&lt;br/>
+      Tools for developers working with Java and Web applications, including a Java IDE, tools for JavaScript, TypeScript, JavaServer Pages and Faces, Yaml, Markdown, Web Services, JPA and Data Tools, Maven and Gradle, Git, and more.&lt;br/>
       &lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?classification=WebTools&quot;>here&lt;/a> to file a bug against Eclipse Web Tools Platform.&lt;br/>
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br/>
@@ -4862,7 +4862,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -4942,9 +4942,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -5054,7 +5054,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -5134,9 +5134,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6733,7 +6733,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6843,9 +6843,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6985,7 +6985,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -7095,9 +7095,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7255,13 +7255,13 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2021-03)"
+        label="Latest (2020-12)"
         requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-web-and-javascript-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/r/eclipse-ide-web-and-javascript-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -7270,16 +7270,16 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (2021-03)">
+          label="Eclipse IDE for JavaScript and Web Developers (2020-12)">
         <requirement
             name="epp.package.javascript"
-            versionRange="[4.19.0,5.0.0)"/>
+            versionRange="[4.18.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.19.0,5.0.0)"/>
+            versionRange="[4.18.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.19.0,5.0.0)"/>
+            versionRange="[4.18.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -7309,9 +7309,9 @@
         <requirement
             name="org.eclipse.wst.server_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-12/202012101200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2020-12/202012161000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7376,70 +7376,6 @@
             url="http://download.eclipse.org/technology/epp/packages/2020-12/202012101200"/>
         <repository
             url="http://download.eclipse.org/releases/2020-12/202012161000">
-          <annotation
-              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
-        </repository>
-      </setupTask>
-    </version>
-    <version
-        name="2021-03"
-        label="2021-03"
-        requiredJavaVersion="11">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-web-and-javascript-developers</value>
-        </detail>
-        <detail
-            key="shortcut">
-          <value>Eclipse IDE for Web and JavaScript Developers - 2021-03</value>
-        </detail>
-      </annotation>
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for JavaScript and Web Developers (2021-03)">
-        <requirement
-            name="epp.package.javascript"
-            versionRange="[4.19.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.19.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.19.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.egit.feature.group"/>
-        <requirement
-            name="org.eclipse.egit.gitflow.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.epp.mpc.feature.group"/>
-        <requirement
-            name="org.eclipse.epp.package.common.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.equinox.p2.user.ui.feature.group"/>
-        <requirement
-            name="org.eclipse.help.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.wikitext.editors_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.rse.feature.group"/>
-        <requirement
-            name="org.eclipse.tips.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.tm.terminal.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wst.server_adapters.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.wst.server_ui.feature.feature.group"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
-        <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8486,7 +8422,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -8544,9 +8480,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8634,7 +8570,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -8692,9 +8628,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9795,7 +9731,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9891,9 +9827,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -10017,7 +9953,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -10113,9 +10049,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11665,7 +11601,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -11703,9 +11639,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11773,7 +11709,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -11811,9 +11747,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12776,7 +12712,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -12848,9 +12784,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12952,7 +12888,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -13024,9 +12960,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14579,7 +14515,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14637,9 +14573,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14725,7 +14661,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14783,9 +14719,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17077,7 +17013,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -17139,9 +17075,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17233,7 +17169,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -17295,9 +17231,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18702,7 +18638,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -18748,9 +18684,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18826,7 +18762,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m2/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -18872,9 +18808,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102251200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -20041,13 +19977,13 @@
     </annotation>
     <version
         name="latest"
-        label="Latest (2021-03)"
+        label="Latest (2020-12)"
         requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-rust-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2020-12/r/eclipse-ide-rust-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -20056,16 +19992,16 @@
       </annotation>
       <setupTask
           xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Rust Developers (2021-03)">
+          label="Eclipse IDE for Rust Developers (2020-12)">
         <requirement
             name="epp.package.rust"
-            versionRange="[4.19.0,5.0.0)"/>
+            versionRange="[4.18.0,5.0.0)"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.19.0,5.0.0)"/>
+            versionRange="[4.18.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.19.0,5.0.0)"/>
+            versionRange="[4.18.0,5.0.0)"/>
         <requirement
             name="org.eclipse.corrosion.feature.feature.group"/>
         <requirement
@@ -20079,9 +20015,9 @@
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
+            url="http://download.eclipse.org/technology/epp/packages/2020-12/202012101200"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2020-12/202012161000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -20130,54 +20066,6 @@
             url="http://download.eclipse.org/technology/epp/packages/2020-12/202012101200"/>
         <repository
             url="http://download.eclipse.org/releases/2020-12/202012161000">
-          <annotation
-              source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
-        </repository>
-      </setupTask>
-    </version>
-    <version
-        name="2021-03"
-        label="2021-03"
-        requiredJavaVersion="11">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-        <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2021-03/m1/eclipse-ide-rust-developers</value>
-        </detail>
-        <detail
-            key="shortcut">
-          <value>Eclipse IDE for Rust Developers - 2021-03</value>
-        </detail>
-      </annotation>
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse IDE for Rust Developers (2021-03)">
-        <requirement
-            name="epp.package.rust"
-            versionRange="[4.19.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.platform.feature.group"
-            versionRange="[4.19.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.rcp.feature.group"
-            versionRange="[4.19.0,5.0.0)"/>
-        <requirement
-            name="org.eclipse.corrosion.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.egit.feature.group"/>
-        <requirement
-            name="org.eclipse.egit.gitflow.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.epp.mpc.feature.group"/>
-        <requirement
-            name="org.eclipse.mylyn.wikitext.editors_feature.feature.group"/>
-        <requirement
-            name="org.eclipse.tm.terminal.feature.feature.group"/>
-        <repository
-            url="http://download.eclipse.org/technology/epp/packages/2021-03/202102041200"/>
-        <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -20916,7 +20804,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.19.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -20984,7 +20872,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.19.0,5.0.0)"/>
         <repository
-            url="http://download.eclipse.org/releases/2021-03/202102051000">
+            url="http://download.eclipse.org/releases/2021-03/202102261000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
