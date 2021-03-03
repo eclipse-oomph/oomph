@@ -96,14 +96,14 @@ for f in *.zip *.tar.gz; do
       curl -o $UNNOTARIZED_DMG --write-out '%{http_code}\n' -F sign=true -F source=@$PRODUCTS/eclipse-inst-mac$bitness.tar.gz http://build.eclipse.org:31338/dmg-packager
 
       echo "  Notarizing eclipse-inst-mac$bitness.$TIMESTAMP.dmg"
-      RESPONSE=$(curl -X POST -F file=@$UNNOTARIZED_DMG -F 'options={"primaryBundleId": "app-bundle", "staple": true};type=application/json' http://172.30.206.146:8383/macos-notarization-service/notarize)
+      RESPONSE=$(curl -X POST -F file=@$UNNOTARIZED_DMG -F 'options={"primaryBundleId": "app-bundle", "staple": true};type=application/json' https://cbi.eclipse.org/macos/xcrun/notarize)
       UUID=$(echo $RESPONSE | grep -Po '"uuid"\s*:\s*"\K[^"]+')
       STATUS=$(echo $RESPONSE | grep -Po '"status"\s*:\s*"\K[^"]+')
       echo "  Progress: $RESPONSE"
 
       while [[ $STATUS == 'IN_PROGRESS' ]]; do
         sleep 1m
-        RESPONSE=$(curl -s http://172.30.206.146:8383/macos-notarization-service/$UUID/status)
+        RESPONSE=$(curl -s https://cbi.eclipse.org/macos/xcrun/$UUID/status)
         STATUS=$(echo $RESPONSE | grep -Po '"status"\s*:\s*"\K[^"]+')
         echo "  Progress: $RESPONSE"
       done
@@ -117,7 +117,7 @@ for f in *.zip *.tar.gz; do
 
       echo "  Downloading stapled result"
 
-      curl -JO http://172.30.206.146:8383/macos-notarization-service/$UUID/download
+      curl -JO https://cbi.eclipse.org/macos/xcrun/$UUID/download
 
       echo "  Moving stapled notarized result"
 
@@ -205,14 +205,14 @@ else
       cp -a $f $TMP/$UNNOTARIZED_DMG
       cd $TMP
 
-      RESPONSE=$(curl -X POST -F file=@$UNNOTARIZED_DMG -F 'options={"primaryBundleId": "app-bundle", "staple": true};type=application/json' http://172.30.206.146:8383/macos-notarization-service/notarize)
+      RESPONSE=$(curl -X POST -F file=@$UNNOTARIZED_DMG -F 'options={"primaryBundleId": "app-bundle", "staple": true};type=application/json' https://cbi.eclipse.org/macos/xcrun/notarize)
       UUID=$(echo $RESPONSE | grep -Po '"uuid"\s*:\s*"\K[^"]+')
       STATUS=$(echo $RESPONSE | grep -Po '"status"\s*:\s*"\K[^"]+')
       echo "  Progress: $RESPONSE"
 
       while [[ $STATUS == 'IN_PROGRESS' ]]; do
         sleep 1m
-        RESPONSE=$(curl -s http://172.30.206.146:8383/macos-notarization-service/$UUID/status)
+        RESPONSE=$(curl -s https://cbi.eclipse.org/macos/xcrun/$UUID/status)
         STATUS=$(echo $RESPONSE | grep -Po '"status"\s*:\s*"\K[^"]+')
         echo "  Progress: $RESPONSE"
       done
@@ -227,7 +227,7 @@ else
       else
         mv $UNNOTARIZED_DMG $UNNOTARIZED_DMG.unnotarized
         echo "  Downloading stapled result"
-        curl -JO http://172.30.206.146:8383/macos-notarization-service/$UUID/download
+        curl -JO https://cbi.eclipse.org/macos/xcrun/$UUID/download
         ls -sail
         echo "  Copying stapled notarized result"
         cp -a $UNNOTARIZED_DMG $PRODUCTS/$f
