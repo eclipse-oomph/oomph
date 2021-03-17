@@ -127,7 +127,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final URI ECLIPSE_PROJECT_URI = URI.createURI("http://download.eclipse.org/eclipse/updates");
 
-  private static final URI ECLIPSE_BRANDING_NOTIFICATION_URI = URI.createURI("https://www.eclipse.org/setups/donate/?scope=${scope}&campaign=2020-12");
+  private static final URI ECLIPSE_BRANDING_NOTIFICATION_URI = URI.createURI("https://www.eclipse.org/setups/donate/?scope=${scope}&campaign=2020-03");
 
   private static final String ICON_DEFAULT = ICON_URL_PREFIX + "committers.png";
 
