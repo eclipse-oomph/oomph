@@ -11,7 +11,7 @@
       source="http://www.eclipse.org/oomph/setup/BrandingInfo">
     <detail
         key="notificationURI">
-      <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;campaign=2020-03</value>
+      <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;campaign=2021-03</value>
     </detail>
     <detail
         key="notificationLabel">
