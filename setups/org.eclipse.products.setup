@@ -13444,8 +13444,6 @@
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
-            name="org.eclipse.emf.cdo.epp.feature.group"/>
-        <requirement
             name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
         <requirement
             name="org.eclipse.emf.compare.egit.feature.group"/>
@@ -13532,8 +13530,6 @@
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
-            name="org.eclipse.emf.cdo.epp.feature.group"/>
-        <requirement
             name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
         <requirement
             name="org.eclipse.emf.compare.egit.feature.group"/>
@@ -13619,8 +13615,6 @@
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.cdo.epp.feature.group"/>
         <requirement
             name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
         <requirement
@@ -13711,8 +13705,6 @@
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.cdo.epp.feature.group"/>
         <requirement
             name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
         <requirement
