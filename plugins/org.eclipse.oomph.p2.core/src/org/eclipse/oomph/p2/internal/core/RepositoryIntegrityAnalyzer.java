@@ -116,8 +116,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.math.RoundingMode;
 import java.net.URISyntaxException;
@@ -3828,14 +3830,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       }
     }
 
-    public static final ILicense SUA_10 = load(URI.createURI("https://www.eclipse.org/legal/epl-v10.html"), URI.createURI(
-        "archive:https://git.eclipse.org/c/cbi/org.eclipse.license.git/snapshot/org.eclipse.license-license-1.0.0.v20131003-1638.zip!/org.eclipse.license-license-1.0.0.v20131003-1638/org.eclipse.license/feature.properties"));
+    public static final ILicense SUA_10 = load(URI.createURI("https://www.eclipse.org/legal/epl-v10.html"),
+        URI.createURI("https://raw.githubusercontent.com/eclipse-cbi/epl-license-feature/license-1.0.0.v20131003-1638/org.eclipse.license/feature.properties"));
 
-    public static final ILicense SUA_11 = load(URI.createURI("https://www.eclipse.org/legal/epl-v10.html"), URI.createURI(
-        "archive:https://git.eclipse.org/c/cbi/org.eclipse.license.git/snapshot/org.eclipse.license-license-1.0.1.v20140414-1359.zip!/org.eclipse.license-license-1.0.1.v20140414-1359/org.eclipse.license/feature.properties"));
+    public static final ILicense SUA_11 = load(URI.createURI("https://www.eclipse.org/legal/epl-v10.html"),
+        URI.createURI("https://raw.githubusercontent.com/eclipse-cbi/epl-license-feature/license-1.0.1.v20140414-1359/org.eclipse.license/feature.properties"));
 
     public static final ILicense SUA_20 = load(URI.createURI("https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.html"),
-        URI.createURI("https://git.eclipse.org/c/cbi/org.eclipse.license.git/plain/org.eclipse.license/feature.properties"));
+        URI.createURI("https://raw.githubusercontent.com/eclipse-cbi/epl-license-feature/license-2.0.1.v20180423-1114/org.eclipse.license/feature.properties"));
 
     public static final List<ILicense> SUAS = Collections.unmodifiableList(Arrays.asList(new ILicense[] { SUA_10, SUA_11, SUA_20 }));
 
@@ -4059,7 +4061,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       {
         in = URIConverter.INSTANCE.createInputStream(uri);
         Properties properties = new Properties();
-        properties.load(in);
+        Reader reader = new InputStreamReader(in, "UTF-8");
+        properties.load(reader);
         Object license = properties.get("license");
         return MetadataFactory.createLicense(new java.net.URI(licenseURI.toString()), license.toString());
       }
