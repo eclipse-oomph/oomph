@@ -186,7 +186,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   public static final Adapter RULE_VARIABLE_ADAPTER = new AdapterImpl();
 
-  private static final Pattern FILTER_MEMBER_PATTERN = Pattern.compile("(\\(\\s*)([^~<>=\\(\\)]+)([~<>=\\\\(\\\\)])"); //$NON-NLS-1$
+  private static final Pattern FILTER_MEMBER_PATTERN = Pattern.compile("(\\(\\s*)([^|&!~<>=\\(\\)]+)([~<>=\\\\(\\\\)][^\\)]+\\))"); //$NON-NLS-1$
 
   private static final Map<String, ValueConverter> CONVERTERS = new LinkedHashMap<String, ValueConverter>();
 
