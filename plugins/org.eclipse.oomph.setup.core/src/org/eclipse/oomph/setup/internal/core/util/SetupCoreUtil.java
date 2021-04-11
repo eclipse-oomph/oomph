@@ -599,10 +599,11 @@ public final class SetupCoreUtil
       }
     }
 
-    uriHandlers.add(4, new UserURIHandlerImpl());
-    uriHandlers.add(5, new SelfProductCatalogURIHandlerImpl());
-    uriHandlers.add(6, new PreferencesURIHandlerImpl());
-    uriHandlers.add(7, new ECFURIHandlerImpl(AUTHORIZATION_HANDLER));
+    int insertionPoint = uriHandlers.size() - 1;
+    uriHandlers.add(insertionPoint, new UserURIHandlerImpl());
+    uriHandlers.add(++insertionPoint, new SelfProductCatalogURIHandlerImpl());
+    uriHandlers.add(++insertionPoint, new PreferencesURIHandlerImpl());
+    uriHandlers.add(++insertionPoint, new ECFURIHandlerImpl(AUTHORIZATION_HANDLER));
   }
 
   static void configureRedirections(Map<URI, URI> uriMap)
