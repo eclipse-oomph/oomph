@@ -93,7 +93,7 @@ for f in *.zip *.tar.gz; do
 
       TIMESTAMP=$(date +%s%N)
       UNNOTARIZED_DMG=$PRODUCTS/eclipse-inst-mac$bitness.$TIMESTAMP.dmg
-      curl -o $UNNOTARIZED_DMG --write-out '%{http_code}\n' -F sign=true -F source=@$PRODUCTS/eclipse-inst-mac$bitness.tar.gz http://build.eclipse.org:31338/dmg-packager
+      curl -o $UNNOTARIZED_DMG --write-out '%{http_code}\n' -F sign=true -F source=@$PRODUCTS/eclipse-inst-mac$bitness.tar.gz https://cbi.eclipse.org/macos/packager/dmg/create
 
       echo "  Notarizing eclipse-inst-mac$bitness.$TIMESTAMP.dmg"
       RESPONSE=$(curl -X POST -F file=@$UNNOTARIZED_DMG -F 'options={"primaryBundleId": "app-bundle", "staple": true};type=application/json' https://cbi.eclipse.org/macos/xcrun/notarize)
@@ -129,7 +129,7 @@ for f in *.zip *.tar.gz; do
 
     if [[ "$PACK_AND_SIGN" == true ]]; then
       echo "  Signing eclipse-inst.exe"
-      curl -o signed.exe -F filedata=@eclipse-inst.exe http://build.eclipse.org:31338/winsign.php
+      curl -o signed.exe -F filedata=@eclipse-inst.exe https://cbi.eclipse.org/authenticode/sign
       mv signed.exe eclipse-inst.exe
 
       actualSize=$(wc -c eclipse-inst.exe | cut -f 1 -d ' ')
@@ -169,7 +169,7 @@ for f in *.zip *.tar.gz; do
 
     if [[ "$PACK_AND_SIGN" == true ]]; then
       echo "  Signing $extractor"
-      curl -o $PRODUCTS/$extractor-signed -F filedata=@$PRODUCTS/$extractor http://build.eclipse.org:31338/winsign.php
+      curl -o $PRODUCTS/$extractor-signed -F filedata=@$PRODUCTS/$extractor https://cbi.eclipse.org/authenticode/sign
       cp -a $PRODUCTS/$extractor $WORKSPACE
       mv $PRODUCTS/$extractor-signed $PRODUCTS/$extractor
 

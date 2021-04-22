@@ -100,7 +100,7 @@ elif [[ $file == *.exe ]]; then
     $concatdir/marker.txt > $file-unsigned
 
   echo ""
-  curl -o $file-new -F filedata=@$file-unsigned http://build.eclipse.org:31338/winsign.php
+  curl -o $file-new -F filedata=@$file-unsigned https://cbi.eclipse.org/authenticode/sign 
 
   actualSize=$(wc -c "$file-new" | cut -f 1 -d ' ')
   if [ $actualSize -lt 40000000 ]; then
