@@ -77,16 +77,6 @@
     <description>${scope.project.label}</description>
   </setupTask>
   <setupTask
-      xsi:type="setup:TextModifyTask"
-      excludedTriggers="BOOTSTRAP"
-      url="${git.clone.epp.packages.location|uri}/packages/org.eclipse.epp.package.javascript.tests/.project"
-      encoding="UTF-8">
-    <modification
-        pattern="\t(&lt;nature>org.eclipse.m2e.core.maven2Nature&lt;/nature>)">
-      <substitution>&lt;!-- \1 --></substitution>
-    </modification>
-  </setupTask>
-  <setupTask
       xsi:type="setup.targlets:TargletTask">
     <targlet
         name="${scope.project.label}">
