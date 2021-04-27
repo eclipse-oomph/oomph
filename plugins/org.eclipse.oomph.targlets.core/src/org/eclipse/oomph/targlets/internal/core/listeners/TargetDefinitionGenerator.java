@@ -75,6 +75,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -82,6 +83,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -115,6 +117,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   public static final String ANNOTATION_EXTRA_UNITS = "extraUnits"; //$NON-NLS-1$
 
   public static final String ANNOTATION_SINGLE_LOCATION = "singleLocation"; //$NON-NLS-1$
+
+  public static final String ANNOTATION_SORT_LOCATIONS = "sortLocations"; //$NON-NLS-1$
 
   public static final String ANNOTATION_GENERATE_SERVER_XML = "generateServerXML"; //$NON-NLS-1$
 
@@ -157,8 +161,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     EMap<String, String> details = annotation.getDetails();
 
     String targletName = details.get(ANNOTATION_NAME);
-    final String name = StringUtil.isEmpty(targletName) ? NLS.bind(Messages.TargetDefinitionGenerator_GeneratedFrom_message, targlet.getName())
-        : targletName;
+    final String name = StringUtil.isEmpty(targletName) ? NLS.bind(Messages.TargetDefinitionGenerator_GeneratedFrom_message, targlet.getName()) : targletName;
 
     String location = details.get(ANNOTATION_LOCATION);
     if (StringUtil.isEmpty(location))
@@ -172,6 +175,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     final Set<IVersionedId> extraUnits = getExtraUnits(annotation);
     final List<String> preferredURLs = getPreferredRepositories(annotation);
     final boolean singleLocation = isAnnotationDetail(annotation, ANNOTATION_SINGLE_LOCATION, false);
+    final boolean sortLocations = isAnnotationDetail(annotation, ANNOTATION_SORT_LOCATIONS, false);
     final boolean generateImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_GENERATE_IMPLICIT_UNITS, false);
     final boolean minimizeImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_MINIMIZE_IMPLICIT_UNITS, false);
     final boolean versions = isAnnotationDetail(annotation, ANNOTATION_GENERATE_VERSIONS, false);
@@ -192,7 +196,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     }
 
     final Map<IMetadataRepository, Set<IInstallableUnit>> repositoryIUs = analyzeRepositories(targlet, profile, artificialRoot, metadataRepositories,
-        workspaceIUInfos, extraUnits, preferredURLs, generateImplicitUnits, minimizeImplicitUnits, singleLocation, monitor);
+        workspaceIUInfos, extraUnits, preferredURLs, generateImplicitUnits, minimizeImplicitUnits, singleLocation, sortLocations, monitor);
 
     new FileUpdater()
     {
@@ -228,37 +232,33 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
               + "\" includeMode=\"" + includeMode + "\" includeSource=\"" + includeSource + "\" type=\"InstallableUnit\">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
           builder.append(nl);
 
-          boolean first = true;
-
-          for (Map.Entry<IMetadataRepository, Set<IInstallableUnit>> entry : repositoryIUs.entrySet())
+          // Only one set will be non-empty, but with sorting it might not be the first one.
+          for (Set<IInstallableUnit> set : repositoryIUs.values())
           {
-            IMetadataRepository repository = entry.getKey();
-            Set<IInstallableUnit> set = entry.getValue();
-
-            if (first)
+            if (!set.isEmpty())
             {
               List<IInstallableUnit> list = new ArrayList<IInstallableUnit>(set);
-              if (!list.isEmpty())
+              Collection<String> elements = new LinkedHashSet<String>();
+              Collections.sort(list);
+
+              for (IInstallableUnit iu : list)
               {
-                Collection<String> elements = new LinkedHashSet<String>();
-                Collections.sort(list);
-
-                for (IInstallableUnit iu : list)
-                {
-                  elements.add(formatElement(iu, versions, escaper));
-                }
-
-                for (String element : elements)
-                {
-                  builder.append("      "); //$NON-NLS-1$
-                  builder.append(element);
-                  builder.append(nl);
-                }
-
-                first = false;
+                elements.add(formatElement(iu, versions, escaper));
               }
-            }
 
+              for (String element : elements)
+              {
+                builder.append("      "); //$NON-NLS-1$
+                builder.append(element);
+                builder.append(nl);
+              }
+
+              break;
+            }
+          }
+
+          for (IMetadataRepository repository : repositoryIUs.keySet())
+          {
             builder.append("      <repository "); //$NON-NLS-1$
 
             java.net.URI repositoryLocation = repository.getLocation();
@@ -334,8 +334,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       @Override
       protected void setContents(URI uri, String encoding, String contents) throws IOException
       {
-        monitor.subTask(
-            NLS.bind(Messages.TargetDefinitionGenerator_Updating_task, uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
+        monitor.subTask(NLS.bind(Messages.TargetDefinitionGenerator_Updating_task, uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
         contents = contents.replace("sequenceNumber=\"" + sequenceNumber + "\"", "sequenceNumber=\"" + (sequenceNumber + 1) + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         super.setContents(uri, encoding, contents);
       }
@@ -623,7 +622,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
   private static Map<IMetadataRepository, Set<IInstallableUnit>> analyzeRepositories(Targlet targlet, Profile profile, IInstallableUnit artificialRoot,
       List<IMetadataRepository> metadataRepositories, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, Set<IVersionedId> extraUnits,
-      List<String> preferredURLs, boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, IProgressMonitor monitor)
+      List<String> preferredURLs, boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, boolean sortLocations,
+      IProgressMonitor monitor)
   {
 
     Set<String> workspaceIDs = new HashSet<String>();
@@ -662,7 +662,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
     Map<String, IMetadataRepository> queryables = sortMetadataRepositories(targlet, metadataRepositories, preferredURLs, monitor);
 
-    return assignUnits(queryables, extraUnits, generateImplicitUnits, minimizeImplicitUnits, singleLocation, profileIUs, monitor);
+    return assignUnits(queryables, extraUnits, generateImplicitUnits, minimizeImplicitUnits, singleLocation, sortLocations, profileIUs, monitor);
   }
 
   private static Map<String, IMetadataRepository> sortMetadataRepositories(Targlet targlet, List<IMetadataRepository> metadataRepositories,
@@ -725,9 +725,18 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   }
 
   private static Map<IMetadataRepository, Set<IInstallableUnit>> assignUnits(Map<String, IMetadataRepository> queryables, Set<IVersionedId> extraUnits,
-      boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, Set<IInstallableUnit> resolvedIUs, IProgressMonitor monitor)
+      boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, boolean sortLocations, Set<IInstallableUnit> resolvedIUs,
+      IProgressMonitor monitor)
   {
-    Map<IMetadataRepository, Set<IInstallableUnit>> result = new LinkedHashMap<IMetadataRepository, Set<IInstallableUnit>>();
+    Map<IMetadataRepository, Set<IInstallableUnit>> result = sortLocations
+        ? new TreeMap<IMetadataRepository, Set<IInstallableUnit>>(new Comparator<IMetadataRepository>()
+        {
+          public int compare(IMetadataRepository o1, IMetadataRepository o2)
+          {
+            return o1.getLocation().compareTo(o2.getLocation());
+          }
+        })
+        : new LinkedHashMap<IMetadataRepository, Set<IInstallableUnit>>();
 
     if (singleLocation)
     {

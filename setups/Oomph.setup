@@ -463,6 +463,10 @@
             <value>true</value>
           </detail>
           <detail
+              key="sortLocations">
+            <value>true</value>
+          </detail>
+          <detail
               key="includeAllPlatforms">
             <value>false</value>
           </detail>
