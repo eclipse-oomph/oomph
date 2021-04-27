@@ -1832,11 +1832,13 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       {
         org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository compositeRepository = (org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository)repository;
         org.eclipse.equinox.internal.p2.persistence.CompositeRepositoryState state = compositeRepository.toState();
-        URI[] children = state.getChildren();
+        boolean shouldFailOnChildFailure = shouldFailOnChildFailure(state);
+        int count = 0;
 
         final List<Item> errors = new ArrayList<Item>();
         Set<String> messages = new HashSet<String>();
 
+        URI[] children = state.getChildren();
         for (URI child : children)
         {
           try
@@ -1847,6 +1849,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
             {
               throw new ProvisionException("No repository found at " + absolute + "."); //$NON-NLS-1$ //$NON-NLS-2$
             }
+
+            ++count;
           }
           catch (Exception ex)
           {
@@ -1858,7 +1862,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           }
         }
 
-        if (!errors.isEmpty())
+        if (!errors.isEmpty() && (shouldFailOnChildFailure || count == 0))
         {
           UIUtil.asyncExec(new Runnable()
           {
@@ -1874,6 +1878,22 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
       installableUnits = repository.query(QueryUtil.createIUAnyQuery(), progress.newChild(1));
       analyzeJob.reschedule();
+    }
+
+    @SuppressWarnings("restriction")
+    private boolean shouldFailOnChildFailure(org.eclipse.equinox.internal.p2.persistence.CompositeRepositoryState state)
+    {
+      Map<String, String> repoProperties = state.getProperties();
+      boolean failOnChildFailure = org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository.ATOMIC_LOADING_DEFAULT;
+      if (repoProperties != null)
+      {
+        String value = repoProperties.get(org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository.PROP_ATOMIC_LOADING);
+        if (value != null)
+        {
+          failOnChildFailure = Boolean.parseBoolean(value);
+        }
+      }
+      return failOnChildFailure;
     }
 
     private List<IInstallableUnit> analyzeIUs(String path) throws Exception
