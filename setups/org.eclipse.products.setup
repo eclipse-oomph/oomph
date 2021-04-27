@@ -13452,6 +13452,8 @@
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
+            name="org.eclipse.emf.cdo.epp.feature.group"/>
+        <requirement
             name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
         <requirement
             name="org.eclipse.emf.compare.egit.feature.group"/>
@@ -13538,6 +13540,8 @@
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
+            name="org.eclipse.emf.cdo.epp.feature.group"/>
+        <requirement
             name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
         <requirement
             name="org.eclipse.emf.compare.egit.feature.group"/>
@@ -13623,6 +13627,8 @@
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.cdo.epp.feature.group"/>
         <requirement
             name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
         <requirement
@@ -13713,6 +13719,8 @@
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
+        <requirement
+            name="org.eclipse.emf.cdo.epp.feature.group"/>
         <requirement
             name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
         <requirement
@@ -21703,6 +21711,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Platform - Latest</value>
         </detail>
@@ -21766,6 +21778,10 @@
         requiredJavaVersion="11">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse Platform - 2021-06</value>
