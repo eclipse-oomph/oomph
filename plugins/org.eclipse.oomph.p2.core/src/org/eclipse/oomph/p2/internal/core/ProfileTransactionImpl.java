@@ -608,7 +608,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
             iuDeltas.put(second, CommitContext.DeltaType.ADDITION);
           }
         }
-        else
+        else if (!first.equals(second))
         {
           iuDeltas.put(first, CommitContext.DeltaType.REMOVAL);
           if (second != null)
