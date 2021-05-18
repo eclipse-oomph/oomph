@@ -963,6 +963,7 @@
   <project href="interim/MPC.setup#/"/>
   <project href="http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.git/plain/org.eclipse.mylyn.releng/oomph/Mylyn.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/mwe/master/releng/MWE.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-m2e/m2e-core/master/setup/m2e.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/nebula/master/oomph.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/n4js/master/releng/org.eclipse.n4js.targetplatform/N4JS.setup#/"/>
   <project href="http://git.eclipse.org/c/ocl/org.eclipse.ocl.git/plain/releng/org.eclipse.ocl.oomph/setups/ocl.setup#/"/>
