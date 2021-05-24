@@ -493,15 +493,6 @@
           <repository
               url="http://download.eclipse.org/usssdk/updates/latest"/>
           <repository
-              url="http://download.eclipse.org/jetty/updates/jetty-bundles-9.x/9.4.37.v20210219">
-            <annotation>
-              <detail
-                  key="justification">
-                <value>The usssdk tests depend on a old version of Jetty that it not in the 4.20 version of the platform so we need this until they provide a new build that works with a newer Jetty.</value>
-              </detail>
-            </annotation>
-          </repository>
-          <repository
               url="http://download.eclipse.org/egit/updates"/>
           <repository
               url="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
