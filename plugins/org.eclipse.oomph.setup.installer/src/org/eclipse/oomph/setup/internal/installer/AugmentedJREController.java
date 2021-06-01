@@ -16,20 +16,25 @@ import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREFilter;
 import org.eclipse.oomph.jreinfo.ui.JREController;
 import org.eclipse.oomph.setup.AnnotationConstants;
+import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Installation;
+import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.util.Request.Handler;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.widgets.Label;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * This augments the JRE controller to provide choices of JREs installed from a p2 update site.
@@ -38,6 +43,8 @@ import java.util.LinkedHashSet;
  */
 public class AugmentedJREController extends JREController
 {
+  private static Set<Trigger> BOOSTRAP_ONLY_TRIGGER = new LinkedHashSet<Trigger>(Arrays.asList(new Trigger[] { Trigger.STARTUP, Trigger.MANUAL }));
+
   public AugmentedJREController(Label label, StructuredViewer viewer, Handler downloadHandler)
   {
     super(label, viewer, downloadHandler);
@@ -56,6 +63,8 @@ public class AugmentedJREController extends JREController
   protected void updateSetupContext(SetupContext setupContext, JRE jre)
   {
     Installation installation = setupContext.getInstallation();
+
+    // Remove any JRE-related task that may have been added earlier perhaps for a different JRE.
     EList<SetupTask> setupTasks = installation.getSetupTasks();
     for (SetupTask setupTask : setupTasks)
     {
@@ -71,12 +80,34 @@ public class AugmentedJREController extends JREController
       JRE.Descriptor jreDescriptor = jre.getDescriptor();
       if (jreDescriptor != null)
       {
+        CompoundTask compoundTask = SetupFactory.eINSTANCE.createCompoundTask();
+        compoundTask.setName(jreDescriptor.getLabel());
+        EList<SetupTask> additionalSetupTasks = compoundTask.getSetupTasks();
+
+        // Mark it so it can be removed above.
+        Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_JRE);
+        compoundTask.getAnnotations().add(annotation);
+
         SetupTask setupTask = (SetupTask)jreDescriptor.getData();
         SetupTask setupTaskCopy = EcoreUtil.copy(setupTask);
-        Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_JRE);
-        setupTaskCopy.getAnnotations().add(annotation);
-        setupTaskCopy.setExcludedTriggers(new LinkedHashSet<Trigger>(Arrays.asList(new Trigger[] { Trigger.STARTUP, Trigger.MANUAL })));
-        setupTasks.add(0, setupTaskCopy);
+        setupTaskCopy.setExcludedTriggers(BOOSTRAP_ONLY_TRIGGER);
+        Annotation jreSpecificTasks = setupTaskCopy.getAnnotation(AnnotationConstants.ANNOTATION_JRE_SPECIFIC_TASKS);
+        if (jreSpecificTasks != null)
+        {
+          setupTaskCopy.getAnnotations().remove(jreSpecificTasks);
+          for (EObject eObject : new ArrayList<EObject>(jreSpecificTasks.getContents()))
+          {
+            if (eObject instanceof SetupTask)
+            {
+              SetupTask additionalTask = (SetupTask)eObject;
+              additionalTask.setExcludedTriggers(BOOSTRAP_ONLY_TRIGGER);
+              additionalSetupTasks.add(additionalTask);
+            }
+          }
+        }
+
+        additionalSetupTasks.add(0, setupTaskCopy);
+        setupTasks.add(0, compoundTask);
       }
     }
   }

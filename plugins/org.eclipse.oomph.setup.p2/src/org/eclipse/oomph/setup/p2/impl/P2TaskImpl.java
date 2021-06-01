@@ -551,7 +551,12 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       return super.getOverrideToken();
     }
 
-    return getClass();
+    // This ensures that he p2 tasks with different excluded triggers don't merge early.
+    // In SetupTaskPerformer.getSubstitutions(EList<SetupTask>), this list is modified to ensure that merging happens later.
+    List<Object> token = new ArrayList<Object>();
+    token.add(getClass());
+    token.addAll(getTriggers());
+    return token;
   }
 
   @Override

@@ -2166,6 +2166,18 @@ public class ProductCatalogGenerator implements IApplication
       p2Task.setLabel("JRE " + jreVersion);
       String description = iu.getProperty(IInstallableUnit.PROP_DESCRIPTION, null);
       p2Task.setDescription(description);
+
+      if (osgiVersion.getMajor() >= 16)
+      {
+        Annotation jreSpecifTasks = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_JRE_SPECIFIC_TASKS);
+        EclipseIniTask illegalAccessTask = SetupFactory.eINSTANCE.createEclipseIniTask();
+        illegalAccessTask.setOption("--illegal-access");
+        illegalAccessTask.setValue("=permit");
+        illegalAccessTask.setVm(true);
+        jreSpecifTasks.getContents().add(illegalAccessTask);
+        p2Task.getAnnotations().add(jreSpecifTasks);
+      }
+
       jreMacro.getSetupTasks().add(p2Task);
     }
 

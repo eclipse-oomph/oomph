@@ -518,7 +518,7 @@
           <repository
               url="http://download.eclipse.org/webtools/repository/latest"/>
           <repository
-              url="http://download.eclipse.org/justj/jres/15/updates/release/15.0.2"/>
+              url="http://download.eclipse.org/justj/jres/16/updates/release/16.0.1"/>
         </repositoryList>
         <repositoryList
             name="2021-03">

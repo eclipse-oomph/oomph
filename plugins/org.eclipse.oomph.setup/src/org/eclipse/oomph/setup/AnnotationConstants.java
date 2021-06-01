@@ -85,6 +85,8 @@ public final class AnnotationConstants
 
   public static final String ANNOTATION_JRE = "http://www.eclipse.org/oomph/setup/JRE"; //$NON-NLS-1$
 
+  public static final String ANNOTATION_JRE_SPECIFIC_TASKS = "http://www.eclipse.org/oomph/setup/JRESpecificTasks"; //$NON-NLS-1$
+
   private AnnotationConstants()
   {
   }

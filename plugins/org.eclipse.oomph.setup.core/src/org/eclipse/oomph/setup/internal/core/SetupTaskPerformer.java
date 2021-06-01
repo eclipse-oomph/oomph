@@ -4035,6 +4035,24 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     for (SetupTask setupTask : setupTasks)
     {
       Object overrideToken = setupTask.getOverrideToken();
+      Trigger trigger = getTrigger();
+      if (trigger != null && overrideToken instanceof ArrayList<?>)
+      {
+        // This is primarily for p2 tasks where excluded triggers result in poor merging behavior.
+        // E.g., the p2 task for installing a JRE is set to trigger only for bootstrap.
+        // But this merges with the product's p2 task such that the merged result is only triggered for bootstrap.
+        // The following filtering based on the non-null trigger ensures the p2 tasks merge in the final performer creation, but not before.
+        ArrayList<?> list = (ArrayList<?>)overrideToken;
+        for (Iterator<?> it = list.iterator(); it.hasNext();)
+        {
+          Object item = it.next();
+          if (item instanceof Trigger && item != trigger)
+          {
+            it.remove();
+          }
+        }
+      }
+
       SetupTask overriddenTask = overrides.put(overrideToken, setupTask);
       if (overriddenTask != null)
       {
