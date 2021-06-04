@@ -986,7 +986,7 @@
   <project href="https://git.eclipse.org/c/tea/tea.git/plain/org.eclipse.tea.core_feature/TEA.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/texlipse/master/EclipseTeXlipse.setup#/"/>
   <project href="http://git.eclipse.org/c/tracecompass/org.eclipse.tracecompass.git/plain/TraceCompass.setup#/"/>
-  <project href="https://git.eclipse.org/c/tycho/org.eclipse.tycho.git/plain/setup/Tycho.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse/tycho/master/setup/Tycho.setup#/"/>
   <project href="https://git.eclipse.org/c/uml2/org.eclipse.uml2.git/plain/releng/org.eclipse.uml2.build-feature/UML2.setup#/"/>
   <project href="https://git.eclipse.org/c/usssdk/org.eclipse.usssdk.git/plain/org.eclipse.userstorage.releng/UserStorage.setup#/"/>
   <project href="http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.docs.vex.git/plain/org.eclipse.vex.releng/Vex.setup#/"/>
