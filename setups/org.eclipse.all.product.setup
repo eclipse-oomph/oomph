@@ -86,7 +86,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.20.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2021-06/202106041000">
+          url="http://download.eclipse.org/releases/2021-06/202106041001">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -194,7 +194,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.20.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2021-06/202106041000">
+          url="http://download.eclipse.org/releases/2021-06/202106041001">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
