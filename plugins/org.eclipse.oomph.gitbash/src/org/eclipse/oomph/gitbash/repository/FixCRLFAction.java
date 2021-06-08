@@ -145,7 +145,7 @@ public class FixCRLFAction extends AbstractAction<Repository>
       if (targetRepository != null)
       {
         log("Adding to repository view " + targetRepository.getWorkTree());
-        org.eclipse.egit.core.RepositoryUtil repositoryUtil = org.eclipse.egit.ui.Activator.getDefault().getRepositoryUtil();
+        org.eclipse.egit.core.RepositoryUtil repositoryUtil = org.eclipse.egit.core.RepositoryUtil.getInstance();
         repositoryUtil.addConfiguredRepository(targetRepository.getDirectory());
         targetRepository.close();
       }
