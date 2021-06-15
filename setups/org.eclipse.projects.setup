@@ -658,7 +658,10 @@
             label="Git (read-write)"/>
         <choice
             value="https://${github.user.id|username}@github.com/@{remoteURI}.git"
-            label="HTTPS (read-write)"/>
+            label="HTTPS (read-write)">
+          <annotation
+              source="http://www.eclipse.org/oomph/setup/MatchChoice"/>
+        </choice>
         <choice
             value="https://github.com/@{remoteURI}.git"
             label="HTTPS (read-only, anonymous)"/>

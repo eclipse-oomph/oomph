@@ -46,5 +46,26 @@
       Provides the complete set of modules of the JDK, excluding incubators.
     </description>
   </setupTask>
+  <setupTask
+      xsi:type="setup.p2:P2Task"
+      label="JRE 16.0.1">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/JRESpecificTasks">
+      <content
+          xsi:type="setup:EclipseIniTask"
+          option="--illegal-access"
+          value="=permit"
+          vm="true"/>
+    </annotation>
+    <requirement
+        name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"
+        filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
+    <repository
+        url="http://download.eclipse.org/justj/jres/16/updates/release/16.0.1"/>
+    <description>
+      Contains the plug-ins and fragments for the OpenJDK Hotspot JRE Complete.
+      Provides the complete set of modules of the JDK, excluding incubators.
+    </description>
+  </setupTask>
   <description>The JRE macro provides tasks for installing JREs from JustJ's p2 update sites</description>
 </setup:Macro>
