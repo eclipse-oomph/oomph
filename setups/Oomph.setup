@@ -489,6 +489,38 @@
           </predicate>
         </sourceLocator>
         <repositoryList
+            name="2021-09">
+          <repository
+              url="http://download.eclipse.org/usssdk/updates/latest"/>
+          <repository
+              url="http://download.eclipse.org/egit/updates"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
+          <repository
+              url="http://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
+          <repository
+              url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
+          <repository
+              url="http://download.eclipse.org/tools/orbit/downloads/drops2/R20190602212107/repository">
+            <annotation>
+              <detail
+                  key="justification">
+                <value>This is here because the Mylyn repository is currently inconsistent providing and older version of lucence but requiring a newer one, yet one that isn't in the latest release or orbit either.</value>
+              </detail>
+            </annotation>
+          </repository>
+          <repository
+              url="http://download.eclipse.org/technology/m2e/snapshots"/>
+          <repository
+              url="http://download.eclipse.org/nebula/snapshot"/>
+          <repository
+              url="http://download.eclipse.org/technology/swtbot/snapshots"/>
+          <repository
+              url="http://download.eclipse.org/webtools/repository/latest"/>
+          <repository
+              url="http://download.eclipse.org/justj/jres/16/updates/release/16.0.1"/>
+        </repositoryList>
+        <repositoryList
             name="2021-06">
           <repository
               url="http://download.eclipse.org/usssdk/updates/latest"/>
