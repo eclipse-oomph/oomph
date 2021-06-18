@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.p2.core;
 
+import org.eclipse.oomph.p2.core.CertificateConfirmer.TrustInfoWithPolicy;
 import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Confirmer.Confirmation;
 
@@ -55,7 +56,7 @@ public abstract class DelegatingUIServices extends UIServices
         Confirmation confirmation = unsignedContentConfirmer.confirm(true, unsignedDetail);
         if (!confirmation.isConfirmed())
         {
-          return new TrustInfo(new Certificate[0], false, false);
+          return new TrustInfoWithPolicy(new Certificate[0], false, false, false);
         }
 
         // We've checked trust in unsigned content already; prevent delegate from checking it again.
@@ -71,7 +72,7 @@ public abstract class DelegatingUIServices extends UIServices
       {
         if (certificateConfirmer.isDecline())
         {
-          return new TrustInfo(new Certificate[0], false, false);
+          return new TrustInfoWithPolicy(new Certificate[0], false, false, false);
         }
 
         for (Certificate[] untrustedChain : untrustedChains)
@@ -130,6 +131,6 @@ public abstract class DelegatingUIServices extends UIServices
       }
     }
 
-    return new TrustInfo(trusted.toArray(new Certificate[trusted.size()]), trustInfo.persistTrust(), true);
+    return new TrustInfoWithPolicy(trusted.toArray(new Certificate[trusted.size()]), trustInfo.persistTrust(), true, false);
   }
 }

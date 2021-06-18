@@ -30,6 +30,7 @@ public class CertificateConfirmer
   {
     private final boolean trustAll;
 
+    @SuppressWarnings("deprecation")
     public TrustInfoWithPolicy(Certificate[] trusted, boolean save, boolean trustUnsigned, boolean trustAll)
     {
       super(trusted, save, trustUnsigned);
