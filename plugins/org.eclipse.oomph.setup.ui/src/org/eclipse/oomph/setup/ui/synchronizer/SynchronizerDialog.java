@@ -1290,6 +1290,11 @@ public class SynchronizerDialog extends AbstractSetupDialog
       }
     }
 
+    protected void dispose()
+    {
+      imageDisabled.dispose();
+    }
+
     /**
      * @author Eike Stepper
      */
@@ -1821,6 +1826,16 @@ public class SynchronizerDialog extends AbstractSetupDialog
         Rectangle bounds = taskItem.getBounds(nextColumn);
         tree.redraw(bounds.x, bounds.y, bounds.width, bounds.height, false);
       }
+    }
+
+    @Override
+    public void dispose()
+    {
+      for (Choice choice : choices)
+      {
+        choice.dispose();
+      }
+      super.dispose();
     }
   }
 
