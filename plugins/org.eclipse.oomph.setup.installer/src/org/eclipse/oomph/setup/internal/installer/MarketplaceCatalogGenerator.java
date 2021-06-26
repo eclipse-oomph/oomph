@@ -270,6 +270,7 @@ public class MarketplaceCatalogGenerator implements IApplication
 
       for (URI listingURI : uris)
       {
+        System.out.println("Loading " + listingURI);
         Resource listingResource = resourceSet.getResource(listingURI, true);
         EObject documentRoot = listingResource.getContents().get(0);
         EObject marketplace = documentRoot.eContents().get(0);
@@ -330,7 +331,16 @@ public class MarketplaceCatalogGenerator implements IApplication
         }
       }
 
-      ResourceMirror resourceMirror = new ResourceMirror(resourceSet, 50);
+      ResourceMirror resourceMirror = new ResourceMirror(resourceSet, 50)
+      {
+        @Override
+        protected LoadJob createWorker(URI key, int workerID, boolean secondary)
+        {
+          System.out.println("Loading " + key);
+          return super.createWorker(key, workerID, secondary);
+        }
+      };
+
       resourceMirror.perform(nodeQueryURIs);
       resourceMirror.dispose();
     }
@@ -342,7 +352,7 @@ public class MarketplaceCatalogGenerator implements IApplication
       Set<String> updateURLs = new LinkedHashSet<String>();
       for (URI listingURI : nodeQueryURIs)
       {
-        System.err.println("Loading: " + listingURI);
+        System.out.println("Loading: " + listingURI);
         Resource listingResource = resourceSet.getResource(listingURI, true);
         EList<EObject> contents = listingResource.getContents();
         if (contents.isEmpty())
