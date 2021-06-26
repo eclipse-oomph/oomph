@@ -128,7 +128,10 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
     {
       super.start(context);
 
-      Display.setAppName(PropertiesUtil.getProductName());
+      if (!PropertiesUtil.isProperty(SetupUIPlugin.PREF_HEADLESS) && !SetupUtil.SETUP_ARCHIVER_APPLICATION)
+      {
+        Display.setAppName(PropertiesUtil.getProductName());
+      }
 
       adjustDefaultPasswordProvider();
 
