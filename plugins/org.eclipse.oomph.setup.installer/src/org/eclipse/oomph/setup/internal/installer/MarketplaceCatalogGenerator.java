@@ -75,7 +75,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.p2.core.ProvisionException;
@@ -206,6 +208,11 @@ public class MarketplaceCatalogGenerator implements IApplication
 
       return null;
     }
+    catch (Throwable throwable)
+    {
+      throwable.printStackTrace();
+      throw new RuntimeException(throwable);
+    }
     finally
     {
       Job.getJobManager().join(org.eclipse.equinox.internal.p2.engine.ProfilePreferences.PROFILE_SAVE_JOB_FAMILY, new NullProgressMonitor());
@@ -261,9 +268,7 @@ public class MarketplaceCatalogGenerator implements IApplication
           }
         }
 
-        ResourceMirror resourceMirror = new ResourceMirror(resourceSet, 50);
-        resourceMirror.perform(uris);
-        resourceMirror.dispose();
+        loadResources(uris);
       }
 
       System.out.println("Gathering " + uris.size() + " categories: " + (startListings - startCategories) / 1000);
@@ -331,18 +336,7 @@ public class MarketplaceCatalogGenerator implements IApplication
         }
       }
 
-      ResourceMirror resourceMirror = new ResourceMirror(resourceSet, 50)
-      {
-        @Override
-        protected LoadJob createWorker(URI key, int workerID, boolean secondary)
-        {
-          System.out.println("Loading " + key);
-          return super.createWorker(key, workerID, secondary);
-        }
-      };
-
-      resourceMirror.perform(nodeQueryURIs);
-      resourceMirror.dispose();
+      loadResources(nodeQueryURIs);
     }
 
     long startRepositoryLoads = System.currentTimeMillis();
@@ -804,6 +798,31 @@ public class MarketplaceCatalogGenerator implements IApplication
     test();
     long finishTesting = System.currentTimeMillis();
     System.out.println("Testing : " + (finishTesting - startTesting) / 1000 + " seconds");
+  }
+
+  private void loadResources(Set<URI> uris)
+  {
+    ResourceMirror resourceMirror = new ResourceMirror(resourceSet, 50)
+    {
+      @Override
+      protected LoadJob createWorker(final URI key, int workerID, boolean secondary)
+      {
+        LoadJob result = super.createWorker(key, workerID, secondary);
+        result.addJobChangeListener(new JobChangeAdapter()
+        {
+          @Override
+          public void running(IJobChangeEvent event)
+          {
+            System.out.println("Loading " + key);
+            super.running(event);
+          }
+        });
+        return result;
+      }
+    };
+
+    resourceMirror.perform(uris);
+    resourceMirror.dispose();
   }
 
   private void generateReport() throws Exception
