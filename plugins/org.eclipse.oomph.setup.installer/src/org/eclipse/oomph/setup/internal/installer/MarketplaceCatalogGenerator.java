@@ -144,6 +144,8 @@ public class MarketplaceCatalogGenerator implements IApplication
 
   private IMetadataRepositoryManager manager;
 
+  private long await = 60;
+
   @SuppressWarnings("restriction")
   public Object start(IApplicationContext context) throws Exception
   {
@@ -167,6 +169,10 @@ public class MarketplaceCatalogGenerator implements IApplication
         if ("-listing".equals(option) || "-l".equals(option))
         {
           nodeURIs.put("", URI.createURI(arguments[++i]));
+        }
+        if ("-await".equals(option))
+        {
+          await = Integer.parseInt(arguments[++i]);
         }
       }
     }
@@ -795,6 +801,7 @@ public class MarketplaceCatalogGenerator implements IApplication
 
     long startTesting = System.currentTimeMillis();
     System.out.println("Loaded repositories : " + (startTesting - startRepositoryLoads) / 1000 + " seconds");
+    System.out.println("Start testing for at most " + await + " minutes");
     test();
     long finishTesting = System.currentTimeMillis();
     System.out.println("Testing : " + (finishTesting - startTesting) / 1000 + " seconds");
@@ -833,7 +840,11 @@ public class MarketplaceCatalogGenerator implements IApplication
 
   private void generateMinimizedResult()
   {
+    System.out.println("Generating minimized result from:" + getResolvedResourceURI());
+
     Resource resource = resourceSet.getResource(getResolvedResourceURI(), true);
+
+    System.out.println("Loaded result from:" + getResolvedResourceURI());
 
     Set<EObject> objectsToDelete = new HashSet<EObject>();
     for (Iterator<EObject> it = resource.getAllContents(); it.hasNext();)
@@ -871,6 +882,7 @@ public class MarketplaceCatalogGenerator implements IApplication
 
     try
     {
+      System.out.println("Saving to :" + getResolvedMinimizedResourceURI());
       resource.save(Collections.singletonMap(XMLResource.OPTION_LINE_WIDTH, Integer.MAX_VALUE));
     }
     catch (IOException ex)
@@ -1084,7 +1096,15 @@ public class MarketplaceCatalogGenerator implements IApplication
     }
 
     executor.shutdown();
-    executor.awaitTermination(1, TimeUnit.HOURS);
+    boolean terminated = executor.awaitTermination(await, TimeUnit.MINUTES);
+    if (terminated)
+    {
+      System.out.println("Testing normally.");
+    }
+    else
+    {
+      System.out.println("Testing terminated with a timeout after " + await + " minutes");
+    }
 
     try
     {
