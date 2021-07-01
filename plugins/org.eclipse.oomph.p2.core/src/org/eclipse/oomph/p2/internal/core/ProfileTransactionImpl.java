@@ -31,8 +31,10 @@ import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.Pair;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
+import org.eclipse.oomph.util.ReflectUtil.ReflectionException;
 import org.eclipse.oomph.util.WorkerPool;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -59,7 +61,6 @@ import org.eclipse.equinox.internal.p2.engine.Operand;
 import org.eclipse.equinox.internal.p2.engine.PropertyOperand;
 import org.eclipse.equinox.internal.p2.engine.ProvisioningPlan;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
-import org.eclipse.equinox.internal.p2.touchpoint.natives.BackupStore;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.IBackupStore;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.NativeTouchpoint;
 import org.eclipse.equinox.internal.provisional.p2.core.eventbus.IProvisioningEventBus;
@@ -100,6 +101,7 @@ import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.text.NumberFormat;
@@ -995,6 +997,9 @@ public class ProfileTransactionImpl implements ProfileTransaction
     {
       try
       {
+        final Constructor<?> backStoreConstructor = ReflectUtil.getConstructor(
+            CommonPlugin.loadClass("org.eclipse.equinox.p2.touchpoint.natives", "org.eclipse.equinox.internal.p2.touchpoint.natives.BackupStore"), File.class, //$NON-NLS-1$ //$NON-NLS-2$
+            String.class);
         Location location = Platform.getInstallLocation();
         org.eclipse.emf.common.util.URI installationLocation = org.eclipse.emf.common.util.URI.createURI(FileLocator.resolve(location.getURL()).toString());
         org.eclipse.emf.common.util.URI tempDir = org.eclipse.emf.common.util.URI.createFileURI(PropertiesUtil.getProperty("java.io.tmpdir")); //$NON-NLS-1$
@@ -1007,7 +1012,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
           final IProfile planProfile = provisioningPlan.getProfile();
           backups.put(planProfile, new IBackupStore()
           {
-            private BackupStore delegate;
+            private IBackupStore delegate;
 
             public boolean backup(File file) throws IOException
             {
@@ -1045,7 +1050,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
               {
                 return;
               }
-              delegate = new BackupStore(localTempFolder, NativeTouchpoint.escape(planProfile.getProfileId()));
+              delegate = (IBackupStore)ReflectUtil.newInstance(backStoreConstructor, localTempFolder, NativeTouchpoint.escape(planProfile.getProfileId()));
             }
 
             public String getBackupName()
@@ -1077,6 +1082,14 @@ public class ProfileTransactionImpl implements ProfileTransaction
       catch (IOException ex)
       {
         P2CorePlugin.INSTANCE.coreException(ex);
+      }
+      catch (ReflectionException ex)
+      {
+        //$FALL-THROUGH$
+      }
+      catch (ClassNotFoundException ex)
+      {
+        //$FALL-THROUGH$
       }
     }
   }
