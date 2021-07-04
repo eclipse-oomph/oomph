@@ -360,7 +360,7 @@ public class Installer extends SetupWizard
 
   public void runEventLoop(Shell shell)
   {
-    // Use our own even loop so we can process delayed events.
+    // Use our own event loop so we can process delayed events.
     // This ensures that we do not process delayed events while any other modal dialog is in its own event loop.
     Display display = shell.getDisplay();
     while (!shell.isDisposed())

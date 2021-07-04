@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Ed Merks (Berlin, Germany) and others.
+ * Copyright (c) 2016, 2021 Ed Merks (Berlin, Germany) and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
  * which accompanies this distribution, and is available at
@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Eike Stepper - initial API and implementation
+ *    Hannes Wellmann - Bug 574644: Support direct drag&drop of Auto-Launch-Installer Button
  */
 package org.eclipse.oomph.setup.ui;
 
@@ -56,6 +57,8 @@ import java.util.EventObject;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Ed Merks
@@ -409,9 +412,41 @@ class AddToResourceCommand extends ResourceCommand
 
 class LoadResourceCommand extends ResourceCommand
 {
+  private static final Pattern AUTO_LAUNCHER_WEBSITE = Pattern.compile("^https?://www\\.eclipse\\.org/setups/installer/\\?"); //$NON-NLS-1$
+
+  private static final Pattern SETUP_URL_PARAMETER = Pattern.compile("url=([^&]+)"); //$NON-NLS-1$
+
+  private static URI extractSetupURLIfAutoLauncherURL(URI uri)
+  {
+    if (AUTO_LAUNCHER_WEBSITE.matcher(uri.toString()).find() && uri.hasQuery())
+    {
+      Matcher matcher = SETUP_URL_PARAMETER.matcher(uri.query());
+      if (matcher.find())
+      {
+        String setupURL = matcher.group(1);
+        return URI.createURI(setupURL);
+      }
+    }
+    return uri;
+  }
+
+  private static Collection<?> extractSetupURLsIfAutoLauncherURLs(Collection<?> collection)
+  {
+    if (collection == null)
+    {
+      return collection;
+    }
+    Collection<Object> copy = new ArrayList<Object>(collection.size());
+    for (Object object : collection)
+    {
+      copy.add(object instanceof URI ? extractSetupURLIfAutoLauncherURL((URI)object) : object);
+    }
+    return copy;
+  }
+
   protected LoadResourceCommand(EditingDomain domain, Collection<?> collection)
   {
-    super(domain, collection);
+    super(domain, extractSetupURLsIfAutoLauncherURLs(collection));
   }
 
   @Override
