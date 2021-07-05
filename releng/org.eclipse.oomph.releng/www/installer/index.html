@@ -268,6 +268,8 @@
         updateHref('link-drag-and-drop', url, 'Drag and drop the following link on the installer\'s title area:\n' + url);
         updateHref('link-copy-and-apply', url, 'Click to copy the following link to the system clipboard and apply it to the installer:\n' + url);
         updateHref('link-launch', scheme + ':' + url, 'Click to launch the installer for the following link:\n' + url);
+        updateProjectURL('button-sample-link', 'href', url);
+        updateProjectURLText('button-sample', url);
       }
 
       var os = getOS();
@@ -290,6 +292,24 @@
           expand_collapse('marketplace-section');
         }
       }
+    }
+
+    function updateProjectURL(id, attribute, url) {
+       var e = document.getElementById(id);
+       e.setAttribute(attribute, e.getAttribute(attribute).replace(/PROJECT_URL/g, url));
+    }
+
+    function updateProjectURLText(id, url) {
+       var e = document.getElementById(id);
+       e.innerHTML =  e.innerHTML.replace(/PROJECT_URL/g, url);
+    }
+
+    function updateProjectLabel(label) {
+       var name = label.replace(/ *Development */, '').replace(/ *Environment */, '').replace(/ *Configuration */, '')
+       var e = document.getElementById('button-sample');
+       e.innerHTML =  e.innerHTML.replace(/PROJECT/g, name);
+       var e = document.getElementById('button-sample-link');
+       e.innerHTML =  e.innerHTML.replace(/PROJECT/g, name);
     }
 
     function updateHref(id, url, tooltip) {
@@ -389,6 +409,7 @@
 
             var title= xmlDoc.documentElement.getAttribute('label');
             var body = xmlBody[xmlBody.length - 1].textContent;
+            updateProjectLabel(title)
             updateMarketplace(imageURI, title, body, ' and provision the <b>' + title + '</b>');
           }
         }
@@ -671,7 +692,8 @@ Click the following link button to launch the registered installer<span id="mark
                   <button id="drag-and-drop-installer_arrow" class="orange bb" onclick="expand_collapse('drag-and-drop-installer');">&#x25B7;</button>
                   Install Using Drag and Drop
                 </h3>
-                <p id="drag-and-drop-installer" style="display: none;">
+                <div id="drag-and-drop-installer" style="display: none;">
+                <p>
 If you don't wish to register the Eclipse Installer,
 you can drag the following link button and drop it onto installer's title area:
 <br/>
@@ -693,8 +715,33 @@ Or here in advanced mode:
 <br/>
 Alternatively, you can
 <span class="help-link" onclick="expand_collapse('copy-and-apply-installer', true);">copy and apply<img class="help" src="Help.png"/></span>the link.
-                <hr class="clearer"/>
+<br/>
+<br/>
+<button id="drag-and-drop-installer-button_arrow" class="orange bb" onclick="expand_collapse('drag-and-drop-installer-button');">&#x25B7;</button>
+You can even drag and drop the link for this page directly and the author could provide a styled button for that purpose.
 </p>
+<div id="drag-and-drop-installer-button" style="display:none;">
+<a id="button-sample-link"
+  title="Click to open the Eclipse Installer Auto Launch documentation or drag into your running installer"
+  href="https://www.eclipse.org/setups/installer/?url=PROJECT_URL&show=true">
+    <img 
+      src="https://img.shields.io/static/v1?logo=eclipseide&amp;label=Create%20Development%20Environment&amp;message=PROJECT&amp;style=for-the-badge&amp;logoColor=white&amp;labelColor=darkorange&amp;color=gray"
+      alt="Create Eclipse Development Environment for PROJECT"/>
+</a>
+<br/>
+<br/>
+<pre id="button-sample" style="font-size: 60%;">
+&lt;a 
+  title="Click to open the Eclipse Installer Auto Launch documentation or drag into your running installer"
+  href="https://www.eclipse.org/setups/installer/?url=PROJECT_URL&amp;show=true">
+    &lt;img 
+      src="https://img.shields.io/static/v1?logo=eclipseide&amp;label=Create%20Development%20Environment&amp;message=PROJECT&amp;style=for-the-badge&amp;logoColor=white&amp;labelColor=darkorange&amp;color=gray"
+      alt="Create Eclipse Development Environment for PROJECT"/>
+&lt;/a>
+</pre>
+</div>
+</div>
+                <hr class="clearer"/>
 
                 <h3 class="url-required section-header">
                   <button id="copy-and-apply-installer_arrow" class="orange bb" onclick="expand_collapse('copy-and-apply-installer');">&#x25B7;</button>
