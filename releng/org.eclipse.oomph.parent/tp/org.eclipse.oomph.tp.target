@@ -23,7 +23,7 @@
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
       <repository location="http://download.eclipse.org/eclipse/updates/4.21-I-builds"/>
       <repository location="http://download.eclipse.org/egit/updates"/>
-      <repository location="http://download.eclipse.org/justj/jres/16/updates/release/16.0.1"/>
+      <repository location="http://download.eclipse.org/justj/jres/16/updates/release/16.0.2"/>
       <repository location="http://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
       <repository location="http://download.eclipse.org/mylyn/snapshots/weekly"/>
       <repository location="http://download.eclipse.org/nebula/snapshot"/>

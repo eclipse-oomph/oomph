@@ -137,10 +137,27 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final String ECLIPSE_PLATFORM_SDK_PRODUCT_ID = "eclipse.platform.sdk";
 
-  private static final List<String> PRODUCT_IDS = Arrays.asList(new String[] { "epp.package.java", "epp.package.jee", "epp.package.cpp", "epp.package.embedcpp",
-      "epp.package.javascript", "epp.package.php", "epp.package.committers", "epp.package.dsl", "epp.package.modeling", "epp.package.rcp",
-      "epp.package.testing", "epp.package.parallel", "epp.package.scout", "epp.package.rust", "org.eclipse.platform.ide", ECLIPSE_PLATFORM_SDK_PRODUCT_IDE_ID,
-      "epp.package.reporting", "epp.package.android", "epp.package.automotive" });
+  private static final List<String> PRODUCT_IDS = Arrays.asList(new String[] { //
+      "epp.package.java", //
+      "epp.package.jee", //
+      "epp.package.cpp", //
+      "epp.package.embedcpp", //
+      "epp.package.php", //
+      "epp.package.committers", //
+      "epp.package.dsl", //
+      "epp.package.rcp", //
+      "epp.package.modeling", //
+      "epp.package.parallel", //
+      "epp.package.scout", //
+      "epp.package.javascript", //
+      "epp.package.testing", //
+      "epp.package.rust", //
+      "org.eclipse.platform.ide", //
+      ECLIPSE_PLATFORM_SDK_PRODUCT_IDE_ID, //
+      "epp.package.reporting", //
+      "epp.package.android", //
+      "epp.package.automotive" //
+  });
 
   private static final String ALL_PRODUCT_ID = "all";
 
