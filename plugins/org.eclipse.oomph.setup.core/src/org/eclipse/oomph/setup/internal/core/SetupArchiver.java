@@ -591,7 +591,7 @@ public class SetupArchiver implements IApplication
 
   private void resolveAll(EList<EObject> references, boolean recursive)
   {
-    for (Iterator<EObject> it2 = references.iterator(), it3 = ((InternalEList<EObject>)references).basicIterator(); it2.hasNext();)
+    for (Iterator<EObject> it2 = references.iterator(), it3 = ((InternalEList<EObject>)references).basicIterator(); it3.hasNext();)
     {
       EObject reference = it3.next();
       try
