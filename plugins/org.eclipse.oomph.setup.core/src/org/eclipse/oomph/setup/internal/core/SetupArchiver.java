@@ -19,15 +19,17 @@ import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIHandler;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.FeatureMap;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xml.type.AnyType;
 
@@ -285,7 +287,23 @@ public class SetupArchiver implements IApplication
 
     resourceMirror.perform(uris);
     resourceMirror.dispose();
-    EcoreUtil.resolveAll(resourceSet);
+    List<Resource> resources = resourceSet.getResources();
+    for (int i = 0; i < resources.size(); ++i)
+    {
+      for (EObject eObject : resources.get(i).getContents())
+      {
+        try
+        {
+          eObject.eContainer();
+        }
+        catch (RuntimeException ex)
+        {
+          System.err.println("Unresolved proxy " + ((InternalEObject)eObject).eInternalContainer()); //$NON-NLS-1$
+        }
+
+        resolveAll(eObject);
+      }
+    }
 
     ECFURIHandlerImpl.clearExpectedETags();
 
@@ -563,5 +581,31 @@ public class SetupArchiver implements IApplication
 
   public void stop()
   {
+  }
+
+  private void resolveAll(EObject eObject)
+  {
+    resolveAll(eObject.eCrossReferences(), false);
+    resolveAll(eObject.eContents(), true);
+  }
+
+  private void resolveAll(EList<EObject> references, boolean recursive)
+  {
+    for (Iterator<EObject> it2 = references.iterator(), it3 = ((InternalEList<EObject>)references).basicIterator(); it2.hasNext();)
+    {
+      EObject reference = it3.next();
+      try
+      {
+        EObject resolvedReference = it2.next();
+        if (recursive)
+        {
+          resolveAll(resolvedReference);
+        }
+      }
+      catch (RuntimeException ex)
+      {
+        System.err.println("Unresolved proxy " + reference); //$NON-NLS-1$
+      }
+    }
   }
 }
