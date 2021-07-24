@@ -974,7 +974,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       {
         public PreferenceHandler create(URI key)
         {
-          return new XMLPreferenceHandler(key, "template", new String[] { "id" }, null); //$NON-NLS-1$ //$NON-NLS-2$
+          return new XMLPreferenceHandler(key, "template", new String[] { "name" }, null); //$NON-NLS-1$ //$NON-NLS-2$
         }
       });
 
