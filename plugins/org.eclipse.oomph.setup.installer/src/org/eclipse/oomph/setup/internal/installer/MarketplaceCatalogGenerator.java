@@ -1074,13 +1074,14 @@ public class MarketplaceCatalogGenerator implements IApplication
                 Resolution resolution = (Resolution)setupTaskPerformer.get(Resolution.class);
                 if (resolution == bogus)
                 {
-                  System.err.println("###");
+                  System.err.println("No resolution");
                 }
 
                 IQueryable<IInstallableUnit> futureState = resolution.getProvisioningPlan().getFutureState();
                 IQueryResult<IInstallableUnit> query = futureState.query(QueryUtil.createIUQuery("org.eclipse.platform"), null);
                 IInstallableUnit platformIU = query.iterator().next();
                 BaseUtil.setAnnotation(stream, "Resolved", platformIU.getId(), platformIU.getVersion().toString());
+                resolution.getProfileTransaction().getProfile().delete(true);
               }
             }
             catch (Exception ex)
@@ -1099,7 +1100,7 @@ public class MarketplaceCatalogGenerator implements IApplication
     boolean terminated = executor.awaitTermination(await, TimeUnit.MINUTES);
     if (terminated)
     {
-      System.out.println("Testing normally.");
+      System.out.println("Testing terminated normally.");
     }
     else
     {
