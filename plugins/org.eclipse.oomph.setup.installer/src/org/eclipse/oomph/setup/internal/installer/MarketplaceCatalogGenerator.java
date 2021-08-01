@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.p2.P2Factory;
@@ -914,6 +915,17 @@ public class MarketplaceCatalogGenerator implements IApplication
     }
   }
 
+  private void ensureEntryDataExists(ModelElement element)
+  {
+    if (element != null)
+    {
+      for (Annotation annotation : element.getAnnotations())
+      {
+        annotation.getDetails().get(null);
+      }
+    }
+  }
+
   private void test() throws Exception
   {
     final File installationLocationRoot = new File(outputLocation, "installation-test");
@@ -929,9 +941,13 @@ public class MarketplaceCatalogGenerator implements IApplication
 
     Resource productCatalogResource = resourceSet.getResource(URI.createURI("index:/org.eclipse.products.setup"), true);
     Product platformIDEProduct = (Product)productCatalogResource.getEObject("//@products[name='org.eclipse.platform.ide']");
+    ensureEntryDataExists(platformIDEProduct);
+    ensureEntryDataExists(platformIDEProduct.getParentScope());
+    ensureEntryDataExists(platformIDEProduct.getParentScope().getParentScope());
     final Map<String, ProductVersion> productVersions = new LinkedHashMap<String, ProductVersion>();
     for (ProductVersion productVersion : platformIDEProduct.getVersions())
     {
+      ensureEntryDataExists(productVersion);
       productVersions.put(productVersion.getName(), productVersion);
     }
 
