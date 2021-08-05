@@ -951,7 +951,8 @@ public class MarketplaceCatalogGenerator implements IApplication
       productVersions.put(productVersion.getName(), productVersion);
     }
 
-    ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    int count = Integer.parseInt(System.getProperty("oomph.mpc.thread.pool.size", Integer.toString(Runtime.getRuntime().availableProcessors())));
+    ExecutorService executor = Executors.newFixedThreadPool(count);
 
     for (final Project project : projectCatalog.getProjects())
     {
