@@ -951,7 +951,7 @@ public class MarketplaceCatalogGenerator implements IApplication
       productVersions.put(productVersion.getName(), productVersion);
     }
 
-    ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4);
+    ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     for (final Project project : projectCatalog.getProjects())
     {
