@@ -150,6 +150,24 @@ public class MarketplaceCatalogGenerator implements IApplication
   @SuppressWarnings("restriction")
   public Object start(IApplicationContext context) throws Exception
   {
+    Job.getJobManager().addJobChangeListener(new JobChangeAdapter()
+    {
+      @Override
+      public void done(IJobChangeEvent event)
+      {
+        Job job = event.getJob();
+        if (job.getClass().getName().equals("org.eclipse.equinox.internal.p2.director.Projector$ExplanationJob"))
+        {
+          Object projector = ReflectUtil.getValue("this$0", job);
+          Object dependencyHelper = ReflectUtil.getValue("dependencyHelper", projector);
+          Object explainer = ReflectUtil.getValue("solver", dependencyHelper);
+          Object adapter = ReflectUtil.getValue("solver", explainer);
+          Object decorator = ReflectUtil.getValue("solver", adapter);
+          ReflectUtil.invokeMethod("reset", decorator);
+        }
+      }
+    });
+
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
     Map<String, URI> nodeURIs = new LinkedHashMap<String, URI>();
     outputLocation = File.createTempFile("marketplace", "-report");
