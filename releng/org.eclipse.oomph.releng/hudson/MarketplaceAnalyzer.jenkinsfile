@@ -1,0 +1,118 @@
+pipeline {
+  agent { label 'basic-16gb' }
+
+  tools {
+      jdk 'adoptopenjdk-hotspot-jdk11-latest'
+  }
+
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '10'))
+    disableConcurrentBuilds()
+    timeout(time: 5, unit: 'HOURS')
+    skipDefaultCheckout()
+  }
+  
+   parameters {
+    booleanParam(
+      name: 'PROMOTE',
+      defaultValue: false,
+      description: '''
+        Whether the results of the build should be promoted and made public under
+        <a href="https://www.eclipse.org/setups/marketplace-listings/marketplace.eclipse.org.setup">marketplace.eclipse.org.setup</a>.
+      '''
+    )
+  }
+
+  stages {
+      stage('Display Parameters') {
+      steps {
+        echo "PROMOTE=${params.PROMOTE}"
+        script {
+          env.PROMOTE = params.PROMOTE
+        }
+      }
+    }
+
+    stage('Analyzer') {
+      steps {
+        sshagent(['projects-storage.eclipse.org-bot-ssh']) {
+          sh '''
+            which java
+
+            set -o pipefail
+            LOGIN="genie.oomph@projects-storage.eclipse.org"
+            OOMPH_DIR="/home/data/httpd/download.eclipse.org/oomph"
+
+            scp ${LOGIN}:${OOMPH_DIR}/products/latest/eclipse-inst-linux64.tar.gz .
+            tar -xf eclipse-inst-linux64.tar.gz
+
+            OUTPUT="report"
+
+            which java
+
+            eclipse-installer/eclipse-inst \
+              -application org.eclipse.oomph.setup.installer.MarketplaceCatalogGenerator \
+              -consoleLog \
+              -noSplash \
+              -o ${OUTPUT} \
+              -await 180 \
+              -vmargs \
+                -Dfile.encoding=UTF-8 \
+                -Dorg.eclipse.emf.ecore.plugin.EcorePlugin.doNotLoadResourcesPlugin=true \
+                -Dheadless.startup=true \
+                -Doomph.setup.ecf.connect.timeout=120000 \
+                -Doomph.setup.ecf.read.timeout=120000 \
+                -Doomph.p2.repository.retry=0 \
+                -Declipse.p2.mirrors=false \
+                -Declipse.p2.unsignedPolicy=allow \
+                -Doomph.p2.flush=false \
+                -Doomph.p2.repository.fail.permanently=true \
+                -Dcom.sun.net.ssl.checkRevocation=false \
+                -Dsun.zip.disableMemoryMapping=true \
+                -Xmx14G \
+                -Duser.home=$(pwd) \
+                -Dorg.eclipse.ecf.provider.filetransfer.httpclient.browse.connectTimeout=60000 \
+                -Dorg.eclipse.ecf.provider.filetransfer.httpclient.retrieve.connectTimeout=60000 \
+                -Dorg.eclipse.ecf.provider.filetransfer.httpclient.retrieve.readTimeout=60000 \
+                -Dorg.eclipse.ecf.provider.filetransfer.httpclient4.browse.connectTimeout=60000 \
+                -Dorg.eclipse.ecf.provider.filetransfer.httpclient4.retrieve.connectTimeout=60000 \
+                -Dorg.eclipse.ecf.provider.filetransfer.httpclient4.retrieve.readTimeout=60000 \
+	            -Dcom.sun.management.jmxremote \
+	            -Dcom.sun.management.jmxremote.authenticate=false \
+	            -Dcom.sun.management.jmxremote.ssl=false \
+	            -Dcom.sun.management.jmxremote.local.only=false \
+	            -Dcom.sun.management.jmxremote.port=4711 \
+	            -Dcom.sun.management.jmxremote.rmi.port=4711 \
+	            -Djava.rmi.server.hostname=127.0.0.1 \
+              2>&1 | tee log
+
+            ls -al report/
+
+            if [[ ${PROMOTE} == "true" ]]; then
+              echo "Promoting"
+              PUBLISH_ARGUMENT="${OOMPH_DIR}/www/marketplace-listings"
+              ssh ${LOGIN} "mkdir -p ${PUBLISH_ARGUMENT}"
+              scp report/resolved-minimized.setup ${LOGIN}:${PUBLISH_ARGUMENT}/marketplace.eclipse.org.setup
+            fi
+          '''
+        }
+      }
+    }
+  }
+
+  post {
+    failure {
+      mail to: 'ed.merks@gmail.com',
+      subject: "[Oomph CI] Build Failure ${currentBuild.fullDisplayName}",
+      mimeType: 'text/html',
+      body: "Project: ${env.JOB_NAME}<br/>Build Number: ${env.BUILD_NUMBER}<br/>Build URL: <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a>"
+    }
+
+    fixed {
+      mail to: 'ed.merks@gmail.com',
+      subject: "[Oomph CI] Back to normal ${currentBuild.fullDisplayName}",
+      mimeType: 'text/html',
+      body: "Project: ${env.JOB_NAME}<br/>Build Number: ${env.BUILD_NUMBER}<br/>Build URL: <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a>"
+    }
+  }
+}
