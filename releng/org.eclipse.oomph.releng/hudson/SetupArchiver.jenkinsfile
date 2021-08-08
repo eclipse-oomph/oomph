@@ -1,0 +1,124 @@
+pipeline {
+  agent any
+
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '20'))
+    disableConcurrentBuilds()
+    timeout(time: 10, unit: 'MINUTES')
+  }
+
+  stages {
+    stage('Archiver') {
+      steps {
+        sshagent(['projects-storage.eclipse.org-bot-ssh']) {
+          sh '''
+            set -o pipefail
+            LOGIN="genie.oomph@projects-storage.eclipse.org"
+            OOMPH_DIR="/home/data/httpd/download.eclipse.org/oomph"
+            ARCHIVE_NAME="setups.zip"
+            ARCHIVE_LOCATION=${OOMPH_DIR}/www/${ARCHIVE_NAME}
+            #ARCHIVE_LOCATION=${OOMPH_DIR}/archive/${ARCHIVE_NAME}
+            if ssh ${LOGIN} "test -f ${ARCHIVE_LOCATION}" 2> ssh.errors; then
+              scp ${LOGIN}:${ARCHIVE_LOCATION} ${ARCHIVE_NAME}
+              mkdir -p setups-old
+              cd setups-old
+              unzip -q ../${ARCHIVE_NAME}
+              cd -
+            elif [[ $(stat -c "%s" ssh.errors) == 0 ]]; then 
+              echo "${ARCHIVE_LOCATION} does not exist yet."
+            else
+              echo "ssh failure"
+              cat ssh.errors
+              exit
+            fi
+
+            scp ${LOGIN}:${OOMPH_DIR}/products/latest/eclipse-inst-jre-linux64.tar.gz .
+            tar -xf eclipse-inst-jre-linux64.tar.gz
+
+            eclipse-installer/eclipse-inst \
+              -application org.eclipse.oomph.setup.core.SetupArchiver \
+              -consoleLog \
+              -noSplash \
+              -target \
+              ${WORKSPACE}/${ARCHIVE_NAME} \
+              -vmargs \
+                -Dfile.encoding=UTF-8 \
+                -Doomph.setup.ecf.trace=false 2>&1 | tee log
+
+            if  ! grep "FAILED" log > changes; then
+              echo "NO FAILURES" >> changes
+            fi
+
+            if ! grep "CHANGED" log >> changes; then
+              echo "UNCHANGED" >> changes
+            fi
+
+            if [[ -e setups-old ]]; then
+              mkdir -p setups-new
+              cd setups-new
+              unzip -q ../${ARCHIVE_NAME}
+
+              cd -
+              if ! diff -arq setups-old setups-new; then
+                diff -ar setups-old setups-new >> changes || true
+                echo "The contents have changed"
+              else
+                echo "The contents are unchanged"
+                exit
+              fi
+            fi
+
+            mv changes changes.old
+            echo "PROMOTING changes to ${ARCHIVE_LOCATION}" > changes
+            cat changes.old >> changes
+            scp ${WORKSPACE}/${ARCHIVE_NAME} ${LOGIN}:${ARCHIVE_LOCATION}.new
+            # Ensure that this update is atomic.
+            ssh ${LOGIN} "
+              mv ${ARCHIVE_LOCATION}.new ${ARCHIVE_LOCATION};
+              cd $(dirname ${ARCHIVE_LOCATION});
+              rm -rf setups-new setups-old;
+              mkdir setups-new;
+              cd setups-new;
+              unzip -q ${ARCHIVE_LOCATION};
+              cd ..;
+              if [[  -e setups ]]; then
+                mv setups setups-old;
+              fi
+              mv setups-new setups;
+              if [[  -e setups-old ]]; then
+                rm -rf setups-old;
+              fi
+            "
+          '''
+        }
+        script {
+          if (sh(returnStdout: true, script:'cat changes').contains("PROMOTING")) {
+            currentBuild.setKeepLog(true);
+          } else {
+            currentBuild.setKeepLog(false);
+          }
+          env.BUILD_DESCRIPTION = sh(returnStdout: true, script: '''
+            sed "s#\\(https?:[^\\"' ]*\\)#<a href='\\1'>\\1</a>#g; s/&/\\&amp;/g; s/</\\&lt;/g; s/>/\\&gt;/g;" < changes | sed -z "s/\\n/<br>\\n/g"
+            ''').trim()
+        }
+        buildDescription "${BUILD_DESCRIPTION}"
+      }
+    }
+  }
+
+  post {
+    failure {
+      mail to: 'ed.merks@gmail.com',
+      subject: "[Oomph CI] Build Failure ${currentBuild.fullDisplayName}",
+      mimeType: 'text/html',
+      body: "Project: ${env.JOB_NAME}<br/>Build Number: ${env.BUILD_NUMBER}<br/>Build URL: ${env.BUILD_URL}<br/>Console: ${env.BUILD_URL}/console"
+    }
+
+    fixed {
+      mail to: 'ed.merks@gmail.com',
+      subject: "[Oomph CI] Back to normal ${currentBuild.fullDisplayName}",
+      mimeType: 'text/html',
+      body: "Project: ${env.JOB_NAME}<br/>Build Number: ${env.BUILD_NUMBER}<br/>Build URL: ${env.BUILD_URL}<br/>Console: ${env.BUILD_URL}/console"
+    }
+  }
+}
