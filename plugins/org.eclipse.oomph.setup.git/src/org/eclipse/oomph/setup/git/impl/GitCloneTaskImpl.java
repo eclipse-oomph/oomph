@@ -47,6 +47,7 @@ import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.egit.core.EclipseGitProgressTransformer;
+import org.eclipse.egit.core.RepositoryUtil;
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
@@ -73,7 +74,6 @@ import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -286,8 +286,6 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   private Git cachedGit;
 
   private Repository cachedRepository;
-
-  private Object repositoryUtil;
 
   private boolean bypassCloning;
 
@@ -774,6 +772,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     // Also use this as an opportunity to initialize the timeout based on EGit preferences
     try
     {
+      repositories = new HashSet<String>(RepositoryUtil.getInstance().getConfiguredRepositories());
+
       // Maybe the preference will be moved to the core...
       IEclipsePreferences egitCorePreferences = InstanceScope.INSTANCE.getNode("org.eclipse.egit.core"); //$NON-NLS-1$
       IEclipsePreferences egitCoreDefaultPreferences = DefaultScope.INSTANCE.getNode("org.eclipse.egit.core"); //$NON-NLS-1$
@@ -781,11 +781,6 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
       Class<?> egitUIActivatorClass = CommonPlugin.loadClass("org.eclipse.egit.ui", "org.eclipse.egit.ui.Activator"); //$NON-NLS-1$ //$NON-NLS-2$
       Object egitUIActivator = ReflectUtil.invokeMethod("getDefault", egitUIActivatorClass); //$NON-NLS-1$
-      repositoryUtil = ReflectUtil.invokeMethod("getRepositoryUtil", egitUIActivator); //$NON-NLS-1$
-
-      @SuppressWarnings("unchecked")
-      List<String> configuredRepositories = (List<String>)ReflectUtil.invokeMethod("getConfiguredRepositories", repositoryUtil); //$NON-NLS-1$
-      repositories = new HashSet<String>(configuredRepositories);
 
       if (timeout == 0)
       {
@@ -934,19 +929,8 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
           }
         }
 
-        if (repositoryUtil != null)
-        {
-          try
-          {
-            // Add the clone to the Git repositories view.
-            Method addConfiguredRepositoryMethod = ReflectUtil.getMethod(repositoryUtil.getClass(), "addConfiguredRepository", File.class); //$NON-NLS-1$
-            ReflectUtil.invokeMethod(addConfiguredRepositoryMethod, repositoryUtil, new File(workDir, ".git")); //$NON-NLS-1$
-          }
-          catch (Throwable ex)
-          {
-            // Ignore.
-          }
-        }
+        // Add the clone to the Git repositories view.
+        RepositoryUtil.getInstance().addConfiguredRepository(new File(workDir, ".git")); //$NON-NLS-1$
       }
       finally
       {
