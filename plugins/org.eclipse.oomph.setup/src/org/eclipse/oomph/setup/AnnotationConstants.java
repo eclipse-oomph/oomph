@@ -25,6 +25,8 @@ public final class AnnotationConstants
 
   public static final String KEY_SITE_URI = "siteURI"; //$NON-NLS-1$
 
+  public static final String KEY_BADGE_LABEL = "badgeLabel"; //$NON-NLS-1$
+
   public static final String KEY_STATUS = "status"; //$NON-NLS-1$
 
   public static final String KEY_INCUBATING = "incubating"; //$NON-NLS-1$

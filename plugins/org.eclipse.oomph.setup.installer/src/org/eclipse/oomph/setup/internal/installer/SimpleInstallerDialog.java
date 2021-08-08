@@ -1441,7 +1441,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     protected void handleWidgetSelected()
     {
       String resolvedURI = uri.toString().replace("${installer.version}", URI.encodeQuery(SelfUpdate.getProductVersion(), true)).replace("${scope}", //$NON-NLS-1$ //$NON-NLS-2$
-          URI.encodeQuery(StringUtil.safe(scopeLabel).replace("+", "%2B"), false)); //$NON-NLS-1$ //$NON-NLS-2$
+          URI.encodeQuery(StringUtil.safe(scopeLabel), false).replace("+", "%2B").replace("&", "%26")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
       OS.INSTANCE.openSystemBrowser(resolvedURI);
       update(getURI(), getText(), getToolTipText(), AnimationStyle.NONE, false, buttonColor, scopeLabel);
     }

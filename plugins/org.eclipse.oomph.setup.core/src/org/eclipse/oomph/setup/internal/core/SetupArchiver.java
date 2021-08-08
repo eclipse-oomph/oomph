@@ -10,7 +10,13 @@
  */
 package org.eclipse.oomph.setup.internal.core;
 
+import org.eclipse.oomph.base.util.BaseUtil;
+import org.eclipse.oomph.base.util.BytesResourceFactoryImpl;
 import org.eclipse.oomph.base.util.EAnnotations;
+import org.eclipse.oomph.setup.AnnotationConstants;
+import org.eclipse.oomph.setup.Configuration;
+import org.eclipse.oomph.setup.Stream;
+import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl.CacheHandling;
 import org.eclipse.oomph.setup.internal.core.util.ResourceMirror;
@@ -18,9 +24,11 @@ import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -28,6 +36,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.URIHandler;
+import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -53,6 +63,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -69,7 +82,25 @@ public class SetupArchiver implements IApplication
     final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
     final URIConverter uriConverter = resourceSet.getURIConverter();
 
-    for (ListIterator<URIHandler> it = uriConverter.getURIHandlers().listIterator(); it.hasNext();)
+    final Map<URI, URI> configurationImages = new ConcurrentHashMap<URI, URI>();
+
+    EList<URIHandler> uriHandlers = uriConverter.getURIHandlers();
+    uriHandlers.add(0, new URIHandlerImpl()
+    {
+      @Override
+      public boolean canHandle(URI uri)
+      {
+        return configurationImages.containsKey(uri);
+      }
+
+      @Override
+      public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
+      {
+        return super.createInputStream(configurationImages.get(uri), options);
+      }
+    });
+
+    for (ListIterator<URIHandler> it = uriHandlers.listIterator(); it.hasNext();)
     {
       // Create a delegating handling for ECFURIHandler...
       // The GITC is serving bytes that randomly have trailing garbage.
@@ -262,6 +293,7 @@ public class SetupArchiver implements IApplication
     }
 
     resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_IGNORE);
+    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("svg", new BytesResourceFactoryImpl()); //$NON-NLS-1$
 
     ResourceMirror resourceMirror = new ResourceMirror.WithProductImages(resourceSet)
     {
@@ -281,7 +313,66 @@ public class SetupArchiver implements IApplication
           }
         }
 
+        if (eObject instanceof Configuration)
+        {
+          Configuration configuration = (Configuration)eObject;
+          String badgeLabel = BaseUtil.getAnnotation(configuration, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_BADGE_LABEL);
+          if (!StringUtil.isEmpty(badgeLabel))
+          {
+            schedule(badgeLabel, badgeLabel);
+          }
+          else
+          {
+            Workspace workspace = configuration.getWorkspace();
+            if (workspace != null)
+            {
+              List<String> projects = new UniqueEList<String>();
+              for (Stream stream : workspace.getStreams())
+              {
+                String proxyURI = EcoreUtil.getURI(stream).toString();
+                Matcher matcher = Pattern.compile("/@projects\\[name='([^']+)'\\]").matcher(proxyURI); //$NON-NLS-1$
+                if (matcher.find())
+                {
+                  projects.add(URI.decode(matcher.group(1)));
+                }
+              }
+
+              if (!projects.isEmpty())
+              {
+                StringBuilder compositeLabel = new StringBuilder();
+                StringBuilder compositeFileName = new StringBuilder();
+                for (String project : projects)
+                {
+                  if (compositeLabel.length() != 0)
+                  {
+                    compositeLabel.append(" + "); //$NON-NLS-1$
+                    compositeFileName.append("_"); //$NON-NLS-1$
+                  }
+
+                  compositeLabel.append(project);
+                  compositeFileName.append(project);
+
+                  if (projects.size() > 1)
+                  {
+                    schedule(project, project);
+                  }
+                }
+
+                schedule(compositeFileName.toString(), compositeLabel.toString());
+              }
+            }
+          }
+        }
+
         super.visit(eObject);
+      }
+
+      private void schedule(String fileName, String label)
+      {
+        URI svgURI = URI.createURI("svg:/" + IOUtil.encodeFileName(fileName).replace(' ', '_') + ".svg"); //$NON-NLS-1$ //$NON-NLS-2$
+        URI imageURI = URI.createURI(SetupArchiver.this.getConfigurationImage(label));
+        configurationImages.put(svgURI, imageURI);
+        schedule(svgURI);
       }
     };
 
@@ -355,10 +446,13 @@ public class SetupArchiver implements IApplication
 
         URI normalizedURI = uriConverter.normalize(uri);
         String scheme = normalizedURI.scheme();
-        if (normalizedURI.query() == null && ("http".equals(scheme) || "https".equals(scheme))) //$NON-NLS-1$ //$NON-NLS-2$
+        if (normalizedURI.query() == null && ("http".equals(scheme) || "https".equals(scheme) || "svg".equals(scheme))) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         {
           URI path = URI.createURI(scheme);
-          path = path.appendSegment(normalizedURI.authority());
+          if (normalizedURI.hasAuthority())
+          {
+            path = path.appendSegment(normalizedURI.authority());
+          }
           path = path.appendSegments(normalizedURI.segments());
           System.out.println(NLS.bind(Messages.SetupArchiver_Mirroring_message, normalizedURI));
 
@@ -607,5 +701,12 @@ public class SetupArchiver implements IApplication
         System.err.println("Unresolved proxy " + reference); //$NON-NLS-1$
       }
     }
+  }
+
+  String getConfigurationImage(String label)
+  {
+    String encodedLabel = URI.encodeQuery(StringUtil.safe(label), false).toString().replace("+", "%2B").replace("&", "%26"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+    return "https://img.shields.io/static/v1?logo=eclipseide&label=Create%20Development%20Environment&message=" + encodedLabel //$NON-NLS-1$
+        + "&style=for-the-badge&logoColor=white&labelColor=darkorange&color=gray"; //$NON-NLS-1$
   }
 }

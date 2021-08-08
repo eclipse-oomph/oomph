@@ -11,6 +11,10 @@
         key="imageURI">
       <value>https://www.eclipse.org/downloads/images/committers.png</value>
     </detail>
+    <detail
+        key="badgeLabel">
+      <value>Platform SDK</value>
+    </detail>
   </annotation>
   <installation
       name="platform.sdk.installation"
