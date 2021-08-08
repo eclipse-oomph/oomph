@@ -66,6 +66,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -114,6 +115,8 @@ public class CachingRepositoryManager<T>
 
   private static final String PROP_REPOSITORY_RETRY = "oomph.p2.repository.retry"; //$NON-NLS-1$
 
+  private static final String PROP_REPOSITORY_FAIL_PERMANENTLY = "oomph.p2.repository.fail.permanently"; //$NON-NLS-1$
+
   private static final int MAX_RETRY = PropertiesUtil.getProperty(PROP_REPOSITORY_RETRY, 0);
 
   private static boolean betterMirrorSelection;
@@ -123,6 +126,10 @@ public class CachingRepositoryManager<T>
   private final int repositoryType;
 
   private final CachingTransport transport;
+
+  private final Map<URI, ProvisionException> failedRepositories = PropertiesUtil.isProperty(PROP_REPOSITORY_FAIL_PERMANENTLY)
+      ? new ConcurrentHashMap<URI, ProvisionException>()
+      : null;
 
   public CachingRepositoryManager(AbstractRepositoryManager<T> delegate, int repositoryType, CachingTransport transport)
   {
@@ -162,6 +169,15 @@ public class CachingRepositoryManager<T>
 
   public IRepository<T> loadRepository(URI location, IProgressMonitor monitor, String type, int flags) throws ProvisionException
   {
+    if (failedRepositories != null)
+    {
+      ProvisionException exception = failedRepositories.get(location);
+      if (exception != null)
+      {
+        throw exception;
+      }
+    }
+
     checkValidLocation(location);
     SubMonitor sub = SubMonitor.convert(monitor, 100);
     boolean added = false;
@@ -252,6 +268,10 @@ public class CachingRepositoryManager<T>
 
           if (failure != null)
           {
+            if (failedRepositories != null && !"file".equals(location.getScheme())) //$NON-NLS-1$
+            {
+              failedRepositories.put(location, failure);
+            }
             throw failure;
           }
 
@@ -371,6 +391,10 @@ public class CachingRepositoryManager<T>
       Throwable cause = ex.getCause();
       if (cause instanceof ProvisionException)
       {
+        if (failedRepositories != null && !"file".equals(location.getScheme())) //$NON-NLS-1$
+        {
+          failedRepositories.put(location, (ProvisionException)cause);
+        }
         throw (ProvisionException)cause;
       }
 
