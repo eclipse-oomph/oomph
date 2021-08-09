@@ -26,10 +26,8 @@ import org.eclipse.oomph.setup.util.FileUtil;
 import org.eclipse.oomph.util.MonitorUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
-import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
-import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -43,11 +41,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.egit.core.EclipseGitProgressTransformer;
-import org.eclipse.egit.core.RepositoryUtil;
+import org.eclipse.egit.core.settings.GitSettings;
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
@@ -74,6 +69,7 @@ import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -766,28 +762,14 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     }
 
     // If the EGit UI is available, this will contain the list of repositories that have been added to the repositories view.
-    Set<String> repositories = null;
+    Set<Path> repositories = null;
 
     // Force start egit to make the clone appears in the repositories view and so projects are connected by the egit team provider.
     // Also use this as an opportunity to initialize the timeout based on EGit preferences
     try
     {
-      repositories = new HashSet<String>(RepositoryUtil.getInstance().getConfiguredRepositories());
-
-      // Maybe the preference will be moved to the core...
-      IEclipsePreferences egitCorePreferences = InstanceScope.INSTANCE.getNode("org.eclipse.egit.core"); //$NON-NLS-1$
-      IEclipsePreferences egitCoreDefaultPreferences = DefaultScope.INSTANCE.getNode("org.eclipse.egit.core"); //$NON-NLS-1$
-      timeout = egitCorePreferences.getInt("core_remote_connection_timeout", egitCoreDefaultPreferences.getInt("core_remote_connection_timeout", 0)); //$NON-NLS-1$ //$NON-NLS-2$
-
-      Class<?> egitUIActivatorClass = CommonPlugin.loadClass("org.eclipse.egit.ui", "org.eclipse.egit.ui.Activator"); //$NON-NLS-1$ //$NON-NLS-2$
-      Object egitUIActivator = ReflectUtil.invokeMethod("getDefault", egitUIActivatorClass); //$NON-NLS-1$
-
-      if (timeout == 0)
-      {
-        Object egitUIPreferenceStore = ReflectUtil.invokeMethod("getPreferenceStore", egitUIActivator); //$NON-NLS-1$
-        timeout = ReflectUtil.invokeMethod(ReflectUtil.getMethod(egitUIPreferenceStore, "getInt", String.class), egitUIPreferenceStore, //$NON-NLS-1$
-            "remote_connection_timeout"); //$NON-NLS-1$
-      }
+      repositories = new HashSet<Path>(GitSettings.getConfiguredRepositoryDirectories());
+      timeout = GitSettings.getRemoteConnectionTimeout();
     }
     catch (Throwable ex)
     {
@@ -804,7 +786,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
     workDirExisted = true;
 
-    boolean needsToBeAdded = repositories != null && !repositories.contains(new File(workDir, ".git").toString()); //$NON-NLS-1$
+    boolean needsToBeAdded = repositories != null && !repositories.contains(new File(workDir, ".git").toPath()); //$NON-NLS-1$
     if (workDir.list().length > 1)
     {
       // Even though cloning isn't needed, return true if the repository needs to be added to the repositories view.
@@ -930,7 +912,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         }
 
         // Add the clone to the Git repositories view.
-        RepositoryUtil.getInstance().addConfiguredRepository(new File(workDir, ".git")); //$NON-NLS-1$
+        GitSettings.addConfiguredRepository(new File(workDir, ".git").toPath()); //$NON-NLS-1$
       }
       finally
       {
