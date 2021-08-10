@@ -8,7 +8,7 @@ pipeline {
   options {
     buildDiscarder(logRotator(numToKeepStr: '10'))
     disableConcurrentBuilds()
-    timeout(time: 5, unit: 'HOURS')
+    timeout(time: 4, unit: 'HOURS')
     skipDefaultCheckout()
   }
   
@@ -71,19 +71,12 @@ pipeline {
                 -Dsun.zip.disableMemoryMapping=true \
                 -Xmx14G \
                 -Duser.home=$(pwd) \
-                -Dorg.eclipse.ecf.provider.filetransfer.httpclient.browse.connectTimeout=60000 \
-                -Dorg.eclipse.ecf.provider.filetransfer.httpclient.retrieve.connectTimeout=60000 \
-                -Dorg.eclipse.ecf.provider.filetransfer.httpclient.retrieve.readTimeout=60000 \
-                -Dorg.eclipse.ecf.provider.filetransfer.httpclient4.browse.connectTimeout=60000 \
-                -Dorg.eclipse.ecf.provider.filetransfer.httpclient4.retrieve.connectTimeout=60000 \
-                -Dorg.eclipse.ecf.provider.filetransfer.httpclient4.retrieve.readTimeout=60000 \
-	            -Dcom.sun.management.jmxremote \
-	            -Dcom.sun.management.jmxremote.authenticate=false \
-	            -Dcom.sun.management.jmxremote.ssl=false \
-	            -Dcom.sun.management.jmxremote.local.only=false \
-	            -Dcom.sun.management.jmxremote.port=4711 \
-	            -Dcom.sun.management.jmxremote.rmi.port=4711 \
-	            -Djava.rmi.server.hostname=127.0.0.1 \
+                -Dorg.eclipse.ecf.provider.filetransfer.httpclient.browse.connectTimeout=120000 \
+                -Dorg.eclipse.ecf.provider.filetransfer.httpclient.retrieve.connectTimeout=120000 \
+                -Dorg.eclipse.ecf.provider.filetransfer.httpclient.retrieve.readTimeout=120000 \
+                -Dorg.eclipse.ecf.provider.filetransfer.httpclient4.browse.connectTimeout=120000 \
+                -Dorg.eclipse.ecf.provider.filetransfer.httpclient4.retrieve.connectTimeout=120000 \
+                -Dorg.eclipse.ecf.provider.filetransfer.httpclient4.retrieve.readTimeout=120000 \
               2>&1 | tee log
 
             ls -al report/
