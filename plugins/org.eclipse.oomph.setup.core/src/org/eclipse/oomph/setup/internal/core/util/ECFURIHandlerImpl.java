@@ -775,7 +775,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         {
           AuthenticationInfo currentAuthenticationInfo = new AuthenticationInfo(authorization.getUser(), authorization.getPassword(), authorization.isSaved());
           AuthenticationInfo authenticationInfo = uiServices.getUsernamePassword(uri.toString(), currentAuthenticationInfo);
-          if (authenticationInfo != null)
+          if (authenticationInfo != null && authenticationInfo != UIServices.AUTHENTICATION_PROMPT_CANCELED)
           {
             String user = authenticationInfo.getUserName();
             String password = authenticationInfo.getPassword();
@@ -2981,6 +2981,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
             {
               if (authorization.isAuthorized())
               {
+                boolean consumedUser = false;
                 for (Map.Entry<String, String> entry : parameterValues.entrySet())
                 {
                   String key = entry.getKey();
@@ -2990,12 +2991,14 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                     String type = parameterTypes.get(key);
                     if ("password".equals(type)) //$NON-NLS-1$
                     {
+                      emptyKeys.add(key);
                       parameterValues.put(key, PreferencesUtil.encrypt(authorization.getPassword()));
                     }
-                    else
+                    else if (!consumedUser && "text".equals(type)) //$NON-NLS-1$
                     {
                       emptyKeys.add(key);
                       parameterValues.put(key, authorization.getUser());
+                      consumedUser = true;
                     }
                   }
                 }
@@ -3190,9 +3193,10 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
       handleProxy(connection);
 
+      String form = getForm(parameterValues, secureParameters, true);
+
       // Write the form data to connection.
       DataOutputStream data = new DataOutputStream(connection.getOutputStream());
-      String form = getForm(parameterValues, secureParameters, true);
 
       if (TRACE)
       {
