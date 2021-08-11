@@ -15,7 +15,7 @@ pipeline {
    parameters {
     booleanParam(
       name: 'PROMOTE',
-      defaultValue: false,
+      defaultValue: true,
       description: '''
         Whether the results of the build should be promoted and made public under
         <a href="https://www.eclipse.org/setups/marketplace-listings/marketplace.eclipse.org.setup">marketplace.eclipse.org.setup</a>.
