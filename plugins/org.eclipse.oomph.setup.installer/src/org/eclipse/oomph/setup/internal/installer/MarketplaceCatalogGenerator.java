@@ -349,6 +349,7 @@ public class MarketplaceCatalogGenerator implements IApplication
     platformVersions.put("platform.version=4.18", "2020-12");
     platformVersions.put("platform.version=4.19", "2021-03");
     platformVersions.put("platform.version=4.20", "2021-06");
+    platformVersions.put("platform.version=4.20", "2021-09");
 
     Set<URI> nodeQueryURIs = new LinkedHashSet<URI>();
     {
@@ -366,7 +367,6 @@ public class MarketplaceCatalogGenerator implements IApplication
 
     long startRepositoryLoads = System.currentTimeMillis();
     System.out.println("Gathering " + nodeQueryURIs.size() + " listings: " + (startRepositoryLoads - startListings) / 1000 + " seconds");
-
     {
       Set<String> updateURLs = new LinkedHashSet<String>();
       for (URI listingURI : nodeQueryURIs)
@@ -422,6 +422,10 @@ public class MarketplaceCatalogGenerator implements IApplication
       repositoryLoader.perform(updateURLs);
       repositoryLoader.dispose();
     }
+
+    System.out.println("Free memory MB: " + Runtime.getRuntime().freeMemory() / 1024 / 1024);
+    System.out.println("Total memory MB: " + Runtime.getRuntime().totalMemory() / 1024 / 1024);
+    System.out.println("Max memory MB: " + Runtime.getRuntime().maxMemory() / 1024 / 1024);
 
     @SuppressWarnings("unchecked")
     List<IQuery<IInstallableUnit>> jreQuery = Arrays.asList(QueryUtil.createIUQuery("a.jre.javase"), QueryUtil.createLatestIUQuery());
