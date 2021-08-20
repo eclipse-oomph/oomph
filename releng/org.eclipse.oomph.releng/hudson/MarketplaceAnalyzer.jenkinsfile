@@ -1,5 +1,5 @@
 pipeline {
-  agent { label 'basic-8gb' }
+  agent { label 'basic-16gb' }
 
   tools {
       jdk 'adoptopenjdk-hotspot-jdk11-latest'
@@ -69,7 +69,7 @@ pipeline {
                 -Doomph.p2.repository.fail.permanently=true \
                 -Dcom.sun.net.ssl.checkRevocation=false \
                 -Dsun.zip.disableMemoryMapping=true \
-                -Xmx8G \
+                -Xmx14G \
                 -Duser.home=$(pwd) \
                 -Dorg.eclipse.ecf.provider.filetransfer.httpclient.browse.connectTimeout=120000 \
                 -Dorg.eclipse.ecf.provider.filetransfer.httpclient.retrieve.connectTimeout=120000 \
