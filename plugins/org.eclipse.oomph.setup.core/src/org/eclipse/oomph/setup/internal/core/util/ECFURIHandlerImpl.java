@@ -1737,7 +1737,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                 // That API, for security reasons, does not return HTTP_UNAUTHORIZED, so we need this special case for that host.
                 else if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED
                     || API_GITHUB_HOST.equals(getHost(uri)) && errorCode == HttpURLConnection.HTTP_NOT_FOUND
-                    || forceAuthorization != null && errorCode == HttpURLConnection.HTTP_FORBIDDEN || errorCode == HttpURLConnection.HTTP_NOT_FOUND)
+                    || forceAuthorization != null && (errorCode == HttpURLConnection.HTTP_FORBIDDEN || errorCode == HttpURLConnection.HTTP_NOT_FOUND))
                 {
                   // Get the authorization if we don't already have one.
                   if (authorization == null)
