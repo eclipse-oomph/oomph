@@ -510,7 +510,7 @@
             </annotation>
           </repository>
           <repository
-              url="http://download.eclipse.org/technology/m2e/snapshots"/>
+              url="http://download.eclipse.org/technology/m2e/snapshots/latest"/>
           <repository
               url="http://download.eclipse.org/nebula/snapshot"/>
           <repository
